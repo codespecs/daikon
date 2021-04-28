@@ -1,7 +1,7 @@
 package daikon.chicory;
 
 import daikon.Chicory;
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -38,7 +38,7 @@ public class DTraceWriter extends DaikonWriter {
   protected static final String stringClassName = "java.lang.String";
 
   /** Where to print output. */
-  private PrintStream outFile;
+  private PrintWriter outFile;
 
   /** debug information about daikon variables */
   private boolean debug_vars = false;
@@ -48,7 +48,7 @@ public class DTraceWriter extends DaikonWriter {
    *
    * @param writer stream to write to
    */
-  public DTraceWriter(PrintStream writer) {
+  public DTraceWriter(PrintWriter writer) {
     super();
     outFile = writer;
   }
@@ -428,10 +428,10 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Returns a list of Strings which are the names of the runtime types in the theVals param.
+   * Returns a list of Strings which are the names of the run-time types in the theVals param.
    *
    * @param theVals list of ObjectReferences
-   * @return a list of Strings which are the names of the runtime types in the theVals param
+   * @return a list of Strings which are the names of the run-time types in the theVals param
    */
   public static @Nullable List<String> getTypeNameList(List<Object> theVals) {
     // Return null rather than NonsensicalList as NonsensicalList is
@@ -462,7 +462,7 @@ public class DTraceWriter extends DaikonWriter {
    *
    * @param val the object whose type we are examining
    * @param declared the declared type of the variable corresponding to val
-   * @param runtime should we use the runtime type or declared type?
+   * @param runtime should we use the run-time type or declared type?
    * @return the variable's type, with primitive wrappers removed, or null if the value is non-null
    */
   public static @Nullable Class<?> removeWrappers(Object val, Class<?> declared, boolean runtime) {

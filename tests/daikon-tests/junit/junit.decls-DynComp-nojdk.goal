@@ -1,0 +1,303 @@
+// Declarations for MyEvenOddTest
+// Declarations written 2020-11-18T07:48:39.886 by daikon.DynComp
+
+decl-version 2.0
+var-comparability implicit
+
+ppt MyEvenOddTest:::CLASS
+ppt-type class
+
+ppt MyEvenOddTest:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type MyEvenOddTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt MyEvenOddTest.MyEvenOddTest():::ENTER
+ppt-type enter
+
+ppt MyEvenOddTest.MyEvenOddTest():::EXIT5
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MyEvenOddTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt MyEvenOddTest.testEvenOddNumber():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MyEvenOddTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt MyEvenOddTest.testEvenOddNumber():::EXIT11
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MyEvenOddTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt MyEvenOddTest.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MyEvenOddTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt MyEvenOddTest.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MyEvenOddTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt MyEvenOddTest.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MyEvenOddTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt MyEvenOddTest.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MyEvenOddTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt MyEvenOdd:::CLASS
+ppt-type class
+
+ppt MyEvenOdd:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type MyEvenOdd
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt MyEvenOdd.MyEvenOdd():::ENTER
+ppt-type enter
+
+ppt MyEvenOdd.MyEvenOdd():::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MyEvenOdd
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt MyEvenOdd.isEvenNumber(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MyEvenOdd
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable number
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt MyEvenOdd.isEvenNumber(int):::EXIT9
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MyEvenOdd
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable number
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt MyEvenOdd.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MyEvenOdd
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt MyEvenOdd.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MyEvenOdd
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt MyEvenOdd.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MyEvenOdd
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt MyEvenOdd.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MyEvenOdd
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+

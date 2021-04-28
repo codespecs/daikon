@@ -1,15 +1,15 @@
 ===========================================================================
 six170.HuffmanCodec:::OBJECT
-this.decodingTree.symbol == this.decodingTree.left.symbol
-this.decodingTree.symbol == this.decodingTree.right.symbol
 this.encodingMap != null
 this.encodingMap.getClass().getName() == java.util.LinkedHashMap.class
 this.decodingTree != null
 this.decodingTree.symbol == null
 this.decodingTree.left != null
+this.decodingTree.left.symbol == null
 this.decodingTree.left.left != null
 this.decodingTree.left.right != null
 this.decodingTree.right != null
+this.decodingTree.right.symbol == null
 this.decodingTree.right.left != null
 this.decodingTree.right.right != null
 ===========================================================================
@@ -38,8 +38,6 @@ bitStack.getClass().getName() == java.util.ArrayList.class
 encodingMap.getClass().getName() != subTree.symbol.symbol.getClass().getName()
 encodingMap.getClass().getName() != bitStack.getClass().getName()
 subTree.symbol.symbol.getClass().getName() != bitStack.getClass().getName()
-(size(bitStack[]) == 0) ==> (subTree.symbol.frequency == 0)
-(size(bitStack[])-1 == 0) ==> (subTree.symbol.frequency == 0)
 ===========================================================================
 six170.HuffmanCodec.addToMap(java.util.Map, six170.HuffmanTree, java.util.List):::EXIT
 subTree.symbol == orig(subTree.symbol)
@@ -63,8 +61,6 @@ bitStack[] elements != null
 bitStack[].getClass().getName() elements == java.lang.Boolean.class
 subTree.symbol.symbol.getClass().getName() != orig(encodingMap.getClass().getName())
 subTree.symbol.symbol.getClass().getName() != orig(bitStack.getClass().getName())
-(size(bitStack[])-1 == 0) ==> (subTree.symbol.frequency == 0)
-(orig(size(bitStack[])) == 0) ==> (subTree.symbol.frequency == 0)
 ===========================================================================
 six170.HuffmanCodec.buildDecodingTree(java.util.List):::ENTER
 huffmanSymbols[].getClass().getName() elements == six170.HuffmanSymbol.class
@@ -73,30 +69,30 @@ huffmanSymbols.getClass().getName() == java.util.ArrayList.class
 ===========================================================================
 six170.HuffmanCodec.buildDecodingTree(java.util.List):::EXIT
 huffmanSymbols[] == orig(huffmanSymbols[])
-return.symbol == return.left.symbol
-return.symbol == return.right.symbol
 huffmanSymbols[].getClass().getName() elements == six170.HuffmanSymbol.class
 return.symbol == null
+return.left.symbol == null
+return.right.symbol == null
 (orig(size(huffmanSymbols[])) >> size(huffmanSymbols[])-1 == 0)
 ===========================================================================
 six170.HuffmanCodec.buildEncodingMap(six170.HuffmanTree):::ENTER
-decodingTree.symbol == decodingTree.left.symbol
-decodingTree.symbol == decodingTree.right.symbol
 decodingTree.symbol == null
+decodingTree.left.symbol == null
+decodingTree.right.symbol == null
 ===========================================================================
 six170.HuffmanCodec.buildEncodingMap(six170.HuffmanTree):::EXIT
-decodingTree.symbol == decodingTree.left.symbol
-decodingTree.symbol == decodingTree.right.symbol
 decodingTree.symbol == orig(decodingTree.symbol)
-decodingTree.symbol == orig(decodingTree.left.symbol)
-decodingTree.symbol == orig(decodingTree.right.symbol)
 decodingTree.left == orig(decodingTree.left)
+decodingTree.left.symbol == orig(decodingTree.left.symbol)
 decodingTree.left.left == orig(decodingTree.left.left)
 decodingTree.left.right == orig(decodingTree.left.right)
 decodingTree.right == orig(decodingTree.right)
+decodingTree.right.symbol == orig(decodingTree.right.symbol)
 decodingTree.right.left == orig(decodingTree.right.left)
 decodingTree.right.right == orig(decodingTree.right.right)
 decodingTree.symbol == null
+decodingTree.left.symbol == null
+decodingTree.right.symbol == null
 return.getClass().getName() == java.util.LinkedHashMap.class
 ===========================================================================
 six170.HuffmanCodec.decode(java.util.List):::ENTER
@@ -109,12 +105,12 @@ this.encodingMap == orig(this.encodingMap)
 this.encodingMap.getClass().getName() == orig(this.encodingMap.getClass().getName())
 this.decodingTree == orig(this.decodingTree)
 this.decodingTree.symbol == orig(this.decodingTree.symbol)
-this.decodingTree.symbol == orig(this.decodingTree.left.symbol)
-this.decodingTree.symbol == orig(this.decodingTree.right.symbol)
 this.decodingTree.left == orig(this.decodingTree.left)
+this.decodingTree.left.symbol == orig(this.decodingTree.left.symbol)
 this.decodingTree.left.left == orig(this.decodingTree.left.left)
 this.decodingTree.left.right == orig(this.decodingTree.left.right)
 this.decodingTree.right == orig(this.decodingTree.right)
+this.decodingTree.right.symbol == orig(this.decodingTree.right.symbol)
 this.decodingTree.right.left == orig(this.decodingTree.right.left)
 this.decodingTree.right.right == orig(this.decodingTree.right.right)
 inputBitStream[] == orig(inputBitStream[])
@@ -133,12 +129,12 @@ this.encodingMap == orig(this.encodingMap)
 this.encodingMap.getClass().getName() == orig(this.encodingMap.getClass().getName())
 this.decodingTree == orig(this.decodingTree)
 this.decodingTree.symbol == orig(this.decodingTree.symbol)
-this.decodingTree.symbol == orig(this.decodingTree.left.symbol)
-this.decodingTree.symbol == orig(this.decodingTree.right.symbol)
 this.decodingTree.left == orig(this.decodingTree.left)
+this.decodingTree.left.symbol == orig(this.decodingTree.left.symbol)
 this.decodingTree.left.left == orig(this.decodingTree.left.left)
 this.decodingTree.left.right == orig(this.decodingTree.left.right)
 this.decodingTree.right == orig(this.decodingTree.right)
+this.decodingTree.right.symbol == orig(this.decodingTree.right.symbol)
 this.decodingTree.right.left == orig(this.decodingTree.right.left)
 this.decodingTree.right.right == orig(this.decodingTree.right.right)
 inputStream[] == orig(inputStream[])
@@ -165,10 +161,7 @@ return.symbol.symbol != null
 return.symbol.symbol.getClass().getName() == java.lang.Character.class
 return.symbol.frequency >= 1
 nodeList[] is a subset of orig(nodeList[])
-return in orig(nodeList[])
 return.symbol.symbol.getClass().getName() != orig(nodeList.getClass().getName())
-(size(nodeList[])-1 == 0) ==> (return.symbol.frequency == 0)
-(orig(size(nodeList[]))-1 == 0) ==> (return.symbol.frequency == 0)
 ===========================================================================
 six170.HuffmanSymbol:::OBJECT
 this.symbol != null
@@ -501,7 +494,6 @@ this.left.symbol.frequency <= return.symbol.frequency
 six170.HuffmanTree.symbol():::ENTER
 ===========================================================================
 six170.HuffmanTree.symbol():::EXIT63
-this.symbol == return
 this.symbol == null
 this.left != null
 this.right != null
@@ -568,5 +560,4 @@ return.getClass().getName() == orig(this.symbol.symbol.getClass().getName())
 (this.symbol == null)  ==>  (this.right.symbol.frequency >= 1)
 (this.symbol == null)  ==>  (this.right.symbol.symbol != null)
 (this.symbol == null)  ==>  (this.right.symbol.symbol.getClass().getName() == java.lang.Character.class)
-(this.symbol == null)  ==>  (this.symbol == return)
 return.getClass().getName() == java.lang.Character.class

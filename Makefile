@@ -29,7 +29,7 @@ IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
 DOC_FILES_NO_IMAGES := Makefile index.html daikon.texinfo \
                        config-options.texinfo invariants-doc.texinfo \
                        daikon.pdf daikon.html developer.texinfo \
-                       developer.html CHANGES VERSION daikon-favicon.png
+                       developer.html CHANGELOG.md VERSION daikon-favicon.png
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 
@@ -38,7 +38,7 @@ DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 # visible to the user.
 DOC_FILES_USER := daikon.pdf daikon.html developer.html developer.pdf \
                   daikon.texinfo developer.texinfo config-options.texinfo \
-                  invariants-doc.texinfo CHANGES daikon-favicon.png VERSION
+                  invariants-doc.texinfo CHANGELOG.md daikon-favicon.png VERSION
 README_PATHS := README doc/README fjalar/README
 # Files that contain the (automatically updated) version number and date.
 DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
@@ -381,9 +381,9 @@ validate:
 # Main distribution
 
 # A couple of checks to see if we can proceed with staging.
-# Verify that doc/CHANGES is newer than doc/daikon.texinfo - error out if not.
+# Verify that doc/CHANGELOG.md is newer than doc/daikon.texinfo - error out if not.
 # Report any uncommited files - users responsibility to act on results.
-check-repo: doc/CHANGES
+check-repo: doc/CHANGELOG.md
 	git status -uno
 
 # The staging target builds all of the files that will be distributed
@@ -408,9 +408,9 @@ staging:
 	# Build the main tarfile for daikon
 	@echo "]2;Building daikon.tar"
 	# make daikon.tar has side effect of making documents
-	# it also causes doc/CHANGES time stamp to be checked; which
+	# it also causes doc/CHANGELOG.md time stamp to be checked; which
 	# we do not care about at this point.
-	touch doc/CHANGES
+	touch doc/CHANGELOG.md
 	$(MAKE) daikon.tar
 	gzip -c ${TMPDIR}/$(NEW_RELEASE_NAME).tar > $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz
 	cp -pf ${TMPDIR}/$(NEW_RELEASE_NAME).zip $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).zip
@@ -470,13 +470,13 @@ staging-to-www: $(STAGING_DIR)
 pubs:
 	$(MAKE) -C doc/www pubs
 
-doc/CHANGES: doc/daikon.texinfo
+doc/CHANGELOG.md: doc/daikon.texinfo
 	@echo "******************************************************************"
-	@echo "** doc/CHANGES file is not up-to-date with respect to doc files."
-	@echo "** doc/CHANGES must be modified by hand."
+	@echo "** doc/CHANGELOG.md file is not up-to-date with respect to doc files."
+	@echo "** doc/CHANGELOG.md must be modified by hand."
 	@echo "** Try:"
 	@echo "     diff -b -u -s --from-file $(WWW_DIR)/download/doc doc/*.texinfo"
-	@echo "** (or maybe  touch doc/CHANGES )."
+	@echo "** (or maybe  touch doc/CHANGELOG.md )."
 	@echo "******************************************************************"
 	@exit 1
 
@@ -508,7 +508,7 @@ save-current-release:
 	-chmod u+w $(HISTORY_DIR)
 	mkdir $(HISTORY_DIR)/$(CUR_RELEASE_NAME)
 	-chmod u-w $(HISTORY_DIR)
-	cd $(HISTORY_DIR)/$(CUR_RELEASE_NAME) && cp -p $(WWW_DIR)/download/$(CUR_RELEASE_NAME).* . && unzip -p $(CUR_RELEASE_NAME).zip $(CUR_RELEASE_NAME)/doc/CHANGES >CHANGES && chmod o-w CHANGES .
+	cd $(HISTORY_DIR)/$(CUR_RELEASE_NAME) && cp -p $(WWW_DIR)/download/$(CUR_RELEASE_NAME).* . && unzip -p $(CUR_RELEASE_NAME).zip $(CUR_RELEASE_NAME)/doc/CHANGELOG.md >CHANGELOG.md && chmod o-w CHANGELOG.md .
 # Create links to the previous version to help reduce confusion over a version number change.
 	cd $(STAGING_DIR)/download && ln $(HISTORY_DIR)/$(CUR_RELEASE_NAME)/$(CUR_RELEASE_NAME).zip
 	cd $(STAGING_DIR)/download && ln $(HISTORY_DIR)/$(CUR_RELEASE_NAME)/$(CUR_RELEASE_NAME).tar.gz
@@ -533,7 +533,7 @@ update-doc-dist-date:
 	perl -wpi -e 's/((Daikon|Fjalar) version .*, released ).*(\.|<\/CENTER>)$$/$$1${TODAY}$$3/' ${DIST_VERSION_FILES}
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/(\@c .* Daikon version .* date\n\@center ).*(\n)/$$1${TODAY}$$2/;' doc/daikon.texinfo doc/developer.texinfo
 	perl -wpi -e 's/(public static final String release_date = ").*(";)$$/$$1${TODAY}$$2/' java/daikon/Daikon.java
-	touch doc/CHANGES
+	touch doc/CHANGELOG.md
 
 # Update the documentation according to the version number in VERSION.
 # This isn't done as part of "make dist" because then subsequent "make www"
@@ -546,7 +546,7 @@ update-doc-dist-version:
 	perl -wpi -e 's/(\-)[0-9]+(\.[0-9]+)+/$$1 . "$(NEW_VER)"/eg;' doc/www/download/index.html
 	perl -wpi -e 's/(public static final String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(NEW_VER)" . $$3/e;' java/daikon/Daikon.java
 	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(NEW_VER)" . $$3/e' fjalar/valgrind/fjalar/mc_main.c
-	touch doc/CHANGES
+	touch doc/CHANGELOG.md
 
 # Update the version number in file doc/VERSION
 # This is done immediately after releasing a new version; thus, VERSION
@@ -712,7 +712,7 @@ update-libs: update-checklink update-html-tools update-plume-scripts update-run-
 update-checklink:
 ifndef NONETWORK
 	if test -d utils/checklink/.git ; then \
-	  (cd utils/checklink && git pull -q) \
+	  (cd utils/checklink && (git pull -q || (echo "git pull failed" && true))) \
 	elif ! test -d utils/checklink ; then \
 	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink || git clone -q --depth 1 https://github.com/plume-lib/checklink.git utils/checklink)) \
 	fi
@@ -721,7 +721,7 @@ endif
 update-html-tools:
 ifndef NONETWORK
 	if test -d utils/html-tools/.git ; then \
-	  (cd utils/html-tools && git pull -q) \
+	  (cd utils/html-tools && (git pull -q || (echo "git pull failed" && true))) \
 	elif ! test -d utils/html-tools ; then \
 	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools || git clone -q --depth 1 https://github.com/plume-lib/html-tools.git utils/html-tools)) \
 	fi
@@ -730,7 +730,7 @@ endif
 update-plume-scripts:
 ifndef NONETWORK
 	if test -d utils/plume-scripts/.git ; then \
-	  (cd utils/plume-scripts && (git pull -q || echo "git pull failed")) \
+	  (cd utils/plume-scripts && (git pull -q || (echo "git pull failed" && true))) \
 	elif ! test -d utils/plume-scripts ; then \
 	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts || git clone -q --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts)) \
 	fi
@@ -739,7 +739,7 @@ endif
 update-run-google-java-format:
 ifndef NONETWORK
 	if test -d utils/run-google-java-format/.git ; then \
-	  (cd utils/run-google-java-format && git pull -q) \
+	  (cd utils/run-google-java-format && (git pull -q || (echo "git pull failed" && true))) \
 	elif ! test -d utils/run-google-java-format ; then \
 	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format || git clone -q --depth 1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format)) \
 	fi

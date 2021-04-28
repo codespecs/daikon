@@ -2,11 +2,12 @@
 misc.Purity:::OBJECT
 this.value == this.getValue()
 this.shift == this.getShift()
-this.shift == this.retrieve(this.list1)
-this.shift == this.retrieve(this.list2)
 this.heavy == this.isHeavy()
+this.getShift() == this.retrieve(this.list1)
+this.getShift() == this.retrieve(this.list2)
+this.scale(this.value) == this.scale(this.getValue())
+this.scale(this.shift) == this.scale(this.getShift())
 this.sum(this.getNum()) == this.sum(this.getJWrap())
-size(this.list1[]) == size(this.list2[])
 this.shift one of { 0, 5, 10 }
 this.list1 != null
 this.list1[] contains no duplicates
@@ -16,24 +17,37 @@ this.list1[].getClass().getName() elements == java.lang.Integer.class
 this.list2 != null
 this.list2[] contains no duplicates
 this.list2[] elements != null
+this.list2[].getClass().getName() == [java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer]
+this.list2[].getClass().getName() elements == java.lang.Integer.class
 this.list2.getClass().getName() == java.util.ArrayList.class
+this.getShift() one of { 0, 5, 10 }
 this.getNum() != null
 this.getNum().getClass().getName() == java.lang.Integer.class
 this.getJWrap() != null
 this.sum(this.getNum()) == 0  (mod 2)
 size(this.list1[]) == 11
+size(this.list2[]) == 11
 (this.scale(this.value) == 0) ==> (this.value == 0)
 (this.value == 0) ==> (this.scale(this.value) == 0)
 this.value <= this.scale(this.shift)
 (this.sum(this.getNum()) == 0) ==> (this.value == 0)
 (this.value == 0) ==> (this.sum(this.getNum()) == 0)
 2 * this.value - this.sum(this.getNum()) == 0
-this.shift <= size(this.list1[])-1
 this.getNum().getClass().getName() in this.list1[].getClass().getName()
+this.getNum().getClass().getName() in this.list2[].getClass().getName()
 this.list2.getClass().getName() != this.getNum().getClass().getName()
+(this.getValue() == 0) ==> (this.scale(this.value) == 0)
+(this.scale(this.value) == 0) ==> (this.getValue() == 0)
+this.getValue() <= this.scale(this.shift)
+(this.getValue() == 0) ==> (this.sum(this.getNum()) == 0)
+(this.sum(this.getNum()) == 0) ==> (this.getValue() == 0)
+2 * this.getValue() - this.sum(this.getNum()) == 0
+this.getShift() <= size(this.list1[])-1
+this.getShift() <= size(this.list2[])-1
 (this.scale(this.value) == 0) ==> (this.sum(this.getNum()) == 0)
 (this.sum(this.getNum()) == 0) ==> (this.scale(this.value) == 0)
 this.sum(this.getNum()) != size(this.list1[])
+this.sum(this.getNum()) != size(this.list2[])
 ===========================================================================
 misc.Purity.Purity(int, int):::ENTER
 shift one of { 0, 5, 10 }
@@ -43,108 +57,119 @@ misc.Purity.Purity(int, int):::EXIT
 this.value == orig(value)
 this.shift == orig(shift)
 this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 ===========================================================================
 misc.Purity.getJWrap():::ENTER
 this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 ===========================================================================
 misc.Purity.getJWrap():::EXIT
 this.value == orig(this.value)
-this.value == orig(this.getValue())
 this.shift == orig(this.shift)
-this.shift == orig(this.getShift())
-this.shift == orig(this.retrieve(this.list1))
-this.shift == orig(this.retrieve(this.list2))
 this.heavy == orig(this.heavy)
-this.heavy == orig(this.isHeavy())
 this.list1 == orig(this.list1)
 this.list1[] == orig(this.list1[])
 this.list2 == orig(this.list2)
 this.list2[] == orig(this.list2[])
 this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.getValue() == orig(this.getValue())
+this.getShift() == orig(this.getShift())
+this.getShift() == orig(this.retrieve(this.list1))
+this.getShift() == orig(this.retrieve(this.list2))
+this.isHeavy() == orig(this.isHeavy())
 this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
+this.scale(this.value) == orig(this.scale(this.getValue()))
+this.scale(this.shift) == orig(this.scale(this.getShift()))
 this.sum(this.getNum()) == orig(this.sum(this.getJWrap()))
-size(this.list1[]) == orig(size(this.list2[]))
 this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 return != null
 ===========================================================================
 misc.Purity.getNum():::ENTER
 this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 ===========================================================================
 misc.Purity.getNum():::EXIT
 this.value == orig(this.value)
-this.value == orig(this.getValue())
 this.shift == orig(this.shift)
-this.shift == orig(this.getShift())
-this.shift == orig(this.retrieve(this.list1))
-this.shift == orig(this.retrieve(this.list2))
 this.heavy == orig(this.heavy)
-this.heavy == orig(this.isHeavy())
 this.list1 == orig(this.list1)
 this.list1[] == orig(this.list1[])
 this.list2 == orig(this.list2)
 this.list2[] == orig(this.list2[])
 this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.getValue() == orig(this.getValue())
+this.getShift() == orig(this.getShift())
+this.getShift() == orig(this.retrieve(this.list1))
+this.getShift() == orig(this.retrieve(this.list2))
+this.isHeavy() == orig(this.isHeavy())
 this.getNum().getClass().getName() == return.getClass().getName()
+this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
+this.scale(this.value) == orig(this.scale(this.getValue()))
+this.scale(this.shift) == orig(this.scale(this.getShift()))
 this.sum(this.getNum()) == orig(this.sum(this.getJWrap()))
-return.getClass().getName() == orig(this.getNum().getClass().getName())
-size(this.list1[]) == orig(size(this.list2[]))
 this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 return != null
 return.getClass().getName() == java.lang.Integer.class
 return.getClass().getName() in this.list1[].getClass().getName()
+return.getClass().getName() in this.list2[].getClass().getName()
 this.list2.getClass().getName() != return.getClass().getName()
 ===========================================================================
 misc.Purity.getShift():::ENTER
 this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 ===========================================================================
 misc.Purity.getShift():::EXIT
 this.value == orig(this.value)
-this.value == orig(this.getValue())
 this.shift == return
 this.heavy == orig(this.heavy)
-this.heavy == orig(this.isHeavy())
 this.list1 == orig(this.list1)
 this.list1[] == orig(this.list1[])
 this.list2 == orig(this.list2)
 this.list2[] == orig(this.list2[])
 this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.getValue() == orig(this.getValue())
 this.getShift() == return
+this.getShift() == orig(this.getShift())
+this.getShift() == orig(this.retrieve(this.list1))
+this.getShift() == orig(this.retrieve(this.list2))
+this.isHeavy() == orig(this.isHeavy())
 this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
+this.scale(this.value) == orig(this.scale(this.getValue()))
+this.scale(this.shift) == orig(this.scale(this.getShift()))
 this.sum(this.getNum()) == orig(this.sum(this.getJWrap()))
-this.retrieve(this.list1) == return
-this.retrieve(this.list2) == return
 return == orig(this.shift)
-return == orig(this.getShift())
-return == orig(this.retrieve(this.list1))
-return == orig(this.retrieve(this.list2))
-size(this.list1[]) == orig(size(this.list2[]))
+this.getShift() == 0  (mod 5)
 return one of { 0, 5, 10 }
 return == 0  (mod 5)
-return <= size(this.list1[])-1
 ===========================================================================
 misc.Purity.getValue():::ENTER
 this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 ===========================================================================
 misc.Purity.getValue():::EXIT
 this.value == return
 this.shift == orig(this.shift)
-this.shift == orig(this.getShift())
-this.shift == orig(this.retrieve(this.list1))
-this.shift == orig(this.retrieve(this.list2))
 this.heavy == orig(this.heavy)
-this.heavy == orig(this.isHeavy())
 this.list1 == orig(this.list1)
 this.list1[] == orig(this.list1[])
 this.list2 == orig(this.list2)
 this.list2[] == orig(this.list2[])
 this.list2.getClass().getName() == orig(this.list2.getClass().getName())
 this.getValue() == return
+this.getValue() == orig(this.getValue())
+this.getShift() == orig(this.getShift())
+this.getShift() == orig(this.retrieve(this.list1))
+this.getShift() == orig(this.retrieve(this.list2))
+this.isHeavy() == orig(this.isHeavy())
 this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
+this.scale(this.value) == orig(this.scale(this.getValue()))
+this.scale(this.shift) == orig(this.scale(this.getShift()))
 this.sum(this.getNum()) == orig(this.sum(this.getJWrap()))
 return == orig(this.value)
-return == orig(this.getValue())
-size(this.list1[]) == orig(size(this.list2[]))
 this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 (return == 0) ==> (this.scale(this.value) == 0)
 (this.scale(this.value) == 0) ==> (return == 0)
 this.scale(this.shift) >= return
@@ -155,180 +180,217 @@ misc.Purity.isHeavy():::ENTER
 ===========================================================================
 misc.Purity.isHeavy():::EXIT
 this.value == orig(this.value)
-this.value == orig(this.getValue())
 this.shift == orig(this.shift)
-this.shift == orig(this.getShift())
-this.shift == orig(this.retrieve(this.list1))
-this.shift == orig(this.retrieve(this.list2))
 this.heavy == return
 this.list1 == orig(this.list1)
 this.list1[] == orig(this.list1[])
 this.list2 == orig(this.list2)
 this.list2[] == orig(this.list2[])
 this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.getValue() == orig(this.getValue())
+this.getShift() == orig(this.getShift())
+this.getShift() == orig(this.retrieve(this.list1))
+this.getShift() == orig(this.retrieve(this.list2))
 this.isHeavy() == return
+this.isHeavy() == orig(this.isHeavy())
 this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
+this.scale(this.value) == orig(this.scale(this.getValue()))
+this.scale(this.shift) == orig(this.scale(this.getShift()))
 this.sum(this.getNum()) == orig(this.sum(this.getJWrap()))
 return == orig(this.heavy)
-return == orig(this.isHeavy())
-size(this.list1[]) == orig(size(this.list2[]))
 (this.shift == 0)  <==>  (return == false)
+(this.shift == 0)  <==>  (this.getShift() == 0)
+(this.shift == 0)  <==>  (this.getValue() == this.scale(this.shift))
+(this.shift == 0)  <==>  (this.isHeavy() == false)
 (this.shift == 0)  <==>  (this.value == this.scale(this.shift))
 (this.shift == 0)  ==>  ((this.scale(this.shift) == 0) ==> (this.sum(this.getNum()) == 0))
 (this.shift == 0)  ==>  ((this.sum(this.getNum()) == 0) ==> (this.scale(this.shift) == 0))
 (this.shift == 0)  ==>  (2 * this.scale(this.shift) - this.sum(this.getNum()) == 0)
 (this.shift == 0)  ==>  (2 * this.scale(this.value) - this.sum(this.getNum()) == 0)
-(this.shift == 0)  ==>  (this.list1[0..this.shift-1] == [])
-(this.shift == 0)  ==>  (this.list1[0..this.shift] elements == this.list1[this.shift])
-(this.shift == 0)  ==>  (this.list2[0..this.shift-1] == [])
-(this.shift == 0)  ==>  (this.list2[0..this.shift] elements == this.list2[this.shift])
-(this.shift == 0)  ==>  (this.shift < size(this.list1[])-1)
+(this.shift == 0)  ==>  (this.getShift() < size(this.list1[])-1)
+(this.shift == 0)  ==>  (this.getShift() < size(this.list2[])-1)
+(this.shift == 0)  ==>  (this.getShift() is a pointer)
+(this.shift == 0)  ==>  (this.getValue() == this.scale(this.value))
+(this.shift == 0)  ==>  (this.list1[0..this.getShift()-1] == [])
+(this.shift == 0)  ==>  (this.list2[0..this.getShift()-1] == [])
 (this.shift == 0)  ==>  (this.shift is a pointer)
 (this.shift == 0)  ==>  (this.value == this.scale(this.value))
 (this.shift one of { 5, 10 })  <==>  (return == true)
+(this.shift one of { 5, 10 })  <==>  (this.getShift() one of { 5, 10 })
+(this.shift one of { 5, 10 })  <==>  (this.getValue() < this.scale(this.shift))
+(this.shift one of { 5, 10 })  <==>  (this.isHeavy() == true)
 (this.shift one of { 5, 10 })  <==>  (this.value < this.scale(this.shift))
+(this.shift one of { 5, 10 })  ==>  (15 * this.shift + this.getValue() - this.scale(this.shift) - 50 == 0)
+(this.shift one of { 5, 10 })  ==>  (30 * this.getShift() - 2 * this.scale(this.shift) + this.sum(this.getNum()) - 100 == 0)
 (this.shift one of { 5, 10 })  ==>  (30 * this.shift - 2 * this.scale(this.shift) + this.sum(this.getNum()) - 100 == 0)
+(this.shift one of { 5, 10 })  ==>  (this.getShift() != this.scale(this.value))
+(this.shift one of { 5, 10 })  ==>  (this.getShift() == 0  (mod 5))
+(this.shift one of { 5, 10 })  ==>  (this.getValue() + 15 * this.getShift() - this.scale(this.shift) - 50 == 0)
 (this.shift one of { 5, 10 })  ==>  (this.scale(this.value) != size(this.list1[])-1)
+(this.shift one of { 5, 10 })  ==>  (this.scale(this.value) != size(this.list2[])-1)
 (this.shift one of { 5, 10 })  ==>  (this.shift != this.scale(this.value))
 (this.shift one of { 5, 10 })  ==>  (this.shift == 0  (mod 5))
+(this.shift one of { 5, 10 })  ==>  (this.value + 15 * this.getShift() - this.scale(this.shift) - 50 == 0)
 (this.shift one of { 5, 10 })  ==>  (this.value + 15 * this.shift - this.scale(this.shift) - 50 == 0)
 ===========================================================================
 misc.Purity.isHeavy():::EXIT;condition="return == true"
 this.shift one of { 5, 10 }
 this.shift == 0  (mod 5)
+this.getShift() one of { 5, 10 }
+this.getShift() == 0  (mod 5)
+this.isHeavy() == true
 return == true
 this.value < this.scale(this.shift)
 this.shift != this.scale(this.value)
+this.getValue() < this.scale(this.shift)
+this.getShift() != this.scale(this.value)
 this.scale(this.value) != size(this.list1[])-1
+this.scale(this.value) != size(this.list2[])-1
 this.value + 15 * this.shift - this.scale(this.shift) - 50 == 0
+this.value + 15 * this.getShift() - this.scale(this.shift) - 50 == 0
+15 * this.shift + this.getValue() - this.scale(this.shift) - 50 == 0
 30 * this.shift - 2 * this.scale(this.shift) + this.sum(this.getNum()) - 100 == 0
+this.getValue() + 15 * this.getShift() - this.scale(this.shift) - 50 == 0
+30 * this.getShift() - 2 * this.scale(this.shift) + this.sum(this.getNum()) - 100 == 0
 ===========================================================================
 misc.Purity.isHeavy():::EXIT;condition="not(return == true)"
-this.value == this.scale(this.value)
-this.value == this.scale(this.shift)
-this.value == this.scale(this.getValue())
-this.value == this.scale(this.getShift())
-this.value == orig(this.scale(this.value))
-this.value == orig(this.scale(this.shift))
-this.value == orig(this.scale(this.getValue()))
-this.value == orig(this.scale(this.getShift()))
+this.getValue() == this.scale(this.value)
+this.getValue() == this.scale(this.shift)
+this.getValue() == this.scale(this.getValue())
+this.getValue() == this.scale(this.getShift())
+this.getValue() == orig(this.scale(this.value))
+this.getValue() == orig(this.scale(this.shift))
+this.getValue() == orig(this.scale(this.getValue()))
+this.getValue() == orig(this.scale(this.getShift()))
 this.shift == 0
+this.getShift() == 0
+this.isHeavy() == false
 return == false
-this.list1[0..this.shift-1] == []
-this.list2[0..this.shift-1] == []
-this.list1[0..this.shift] elements == this.list1[this.shift]
-this.list2[0..this.shift] elements == this.list2[this.shift]
+this.list1[0..this.getShift()-1] == []
+this.list2[0..this.getShift()-1] == []
 ===========================================================================
 misc.Purity.retrieve(java.util.List):::ENTER
 this.list2.getClass().getName() == l.getClass().getName()
 this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 l != null
 l[] contains no duplicates
 l[] elements != null
 l[].getClass().getName() == [java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer]
 l[].getClass().getName() elements == java.lang.Integer.class
 size(l[]) == 20
-this.shift < size(l[])-1
+this.getShift() < size(l[])-1
 this.getNum().getClass().getName() in l[].getClass().getName()
 this.sum(this.getNum()) != size(l[])-1
 ===========================================================================
 misc.Purity.retrieve(java.util.List):::EXIT
 this.value == orig(this.value)
-this.value == orig(this.getValue())
-this.shift == return
+this.shift == orig(this.shift)
 this.heavy == orig(this.heavy)
-this.heavy == orig(this.isHeavy())
 this.list1 == orig(this.list1)
 this.list1[] == orig(this.list1[])
 this.list2 == orig(this.list2)
 this.list2[] == orig(this.list2[])
 this.list2.getClass().getName() == orig(this.list2.getClass().getName())
 this.list2.getClass().getName() == orig(l.getClass().getName())
+this.getValue() == orig(this.getValue())
 this.getShift() == return
+this.getShift() == orig(this.getShift())
+this.getShift() == orig(this.retrieve(this.list1))
+this.getShift() == orig(this.retrieve(this.list2))
+this.isHeavy() == orig(this.isHeavy())
 this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
+this.scale(this.value) == orig(this.scale(this.getValue()))
+this.scale(this.shift) == orig(this.scale(this.getShift()))
 this.sum(this.getNum()) == orig(this.sum(this.getJWrap()))
-this.retrieve(this.list1) == return
-this.retrieve(this.list2) == return
 l[] == orig(l[])
-return == orig(this.shift)
-return == orig(this.getShift())
-return == orig(this.retrieve(this.list1))
-return == orig(this.retrieve(this.list2))
-size(this.list1[]) == orig(size(this.list2[]))
+this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 l[] contains no duplicates
 l[] elements != null
 l[].getClass().getName() == [java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer, java.lang.Integer]
 l[].getClass().getName() elements == java.lang.Integer.class
 return one of { 0, 5, 10 }
 return == 0  (mod 5)
+this.getShift() < size(l[])-1
 this.getNum().getClass().getName() in l[].getClass().getName()
 this.sum(this.getNum()) != size(l[])-1
-return <= size(this.list1[])-1
-return < size(l[])-1
 ===========================================================================
 misc.Purity.scale(int):::ENTER
 this.value == scale
 this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 ===========================================================================
 misc.Purity.scale(int):::EXIT
 this.value == orig(this.value)
-this.value == orig(this.getValue())
 this.value == orig(scale)
 this.shift == orig(this.shift)
-this.shift == orig(this.getShift())
-this.shift == orig(this.retrieve(this.list1))
-this.shift == orig(this.retrieve(this.list2))
 this.heavy == orig(this.heavy)
-this.heavy == orig(this.isHeavy())
 this.list1 == orig(this.list1)
 this.list1[] == orig(this.list1[])
 this.list2 == orig(this.list2)
 this.list2[] == orig(this.list2[])
 this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.getValue() == orig(this.getValue())
+this.getShift() == orig(this.getShift())
+this.getShift() == orig(this.retrieve(this.list1))
+this.getShift() == orig(this.retrieve(this.list2))
+this.isHeavy() == orig(this.isHeavy())
 this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
 this.scale(this.value) == return
-this.scale(this.getValue()) == return
+this.scale(this.value) == orig(this.scale(this.getValue()))
+this.scale(this.shift) == orig(this.scale(this.getShift()))
 this.sum(this.getNum()) == orig(this.sum(this.getJWrap()))
-return == orig(this.scale(this.value))
-return == orig(this.scale(this.getValue()))
-size(this.list1[]) == orig(size(this.list2[]))
 this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 (return == 0) ==> (this.value == 0)
 (this.value == 0) ==> (return == 0)
+(return == 0) ==> (this.getValue() == 0)
+(this.getValue() == 0) ==> (return == 0)
 (return == 0) ==> (this.sum(this.getNum()) == 0)
 (this.sum(this.getNum()) == 0) ==> (return == 0)
 ===========================================================================
 misc.Purity.sum(java.lang.Number):::ENTER
 this.getNum().getClass().getName() == n.getClass().getName()
 this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 n != null
+n.getClass().getName() == java.lang.Integer.class
+n.getClass().getName() in this.list1[].getClass().getName()
+n.getClass().getName() in this.list2[].getClass().getName()
+this.list2.getClass().getName() != n.getClass().getName()
 ===========================================================================
 misc.Purity.sum(java.lang.Number):::EXIT
 this.value == orig(this.value)
-this.value == orig(this.getValue())
 this.shift == orig(this.shift)
-this.shift == orig(this.getShift())
-this.shift == orig(this.retrieve(this.list1))
-this.shift == orig(this.retrieve(this.list2))
 this.heavy == orig(this.heavy)
-this.heavy == orig(this.isHeavy())
 this.list1 == orig(this.list1)
 this.list1[] == orig(this.list1[])
 this.list2 == orig(this.list2)
 this.list2[] == orig(this.list2[])
 this.list2.getClass().getName() == orig(this.list2.getClass().getName())
+this.getValue() == orig(this.getValue())
+this.getShift() == orig(this.getShift())
+this.getShift() == orig(this.retrieve(this.list1))
+this.getShift() == orig(this.retrieve(this.list2))
+this.isHeavy() == orig(this.isHeavy())
 this.getNum().getClass().getName() == orig(this.getNum().getClass().getName())
 this.getNum().getClass().getName() == orig(n.getClass().getName())
+this.scale(this.value) == orig(this.scale(this.getValue()))
+this.scale(this.shift) == orig(this.scale(this.getShift()))
 this.sum(this.getNum()) == return
-this.sum(this.getJWrap()) == return
-return == orig(this.sum(this.getNum()))
-return == orig(this.sum(this.getJWrap()))
-size(this.list1[]) == orig(size(this.list2[]))
+this.sum(this.getNum()) == orig(this.sum(this.getJWrap()))
 this.shift == 0  (mod 5)
+this.getShift() == 0  (mod 5)
 return == 0  (mod 2)
 (return == 0) ==> (this.value == 0)
 (this.value == 0) ==> (return == 0)
 2 * this.value - return == 0
+orig(n.getClass().getName()) in this.list1[].getClass().getName()
+orig(n.getClass().getName()) in this.list2[].getClass().getName()
+this.list2.getClass().getName() != orig(n.getClass().getName())
+(return == 0) ==> (this.getValue() == 0)
+(this.getValue() == 0) ==> (return == 0)
+2 * this.getValue() - return == 0
 (return == 0) ==> (this.scale(this.value) == 0)
 (this.scale(this.value) == 0) ==> (return == 0)
-return != size(this.list1[])

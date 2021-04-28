@@ -1,0 +1,21 @@
+===========================================================================
+misc.Compar1.bar(int, int, int, int):::ENTER
+    Variables: i j k l
+i - j + 1 == 0
+k - l + 1 == 0
+===========================================================================
+misc.Compar1.bar(int, int, int, int):::EXIT
+    Variables: i j k l orig(i) orig(j) orig(k) orig(l)
+===========================================================================
+misc.Compar1.main(java.lang.String[]):::ENTER
+    Variables: args args.getClass().getName() args[] args[].toString size(args[]) size(args[])-1
+args != null
+args.getClass().getName() == java.lang.String[].class.getName()
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(args, "toString()"), new String[] {  })
+===========================================================================
+misc.Compar1.main(java.lang.String[]):::EXIT
+    Variables: args args.getClass().getName() args[] args[].toString orig(args) orig(args.getClass().getName()) orig(args[]) orig(args[].toString) size(args[]) size(args[])-1 orig(size(args[])) orig(size(args[]))-1
+daikon.Quant.pairwiseEqual(args, \old(args))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(args, "toString()"), new String[] {  })

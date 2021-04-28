@@ -10,13 +10,12 @@ import junit.framework.Assert;
 public class StreetNumberSet
 {
 
-  /*@ invariant this.begins.length == this.ends.length; */
   /*@ invariant this.begins != null; */
   /*@ invariant (\forall int i; (0 <= i && i <= this.begins.length-1) ==> (this.begins[i] >= 0)); */
   /*@ invariant this.ends != null; */
   /*@ invariant (\forall int i; (0 <= i && i <= this.ends.length-1) ==> (this.ends[i] >= 0)); */
   /*@ invariant this.begins.length >= 1; */
-  /*@ invariant (\forall int i, j; (0 <= i && i <= this.begins.length-1 && 0 <= j && j <= this.ends.length-1 && i == j) ==> (this.begins[i] <= this.ends[j])); */
+  /*@ invariant this.ends.length >= 1; */
   /*@ invariant begins.owner == this; */
   /*@ invariant ends.owner == this; */
   /*@ requires numbers != null; */
@@ -92,7 +91,6 @@ public class StreetNumberSet
   /*@ spec_public */ private final int[] begins;
   /*@ spec_public */ private final int[] ends;
 
-  /*@ ensures this.begins.length == \old(this.ends.length); */
   public void checkRep()
   {
     // parallel arrays
@@ -122,7 +120,6 @@ public class StreetNumberSet
   }
 
   /*@ requires n >= 0; */
-  /*@ ensures this.begins.length == \old(this.ends.length); */
   /** @return true iff n is in this */
   public boolean contains(int n)
   {
@@ -148,12 +145,9 @@ public class StreetNumberSet
   }
 
   /*@ requires n >= 0; */
-  /*@ requires n != this.begins.length; */
-  /*@ ensures this.begins.length == \old(this.ends.length); */
   /*@ ensures \result >= 0; */
   /*@ ensures (\old(n) == 0) ==> (\result == 0); */
   /*@ ensures \result <= \old(n); */
-  /*@ ensures \old(n) != this.begins.length; */
   /** @return the number of elements less than n in this */
   public int orderStatistic(int n)
   {
@@ -189,8 +183,6 @@ public class StreetNumberSet
     return result;
   }
 
-  /*@ ensures this.begins.length == \old(this.ends.length); */
-  /*@ ensures \result >= this.begins.length; */
   /** @return the number of elements in this */
   public int size()
   {
@@ -210,7 +202,6 @@ public class StreetNumberSet
     return result;
   }
 
-  /*@ ensures this.begins.length == \old(this.ends.length); */
   /*@ ensures \result == false; */
   /**
    * @returns true iff the set is the empty set
@@ -221,7 +212,6 @@ public class StreetNumberSet
     return (begins.length == 0);
   }
 
-  /*@ ensures this.begins.length == \old(this.ends.length); */
   /*@ ensures \result >= 0; */
   /*@ ensures !(\forall int i; (0 <= i && i <= this.begins.length-1) ==> (this.begins[i] != \result)); */
   /*@ ensures (\forall int i; (0 <= i && i <= this.begins.length-1) ==> (this.begins[i] >= \result)); */
@@ -246,13 +236,10 @@ public class StreetNumberSet
     return low;
   }
 
-  /*@ ensures this.begins.length == \old(this.ends.length); */
   /*@ ensures \result >= 0; */
   /*@ ensures (\forall int i; (0 <= i && i <= this.begins.length-1) ==> (this.begins[i] <= \result)); */
   /*@ ensures !(\forall int i; (0 <= i && i <= this.ends.length-1) ==> (this.ends[i] != \result)); */
   /*@ ensures (\forall int i; (0 <= i && i <= this.ends.length-1) ==> (this.ends[i] <= \result)); */
-  /*@ ensures (\result == 0) ==> (this.begins.length-1 == 0); */
-  /*@ ensures \result >= this.begins.length-1; */
   /**
    * @requires !this.isEmpty()
    * @returns the maximal number in the set
@@ -273,23 +260,19 @@ public class StreetNumberSet
     return high;
   }
 
-  /*@ requires other.begins.length == other.ends.length; */
   /*@ requires other != null; */
   /*@ requires other.begins != null; */
   /*@ requires (\forall int i; (0 <= i && i <= other.begins.length-1) ==> (other.begins[i] >= 0)); */
   /*@ requires other.ends != null; */
   /*@ requires (\forall int i; (0 <= i && i <= other.ends.length-1) ==> (other.ends[i] >= 0)); */
   /*@ requires other.begins.length >= 1; */
-  /*@ requires (\forall int i, j; (0 <= i && i <= other.begins.length-1 && 0 <= j && j <= other.ends.length-1 && i == j) ==> (other.begins[i] <= other.ends[j])); */
-  /*@ ensures this.begins.length == \old(this.ends.length); */
-  /*@ ensures other.begins.length == other.ends.length; */
-  /*@ ensures other.begins.length == \old(other.ends.length); */
+  /*@ requires other.ends.length >= 1; */
   /*@ ensures other.begins != null; */
   /*@ ensures (\forall int i; (0 <= i && i <= other.begins.length-1) ==> (other.begins[i] >= 0)); */
   /*@ ensures other.ends != null; */
   /*@ ensures (\forall int i; (0 <= i && i <= other.ends.length-1) ==> (other.ends[i] >= 0)); */
   /*@ ensures other.begins.length >= 1; */
-  /*@ ensures (\forall int i, j; (0 <= i && i <= other.begins.length-1 && 0 <= j && j <= other.ends.length-1 && i == j) ==> (other.begins[i] <= other.ends[j])); */
+  /*@ ensures other.ends.length >= 1; */
   /** @return true iff n is in this */
   public boolean intersects(StreetNumberSet other)
   {
@@ -321,7 +304,6 @@ public class StreetNumberSet
     }
   }
 
-  /*@ also_ensures this.begins.length == \old(this.ends.length); */
   /*@ also_ensures (\result == true)  ==>  (\old(o) != null); */
   /*@ also_ensures (\result == true)  ==>  (\old(\typeof(o)) == \type(MapQuick1.StreetNumberSet)); */
   public boolean equals(Object o)
@@ -329,23 +311,19 @@ public class StreetNumberSet
     return (o instanceof StreetNumberSet) && equals((StreetNumberSet) o);
   }
 
-  /*@ requires other.begins.length == other.ends.length; */
   /*@ requires other.begins != null; */
   /*@ requires (\forall int i; (0 <= i && i <= other.begins.length-1) ==> (other.begins[i] >= 0)); */
   /*@ requires other.ends != null; */
   /*@ requires (\forall int i; (0 <= i && i <= other.ends.length-1) ==> (other.ends[i] >= 0)); */
   /*@ requires other.begins.length >= 1; */
-  /*@ requires (\forall int i, j; (0 <= i && i <= other.begins.length-1 && 0 <= j && j <= other.ends.length-1 && i == j) ==> (other.begins[i] <= other.ends[j])); */
-  /*@ ensures this.begins.length == \old(this.ends.length); */
-  /*@ ensures other.begins.length == other.ends.length; */
-  /*@ ensures other.begins.length == \old(other.ends.length); */
+  /*@ requires other.ends.length >= 1; */
   /*@ ensures (\result == true)  ==>  (\old(other) != null); */
   /*@ ensures other.begins != null; */
   /*@ ensures (\forall int i; (0 <= i && i <= other.begins.length-1) ==> (other.begins[i] >= 0)); */
   /*@ ensures other.ends != null; */
   /*@ ensures (\forall int i; (0 <= i && i <= other.ends.length-1) ==> (other.ends[i] >= 0)); */
   /*@ ensures other.begins.length >= 1; */
-  /*@ ensures (\forall int i, j; (0 <= i && i <= other.begins.length-1 && 0 <= j && j <= other.ends.length-1 && i == j) ==> (other.begins[i] <= other.ends[j])); */
+  /*@ ensures other.ends.length >= 1; */
   public boolean equals(StreetNumberSet other)
   {
     if (other == null) return false;
@@ -370,12 +348,11 @@ public class StreetNumberSet
     return true;
   }
 
-  /*@ also_ensures this.begins.length == \old(this.ends.length); */
   /*@ also_ensures (\forall int i; (0 <= i && i <= this.begins.length-1) ==> (this.begins[i] == 1 || this.begins[i] == 3 || this.begins[i] == 7)); */
   /*@ also_ensures (\forall int i; (0 <= i && i <= this.ends.length-1) ==> (this.ends[i] == 1 || this.ends[i] == 5 || this.ends[i] == 7)); */
   /*@ also_ensures \result == 122; */
   /*@ also_ensures this.begins.length == 1 || this.begins.length == 3; */
-  /*@ also_ensures !(\forall int i; (0 <= i && i <= this.begins.length-1) ==> (this.begins[i] != this.begins.length)); */
+  /*@ also_ensures this.ends.length == 1 || this.ends.length == 3; */
   public int hashCode()
   {
     return 3 * min() + 17 * max();

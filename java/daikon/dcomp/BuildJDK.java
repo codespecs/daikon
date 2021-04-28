@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -174,7 +175,6 @@ public class BuildJDK {
       System.out.printf("Writing a list of class names to %s%n", jdk_classes_file);
       // Class names are written in internal form.
       try (PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name())) {
-        pw.println("no_primitives: " + DynComp.no_primitives);
         for (String classFileName : class_stream_map.keySet()) {
           pw.println(classFileName.replace(".class", ""));
         }
@@ -383,7 +383,7 @@ public class BuildJDK {
   }
 
   /**
-   * Add abstract interface classes needed by DynComp runtime.
+   * Add abstract interface classes needed by the DynComp runtime.
    *
    * @param destDir where to store the interface classes
    */
@@ -404,7 +404,7 @@ public class BuildJDK {
    *
    * @param destDir where to store the new class
    * @param className name of class
-   * @param dcompInstrumented c$if true, add equals_dcomp_instrumented method to class
+   * @param dcompInstrumented if true, add equals_dcomp_instrumented method to class
    */
   private void createDCompClass(
       String destDir, @BinaryName String className, boolean dcompInstrumented) {
@@ -448,6 +448,9 @@ public class BuildJDK {
     }
   }
 
+  /** Formats just the time part of a DateTime. */
+  private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+
   /**
    * Instruments the JavaClass {@code jc} (whose name is {@code classFileName}). Writes the
    * resulting class to its corresponding location in the directory outputDir.
@@ -464,11 +467,7 @@ public class BuildJDK {
     if (verbose) System.out.printf("processing target %s%n", classFileName);
     DCInstrument dci = new DCInstrument(jc, true, null);
     JavaClass inst_jc;
-    if (DynComp.no_primitives) {
-      inst_jc = dci.instrument_jdk_refs_only();
-    } else {
-      inst_jc = dci.instrument_jdk();
-    }
+    inst_jc = dci.instrument_jdk();
     skipped_methods.addAll(dci.get_skipped_methods());
     File classfile = new File(classFileName);
     File dir;
@@ -485,7 +484,9 @@ public class BuildJDK {
     if (((_numFilesProcessed % 100) == 0) && (System.console() != null)) {
       System.out.printf(
           "Processed %d/%d classes at %s%n",
-          _numFilesProcessed, classTotal, LocalDateTime.now(ZoneId.systemDefault()));
+          _numFilesProcessed,
+          classTotal,
+          LocalDateTime.now(ZoneId.systemDefault()).format(timeFormatter));
     }
   }
 

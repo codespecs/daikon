@@ -268,8 +268,8 @@ public class CLASSNAME extends SUPERCLASS {
       + "(<= (+ " + shift + " " + aS + ") " + bS + ") "  // 2
       + "(FORALL (" + index + ") (IMPLIES (AND (<= 0 " + index + ") (< " + index + " " + aS + ")) " // 3
       + "(EQ "
-      + UtilPlume.replaceString(aE, aI, "(+ " + aL + " " + index + ")") + " "
-      + UtilPlume.replaceString(bE, bI, "(+ (+ " + bL + " " + index + ") " + shift + ")") + ")))))";
+      + aE.replace(aI, "(+ " + aL + " " + index + ")") + " "
+      + bE.replace(bI, "(+ (+ " + bL + " " + index + ") " + shift + ")") + ")))))";
 
     // So, when this in sensible, we know that both the length and
     // subseq statements hold.

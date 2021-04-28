@@ -134,6 +134,8 @@ public abstract class DaikonVariableInfo
    * Constructs a non-array-type DaikonVariableInfo object.
    *
    * @param theName the name of the variable
+   * @param typeName the name of the type
+   * @param repTypeName the name of the representation type
    */
   protected DaikonVariableInfo(String theName, String typeName, String repTypeName) {
     this(theName, typeName, repTypeName, false);
@@ -170,12 +172,7 @@ public abstract class DaikonVariableInfo
     if (name == null) {
       return null;
     }
-
-    if (Chicory.new_decl_format) {
-      return name.replaceFirst("\\[\\]", "[..]");
-    } else {
-      return name;
-    }
+    return name.replaceFirst("\\[\\]", "[..]");
   }
 
   /**
@@ -594,7 +591,8 @@ public abstract class DaikonVariableInfo
             debug_vars.log("Pure method");
             debug_vars.indent();
             assert meth.member != null
-                : "@AssumeAssertion(nullness): member of method_infos have .member field"; // dependent type
+                : "@AssumeAssertion(nullness): member of method_infos have"
+                    + " .member field"; // dependent type
             newChild.addChildNodes(
                 cinfo,
                 ((Method) meth.member).getReturnType(),
@@ -633,7 +631,8 @@ public abstract class DaikonVariableInfo
                 debug_vars.log("Pure method");
                 debug_vars.indent();
                 assert meth.member != null
-                    : "@AssumeAssertion(nullness): member of method_infos have .member field"; // fix with dependent type
+                    : "@AssumeAssertion(nullness): member of"
+                        + " method_infos have .member field"; // fix with dependent type
                 newChild.addChildNodes(
                     cinfo,
                     ((Method) meth.member).getReturnType(),

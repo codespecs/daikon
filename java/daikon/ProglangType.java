@@ -16,7 +16,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * Represents the type of a variable, for its declared type, dtrace file representation, and
@@ -27,7 +27,7 @@ import org.plumelib.util.UtilPlume;
 //  * that ties this to a Java front end, as Class can't represent types of
 //    (say) C variables.  (not a compelling problem)
 //  * that loads the class, which requies that all classes available at
-//    runtime be available at inference time.  (not a compelling problem)
+//    run time be available at inference time.  (not a compelling problem)
 //  * Class does not represent inheritance (but I can do that myself);
 //    and see isAssignableFrom, which might do all I need.
 //  * Class has no "dimensions" field.  isArray() exists, however, as does
@@ -174,8 +174,14 @@ public final @Interned class ProglangType implements Serializable {
   //   return this == o;
   // }
 
-  // THIS CODE IS A HOT SPOT (~33% of runtime) [as of January 2002].
-  /** @param t_base must be interned */
+  // THIS CODE IS A HOT SPOT (~33% of run time) [as of January 2002].
+  /**
+   * Searches for an array type with the given base and number of dimensions.
+   *
+   * @param t_base the base type; must be interned
+   * @param t_dims the number of dimensions
+   * @return an array type with the given base and number of dimensions, or null
+   */
   private static @Nullable ProglangType find(@Interned String t_base, int t_dims) {
     // Disabled for performance reasons! this assertion is sound though:
     //    assert t_base == t_base.intern();
@@ -220,11 +226,8 @@ public final @Interned class ProglangType implements Serializable {
     @SuppressWarnings("interning") // test above did not find one, so the new one is interned
     @Interned ProglangType result = new ProglangType(t_base, t_dims);
 
-    List<ProglangType> v = all_known_types.get(t_base);
-    if (v == null) {
-      v = new ArrayList<ProglangType>();
-      all_known_types.put(t_base, v);
-    }
+    List<ProglangType> v =
+        all_known_types.computeIfAbsent(t_base, __ -> new ArrayList<ProglangType>());
 
     v.add(result);
 
@@ -411,7 +414,7 @@ public final @Interned class ProglangType implements Serializable {
         System.out.printf(
             "Proceeding anyway.  Please report a bug in the tool that made the data trace file.");
       }
-      value = UtilPlume.unescapeJava(value);
+      value = StringsPlume.unescapeJava(value);
       return value.intern();
     } else if (base == BASE_CHAR) {
       // This will fail if the character is output as an integer
@@ -420,7 +423,7 @@ public final @Interned class ProglangType implements Serializable {
       if (value.length() == 1) {
         c = value.charAt(0);
       } else if ((value.length() == 2) && (value.charAt(0) == '\\')) {
-        c = UtilPlume.unescapeJava(value).charAt(0);
+        c = StringsPlume.unescapeJava(value).charAt(0);
       } else if ((value.length() == 4) && (value.charAt(0) == '\\')) {
         Byte b = Byte.decode("0" + value.substring(1));
         return Intern.internedLong(b.longValue());
@@ -508,7 +511,8 @@ public final @Interned class ProglangType implements Serializable {
             v.add(parser.sval);
           } else if (parser.ttype == StreamTokenizer.TT_WORD) {
             assert parser.sval != null
-                : "@AssumeAssertion(nullness): dependent: representation invariant of StreamTokenizer";
+                : "@AssumeAssertion(nullness): dependent: representation invariant of"
+                    + " StreamTokenizer";
             if (parser.sval.equals("nonsensical")) {
               return null;
             }
@@ -518,7 +522,9 @@ public final @Interned class ProglangType implements Serializable {
             v.add(Integer.toString((int) parser.nval));
           } else {
             System.out.printf(
-                "Warning: at %s line %d%n  bad ttype %c [int=%d] while parsing %s%n  Proceeding with value 'null'%n",
+                "Warning: at %s line %d%n"
+                    + "  bad ttype %c [int=%d] while parsing %s%n"
+                    + "  Proceeding with value 'null'%n",
                 filename, reader.getLineNumber(), (char) parser.ttype, parser.ttype, value_orig);
             v.add(null);
           }

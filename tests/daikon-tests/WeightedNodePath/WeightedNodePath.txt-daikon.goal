@@ -122,4 +122,3 @@ this.node == orig(this.node)
 this.path == orig(this.path)
 this.cost == orig(this.cost)
 this.path == null
-this.cost < return

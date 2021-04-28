@@ -7,182 +7,27 @@ this.theArray[] elements >= 0
 this.i <= 49
 this.i >= 0
 size(this.theArray[]) == 1000
-this.theArray[this.j+1..] != (index)
-this.theArray[0..this.j] contains no duplicates
-this.i in this.theArray[]
-this.j in this.theArray[]
 this.theArray[] elements < size(this.theArray[])-1
 (this.j == 0) ==> (this.i == 0)
 this.i <= this.j
-this.i < size(this.theArray[])-1
-(this.i == 0) ==> (this.theArray[this.i] == 0)
-(this.theArray[this.i] == 0) ==> (this.i == 0)
-this.i in this.theArray[this.i..]
-this.i in this.theArray[this.i+1..]
-(this.theArray[this.j] == 0) ==> (this.i == 0)
-this.i in this.theArray[this.j..]
-this.i in this.theArray[this.j+1..]
-this.j < size(this.theArray[])-1
-(this.j == 0) ==> (this.theArray[this.i] == 0)
-this.j in this.theArray[this.i..]
-this.j in this.theArray[this.i+1..]
-(this.j == 0) ==> (this.theArray[this.j] == 0)
-(this.theArray[this.j] == 0) ==> (this.j == 0)
-this.j in this.theArray[this.j..]
-this.j in this.theArray[this.j+1..]
-size(this.theArray[])-1 > this.theArray[this.i]
-this.theArray[this.i..] elements < size(this.theArray[])-1
-this.theArray[this.i+1..] elements < size(this.theArray[])-1
-this.theArray[0..this.i] elements < size(this.theArray[])-1
-this.theArray[0..this.i-1] elements < size(this.theArray[])-1
-size(this.theArray[])-1 > this.theArray[this.j]
-this.theArray[this.j..] elements < size(this.theArray[])-1
-this.theArray[this.j+1..] elements < size(this.theArray[])-1
-this.theArray[0..this.j] elements < size(this.theArray[])-1
-this.theArray[0..this.j-1] elements < size(this.theArray[])-1
-(this.theArray[this.j] == 0) ==> (this.theArray[this.i] == 0)
 ===========================================================================
 misc.Suppress02.Suppress02():::EXIT
-this.i == this.theArray[this.i]
 this.i == 0
 this.j == 5
-this.theArray[0..this.i] elements == 0
-this.theArray[0..this.i] == (index)
-this.theArray[this.j] == 153
-this.theArray[this.j-1] == 44
-this.theArray[0..this.i] elements == this.i
 ===========================================================================
 misc.Suppress02.f(int):::ENTER
-this.theArray[0..n] contains no duplicates
-n in this.theArray[]
 (n == 0) ==> (this.i == 0)
 this.i <= n
-(this.theArray[n] == 0) ==> (this.i == 0)
-this.i in this.theArray[n..]
-this.i in this.theArray[n+1..]
-this.j in this.theArray[n..]
-this.j in this.theArray[n+1..]
-n < size(this.theArray[])-1
-(n == 0) ==> (this.theArray[this.i] == 0)
-n in this.theArray[this.i..]
-n in this.theArray[this.i+1..]
-n != this.theArray[this.j]
-n in this.theArray[this.j..]
-n in this.theArray[this.j+1..]
-(n == 0) ==> (this.theArray[n] == 0)
-(this.theArray[n] == 0) ==> (n == 0)
-n in this.theArray[n..]
-n in this.theArray[n+1..]
-size(this.theArray[])-1 > this.theArray[n]
-this.theArray[n..] elements < size(this.theArray[])-1
-this.theArray[n+1..] elements < size(this.theArray[])-1
-this.theArray[0..n] elements < size(this.theArray[])-1
-this.theArray[0..n-1] elements < size(this.theArray[])-1
-(this.theArray[n] == 0) ==> (this.theArray[this.i] == 0)
 ===========================================================================
 misc.Suppress02.f(int):::EXIT
 this.theArray == orig(this.theArray)
 this.theArray[] == orig(this.theArray[])
-this.theArray[orig(this.j)+1..] != (index)
-this.theArray[0..orig(this.j)] contains no duplicates
-this.theArray[0..orig(n)] contains no duplicates
-orig(this.i) in this.theArray[]
-orig(this.j) in this.theArray[]
-orig(n) in this.theArray[]
 (orig(n) == 0) ==> (this.i == 0)
 this.i <= orig(n)
-this.i in this.theArray[orig(this.i)..]
-this.i in this.theArray[orig(this.i)+1..]
-this.i != this.theArray[orig(this.j)]
-this.i in this.theArray[orig(this.j)..]
-this.i in this.theArray[orig(this.j)+1..]
-(this.theArray[orig(n)] == 0) ==> (this.i == 0)
-this.i in this.theArray[orig(n)..]
-this.i in this.theArray[orig(n)+1..]
 (this.j == 0) ==> (orig(this.i) == 0)
 this.j != orig(this.j)
 (orig(n) == 0) ==> (this.j == 0)
 (this.j == 0) ==> (orig(n) == 0)
-(this.j == 0) ==> (this.theArray[orig(this.i)] == 0)
-this.j in this.theArray[orig(this.i)..]
-this.j in this.theArray[orig(this.i)+1..]
-this.j in this.theArray[orig(this.j)..]
-this.j in this.theArray[orig(this.j)+1..]
-(this.j == 0) ==> (this.theArray[orig(n)] == 0)
-(this.theArray[orig(n)] == 0) ==> (this.j == 0)
-this.j in this.theArray[orig(n)..]
-this.j in this.theArray[orig(n)+1..]
-orig(this.i) < size(this.theArray[])-1
-orig(this.i) in this.theArray[this.i..]
-orig(this.i) in this.theArray[this.i+1..]
-(this.theArray[this.j] == 0) ==> (orig(this.i) == 0)
-orig(this.i) in this.theArray[this.j..]
-orig(this.i) in this.theArray[this.j+1..]
-(orig(this.i) == 0) ==> (this.theArray[orig(this.i)] == 0)
-(this.theArray[orig(this.i)] == 0) ==> (orig(this.i) == 0)
-orig(this.i) in this.theArray[orig(this.i)..]
-orig(this.i) in this.theArray[orig(this.i)+1..]
-(this.theArray[orig(this.j)] == 0) ==> (orig(this.i) == 0)
-orig(this.i) in this.theArray[orig(this.j)..]
-orig(this.i) in this.theArray[orig(this.j)+1..]
-(this.theArray[orig(n)] == 0) ==> (orig(this.i) == 0)
-orig(this.i) in this.theArray[orig(n)..]
-orig(this.i) in this.theArray[orig(n)+1..]
-orig(this.j) < size(this.theArray[])-1
-orig(this.j) in this.theArray[this.i..]
-orig(this.j) in this.theArray[this.i+1..]
-orig(this.j) != this.theArray[this.j]
-orig(this.j) in this.theArray[this.j..]
-orig(this.j) in this.theArray[this.j+1..]
-(orig(this.j) == 0) ==> (this.theArray[orig(this.i)] == 0)
-orig(this.j) in this.theArray[orig(this.i)..]
-orig(this.j) in this.theArray[orig(this.i)+1..]
-(orig(this.j) == 0) ==> (this.theArray[orig(this.j)] == 0)
-(this.theArray[orig(this.j)] == 0) ==> (orig(this.j) == 0)
-orig(this.j) in this.theArray[orig(this.j)..]
-orig(this.j) in this.theArray[orig(this.j)+1..]
-orig(this.j) in this.theArray[orig(n)..]
-orig(this.j) in this.theArray[orig(n)+1..]
-orig(n) < size(this.theArray[])-1
-(orig(n) == 0) ==> (this.theArray[this.i] == 0)
-orig(n) in this.theArray[this.i..]
-orig(n) in this.theArray[this.i+1..]
-(orig(n) == 0) ==> (this.theArray[this.j] == 0)
-(this.theArray[this.j] == 0) ==> (orig(n) == 0)
-orig(n) in this.theArray[this.j..]
-orig(n) in this.theArray[this.j+1..]
-(orig(n) == 0) ==> (this.theArray[orig(this.i)] == 0)
-orig(n) in this.theArray[orig(this.i)..]
-orig(n) in this.theArray[orig(this.i)+1..]
-orig(n) != this.theArray[orig(this.j)]
-orig(n) in this.theArray[orig(this.j)..]
-orig(n) in this.theArray[orig(this.j)+1..]
-(orig(n) == 0) ==> (this.theArray[orig(n)] == 0)
-(this.theArray[orig(n)] == 0) ==> (orig(n) == 0)
-orig(n) in this.theArray[orig(n)..]
-orig(n) in this.theArray[orig(n)+1..]
-size(this.theArray[])-1 > this.theArray[orig(this.i)]
-this.theArray[orig(this.i)..] elements < size(this.theArray[])-1
-this.theArray[orig(this.i)+1..] elements < size(this.theArray[])-1
-this.theArray[0..orig(this.i)] elements < size(this.theArray[])-1
-this.theArray[0..orig(this.i)-1] elements < size(this.theArray[])-1
-size(this.theArray[])-1 > this.theArray[orig(this.j)]
-this.theArray[orig(this.j)..] elements < size(this.theArray[])-1
-this.theArray[orig(this.j)+1..] elements < size(this.theArray[])-1
-this.theArray[0..orig(this.j)] elements < size(this.theArray[])-1
-this.theArray[0..orig(this.j)-1] elements < size(this.theArray[])-1
-size(this.theArray[])-1 > this.theArray[orig(n)]
-this.theArray[orig(n)..] elements < size(this.theArray[])-1
-this.theArray[orig(n)+1..] elements < size(this.theArray[])-1
-this.theArray[0..orig(n)] elements < size(this.theArray[])-1
-this.theArray[0..orig(n)-1] elements < size(this.theArray[])-1
-(this.theArray[orig(n)] == 0) ==> (this.theArray[this.i] == 0)
-(this.theArray[this.j] == 0) ==> (this.theArray[orig(this.i)] == 0)
-this.theArray[this.j] != this.theArray[orig(this.j)]
-(this.theArray[orig(n)] == 0) ==> (this.theArray[this.j] == 0)
-(this.theArray[this.j] == 0) ==> (this.theArray[orig(n)] == 0)
-(this.theArray[orig(this.j)] == 0) ==> (this.theArray[orig(this.i)] == 0)
-(this.theArray[orig(n)] == 0) ==> (this.theArray[orig(this.i)] == 0)
 ===========================================================================
 misc.Suppress02.main(java.lang.String[]):::ENTER
 args has only one value

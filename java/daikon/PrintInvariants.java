@@ -56,7 +56,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.plumelib.util.RegexUtil;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * PrintInvariants prints a set of invariants from a {@code .inv} file. For documentation, see
@@ -265,8 +265,9 @@ public final class PrintInvariants {
     daikon.Runtime.no_dtrace = true;
   }
 
+  /** The usage message for this program. */
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage: java daikon.PrintInvariants [OPTION]... FILE",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
@@ -306,7 +307,6 @@ public final class PrintInvariants {
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
    * appropriate to be called progrmmatically.
    */
-  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
   public static void mainHelper(String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
           ClassNotFoundException {
@@ -363,7 +363,8 @@ public final class PrintInvariants {
               PrintInvariants.discReasonSetup(Daikon.getOptarg(g));
             } catch (IllegalArgumentException e) {
               assert e.getMessage() != null
-                  : "@AssumeAssertion(nullness):  application invariant:  if discReasonSetup throws IllegalArgumentException, its message is non-null";
+                  : "@AssumeAssertion(nullness):  application invariant:  if discReasonSetup"
+                      + " throws IllegalArgumentException, its message is non-null";
               throw new Daikon.UserError(e.getMessage());
             }
           } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
@@ -480,11 +481,6 @@ public final class PrintInvariants {
       out_stream.flush();
       out_stream.close();
     }
-  }
-
-  // To avoid the leading "UtilPlume." on all calls.
-  private static String nplural(int n, String noun) {
-    return UtilPlume.nplural(n, noun);
   }
 
   /**
@@ -917,7 +913,7 @@ public final class PrintInvariants {
     if (Daikon.output_num_samples) {
       out.print("  ");
       if (!wrap_xml) {
-        out.print(nplural(ppt.num_samples(), "sample"));
+        out.print(StringsPlume.nplural(ppt.num_samples(), "sample"));
       } else {
         printXmlTagged(out, "SAMPLES", ppt.num_samples());
       }
@@ -1132,7 +1128,7 @@ public final class PrintInvariants {
 
     if (Daikon.output_num_samples) {
       int inv_num_samps = inv.ppt.num_samples();
-      String num_values_samples = "\t\t(" + nplural(inv_num_samps, "sample") + ")";
+      String num_values_samples = "\t\t(" + StringsPlume.nplural(inv_num_samps, "sample") + ")";
       inv_rep += num_values_samples;
     }
 
@@ -1643,11 +1639,8 @@ public final class PrintInvariants {
       if (filter != null) {
         filter_class = filter.getClass();
       }
-      Map<Class<? extends Invariant>, Integer> inv_map = filter_map.get(filter_class);
-      if (inv_map == null) {
-        inv_map = new LinkedHashMap<>();
-        filter_map.put(filter_class, inv_map);
-      }
+      Map<Class<? extends Invariant>, Integer> inv_map =
+          filter_map.computeIfAbsent(filter_class, __ -> new LinkedHashMap<>());
       Integer cnt = inv_map.get(inv.getClass());
       if (cnt == null) {
         cnt = 1;
@@ -1685,8 +1678,7 @@ public final class PrintInvariants {
     }
   }
 
-  @SuppressWarnings("flowexpr.parse.error") // private field
-  @RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})
+  @RequiresNonNull({"daikon.suppress.NIS.all_suppressions", "daikon.suppress.NIS.suppressor_map"})
   public static void print_true_inv_cnt(PptMap ppts) {
 
     // Count printable invariants

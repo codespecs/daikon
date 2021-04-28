@@ -158,7 +158,7 @@ SOURCES?=$(COMMON_HERE)/sources
 # (e.g. esc-experiments/StackAr or daikon-tests/QueueAr)
 CWD:=$(shell pwd)
 # Why is this command echoed in the Travis job output?
-PROJECT_VIA_COMMAND:=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[678]-)?daikon/(workspace/)?tests(\.ver[23])?/||;')
+PROJECT_VIA_COMMAND:=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[678]-)?daikon[^/]*/(workspace/)?tests(\.ver[23])?/||;')
 PROJECT?=${PROJECT_VIA_COMMAND}
 
 # This is the name for the output files ($.inv.gz $.txt-daikon ...)
@@ -168,10 +168,8 @@ PROJECT_FILE?=$(notdir ${PROJECT})
 
 # if another scratch dir is desired (such as /var/autofs/net/manioc/scratch
 # or /tmp) define SCRATCH_BASE to that location.
-SCRATCH_BASE ?= /scratch
-# Test that the directory exists.  There must be a better way to do this.
-SCRATCH_BASE:=$(wildcard $(SCRATCH_BASE))
-ifndef SCRATCH_BASE
+SCRATCH_BASE?=/scratch
+ifeq ("$(wildcard $(SCRATCH_BASE))","")
   SCRATCH_BASE=/tmp
 endif
 SCRATCH_FOR_DAIKON_BASE?=${SCRATCH_BASE}/${USER}/tests
@@ -188,7 +186,7 @@ else
   JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
 endif
 JAVA  := $(JAVA_HOME)/bin/java
-JAVAC := $(JAVA_HOME)/bin/javac
+JAVAC ?= $(JAVA_HOME)/bin/javac
 JAVALIB_CLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
@@ -415,7 +413,7 @@ ${ALL_LIST_FILE}: ${SCRATCH_FOR_DAIKON}/.exists ./Makefile $(MAIN_JAVA) $(MAIN2_
 	@echo
 	@echo "### figure out the necessary files (${PROJECT_FILE})"
 	@echo
-	${DAIKONDIR}/scripts/java-dependencies $(SOURCES) "$(MAIN_JAVA) $(MAIN2_JAVA)" $(JAVAC) \
+	${DAIKONDIR}/scripts/java-dependencies $(SOURCES) "$(MAIN_JAVA) $(MAIN2_JAVA)" "$(JAVAC)" \
 		> $(ALL_LIST_FILE)
 
 
@@ -486,13 +484,12 @@ chicory: $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz
 $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-timestamp \
 									$(INST_LIST_FILE) $(CHICORY_EXEC)
 	@echo
-	@echo "### compile source and run Chicory (${PROJECT_FILE})"
+	@echo "### Run Chicory (${PROJECT_FILE})"
 	@echo
-	@echo inst_Files: '$(INST_FILES)'
-	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 	  --dtrace-file=$(PROJECT_FILE).dtrace.gz \
-	  --ppt-select-pattern='$(INST_FILES)' ${MAIN_CLASS} ${MAIN_ARGS}
+	  --comparability-file=$(CWD)/$(PROJECT_FILE).decls-DynComp \
+	  --ppt-select-pattern='$(INST_FILES)' ${JUNIT} ${MAIN_CLASS} ${MAIN_ARGS}
 	touch $(SCRATCH_FOR_DAIKON)/.run-timestamp
 endif
 # end of "ifeq (generated,${TRACE_SOURCE})"
@@ -539,16 +536,17 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
   $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).txt-cset-nojdk: $(DCOMP_PREMAIN) $(DCOMP_RT) \
 				$(SCRATCH_FOR_DAIKON)/.copy-timestamp $(INST_LIST_FILE)
 	@echo
-	@echo "### Run DynComp (${PROJECT_FILE})"
+	@echo "### Compile source and run DynComp (${PROJECT_FILE})"
 	@echo
+#	@echo inst_Files: '$(INST_FILES)'
 	rm -f $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
-	$(RUN_JAVA) daikon.DynComp $(DCOMP_ARGS) $(MAIN_CLASS) $(MAIN_ARGS)
+	$(RUN_JAVA) daikon.DynComp $(DCOMP_ARGS) ${JUNIT} $(MAIN_CLASS) $(MAIN_ARGS)
 	$(RUN_JAVA) daikon.DynComp '--ppt-select-pattern=$(INST_FILES)' \
 		--comparability-file=$(PROJECT_FILE).txt-cset-nojdk \
 		--decl_file $(PROJECT_FILE).decls-DynComp-nojdk \
 		--trace-file=$(PROJECT_FILE).txt-trace-nojdk \
-		--abridged-vars=$(SHINY_PRINT) --rt-file=NONE $(MAIN_CLASS) $(MAIN_ARGS)
+		--abridged-vars=$(SHINY_PRINT) --rt-file=NONE ${JUNIT} $(MAIN_CLASS) $(MAIN_ARGS)
 
 else
 dyncomp:
@@ -583,11 +581,12 @@ endif
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make test-run       : runs the program, without instrumentation, etc."
-test-run:
+test-run: ${SCRATCH_FOR_DAIKON}/.copy-timestamp
 	@echo
 	@echo "### test-run (${PROJECT_FILE})"
 	@echo
-	${RUN_JAVA} ${JAVA_ARGS} ${MAIN_CLASS} ${MAIN_ARGS}
+	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
+	${RUN_JAVA} ${JAVA_ARGS} ${JUNIT} ${MAIN_CLASS} ${MAIN_ARGS}
 
 # generate invariants from the dtrace, decls, etc. data
 
@@ -641,7 +640,7 @@ ${SPINFO_INV_FILE}: ${PROJECT_FILE}.decls-DynComp ${PROJECT_FILE}.spinfo-static 
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 		--dtrace-file=$(PROJECT_FILE)-dyncomp.dtrace.gz \
 		--comparability-file=${CWD}/$(PROJECT_FILE).decls-DynComp \
-		--ppt-select-pattern='$(INST_FILES)' ${MAIN_CLASS} ${MAIN_ARGS}
+		--ppt-select-pattern='$(INST_FILES)' ${JUNIT} ${MAIN_CLASS} ${MAIN_ARGS}
 	@echo
 	@echo "### run Daikon with DynComp dtrace and splitter file (${PROJECT_FILE})"
 	@echo
@@ -856,14 +855,14 @@ ifdef ESC_ON
 ifndef NO_MERGE
 ifndef NO_CSHARP
 # ESC  MERGE  CSHARP
-txt-diff: txt-daikon-diff txt-chicory-diff txt-esc-diff inv-checker-diff \
-		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-daikon-end2end-diff txt-chicory-diff \
-		  dyncomp-diff txt-simplify-diff txt-csharpcontract-diff txt-jaif-diff
+txt-diff: dyncomp-diff txt-daikon-diff txt-chicory-diff txt-esc-diff inv-checker-diff \
+		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-daikon-end2end-diff \
+		  txt-simplify-diff txt-csharpcontract-diff txt-jaif-diff
 else
 # ESC  MERGE  !CSHARP
-txt-diff: txt-daikon-diff txt-chicory-diff txt-esc-diff inv-checker-diff \
-		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-daikon-end2end-diff txt-chicory-diff \
-		  dyncomp-diff txt-simplify-diff txt-jaif-diff
+txt-diff: dyncomp-diff txt-daikon-diff txt-chicory-diff txt-esc-diff inv-checker-diff \
+		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-daikon-end2end-diff \
+		  txt-simplify-diff txt-jaif-diff
 endif
 
 # txt-daikon-suppress-diff;
@@ -878,12 +877,12 @@ txt-merge-diff:
 	@echo 'Nothing to do for merge'
 ifndef NO_CSHARP
 # ESC  !MERGE  CSHARP
-txt-diff: txt-daikon-diff txt-jml-diff spinfo-static-diff txt-daikon-end2end-diff txt-esc-diff \
-		  txt-csharpcontract-diff txt-chicory-diff inv-checker-diff dyncomp-diff
+txt-diff: dyncomp-diff txt-daikon-diff txt-jml-diff spinfo-static-diff txt-daikon-end2end-diff txt-esc-diff \
+		  txt-csharpcontract-diff txt-chicory-diff inv-checker-diff
 else
 # ESC  !MERGE  !CSHARP
-txt-diff: txt-daikon-diff txt-jml-diff spinfo-static-diff txt-daikon-end2end-diff txt-esc-diff \
-		  txt-chicory-diff inv-checker-diff dyncomp-diff
+txt-diff: dyncomp-diff txt-daikon-diff txt-jml-diff spinfo-static-diff txt-daikon-end2end-diff txt-esc-diff \
+		  txt-chicory-diff inv-checker-diff
 endif
 # txt-daikon-suppress-diff;
 endif # ifndef NO_MERGE
@@ -893,16 +892,16 @@ ifdef NO_JML
 # !ESC !JML
 txt-merge-diff:
 	@echo 'Nothing to do for merge'
-txt-diff: txt-daikon-diff;
+txt-diff: dyncomp-diff txt-daikon-diff txt-chicory-diff
 else
 # !ESC JML
 ifndef NO_MERGE
 ifndef NO_CSHARP
 # !ESC JML MERGE CSHARP
-txt-diff: txt-daikon-diff txt-jml-diff txt-merge-diff txt-chicory-diff txt-csharpcontract-diff inv-checker-diff dyncomp-diff
+txt-diff: dyncomp-diff txt-daikon-diff txt-jml-diff txt-merge-diff txt-chicory-diff txt-csharpcontract-diff inv-checker-diff
 else
 # !ESC JML MERGE !CSHARP
-txt-diff: txt-daikon-diff txt-jml-diff txt-merge-diff txt-chicory-diff inv-checker-diff dyncomp-diff
+txt-diff: dyncomp-diff txt-daikon-diff txt-jml-diff txt-merge-diff txt-chicory-diff inv-checker-diff
 endif
 # !ESC JML MERGE
 # txt-daikon-suppress-diff;
@@ -951,12 +950,29 @@ endif
 txt-jaif-diff: $(PROJECT_FILE).txt-jaif.diff
 
 # Special case for merge: we want to keep track of whitespace
-%-merge-jml.diff: %-merge-jml.goal %-merge-jml
+%-merge-jml.diff: $(call goal_name, %-merge-jml) %-merge-jml
 	@echo
 	@echo "### textual diff (${PROJECT_FILE})"
 	@echo
 	-rm -f $@
-	-diff -u --strip-trailing-cr $^ > $@ 2>&1
+	-diff -u --strip-trailing-cr $(call goal_name, $*-merge-jml) $*-merge-jml > $@ 2>&1
+	cat $@
+
+# Special case for DynComp: we need to ignore date/time stamp
+# so just skip all comment lines
+%-DynComp.diff: $(call goal_name,%-DynComp) %-DynComp
+	@echo
+	@echo "### textual diff (${PROJECT_FILE})"
+	@echo
+	-rm -f $@
+	-diff -u --ignore-matching-lines '^//.*' $(call goal_name,$*-DynComp) $*-DynComp > $@ 2>&1
+	cat $@
+%-DynComp-nojdk.diff: $(call goal_name,%-DynComp-nojdk) %-DynComp-nojdk
+	@echo
+	@echo "### textual diff (${PROJECT_FILE})"
+	@echo
+	-rm -f $@
+	-diff -u --ignore-matching-lines '^//.*' $(call goal_name,$*-DynComp-nojdk) $*-DynComp-nojdk > $@ 2>&1
 	cat $@
 
 # If a prerequisite fails, none of the rules gets run.

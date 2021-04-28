@@ -1886,7 +1886,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // and many methods should only be called on non-prototype methods.
   // Another (arguably better, though less convenient in certain ways)
   // design would not represent the factory as an Invariant object.  An
-  // object never transitions at runtime between being a factory/prototype
+  // object never transitions at run time between being a factory/prototype
   // and being a normal invariant.
   //
   // Could we just use the class, such as Positive.class, as (a proxy for)

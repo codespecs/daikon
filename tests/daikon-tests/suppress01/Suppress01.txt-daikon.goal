@@ -1,7 +1,5 @@
 ===========================================================================
 misc.Suppress01:::OBJECT
-this.b == this.theArray[this.b]
-this.b == this.theArray2[this.b]
 this has only one value
 this.theArray != null
 this.theArray[] elements >= 0
@@ -11,20 +9,15 @@ this.theArray2[] elements >= 0
 this.theArray2[i] <= i
 this.b == 0
 this.theArray[] is a subset of this.theArray2[]
-this.theArray[] elements >= this.b
 this.theArray[] elements <= size(this.theArray[])-1
 this.theArray[] elements < size(this.theArray2[])-1
-this.theArray2[] elements >= this.b
 this.theArray2[] elements <= size(this.theArray[])
 size(this.theArray[])-1 in this.theArray2[]
 this.theArray2[] elements <= size(this.theArray2[])-1
-this.b <= size(this.theArray[])-1
-this.b < size(this.theArray2[])-1
 (size(this.theArray2[])-1 >> size(this.theArray[]) == 0)
 size(this.theArray[]) <= size(this.theArray2[])-1
 ===========================================================================
 misc.Suppress01.Suppress01():::EXIT
-this.b == size(this.theArray[])-1
 size(this.theArray[]) == size(this.theArray2[])-1
 this.theArray has only one value
 this.theArray[] elements == 0
@@ -32,19 +25,14 @@ this.theArray[i] == i
 this.theArray2 has only one value
 this.theArray2[i] == i
 size(this.theArray2[]) == 2
-this.theArray[] elements == this.b
+size(this.theArray[])-1 in this.theArray[]
+this.theArray[] elements == size(this.theArray[])-1
 size(this.theArray[]) in this.theArray2[]
 ===========================================================================
 misc.Suppress01.f():::ENTER
 ===========================================================================
 misc.Suppress01.f():::EXIT
 this.b == orig(this.b)
-this.b == this.theArray[orig(this.b)]
-this.b == this.theArray2[orig(this.b)]
-this.b == orig(this.theArray[post(this.b)])
-this.b == orig(this.theArray2[post(this.b)])
-this.b == orig(this.theArray[this.b])
-this.b == orig(this.theArray2[this.b])
 size(this.theArray[])-1 == orig(size(this.theArray[]))
 this.theArray[] is a superset of orig(this.theArray[])
 this.theArray[] is a subset of orig(this.theArray2[])
@@ -57,10 +45,6 @@ this.theArray2[] elements <= size(this.theArray[])-1
 this.theArray2[] elements < size(this.theArray2[])-1
 orig(size(this.theArray[]))-1 in this.theArray2[]
 this.theArray2[] elements <= orig(size(this.theArray2[]))-1
-orig(this.theArray[]) elements >= this.b
-orig(this.theArray2[]) elements >= this.b
-this.b <= orig(size(this.theArray[]))-1
-this.b < orig(size(this.theArray2[]))-1
 orig(this.theArray[]) elements < size(this.theArray2[])-1
 orig(this.theArray2[]) elements <= size(this.theArray[])-1
 orig(this.theArray2[]) elements < size(this.theArray2[])-1

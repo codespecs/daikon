@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * Extract the consequents of all Implication invariants that are predicated by membership in a
@@ -74,8 +74,9 @@ public class ExtractConsequent {
   private static Map<String, Map<String, Map<String, HashedConsequent>>> pptname_to_conditions =
       new HashMap<>();
 
+  /** The usage message for this program. */
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage: java daikon.ExtractConsequent [OPTION]... FILE",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",

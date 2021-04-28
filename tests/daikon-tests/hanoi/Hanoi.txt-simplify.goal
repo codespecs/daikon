@@ -47,7 +47,6 @@ six170.Hanoi.moveTower(int, int, int):::ENTER
 (>= |towerHeight| 1)
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |towerHeight| 1)) (<= 0 |j|) (<= |j| (- |towerHeight| 1)) (EQ (+ |i| 1) |j|)) (EQ (select (select elems (select |diskLocation| |this|)) |i|) (select (select elems (select |diskLocation| |this|)) |j|))))
 (>= (select |height| |this|) |towerHeight|)
-(FORALL (|i|) (IMPLIES (AND (<= |towerHeight| |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1))) (<= (select (select elems (select |diskLocation| |this|)) |i|) (select |height| |this|))))
 (EQ (|java-&| |fromPeg| |toPeg|) 0)
 (NEQ |fromPeg| |toPeg|)
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |towerHeight| 1))) (EQ (select (select elems (select |diskLocation| |this|)) |i|) |fromPeg|)))
@@ -64,14 +63,11 @@ six170.Hanoi.moveTower(int, int, int):::EXIT
 (EQ (select |noOutput| |this|) |@true|)
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |__orig__towerHeight| 1)) (<= 0 |j|) (<= |j| (- |__orig__towerHeight| 1)) (EQ (+ |i| 1) |j|)) (EQ (select (select elems (select |diskLocation| |this|)) |i|) (select (select elems (select |diskLocation| |this|)) |j|))))
 (>= (select |height| |this|) |__orig__towerHeight|)
-(FORALL (|i|) (IMPLIES (AND (<= |__orig__towerHeight| |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1))) (<= (select (select elems (select |diskLocation| |this|)) |i|) (select |height| |this|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |__orig__towerHeight| 1))) (EQ (select (select elems (select |diskLocation| |this|)) |i|) |__orig__toPeg|)))
 ===========================================================================
 six170.Hanoi.otherPeg(int, int):::ENTER
 (OR (EQ |pegA| 0) (EQ |pegA| 1) (EQ |pegA| 2))
 (OR (EQ |pegB| 0) (EQ |pegB| 1) (EQ |pegB| 2))
-(EQ (|java-&| |pegA| |pegB|) 0)
-(NEQ |pegA| |pegB|)
 ===========================================================================
 six170.Hanoi.otherPeg(int, int):::EXIT65
 (EQ |return| 2)
@@ -105,11 +101,6 @@ six170.Hanoi.otherPeg(int, int):::EXIT70
 ===========================================================================
 six170.Hanoi.otherPeg(int, int):::EXIT
 (OR (EQ |return| 0) (EQ |return| 1) (EQ |return| 2))
-(EQ (|java-&| |return| |__orig__pegA|) 0)
-(NEQ |return| |__orig__pegA|)
-(EQ (|java-&| |return| |__orig__pegB|) 0)
-(NEQ |return| |__orig__pegB|)
-(EQ 0 (+ (+ |return| |__orig__pegA| |__orig__pegB|) -3))
 ===========================================================================
 six170.Hanoi.showTowers():::ENTER
 (EQ (select |noOutput| |this|) |@true|)

@@ -135,7 +135,8 @@ public class Session {
       @UnknownInitialization(Session.class) @GuardSatisfied Session this, String s) {
     if (dkconfig_trace_input) {
       assert trace_file != null
-          : "@AssumeAssertion(nullness): dependent: trace_file is non-null (set in constructor) if dkconfig_trace_input is true";
+          : "@AssumeAssertion(nullness): dependent: trace_file is non-null (set in constructor) if"
+              + " dkconfig_trace_input is true";
       trace_file.println(s);
     }
     input.println(s);
@@ -153,7 +154,8 @@ public class Session {
     process.destroy();
     if (dkconfig_trace_input) {
       assert trace_file != null
-          : "@AssumeAssertion(nullness): conditional: trace_file is non-null if dkconfig_trace_input==true";
+          : "@AssumeAssertion(nullness): conditional: trace_file is non-null if"
+              + " dkconfig_trace_input==true";
       trace_file.close();
     }
   }

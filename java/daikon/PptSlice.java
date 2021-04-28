@@ -176,7 +176,7 @@ public abstract class PptSlice extends Ppt {
   abstract List<Invariant> add(ValueTuple full_vt, int count);
 
   /** Removes any falsified invariants from our list. */
-  @RequiresNonNull("NIS.suppressor_map")
+  @RequiresNonNull("daikon.suppress.NIS.suppressor_map")
   protected void remove_falsified() {
 
     // Remove the dead invariants

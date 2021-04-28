@@ -246,7 +246,8 @@ public class InvariantAddAndCheckTester {
           new LineNumberReader(new InputStreamReader(new FileInputStream(commandsFileName), UTF_8));
     } catch (FileNotFoundException e) {
       fail(
-          "Unexpected FileNotFoundException (very strange since the URL of the file was found earlier)");
+          "Unexpected FileNotFoundException (very strange since the URL of the file was found"
+              + " earlier)");
       throw new Error("Unreachable control flow");
     }
     return commands;

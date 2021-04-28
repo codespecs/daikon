@@ -33,7 +33,7 @@ public class DerivedVariableFilter extends InvariantFilter {
     isOn = dkconfig_class_re != null;
     if (isOn) {
       assert dkconfig_class_re != null
-          : "@AssumeAssertion(nullness): dependent:  nullness is indicated by boolean variable isOn";
+          : "@AssumeAssertion(nullness): dependent: nullness is indicated by boolean variable isOn";
       class_re = Pattern.compile(dkconfig_class_re);
     }
   }

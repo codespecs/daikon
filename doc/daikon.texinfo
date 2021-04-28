@@ -56,20 +56,11 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.8.5
+@center Daikon version 5.8.9
 
 @sp 1
 
-@ifset final
-@c FINAL version
-@c Print out the Daikon version 5.8.5 release date
 @center July 22, 2020
-@end ifset
-
-@ifclear final
-@c DRAFT version
-@center DRAFT Version @today{}
-@end ifclear
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -79,7 +70,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2014
+Copyright @copyright{} 1998-2020
 @end titlepage
 
 @c set document heading/footing style
@@ -90,11 +81,6 @@ Copyright @copyright{} 1998-2014
 @c @oddheading Section @thissectionnum @| @thissectionname @| @thispage
 @c @oddheading Chapter @thischapternum: @thischaptername @| @| @thispage
 @c @evenheading @thispage @| @| Section @thissectionnum: @thissectionname
-
-@ifclear final
-@c DRAFT version
-@everyfooting DRAFT @| @| @today{}
-@end ifclear
 
 @html
 @image{images/daikon-logo}
@@ -111,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.8.5, released July 22, 2020.
+It describes Daikon version 5.8.9, released March 3, 2021.
 
 @menu
 * Introduction::
@@ -167,55 +153,23 @@ detection is a machine learning technique that can be applied to
 arbitrary data.)  It is easy to extend Daikon to other applications.
 
 Daikon is freely available for download from
-@uref{http://plse.cs.washington.edu/daikon/download/, ,download-site}.  The distribution
-includes both source code and
+@uref{http://plse.cs.washington.edu/daikon/download/, ,download-site}.
+Daikon's license permits unrestricted use (@pxref{License}).
+The distribution includes both source code
+(also available on @uref{https://github.com/codespecs/daikon, , GitHub})
+and
 @uref{http://plse.cs.washington.edu/daikon/download/doc/, ,documentation},
-and Daikon's license permits unrestricted use (@pxref{License}).  Many
-researchers and practitioners have used Daikon; those uses, and Daikon
+Many researchers and practitioners have used Daikon; those uses, and Daikon
 itself, are described in various
 @uref{http://plse.cs.washington.edu/daikon/pubs/, ,publications}.
 
 For more information on Daikon,
 @pxref{Top, , Introduction, developer, Daikon Developer Manual}.
 For instance, the @cite{Daikon Developer Manual} indicates how to
+obtain Daikon's source code and how to
 extend Daikon with new invariants, new derived variables, and front
 ends for new languages.  It also contains information about the
 implementation and about debugging flags.
-
-@menu
-* Mailing lists::
-@end menu
-
-@node    Mailing lists
-@section Mailing lists
-@cindex mailing lists
-@cindex daikon-announce mailing list
-@cindex daikon-discuss mailing list
-@cindex daikon-developers mailing list
-
-The following mailing lists (and their archives) are available:
-@table @samp
-@item daikon-announce@@googlegroups.com
-A low-volume, announcement-only list.  For example,
-announcements of new releases are sent to this list.
-To subscribe, visit
-@uref{https://groups.google.com/forum/#!forum/daikon-announce}.
-@item daikon-discuss@@googlegroups.com
-A moderated list for the community of Daikon users.  Use it to share
-tips and successes, and to get help with questions or problems (after
-checking the documentation).  To subscribe, visit
-@uref{https://groups.google.com/forum/#!forum/daikon-discuss}.
-@item daikon-developers@@googlegroups.com
-This list goes to the Daikon maintainers.  Use it for questions about the
-Daikon and Kvasir source code.  Use the issue tracker
-(@uref{https://github.com/codespecs/daikon/issues}) for bug reports
-and feature requests.  If you are an active contributor to Daikon,
-you may send mail to the list asking to be added.
-@end table
-
-Do @emph{not} send the same message to multiple mailing lists.  Doing so is
-antisocial:  it causes confusion and extra work.  If you do so, your
-question will not be answered.
 
 
 @node    Installing Daikon
@@ -228,7 +182,7 @@ instructions.
 The main way to install Daikon is from a release, as explained in this
 section.
 (Alternately,
-@pxref{Version control repository,,,developer,Daikon Developer Manual},
+@pxref{Source code (version control repository),,,developer,Daikon Developer Manual},
 to obtain the latest Daikon source code from its version control repository.)
 Here is an overview of the steps.
 
@@ -252,7 +206,7 @@ instructions for your operating system.
 
 
 Differences from previous versions of Daikon appear
-in the file @url{CHANGES,,@file{doc/CHANGES}} in the distribution.
+in the file @url{CHANGELOG.md,,@file{doc/CHANGELOG.md}} in the distribution.
 To be notified of new releases, or to join discussions about Daikon,
 subscribe to one of the mailing lists (@pxref{Mailing lists}).
 
@@ -267,7 +221,7 @@ subscribe to one of the mailing lists (@pxref{Mailing lists}).
 @section    Requirements for running Daikon
 
 In order to run Daikon, you must have a Java 8 (or later) JDK, including a
-@uref{https://www.oracle.com/technetwork/java/javase/overview/index.html,,
+@uref{https://www.oracle.com/java/technologies/java-se-glance.html,,
 Java Virtual Machine} and a Java compiler.
 
 If you wish to analyze C or C++ programs, or
@@ -293,12 +247,12 @@ unpack Daikon.
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.5.tar.gz
-tar zxf daikon-5.8.5.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.9.tar.gz
+tar zxf daikon-5.8.9.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-5.8.5/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.8.9/} subdirectory.
 
 @item
 Place two commands in your shell initialization file:
@@ -310,7 +264,7 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The absolute pathname of the directory that contains Daikon
-export DAIKONDIR=@var{daikonparent}/daikon-5.8.5
+export DAIKONDIR=@var{daikonparent}/daikon-5.8.9
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
@@ -334,9 +288,7 @@ Strictly speaking, this step is optional, but some parts of
 this are required in order to infer invariants in Java programs,
 and other parts are needed in order to infer invariants in C programs.
 First, make sure that you have satisfied the requirements in
-@ref{Requirements for compiling Daikon,,,developer,Daikon Developer Manual}
-and
-@ref{Requirements for compiling Kvasir,,,developer,Daikon Developer Manual}.
+@ref{Requirements for compiling Daikon,,,developer,Daikon Developer Manual}.
 Then, run:
 
 @c Note that this step is @emph{not} required if you only want to use Daikon
@@ -377,10 +329,10 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 @c
 @c apt-get install -y wget
 @c
-@c wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.5.tar.gz
-@c tar zxf daikon-5.8.5.tar.gz
+@c wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.9.tar.gz
+@c tar zxf daikon-5.8.9.tar.gz
 @c
-@c export DAIKONDIR=$(cd daikon-5.8.5 && pwd)
+@c export DAIKONDIR=$(cd daikon-5.8.9 && pwd)
 @c source $DAIKONDIR/scripts/daikon.bashrc
 @c
 @c apt-get install -y openjdk-11-jdk gcc ctags git graphviz make netpbm \
@@ -1198,7 +1150,7 @@ You can obtain Citadel from
 @nospellcheck{Hynger (HYbrid iNvariant GEneratoR) instruments Simulink/Stateflow (SLSF)}
 block diagrams to generate Daikon input (@file{.dtrace} files).  Hynger was created
 by @nospellcheck{Taylor Johnson, Stanley Bak, and Steven Drager.}  You can obtain Hynger
-from @uref{https://bitbucket.org/verivital/hynger}.
+from @uref{https://github.com/verivital/hynger}.
 
 
 @node    Running Daikon
@@ -1700,7 +1652,7 @@ inserted in source code; for more details, see
 @uref{http://www.hpl.hp.com/downloads/crl/jtk/}.  Daikon's @option{ESC/Java} format
 (which can also be specified as @option{ESC} format) is intended for use with the
 original @command{ESC/Java} tool.  Use Daikon's @option{JML} format for use with the
-@uref{http://kindsoftware.com/products/opensource/ESCJava2/, ,ESC/Java2}
+@uref{https://www.kindsoftware.com/products/opensource/escjava2/, ,ESC/Java2}
 tool.
 
 @cindex Java output format
@@ -1734,11 +1686,11 @@ These expression are obviously not valid Java code.
 @cindex output format, JML
 @item JML format
 Produces output in JVM (Java Modeling Language,
-@uref{http://www.jmlspecs.org}); for details, see the
+@uref{https://www.cs.ucf.edu/~leavens/JML/}); for details, see the
 @uref{http://www.eecs.ucf.edu/~leavens/JML/documentation.shtml, ,JML Manual}.  @option{JML}
 format lets you use the various JVM tools on Daikon invariants,
 including run-time assertion checking and the
-@uref{http://kindsoftware.com/products/opensource/ESCJava2/, ,ESC/Java2}
+@uref{https://www.kindsoftware.com/products/opensource/escjava2/, ,ESC/Java2}
 tool.
 
 @c This implementation detail not relevant to users
@@ -1757,7 +1709,7 @@ prover; for details, see the
 @cindex output format, CSharpContract
 @item CSharpContract format
 Produces C# output for use with Microsoft's Code Contracts
-@uref{http://www.microsoft.com/en-us/research/project/code-contracts/,,}.
+@uref{https://www.microsoft.com/en-us/research/project/code-contracts/,,}.
 The format employs some extension/utility methods to improve contract
 readability; the library containing these methods can be found at
 @uref{https://github.com/twschiller/daikon-code-contract-extensions,,}.
@@ -3393,7 +3345,7 @@ Chicory's output.
 @item --nesting-depth=@var{n}
 Depth to which to examine structure components (default 2).
 This parameter determines which variables the front end causes to be output at
-runtime.  For instance, suppose that a program contained the following
+run time.  For instance, suppose that a program contained the following
 data structures and a method @code{foo}:
 @example
 class A @{
@@ -3438,8 +3390,12 @@ value is marked as nonsensical.
 
 @item --omit-var=@var{regex}
 @cindex variables, omit
-Do not include variables whose name matches the regular expression.  Variables
-will be omitted from each program point in which they appear.
+Do not include variables whose name matches the regular expression.
+(For static fields, the fully-qualified name is used.)
+Variables will be omitted from each program point in which they appear.
+Also see Daikon's @code{--var-omit-pattern} command-line argument.
+Note that you may need to omit the same variables from downstream tools
+that process invariant files, such as Annotate
 
 @item --std-visibility
 @cindex private variables
@@ -3631,7 +3587,7 @@ itself (if a file named @file{daikon.jar} appears in the classpath).  If
 the Daikon jar file is not named @file{daikon.jar}, you can use this
 switch to specify its name.  For example:
 @example
---premain=C:\lib\daikon-5.8.5.jar
+--premain=C:\lib\daikon-5.8.9.jar
 @end example
 
 @item --heap-size=@var{max_heap}
@@ -3795,39 +3751,52 @@ See below for more options.
 Here is part of a sample @file{.decls-DynComp} file generated by running DynComp on the example above:
 
 @example
-DECLARE
-Year.compute(int, int, int):::ENTER
-yr
-int # isParam=true
-int
-3
-d1
-int # isParam=true
-int
-2
-d2
-int # isParam=true
-int
-2
+ppt Year.compute(int, int, int):::ENTER
+ppt-type enter
+variable yr
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable d1
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable d2
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
 
-DECLARE
-Year.compute(int, int, int):::EXIT11
-yr
-int # isParam=true
-int
-3
-d1
-int # isParam=true
-int
-2
-d2
-int # isParam=true
-int
-2
-return
-int
-int
-2
+ppt Year.compute(int, int, int):::EXIT11
+ppt-type subexit
+variable yr
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable d1
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable d2
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
 @end example
 
 @noindent
@@ -4023,8 +3992,12 @@ appear before the @var{classname} on the DynComp command line.
 @item --verbose
 Print information about the classes being processed.
 
-@item --debug
+@item --dump
 Dump the instrumented classes to @file{debug/bin}.
+
+@item --debug
+Produce debugging information.  (This produces a lot of output!)
+This option also turns on @option{--dump}.
 
 @item --debug-dir
 The directory in which to dump instrumented class files (only if
@@ -4085,13 +4058,6 @@ This option can be specified multiple times, any may be used in
 conjunction with @option{--ppt-select-pattern}.  If a program point
 matches both a select pattern and an omit pattern, it is omitted.
 
-@item --no-primitives
-Don't track Java primitive values (of type @code{boolean}, @code{int},
-@code{long}, etc.).  When this switch is on, DynComp only tracks
-the comparability of object references; primitive values are
-ignored.  Using this switch can greatly improve DynComp's runtime if
-you are not interested in primitive values.
-
 @item --rt-file=@var{jdk-jar-file}
 Specifies the location of the instrumented JDK (see @ref{Instrumenting
 the JDK with DynComp}).  This option is rarely necessary, because
@@ -4103,7 +4069,7 @@ are placed on the boot classpath for DynComp's execution.
 If the filename is @code{NONE}, then
 run DynComp with an uninstrumented JDK, instead of with a
 copy of the JDK that has been instrumented with DynComp.
-This will improve runtime performance, but will
+This will improve run-time performance, but will
 yield less accurate results.
 
 @item --std-visibility
@@ -4178,6 +4144,18 @@ java.lang.UnsatisfiedLinkError:
 @c @end example
 
 
+When running DynComp, an exception similar to the following:
+
+@example
+Exception in thread "main" java.lang.AbstractMethodError:
+    example1c$$Lambda$5/1722023916.sayHello(Ldaikon/dcomp/DCompMarker;)Ljava/lang/String;
+@end example
+
+@noindent
+probably means that @code{sayHello} is the method of an functional
+interface that has not been annotated with @code{@@FunctionalInterface}.
+
+
 @node       DynComp for Java known bugs
 @subsection Known bugs and limitations
 
@@ -4215,7 +4193,7 @@ Daikon's front end for C and C++, named Kvasir, executes C and C++
 programs and creates
 data trace (@file{.dtrace}) files of variables and their values by
 examining the operation of the binary at
-runtime.  Kvasir is named after the Norse god of knowledge and beet juice.
+run time.  Kvasir is named after the Norse god of knowledge and beet juice.
 It is built upon the Fjalar dynamic analysis framework for C and C++ programs
 (available at @uref{http://pag.csail.mit.edu/fjalar/}, but already
 included in the Daikon distribution).
@@ -5236,7 +5214,7 @@ void view_foo_and_bar(void* f, void* b);
 @noindent
 With type coercion, though, Kvasir treats @code{f} as a @code{foo*} and
 @code{b} as @code{bar*} and can traverse inside of them.  Of course, if
-those are not the true runtime types of the variables, then Kvasir's
+those are not the true run-time types of the variables, then Kvasir's
 output will be meaningless.
 
 Due to the use of @code{typedefs}, there may be more than one name for a
@@ -6417,7 +6395,7 @@ separately; see @uref{http://se.inf.ethz.ch/people/polikarpova/citadel/}.
 
 A front end for the @nospellcheck{Simulink/Stateflow (SLSF)} programming language, named
 Hynger, is distributed separately; see
-@uref{https://bitbucket.org/verivital/hynger}.
+@uref{https://github.com/verivital/hynger}.
 
 @cindex front end for IOA
 @cindex front end for Input/Output Automata
@@ -7929,7 +7907,7 @@ correct, but more verbose than it would be if you used Simplify.
 @c is dated Nov 16 2004 (as of Mar 30 2015).
 
 Obtain Simplify from
-@uref{http://kindsoftware.com/products/opensource/archives/Simplify-1.5.5-13-06-07-binary.zip},
+@uref{https://www.kindsoftware.com/products/opensource/archives/Simplify-1.5.5-13-06-07-binary.zip},
 and unzip the zip file.
 
 Either place the appropriate binary on your path, named @command{Simplify},
@@ -8021,7 +7999,7 @@ Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
 @subsection Daikon runs slowly
 
 @cindex slow operation, of Daikon
-@cindex runtime, of Daikon
+@cindex run time, of Daikon
 
 If Daikon runs slowly, there are three general possible reasons:
 @itemize
@@ -8071,7 +8049,7 @@ For details, see @ref{Large dtrace files}.
 @subsubsection Slow inference of invariants
 @cindex large trace files, creating
 
-Daikon's runtime and space depend on the particular data that it analyzes.
+Daikon's run time and space depend on the particular data that it analyzes.
 Informally, invariant detection time can be characterized as
 @example
 O((@var{vars}^3 * @var{falsetime} + @var{trueinvs} * @var{testsuite}) * @var{procedures})
@@ -8095,7 +8073,7 @@ invariants are true, then Daikon need no longer check them once they
 are falsified (which in practice happens quickly).  Daikon processes
 each procedure independently.
 
-Another important factor affecting Daikon's runtime is the number of
+Another important factor affecting Daikon's run time is the number of
 variables.  Because invariants involve up to three variables each, the
 number of invariants to check is cubic in the number of variables at a
 single program point.  Derived variables (such as @code{a[i]},
@@ -8115,22 +8093,31 @@ Daikon checks, and thereby speeds up Daikon.
 @node       Bigger traces cause invariants to appear
 @subsection Bigger traces cause invariants to appear
 
-Suppose that you run Daikon twice.  The first time, you supply Daikon
-with traces @i{T}.  The second time you supply Daikon with traces
-@i{T+T@quoteright{}}:  either more files, or file(s) that are supersets of the
-original one(s).  The second Daikon execution may report fewer
-invariants, more invariants, or a mix.
+Suppose that you run Daikon twice.  The first time, you supply Daikon with
+traces @i{T}.  The second time, you supply Daikon with more traces
+@i{T+T@quoteright{}} for the same program points.  The second Daikon
+execution may report the same invariants, fewer invariants, more
+invariants, or a mix.
+
+The second execution may report @strong{the same} invariants if the
+additional samples in @i{T@quoteright{}} do not add any more information than
+those in @i{T},
 
 The second execution may report @strong{fewer} invariants, because the
 additional data has eliminated overfitting (false positives).  There may
 have been some accidental property of the shorter executions that is not
 true in the longer ones.
 
-Even though fewer invariants are true on the second execution, Daikon may
-report invariants that it did not report on the first execution.
-The invariants were true on the first execution, but were not reported
-by Daikon.  @ref{True invariants are not reported due to output filters} describes why this
-might happen.
+The second execution may report @strong{more} invariants, because the first
+execution did not report some invariants that were true.  @ref{True
+invariants are not reported due to output filters} describes reasons that
+Daikon might not report this invariants that are true --- for example,
+because they were not statistically justified.
+
+Another reason that the second execution might report more invariants is
+if @i{T+T@quoteright{}} contains samples for program points that were not
+in @i{T}.  The first execution will not report any facts about program
+points that were not executed.
 
 
 @node    Large dtrace files
@@ -8621,7 +8608,7 @@ and about debugging flags.
 @menu
 * History::
 * License::
-* Mailing lists reminder::
+* Mailing lists::
 * Credits::
 * Citing Daikon::
 @end menu
@@ -8630,9 +8617,9 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.8.5, released July 22, 2020.
+This manual describes Daikon version 5.8.9, released March 3, 2021.
 A more detailed list of revisions since mid-2001 can be found in file
-@url{CHANGES,,@file{doc/CHANGES}}
+@url{CHANGELOG.md,,@file{doc/CHANGELOG.md}}
 in the distribution; this section gives a
 high-level view of the package's history.
 
@@ -8645,7 +8632,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.8.5
+@cindex Daikon version 5.8.9
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited
@@ -8700,9 +8687,13 @@ Groups.
 
 @cindex license
 
-Copyright @copyright{} 1998-2008 Massachusetts Institute of Technology
+@c Copyright @copyright{} 1998-2000 Michael Ernst
 
-Copyright @copyright{} 2008-2014 University of Washington
+@c Copyright @copyright{} 1998-2008 Massachusetts Institute of Technology
+
+@c Copyright @copyright{} 2008-2020 University of Washington
+
+Copyright @copyright{} 1998-2020
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
@@ -8875,19 +8866,36 @@ OTHER DEALINGS IN THE SOFTWARE.
 @exampleindent 4
 
 
-@node    Mailing lists reminder
-@section Mailing lists reminder
+@node    Mailing lists
+@section Mailing lists
+@cindex mailing lists
+@cindex daikon-announce mailing list
+@cindex daikon-discuss mailing list
+@cindex daikon-developers mailing list
 
-If you use Daikon, please subscribe to the @samp{daikon-announce} and
-@samp{daikon-discuss} mailing lists (@pxref{Mailing lists}).  The
-@samp{daikon-announce} list will inform you of new versions, enhancements,
-and bug fixes.  On the @samp{daikon-discuss} mailing list, you can obtain
-help from, and offer help to, other users.  We would also appreciate a
-brief description of how you are using Daikon, sent to
-@email{daikon-developers@@googlegroups.com}.  We are curious about how
-users exploit Daikon, and we are eager for anecdotes about its
-successes and failures, so that we can make Daikon more effective for
-its users.
+The following mailing lists (and their archives) are available:
+@table @samp
+@item daikon-announce@@googlegroups.com
+A low-volume, announcement-only list.  For example,
+announcements of new releases are sent to this list.
+To subscribe, visit
+@uref{https://groups.google.com/forum/#!forum/daikon-announce}.
+@item daikon-discuss@@googlegroups.com
+A moderated list for the community of Daikon users.  Use it to share
+tips and successes, and to get help with questions or problems (after
+checking the documentation).  To subscribe, visit
+@uref{https://groups.google.com/forum/#!forum/daikon-discuss}.
+@item daikon-developers@@googlegroups.com
+This list goes to the Daikon maintainers.  Use it for questions about the
+Daikon and Kvasir source code.  Use the issue tracker
+(@uref{https://github.com/codespecs/daikon/issues}) for bug reports
+and feature requests.  If you are an active contributor to Daikon,
+you may send mail to the list asking to be added to the list.
+@end table
+
+Do @emph{not} send the same message to multiple mailing lists.  Doing so is
+antisocial:  it causes confusion and extra work.  If you do so, your
+question will not be answered.
 
 
 @node    Credits
@@ -9156,4 +9164,4 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  dimensionality consequents UNRETURNED getter globals
 @c  LocalWords:  typedefs celeriacArg Inserter comparator roundoff bitwise
 @c  LocalWords:  Kellen Florian Laure Raytheon pathname customizable ctags
-@c  LocalWords:  myclasspath runtime Year2
+@c  LocalWords:  myclasspath runtime Year2 typedef

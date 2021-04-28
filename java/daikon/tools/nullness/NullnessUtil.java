@@ -17,10 +17,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  *
  * <pre>import static daikon.tools.nullness.NullnessUtil.*;</pre>
  *
- * <p><b>Runtime Dependency</b>
+ * <p><b>Run-time Dependency</b>
  *
- * <p>Please note that using this class introduces a runtime dependency. This means that you need to
- * distribute (or link to) Daikon, along with your binaries.
+ * <p>Please note that using this class introduces a run-time dependency. This means that you need
+ * to distribute (or link to) Daikon, along with your binaries.
  *
  * <p>To eliminate this dependency, you can simply copy this class into your own project.
  */

@@ -30,7 +30,6 @@ this.left.right.color == this.left.color
 this.left.color == this.right.left.color
 this.left.color == this.right.right.color
 this.left.color == this.right.color
-this.left.color == this.color
 this.element.getClass().getName() == DataStructures.MyInteger.class
 this.left.element != null
 this.left.element.getClass().getName() == DataStructures.MyInteger.class
@@ -123,7 +122,6 @@ this.right.right.left == lt.left
 this.right.right.right == lt.left
 this.right.right.color == lt.color
 this.right.color == lt.color
-this.color == lt.color
 lt.element == lt.left.element
 lt.element == lt.right.element
 lt.element == rt.element
@@ -209,12 +207,12 @@ DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructu
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.great.element.getClass().getName()
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.great.left.element.getClass().getName()
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.RedBlackTree.great.right.element.getClass().getName()
-DataStructures.RedBlackTree.nullNode.left.color == DataStructures.RedBlackTree.BLACK
-DataStructures.RedBlackTree.nullNode.right.color == DataStructures.RedBlackTree.BLACK
-DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.BLACK
+DataStructures.RedBlackTree.nullNode.left.color == DataStructures.RedBlackTree.nullNode.color
+DataStructures.RedBlackTree.nullNode.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode has only one value
 DataStructures.RedBlackTree.nullNode != null
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == DataStructures.MyInteger.class
+DataStructures.RedBlackTree.nullNode.color == 1
 DataStructures.RedBlackTree.current.element != null
 DataStructures.RedBlackTree.current.left != null
 DataStructures.RedBlackTree.current.left.element != null
@@ -263,30 +261,18 @@ DataStructures.RedBlackTree.great.right.left != null
 DataStructures.RedBlackTree.great.right.right != null
 DataStructures.RedBlackTree.great.right.color one of { 0, 1 }
 DataStructures.RedBlackTree.great.color one of { 0, 1 }
-DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.great.left.color
-DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.great.right.color
-DataStructures.RedBlackTree.BLACK >= DataStructures.RedBlackTree.great.color
-DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.great.left.color
-DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.great.right.color
-DataStructures.RedBlackTree.RED <= DataStructures.RedBlackTree.great.color
+DataStructures.RedBlackTree.nullNode.color >= DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color >= DataStructures.RedBlackTree.current.right.color
+DataStructures.RedBlackTree.nullNode.color >= DataStructures.RedBlackTree.current.color
+DataStructures.RedBlackTree.nullNode.color >= DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.nullNode.color >= DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.nullNode.color >= DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color >= DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color >= DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color >= DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.nullNode.color >= DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.nullNode.color >= DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.nullNode.color >= DataStructures.RedBlackTree.great.color
 ===========================================================================
 DataStructures.RedBlackTree:::OBJECT
 this.header.element.getClass().getName() == DataStructures.RedBlackTree.nullNode.element.getClass().getName()
@@ -295,9 +281,9 @@ this.header.left.element == DataStructures.RedBlackTree.nullNode.element
 this.header.left.element.getClass().getName() == DataStructures.RedBlackTree.nullNode.element.getClass().getName()
 this.header.left.left == DataStructures.RedBlackTree.nullNode
 this.header.left.right == DataStructures.RedBlackTree.nullNode
-this.header.left.color == DataStructures.RedBlackTree.BLACK
+this.header.left.color == DataStructures.RedBlackTree.nullNode.color
 this.header.right.element.getClass().getName() == DataStructures.RedBlackTree.nullNode.element.getClass().getName()
-this.header.color == DataStructures.RedBlackTree.BLACK
+this.header.color == DataStructures.RedBlackTree.nullNode.color
 this has only one value
 this.header has only one value
 this.header != null
@@ -308,8 +294,7 @@ this.header.right != null
 this.header.right.left != null
 this.header.right.right != null
 this.header.right.color one of { 0, 1 }
-this.header.right.color <= DataStructures.RedBlackTree.BLACK
-this.header.right.color >= DataStructures.RedBlackTree.RED
+this.header.right.color <= DataStructures.RedBlackTree.nullNode.color
 this.header.right.color >= DataStructures.RedBlackTree.current.color
 this.header.right.color >= DataStructures.RedBlackTree.parent.right.color
 this.header.right.color >= DataStructures.RedBlackTree.parent.color
@@ -327,7 +312,7 @@ this.header.right == DataStructures.RedBlackTree.nullNode
 this.header.right.element == DataStructures.RedBlackTree.nullNode.element
 this.header.right.left == DataStructures.RedBlackTree.nullNode
 this.header.right.right == DataStructures.RedBlackTree.nullNode
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.parent
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.grand
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.great
@@ -335,7 +320,7 @@ DataStructures.RedBlackTree.nullNode.element == null
 DataStructures.RedBlackTree.current == null
 ===========================================================================
 DataStructures.RedBlackTree.find(DataStructures.Comparable):::ENTER
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.parent.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.parent.left.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.parent.left.right
@@ -346,22 +331,21 @@ DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.grand.right.
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.grand.right.right
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.parent.left.element
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == x.getClass().getName()
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.color
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.grand.left
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.great.left.left
 DataStructures.RedBlackTree.parent.element == DataStructures.RedBlackTree.grand.left.element
 DataStructures.RedBlackTree.parent.right == DataStructures.RedBlackTree.grand.left.right
+DataStructures.RedBlackTree.parent.right.color == DataStructures.RedBlackTree.grand.color
 DataStructures.RedBlackTree.grand == DataStructures.RedBlackTree.great.left
 DataStructures.RedBlackTree.grand.element == DataStructures.RedBlackTree.great.left.element
 DataStructures.RedBlackTree.grand.right == DataStructures.RedBlackTree.great.left.right
+DataStructures.RedBlackTree.grand.color == DataStructures.RedBlackTree.great.left.color
 this.header.right has only one value
 this.header.right.element has only one value
 this.header.right.element != null
@@ -379,6 +363,7 @@ DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.grand.element has only one value
 DataStructures.RedBlackTree.grand.right has only one value
 DataStructures.RedBlackTree.grand.right.element has only one value
+DataStructures.RedBlackTree.grand.color == 0
 DataStructures.RedBlackTree.great has only one value
 DataStructures.RedBlackTree.great != null
 DataStructures.RedBlackTree.great.element has only one value
@@ -387,6 +372,9 @@ DataStructures.RedBlackTree.great.right.element has only one value
 DataStructures.RedBlackTree.great.right.left has only one value
 DataStructures.RedBlackTree.great.right.right has only one value
 x != null
+DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.right.color >= DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color >= DataStructures.RedBlackTree.grand.color
 ===========================================================================
 DataStructures.RedBlackTree.find(DataStructures.Comparable):::EXIT128
 ===========================================================================
@@ -400,7 +388,7 @@ this.header.right.element == orig(this.header.right.element)
 this.header.right.element.getClass().getName() == return.getClass().getName()
 this.header.right.left == orig(this.header.right.left)
 this.header.right.right == orig(this.header.right.right)
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.parent.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.parent.left.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.parent.left.right
@@ -432,15 +420,24 @@ DataStructures.RedBlackTree.nullNode.element == orig(x)
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.nullNode.left.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.nullNode.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.color
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.parent.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.parent.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.grand.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.grand.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.great.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.great.color)
 DataStructures.RedBlackTree.current.element == return
 DataStructures.RedBlackTree.current.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.current.left.element.getClass().getName() == return.getClass().getName()
@@ -460,6 +457,7 @@ DataStructures.RedBlackTree.parent.right == orig(DataStructures.RedBlackTree.par
 DataStructures.RedBlackTree.parent.right == orig(DataStructures.RedBlackTree.grand.left.right)
 DataStructures.RedBlackTree.parent.right.element == orig(DataStructures.RedBlackTree.parent.right.element)
 DataStructures.RedBlackTree.parent.right.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.parent.right.color == DataStructures.RedBlackTree.grand.color
 DataStructures.RedBlackTree.grand == DataStructures.RedBlackTree.great.left
 DataStructures.RedBlackTree.grand == orig(DataStructures.RedBlackTree.grand)
 DataStructures.RedBlackTree.grand == orig(DataStructures.RedBlackTree.great.left)
@@ -473,6 +471,10 @@ DataStructures.RedBlackTree.grand.right == orig(DataStructures.RedBlackTree.gran
 DataStructures.RedBlackTree.grand.right == orig(DataStructures.RedBlackTree.great.left.right)
 DataStructures.RedBlackTree.grand.right.element == orig(DataStructures.RedBlackTree.grand.right.element)
 DataStructures.RedBlackTree.grand.right.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.grand.color == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.grand.color == orig(DataStructures.RedBlackTree.parent.right.color)
+DataStructures.RedBlackTree.grand.color == orig(DataStructures.RedBlackTree.grand.color)
+DataStructures.RedBlackTree.grand.color == orig(DataStructures.RedBlackTree.great.left.color)
 DataStructures.RedBlackTree.great == orig(DataStructures.RedBlackTree.great)
 DataStructures.RedBlackTree.great.element == orig(DataStructures.RedBlackTree.great.element)
 DataStructures.RedBlackTree.great.element.getClass().getName() == return.getClass().getName()
@@ -518,6 +520,7 @@ DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.grand.element has only one value
 DataStructures.RedBlackTree.grand.right has only one value
 DataStructures.RedBlackTree.grand.right.element has only one value
+DataStructures.RedBlackTree.grand.color == 0
 DataStructures.RedBlackTree.great has only one value
 DataStructures.RedBlackTree.great != null
 DataStructures.RedBlackTree.great.element has only one value
@@ -527,9 +530,18 @@ DataStructures.RedBlackTree.great.right.left has only one value
 DataStructures.RedBlackTree.great.right.right has only one value
 return != null
 return.getClass().getName() == DataStructures.MyInteger.class
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.current.left.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.current.right.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.current.color)
+DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.right.color >= DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color >= DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.grand.color <= orig(DataStructures.RedBlackTree.current.left.color)
+DataStructures.RedBlackTree.grand.color <= orig(DataStructures.RedBlackTree.current.right.color)
+DataStructures.RedBlackTree.grand.color <= orig(DataStructures.RedBlackTree.current.color)
 ===========================================================================
 DataStructures.RedBlackTree.findMax():::ENTER
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.right
@@ -549,20 +561,19 @@ DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.curr
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.current.right.element
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.parent.left.element
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.parent.right.element
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.color
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.parent.right
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.grand.left.right
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.great.left.color
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.grand.left
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.great.left.left
 DataStructures.RedBlackTree.parent.element == DataStructures.RedBlackTree.grand.left.element
@@ -575,6 +586,7 @@ this.header.right.left has only one value
 this.header.right.right has only one value
 DataStructures.RedBlackTree.nullNode.element has only one value
 DataStructures.RedBlackTree.current has only one value
+DataStructures.RedBlackTree.current.color == 0
 DataStructures.RedBlackTree.parent has only one value
 DataStructures.RedBlackTree.parent.element has only one value
 DataStructures.RedBlackTree.grand has only one value
@@ -600,7 +612,7 @@ this.header.right.element == orig(this.header.right.element)
 this.header.right.element.getClass().getName() == return.getClass().getName()
 this.header.right.left == orig(this.header.right.left)
 this.header.right.right == orig(this.header.right.right)
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.right
@@ -656,18 +668,28 @@ DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.nullNode.left.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.nullNode.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.color
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.current.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.current.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.parent.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.parent.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.grand.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.grand.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.great.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.great.color)
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.parent.right
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.grand.left.right
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.current)
@@ -676,6 +698,13 @@ DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.grand.le
 DataStructures.RedBlackTree.current.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.current.left.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.current.right.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.current.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.parent.right.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.grand.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.great.left.color)
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.grand.left
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.great.left.left
 DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.parent)
@@ -733,6 +762,7 @@ this.header.right.left has only one value
 this.header.right.right has only one value
 DataStructures.RedBlackTree.nullNode.element has only one value
 DataStructures.RedBlackTree.current has only one value
+DataStructures.RedBlackTree.current.color == 0
 DataStructures.RedBlackTree.parent has only one value
 DataStructures.RedBlackTree.parent.element has only one value
 DataStructures.RedBlackTree.grand has only one value
@@ -749,7 +779,7 @@ return has only one value
 return.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.RedBlackTree.findMin():::ENTER
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.right
@@ -769,20 +799,19 @@ DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.curr
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.current.right.element
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.parent.left.element
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.parent.right.element
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.color
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.parent.right
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.grand.left.right
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.great.left.color
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.grand.left
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.great.left.left
 DataStructures.RedBlackTree.parent.element == DataStructures.RedBlackTree.grand.left.element
@@ -795,6 +824,7 @@ this.header.right.left has only one value
 this.header.right.right has only one value
 DataStructures.RedBlackTree.nullNode.element has only one value
 DataStructures.RedBlackTree.current has only one value
+DataStructures.RedBlackTree.current.color == 0
 DataStructures.RedBlackTree.parent has only one value
 DataStructures.RedBlackTree.parent.element has only one value
 DataStructures.RedBlackTree.grand has only one value
@@ -820,7 +850,7 @@ this.header.right.element == orig(this.header.right.element)
 this.header.right.element.getClass().getName() == return.getClass().getName()
 this.header.right.left == orig(this.header.right.left)
 this.header.right.right == orig(this.header.right.right)
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.right
@@ -876,18 +906,28 @@ DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.nullNode.left.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.nullNode.right.element.getClass().getName() == return.getClass().getName()
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.color
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.current.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.current.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.parent.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.parent.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.grand.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.grand.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.great.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.great.color)
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.parent.right
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.grand.left.right
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.current)
@@ -896,6 +936,13 @@ DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.grand.le
 DataStructures.RedBlackTree.current.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.current.left.element.getClass().getName() == return.getClass().getName()
 DataStructures.RedBlackTree.current.right.element.getClass().getName() == return.getClass().getName()
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.current.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.parent.right.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.grand.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.great.left.color)
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.grand.left
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.great.left.left
 DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.parent)
@@ -953,6 +1000,7 @@ this.header.right.left has only one value
 this.header.right.right has only one value
 DataStructures.RedBlackTree.nullNode.element has only one value
 DataStructures.RedBlackTree.current has only one value
+DataStructures.RedBlackTree.current.color == 0
 DataStructures.RedBlackTree.parent has only one value
 DataStructures.RedBlackTree.parent.element has only one value
 DataStructures.RedBlackTree.grand has only one value
@@ -969,10 +1017,10 @@ return has only one value
 return.getClass().getName() == DataStructures.MyInteger.class
 ===========================================================================
 DataStructures.RedBlackTree.handleReorient(DataStructures.Comparable):::ENTER
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode.element == item
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == item.getClass().getName()
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.color
 DataStructures.RedBlackTree.current.left.color == DataStructures.RedBlackTree.current.right.color
 this.header.right.element != null
 DataStructures.RedBlackTree.nullNode.element != null
@@ -984,7 +1032,7 @@ DataStructures.RedBlackTree.great != null
 DataStructures.RedBlackTree.handleReorient(DataStructures.Comparable):::EXIT
 this.header == orig(this.header)
 this.header.element == orig(this.header.element)
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode == orig(this.header.left)
 DataStructures.RedBlackTree.nullNode == orig(this.header.left.left)
 DataStructures.RedBlackTree.nullNode == orig(this.header.left.right)
@@ -1019,7 +1067,14 @@ DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataSt
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(item.getClass().getName())
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.current.color)
 DataStructures.RedBlackTree.current.left.color == DataStructures.RedBlackTree.current.right.color
 DataStructures.RedBlackTree.current.left.color == orig(DataStructures.RedBlackTree.parent.color)
 DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.parent)
@@ -1040,6 +1095,12 @@ DataStructures.RedBlackTree.current != null
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.current.left.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.parent.left.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.parent.right.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.grand.left.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.grand.right.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.grand.color)
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.parent.left.color
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.parent.right.color
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.grand.color
@@ -1088,9 +1149,9 @@ DataStructures.RedBlackTree.grand.right.color == (java.lang.Math.pow(orig(DataSt
 ===========================================================================
 DataStructures.RedBlackTree.insert(DataStructures.Comparable):::ENTER
 this.header.element.getClass().getName() == item.getClass().getName()
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.left
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.color
 DataStructures.RedBlackTree.current.left.left == DataStructures.RedBlackTree.current.left.right
 DataStructures.RedBlackTree.current.left.left == DataStructures.RedBlackTree.current.right.left
 DataStructures.RedBlackTree.current.left.left == DataStructures.RedBlackTree.current.right.right
@@ -1126,7 +1187,7 @@ DataStructures.RedBlackTree.insert(DataStructures.Comparable):::EXIT65
 DataStructures.RedBlackTree.insert(DataStructures.Comparable):::EXIT
 this.header == orig(this.header)
 this.header.element == orig(this.header.element)
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.right
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.right.left
@@ -1150,8 +1211,15 @@ DataStructures.RedBlackTree.nullNode.element == orig(item)
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(this.header.element.getClass().getName())
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.nullNode.element.getClass().getName())
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(item.getClass().getName())
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.parent.color)
 DataStructures.RedBlackTree.current.left.color == DataStructures.RedBlackTree.current.right.color
 this.header.right.element != null
 DataStructures.RedBlackTree.nullNode.element != null
@@ -1159,6 +1227,15 @@ DataStructures.RedBlackTree.current != null
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.current.left.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.current.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.parent.left.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.parent.right.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.grand.right.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.grand.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.great.left.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.great.right.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.great.color)
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.parent.left.color
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.parent.right.color
 DataStructures.RedBlackTree.current.left.color >= DataStructures.RedBlackTree.grand.color
@@ -1184,7 +1261,7 @@ DataStructures.RedBlackTree.current.color == (orig(DataStructures.RedBlackTree.g
 DataStructures.RedBlackTree.current.color == (orig(DataStructures.RedBlackTree.grand.right.color) >>> DataStructures.RedBlackTree.current.left.color)
 ===========================================================================
 DataStructures.RedBlackTree.isEmpty():::ENTER
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.right
@@ -1204,20 +1281,19 @@ DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.curr
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.current.right.element
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.parent.left.element
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.parent.right.element
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.color
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.parent.right
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.grand.left.right
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.great.left.color
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.grand.left
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.great.left.left
 DataStructures.RedBlackTree.parent.element == DataStructures.RedBlackTree.grand.left.element
@@ -1230,6 +1306,7 @@ this.header.right.left has only one value
 this.header.right.right has only one value
 DataStructures.RedBlackTree.nullNode.element has only one value
 DataStructures.RedBlackTree.current has only one value
+DataStructures.RedBlackTree.current.color == 0
 DataStructures.RedBlackTree.parent has only one value
 DataStructures.RedBlackTree.parent.element has only one value
 DataStructures.RedBlackTree.grand has only one value
@@ -1250,7 +1327,7 @@ this.header.right == orig(this.header.right)
 this.header.right.element == orig(this.header.right.element)
 this.header.right.left == orig(this.header.right.left)
 this.header.right.right == orig(this.header.right.right)
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.right
@@ -1321,23 +1398,40 @@ DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataSt
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.element.getClass().getName())
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.left.element.getClass().getName())
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataStructures.RedBlackTree.great.right.element.getClass().getName())
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.color
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.current.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.current.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.parent.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.parent.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.grand.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.grand.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.great.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.great.color)
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.parent.right
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.grand.left.right
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.current)
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.parent.right)
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.grand.left.right)
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.current.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.parent.right.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.grand.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.great.left.color)
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.grand.left
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.great.left.left
 DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.parent)
@@ -1368,6 +1462,7 @@ this.header.right.left has only one value
 this.header.right.right has only one value
 DataStructures.RedBlackTree.nullNode.element has only one value
 DataStructures.RedBlackTree.current has only one value
+DataStructures.RedBlackTree.current.color == 0
 DataStructures.RedBlackTree.parent has only one value
 DataStructures.RedBlackTree.parent.element has only one value
 DataStructures.RedBlackTree.grand has only one value
@@ -1385,7 +1480,6 @@ return == false
 DataStructures.RedBlackTree.isEmpty():::EXIT;condition="not(return == true)"
 ===========================================================================
 DataStructures.RedBlackTree.main(java.lang.String[]):::ENTER
-DataStructures.RedBlackTree.RED == size(args[])
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.parent
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.grand
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.great
@@ -1421,18 +1515,20 @@ DataStructures.RedBlackTree.nullNode == orig(DataStructures.RedBlackTree.nullNod
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.current.left.element
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.current.right.element
 DataStructures.RedBlackTree.nullNode.element == DataStructures.RedBlackTree.parent.left.element
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.great.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.great.color
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.color)
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.great.left.color
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.grand.left
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.great.left.left
 DataStructures.RedBlackTree.parent.element == DataStructures.RedBlackTree.grand.left.element
@@ -1444,6 +1540,7 @@ args[] == orig(args[])
 DataStructures.RedBlackTree.nullNode.element has only one value
 DataStructures.RedBlackTree.current has only one value
 DataStructures.RedBlackTree.current.element has only one value
+DataStructures.RedBlackTree.current.color == 0
 DataStructures.RedBlackTree.parent has only one value
 DataStructures.RedBlackTree.parent.element has only one value
 DataStructures.RedBlackTree.parent.right has only one value
@@ -1471,14 +1568,13 @@ DataStructures.RedBlackTree.nullNode.element.getClass().getName() == item.getCla
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.element.getClass().getName()
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.left.element.getClass().getName()
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == parent.right.element.getClass().getName()
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.right.color
 DataStructures.RedBlackTree.current.element == DataStructures.RedBlackTree.parent.right.element
 DataStructures.RedBlackTree.current.left == DataStructures.RedBlackTree.parent.right.left
 DataStructures.RedBlackTree.current.right == DataStructures.RedBlackTree.parent.right.right
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.color
 DataStructures.RedBlackTree.parent.left.color == DataStructures.RedBlackTree.grand.left.color
 DataStructures.RedBlackTree.parent.right == DataStructures.RedBlackTree.grand.right.right
 DataStructures.RedBlackTree.parent.right.color == DataStructures.RedBlackTree.grand.right.color
@@ -1498,9 +1594,15 @@ DataStructures.RedBlackTree.great.color == parent.color
 this.header.right.element != null
 DataStructures.RedBlackTree.nullNode.element != null
 DataStructures.RedBlackTree.current != null
+DataStructures.RedBlackTree.current.color == 0
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.color
 DataStructures.RedBlackTree.parent.left.color != DataStructures.RedBlackTree.parent.right.color
 DataStructures.RedBlackTree.parent.right.color == (this.header.right.color >> DataStructures.RedBlackTree.parent.left.color)
 DataStructures.RedBlackTree.parent.right.color == (this.header.right.color >>> DataStructures.RedBlackTree.parent.left.color)
@@ -1510,7 +1612,7 @@ this.header.right == orig(this.header.right)
 this.header.right.element == orig(this.header.right.element)
 this.header.right.left == orig(this.header.right.left)
 this.header.right.right == orig(this.header.right.right)
-this.header.right.color == DataStructures.RedBlackTree.BLACK
+this.header.right.color == DataStructures.RedBlackTree.nullNode.color
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.right
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.parent.left.left
@@ -1545,11 +1647,11 @@ DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.current.right.element)
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.parent.left.element)
 DataStructures.RedBlackTree.nullNode.element == orig(DataStructures.RedBlackTree.parent.right.element)
-DataStructures.RedBlackTree.BLACK == orig(this.header.right.color)
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.great.left.color
-DataStructures.RedBlackTree.RED == parent.left.color
-DataStructures.RedBlackTree.RED == orig(DataStructures.RedBlackTree.great.left.color)
-DataStructures.RedBlackTree.RED == orig(parent.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.right.color)
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.current.color == parent.left.color
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.great.left.color)
+DataStructures.RedBlackTree.current.color == orig(parent.left.color)
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.great.left
 DataStructures.RedBlackTree.parent == parent.left
 DataStructures.RedBlackTree.parent.element == DataStructures.RedBlackTree.great.left.element
@@ -1584,10 +1686,10 @@ orig(DataStructures.RedBlackTree.parent.right.color) == (DataStructures.RedBlack
 orig(DataStructures.RedBlackTree.parent.right.color) == (DataStructures.RedBlackTree.great.right.color >>> orig(DataStructures.RedBlackTree.parent.left.color))
 ===========================================================================
 DataStructures.RedBlackTree.rotate(DataStructures.Comparable, DataStructures.RedBlackNode):::EXIT215
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.great.right.color
-DataStructures.RedBlackTree.RED == parent.right.color
-DataStructures.RedBlackTree.RED == orig(DataStructures.RedBlackTree.great.right.color)
-DataStructures.RedBlackTree.RED == orig(parent.right.color)
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.current.color == parent.right.color
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.great.right.color)
+DataStructures.RedBlackTree.current.color == orig(parent.right.color)
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.great.right
 DataStructures.RedBlackTree.parent == parent.right
 DataStructures.RedBlackTree.parent.element == DataStructures.RedBlackTree.great.right.element
@@ -1671,18 +1773,17 @@ DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(item.g
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(parent.element.getClass().getName())
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(parent.left.element.getClass().getName())
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(parent.right.element.getClass().getName())
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == return.left.color
-DataStructures.RedBlackTree.RED == return.right.color
-DataStructures.RedBlackTree.RED == return.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(this.header.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.current.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.current.right.color)
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.current)
 DataStructures.RedBlackTree.current.element == orig(DataStructures.RedBlackTree.current.element)
 DataStructures.RedBlackTree.current.element == orig(DataStructures.RedBlackTree.parent.right.element)
@@ -1696,6 +1797,16 @@ DataStructures.RedBlackTree.current.right == return.right.right
 DataStructures.RedBlackTree.current.right == orig(DataStructures.RedBlackTree.current.right)
 DataStructures.RedBlackTree.current.right == orig(DataStructures.RedBlackTree.parent.right.right)
 DataStructures.RedBlackTree.current.right.element == orig(DataStructures.RedBlackTree.current.right.element)
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color == return.left.color
+DataStructures.RedBlackTree.current.color == return.right.color
+DataStructures.RedBlackTree.current.color == return.color
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.current.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.parent.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.grand.color)
 DataStructures.RedBlackTree.parent == return
 DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.parent)
 DataStructures.RedBlackTree.parent.element == return.element
@@ -1740,10 +1851,18 @@ DataStructures.RedBlackTree.great.color == orig(parent.color)
 this.header.right.element != null
 DataStructures.RedBlackTree.nullNode.element != null
 DataStructures.RedBlackTree.current != null
+DataStructures.RedBlackTree.current.color == 0
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
 this.header.right.color >= orig(DataStructures.RedBlackTree.parent.right.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.parent.left.color)
+DataStructures.RedBlackTree.nullNode.color >= orig(DataStructures.RedBlackTree.parent.right.color)
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.color
+DataStructures.RedBlackTree.current.color <= orig(DataStructures.RedBlackTree.parent.left.color)
+DataStructures.RedBlackTree.current.color <= orig(DataStructures.RedBlackTree.parent.right.color)
 orig(DataStructures.RedBlackTree.parent.right.color) == (this.header.right.color >> orig(DataStructures.RedBlackTree.parent.left.color))
 orig(DataStructures.RedBlackTree.parent.right.color) == (this.header.right.color >>> orig(DataStructures.RedBlackTree.parent.left.color))
 ===========================================================================
@@ -1777,21 +1896,20 @@ DataStructures.RedBlackTree.nullNode.element == k2.right.element
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.element.getClass().getName()
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.left.element.getClass().getName()
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k2.right.element.getClass().getName()
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.BLACK == k2.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == k2.left.color
-DataStructures.RedBlackTree.RED == k2.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color == k2.right.color
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.parent.left
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.grand.left.left
 DataStructures.RedBlackTree.current == k2.left.left
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color == k2.left.color
+DataStructures.RedBlackTree.current.color == k2.color
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.grand.left
 DataStructures.RedBlackTree.parent == k2.left
 DataStructures.RedBlackTree.parent.element == DataStructures.RedBlackTree.grand.left.element
@@ -1800,9 +1918,13 @@ DataStructures.RedBlackTree.grand == k2
 DataStructures.RedBlackTree.grand.element == k2.element
 DataStructures.RedBlackTree.nullNode.element != null
 DataStructures.RedBlackTree.current != null
+DataStructures.RedBlackTree.current.color == 0
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.color
 ===========================================================================
 DataStructures.RedBlackTree.rotateWithLeftChild(DataStructures.RedBlackNode):::EXIT
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left
@@ -1900,27 +2022,41 @@ DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataSt
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k2.element.getClass().getName())
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k2.left.element.getClass().getName())
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k2.right.element.getClass().getName())
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.BLACK == k2.left.color
-DataStructures.RedBlackTree.BLACK == k2.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == k2.color
-DataStructures.RedBlackTree.RED == return.left.color
-DataStructures.RedBlackTree.RED == return.right.color
-DataStructures.RedBlackTree.RED == return.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color == k2.left.color
+DataStructures.RedBlackTree.nullNode.color == k2.right.color
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.current.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.current.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.parent.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.grand.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(k2.right.color)
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.parent.left
 DataStructures.RedBlackTree.current == return.left
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.current)
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.parent.left)
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.grand.left.left)
 DataStructures.RedBlackTree.current == orig(k2.left.left)
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color == k2.color
+DataStructures.RedBlackTree.current.color == return.left.color
+DataStructures.RedBlackTree.current.color == return.right.color
+DataStructures.RedBlackTree.current.color == return.color
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.current.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.parent.left.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.parent.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.grand.left.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.grand.color)
+DataStructures.RedBlackTree.current.color == orig(k2.left.color)
+DataStructures.RedBlackTree.current.color == orig(k2.color)
 DataStructures.RedBlackTree.parent == return
 DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.parent)
 DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.grand.left)
@@ -1951,9 +2087,13 @@ DataStructures.RedBlackTree.great.right.color == orig(DataStructures.RedBlackTre
 DataStructures.RedBlackTree.great.color == orig(DataStructures.RedBlackTree.great.color)
 DataStructures.RedBlackTree.nullNode.element != null
 DataStructures.RedBlackTree.current != null
+DataStructures.RedBlackTree.current.color == 0
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.color
 ===========================================================================
 DataStructures.RedBlackTree.rotateWithRightChild(DataStructures.RedBlackNode):::ENTER
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.left
@@ -1963,24 +2103,23 @@ DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.righ
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.element.getClass().getName()
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.left.element.getClass().getName()
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == k1.right.element.getClass().getName()
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK == k1.left.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == k1.right.color
-DataStructures.RedBlackTree.RED == k1.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == k1.left.color
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.parent.right
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.grand.right.right
 DataStructures.RedBlackTree.current == k1.right.right
 DataStructures.RedBlackTree.current.element == DataStructures.RedBlackTree.parent.right.element
 DataStructures.RedBlackTree.current.left == DataStructures.RedBlackTree.parent.right.left
 DataStructures.RedBlackTree.current.right == DataStructures.RedBlackTree.parent.right.right
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color == k1.right.color
+DataStructures.RedBlackTree.current.color == k1.color
 DataStructures.RedBlackTree.parent == DataStructures.RedBlackTree.grand.right
 DataStructures.RedBlackTree.parent == k1.right
 DataStructures.RedBlackTree.parent.element == DataStructures.RedBlackTree.grand.right.element
@@ -1995,9 +2134,13 @@ DataStructures.RedBlackTree.grand.left.left == k1.left.left
 DataStructures.RedBlackTree.grand.left.right == k1.left.right
 DataStructures.RedBlackTree.nullNode.element != null
 DataStructures.RedBlackTree.current != null
+DataStructures.RedBlackTree.current.color == 0
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.color
 ===========================================================================
 DataStructures.RedBlackTree.rotateWithRightChild(DataStructures.RedBlackNode):::EXIT
 DataStructures.RedBlackTree.nullNode == DataStructures.RedBlackTree.current.left.left
@@ -2042,21 +2185,20 @@ DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(DataSt
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k1.element.getClass().getName())
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k1.left.element.getClass().getName())
 DataStructures.RedBlackTree.nullNode.element.getClass().getName() == orig(k1.right.element.getClass().getName())
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.current.right.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.left.color
-DataStructures.RedBlackTree.BLACK == DataStructures.RedBlackTree.grand.right.color
-DataStructures.RedBlackTree.BLACK == k1.left.color
-DataStructures.RedBlackTree.BLACK == k1.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.current.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.left.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.right.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.parent.color
-DataStructures.RedBlackTree.RED == DataStructures.RedBlackTree.grand.color
-DataStructures.RedBlackTree.RED == k1.color
-DataStructures.RedBlackTree.RED == return.left.color
-DataStructures.RedBlackTree.RED == return.right.color
-DataStructures.RedBlackTree.RED == return.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.current.right.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.left.color
+DataStructures.RedBlackTree.nullNode.color == DataStructures.RedBlackTree.grand.right.color
+DataStructures.RedBlackTree.nullNode.color == k1.left.color
+DataStructures.RedBlackTree.nullNode.color == k1.right.color
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.nullNode.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.current.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.current.right.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.parent.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(DataStructures.RedBlackTree.grand.left.color)
+DataStructures.RedBlackTree.nullNode.color == orig(k1.left.color)
 DataStructures.RedBlackTree.current == DataStructures.RedBlackTree.parent.right
 DataStructures.RedBlackTree.current == return.right
 DataStructures.RedBlackTree.current == orig(DataStructures.RedBlackTree.current)
@@ -2077,6 +2219,21 @@ DataStructures.RedBlackTree.current.right == return.right.right
 DataStructures.RedBlackTree.current.right == orig(DataStructures.RedBlackTree.current.right)
 DataStructures.RedBlackTree.current.right == orig(DataStructures.RedBlackTree.parent.right.right)
 DataStructures.RedBlackTree.current.right.element == orig(DataStructures.RedBlackTree.current.right.element)
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.left.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.right.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.parent.color
+DataStructures.RedBlackTree.current.color == DataStructures.RedBlackTree.grand.color
+DataStructures.RedBlackTree.current.color == k1.color
+DataStructures.RedBlackTree.current.color == return.left.color
+DataStructures.RedBlackTree.current.color == return.right.color
+DataStructures.RedBlackTree.current.color == return.color
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.current.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.parent.right.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.parent.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.grand.right.color)
+DataStructures.RedBlackTree.current.color == orig(DataStructures.RedBlackTree.grand.color)
+DataStructures.RedBlackTree.current.color == orig(k1.right.color)
+DataStructures.RedBlackTree.current.color == orig(k1.color)
 DataStructures.RedBlackTree.parent == return
 DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.parent)
 DataStructures.RedBlackTree.parent == orig(DataStructures.RedBlackTree.grand.right)
@@ -2133,6 +2290,10 @@ DataStructures.RedBlackTree.great.right.color == orig(DataStructures.RedBlackTre
 DataStructures.RedBlackTree.great.color == orig(DataStructures.RedBlackTree.great.color)
 DataStructures.RedBlackTree.nullNode.element != null
 DataStructures.RedBlackTree.current != null
+DataStructures.RedBlackTree.current.color == 0
 DataStructures.RedBlackTree.parent != null
 DataStructures.RedBlackTree.grand != null
 DataStructures.RedBlackTree.great != null
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.left.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.right.color
+DataStructures.RedBlackTree.current.color <= DataStructures.RedBlackTree.great.color

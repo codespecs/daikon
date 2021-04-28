@@ -138,4 +138,3 @@ this.node == \old(this.node)
 this.path == \old(this.path)
 this.cost == \old(this.cost)
 this.path == null
-this.cost < \result

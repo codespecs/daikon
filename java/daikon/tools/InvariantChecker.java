@@ -33,7 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * InvariantChecker reads an invariant file and trace file. It prints errors for any invariants that
@@ -54,8 +54,9 @@ public class InvariantChecker {
   private static final String filter_SWITCH = "filter";
   private static final String verbose_SWITCH = "verbose";
 
+  /** The usage message for this program. */
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage: java daikon.InvariantChecker [OPTION]... <inv_file> <dtrace_file>",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",
@@ -65,7 +66,8 @@ public class InvariantChecker {
           "  --" + filter_SWITCH,
           "      Checks only invariants that are not filtered by the default filters",
           "  --" + dir_SWITCH + " directory with invariant and dtrace files",
-          "      We output how many invariants failed for each invariant file. We check for failure against any sample in any dtrace file.",
+          "      We output how many invariants failed for each invariant file. We check for"
+              + " failure against any sample in any dtrace file.",
           "  --" + verbose_SWITCH + " print all failing samples",
           "  --" + Daikon.config_option_SWITCH + " config_var=val",
           "      Sets the specified configuration variable.  ",
@@ -379,7 +381,7 @@ public class InvariantChecker {
      * process the sample by checking it against each existing invariant and issuing an error if any
      * invariant is falsified or weakened.
      */
-    @RequiresNonNull("FileIO.data_trace_state")
+    @RequiresNonNull("daikon.FileIO.data_trace_state")
     @Override
     public void process_sample(
         PptMap all_ppts, PptTopLevel ppt, ValueTuple vt, @Nullable Integer nonce) {
@@ -429,7 +431,7 @@ public class InvariantChecker {
       add(ppt, vt, all_ppts);
     }
 
-    @RequiresNonNull("FileIO.data_trace_state")
+    @RequiresNonNull("daikon.FileIO.data_trace_state")
     private void add(PptTopLevel ppt, ValueTuple vt, PptMap all_ppts) {
       // Add the sample to any splitters
       if (ppt.has_splitters()) {

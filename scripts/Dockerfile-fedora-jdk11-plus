@@ -38,6 +38,7 @@ RUN dnf -qy install \
   netpbm \
   python \
   python3 \
+  python3-distutils \
   texi2html \
   texinfo \
   texinfo-tex \

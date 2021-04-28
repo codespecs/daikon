@@ -1,6 +1,5 @@
 ===========================================================================
 misc.Smithnosky:::OBJECT
-this.size == size(this.s[])
 this has only one value
 this.b >= 0
 this.c >= 0
@@ -10,31 +9,19 @@ this.s != null
 this.s[] elements has only one value
 this.s[] elements != null
 this.s[].getClass().getName() elements == java.lang.String.class
-this.s[this.size..] == []
+size(this.s[]) one of { 0, 1, 2 }
 (this.a == 0) ==> (this.b == 0)
 this.a >= this.b
 (this.a == 0) ==> (this.c == 0)
 this.a >= this.c
-(this.a == 0) ==> (this.size == 0)
-this.a >= this.size
-this.size is a bitwise subset of this.a
 (this.b == 0) ==> (this.c == 0)
 this.b >= this.c
 (this.aXb == 0) ==> (this.b == 0)
 this.b <= this.aXb
-(this.b == 0) ==> (this.size == 0)
-this.b >= this.size
-this.size is a bitwise subset of this.b
 (this.aXb == 0) ==> (this.c == 0)
 this.c <= this.aXb
 this.c <= this.aXc
-(this.c == 0) ==> (this.size == 0)
-this.c >= this.size
-this.size is a bitwise subset of this.c
-(this.aXb == 0) ==> (this.size == 0)
-this.aXb >= this.size
-this.aXc > this.size
-(this.size & size(this.s[])-1) == 0
+(size(this.s[]) & size(this.s[])-1) == 0
 ===========================================================================
 misc.Smithnosky.Smithnosky(int, int, int):::ENTER
 a == 2
@@ -44,10 +31,10 @@ c == 4
 misc.Smithnosky.Smithnosky(int, int, int):::EXIT
 this.a == this.b
 this.a == this.c
-this.a == this.size
-this.a == size(this.s[])
+this.a == 0
 this.aXb == 6
 this.aXc == 8
+this.size == 0
 this.s[] == []
 this.s[].getClass().getName() == []
 ===========================================================================
@@ -61,7 +48,7 @@ this.size one of { 0, 1 }
 this.s[].getClass().getName() one of { [], [java.lang.String] }
 o has only one value
 o.getClass().getName() == java.lang.String.class
-this.s[] elements == o
+size(this.s[]) one of { 0, 1 }
 ===========================================================================
 misc.Smithnosky.add(java.lang.Object):::EXIT
 this.a == this.b
@@ -73,16 +60,14 @@ this.aXb == this.aXc
 this.aXb == orig(this.aXb)
 this.aXb == orig(this.aXc)
 this.s == orig(this.s)
-orig(this.size) == size(this.s[])-1
-orig(this.s[]) == this.s[0..orig(this.size)-1]
-orig(o) == this.s[this.size-1]
-orig(o) == this.s[orig(this.size)]
+size(this.s[])-1 == orig(size(this.s[]))
 this.a == 3
 this.aXb == 9
 this.size one of { 1, 2 }
 this.s[].getClass().getName() one of { [java.lang.String], [java.lang.String, java.lang.String] }
-this.s[orig(this.size)..] contains no nulls and has only one value, of length 1
-this.s[] elements == orig(o)
+size(this.s[]) one of { 1, 2 }
+orig(this.s[]) is a subsequence of this.s[]
+this.s[] is a superset of orig(this.s[])
 orig(o.getClass().getName()) in this.s[].getClass().getName()
 ===========================================================================
 misc.Smithnosky.incA():::ENTER
@@ -91,6 +76,7 @@ this.a == this.c
 this.a one of { 0, 1, 2 }
 this.aXb one of { 1, 4, 6 }
 this.aXc one of { 1, 4, 8 }
+this.size == 0
 this.s[] == []
 this.s[].getClass().getName() == []
 ===========================================================================
@@ -101,13 +87,13 @@ this.b == orig(this.b)
 this.b == orig(this.c)
 this.aXc == orig(this.aXc)
 this.size == orig(this.size)
-this.size == orig(size(this.s[]))
 this.s == orig(this.s)
 this.s[] == orig(this.s[])
 this.a one of { 1, 2, 3 }
 this.b one of { 0, 1, 2 }
 this.aXb one of { 0, 2, 6 }
 this.aXc one of { 1, 4, 8 }
+this.size == 0
 this.s[] == []
 this.s[].getClass().getName() == []
 ===========================================================================
@@ -117,6 +103,7 @@ this.a one of { 1, 2, 3 }
 this.b one of { 0, 1, 2 }
 this.aXb one of { 0, 2, 6 }
 this.aXc one of { 1, 4, 8 }
+this.size == 0
 this.s[] == []
 this.s[].getClass().getName() == []
 ===========================================================================
@@ -127,13 +114,13 @@ this.c == orig(this.b)
 this.c == orig(this.c)
 this.aXc == orig(this.aXc)
 this.size == orig(this.size)
-this.size == orig(size(this.s[]))
 this.s == orig(this.s)
 this.s[] == orig(this.s[])
 this.a one of { 1, 2, 3 }
 this.c one of { 0, 1, 2 }
 this.aXb one of { 1, 4, 9 }
 this.aXc one of { 1, 4, 8 }
+this.size == 0
 this.s[] == []
 this.s[].getClass().getName() == []
 ===========================================================================
@@ -143,6 +130,7 @@ this.a one of { 1, 2, 3 }
 this.c one of { 0, 1, 2 }
 this.aXb one of { 1, 4, 9 }
 this.aXc one of { 1, 4, 8 }
+this.size == 0
 this.s[] == []
 this.s[].getClass().getName() == []
 ===========================================================================
@@ -154,11 +142,11 @@ this.a == orig(this.b)
 this.aXb == this.aXc
 this.aXb == orig(this.aXb)
 this.size == orig(this.size)
-this.size == orig(size(this.s[]))
 this.s == orig(this.s)
 this.s[] == orig(this.s[])
 this.a one of { 1, 2, 3 }
 this.aXb one of { 1, 4, 9 }
+this.size == 0
 this.s[] == []
 this.s[].getClass().getName() == []
 ===========================================================================

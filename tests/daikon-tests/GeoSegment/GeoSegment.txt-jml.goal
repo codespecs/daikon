@@ -36,7 +36,6 @@ gp.latitude == \old(gp.latitude)
 gp.longitude == \old(gp.longitude)
 gp.latitude is a pointer
 gp.longitude is a pointer
-daikon.Quant.fuzzy.gt(MapQuick1.GeoPoint.REP_SCALE_FACTOR, \result)
 this.latitude > gp.longitude
 this.longitude < gp.latitude
 gp.latitude > gp.longitude
@@ -62,9 +61,6 @@ MapQuick1.GeoPoint.hashCode():::EXIT
 this.latitude == \old(this.latitude)
 this.longitude == \old(this.longitude)
 \result is a pointer
-this.latitude < \result
-this.longitude < \result
-7 * this.latitude + 41 * this.longitude - \result + 4.294967296E9 == 0
 ===========================================================================
 MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::ENTER
     Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude gp gp.latitude gp.longitude
@@ -85,7 +81,6 @@ gp.latitude == \old(gp.latitude)
 gp.longitude == \old(gp.longitude)
 gp.latitude is a pointer
 gp.longitude is a pointer
-daikon.Quant.fuzzy.gt(MapQuick1.GeoPoint.REP_SCALE_FACTOR, \result)
 this.latitude != gp.latitude
 this.latitude > gp.longitude
 this.longitude < gp.latitude
@@ -125,7 +120,6 @@ p2.latitude > p2.longitude
 MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::EXIT
     Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude name name.toString p1 p1.latitude p1.longitude p2 p2.latitude p2.longitude orig(name) orig(name.toString) orig(p1) orig(p1.latitude) orig(p1.longitude) orig(p2) orig(p2.latitude) orig(p2.longitude)
 this.name == \old(name)
-this.name.toString().equals(name.toString())
 this.p1 == \old(p1)
 this.p1.latitude == p1.latitude
 this.p1.longitude == p1.longitude
@@ -186,10 +180,6 @@ this.p2.latitude == \old(this.p2.latitude)
 this.p2.longitude == \old(this.p2.longitude)
 \result != 0
 \result is a pointer
-this.p1.latitude != \result
-this.p1.longitude != \result
-this.p2.latitude != \result
-this.p2.longitude != \result
 ===========================================================================
 MapQuick1.GeoSegment.heading():::ENTER
     Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude
@@ -206,7 +196,6 @@ this.p1.longitude == \old(this.p1.longitude)
 this.p2 == \old(this.p2)
 this.p2.latitude == \old(this.p2.latitude)
 this.p2.longitude == \old(this.p2.longitude)
-daikon.Quant.fuzzy.gt(MapQuick1.GeoPoint.REP_SCALE_FACTOR, \result)
 this.p1.latitude != this.p2.latitude
 this.p1.longitude != this.p2.longitude
 ===========================================================================
@@ -224,7 +213,6 @@ this.p1.longitude == \old(this.p1.longitude)
 this.p2 == \old(this.p2)
 this.p2.latitude == \old(this.p2.latitude)
 this.p2.longitude == \old(this.p2.longitude)
-daikon.Quant.fuzzy.gt(MapQuick1.GeoPoint.REP_SCALE_FACTOR, \result)
 this.p1.longitude != this.p2.longitude
 ===========================================================================
 MapQuick1.GeoSegment.name():::ENTER
@@ -235,7 +223,7 @@ this.p1.longitude != this.p2.longitude
 MapQuick1.GeoSegment.name():::EXIT
     Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude return return.toString orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude)
 this.name == \result
-this.name.toString().equals(\result.toString())
+this.name.toString().equals(\old(this.name.toString()))
 this.p1 == \old(this.p1)
 this.p1.latitude == \old(this.p1.latitude)
 this.p1.longitude == \old(this.p1.longitude)
@@ -243,7 +231,6 @@ this.p2 == \old(this.p2)
 this.p2.latitude == \old(this.p2.latitude)
 this.p2.longitude == \old(this.p2.longitude)
 \result == \old(this.name)
-\result.toString().equals(\old(this.name.toString()))
 \result != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: return.toString is printable
 this.p1.latitude != this.p2.latitude

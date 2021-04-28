@@ -3,11 +3,10 @@ package daikon.inv;
 import daikon.ProglangType;
 import daikon.VarInfo;
 import java.io.Serializable;
-import org.plumelib.util.LimitedSizeIntSet;
-import org.plumelib.util.UtilPlume;
+import java.util.Arrays;
+import org.plumelib.util.LimitedSizeLongSet;
 
-// This is the successor to ValueTracker1.
-// It is a thin wrapper around LimitedSizeIntSet.
+// It is a thin wrapper around LimitedSizeLongSet.
 // (Actually, maybe it will just subclass that.)
 
 /**
@@ -15,7 +14,7 @@ import org.plumelib.util.UtilPlume;
  * for efficiency its hash code is added rather than the value itself. If the set size exceeds a
  * specified limit, then its rep is nulled.
  *
- * <p>This class is used for efficient justification tests.
+ * <p>The size of this class is used for efficient justification tests.
  *
  * <p>Relevant subclasses are:
  *
@@ -29,8 +28,24 @@ import org.plumelib.util.UtilPlume;
  * </ul>
  *
  * These subclasses store a hashcode.
+ *
+ * <p><b>Caveat:</b> The size is an approximation, because if two values happen to have the same
+ * hash value, then the sets size reflects only one of them. (As an example, the hash codes of 0L
+ * and -1L are the same. This implementation has a special case to avoid that problem for long
+ * values, but the hash codes of the arrays {0L} and {-1L} are also the same and this implementation
+ * does not work around that problem.)
+ *
+ * <p>An alternative approach would be to store actual values, rather than approximating. That would
+ * use more space than the current implementation does, but it would give a more accurate
+ * approximation of the size, Here are some possible implementation approaches:
+ *
+ * <ul>
+ *   <li>use a TreeSet with a special comparator
+ *   <li>use a HashSet that stores wrappers, where the wrappers redefine hashCode. (That is
+ *       necessary because arrays don't override {@code Object.hashCode}.
+ * </ul>
  */
-public abstract class ValueSet extends LimitedSizeIntSet implements Serializable, Cloneable {
+public abstract class ValueSet extends LimitedSizeLongSet implements Serializable, Cloneable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
@@ -42,7 +57,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
 
   // There is one ValueSet per variable (not one per slice or invariant),
   // so pre-allocating an array with 44 slots should not be a problem.  If
-  // it is, then change LimitedSizeIntSet to optionally not pre-allocate
+  // it is, then change LimitedSizeLongSet to optionally not pre-allocate
   // the entire array.
   /**
    * The number 44 comes from the fact that .9^44 &lt; .01. So, if the confidence limit is .01 and
@@ -112,7 +127,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       if (val > max_val) {
         max_val = val;
       }
-      add(UtilPlume.hash(val));
+      add(val);
     }
 
     @Override
@@ -166,8 +181,10 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       }
       if (Double.isNaN(val)) {
         can_be_NaN = true;
+        // use the canonical NaN value
+        val = Double.NaN;
       }
-      add(UtilPlume.hash(val));
+      add(Double.doubleToLongBits(val));
     }
 
     @Override
@@ -217,7 +234,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     long max_val = Long.MIN_VALUE;
     int max_length = 0;
     int elem_cnt = 0;
-    int multi_arr_cnt = 0; // number of arrays with 2 or more elements
+    int nonsingleton_arr_cnt = 0; // number of arrays with 2 or more elements
 
     public ValueSetScalarArray(int max_values) {
       super(max_values);
@@ -236,9 +253,9 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
         }
       }
       elem_cnt += val.length;
-      if (val.length > 1) multi_arr_cnt++;
+      if (val.length > 1) nonsingleton_arr_cnt++;
       if (val.length > max_length) max_length = val.length;
-      add(UtilPlume.hash((long[]) v1));
+      add(Arrays.hashCode((long[]) v1));
     }
 
     @Override
@@ -247,7 +264,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       min_val = Math.min(min_val, vs.min_val);
       max_val = Math.max(max_val, vs.max_val);
       elem_cnt += vs.elem_cnt;
-      multi_arr_cnt += vs.multi_arr_cnt;
+      nonsingleton_arr_cnt += vs.nonsingleton_arr_cnt;
       max_length = Math.max(max_length, vs.max_length);
     }
 
@@ -263,8 +280,8 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       return elem_cnt;
     }
 
-    public int multi_arr_cnt() {
-      return multi_arr_cnt;
+    public int nonsingleton_arr_cnt() {
+      return nonsingleton_arr_cnt;
     }
 
     public int max_length() {
@@ -292,7 +309,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     boolean can_be_NaN = false;
     int max_length = 0;
     int elem_cnt = 0;
-    int multi_arr_cnt = 0; // number of arrays with 2 or more elements
+    int nonsingleton_arr_cnt = 0; // number of arrays with 2 or more elements
 
     public ValueSetFloatArray(int max_values) {
       super(max_values);
@@ -314,9 +331,9 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
         }
       }
       elem_cnt += val.length;
-      if (val.length > 1) multi_arr_cnt++;
+      if (val.length > 1) nonsingleton_arr_cnt++;
       if (val.length > max_length) max_length = val.length;
-      add(UtilPlume.hash(val));
+      add(Arrays.hashCode(val));
     }
 
     @Override
@@ -326,7 +343,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       max_val = Math.max(max_val, vs.max_val);
       can_be_NaN = can_be_NaN || vs.can_be_NaN;
       elem_cnt += vs.elem_cnt;
-      multi_arr_cnt += vs.multi_arr_cnt;
+      nonsingleton_arr_cnt += vs.nonsingleton_arr_cnt;
       max_length = Math.max(max_length, vs.max_length);
     }
 
@@ -346,8 +363,8 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       return elem_cnt;
     }
 
-    public int multi_arr_cnt() {
-      return multi_arr_cnt;
+    public int nonsingleton_arr_cnt() {
+      return nonsingleton_arr_cnt;
     }
 
     public int max_length() {
@@ -384,7 +401,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     @Override
     public void add(Object v1) {
       assert v1 != null;
-      add(UtilPlume.hash((String) v1));
+      add(((String) v1).hashCode());
     }
 
     @Override
@@ -403,7 +420,7 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
     static final long serialVersionUID = 20031017L;
 
     int elem_cnt = 0;
-    int multi_arr_cnt = 0; // number of arrays with 2 or more elements
+    int nonsingleton_arr_cnt = 0; // number of arrays with 2 or more elements
 
     public ValueSetStringArray(int max_values) {
       super(max_values);
@@ -414,23 +431,23 @@ public abstract class ValueSet extends LimitedSizeIntSet implements Serializable
       assert v1 != null;
       String[] val = (String[]) v1;
       elem_cnt += val.length;
-      if (val.length > 1) multi_arr_cnt++;
-      add(UtilPlume.hash(val));
+      if (val.length > 1) nonsingleton_arr_cnt++;
+      add(Arrays.deepHashCode(val));
     }
 
     @Override
     protected void add_stats(ValueSet other) {
       ValueSetStringArray vs = (ValueSetStringArray) other;
       elem_cnt += vs.elem_cnt;
-      multi_arr_cnt += vs.multi_arr_cnt;
+      nonsingleton_arr_cnt += vs.nonsingleton_arr_cnt;
     }
 
     public int elem_cnt() {
       return elem_cnt;
     }
 
-    public int multi_arr_cnt() {
-      return multi_arr_cnt;
+    public int nonsingleton_arr_cnt() {
+      return nonsingleton_arr_cnt;
     }
 
     @Override

@@ -188,6 +188,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -196,6 +197,7 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.EntryReader;
 import org.plumelib.util.RegexUtil;
+import org.plumelib.util.StringsPlume;
 import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.Prototype;
 
@@ -203,8 +205,6 @@ import typequals.prototype.qual.Prototype;
  * The {@link #main} method is the main entry point for the Daikon invariant detector. The {@link
  * #mainHelper} method is the entry point, when called programmatically.
  */
-@SuppressWarnings(
-    "nullness:initialization.static.fields.uninitialized") // field all_ppts; deal with it later
 public final class Daikon {
 
   private Daikon() {
@@ -218,9 +218,9 @@ public final class Daikon {
   public static int dkconfig_progress_delay = 1000;
 
   /** The current version of Daikon. */
-  public static final String release_version = "5.8.5";
+  public static final String release_version = "5.8.9";
   /** The date for the current version of Daikon. */
-  public static final String release_date = "July 22, 2020";
+  public static final String release_date = "March 3, 2021";
   /** A description of the Daikon release (version number, date, and URL). */
   public static final String release_string =
       "Daikon version "
@@ -466,8 +466,11 @@ public final class Daikon {
   public static @MonotonicNonNull File server_dir =
       null; // YOAV: the directory from which we read the dtrace files
 
-  // A PptMap (mapping String -> PptTopLevel) that contains all the program points.
-  // Set in mainHelper().
+  /**
+   * A PptMap (mapping from String to PptTopLevel) that contains all the program points. Set in
+   * mainHelper().
+   */
+  @SuppressWarnings("nullness:initialization.static.field.uninitialized") // set in mainHelper()
   public static PptMap all_ppts;
 
   /** current invariant (used for debugging) */
@@ -495,12 +498,11 @@ public final class Daikon {
     daikon.Runtime.no_dtrace = true;
   }
 
+  /** The usage message for this program. */
   static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           release_string,
-          "Daikon invariant detector, copyright 1998-2018",
-          // " by Michael Ernst <mernst@cs.washington.edu>",
-          "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
+          // "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
           // "For licensing information, see the License section of the manual.",
           "Usage:",
           "    java daikon.Daikon [flags...] files...",
@@ -1731,7 +1733,8 @@ public final class Daikon {
           Class<?> cls = inv_as_object.getClass();
           throw new Daikon.UserError(
               invariantClassName
-                  + ".get_proto() returned object of the wrong type.  It should have been a subclass of invariant, but was "
+                  + ".get_proto() returned object of the wrong type."
+                  + "  It should have been a subclass of invariant, but was "
                   + cls
                   + ": "
                   + inv_as_object);
@@ -2028,7 +2031,7 @@ public final class Daikon {
       fileio_progress.clear();
       if (!Daikon.dkconfig_quiet && decl_files.size() > 0) {
         System.out.print("\r(read ");
-        System.out.print(UtilPlume.nplural(decl_files.size(), "decls file"));
+        System.out.print(StringsPlume.nplural(decl_files.size(), "decls file"));
         System.out.println(")");
       }
       return all_ppts;
@@ -2052,9 +2055,10 @@ public final class Daikon {
       System.out.print("Reading splitter info files ");
       create_splitters(spinfo_files);
       System.out.print("\r(read ");
-      System.out.print(UtilPlume.nplural(spinfo_files.size(), "spinfo file"));
+      System.out.print(StringsPlume.nplural(spinfo_files.size(), "spinfo file"));
       System.out.print(", ");
-      System.out.print(UtilPlume.nplural(SpinfoFile.numSplittterObjects(spinfoFiles), "splitter"));
+      System.out.print(
+          StringsPlume.nplural(SpinfoFile.numSplittterObjects(spinfoFiles), "splitter"));
       System.out.println(")");
     } catch (IOException e) {
       System.out.println();
@@ -2079,7 +2083,7 @@ public final class Daikon {
       ContextSplitterFactory.load_mapfiles_into_splitterlist(
           map_files, ContextSplitterFactory.dkconfig_granularity);
       System.out.print("\r(read ");
-      System.out.print(UtilPlume.nplural(map_files.size(), "map (context) file"));
+      System.out.print(StringsPlume.nplural(map_files.size(), "map (context) file"));
       System.out.println(")");
       long duration = System.nanoTime() - startTime;
       debugProgress.fine(
@@ -2110,7 +2114,7 @@ public final class Daikon {
     }
     if (pconds != null) {
       Global.debugSplit.fine(
-          "Got " + UtilPlume.nplural(pconds.length, "splitter") + " for " + ppt.name());
+          "Got " + StringsPlume.nplural(pconds.length, "splitter") + " for " + ppt.name());
       ppt.addConditions(pconds);
     }
 
@@ -2174,7 +2178,7 @@ public final class Daikon {
       }
       // "display("");" is wrong becuase it leaves the timestamp and writes
       // spaces across the screen.
-      String status = UtilPlume.rpad("", dkconfig_progress_display_width - 1);
+      String status = StringsPlume.rpad("", dkconfig_progress_display_width - 1);
       System.out.print("\r" + status);
       System.out.print("\r"); // return to beginning of line
       System.out.flush();
@@ -2206,7 +2210,7 @@ public final class Daikon {
         return;
       }
       String status =
-          UtilPlume.rpad(
+          StringsPlume.rpad(
               "[" + LocalDateTime.now(ZoneId.systemDefault()) + "]: " + message,
               dkconfig_progress_display_width - 1);
       System.out.print("\r" + status);
@@ -2236,7 +2240,6 @@ public final class Daikon {
    * have been loaded, all of the program points have been setup, and candidate invariants have been
    * instantiated. This routine processes data to falsify the candidate invariants.
    */
-  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
   @RequiresNonNull("fileio_progress")
   // set in mainHelper
   private static void process_data(PptMap all_ppts, Set<String> dtrace_files) {
@@ -2257,7 +2260,7 @@ public final class Daikon {
       if (!Daikon.dkconfig_quiet) {
         System.out.println(
             "Processing trace data; reading "
-                + UtilPlume.nplural(dtrace_files.size(), "dtrace file")
+                + StringsPlume.nplural(dtrace_files.size(), "dtrace file")
                 + ":");
       }
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
@@ -2314,7 +2317,7 @@ public final class Daikon {
     if ((use_dataflow_hierarchy && FileIO.samples_processed == unmatched_count)
         || (FileIO.samples_processed == 0)) {
       throw new Daikon.UserError(
-          "No samples found for any of " + UtilPlume.nplural(all_ppts.size(), "program point"));
+          "No samples found for any of " + StringsPlume.nplural(all_ppts.size(), "program point"));
     }
 
     // ppt_stats (all_ppts);
@@ -2458,8 +2461,7 @@ public final class Daikon {
           continue;
         }
         leader_cnt++;
-        Count cnt = type_map.get(v.file_rep_type);
-        if (cnt == null) type_map.put(v.file_rep_type, cnt = new Count(0));
+        Count cnt = type_map.computeIfAbsent(v.file_rep_type, __ -> new Count(0));
         cnt.val++;
       }
       System.out.println("  vars       = " + ppt.var_infos.length);
@@ -2494,6 +2496,12 @@ public final class Daikon {
   }
 
   /** Initialize NIS suppression. */
+  @EnsuresNonNull({
+    "daikon.suppress.NIS.suppressor_map",
+    "daikon.suppress.NIS.suppressor_map_suppression_count",
+    "daikon.suppress.NIS.all_suppressions",
+    "daikon.suppress.NIS.suppressor_proto_invs"
+  })
   public static void setup_NISuppression() {
     NIS.init_ni_suppression();
   }
@@ -2658,8 +2666,7 @@ public final class Daikon {
    * Undoes the invariants suppressed for the dynamic constant, suppression and equality set
    * optimizations (should yield the same invariants as the simple incremental algorithm.
    */
-  @SuppressWarnings("flowexpr.parse.error") // private field
-  @RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})
+  @RequiresNonNull({"daikon.suppress.NIS.all_suppressions", "daikon.suppress.NIS.suppressor_map"})
   public static void undoOpts(PptMap all_ppts) {
 
     // undo suppressions

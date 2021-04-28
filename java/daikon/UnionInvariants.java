@@ -2,6 +2,7 @@ package daikon;
 
 import gnu.getopt.*;
 import java.io.File;
+import org.plumelib.util.StringsPlume;
 import org.plumelib.util.UtilPlume;
 
 /**
@@ -21,9 +22,10 @@ public final class UnionInvariants {
     throw new Error("do not instantiate");
   }
 
+  /** The usage message for this program. */
   // Non-empty program points in the input files must be distinct.
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage: java daikon.UnionInvariants [OPTION]... FILE.inv[.gz] [FILE.inv[.gz] ...]",
           "  -h, --" + Daikon.help_SWITCH,
           "      Display this usage message",

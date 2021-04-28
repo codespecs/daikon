@@ -52,11 +52,9 @@ daikon.Quant.size(this.bits)-1 == (\old(n) | daikon.Quant.size(this.bits)-1)
 ===========================================================================
 six170.FixedSizeSet.intersect(six170.FixedSizeSet):::ENTER
     Variables: this this.bits this.bits[] other other.bits other.bits[] size(this.bits[]) size(this.bits[])-1 size(other.bits[]) size(other.bits[])-1
-daikon.Quant.size(this.bits) == daikon.Quant.size(other.bits)
 other != null
 other.bits != null
-daikon.Quant.subsetOf(this.bits, other.bits)
-daikon.Quant.subsetOf(other.bits, this.bits)
+daikon.Quant.size(other.bits) == 8
 ===========================================================================
 six170.FixedSizeSet.intersect(six170.FixedSizeSet):::EXIT
     Variables: this this.bits this.bits[] other other.bits other.bits[] orig(this) orig(this.bits) orig(this.bits[]) orig(other) orig(other.bits) orig(other.bits[]) size(this.bits[]) size(this.bits[])-1 size(other.bits[]) size(other.bits[])-1 orig(size(this.bits[])) orig(size(this.bits[]))-1 orig(size(other.bits[])) orig(size(other.bits[]))-1
@@ -64,14 +62,10 @@ assignable this.bits[*]
 this.bits == \old(this.bits)
 other.bits == \old(other.bits)
 daikon.Quant.pairwiseEqual(other.bits, \old(other.bits))
-daikon.Quant.size(this.bits) == daikon.Quant.size(other.bits)
 daikon.Quant.size(this.bits) == \old(daikon.Quant.size(this.bits))
-daikon.Quant.size(this.bits) == \old(daikon.Quant.size(other.bits))
 other.bits != null
-daikon.Quant.subsetOf(this.bits, other.bits)
+daikon.Quant.size(other.bits) == 8
 daikon.Quant.subsetOf(this.bits, \old(this.bits))
-daikon.Quant.subsetOf(other.bits, \old(this.bits))
-daikon.Quant.subsetOf(\old(this.bits), other.bits)
 ===========================================================================
 six170.FixedSizeSet.remove(int):::ENTER
     Variables: this this.bits this.bits[] n size(this.bits[]) size(this.bits[])-1 this.bits[n] this.bits[n-1] this.bits[n..] this.bits[n+1..] this.bits[0..n] this.bits[0..n-1]
@@ -99,11 +93,9 @@ daikon.Quant.size(this.bits)-1 == (\old(n) | daikon.Quant.size(this.bits)-1)
 ===========================================================================
 six170.FixedSizeSet.union(six170.FixedSizeSet):::ENTER
     Variables: this this.bits this.bits[] other other.bits other.bits[] size(this.bits[]) size(this.bits[])-1 size(other.bits[]) size(other.bits[])-1
-daikon.Quant.size(this.bits) == daikon.Quant.size(other.bits)
 other != null
 other.bits != null
-daikon.Quant.subsetOf(this.bits, other.bits)
-daikon.Quant.subsetOf(other.bits, this.bits)
+daikon.Quant.size(other.bits) == 8
 ===========================================================================
 six170.FixedSizeSet.union(six170.FixedSizeSet):::EXIT
     Variables: this this.bits this.bits[] other other.bits other.bits[] orig(this) orig(this.bits) orig(this.bits[]) orig(other) orig(other.bits) orig(other.bits[]) size(this.bits[]) size(this.bits[])-1 size(other.bits[]) size(other.bits[])-1 orig(size(this.bits[])) orig(size(this.bits[]))-1 orig(size(other.bits[])) orig(size(other.bits[]))-1
@@ -111,11 +103,7 @@ assignable this.bits[*]
 this.bits == \old(this.bits)
 other.bits == \old(other.bits)
 daikon.Quant.pairwiseEqual(other.bits, \old(other.bits))
-daikon.Quant.size(this.bits) == daikon.Quant.size(other.bits)
 daikon.Quant.size(this.bits) == \old(daikon.Quant.size(this.bits))
-daikon.Quant.size(this.bits) == \old(daikon.Quant.size(other.bits))
 other.bits != null
-daikon.Quant.subsetOf(this.bits, other.bits)
+daikon.Quant.size(other.bits) == 8
 daikon.Quant.subsetOf(this.bits, \old(this.bits))
-daikon.Quant.subsetOf(other.bits, \old(this.bits))
-daikon.Quant.subsetOf(\old(this.bits), other.bits)

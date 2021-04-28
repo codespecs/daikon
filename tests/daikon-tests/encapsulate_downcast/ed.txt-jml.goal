@@ -7,14 +7,14 @@ misc.EncapsulateDowncast.random2 != null
 misc.EncapsulateDowncast.random2 != null
 ===========================================================================
 misc.EncapsulateDowncast.main(java.lang.String[]):::ENTER
-    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 argv argv.getClass().getName() argv[] argv[].toString size(argv[]) size(argv[])-1 argv[misc.EncapsulateDowncast.CASES] argv[misc.EncapsulateDowncast.CASES-1] argv[misc.EncapsulateDowncast.CASES..] argv[misc.EncapsulateDowncast.CASES+1..] argv[0..misc.EncapsulateDowncast.CASES] argv[0..misc.EncapsulateDowncast.CASES-1] argv[misc.EncapsulateDowncast.SEED] argv[misc.EncapsulateDowncast.SEED-1] argv[misc.EncapsulateDowncast.SEED..] argv[misc.EncapsulateDowncast.SEED+1..] argv[0..misc.EncapsulateDowncast.SEED] argv[0..misc.EncapsulateDowncast.SEED-1]
+    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 argv argv.getClass().getName() argv[] argv[].toString size(argv[]) size(argv[])-1
 argv != null
 argv.getClass().getName() == java.lang.String[].class.getName()
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(argv, "toString()"), new String[] {  })
 ===========================================================================
 misc.EncapsulateDowncast.main(java.lang.String[]):::EXIT
-    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 argv argv.getClass().getName() argv[] argv[].toString orig(misc.EncapsulateDowncast.random) orig(misc.EncapsulateDowncast.random2) orig(argv) orig(argv.getClass().getName()) orig(argv[]) orig(argv[].toString) size(argv[]) size(argv[])-1 orig(size(argv[])) orig(size(argv[]))-1 argv[misc.EncapsulateDowncast.CASES] argv[misc.EncapsulateDowncast.CASES-1] argv[misc.EncapsulateDowncast.CASES..] argv[misc.EncapsulateDowncast.CASES+1..] argv[0..misc.EncapsulateDowncast.CASES] argv[0..misc.EncapsulateDowncast.CASES-1] orig(argv[post(misc.EncapsulateDowncast.CASES)]) orig(argv[post(misc.EncapsulateDowncast.CASES)-1]) orig(argv[post(misc.EncapsulateDowncast.CASES)..]) orig(argv[post(misc.EncapsulateDowncast.CASES)+1..]) orig(argv[0..post(misc.EncapsulateDowncast.CASES)]) orig(argv[0..post(misc.EncapsulateDowncast.CASES)-1]) argv[misc.EncapsulateDowncast.SEED] argv[misc.EncapsulateDowncast.SEED-1] argv[misc.EncapsulateDowncast.SEED..] argv[misc.EncapsulateDowncast.SEED+1..] argv[0..misc.EncapsulateDowncast.SEED] argv[0..misc.EncapsulateDowncast.SEED-1] orig(argv[post(misc.EncapsulateDowncast.SEED)]) orig(argv[post(misc.EncapsulateDowncast.SEED)-1]) orig(argv[post(misc.EncapsulateDowncast.SEED)..]) orig(argv[post(misc.EncapsulateDowncast.SEED)+1..]) orig(argv[0..post(misc.EncapsulateDowncast.SEED)]) orig(argv[0..post(misc.EncapsulateDowncast.SEED)-1])
+    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 argv argv.getClass().getName() argv[] argv[].toString orig(misc.EncapsulateDowncast.random) orig(misc.EncapsulateDowncast.random2) orig(argv) orig(argv.getClass().getName()) orig(argv[]) orig(argv[].toString) size(argv[]) size(argv[])-1 orig(size(argv[])) orig(size(argv[]))-1
 misc.EncapsulateDowncast.random == \old(misc.EncapsulateDowncast.random)
 misc.EncapsulateDowncast.random2 == \old(misc.EncapsulateDowncast.random2)
 daikon.Quant.pairwiseEqual(argv, \old(argv))
@@ -22,44 +22,36 @@ daikon.Quant.pairwiseEqual(argv, \old(argv))
 daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(argv, "toString()"), new String[] {  })
 ===========================================================================
 misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::ENTER
-    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 list list[] list[].getClass().getName() size(list[]) size(list[])-1 list[misc.EncapsulateDowncast.CASES] list[misc.EncapsulateDowncast.CASES-1] list[misc.EncapsulateDowncast.CASES..] list[misc.EncapsulateDowncast.CASES+1..] list[0..misc.EncapsulateDowncast.CASES] list[0..misc.EncapsulateDowncast.CASES-1] list[misc.EncapsulateDowncast.SEED] list[misc.EncapsulateDowncast.SEED-1] list[misc.EncapsulateDowncast.SEED..] list[misc.EncapsulateDowncast.SEED+1..] list[0..misc.EncapsulateDowncast.SEED] list[0..misc.EncapsulateDowncast.SEED-1]
+    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 list list[] list[].getClass().getName() size(list[]) size(list[])-1
 list != null
 daikon.Quant.noDups(list)
 daikon.Quant.eltsNotEqual(list, null)
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(list), "misc.Person")
-(misc.EncapsulateDowncast.CASES & daikon.Quant.size(list)) == 0
-misc.EncapsulateDowncast.CASES > daikon.Quant.size(list)
-(misc.EncapsulateDowncast.CASES & daikon.Quant.size(list)-1) == 0
-misc.EncapsulateDowncast.SEED > daikon.Quant.size(list)
 ===========================================================================
 misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::EXIT
-    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 list list[] list[].getClass().getName() orig(misc.EncapsulateDowncast.random) orig(misc.EncapsulateDowncast.random2) orig(list) orig(list[]) orig(list[].getClass().getName()) size(list[]) size(list[])-1 orig(size(list[])) orig(size(list[]))-1 list[misc.EncapsulateDowncast.CASES] list[misc.EncapsulateDowncast.CASES-1] list[misc.EncapsulateDowncast.CASES..] list[misc.EncapsulateDowncast.CASES+1..] list[0..misc.EncapsulateDowncast.CASES] list[0..misc.EncapsulateDowncast.CASES-1] orig(list[post(misc.EncapsulateDowncast.CASES)]) orig(list[post(misc.EncapsulateDowncast.CASES)-1]) orig(list[post(misc.EncapsulateDowncast.CASES)..]) orig(list[post(misc.EncapsulateDowncast.CASES)+1..]) orig(list[0..post(misc.EncapsulateDowncast.CASES)]) orig(list[0..post(misc.EncapsulateDowncast.CASES)-1]) list[misc.EncapsulateDowncast.SEED] list[misc.EncapsulateDowncast.SEED-1] list[misc.EncapsulateDowncast.SEED..] list[misc.EncapsulateDowncast.SEED+1..] list[0..misc.EncapsulateDowncast.SEED] list[0..misc.EncapsulateDowncast.SEED-1] orig(list[post(misc.EncapsulateDowncast.SEED)]) orig(list[post(misc.EncapsulateDowncast.SEED)-1]) orig(list[post(misc.EncapsulateDowncast.SEED)..]) orig(list[post(misc.EncapsulateDowncast.SEED)+1..]) orig(list[0..post(misc.EncapsulateDowncast.SEED)]) orig(list[0..post(misc.EncapsulateDowncast.SEED)-1])
+    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 list list[] list[].getClass().getName() orig(misc.EncapsulateDowncast.random) orig(misc.EncapsulateDowncast.random2) orig(list) orig(list[]) orig(list[].getClass().getName()) size(list[]) size(list[])-1 orig(size(list[])) orig(size(list[]))-1
 misc.EncapsulateDowncast.random == \old(misc.EncapsulateDowncast.random)
 misc.EncapsulateDowncast.random2 == \old(misc.EncapsulateDowncast.random2)
 daikon.Quant.pairwiseEqual(list, \old(list))
 daikon.Quant.noDups(list)
 daikon.Quant.eltsNotEqual(list, null)
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(list), "misc.Person")
-(misc.EncapsulateDowncast.CASES & daikon.Quant.size(list)-1) == 0
 ===========================================================================
 misc.Person:::OBJECT
     Variables: this this._name this._name.toString this._height this._weight
 this._name != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: this._name.toString is printable
 this._height >= 0
-this._height < this._weight
 ===========================================================================
 misc.Person.Person(java.lang.String, int, int):::ENTER
     Variables: name name.toString height weight
 name != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: name.toString is printable
 height >= 0
-height < weight
 ===========================================================================
 misc.Person.Person(java.lang.String, int, int):::EXIT
     Variables: this this._name this._name.toString this._height this._weight name name.toString height weight orig(name) orig(name.toString) orig(height) orig(weight)
 this._name == \old(name)
-this._name.toString().equals(name.toString())
 this._height == \old(height)
 this._weight == \old(weight)
 name.toString().equals(\old(name.toString()))

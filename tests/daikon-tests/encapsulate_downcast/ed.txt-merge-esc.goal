@@ -6,14 +6,12 @@ class Person {
 
     /*@ invariant this._name != null; */
     /*@ invariant this._height >= 0; */
-    /*@ invariant this._height < this._weight; */
     /*@ spec_public */ private String _name;
     /*@ spec_public */ private int _height;
     /*@ spec_public */ private int _weight;
 
     /*@ requires name != null; */
     /*@ requires height >= 0; */
-    /*@ requires height < weight; */
     /*@ ensures this._name == \old(name); */
     /*@ ensures this._height == \old(height); */
     /*@ ensures this._weight == \old(weight); */

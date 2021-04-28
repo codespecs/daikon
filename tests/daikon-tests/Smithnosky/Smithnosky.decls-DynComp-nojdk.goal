@@ -1,739 +1,1008 @@
-// Declaration file written by daikon.dcomp
+// Declarations for misc.Smithnosky
+// Declarations written 2020-11-18T07:29:04.896 by daikon.DynComp
 
-VarComparability
-implicit
+decl-version 2.0
+var-comparability implicit
 
-DECLARE
-misc.Smithnosky:::CLASS
+ppt misc.Smithnosky:::CLASS
+ppt-type class
 
-DECLARE
-misc.Smithnosky:::OBJECT
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-2
-this.a
-int # declaringClassPackageName=misc
-int
-3
-this.b
-int # declaringClassPackageName=misc
-int
-3
-this.c
-int # declaringClassPackageName=misc
-int
-3
-this.aXb
-int # declaringClassPackageName=misc
-int
-3
-this.aXc
-int # declaringClassPackageName=misc
-int
-3
-this.size
-int # declaringClassPackageName=misc
-int
-6
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-4
-this.s[..]
-java.util.Vector
-hashcode[]
-5[7]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
+ppt misc.Smithnosky:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 4
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 5[7]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[8]
 
+ppt misc.Smithnosky.Smithnosky(int, int, int):::ENTER
+ppt-type enter
+variable a
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable b
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable c
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
 
-DECLARE
-misc.Smithnosky.Smithnosky(int, int, int):::ENTER
-a
-int # isParam=true
-int
-2
-b
-int # isParam=true
-int
-2
-c
-int # isParam=true
-int
-2
+ppt misc.Smithnosky.Smithnosky(int, int, int):::EXIT24
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 4
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 5[7]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable a
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable b
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable c
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
 
-DECLARE
-misc.Smithnosky.Smithnosky(int, int, int):::EXIT24
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-3
-this.a
-int # declaringClassPackageName=misc
-int
-2
-this.b
-int # declaringClassPackageName=misc
-int
-2
-this.c
-int # declaringClassPackageName=misc
-int
-2
-this.aXb
-int # declaringClassPackageName=misc
-int
-2
-this.aXc
-int # declaringClassPackageName=misc
-int
-2
-this.size
-int # declaringClassPackageName=misc
-int
-6
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-4
-this.s[..]
-java.util.Vector
-hashcode[]
-5[7]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-a
-int # isParam=true
-int
-2
-b
-int # isParam=true
-int
-2
-c
-int # isParam=true
-int
-2
+ppt misc.Smithnosky.incA():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 4
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 5[7]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[8]
 
+ppt misc.Smithnosky.incA():::EXIT29
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 4
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 5[7]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[8]
 
-DECLARE
-misc.Smithnosky.incA():::ENTER
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-2
-this.a
-int # declaringClassPackageName=misc
-int
-3
-this.b
-int # declaringClassPackageName=misc
-int
-3
-this.c
-int # declaringClassPackageName=misc
-int
-3
-this.aXb
-int # declaringClassPackageName=misc
-int
-3
-this.aXc
-int # declaringClassPackageName=misc
-int
-3
-this.size
-int # declaringClassPackageName=misc
-int
-6
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-4
-this.s[..]
-java.util.Vector
-hashcode[]
-5[7]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
+ppt misc.Smithnosky.incB():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 4
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 5[7]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[8]
 
-DECLARE
-misc.Smithnosky.incA():::EXIT29
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-2
-this.a
-int # declaringClassPackageName=misc
-int
-3
-this.b
-int # declaringClassPackageName=misc
-int
-3
-this.c
-int # declaringClassPackageName=misc
-int
-3
-this.aXb
-int # declaringClassPackageName=misc
-int
-3
-this.aXc
-int # declaringClassPackageName=misc
-int
-3
-this.size
-int # declaringClassPackageName=misc
-int
-6
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-4
-this.s[..]
-java.util.Vector
-hashcode[]
-5[7]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
+ppt misc.Smithnosky.incB():::EXIT34
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 4
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 5[7]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[8]
 
+ppt misc.Smithnosky.incC():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 4
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 5[7]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[8]
 
-DECLARE
-misc.Smithnosky.incB():::ENTER
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-2
-this.a
-int # declaringClassPackageName=misc
-int
-3
-this.b
-int # declaringClassPackageName=misc
-int
-3
-this.c
-int # declaringClassPackageName=misc
-int
-3
-this.aXb
-int # declaringClassPackageName=misc
-int
-3
-this.aXc
-int # declaringClassPackageName=misc
-int
-3
-this.size
-int # declaringClassPackageName=misc
-int
-6
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-4
-this.s[..]
-java.util.Vector
-hashcode[]
-5[7]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
+ppt misc.Smithnosky.incC():::EXIT39
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 4
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 5[7]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[8]
 
-DECLARE
-misc.Smithnosky.incB():::EXIT34
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-2
-this.a
-int # declaringClassPackageName=misc
-int
-3
-this.b
-int # declaringClassPackageName=misc
-int
-3
-this.c
-int # declaringClassPackageName=misc
-int
-3
-this.aXb
-int # declaringClassPackageName=misc
-int
-3
-this.aXc
-int # declaringClassPackageName=misc
-int
-3
-this.size
-int # declaringClassPackageName=misc
-int
-6
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-4
-this.s[..]
-java.util.Vector
-hashcode[]
-5[7]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
+ppt misc.Smithnosky.add(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 5
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 2[7]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
 
+ppt misc.Smithnosky.add(java.lang.Object):::EXIT44
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 5
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 2[7]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-misc.Smithnosky.incC():::ENTER
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-2
-this.a
-int # declaringClassPackageName=misc
-int
-3
-this.b
-int # declaringClassPackageName=misc
-int
-3
-this.c
-int # declaringClassPackageName=misc
-int
-3
-this.aXb
-int # declaringClassPackageName=misc
-int
-3
-this.aXc
-int # declaringClassPackageName=misc
-int
-3
-this.size
-int # declaringClassPackageName=misc
-int
-6
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-4
-this.s[..]
-java.util.Vector
-hashcode[]
-5[7]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
+ppt misc.Smithnosky.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
 
-DECLARE
-misc.Smithnosky.incC():::EXIT39
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-2
-this.a
-int # declaringClassPackageName=misc
-int
-3
-this.b
-int # declaringClassPackageName=misc
-int
-3
-this.c
-int # declaringClassPackageName=misc
-int
-3
-this.aXb
-int # declaringClassPackageName=misc
-int
-3
-this.aXc
-int # declaringClassPackageName=misc
-int
-3
-this.size
-int # declaringClassPackageName=misc
-int
-6
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-4
-this.s[..]
-java.util.Vector
-hashcode[]
-5[7]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
+ppt misc.Smithnosky.main(java.lang.String[]):::EXIT59
+ppt-type subexit
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
 
+ppt misc.Smithnosky.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 5
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 6[8]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-misc.Smithnosky.add(java.lang.Object):::ENTER
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-3
-this.a
-int # declaringClassPackageName=misc
-int
-4
-this.b
-int # declaringClassPackageName=misc
-int
-4
-this.c
-int # declaringClassPackageName=misc
-int
-4
-this.aXb
-int # declaringClassPackageName=misc
-int
-4
-this.aXc
-int # declaringClassPackageName=misc
-int
-4
-this.size
-int # declaringClassPackageName=misc
-int
-6
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-5
-this.s[..]
-java.util.Vector
-hashcode[]
-2[7]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt misc.Smithnosky.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 6
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 7[9]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
-DECLARE
-misc.Smithnosky.add(java.lang.Object):::EXIT44
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-3
-this.a
-int # declaringClassPackageName=misc
-int
-4
-this.b
-int # declaringClassPackageName=misc
-int
-4
-this.c
-int # declaringClassPackageName=misc
-int
-4
-this.aXb
-int # declaringClassPackageName=misc
-int
-4
-this.aXc
-int # declaringClassPackageName=misc
-int
-4
-this.size
-int # declaringClassPackageName=misc
-int
-6
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-5
-this.s[..]
-java.util.Vector
-hashcode[]
-2[7]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt misc.Smithnosky.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 5
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 6[8]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-
-DECLARE
-misc.Smithnosky.main(java.lang.String[]):::ENTER
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[5]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[6]
-
-DECLARE
-misc.Smithnosky.main(java.lang.String[]):::EXIT59
-args
-java.lang.String[] # isParam=true
-hashcode
-2
-args.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-args[..]
-java.lang.String[]
-hashcode[]
-3[5]
-args[..].toString
-java.lang.String[]
-java.lang.String[]
-4[6]
-
-
-DECLARE
-misc.Smithnosky.equals(java.lang.Object):::ENTER
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-3
-this.a
-int # declaringClassPackageName=misc
-int
-4
-this.b
-int # declaringClassPackageName=misc
-int
-4
-this.c
-int # declaringClassPackageName=misc
-int
-4
-this.aXb
-int # declaringClassPackageName=misc
-int
-4
-this.aXc
-int # declaringClassPackageName=misc
-int
-4
-this.size
-int # declaringClassPackageName=misc
-int
-7
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-5
-this.s[..]
-java.util.Vector
-hashcode[]
-6[8]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-misc.Smithnosky.equals(java.lang.Object):::EXIT1
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-4
-this.a
-int # declaringClassPackageName=misc
-int
-5
-this.b
-int # declaringClassPackageName=misc
-int
-5
-this.c
-int # declaringClassPackageName=misc
-int
-5
-this.aXb
-int # declaringClassPackageName=misc
-int
-5
-this.aXc
-int # declaringClassPackageName=misc
-int
-5
-this.size
-int # declaringClassPackageName=misc
-int
-8
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-6
-this.s[..]
-java.util.Vector
-hashcode[]
-7[9]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-misc.Smithnosky.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-3
-this.a
-int # declaringClassPackageName=misc
-int
-4
-this.b
-int # declaringClassPackageName=misc
-int
-4
-this.c
-int # declaringClassPackageName=misc
-int
-4
-this.aXb
-int # declaringClassPackageName=misc
-int
-4
-this.aXc
-int # declaringClassPackageName=misc
-int
-4
-this.size
-int # declaringClassPackageName=misc
-int
-7
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-5
-this.s[..]
-java.util.Vector
-hashcode[]
-6[8]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-misc.Smithnosky.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-misc.Smithnosky # isNonNull=true, isParam=true
-hashcode
-4
-this.a
-int # declaringClassPackageName=misc
-int
-5
-this.b
-int # declaringClassPackageName=misc
-int
-5
-this.c
-int # declaringClassPackageName=misc
-int
-5
-this.aXb
-int # declaringClassPackageName=misc
-int
-5
-this.aXc
-int # declaringClassPackageName=misc
-int
-5
-this.size
-int # declaringClassPackageName=misc
-int
-8
-this.s
-java.util.Vector # declaringClassPackageName=misc
-hashcode
-6
-this.s[..]
-java.util.Vector
-hashcode[]
-7[9]
-this.s[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+ppt misc.Smithnosky.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Smithnosky
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.a
+  var-kind field a
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.b
+  var-kind field b
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.c
+  var-kind field c
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.aXb
+  var-kind field aXb
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.aXc
+  var-kind field aXc
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.s
+  var-kind field s
+  dec-type java.util.Vector
+  rep-type hashcode
+  comparability 6
+variable this.s[..]
+  var-kind array
+  array 1
+  dec-type java.util.Vector
+  rep-type hashcode[]
+  comparability 7[9]
+variable this.s[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.s[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 

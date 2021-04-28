@@ -162,7 +162,7 @@ terms.size()== 0
 
 REPLACE
 get(int index)
-(RatTerm)wrapped.get(index)
+wrapped.get(index)
 printDebug()
 "RatTermVec<wrapped:"+this.wrapped+">"
 size()

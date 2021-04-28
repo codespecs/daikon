@@ -26,7 +26,11 @@ public class DynComp {
   public static boolean verbose = false;
 
   /** Dump the instrumented classes to disk. */
-  @Option("-d Dump the instrumented classes to disk")
+  @Option("Dump the instrumented classes to disk")
+  public static boolean dump = false;
+
+  /** Output debugging information. */
+  @Option("-d Output debugging information (implies --dump)")
   public static boolean debug = false;
 
   /** The directory in which to dump instrumented class files. */
@@ -66,10 +70,6 @@ public class DynComp {
   /** Suppress program points that match regex. */
   @Option("Ignore program points matching the regex")
   public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
-
-  /** Do not track Java primitive values (of type boolean, int, long, etc.). */
-  @Option("Don't track primitives")
-  public static boolean no_primitives = false;
 
   /** Specifies the location of the instrumented JDK. */
   @Option("jar file containing an instrumented JDK")
@@ -129,9 +129,14 @@ public class DynComp {
     String[] target_args = options.parse(true, args);
     check_args(options, target_args);
 
-    // Turn on basic logging if the debug was selected
+    // Turn on basic logging if debug was selected
     basic.enabled = debug;
     basic.log("target_args = %s%n", Arrays.toString(target_args));
+
+    // Turn on dumping of instrumented classes if debug was selected
+    if (debug) {
+      dump = true;
+    }
 
     // Start the target.  Pass the same options to the premain as
     // were passed here.
@@ -316,6 +321,9 @@ public class DynComp {
         // allow java.base to access daikon.jar (for instrumentation runtime)
         cmdlist.add("--add-reads");
         cmdlist.add("java.base=ALL-UNNAMED");
+        // allow DCRuntime to make reflective access to sun.util.locale (equals_dcomp_instrumented)
+        cmdlist.add("--add-exports");
+        cmdlist.add("java.base/sun.util.locale=ALL-UNNAMED");
         // replace default java.base with our instrumented version
         cmdlist.add("--patch-module");
         cmdlist.add("java.base=" + rt_file);

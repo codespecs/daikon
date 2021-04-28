@@ -7,6 +7,7 @@ AFS
 AMD
 amd64
 API
+aren
 arity
 Athlon
 Automata
@@ -56,6 +57,7 @@ deserializing
 dimensionality
 disambiguated
 disambiguates
+doesn
 dtrace
 DynComp
 DynComp's
@@ -75,6 +77,7 @@ GitHub
 globals
 hashcode
 hashcodes
+hasn
 html
 Hynger
 IDE
@@ -86,9 +89,10 @@ instantiation
 instrumenter
 instrumenters
 invariant
-invariants
 invariant's
+invariants
 IOA
+isn
 Itanium
 javac
 Javadoc
@@ -98,8 +102,8 @@ JRE
 JTB
 JUnit
 JVM
-JVMs
 JVM's
+JVMs
 kmeans
 kvasir
 Kvasir
@@ -109,8 +113,8 @@ LLVM
 lst
 macOS
 Makefile
-Makefiles
 Makefile's
+Makefiles
 Memcheck
 Memcheck's
 merchantability
@@ -150,6 +154,7 @@ runtime
 runtimechecker
 screenshot
 screenshots
+shouldn
 signalling
 SIMD
 SplitDtrace
@@ -203,6 +208,7 @@ wildcard
 workflow
 workflows
 workspace
+wouldn
 WSL
 x86
 xmeans

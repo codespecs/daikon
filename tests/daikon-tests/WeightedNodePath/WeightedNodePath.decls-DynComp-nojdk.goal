@@ -1,1124 +1,1432 @@
-// Declaration file written by daikon.dcomp
+// Declarations for MapQuick.WeightedNodePath
+// Declarations written 2020-11-18T07:36:00.020 by daikon.DynComp
 
-VarComparability
-implicit
+decl-version 2.0
+var-comparability implicit
 
-DECLARE
-MapQuick.WeightedNodePath:::CLASS
+ppt MapQuick.WeightedNodePath:::CLASS
+ppt-type class
 
-DECLARE
-MapQuick.WeightedNodePath:::OBJECT
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-2
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-3
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-3
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-3
+ppt MapQuick.WeightedNodePath:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 5
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
 
+ppt MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::ENTER
+ppt-type enter
+variable node
+  var-kind variable
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
 
-DECLARE
-MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::ENTER
-node
-MapQuick.WeightedNode # isParam=true
-hashcode
-2
+ppt MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::EXIT33
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 5
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable node
+  var-kind variable
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
 
-DECLARE
-MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::EXIT33
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-3
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-node
-MapQuick.WeightedNode # isParam=true
-hashcode
-2
+ppt MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::ENTER
+ppt-type enter
+variable node
+  var-kind variable
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable path
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 5
+variable path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
 
+ppt MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::EXIT51
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 3
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 5
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable node
+  var-kind variable
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable path
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 5
+variable path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
 
-DECLARE
-MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::ENTER
-node
-MapQuick.WeightedNode # isParam=true
-hashcode
-2
-path
-MapQuick.WeightedNodePath # isParam=true
-hashcode
-3
-path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-5
-path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
+ppt MapQuick.WeightedNodePath.extend(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 5
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::EXIT51
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-7
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-3
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-node
-MapQuick.WeightedNode # isParam=true
-hashcode
-2
-path
-MapQuick.WeightedNodePath # isParam=true
-hashcode
-3
-path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-5
-path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
+ppt MapQuick.WeightedNodePath.extend(java.lang.Object):::EXIT56
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 8
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type MapQuick.Path
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
+ppt MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 5
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable node
+  var-kind variable
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
 
-DECLARE
-MapQuick.WeightedNodePath.extend(java.lang.Object):::ENTER
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-3
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::EXIT63
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 2
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 8
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable node
+  var-kind variable
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type MapQuick.Path
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick.WeightedNodePath.extend(java.lang.Object):::EXIT56
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-4
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-8
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-MapQuick.Path
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt MapQuick.WeightedNodePath.cost():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 5
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
 
+ppt MapQuick.WeightedNodePath.cost():::EXIT68
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 5
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 2
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 2
+variable return
+  var-kind return
+  dec-type double
+  rep-type double
+  comparability 2
 
-DECLARE
-MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::ENTER
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-3
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-node
-MapQuick.WeightedNode # isParam=true
-hashcode
-2
+ppt MapQuick.WeightedNodePath.elements():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 5
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
 
-DECLARE
-MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::EXIT63
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-4
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-2
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-8
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-node
-MapQuick.WeightedNode # isParam=true
-hashcode
-2
-return
-MapQuick.Path
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt MapQuick.WeightedNodePath.elements():::EXIT79
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 8
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type java.util.Iterator
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
 
+ppt MapQuick.WeightedNodePath.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 8
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick.WeightedNodePath.cost():::ENTER
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-2
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-3
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-3
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-3
+ppt MapQuick.WeightedNodePath.equals(java.lang.Object):::EXIT103
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 6
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 6
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 8
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 6
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 9
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
-DECLARE
-MapQuick.WeightedNodePath.cost():::EXIT68
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-3
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-2
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-2
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-2
-return
-double
-double
-2
+ppt MapQuick.WeightedNodePath.equals(java.lang.Object):::EXIT105
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 6
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 6
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 8
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 6
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 9
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 
+ppt MapQuick.WeightedNodePath.equals(MapQuick.WeightedNodePath):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 5
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
+variable wnp
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param
+  comparability 8
+variable wnp.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 10
+variable wnp.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 11
+variable wnp.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 13
+variable wnp.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 14
+variable wnp.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 12
+variable wnp.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 9
 
-DECLARE
-MapQuick.WeightedNodePath.elements():::ENTER
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-2
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-3
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-3
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-3
+ppt MapQuick.WeightedNodePath.equals(MapQuick.WeightedNodePath):::EXIT113
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 8
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable wnp
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param
+  comparability 9
+variable wnp.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 11
+variable wnp.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 12
+variable wnp.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 14
+variable wnp.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 15
+variable wnp.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 13
+variable wnp.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 10
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 2
 
-DECLARE
-MapQuick.WeightedNodePath.elements():::EXIT79
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-3
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-8
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-return
-java.util.Iterator
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt MapQuick.WeightedNodePath.hashCode():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 5
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 4
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 3
 
+ppt MapQuick.WeightedNodePath.hashCode():::EXIT118
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 8
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
 
-DECLARE
-MapQuick.WeightedNodePath.equals(java.lang.Object):::ENTER
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-3
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-8
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
+ppt MapQuick.WeightedNodePath.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 6
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 5
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 8
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
 
-DECLARE
-MapQuick.WeightedNodePath.equals(java.lang.Object):::EXIT103
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-4
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-8
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-9
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-DECLARE
-MapQuick.WeightedNodePath.equals(java.lang.Object):::EXIT105
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-4
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-8
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-9
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-MapQuick.WeightedNodePath.equals(MapQuick.WeightedNodePath):::ENTER
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-2
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-3
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-3
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-3
-wnp
-MapQuick.WeightedNodePath # isParam=true
-hashcode
-8
-wnp.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-10
-wnp.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-11
-wnp.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-13
-wnp.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-14
-wnp.path.cost
-int # declaringClassPackageName=MapQuick
-int
-12
-wnp.cost
-int # declaringClassPackageName=MapQuick
-int
-9
-
-DECLARE
-MapQuick.WeightedNodePath.equals(MapQuick.WeightedNodePath):::EXIT113
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-3
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-8
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-wnp
-MapQuick.WeightedNodePath # isParam=true
-hashcode
-9
-wnp.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-11
-wnp.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-12
-wnp.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-14
-wnp.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-15
-wnp.path.cost
-int # declaringClassPackageName=MapQuick
-int
-13
-wnp.cost
-int # declaringClassPackageName=MapQuick
-int
-10
-return
-boolean
-boolean
-2
-
-
-DECLARE
-MapQuick.WeightedNodePath.hashCode():::ENTER
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-2
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-4
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-3
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-3
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-3
-
-DECLARE
-MapQuick.WeightedNodePath.hashCode():::EXIT118
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-3
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-8
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-return
-int
-int
-2
-
-
-DECLARE
-MapQuick.WeightedNodePath.equals_dcomp_instrumented(java.lang.Object):::ENTER
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-3
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-5
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-8
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-4
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-MapQuick.WeightedNodePath.equals_dcomp_instrumented(java.lang.Object):::EXIT1
-this
-MapQuick.WeightedNodePath # isNonNull=true, isParam=true
-hashcode
-4
-this.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-7
-this.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-8
-this.path.path.node
-MapQuick.WeightedNode # declaringClassPackageName=MapQuick
-hashcode
-6
-this.path.path.path
-MapQuick.WeightedNodePath # declaringClassPackageName=MapQuick
-hashcode
-9
-this.path.path.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-this.path.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-this.cost
-int # declaringClassPackageName=MapQuick
-int
-5
-obj
-java.lang.Object # isParam=true
-hashcode
-2
-obj.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
+ppt MapQuick.WeightedNodePath.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 6
+variable this.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 7
+variable this.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 6
+variable this.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 8
+variable this.path.path.node
+  var-kind field node
+  dec-type MapQuick.WeightedNode
+  rep-type hashcode
+  comparability 6
+variable this.path.path.path
+  var-kind field path
+  dec-type MapQuick.WeightedNodePath
+  rep-type hashcode
+  comparability 9
+variable this.path.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.path.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.cost
+  var-kind field cost
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
 

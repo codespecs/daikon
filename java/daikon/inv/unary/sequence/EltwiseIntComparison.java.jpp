@@ -28,7 +28,7 @@ import typequals.prototype.qual.Prototype;
  * Abstract base class defined so that the different types of EltwiseIntComparison (and separately
  * EltwiseFloatComparison), at the current moment those are ==, !=, &lt;, &le;, &gt;, &ge; can have
  * a common superclass which is needed for actions like the isExclusiveFormula method. It is also
- * used to force the definition of the hasSeenNonTrivialSample function for each type of
+ * used to force the definition of the hasSeenNonSingletonSample function for each type of
  * EltwiseIntComparison.
  */
 
@@ -38,7 +38,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030109L;
 
-  public abstract boolean hasSeenNonTrivialSample();
+  public abstract boolean hasSeenNonSingletonSample();
 
   protected CLASSNAME(PptSlice ppt) {
     super(ppt);

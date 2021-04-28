@@ -3,7 +3,6 @@ package daikon.config;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.regex.qual.Regex;
-import org.plumelib.util.UtilPlume;
 
 /** Supplies a static method htmlToTexinfo that converts HTML to Texinfo format. */
 public class HtmlToTexinfo {
@@ -45,33 +44,31 @@ public class HtmlToTexinfo {
   public static String htmlToTexinfo(String s) {
 
     // Remove leading spaces, which throw off Info.
-    s = UtilPlume.replaceString(s, lineSep + " ", lineSep);
+    s = s.replace(lineSep + " ", lineSep);
 
-    s = UtilPlume.replaceString(s, "{", "@{");
-    s = UtilPlume.replaceString(s, "}", "@}");
+    s = s.replace("{", "@{");
+    s = s.replace("}", "@}");
     s = s.replaceAll("(@p?x?ref)@\\{(.*)@\\}", "$1{$2}");
-    s = UtilPlume.replaceString(s, "<br>", "@*");
-    s = UtilPlume.replaceString(s, lineSep + lineSep + "<p>", lineSep + lineSep);
-    s = UtilPlume.replaceString(s, "<p>", "@*@*");
+    s = s.replace("<br>", "@*");
+    s = s.replace(lineSep + lineSep + "<p>", lineSep + lineSep);
+    s = s.replace("<p>", "@*@*");
     // Sadly, Javadoc prohibits the <samp> tag.  Use <code> instead.
-    s = UtilPlume.replaceString(s, "<samp>", "@samp{");
-    s = UtilPlume.replaceString(s, "</samp>", "}");
-    s = UtilPlume.replaceString(s, "<code>", "@code{");
-    s = UtilPlume.replaceString(s, "</code>", "}");
-    s = UtilPlume.replaceString(s, lineSep + "<pre>" + lineSep, lineSep + "@example" + lineSep);
-    s = UtilPlume.replaceString(s, "<pre>" + lineSep, lineSep + "@example" + lineSep);
-    s = UtilPlume.replaceString(s, lineSep + "<pre>", lineSep + "@example" + lineSep);
-    s = UtilPlume.replaceString(s, "<pre>", lineSep + "@example" + lineSep);
-    s =
-        UtilPlume.replaceString(
-            s, lineSep + "</pre>" + lineSep, lineSep + "@end example" + lineSep);
-    s = UtilPlume.replaceString(s, "</pre>" + lineSep, lineSep + "@end example" + lineSep);
-    s = UtilPlume.replaceString(s, lineSep + "</pre>", lineSep + "@end example" + lineSep);
-    s = UtilPlume.replaceString(s, "</pre>", lineSep + "@end example" + lineSep);
+    s = s.replace("<samp>", "@samp{");
+    s = s.replace("</samp>", "}");
+    s = s.replace("<code>", "@code{");
+    s = s.replace("</code>", "}");
+    s = s.replace(lineSep + "<pre>" + lineSep, lineSep + "@example" + lineSep);
+    s = s.replace("<pre>" + lineSep, lineSep + "@example" + lineSep);
+    s = s.replace(lineSep + "<pre>", lineSep + "@example" + lineSep);
+    s = s.replace("<pre>", lineSep + "@example" + lineSep);
+    s = s.replace(lineSep + "</pre>" + lineSep, lineSep + "@end example" + lineSep);
+    s = s.replace("</pre>" + lineSep, lineSep + "@end example" + lineSep);
+    s = s.replace(lineSep + "</pre>", lineSep + "@end example" + lineSep);
+    s = s.replace("</pre>", lineSep + "@end example" + lineSep);
     // Catch-all for parameters, filenames, etc. for which there is no specific HTML formatting.
     // But Javadoc should use <code>...</code> rather than <tt>.
-    s = UtilPlume.replaceString(s, "<tt>", "@code{");
-    s = UtilPlume.replaceString(s, "</tt>", "}");
+    s = s.replace("<tt>", "@code{");
+    s = s.replace("</tt>", "}");
 
     // Other HTML formatting to handle in the future
     // BLOCKQUOTE, "\n\n",        ""
@@ -87,14 +84,14 @@ public class HtmlToTexinfo {
     // A,          "", ""
     // SUP,        "^", ""
 
-    s = UtilPlume.replaceString(s, "&gt;", ">");
-    s = UtilPlume.replaceString(s, "&ge;", ">=");
-    s = UtilPlume.replaceString(s, "&lt;", "<");
-    s = UtilPlume.replaceString(s, "&le;", "<=");
-    s = UtilPlume.replaceString(s, "&rArr;", "->");
+    s = s.replace("&gt;", ">");
+    s = s.replace("&ge;", ">=");
+    s = s.replace("&lt;", "<");
+    s = s.replace("&le;", "<=");
+    s = s.replace("&rArr;", "->");
 
     // &amp must come last
-    s = UtilPlume.replaceString(s, "&amp;", "&");
+    s = s.replace("&amp;", "&");
 
     return s;
   }

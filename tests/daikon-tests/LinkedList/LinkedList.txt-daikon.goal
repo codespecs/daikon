@@ -6,7 +6,6 @@ this.header.next.element != null
 this.header.next.element.getClass().getName() is printable
 ===========================================================================
 DataStructures.LinkedList.LinkedList():::EXIT
-this.header.element == this.header.next
 this.header.next == null
 ===========================================================================
 DataStructures.LinkedList.find(java.lang.Object):::ENTER
@@ -90,10 +89,8 @@ this.header.next.next == orig(this.header.next.next)
 (this.header.next != null)  ==>  (this.header.next.element != null)
 (this.header.next != null)  ==>  (this.header.next.element.getClass().getName() is printable)
 (this.header.next == null)  <==>  (return == true)
-(this.header.next == null)  ==>  (this.header.element == this.header.next)
 ===========================================================================
 DataStructures.LinkedList.isEmpty():::EXIT;condition="return == true"
-this.header.element == this.header.next
 this.header.next == null
 return == true
 ===========================================================================
@@ -105,7 +102,6 @@ DataStructures.LinkedList.makeEmpty():::ENTER
 ===========================================================================
 DataStructures.LinkedList.makeEmpty():::EXIT
 this.header == orig(this.header)
-this.header.element == this.header.next
 this.header.element == orig(this.header.element)
 this.header.next == null
 ===========================================================================
@@ -138,7 +134,6 @@ DataStructures.LinkedList.zeroth():::ENTER
 DataStructures.LinkedList.zeroth():::EXIT
 this.header == return.current
 this.header == orig(this.header)
-this.header.element == return.current.element
 this.header.element == orig(this.header.element)
 this.header.next == return.current.next
 this.header.next == orig(this.header.next)
@@ -146,6 +141,7 @@ this.header.next.element == orig(this.header.next.element)
 this.header.next.element.getClass().getName() == orig(this.header.next.element.getClass().getName())
 this.header.next.next == orig(this.header.next.next)
 return != null
+return.current.element == null
 ===========================================================================
 DataStructures.LinkedListItr:::OBJECT
 this.current.element.getClass().getName() is printable
@@ -179,10 +175,8 @@ DataStructures.LinkedListItr.advance():::ENTER
 this.current != null
 ===========================================================================
 DataStructures.LinkedListItr.advance():::EXIT
-this.current == orig(this.current.next)
 this.current.element == orig(this.current.next.element)
 this.current.element.getClass().getName() == orig(this.current.next.element.getClass().getName())
-this.current.next == orig(this.current.next.next)
 this.current.element != null
 ===========================================================================
 DataStructures.LinkedListItr.isPastEnd():::ENTER
@@ -234,8 +228,6 @@ DataStructures.ListNode.ListNode(java.lang.Object):::ENTER
 theElement == null
 ===========================================================================
 DataStructures.ListNode.ListNode(java.lang.Object):::EXIT
-this.element == this.next
-this.element == orig(theElement)
 this.element == null
 this.next == null
 ===========================================================================

@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * Class that defines a set of non-instantiating suppressions for a single invariant (suppressee).
@@ -73,11 +73,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
         // Get the list of suppression sets for this suppressor.  Create it
         // if this is the first one.  Add this set to the list
         List<NISuppressionSet> suppression_set_list =
-            suppressor_map.get(suppressor.get_inv_class());
-        if (suppression_set_list == null) {
-          suppression_set_list = new ArrayList<NISuppressionSet>();
-          suppressor_map.put(suppressor.get_inv_class(), suppression_set_list);
-        }
+            suppressor_map.computeIfAbsent(
+                suppressor.get_inv_class(), __ -> new ArrayList<NISuppressionSet>());
         suppression_set_list.add(this);
       }
     }
@@ -551,6 +548,6 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied NISuppressionSet this) {
-    return "{ " + UtilPlume.join(", ", suppression_set) + " }";
+    return "{ " + StringsPlume.join(", ", suppression_set) + " }";
   }
 }

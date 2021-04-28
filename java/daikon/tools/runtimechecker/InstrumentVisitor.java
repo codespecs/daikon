@@ -24,11 +24,11 @@ import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * Visitor that instruments a Java source file (i.e. adds code at certain places) to check invariant
- * violations at runtime.
+ * violations at run time.
  */
 @SuppressWarnings("rawtypes")
 public class InstrumentVisitor extends DepthFirstVisitor {
@@ -677,7 +677,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     code.add("} catch (Exception e) {");
     code.add(
-        " System.err.println(\"malformed invariant. This is probably a bug in the daikon.tools.runtimechecker tool; please submit a bug report.\");");
+        " System.err.println(\"malformed invariant. This is probably a bug in the"
+            + " daikon.tools.runtimechecker tool; please submit a bug report.\");");
     code.add(" e.printStackTrace();");
     code.add(" System.exit(1);");
     code.add("}");
@@ -697,7 +698,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     StringBuilder code = new StringBuilder();
     code.append(
-        "private void checkObjectInvariants_instrument(daikon.tools.runtimechecker.Violation.Time time) {");
+        "private void checkObjectInvariants_instrument"
+            + "(daikon.tools.runtimechecker.Violation.Time time) {");
     String objectPptname = classname + ":::OBJECT";
     PptTopLevel objectPpt = pptmap.get(objectPptname);
     if (objectPpt != null) {
@@ -717,7 +719,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
       String classname) {
     StringBuilder code = new StringBuilder();
     code.append(
-        "private static void checkClassInvariantsInstrument(daikon.tools.runtimechecker.Violation.Time time) {");
+        "private static void checkClassInvariantsInstrument"
+            + "(daikon.tools.runtimechecker.Violation.Time time) {");
     String classPptname = classname + ":::CLASS";
     PptTopLevel classPpt = pptmap.get(classPptname);
     if (classPpt != null) {
@@ -1093,7 +1096,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     code.append("<INVINFO>");
     code.append("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
     code.append("<DAIKON>" + daikonrep + "</DAIKON>");
-    code.append("<INV>" + UtilPlume.escapeJava(javarep) + "</INV>");
+    code.append("<INV>" + StringsPlume.escapeJava(javarep) + "</INV>");
     code.append("<DAIKONCLASS>" + inv.getClass().toString() + "</DAIKONCLASS>");
     code.append("<METHOD>" + inv.ppt.parent.ppt_name.getSignature() + "</METHOD>");
     code.append("</INVINFO>");

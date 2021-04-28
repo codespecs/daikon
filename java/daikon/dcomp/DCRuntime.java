@@ -3,9 +3,12 @@ package daikon.dcomp;
 import daikon.DynComp;
 import daikon.chicory.ArrayInfo;
 import daikon.chicory.ClassInfo;
+import daikon.chicory.ComparabilityProvider;
 import daikon.chicory.DaikonClassInfo;
 import daikon.chicory.DaikonVariableInfo;
 import daikon.chicory.DaikonWriter;
+import daikon.chicory.DeclReader;
+import daikon.chicory.DeclWriter;
 import daikon.chicory.FieldInfo;
 import daikon.chicory.MethodInfo;
 import daikon.chicory.ParameterInfo;
@@ -22,9 +25,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
@@ -42,8 +46,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.checkerframework.dataflow.qual.Pure;
 
+/**
+ * Runtime support for DynComp, a comparability front end for Chicory. This class is a collection of
+ * methods; it should never be instantiated.
+ */
 @SuppressWarnings({"nullness", "interning"}) // tricky code, skip for now
-public final class DCRuntime {
+public final class DCRuntime implements ComparabilityProvider {
 
   /** List of all instrumented methods. */
   public static final List<MethodInfo> methods = new ArrayList<>();
@@ -98,6 +106,17 @@ public final class DCRuntime {
 
   /** If true, merge arrays and their indices. */
   private static boolean merge_arrays_and_indices = true;
+
+  /** Decl writer to share output code with Chicory. */
+  // Set in Premain.premain().
+  static DeclWriter declWriter;
+
+  /** Used for calling {@link ComparabilityProvider#getComparability}. */
+  // Set in Premain.premain().
+  static ComparabilityProvider comparabilityProvider;
+
+  /** Whether the header has been printed. */
+  private static boolean headerPrinted = false;
 
   /** Class to hold per-thread comparability data. */
   private static class ThreadData {
@@ -200,7 +219,9 @@ public final class DCRuntime {
 
     // Initialize the array of static tags
     ((ArrayList<@Nullable Object>) static_tags).ensureCapacity(max_jdk_static);
-    while (static_tags.size() <= max_jdk_static) static_tags.add(null);
+    while (static_tags.size() <= max_jdk_static) {
+      static_tags.add(null);
+    }
   }
 
   public static void debug_print_call_stack() {
@@ -616,11 +637,7 @@ public final class DCRuntime {
     // instrumented user method.  Since it might be on a new thread
     // we need to check/set the per-thread data map.
     Thread t = Thread.currentThread();
-    ThreadData td = thread_to_data.get(t);
-    if (td == null) {
-      td = new ThreadData();
-      thread_to_data.put(t, td);
-    }
+    ThreadData td = thread_to_data.computeIfAbsent(t, __ -> new ThreadData());
 
     int frame_size = ((int) params.charAt(0)) - '0';
     // Character.digit (params.charAt(0), Character.MAX_RADIX);
@@ -771,14 +788,6 @@ public final class DCRuntime {
   }
 
   /**
-   * Used when we are only interested in references. We don't use the tag stack, so nothing needs to
-   * be done here. (Reference comparability only.)
-   */
-  public static void normal_exit_refs_only() {
-    if (debug) System.out.printf("Normal exit refs_only%n");
-  }
-
-  /**
    * Clean up the tag stack on an exception exit from a method. Pops items off of the tag stack
    * until the method marker is found.
    *
@@ -806,20 +815,11 @@ public final class DCRuntime {
     System.out.printf("Method marker not found in exception exit%n");
   }
 
-  /**
-   * Clean up the tag stack on an exception exit from a method. Pops items off of the tag stack
-   * until the method marker is found. (Reference comparability only.)
-   */
-  public static void exception_exit_refs_only() {
-    if (debug) System.out.printf("Exception exit refs_only from %s%n", caller_name());
-  }
-
   /** Cleans up the tag stack when an exception is thrown. */
   public static void throw_op() {
     if (debug) {
       System.out.printf("In throw_op%n");
     }
-
     ThreadData td = thread_to_data.get(Thread.currentThread());
     while (td.tag_stack.peek() != method_marker) td.tag_stack.pop();
     if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
@@ -1172,65 +1172,6 @@ public final class DCRuntime {
   }
 
   /**
-   * Called when a user method is entered. Any daikon variables whose current values are comparable
-   * are marked as comparable. (Reference comparability only.)
-   *
-   * @param obj value of 'this', or null if the method is static
-   * @param mi_index index into the list of all methods (methods)
-   * @param args array of the arguments to the method
-   */
-  public static void enter_refs_only(@Nullable Object obj, int mi_index, Object[] args) {
-
-    // Don't be recursive
-    if (in_enter_exit) {
-      return;
-    }
-    in_enter_exit = true;
-
-    if (debug) {
-      Throwable stack = new Throwable("enter_refs_only");
-      StackTraceElement[] ste_arr = stack.getStackTrace();
-      StackTraceElement ste = ste_arr[1];
-      if (ignore_toString && ste.getMethodName().equals("toString")) {
-        in_enter_exit = false;
-        return;
-      }
-      System.out.printf("%s.%s():::ENTER%n%n", ste.getClassName(), ste.getMethodName());
-
-      System.out.printf("this = '%s', mi = %s%n", obj_str(obj), methods.get(mi_index));
-      System.out.printf("args: ");
-      for (Object arg : args) {
-        System.out.printf("%s ", obj_str(arg));
-      }
-      System.out.println();
-      System.out.println();
-    }
-
-    MethodInfo mi = methods.get(mi_index);
-    mi.call_cnt++;
-    ClassInfo ci = mi.class_info;
-    if (ci.clazz == null) {
-      ci.initViaReflection();
-      all_classes.add(ci);
-      // Moved to DCInstrument.instrument()
-      // daikon.chicory.Runtime.all_classes.add (ci);
-      merge_dv.log("initializing traversal for %s%n", ci);
-      ci.init_traversal(depth);
-    }
-    if (mi.traversalEnter == null) {
-      mi.init_traversal(depth);
-    }
-
-    // Merge comparability information for the Daikon variables
-    merge_dv.log("processing method %s:::ENTER%n", mi);
-    merge_dv.indent();
-    process_all_vars_refs_only(mi, mi.traversalEnter, /*tag_frame, */ obj, args, null);
-    merge_dv.exdent();
-
-    in_enter_exit = false;
-  }
-
-  /**
    * Called when a user method exits. Any daikon variables whose current values are comparable are
    * marked as comparable.
    *
@@ -1279,55 +1220,6 @@ public final class DCRuntime {
     merge_dv.log("processing method %s:::EXIT%n", mi);
     merge_dv.indent();
     process_all_vars(mi, mi.traversalExit, tag_frame, obj, args, ret_val);
-    merge_dv.exdent();
-
-    in_enter_exit = false;
-  }
-
-  /**
-   * Called when a user method exits. Any daikon variables whose current values are comparable are
-   * marked as comparable. (Reference comparability only.)
-   *
-   * @param obj value of 'this', or null if the method is static
-   * @param mi_index index into the list of all methods (methods)
-   * @param args array of the arguments to the method
-   * @param ret_val value returned by the method, or null if the method is a constructor or void
-   * @param exit_line_number the source line number of this exit point
-   */
-  public static void exit_refs_only(
-      @Nullable Object obj, int mi_index, Object[] args, Object ret_val, int exit_line_number) {
-
-    // Don't be recursive
-    if (in_enter_exit) {
-      return;
-    }
-    in_enter_exit = true;
-
-    if (debug) {
-      Throwable stack = new Throwable("exit_refs_only");
-      StackTraceElement[] ste_arr = stack.getStackTrace();
-      StackTraceElement ste = ste_arr[1];
-      if (ignore_toString && ste.getMethodName().equals("toString")) {
-        in_enter_exit = false;
-        return;
-      }
-      System.out.printf("%s.%s():::EXIT%n%n", ste.getClassName(), ste.getMethodName());
-
-      System.out.printf("this = '%s', mi = %s%n", obj_str(obj), methods.get(mi_index));
-      System.out.printf("args: ");
-      for (Object arg : args) {
-        System.out.printf("%s ", obj_str(arg));
-      }
-      System.out.println();
-      System.out.printf("ret_val = %s, exit_line_number= %d%n", ret_val, exit_line_number);
-    }
-
-    MethodInfo mi = methods.get(mi_index);
-
-    // Merge comparability information for the Daikon variables
-    merge_dv.log("processing method %s:::EXIT%n", mi);
-    merge_dv.indent();
-    process_all_vars_refs_only(mi, mi.traversalExit, /*tag_frame,*/ obj, args, ret_val);
     merge_dv.exdent();
 
     in_enter_exit = false;
@@ -1385,65 +1277,6 @@ public final class DCRuntime {
   }
 
   /**
-   * Process all of the daikon variables in the tree starting at root. If the values referenced by
-   * those variables are comparable mark the variables as comparable. (Reference comparability
-   * only.)
-   */
-  public static void process_all_vars_refs_only(
-      MethodInfo mi,
-      RootInfo root,
-      /*Object[] tag_frame,*/ Object obj,
-      Object[] args,
-      Object ret_val) {
-
-    debug_timing.log("process_all_vars_refs_only for %s%n", mi);
-
-    merge_dv.log("this: %s%n", obj);
-    merge_dv.log("arguments: %s%n", Arrays.toString(args));
-
-    // Map from an Object to the Daikon variable that currently holds
-    // that object.
-    IdentityHashMap<Object, DaikonVariableInfo> varmap =
-        new IdentityHashMap<Object, DaikonVariableInfo>(2048);
-
-    for (DaikonVariableInfo dv : root.children) {
-      if (dv instanceof ThisObjInfo) {
-        merge_comparability_refs_only(varmap, null, obj, dv);
-      } else if (dv instanceof ParameterInfo) {
-        ParameterInfo pi = (ParameterInfo) dv;
-        Object p = args[pi.getArgNum()];
-
-        // If variable is primitive, ignore it
-        if (!pi.isPrimitive()) merge_comparability_refs_only(varmap, null, p, pi);
-      } else if (dv instanceof ReturnInfo) {
-        // ReturnInfo ri = (ReturnInfo) dv;
-
-        // If variable is primitive, ignore it
-        if (!mi.return_type().isPrimitive()) {
-          merge_comparability_refs_only(varmap, null, ret_val, dv);
-        }
-      } else if (dv instanceof FieldInfo) {
-        FieldInfo fi = (FieldInfo) dv;
-        assert fi.isStatic() : "non static field at root " + dv;
-
-        // If variable is primitive, ignore it
-        if (!fi.isPrimitive()) merge_comparability_refs_only(varmap, null, null, dv);
-      } else if (dv instanceof StaticObjInfo) {
-        for (DaikonVariableInfo static_dv : dv.children) {
-          FieldInfo fi = (FieldInfo) static_dv;
-          assert fi.isStatic() : "non static field at root " + dv;
-
-          // If variable is primitive, ignore it
-          if (!fi.isPrimitive()) merge_comparability_refs_only(varmap, null, null, static_dv);
-        }
-      } else {
-        throw new Error("unexpected node " + dv);
-      }
-    }
-    debug_timing.log("exit process_all_vars for %s%n%n", mi);
-  }
-
-  /**
    * Returns the tag for the specified field. If that field is an array, a list of tags will be
    * returned.
    */
@@ -1466,42 +1299,6 @@ public final class DCRuntime {
           fi.field_tag = new PrimitiveArrayTag(fi);
         } else if (fi.isPrimitive()) {
           fi.field_tag = new PrimitiveTag(fi);
-        } else {
-          fi.field_tag = new ReferenceTag(fi);
-        }
-      }
-    }
-
-    // get the tag
-    return fi.field_tag.get_tag(parent, obj);
-  }
-
-  /**
-   * Returns the tag for the specified field. If that field is an array, a list of tags will be
-   * returned. (Reference comparability only.)
-   */
-  static Object get_field_tag_refs_only(FieldInfo fi, Object parent, Object obj) {
-
-    // Initialize the code that gets the tag for various field types
-    if (fi.field_tag == null) {
-      if (fi.isStatic()) {
-        if (fi.isPrimitive()) {
-          // a static final primitive is a constant and there is no tag accessor
-          if (fi.isFinal()) {
-            return null;
-          }
-          //          fi.field_tag = new StaticPrimitiveTag (fi);
-          throw new RuntimeException("fi should not be primitive!");
-        } else {
-          fi.field_tag = new StaticReferenceTag(fi);
-        }
-      } else { // not static
-        if (fi.isPrimitive() && fi.isArray()) {
-          //          fi.field_tag = new PrimitiveArrayTag (fi);
-          throw new RuntimeException("fi should not be primitive!");
-        } else if (fi.isPrimitive()) {
-          //          fi.field_tag = new PrimitiveTag (fi);
-          throw new RuntimeException("fi should not be primitive!");
         } else {
           fi.field_tag = new ReferenceTag(fi);
         }
@@ -1684,160 +1481,11 @@ public final class DCRuntime {
   }
 
   /**
-   * Merges the comparability of the daikon variable dv and its children whose current values are
-   * comparable. (Reference comparability only.)
+   * Dumps out comparability information for all classes that were processed.
    *
-   * @param varmap map from value set leaders to the first daikon variable encountered with that
-   *     leader. Whenever a second daikon variable is encountered whose value has the same leader,
-   *     that daikon variable is merged with the first daikon variable.
-   * @param parent value of dv's parent
-   * @param obj value of dv
-   * @param dv DaikonVariable to process
+   * @param pw PrintWriter to write on
    */
-  static void merge_comparability_refs_only(
-      IdentityHashMap<Object, DaikonVariableInfo> varmap,
-      Object parent,
-      Object obj,
-      DaikonVariableInfo dv) {
-
-    // merge_dv.enabled = dv.getName().contains ("mtfFreq");
-
-    long start_millis = 0;
-    if (debug_timing.enabled()) start_millis = System.currentTimeMillis();
-    if (merge_dv.enabled()) {
-      merge_dv.log("merge_comparability: checking var %s = '%s' %n", dv, obj_str(obj));
-    }
-
-    // Ignore ClassInfo and StringInfo variables.  These are not real
-    // variables in the program
-    if ((dv instanceof DaikonClassInfo) || (dv instanceof StringInfo)) {
-      debug_timing.log("  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
-      return;
-    }
-
-    // Get the tag for this object.  For non-primitives this is normally the
-    // object itself.  For static fields, the object is not passed in, but is
-    // obtained via reflection.
-    Object tag = obj;
-    if (dv instanceof FieldInfo) {
-      tag = get_field_tag_refs_only((FieldInfo) dv, parent, obj);
-    }
-
-    if (!dv.declShouldPrint()) {
-      // do nothing
-    } else if (dv.isArray() && (tag instanceof List<?>)) {
-      @SuppressWarnings("unchecked")
-      List<Object> elements = (List<Object>) tag;
-      if (debug_timing.enabled()) debug_timing.log("  ArrayInfo %d elements", elements.size());
-      for (Object atag : elements) {
-        // Ignore null and nonsensical tags.  There is no reason to process
-        // their children, because they can't have any with reasonable values
-        if ((atag == null) || (atag == nonsensical) || (atag == nonsensical_list)) {
-          continue;
-        }
-
-        // Look up this object.  If it already is associated with a
-        // DaikonVariable merge those variables.  Otherwise, add it to
-        // the map
-        Object leader = TagEntry.find(atag);
-        if (merge_dv.enabled()) {
-          merge_dv.log("Leader for atag '%s' is '%s'%n", obj_str(atag), obj_str(leader));
-        }
-        DaikonVariableInfo current = varmap.get(leader);
-        merge_dv.log("Daikon variable for leader = %s%n", current);
-        if (current != null) {
-          merge_dv.log("**Merging %s and %s%n", current, dv);
-          TagEntry.union(current, dv);
-        } else {
-          varmap.put(leader, dv);
-        }
-      }
-    } else if (dv.isArray()) {
-      if (tag == null) {
-        debug_timing.log(
-            "  no array tags for Variable %s : %d msecs%n",
-            dv, System.currentTimeMillis() - start_millis);
-        return;
-      }
-      Object[] elements = (Object[]) tag;
-      if (debug_timing.enabled()) debug_timing.log("  Prim ArrayInfo %d elements", elements.length);
-      Object prev_tag = null;
-      for (Object atag : elements) {
-        // Ignore null and nonsensical tags.  There is no reason to process
-        // their children, because they can't have any with reasonable values
-        if ((atag == null) || (atag == nonsensical) || (atag == nonsensical_list)) {
-          continue;
-        }
-
-        // No need to handle the same tag twice
-        if (prev_tag == atag) {
-          continue;
-        }
-        prev_tag = atag;
-
-        // Look up this object.  If it already is associated with a
-        // DaikonVariable merge those variables.  Otherwise, add it to
-        // the map
-        Object leader = TagEntry.find(atag);
-        if (merge_dv.enabled()) {
-          merge_dv.log("Leader for atag '%s' is '%s'%n", obj_str(atag), obj_str(leader));
-        }
-        DaikonVariableInfo current = varmap.get(leader);
-        merge_dv.log("Daikon variable for leader = %s%n", current);
-        if (current != null) {
-          merge_dv.log("**Merging %s and %s%n", current, dv);
-          TagEntry.union(current, dv);
-        } else {
-          varmap.put(leader, dv);
-        }
-      }
-    } else {
-      // Ignore null and nonsensical tags.  There is no reason to process
-      // their children, because they can't have any with reasonable values
-      if ((tag == null) || (tag == nonsensical) || (tag == nonsensical_list)) {
-        debug_timing.log(
-            "  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
-        return;
-      }
-
-      // Look up this object.  If it already is associated with a
-      // DaikonVariable merge those variables.  Otherwise, add it to
-      // the map
-      Object leader = TagEntry.find(tag);
-      if (merge_dv.enabled()) {
-        merge_dv.log("Leader for tag '%s' is '%s'%n", obj_str(tag), obj_str(leader));
-      }
-      DaikonVariableInfo current = varmap.get(leader);
-      assert leader != null : "null leader for " + obj_str(tag);
-      merge_dv.log("Daikon variable for leader = %s%n", current);
-      if (current != null) {
-        merge_dv.log("**Merging variable '%s' and '%s'%n", current, dv);
-        TagEntry.union(current, dv);
-      } else {
-        varmap.put(leader, dv);
-      }
-    }
-
-    debug_timing.log("  Variable %s : %d msecs%n", dv, System.currentTimeMillis() - start_millis);
-
-    // Process all of the children
-    for (DaikonVariableInfo child : dv) {
-      Object child_obj;
-      if ((child instanceof ArrayInfo) && ((ArrayInfo) child).getType().isPrimitive()) {
-        // System.out.printf("child array type %s = %s%n", ai, ai.getType());
-        Object[] arr_tags = field_map.get(tag);
-        // System.out.printf("found arr_tag %s for arr %s%n", arr_tags, tag);
-        // System.out.printf("tag values = %s%n", Arrays.toString (arr_tags));
-        child_obj = arr_tags;
-      } else { // not a primitive array
-        child_obj = child.getMyValFromParentVal(tag);
-      }
-      merge_comparability(varmap, tag, child_obj, child);
-    }
-  }
-
-  /** Dumps out comparability information for all classes that were processed. */
-  public static void print_all_comparable(PrintWriter ps) {
+  public static void printAllComparable(PrintWriter pw) {
 
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
@@ -1849,35 +1497,18 @@ public final class DCRuntime {
         if (mi.method_name.equals("equals_dcomp_instrumented")) {
           continue;
         }
-        ps.println();
-        print_comparable(ps, mi);
+        pw.println();
+        printComparable(pw, mi);
       }
     }
   }
 
   /**
-   * Dumps out comparability information for all classes that were processed. (Reference
-   * comparability only.)
+   * Dumps out comparability trace information for all classes that were processed.
+   *
+   * @param pw PrintWriter to write on
    */
-  public static void print_all_comparable_refs_only(PrintWriter ps) {
-
-    for (ClassInfo ci : all_classes) {
-      merge_class_comparability(ci);
-      for (MethodInfo mi : ci.method_infos) {
-        if (mi.is_class_init()) {
-          continue;
-        }
-        // skip our added method
-        if (mi.method_name.equals("equals_dcomp_instrumented")) {
-          continue;
-        }
-        ps.println();
-        print_comparable_refs_only(ps, mi);
-      }
-    }
-  }
-
-  public static void trace_all_comparable(PrintWriter ps) {
+  public static void traceAllComparable(PrintWriter pw) {
 
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
@@ -1888,21 +1519,47 @@ public final class DCRuntime {
         if (mi.method_name.equals("equals_dcomp_instrumented")) {
           continue;
         }
-        ps.println();
-        print_comparable_traced(ps, mi);
+        pw.println();
+        printComparableTraced(pw, mi);
       }
     }
   }
 
-  public static void print_decl_file(PrintWriter ps) {
+  /**
+   * Prints header information to the decls file. Should be called once before emitting any other
+   * declarations.
+   *
+   * @param pw where to write output
+   * @param className name of the top-level class (used only for printing comments)
+   */
+  public static void printHeaderInfo(PrintWriter pw, String className) {
 
     // Write the file header
-    ps.printf("// Declaration file written by daikon.dcomp%n%n");
-    ps.printf("VarComparability%nimplicit%n%n");
+    pw.println("// Declarations for " + className);
+    pw.println(
+        "// Declarations written "
+            + LocalDateTime.now(ZoneId.systemDefault())
+            + " by daikon.DynComp");
+    pw.println();
+    pw.println("decl-version 2.0");
+    pw.println("var-comparability implicit");
+    pw.println();
+  }
+
+  /**
+   * Dumps out .decl file information for all classes that were processed.
+   *
+   * @param pw where to write output
+   */
+  public static void printDeclFile(PrintWriter pw) {
 
     // Write the information for each class
     for (ClassInfo ci : all_classes) {
-      print_class_decl(ps, ci);
+      if (!headerPrinted) {
+        printHeaderInfo(pw, ci.class_name);
+        headerPrinted = true;
+      }
+      printClassDecl(pw, ci);
     }
     debug_decl_print.log("finished %d classes%n", all_classes.size());
   }
@@ -2023,8 +1680,13 @@ public final class DCRuntime {
     }
   }
 
-  /** Calculates and prints the declarations for the specified class. */
-  public static void print_class_decl(PrintWriter ps, ClassInfo ci) {
+  /**
+   * Calculates and prints the declarations for the specified class.
+   *
+   * @param pw where to produce output
+   * @param ci the class to write
+   */
+  public static void printClassDecl(PrintWriter pw, ClassInfo ci) {
 
     time_decl.log("Printing decl file for class %s%n", ci.class_name);
     time_decl.indent();
@@ -2035,19 +1697,19 @@ public final class DCRuntime {
     merge_class_comparability(ci);
 
     // Write the class ppt
-    String classPptName = String.format("%s:::CLASS", ci.class_name);
-    ps.printf("DECLARE%n");
-    ps.println(classPptName);
-    print_decl_vars(ps, get_comparable(ci.traversalClass), ci.traversalClass, classPptName);
-    ps.println();
+    String classPptName = ci.class_name + ":::CLASS";
+    pw.println("ppt " + classPptName);
+    pw.println("ppt-type class");
+    printDeclVars(get_comparable(ci.traversalClass), ci.traversalClass, classPptName);
+    pw.println();
     time_decl.log("printed class ppt");
 
     // Write the object ppt
-    String objectPptName = String.format("%s:::OBJECT", ci.class_name);
-    ps.printf("DECLARE%n");
-    ps.println(objectPptName);
-    print_decl_vars(ps, get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
-    ps.println();
+    String objectPptName = ci.class_name + ":::OBJECT";
+    pw.println("ppt " + objectPptName);
+    pw.println("ppt-type object");
+    printDeclVars(get_comparable(ci.traversalObject), ci.traversalObject, objectPptName);
+    pw.println();
     time_decl.log("printed object ppt");
 
     // Print the information for each enter/exit point
@@ -2056,8 +1718,7 @@ public final class DCRuntime {
         continue;
       }
       debug_decl_print.log("  method %s%n", mi.method_name);
-      ps.println();
-      print_decl(ps, mi);
+      printMethod(pw, mi);
     }
 
     time_decl.log("finished class %s%n", ci.class_name);
@@ -2073,8 +1734,12 @@ public final class DCRuntime {
   /**
    * Prints a decl ENTER/EXIT records with comparability. Returns the list of comparabile DVSets for
    * the exit.
+   *
+   * @param pw where to produce output
+   * @param mi the class to output
+   * @return the list of comparabile DVSets for the exit
    */
-  public static List<DVSet> print_decl(PrintWriter ps, MethodInfo mi) {
+  public static List<DVSet> printMethod(PrintWriter pw, MethodInfo mi) {
 
     // long start = System.currentTimeMillis();
     // watch.reset();
@@ -2090,12 +1755,12 @@ public final class DCRuntime {
 
     // Print the enter point
     String enterPptName = clean_decl_name(DaikonWriter.methodEntryName(mi.member));
-    ps.println("DECLARE");
-    ps.println(enterPptName);
+    pw.println("ppt " + enterPptName);
+    pw.println("ppt-type enter");
     // ppt_name_ms += watch.snapshot();  watch.reset();
-    print_decl_vars(ps, l, mi.traversalEnter, enterPptName);
+    printDeclVars(l, mi.traversalEnter, enterPptName);
     // decl_vars_ms += watch.snapshot();  watch.reset();
-    ps.println();
+    pw.println();
     time_decl.log("after enter");
 
     // Print the exit points
@@ -2105,13 +1770,13 @@ public final class DCRuntime {
     time_decl.log("got exit comparable sets");
     for (Integer ii : mi.exit_locations) {
       String exitPptName = clean_decl_name(DaikonWriter.methodExitName(mi.member, ii));
-      ps.println("DECLARE");
-      ps.println(exitPptName);
+      pw.println("ppt " + exitPptName);
+      pw.println("ppt-type subexit");
       // ppt_name_ms += watch.snapshot();  watch.reset();
 
       time_decl.log("after exit clean_decl_name");
-      print_decl_vars(ps, l, mi.traversalExit, exitPptName);
-      ps.println();
+      printDeclVars(l, mi.traversalExit, exitPptName);
+      pw.println();
       // decl_vars_ms += watch.snapshot();  watch.reset();
 
     }
@@ -2122,34 +1787,38 @@ public final class DCRuntime {
     return l;
   }
 
+  /** Map from array name to comparability for its indices (if any). */
+  private static Map<String, Integer> arr_index_map;
+  /** Map from variable to its comparability. */
+  private static Map<DaikonVariableInfo, Integer> dv_comp_map;
+  /** Comparability value for a variable. */
+  private static int base_comp;
+
   /**
-   * Print the variables in sets to ps in DECL file format. Each variable in the same set is given
+   * Print the variables in sets to pw in DECL file format. Each variable in the same set is given
    * the same comparability. Constructed classname variables are made comparable to other classname
    * variables only.
    *
-   * @param ps where to print the variables
    * @param sets the comparability sets
    * @param dv_tree the tree of variables
    * @param pptName used only for debugging output
    */
-  private static void print_decl_vars(
-      PrintWriter ps, List<DVSet> sets, RootInfo dv_tree, String pptName) {
+  private static void printDeclVars(List<DVSet> sets, RootInfo dv_tree, String pptName) {
 
     time_decl.indent();
-    time_decl.log("print_decl_vars start");
+    time_decl.log("printDeclVars start");
 
-    debug_decl_print.log("print_decl_vars(%s)%n", pptName);
+    debug_decl_print.log("printDeclVars(%s)%n", pptName);
 
     // Map from array name to comparability for its indices (if any)
-    Map<String, Integer> arr_index_map = new LinkedHashMap<>();
+    arr_index_map = new LinkedHashMap<>();
 
     // Map from daikon variable to its comparability
-    Map<DaikonVariableInfo, Integer> dv_comp_map =
-        new IdentityHashMap<DaikonVariableInfo, Integer>(256);
+    dv_comp_map = new IdentityHashMap<DaikonVariableInfo, Integer>(256);
 
     // Initial comparability values
     int class_comp = 1;
-    int base_comp = 2;
+    base_comp = 2;
 
     // Loop through each set of comparable variables
     for (DVSet set : sets) {
@@ -2225,54 +1894,65 @@ public final class DCRuntime {
       if ((dv instanceof RootInfo) || (dv instanceof StaticObjInfo) || !dv.declShouldPrint()) {
         continue;
       }
-      // System.out.printf("Output dv: %s ", dv);
-      ps.println(dv.getName());
-      ps.println(dv.getTypeName());
-      ps.println(dv.getRepTypeName());
-      int comp = dv_comp_map.get(dv);
-      if (dv.isArray()) {
-        String name = dv.getName();
-        // If we an array of CLASSNAME or TO_STRING get the index
-        // comparability from the base array.
-        if (name.endsWith(DaikonVariableInfo.class_suffix)) {
-          name = name.substring(0, name.length() - DaikonVariableInfo.class_suffix.length());
-        } else if (name.endsWith(".toString")) {
-          name = name.substring(0, name.length() - ".toString".length());
-        }
-        Integer index_comp = arr_index_map.get(name);
-        // System.out.printf("compare: %d [ %s ] ", comp, index_comp);
-        if (index_comp != null) {
-          // System.out.println(comp + "[" + index_comp + "]");
-          ps.println(comp + "[" + index_comp + "]");
-        } else {
-          // There is no index comparability, so just set it to a unique value.
-          // System.out.println(comp + "[" + base_comp + "]");
-          ps.println(comp + "[" + base_comp++ + "]");
-        }
-      } else {
-        // System.out.println(comp);
-        ps.println(comp);
-      }
+
+      declWriter.printDecl(null, dv, null, comparabilityProvider);
     }
 
-    time_decl.log("print_decl_vars end%n");
+    time_decl.log("printDeclVars end%n");
     map_info.log("dv_comp_map size: %d%n", dv_comp_map.size());
     time_decl.exdent();
   }
 
   /**
+   * Calculates a comparability value.
+   *
+   * @param dv variable to calculate comparability for
+   * @param compare_ppt (not used)
+   * @return string containing comparability value
+   */
+  @Override
+  public String getComparability(DaikonVariableInfo dv, DeclReader.DeclPpt compare_ppt) {
+    int comp = dv_comp_map.get(dv);
+    String comp_str = Integer.toString(comp);
+    if (dv.isArray()) {
+      String name = dv.getName();
+      // If we an array of CLASSNAME or TO_STRING get the index
+      // comparability from the base array.
+      if (name.endsWith(DaikonVariableInfo.class_suffix)) {
+        name = name.substring(0, name.length() - DaikonVariableInfo.class_suffix.length());
+      } else if (name.endsWith(".toString")) {
+        name = name.substring(0, name.length() - ".toString".length());
+      }
+      Integer index_comp = arr_index_map.get(name);
+      // System.out.printf("compare: %d [ %s ] ", comp, index_comp);
+      if (index_comp != null) {
+        // System.out.println(comp + "[" + index_comp + "]");
+        comp_str = comp_str + "[" + index_comp + "]";
+      } else {
+        // There is no index comparability, so just set it to a unique value.
+        // System.out.println(comp + "[" + base_comp + "]");
+        comp_str = comp_str + "[" + base_comp++ + "]";
+      }
+    }
+    return comp_str;
+  }
+
+  /**
    * Prints comparability information for the enter and exit points of the specified method. By
    * default, outputs to {@code foo.txt-cset}.
+   *
+   * @param pw where to produce output
+   * @param mi the method whose comparability to output
    */
   /* TO DO: Find a way to make this work correctly without using normal
    * get_comparable.
    */
-  public static void print_comparable(PrintWriter ps, MethodInfo mi) {
+  public static void printComparable(PrintWriter pw, MethodInfo mi) {
 
     List<DVSet> l = get_comparable(mi.traversalEnter);
-    ps.printf("Variable sets for %s enter%n", clean_decl_name(mi.toString()));
+    pw.printf("Variable sets for %s enter%n", clean_decl_name(mi.toString()));
     if (l == null) {
-      ps.printf("  not called%n");
+      pw.printf("  not called%n");
     } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
@@ -2280,14 +1960,14 @@ public final class DCRuntime {
         }
         ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
-        ps.printf("  [%d] %s%n", stuff.size(), stuff);
+        pw.printf("  [%d] %s%n", stuff.size(), stuff);
       }
     }
 
     l = get_comparable(mi.traversalExit);
-    ps.printf("Variable sets for %s exit%n", clean_decl_name(mi.toString()));
+    pw.printf("Variable sets for %s exit%n", clean_decl_name(mi.toString()));
     if (l == null) {
-      ps.printf("  not called%n");
+      pw.printf("  not called%n");
     } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
@@ -2295,104 +1975,63 @@ public final class DCRuntime {
         }
         ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
-        ps.printf("  [%d] %s%n", stuff.size(), stuff);
+        pw.printf("  [%d] %s%n", stuff.size(), stuff);
       }
     }
   }
 
   /**
-   * Prints comparability information for the enter and exit points of the specified method. By
-   * default, outputs to {@code foo.txt-cset}. (Reference comparability only.)
+   * Dumps out comparability trace information for a single method.
+   *
+   * @param pw where to write output
+   * @param mi the method to process
    */
-  /* TO DO: Find a way to make this work correctly without using normal
-   * get_comparable.
-   */
-  public static void print_comparable_refs_only(PrintWriter ps, MethodInfo mi) {
-
-    List<DVSet> l = get_comparable(mi.traversalEnter);
-    ps.printf("Variable sets for %s enter%n", clean_decl_name(mi.toString()));
-    if (l == null) {
-      ps.printf("  not called%n");
-    } else {
-      for (DVSet set : l) {
-        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
-          continue;
-        }
-        if ((set.get(0) instanceof FieldInfo) && ((FieldInfo) set.get(0)).isPrimitive()) {
-          continue;
-        }
-        if ((set.get(0) instanceof ParameterInfo) && ((ParameterInfo) set.get(0)).isPrimitive()) {
-          continue;
-        }
-        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
-        // To see "daikon.chicory.FooInfo:variable", change true to false
-        ps.printf("  [%d] %s%n", stuff.size(), stuff);
-      }
-    }
-
-    l = get_comparable(mi.traversalExit);
-    ps.printf("Variable sets for %s exit%n", clean_decl_name(mi.toString()));
-    if (l == null) {
-      ps.printf("  not called%n");
-    } else {
-      for (DVSet set : l) {
-        if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
-          continue;
-        }
-        if ((set.get(0) instanceof FieldInfo) && ((FieldInfo) set.get(0)).isPrimitive()) {
-          continue;
-        }
-        if ((set.get(0) instanceof ParameterInfo) && ((ParameterInfo) set.get(0)).isPrimitive()) {
-          continue;
-        }
-        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
-        // To see "daikon.chicory.FooInfo:variable", change true to false
-        ps.printf("  [%d] %s%n", stuff.size(), stuff);
-      }
-    }
-  }
-
-  public static void print_comparable_traced(PrintWriter ps, MethodInfo mi) {
+  public static void printComparableTraced(PrintWriter pw, MethodInfo mi) {
     List<DVSet> l = get_comparable(mi.traversalEnter);
     Map<DaikonVariableInfo, DVSet> t = get_comparable_traced(mi.traversalEnter);
-    ps.printf("DynComp Traced Tree for %s enter%n", clean_decl_name(mi.toString()));
+    pw.printf("DynComp Traced Tree for %s enter%n", clean_decl_name(mi.toString()));
     if (t == null) {
-      ps.printf("  not called%n");
+      pw.printf("  not called%n");
     } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        print_tree(ps, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
-        ps.println();
+        printTree(pw, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
+        pw.println();
       }
     }
-    ps.println();
+    pw.println();
 
     l = get_comparable(mi.traversalExit);
     t = get_comparable_traced(mi.traversalExit);
-    ps.printf("DynComp Traced Tree for %s exit%n", clean_decl_name(mi.toString()));
+    pw.printf("DynComp Traced Tree for %s exit%n", clean_decl_name(mi.toString()));
     if (t == null) {
-      ps.printf("  not called%n");
+      pw.printf("  not called%n");
     } else {
       for (DVSet set : l) {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        print_tree(ps, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
-        ps.println();
+        printTree(pw, t, (DaikonVariableInfo) TagEntry.troot_find(set.get(0)), 0);
+        pw.println();
       }
     }
-    ps.println();
+    pw.println();
   }
 
   /**
    * Prints to [stream] the segment of the tree that starts at [node], interpreting [node] as
    * [depth] steps from the root. Requires a Map [tree] that represents a tree though key-value sets
    * of the form {@code <}parent, set of children{@code >}.
+   *
+   * @param pw where to write output
+   * @param tree map parents to children
+   * @param node starting point of tree to print
+   * @param depth distance from node to root of tree
    */
-  static void print_tree(
-      PrintWriter ps, Map<DaikonVariableInfo, DVSet> tree, DaikonVariableInfo node, int depth) {
+  static void printTree(
+      PrintWriter pw, Map<DaikonVariableInfo, DVSet> tree, DaikonVariableInfo node, int depth) {
 
     /* This method, for some reason, triggers a segfault due to the way
      * DVSets are handled conceptually. A trace-tree of one element creates
@@ -2401,25 +2040,25 @@ public final class DCRuntime {
      */
 
     if (depth == 0) {
-      ps.printf("%s%n", skinyOutput(node, daikon.DynComp.abridged_vars));
+      pw.printf("%s%n", skinyOutput(node, daikon.DynComp.abridged_vars));
       if (tree.get(node) == null) {
         return;
       }
       for (DaikonVariableInfo child : tree.get(node)) {
-        if (child != node) print_tree(ps, tree, child, depth + 1);
+        if (child != node) printTree(pw, tree, child, depth + 1);
       }
     } else {
       for (int i = 0; i < depth; i++) {
-        ps.printf("--");
+        pw.printf("--");
       }
-      ps.printf(
+      pw.printf(
           "%s (%s)%n",
           skinyOutput(node, daikon.DynComp.abridged_vars), TagEntry.get_line_trace(node));
       if (tree.get(node) == null) {
         return;
       }
       for (DaikonVariableInfo child : tree.get(node)) {
-        if (child != node) print_tree(ps, tree, child, depth + 1);
+        if (child != node) printTree(pw, tree, child, depth + 1);
       }
     }
   }
@@ -2553,11 +2192,7 @@ public final class DCRuntime {
   static void add_variable_traced(Map<DaikonVariableInfo, DVSet> sets, DaikonVariableInfo dv) {
     try {
       DaikonVariableInfo parent = (DaikonVariableInfo) TagEntry.tracer_find(dv);
-      DVSet set = sets.get(parent);
-      if (set == null) {
-        set = new DVSet();
-        sets.put(parent, set);
-      }
+      DVSet set = sets.computeIfAbsent(parent, __ -> new DVSet());
       set.add(dv);
     } catch (NullPointerException e) {
       throw new Error(e);
@@ -2688,11 +2323,7 @@ public final class DCRuntime {
     // Add this variable into the set of its leader
     if (dv.declShouldPrint()) {
       DaikonVariableInfo leader = (DaikonVariableInfo) TagEntry.find(dv);
-      DVSet set = sets.get(leader);
-      if (set == null) {
-        set = new DVSet();
-        sets.put(leader, set);
-      }
+      DVSet set = sets.computeIfAbsent(leader, __ -> new DVSet());
       set.add(dv);
     }
 
@@ -3095,6 +2726,10 @@ public final class DCRuntime {
     Throwable stack = new Throwable("caller");
     StackTraceElement[] ste_arr = stack.getStackTrace();
     StackTraceElement ste = ste_arr[2];
+    // If JDK 11 runtime transfer method, need to skip another level.
+    if (ste.getClassName().equals("java.lang.DCRuntime")) {
+      ste = ste_arr[3];
+    }
     return (ste.getClassName() + "." + ste.getMethodName());
   }
 
@@ -3197,7 +2832,7 @@ public final class DCRuntime {
 
   /**
    * Class that gets the tag for static primitive fields. We retrieve the static tag by using the
-   * same method as we use during runtime to push the tag on the tag stack.
+   * same method as we use during run time to push the tag on the tag stack.
    */
   public static class StaticPrimitiveTag extends FieldTag {
 
@@ -3344,7 +2979,7 @@ public final class DCRuntime {
       // assert obj == null: "primitive object = " + obj_str (obj);
       Object[] tags = field_map.get(parent);
       if (tags == null) {
-        return (nonsensical); // happens if field has never been assigned to
+        return nonsensical; // happens if field has never been assigned to
       } else {
         return tags[field_num];
       }

@@ -60,6 +60,7 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.CollectionsPlume;
+import org.plumelib.util.StringsPlume;
 import org.plumelib.util.UtilPlume;
 
 public final class FileIO {
@@ -234,8 +235,15 @@ public final class FileIO {
     @Override
     public String toString(@GuardSatisfied ParentRelation this) {
       return parent_ppt_name + "[" + id + "] " + rel_type;
-    };
+    }
 
+    /**
+     * Intern the ppt name.
+     *
+     * @param in the input stream from which to read the object
+     * @throws IOException if there is a problem reading the stream
+     * @throws ClassNotFoundException if a class cannot be loaded
+     */
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
       if (parent_ppt_name != null) {
@@ -893,7 +901,7 @@ public final class FileIO {
           // little point.  val can be null, so it cannot be the receiver.
           pw.print("<hashcode>");
         else if (val instanceof int[]) pw.print(Arrays.toString((int[]) val));
-        else if (val instanceof String) pw.print(UtilPlume.escapeNonASCII((String) val));
+        else if (val instanceof String) pw.print(StringsPlume.escapeNonASCII((String) val));
         else {
           pw.print(val);
         }
@@ -1618,7 +1626,9 @@ public final class FileIO {
         if (!new_decl_format && line.startsWith("ppt ")) {
           throw new Daikon.UserError(
               String.format(
-                  "Declaration file %s is not version 2.0, but line %d looks like a version 2.0 declaration: %s%nPerhaps the file is missing a \"decl-version 2.0\" record at the beginning",
+                  "Declaration file %s is not version 2.0, but line %d looks like a version 2.0"
+                      + " declaration: %s%nPerhaps the file is missing a \"decl-version 2.0\""
+                      + " record at the beginning",
                   state.filename, state.reader.getLineNumber(), line));
         }
         throw new Daikon.UserError(
@@ -1642,7 +1652,9 @@ public final class FileIO {
 
       if (state.all_ppts.size() == 0) {
         throw new Daikon.UserError(
-            "No declarations were provided before the first sample.  Perhaps you did not supply the proper .decls file to Daikon.  (Or, there could be a bug in the front end that created the .dtrace file "
+            "No declarations were provided before the first sample.  Perhaps you did not supply"
+                + " the proper .decls file to Daikon.  (Or, there could be a bug in the front end"
+                + " that created the .dtrace file "
                 + state.filename
                 + ".)");
       }
@@ -1800,10 +1812,7 @@ public final class FileIO {
       return;
     }
 
-    @SuppressWarnings({
-      "UnusedVariable",
-      "nullness:flowexpr.parse.error"
-    }) // https://tinyurl.com/cfissue/862
+    @SuppressWarnings({"UnusedVariable", "nullness:contracts.precondition.not.satisfied"})
     Object dummy = ppt.add_bottom_up(vt, 1);
 
     if (debugVars.isLoggable(Level.FINE)) {
@@ -1844,7 +1853,9 @@ public final class FileIO {
     if (!call_stack.isEmpty() || !call_hashmap.isEmpty()) {
       System.out.println();
       System.out.print(
-          "No return from procedure observed " + UtilPlume.nplural(unmatched_count, "time") + ".");
+          "No return from procedure observed "
+              + StringsPlume.nplural(unmatched_count, "time")
+              + ".");
       if (Daikon.use_dataflow_hierarchy) {
         System.out.print("  Unmatched entries are ignored!");
       }
@@ -1869,7 +1880,7 @@ public final class FileIO {
         if (dkconfig_verbose_unmatched_procedure_entries) {
           System.out.println(
               "Remaining "
-                  + UtilPlume.nplural(unmatched_count, "stack")
+                  + StringsPlume.nplural(unmatched_count, "stack")
                   + " call summarized below.");
           print_invocations_verbose(call_stack);
         } else {
@@ -1910,7 +1921,7 @@ public final class FileIO {
     // Print the invocations in sorted order.
     for (Map.Entry<@Interned String, Integer> invokEntry : counter.entrySet()) {
       System.out.println(
-          invokEntry.getKey() + " : " + UtilPlume.nplural(invokEntry.getValue(), "invocation"));
+          invokEntry.getKey() + " : " + StringsPlume.nplural(invokEntry.getValue(), "invocation"));
     }
   }
 
@@ -2237,7 +2248,7 @@ public final class FileIO {
           invoc = call_stack.pop();
           while (invoc.ppt.ppt_name.getNameWithoutPoint() != fn_name) {
             // Should also mark as a function that made an exceptional exit
-            // at runtime.
+            // at run time.
             System.err.println(
                 "Exceptional exit from function "
                     + fn_name
@@ -2414,7 +2425,9 @@ public final class FileIO {
       throw (IOException) new IOException("Error while loading inv file").initCause(e);
     } catch (InvalidClassException e) {
       throw new IOException(
-          "It is likely that the .inv file format has changed, because a Daikon data structure has been modified, so your old .inv file is no longer readable by Daikon.  Please regenerate your .inv file."
+          "It is likely that the .inv file format has changed, because a Daikon data structure has"
+              + " been modified, so your old .inv file is no longer readable by Daikon.  Please"
+              + " regenerate your .inv file."
           // + lineSep + e.toString()
           );
     }

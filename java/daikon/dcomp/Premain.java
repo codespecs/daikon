@@ -4,6 +4,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
+import daikon.chicory.DeclWriter;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
@@ -13,10 +14,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
+import java.net.URL;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,70 +57,29 @@ public class Premain {
           Arrays.asList(
               // Packages to support reflection and Lambda expressions cause instrumentation
               // problems and probably don't affect user program comparability values.
-              "java.lang.invoke", "java.lang.reflect", "jdk.internal.reflect"));
+              // JDK8 and JDK11
+              "java.lang.invoke",
+              "java.lang.reflect",
+              "sun.reflect.annotation",
+              "sun.reflect.misc",
+              // JDK8
+              "sun.reflect",
+              // JDK11
+              "jdk.internal.reflect"));
 
   /** Set of classes known to cause problems when instrumented. */
   protected static Set<String> problem_classes =
       new HashSet<>(
           Arrays.asList(
-              // Interfaces marked @FunctionalInterface should not be instrumented
-              // as they are used by LambdaExpressions.  Since BCEL won't let us
-              // inspect the annotations, we must manually add to problem classes.
-              "java.util.regex.Pattern$CharPredicate",
-              // <clinit> gets a JNI error during initialization.
-              "java.lang.StackTraceElement$HashedModules"));
+              // (none at present)
+              ));
 
   /** Set of methods known to cause problems when instrumented. */
   protected static Set<String> problem_methods =
       new HashSet<>(
           Arrays.asList(
-              // The following methods call sun.reflect.Reflection.getCallerClass().
-              // These methods are annotated with @CallerSensitive to
-              // indicate 'skip me when looking at call stack'.
-              // When we create the instrumented version of these methods we
-              // should include this annotation.  However, BCEL does not support
-              // this at this time.  So for now, we do not instrument these methods.
-              // Initially, we just had a couple methods listed, but it turns out
-              // that the junit tool references a large number of these methods.
-              "java.lang.Class.forName",
-              "java.lang.Class.newInstance",
-              "java.lang.Class.getClassLoader",
-              "java.lang.Class.getEnclosingMethod",
-              "java.lang.Class.getDeclaringClass",
-              "java.lang.Class.getEnclosingClass",
-              "java.lang.Class.getClasses",
-              "java.lang.Class.getField",
-              "java.lang.Class.getFields",
-              "java.lang.Class.getMethod",
-              "java.lang.Class.getMethods",
-              "java.lang.Class.getConstructor",
-              "java.lang.Class.getConstructors",
-              "java.lang.Class.getDeclaredClasses",
-              "java.lang.Class.getDeclaredField",
-              "java.lang.Class.getDeclaredFields",
-              "java.lang.Class.getDeclaredMethod",
-              "java.lang.Class.getDeclaredMethods",
-              "java.lang.Class.getDeclaredConstructor",
-              "java.lang.Class.getDeclaredConstructors",
-              "java.util.ResourceBundle.getBundle",
-              "java.util.ResourceBundle.clearCache",
-
-              // The below entries are temporary, until the bugs are fixed.
-
-              // There is a problem in the instrumented code for DecimalFormat that I have
-              // not been able to debug.  It does not crash, but causes floating point rounding
-              // to return incorrect results.
-              "java.text.DecimalFormat.applyPattern",
-              "java.text.DecimalFormat.format",
-              // There is a problem in the instrumented code for BufferedReader that I have
-              // not been able to debug.  It does not crash, but readLine() will sometimes
-              // trucate the result string.
-              "java.io.BufferedReader.readLine",
-              // There is a problem in the instrumented code for StringBuffer that I have
-              // not been able to debug.  It does not crash, but toString() will sometimes
-              // return an empty string.
-              "java.lang.StringBuffer.append",
-              "java.lang.StringBuffer.toString"));
+              // (none at present)
+              ));
 
   /**
    * One of the last phases for DynComp is to write out the comparability values after the user
@@ -134,12 +95,6 @@ public class Premain {
    */
   protected static boolean in_shutdown = false;
 
-  /** Flag to indicate if we are retransforming a previously loaded class. */
-  protected static boolean retransform_preloads;
-
-  /** Keep track of classes that have already been retransformed. */
-  private static Set<Class<?>> previously_processed_classes = new HashSet<>();
-
   // For debugging
   // protected static Instrumentation instr;
 
@@ -147,9 +102,6 @@ public class Premain {
    * This method is the entry point of the java agent. Its main purpose is to set up the transformer
    * so that when classes from the target app are loaded, they are first transformed in order to add
    * comparability instrumentation.
-   *
-   * <p>If this code is running on Java 9+ and jdk_instrumented is true it also retransforms any JDK
-   * methods that were loaded prior to premain getting control.
    *
    * @param agentArgs string containing the arguments passed to this agent
    * @param inst instrumentation instance to be used to transform classes
@@ -197,30 +149,12 @@ public class Premain {
       InputStream strm = Object.class.getResourceAsStream("jdk_classes.txt");
       if (strm == null) {
         System.err.println(
-            "Can't find jdk_classes.txt; see Daikon manual, section \"Instrumenting the JDK with DynComp\"");
+            "Can't find jdk_classes.txt;"
+                + " see Daikon manual, section \"Instrumenting the JDK with DynComp\"");
         System.exit(1);
       }
       BufferedReader reader = new BufferedReader(new InputStreamReader(strm, UTF_8));
 
-      // Verify that the current no-primitives flag setting matches the setting used to
-      // generate dcomp_rt.jar (via the BuildJDK tool).
-      String noPrimitivesLine = reader.readLine();
-      if (noPrimitivesLine == null) {
-        System.err.println("jdk_classes.txt is an empty file.");
-        System.exit(1);
-      }
-      noPrimitivesLine = noPrimitivesLine.trim();
-      if (!noPrimitivesLine.startsWith("no_primitives: ")) {
-        System.err.println("First line of jdk_classes.txt does not contain no_primitives flag.");
-        System.exit(1);
-      }
-      if (DynComp.no_primitives != noPrimitivesLine.equalsIgnoreCase("no_primitives: true")) {
-        System.err.println(
-            "no-primitives flag does not match setting used to generate dcomp_rt.jar.");
-        System.exit(1);
-      }
-
-      // Read in the list of pre-instrumented classes
       while (true) {
         String line = reader.readLine();
         if (line == null) {
@@ -247,8 +181,10 @@ public class Premain {
       throw new RuntimeException("Unexpected error loading Instrument", e);
     }
     if (DynComp.verbose) {
+      // If DCInstrument.jdk_instrumented is true then the printf below will output
+      // 'null' to indicate we are using the bootstrap loader.
       System.out.printf(
-          "Classloader of tranformer = %s%n", transformer.getClass().getClassLoader());
+          "Classloader of transformer = %s%n", transformer.getClass().getClassLoader());
     }
 
     // Check that we got a newer version of BCEL that includes JDK 11 support. At present,
@@ -268,50 +204,41 @@ public class Premain {
     }
     inst.addTransformer(transformer, true);
 
-    // For Java 9+ we only partially instrument the JDK as part of building DynComp.
-    // We complete the instrumentation when a JDK class is loaded during program execution.
-    // However, there is Catch-22: "All future class definitions will be seen by the transformer,
-    // except definitions of classes upon which any registered transformer is dependent"
-    // (from the documentation for Instrumentation.addTransformer()).
-    // Thus a JDK class used by DynComp will not be seen by our transformer.  To get around this
-    // we get the list of all the classes already loaded and call retransformClasses on them.
-    // Unfortunately, this process may need to be repeated multiple times as each time we call
-    // retransform on a class it may require the use of a previously unexecuted part of DynComp
-    // which may, in turn, cause more JDK classes to be loaded without our knowledge.
+    // See the "General Java Runtime instrumentation strategy" comments in DCInstrument.java
+    // for an explaination of how we deal with instrumenting the JDK 11 runtime.
     //
-    // Possibility:
-    // There may be a way to use the JDeps tool to get a list of all the dependencies as part of
-    // the DynComp build process and then pass this list to Premain for processing.
-    //
-    // Future work:
-    // We should revisit the problems associated with pre-instrumenting the JDK via BuildJDK.
-    // The current system has a noticeable performance hit at startup in addition to the
-    // retransformation complications noted above.
+    // At this point in DynComp start up, we use java.lang.instrument.redefineClasses to replace the
+    // dummy java.lang.DCRuntime with a version where each method calls the corresponding method in
+    // daikon.dcomp.DCRuntime. The Java runtime does not enforce the security check in this case.
     //
     if (BcelUtil.javaVersion > 8 && DCInstrument.jdk_instrumented) {
 
-      retransform_preloads = true;
-      Class<?>[] classes_to_retransform = get_retransform_list(inst);
-
-      while (classes_to_retransform.length > 0) {
-        if (DynComp.verbose) {
-          System.out.println("call retransformClasses");
-        }
+      // Buffer for input of our replacement java.lang.DCRuntime.
+      // The size of the current version is 6326 bytes and we do not
+      // anticipate any significant changes.
+      byte[] repClass = new byte[9999];
+      String classname = "daikon/dcomp-transfer/DCRuntime.class";
+      URL class_url = ClassLoader.getSystemResource(classname);
+      if (class_url != null) {
         try {
-          inst.retransformClasses(classes_to_retransform);
-        } catch (Exception e) {
-          System.err.println("Unable to retransformClasses.");
-          System.err.println(e);
+          InputStream inputStream = class_url.openStream();
+          if (inputStream != null) {
+            int size = inputStream.read(repClass, 0, repClass.length);
+            byte[] truncated = new byte[size];
+            System.arraycopy(repClass, 0, truncated, 0, size);
+            ClassDefinition cd =
+                new ClassDefinition(Class.forName("java.lang.DCRuntime"), truncated);
+            inst.redefineClasses(cd);
+          } else {
+            throw new Error("openStream failed for " + class_url);
+          }
+        } catch (Throwable t) {
+          throw new Error("Unexpected error reading " + class_url, t);
         }
-        classes_to_retransform = get_retransform_list(inst);
+      } else {
+        throw new Error("Could not locate " + classname);
       }
     }
-    retransform_preloads = false;
-
-    // Iterator<Class<?>> value = previously_processed_classes.iterator();
-    // while (value.hasNext()) {
-    //   System.out.println(value.next());
-    // }
 
     // Initialize the static tag array
     if (DynComp.verbose) {
@@ -322,41 +249,6 @@ public class Premain {
     if (DynComp.verbose) {
       System.out.println("exit premain");
     }
-  }
-
-  /**
-   * Get an array of already loaded classes that need to be retransformed.
-   *
-   * @param inst instrumentation instance to be used to transform classes
-   * @return an array containing the classes to be retransformed
-   */
-  private static Class<?>[] get_retransform_list(Instrumentation inst) {
-    if (DynComp.verbose) {
-      System.out.println("get retransformation list");
-    }
-
-    ArrayList<Class<?>> class_list = new ArrayList<>();
-
-    // Get the set of already loaded classes.
-    Class<?>[] loaded_classes = inst.getAllLoadedClasses();
-
-    for (Class<?> loaded_class : loaded_classes) {
-      // System.out.println(loaded_class + ": " + loaded_class.getClassLoader());
-      // Skip previously processed classes.
-      if (previously_processed_classes.contains(loaded_class)) continue;
-      // Skip Daikon classes.
-      if (loaded_class.getName().startsWith("daikon.")) continue;
-      // Skip BCEL classes.
-      if (loaded_class.getName().startsWith("org.apache.bcel.")) continue;
-      // Object cannot be instrumented due to its fundimental nature.
-      if (loaded_class.getName().equals("java.lang.Object")) continue;
-      if (inst.isModifiableClass(loaded_class)) {
-        // System.out.println(loaded_class);
-        class_list.add(loaded_class);
-      }
-    }
-    previously_processed_classes = new HashSet<>(Arrays.asList(loaded_classes));
-    return class_list.toArray(new Class<?>[class_list.size()]);
   }
 
   /** Shutdown thread that writes out the comparability results. */
@@ -383,11 +275,7 @@ public class Premain {
         }
         PrintWriter compare_out = open(DynComp.comparability_file);
         long startTime = System.nanoTime();
-        if (DynComp.no_primitives) {
-          DCRuntime.print_all_comparable_refs_only(compare_out);
-        } else {
-          DCRuntime.print_all_comparable(compare_out);
-        }
+        DCRuntime.printAllComparable(compare_out);
         compare_out.close();
         if (DynComp.verbose) {
           long duration = System.nanoTime() - startTime;
@@ -402,7 +290,7 @@ public class Premain {
         }
         PrintWriter trace_out = open(DynComp.trace_file);
         long startTime = System.nanoTime();
-        DCRuntime.trace_all_comparable(trace_out);
+        DCRuntime.traceAllComparable(trace_out);
         trace_out.close();
         if (DynComp.verbose) {
           long duration = System.nanoTime() - startTime;
@@ -424,8 +312,14 @@ public class Premain {
       File decl_file = new File(DynComp.output_dir, DynComp.decl_file);
       if (DynComp.verbose) System.out.println("Writing decl file to " + decl_file);
       PrintWriter decl_fp = open(decl_file);
+      // Create DeclWriter so can share output code in Chicory.
+      DCRuntime.declWriter = new DeclWriter(decl_fp);
+      DCRuntime.declWriter.debug = DynComp.debug_decl_print;
+      // Used for calling ComparabilityProvider.getComparability.
+      DCRuntime.comparabilityProvider = new DCRuntime();
+
       long startTime = System.nanoTime();
-      DCRuntime.print_decl_file(decl_fp);
+      DCRuntime.printDeclFile(decl_fp);
       decl_fp.close();
       if (DynComp.verbose) {
         long duration = System.nanoTime() - startTime;
@@ -446,13 +340,25 @@ public class Premain {
    * @return a new PrintWriter from filename
    */
   public static PrintWriter open(File filename) {
+    File canonicalFile;
     try {
-      return new PrintWriter(Files.newBufferedWriter(filename.toPath(), UTF_8));
-      // return new PrintWriter (filename);
-      // return new PrintStream (new BufferedWriter
-      //            (new Outpu32tStreamWriter (new FileOutputStream(filename))));
+      canonicalFile = filename.getCanonicalFile();
+    } catch (IOException e) {
+      throw new Error(
+          "Can't get canonical file for " + filename + " in " + System.getProperty("user.dir"));
+    }
+
+    // I don't know why, but without this, the call to newBufferedWriter fails in some contexts.
+    try {
+      canonicalFile.createNewFile();
+    } catch (IOException e) {
+      throw new Error("createNewFile failed for " + canonicalFile, e);
+    }
+
+    try {
+      return new PrintWriter(Files.newBufferedWriter(canonicalFile.toPath(), UTF_8));
     } catch (Exception e) {
-      throw new Error("Can't open " + filename, e);
+      throw new Error("Can't open " + filename + " = " + canonicalFile, e);
     }
   }
 }

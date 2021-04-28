@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.RegexUtil;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * This tool is used to find the differences between two dtrace files based on analysis of the
@@ -34,8 +34,9 @@ import org.plumelib.util.UtilPlume;
  */
 public class DtraceDiff {
 
+  /** The usage message for this program. */
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage: DtraceDiff [OPTION]... [DECLS1]... DTRACE1 [DECLS2]... DTRACE2",
           "DTRACE1 and DTRACE2 are the data trace files to be compared.",
           "You may optionally specify corresponding DECLS files for each one.",

@@ -1,5 +1,4 @@
 NAME := UnionComp
-AMD64_WORKING := yes
 # This test contains a union of a char* and ptr*.
 # The ptr (next) is assigned an address giving the char* (name) random garbage.
 # Hence, the .dtrace file will almost never match.

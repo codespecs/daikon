@@ -7,56 +7,48 @@ misc.EncapsulateDowncast.random2 != null
 misc.EncapsulateDowncast.random2 != null
 ===========================================================================
 misc.EncapsulateDowncast.main(java.lang.String[]):::ENTER
-    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 argv argv.getClass().getName() argv[] argv[].toString size(argv[]) size(argv[])-1 argv[misc.EncapsulateDowncast.CASES] argv[misc.EncapsulateDowncast.CASES-1] argv[misc.EncapsulateDowncast.CASES..] argv[misc.EncapsulateDowncast.CASES+1..] argv[0..misc.EncapsulateDowncast.CASES] argv[0..misc.EncapsulateDowncast.CASES-1] argv[misc.EncapsulateDowncast.SEED] argv[misc.EncapsulateDowncast.SEED-1] argv[misc.EncapsulateDowncast.SEED..] argv[misc.EncapsulateDowncast.SEED+1..] argv[0..misc.EncapsulateDowncast.SEED] argv[0..misc.EncapsulateDowncast.SEED-1]
+    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 argv argv.getClass().getName() argv[] argv[].toString size(argv[]) size(argv[])-1
 argv != null
 \typeof(argv) == \type(java.lang.String[])
 (argv.length == 0) && ((\forall int i; (0 <= i && i <= argv.length-1) ==> (argv[i] != null)))
 warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: argv[].toString == []
 ===========================================================================
 misc.EncapsulateDowncast.main(java.lang.String[]):::EXIT
-    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 argv argv.getClass().getName() argv[] argv[].toString orig(misc.EncapsulateDowncast.random) orig(misc.EncapsulateDowncast.random2) orig(argv) orig(argv.getClass().getName()) orig(argv[]) orig(argv[].toString) size(argv[]) size(argv[])-1 orig(size(argv[])) orig(size(argv[]))-1 argv[misc.EncapsulateDowncast.CASES] argv[misc.EncapsulateDowncast.CASES-1] argv[misc.EncapsulateDowncast.CASES..] argv[misc.EncapsulateDowncast.CASES+1..] argv[0..misc.EncapsulateDowncast.CASES] argv[0..misc.EncapsulateDowncast.CASES-1] orig(argv[post(misc.EncapsulateDowncast.CASES)]) orig(argv[post(misc.EncapsulateDowncast.CASES)-1]) orig(argv[post(misc.EncapsulateDowncast.CASES)..]) orig(argv[post(misc.EncapsulateDowncast.CASES)+1..]) orig(argv[0..post(misc.EncapsulateDowncast.CASES)]) orig(argv[0..post(misc.EncapsulateDowncast.CASES)-1]) argv[misc.EncapsulateDowncast.SEED] argv[misc.EncapsulateDowncast.SEED-1] argv[misc.EncapsulateDowncast.SEED..] argv[misc.EncapsulateDowncast.SEED+1..] argv[0..misc.EncapsulateDowncast.SEED] argv[0..misc.EncapsulateDowncast.SEED-1] orig(argv[post(misc.EncapsulateDowncast.SEED)]) orig(argv[post(misc.EncapsulateDowncast.SEED)-1]) orig(argv[post(misc.EncapsulateDowncast.SEED)..]) orig(argv[post(misc.EncapsulateDowncast.SEED)+1..]) orig(argv[0..post(misc.EncapsulateDowncast.SEED)]) orig(argv[0..post(misc.EncapsulateDowncast.SEED)-1])
+    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 argv argv.getClass().getName() argv[] argv[].toString orig(misc.EncapsulateDowncast.random) orig(misc.EncapsulateDowncast.random2) orig(argv) orig(argv.getClass().getName()) orig(argv[]) orig(argv[].toString) size(argv[]) size(argv[])-1 orig(size(argv[])) orig(size(argv[]))-1
       Unmodified variables: misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 argv argv.getClass().getName() argv[] argv[].toString size(argv[])
 (argv.length == 0) && ((\forall int i; (0 <= i && i <= argv.length-1) ==> (argv[i] != null)))
 warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: argv[].toString == []
 ===========================================================================
 misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::ENTER
-    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 list list[] list[].getClass().getName() size(list[]) size(list[])-1 list[misc.EncapsulateDowncast.CASES] list[misc.EncapsulateDowncast.CASES-1] list[misc.EncapsulateDowncast.CASES..] list[misc.EncapsulateDowncast.CASES+1..] list[0..misc.EncapsulateDowncast.CASES] list[0..misc.EncapsulateDowncast.CASES-1] list[misc.EncapsulateDowncast.SEED] list[misc.EncapsulateDowncast.SEED-1] list[misc.EncapsulateDowncast.SEED..] list[misc.EncapsulateDowncast.SEED+1..] list[0..misc.EncapsulateDowncast.SEED] list[0..misc.EncapsulateDowncast.SEED-1]
+    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 list list[] list[].getClass().getName() size(list[]) size(list[])-1
 list != null
 warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: list[] contains no duplicates
 list.containsNull == false
 list.elementType == \type(misc.Person)
-warning: method daikon.inv.binary.twoScalar.NumericInt$BitwiseAndZero.format(OutputFormat:ESC/Java) needs to be implemented: (misc.EncapsulateDowncast.CASES & size(list[])) == 0
-warning: method daikon.inv.binary.twoScalar.IntGreaterThan.format(OutputFormat:ESC/Java) needs to be implemented: misc.EncapsulateDowncast.CASES > size(list[])
-warning: method daikon.inv.binary.twoScalar.NumericInt$BitwiseAndZero.format(OutputFormat:ESC/Java) needs to be implemented: (misc.EncapsulateDowncast.CASES & size(list[])-1) == 0
-warning: method daikon.inv.binary.twoScalar.IntGreaterThan.format(OutputFormat:ESC/Java) needs to be implemented: misc.EncapsulateDowncast.SEED > size(list[])
 ===========================================================================
 misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::EXIT
-    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 list list[] list[].getClass().getName() orig(misc.EncapsulateDowncast.random) orig(misc.EncapsulateDowncast.random2) orig(list) orig(list[]) orig(list[].getClass().getName()) size(list[]) size(list[])-1 orig(size(list[])) orig(size(list[]))-1 list[misc.EncapsulateDowncast.CASES] list[misc.EncapsulateDowncast.CASES-1] list[misc.EncapsulateDowncast.CASES..] list[misc.EncapsulateDowncast.CASES+1..] list[0..misc.EncapsulateDowncast.CASES] list[0..misc.EncapsulateDowncast.CASES-1] orig(list[post(misc.EncapsulateDowncast.CASES)]) orig(list[post(misc.EncapsulateDowncast.CASES)-1]) orig(list[post(misc.EncapsulateDowncast.CASES)..]) orig(list[post(misc.EncapsulateDowncast.CASES)+1..]) orig(list[0..post(misc.EncapsulateDowncast.CASES)]) orig(list[0..post(misc.EncapsulateDowncast.CASES)-1]) list[misc.EncapsulateDowncast.SEED] list[misc.EncapsulateDowncast.SEED-1] list[misc.EncapsulateDowncast.SEED..] list[misc.EncapsulateDowncast.SEED+1..] list[0..misc.EncapsulateDowncast.SEED] list[0..misc.EncapsulateDowncast.SEED-1] orig(list[post(misc.EncapsulateDowncast.SEED)]) orig(list[post(misc.EncapsulateDowncast.SEED)-1]) orig(list[post(misc.EncapsulateDowncast.SEED)..]) orig(list[post(misc.EncapsulateDowncast.SEED)+1..]) orig(list[0..post(misc.EncapsulateDowncast.SEED)]) orig(list[0..post(misc.EncapsulateDowncast.SEED)-1])
+    Variables: misc.EncapsulateDowncast.CASES misc.EncapsulateDowncast.SEED misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 list list[] list[].getClass().getName() orig(misc.EncapsulateDowncast.random) orig(misc.EncapsulateDowncast.random2) orig(list) orig(list[]) orig(list[].getClass().getName()) size(list[]) size(list[])-1 orig(size(list[])) orig(size(list[]))-1
       Unmodified variables: misc.EncapsulateDowncast.random misc.EncapsulateDowncast.random2 list list[] list[].getClass().getName() size(list[])
 warning: method daikon.inv.unary.sequence.NoDuplicates.format(OutputFormat:ESC/Java) needs to be implemented: list[] contains no duplicates
 list.containsNull == false
 list.elementType == \type(misc.Person)
-warning: method daikon.inv.binary.twoScalar.NumericInt$BitwiseAndZero.format(OutputFormat:ESC/Java) needs to be implemented: (misc.EncapsulateDowncast.CASES & size(list[])-1) == 0
 ===========================================================================
 misc.Person:::OBJECT
     Variables: this this._name this._name.toString this._height this._weight
 this._name != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: this._name.toString is printable
 this._height >= 0
-this._height < this._weight
 ===========================================================================
 misc.Person.Person(java.lang.String, int, int):::ENTER
     Variables: name name.toString height weight
 name != null
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: name.toString is printable
 height >= 0
-height < weight
 ===========================================================================
 misc.Person.Person(java.lang.String, int, int):::EXIT
     Variables: this this._name this._name.toString this._height this._weight name name.toString height weight orig(name) orig(name.toString) orig(height) orig(weight)
       Unmodified variables: name name.toString height weight
 this._name == \old(name)
-this._name.toString == name.toString
 this._height == \old(height)
 this._weight == \old(weight)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:ESC/Java) needs to be implemented: name.toString is printable

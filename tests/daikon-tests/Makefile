@@ -8,6 +8,11 @@ SCRIPTS=$(DAIKONDIR)/scripts
 # Help system
 default help: help-recurse
 
+.PHONY: regression-tests
+regression-tests:
+	$(MAKE) txt-diff
+	$(MAKE) summary
+
 # Targets that ascend to parent directories
 results summary summary2 summary3 help-recurse:
 	@$(MAKE) --no-print-directory BASE?=`pwd` -C .. $@
@@ -46,7 +51,7 @@ nonquick-%: dsaa-% mapquick-% javautil-% 6170-% large-% new-%
 
 # Canonical groupings
 
-SQD-%: do-StackAr-% do-QueueAr-% do-DisjSets-% 
+SQD-%: do-StackAr-% do-QueueAr-% do-DisjSets-%
 	@echo ${HR}
 polycalc-%: do-RatNum-% do-RatPoly-% do-RatPolyStack-% do-RatTermVec-%
 	@echo ${HR}
@@ -64,7 +69,7 @@ javautil-%: do-Vector-% do-ArrayList13-% do-ArrayList17-%
 	@echo ${HR}
 large-%: # do-Flex-% do-JML-%
 	@echo ${HR}
-new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-baseline-%
+new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-baseline-% do-junit-%
 	@echo ${HR}
 
 # Extra groupings

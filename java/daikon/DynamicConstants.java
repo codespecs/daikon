@@ -1027,7 +1027,7 @@ public class DynamicConstants implements Serializable {
    * (default is on), only unary and binary invariants that can be suppressors in NIS suppressions
    * are created.
    */
-  @RequiresNonNull("NIS.suppressor_proto_invs")
+  @RequiresNonNull("daikon.suppress.NIS.suppressor_proto_invs")
   public List<PptSlice> create_constant_invs() {
 
     // Turn off track logging so that we don't get voluminous messages

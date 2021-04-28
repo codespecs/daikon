@@ -92,11 +92,11 @@ daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 	${TEXI2HTML} --split=chapter -o daikon $<
 	# Fixup 'bad' href(s) inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' daikon/index.html
-	perl -pi -e 's|href="CHANGES"|href="../CHANGES"|;' daikon/*.html
+	perl -pi -e 's|href="CHANGELOG.md"|href="../CHANGELOG.md"|;' daikon/*.html
 	mkdir daikon/images
 	cp images/*.png daikon/images
 	cp images/*.jpg daikon/images
-	${HTMLTOOLS}/html-add-favicon daikon ../daikon-favicon.png
+	cd daikon && ../${HTMLTOOLS}/html-add-favicon . ../daikon-favicon.png
 
 developer/index.html: developer.texinfo ../utils/html-tools
 	rm -rf developer/*
@@ -106,7 +106,7 @@ developer/index.html: developer.texinfo ../utils/html-tools
 	mkdir developer/images
 	cp images/*.png developer/images
 	cp images/*.jpg developer/images
-	${HTMLTOOLS}/html-add-favicon developer ../daikon-favicon.png
+	cd developer && ../${HTMLTOOLS}/html-add-favicon . ../daikon-favicon.png
 
 pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
 
@@ -161,7 +161,7 @@ find-changes:
 spell-check:
 	perl prepare-texinfo-for-spellcheck.pl < daikon.texinfo | hunspell -u -p daikon.dict
 	perl prepare-texinfo-for-spellcheck.pl < developer.texinfo | hunspell -u -p daikon.dict
-# For CHANGES file, only recent lines (top 100), and not text starting with
+# For CHANGELOG.md file, only recent lines (top 100), and not text starting with
 # 4+ spaces (assumed to be literal code or commands.  Permit some failures.
 	@echo "The following command is allowed to have some failures not in daikon.dict"
-	head -100 CHANGES | sed 's/^    .*/ /' | hunspell -u -p daikon.dict
+	head -100 CHANGELOG.md | sed 's/^    .*/ /' | hunspell -u -p daikon.dict

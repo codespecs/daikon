@@ -163,6 +163,8 @@ public class SpinfoFile {
    *
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed
    * @param replaceStatements the List into which the ReplaceStatements are added
+   * @throws IOException if there is a problem reading the file
+   * @throws ParseException if there is a problem parsing
    */
   private void readReplaceStatements(
       @UnknownInitialization SpinfoFile this,

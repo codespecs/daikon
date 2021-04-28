@@ -99,8 +99,12 @@ public final class SplitDtrace {
           if (isEnter(rec)) {
             nonceSet.add(nonce);
           } else {
-            if (!isExit(rec)) throw new RuntimeException("Must be either ENTER or EXIT:" + rec);
-            if (!nonceSet.contains(nonce)) shouldWrite = false;
+            if (!isExit(rec)) {
+              throw new RuntimeException("Must be either ENTER or EXIT:" + rec);
+            }
+            if (!nonceSet.contains(nonce)) {
+              shouldWrite = false;
+            }
             nonceSet.remove(nonce);
           }
         }

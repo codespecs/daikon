@@ -1,6 +1,5 @@
 package daikon.chicory;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,7 +92,8 @@ public class ClassInfo {
           boolean foundMatch = false;
           for (MethodInfo mi : method_infos) {
             assert mi.member != null
-                : "@AssumeAssertion(nullness): member of method_infos have .member field"; // dependent type
+                : "@AssumeAssertion(nullness): member of method_infos have"
+                    + " .member field"; // dependent type
             // System.out.printf("compare %s to pure %s%n",
             //                  mi.member.toString() , pureMeth);
             if (mi.member.toString().trim().equals(pureMeth)) {
@@ -122,24 +122,6 @@ public class ClassInfo {
     // Match anything of the form: ____class_name.____(____
     // Where ____ corresponds to any sequence of characters
     return methodName.matches(".*" + Pattern.quote(class_name) + "\\..*\\(.*");
-  }
-
-  /** dumps all of the class info to the specified stream */
-  public void dump(PrintStream ps) {
-    ps.printf("ClassInfo for %s [%s]%n", class_name, clazz);
-    for (MethodInfo mi : method_infos) {
-      ps.printf("  method %s [%s]%n", mi.method_name, mi.member);
-      ps.printf("    arguments: ");
-      for (int ii = 0; ii < mi.arg_names.length; ii++) {
-        if (ii > 0) ps.printf(", ");
-        ps.printf("%s [%s] %s", mi.arg_type_strings[ii], mi.arg_types[ii], mi.arg_names[ii]);
-      }
-      ps.printf("%n    exits: ");
-      for (Integer exit_loc : mi.exit_locations) {
-        ps.printf("%s ", exit_loc);
-      }
-      ps.println();
-    }
   }
 
   /**

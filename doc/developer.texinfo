@@ -42,20 +42,11 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.8.5
+@center Daikon version 5.8.9
 
 @sp 1
 
-@ifset final
-@c FINAL version
-@c Print out the Daikon version 5.8.5 release date
 @center July 22, 2020
-@end ifset
-
-@ifclear final
-@c DRAFT version
-@center DRAFT Version @today{}
-@end ifclear
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -65,7 +56,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2014
+Copyright @copyright{} 1998-2020
 @end titlepage
 
 @c set document heading/footing style
@@ -76,11 +67,6 @@ Copyright @copyright{} 1998-2014
 @c @oddheading Section @thissectionnum @| @thissectionname @| @thispage
 @c @oddheading Chapter @thischapternum: @thischaptername @| @| @thispage
 @c @evenheading @thispage @| @| Section @thissectionnum: @thissectionname
-
-@ifclear final
-@c DRAFT version
-@everyfooting DRAFT @| @| @today{}
-@end ifclear
 
 @html
 @image{images/daikon-logo}
@@ -97,7 +83,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.5, released July 22, 2020.
+It describes Daikon version 5.8.9, released March 3, 2021.
 
 @menu
 * Introduction::
@@ -153,7 +139,7 @@ This chapter describes how to customize or modify Daikon.
 
 @menu
 * Compiling Daikon::
-* Version control repository::
+* Source code (version control repository)::
 * Using Eclipse::
 * New invariants::
 * New derived variables::
@@ -212,9 +198,10 @@ distribution into multiple @file{.java} files, which are then compiled.
 If you have a C compiler, you almost certainly have @command{cpp}.
 
 
-@node    Version control repository
-@section Version control repository
+@node    Source code (version control repository)
+@section Source code (version control repository)
 
+@cindex source code
 @cindex repository
 @cindex Git repository
 @cindex version control repository
@@ -1046,7 +1033,7 @@ be enabled or disabled at the Daikon command line, as described in
 @cindex non-checking of invariants
 @cindex non-printing of invariants
 
-Daikon reduces runtime and memory by avoiding performing work for
+Daikon reduces run time and memory by avoiding performing work for
 redundant invariants that provide no useful information to the user.
 There are three basic types of optimization that can be performed for
 uninteresting invariants:  non-instantiation, suppression, and
@@ -1082,7 +1069,7 @@ See @ref{New suppressors} for more information.
 @dfn{Non-printing} is a post-pass that throws out any invariants that
 are implied by other true invariants.  It is similar to suppression, but
 has none of the limitations of suppression.  But since it is only run as
-a post pass, it cannot optimize runtime and memory use as suppression can.
+a post pass, it cannot optimize run time and memory use as suppression can.
 Non-printing should be used only in cases where suppression cannot.
 Non-printing is implemented by @code{ObviousFilter}, which calls the
 @code{isObviousDynamically} method on invariants.  The
@@ -1227,8 +1214,8 @@ behavior and possibly update the goals.
 
 The Daikon distribution contains unit tests, but not regression tests
 (which would make the distribution much larger).  The regression tests
-appear in Daikon's version control repository (@pxref{Version control
-repository}), within the @file{tests} subdirectory.
+appear in Daikon's version control repository (@pxref{Source code (version control
+repository)}), within the @file{tests} subdirectory.
 
 @menu
 * Unit testing::
@@ -1712,7 +1699,7 @@ Window >> Preferences >> Java >> Compiler >> Style >> Non-static access >> >> Ig
 @node          Import existing project
 @subsubsection Import an existing project
 
-First, do @command{cp $DAIKONDIR/java/.classpath-pag $DAIKONDIR/java/.classpath}
+@c First, do @command{cp $DAIKONDIR/java/.classpath-pag $DAIKONDIR/java/.classpath}
 
 Second, import Daikon into Eclipse.  To import:  start Eclipse, then choose
 menu item @samp{File->Import->ExistingProjectIntoWorkspace}, then enter (the full
@@ -2081,7 +2068,7 @@ complete overnight.
 
 @need 1000
 @item
-Edit the @file{doc/CHANGES} file to indicate what has changed
+Edit the @file{doc/CHANGELOG.md} file to indicate what has changed
 in this version.  A good way to determine what has changed is to diff
 the Texinfo source files in the @file{doc/} directory against the previous
 versions:
@@ -2228,7 +2215,7 @@ cd $DAIKONDIR && make very-clean clean-kvasir && make rebuild-everything
 @item
 Once you have successfully reached this point, you are ready to make a release
 candidate and begin testing it.
-The following command will verify that @file{doc/CHANGES} is up-to-date and then list
+The following command will verify that @file{doc/CHANGELOG.md} is up-to-date and then list
 any uncommitted files.
 
 @example
@@ -2313,11 +2300,11 @@ build everything to be distributed and copy it to the temporary staging area
 @example
 # First, start a separate, new Bash command shell.  Don't kill your old one.
 
-mkdir -p /tmp/$USER
-cd /tmp/$USER
-rm -rf stage-daikon
-git clone --depth 3 https://github.com/codespecs/daikon stage-daikon
+rm -rf /tmp/$USER/stage-daikon
+mkdir -p /tmp/$USER/stage-daikon
 cd /tmp/$USER/stage-daikon
+git clone --depth 3 https://github.com/codespecs/daikon
+cd daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 unset CHECKERFRAMEWORK
@@ -2433,7 +2420,7 @@ Test the distribution on Ubuntu and Mac OS machines.
 To use Azure Pipelines,
 navigate to
 @url{https://dev.azure.com/mernstdaikon/daikon/_build?definitionId=3&_a=summary}
-and click ``Run pipeline''.
+and click ``Run pipeline'' then ``Run''.
 
 If there is a problem, fix it and start over.
 
@@ -2539,18 +2526,16 @@ the actual number of the release.
 <to:>  daikon-announce@@googlegroups.com
 <subject:>  Daikon version <version number> has been released
 
-Daikon version <version number> is now available.
-
-Please see the entry from the doc/CHANGES file that appears below for more details.
-
-You can download the latest version of Daikon at:
+Daikon version <version number> is available at:
 http://plse.cs.washington.edu/daikon/download/
+
+Please see the entry from the doc/CHANGELOG.md file that appears below for more details.
 
   <your name>
 
-<a copy of the current entry from the doc/CHANGES file, with
+<a copy of the current entry from the doc/CHANGELOG.md file, with
 paragraphs refilled (remove unnecessary line breaks that trim lines
-to 80 columns for the CHANGES file but aren't desirable in email)>
+to 80 columns for the CHANGELOG.md file but aren't desirable in email)>
 @end example
 
 Note that if you use Microsoft Outlook 2010 or 2013 as your mailer,
@@ -2751,7 +2736,7 @@ declarations after the first one have no effect).
 
 A data trace record (also known as a @dfn{sample})
 represents one execution of a program point.  The
-record specifies the program point and gives the runtime values of each
+record specifies the program point and gives the run-time values of each
 variable.  The list of variables in the data trace record must be
 identical to that in the corresponding declaration.  For a given program point,
 the declaration must precede the first data trace record for the program
@@ -2994,7 +2979,7 @@ types are related to the program point hierarchy (see @ref{Dataflow hierarchy}).
 
 A @code{point} program point is one that is @emph{not} involved in a
 program point hierarchy.   This is normally used when the input is not
-from a programming language or when is no dataflow hierarchy.
+from a programming language or when there is no dataflow hierarchy.
 
 @item @code{flags <flags>}
 

@@ -19,7 +19,7 @@ import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.UtilPlume;
 
 /**
- * ParameterDoclet is a JavaDoc doclet that collects information about the runtime configuration
+ * ParameterDoclet is a JavaDoc doclet that collects information about the run-time configuration
  * options for the Daikon tools. Refer to the {@code --config} command-line option in the Daikon
  * manual for an introduction to the configuration system.
  */
@@ -219,7 +219,8 @@ public class ParameterDoclet {
               "Other invariant configuration parameters",
               new String[] {
                 "@cindex invariants, configuring",
-                "The configuration options listed in this section parameterize the behavior of certain invariants.",
+                "The configuration options listed in this section parameterize the behavior of"
+                    + " certain invariants.",
                 "See @ref{Invariant list}, for more information about the invariants."
               }),
           new DocCategory(
@@ -229,7 +230,8 @@ public class ParameterDoclet {
               "Options to enable/disable derived variables",
               new String[] {
                 "@cindex derived variables, enabling/disabling",
-                "These options control whether Daikon looks for invariants involving certain forms of derived variables.",
+                "These options control whether Daikon looks for invariants involving certain forms"
+                    + " of derived variables.",
                 "Also see @ref{Variable names}."
               }),
           new DocCategory(
@@ -239,8 +241,10 @@ public class ParameterDoclet {
               "Simplify interface configuration options",
               new String[] {
                 "@cindex Simplify theorem prover, configuring",
-                "The configuration options in this section are used to customize the interface to the Simplify theorem prover.",
-                "See the description of the @option{--suppress_redundant} command-line option in @ref{Options to control invariant detection}."
+                "The configuration options in this section are used to customize the interface to"
+                    + " the Simplify theorem prover.",
+                "See the description of the @option{--suppress_redundant} command-line option in"
+                    + " @ref{Options to control invariant detection}."
               }),
           new DocCategory(
               "daikon.split.",
@@ -249,8 +253,10 @@ public class ParameterDoclet {
               "Splitter options",
               new String[] {
                 "@cindex Splitters, configuring",
-                "The configuration options in this section are used to customize the the behavior of splitters,",
-                "which yield conditional invariants and implications (@pxref{Conditional invariants})."
+                "The configuration options in this section are used to customize the the behavior"
+                    + " of splitters,",
+                "which yield conditional invariants and implications"
+                    + " (@pxref{Conditional invariants})."
               }),
           new DocCategory(
               "daikon.Debug.",
@@ -259,7 +265,8 @@ public class ParameterDoclet {
               "Debugging options",
               new String[] {
                 "@cindex Splitters, configuring",
-                "The configuration options in this section are used to cause extra output that is useful for debugging.",
+                "The configuration options in this section are used to cause extra output that is"
+                    + " useful for debugging.",
                 "Also see section \"Daikon debugging options\" (@pxref{Daikon debugging options})."
               }),
           new DocCategory(

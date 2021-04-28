@@ -1,6 +1,6 @@
 instrument [OPTIONS] INV_FILE JAVA_FILES
   Summary:  Creates new copies of the given Java files that contain code to
-    check invariants at runtime.
+    check invariants at run time.
   Example use:
     java daikon.tools.runtimecheker.Main instrument BoundedStack.inv.gz ubs/BoundedStack.java
   Arguments:

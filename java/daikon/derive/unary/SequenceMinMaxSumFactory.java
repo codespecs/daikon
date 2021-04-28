@@ -24,7 +24,7 @@ public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
     }
     if (vi.type.base() == "char") // interned
     return null;
-    // Should be reversed at some point; for now, will improve runtime.
+    // Should be reversed at some point; for now, will improve run time.
     if (Daikon.output_format != OutputFormat.DAIKON) {
       return null;
     }

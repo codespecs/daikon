@@ -16,35 +16,19 @@ size(this.outer[]) == 100
 size(this.inner[]) == 1
 this.outer[this.y] != 0
 this.outer[this.y-1] != 0
-this.outer[this.x] != 0
 this.inner[this.x] != 0
-this.inner[] is a subsequence of this.outer[]
 this.inner[this.x] in this.outer[]
 this.inner[] elements == this.inner[this.x]
 this.y != this.outer[this.y]
 this.y != this.outer[this.y-1]
-this.y != this.outer[this.x]
 this.y != this.inner[this.x]
-this.x != this.outer[this.y]
-this.x != this.outer[this.y-1]
-this.x != this.outer[this.x]
-this.x != this.inner[this.x]
 size(this.outer[]) != this.outer[this.y]
 size(this.outer[]) != this.outer[this.y-1]
-size(this.outer[]) != this.outer[this.x]
 size(this.outer[]) != this.inner[this.x]
 size(this.outer[])-1 != this.outer[this.y]
 size(this.outer[])-1 != this.outer[this.y-1]
-size(this.outer[])-1 != this.outer[this.x]
 size(this.outer[])-1 != this.inner[this.x]
-size(this.inner[]) != this.outer[this.y]
-size(this.inner[]) != this.outer[this.y-1]
-size(this.inner[]) != this.outer[this.x]
-size(this.inner[]) != this.inner[this.x]
 this.outer[this.y] != this.outer[this.y-1]
-this.outer[this.y] != this.outer[this.x]
-this.outer[this.y-1] != this.outer[this.x]
-this.outer[this.x] != this.inner[this.x]
 ===========================================================================
 misc.StaticInteresting2:::CLASS
 misc.StaticInteresting2.rand has only one value
@@ -62,32 +46,19 @@ this.inner != null
 this.y == 25
 size(this.outer[]) == 100
 size(this.inner[]) == 1
-this.inner[] is a subsequence of this.outer[]
 this.inner[] elements == this.outer[this.y]
 this.y != this.outer[this.y]
 this.y != this.outer[this.y-1]
-this.y != this.outer[this.x]
-this.x != this.outer[this.y]
-this.x != this.outer[this.y-1]
-this.x != this.outer[this.x]
 size(this.outer[]) != this.outer[this.y]
 size(this.outer[]) != this.outer[this.y-1]
-size(this.outer[]) != this.outer[this.x]
 size(this.outer[])-1 != this.outer[this.y]
 size(this.outer[])-1 != this.outer[this.y-1]
-size(this.outer[])-1 != this.outer[this.x]
-size(this.inner[]) != this.outer[this.y]
-size(this.inner[]) != this.outer[this.y-1]
-size(this.inner[]) != this.outer[this.x]
 this.outer[this.y] != this.outer[this.y-1]
-this.outer[this.y] != this.outer[this.x]
-this.outer[this.y-1] != this.outer[this.x]
 ===========================================================================
 misc.StaticInteresting2.StaticInteresting2():::EXIT
 this.inner[] elements == -1339421172
 this.outer[this.y] == -1339421172
 this.outer[this.y-1] == 134578847
-this.outer[this.x] == -1157793070
 ===========================================================================
 misc.StaticInteresting2.main(java.lang.String[]):::ENTER
 args == null
@@ -109,42 +80,25 @@ size(this.inner[]) == orig(size(this.inner[]))
 this.outer[this.y] == this.outer[orig(this.y)]
 this.outer[this.y] == this.inner[orig(this.x)]
 this.outer[this.y-1] == this.outer[orig(this.y)-1]
-this.outer[this.x] == this.outer[orig(this.x)]
 orig(this.outer[post(this.y)]) == orig(this.outer[this.y])
 orig(this.outer[post(this.y)-1]) == orig(this.outer[this.y-1])
-orig(this.outer[post(this.x)]) == orig(this.outer[this.x])
 orig(this.inner[post(this.x)]) == orig(this.outer[this.y])
 this.y != orig(this.outer[this.y])
 this.y != orig(this.outer[this.y-1])
-this.y != orig(this.outer[this.x])
-this.x != orig(this.outer[this.y])
-this.x != orig(this.outer[this.y-1])
-this.x != orig(this.outer[this.x])
 size(this.outer[]) != orig(this.outer[this.y])
 size(this.outer[]) != orig(this.outer[this.y-1])
-size(this.outer[]) != orig(this.outer[this.x])
 size(this.outer[])-1 != orig(this.outer[this.y])
 size(this.outer[])-1 != orig(this.outer[this.y-1])
-size(this.outer[])-1 != orig(this.outer[this.x])
-size(this.inner[]) != orig(this.outer[this.y])
-size(this.inner[]) != orig(this.outer[this.y-1])
-size(this.inner[]) != orig(this.outer[this.x])
 this.outer[this.y] != orig(this.outer[this.y])
 this.outer[this.y] != orig(this.outer[this.y-1])
-this.outer[this.y] != orig(this.outer[this.x])
 this.outer[this.y-1] != orig(this.outer[this.y])
 this.outer[this.y-1] != orig(this.outer[this.y-1])
-this.outer[this.y-1] != orig(this.outer[this.x])
-this.outer[this.x] != orig(this.outer[this.y])
-this.outer[this.x] != orig(this.outer[this.y-1])
-this.outer[this.x] != orig(this.outer[this.x])
 ===========================================================================
 misc.StaticInteresting.StaticInteresting():::EXIT
 this.outer[this.y] == this.inner[this.x]
 this.inner[] elements == -1339421172
 this.outer[this.y] == -1339421172
 this.outer[this.y-1] == 134578847
-this.outer[this.x] == -1157793070
 this.inner[] elements == this.outer[this.y]
 ===========================================================================
 misc.StaticInteresting.main(java.lang.String[]):::ENTER
@@ -171,41 +125,22 @@ this.outer[this.y] == this.outer[orig(this.y)]
 this.outer[this.y] == this.inner[this.x]
 this.outer[this.y] == this.inner[orig(this.x)]
 this.outer[this.y-1] == this.outer[orig(this.y)-1]
-this.outer[this.x] == this.outer[orig(this.x)]
 orig(this.outer[post(this.y)]) == orig(this.outer[this.y])
 orig(this.outer[post(this.y)-1]) == orig(this.outer[this.y-1])
-orig(this.outer[post(this.x)]) == orig(this.outer[this.x])
 orig(this.inner[post(this.x)]) == orig(this.inner[this.x])
 this.inner[] elements == this.outer[this.y]
 this.y != orig(this.outer[this.y])
 this.y != orig(this.outer[this.y-1])
-this.y != orig(this.outer[this.x])
 this.y != orig(this.inner[this.x])
-this.x != orig(this.outer[this.y])
-this.x != orig(this.outer[this.y-1])
-this.x != orig(this.outer[this.x])
-this.x != orig(this.inner[this.x])
 size(this.outer[]) != orig(this.outer[this.y])
 size(this.outer[]) != orig(this.outer[this.y-1])
-size(this.outer[]) != orig(this.outer[this.x])
 size(this.outer[]) != orig(this.inner[this.x])
 size(this.outer[])-1 != orig(this.outer[this.y])
 size(this.outer[])-1 != orig(this.outer[this.y-1])
-size(this.outer[])-1 != orig(this.outer[this.x])
 size(this.outer[])-1 != orig(this.inner[this.x])
-size(this.inner[]) != orig(this.outer[this.y])
-size(this.inner[]) != orig(this.outer[this.y-1])
-size(this.inner[]) != orig(this.outer[this.x])
-size(this.inner[]) != orig(this.inner[this.x])
 this.outer[this.y] != orig(this.outer[this.y])
 this.outer[this.y] != orig(this.outer[this.y-1])
-this.outer[this.y] != orig(this.outer[this.x])
 this.outer[this.y] != orig(this.inner[this.x])
 this.outer[this.y-1] != orig(this.outer[this.y])
 this.outer[this.y-1] != orig(this.outer[this.y-1])
-this.outer[this.y-1] != orig(this.outer[this.x])
 this.outer[this.y-1] != orig(this.inner[this.x])
-this.outer[this.x] != orig(this.outer[this.y])
-this.outer[this.x] != orig(this.outer[this.y-1])
-this.outer[this.x] != orig(this.outer[this.x])
-this.outer[this.x] != orig(this.inner[this.x])

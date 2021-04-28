@@ -29,7 +29,7 @@ import java.lang.reflect.Constructor;
  */
 public class TestSuite implements Test {
 
-	private Vector fTests= new Vector(10);
+	private Vector<Test> fTests = new Vector<Test>(10);
 	private String fName;
 
     /**
@@ -42,7 +42,7 @@ public class TestSuite implements Test {
 	 * Constructs a TestSuite from the given class with the given name.
 	 * @see TestSuite#TestSuite(Class)
 	 */
-	public TestSuite(Class theClass, String name) {
+	public TestSuite(Class<?> theClass, String name) {
 		this(theClass);
 		setName(name);
 	}
@@ -53,7 +53,7 @@ public class TestSuite implements Test {
 	 * Parts of this method was written at 2337 meters in the Huffihutte,
 	 * Kanton Uri
 	 */
-	 public TestSuite(final Class theClass) {
+	 public TestSuite(final Class<?> theClass) {
 		fName= theClass.getName();
 		try {
 			getTestConstructor(theClass); // Avoid generating multiple error messages
@@ -68,7 +68,7 @@ public class TestSuite implements Test {
 		}
 
 		Class superClass= theClass;
-		Vector names= new Vector();
+		Vector<String> names = new Vector<String>();
 		while (Test.class.isAssignableFrom(superClass)) {
 			Method[] methods= superClass.getDeclaredMethods();
 			for (int i= 0; i < methods.length; i++) {
@@ -101,7 +101,7 @@ public class TestSuite implements Test {
 		addTest(new TestSuite(testClass));
 	}
 
-	private void addTestMethod(Method m, Vector names, Class theClass) {
+	private void addTestMethod(Method m, Vector<String> names, Class theClass) {
 		String name= m.getName();
 		if (names.contains(name))
 			return;
@@ -171,8 +171,8 @@ public class TestSuite implements Test {
 	 * Gets a constructor which takes a single String as
 	 * its argument or a no arg constructor.
 	 */
-	public static Constructor getTestConstructor(Class theClass) throws NoSuchMethodException {
-		Class[] args= { String.class };
+	public static Constructor<?> getTestConstructor(Class<?> theClass) throws NoSuchMethodException {
+		Class<?>[] args = { String.class };
 		try {
 			return theClass.getConstructor(args);
 		} catch (NoSuchMethodException e) {
@@ -212,7 +212,7 @@ public class TestSuite implements Test {
 	 * Returns the test at the given index
 	 */
 	public Test testAt(int index) {
-		return (Test)fTests.elementAt(index);
+		return fTests.elementAt(index);
 	}
 
 	/**

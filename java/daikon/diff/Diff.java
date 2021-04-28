@@ -30,6 +30,7 @@ import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.OrderedPairIterator;
 import org.plumelib.util.Pair;
+import org.plumelib.util.StringsPlume;
 import org.plumelib.util.UtilPlume;
 
 /**
@@ -51,10 +52,12 @@ import org.plumelib.util.UtilPlume;
  */
 public final class Diff {
 
+  /** Debug logger. */
   public static final Logger debug = Logger.getLogger("daikon.diff.Diff");
 
+  /** The usage message for this program. */
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage:",
           "    java daikon.diff.Diff [flags...] file1 [file2]",
           "  file1 and file2 are serialized invariants produced by Daikon.",

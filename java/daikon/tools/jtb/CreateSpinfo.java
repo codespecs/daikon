@@ -19,7 +19,7 @@ import jtb.syntaxtree.*;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.CollectionsPlume;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.StringsPlume;
 
 /**
  * Create a splitter info file from Java source.
@@ -45,10 +45,12 @@ public class CreateSpinfo {
   //  The method printSpinfoFile prints out these expressions and
   //  replace statements in splitter info file format.
 
+  /** Debug logger. */
   public static final Logger debug = Logger.getLogger("daikon.tools.jtb.CreateSpinfo");
 
+  /** The usage message for this program. */
   private static String usage =
-      UtilPlume.joinLines(
+      StringsPlume.joinLines(
           "Usage:  java daikon.tools.CreateSpinfo FILE.java ...",
           "  -o outputfile   Put all output in specified file",
           "  -h              Display this usage message");
@@ -268,7 +270,7 @@ public class CreateSpinfo {
    * single space.
    */
   private static String removeNewlines(String target) {
-    String[] lines = UtilPlume.splitLines(target);
+    String[] lines = StringsPlume.splitLines(target);
     for (int i = 0; i < lines.length; i++) {
       lines[i] = lines[i].trim();
     }

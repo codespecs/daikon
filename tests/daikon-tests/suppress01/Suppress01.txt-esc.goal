@@ -1,8 +1,6 @@
 ===========================================================================
 misc.Suppress01:::OBJECT
-    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1 this.theArray[this.b] this.theArray[this.b-1] this.theArray2[this.b] this.theArray2[this.b-1]
-this.b == this.theArray[this.b]
-this.b == this.theArray2[this.b]
+    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1
 this != null
 this.theArray != null
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] >= 0))
@@ -12,21 +10,16 @@ this.theArray2 != null
 (\forall int i; (0 <= i && i <= this.theArray2.length-1) ==> (this.theArray2[i] <= i))
 this.b == 0
 warning: method daikon.inv.binary.twoSequence.SubSet.format_esc() needs to be implemented: this.theArray[] is a subset of this.theArray2[]
-(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] >= this.b))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] <= this.theArray.length-1))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] < this.theArray2.length-1))
-(\forall int i; (0 <= i && i <= this.theArray2.length-1) ==> (this.theArray2[i] >= this.b))
 (\forall int i; (0 <= i && i <= this.theArray2.length-1) ==> (this.theArray2[i] <= this.theArray.length))
 !(\forall int i; (0 <= i && i <= this.theArray2.length-1) ==> (this.theArray2[i] != this.theArray.length-1))
 (\forall int i; (0 <= i && i <= this.theArray2.length-1) ==> (this.theArray2[i] <= this.theArray2.length-1))
-this.b <= this.theArray.length-1
-this.b < this.theArray2.length-1
 (this.theArray2.length-1 >> this.theArray.length == 0)
 this.theArray.length <= this.theArray2.length-1
 ===========================================================================
 misc.Suppress01.Suppress01():::EXIT
-    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1 this.theArray[this.b] this.theArray[this.b-1] this.theArray2[this.b] this.theArray2[this.b-1]
-this.b == this.theArray.length-1
+    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1
 this.theArray.length == this.theArray2.length-1
 this.theArray != null
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == 0))
@@ -34,23 +27,18 @@ this.theArray != null
 this.theArray2 != null
 (\forall int i; (0 <= i && i <= this.theArray2.length-1) ==> (this.theArray2[i] == i))
 this.theArray2.length == 2
-(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.b))
+!(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.theArray.length-1))
+(\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray.length-1))
 !(\forall int i; (0 <= i && i <= this.theArray2.length-1) ==> (this.theArray2[i] != this.theArray.length))
 ===========================================================================
 misc.Suppress01.f():::ENTER
-    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1 this.theArray[this.b] this.theArray[this.b-1] this.theArray2[this.b] this.theArray2[this.b-1]
+    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1
 ===========================================================================
 misc.Suppress01.f():::EXIT
-    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b orig(this) orig(this.theArray) orig(this.theArray[]) orig(this.theArray2) orig(this.theArray2[]) orig(this.b) size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1 orig(size(this.theArray[])) orig(size(this.theArray[]))-1 orig(size(this.theArray2[])) orig(size(this.theArray2[]))-1 this.theArray[this.b] this.theArray[this.b-1] this.theArray[orig(this.b)] this.theArray[orig(this.b)-1] this.theArray2[this.b] this.theArray2[this.b-1] this.theArray2[orig(this.b)] this.theArray2[orig(this.b)-1] orig(this.theArray[post(this.b)]) orig(this.theArray[post(this.b)-1]) orig(this.theArray2[post(this.b)]) orig(this.theArray2[post(this.b)-1]) orig(this.theArray[this.b]) orig(this.theArray[this.b-1]) orig(this.theArray2[this.b]) orig(this.theArray2[this.b-1])
-      Modified variables: this.theArray this.theArray[] this.theArray2 this.theArray2[] size(this.theArray[]) size(this.theArray2[]) this.theArray[this.b-1] this.theArray2[this.b-1]
-      Unmodified variables: this this.b this.theArray[this.b] this.theArray2[this.b]
-modifies this.theArray, this.theArray[*], this.theArray2, this.theArray2[*], this.theArray[this.b-1], this.theArray2[this.b-1]
-this.b == this.theArray[\old(this.b)]
-this.b == this.theArray2[\old(this.b)]
-this.b == \old(this.theArray[\new(this.b)])
-this.b == \old(this.theArray2[\new(this.b)])
-this.b == \old(this.theArray[this.b])
-this.b == \old(this.theArray2[this.b])
+    Variables: this this.theArray this.theArray[] this.theArray2 this.theArray2[] this.b orig(this) orig(this.theArray) orig(this.theArray[]) orig(this.theArray2) orig(this.theArray2[]) orig(this.b) size(this.theArray[]) size(this.theArray[])-1 size(this.theArray2[]) size(this.theArray2[])-1 orig(size(this.theArray[])) orig(size(this.theArray[]))-1 orig(size(this.theArray2[])) orig(size(this.theArray2[]))-1
+      Modified variables: this.theArray this.theArray[] this.theArray2 this.theArray2[] size(this.theArray[]) size(this.theArray2[])
+      Unmodified variables: this this.b
+modifies this.theArray, this.theArray[*], this.theArray2, this.theArray2[*]
 this.theArray.length-1 == \old(this.theArray.length)
 warning: method daikon.inv.binary.twoSequence.SuperSet.format_esc() needs to be implemented: this.theArray[] is a superset of orig(this.theArray[])
 warning: method daikon.inv.binary.twoSequence.SubSet.format_esc() needs to be implemented: this.theArray[] is a subset of orig(this.theArray2[])
@@ -63,10 +51,6 @@ warning: method daikon.inv.binary.twoSequence.SuperSet.format_esc() needs to be 
 (\forall int i; (0 <= i && i <= this.theArray2.length-1) ==> (this.theArray2[i] < this.theArray2.length-1))
 !(\forall int i; (0 <= i && i <= this.theArray2.length-1) ==> (this.theArray2[i] != \old(this.theArray.length)-1))
 (\forall int i; (0 <= i && i <= this.theArray2.length-1) ==> (this.theArray2[i] <= \old(this.theArray2.length)-1))
-(\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(this.theArray[i]) >= this.b))
-(\forall int i; (0 <= i && i <= \old(this.theArray2.length-1)) ==> (\old(this.theArray2[i]) >= this.b))
-this.b <= \old(this.theArray.length)-1
-this.b < \old(this.theArray2.length)-1
 (\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(this.theArray[i]) < this.theArray2.length-1))
 (\forall int i; (0 <= i && i <= \old(this.theArray2.length-1)) ==> (\old(this.theArray2[i]) <= this.theArray.length-1))
 (\forall int i; (0 <= i && i <= \old(this.theArray2.length-1)) ==> (\old(this.theArray2[i]) < this.theArray2.length-1))

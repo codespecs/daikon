@@ -1,2912 +1,4182 @@
-// Declaration file written by daikon.dcomp
-
-VarComparability
-implicit
-
-DECLARE
-javautil.ArrayList13:::CLASS
-
-DECLARE
-javautil.ArrayList13:::OBJECT
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[7]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-this.size
-int # declaringClassPackageName=javautil
-int
-6
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-
-
-DECLARE
-javautil.ArrayList13.ArrayList13(int):::ENTER
-initialCapacity
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.ArrayList13.ArrayList13(int):::EXIT101
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[2]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[2]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-initialCapacity
-int # isParam=true
-int
-2
-
-
-DECLARE
-javautil.ArrayList13.ArrayList13():::ENTER
-
-DECLARE
-javautil.ArrayList13.ArrayList13():::EXIT108
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[7]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-this.size
-int # declaringClassPackageName=javautil
-int
-6
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-
-
-DECLARE
-javautil.ArrayList13.ArrayList13(javautil.Collection13):::ENTER
-c
-javautil.Collection13 # isParam=true
-hashcode
-2
-c.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.ArrayList13.ArrayList13(javautil.Collection13):::EXIT122
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-c
-javautil.Collection13 # isParam=true
-hashcode
-2
-c.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.ArrayList13.trimToSize():::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[7]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-this.size
-int # declaringClassPackageName=javautil
-int
-6
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-
-DECLARE
-javautil.ArrayList13.trimToSize():::EXIT137
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[7]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-this.size
-int # declaringClassPackageName=javautil
-int
-6
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-
-
-DECLARE
-javautil.ArrayList13.ensureCapacity(int):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-minCapacity
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.ArrayList13.ensureCapacity(int):::EXIT157
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-minCapacity
-int # isParam=true
-int
-2
-
-
-DECLARE
-javautil.ArrayList13.size():::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[7]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-this.size
-int # declaringClassPackageName=javautil
-int
-6
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-
-DECLARE
-javautil.ArrayList13.size():::EXIT165
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-return
-int
-int
-2
-
-
-DECLARE
-javautil.ArrayList13.isEmpty():::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[7]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-this.size
-int # declaringClassPackageName=javautil
-int
-6
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-
-DECLARE
-javautil.ArrayList13.isEmpty():::EXIT175
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-return
-boolean
-boolean
-2
-
-
-DECLARE
-javautil.ArrayList13.contains(java.lang.Object):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-elem
-java.lang.Object # isParam=true
-hashcode
-2
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.ArrayList13.contains(java.lang.Object):::EXIT184
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-elem
-java.lang.Object # isParam=true
-hashcode
-2
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-javautil.ArrayList13.indexOf(java.lang.Object):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-elem
-java.lang.Object # isParam=true
-hashcode
-2
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.ArrayList13.indexOf(java.lang.Object):::EXIT200
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-elem
-java.lang.Object # isParam=true
-hashcode
-2
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-DECLARE
-javautil.ArrayList13.indexOf(java.lang.Object):::EXIT204
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-elem
-java.lang.Object # isParam=true
-hashcode
-2
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-DECLARE
-javautil.ArrayList13.indexOf(java.lang.Object):::EXIT206
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-elem
-java.lang.Object # isParam=true
-hashcode
-2
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-
-DECLARE
-javautil.ArrayList13.lastIndexOf(java.lang.Object):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-elem
-java.lang.Object # isParam=true
-hashcode
-2
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.ArrayList13.lastIndexOf(java.lang.Object):::EXIT221
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-elem
-java.lang.Object # isParam=true
-hashcode
-2
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-DECLARE
-javautil.ArrayList13.lastIndexOf(java.lang.Object):::EXIT225
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-elem
-java.lang.Object # isParam=true
-hashcode
-2
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-DECLARE
-javautil.ArrayList13.lastIndexOf(java.lang.Object):::EXIT227
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-elem
-java.lang.Object # isParam=true
-hashcode
-2
-elem.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-
-DECLARE
-javautil.ArrayList13.clone():::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[7]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-this.size
-int # declaringClassPackageName=javautil
-int
-6
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-
-DECLARE
-javautil.ArrayList13.clone():::EXIT242
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-return
-java.lang.Object
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.ArrayList13.toArray():::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[7]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-this.size
-int # declaringClassPackageName=javautil
-int
-6
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-
-DECLARE
-javautil.ArrayList13.toArray():::EXIT259
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-return
-java.lang.Object[]
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return[..]
-java.lang.Object[]
-hashcode[]
-3[11]
-
-
-DECLARE
-javautil.ArrayList13.toArray(java.lang.Object[]):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-a
-java.lang.Object[] # isParam=true
-hashcode
-2
-a.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-a[..]
-java.lang.Object[]
-hashcode[]
-3[11]
-
-DECLARE
-javautil.ArrayList13.toArray(java.lang.Object[]):::EXIT293
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-6
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-7
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-8[11]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[12]
-this.size
-int # declaringClassPackageName=javautil
-int
-10
-this.modCount
-int # declaringClassPackageName=javautil
-int
-9
-a
-java.lang.Object[] # isParam=true
-hashcode
-2
-a.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-a[..]
-java.lang.Object[]
-hashcode[]
-3[13]
-return
-java.lang.Object[]
-hashcode
-4
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return[..]
-java.lang.Object[]
-hashcode[]
-5[14]
-
-
-DECLARE
-javautil.ArrayList13.get(int):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-index
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.ArrayList13.get(int):::EXIT309
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-index
-int # isParam=true
-int
-2
-return
-java.lang.Object
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.ArrayList13.set(int, java.lang.Object):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-index
-int # isParam=true
-int
-3
-element
-java.lang.Object # isParam=true
-hashcode
-2
-element.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.ArrayList13.set(int, java.lang.Object):::EXIT327
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-6
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-7[10]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[11]
-this.size
-int # declaringClassPackageName=javautil
-int
-9
-this.modCount
-int # declaringClassPackageName=javautil
-int
-8
-index
-int # isParam=true
-int
-3
-element
-java.lang.Object # isParam=true
-hashcode
-2
-element.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-java.lang.Object
-hashcode
-4
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.ArrayList13.add(java.lang.Object):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.ArrayList13.add(java.lang.Object):::EXIT339
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-javautil.ArrayList13.add(int, java.lang.Object):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-index
-int # isParam=true
-int
-3
-element
-java.lang.Object # isParam=true
-hashcode
-2
-element.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.ArrayList13.add(int, java.lang.Object):::EXIT362
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-index
-int # isParam=true
-int
-3
-element
-java.lang.Object # isParam=true
-hashcode
-2
-element.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.ArrayList13.remove(int):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-index
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.ArrayList13.remove(int):::EXIT386
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-index
-int # isParam=true
-int
-2
-return
-java.lang.Object
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.ArrayList13.clear():::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[7]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-this.size
-int # declaringClassPackageName=javautil
-int
-6
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-
-DECLARE
-javautil.ArrayList13.clear():::EXIT401
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-3
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-4[7]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[8]
-this.size
-int # declaringClassPackageName=javautil
-int
-6
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-
-
-DECLARE
-javautil.ArrayList13.addAll(javautil.Collection13):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-c
-javautil.Collection13 # isParam=true
-hashcode
-2
-c.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.ArrayList13.addAll(javautil.Collection13):::EXIT425
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-c
-javautil.Collection13 # isParam=true
-hashcode
-2
-c.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-javautil.ArrayList13.addAll(int, javautil.Collection13):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-5
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-6[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-8
-this.modCount
-int # declaringClassPackageName=javautil
-int
-7
-index
-int # isParam=true
-int
-3
-c
-javautil.Collection13 # isParam=true
-hashcode
-2
-c.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.ArrayList13.addAll(int, javautil.Collection13):::EXIT460
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-5
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-6
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-7[10]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[11]
-this.size
-int # declaringClassPackageName=javautil
-int
-9
-this.modCount
-int # declaringClassPackageName=javautil
-int
-8
-index
-int # isParam=true
-int
-3
-c
-javautil.Collection13 # isParam=true
-hashcode
-2
-c.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
-
-
-DECLARE
-javautil.ArrayList13.removeRange(int, int):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-fromIndex
-int # isParam=true
-int
-2
-toIndex
-int # isParam=true
-int
-8
-
-DECLARE
-javautil.ArrayList13.removeRange(int, int):::EXIT483
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[9]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[10]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-fromIndex
-int # isParam=true
-int
-2
-toIndex
-int # isParam=true
-int
-8
-
-
-DECLARE
-javautil.ArrayList13.RangeCheck(int):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-index
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.ArrayList13.RangeCheck(int):::EXIT493
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-index
-int # isParam=true
-int
-2
-
-
-DECLARE
-javautil.ArrayList13.writeObject(java.io.ObjectOutputStream):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-s
-java.io.ObjectOutputStream # isParam=true
-hashcode
-2
-
-DECLARE
-javautil.ArrayList13.writeObject(java.io.ObjectOutputStream):::EXIT514
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-s
-java.io.ObjectOutputStream # isParam=true
-hashcode
-2
-
-
-DECLARE
-javautil.ArrayList13.readObject(java.io.ObjectInputStream):::ENTER
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-s
-java.io.ObjectInputStream # isParam=true
-hashcode
-2
-
-DECLARE
-javautil.ArrayList13.readObject(java.io.ObjectInputStream):::EXIT532
-this
-javautil.ArrayList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.elementData
-java.lang.Object[] # declaringClassPackageName=javautil
-hashcode
-4
-this.elementData.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.elementData[..]
-java.lang.Object[]
-hashcode[]
-5[8]
-this.elementData[..].getClass().getName()
-java.lang.Class[]
-java.lang.String[]
-1[9]
-this.size
-int # declaringClassPackageName=javautil
-int
-7
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-s
-java.io.ObjectInputStream # isParam=true
-hashcode
-2
-
-DECLARE
-javautil.AbstractList13:::CLASS
-
-DECLARE
-javautil.AbstractList13:::OBJECT
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-3
-
-
-DECLARE
-javautil.AbstractList13.AbstractList13():::ENTER
-
-DECLARE
-javautil.AbstractList13.AbstractList13():::EXIT63
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-3
-
-
-DECLARE
-javautil.AbstractList13.add(java.lang.Object):::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-4
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.AbstractList13.add(java.lang.Object):::EXIT91
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-javautil.AbstractList13.set(int, java.lang.Object):::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-index
-int # isParam=true
-int
-3
-element
-java.lang.Object # isParam=true
-hashcode
-2
-element.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.AbstractList13.add(int, java.lang.Object):::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-index
-int # isParam=true
-int
-3
-element
-java.lang.Object # isParam=true
-hashcode
-2
-element.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.AbstractList13.remove(int):::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-4
-index
-int # isParam=true
-int
-2
-
-
-DECLARE
-javautil.AbstractList13.indexOf(java.lang.Object):::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-4
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.AbstractList13.indexOf(java.lang.Object):::EXIT200
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-DECLARE
-javautil.AbstractList13.indexOf(java.lang.Object):::EXIT204
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-DECLARE
-javautil.AbstractList13.indexOf(java.lang.Object):::EXIT206
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-
-DECLARE
-javautil.AbstractList13.lastIndexOf(java.lang.Object):::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-4
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT231
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-DECLARE
-javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT235
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-DECLARE
-javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT237
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-int
-int
-3
-
-
-DECLARE
-javautil.AbstractList13.clear():::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-3
-
-DECLARE
-javautil.AbstractList13.clear():::EXIT260
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-3
-
-
-DECLARE
-javautil.AbstractList13.addAll(int, javautil.Collection13):::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-index
-int # isParam=true
-int
-3
-c
-javautil.Collection13 # isParam=true
-hashcode
-2
-c.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.AbstractList13.addAll(int, javautil.Collection13):::EXIT308
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-5
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-6
-index
-int # isParam=true
-int
-3
-c
-javautil.Collection13 # isParam=true
-hashcode
-2
-c.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-4
-
-
-DECLARE
-javautil.AbstractList13.iterator():::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-3
-
-DECLARE
-javautil.AbstractList13.iterator():::EXIT336
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-4
-return
-javautil.Iterator13
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.AbstractList13.listIterator():::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-3
-
-DECLARE
-javautil.AbstractList13.listIterator():::EXIT348
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-4
-return
-javautil.ListIterator13
-hashcode
-2
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.AbstractList13.listIterator(int):::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-4
-index
-int # isParam=true
-int
-2
-
-DECLARE
-javautil.AbstractList13.listIterator(int):::EXIT391
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-index
-int # isParam=true
-int
-2
-return
-javautil.ListIterator13
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.AbstractList13.subList(int, int):::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-4
-fromIndex
-int # isParam=true
-int
-2
-toIndex
-int # isParam=true
-int
-5
-
-DECLARE
-javautil.AbstractList13.subList(int, int):::EXIT565
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-fromIndex
-int # isParam=true
-int
-2
-toIndex
-int # isParam=true
-int
-6
-return
-javautil.List13
-hashcode
-3
-return.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-
-DECLARE
-javautil.AbstractList13.equals(java.lang.Object):::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-4
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-
-DECLARE
-javautil.AbstractList13.equals(java.lang.Object):::EXIT594
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-DECLARE
-javautil.AbstractList13.equals(java.lang.Object):::EXIT596
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-DECLARE
-javautil.AbstractList13.equals(java.lang.Object):::EXIT604
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-DECLARE
-javautil.AbstractList13.equals(java.lang.Object):::EXIT606
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-4
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-5
-o
-java.lang.Object # isParam=true
-hashcode
-2
-o.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-return
-boolean
-boolean
-3
-
-
-DECLARE
-javautil.AbstractList13.hashCode():::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-2
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-3
-
-DECLARE
-javautil.AbstractList13.hashCode():::EXIT625
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-4
-return
-int
-int
-2
-
-
-DECLARE
-javautil.AbstractList13.removeRange(int, int):::ENTER
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-4
-fromIndex
-int # isParam=true
-int
-2
-toIndex
-int # isParam=true
-int
-5
-
-DECLARE
-javautil.AbstractList13.removeRange(int, int):::EXIT657
-this
-javautil.AbstractList13 # isNonNull=true, isParam=true
-hashcode
-3
-this.getClass().getName()
-java.lang.Class
-java.lang.String
-1
-this.modCount
-int # declaringClassPackageName=javautil
-int
-4
-fromIndex
-int # isParam=true
-int
-2
-toIndex
-int # isParam=true
-int
-5
+// Declarations for javautil.ArrayList13
+// Declarations written 2020-11-18T07:44:27.441 by daikon.DynComp
+
+decl-version 2.0
+var-comparability implicit
+
+ppt javautil.ArrayList13:::CLASS
+ppt-type class
+
+ppt javautil.ArrayList13:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[7]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+
+ppt javautil.ArrayList13.ArrayList13(int):::ENTER
+ppt-type enter
+variable initialCapacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.ArrayList13.ArrayList13(int):::EXIT101
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[2]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[2]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable initialCapacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.ArrayList13.ArrayList13():::ENTER
+ppt-type enter
+
+ppt javautil.ArrayList13.ArrayList13():::EXIT108
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[7]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+
+ppt javautil.ArrayList13.ArrayList13(javautil.Collection13):::ENTER
+ppt-type enter
+variable c
+  var-kind variable
+  dec-type javautil.Collection13
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable c.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args c
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.ArrayList13(javautil.Collection13):::EXIT122
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable c
+  var-kind variable
+  dec-type javautil.Collection13
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable c.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args c
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.trimToSize():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[7]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+
+ppt javautil.ArrayList13.trimToSize():::EXIT137
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[7]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+
+ppt javautil.ArrayList13.ensureCapacity(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable minCapacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.ArrayList13.ensureCapacity(int):::EXIT157
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable minCapacity
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.ArrayList13.size():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[7]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+
+ppt javautil.ArrayList13.size():::EXIT165
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt javautil.ArrayList13.isEmpty():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[7]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+
+ppt javautil.ArrayList13.isEmpty():::EXIT175
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 2
+
+ppt javautil.ArrayList13.contains(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.contains(java.lang.Object):::EXIT184
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt javautil.ArrayList13.indexOf(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.indexOf(java.lang.Object):::EXIT200
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.ArrayList13.indexOf(java.lang.Object):::EXIT204
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.ArrayList13.indexOf(java.lang.Object):::EXIT206
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.ArrayList13.lastIndexOf(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.lastIndexOf(java.lang.Object):::EXIT221
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.ArrayList13.lastIndexOf(java.lang.Object):::EXIT225
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.ArrayList13.lastIndexOf(java.lang.Object):::EXIT227
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable elem
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable elem.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args elem
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.ArrayList13.clone():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[7]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+
+ppt javautil.ArrayList13.clone():::EXIT242
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable return
+  var-kind return
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.toArray():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[7]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+
+ppt javautil.ArrayList13.toArray():::EXIT259
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable return
+  var-kind return
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+variable return[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[11]
+
+ppt javautil.ArrayList13.toArray(java.lang.Object[]):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable a
+  var-kind variable
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable a.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args a
+  flags synthetic classname non_null
+  comparability 1
+variable a[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[11]
+
+ppt javautil.ArrayList13.toArray(java.lang.Object[]):::EXIT293
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 6
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 7
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 8[11]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[12]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 10
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 9
+variable a
+  var-kind variable
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable a.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args a
+  flags synthetic classname non_null
+  comparability 1
+variable a[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 3[13]
+variable return
+  var-kind return
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+variable return[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[14]
+
+ppt javautil.ArrayList13.get(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.ArrayList13.get(int):::EXIT309
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.set(int, java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable element
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable element.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args element
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.set(int, java.lang.Object):::EXIT327
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 6
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 7[10]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[11]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 8
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable element
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable element.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args element
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 4
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.add(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.add(java.lang.Object):::EXIT339
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt javautil.ArrayList13.add(int, java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable element
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable element.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args element
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.add(int, java.lang.Object):::EXIT362
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable element
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable element.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args element
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.remove(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.ArrayList13.remove(int):::EXIT386
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type java.lang.Object
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.clear():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[7]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+
+ppt javautil.ArrayList13.clear():::EXIT401
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 3
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 4[7]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+
+ppt javautil.ArrayList13.addAll(javautil.Collection13):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable c
+  var-kind variable
+  dec-type javautil.Collection13
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable c.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args c
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.addAll(javautil.Collection13):::EXIT425
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable c
+  var-kind variable
+  dec-type javautil.Collection13
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable c.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args c
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt javautil.ArrayList13.addAll(int, javautil.Collection13):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 5
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 7
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable c
+  var-kind variable
+  dec-type javautil.Collection13
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable c.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args c
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.ArrayList13.addAll(int, javautil.Collection13):::EXIT460
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 6
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 7[10]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[11]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 8
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable c
+  var-kind variable
+  dec-type javautil.Collection13
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable c.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args c
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
+
+ppt javautil.ArrayList13.removeRange(int, int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable fromIndex
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable toIndex
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 8
+
+ppt javautil.ArrayList13.removeRange(int, int):::EXIT483
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[9]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[10]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable fromIndex
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable toIndex
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 8
+
+ppt javautil.ArrayList13.RangeCheck(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.ArrayList13.RangeCheck(int):::EXIT493
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.ArrayList13.writeObject(java.io.ObjectOutputStream):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable s
+  var-kind variable
+  dec-type java.io.ObjectOutputStream
+  rep-type hashcode
+  flags is_param
+  comparability 2
+
+ppt javautil.ArrayList13.writeObject(java.io.ObjectOutputStream):::EXIT514
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable s
+  var-kind variable
+  dec-type java.io.ObjectOutputStream
+  rep-type hashcode
+  flags is_param
+  comparability 2
+
+ppt javautil.ArrayList13.readObject(java.io.ObjectInputStream):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable s
+  var-kind variable
+  dec-type java.io.ObjectInputStream
+  rep-type hashcode
+  flags is_param
+  comparability 2
+
+ppt javautil.ArrayList13.readObject(java.io.ObjectInputStream):::EXIT532
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.ArrayList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.elementData
+  var-kind field elementData
+  dec-type java.lang.Object[]
+  rep-type hashcode
+  comparability 4
+variable this.elementData.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this.elementData
+  flags synthetic classname non_null
+  comparability 1
+variable this.elementData[..]
+  var-kind array
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[8]
+variable this.elementData[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args this.elementData[]
+  flags synthetic classname non_null
+  comparability 1[9]
+variable this.size
+  var-kind field size
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable s
+  var-kind variable
+  dec-type java.io.ObjectInputStream
+  rep-type hashcode
+  flags is_param
+  comparability 2
+
+ppt javautil.AbstractList13:::CLASS
+ppt-type class
+
+ppt javautil.AbstractList13:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.AbstractList13.AbstractList13():::ENTER
+ppt-type enter
+
+ppt javautil.AbstractList13.AbstractList13():::EXIT63
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.AbstractList13.add(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.AbstractList13.add(java.lang.Object):::EXIT91
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt javautil.AbstractList13.set(int, java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable element
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable element.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args element
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.AbstractList13.add(int, java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable element
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable element.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args element
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.AbstractList13.remove(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.AbstractList13.indexOf(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.AbstractList13.indexOf(java.lang.Object):::EXIT200
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.AbstractList13.indexOf(java.lang.Object):::EXIT204
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.AbstractList13.indexOf(java.lang.Object):::EXIT206
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.AbstractList13.lastIndexOf(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT231
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT235
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.AbstractList13.lastIndexOf(java.lang.Object):::EXIT237
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.AbstractList13.clear():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.AbstractList13.clear():::EXIT260
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.AbstractList13.addAll(int, javautil.Collection13):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable c
+  var-kind variable
+  dec-type javautil.Collection13
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable c.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args c
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.AbstractList13.addAll(int, javautil.Collection13):::EXIT308
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 6
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable c
+  var-kind variable
+  dec-type javautil.Collection13
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable c.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args c
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
+
+ppt javautil.AbstractList13.iterator():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.AbstractList13.iterator():::EXIT336
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type javautil.Iterator13
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.AbstractList13.listIterator():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.AbstractList13.listIterator():::EXIT348
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type javautil.ListIterator13
+  rep-type hashcode
+  comparability 2
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.AbstractList13.listIterator(int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt javautil.AbstractList13.listIterator(int):::EXIT391
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable index
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type javautil.ListIterator13
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.AbstractList13.subList(int, int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable fromIndex
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable toIndex
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 5
+
+ppt javautil.AbstractList13.subList(int, int):::EXIT565
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable fromIndex
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable toIndex
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 6
+variable return
+  var-kind return
+  dec-type javautil.List13
+  rep-type hashcode
+  comparability 3
+variable return.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args return
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.AbstractList13.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+
+ppt javautil.AbstractList13.equals(java.lang.Object):::EXIT594
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt javautil.AbstractList13.equals(java.lang.Object):::EXIT596
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt javautil.AbstractList13.equals(java.lang.Object):::EXIT604
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt javautil.AbstractList13.equals(java.lang.Object):::EXIT606
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt javautil.AbstractList13.hashCode():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt javautil.AbstractList13.hashCode():::EXIT625
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt javautil.AbstractList13.removeRange(int, int):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable fromIndex
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable toIndex
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 5
+
+ppt javautil.AbstractList13.removeRange(int, int):::EXIT657
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type javautil.AbstractList13
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args this
+  flags synthetic classname non_null
+  comparability 1
+variable this.modCount
+  var-kind field modCount
+  dec-type int
+  rep-type int
+  comparability 4
+variable fromIndex
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable toIndex
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 5
 

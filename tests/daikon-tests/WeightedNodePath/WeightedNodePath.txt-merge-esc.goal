@@ -24,18 +24,18 @@ public class WeightedNodePath implements Path {
   //   (path == null) ==> (cost == node.cost) &&
   //   (path != null) ==> (cost == node.cost + path.cost)
   //
-  
+
   /*@ spec_public */ private final WeightedNode node;
   /*@ spec_public */ private final WeightedNodePath path;
   /*@ spec_public */ private final int cost;
-  
+
 
   /*@ requires node != null; */
   /*@ ensures this.node == \old(node); */
   /*@ ensures this.path == null; */
   /**
    * Constructs a WeightedNodePath containing one node.
-   * 
+   *
    * @requires node != null
    * @effects Creates a new WeightedNodePath which originates at
    * <code>node</code>.
@@ -161,10 +161,9 @@ public class WeightedNodePath implements Path {
 
   /*@ also_modifies this.path.node, this.path.path, this.path.path.node, this.path.path.path, this.path.path.cost, this.path.cost; */
   /*@ also_ensures this.path == null; */
-  /*@ also_ensures this.cost < \result; */
   // Specified by the Object superclass
   public int hashCode() {
     return node.hashCode() + (this.path==null ? 0 : 13 * path.hashCode());
-  }					       
-}    
+  }
+}
 

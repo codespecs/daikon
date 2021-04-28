@@ -837,7 +837,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       // the side-effected VarDefinition will be passed to "new VarInfo".
       if (result_vardef.enclosing_var_name != null) {
         assert vi.enclosing_var != null
-            : "@AssumeAssertion(nullness): dependent: result_vardef was copied from vi and their enclosing_var fields are the same";
+            : "@AssumeAssertion(nullness): dependent: result_vardef was copied from vi and their"
+                + " enclosing_var fields are the same";
         result_vardef.enclosing_var_name = vi.enclosing_var.prestate_name();
         assert result_vardef.enclosing_var_name != null : "" + result_vardef;
       }

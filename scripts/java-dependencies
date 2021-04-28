@@ -9,7 +9,8 @@
 #
 #   sources     -- directory containing all of the possible sources
 #   main        -- main files to compile.  Multiple files can be specified
-#                  (in quotes).  Must be full pathname to file
+#                  (in quotes).  Must be full pathname to file.  Path names
+#                  must not contain spaces.
 #   javac       -- java compiler command to use.  Can just be 'javac'
 #
 #  The list of all files used by <main> is written to standard out.
@@ -20,7 +21,7 @@ debug=
 
 # get the arguments
 if [ $# -ne 3 ]; then
-    echo $(basename $0)" takes 3 arguments, but $# were supplied"
+    echo "$(basename "$0") takes 3 arguments, but $# were supplied"
     exit 1
 fi
 sources="$1"
@@ -30,13 +31,15 @@ javac="$3"
 # Determine if we have GNU find.  GNU find requires -noleaf on AFS filesystems.
 # Don't quote find_args when it is used.
 find_args=""
-if [ find . --version 2>&1 | grep -q GNU ] ; then
+if find . --version 2>&1 | grep -q GNU ; then
   find_args="-noleaf"
 fi
 
 # compile the java files
 scratch=$(mktemp -d -t build_all_list_file.XXXXXX)
-if ! $javac -d $scratch -sourcepath $sources $main ; then
+# $main may be multiple files
+# shellcheck disable=SC2086
+if ! $javac -d "$scratch" -sourcepath "$sources" $main ; then
   exit 1
 fi
 
@@ -44,11 +47,11 @@ fi
 # relative Java filenames.  If the corresponding Java file doesn't exist,
 # discard the file (this happens for inner classes, two classes in a file,
 # and perhaps some other cases).
-cd $scratch || exit
+cd "$scratch" || exit
 files=$(find . $find_args -name '*.class' | grep -v -F '$' | sed s/class/java/ | sed 's/\.\///' | sort)
 for file in $files; do
-  if [ -e $sources/$file ] ; then
-    echo $file
+  if [ -e "$sources/$file" ] ; then
+    echo "$file"
   fi
 done
 cd ..
@@ -57,5 +60,5 @@ if [ $debug ]; then
   echo "scratch = $scratch"
 else
   # remove the temporary directory
-  /bin/rm -rf $scratch
+  /bin/rm -rf "$scratch"
 fi

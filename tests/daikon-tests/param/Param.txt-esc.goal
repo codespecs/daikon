@@ -11,11 +11,6 @@ this.gs2 != null
 this.gs2 != null
 this.gs2.a == 20
 this.gs2.b == 25
-this.gi1 < this.gs1.a
-this.gi2 < this.gs1.a
-(this.gs1.a >> this.gs1.b == 0)
-(this.gs1.a >> this.gs2.a == 0)
-(this.gs1.a >> this.gs2.b == 0)
 ===========================================================================
 misc.Param.Param():::EXIT
     Variables: this this.gi1 this.gi2 this.gs1 this.gs1.a this.gs1.b this.gs2 this.gs2.a this.gs2.b
@@ -52,9 +47,10 @@ this.gi2 == pi2
 this.gs1 == ps1
 this.gs1.a == ps1.a
 this.gs1.b == ps1.b
-this.gs2 == ps2
-this.gs2.a == ps2.a
-this.gs2.b == ps2.b
+ps2 != null
+ps2 != null
+ps2.a == 20
+ps2.b == 25
 ===========================================================================
 misc.Param.work(int, int, misc.ParamType, misc.ParamType):::EXIT
     Variables: this this.gi1 this.gi2 this.gs1 this.gs1.a this.gs1.b this.gs2 this.gs2.a this.gs2.b pi1 pi2 ps1 ps1.a ps1.b ps2 ps2.a ps2.b orig(this) orig(this.gi1) orig(this.gi2) orig(this.gs1) orig(this.gs1.a) orig(this.gs1.b) orig(this.gs2) orig(this.gs2.a) orig(this.gs2.b) orig(pi1) orig(pi2) orig(ps1) orig(ps1.a) orig(ps1.b) orig(ps2) orig(ps2.a) orig(ps2.b)
@@ -67,27 +63,14 @@ this.gi2 == \old(pi2)
 this.gs1 == \old(ps1)
 this.gs1.a == ps1.a
 this.gs1.b == ps1.b
-this.gs2 == \old(ps2)
-this.gs2.a == \old(ps2.a)
-this.gs2.b == \old(ps2.b)
 ps1.b == \old(this.gs1.b)
 ps1.b == 15
-this.gi1 < ps1.a
-this.gi1 < \old(ps1.a)
-this.gi2 < ps1.a
-this.gi2 < \old(ps1.a)
-(ps1.a >> this.gs2.a == 0)
-(\old(ps1.a) >> this.gs2.a == 0)
-(ps1.a >> this.gs2.b == 0)
-(\old(ps1.a) >> this.gs2.b == 0)
-(ps1.a >> ps1.b == 0)
 ps1.a - \old(ps1.a) - 1 == 0
-(\old(ps1.a) >> ps1.b == 0)
 ===========================================================================
 misc.ParamType:::OBJECT
     Variables: this this.a this.b
-this.a == this.b
 this.a == 0
+this.b == 0
 ===========================================================================
 misc.ParamType.ParamType():::EXIT
     Variables: this this.a this.b
