@@ -261,8 +261,7 @@ public final class FileIO {
 
   // Nullness-checking of read_data_trace_record(ParseState) works even
   // without these two lines, since StringJoiner accepts null values.
-  @SuppressWarnings(
-      "nullness:contracts.conditional.postcondition.not.satisfied") // readLine() assertion is
+  @SuppressWarnings("nullness:contracts.conditional.postcondition") // readLine() assertion is
   // ensured by call to reset()
   @EnsuresNonNullIf(result = true, expression = "#1.readLine()")
   public static final boolean nextLineIsComment(BufferedReader reader) {
@@ -1812,7 +1811,7 @@ public final class FileIO {
       return;
     }
 
-    @SuppressWarnings({"UnusedVariable", "nullness:contracts.precondition.not.satisfied"})
+    @SuppressWarnings({"UnusedVariable", "nullness:contracts.precondition"})
     Object dummy = ppt.add_bottom_up(vt, 1);
 
     if (debugVars.isLoggable(Level.FINE)) {
@@ -2969,7 +2968,7 @@ public final class FileIO {
 
   /** Call this to indicate a malformed declaration. */
   private static void decl_error(ParseState state, String format, @Nullable Object... args) {
-    @SuppressWarnings("formatter:format.string.invalid") // https://tinyurl.com/cfissue/2584
+    @SuppressWarnings("formatter:format.string") // https://tinyurl.com/cfissue/2584
     String msg = String.format(format, args) + state.line_file_message();
     throw new Daikon.UserError(msg);
   }

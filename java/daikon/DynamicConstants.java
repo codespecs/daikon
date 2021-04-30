@@ -176,7 +176,7 @@ public class DynamicConstants implements Serializable {
           : toString();
     }
 
-    @SuppressWarnings("super.invocation.invalid")
+    @SuppressWarnings("super.invocation")
     public Constant(VarInfo vi) {
       this.vi = vi;
     }

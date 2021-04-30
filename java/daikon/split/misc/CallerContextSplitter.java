@@ -21,8 +21,7 @@ public final class CallerContextSplitter extends Splitter {
   static final long serialVersionUID = 20030112L;
 
   /** Create a new splitter for the given ppt using this as a prototype. */
-  @SuppressWarnings(
-      "nullness:return.type.incompatible") // why is "new ...Splitter" @UnderInitialization?
+  @SuppressWarnings("nullness:return") // why is "new ...Splitter" @UnderInitialization?
   @Override
   public Splitter instantiateSplitter(@UnknownInitialization(Ppt.class) Ppt ppt) {
     return new CallerContextSplitter(ppt, ids, condition);
@@ -57,7 +56,7 @@ public final class CallerContextSplitter extends Splitter {
   }
 
   @SuppressWarnings(
-      "nullness:contracts.precondition.override.invalid") // application invariant about private
+      "nullness:contracts.precondition.override") // application invariant about private
   // variable
   @RequiresNonNull("caller_varinfo")
   @Override

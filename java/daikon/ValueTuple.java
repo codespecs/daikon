@@ -125,8 +125,7 @@ public final class ValueTuple implements Cloneable {
     return mods[value_index] == MISSING_FLOW;
   }
 
-  @SuppressWarnings(
-      "nullness:contracts.conditional.postcondition.not.satisfied") // dependent: vals[i] is
+  @SuppressWarnings("nullness:contracts.conditional.postcondition") // dependent: vals[i] is
   // non-null if mods[i] != MISSING_*
   @EnsuresNonNullIf(result = false, expression = "vals[#1]")
   @Pure

@@ -339,8 +339,8 @@ public final class Configuration implements Serializable {
    */
   // This method exists to reduce the scope of the warning suppression.
   @SuppressWarnings({
-    "nullness:argument.type.incompatible", // field is static, so object may be null
-    "interning:argument.type.incompatible" // interning is not necessary for how this method is used
+    "nullness:argument", // field is static, so object may be null
+    "interning:argument" // interning is not necessary for how this method is used
   })
   private static void setStaticField(Field field, @Nullable Object value)
       throws IllegalAccessException {

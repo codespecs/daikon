@@ -97,7 +97,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * @param variables variables that are equivalent, with the canonical one first. Elements must be
    *     of type VarInfo.
    */
-  @SuppressWarnings("initialization.invalid.field.write.initialized") // weakness of FBC type system
+  @SuppressWarnings("initialization.field.write.initialized") // weakness of FBC type system
   public Equality(Collection<VarInfo> variables, PptSlice ppt) {
     super(ppt);
     if (debug.isLoggable(Level.FINE)) {

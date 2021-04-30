@@ -311,14 +311,14 @@ public class Implication extends Joiner {
   @Override
   @FormatMethod
   @SuppressWarnings({
-    "nullness:override.receiver.invalid", // sound overriding, not expressible in Checker Framework
+    "nullness:override.receiver", // sound overriding, not expressible in Checker Framework
   })
   public boolean log(
       @UnknownInitialization(Implication.class) Implication this,
       String format,
       @Nullable Object... args) {
     String msg = (args.length == 0) ? format : String.format(format, args);
-    @SuppressWarnings("nullness:method.invocation.invalid")
+    @SuppressWarnings("nullness:method.invocation")
     String formatted = format();
     return right.log(
         "%s [for implication %s (%s)]",

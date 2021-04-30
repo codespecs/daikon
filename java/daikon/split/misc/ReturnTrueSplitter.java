@@ -30,8 +30,7 @@ public final class ReturnTrueSplitter extends Splitter {
     instantiated = true;
   }
 
-  @SuppressWarnings(
-      "nullness:return.type.incompatible") // why is "new ...Splitter" @UnderInitialization?
+  @SuppressWarnings("nullness:return") // why is "new ...Splitter" @UnderInitialization?
   @Override
   public Splitter instantiateSplitter(@UnknownInitialization(Ppt.class) Ppt ppt) {
     return new ReturnTrueSplitter(ppt);
@@ -44,7 +43,7 @@ public final class ReturnTrueSplitter extends Splitter {
   }
 
   @SuppressWarnings(
-      "nullness:contracts.precondition.override.invalid") // application invariant about private
+      "nullness:contracts.precondition.override") // application invariant about private
   // variable
   @RequiresNonNull("return_varinfo")
   @Override
