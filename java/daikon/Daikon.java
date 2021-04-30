@@ -700,8 +700,10 @@ public final class Daikon {
   /**
    * This does the work of {@link #main}, but it never calls System.exit, so it is appropriate to be
    * called progrmmatically.
+   *
+   * @param args the command-line arguments
    */
-  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition") // private field
   public static void mainHelper(final String[] args) {
     // Cleanup from any previous runs
     cleanup();
@@ -1433,8 +1435,8 @@ public final class Daikon {
    */
   // This method exists to reduce the scope of the warning suppression.
   @SuppressWarnings({
-    "nullness:argument.type.incompatible", // field is static, so object may be null
-    "interning:argument.type.incompatible" // interning is not necessary for how this method is used
+    "nullness:argument", // field is static, so object may be null
+    "interning:argument" // interning is not necessary for how this method is used
   })
   private static void setStaticField(Field field, Object value) throws IllegalAccessException {
     field.set(null, value);
@@ -2095,8 +2097,10 @@ public final class Daikon {
    * Sets up splitting on all ppts. Currently only binary splitters over boolean returns or exactly
    * two return statements are enabled by default (though other splitters can be defined by the
    * user).
+   *
+   * @param ppt the program point to add conditions to
    */
-  @SuppressWarnings("nullness:contracts.precondition.not.satisfied")
+  @SuppressWarnings("nullness:contracts.precondition")
   public static void setup_splitters(PptTopLevel ppt) {
     if (PptSplitter.dkconfig_disable_splitting) {
       return;

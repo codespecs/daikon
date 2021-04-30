@@ -125,9 +125,16 @@ public final class ValueTuple implements Cloneable {
     return mods[value_index] == MISSING_FLOW;
   }
 
+  /**
+   * Returns true if the value at the given index is missing.
+   *
+   * @param value_index an index into this ValueTuple
+   * @return true if the value at the given index is missing
+   */
   @SuppressWarnings(
-      "nullness:contracts.conditional.postcondition.not.satisfied") // dependent: vals[i] is
-  // non-null if mods[i] != MISSING_*
+      "nullness:contracts.conditional.postcondition" // dependent: vals[i] is non-null if mods[i] !=
+  // MISSING_*
+  )
   @EnsuresNonNullIf(result = false, expression = "vals[#1]")
   @Pure
   boolean isMissing(@UnknownInitialization(ValueTuple.class) ValueTuple this, int value_index) {

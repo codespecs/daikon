@@ -71,8 +71,15 @@ public final class MergeInvariants {
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
    * appropriate to be called progrmmatically.
+   *
+   * @param args the command-line arguments
+   * @throws FileNotFoundException if a file cannot be found
+   * @throws StreamCorruptedException if a stream is corrupted
+   * @throws OptionalDataException if there is a serialization problem
+   * @throws IOException if there is trouble with I/O
+   * @throws ClassNotFoundException if a class cannot be found
    */
-  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition") // private field
   public static void mainHelper(String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
           ClassNotFoundException {

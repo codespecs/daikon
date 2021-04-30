@@ -176,7 +176,12 @@ public class DynamicConstants implements Serializable {
           : toString();
     }
 
-    @SuppressWarnings("super.invocation.invalid")
+    /**
+     * Creates a new Constant, indicating whether the given variable is a constant.
+     *
+     * @param vi the variable that might be a constant
+     */
+    @SuppressWarnings("super.invocation")
     public Constant(VarInfo vi) {
       this.vi = vi;
     }

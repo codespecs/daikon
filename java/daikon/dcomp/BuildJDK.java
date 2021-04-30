@@ -126,7 +126,7 @@ public class BuildJDK {
     if (cl_args.length > 1) {
 
       // Arguments are <destdir> [<classfiles>...]
-      @SuppressWarnings("nullness:assignment.type.incompatible") // https://tinyurl.com/cfissue/3224
+      @SuppressWarnings("nullness:assignment") // https://tinyurl.com/cfissue/3224
       @NonNull String[] class_files = Arrays.copyOfRange(cl_args, 1, cl_args.length);
 
       // Instrumenting a specific list of class files is usually used for testing.
@@ -422,8 +422,7 @@ public class BuildJDK {
       dcomp_class.setMajor(BcelUtil.javaVersion + 44);
 
       if (dcompInstrumented) {
-        @SuppressWarnings(
-            "nullness:argument.type.incompatible") // null instruction list is ok for abstract
+        @SuppressWarnings("nullness:argument") // null instruction list is ok for abstract
         MethodGen mg =
             new MethodGen(
                 Const.ACC_PUBLIC | Const.ACC_ABSTRACT,
