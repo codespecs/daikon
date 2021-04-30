@@ -73,11 +73,11 @@ public final class MergeInvariants {
    * appropriate to be called progrmmatically.
    *
    * @param args the command-line arguments
-   * @throws FileNotFoundException
-   * @throws StreamCorruptedException
-   * @throws OptionalDataException
-   * @throws IOException
-   * @throws ClassNotFoundException
+   * @throws FileNotFoundException if a file cannot be found
+   * @throws StreamCorruptedException if a stream is corrupted
+   * @throws OptionalDataException if there is a serialization problem
+   * @throws IOException if there is trouble with I/O
+   * @throws ClassNotFoundException if a class cannot be found
    */
   @SuppressWarnings("nullness:contracts.precondition") // private field
   public static void mainHelper(String[] args)
