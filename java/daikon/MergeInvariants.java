@@ -71,6 +71,13 @@ public final class MergeInvariants {
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
    * appropriate to be called progrmmatically.
+   *
+   * @param args the command-line arguments
+   * @throws FileNotFoundException
+   * @throws StreamCorruptedException
+   * @throws OptionalDataException
+   * @throws IOException
+   * @throws ClassNotFoundException
    */
   @SuppressWarnings("nullness:contracts.precondition") // private field
   public static void mainHelper(String[] args)

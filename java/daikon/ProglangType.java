@@ -105,6 +105,9 @@ public final @Interned class ProglangType implements Serializable {
   /**
    * No public constructor: use parse() instead to get a canonical representation. basetype should
    * be interned.
+   *
+   * @param basetype the base type
+   * @param dimensions the number of dimensions
    */
   @SuppressWarnings("super.invocation") // never called twice with the same arguments
   private ProglangType(@Interned String basetype, int dimensions) {

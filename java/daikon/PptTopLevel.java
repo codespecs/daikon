@@ -341,7 +341,11 @@ public class PptTopLevel extends Ppt {
     return CollectionsPlume.iteratorToIterable(new CondIterator());
   }
 
-  /** Returns whether or not this ppt has any splitters. */
+  /**
+   * Returns whether or not this ppt has any splitters.
+   *
+   * @return whether or not this ppt has any splitters
+   */
   @SuppressWarnings("contracts.conditional.postcondition") // Checker Framework bug: "splitters"
   @EnsuresNonNullIf(result = true, expression = "splitters")
   public boolean has_splitters() {
@@ -379,9 +383,7 @@ public class PptTopLevel extends Ppt {
    */
   public boolean invariants_removed = false;
 
-  // This was renamed to the joiner_view because it no longer just for
-  // implications, but instead for any Invariants that represents a
-  // "joining" of two others (such as and, or, etc)
+  /** Contains invariants that represent a "joining" of two others: implications, and, or, etc. */
   @SuppressWarnings({
     "nullness:assignment", // field won't be used until object is initialized
     "nullness:argument" // ditto

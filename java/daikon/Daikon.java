@@ -700,6 +700,8 @@ public final class Daikon {
   /**
    * This does the work of {@link #main}, but it never calls System.exit, so it is appropriate to be
    * called progrmmatically.
+   *
+   * @param args the command-line arguments
    */
   @SuppressWarnings("nullness:contracts.precondition") // private field
   public static void mainHelper(final String[] args) {
@@ -2095,6 +2097,8 @@ public final class Daikon {
    * Sets up splitting on all ppts. Currently only binary splitters over boolean returns or exactly
    * two return statements are enabled by default (though other splitters can be defined by the
    * user).
+   *
+   * @param ppt the program point to add conditions to
    */
   @SuppressWarnings("nullness:contracts.precondition")
   public static void setup_splitters(PptTopLevel ppt) {

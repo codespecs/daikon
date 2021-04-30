@@ -94,8 +94,10 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   }
 
   /**
-   * @param variables variables that are equivalent, with the canonical one first. Elements must be
-   *     of type VarInfo.
+   * Creates a new Equality invariant.
+   *
+   * @param variables variables that are equivalent, with the canonical one first
+   * @param ppt the program point
    */
   @SuppressWarnings("initialization.field.write.initialized") // weakness of FBC type system
   public Equality(Collection<VarInfo> variables, PptSlice ppt) {
