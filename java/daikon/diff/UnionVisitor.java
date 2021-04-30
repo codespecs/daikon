@@ -35,8 +35,9 @@ public class UnionVisitor extends DepthFirstVisitor {
    */
   @Override
   @SuppressWarnings(
-      "nullness:contracts.precondition.override") // visitor invariant, because the PptNode
-  // has already been visited
+      "nullness:contracts.precondition.override" // visitor invariant, because the PptNode has
+  // already been visited
+  )
   @RequiresNonNull("currentPpt")
   // visitor invariant
   public void visit(InvNode node) {

@@ -386,7 +386,7 @@ public class PptTopLevel extends Ppt {
   /** Contains invariants that represent a "joining" of two others: implications, and, or, etc. */
   @SuppressWarnings({
     "nullness:assignment", // field won't be used until object is initialized
-    "nullness:argument" // ditto
+    "nullness:argument" // field won't be used until object is initialized
   })
   public PptSlice0 joiner_view = new PptSlice0(this);
 

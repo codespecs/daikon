@@ -64,8 +64,10 @@ public class InstrumentHandler extends CommandHandler {
   /** Default directory for checker classes. */
   private String checkersOutputDirName = "checker-classes";
 
-  @SuppressWarnings("enhancedfor") // Checker Framework bug exposed on line "for
-  // (TypeDeclaration decl : oneFile.roots) {"
+  @SuppressWarnings(
+      "enhancedfor" // Checker Framework bug exposed on line "for (TypeDeclaration decl :
+  // oneFile.roots) {"
+  )
   @Override
   public boolean handle(String[] args) {
 

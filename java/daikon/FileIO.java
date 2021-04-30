@@ -267,8 +267,10 @@ public final class FileIO {
    */
   // Nullness-checking of read_data_trace_record(ParseState) works even
   // without these two lines, since StringJoiner accepts null values.
-  @SuppressWarnings("nullness:contracts.conditional.postcondition") // readLine() assertion is
-  // ensured by call to reset()
+  @SuppressWarnings(
+      "nullness:contracts.conditional.postcondition" // readLine() assertion is ensured by call to
+  // reset()
+  )
   @EnsuresNonNullIf(result = true, expression = "#1.readLine()")
   public static final boolean nextLineIsComment(BufferedReader reader) {
     boolean result = false;
