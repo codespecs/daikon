@@ -199,7 +199,7 @@ CHICORY_EXEC := ${DAIKONDIR}/java/daikon/Chicory.class
 
 # As of JDK 1.3 (and 1.4, I think), don't use "-server" here.
 # It causes incorrect optimizations that are evidenced by ">>" right shifts.
-RUN_JAVA?=$(JAVA) -ea -Xmx1500m -cp "$(DAIKON_TESTS_CLASSPATH)"
+RUN_JAVA?=$(JAVA) -ea -Xmx3600m -cp "$(DAIKON_TESTS_CLASSPATH)"
 DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DAIKON = $(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.Daikon
 PRINT_INVARIANTS_CLASS?=${DAIKONDIR}/java/daikon/PrintInvariants.class
@@ -702,12 +702,12 @@ txt-jaif: $(PROJECT_FILE).txt-jaif
 	@echo
 	@echo "### run AnnotateNullable (${PROJECT_FILE})"
 	@echo
-	$(JAVA) -cp "$(DAIKON_TESTS_CLASSPATH)" -ea -Xmx1024M daikon.Daikon --no_text_output --no_show_progress \
+	$(JAVA) -cp "$(DAIKON_TESTS_CLASSPATH)" -ea -Xmx3600M daikon.Daikon --no_text_output --no_show_progress \
 	  $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz \
 	  --config ${DAIKONDIR}/java/daikon/annotate_nullable.config \
 	  --config_option daikon.Debug.show_stack_trace=true \
 	  -o $(PROJECT_FILE)-jaif.inv.gz
-	$(JAVA) -cp "$(DAIKON_TESTS_CLASSPATH)" -ea -Xmx1024M daikon.AnnotateNullable $(PROJECT_FILE)-jaif.inv.gz \
+	$(JAVA) -cp "$(DAIKON_TESTS_CLASSPATH)" -ea -Xmx3600M daikon.AnnotateNullable $(PROJECT_FILE)-jaif.inv.gz \
 	  > $@-failed 2>&1
 	mv $@-failed $@
 else
