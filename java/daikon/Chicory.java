@@ -84,7 +84,7 @@ public class Chicory {
   // for Daikon separately.
   /** Heap size for the target program, and for Daikon if Daikon is run. */
   @Option("Size of the heap for the target program, and for Daikon if it is run")
-  public static String heap_size = "1000m";
+  public static String heap_size = "3600m";
 
   /** Print information about each ppt name as it is created. */
   @Option("Print information about each ppt name as it is created")
