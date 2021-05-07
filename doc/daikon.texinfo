@@ -486,13 +486,11 @@ Alternately, replacing the @option{--daikon} argument by
 @option{--daikon-online} has the same effect, but does not write a data
 trace file to disk.
 
-@end enumerate
-
 If you wish to have more control over the invariant detection process,
 you can split the third step above into multiple steps.  Then, step 3
 would become:
 
-@enumerate 3
+@enumerate a
 @item
 Run the program under the control of the Chicory front end
 in order to create a trace file named
@@ -510,6 +508,7 @@ Run Daikon on the trace file.
 @example
 java -cp $DAIKONDIR/daikon.jar daikon.Daikon StackArTester.dtrace.gz
 @end example
+@end enumerate
 
 Daikon can analyze multiple runs (executions) of the program.  You can
 supply Daikon with multiple trace files:
@@ -910,7 +909,7 @@ step may take several minutes.
 Since the default memory size used by a Java virtual machine varies, we
 suggest that Daikon be run with at least 256 megabytes of
 memory (and perhaps much more).  For many JVMs, specify a maximum heap size
-of 3.6GB by the option @option{-Xmx3600m}.
+of @nospellcheck{3.6GB} by the option @option{-Xmx3600m}.
 For more information about specifying the memory usage for Daikon, see
 @ref{Out of memory}.
 
