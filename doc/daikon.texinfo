@@ -510,39 +510,6 @@ java -cp $DAIKONDIR/daikon.jar daikon.Daikon StackArTester.dtrace.gz
 @end example
 @end enumerate
 
-Daikon can analyze multiple runs (executions) of the program.  You can
-supply Daikon with multiple trace files:
-
-@exampleindent 0
-@smallexample
-java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
-     --dtrace-file=StackArTester1.dtrace.gz \
-     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
-java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
-     --dtrace-file=StackArTester2.dtrace.gz \
-     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
-java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
-     --dtrace-file=StackArTester3.dtrace.gz \
-     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
-java -cp $DAIKONDIR/daikon.jar daikon.Daikon StackArTester*.dtrace.gz
-@end smallexample
-@exampleindent 1
-
-@c @noindent
-@c or, you can append information from multiple runs in a single trace file
-@c (but in this case you cannot use a compressed trace file):
-@c
-@c @example
-@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
-@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
-@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
-@c java daikon.Daikon StackArTester.dtrace
-@c @end example
-
-@noindent
-(In this example, all the runs are identical, so multiple runs yield the
-same invariants as one run.)
-
 @item
 Examine the invariants.  (They were also printed to standard out
 by the previous step.)
@@ -580,6 +547,40 @@ For more information about the Annotate program, see @ref{Annotate}.
 @end itemize
 @end enumerate
 @exampleindent 4
+
+Daikon can analyze multiple runs (executions) of the program.  You can
+supply Daikon with multiple trace files:
+
+@exampleindent 0
+@smallexample
+java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
+     --dtrace-file=StackArTester1.dtrace.gz \
+     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
+java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
+     --dtrace-file=StackArTester2.dtrace.gz \
+     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
+java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
+     --dtrace-file=StackArTester3.dtrace.gz \
+     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
+java -cp $DAIKONDIR/daikon.jar daikon.Daikon StackArTester*.dtrace.gz
+@end smallexample
+@exampleindent 1
+
+@c @noindent
+@c or, you can append information from multiple runs in a single trace file
+@c (but in this case you cannot use a compressed trace file):
+@c
+@c @example
+@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
+@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
+@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
+@c java daikon.Daikon StackArTester.dtrace
+@c @end example
+
+@noindent
+(In this example, all the runs are identical, so multiple runs yield the
+same invariants as one run.)
+
 
 
 @node Detecting invariants when running a Java program from a jar file
