@@ -59,11 +59,15 @@ public class InstrumentHandler extends CommandHandler {
   private static final String checkers_directory_SWITCH = "checker_classes_directory";
 
   // Default values; can be overridden by the command-line switches above.
+  /** Default directory for instrumented classes. */
   private String instrumented_directory = "instrumented-classes";
+  /** Default directory for checker classes. */
   private String checkersOutputDirName = "checker-classes";
 
-  @SuppressWarnings("enhancedfor.type.incompatible") // Checker Framework bug exposed on line "for
-  // (TypeDeclaration decl : oneFile.roots) {"
+  @SuppressWarnings(
+      "enhancedfor" // Checker Framework bug exposed on line "for (TypeDeclaration decl :
+  // oneFile.roots) {"
+  )
   @Override
   public boolean handle(String[] args) {
 

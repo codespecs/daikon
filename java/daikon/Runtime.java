@@ -117,11 +117,8 @@ public final class Runtime {
       result = classname.substring(1, classname.length() - 1);
       result = result.replace('/', '.');
     } else {
-      result = primitiveClassesFromJvm.get(classname);
-      if (result == null) {
-        // If the input is not a field descriptor, return it.
-        result = classname;
-      }
+      // If the input is not a field descriptor, use it unchanged.
+      result = primitiveClassesFromJvm.getOrDefault(classname, classname);
     }
     for (int i = 0; i < dims; i++) {
       result += "[]";

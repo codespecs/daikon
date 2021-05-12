@@ -84,11 +84,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
       // Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
       String bucketKey = thisPptName1.substring(0, thisPptName1.lastIndexOf(";condition"));
       String predicate = extractPredicate(thisPptName1);
-      HashSet<String> bucket = goodMap.get(bucketKey);
-      if (bucket == null) {
-        bucket = new HashSet<String>();
-        goodMap.put(bucketKey, bucket);
-      }
+      HashSet<String> bucket = goodMap.computeIfAbsent(bucketKey, __ -> new HashSet<String>());
       bucket.add(predicate + " ==> " + inv1.format());
     }
   }

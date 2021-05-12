@@ -231,16 +231,9 @@ public class ContextSplitterFactory {
       }
 
       // Place the ID into the mapping
-      Map<String, Set<Long>> caller2ids = callee2caller2ids.get(callee_ppt_name);
-      if (caller2ids == null) {
-        caller2ids = new LinkedHashMap<>();
-        callee2caller2ids.put(callee_ppt_name, caller2ids);
-      }
-      Set<Long> ids = caller2ids.get(caller_condition);
-      if (ids == null) {
-        ids = new TreeSet<Long>();
-        caller2ids.put(caller_condition, ids);
-      }
+      Map<String, Set<Long>> caller2ids =
+          callee2caller2ids.computeIfAbsent(callee_ppt_name, __ -> new LinkedHashMap<>());
+      Set<Long> ids = caller2ids.computeIfAbsent(caller_condition, __ -> new TreeSet<Long>());
       ids.add(entry.id);
     } // for all entries
 

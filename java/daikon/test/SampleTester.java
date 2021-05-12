@@ -245,7 +245,9 @@ public class SampleTester {
 
     if (all_ppts == null) parse_error("decl file must be specified before ppt");
     ppt = all_ppts.get(ppt_name);
-    if (ppt == null) parse_error("ppt name " + ppt_name + " not found in decl file");
+    if (ppt == null) {
+      parse_error("ppt name " + ppt_name + " not found in decl file");
+    }
     vars = null;
   }
 

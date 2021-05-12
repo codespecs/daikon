@@ -6,12 +6,16 @@ jobs:
   ubuntu-jdk8-jobs:
     docker:
       - image: cimg/base:2020.01
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - run: /bin/true
 
   quick-txt-diff-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -28,6 +32,8 @@ jobs:
   quick-txt-diff-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -44,6 +50,8 @@ jobs:
   nonquick-txt-diff-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -60,6 +68,8 @@ jobs:
   nonquick-txt-diff-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -76,6 +86,8 @@ jobs:
   non-txt-diff-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -92,6 +104,8 @@ jobs:
   non-txt-diff-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -144,6 +158,8 @@ jobs:
   kvasir-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8-plus
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -160,6 +176,8 @@ jobs:
   kvasir-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11-plus
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -176,6 +194,8 @@ jobs:
   quick-txt-diff-fedora-jdk8:
     docker:
       - image: mdernst/daikon-fedora-jdk8
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -192,6 +212,8 @@ jobs:
   quick-txt-diff-fedora-jdk11:
     docker:
       - image: mdernst/daikon-fedora-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -208,6 +230,8 @@ jobs:
   nonquick-txt-diff-fedora-jdk8:
     docker:
       - image: mdernst/daikon-fedora-jdk8
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -224,6 +248,8 @@ jobs:
   nonquick-txt-diff-fedora-jdk11:
     docker:
       - image: mdernst/daikon-fedora-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -240,6 +266,8 @@ jobs:
   non-txt-diff-fedora-jdk8:
     docker:
       - image: mdernst/daikon-fedora-jdk8
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -256,6 +284,8 @@ jobs:
   non-txt-diff-fedora-jdk11:
     docker:
       - image: mdernst/daikon-fedora-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -309,6 +339,8 @@ jobs:
   # kvasir-fedora-jdk8:
   #   docker:
   #     - image: mdernst/daikon-fedora-jdk8-plus
+  #   environment:
+  #     CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
   #   steps:
   #     - restore_cache:
   #         keys:
@@ -326,6 +358,8 @@ jobs:
   # kvasir-fedora-jdk11:
   #   docker:
   #     - image: mdernst/daikon-fedora-jdk11-plus
+  #   environment:
+  #     CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
   #   steps:
   #     - restore_cache:
   #         keys:
@@ -342,6 +376,8 @@ jobs:
   quick-txt-diff-centos-jdk8:
     docker:
       - image: mdernst/daikon-centos-jdk8
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -358,6 +394,8 @@ jobs:
   quick-txt-diff-centos-jdk11:
     docker:
       - image: mdernst/daikon-centos-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -374,6 +412,8 @@ jobs:
   nonquick-txt-diff-centos-jdk8:
     docker:
       - image: mdernst/daikon-centos-jdk8
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -390,6 +430,8 @@ jobs:
   nonquick-txt-diff-centos-jdk11:
     docker:
       - image: mdernst/daikon-centos-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -406,6 +448,8 @@ jobs:
   non-txt-diff-centos-jdk8:
     docker:
       - image: mdernst/daikon-centos-jdk8
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -422,6 +466,8 @@ jobs:
   non-txt-diff-centos-jdk11:
     docker:
       - image: mdernst/daikon-centos-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -480,6 +526,8 @@ jobs:
   kvasir-centos-jdk8:
     docker:
       - image: mdernst/daikon-centos-jdk8-plus
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -496,6 +544,8 @@ jobs:
   kvasir-centos-jdk11:
     docker:
       - image: mdernst/daikon-centos-jdk11-plus
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -515,6 +565,8 @@ jobs:
   typecheck-with-included-CF-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -536,6 +588,8 @@ jobs:
   typecheck-with-locally-built-CF-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:
@@ -555,6 +609,8 @@ jobs:
   typecheck-with-locally-built-CF-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
       - restore_cache:
           keys:

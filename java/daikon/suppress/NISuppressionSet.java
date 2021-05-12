@@ -73,11 +73,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
         // Get the list of suppression sets for this suppressor.  Create it
         // if this is the first one.  Add this set to the list
         List<NISuppressionSet> suppression_set_list =
-            suppressor_map.get(suppressor.get_inv_class());
-        if (suppression_set_list == null) {
-          suppression_set_list = new ArrayList<NISuppressionSet>();
-          suppressor_map.put(suppressor.get_inv_class(), suppression_set_list);
-        }
+            suppressor_map.computeIfAbsent(
+                suppressor.get_inv_class(), __ -> new ArrayList<NISuppressionSet>());
         suppression_set_list.add(this);
       }
     }

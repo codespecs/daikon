@@ -268,11 +268,9 @@ public class Runtime {
           capture = (mi.call_cnt % 10000) == 0;
         }
         Thread t = Thread.currentThread();
-        Deque<CallInfo> callstack = thread_to_callstack.get(t);
-        if (callstack == null) {
-          callstack = new ArrayDeque<CallInfo>();
-          thread_to_callstack.put(t, callstack);
-        }
+        @SuppressWarnings("lock:method.invocation") // CF bug: inference failed
+        Deque<CallInfo> callstack =
+            thread_to_callstack.computeIfAbsent(t, __ -> new ArrayDeque<CallInfo>());
         callstack.push(new CallInfo(nonce, capture));
       }
 

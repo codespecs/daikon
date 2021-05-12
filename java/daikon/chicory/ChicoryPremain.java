@@ -153,7 +153,7 @@ public class ChicoryPremain {
   // value of dtrace passed in, therefore they do not need to make use
   // of synchronization and their references to dtrace do not need to
   // be annotated with @GuardedBy("<self>").
-  @SuppressWarnings("lock:argument.type.incompatible")
+  @SuppressWarnings("lock:argument")
   private static void initializeDeclAndDTraceWriters() {
     // The include/exclude filter are implemented in the transform,
     // so they don't need to be handled here.

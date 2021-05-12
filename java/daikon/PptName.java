@@ -94,7 +94,13 @@ public class PptName implements Serializable {
     method = fn_name.substring(dot + 1).intern();
   }
 
-  /** className or methodName (or both) must be non-null. */
+  /**
+   * Creates a new PptName. {@code className} or {@code methodName} (or both) must be non-null.
+   *
+   * @param className fully-qualified class name
+   * @param methodName method signature, including types
+   * @param pointName post-separator (separator is ":::")
+   */
   public PptName(@Nullable String className, @Nullable String methodName, String pointName) {
     if ((className == null) && (methodName == null)) {
       throw new UnsupportedOperationException("One of class or method must be non-null");

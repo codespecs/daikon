@@ -71,9 +71,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
       if (val == null) {
         // Use one as default, obviously
         freqList.put(key, 1);
-      }
-      // increment if it's already there
-      else {
+      } else {
+        // increment if it's already there
         freqList.put(key, val.intValue() + 1);
       }
 
