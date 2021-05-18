@@ -270,6 +270,8 @@ public final class DCRuntime implements ComparabilityProvider {
 
     if (m != null) {
       try {
+        // In case the class containing "equals_dcomp_instrumented" is not accessible:
+        m.setAccessible(true);
         return (Boolean) m.invoke(o1, o2);
       } catch (Exception e) {
         throw new RuntimeException("unexpected error invoking equal_dcomp_instrumented", e);
