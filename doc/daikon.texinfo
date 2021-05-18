@@ -3280,7 +3280,7 @@ parts of your program.
 @item omit a whole package:
 @smallexample
 java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
-     '--ppt-omit-pattern=^junit\.' ...
+     '--ppt-omit-pattern=^org\.junit\.' ...
 @end smallexample
 @smallexample
 java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
