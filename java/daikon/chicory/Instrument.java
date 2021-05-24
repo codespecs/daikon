@@ -65,6 +65,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /** Debug information about which classes are transformed and why. */
   public static SimpleLog debug_transform = new SimpleLog(false);
 
+  /** Instrument class constructor. Setup debug logging. */
   public Instrument() {
     super();
     debug_transform.enabled = Chicory.debug_transform;
