@@ -300,6 +300,7 @@ public class DCInstrument extends InstructionListUtils {
     // System.out.printf("DCInstrument %s%n", orig_class.getClassName());
     // Turn on some of the logging based on debug option.
     debug_transform.enabled = DynComp.debug_transform || Premain.debug_dcinstrument;
+    daikon.chicory.Instrument.debug_transform.enabled = debug_transform.enabled;
     debug_instrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
     debug_native.enabled = DynComp.debug;
     debug_track.enabled = Premain.debug_dcinstrument;
@@ -494,7 +495,7 @@ public class DCInstrument extends InstructionListUtils {
       tag_frame_local = null;
       try {
         // Note whether we want to track the daikon variables in this method
-        boolean track = should_track(classname, methodEntryName(classname, m));
+        boolean track = should_track(classname, m.getName(), methodEntryName(classname, m));
         // If any one method is tracked, then the class is tracked.
         if (track) {
           track_class = true;
@@ -2821,54 +2822,29 @@ public class DCInstrument extends InstructionListUtils {
    * Returns whether or not this ppt should be included. A ppt is included if it matches ones of the
    * select patterns and doesn't match any of the omit patterns.
    *
-   * @param classname class to test
-   * @param pptname ppt to look for
+   * @param className class to test
+   * @param methodName method to test
+   * @param pptName ppt to look for
    * @return true if this ppt should be included
    */
-  boolean should_track(@ClassGetName String classname, String pptname) {
+  boolean should_track(@ClassGetName String className, String methodName, String pptName) {
 
-    debug_track.log("Considering tracking ppt %s %s%n", classname, pptname);
+    debug_track.log("Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
 
     // Don't track any JDK classes
-    if (BcelUtil.inJdk(classname)) {
+    if (BcelUtil.inJdk(className)) {
       debug_track.log("  jdk class, return false%n");
       return false;
     }
 
     // Don't track toString methods because we call them in
     // our debug statements.
-    if (ignore_toString && pptname.contains("toString")) {
+    if (ignore_toString && pptName.contains("toString")) {
       return false;
     }
 
-    // If any of the omit patterns match, exclude the ppt
-    for (Pattern p : DynComp.ppt_omit_pattern) {
-      // System.out.printf("should_track: pattern '%s' on ppt '%s'%n",
-      //                    p, pptname);
-      if (p.matcher(pptname).find()) {
-        debug_track.log("  Omitting program point %s%n", pptname);
-        return false;
-      }
-    }
-
-    // If there are no select patterns, everything matches
-    if (DynComp.ppt_select_pattern.size() == 0) {
-      return true;
-    }
-
-    // One of the select patterns must match the ppt or the class to include
-    for (Pattern p : DynComp.ppt_select_pattern) {
-      if (p.matcher(pptname).find()) {
-        debug_track.log("  matched pptname%n");
-        return true;
-      }
-      if (p.matcher(classname).find()) {
-        debug_track.log(" matched classname%n");
-        return true;
-      }
-    }
-    debug_track.log(" No Match%n");
-    return false;
+    // call shouldFilter to check ppt-omit-pattern(s) and ppt-select-pattern(s)
+    return !daikon.chicory.Instrument.shouldFilter(className, methodName, pptName);
   }
 
   /**

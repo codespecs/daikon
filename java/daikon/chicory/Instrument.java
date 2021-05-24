@@ -54,7 +54,7 @@ import org.checkerframework.dataflow.qual.Pure;
  * purposes.
  */
 @SuppressWarnings("nullness")
-class Instrument extends InstructionListUtils implements ClassFileTransformer {
+public class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
   /** the index of this method into SharedData.methods */
   int cur_method_info_index = 0;
@@ -63,7 +63,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
   /** Debug information about which classes are transformed and why. */
-  protected static SimpleLog debug_transform = new SimpleLog(false);
+  public static SimpleLog debug_transform = new SimpleLog(false);
 
   public Instrument() {
     super();
@@ -71,9 +71,17 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
     debug_instrument.enabled = Chicory.debug;
   }
 
-  // uses Runtime.ppt_omit_pattern and Runtime.ppt_select_pattern
-  // to see if the given ppt should be "filtered out"
-  private boolean shouldFilter(String className, String methodName, String pptName) {
+  /**
+   * See if the given ppt should be "filtered out"; i.e., ignored. This method is used by both
+   * Chicory and Dyncomp, the patterns are in Runtime.ppt_omit_pattern and
+   * Runtime.ppt_select_pattern.
+   *
+   * @param className class name to be checked
+   * @param methodName method name to be checked
+   * @param pptName ppt name to be checked
+   * @return true if the item should be filtered out
+   */
+  public static boolean shouldFilter(String className, String methodName, String pptName) {
 
     debug_transform.log("shouldFilter: %s, %s, %s%n", className, methodName, pptName);
 

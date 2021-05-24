@@ -94,6 +94,8 @@ public class ChicoryPremain {
 
     // Setup argument fields in Runtime
     Runtime.nesting_depth = Chicory.nesting_depth;
+    // daikon.chicory.Instrument.shouldFilter is shared by Chicory and DynComp.
+    // It uses the Runtime copy of the patterns.
     Runtime.ppt_omit_pattern = Chicory.ppt_omit_pattern;
     Runtime.ppt_select_pattern = Chicory.ppt_select_pattern;
     Runtime.sample_start = Chicory.sample_start;
