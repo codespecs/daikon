@@ -607,7 +607,9 @@ public class DCInstrument extends InstructionListUtils {
           }
           if (replacingMethod) {
             gen.replaceMethod(m, mg.getMethod());
-            if (BcelUtil.isMain(mg)) gen.addMethod(create_dcomp_stub(mg).getMethod());
+            if (BcelUtil.isMain(mg)) {
+              gen.addMethod(create_dcomp_stub(mg).getMethod());
+            }
           } else {
             gen.addMethod(mg.getMethod());
           }
@@ -630,7 +632,9 @@ public class DCInstrument extends InstructionListUtils {
             // try again
             if (replacingMethod) {
               gen.replaceMethod(m, mg.getMethod());
-              if (BcelUtil.isMain(mg)) gen.addMethod(create_dcomp_stub(mg).getMethod());
+              if (BcelUtil.isMain(mg)) {
+                gen.addMethod(create_dcomp_stub(mg).getMethod());
+              }
             } else {
               gen.addMethod(mg.getMethod());
             }
