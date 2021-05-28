@@ -137,17 +137,6 @@ public abstract class DaikonWriter {
     // System.out.printf("ppt name = %s%n", pptname);
 
     return pptname;
-
-    /*
-    // Quote dollar signs, which replaceFirst would interpreted as a
-    // group reference.
-    String paramTypesString = paramTypes.toString().replace("$", "\\$");
-    name = name.replaceFirst("\\(.*\\)", paramTypesString);
-    // System.out.printf("params = %s, newname = %s, short_name = %s%n",
-    //                   paramTypesString, name, short_name);
-
-    return methodName(name, short_name, isConstructor, point);
-    */
   }
 
   /**
