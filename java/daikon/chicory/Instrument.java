@@ -65,7 +65,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /** Debug information about which classes are transformed and why. */
   public static SimpleLog debug_transform = new SimpleLog(false);
 
-  /** Instrument class constructor. Setup debug logging. */
+  /** Create a new Instrument. Sets up debug logging. */
   public Instrument() {
     super();
     debug_transform.enabled = Chicory.debug_transform;
@@ -73,9 +73,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * See if the given ppt should be "filtered out"; i.e., ignored. This method is used by both
-   * Chicory and Dyncomp, the patterns are in Runtime.ppt_omit_pattern and
-   * Runtime.ppt_select_pattern.
+   * Returns true if the given ppt should be ignored. The patterns are in Runtime.ppt_omit_pattern
+   * and Runtime.ppt_select_pattern. This method is used by both Chicory and Dyncomp.
    *
    * @param className class name to be checked
    * @param methodName method name to be checked
