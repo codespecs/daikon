@@ -588,45 +588,54 @@ public class DCInstrument extends InstructionListUtils {
           }
         }
 
-        if (!BcelUtil.isMain(mg) && !BcelUtil.isClinit(mg) && !junit_test_class) {
-          // doubling
-          try {
-            if (has_code) {
-              il = mg.getInstructionList();
-              InstructionHandle end = il.getEnd();
-              int length = end.getPosition() + end.getInstruction().getLength();
-              if (length >= Const.MAX_CODE_SIZE) {
-                throw new ClassGenException(
-                    "Code array too big: must be smaller than " + Const.MAX_CODE_SIZE + " bytes.");
-              }
-            }
-            gen.addMethod(mg.getMethod());
-          } catch (Exception e) {
-            String s = e.getMessage();
-            if (s == null) throw e;
-            if (s.startsWith("Branch target offset too large")
-                || s.startsWith("Code array too big")) {
-              System.out.printf(
-                  "DynComp warning: ClassFile: %s - method %s is too large to instrument and is"
-                      + " being skipped.%n",
-                  classname, mg.getName());
-              // Build a dummy instrumented method that has DCompMarker
-              // argument and no instrumentation.
-              // first, restore unmodified method
-              mg = new MethodGen(m, classname, pool);
-              // Add the DCompMarker argument
-              add_dcomp_arg(mg);
-              remove_local_variable_type_table(mg);
-              // try again
-              gen.addMethod(mg.getMethod());
-            } else {
-              throw e;
+        // Can't duplicate 'main' or 'clinit' or a JUnit test.
+        boolean replacingMethod = BcelUtil.isMain(mg) || BcelUtil.isClinit(mg) || junit_test_class;
+        try {
+          if (has_code) {
+            il = mg.getInstructionList();
+            InstructionHandle end = il.getEnd();
+            int length = end.getPosition() + end.getInstruction().getLength();
+            if (length >= Const.MAX_CODE_SIZE) {
+              throw new ClassGenException(
+                  "Code array too big: must be smaller than " + Const.MAX_CODE_SIZE + " bytes.");
             }
           }
-        } else {
-          // replacing
-          gen.replaceMethod(m, mg.getMethod());
-          if (BcelUtil.isMain(mg)) gen.addMethod(create_dcomp_stub(mg).getMethod());
+          if (replacingMethod) {
+            gen.replaceMethod(m, mg.getMethod());
+            if (BcelUtil.isMain(mg)) {
+              gen.addMethod(create_dcomp_stub(mg).getMethod());
+            }
+          } else {
+            gen.addMethod(mg.getMethod());
+          }
+        } catch (Exception e) {
+          String s = e.getMessage();
+          if (s == null) throw e;
+          if (s.startsWith("Branch target offset too large")
+              || s.startsWith("Code array too big")) {
+            System.out.printf(
+                "DynComp warning: ClassFile: %s - method %s is too large to instrument and is"
+                    + " being skipped.%n",
+                classname, mg.getName());
+            // Build a dummy instrumented method that has DCompMarker
+            // argument and no instrumentation.
+            // first, restore unmodified method
+            mg = new MethodGen(m, classname, pool);
+            // Add the DCompMarker argument
+            add_dcomp_arg(mg);
+            remove_local_variable_type_table(mg);
+            // try again
+            if (replacingMethod) {
+              gen.replaceMethod(m, mg.getMethod());
+              if (BcelUtil.isMain(mg)) {
+                gen.addMethod(create_dcomp_stub(mg).getMethod());
+              }
+            } else {
+              gen.addMethod(mg.getMethod());
+            }
+          } else {
+            throw e;
+          }
         }
         debug_transform.exdent();
       } catch (Throwable t) {
