@@ -588,13 +588,8 @@ public class DCInstrument extends InstructionListUtils {
           }
         }
 
-        boolean replacingMethod;
-        if (!BcelUtil.isMain(mg) && !BcelUtil.isClinit(mg) && !junit_test_class) {
-          replacingMethod = false;
-        } else {
-          // can't duplicate 'main' or 'clinit' or a junit test
-          replacingMethod = true;
-        }
+        // Can't duplicate 'main' or 'clinit' or a JUnit test.
+        boolean replacingMethod = BcelUtil.isMain(mg) || BcelUtil.isClinit(mg) || junit_test_class;
         try {
           if (has_code) {
             il = mg.getInstructionList();
