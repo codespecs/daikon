@@ -73,8 +73,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Returns true if the given ppt should be ignored. The patterns are in Runtime.ppt_omit_pattern
-   * and Runtime.ppt_select_pattern. This method is used by both Chicory and Dyncomp.
+   * Returns true if the given ppt should be ignored. Uses the patterns in {@link
+   * daikon.chicory.Runtime#ppt_omit_pattern} and {@link daikon.chicory.Runtime#ppt_select_pattern}.
+   * This method is used by both Chicory and Dyncomp.
    *
    * @param className class name to be checked
    * @param methodName method name to be checked
