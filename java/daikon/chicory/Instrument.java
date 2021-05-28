@@ -82,9 +82,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * @param pptName ppt name to be checked
    * @return true if the item should be filtered out
    */
-  public static boolean shouldFilter(String className, String methodName, String pptName) {
+  public static boolean shouldIgnore(String className, String methodName, String pptName) {
 
-    debug_transform.log("shouldFilter: %s, %s, %s%n", className, methodName, pptName);
+    debug_transform.log("shouldIgnore: %s, %s, %s%n", className, methodName, pptName);
 
     // Don't instrument class if it matches an excluded regular expression
     for (Pattern pattern : Runtime.ppt_omit_pattern) {
@@ -512,7 +512,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
               DaikonWriter.methodEntryName(
                   fullClassName, getArgTypes(mg), mg.toString(), mg.getName());
           add_entry_instrumentation(
-              il, context, !shouldFilter(fullClassName, mg.getName(), entry_ppt_name));
+              il, context, !shouldIgnore(fullClassName, mg.getName(), entry_ppt_name));
 
           print_stack_map_table("After add_entry_instrumentation");
 
@@ -1077,8 +1077,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     boolean shouldInclude = false;
 
-    // see if we should filter the entry point
-    if (!shouldFilter(
+    // see if we should track the entry point
+    if (!shouldIgnore(
         class_info.class_name,
         mgen.getName(),
         DaikonWriter.methodEntryName(
@@ -1136,7 +1136,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
           last_line_number = line_number;
 
-          if (!shouldFilter(
+          if (!shouldIgnore(
               class_info.class_name,
               mgen.getName(),
               DaikonWriter.methodExitName(

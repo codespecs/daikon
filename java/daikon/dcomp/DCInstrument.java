@@ -2852,8 +2852,8 @@ public class DCInstrument extends InstructionListUtils {
       return false;
     }
 
-    // call shouldFilter to check ppt-omit-pattern(s) and ppt-select-pattern(s)
-    return !daikon.chicory.Instrument.shouldFilter(className, methodName, pptName);
+    // call shouldIgnore to check ppt-omit-pattern(s) and ppt-select-pattern(s)
+    return !daikon.chicory.Instrument.shouldIgnore(className, methodName, pptName);
   }
 
   /**
