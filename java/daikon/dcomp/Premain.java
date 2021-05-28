@@ -131,7 +131,7 @@ public class Premain {
     // Instrument.transform() avoid ClassCircularityErrors during initialization.
     DaikonVariableInfo.std_visibility = DynComp.std_visibility;
     DCRuntime.depth = DynComp.nesting_depth;
-    // daikon.chicory.Instrument.shouldFilter is shared by Chicory and DynComp.
+    // daikon.chicory.Instrument#shouldFilter is shared by Chicory and DynComp.
     // It uses the Chicory Runtime copy of the patterns.
     daikon.chicory.Runtime.ppt_omit_pattern = DynComp.ppt_omit_pattern;
     daikon.chicory.Runtime.ppt_select_pattern = DynComp.ppt_select_pattern;
