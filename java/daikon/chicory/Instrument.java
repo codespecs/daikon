@@ -54,7 +54,7 @@ import org.checkerframework.dataflow.qual.Pure;
  * purposes.
  */
 @SuppressWarnings("nullness")
-class Instrument extends InstructionListUtils implements ClassFileTransformer {
+public class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
   /** the index of this method into SharedData.methods */
   int cur_method_info_index = 0;
@@ -63,19 +63,28 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
   /** Debug information about which classes are transformed and why. */
-  protected static SimpleLog debug_transform = new SimpleLog(false);
+  public static SimpleLog debug_transform = new SimpleLog(false);
 
+  /** Create a new Instrument. Sets up debug logging. */
   public Instrument() {
     super();
     debug_transform.enabled = Chicory.debug_transform;
     debug_instrument.enabled = Chicory.debug;
   }
 
-  // uses Runtime.ppt_omit_pattern and Runtime.ppt_select_pattern
-  // to see if the given ppt should be "filtered out"
-  private boolean shouldFilter(String className, String methodName, String pptName) {
+  /**
+   * Returns true if the given ppt should be ignored. Uses the patterns in {@link
+   * daikon.chicory.Runtime#ppt_omit_pattern} and {@link daikon.chicory.Runtime#ppt_select_pattern}.
+   * This method is used by both Chicory and Dyncomp.
+   *
+   * @param className class name to be checked
+   * @param methodName method name to be checked
+   * @param pptName ppt name to be checked
+   * @return true if the item should be filtered out
+   */
+  public static boolean shouldIgnore(String className, String methodName, String pptName) {
 
-    debug_transform.log("shouldFilter: %s, %s, %s%n", className, methodName, pptName);
+    debug_transform.log("shouldIgnore: %s, %s, %s%n", className, methodName, pptName);
 
     // Don't instrument class if it matches an excluded regular expression
     for (Pattern pattern : Runtime.ppt_omit_pattern) {
@@ -503,7 +512,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
               DaikonWriter.methodEntryName(
                   fullClassName, getArgTypes(mg), mg.toString(), mg.getName());
           add_entry_instrumentation(
-              il, context, !shouldFilter(fullClassName, mg.getName(), entry_ppt_name));
+              il, context, !shouldIgnore(fullClassName, mg.getName(), entry_ppt_name));
 
           print_stack_map_table("After add_entry_instrumentation");
 
@@ -1068,8 +1077,8 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
     boolean shouldInclude = false;
 
-    // see if we should filter the entry point
-    if (!shouldFilter(
+    // see if we should track the entry point
+    if (!shouldIgnore(
         class_info.class_name,
         mgen.getName(),
         DaikonWriter.methodEntryName(
@@ -1127,7 +1136,7 @@ class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
           last_line_number = line_number;
 
-          if (!shouldFilter(
+          if (!shouldIgnore(
               class_info.class_name,
               mgen.getName(),
               DaikonWriter.methodExitName(
