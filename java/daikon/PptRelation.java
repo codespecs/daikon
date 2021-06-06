@@ -522,8 +522,9 @@ public class PptRelation implements Serializable {
               "missing variables in newEnterExitRel:%n"
                   + "  parent = %s%n"
                   + "  child = %s%n"
+                  + "  parent.var_infos = %s%n"
                   + "parent varinfos missing from parent_to_child_map:%n",
-              parent.name(), child.name());
+              parent.name(), child.name(), parent.var_infos);
           all_found = false;
         }
         System.out.printf("   %s%n", vp.name());
