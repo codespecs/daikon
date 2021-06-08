@@ -60,8 +60,8 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.CollectionsPlume;
+import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
-import org.plumelib.util.UtilPlume;
 
 public final class FileIO {
 
@@ -1329,7 +1329,7 @@ public final class FileIO {
 
       if (count_lines) {
         Daikon.progress = "Checking size of " + filename;
-        total_lines = UtilPlume.countLines(raw_filename);
+        total_lines = FilesPlume.countLines(raw_filename);
       } else {
         // System.out.printf("no count %b %d %s %d %d%n", is_decl_file,
         //                    dkconfig_dtrace_line_count, filename,
@@ -1355,7 +1355,7 @@ public final class FileIO {
           reader = new LineNumberReader(new InputStreamReader(stream, UTF_8));
         }
       } else {
-        reader = UtilPlume.lineNumberFileReader(raw_filename);
+        reader = FilesPlume.newLineNumberFileReader(raw_filename);
       }
 
       varcomp_format = VarComparability.IMPLICIT;
@@ -2385,7 +2385,7 @@ public final class FileIO {
 
   public static void write_serialized_pptmap(PptMap map, File file) throws IOException {
     SerialFormat record = new SerialFormat(map, Configuration.getInstance());
-    UtilPlume.writeObject(record, file);
+    FilesPlume.writeObject(record, file);
   }
 
   /**
@@ -2397,7 +2397,7 @@ public final class FileIO {
       throws IOException {
 
     try {
-      Object obj = UtilPlume.readObject(file);
+      Object obj = FilesPlume.readObject(file);
       if (obj instanceof FileIO.SerialFormat) {
         SerialFormat record = (SerialFormat) obj;
         if (use_saved_config) {

@@ -196,7 +196,7 @@ public class CreateSpinfo {
   private static void filterConditions(Map<String, List<String>> conditionMap) {
     for (Map.Entry<String, List<String>> entry : conditionMap.entrySet()) {
       List<String> conditions = entry.getValue();
-      conditions = CollectionsPlume.removeDuplicates(conditions);
+      conditions = CollectionsPlume.withoutDuplicates(conditions);
       conditions.remove("true");
       conditions.remove("false");
       entry.setValue(conditions);

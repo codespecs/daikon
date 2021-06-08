@@ -13,7 +13,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.FilesPlume;
 
 /**
  * SpinfoFile stores information parsed from a {@code .spinfo} file. The constructor parses the
@@ -57,7 +57,7 @@ public class SpinfoFile {
     this.tempDir = tempDir;
     this.spinfoFileName = spinfoFile.toString();
     try {
-      LineNumberReader reader = UtilPlume.lineNumberFileReader(spinfoFile);
+      LineNumberReader reader = FilesPlume.newLineNumberFileReader(spinfoFile);
       parseFile(reader);
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);

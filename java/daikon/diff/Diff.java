@@ -28,10 +28,10 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.CollectionsPlume;
+import org.plumelib.util.FilesPlume;
 import org.plumelib.util.OrderedPairIterator;
 import org.plumelib.util.Pair;
 import org.plumelib.util.StringsPlume;
-import org.plumelib.util.UtilPlume;
 
 /**
  * Diff is the main class for the invariant diff program. The invariant diff program outputs the
@@ -281,7 +281,7 @@ public final class Diff {
           }
           String outputFilename = Daikon.getOptarg(g);
           outputFile = new File(outputFilename);
-          if (!UtilPlume.canCreateAndWrite(outputFile)) {
+          if (!FilesPlume.canCreateAndWrite(outputFile)) {
             throw new Error("Cannot write to file " + outputFile);
           }
           break;
@@ -445,7 +445,7 @@ public final class Diff {
       if (outputFile != null) {
         MinusVisitor v = new MinusVisitor();
         root.accept(v);
-        UtilPlume.writeObject(v.getResult(), outputFile);
+        FilesPlume.writeObject(v.getResult(), outputFile);
         // System.out.println("Output written to: " + outputFile);
       } else {
         throw new Error("no output file specified on command line");
@@ -457,7 +457,7 @@ public final class Diff {
         XorVisitor v = new XorVisitor();
         root.accept(v);
         InvMap resultMap = v.getResult();
-        UtilPlume.writeObject(resultMap, outputFile);
+        FilesPlume.writeObject(resultMap, outputFile);
         if (debug.isLoggable(Level.FINE)) {
           debug.fine("Result: " + resultMap.toString());
         }
@@ -472,7 +472,7 @@ public final class Diff {
       if (outputFile != null) {
         UnionVisitor v = new UnionVisitor();
         root.accept(v);
-        UtilPlume.writeObject(v.getResult(), outputFile);
+        FilesPlume.writeObject(v.getResult(), outputFile);
         // System.out.println("Output written to: " + outputFile);
       } else {
         throw new Error("no output file specified on command line");
@@ -488,7 +488,7 @@ public final class Diff {
 
   /** Reads an InvMap from a file that contains a serialized InvMap or PptMap. */
   private InvMap readInvMap(File file) throws IOException, ClassNotFoundException {
-    Object o = UtilPlume.readObject(file);
+    Object o = FilesPlume.readObject(file);
     if (o instanceof InvMap) {
       return (InvMap) o;
     } else {

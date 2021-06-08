@@ -183,6 +183,7 @@ public class ChicoryPremain {
    * Specification". This is public, protected or private first, and then other modifiers in the
    * following order: abstract, static, final, synchronized native.
    */
+  @SuppressWarnings("deprecation") // TODO: TEMPORARY
   private static void readPurityFile(File purityFileName, @Nullable File pathLoc) {
     pureMethods = new HashSet<String>();
     File purityFile = new File(pathLoc, purityFileName.getPath());
@@ -190,6 +191,7 @@ public class ChicoryPremain {
     BufferedReader reader;
     try {
       reader = UtilPlume.bufferedFileReader(purityFile);
+      // TODO: reader = FilesPlume.newBufferedFileReader(purityFile);
     } catch (FileNotFoundException e) {
       System.err.printf(
           "%nCould not find purity file %s = %s%n", purityFileName, purityFile.getAbsolutePath());

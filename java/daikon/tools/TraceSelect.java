@@ -12,9 +12,9 @@ import java.util.StringTokenizer;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
+import org.plumelib.util.FilesPlume;
 import org.plumelib.util.MultiRandSelector;
 import org.plumelib.util.StringsPlume;
-import org.plumelib.util.UtilPlume;
 
 public class TraceSelect {
 
@@ -199,7 +199,7 @@ public class TraceSelect {
         // but now add a '-p' in the front so it's all good
         sampleNames[num_reps] = filePrefix + ".inv";
 
-        PrintWriter pwOut = new PrintWriter(UtilPlume.bufferedFileWriter(filePrefix));
+        PrintWriter pwOut = new PrintWriter(FilesPlume.newBufferedFileWriter(filePrefix));
 
         for (String toPrint : al) {
           pwOut.println(toPrint);

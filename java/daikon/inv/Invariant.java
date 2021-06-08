@@ -1788,7 +1788,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       // debugGuarding.fine (guardingSet.toString());
     }
 
-    return CollectionsPlume.removeDuplicates(guardingList);
+    return CollectionsPlume.withoutDuplicates(guardingList);
   }
 
   // This is called only from finally_print_the_invariants().
