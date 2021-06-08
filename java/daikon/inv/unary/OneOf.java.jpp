@@ -421,9 +421,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   }
 
 #if defined(STRING) || defined(ELTSTRING)
-// TODO:  static Comparator<String> comparator = new Comparator.nullsFirst(Comparator.naturalOrder());
-  @SuppressWarnings("deprecation")
-  static Comparator<String> comparator = new StringsPlume.NullableStringComparator();
+  static Comparator<@Nullable String> comparator = Comparator.nullsFirst(Comparator.naturalOrder());
   #define COMPARATOR_ARG , comparator
 #elif defined(SEQUENCE)
   static Comparator<long[]> comparator = new ArraysPlume.LongArrayComparatorLexical();
