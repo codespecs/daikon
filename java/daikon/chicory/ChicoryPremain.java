@@ -8,7 +8,7 @@ import daikon.Chicory;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
-import daikon.plumelib.util.UtilPlume;
+import daikon.plumelib.util.FilesPlume;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -186,15 +186,13 @@ public class ChicoryPremain {
    * @param purityFileName the purity file
    * @param pathLoc the relative path; interpret {@code purityFileName} with respect to it
    */
-  @SuppressWarnings("deprecation") // TODO: TEMPORARY
   private static void readPurityFile(File purityFileName, @Nullable File pathLoc) {
     pureMethods = new HashSet<String>();
     File purityFile = new File(pathLoc, purityFileName.getPath());
 
     BufferedReader reader;
     try {
-      reader = UtilPlume.bufferedFileReader(purityFile);
-      // TODO: reader = FilesPlume.newBufferedFileReader(purityFile);
+      reader = FilesPlume.newBufferedFileReader(purityFile);
     } catch (FileNotFoundException e) {
       System.err.printf(
           "%nCould not find purity file %s = %s%n", purityFileName, purityFile.getAbsolutePath());
