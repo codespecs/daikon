@@ -63,6 +63,7 @@ import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
 
+/** File I/O utilities. */
 public final class FileIO {
 
   /** Nobody should ever instantiate a FileIO. */
