@@ -2383,6 +2383,13 @@ public final class FileIO {
     public boolean new_decl_format = false;
   }
 
+  /**
+   * Write a serialized PptMap to a file.
+   *
+   * @param map a PptMap
+   * @param file the file to which to write
+   * @throws IOException if there is trouble writing the file
+   */
   public static void write_serialized_pptmap(PptMap map, File file) throws IOException {
     SerialFormat record = new SerialFormat(map, Configuration.getInstance());
     FilesPlume.writeObject(record, file);

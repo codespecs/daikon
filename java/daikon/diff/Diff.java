@@ -486,7 +486,14 @@ public final class Diff {
     // finished; return (and end program)
   }
 
-  /** Reads an InvMap from a file that contains a serialized InvMap or PptMap. */
+  /**
+   * Reads an InvMap from a file that contains a serialized InvMap or PptMap.
+   *
+   * @param file a file
+   * @return an InvMap read from the file
+   * @throws IOException if there is trouble reading the file
+   * @throws ClassNotFoundException if an object in the serialized file has an unloadable class
+   */
   private InvMap readInvMap(File file) throws IOException, ClassNotFoundException {
     Object o = FilesPlume.readObject(file);
     if (o instanceof InvMap) {

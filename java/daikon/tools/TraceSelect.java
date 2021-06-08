@@ -16,6 +16,10 @@ import org.plumelib.util.FilesPlume;
 import org.plumelib.util.MultiRandSelector;
 import org.plumelib.util.StringsPlume;
 
+/**
+ * The TraceSelect tool creates several small subsets of the data by randomly selecting parts of the
+ * original trace file.
+ */
 public class TraceSelect {
 
   public static boolean CLEAN = true;

@@ -182,6 +182,9 @@ public class ChicoryPremain {
    * <p>The access modifiers are placed in canonical order as specified by "The Java Language
    * Specification". This is public, protected or private first, and then other modifiers in the
    * following order: abstract, static, final, synchronized native.
+   *
+   * @param purityFileName the purity file
+   * @param pathLoc the relative path; interpret {@code purityFileName} with respect to it
    */
   @SuppressWarnings("deprecation") // TODO: TEMPORARY
   private static void readPurityFile(File purityFileName, @Nullable File pathLoc) {
