@@ -1,0 +1,50 @@
+How to create junit-4.13.2-Daikon.jar:
+
+  git clone git@github.com:junit-team/junit4.git
+  cd junit4
+  git co 8b2ff14399264a378130c41cf0a00ca66d0c3a60
+
+Note that commit 8b2ff14399264a378130c41cf0a00ca66d0c3a60 is one commit past the r4.13.2 tag.  This additional
+commit adds a link to the r4.13.2 release notes to the documentation.
+
+You now need to modify two files:
+  pom.xml
+  src/main/java/junit/runner/Version.java
+
+The changes to pom.xml change the compile target from JDK 5 to JDK 8 and names the release r.13.2-Daikon:
+7c7
+<     <version>4.13.2</version>
+---
+>     <version>4.13.2-Daikon</version>
+96c96
+<         <jdkVersion>1.5</jdkVersion>
+---
+>         <jdkVersion>1.8</jdkVersion>
+225c225
+<                     <compilerVersion>1.5</compilerVersion>
+---
+>                     <compilerVersion>1.8</compilerVersion>
+566c566
+<                 <jdkVersion>1.6</jdkVersion>
+---
+>                 <jdkVersion>1.8</jdkVersion>
+596c596
+<                 <jdkVersion>1.7</jdkVersion>
+---
+>                 <jdkVersion>1.8</jdkVersion>
+
+The change to src/main/java/junit/runner/Version.java identifies the release as r.13.2-Daikon:
+12c12
+<               return "4.13.2-SNAPSHOT";
+---
+>               return "4.13.2-Daikon";
+
+After you have made the edits, build and verify the jar file with:
+  mvn verify
+
+You will get quite a few deprecation warnings - these can be ignored.  All the tests should pass:
+  Tests run: 1108, Failures: 0, Errors: 0, Skipped: 5
+
+The result of the build will be the file target/junit-4.13.2-Daikon.jar.  Copy this file to this
+directory (daikon/java/lib).
+

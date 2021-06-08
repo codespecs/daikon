@@ -179,7 +179,9 @@ public class Instrument implements ClassFileTransformer {
       } else {
         if (DynComp.dump) {
           System.out.printf("Dumping %s to %s%n", njc.getClassName(), debug_bin_dir);
+          // write .class file
           njc.dump(new File(debug_bin_dir, njc.getClassName() + ".class"));
+          // write .bcel file
           BcelUtil.dump(njc, debug_bin_dir);
         }
         return (njc.getBytes());

@@ -6,8 +6,8 @@ so that Daikon will run under Java 8.
 bcel-6.5.0.jar : https://repo.maven.apache.org/maven2/org/checkerframework/annotatedlib/bcel
   wget https://repo.maven.apache.org/maven2/org/checkerframework/annotatedlib/bcel/6.5.0/bcel-6.5.0.jar
 
-bcel-util-1.1.11.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/
-  wget https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/1.1.11/bcel-util-1.1.11.jar
+bcel-util-1.1.12.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/
+  wget https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/1.1.12/bcel-util-1.1.12.jar
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
 checker-framework/ and checker-qual.jar : https://github.com/typetools/checker-framework/releases
@@ -37,9 +37,13 @@ cd jarjar-pantsbuild && \
 java-getopt-1.0.14.0.1.jar : https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.checkerframework.annotatedlib%22%20a%3A%22java-getopt%22
   wget https://repo.maven.apache.org/maven2/org/checkerframework/annotatedlib/java-getopt/1.0.14.0.1/java-getopt-1.0.14.0.1.jar
 
-junit-4.13.2.jar : https://search.maven.org/search?q=g:junit%20AND%20a:junit
-  wget https://search.maven.org/remotecontent?filepath=junit/junit/4.13.2/junit-4.13.2.jar
-  then rename the file
+junit-4.13.2-Daikon.jar : This is our Java 8 recompilation of the release version of junit-4.13.2.jar.
+The release version contains Java 5 bytecodes.  When a program that uses JUnit is processed by DynComp
+it produces lots of warnings about the use of old bytes codes. More importantly, the Java 5 bytecodes
+generated for try finally statements confuse the BCEL bytecode verifier and it reports a fatal error.
+Note that if a user wishes to use the release version of JUnit, or any other version of JUnit, they
+can simply put it on their class path prior to daikon.jar and/or daikon/java/lib/*.  See the file
+README.junit for details on how to create junit-4.13.2-Daikon.jar.
 
 options-1.0.5.jar : https://search.maven.org/#search%7Cga%7C1%7Coptions
   wget https://repo.maven.apache.org/maven2/org/plumelib/options/1.0.5/options-1.0.5.jar
