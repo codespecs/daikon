@@ -973,57 +973,6 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_char_as_ints(java.io.PrintStream ps, char @Nullable [] a) {
-    if (a == null) {
-      ps.println("null");
-      return;
-    }
-    ps.print('[');
-    if (a.length > 0) {
-      ps.print(Character.getNumericValue(a[0]));
-      for (int i = 1; i < a.length; i++) {
-        ps.print(' ');
-        ps.print(Character.getNumericValue(a[i]));
-      }
-    }
-    ps.println(']');
-  }
-
-  public static final void println_array_char_as_ints(
-      java.io.PrintStream ps, Object @Nullable [] a) {
-    if (a == null) {
-      ps.println("null");
-      return;
-    }
-    ps.print('[');
-    if (a.length > 0) {
-      ps.print(Character.getNumericValue(((Character) a[0]).charValue()));
-      for (int i = 1; i < a.length; i++) {
-        ps.print(' ');
-        ps.print(Character.getNumericValue(((Character) a[i]).charValue()));
-      }
-    }
-    ps.println(']');
-  }
-
-  public static final void println_array_char_as_ints(
-      java.io.PrintStream ps, @Nullable List<Character> v) {
-    if (v == null) {
-      ps.println("null");
-      return;
-    }
-    ps.print('[');
-    int size = v.size();
-    if (size > 0) {
-      ps.print(Character.getNumericValue(v.get(0).charValue()));
-      for (int i = 1; i < size; i++) {
-        ps.print(' ');
-        ps.print(Character.getNumericValue(v.get(i).charValue()));
-      }
-    }
-    ps.println(']');
-  }
-
   // I'm not sure if this is what I want -- I might prefer to view it as String[].
   // Print the lengths of the elements of the top-level array.
   public static final void println_array_2d_size(java.io.PrintStream ps, char @Nullable [][] a) {
