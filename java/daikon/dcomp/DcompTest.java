@@ -253,6 +253,7 @@ class DcompTest {
     }
 
     // Should NOT change comparability
+    @SuppressWarnings("ReturnValueIgnored") // called for side effect
     public void compare3() {
       obj1.hashCode();
       obj2.hashCode();

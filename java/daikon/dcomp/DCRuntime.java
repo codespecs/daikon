@@ -1792,7 +1792,7 @@ public final class DCRuntime implements ComparabilityProvider {
   /** Map from array name to comparability for its indices (if any). */
   private static Map<String, Integer> arr_index_map;
   /** Map from variable to its comparability. */
-  private static Map<DaikonVariableInfo, Integer> dv_comp_map;
+  private static IdentityHashMap<DaikonVariableInfo, Integer> dv_comp_map;
   /** Comparability value for a variable. */
   private static int base_comp;
 
@@ -2144,7 +2144,8 @@ public final class DCRuntime implements ComparabilityProvider {
     }
 
     // List of all of the sets of comparable daikon variables
-    Map<DaikonVariableInfo, DVSet> sets = new IdentityHashMap<DaikonVariableInfo, DVSet>();
+    IdentityHashMap<DaikonVariableInfo, DVSet> sets =
+        new IdentityHashMap<DaikonVariableInfo, DVSet>();
 
     for (DaikonVariableInfo dv : root) {
       add_variable(sets, dv);
@@ -2179,7 +2180,8 @@ public final class DCRuntime implements ComparabilityProvider {
     // The keyset of this Map is exactly the RootInfo node and the set of all
     //   nodes that have children.
     // The valueset of this Map is exactly the set of all nodes.
-    Map<DaikonVariableInfo, DVSet> sets = new IdentityHashMap<DaikonVariableInfo, DVSet>(256);
+    IdentityHashMap<DaikonVariableInfo, DVSet> sets =
+        new IdentityHashMap<DaikonVariableInfo, DVSet>(256);
 
     for (DaikonVariableInfo child : root) {
       if (child.declShouldPrint()) add_variable_traced(sets, child);
