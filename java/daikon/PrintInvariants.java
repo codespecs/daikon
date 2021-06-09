@@ -255,8 +255,17 @@ public final class PrintInvariants {
   // words, if print_discarded_invariants == true).  But they can be null
   // even in that case, which means to output a discard-reason for every
   // invariant.
+  /** Output discard reasons for this class. If null, output discard reasons for all classes. */
   private static @MonotonicNonNull String discClass = null;
+  /**
+   * Comma-separated variable names. Output discard reasons if those are the variables. If null,
+   * output discard reasons for all variable tuples.
+   */
   private static @MonotonicNonNull String discVars = null;
+  /**
+   * Output discard reasons for this program point. If null, output discard reasons fro all program
+   * points.
+   */
   private static @MonotonicNonNull String discPpt = null;
 
   /** The usage message for this program. */
