@@ -206,12 +206,11 @@ public class DiffTester {
         name, ProglangType.INT, ProglangType.INT, VarComparabilityNone.it, VarInfoAux.getDefault());
   }
 
-  @SuppressWarnings("ReturnValueIgnored") // called for side effect
   @Test
   public void testEmptyEmpty() {
     RootNode diff = diffSome.diffPptMap(empty, empty);
     RootNode ref = new RootNode();
-    printTree(ref).equals(printTree(diff));
+    assertEquals(printTree(ref), printTree(diff));
   }
 
   @Test
