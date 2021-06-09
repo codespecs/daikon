@@ -433,7 +433,7 @@ public final @Interned class ProglangType implements Serializable {
       } else {
         throw new IllegalArgumentException("Bad character: " + value);
       }
-      return Intern.internedLong(Character.getNumericValue(c));
+      return Intern.internedLong((int) c);
     }
     // When parse_value is called from FileIO.read_ppt_decl, we have
     // not set file_rep_type. Hence, rep_type is still file_rep_type
