@@ -703,7 +703,7 @@ else
 ## MutablePublicArray is off because Error Prone 2.4.0 crashes: https://github.com/google/error-prone/issues/1645
 	javac -cp ${DAIKON_CLASSPATH} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
-	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF' \
+	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF' \
 	  -Xmaxwarns 100000 -Werror \
 	  ${JAVA_FILES_FOR_STYLE}
 endif

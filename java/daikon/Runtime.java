@@ -29,7 +29,9 @@ import org.checkerframework.checker.signature.qual.FieldDescriptor;
 // See Checker Framework test case
 @SuppressWarnings({
   "initialization.fields.uninitialized", // for the dtrace field.
-  "JavaLangClash"
+  "JavaLangClash",
+  "CharacterGetNumericValue", // This class will be deleted
+  "InlineMeSuggester", // This class will be deleted
 })
 public final class Runtime {
 
