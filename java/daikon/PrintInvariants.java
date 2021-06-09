@@ -259,12 +259,6 @@ public final class PrintInvariants {
   private static @MonotonicNonNull String discVars = null;
   private static @MonotonicNonNull String discPpt = null;
 
-  // Avoid problems if daikon.Runtime is loaded at analysis (rather than
-  // test-run) time.  This might have to change when JTrace is used.
-  static {
-    daikon.Runtime.no_dtrace = true;
-  }
-
   /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(

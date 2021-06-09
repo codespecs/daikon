@@ -492,12 +492,6 @@ public final class Daikon {
   /** Prints out statistics concerning equality sets, suppressions, etc. */
   public static final Logger debugStats = Logger.getLogger("daikon.stats");
 
-  // Avoid problems if daikon.Runtime is loaded at analysis (rather than
-  // test-run) time.  This might have to change when JTrace is used.
-  static {
-    daikon.Runtime.no_dtrace = true;
-  }
-
   /** The usage message for this program. */
   static String usage =
       StringsPlume.joinLines(
