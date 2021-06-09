@@ -11,7 +11,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.FilesPlume;
 
 /**
  * This class's main method can be used to update both the target files of SplitterFactoryTest and
@@ -156,7 +156,7 @@ public class SplitterFactoryTestUpdater {
     // file.renameTo(to) fails if the two files are on different file systems
     // (e.g., /tmp and /scratch may be different).
     // So read and write the file directly rather than using renameTo().
-    UtilPlume.writeFile(to, UtilPlume.readFile(from));
+    FilesPlume.writeFile(to, FilesPlume.readFile(from));
   }
 
   /** Writes the new code for "SplitterFactoryTest.java". */
@@ -166,7 +166,8 @@ public class SplitterFactoryTestUpdater {
       // Delete the file, in case it is unwriteable (in which case deleting
       // works, but overwriting does not).
       new File(splitDir + "SplitterFactoryTest.java").delete();
-      BufferedWriter writer = UtilPlume.bufferedFileWriter(splitDir + "SplitterFactoryTest.java");
+      BufferedWriter writer =
+          FilesPlume.newBufferedFileWriter(splitDir + "SplitterFactoryTest.java");
       writer.write(code);
       writer.flush();
     } catch (IOException e) {
@@ -191,6 +192,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("import java.util.*;");
     ps.println("import junit.framework.*;");
     ps.println("import org.junit.Test;");
+    ps.println("import org.plumelib.util.FilesPlume;");
     ps.println("import org.plumelib.util.StringsPlume;");
     ps.println("import org.plumelib.util.UtilPlume;");
     ps.println("import static org.junit.Assert.fail;");
@@ -316,9 +318,9 @@ public class SplitterFactoryTestUpdater {
       ps.println("    createSplitterFiles(");
       ps.println(
           "        \""
-              + UtilPlume.javaSource(spinfoFileLists.get(i).get(0))
+              + FilesPlume.javaSource(spinfoFileLists.get(i).get(0))
               + "\", \""
-              + UtilPlume.javaSource(declsFileLists.get(i).get(0))
+              + FilesPlume.javaSource(declsFileLists.get(i).get(0))
               + "\");");
     }
     ps.println("  }");
@@ -328,7 +330,7 @@ public class SplitterFactoryTestUpdater {
   private static void appendTests(PrintStream ps) {
     ps.println("  /** Returns true iff files are the same (ignoring extra white space). */");
     ps.println("  public static void assertEqualFiles(String f1, String f2) {");
-    ps.println("    if (!UtilPlume.equalFiles(f1, f2)) {");
+    ps.println("    if (!FilesPlume.equalFiles(f1, f2)) {");
     ps.println("      fail(\"Files \" + f1 + \" and \" + f2 + \" differ.\");");
     ps.println("    }");
     ps.println("  }");

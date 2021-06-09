@@ -114,7 +114,6 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.StringsPlume;
-import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -568,7 +567,7 @@ public class PptTopLevel extends Ppt {
     }
     BitSet b1 = mbtracker.get(vi1.value_index);
     BitSet b2 = mbtracker.get(vi2.value_index);
-    int num_slice_samples = UtilPlume.intersectionCardinality(b1, b2);
+    int num_slice_samples = CollectionsPlume.intersectionCardinality(b1, b2);
     return num_slice_samples;
   }
 
@@ -586,7 +585,7 @@ public class PptTopLevel extends Ppt {
     BitSet b1 = mbtracker.get(vi1.value_index);
     BitSet b2 = mbtracker.get(vi2.value_index);
     BitSet b3 = mbtracker.get(vi3.value_index);
-    int num_slice_samples = UtilPlume.intersectionCardinality(b1, b2, b3);
+    int num_slice_samples = CollectionsPlume.intersectionCardinality(b1, b2, b3);
     return num_slice_samples;
   }
 

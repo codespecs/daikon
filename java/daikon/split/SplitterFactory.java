@@ -17,7 +17,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.checkerframework.checker.signature.qual.BinaryName;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.FilesPlume;
 
 /**
  * This class contains static methods {@link #parse_spinfofile(File)} which creates Splitterss from
@@ -189,7 +189,7 @@ public class SplitterFactory {
       @BinaryName String fileName_bn = fileName;
       splitObj.setClassName(fileName_bn);
       try {
-        BufferedWriter writer = UtilPlume.bufferedFileWriter(fileAddress + ".java");
+        BufferedWriter writer = FilesPlume.newBufferedFileWriter(fileAddress + ".java");
         if (dkconfig_delete_splitters_on_exit) {
           new File(fileAddress + ".java").deleteOnExit();
           new File(fileAddress + ".class").deleteOnExit();
@@ -324,7 +324,7 @@ public class SplitterFactory {
    */
   private static String createTempDir() {
     try {
-      File tmpDir = UtilPlume.createTempDir("daikon", "split");
+      File tmpDir = FilesPlume.createTempDir("daikon", "split");
       if (dkconfig_delete_splitters_on_exit) {
         tmpDir.deleteOnExit();
       }
