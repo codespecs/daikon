@@ -96,8 +96,8 @@ public final class TestClassOrInterfaceTypeDecorateVisitor {
     String result = ungenerifiedCollector.collectionResults().trim();
     String[] result_arr = StringsPlume.splitLines(result);
 
-    // UtilPlume.writeFile(new File("expected.txt"), expected);
-    // UtilPlume.writeFile(new File("result.txt"), result);
+    // FilesPlume.writeFile(new File("expected.txt"), expected);
+    // FilesPlume.writeFile(new File("result.txt"), result);
 
     assertEquals(expectedAnswerLines.length, result_arr.length);
     for (int ii = 0; ii < expectedAnswerLines.length; ii++) {
