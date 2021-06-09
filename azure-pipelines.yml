@@ -11,6 +11,11 @@ pr:
 
 jobs:
 
+# The dependsOn clauses are:
+#  * Everything not *_ubuntu_jdk11 or typecheck_jdk11 depends on jdk11_jobs.
+#  * Anything *_jdk8 depends on *_jdk11.
+#  * Anything *_centos_* or *_fedora_* depends on *_ubuntu_*.
+
 # The remainder of jobs are run only if the jdk11_jobs pass.
 - job: jdk11_jobs
   dependsOn:
@@ -292,7 +297,6 @@ jobs:
     - jdk11_jobs
     - kvasir_fedora_jdk11
     - kvasir_ubuntu_jdk8
-    - typecheck_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-fedora-jdk8-plus:latest
@@ -432,7 +436,6 @@ jobs:
     - jdk11_jobs
     - kvasir_centos_jdk11
     - kvasir_ubuntu_jdk8
-    - typecheck_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-centos-jdk8-plus:latest
