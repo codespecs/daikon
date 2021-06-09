@@ -124,7 +124,6 @@ jobs:
   dependsOn:
     - jdk11_jobs
     - kvasir_ubuntu_jdk11
-    - typecheck_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8-plus:latest
@@ -147,7 +146,6 @@ jobs:
 - job: typecheck_jdk8
   dependsOn:
     - jdk11_jobs
-    - typecheck_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8-plus:latest
