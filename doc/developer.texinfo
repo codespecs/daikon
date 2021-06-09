@@ -471,38 +471,38 @@ them all to 1, which is a safe default.
 @example
 class Example @{
   static @{
-    daikon.Runtime.setDtraceMaybe("daikon-output/StackAr.dtrace");
+    daikon.chicory.Runtime.setDtraceMaybe("daikon-output/StackAr.dtrace");
   @}
 
   // Return either the square of x or the square of (x+1).
   int squar(int x, boolean b) @{
-    synchronized (daikon.Runtime.dtrace) @{
-      daikon.Runtime.dtrace.println();
-      daikon.Runtime.dtrace.println("Example.squar:::ENTER");
-      daikon.Runtime.dtrace.println("x");
-      daikon.Runtime.dtrace.println(x);
-      daikon.Runtime.dtrace.println(1);  // modified bit
-      daikon.Runtime.dtrace.println("b");
-      daikon.Runtime.dtrace.println(b ? 1 : 0);
-      daikon.Runtime.dtrace.println(1);  // modified bit
+    synchronized (daikon.chicory.Runtime.dtrace) @{
+      daikon.chicory.Runtime.dtrace.println();
+      daikon.chicory.Runtime.dtrace.println("Example.squar:::ENTER");
+      daikon.chicory.Runtime.dtrace.println("x");
+      daikon.chicory.Runtime.dtrace.println(x);
+      daikon.chicory.Runtime.dtrace.println(1);  // modified bit
+      daikon.chicory.Runtime.dtrace.println("b");
+      daikon.chicory.Runtime.dtrace.println(b ? 1 : 0);
+      daikon.chicory.Runtime.dtrace.println(1);  // modified bit
     @}
 
     if (b)
       x++;
 
     int daikon_return_value = x*x;
-    synchronized (daikon.Runtime.dtrace) @{
-      daikon.Runtime.dtrace.println();
-      daikon.Runtime.dtrace.println("Example.squar:::EXIT");
-      daikon.Runtime.dtrace.println("x");
-      daikon.Runtime.dtrace.println(x);
-      daikon.Runtime.dtrace.println(1);  // modified bit
-      daikon.Runtime.dtrace.println("b");
-      daikon.Runtime.dtrace.println(b ? 1 : 0);
-      daikon.Runtime.dtrace.println(1);  // modified bit
-      daikon.Runtime.dtrace.println("return");
-      daikon.Runtime.dtrace.println(daikon_return_value);
-      daikon.Runtime.dtrace.println(1);  // modified bit
+    synchronized (daikon.chicory.Runtime.dtrace) @{
+      daikon.chicory.Runtime.dtrace.println();
+      daikon.chicory.Runtime.dtrace.println("Example.squar:::EXIT");
+      daikon.chicory.Runtime.dtrace.println("x");
+      daikon.chicory.Runtime.dtrace.println(x);
+      daikon.chicory.Runtime.dtrace.println(1);  // modified bit
+      daikon.chicory.Runtime.dtrace.println("b");
+      daikon.chicory.Runtime.dtrace.println(b ? 1 : 0);
+      daikon.chicory.Runtime.dtrace.println(1);  // modified bit
+      daikon.chicory.Runtime.dtrace.println("return");
+      daikon.chicory.Runtime.dtrace.println(daikon_return_value);
+      daikon.chicory.Runtime.dtrace.println(1);  // modified bit
     @}
 
     return daikon_return_value;

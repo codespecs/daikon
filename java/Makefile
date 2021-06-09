@@ -392,7 +392,7 @@ endif
 	$(MAKE) --stop all_directly junit
 
 ## In general, don't use this; it misses some files
-all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
+all_via_daikon: chicory daikon/Daikon.class daikon/diff/Diff.class
 	$(MAKE) all_pass2
 
 xlint: chicory ${ALL_GENERATED_FILES}
@@ -600,9 +600,6 @@ daikon/Daikon.class: daikon/Daikon.java	../utils/plume-scripts ${AUTO_GENERATED_
 
 daikon/Diff.class: Diff.java ../utils/plume-scripts ${AUTO_GENERATED_FILES}
 	${JAVAC_COMMAND} daikon/Diff.java
-
-daikon/Runtime.class: daikon/Runtime.java
-	${JAVAC_COMMAND} daikon/Runtime.java
 
 
 ###########################################################################
