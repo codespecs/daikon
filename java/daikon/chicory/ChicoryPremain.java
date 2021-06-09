@@ -8,7 +8,7 @@ import daikon.Chicory;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
-import daikon.plumelib.util.UtilPlume;
+import daikon.plumelib.util.FilesPlume;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -182,6 +182,9 @@ public class ChicoryPremain {
    * <p>The access modifiers are placed in canonical order as specified by "The Java Language
    * Specification". This is public, protected or private first, and then other modifiers in the
    * following order: abstract, static, final, synchronized native.
+   *
+   * @param purityFileName the purity file
+   * @param pathLoc the relative path; interpret {@code purityFileName} with respect to it
    */
   private static void readPurityFile(File purityFileName, @Nullable File pathLoc) {
     pureMethods = new HashSet<String>();
@@ -189,7 +192,7 @@ public class ChicoryPremain {
 
     BufferedReader reader;
     try {
-      reader = UtilPlume.bufferedFileReader(purityFile);
+      reader = FilesPlume.newBufferedFileReader(purityFile);
     } catch (FileNotFoundException e) {
       System.err.printf(
           "%nCould not find purity file %s = %s%n", purityFileName, purityFile.getAbsolutePath());

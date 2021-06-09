@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.plumelib.util.FilesPlume;
 import org.plumelib.util.Partitioner;
-import org.plumelib.util.UtilPlume;
 
 /**
  * This class partitions Daikon trace files so that invocations of the same program point are
@@ -32,7 +32,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
     try {
       this.filename = filename;
       // System.out.printf("trying with file %s%n", filename);
-      br = UtilPlume.bufferedFileReader(filename);
+      br = FilesPlume.newBufferedFileReader(filename);
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -153,7 +153,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
       // look for EXIT half of invocations and augment
       // the values of nonceMap so that the map eventually
       // maps nonces --> full invocations with ENTER / EXIT
-      br = UtilPlume.bufferedFileReader(filename);
+      br = FilesPlume.newBufferedFileReader(filename);
       while (br.ready()) {
         String nextInvo = grabNextInvocation();
         if (nextInvo.indexOf("EXIT") == -1) {
