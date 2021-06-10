@@ -113,7 +113,7 @@ public class DotNetStringFilter extends InvariantFilter {
 
   /**
    * {@code true} iff {@code invariant} encodes {@code x != null} and {@code
-   * !string.IsNullOrEmpty(x)} is an inferred invariant</code>
+   * !string.IsNullOrEmpty(x)} is an inferred invariant
    */
   boolean shouldDiscardNonNullInvariant(Invariant invariant) {
     if (invariant instanceof NonZero) {
@@ -140,7 +140,7 @@ public class DotNetStringFilter extends InvariantFilter {
 
   /**
    * {@code true} iff {@code invariant} encodes {@code !string.IsNullOrEmpty()} and {@code
-   * !string.IsNullOrWhitespace()} is an inferred invariant</code>.
+   * !string.IsNullOrWhitespace()} is an inferred invariant.
    */
   boolean shouldDiscardNullOrEmptyInvariant(Invariant invariant) {
     if (invariant instanceof OneOfScalar) {
@@ -169,7 +169,7 @@ public class DotNetStringFilter extends InvariantFilter {
 
   /**
    * {@code true} iff {@code invariant} encodes {@code string.IsNullOrWhitespace()} and {@code
-   * string.IsNullOrEmpty()} is an inferred invariant</code>.
+   * string.IsNullOrEmpty()} is an inferred invariant.
    */
   boolean shouldDiscardNullOrWhitespaceInvariant(Invariant invariant) {
     if (invariant instanceof OneOfScalar) {

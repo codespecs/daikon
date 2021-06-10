@@ -429,10 +429,10 @@ public class ExtractConsequent {
 
   /**
    * Prevents the occurence of "equivalent" inequalities, or inequalities which produce the same
-   * pair of splits at a program point, for example "x <= y" and "x &gt; y". Replaces "&ge;" with
-   * "<", "&le;" with ">", and "!=" with "==" so that the occurence of equivalent inequalities can
-   * be detected. However it tries not to be smart ... If there is more than one inequality in the
-   * expression, it doesn't perform a substitution.
+   * pair of splits at a program point, for example "x &le; y" and "x &gt; y". Replaces "&ge;" with
+   * "&lt;", "&le;" with "&gt;", and "!=" with "==" so that the occurence of equivalent inequalities
+   * can be detected. However it tries not to be smart ... If there is more than one inequality in
+   * the expression, it doesn't perform a substitution.
    */
   private static String simplify_inequalities(String condition) {
     if (contains_exactly_one(condition, inequality_pattern)) {
