@@ -601,6 +601,8 @@ public class Runtime {
    * If the current data trace file is not yet set, then set it. The value of the DTRACEFILE
    * environment variable is used; if that environment variable is not set, then the argument to
    * this method is used instead.
+   *
+   * @param default_filename the file to maybe use as the data trace file
    */
   public static void setDtraceMaybe(String default_filename) {
     // System.out.println ("Setting dtrace maybe: " + default_filename);
