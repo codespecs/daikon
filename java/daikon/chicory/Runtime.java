@@ -611,6 +611,11 @@ public class Runtime {
     }
   }
 
+  /**
+   * Returns true if method Thread.addShutdownHook exists.
+   *
+   * @return true if method Thread.addShutdownHook exists
+   */
   private static boolean supportsAddShutdownHook() {
     try {
       Class<java.lang.Runtime> rt = java.lang.Runtime.class;
