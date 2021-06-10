@@ -11,20 +11,28 @@ pr:
 
 jobs:
 
-# The remainder of jobs are run only if the jdk8_jobs pass.
-- job: jdk8_jobs
+# The dependsOn clauses are:
+#  * Everything not *_ubuntu_jdk11 or typecheck_jdk11 depends on jdk11_jobs.
+#  * Anything *_jdk8 depends on *_jdk11.
+#  * Anything *_centos_* or *_fedora_* depends on *_ubuntu_*.
+
+# The remainder of jobs are run only if the jdk11_jobs pass.
+- job: jdk11_jobs
   dependsOn:
-    - quick_txt_diff_ubuntu_jdk8
-    - nonquick_txt_diff_ubuntu_jdk8
-    - non_txt_diff_ubuntu_jdk8
-    - misc_ubuntu_jdk8
-    - kvasir_ubuntu_jdk8
-    - typecheck_jdk8
+    - quick_txt_diff_ubuntu_jdk11
+    - nonquick_txt_diff_ubuntu_jdk11
+    - non_txt_diff_ubuntu_jdk11
+    - misc_ubuntu_jdk11
+    - kvasir_ubuntu_jdk11
+    - typecheck_jdk11
   steps:
   - checkout: none
   - bash: true
 
 - job: quick_txt_diff_ubuntu_jdk8
+  dependsOn:
+    - jdk11_jobs
+    - quick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8:latest
@@ -35,9 +43,6 @@ jobs:
     displayName: test-quick-txt-diff.sh
 
 - job: quick_txt_diff_ubuntu_jdk11
-  dependsOn:
-    - jdk8_jobs
-    - quick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11:latest
@@ -48,6 +53,9 @@ jobs:
     displayName: test-quick-txt-diff.sh
 
 - job: nonquick_txt_diff_ubuntu_jdk8
+  dependsOn:
+    - jdk11_jobs
+    - nonquick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8:latest
@@ -58,9 +66,6 @@ jobs:
     displayName: test-nonquick-txt-diff.sh
 
 - job: nonquick_txt_diff_ubuntu_jdk11
-  dependsOn:
-    - jdk8_jobs
-    - nonquick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11:latest
@@ -71,6 +76,9 @@ jobs:
     displayName: test-nonquick-txt-diff.sh
 
 - job: non_txt_diff_ubuntu_jdk8
+  dependsOn:
+    - jdk11_jobs
+    - non_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8:latest
@@ -81,9 +89,6 @@ jobs:
     displayName: test-non-txt-diff.sh
 
 - job: non_txt_diff_ubuntu_jdk11
-  dependsOn:
-    - jdk8_jobs
-    - non_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11:latest
@@ -94,6 +99,9 @@ jobs:
     displayName: test-non-txt-diff.sh
 
 - job: misc_ubuntu_jdk8
+  dependsOn:
+    - jdk11_jobs
+    - misc_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8-plus:latest
@@ -106,9 +114,6 @@ jobs:
     displayName: test-misc.sh
 
 - job: misc_ubuntu_jdk11
-  dependsOn:
-    - jdk8_jobs
-    - misc_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11-plus:latest
@@ -121,6 +126,9 @@ jobs:
     displayName: test-misc.sh
 
 - job: kvasir_ubuntu_jdk8
+  dependsOn:
+    - jdk11_jobs
+    - kvasir_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8-plus:latest
@@ -131,10 +139,6 @@ jobs:
     displayName: test-kvasir.sh
 
 - job: kvasir_ubuntu_jdk11
-  dependsOn:
-    - jdk8_jobs
-    - kvasir_ubuntu_jdk8
-    - typecheck_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11-plus:latest
@@ -145,6 +149,8 @@ jobs:
     displayName: test-kvasir.sh
 
 - job: typecheck_jdk8
+  dependsOn:
+    - jdk11_jobs
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8-plus:latest
@@ -160,9 +166,6 @@ jobs:
     displayName: test-typecheck.sh
 
 - job: typecheck_jdk11
-  dependsOn:
-    - jdk8_jobs
-    - typecheck_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11-plus:latest
@@ -179,7 +182,8 @@ jobs:
 
 - job: quick_txt_diff_fedora_jdk8
   dependsOn:
-    - jdk8_jobs
+    - jdk11_jobs
+    - quick_txt_diff_fedora_jdk11
     - quick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -192,8 +196,7 @@ jobs:
 
 - job: quick_txt_diff_fedora_jdk11
   dependsOn:
-    - jdk8_jobs
-    - quick_txt_diff_fedora_jdk8
+    - jdk11_jobs
     - quick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -206,7 +209,8 @@ jobs:
 
 - job: nonquick_txt_diff_fedora_jdk8
   dependsOn:
-    - jdk8_jobs
+    - jdk11_jobs
+    - nonquick_txt_diff_fedora_jdk11
     - nonquick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -219,8 +223,7 @@ jobs:
 
 - job: nonquick_txt_diff_fedora_jdk11
   dependsOn:
-    - jdk8_jobs
-    - nonquick_txt_diff_fedora_jdk8
+    - jdk11_jobs
     - nonquick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -233,7 +236,8 @@ jobs:
 
 - job: non_txt_diff_fedora_jdk8
   dependsOn:
-    - jdk8_jobs
+    - jdk11_jobs
+    - non_txt_diff_fedora_jdk11
     - non_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -246,8 +250,7 @@ jobs:
 
 - job: non_txt_diff_fedora_jdk11
   dependsOn:
-    - jdk8_jobs
-    - non_txt_diff_fedora_jdk8
+    - jdk11_jobs
     - non_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -260,7 +263,8 @@ jobs:
 
 - job: misc_fedora_jdk8
   dependsOn:
-    - jdk8_jobs
+    - jdk11_jobs
+    - misc_fedora_jdk11
     - misc_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -275,8 +279,7 @@ jobs:
 
 - job: misc_fedora_jdk11
   dependsOn:
-    - jdk8_jobs
-    - misc_fedora_jdk8
+    - jdk11_jobs
     - misc_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -291,9 +294,9 @@ jobs:
 
 - job: kvasir_fedora_jdk8
   dependsOn:
-    - jdk8_jobs
+    - jdk11_jobs
+    - kvasir_fedora_jdk11
     - kvasir_ubuntu_jdk8
-    - typecheck_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-fedora-jdk8-plus:latest
@@ -305,8 +308,7 @@ jobs:
 
 - job: kvasir_fedora_jdk11
   dependsOn:
-    - jdk8_jobs
-    - kvasir_fedora_jdk8
+    - jdk11_jobs
     - kvasir_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -319,7 +321,8 @@ jobs:
 
 - job: quick_txt_diff_centos_jdk8
   dependsOn:
-    - jdk8_jobs
+    - jdk11_jobs
+    - quick_txt_diff_centos_jdk11
     - quick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -332,8 +335,7 @@ jobs:
 
 - job: quick_txt_diff_centos_jdk11
   dependsOn:
-    - jdk8_jobs
-    - quick_txt_diff_centos_jdk8
+    - jdk11_jobs
     - quick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -346,7 +348,8 @@ jobs:
 
 - job: nonquick_txt_diff_centos_jdk8
   dependsOn:
-    - jdk8_jobs
+    - jdk11_jobs
+    - nonquick_txt_diff_centos_jdk11
     - nonquick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -359,8 +362,7 @@ jobs:
 
 - job: nonquick_txt_diff_centos_jdk11
   dependsOn:
-    - jdk8_jobs
-    - nonquick_txt_diff_centos_jdk8
+    - jdk11_jobs
     - nonquick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -373,7 +375,8 @@ jobs:
 
 - job: non_txt_diff_centos_jdk8
   dependsOn:
-    - jdk8_jobs
+    - jdk11_jobs
+    - non_txt_diff_centos_jdk11
     - non_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -386,8 +389,7 @@ jobs:
 
 - job: non_txt_diff_centos_jdk11
   dependsOn:
-    - jdk8_jobs
-    - non_txt_diff_centos_jdk8
+    - jdk11_jobs
     - non_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -400,7 +402,8 @@ jobs:
 
 - job: misc_centos_jdk8
   dependsOn:
-    - jdk8_jobs
+    - jdk11_jobs
+    - misc_centos_jdk11
     - misc_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -415,8 +418,7 @@ jobs:
 
 - job: misc_centos_jdk11
   dependsOn:
-    - jdk8_jobs
-    - misc_centos_jdk8
+    - jdk11_jobs
     - misc_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -431,9 +433,9 @@ jobs:
 
 - job: kvasir_centos_jdk8
   dependsOn:
-    - jdk8_jobs
+    - jdk11_jobs
+    - kvasir_centos_jdk11
     - kvasir_ubuntu_jdk8
-    - typecheck_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-centos-jdk8-plus:latest
@@ -445,8 +447,7 @@ jobs:
 
 - job: kvasir_centos_jdk11
   dependsOn:
-    - jdk8_jobs
-    - kvasir_centos_jdk8
+    - jdk11_jobs
     - kvasir_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
