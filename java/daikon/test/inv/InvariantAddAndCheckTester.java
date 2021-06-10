@@ -849,7 +849,8 @@ public class InvariantAddAndCheckTester {
     }
 
     /**
-     * This function instantiates an invariant class by using the <type>(PptSlice) constructor.
+     * This function instantiates an invariant class by using the {@code <type>(PptSlice)}
+     * constructor.
      *
      * @param theClass the invariant class to be instantiated
      * @param sl the PptSlice representing the variables about which an invariant is determined
