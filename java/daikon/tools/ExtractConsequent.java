@@ -433,6 +433,9 @@ public class ExtractConsequent {
    * "&lt;", "&le;" with "&gt;", and "!=" with "==" so that the occurence of equivalent inequalities
    * can be detected. However it tries not to be smart ... If there is more than one inequality in
    * the expression, it doesn't perform a substitution.
+   *
+   * @param condition a boolean equation
+   * @return the condition, with some equalities canonicalized
    */
   private static String simplify_inequalities(String condition) {
     if (contains_exactly_one(condition, inequality_pattern)) {
