@@ -210,7 +210,7 @@ public class DiffTester {
   public void testEmptyEmpty() {
     RootNode diff = diffSome.diffPptMap(empty, empty);
     RootNode ref = new RootNode();
-    printTree(ref).equals(printTree(diff));
+    assertEquals(printTree(ref), printTree(diff));
   }
 
   @Test
