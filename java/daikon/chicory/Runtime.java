@@ -555,7 +555,6 @@ public class Runtime {
     }
   }
 
-  // Copied from daikon.Runtime
   /** Specify the dtrace file to which to write. */
   @EnsuresNonNull("dtrace")
   public static void setDtrace(String filename, boolean append) {
@@ -602,9 +601,10 @@ public class Runtime {
    * If the current data trace file is not yet set, then set it. The value of the DTRACEFILE
    * environment variable is used; if that environment variable is not set, then the argument to
    * this method is used instead.
+   *
+   * @param default_filename the file to maybe use as the data trace file
    */
   public static void setDtraceMaybe(String default_filename) {
-    // Copied from daikon.Runtime
     // System.out.println ("Setting dtrace maybe: " + default_filename);
     if ((dtrace == null) && !no_dtrace) {
       String filename = System.getProperty("DTRACEFILE", default_filename);
@@ -613,9 +613,12 @@ public class Runtime {
     }
   }
 
+  /**
+   * Returns true if method Thread.addShutdownHook exists.
+   *
+   * @return true if method Thread.addShutdownHook exists
+   */
   private static boolean supportsAddShutdownHook() {
-    // Copied from daikon.Runtime
-
     try {
       Class<java.lang.Runtime> rt = java.lang.Runtime.class;
       rt.getMethod("addShutdownHook", new Class<?>[] {java.lang.Thread.class});
@@ -627,8 +630,6 @@ public class Runtime {
 
   /** Add a shutdown hook to close the PrintWriter when the program exits. */
   private static void addShutdownHook() {
-    // Copied from daikon.Runtime, then modified
-
     java.lang.Runtime.getRuntime()
         .addShutdownHook(
             new Thread() {
