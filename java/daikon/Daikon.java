@@ -443,7 +443,7 @@ public final class Daikon {
 
   /**
    * Regular expression that matches class names in the format expected by {@link
-   * Class#getName(String)}.
+   * Class#forName(String)}.
    */
   // This regular expression is taken from
   // checker-framework/checker/src/org/checkerframework/checker/signature/qual/ClassGetName.java

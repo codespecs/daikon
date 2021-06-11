@@ -232,7 +232,6 @@ public class SplitterFactory {
    * @return the error output from compiling the files
    * @param fileNames paths to the files to be compiled as Strings
    * @throws IOException if there is a problem reading a file
-   * @see plume.FileCompiler#compileFiles
    */
   private static String compileFiles(List<String> fileNames) throws IOException {
     // We delay setting fileCompiler until now because we want to permit
