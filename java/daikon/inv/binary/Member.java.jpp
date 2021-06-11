@@ -481,8 +481,8 @@ public final class CLASSNAME extends SEQUENCESCALAR {
    * Checks to see if this is obvious over the specified variables. Implements the following checks:
    *
    * <pre>
-   *   (0 <= i &le; j) ^ (a[] == b[]) &rArr; a[i] in b[0..j]
-   *   (0 <= i &le; j) ^ (a[] == b[]) &rArr; a[j] in b[i..]
+   *   (0 &le; i &le; j) ^ (a[] == b[]) &rArr; a[i] in b[0..j]
+   *   (0 &le; i &le; j) ^ (a[] == b[]) &rArr; a[j] in b[i..]
    * </pre>
    */
   private @Nullable DiscardInfo subscript_in_subsequence(VarInfo[] vis) {
