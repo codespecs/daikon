@@ -1,10 +1,6 @@
 PPT_NAME misc.fuzzy.daikonPrint
 x == null
 
-PPT_NAME misc.fuzzy.main
-daikon.Runtime.ps_count++ == 0
-daikon.Runtime.ps_count++ == 0
-
 PPT_NAME misc.fuzzy.daikonPrintArray
 a == null
 depth == 0
@@ -21,8 +17,3 @@ i < a.size()
 
 PPT_NAME misc.fuzzy.daikonPrintArrayNonsensical
 depth == 0
-
-PPT_NAME misc.fuzzy.fuzzy
-daikon.Runtime.ps_count++ == 0
-daikon.Runtime.ps_count++ == 0
-

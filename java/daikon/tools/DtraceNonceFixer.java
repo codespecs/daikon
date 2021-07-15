@@ -6,8 +6,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
+import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
-import org.plumelib.util.UtilPlume;
 
 /**
  * This tool fixes a Dtrace file whose invocation nonces became inaccurate as a result of a {@code
@@ -55,8 +55,8 @@ public class DtraceNonceFixer {
         args[0].endsWith(".gz") ? (args[0] + "_fixed.gz") : (args[0] + "_fixed");
 
     try {
-      BufferedReader br1 = UtilPlume.bufferedFileReader(args[0]);
-      PrintWriter out = new PrintWriter(UtilPlume.bufferedFileWriter(outputFilename));
+      BufferedReader br1 = FilesPlume.newBufferedFileReader(args[0]);
+      PrintWriter out = new PrintWriter(FilesPlume.newBufferedFileWriter(outputFilename));
 
       // maxNonce - the biggest nonce ever found in the file
       // correctionFactor - the amount to add to each observed nonce
@@ -91,8 +91,8 @@ public class DtraceNonceFixer {
       String allFixedFilename =
           outputFilename.endsWith(".gz") ? (args[0] + "_all_fixed.gz") : (args[0] + "_all_fixed");
 
-      BufferedReader br2 = UtilPlume.bufferedFileReader(outputFilename);
-      out = new PrintWriter(UtilPlume.bufferedFileWriter(allFixedFilename));
+      BufferedReader br2 = FilesPlume.newBufferedFileReader(outputFilename);
+      out = new PrintWriter(FilesPlume.newBufferedFileWriter(allFixedFilename));
 
       while (br2.ready()) {
         String nextInvo = grabNextInvocation(br2);

@@ -1778,7 +1778,12 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return getGuardingList(ppt.var_infos);
   }
 
-  /** Returns the union of calling VarInfo.getGuardingList on each element of the argument. */
+  /**
+   * Returns the union of calling VarInfo.getGuardingList on each element of the argument.
+   *
+   * @param varInfos an array of VarInfo
+   * @return the union of calling VarInfo.getGuardingList on each element of the argument
+   */
   public static List<VarInfo> getGuardingList(VarInfo[] varInfos) {
     List<VarInfo> guardingList = new ArrayList<>();
 
@@ -1788,7 +1793,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       // debugGuarding.fine (guardingSet.toString());
     }
 
-    return CollectionsPlume.removeDuplicates(guardingList);
+    return CollectionsPlume.withoutDuplicates(guardingList);
   }
 
   // This is called only from finally_print_the_invariants().

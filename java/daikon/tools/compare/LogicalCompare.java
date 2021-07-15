@@ -52,8 +52,8 @@ import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
-import org.plumelib.util.UtilPlume;
 
 /**
  * This is a standalone program that compares the invariants from two versions of (and/or runs of) a
@@ -560,7 +560,7 @@ public class LogicalCompare {
   private static void readExtraAssumptions(String filename) {
     File file = new File(filename);
     try {
-      LineNumberReader reader = UtilPlume.lineNumberFileReader(file);
+      LineNumberReader reader = FilesPlume.newLineNumberFileReader(file);
       String line;
       String ppt_name = null;
       while ((line = reader.readLine()) != null) {

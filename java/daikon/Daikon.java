@@ -196,9 +196,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.EntryReader;
+import org.plumelib.util.FilesPlume;
 import org.plumelib.util.RegexUtil;
 import org.plumelib.util.StringsPlume;
-import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -443,7 +443,7 @@ public final class Daikon {
 
   /**
    * Regular expression that matches class names in the format expected by {@link
-   * Class#getName(String)}.
+   * Class#forName(String)}.
    */
   // This regular expression is taken from
   // checker-framework/checker/src/org/checkerframework/checker/signature/qual/ClassGetName.java
@@ -491,12 +491,6 @@ public final class Daikon {
 
   /** Prints out statistics concerning equality sets, suppressions, etc. */
   public static final Logger debugStats = Logger.getLogger("daikon.stats");
-
-  // Avoid problems if daikon.Runtime is loaded at analysis (rather than
-  // test-run) time.  This might have to change when JTrace is used.
-  static {
-    daikon.Runtime.no_dtrace = true;
-  }
 
   /** The usage message for this program. */
   static String usage =
@@ -1347,7 +1341,7 @@ public final class Daikon {
 
           inv_file = new File(inv_filename);
 
-          if (!UtilPlume.canCreateAndWrite(inv_file)) {
+          if (!FilesPlume.canCreateAndWrite(inv_file)) {
             throw new Daikon.UserError("Cannot write to serialization output file " + inv_file);
           }
           break;
@@ -1396,7 +1390,7 @@ public final class Daikon {
           String inv_filename = basename.substring(0, base_end) + ".inv.gz";
 
           inv_file = new File(inv_filename);
-          if (!UtilPlume.canCreateAndWrite(inv_file)) {
+          if (!FilesPlume.canCreateAndWrite(inv_file)) {
             throw new Daikon.UserError("Cannot write to file " + inv_file);
           }
         }
@@ -2615,7 +2609,7 @@ public final class Daikon {
       for (File file : decl_files) {
 
         // Open the file
-        LineNumberReader fp = UtilPlume.lineNumberFileReader(file);
+        LineNumberReader fp = FilesPlume.newLineNumberFileReader(file);
 
         // Read each ppt name from the file
         for (String line = fp.readLine(); line != null; line = fp.readLine()) {

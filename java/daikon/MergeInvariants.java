@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
-import org.plumelib.util.UtilPlume;
 
 /**
  * Merges invariants from multiple invariant files into a single invariant file. It does this by
@@ -145,7 +145,7 @@ public final class MergeInvariants {
 
           output_inv_file = new File(output_inv_filename);
 
-          if (!UtilPlume.canCreateAndWrite(output_inv_file)) {
+          if (!FilesPlume.canCreateAndWrite(output_inv_file)) {
             throw new Daikon.UserError(
                 "Cannot write to serialization output file " + output_inv_file);
           }

@@ -3513,9 +3513,9 @@ public class DCInstrument extends InstructionListUtils {
   /**
    * Creates tag get and set accessor methods for each field in gen. An accessor is created for each
    * field (including final, static, and private fields). The accessors share the modifiers of their
-   * field (except that all are final). Accessors are named <field>_<class>__$get_tag and
-   * <field>_<class>__$set_tag. The class name must be included because field names can shadow one
-   * another.
+   * field (except that all are final). Accessors are named {@code <field>_<class>__$get_tag} and
+   * {@code <field>_<class>__$set_tag}. The class name must be included because field names can
+   * shadow one another.
    *
    * <p>If tag_fields_ok is true for the class, then tag fields are created and the accessor uses
    * the tag fields. If not, tag storage is created separately and accessed via the field number.

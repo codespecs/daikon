@@ -392,7 +392,7 @@ endif
 	$(MAKE) --stop all_directly junit
 
 ## In general, don't use this; it misses some files
-all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
+all_via_daikon: chicory daikon/Daikon.class daikon/diff/Diff.class
 	$(MAKE) all_pass2
 
 xlint: chicory ${ALL_GENERATED_FILES}
@@ -601,9 +601,6 @@ daikon/Daikon.class: daikon/Daikon.java	../utils/plume-scripts ${AUTO_GENERATED_
 daikon/Diff.class: Diff.java ../utils/plume-scripts ${AUTO_GENERATED_FILES}
 	${JAVAC_COMMAND} daikon/Diff.java
 
-daikon/Runtime.class: daikon/Runtime.java
-	${JAVAC_COMMAND} daikon/Runtime.java
-
 
 ###########################################################################
 ### Cleaning (removing generated files
@@ -691,7 +688,7 @@ else
 endif
 
 # See version numbers at https://github.com/google/error-prone/releases
-ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.4.0-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-shaded-3.1.2.jar:${DAIKONDIR}/java/lib/error-prone/javacutil-3.1.1.jar:${DAIKONDIR}/java/lib/error-prone/jFormatString-3.0.0.jar:${DAIKONDIR}/java/lib/error-prone/caffeine-2.8.4.jar:${DAIKONDIR}/java/lib/error-prone/diffutils-1.3.0.jar:${DAIKONDIR}/java/lib/error-prone/threeten-extra-1.5.0.jar
+ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.7.1-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-shaded-3.11.0.jar:${DAIKONDIR}/java/lib/error-prone/javacutil-3.1.1.jar:${DAIKONDIR}/java/lib/error-prone/jFormatString-3.0.0.jar:${DAIKONDIR}/java/lib/error-prone/caffeine-2.8.4.jar:${DAIKONDIR}/java/lib/error-prone/diffutils-1.3.0.jar:${DAIKONDIR}/java/lib/error-prone/threeten-extra-1.5.0.jar
 
 error-prone: errorprone
 errorprone: compile errorprone-nocompile
@@ -703,7 +700,7 @@ else
 ## MutablePublicArray is off because Error Prone 2.4.0 crashes: https://github.com/google/error-prone/issues/1645
 	javac -cp ${DAIKON_CLASSPATH} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
-	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF' \
+	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF' \
 	  -Xmaxwarns 100000 -Werror \
 	  ${JAVA_FILES_FOR_STYLE}
 endif
@@ -1057,8 +1054,8 @@ clover: all_directly
 JAVADOC_DEST = api
 # ${DAIKONDIR}/java should not be in classpath, to avoid Javadoc error
 # "Multiple sources of package comments found for package"
+# Removed "-source 8" because it causes a crash under JDK 11:  https://bugzilla.redhat.com/show_bug.cgi?id=1874672
 JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
-                -source 8 \
                 -Xmaxerrs 100000 -Xmaxwarns 100000 \
                 -d $(JAVADOC_DEST) \
                 -linkoffline https://docs.oracle.com/javase/8/docs/api/ https://docs.oracle.com/javase/8/docs/api/ \
@@ -1066,8 +1063,9 @@ JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
 JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
                 -docletpath "${DOCLETPATH}"
 
-# Daikon packages except for util (which is just a copy of plume)
-DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' \
+# Daikon packages except for util (which is just a copy of plume), plume,
+# and dummy packages such as daikon.dcomp-dummy and daikon.dcomp-transfer.
+DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' | egrep -v 'dcomp-' \
 				   | sed s./.. | sed s/^/daikon./ | tr '\n' ':')
 
 javadoc: api
@@ -1117,7 +1115,7 @@ api-test-each: ../utils/plume-scripts ../utils/html-tools
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	mkdir -p $(JAVADOC_DEST)
 	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all \
-	  daikon -subpackages $(DAIKON_PACKAGES):plume
+	  daikon -subpackages $(DAIKON_PACKAGES)
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 
 ## Test that Javadoc exists.
