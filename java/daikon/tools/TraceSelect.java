@@ -118,7 +118,7 @@ public class TraceSelect {
       // properties that appear in some but not all of the
       // samples.
       else if (args[i].toUpperCase().equals("-DO_DIFFS")) {
-        DO_DIFFS = false;
+        DO_DIFFS = true;
         daikonArgStart = i + 1;
       }
 
