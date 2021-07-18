@@ -394,6 +394,7 @@ public final class DCRuntime implements ComparabilityProvider {
    *
    * @param orig_obj object being cloned
    * @return the result of the clone
+   * @throws Throwable if unable clone object
    */
   public static Object dcomp_clone(Object orig_obj) throws Throwable {
     if (debug) System.out.printf("In dcomp_clone%n");
@@ -427,6 +428,7 @@ public final class DCRuntime implements ComparabilityProvider {
    *
    * @param orig_obj object being cloned
    * @return the result of the clone
+   * @throws Throwable if unable clone object
    * @see #active_clone_calls
    */
   public static Object dcomp_super_clone(Object orig_obj) throws Throwable {
