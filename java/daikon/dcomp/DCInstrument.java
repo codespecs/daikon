@@ -2158,7 +2158,7 @@ public class DCInstrument extends InstructionListUtils {
 
       // Runtime will discover if the object has an instrumented clone method.
       // If so, call it otherwise call the uninstrumented version.
-      il.append(DCR_call("dcomp_clone", ret_type, new Type[] {Type.OBJECT}));
+      il.append(dcr_call("dcomp_clone", ret_type, new Type[] {Type.OBJECT}));
     }
 
     return il;
