@@ -515,10 +515,7 @@ public class DCInstrument extends InstructionListUtils {
           build_unitialized_NEW_map(il);
         }
 
-        boolean saveDebug = debug_instrument.enabled;
-        // debug_instrument.enabled = true;
         fix_local_variable_table(mg);
-        debug_instrument.enabled = saveDebug;
 
         // If the method is native
         if (mg.isNative()) {
@@ -2161,7 +2158,7 @@ public class DCInstrument extends InstructionListUtils {
 
       // Runtime will discover if the object has an instrumented clone method.
       // If so, call it otherwise call the uninstrumented version.
-      il.append(dcr_call("dcomp_clone", ret_type, new Type[] {Type.OBJECT}));
+      il.append(DCR_call("dcomp_clone", ret_type, new Type[] {Type.OBJECT}));
     }
 
     return il;
@@ -3665,7 +3662,7 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     String classname = gen.getClassName();
-    String accessor_name = tag_method_name(SET_TAG, classname, f.getName());
+    String setter_name = tag_method_name(SET_TAG, classname, f.getName());
 
     InstructionList il = new InstructionList();
 
@@ -3682,14 +3679,14 @@ public class DCInstrument extends InstructionListUtils {
       access_flags |= Const.ACC_FINAL;
     }
 
-    // Create the set accessor method
+    // Create the setter method
     MethodGen set_method =
         new MethodGen(
             access_flags,
             Type.VOID,
             Type.NO_ARGS,
             new String[] {},
-            accessor_name,
+            setter_name,
             classname,
             il,
             pool);
