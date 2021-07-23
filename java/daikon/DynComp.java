@@ -314,6 +314,9 @@ public class DynComp {
         cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + cp);
       }
     } else {
+      // allow DCRuntime to make reflective access to java.land.Object.clone() without a warning
+      cmdlist.add("--add-opens");
+      cmdlist.add("java.base/java.lang=ALL-UNNAMED");
       if (!no_jdk) {
         // If we are processing JDK classes, then we need our code on the bootclasspath as well.
         // Otherwise, references to DCRuntime from the JDK would fail.
