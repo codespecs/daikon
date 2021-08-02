@@ -2846,6 +2846,7 @@ public final class DCRuntime implements ComparabilityProvider {
      *
      * @param parent object that contains the field (if any)
      * @param obj value of the field itself (if available and if it's an object)
+     * @return the tag for the field
      */
     abstract Object get_tag(Object parent, Object obj);
   }
