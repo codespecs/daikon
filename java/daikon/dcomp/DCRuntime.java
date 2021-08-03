@@ -1290,6 +1290,11 @@ public final class DCRuntime implements ComparabilityProvider {
   /**
    * Returns the tag for the specified field. If that field is an array, a list of tags will be
    * returned.
+   *
+   * @param fi a field
+   * @param parent object that contains the field (if any)
+   * @param obj value of the field itself (if available and if it's an object)
+   * @return the tag for the specified field
    */
   static Object get_field_tag(FieldInfo fi, Object parent, Object obj) {
 
@@ -1479,12 +1484,14 @@ public final class DCRuntime implements ComparabilityProvider {
     for (DaikonVariableInfo child : dv) {
       Object child_obj;
       if ((child instanceof ArrayInfo) && ((ArrayInfo) child).getType().isPrimitive()) {
+        // It's a primitive array.
         // System.out.printf("child array type %s = %s%n", ai, ai.getType());
         Object[] arr_tags = field_map.get(tag);
         // System.out.printf("found arr_tag %s for arr %s%n", arr_tags, tag);
         // System.out.printf("tag values = %s%n", Arrays.toString (arr_tags));
         child_obj = arr_tags;
-      } else { // not a primitive array
+      } else {
+        // It's not a primitive array.
         child_obj = child.getMyValFromParentVal(tag);
       }
       merge_comparability(varmap, tag, child_obj, child);
@@ -2838,7 +2845,8 @@ public final class DCRuntime implements ComparabilityProvider {
      * Gets the tag for the field.
      *
      * @param parent object that contains the field (if any)
-     * @param obj value of the field itself (if available and if its an object
+     * @param obj value of the field itself (if available and if it's an object)
+     * @return the tag for the field
      */
     abstract Object get_tag(Object parent, Object obj);
   }
@@ -2920,7 +2928,9 @@ public final class DCRuntime implements ComparabilityProvider {
       // assert parent == null && obj == null;
       if (!is_class_initialized) {
         if (is_class_initialized(declaring_class)) {
-          if (!field.isAccessible()) field.setAccessible(true);
+          if (!field.isAccessible()) {
+            field.setAccessible(true);
+          }
           is_class_initialized = true;
         } else {
           return nonsensical;
