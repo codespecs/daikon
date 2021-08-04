@@ -38,3 +38,9 @@ At this point, everything should be ready to proceed with a normal build of DynC
 Note that the file daikon/dcomp-dummy/DCRuntime.class.dummy is used later in the build process
 during the construction of dcomp_rt.jar.
 
+These instructions work fine if you are working with a local build.  However, there is a
+caveat when checking in your changes. Since we assumed that changing the interface would
+be a rare event, the Makefile is not setup to support a clean build with just the three
+DCRuntime.java files changed. You must include dcomp-dummy/DCRuntime.class.dummy in the
+checkin otherwise the checkin tests will fail.
+
