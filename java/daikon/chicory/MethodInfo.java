@@ -26,7 +26,7 @@ public class MethodInfo {
 
   /**
    * Reflection information on this method. Null if a class initializer, {@code <clinit>} (see
-   * {@link #is_class_init()}.
+   * {@link #is_class_initializer()}.
    */
   // The code often assumes that member != null.
   public @MonotonicNonNull Member member = null;
@@ -146,7 +146,7 @@ public class MethodInfo {
 
     // Look up the method
     try {
-      if (is_class_init()) {
+      if (is_class_initializer()) {
         member = null;
         // This case DOES occur at run time.  -MDE 1/22/2010
       } else if (is_constructor()) {
@@ -184,13 +184,21 @@ public class MethodInfo {
     return (method_name.equals("<init>") || method_name.equals(""));
   }
 
-  /** Returns whether or not this method is a class initializer. */
+  /**
+   * Returns true iff this method is a class initializer.
+   *
+   * @return true iff this method is a class initializer
+   */
   @Pure
-  public boolean is_class_init() {
+  public boolean is_class_initializer() {
     return (method_name.equals("<clinit>"));
   }
 
-  /** Returns whether or not this method is static. */
+  /**
+   * Returns true iff this method is static.
+   *
+   * @return true iff this method is static
+   */
   @RequiresNonNull("member")
   @Pure
   public boolean is_static() {
