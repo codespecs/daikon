@@ -1,3 +1,6 @@
+## This Travis CI configuration file is provided for the convenience of people who wish to run Travis CI.
+## Travis CI does not run in the codespecs organization (home of the main Daikon repository).
+
 language: generic
 
 before_cache:
