@@ -1,3 +1,6 @@
+## This CircleCI configuration file is provided for the convenience of people who wish to run CircleCI.
+## CircleCI does not run in the codespecs organization (home of the main Daikon repository).
+
 version: 2.1
 
 jobs:
