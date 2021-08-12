@@ -184,13 +184,21 @@ public class MethodInfo {
     return (method_name.equals("<init>") || method_name.equals(""));
   }
 
-  /** Returns whether or not this method is a class initializer. */
+  /**
+   * Returns true iff this method is a class initializer.
+   *
+   * @return true iff this method is a class initializer
+   */
   @Pure
   public boolean is_class_init() {
     return (method_name.equals("<clinit>"));
   }
 
-  /** Returns whether or not this method is static. */
+  /**
+   * Returns true iff this method is static.
+   *
+   * @return true iff this method is static
+   */
   @RequiresNonNull("member")
   @Pure
   public boolean is_static() {
