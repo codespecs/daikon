@@ -1476,9 +1476,9 @@ public final class DCRuntime implements ComparabilityProvider {
         // System.out.printf("tag values = %s%n", Arrays.toString (arr_tags));
         child_obj = arr_tags;
       } else { // not a primitive array
-        child_obj = child.getMyValFromParentVal(tag);
+        child_obj = child.getMyValFromParentVal(obj);
       }
-      merge_comparability(varmap, tag, child_obj, child);
+      merge_comparability(varmap, obj, child_obj, child);
     }
   }
 
