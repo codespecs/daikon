@@ -87,19 +87,28 @@ public final class DCRuntime implements ComparabilityProvider {
    */
   public static Object method_marker = new Object();
 
-  // Control debug printing
+  /** Control debug printing. */
   public static boolean debug = false;
+  /** Log comparability tage stack operations. */
   public static boolean debug_tag_frame = false;
+  /** Log object compare operations. */
   public static boolean debug_objects = false;
+  /** Log variable comparability operations. */
   public static SimpleLog merge_dv = new SimpleLog(false);
+  /** Log array comparability operations. */
   public static SimpleLog debug_arr_index = new SimpleLog(false);
+  /** Log primitive operations. */
   public static SimpleLog debug_primitive = new SimpleLog(false);
+  /** Log comparability merges. */
   public static SimpleLog debug_merge_comp = new SimpleLog(false);
+  /** Log excution time. */
   public static SimpleLog debug_timing = new SimpleLog(false);
+  /** Log decl output. */
   public static SimpleLog debug_decl_print = new SimpleLog(false);
+  /** Log excution time. */
   public static SimpleLog time_decl = new SimpleLog(false);
+  /** Log internal data structure sizes. */
   public static SimpleLog map_info = new SimpleLog(false);
-  public static final SimpleLog debug_df = new SimpleLog(false);
 
   /** Simplifies printouts for debugging if we ignore toString. */
   private static boolean ignore_toString = true;
@@ -1281,6 +1290,11 @@ public final class DCRuntime implements ComparabilityProvider {
   /**
    * Returns the tag for the specified field. If that field is an array, a list of tags will be
    * returned.
+   *
+   * @param fi field to find tag for
+   * @param parent value of fi's parent
+   * @param obj value of fi
+   * @return the tag for the specified field
    */
   static Object get_field_tag(FieldInfo fi, Object parent, Object obj) {
 
@@ -2830,6 +2844,7 @@ public final class DCRuntime implements ComparabilityProvider {
      *
      * @param parent object that contains the field (if any)
      * @param obj value of the field itself (if available and if its an object
+     * @return tag for the field
      */
     abstract Object get_tag(Object parent, Object obj);
   }
