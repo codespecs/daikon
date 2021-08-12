@@ -664,6 +664,10 @@ workflows:
           requires:
             - ubuntu-jdk8-jobs
             - kvasir-ubuntu-jdk8
+      - kvasir-centos-jdk8
+      - kvasir-centos-jdk11:
+          requires:
+            - kvasir-centos-jdk8
       - quick-txt-diff-fedora-jdk8:
           requires:
             - ubuntu-jdk8-jobs
