@@ -1,11 +1,77 @@
 // Declarations for DataStructures.CursorList
-// Declarations written 2020-11-18T07:33:16.895 by daikon.DynComp
+// Declarations written 2021-08-10T12:25:39.674 by daikon.DynComp
 
 decl-version 2.0
 var-comparability implicit
 
 ppt DataStructures.CursorList:::CLASS
 ppt-type class
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 3
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 4[7]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[9]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[10]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[11]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+
+ppt DataStructures.CursorList:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
 variable DataStructures.CursorList.cursorSpace
   var-kind variable
   dec-type DataStructures.CursorNode[]
@@ -37,7 +103,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[7]
+  comparability 6[9]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -45,13 +111,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[8]
+  comparability 1[10]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[9]
+  comparability 7[11]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -59,19 +125,63 @@ variable DataStructures.CursorList.SPACE_SIZE
   flags nomod
   comparability 2
 
-ppt DataStructures.CursorList:::OBJECT
-ppt-type object
-variable this
+ppt DataStructures.CursorList.alloc():::ENTER
+ppt-type enter
+variable DataStructures.CursorList.cursorSpace
   var-kind variable
-  dec-type DataStructures.CursorList
+  dec-type DataStructures.CursorNode[]
   rep-type hashcode
-  flags is_param non_null
-  comparability 7
-variable this.header
-  var-kind field header
+  comparability 3
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 4[7]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[8]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 5[9]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[10]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 6[11]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
   dec-type int
   rep-type int
-  comparability 3
+  flags nomod
+  comparability 2
+
+ppt DataStructures.CursorList.alloc():::EXIT37
+ppt-type subexit
 variable DataStructures.CursorList.cursorSpace
   var-kind variable
   dec-type DataStructures.CursorNode[]
@@ -117,117 +227,7 @@ variable DataStructures.CursorList.cursorSpace[..].next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[10]
-variable DataStructures.CursorList.SPACE_SIZE
-  var-kind variable
-  dec-type int
-  rep-type int
-  flags nomod
-  comparability 2
-
-ppt DataStructures.CursorList.alloc():::ENTER
-ppt-type enter
-variable DataStructures.CursorList.cursorSpace
-  var-kind variable
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode
-  comparability 4
-variable DataStructures.CursorList.cursorSpace.getClass().getName()
-  var-kind function getClass().getName()
-  dec-type java.lang.Class
-  rep-type java.lang.String
-  function-args DataStructures.CursorList.cursorSpace
-  flags synthetic classname non_null
-  comparability 1
-variable DataStructures.CursorList.cursorSpace[..]
-  var-kind array
-  array 1
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode[]
-  comparability 5[3]
-variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[]
-  flags synthetic classname non_null
-  comparability 1[3]
-variable DataStructures.CursorList.cursorSpace[..].element
-  var-kind field element
-  array 1
-  dec-type java.lang.Object[]
-  rep-type hashcode[]
-  comparability 6[7]
-variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[].element
-  flags synthetic classname non_null
-  comparability 1[8]
-variable DataStructures.CursorList.cursorSpace[..].next
-  var-kind field next
-  array 1
-  dec-type int[]
-  rep-type int[]
-  comparability 3[9]
-variable DataStructures.CursorList.SPACE_SIZE
-  var-kind variable
-  dec-type int
-  rep-type int
-  flags nomod
-  comparability 2
-
-ppt DataStructures.CursorList.alloc():::EXIT37
-ppt-type subexit
-variable DataStructures.CursorList.cursorSpace
-  var-kind variable
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode
-  comparability 4
-variable DataStructures.CursorList.cursorSpace.getClass().getName()
-  var-kind function getClass().getName()
-  dec-type java.lang.Class
-  rep-type java.lang.String
-  function-args DataStructures.CursorList.cursorSpace
-  flags synthetic classname non_null
-  comparability 1
-variable DataStructures.CursorList.cursorSpace[..]
-  var-kind array
-  array 1
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode[]
-  comparability 5[3]
-variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[]
-  flags synthetic classname non_null
-  comparability 1[3]
-variable DataStructures.CursorList.cursorSpace[..].element
-  var-kind field element
-  array 1
-  dec-type java.lang.Object[]
-  rep-type hashcode[]
-  comparability 6[7]
-variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[].element
-  flags synthetic classname non_null
-  comparability 1[8]
-variable DataStructures.CursorList.cursorSpace[..].next
-  var-kind field next
-  array 1
-  dec-type int[]
-  rep-type int[]
-  comparability 3[9]
+  comparability 7[10]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -273,7 +273,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[7]
+  comparability 6[8]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -281,13 +281,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[8]
+  comparability 1[9]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[9]
+  comparability 7[10]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -334,7 +334,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[7]
+  comparability 6[8]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -342,13 +342,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[8]
+  comparability 1[9]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[9]
+  comparability 7[10]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -372,7 +372,7 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
-  comparability 7
+  comparability 8
 variable this.header
   var-kind field header
   dec-type int
@@ -409,7 +409,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[8]
+  comparability 6[9]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -417,13 +417,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[9]
+  comparability 1[10]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[10]
+  comparability 7[11]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -438,7 +438,7 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
-  comparability 7
+  comparability 8
 variable this.header
   var-kind field header
   dec-type int
@@ -475,7 +475,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[8]
+  comparability 6[9]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -483,13 +483,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[9]
+  comparability 1[10]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[10]
+  comparability 7[11]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -504,6 +504,77 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
+  comparability 9
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[10]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[11]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[12]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 8
+
+ppt DataStructures.CursorList.makeEmpty():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
   comparability 8
 variable this.header
   var-kind field header
@@ -555,78 +626,7 @@ variable DataStructures.CursorList.cursorSpace[..].next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[11]
-variable DataStructures.CursorList.SPACE_SIZE
-  var-kind variable
-  dec-type int
-  rep-type int
-  flags nomod
-  comparability 2
-variable return
-  var-kind return
-  dec-type boolean
-  rep-type boolean
-  comparability 7
-
-ppt DataStructures.CursorList.makeEmpty():::ENTER
-ppt-type enter
-variable this
-  var-kind variable
-  dec-type DataStructures.CursorList
-  rep-type hashcode
-  flags is_param non_null
-  comparability 7
-variable this.header
-  var-kind field header
-  dec-type int
-  rep-type int
-  comparability 3
-variable DataStructures.CursorList.cursorSpace
-  var-kind variable
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode
-  comparability 4
-variable DataStructures.CursorList.cursorSpace.getClass().getName()
-  var-kind function getClass().getName()
-  dec-type java.lang.Class
-  rep-type java.lang.String
-  function-args DataStructures.CursorList.cursorSpace
-  flags synthetic classname non_null
-  comparability 1
-variable DataStructures.CursorList.cursorSpace[..]
-  var-kind array
-  array 1
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode[]
-  comparability 5[3]
-variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[]
-  flags synthetic classname non_null
-  comparability 1[3]
-variable DataStructures.CursorList.cursorSpace[..].element
-  var-kind field element
-  array 1
-  dec-type java.lang.Object[]
-  rep-type hashcode[]
-  comparability 6[8]
-variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[].element
-  flags synthetic classname non_null
-  comparability 1[9]
-variable DataStructures.CursorList.cursorSpace[..].next
-  var-kind field next
-  array 1
-  dec-type int[]
-  rep-type int[]
-  comparability 3[10]
+  comparability 7[11]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -641,7 +641,7 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
-  comparability 7
+  comparability 8
 variable this.header
   var-kind field header
   dec-type int
@@ -678,7 +678,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[8]
+  comparability 6[9]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -686,13 +686,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[9]
+  comparability 1[10]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[10]
+  comparability 7[11]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -707,7 +707,7 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
-  comparability 7
+  comparability 8
 variable this.header
   var-kind field header
   dec-type int
@@ -744,7 +744,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[8]
+  comparability 6[9]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -752,13 +752,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[9]
+  comparability 1[10]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[10]
+  comparability 7[11]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -773,6 +773,82 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
+  comparability 9
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[10]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[11]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[12]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable return
+  var-kind return
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  comparability 8
+variable return.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorList.first():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
   comparability 8
 variable this.header
   var-kind field header
@@ -824,83 +900,7 @@ variable DataStructures.CursorList.cursorSpace[..].next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[11]
-variable DataStructures.CursorList.SPACE_SIZE
-  var-kind variable
-  dec-type int
-  rep-type int
-  flags nomod
-  comparability 2
-variable return
-  var-kind return
-  dec-type DataStructures.CursorListItr
-  rep-type hashcode
-  comparability 7
-variable return.current
-  var-kind field current
-  dec-type int
-  rep-type int
-  comparability 3
-
-ppt DataStructures.CursorList.first():::ENTER
-ppt-type enter
-variable this
-  var-kind variable
-  dec-type DataStructures.CursorList
-  rep-type hashcode
-  flags is_param non_null
-  comparability 7
-variable this.header
-  var-kind field header
-  dec-type int
-  rep-type int
-  comparability 3
-variable DataStructures.CursorList.cursorSpace
-  var-kind variable
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode
-  comparability 4
-variable DataStructures.CursorList.cursorSpace.getClass().getName()
-  var-kind function getClass().getName()
-  dec-type java.lang.Class
-  rep-type java.lang.String
-  function-args DataStructures.CursorList.cursorSpace
-  flags synthetic classname non_null
-  comparability 1
-variable DataStructures.CursorList.cursorSpace[..]
-  var-kind array
-  array 1
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode[]
-  comparability 5[3]
-variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[]
-  flags synthetic classname non_null
-  comparability 1[3]
-variable DataStructures.CursorList.cursorSpace[..].element
-  var-kind field element
-  array 1
-  dec-type java.lang.Object[]
-  rep-type hashcode[]
-  comparability 6[8]
-variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[].element
-  flags synthetic classname non_null
-  comparability 1[9]
-variable DataStructures.CursorList.cursorSpace[..].next
-  var-kind field next
-  array 1
-  dec-type int[]
-  rep-type int[]
-  comparability 3[10]
+  comparability 7[11]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -915,7 +915,7 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
-  comparability 8
+  comparability 9
 variable this.header
   var-kind field header
   dec-type int
@@ -952,7 +952,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[9]
+  comparability 6[10]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -960,13 +960,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[10]
+  comparability 1[11]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[11]
+  comparability 7[12]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -977,7 +977,7 @@ variable return
   var-kind return
   dec-type DataStructures.CursorListItr
   rep-type hashcode
-  comparability 7
+  comparability 8
 variable return.current
   var-kind field current
   dec-type int
@@ -991,7 +991,7 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
-  comparability 8
+  comparability 9
 variable this.header
   var-kind field header
   dec-type int
@@ -1028,7 +1028,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[9]
+  comparability 6[11]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -1036,13 +1036,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[10]
+  comparability 1[12]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[11]
+  comparability 7[13]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -1054,7 +1054,7 @@ variable x
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 6
+  comparability 10
 variable x.getClass().getName()
   var-kind function getClass().getName()
   dec-type java.lang.Class
@@ -1067,7 +1067,7 @@ variable p
   dec-type DataStructures.CursorListItr
   rep-type hashcode
   flags is_param
-  comparability 7
+  comparability 8
 variable p.current
   var-kind field current
   dec-type int
@@ -1081,6 +1081,96 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
+  comparability 9
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[11]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[12]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[13]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable x
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 10
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable p
+  var-kind variable
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  flags is_param
+  comparability 8
+variable p.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorList.find(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
   comparability 8
 variable this.header
   var-kind field header
@@ -1118,7 +1208,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[9]
+  comparability 6[10]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -1126,13 +1216,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[10]
+  comparability 1[11]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[11]
+  comparability 7[12]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -1144,97 +1234,7 @@ variable x
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 6
-variable x.getClass().getName()
-  var-kind function getClass().getName()
-  dec-type java.lang.Class
-  rep-type java.lang.String
-  function-args x
-  flags synthetic classname non_null
-  comparability 1
-variable p
-  var-kind variable
-  dec-type DataStructures.CursorListItr
-  rep-type hashcode
-  flags is_param
-  comparability 7
-variable p.current
-  var-kind field current
-  dec-type int
-  rep-type int
-  comparability 3
-
-ppt DataStructures.CursorList.find(java.lang.Object):::ENTER
-ppt-type enter
-variable this
-  var-kind variable
-  dec-type DataStructures.CursorList
-  rep-type hashcode
-  flags is_param non_null
-  comparability 7
-variable this.header
-  var-kind field header
-  dec-type int
-  rep-type int
-  comparability 3
-variable DataStructures.CursorList.cursorSpace
-  var-kind variable
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode
-  comparability 4
-variable DataStructures.CursorList.cursorSpace.getClass().getName()
-  var-kind function getClass().getName()
-  dec-type java.lang.Class
-  rep-type java.lang.String
-  function-args DataStructures.CursorList.cursorSpace
-  flags synthetic classname non_null
-  comparability 1
-variable DataStructures.CursorList.cursorSpace[..]
-  var-kind array
-  array 1
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode[]
-  comparability 5[3]
-variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[]
-  flags synthetic classname non_null
-  comparability 1[3]
-variable DataStructures.CursorList.cursorSpace[..].element
-  var-kind field element
-  array 1
-  dec-type java.lang.Object[]
-  rep-type hashcode[]
-  comparability 6[8]
-variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[].element
-  flags synthetic classname non_null
-  comparability 1[9]
-variable DataStructures.CursorList.cursorSpace[..].next
-  var-kind field next
-  array 1
-  dec-type int[]
-  rep-type int[]
-  comparability 3[10]
-variable DataStructures.CursorList.SPACE_SIZE
-  var-kind variable
-  dec-type int
-  rep-type int
-  flags nomod
-  comparability 2
-variable x
-  var-kind variable
-  dec-type java.lang.Object
-  rep-type hashcode
-  flags is_param
-  comparability 6
+  comparability 9
 variable x.getClass().getName()
   var-kind function getClass().getName()
   dec-type java.lang.Class
@@ -1250,6 +1250,95 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
+  comparability 9
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[11]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[12]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[13]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable x
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 10
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  comparability 8
+variable return.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorList.findPrevious(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
   comparability 8
 variable this.header
   var-kind field header
@@ -1287,7 +1376,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[9]
+  comparability 6[10]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -1295,13 +1384,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[10]
+  comparability 1[11]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[11]
+  comparability 7[12]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -1313,96 +1402,7 @@ variable x
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 6
-variable x.getClass().getName()
-  var-kind function getClass().getName()
-  dec-type java.lang.Class
-  rep-type java.lang.String
-  function-args x
-  flags synthetic classname non_null
-  comparability 1
-variable return
-  var-kind return
-  dec-type DataStructures.CursorListItr
-  rep-type hashcode
-  comparability 7
-variable return.current
-  var-kind field current
-  dec-type int
-  rep-type int
-  comparability 3
-
-ppt DataStructures.CursorList.findPrevious(java.lang.Object):::ENTER
-ppt-type enter
-variable this
-  var-kind variable
-  dec-type DataStructures.CursorList
-  rep-type hashcode
-  flags is_param non_null
-  comparability 7
-variable this.header
-  var-kind field header
-  dec-type int
-  rep-type int
-  comparability 3
-variable DataStructures.CursorList.cursorSpace
-  var-kind variable
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode
-  comparability 4
-variable DataStructures.CursorList.cursorSpace.getClass().getName()
-  var-kind function getClass().getName()
-  dec-type java.lang.Class
-  rep-type java.lang.String
-  function-args DataStructures.CursorList.cursorSpace
-  flags synthetic classname non_null
-  comparability 1
-variable DataStructures.CursorList.cursorSpace[..]
-  var-kind array
-  array 1
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode[]
-  comparability 5[3]
-variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[]
-  flags synthetic classname non_null
-  comparability 1[3]
-variable DataStructures.CursorList.cursorSpace[..].element
-  var-kind field element
-  array 1
-  dec-type java.lang.Object[]
-  rep-type hashcode[]
-  comparability 6[8]
-variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[].element
-  flags synthetic classname non_null
-  comparability 1[9]
-variable DataStructures.CursorList.cursorSpace[..].next
-  var-kind field next
-  array 1
-  dec-type int[]
-  rep-type int[]
-  comparability 3[10]
-variable DataStructures.CursorList.SPACE_SIZE
-  var-kind variable
-  dec-type int
-  rep-type int
-  flags nomod
-  comparability 2
-variable x
-  var-kind variable
-  dec-type java.lang.Object
-  rep-type hashcode
-  flags is_param
-  comparability 6
+  comparability 9
 variable x.getClass().getName()
   var-kind function getClass().getName()
   dec-type java.lang.Class
@@ -1418,6 +1418,95 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
+  comparability 9
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[11]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[12]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[13]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable x
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 10
+variable x.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args x
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type DataStructures.CursorListItr
+  rep-type hashcode
+  comparability 8
+variable return.current
+  var-kind field current
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt DataStructures.CursorList.remove(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
   comparability 8
 variable this.header
   var-kind field header
@@ -1455,7 +1544,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[9]
+  comparability 6[10]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -1463,13 +1552,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[10]
+  comparability 1[11]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[11]
+  comparability 7[12]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -1481,96 +1570,7 @@ variable x
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 6
-variable x.getClass().getName()
-  var-kind function getClass().getName()
-  dec-type java.lang.Class
-  rep-type java.lang.String
-  function-args x
-  flags synthetic classname non_null
-  comparability 1
-variable return
-  var-kind return
-  dec-type DataStructures.CursorListItr
-  rep-type hashcode
-  comparability 7
-variable return.current
-  var-kind field current
-  dec-type int
-  rep-type int
-  comparability 3
-
-ppt DataStructures.CursorList.remove(java.lang.Object):::ENTER
-ppt-type enter
-variable this
-  var-kind variable
-  dec-type DataStructures.CursorList
-  rep-type hashcode
-  flags is_param non_null
-  comparability 7
-variable this.header
-  var-kind field header
-  dec-type int
-  rep-type int
-  comparability 3
-variable DataStructures.CursorList.cursorSpace
-  var-kind variable
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode
-  comparability 4
-variable DataStructures.CursorList.cursorSpace.getClass().getName()
-  var-kind function getClass().getName()
-  dec-type java.lang.Class
-  rep-type java.lang.String
-  function-args DataStructures.CursorList.cursorSpace
-  flags synthetic classname non_null
-  comparability 1
-variable DataStructures.CursorList.cursorSpace[..]
-  var-kind array
-  array 1
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode[]
-  comparability 5[3]
-variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[]
-  flags synthetic classname non_null
-  comparability 1[3]
-variable DataStructures.CursorList.cursorSpace[..].element
-  var-kind field element
-  array 1
-  dec-type java.lang.Object[]
-  rep-type hashcode[]
-  comparability 6[8]
-variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[].element
-  flags synthetic classname non_null
-  comparability 1[9]
-variable DataStructures.CursorList.cursorSpace[..].next
-  var-kind field next
-  array 1
-  dec-type int[]
-  rep-type int[]
-  comparability 3[10]
-variable DataStructures.CursorList.SPACE_SIZE
-  var-kind variable
-  dec-type int
-  rep-type int
-  flags nomod
-  comparability 2
-variable x
-  var-kind variable
-  dec-type java.lang.Object
-  rep-type hashcode
-  flags is_param
-  comparability 6
+  comparability 9
 variable x.getClass().getName()
   var-kind function getClass().getName()
   dec-type java.lang.Class
@@ -1586,7 +1586,7 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
-  comparability 7
+  comparability 8
 variable this.header
   var-kind field header
   dec-type int
@@ -1623,7 +1623,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[8]
+  comparability 6[10]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -1631,13 +1631,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[9]
+  comparability 1[11]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[10]
+  comparability 7[12]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -1649,7 +1649,7 @@ variable x
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 6
+  comparability 9
 variable x.getClass().getName()
   var-kind function getClass().getName()
   dec-type java.lang.Class
@@ -1691,7 +1691,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[8]
+  comparability 6[9]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -1699,13 +1699,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[9]
+  comparability 1[10]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[10]
+  comparability 7[11]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -1717,7 +1717,7 @@ variable theList
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param
-  comparability 7
+  comparability 8
 variable theList.header
   var-kind field header
   dec-type int
@@ -1757,7 +1757,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[8]
+  comparability 6[9]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -1765,13 +1765,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[9]
+  comparability 1[10]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[10]
+  comparability 7[11]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -1783,7 +1783,7 @@ variable theList
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param
-  comparability 7
+  comparability 8
 variable theList.header
   var-kind field header
   dec-type int
@@ -1797,7 +1797,7 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
-  comparability 8
+  comparability 9
 variable this.header
   var-kind field header
   dec-type int
@@ -1834,7 +1834,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[9]
+  comparability 6[10]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -1842,13 +1842,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[10]
+  comparability 1[11]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[11]
+  comparability 7[12]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -1860,7 +1860,7 @@ variable obj
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 7
+  comparability 8
 variable obj.getClass().getName()
   var-kind function getClass().getName()
   dec-type java.lang.Class
@@ -1876,6 +1876,90 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
+  comparability 10
+variable this.header
+  var-kind field header
+  dec-type int
+  rep-type int
+  comparability 3
+variable DataStructures.CursorList.cursorSpace
+  var-kind variable
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode
+  comparability 4
+variable DataStructures.CursorList.cursorSpace.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args DataStructures.CursorList.cursorSpace
+  flags synthetic classname non_null
+  comparability 1
+variable DataStructures.CursorList.cursorSpace[..]
+  var-kind array
+  array 1
+  dec-type DataStructures.CursorNode[]
+  rep-type hashcode[]
+  comparability 5[3]
+variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[]
+  flags synthetic classname non_null
+  comparability 1[3]
+variable DataStructures.CursorList.cursorSpace[..].element
+  var-kind field element
+  array 1
+  dec-type java.lang.Object[]
+  rep-type hashcode[]
+  comparability 6[11]
+variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args DataStructures.CursorList.cursorSpace[].element
+  flags synthetic classname non_null
+  comparability 1[12]
+variable DataStructures.CursorList.cursorSpace[..].next
+  var-kind field next
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[13]
+variable DataStructures.CursorList.SPACE_SIZE
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags nomod
+  comparability 2
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 8
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 9
+
+ppt DataStructures.CursorList.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type DataStructures.CursorList
+  rep-type hashcode
+  flags is_param non_null
   comparability 9
 variable this.header
   var-kind field header
@@ -1927,7 +2011,7 @@ variable DataStructures.CursorList.cursorSpace[..].next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[12]
+  comparability 7[12]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -1939,91 +2023,7 @@ variable obj
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 7
-variable obj.getClass().getName()
-  var-kind function getClass().getName()
-  dec-type java.lang.Class
-  rep-type java.lang.String
-  function-args obj
-  flags synthetic classname non_null
-  comparability 1
-variable return
-  var-kind return
-  dec-type boolean
-  rep-type boolean
   comparability 8
-
-ppt DataStructures.CursorList.equals_dcomp_instrumented(java.lang.Object):::ENTER
-ppt-type enter
-variable this
-  var-kind variable
-  dec-type DataStructures.CursorList
-  rep-type hashcode
-  flags is_param non_null
-  comparability 8
-variable this.header
-  var-kind field header
-  dec-type int
-  rep-type int
-  comparability 3
-variable DataStructures.CursorList.cursorSpace
-  var-kind variable
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode
-  comparability 4
-variable DataStructures.CursorList.cursorSpace.getClass().getName()
-  var-kind function getClass().getName()
-  dec-type java.lang.Class
-  rep-type java.lang.String
-  function-args DataStructures.CursorList.cursorSpace
-  flags synthetic classname non_null
-  comparability 1
-variable DataStructures.CursorList.cursorSpace[..]
-  var-kind array
-  array 1
-  dec-type DataStructures.CursorNode[]
-  rep-type hashcode[]
-  comparability 5[3]
-variable DataStructures.CursorList.cursorSpace[..].getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[]
-  flags synthetic classname non_null
-  comparability 1[3]
-variable DataStructures.CursorList.cursorSpace[..].element
-  var-kind field element
-  array 1
-  dec-type java.lang.Object[]
-  rep-type hashcode[]
-  comparability 6[9]
-variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
-  var-kind function getClass().getName()
-  array 1
-  dec-type java.lang.Class[]
-  rep-type java.lang.String[]
-  function-args DataStructures.CursorList.cursorSpace[].element
-  flags synthetic classname non_null
-  comparability 1[10]
-variable DataStructures.CursorList.cursorSpace[..].next
-  var-kind field next
-  array 1
-  dec-type int[]
-  rep-type int[]
-  comparability 3[11]
-variable DataStructures.CursorList.SPACE_SIZE
-  var-kind variable
-  dec-type int
-  rep-type int
-  flags nomod
-  comparability 2
-variable obj
-  var-kind variable
-  dec-type java.lang.Object
-  rep-type hashcode
-  flags is_param
-  comparability 7
 variable obj.getClass().getName()
   var-kind function getClass().getName()
   dec-type java.lang.Class
@@ -2039,7 +2039,7 @@ variable this
   dec-type DataStructures.CursorList
   rep-type hashcode
   flags is_param non_null
-  comparability 9
+  comparability 10
 variable this.header
   var-kind field header
   dec-type int
@@ -2076,7 +2076,7 @@ variable DataStructures.CursorList.cursorSpace[..].element
   array 1
   dec-type java.lang.Object[]
   rep-type hashcode[]
-  comparability 6[10]
+  comparability 6[11]
 variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   var-kind function getClass().getName()
   array 1
@@ -2084,13 +2084,13 @@ variable DataStructures.CursorList.cursorSpace[..].element.getClass().getName()
   rep-type java.lang.String[]
   function-args DataStructures.CursorList.cursorSpace[].element
   flags synthetic classname non_null
-  comparability 1[11]
+  comparability 1[12]
 variable DataStructures.CursorList.cursorSpace[..].next
   var-kind field next
   array 1
   dec-type int[]
   rep-type int[]
-  comparability 3[12]
+  comparability 7[13]
 variable DataStructures.CursorList.SPACE_SIZE
   var-kind variable
   dec-type int
@@ -2102,7 +2102,7 @@ variable obj
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 7
+  comparability 8
 variable obj.getClass().getName()
   var-kind function getClass().getName()
   dec-type java.lang.Class
@@ -2114,7 +2114,7 @@ variable return
   var-kind return
   dec-type boolean
   rep-type boolean
-  comparability 8
+  comparability 9
 
 ppt DataStructures.CursorNode:::CLASS
 ppt-type class
