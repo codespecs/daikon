@@ -151,7 +151,7 @@ public final class DCRuntime implements ComparabilityProvider {
   private static List<ClassInfo> all_classes = new ArrayList<>();
 
   /** Set of classes whose static initializer has run. */
-  private static Set<String> init_classes = new HashSet<>();
+  private static Set<String> initialized_eclassses = new HashSet<>();
 
   /**
    * Class used as a tag for primitive constants. Only different from Object for debugging purposes.
@@ -396,23 +396,51 @@ public final class DCRuntime implements ComparabilityProvider {
   private static Throwable dcomp_clone_error;
 
   /**
-   * Clone an object. If the object is an array, call standard clone on the array. If the object has
-   * been instrumented, call insturumented version of clone; if not, call the regular version and
-   * make the objects comparable. Really should make all of their fields comparable instead. Returns
-   * the cloned object.
+   * Clone an object and return the cloned object.
+   *
+   * <p>DCInstrument guarantees we will not see a clone of an array. If the object has been
+   * instrumented, call the instrumented version of clone; if not, call the uninstrumented version
+   * and make the objects comparable. Really should make all of their fields comparable instead.
    *
    * @param orig_obj object being cloned
    * @return the result of the clone
    * @throws Throwable if unable clone object
    */
-  public static Object dcomp_clone(Object orig_obj) throws Throwable {
-    if (debug) System.out.printf("In dcomp_clone%n");
+  public static Object dcomp_clone(Object orig_obj, Class<?> target_class) throws Throwable {
+    if (debug) {
+      System.out.printf("In dcomp_clone%n");
+      System.out.printf("orig: %s, target: %s%n", orig_obj.getClass(), target_class);
+    }
 
-    Class<?> target_class = orig_obj.getClass();
-    Object clone_obj = dcomp_clone_worker(orig_obj, target_class);
+    Object clone_obj = null;
+    while (true) {
+      clone_obj = dcomp_clone_worker(orig_obj, target_class);
+      if (clone_obj != null) {
+        break;
+      }
+      if (dcomp_clone_error.getCause() == null) {
+        // Some exception other than NoSuchMethod.
+        throw dcomp_clone_error;
+      }
+      if (dcomp_clone_error.getCause() instanceof java.lang.NoSuchMethodException) {
+        if (debug) {
+          System.out.println("NoSuchMethod " + target_class.getName());
+        }
 
-    if (clone_obj == null) {
-      throw dcomp_clone_error;
+        if (target_class.getName().equals("java.lang.Object")) {
+          // UNDONE: can this happen?
+          System.out.println("ALERT: no clone for java.lang.Object");
+          // We've reached the top of the class heirarchy without finding a clone() method.
+          throw dcomp_clone_error;
+        }
+
+        // We didn't find a clone method, get next higher super and try again.
+        target_class = target_class.getSuperclass();
+        continue;
+      } else {
+        // Some exception other than NoSuchMethod.
+        throw dcomp_clone_error;
+      }
     }
 
     // Make orig_obj and its clone comparable.
@@ -432,28 +460,24 @@ public final class DCRuntime implements ComparabilityProvider {
    *
    * <p>Clone an object using its superclass, and returns the cloned object.
    *
-   * <p>If the object is an array, call standard clone on the array. If the object has been
-   * instrumented, call insturumented version of clone; if not, call the regular version and make
-   * the objects comparable. TODO: This really should make all of their fields comparable instead.
+   * <p>DCInstrument guarantees we will not see a clone of an array. If the object has been
+   * instrumented, call the instrumented version of clone; if not, call the uninstrumented version
+   * and make the objects comparable. TODO: This really should make all of their fields comparable instead.
    *
    * @param orig_obj object being cloned
    * @return the result of the clone
    * @throws Throwable if unable to clone object
    * @see #active_clone_calls
    */
-  public static Object dcomp_super_clone(Object orig_obj) throws Throwable {
+  public static Object dcomp_super_clone(Object orig_obj, Class<?> target_class) throws Throwable {
     if (debug) {
-      System.out.printf("In dcomp_super_clone(%s)%n", orig_obj.getClass());
+      System.out.printf("In dcomp_super_clone%n");
+      System.out.printf("orig: %s, target: %s%n", orig_obj.getClass(), target_class);
     }
 
-    Class<?> orig_class = orig_obj.getClass();
-    Class<?> target_class; // The class whose method we will invoke
-
     // Check to see if we're already in the middle of a super.clone call for this object.
-    if (null == active_clone_calls.get(orig_obj)) {
-      // No, we are not
-      target_class = orig_class.getSuperclass();
-    } else {
+    if (null != active_clone_calls.get(orig_obj)) {
+       System.out.println("ALERT: in middle of super.clone");
       // Yes, we are -- continue up the class hierarchy
       target_class = active_clone_calls.get(orig_obj).getSuperclass();
     }
@@ -467,12 +491,18 @@ public final class DCRuntime implements ComparabilityProvider {
         break;
       }
 
-      if (dcomp_clone_error.getCause().toString().startsWith("java.lang.NoSuchMethodException")) {
+      if (dcomp_clone_error.getCause() == null) {
+        // Some exception other than NoSuchMethod.
+        throw dcomp_clone_error;
+      }
+      if (dcomp_clone_error instanceof java.lang.NoSuchMethodException) {
         if (debug) {
           System.out.println("NoSuchMethod " + target_class.getName());
         }
 
         if (target_class.getName().equals("java.lang.Object")) {
+          // UNDONE: can this happen?
+          System.out.println("ALERT: no clone for java.lang.Object");
           // We've reached the top of the class heirarchy without finding a clone() method.
           active_clone_calls.remove(orig_obj);
           throw dcomp_clone_error;
@@ -499,14 +529,15 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * Clone an object. If the object is an array, call standard clone on the array. If the object has
-   * been instrumented, call insturumented version of clone; if not, call the regular version.
+   * Clone an object and return the cloned object. If an error occurs, return null and set
+   * dcomp_clone_error.
+   *
+   * <p>DCInstrument guarantees we will not see a clone of an array. If the object has been
+   * instrumented, call the instrumented version of clone; if not, call the uninstrumented version.
    *
    * <p>Note: we use getDeclaredMethod as clone is often protected; also, in the case of
    * dcomp_super_clone we do not want to automatically find clone in a super class. We will search
    * the hierarchy ourselves.
-   *
-   * <p>Returns the cloned object or null if an error occurs in which case dcomp_clone_error is set.
    *
    * @param orig_obj object being cloned
    * @param target_class class to search for clone method
@@ -515,21 +546,14 @@ public final class DCRuntime implements ComparabilityProvider {
   public static Object dcomp_clone_worker(Object orig_obj, Class<?> target_class) {
     if (debug) {
       System.out.printf("In dcomp_clone_worker%n");
-      System.out.printf(
-          "orig_obj: %s:%s, target_class: %s%n", orig_obj, orig_obj.getClass(), target_class);
+      System.out.printf("orig_obj: %s, target_class: %s%n", obj_str(orig_obj), target_class);
     }
 
     Method m = null;
     dcomp_clone_error = null;
 
     try {
-      if (target_class.getName().charAt(0) == '[') {
-        // cast to Object array to acess clone
-        Object[] oo = (Object[]) orig_obj;
-        return oo.clone();
-      } else {
-        m = target_class.getDeclaredMethod("clone", new Class<?>[] {dcomp_marker_class});
-      }
+      m = target_class.getDeclaredMethod("clone", new Class<?>[] {dcomp_marker_class});
     } catch (NoSuchMethodException e) {
       m = null;
     } catch (Exception e) {
@@ -561,7 +585,7 @@ public final class DCRuntime implements ComparabilityProvider {
       }
     }
 
-    // No instrumented clone(), try for regular version.
+    // No instrumented clone(), try for uninstrumented version.
     try {
       m = target_class.getDeclaredMethod("clone", new Class<?>[] {});
     } catch (NoSuchMethodException e) {
@@ -1154,16 +1178,11 @@ public final class DCRuntime implements ComparabilityProvider {
       Throwable stack = new Throwable("enter");
       StackTraceElement[] ste_arr = stack.getStackTrace();
       StackTraceElement ste = ste_arr[1];
-      // Simplifies printouts for debugging if we ignore toString.
-      if (ste.getMethodName().equals("toString")) {
-        in_enter_exit = false;
-        return;
-      }
       System.out.printf("%n%s.%s():::ENTER%n", ste.getClassName(), ste.getMethodName());
       System.out.printf("this = %s%nmi = %s%n", obj_str(obj), methods.get(mi_index));
       System.out.printf("args: ");
       for (Object arg : args) {
-        System.out.printf("%s ", obj_str(arg));
+        System.out.printf("'%s' ", obj_str(arg));
       }
       System.out.println();
     }
@@ -1222,16 +1241,11 @@ public final class DCRuntime implements ComparabilityProvider {
       Throwable stack = new Throwable("exit");
       StackTraceElement[] ste_arr = stack.getStackTrace();
       StackTraceElement ste = ste_arr[1];
-      // Simplifies printouts for debugging if we ignore toString.
-      if (ste.getMethodName().equals("toString")) {
-        in_enter_exit = false;
-        return;
-      }
       System.out.printf("%n%s.%s():::EXIT%n", ste.getClassName(), ste.getMethodName());
       System.out.printf("this = %s%nmi = %s%n", obj_str(obj), methods.get(mi_index));
       System.out.printf("args: ");
       for (Object arg : args) {
-        System.out.printf("%s ", obj_str(arg));
+        System.out.printf("'%s' ", obj_str(arg));
       }
       System.out.println();
       System.out.printf("ret_val = %s%nexit_line_number= %d%n%n", ret_val, exit_line_number);
@@ -1302,6 +1316,11 @@ public final class DCRuntime implements ComparabilityProvider {
   /**
    * Returns the tag for the specified field. If that field is an array, a list of tags will be
    * returned.
+   *
+   * @param fi a field
+   * @param parent object that contains the field (if any)
+   * @param obj value of the field itself (if available and if it's an object)
+   * @return the tag for the specified field
    */
   static Object get_field_tag(FieldInfo fi, Object parent, Object obj) {
 
@@ -1491,15 +1510,19 @@ public final class DCRuntime implements ComparabilityProvider {
     for (DaikonVariableInfo child : dv) {
       Object child_obj;
       if ((child instanceof ArrayInfo) && ((ArrayInfo) child).getType().isPrimitive()) {
+        // It's a primitive array.
         // System.out.printf("child array type %s = %s%n", ai, ai.getType());
         Object[] arr_tags = field_map.get(tag);
         // System.out.printf("found arr_tag %s for arr %s%n", arr_tags, tag);
         // System.out.printf("tag values = %s%n", Arrays.toString (arr_tags));
         child_obj = arr_tags;
-      } else { // not a primitive array
+      } else {
+        // It's not a primitive array.
         child_obj = child.getMyValFromParentVal(tag);
       }
+      merge_dv.indent();
       merge_comparability(varmap, tag, child_obj, child);
+      merge_dv.exdent();
     }
   }
 
@@ -1513,7 +1536,7 @@ public final class DCRuntime implements ComparabilityProvider {
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
       for (MethodInfo mi : ci.method_infos) {
-        if (mi.is_class_init()) {
+        if (mi.is_class_initializer()) {
           continue;
         }
         // skip our added method
@@ -1536,7 +1559,7 @@ public final class DCRuntime implements ComparabilityProvider {
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
       for (MethodInfo mi : ci.method_infos) {
-        if (mi.is_class_init()) {
+        if (mi.is_class_initializer()) {
           continue;
         }
         if (mi.method_name.equals("equals_dcomp_instrumented")) {
@@ -1613,7 +1636,7 @@ public final class DCRuntime implements ComparabilityProvider {
       add_dv_stats(ci.traversalClass);
       add_dv_stats(ci.traversalObject);
       for (MethodInfo mi : ci.method_infos) {
-        if (mi.is_class_init()) {
+        if (mi.is_class_initializer()) {
           continue;
         }
         method_cnt++;
@@ -1737,7 +1760,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Print the information for each enter/exit point
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) {
+      if (mi.is_class_initializer()) {
         continue;
       }
       debug_decl_print.log("  method %s%n", mi.method_name);
@@ -2250,7 +2273,7 @@ public final class DCRuntime implements ComparabilityProvider {
     // If any methods have not been executed, create their information
     // now (which will note all of their variables as not comparable)
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) {
+      if (mi.is_class_initializer()) {
         continue;
       }
       if (mi.traversalEnter == null) {
@@ -2262,7 +2285,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Merge the comparability from each exit point into the object point
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) {
+      if (mi.is_class_initializer()) {
         continue;
       }
       merge_dv_comparability(mi.traversalExit, mi.traversalEnter, "Merging exit to enter: " + mi);
@@ -2272,7 +2295,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Merge the comparability from the object point back to each exit point
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) {
+      if (mi.is_class_initializer()) {
         continue;
       }
       merge_dv_comparability(ci.traversalObject, mi.traversalExit, "Merging object to exit: " + mi);
@@ -2280,7 +2303,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Merge the comparability for each exit point back to the enter
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) {
+      if (mi.is_class_initializer()) {
         continue;
       }
       merge_dv_comparability(mi.traversalExit, mi.traversalEnter, "Merging exit to enter: " + mi);
@@ -2728,9 +2751,9 @@ public final class DCRuntime implements ComparabilityProvider {
    *
    * @param classname class to mark initialized
    */
-  public static void class_init(String classname) {
-    debug_primitive.log("class_init: %s%n", classname);
-    init_classes.add(classname);
+  public static void set_class_initialized(String classname) {
+    debug_primitive.log("set_class_initialized: %s%n", classname);
+    initialized_eclassses.add(classname);
   }
 
   /**
@@ -2740,9 +2763,9 @@ public final class DCRuntime implements ComparabilityProvider {
    * @return true if clazz has been initialized
    */
   @Pure
-  public static boolean is_class_init(Class<?> clazz) {
-    debug_primitive.log("is_class_init%n");
-    return (init_classes.contains(clazz.getName()));
+  public static boolean is_class_initialized(Class<?> clazz) {
+    debug_primitive.log("is_class_initialized%n");
+    return (initialized_eclassses.contains(clazz.getName()));
   }
 
   /** Returns the name of the method that called the caller of caller_name(). */
@@ -2784,13 +2807,15 @@ public final class DCRuntime implements ComparabilityProvider {
                 + Integer.toHexString(System.identityHashCode(obj))
                 + " failed";
       }
-      // TODO: truncate tostring if too long?
       String default_tostring =
           String.format("%s@%s", obj.getClass().getName(), System.identityHashCode(obj));
       if (tostring.equals(default_tostring)) {
         return tostring;
       } else {
-        return String.format("%s [%s]", default_tostring, tostring);
+        // Limit display of object contents to 60 characters.
+        return String.format(
+            "%s [%s]",
+            default_tostring, org.apache.commons.lang3.StringUtils.abbreviate(tostring, 60));
       }
     }
   }
@@ -2850,7 +2875,8 @@ public final class DCRuntime implements ComparabilityProvider {
      * Gets the tag for the field.
      *
      * @param parent object that contains the field (if any)
-     * @param obj value of the field itself (if available and if its an object
+     * @param obj value of the field itself (if available and if it's an object)
+     * @return the tag for the field
      */
     abstract Object get_tag(Object parent, Object obj);
   }
@@ -2931,8 +2957,10 @@ public final class DCRuntime implements ComparabilityProvider {
 
       // assert parent == null && obj == null;
       if (!is_class_initialized) {
-        if (is_class_init(declaring_class)) {
-          if (!field.isAccessible()) field.setAccessible(true);
+        if (is_class_initialized(declaring_class)) {
+          if (!field.isAccessible()) {
+            field.setAccessible(true);
+          }
           is_class_initialized = true;
         } else {
           return nonsensical;

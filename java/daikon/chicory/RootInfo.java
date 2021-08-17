@@ -28,7 +28,7 @@ public class RootInfo extends DaikonVariableInfo {
     RootInfo root = new RootInfo();
 
     // Don't build a tree for class initializers.
-    if (mi.is_class_init()) {
+    if (mi.is_class_initializer()) {
       return root;
     }
 
@@ -63,7 +63,7 @@ public class RootInfo extends DaikonVariableInfo {
     RootInfo root = new RootInfo();
 
     // Don't build a tree for class initializers.
-    if (mi.is_class_init()) {
+    if (mi.is_class_initializer()) {
       return root;
     }
 

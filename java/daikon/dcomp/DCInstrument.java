@@ -1953,8 +1953,13 @@ public class DCInstrument extends InstructionListUtils {
 
     } else { // not instrumented, discard the tags before making the call
 
-      // methods
-      il.append(discard_primitive_tags(arg_types));
+      // JUnit test classes are a bit strange.  They are marked as not being callee_instrumented
+      // because they do not have the dcomp_marker added to the argument list, but
+      // they actually contain instrumentation code.  So we do not want to discard
+      // the primitive tags prior to the call.
+      if (!junit_test_set.contains(classname)) {
+        il.append(discard_primitive_tags(arg_types));
+      }
 
       // Add a tag for the return type if it is primitive
       if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
@@ -2146,19 +2151,29 @@ public class DCInstrument extends InstructionListUtils {
 
     InstructionList il = new InstructionList();
     Type ret_type = invoke.getReturnType(pool);
+    String classname = invoke.getClassName(pool);
+    ReferenceType ref_type = invoke.getReferenceType(pool);
+    if (ref_type instanceof ArrayType) {
+      // <array>.clone() is never instrumented, return original invoke.
+      il.append(invoke);
+      return il;
+    }
+
+    // push the target class
+    il.append(new LDC(pool.addClass(classname)));
 
     // if this is a super call
     if (invoke.getOpcode() == Const.INVOKESPECIAL) {
 
       // Runtime will discover if the object's superclass has an instrumented clone method.
-      // If so, call it otherwise call the uninstrumented version.
-      il.append(dcr_call("dcomp_super_clone", ret_type, new Type[] {Type.OBJECT}));
+      // If so, call it; otherwise call the uninstrumented version.
+      il.append(dcr_call("dcomp_super_clone", ret_type, new Type[] {Type.OBJECT, javalangClass}));
 
     } else { // a regular (non-super) clone() call
 
       // Runtime will discover if the object has an instrumented clone method.
-      // If so, call it otherwise call the uninstrumented version.
-      il.append(dcr_call("dcomp_clone", ret_type, new Type[] {Type.OBJECT}));
+      // If so, call it; otherwise call the uninstrumented version.
+      il.append(dcr_call("dcomp_clone", ret_type, new Type[] {Type.OBJECT, javalangClass}));
     }
 
     return il;
@@ -2521,8 +2536,8 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Adds a call to DCRuntime.class_init (String classname) to the class initializer for this class.
-   * Creates a class initializer if one is not currently present.
+   * Adds a call to DCRuntime.set_class_initialized (String classname) to the class initializer for
+   * this class. Creates a class initializer if one is not currently present.
    */
   void track_class_init() {
 
@@ -2558,12 +2573,16 @@ public class DCInstrument extends InstructionListUtils {
       MethodGen cinit_gen = new MethodGen(cinit, gen.getClassName(), pool);
       set_current_stack_map_table(cinit_gen, gen.getMajor());
 
-      // Add a call to DCRuntime.class_init to the beginning of the method
+      // Add a call to DCRuntime.set_class_initialized to the beginning of the method
       InstructionList il = new InstructionList();
       il.append(ifact.createConstant(gen.getClassName()));
       il.append(
           ifact.createInvoke(
-              dcompRuntimeClassName, "class_init", Type.VOID, string_arg, Const.INVOKESTATIC));
+              dcompRuntimeClassName,
+              "set_class_initialized",
+              Type.VOID,
+              string_arg,
+              Const.INVOKESTATIC));
 
       insert_at_method_start(cinit_gen, il);
       create_new_stack_map_attribute(cinit_gen);

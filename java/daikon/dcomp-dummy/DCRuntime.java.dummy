@@ -150,7 +150,7 @@ public final class DCRuntime {
   public static void push_const() {
   }
 
-  public static void class_init(String classname) {
+  public static void set_class_initialized(String classname) {
   }
 
 }

@@ -16,12 +16,12 @@ public final class DCRuntime {
     return daikon.dcomp.DCRuntime.dcomp_super_equals(o1, o2);
   }
 
-  public static Object dcomp_clone(Object orig_obj) throws Throwable {
-    return daikon.dcomp.DCRuntime.dcomp_clone(orig_obj);
+  public static Object dcomp_clone(Object orig_obj, Class<?> target_class) throws Throwable {
+    return daikon.dcomp.DCRuntime.dcomp_clone(orig_obj, target_class);
   }
 
-  public static Object dcomp_super_clone(Object orig_obj) throws Throwable {
-    return daikon.dcomp.DCRuntime.dcomp_super_clone(orig_obj);
+  public static Object dcomp_super_clone(Object orig_obj, Class<?> target_class) throws Throwable {
+    return daikon.dcomp.DCRuntime.dcomp_super_clone(orig_obj, target_class);
   }
 
   public static boolean object_eq(Object obj1, Object obj2) {
@@ -194,7 +194,7 @@ public final class DCRuntime {
     daikon.dcomp.DCRuntime.push_const();
   }
 
-  public static void class_init(String classname) {
-    daikon.dcomp.DCRuntime.class_init(classname);
+  public static void set_class_initialized(String classname) {
+    daikon.dcomp.DCRuntime.set_class_initialized(classname);
   }
 }
