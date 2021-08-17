@@ -462,7 +462,8 @@ public final class DCRuntime implements ComparabilityProvider {
    *
    * <p>DCInstrument guarantees we will not see a clone of an array. If the object has been
    * instrumented, call the instrumented version of clone; if not, call the uninstrumented version
-   * and make the objects comparable. TODO: This really should make all of their fields comparable instead.
+   * and make the objects comparable. TODO: This really should make all of their fields comparable
+   * instead.
    *
    * @param orig_obj object being cloned
    * @return the result of the clone
@@ -477,7 +478,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Check to see if we're already in the middle of a super.clone call for this object.
     if (null != active_clone_calls.get(orig_obj)) {
-       System.out.println("ALERT: in middle of super.clone");
+      System.out.println("ALERT: in middle of super.clone");
       // Yes, we are -- continue up the class hierarchy
       target_class = active_clone_calls.get(orig_obj).getSuperclass();
     }
