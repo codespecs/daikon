@@ -403,6 +403,7 @@ public final class DCRuntime implements ComparabilityProvider {
    * and make the objects comparable. Really should make all of their fields comparable instead.
    *
    * @param orig_obj object being cloned
+   * @param target_class class to search for clone method
    * @return the result of the clone
    * @throws Throwable if unable clone object
    */
@@ -466,6 +467,7 @@ public final class DCRuntime implements ComparabilityProvider {
    * instead.
    *
    * @param orig_obj object being cloned
+   * @param target_class class to search for clone method
    * @return the result of the clone
    * @throws Throwable if unable to clone object
    * @see #active_clone_calls
