@@ -428,12 +428,8 @@ public final class DCRuntime implements ComparabilityProvider {
           System.out.println("NoSuchMethod " + target_class.getName());
         }
 
-        if (target_class.getName().equals("java.lang.Object")) {
-          // UNDONE: can this happen?
-          System.out.println("ALERT: no clone for java.lang.Object");
-          // We've reached the top of the class heirarchy without finding a clone() method.
-          throw dcomp_clone_error;
-        }
+        // Should never reach top of class heirarchy without finding a clone() method.
+        assert (!target_class.getName().equals("java.lang.Object"));
 
         // We didn't find a clone method, get next higher super and try again.
         target_class = target_class.getSuperclass();
@@ -480,7 +476,6 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Check to see if we're already in the middle of a super.clone call for this object.
     if (null != active_clone_calls.get(orig_obj)) {
-      System.out.println("ALERT: in middle of super.clone");
       // Yes, we are -- continue up the class hierarchy
       target_class = active_clone_calls.get(orig_obj).getSuperclass();
     }
@@ -503,13 +498,8 @@ public final class DCRuntime implements ComparabilityProvider {
           System.out.println("NoSuchMethod " + target_class.getName());
         }
 
-        if (target_class.getName().equals("java.lang.Object")) {
-          // UNDONE: can this happen?
-          System.out.println("ALERT: no clone for java.lang.Object");
-          // We've reached the top of the class heirarchy without finding a clone() method.
-          active_clone_calls.remove(orig_obj);
-          throw dcomp_clone_error;
-        }
+        // Should never reach top of class heirarchy without finding a clone() method.
+        assert (!target_class.getName().equals("java.lang.Object"));
 
         // We didn't find a clone method, get next higher super and try again.
         target_class = active_clone_calls.get(orig_obj).getSuperclass();
@@ -860,7 +850,7 @@ public final class DCRuntime implements ComparabilityProvider {
       }
     }
 
-    System.out.printf("Method marker not found in exception exit%n");
+    System.err.printf("Method marker not found in exception exit%n");
   }
 
   /** Cleans up the tag stack when an exception is thrown. */

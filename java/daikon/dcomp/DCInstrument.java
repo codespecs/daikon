@@ -608,7 +608,7 @@ public class DCInstrument extends InstructionListUtils {
           if (s == null) throw e;
           if (s.startsWith("Branch target offset too large")
               || s.startsWith("Code array too big")) {
-            System.out.printf(
+            System.err.printf(
                 "DynComp warning: ClassFile: %s - method %s is too large to instrument and is"
                     + " being skipped.%n",
                 classname, mg.getName());
@@ -830,8 +830,8 @@ public class DCInstrument extends InstructionListUtils {
         if (quit_if_error) {
           throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
         } else {
-          System.out.printf("Unexpected error processing %s.%s: %s%n", classname, m.getName(), t);
-          System.out.printf("Method is NOT instrumented.%n");
+          System.err.printf("Unexpected error processing %s.%s: %s%n", classname, m.getName(), t);
+          System.err.printf("Method is NOT instrumented.%n");
         }
       }
     }
