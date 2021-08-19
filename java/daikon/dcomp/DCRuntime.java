@@ -392,9 +392,6 @@ public final class DCRuntime implements ComparabilityProvider {
     return return_val;
   }
 
-  /** Exception from dcomp_clone_worker. */
-  private static Throwable dcomp_clone_error;
-
   /**
    * Clone an object and return the cloned object.
    *
@@ -405,7 +402,7 @@ public final class DCRuntime implements ComparabilityProvider {
    * @param orig_obj object being cloned
    * @param target_class class to search for clone method
    * @return the result of the clone
-   * @throws Throwable if unable clone object
+   * @throws Throwable if unable to clone object
    */
   public static Object dcomp_clone(Object orig_obj, Class<?> target_class) throws Throwable {
     if (debug) {
@@ -415,33 +412,36 @@ public final class DCRuntime implements ComparabilityProvider {
 
     Object clone_obj = null;
     while (true) {
-      clone_obj = dcomp_clone_worker(orig_obj, target_class);
-      if (clone_obj != null) {
+      try {
+        clone_obj = dcomp_clone_worker(orig_obj, target_class);
+        assert (clone_obj != null);
         break;
-      }
-      if (dcomp_clone_error.getCause() == null) {
-        // Some exception other than NoSuchMethod.
-        throw dcomp_clone_error;
-      }
-      if (dcomp_clone_error.getCause() instanceof java.lang.NoSuchMethodException) {
-        if (debug) {
-          System.out.println("NoSuchMethod " + target_class.getName());
+      } catch (Exception e) {
+        if (e.getCause() == null) {
+          // Some exception other than NoSuchMethod.
+          throw e;
         }
+        if (e.getCause() instanceof java.lang.NoSuchMethodException) {
+          if (debug) {
+            System.out.println("NoSuchMethod " + target_class.getName());
+          }
 
-        // Should never reach top of class heirarchy without finding a clone() method.
-        assert (!target_class.getName().equals("java.lang.Object"));
+          // Should never reach top of class heirarchy without finding a clone() method.
+          assert (!target_class.getName().equals("java.lang.Object"));
 
-        // We didn't find a clone method, get next higher super and try again.
-        target_class = target_class.getSuperclass();
-        continue;
-      } else {
-        // Some exception other than NoSuchMethod.
-        throw dcomp_clone_error;
+          // We didn't find a clone method, get next higher super and try again.
+          target_class = target_class.getSuperclass();
+        } else {
+          // Some exception other than NoSuchMethod.
+          throw e;
+        }
       }
     }
 
     // Make orig_obj and its clone comparable.
-    TagEntry.union(orig_obj, clone_obj);
+    if ((orig_obj != null) && (clone_obj != null)) {
+      TagEntry.union(orig_obj, clone_obj);
+    }
     return clone_obj;
   }
 
@@ -484,32 +484,34 @@ public final class DCRuntime implements ComparabilityProvider {
 
     Object clone_obj = null;
     while (true) {
-      clone_obj = dcomp_clone_worker(orig_obj, target_class);
-      if (clone_obj != null) {
+      try {
+        clone_obj = dcomp_clone_worker(orig_obj, target_class);
+        assert (clone_obj != null);
         break;
-      }
+      } catch (Exception e) {
 
-      if (dcomp_clone_error.getCause() == null) {
-        // Some exception other than NoSuchMethod.
-        throw dcomp_clone_error;
-      }
-      if (dcomp_clone_error instanceof java.lang.NoSuchMethodException) {
-        if (debug) {
-          System.out.println("NoSuchMethod " + target_class.getName());
+        if (e.getCause() == null) {
+          // Some exception other than NoSuchMethod.
+          active_clone_calls.remove(orig_obj);
+          throw e;
         }
+        if (e.getCause() instanceof java.lang.NoSuchMethodException) {
+          if (debug) {
+            System.out.println("NoSuchMethod " + target_class.getName());
+          }
 
-        // Should never reach top of class heirarchy without finding a clone() method.
-        assert (!target_class.getName().equals("java.lang.Object"));
+          // Should never reach top of class heirarchy without finding a clone() method.
+          assert (!target_class.getName().equals("java.lang.Object"));
 
-        // We didn't find a clone method, get next higher super and try again.
-        target_class = active_clone_calls.get(orig_obj).getSuperclass();
-        // Update the active_clone_calls map
-        active_clone_calls.put(orig_obj, target_class);
-        continue;
-      } else {
-        // Some exception other than NoSuchMethod.
-        active_clone_calls.remove(orig_obj);
-        throw dcomp_clone_error;
+          // We didn't find a clone method, get next higher super and try again.
+          target_class = active_clone_calls.get(orig_obj).getSuperclass();
+          // Update the active_clone_calls map
+          active_clone_calls.put(orig_obj, target_class);
+        } else {
+          // Some exception other than NoSuchMethod.
+          active_clone_calls.remove(orig_obj);
+          throw e;
+        }
       }
     }
 
@@ -522,8 +524,7 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * Clone an object and return the cloned object. If an error occurs, return null and set
-   * dcomp_clone_error.
+   * Clone an object and return the cloned object. Throws an exception if unable to clone object.
    *
    * <p>DCInstrument guarantees we will not see a clone of an array. If the object has been
    * instrumented, call the instrumented version of clone; if not, call the uninstrumented version.
@@ -535,23 +536,21 @@ public final class DCRuntime implements ComparabilityProvider {
    * @param orig_obj object being cloned
    * @param target_class class to search for clone method
    * @return the result of the clone
+   * @throws Throwable if unable to clone object
    */
-  public static Object dcomp_clone_worker(Object orig_obj, Class<?> target_class) {
+  public static Object dcomp_clone_worker(Object orig_obj, Class<?> target_class) throws Throwable {
     if (debug) {
       System.out.printf("In dcomp_clone_worker%n");
       System.out.printf("orig_obj: %s, target_class: %s%n", obj_str(orig_obj), target_class);
     }
 
     Method m = null;
-    dcomp_clone_error = null;
-
     try {
       m = target_class.getDeclaredMethod("clone", new Class<?>[] {dcomp_marker_class});
     } catch (NoSuchMethodException e) {
       m = null;
     } catch (Exception e) {
-      dcomp_clone_error = new RuntimeException("unexpected error locating clone(DCompMarker)", e);
-      return null;
+      throw new RuntimeException("unexpected error locating clone(DCompMarker)", e);
     }
 
     if (m != null) {
@@ -566,15 +565,12 @@ public final class DCRuntime implements ComparabilityProvider {
       } catch (InvocationTargetException e) {
         // This might happen - if an exception is thrown from clone(),
         // propagate it by rethrowing it.
-        dcomp_clone_error = e.getCause();
-        return null;
+        throw e.getCause();
       } catch (Exception e) {
-        dcomp_clone_error =
-            new RuntimeException(
-                "unexpected error invoking clone(DCompMarker) on object of class "
-                    + orig_obj.getClass(),
-                e);
-        return null;
+        throw new RuntimeException(
+            "unexpected error invoking clone(DCompMarker) on object of class "
+                + orig_obj.getClass(),
+            e);
       }
     }
 
@@ -582,11 +578,9 @@ public final class DCRuntime implements ComparabilityProvider {
     try {
       m = target_class.getDeclaredMethod("clone", new Class<?>[] {});
     } catch (NoSuchMethodException e) {
-      dcomp_clone_error = new RuntimeException("unable to locate clone()", e);
-      return null;
+      throw new RuntimeException("unable to locate clone()", e);
     } catch (Exception e) {
-      dcomp_clone_error = new RuntimeException("unexpected error locating clone()", e);
-      return null;
+      throw new RuntimeException("unexpected error locating clone()", e);
     }
     try {
       if (debug) System.out.printf("found: %s%n", m);
@@ -597,11 +591,10 @@ public final class DCRuntime implements ComparabilityProvider {
     } catch (InvocationTargetException e) {
       // This might happen - if an exception is thrown from clone(),
       // propagate it by rethrowing it.
-      dcomp_clone_error = e.getCause();
-      return null;
+      throw e.getCause();
     } catch (Exception e) {
-      dcomp_clone_error = new RuntimeException("unexpected error invoking clone()", e);
-      return null;
+      throw new RuntimeException(
+          "unexpected error invoking clone() on object of class " + orig_obj.getClass(), e);
     }
   }
 
