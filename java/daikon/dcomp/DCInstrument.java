@@ -2615,8 +2615,8 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Adds a call to DCRuntime.class_init (String classname) to the class initializer for this class.
-   * Creates a class initializer if one is not currently present.
+   * Adds a call to DCRuntime.set_class_initialized (String classname) to the class initializer for
+   * this class. Creates a class initializer if one is not currently present.
    */
   void track_class_init() {
 
@@ -2652,12 +2652,16 @@ public class DCInstrument extends InstructionListUtils {
       MethodGen cinit_gen = new MethodGen(cinit, gen.getClassName(), pool);
       set_current_stack_map_table(cinit_gen, gen.getMajor());
 
-      // Add a call to DCRuntime.class_init to the beginning of the method
+      // Add a call to DCRuntime.set_class_initialized to the beginning of the method
       InstructionList il = new InstructionList();
       il.append(ifact.createConstant(gen.getClassName()));
       il.append(
           ifact.createInvoke(
-              dcompRuntimeClassName, "class_init", Type.VOID, string_arg, Const.INVOKESTATIC));
+              dcompRuntimeClassName,
+              "set_class_initialized",
+              Type.VOID,
+              string_arg,
+              Const.INVOKESTATIC));
 
       insert_at_method_start(cinit_gen, il);
       create_new_stack_map_attribute(cinit_gen);

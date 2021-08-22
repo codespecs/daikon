@@ -87,19 +87,28 @@ public final class DCRuntime implements ComparabilityProvider {
    */
   public static Object method_marker = new Object();
 
-  // Control debug printing
+  /** Control debug printing. */
   public static boolean debug = false;
+  /** Log comparability tage stack operations. */
   public static boolean debug_tag_frame = false;
+  /** Log object compare operations. */
   public static boolean debug_objects = false;
+  /** Log variable comparability operations. */
   public static SimpleLog merge_dv = new SimpleLog(false);
+  /** Log array comparability operations. */
   public static SimpleLog debug_arr_index = new SimpleLog(false);
+  /** Log primitive operations. */
   public static SimpleLog debug_primitive = new SimpleLog(false);
+  /** Log comparability merges. */
   public static SimpleLog debug_merge_comp = new SimpleLog(false);
+  /** Log excution time. */
   public static SimpleLog debug_timing = new SimpleLog(false);
+  /** Log decl output. */
   public static SimpleLog debug_decl_print = new SimpleLog(false);
+  /** Log excution time. */
   public static SimpleLog time_decl = new SimpleLog(false);
+  /** Log internal data structure sizes. */
   public static SimpleLog map_info = new SimpleLog(false);
-  public static final SimpleLog debug_df = new SimpleLog(false);
 
   /** Simplifies printouts for debugging if we ignore toString. */
   private static boolean ignore_toString = true;
@@ -145,7 +154,7 @@ public final class DCRuntime implements ComparabilityProvider {
   private static List<ClassInfo> all_classes = new ArrayList<>();
 
   /** Set of classes whose static initializer has run. */
-  private static Set<String> init_classes = new HashSet<>();
+  private static Set<String> initialized_eclassses = new HashSet<>();
 
   /**
    * Class used as a tag for primitive constants. Only different from Object for debugging purposes.
@@ -1281,6 +1290,11 @@ public final class DCRuntime implements ComparabilityProvider {
   /**
    * Returns the tag for the specified field. If that field is an array, a list of tags will be
    * returned.
+   *
+   * @param fi a field
+   * @param parent object that contains the field (if any)
+   * @param obj value of the field itself (if available and if it's an object)
+   * @return the tag for the specified field
    */
   static Object get_field_tag(FieldInfo fi, Object parent, Object obj) {
 
@@ -1470,12 +1484,14 @@ public final class DCRuntime implements ComparabilityProvider {
     for (DaikonVariableInfo child : dv) {
       Object child_obj;
       if ((child instanceof ArrayInfo) && ((ArrayInfo) child).getType().isPrimitive()) {
+        // It's a primitive array.
         // System.out.printf("child array type %s = %s%n", ai, ai.getType());
         Object[] arr_tags = field_map.get(tag);
         // System.out.printf("found arr_tag %s for arr %s%n", arr_tags, tag);
         // System.out.printf("tag values = %s%n", Arrays.toString (arr_tags));
         child_obj = arr_tags;
-      } else { // not a primitive array
+      } else {
+        // It's not a primitive array.
         child_obj = child.getMyValFromParentVal(tag);
       }
       merge_comparability(varmap, tag, child_obj, child);
@@ -1492,7 +1508,7 @@ public final class DCRuntime implements ComparabilityProvider {
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
       for (MethodInfo mi : ci.method_infos) {
-        if (mi.is_class_init()) {
+        if (mi.is_class_initializer()) {
           continue;
         }
         // skip our added method
@@ -1515,7 +1531,7 @@ public final class DCRuntime implements ComparabilityProvider {
     for (ClassInfo ci : all_classes) {
       merge_class_comparability(ci);
       for (MethodInfo mi : ci.method_infos) {
-        if (mi.is_class_init()) {
+        if (mi.is_class_initializer()) {
           continue;
         }
         if (mi.method_name.equals("equals_dcomp_instrumented")) {
@@ -1592,7 +1608,7 @@ public final class DCRuntime implements ComparabilityProvider {
       add_dv_stats(ci.traversalClass);
       add_dv_stats(ci.traversalObject);
       for (MethodInfo mi : ci.method_infos) {
-        if (mi.is_class_init()) {
+        if (mi.is_class_initializer()) {
           continue;
         }
         method_cnt++;
@@ -1716,7 +1732,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Print the information for each enter/exit point
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) {
+      if (mi.is_class_initializer()) {
         continue;
       }
       debug_decl_print.log("  method %s%n", mi.method_name);
@@ -2229,7 +2245,7 @@ public final class DCRuntime implements ComparabilityProvider {
     // If any methods have not been executed, create their information
     // now (which will note all of their variables as not comparable)
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) {
+      if (mi.is_class_initializer()) {
         continue;
       }
       if (mi.traversalEnter == null) {
@@ -2241,7 +2257,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Merge the comparability from each exit point into the object point
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) {
+      if (mi.is_class_initializer()) {
         continue;
       }
       merge_dv_comparability(mi.traversalExit, mi.traversalEnter, "Merging exit to enter: " + mi);
@@ -2251,7 +2267,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Merge the comparability from the object point back to each exit point
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) {
+      if (mi.is_class_initializer()) {
         continue;
       }
       merge_dv_comparability(ci.traversalObject, mi.traversalExit, "Merging object to exit: " + mi);
@@ -2259,7 +2275,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Merge the comparability for each exit point back to the enter
     for (MethodInfo mi : ci.method_infos) {
-      if (mi.is_class_init()) {
+      if (mi.is_class_initializer()) {
         continue;
       }
       merge_dv_comparability(mi.traversalExit, mi.traversalEnter, "Merging exit to enter: " + mi);
@@ -2707,9 +2723,9 @@ public final class DCRuntime implements ComparabilityProvider {
    *
    * @param classname class to mark initialized
    */
-  public static void class_init(String classname) {
-    debug_primitive.log("class_init: %s%n", classname);
-    init_classes.add(classname);
+  public static void set_class_initialized(String classname) {
+    debug_primitive.log("set_class_initialized: %s%n", classname);
+    initialized_eclassses.add(classname);
   }
 
   /**
@@ -2719,9 +2735,9 @@ public final class DCRuntime implements ComparabilityProvider {
    * @return true if clazz has been initialized
    */
   @Pure
-  public static boolean is_class_init(Class<?> clazz) {
-    debug_primitive.log("is_class_init%n");
-    return (init_classes.contains(clazz.getName()));
+  public static boolean is_class_initialized(Class<?> clazz) {
+    debug_primitive.log("is_class_initialized%n");
+    return (initialized_eclassses.contains(clazz.getName()));
   }
 
   /** Returns the name of the method that called the caller of caller_name(). */
@@ -2829,7 +2845,8 @@ public final class DCRuntime implements ComparabilityProvider {
      * Gets the tag for the field.
      *
      * @param parent object that contains the field (if any)
-     * @param obj value of the field itself (if available and if its an object
+     * @param obj value of the field itself (if available and if it's an object)
+     * @return the tag for the field
      */
     abstract Object get_tag(Object parent, Object obj);
   }
@@ -2910,8 +2927,10 @@ public final class DCRuntime implements ComparabilityProvider {
 
       // assert parent == null && obj == null;
       if (!is_class_initialized) {
-        if (is_class_init(declaring_class)) {
-          if (!field.isAccessible()) field.setAccessible(true);
+        if (is_class_initialized(declaring_class)) {
+          if (!field.isAccessible()) {
+            field.setAccessible(true);
+          }
           is_class_initialized = true;
         } else {
           return nonsensical;
