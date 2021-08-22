@@ -114,7 +114,6 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.StringsPlume;
-import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -341,9 +340,12 @@ public class PptTopLevel extends Ppt {
     return CollectionsPlume.iteratorToIterable(new CondIterator());
   }
 
-  /** Returns whether or not this ppt has any splitters. */
-  @SuppressWarnings(
-      "contracts.conditional.postcondition.not.satisfied") // Checker Framework bug: "splitters"
+  /**
+   * Returns whether or not this ppt has any splitters.
+   *
+   * @return whether or not this ppt has any splitters
+   */
+  @SuppressWarnings("contracts.conditional.postcondition") // Checker Framework bug: "splitters"
   @EnsuresNonNullIf(result = true, expression = "splitters")
   public boolean has_splitters() {
     return (splitters != null) && (splitters.size() > 0);
@@ -380,12 +382,10 @@ public class PptTopLevel extends Ppt {
    */
   public boolean invariants_removed = false;
 
-  // This was renamed to the joiner_view because it no longer just for
-  // implications, but instead for any Invariants that represents a
-  // "joining" of two others (such as and, or, etc)
+  /** Contains invariants that represent a "joining" of two others: implications, and, or, etc. */
   @SuppressWarnings({
-    "nullness:assignment.type.incompatible", // field won't be used until object is initialized
-    "nullness:argument.type.incompatible" // ditto
+    "nullness:assignment", // field won't be used until object is initialized
+    "nullness:argument" // field won't be used until object is initialized
   })
   public PptSlice0 joiner_view = new PptSlice0(this);
 
@@ -492,7 +492,7 @@ public class PptTopLevel extends Ppt {
 
     for (VarInfo vi : var_infos) {
       // TODO: This should not be necessary, since initialization is now complete
-      @SuppressWarnings({"nullness:assignment.type.incompatible"}) // initialization is now complete
+      @SuppressWarnings({"nullness:assignment"}) // initialization is now complete
       @Initialized PptTopLevel initializedThis = this;
       vi.ppt = initializedThis;
     }
@@ -567,7 +567,7 @@ public class PptTopLevel extends Ppt {
     }
     BitSet b1 = mbtracker.get(vi1.value_index);
     BitSet b2 = mbtracker.get(vi2.value_index);
-    int num_slice_samples = UtilPlume.intersectionCardinality(b1, b2);
+    int num_slice_samples = CollectionsPlume.intersectionCardinality(b1, b2);
     return num_slice_samples;
   }
 
@@ -585,7 +585,7 @@ public class PptTopLevel extends Ppt {
     BitSet b1 = mbtracker.get(vi1.value_index);
     BitSet b2 = mbtracker.get(vi2.value_index);
     BitSet b3 = mbtracker.get(vi3.value_index);
-    int num_slice_samples = UtilPlume.intersectionCardinality(b1, b2, b3);
+    int num_slice_samples = CollectionsPlume.intersectionCardinality(b1, b2, b3);
     return num_slice_samples;
   }
 
@@ -1321,7 +1321,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns whether or not the specified variable is dynamically constant. */
-  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug
+  @SuppressWarnings("contracts.conditional.postcondition") // Checker Framework bug
   @EnsuresNonNullIf(result = true, expression = "constants")
   @Pure
   public boolean is_constant(VarInfo v) {
@@ -1332,7 +1332,7 @@ public class PptTopLevel extends Ppt {
    * Returns whether or not the specified variable is currently dynamically constant, or was a
    * dynamic constant at the beginning of constant processing.
    */
-  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug
+  @SuppressWarnings("contracts.conditional.postcondition") // Checker Framework bug
   @EnsuresNonNullIf(result = true, expression = "constants")
   @Pure
   public boolean is_prev_constant(VarInfo v) {
@@ -1340,7 +1340,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns whether or not the specified variable has been missing for all samples seen so far. */
-  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug
+  @SuppressWarnings("contracts.conditional.postcondition") // Checker Framework bug
   @EnsuresNonNullIf(result = true, expression = "constants")
   @Pure
   public boolean is_missing(VarInfo v) {
@@ -1351,7 +1351,7 @@ public class PptTopLevel extends Ppt {
    * returns whether the specified variable is currently missing OR was missing at the beginning of
    * constants processing.
    */
-  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug
+  @SuppressWarnings("contracts.conditional.postcondition") // Checker Framework bug
   @EnsuresNonNullIf(result = true, expression = "constants")
   @Pure
   public boolean is_prev_missing(VarInfo v) {
@@ -1467,11 +1467,7 @@ public class PptTopLevel extends Ppt {
     for (Iterator<PptSlice> j = views_iterator(); j.hasNext(); ) {
       PptSlice slice = j.next();
       for (Invariant inv : slice.invs) {
-        Cnt cnt = inv_map.get(inv.getClass());
-        if (cnt == null) {
-          cnt = new Cnt();
-          inv_map.put(inv.getClass(), cnt);
-        }
+        Cnt cnt = inv_map.computeIfAbsent(inv.getClass(), __ -> new Cnt());
         cnt.cnt++;
       }
     }
@@ -2756,7 +2752,7 @@ public class PptTopLevel extends Ppt {
    * Configuration variable "pairwise_implications" controls whether all or only the first two
    * conditional program points are considered.
    */
-  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition") // private field
   public void addImplications() {
 
     if (PptSplitter.dkconfig_disable_splitting) {
@@ -2986,9 +2982,7 @@ public class PptTopLevel extends Ppt {
       while (!working.isEmpty()) {
         PptTopLevel ppt = working.iterator().next();
         working.remove(ppt);
-        if (!closure.contains(ppt)) {
-          closure.add(ppt);
-        }
+        closure.add(ppt);
       }
     }
 
@@ -3804,7 +3798,7 @@ public class PptTopLevel extends Ppt {
    * of the suppressed invariants in each of the children, performing the merge, and then removing
    * them.
    */
-  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition") // private field
   @RequiresNonNull("equality_view")
   public void merge_invs_multiple_children() {
 

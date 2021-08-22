@@ -60,9 +60,10 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.CollectionsPlume;
+import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
-import org.plumelib.util.UtilPlume;
 
+/** File I/O utilities. */
 public final class FileIO {
 
   /** Nobody should ever instantiate a FileIO. */
@@ -259,11 +260,18 @@ public final class FileIO {
     return s != null && (s.startsWith("//") || s.startsWith("#"));
   }
 
+  /**
+   * Returns true if the next line is a comment.
+   *
+   * @param reader the reader whose next line to check
+   * @return true if the next line is a comment
+   */
   // Nullness-checking of read_data_trace_record(ParseState) works even
   // without these two lines, since StringJoiner accepts null values.
   @SuppressWarnings(
-      "nullness:contracts.conditional.postcondition.not.satisfied") // readLine() assertion is
-  // ensured by call to reset()
+      "nullness:contracts.conditional.postcondition" // readLine() assertion is ensured by call to
+  // reset()
+  )
   @EnsuresNonNullIf(result = true, expression = "#1.readLine()")
   public static final boolean nextLineIsComment(BufferedReader reader) {
     boolean result = false;
@@ -1322,7 +1330,7 @@ public final class FileIO {
 
       if (count_lines) {
         Daikon.progress = "Checking size of " + filename;
-        total_lines = UtilPlume.countLines(raw_filename);
+        total_lines = FilesPlume.countLines(raw_filename);
       } else {
         // System.out.printf("no count %b %d %s %d %d%n", is_decl_file,
         //                    dkconfig_dtrace_line_count, filename,
@@ -1348,7 +1356,7 @@ public final class FileIO {
           reader = new LineNumberReader(new InputStreamReader(stream, UTF_8));
         }
       } else {
-        reader = UtilPlume.lineNumberFileReader(raw_filename);
+        reader = FilesPlume.newLineNumberFileReader(raw_filename);
       }
 
       varcomp_format = VarComparability.IMPLICIT;
@@ -1812,7 +1820,7 @@ public final class FileIO {
       return;
     }
 
-    @SuppressWarnings({"UnusedVariable", "nullness:contracts.precondition.not.satisfied"})
+    @SuppressWarnings({"UnusedVariable", "nullness:contracts.precondition"})
     Object dummy = ppt.add_bottom_up(vt, 1);
 
     if (debugVars.isLoggable(Level.FINE)) {
@@ -2376,9 +2384,16 @@ public final class FileIO {
     public boolean new_decl_format = false;
   }
 
+  /**
+   * Write a serialized PptMap to a file.
+   *
+   * @param map a PptMap
+   * @param file the file to which to write
+   * @throws IOException if there is trouble writing the file
+   */
   public static void write_serialized_pptmap(PptMap map, File file) throws IOException {
     SerialFormat record = new SerialFormat(map, Configuration.getInstance());
-    UtilPlume.writeObject(record, file);
+    FilesPlume.writeObject(record, file);
   }
 
   /**
@@ -2390,7 +2405,7 @@ public final class FileIO {
       throws IOException {
 
     try {
-      Object obj = UtilPlume.readObject(file);
+      Object obj = FilesPlume.readObject(file);
       if (obj instanceof FileIO.SerialFormat) {
         SerialFormat record = (SerialFormat) obj;
         if (use_saved_config) {
@@ -2967,9 +2982,15 @@ public final class FileIO {
     }
   }
 
-  /** Call this to indicate a malformed declaration. */
+  /**
+   * Call this to indicate a malformed declaration.
+   *
+   * @param state the current parse state
+   * @param format a format string, for the error message
+   * @param args arguments for the format string
+   */
   private static void decl_error(ParseState state, String format, @Nullable Object... args) {
-    @SuppressWarnings("formatter:format.string.invalid") // https://tinyurl.com/cfissue/2584
+    @SuppressWarnings("formatter:format.string") // https://tinyurl.com/cfissue/2584
     String msg = String.format(format, args) + state.line_file_message();
     throw new Daikon.UserError(msg);
   }

@@ -153,17 +153,20 @@ detection is a machine learning technique that can be applied to
 arbitrary data.)  It is easy to extend Daikon to other applications.
 
 Daikon is freely available for download from
-@uref{http://plse.cs.washington.edu/daikon/download/, ,download-site}.  The distribution
-includes both source code and
+@uref{http://plse.cs.washington.edu/daikon/download/, ,download-site}.
+Daikon's license permits unrestricted use (@pxref{License}).
+The distribution includes both source code
+(also available on @uref{https://github.com/codespecs/daikon, , GitHub})
+and
 @uref{http://plse.cs.washington.edu/daikon/download/doc/, ,documentation},
-and Daikon's license permits unrestricted use (@pxref{License}).  Many
-researchers and practitioners have used Daikon; those uses, and Daikon
+Many researchers and practitioners have used Daikon; those uses, and Daikon
 itself, are described in various
 @uref{http://plse.cs.washington.edu/daikon/pubs/, ,publications}.
 
 For more information on Daikon,
 @pxref{Top, , Introduction, developer, Daikon Developer Manual}.
 For instance, the @cite{Daikon Developer Manual} indicates how to
+obtain Daikon's source code and how to
 extend Daikon with new invariants, new derived variables, and front
 ends for new languages.  It also contains information about the
 implementation and about debugging flags.
@@ -179,7 +182,7 @@ instructions.
 The main way to install Daikon is from a release, as explained in this
 section.
 (Alternately,
-@pxref{Version control repository,,,developer,Daikon Developer Manual},
+@pxref{Source code (version control repository),,,developer,Daikon Developer Manual},
 to obtain the latest Daikon source code from its version control repository.)
 Here is an overview of the steps.
 
@@ -203,7 +206,7 @@ instructions for your operating system.
 
 
 Differences from previous versions of Daikon appear
-in the file @url{CHANGES,,@file{doc/CHANGES}} in the distribution.
+in the file @url{CHANGELOG.md,,@file{doc/CHANGELOG.md}} in the distribution.
 To be notified of new releases, or to join discussions about Daikon,
 subscribe to one of the mailing lists (@pxref{Mailing lists}).
 
@@ -483,13 +486,11 @@ Alternately, replacing the @option{--daikon} argument by
 @option{--daikon-online} has the same effect, but does not write a data
 trace file to disk.
 
-@end enumerate
-
 If you wish to have more control over the invariant detection process,
 you can split the third step above into multiple steps.  Then, step 3
 would become:
 
-@enumerate 3
+@enumerate a
 @item
 Run the program under the control of the Chicory front end
 in order to create a trace file named
@@ -507,39 +508,7 @@ Run Daikon on the trace file.
 @example
 java -cp $DAIKONDIR/daikon.jar daikon.Daikon StackArTester.dtrace.gz
 @end example
-
-Daikon can analyze multiple runs (executions) of the program.  You can
-supply Daikon with multiple trace files:
-
-@exampleindent 0
-@smallexample
-java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
-     --dtrace-file=StackArTester1.dtrace.gz \
-     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
-java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
-     --dtrace-file=StackArTester2.dtrace.gz \
-     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
-java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
-     --dtrace-file=StackArTester3.dtrace.gz \
-     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
-java -cp $DAIKONDIR/daikon.jar daikon.Daikon StackArTester*.dtrace.gz
-@end smallexample
-@exampleindent 1
-
-@c @noindent
-@c or, you can append information from multiple runs in a single trace file
-@c (but in this case you cannot use a compressed trace file):
-@c
-@c @example
-@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
-@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
-@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
-@c java daikon.Daikon StackArTester.dtrace
-@c @end example
-
-@noindent
-(In this example, all the runs are identical, so multiple runs yield the
-same invariants as one run.)
+@end enumerate
 
 @item
 Examine the invariants.  (They were also printed to standard out
@@ -578,6 +547,40 @@ For more information about the Annotate program, see @ref{Annotate}.
 @end itemize
 @end enumerate
 @exampleindent 4
+
+Daikon can analyze multiple runs (executions) of the program.  You can
+supply Daikon with multiple trace files:
+
+@exampleindent 0
+@smallexample
+java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
+     --dtrace-file=StackArTester1.dtrace.gz \
+     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
+java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
+     --dtrace-file=StackArTester2.dtrace.gz \
+     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
+java -cp .:$DAIKONDIR/daikon.jar daikon.Chicory \
+     --dtrace-file=StackArTester3.dtrace.gz \
+     --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester
+java -cp $DAIKONDIR/daikon.jar daikon.Daikon StackArTester*.dtrace.gz
+@end smallexample
+@exampleindent 1
+
+@c @noindent
+@c or, you can append information from multiple runs in a single trace file
+@c (but in this case you cannot use a compressed trace file):
+@c
+@c @example
+@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
+@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
+@c java -DDTRACEAPPEND=1 daikon.Chicory --dtrace-file=StackArTester.dtrace DataStructures.StackArTester
+@c java daikon.Daikon StackArTester.dtrace
+@c @end example
+
+@noindent
+(In this example, all the runs are identical, so multiple runs yield the
+same invariants as one run.)
+
 
 
 @node Detecting invariants when running a Java program from a jar file
@@ -844,7 +847,7 @@ kvasir-dtrace --no-dyncomp --dtrace-file=daikon-output/wordplay2.dtrace \
     ./wordplay -f words.txt 'better results from multiple runs'
 kvasir-dtrace --no-dyncomp --dtrace-file=daikon-output/wordplay3.dtrace \
     ./wordplay -f words.txt 'more testing equals better testing'
-java -Xmx256m daikon.Daikon daikon-output/wordplay*.dtrace daikon-output/wordplay.decls
+java -Xmx3600m daikon.Daikon daikon-output/wordplay*.dtrace daikon-output/wordplay.decls
 @end smallexample
 
 @noindent
@@ -864,7 +867,7 @@ kvasir-dtrace --no-dyncomp --dtrace-append \
 kvasir-dtrace --no-dyncomp --dtrace-append \
     --dtrace-file=daikon-output/wordplay-all.dtrace \
     ./wordplay -f words.txt 'more testing equals better testing'
-java -Xmx256m daikon.Daikon daikon-output/wordplay-all.dtrace daikon-output/wordplay.decls
+java -Xmx3600m daikon.Daikon daikon-output/wordplay-all.dtrace daikon-output/wordplay.decls
 @end smallexample
 
 @item
@@ -906,7 +909,8 @@ step may take several minutes.
 
 Since the default memory size used by a Java virtual machine varies, we
 suggest that Daikon be run with at least 256 megabytes of
-memory (and perhaps much more), specified for many JVMs by the option @option{-Xmx256m}.
+memory (and perhaps much more).  For many JVMs, specify a maximum heap size
+of @nospellcheck{3.6GB} by the option @option{-Xmx3600m}.
 For more information about specifying the memory usage for Daikon, see
 @ref{Out of memory}.
 
@@ -1184,8 +1188,8 @@ Chicory front end for Java (@pxref{Chicory}) produces only @file{.dtrace}
 files.  If there are no @file{.decls} files, then it is not necessary to
 include them on the command line to Daikon.
 
-Note that combining input files from Chicory and (Java) DynComp can lead to
-a @nospellcheck{decl} format error. The preferred usage is to use the DynComp generated
+Note that using a DynComp generated @file{.decls} file as input to Daikon will lead to
+a @nospellcheck{decl} format error. The correct usage is to use the DynComp generated
 @file{.decls} file(s) as input to Chicory.
 See @ref{Detecting invariants in Java programs} for more details.
 
@@ -3276,7 +3280,7 @@ parts of your program.
 @item omit a whole package:
 @smallexample
 java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
-     '--ppt-omit-pattern=^junit\.' ...
+     '--ppt-omit-pattern=^org\.junit\.' ...
 @end smallexample
 @smallexample
 java -cp $DAIKONDIR/daikon.jar daikon.Chicory \
@@ -3386,8 +3390,12 @@ value is marked as nonsensical.
 
 @item --omit-var=@var{regex}
 @cindex variables, omit
-Do not include variables whose name matches the regular expression.  Variables
-will be omitted from each program point in which they appear.
+Do not include variables whose name matches the regular expression.
+(For static fields, the fully-qualified name is used.)
+Variables will be omitted from each program point in which they appear.
+Also see Daikon's @code{--var-omit-pattern} command-line argument.
+Note that you may need to omit the same variables from downstream tools
+that process invariant files, such as Annotate
 
 @item --std-visibility
 @cindex private variables
@@ -3508,7 +3516,7 @@ Specifies the default name for the trace output (@file{.dtrace}) file.
 If this is not specified, then the value of the @env{DTRACEFILE}
 environment variable (at the time the instrumented program runs) is
 used.  If that environment variable is not used, then the default is
-@file{./@var{CLASSNAME}.dtrace}.
+@file{./@var{CLASSNAME}.dtrace.gz}.
 
 If the @env{DTRACEAPPEND} environment
 variable is set to any value, the @file{.dtrace} file will be appended to
@@ -3516,6 +3524,9 @@ instead of overwritten.  Compressed data trace files may not be appended
 to.  In some cases you may find a single large data trace file more
 convenient; in other cases, a collection of smaller data trace files may
 give you more control over which subsets of runs to invoke Daikon on.
+
+Note that while Chicory will accept any valid value for @var{filename}, it
+must contain @file{.dtrace} to be recognized by Daikon.
 
 @item --comparability-file=@var{filename}
 This option specifies a declaration file
@@ -3587,7 +3598,7 @@ Specifies the maximum size, in bytes, of the memory allocation pool for
 the target program.  Also applies to Daikon, if the @option{--daikon}
 command-line argument is given.
 The size is specified in the same manner as the
-@option{--Xmx} switch to @command{java}; for example: @option{--heap-size=2048m}.
+@option{--Xmx} switch to @command{java}; for example: @option{--heap-size=3600m}.
 
 @end table
 
@@ -4001,12 +4012,14 @@ The directory in which to create output files.  Defaults to the current
 working directory.
 
 @item --decl-file=@var{file}
-Output filename for @file{.decls} file suitable for input to Daikon.  Defaults to
+Output filename for @file{.decls} file suitable for input to Chicory.  Defaults to
 @file{@var{target_program}.decls-DynComp}.
 
 @item --comparability-file=@var{file}
 Output filename for a more easily human-readable file summarizing
 comparability sets.  The file is intended primarily for debugging.
+It is not meant to be used as input to Chicory's @option{--comparability-file} option;
+use the output from DynComp's @option{--decl-file} option for that.
 
 @item --trace-file=@var{file}
 If specified, write a human-readable file showing some of the interactions
@@ -4315,6 +4328,8 @@ created (default behavior), then it contains both variable declarations and a tr
 values.  If separate @file{.decls} and @file{.dtrace} files are created,
 then the @file{.decls} file contains declarations and the @file{.dtrace}
 file contains the trace of values.
+Note that while Kvasir will accept any valid value for @var{filename}, it
+must contain @file{.decls} to be recognized by Daikon.
 
 @item --decls-only
 
@@ -4334,6 +4349,8 @@ of the program will be redirected back to the terminal (@file{/dev/tty}), to avo
 intermixing it with the trace output.  If the given filename ends in
 @file{.gz}, then @option{--dtrace-gzip} is enabled and the
 @file{.dtrace} file will be compressed.
+Note that while Kvasir will accept any valid value for @var{filename}, it
+must contain @file{.dtrace} to be recognized by Daikon.
 
 @item --dtrace-no-decls
 
@@ -5616,7 +5633,7 @@ file.txt} to compress a text file (but start with a small one first).
 @file{$DAIKONDIR/@/examples/@/c-examples/@/bzip2} of the distribution) by
 saying @command{gcc -gdwarf-2 -no-pie bzip2.c -o bzip2}, and that
 @env{$DAIKON} stands for the command that invokes Daikon, for
-instance @command{java -Xmx512m daikon.Daikon --config_option
+instance @command{java -Xmx3600m daikon.Daikon --config_option
 daikon.@/derive.@/Derivation.@/disable_derived_variables=true}.)
 
 @cindex named pipe, as data trace file
@@ -7556,8 +7573,8 @@ and they are not all in the same format.
 for information about how to determine a data file's format.)
 
 The most probable cause is you are using at least one
-Java-DynComp-generated @file{.decls} file
-(which defaults to version 1) and at least one @file{.dtrace} file (which
+version 1 @file{.decls} file or @file{.dtrace} file generated by an older version of
+Chicory/DynComp and at least one current @file{.decls} file or @file{.dtrace} file (which
 defaults to version 2) as input to Daikon.
 (Note that the C/C++ front end Kvasir generates a version 2 file @file{.decls}.)
 The way to
@@ -7833,7 +7850,7 @@ Some implementations of Java use a surprisingly small default, such as 64
 megabytes; to permit use of up to 2048
 megabytes, you would run Java like so:
 @example
-java -Xmx2048m ...
+java -Xmx3600m ...
 @end example
 @noindent
 though you can use much more depending on the limitations of your JVM.
@@ -7843,7 +7860,7 @@ run Daikon, then you must separately indicate the amount of memory
 available to Chicory and to Daikon (the latter with Chicory's
 @option{--heap-size} command-line argument).  For example:
 @example
-java -Xmx256m daikon.Chicory --comparability-file=MyClass.decls-DynComp \
+java -Xmx3600m daikon.Chicory --comparability-file=MyClass.decls-DynComp \
      --heap-size=2600m --daikon mypackage.MyClass arg1 arg2 arg3
 @end example
 
@@ -7856,7 +7873,7 @@ be necessary to increase this limit as well, with the
 of which at most 256 can be used for the permanent generation, you
 would run Java like so:
 @example
-java -Xmx512m -XX:MaxPermSize=256m
+java -Xmx3600m -XX:MaxPermSize=256m
 @end example
 
 Another possible problem is the creation of too many derived variables.
@@ -8611,7 +8628,7 @@ and about debugging flags.
 
 This manual describes Daikon version 5.8.9, released March 3, 2021.
 A more detailed list of revisions since mid-2001 can be found in file
-@url{CHANGES,,@file{doc/CHANGES}}
+@url{CHANGELOG.md,,@file{doc/CHANGELOG.md}}
 in the distribution; this section gives a
 high-level view of the package's history.
 
@@ -9134,20 +9151,20 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  evenheading thispage thischaptername thischapternum hfuzz
 @c  LocalWords:  oddheading thissectionnum thissectionname everyfooting d1
 @c  LocalWords:  QuickTime QTSystem QTJava arg1 arg2 arg3 MyMain Makefile
-@c  LocalWords:  originalclasspath grep EXIT79 EXIT32 prepend Xmx256m var1
+@c  LocalWords:  originalclasspath grep EXIT79 EXIT32 prepend Xmx3600m var1
 @c  LocalWords:  prepended computeConfidence numsamples getName var2 var3
 @c  LocalWords:  jcc Java2 seq1 CSharpContract myString otherString EXIT48
 @c  LocalWords:  unsplit if'' condition1 condition2 condition3 procedure1
 @c  LocalWords:  replacement1 procedure2 replacement2 arg0 EXIT33 pack1 d2
 @c  LocalWords:  pack2 online'' EXIT11 o1 o2 SIGSEGV O0 fjalar gcc3 EXIT0
-@c  LocalWords:  I' C' S' A' P' superclasses vv1 bzip2 Xmx512m bfd dev ABI
+@c  LocalWords:  I' C' S' A' P' superclasses vv1 bzip2 Xmx3600m bfd dev ABI
 @c  LocalWords:  binutils AMD64 EM64T amd64 CeleriacLauncher celeriacArg1
 @c  LocalWords:  celeriacArg2 EXIT22 checkargs Takuan WS BPEL file1 file2
 @c  LocalWords:  readlink Hynger HYbrid iNvariant GEneratoR SLSF Bak Udon
 @c  LocalWords:  Drager I1 I2 invSortComparator1 invSortComparator2 prover
 @c  LocalWords:  Myprog2 isDaikonInstrumented getDaikonInvariants GeoPoint
 @c  LocalWords:  valid'' deserializing declsfiles1 dtracefile1 declsfiles2
-@c  LocalWords:  dtracefile2 NoClassDefFoundError overfitting Xmx2048m ps1
+@c  LocalWords:  dtracefile2 NoClassDefFoundError overfitting Xmx3600m ps1
 @c  LocalWords:  LIB2 CVC4 unformattable LinkageError SquarePanel Donohue
 @c  LocalWords:  SecurityManager setSecurityManager omitpattern Software''
 @c  LocalWords:  MyProblemMethod Liu Galeotti Mangala Gowri ABB LVTT LVT

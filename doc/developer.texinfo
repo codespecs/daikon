@@ -139,7 +139,7 @@ This chapter describes how to customize or modify Daikon.
 
 @menu
 * Compiling Daikon::
-* Version control repository::
+* Source code (version control repository)::
 * Using Eclipse::
 * New invariants::
 * New derived variables::
@@ -198,9 +198,10 @@ distribution into multiple @file{.java} files, which are then compiled.
 If you have a C compiler, you almost certainly have @command{cpp}.
 
 
-@node    Version control repository
-@section Version control repository
+@node    Source code (version control repository)
+@section Source code (version control repository)
 
+@cindex source code
 @cindex repository
 @cindex Git repository
 @cindex version control repository
@@ -470,38 +471,38 @@ them all to 1, which is a safe default.
 @example
 class Example @{
   static @{
-    daikon.Runtime.setDtraceMaybe("daikon-output/StackAr.dtrace");
+    daikon.chicory.Runtime.setDtraceMaybe("daikon-output/StackAr.dtrace");
   @}
 
   // Return either the square of x or the square of (x+1).
   int squar(int x, boolean b) @{
-    synchronized (daikon.Runtime.dtrace) @{
-      daikon.Runtime.dtrace.println();
-      daikon.Runtime.dtrace.println("Example.squar:::ENTER");
-      daikon.Runtime.dtrace.println("x");
-      daikon.Runtime.dtrace.println(x);
-      daikon.Runtime.dtrace.println(1);  // modified bit
-      daikon.Runtime.dtrace.println("b");
-      daikon.Runtime.dtrace.println(b ? 1 : 0);
-      daikon.Runtime.dtrace.println(1);  // modified bit
+    synchronized (daikon.chicory.Runtime.dtrace) @{
+      daikon.chicory.Runtime.dtrace.println();
+      daikon.chicory.Runtime.dtrace.println("Example.squar:::ENTER");
+      daikon.chicory.Runtime.dtrace.println("x");
+      daikon.chicory.Runtime.dtrace.println(x);
+      daikon.chicory.Runtime.dtrace.println(1);  // modified bit
+      daikon.chicory.Runtime.dtrace.println("b");
+      daikon.chicory.Runtime.dtrace.println(b ? 1 : 0);
+      daikon.chicory.Runtime.dtrace.println(1);  // modified bit
     @}
 
     if (b)
       x++;
 
     int daikon_return_value = x*x;
-    synchronized (daikon.Runtime.dtrace) @{
-      daikon.Runtime.dtrace.println();
-      daikon.Runtime.dtrace.println("Example.squar:::EXIT");
-      daikon.Runtime.dtrace.println("x");
-      daikon.Runtime.dtrace.println(x);
-      daikon.Runtime.dtrace.println(1);  // modified bit
-      daikon.Runtime.dtrace.println("b");
-      daikon.Runtime.dtrace.println(b ? 1 : 0);
-      daikon.Runtime.dtrace.println(1);  // modified bit
-      daikon.Runtime.dtrace.println("return");
-      daikon.Runtime.dtrace.println(daikon_return_value);
-      daikon.Runtime.dtrace.println(1);  // modified bit
+    synchronized (daikon.chicory.Runtime.dtrace) @{
+      daikon.chicory.Runtime.dtrace.println();
+      daikon.chicory.Runtime.dtrace.println("Example.squar:::EXIT");
+      daikon.chicory.Runtime.dtrace.println("x");
+      daikon.chicory.Runtime.dtrace.println(x);
+      daikon.chicory.Runtime.dtrace.println(1);  // modified bit
+      daikon.chicory.Runtime.dtrace.println("b");
+      daikon.chicory.Runtime.dtrace.println(b ? 1 : 0);
+      daikon.chicory.Runtime.dtrace.println(1);  // modified bit
+      daikon.chicory.Runtime.dtrace.println("return");
+      daikon.chicory.Runtime.dtrace.println(daikon_return_value);
+      daikon.chicory.Runtime.dtrace.println(1);  // modified bit
     @}
 
     return daikon_return_value;
@@ -1213,8 +1214,8 @@ behavior and possibly update the goals.
 
 The Daikon distribution contains unit tests, but not regression tests
 (which would make the distribution much larger).  The regression tests
-appear in Daikon's version control repository (@pxref{Version control
-repository}), within the @file{tests} subdirectory.
+appear in Daikon's version control repository (@pxref{Source code (version control
+repository)}), within the @file{tests} subdirectory.
 
 @menu
 * Unit testing::
@@ -2067,7 +2068,7 @@ complete overnight.
 
 @need 1000
 @item
-Edit the @file{doc/CHANGES} file to indicate what has changed
+Edit the @file{doc/CHANGELOG.md} file to indicate what has changed
 in this version.  A good way to determine what has changed is to diff
 the Texinfo source files in the @file{doc/} directory against the previous
 versions:
@@ -2214,7 +2215,7 @@ cd $DAIKONDIR && make very-clean clean-kvasir && make rebuild-everything
 @item
 Once you have successfully reached this point, you are ready to make a release
 candidate and begin testing it.
-The following command will verify that @file{doc/CHANGES} is up-to-date and then list
+The following command will verify that @file{doc/CHANGELOG.md} is up-to-date and then list
 any uncommitted files.
 
 @example
@@ -2528,13 +2529,13 @@ the actual number of the release.
 Daikon version <version number> is available at:
 http://plse.cs.washington.edu/daikon/download/
 
-Please see the entry from the doc/CHANGES file that appears below for more details.
+Please see the entry from the doc/CHANGELOG.md file that appears below for more details.
 
   <your name>
 
-<a copy of the current entry from the doc/CHANGES file, with
+<a copy of the current entry from the doc/CHANGELOG.md file, with
 paragraphs refilled (remove unnecessary line breaks that trim lines
-to 80 columns for the CHANGES file but aren't desirable in email)>
+to 80 columns for the CHANGELOG.md file but aren't desirable in email)>
 @end example
 
 Note that if you use Microsoft Outlook 2010 or 2013 as your mailer,

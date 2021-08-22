@@ -36,7 +36,7 @@ public class XorVisitor extends DepthFirstVisitor {
    */
   @Override
   @SuppressWarnings(
-      "nullness:contracts.precondition.override.invalid") // visitor invariant, because the PptNode
+      "nullness:contracts.precondition.override") // visitor invariant, because the PptNode
   // has already been visited
   @RequiresNonNull("currentPpt")
   // visitor invariant

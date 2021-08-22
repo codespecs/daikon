@@ -105,8 +105,11 @@ public final @Interned class ProglangType implements Serializable {
   /**
    * No public constructor: use parse() instead to get a canonical representation. basetype should
    * be interned.
+   *
+   * @param basetype the base type
+   * @param dimensions the number of dimensions
    */
-  @SuppressWarnings("super.invocation.invalid") // never called twice with the same arguments
+  @SuppressWarnings("super.invocation") // never called twice with the same arguments
   private ProglangType(@Interned String basetype, int dimensions) {
     assert basetype == basetype.intern();
     this.base = basetype;
@@ -226,11 +229,8 @@ public final @Interned class ProglangType implements Serializable {
     @SuppressWarnings("interning") // test above did not find one, so the new one is interned
     @Interned ProglangType result = new ProglangType(t_base, t_dims);
 
-    List<ProglangType> v = all_known_types.get(t_base);
-    if (v == null) {
-      v = new ArrayList<ProglangType>();
-      all_known_types.put(t_base, v);
-    }
+    List<ProglangType> v =
+        all_known_types.computeIfAbsent(t_base, __ -> new ArrayList<ProglangType>());
 
     v.add(result);
 
@@ -433,7 +433,7 @@ public final @Interned class ProglangType implements Serializable {
       } else {
         throw new IllegalArgumentException("Bad character: " + value);
       }
-      return Intern.internedLong(Character.getNumericValue(c));
+      return Intern.internedLong((int) c);
     }
     // When parse_value is called from FileIO.read_ppt_decl, we have
     // not set file_rep_type. Hence, rep_type is still file_rep_type

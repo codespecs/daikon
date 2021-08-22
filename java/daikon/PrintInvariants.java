@@ -255,15 +255,18 @@ public final class PrintInvariants {
   // words, if print_discarded_invariants == true).  But they can be null
   // even in that case, which means to output a discard-reason for every
   // invariant.
+  /** Output discard reasons for this class. If null, output discard reasons for all classes. */
   private static @MonotonicNonNull String discClass = null;
+  /**
+   * Comma-separated variable names. Output discard reasons if those are the variables. If null,
+   * output discard reasons for all variable tuples.
+   */
   private static @MonotonicNonNull String discVars = null;
+  /**
+   * Output discard reasons for this program point. If null, output discard reasons fro all program
+   * points.
+   */
   private static @MonotonicNonNull String discPpt = null;
-
-  // Avoid problems if daikon.Runtime is loaded at analysis (rather than
-  // test-run) time.  This might have to change when JTrace is used.
-  static {
-    daikon.Runtime.no_dtrace = true;
-  }
 
   /** The usage message for this program. */
   private static String usage =
@@ -1639,11 +1642,8 @@ public final class PrintInvariants {
       if (filter != null) {
         filter_class = filter.getClass();
       }
-      Map<Class<? extends Invariant>, Integer> inv_map = filter_map.get(filter_class);
-      if (inv_map == null) {
-        inv_map = new LinkedHashMap<>();
-        filter_map.put(filter_class, inv_map);
-      }
+      Map<Class<? extends Invariant>, Integer> inv_map =
+          filter_map.computeIfAbsent(filter_class, __ -> new LinkedHashMap<>());
       Integer cnt = inv_map.get(inv.getClass());
       if (cnt == null) {
         cnt = 1;

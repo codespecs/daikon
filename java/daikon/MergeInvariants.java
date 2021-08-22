@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
-import org.plumelib.util.UtilPlume;
 
 /**
  * Merges invariants from multiple invariant files into a single invariant file. It does this by
@@ -71,8 +71,15 @@ public final class MergeInvariants {
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
    * appropriate to be called progrmmatically.
+   *
+   * @param args the command-line arguments
+   * @throws FileNotFoundException if a file cannot be found
+   * @throws StreamCorruptedException if a stream is corrupted
+   * @throws OptionalDataException if there is a serialization problem
+   * @throws IOException if there is trouble with I/O
+   * @throws ClassNotFoundException if a class cannot be found
    */
-  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition") // private field
   public static void mainHelper(String[] args)
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
           ClassNotFoundException {
@@ -138,7 +145,7 @@ public final class MergeInvariants {
 
           output_inv_file = new File(output_inv_filename);
 
-          if (!UtilPlume.canCreateAndWrite(output_inv_file)) {
+          if (!FilesPlume.canCreateAndWrite(output_inv_file)) {
             throw new Daikon.UserError(
                 "Cannot write to serialization output file " + output_inv_file);
           }

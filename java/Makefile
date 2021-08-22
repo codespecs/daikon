@@ -40,7 +40,7 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 ### end of user customizations
 
 # Not := because DAIKON_CLASSPATH is set later in this file.
-JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx2600m ${JAVAC_ARGS}
+JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx3600m ${JAVAC_ARGS}
 JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
 JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
 
@@ -392,7 +392,7 @@ endif
 	$(MAKE) --stop all_directly junit
 
 ## In general, don't use this; it misses some files
-all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
+all_via_daikon: chicory daikon/Daikon.class daikon/diff/Diff.class
 	$(MAKE) all_pass2
 
 xlint: chicory ${ALL_GENERATED_FILES}
@@ -512,7 +512,7 @@ dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	$(INSTALL) -d $(DCOMP_RT)
-	$(JAVA_COMMAND) -Xmx1500m daikon.dcomp.BuildJDK $(DCOMP_RT)
+	$(JAVA_COMMAND) -Xmx3600m daikon.dcomp.BuildJDK $(DCOMP_RT)
 # "then" clause is Java 8, "else" clause is Java 9+.
 # For Java 9+, there appears to be a bug in the Java reflection invoke code that it
 # does not check that the arg list matches.  Hence, it tries to invoke
@@ -601,9 +601,6 @@ daikon/Daikon.class: daikon/Daikon.java	../utils/plume-scripts ${AUTO_GENERATED_
 daikon/Diff.class: Diff.java ../utils/plume-scripts ${AUTO_GENERATED_FILES}
 	${JAVAC_COMMAND} daikon/Diff.java
 
-daikon/Runtime.class: daikon/Runtime.java
-	${JAVAC_COMMAND} daikon/Runtime.java
-
 
 ###########################################################################
 ### Cleaning (removing generated files
@@ -691,7 +688,7 @@ else
 endif
 
 # See version numbers at https://github.com/google/error-prone/releases
-ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.4.0-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-shaded-3.1.2.jar:${DAIKONDIR}/java/lib/error-prone/javacutil-3.1.1.jar:${DAIKONDIR}/java/lib/error-prone/jFormatString-3.0.0.jar:${DAIKONDIR}/java/lib/error-prone/caffeine-2.8.4.jar:${DAIKONDIR}/java/lib/error-prone/diffutils-1.3.0.jar:${DAIKONDIR}/java/lib/error-prone/threeten-extra-1.5.0.jar
+ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.7.1-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-shaded-3.11.0.jar:${DAIKONDIR}/java/lib/error-prone/javacutil-3.1.1.jar:${DAIKONDIR}/java/lib/error-prone/jFormatString-3.0.0.jar:${DAIKONDIR}/java/lib/error-prone/caffeine-2.8.4.jar:${DAIKONDIR}/java/lib/error-prone/diffutils-1.3.0.jar:${DAIKONDIR}/java/lib/error-prone/threeten-extra-1.5.0.jar
 
 error-prone: errorprone
 errorprone: compile errorprone-nocompile
@@ -703,7 +700,7 @@ else
 ## MutablePublicArray is off because Error Prone 2.4.0 crashes: https://github.com/google/error-prone/issues/1645
 	javac -cp ${DAIKON_CLASSPATH} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
-	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF' \
+	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF' \
 	  -Xmaxwarns 100000 -Werror \
 	  ${JAVA_FILES_FOR_STYLE}
 endif
@@ -801,13 +798,13 @@ JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingCh
 JAVAC_REGEX_ARGS = -processor org.checkerframework.checker.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_REGEX_QUAL_ARGS = -processor org.checkerframework.checker.experimental.regex_qual.RegexCheckerAdapter -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_FORMATTER_ARGS = -processor org.checkerframework.checker.formatter.FormatterChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-# -AsuppressWarnings=lock:method.guarantee.violated,lock:override.sideeffect.invalid is temporary.
+# -AsuppressWarnings=lock:method.guarantee.violated,lock:override.sideeffect is temporary.
 # Once the Purity Checker and -AsuggestPureMethods are fixed, they can be run on plume-lib
 # and Daikon and this can be removed. The method.guarantee.violated warning is issued by
 # the Lock Checker when a method calls another method with a weaker side effect guarantee.
-# The override.sideeffect.invalid warning is issued by the Lock Checker when the side effect
+# The override.sideeffect warning is issued by the Lock Checker when the side effect
 # annotation on the overridder method is weaker than that on the overridden method.
-JAVAC_LOCK_ARGS = -processor org.checkerframework.checker.lock.LockChecker -AsuppressWarnings=lock:method.guarantee.violated,lock:override.sideeffect.invalid -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_LOCK_ARGS = -processor org.checkerframework.checker.lock.LockChecker -AsuppressWarnings=lock:method.guarantee.violated,lock:override.sideeffect -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_JAVARI_ARGS = -processor org.checkerframework.checker.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_IGJ_ARGS = -processor org.checkerframework.checker.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 ## Code in dcomp directory is not called directly; annotations would be useless.
@@ -1057,8 +1054,8 @@ clover: all_directly
 JAVADOC_DEST = api
 # ${DAIKONDIR}/java should not be in classpath, to avoid Javadoc error
 # "Multiple sources of package comments found for package"
+# Removed "-source 8" because it causes a crash under JDK 11:  https://bugzilla.redhat.com/show_bug.cgi?id=1874672
 JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
-                -source 8 \
                 -Xmaxerrs 100000 -Xmaxwarns 100000 \
                 -d $(JAVADOC_DEST) \
                 -linkoffline https://docs.oracle.com/javase/8/docs/api/ https://docs.oracle.com/javase/8/docs/api/ \
@@ -1066,8 +1063,9 @@ JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
 JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
                 -docletpath "${DOCLETPATH}"
 
-# Daikon packages except for util (which is just a copy of plume)
-DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' \
+# Daikon packages except for util (which is just a copy of plume), plume,
+# and dummy packages such as daikon.dcomp-dummy and daikon.dcomp-transfer.
+DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' | egrep -v 'dcomp-' \
 				   | sed s./.. | sed s/^/daikon./ | tr '\n' ':')
 
 javadoc: api
@@ -1095,7 +1093,7 @@ ifeq ($(SKIP_JAVADOC),1)
 else
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all \
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all \
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
@@ -1109,15 +1107,15 @@ endif
 api-test-each: ../utils/plume-scripts ../utils/html-tools
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
+	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
 	@rm -f javadoc-files.txt
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	mkdir -p $(JAVADOC_DEST)
-	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all \
-	  daikon -subpackages $(DAIKON_PACKAGES):plume
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all \
+	  daikon -subpackages $(DAIKON_PACKAGES)
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 
 ## Test that Javadoc exists.
@@ -1129,7 +1127,7 @@ requireJavadoc: $(JAVA_FILES)
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
 	tmpfile=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
-	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $tmpfile \
 		@javadoc-files.txt
 	mv -f $tmpfile $@
@@ -1141,7 +1139,7 @@ requireJavadoc: $(JAVA_FILES)
 ../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
 	tmpfile=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
-	${JAVADOC_COMMAND} -J-Xmx2600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
 		--texinfo $tmpfile \
 		@javadoc-files.txt
 	perl -pi -e 's/&#64;cindex/\@cindex/g' $tmpfile

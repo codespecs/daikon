@@ -219,7 +219,9 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Initialize the array of static tags
     ((ArrayList<@Nullable Object>) static_tags).ensureCapacity(max_jdk_static);
-    while (static_tags.size() <= max_jdk_static) static_tags.add(null);
+    while (static_tags.size() <= max_jdk_static) {
+      static_tags.add(null);
+    }
   }
 
   public static void debug_print_call_stack() {
@@ -268,6 +270,8 @@ public final class DCRuntime implements ComparabilityProvider {
 
     if (m != null) {
       try {
+        // In case the class containing "equals_dcomp_instrumented" is not accessible:
+        m.setAccessible(true);
         return (Boolean) m.invoke(o1, o2);
       } catch (Exception e) {
         throw new RuntimeException("unexpected error invoking equal_dcomp_instrumented", e);
@@ -635,11 +639,7 @@ public final class DCRuntime implements ComparabilityProvider {
     // instrumented user method.  Since it might be on a new thread
     // we need to check/set the per-thread data map.
     Thread t = Thread.currentThread();
-    ThreadData td = thread_to_data.get(t);
-    if (td == null) {
-      td = new ThreadData();
-      thread_to_data.put(t, td);
-    }
+    ThreadData td = thread_to_data.computeIfAbsent(t, __ -> new ThreadData());
 
     int frame_size = ((int) params.charAt(0)) - '0';
     // Character.digit (params.charAt(0), Character.MAX_RADIX);
@@ -1792,7 +1792,7 @@ public final class DCRuntime implements ComparabilityProvider {
   /** Map from array name to comparability for its indices (if any). */
   private static Map<String, Integer> arr_index_map;
   /** Map from variable to its comparability. */
-  private static Map<DaikonVariableInfo, Integer> dv_comp_map;
+  private static IdentityHashMap<DaikonVariableInfo, Integer> dv_comp_map;
   /** Comparability value for a variable. */
   private static int base_comp;
 
@@ -2144,7 +2144,8 @@ public final class DCRuntime implements ComparabilityProvider {
     }
 
     // List of all of the sets of comparable daikon variables
-    Map<DaikonVariableInfo, DVSet> sets = new IdentityHashMap<DaikonVariableInfo, DVSet>();
+    IdentityHashMap<DaikonVariableInfo, DVSet> sets =
+        new IdentityHashMap<DaikonVariableInfo, DVSet>();
 
     for (DaikonVariableInfo dv : root) {
       add_variable(sets, dv);
@@ -2179,7 +2180,8 @@ public final class DCRuntime implements ComparabilityProvider {
     // The keyset of this Map is exactly the RootInfo node and the set of all
     //   nodes that have children.
     // The valueset of this Map is exactly the set of all nodes.
-    Map<DaikonVariableInfo, DVSet> sets = new IdentityHashMap<DaikonVariableInfo, DVSet>(256);
+    IdentityHashMap<DaikonVariableInfo, DVSet> sets =
+        new IdentityHashMap<DaikonVariableInfo, DVSet>(256);
 
     for (DaikonVariableInfo child : root) {
       if (child.declShouldPrint()) add_variable_traced(sets, child);
@@ -2194,11 +2196,7 @@ public final class DCRuntime implements ComparabilityProvider {
   static void add_variable_traced(Map<DaikonVariableInfo, DVSet> sets, DaikonVariableInfo dv) {
     try {
       DaikonVariableInfo parent = (DaikonVariableInfo) TagEntry.tracer_find(dv);
-      DVSet set = sets.get(parent);
-      if (set == null) {
-        set = new DVSet();
-        sets.put(parent, set);
-      }
+      DVSet set = sets.computeIfAbsent(parent, __ -> new DVSet());
       set.add(dv);
     } catch (NullPointerException e) {
       throw new Error(e);
@@ -2329,11 +2327,7 @@ public final class DCRuntime implements ComparabilityProvider {
     // Add this variable into the set of its leader
     if (dv.declShouldPrint()) {
       DaikonVariableInfo leader = (DaikonVariableInfo) TagEntry.find(dv);
-      DVSet set = sets.get(leader);
-      if (set == null) {
-        set = new DVSet();
-        sets.put(leader, set);
-      }
+      DVSet set = sets.computeIfAbsent(leader, __ -> new DVSet());
       set.add(dv);
     }
 
@@ -2989,7 +2983,7 @@ public final class DCRuntime implements ComparabilityProvider {
       // assert obj == null: "primitive object = " + obj_str (obj);
       Object[] tags = field_map.get(parent);
       if (tags == null) {
-        return (nonsensical); // happens if field has never been assigned to
+        return nonsensical; // happens if field has never been assigned to
       } else {
         return tags[field_num];
       }

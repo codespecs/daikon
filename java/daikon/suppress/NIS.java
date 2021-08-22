@@ -638,17 +638,9 @@ public class NIS {
             if (!v1.compatible(v2)) {
               System.out.printf("inv %s has incompatible variables%n", ie.format());
             }
-            Count cnt = var_map.get(v1);
-            if (cnt == null) {
-              cnt = new Count(0);
-              var_map.put(v1, cnt);
-            }
+            Count cnt = var_map.computeIfAbsent(v1, __ -> new Count(0));
             cnt.val++;
-            cnt = var_map.get(v2);
-            if (cnt == null) {
-              cnt = new Count(0);
-              var_map.put(v2, cnt);
-            }
+            cnt = var_map.computeIfAbsent(v2, __ -> new Count(0));
             cnt.val++;
           }
           System.out.printf("%d distinct variables%n", var_map.size());
@@ -833,11 +825,7 @@ public class NIS {
         }
 
         VarComparability vc = inv.get_comparability();
-        Antecedents ants = comp_ants.get(vc);
-        if (ants == null) {
-          ants = new Antecedents(vc);
-          comp_ants.put(vc, ants);
-        }
+        Antecedents ants = comp_ants.computeIfAbsent(vc, Antecedents::new);
         ants.add(inv);
         // if (Debug.logOn())
         //  inv.log ("Added to antecedent map " + inv.format() + " compare = "
@@ -864,11 +852,8 @@ public class NIS {
           continue;
         }
         if (inv.is_false()) false_cnt++;
-        List<Invariant> antecedents = antecedent_map.get(inv.getClass());
-        if (antecedents == null) {
-          antecedents = new ArrayList<Invariant>();
-          antecedent_map.put(inv.getClass(), antecedents);
-        }
+        List<Invariant> antecedents =
+            antecedent_map.computeIfAbsent(inv.getClass(), __ -> new ArrayList<Invariant>());
         antecedents.add(inv);
       }
     }

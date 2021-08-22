@@ -2,8 +2,8 @@ package daikon;
 
 import gnu.getopt.*;
 import java.io.File;
+import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
-import org.plumelib.util.UtilPlume;
 
 /**
  * UnionInvariants is a command-line tool that will read in one (or more) {@code .inv} files
@@ -84,7 +84,7 @@ public final class UnionInvariants {
           System.out.println("Inv filename = " + inv_filename);
           inv_file = new File(inv_filename);
 
-          if (!UtilPlume.canCreateAndWrite(inv_file)) {
+          if (!FilesPlume.canCreateAndWrite(inv_file)) {
             throw new Daikon.UserError("Cannot write to serialization output file " + inv_file);
           }
           break;

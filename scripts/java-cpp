@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 # java-cpp -- C preprocessor specialized for Java
 # Michael Ernst
-# Time-stamp: <2014-01-30 14:23:04 mernst>
+# Time-stamp: <2021-06-10 15:57:04 mernst>
 
 # This acts like the C preprocessor (cpp), but
 #  * it does not remove comments, and
@@ -24,14 +24,17 @@
 
 
 use English;
-use strict;
+use File::Copy qw(copy);
 use filetest 'access';  # needed for afs!
+use strict;
 $WARNING = 1;			# "-w" command-line switch
 
 my $debug = 0;
 # $debug = 1;
 my $cleanup_tmpfiles = 1;
 # $cleanup_tmpfiles = 0;
+my $debug_unescape_comments = 0;
+# $debug_unescape_comments = 1;
 
 my $system_temp_dir = -d '/tmp' ? '/tmp' : $ENV{TMP} || $ENV{TEMP} ||
     die "Cannot determine system temporary directory, stopped";
@@ -83,6 +86,9 @@ my $file_handle_nonce = 'fh00';
     die "java-cpp: cpp $argv $filename failed: $!\n  Actual command that failed: $cpp_command";
   }
 
+  if (! (! $debug && $cleanup_tmpfiles)) {
+    copy($tmpfile_out, "${tmpfile_out}-ORIG");
+  }
   unescape_comments($tmpfile_out);
   if ($cleanup_tmpfiles) {
     unlink($tmpfile_in);
@@ -174,7 +180,9 @@ sub unescape_comments ( $ ) {
   my $next_post_else_space = "";
 
   while (<CPPFILE>) {
-    # print STDERR "// top of unescape_comments loop: <<<$_>>>";
+    if ($debug_unescape_comments) {
+      print STDERR "// top of unescape_comments loop: <<<$_>>>";
+    }
 
     s|JAVACPP_DOUBLESLASHCOMMENT|//|g;
     s|JAVACPP_SLASHSTARCOMMENT|/\*|g;
@@ -244,7 +252,9 @@ sub unescape_comments ( $ ) {
     # s/(^ *(?!(?:\/\/ *)?for\b)[^ ].*\(\S.*) (\)(;|\)| {|$))/$1$2/gm;
     # # print STDERR "post-horizontal: $_";
 
-    # print STDERR "pre-vertical: $_";
+    if ($debug_unescape_comments) {
+      print STDERR "pre-vertical: $_";
+    }
 
     ## Remove extra vertical space
     # compress out duplicate blank lines
@@ -264,7 +274,9 @@ sub unescape_comments ( $ ) {
       s/\n\z//;
     }
 
-    # print STDERR "post-vertical: $_";
+    if ($debug_unescape_comments) {
+      print STDERR "post-vertical: $_";
+    }
 
     # Remove newline after "return" statement if followed by 2 nelines and
     # open curly brace.  But I have no way of knowing that open curly follows.

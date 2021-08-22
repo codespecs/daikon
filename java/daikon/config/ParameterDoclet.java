@@ -16,7 +16,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.CollectionsPlume;
-import org.plumelib.util.UtilPlume;
+import org.plumelib.util.FilesPlume;
 
 /**
  * ParameterDoclet is a JavaDoc doclet that collects information about the run-time configuration
@@ -43,19 +43,19 @@ public class ParameterDoclet {
       if ("--texinfo".equals(opt)) {
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintWriter outf = new PrintWriter(UtilPlume.bufferedFileWriter(fname));
+        PrintWriter outf = new PrintWriter(FilesPlume.newBufferedFileWriter(fname));
         pd.writeTexInfo(outf);
         outf.close();
       } else if ("--text".equals(opt)) {
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintWriter outf = new PrintWriter(UtilPlume.bufferedFileWriter(fname));
+        PrintWriter outf = new PrintWriter(FilesPlume.newBufferedFileWriter(fname));
         pd.writeText(outf);
         outf.close();
       } else if ("--list".equals(opt)) {
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintWriter outf = new PrintWriter(UtilPlume.bufferedFileWriter(fname));
+        PrintWriter outf = new PrintWriter(FilesPlume.newBufferedFileWriter(fname));
         pd.writeList(outf);
         outf.close();
       }

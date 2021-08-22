@@ -117,7 +117,7 @@ public class PptRelation implements Serializable {
 
   /** Adds this relation to its child's parent list and its parent's children list. */
   @SuppressWarnings({
-    "nullness:argument.type.incompatible" // won't be used until initialization is finished
+    "nullness:argument" // won't be used until initialization is finished
   })
   private void connect(@UnderInitialization(PptRelation.class) PptRelation this) {
     assert !child.parents.contains(this);
@@ -522,8 +522,9 @@ public class PptRelation implements Serializable {
               "missing variables in newEnterExitRel:%n"
                   + "  parent = %s%n"
                   + "  child = %s%n"
+                  + "  parent.var_infos = %s%n"
                   + "parent varinfos missing from parent_to_child_map:%n",
-              parent.name(), child.name());
+              parent.name(), child.name(), parent.var_infos);
           all_found = false;
         }
         System.out.printf("   %s%n", vp.name());

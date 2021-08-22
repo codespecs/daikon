@@ -131,6 +131,11 @@ public class Premain {
     // Instrument.transform() avoid ClassCircularityErrors during initialization.
     DaikonVariableInfo.std_visibility = DynComp.std_visibility;
     DCRuntime.depth = DynComp.nesting_depth;
+    // daikon.chicory.Instrument#shouldIgnore is shared by Chicory and DynComp.
+    // It uses the Chicory Runtime copy of the patterns.
+    daikon.chicory.Runtime.ppt_omit_pattern = DynComp.ppt_omit_pattern;
+    daikon.chicory.Runtime.ppt_select_pattern = DynComp.ppt_select_pattern;
+
     DCInstrument.jdk_instrumented = !DynComp.no_jdk;
     @SuppressWarnings("UnusedVariable") // loads the BcelUtil class; otherwise, Premain gives errors
     int junk = BcelUtil.javaVersion;
@@ -307,8 +312,7 @@ public class Premain {
       }
 
       // Write the decl file out
-      @SuppressWarnings(
-          "nullness:argument.type.incompatible") // DynComp guarantees decl_file is non null
+      @SuppressWarnings("nullness:argument") // DynComp guarantees decl_file is non null
       File decl_file = new File(DynComp.output_dir, DynComp.decl_file);
       if (DynComp.verbose) System.out.println("Writing decl file to " + decl_file);
       PrintWriter decl_fp = open(decl_file);

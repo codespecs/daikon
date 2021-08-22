@@ -593,8 +593,13 @@ public class Quantify {
       return arr_vars_indexed[num];
     }
 
-    /** Returns the specified index. */
-    @SuppressWarnings("nullness:return.type.incompatible") // possible application invariant?
+    /**
+     * Returns the term at the specified index.
+     *
+     * @param num the term's index
+     * @return the term at the specified index
+     */
+    @SuppressWarnings("nullness:return") // possible application invariant?
     public String get_index(int num) {
       assert indices[num] != null; // will this assertion fail?
       return indices[num];

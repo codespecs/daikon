@@ -932,7 +932,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
         && var1.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
-      @SuppressWarnings("all:argument.type.incompatible") // EnsuresKeyFor for multiple maps; also https://tinyurl.com/cfissue/2586
+      @SuppressWarnings("all:argument") // EnsuresKeyFor for multiple maps; also https://tinyurl.com/cfissue/2586
       int minA = var1.aux.getInt(VarInfoAux.MINIMUM_VALUE),
           maxA = var1.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
           minB = var2.aux.getInt(VarInfoAux.MINIMUM_VALUE),

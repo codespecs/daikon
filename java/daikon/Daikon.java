@@ -196,9 +196,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.EntryReader;
+import org.plumelib.util.FilesPlume;
 import org.plumelib.util.RegexUtil;
 import org.plumelib.util.StringsPlume;
-import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -443,7 +443,7 @@ public final class Daikon {
 
   /**
    * Regular expression that matches class names in the format expected by {@link
-   * Class#getName(String)}.
+   * Class#forName(String)}.
    */
   // This regular expression is taken from
   // checker-framework/checker/src/org/checkerframework/checker/signature/qual/ClassGetName.java
@@ -491,12 +491,6 @@ public final class Daikon {
 
   /** Prints out statistics concerning equality sets, suppressions, etc. */
   public static final Logger debugStats = Logger.getLogger("daikon.stats");
-
-  // Avoid problems if daikon.Runtime is loaded at analysis (rather than
-  // test-run) time.  This might have to change when JTrace is used.
-  static {
-    daikon.Runtime.no_dtrace = true;
-  }
 
   /** The usage message for this program. */
   static String usage =
@@ -700,8 +694,10 @@ public final class Daikon {
   /**
    * This does the work of {@link #main}, but it never calls System.exit, so it is appropriate to be
    * called progrmmatically.
+   *
+   * @param args the command-line arguments
    */
-  @SuppressWarnings("nullness:contracts.precondition.not.satisfied") // private field
+  @SuppressWarnings("nullness:contracts.precondition") // private field
   public static void mainHelper(final String[] args) {
     // Cleanup from any previous runs
     cleanup();
@@ -1345,7 +1341,7 @@ public final class Daikon {
 
           inv_file = new File(inv_filename);
 
-          if (!UtilPlume.canCreateAndWrite(inv_file)) {
+          if (!FilesPlume.canCreateAndWrite(inv_file)) {
             throw new Daikon.UserError("Cannot write to serialization output file " + inv_file);
           }
           break;
@@ -1394,7 +1390,7 @@ public final class Daikon {
           String inv_filename = basename.substring(0, base_end) + ".inv.gz";
 
           inv_file = new File(inv_filename);
-          if (!UtilPlume.canCreateAndWrite(inv_file)) {
+          if (!FilesPlume.canCreateAndWrite(inv_file)) {
             throw new Daikon.UserError("Cannot write to file " + inv_file);
           }
         }
@@ -1433,8 +1429,8 @@ public final class Daikon {
    */
   // This method exists to reduce the scope of the warning suppression.
   @SuppressWarnings({
-    "nullness:argument.type.incompatible", // field is static, so object may be null
-    "interning:argument.type.incompatible" // interning is not necessary for how this method is used
+    "nullness:argument", // field is static, so object may be null
+    "interning:argument" // interning is not necessary for how this method is used
   })
   private static void setStaticField(Field field, Object value) throws IllegalAccessException {
     field.set(null, value);
@@ -2095,8 +2091,10 @@ public final class Daikon {
    * Sets up splitting on all ppts. Currently only binary splitters over boolean returns or exactly
    * two return statements are enabled by default (though other splitters can be defined by the
    * user).
+   *
+   * @param ppt the program point to add conditions to
    */
-  @SuppressWarnings("nullness:contracts.precondition.not.satisfied")
+  @SuppressWarnings("nullness:contracts.precondition")
   public static void setup_splitters(PptTopLevel ppt) {
     if (PptSplitter.dkconfig_disable_splitting) {
       return;
@@ -2461,8 +2459,7 @@ public final class Daikon {
           continue;
         }
         leader_cnt++;
-        Count cnt = type_map.get(v.file_rep_type);
-        if (cnt == null) type_map.put(v.file_rep_type, cnt = new Count(0));
+        Count cnt = type_map.computeIfAbsent(v.file_rep_type, __ -> new Count(0));
         cnt.val++;
       }
       System.out.println("  vars       = " + ppt.var_infos.length);
@@ -2612,7 +2609,7 @@ public final class Daikon {
       for (File file : decl_files) {
 
         // Open the file
-        LineNumberReader fp = UtilPlume.lineNumberFileReader(file);
+        LineNumberReader fp = FilesPlume.newLineNumberFileReader(file);
 
         // Read each ppt name from the file
         for (String line = fp.readLine(); line != null; line = fp.readLine()) {
