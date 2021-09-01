@@ -25,22 +25,22 @@ add calls to this new runtime method from instrumented code. The new method woul
 added to the master DCRuntime in this directory and the two derivative versions of DCRuntime
 would need to be modified as well. Here are the steps to do so:
 
- 1) go to the daikon/dcomp-transfer directory
- 2) rename DCRuntime.java to DCRuntime.java.temp and delete DCRuntime.class (if present)
- 3) go to the daikon/dcomp-dummy directory
- 4) edit DCRuntime.java.dummy to add the new dummy method
-    (method body is just a return statement)
- 5) copy DCRuntime.java.dummy to DCRuntime.java
- 6) run 'make' which will create DCRuntime.class (as well as doing other parts of the build)
- 7) rename DCRuntime.class to DCRuntime.class.dummy
- 8) delete DCRuntime.java
- 9) go to the daikon/dcomp-transfer directory
-10) rename DCRuntime.java.temp back to DCRuntime.java
-11) edit DCRuntime.java to add the new transfer method
-    (method body is a call to matching new method in daikon.dcomp.DCRuntime)
-12) run 'make' which will create DCRuntime.class (as well as repeating other parts of the build)
+(cd ../dcomp-transfer && mv DCRuntime.java DCRuntime.java.temp && rm -f DCRuntime.class)
+(cd ../dcomp-dummy && mv DCRuntime.java.dummy DCRuntime.java)
+# Edit ../dcomp-dummy/DCRuntime.java to add the new dummy method
+(cd ../dcomp-dummy && make && mv DCRuntime.class DCRuntime.class.dummy && mv DCRuntime.java DCRuntime.java.dummy)
+(cd ../dcomp-transfer && mv DCRuntime.java.temp DCRuntime.java)
+# Edit ../dcomp-transfer/DCRuntime.java to add the new transfer method
+#    (method body is a call to matching new method in daikon.dcomp.DCRuntime)
+(cd ../dcomp-transfer && make)
 
 At this point, everything should be ready to proceed with a normal build of DynComp.
 Note that the file daikon/dcomp-dummy/DCRuntime.class.dummy is used later in the build process
 during the construction of dcomp_rt.jar.
+
+These instructions work fine if you are working with a local build.  However, there is a
+caveat when checking in your changes. Since we assumed that changing the interface would
+be a rare event, the Makefile is not setup to support a clean build with just the three
+DCRuntime.java files changed. You must include dcomp-dummy/DCRuntime.class.dummy in the
+checkin otherwise the checkin tests will fail.
 
