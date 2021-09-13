@@ -5,7 +5,7 @@ How to create hamcrest-core-1.3-Daikon.jar
   git co bbe9c84
 
 Note that commit bbe9c84 is one commit past the hamcrest-java-1.3 tag.  This additional
-commit adds the relase date to CHANGES.txt.
+commit adds the release date to CHANGES.txt.
 
 You need to have Ant 1.6 or greater installed and Java 8 needs to be the default JDK.
 
@@ -39,7 +39,7 @@ After you have made these edits, build and verify the jar file with:
   ant
 
 This will do a full clean build, run all tests and (if successful) package up a distribution.
-The distrution build will fail with javadoc errors. This can be ignored.
+The distribution build will fail with javadoc errors. This can be ignored.
 
 The result of the build will be the file build/hamcrest-1.3-Daikon.jar.  Copy this file to this
 directory (daikon/java/lib).
