@@ -36,10 +36,7 @@ public class CursorList
   @ ensures daikon.Quant.pairwiseEqual(DataStructures.CursorList.cursorSpace, \old(DataStructures.CursorList.cursorSpace));
   @ ensures daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element")));
   @ ensures daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")));
-  @ ensures daikon.Quant.memberOf(\result , \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")) );
   @ ensures \result < daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1;
-  @ ensures daikon.Quant.eltsLTE(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1);
-  @ ensures daikon.Quant.memberOf(daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1 , \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")) );
   @*/
   private static int alloc( )
   {
@@ -58,9 +55,6 @@ public class CursorList
   @ ensures daikon.Quant.pairwiseEqual(DataStructures.CursorList.cursorSpace, \old(DataStructures.CursorList.cursorSpace));
   @ ensures daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element")));
   @ ensures daikon.Quant.subsetOf(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"));
-  @ ensures daikon.Quant.memberOf(\old(p) , daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next") );
-  @ ensures daikon.Quant.eltsLTE(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1);
-  @ ensures daikon.Quant.memberOf(daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1 , \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")) );
   @ ensures \old(p) < daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1;
   @*/
   private static void free( int p )
@@ -113,7 +107,6 @@ public class CursorList
   @ ensures daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element")));
   @ ensures daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")));
   @ ensures daikon.Quant.subsetOf(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"));
-  @ ensures daikon.Quant.memberOf(daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1 , \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")) );
   @*/
   /**
    * Make the list logically empty.
@@ -154,7 +147,6 @@ public class CursorList
   @ ensures daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")));
   @ ensures \result != null;
   @ ensures this.header != \result.current;
-  @ ensures daikon.Quant.memberOf(\result.current , daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next") );
   @ ensures \result.current < daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1;
   @*/
   /**
@@ -181,12 +173,9 @@ public class CursorList
   @ ensures this.header == 1 || this.header == 4 || this.header == 20;
   @ ensures DataStructures.CursorList.cursorSpace.getClass().getName() != \old(x.getClass().getName());
   @ ensures daikon.Quant.subsetOf(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element")), daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element"));
-  @ ensures daikon.Quant.memberOf(\old(x) , daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element") );
   @ ensures daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")));
   @ ensures daikon.Quant.subsetOf(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"));
   @ ensures p.current < daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1;
-  @ ensures daikon.Quant.eltsLTE(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1);
-  @ ensures daikon.Quant.memberOf(daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1 , \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")) );
   @*/
   /**
    * Insert after p.
@@ -222,7 +211,6 @@ public class CursorList
   @ ensures \result.current >= 0;
   @ ensures this.header != \result.current;
   @ ensures DataStructures.CursorList.cursorSpace.getClass().getName() != \old(x.getClass().getName());
-  @ ensures daikon.Quant.memberOf(\result.current , daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next") );
   @ ensures \result.current < daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1;
   @*/
   /**
@@ -285,8 +273,6 @@ public class CursorList
   @ ensures daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element")));
   @ ensures daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")));
   @ ensures daikon.Quant.subsetOf(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"));
-  @ ensures daikon.Quant.eltsLTE(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1);
-  @ ensures daikon.Quant.memberOf(daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1 , \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")) );
   @*/
   /**
    * Remove the first occurrence of an item.

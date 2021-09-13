@@ -11,8 +11,6 @@ daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(DataStructures.CursorList.curs
 daikon.Quant.eltsEqual(daikon.Quant.typeArray(DataStructures.CursorList.cursorSpace), "DataStructures.CursorNode")
 daikon.Quant.eltsGTE(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"), 0)
 daikon.Quant.size(DataStructures.CursorList.cursorSpace) == 100
-daikon.Quant.eltsLTE(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"), daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1)
-daikon.Quant.memberOf(daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1 , daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next") )
 ===========================================================================
 DataStructures.CursorList:::OBJECT
     Variables: this this.header DataStructures.CursorList.cursorSpace DataStructures.CursorList.cursorSpace.getClass().getName() DataStructures.CursorList.cursorSpace[] DataStructures.CursorList.cursorSpace[].getClass().getName() DataStructures.CursorList.cursorSpace[].element DataStructures.CursorList.cursorSpace[].element.getClass().getName() DataStructures.CursorList.cursorSpace[].next DataStructures.CursorList.SPACE_SIZE size(DataStructures.CursorList.cursorSpace[]) size(DataStructures.CursorList.cursorSpace[])-1 DataStructures.CursorList.cursorSpace[this.header] DataStructures.CursorList.cursorSpace[this.header-1] DataStructures.CursorList.cursorSpace[this.header..] DataStructures.CursorList.cursorSpace[this.header+1..] DataStructures.CursorList.cursorSpace[0..this.header] DataStructures.CursorList.cursorSpace[0..this.header-1]
@@ -33,10 +31,7 @@ DataStructures.CursorList.cursorSpace.getClass().getName() == \old(DataStructure
 daikon.Quant.pairwiseEqual(DataStructures.CursorList.cursorSpace, \old(DataStructures.CursorList.cursorSpace))
 daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element")))
 daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")))
-daikon.Quant.memberOf(\result , \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")) )
 \result < daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1
-daikon.Quant.eltsLTE(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1)
-daikon.Quant.memberOf(daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1 , \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")) )
 ===========================================================================
 DataStructures.CursorList.find(java.lang.Object):::ENTER
     Variables: this this.header DataStructures.CursorList.cursorSpace DataStructures.CursorList.cursorSpace.getClass().getName() DataStructures.CursorList.cursorSpace[] DataStructures.CursorList.cursorSpace[].getClass().getName() DataStructures.CursorList.cursorSpace[].element DataStructures.CursorList.cursorSpace[].element.getClass().getName() DataStructures.CursorList.cursorSpace[].next DataStructures.CursorList.SPACE_SIZE x x.getClass().getName() size(DataStructures.CursorList.cursorSpace[]) size(DataStructures.CursorList.cursorSpace[])-1 DataStructures.CursorList.cursorSpace[this.header] DataStructures.CursorList.cursorSpace[this.header-1] DataStructures.CursorList.cursorSpace[this.header..] DataStructures.CursorList.cursorSpace[this.header+1..] DataStructures.CursorList.cursorSpace[0..this.header] DataStructures.CursorList.cursorSpace[0..this.header-1]
@@ -58,7 +53,6 @@ this.header == 1 || this.header == 4 || this.header == 20
 \result.current >= 0
 this.header != \result.current
 DataStructures.CursorList.cursorSpace.getClass().getName() != \old(x.getClass().getName())
-daikon.Quant.memberOf(\result.current , daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next") )
 \result.current < daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1
 ===========================================================================
 DataStructures.CursorList.findPrevious(java.lang.Object):::ENTER
@@ -92,7 +86,6 @@ daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(DataStructures.CursorList.
 daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")))
 \result != null
 this.header != \result.current
-daikon.Quant.memberOf(\result.current , daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next") )
 \result.current < daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1
 ===========================================================================
 DataStructures.CursorList.free(int):::ENTER
@@ -107,9 +100,6 @@ DataStructures.CursorList.cursorSpace.getClass().getName() == \old(DataStructure
 daikon.Quant.pairwiseEqual(DataStructures.CursorList.cursorSpace, \old(DataStructures.CursorList.cursorSpace))
 daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element")))
 daikon.Quant.subsetOf(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"))
-daikon.Quant.memberOf(\old(p) , daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next") )
-daikon.Quant.eltsLTE(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1)
-daikon.Quant.memberOf(daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1 , \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")) )
 \old(p) < daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1
 ===========================================================================
 DataStructures.CursorList.insert(java.lang.Object, DataStructures.CursorListItr):::ENTER
@@ -132,13 +122,10 @@ p.current == \old(p.current)
 this.header == 1 || this.header == 4 || this.header == 20
 DataStructures.CursorList.cursorSpace.getClass().getName() != \old(x.getClass().getName())
 daikon.Quant.subsetOf(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element")), daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element"))
-daikon.Quant.memberOf(\old(x) , daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element") )
 daikon.Quant.memberOf(\old(x.getClass().getName()) , daikon.Quant.typeArray(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element")) )
 daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")))
 daikon.Quant.subsetOf(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"))
 p.current < daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1
-daikon.Quant.eltsLTE(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1)
-daikon.Quant.memberOf(daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1 , \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")) )
 ===========================================================================
 DataStructures.CursorList.isEmpty():::ENTER
     Variables: this this.header DataStructures.CursorList.cursorSpace DataStructures.CursorList.cursorSpace.getClass().getName() DataStructures.CursorList.cursorSpace[] DataStructures.CursorList.cursorSpace[].getClass().getName() DataStructures.CursorList.cursorSpace[].element DataStructures.CursorList.cursorSpace[].element.getClass().getName() DataStructures.CursorList.cursorSpace[].next DataStructures.CursorList.SPACE_SIZE size(DataStructures.CursorList.cursorSpace[]) size(DataStructures.CursorList.cursorSpace[])-1 DataStructures.CursorList.cursorSpace[this.header] DataStructures.CursorList.cursorSpace[this.header-1] DataStructures.CursorList.cursorSpace[this.header..] DataStructures.CursorList.cursorSpace[this.header+1..] DataStructures.CursorList.cursorSpace[0..this.header] DataStructures.CursorList.cursorSpace[0..this.header-1]
@@ -173,7 +160,6 @@ daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(daikon.Quant.collectObject(Dat
 daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element")))
 daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")))
 daikon.Quant.subsetOf(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"))
-daikon.Quant.memberOf(daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1 , \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")) )
 ===========================================================================
 DataStructures.CursorList.printList(DataStructures.CursorList):::ENTER
     Variables: DataStructures.CursorList.cursorSpace DataStructures.CursorList.cursorSpace.getClass().getName() DataStructures.CursorList.cursorSpace[] DataStructures.CursorList.cursorSpace[].getClass().getName() DataStructures.CursorList.cursorSpace[].element DataStructures.CursorList.cursorSpace[].element.getClass().getName() DataStructures.CursorList.cursorSpace[].next DataStructures.CursorList.SPACE_SIZE theList theList.header size(DataStructures.CursorList.cursorSpace[]) size(DataStructures.CursorList.cursorSpace[])-1 DataStructures.CursorList.cursorSpace[theList.header] DataStructures.CursorList.cursorSpace[theList.header-1] DataStructures.CursorList.cursorSpace[theList.header..] DataStructures.CursorList.cursorSpace[theList.header+1..] DataStructures.CursorList.cursorSpace[0..theList.header] DataStructures.CursorList.cursorSpace[0..theList.header-1]
@@ -210,8 +196,6 @@ DataStructures.CursorList.cursorSpace.getClass().getName() != \old(x.getClass().
 daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "element")))
 daikon.Quant.subsetOf(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"), \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")))
 daikon.Quant.subsetOf(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next"))
-daikon.Quant.eltsLTE(\old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")), daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1)
-daikon.Quant.memberOf(daikon.Quant.size(DataStructures.CursorList.cursorSpace)-1 , \old(daikon.Quant.collectObject(DataStructures.CursorList.cursorSpace, "next")) )
 ===========================================================================
 DataStructures.CursorList.zeroth():::ENTER
     Variables: this this.header DataStructures.CursorList.cursorSpace DataStructures.CursorList.cursorSpace.getClass().getName() DataStructures.CursorList.cursorSpace[] DataStructures.CursorList.cursorSpace[].getClass().getName() DataStructures.CursorList.cursorSpace[].element DataStructures.CursorList.cursorSpace[].element.getClass().getName() DataStructures.CursorList.cursorSpace[].next DataStructures.CursorList.SPACE_SIZE size(DataStructures.CursorList.cursorSpace[]) size(DataStructures.CursorList.cursorSpace[])-1 DataStructures.CursorList.cursorSpace[this.header] DataStructures.CursorList.cursorSpace[this.header-1] DataStructures.CursorList.cursorSpace[this.header..] DataStructures.CursorList.cursorSpace[this.header+1..] DataStructures.CursorList.cursorSpace[0..this.header] DataStructures.CursorList.cursorSpace[0..this.header-1]
