@@ -2,7 +2,8 @@
 
 # Read Makefile.common for what all of this means
 
-DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
+# DAIKONDIR is the clone of the 'daikon' project.
+DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
 
 MAIN_CLASS:=misc.PurityTester
 

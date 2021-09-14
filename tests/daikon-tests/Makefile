@@ -2,7 +2,7 @@
 # Read Makefile in parent directory to see what this all means
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR=$(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
+DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 SCRIPTS=$(DAIKONDIR)/scripts
 
 # Help system

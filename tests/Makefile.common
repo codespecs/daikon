@@ -134,7 +134,7 @@ endif
 
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR:=$(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
+DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 
 # COMMON_HERE is where the Makefile.common is located.
 COMMON_HERE?=${DAIKONDIR}/tests
