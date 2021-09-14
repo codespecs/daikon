@@ -134,7 +134,12 @@ endif
 
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
+# Would like to use simple '?=' but this is recursively expanded while ':=' is simply expanded.
+# The include of Makefile.user (if it exists) will change the value of MAKEFILE_LIST and thus
+# '?=' will not evaluate as we desire.
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
+endif
 
 # COMMON_HERE is where the Makefile.common is located.
 COMMON_HERE?=${DAIKONDIR}/tests
