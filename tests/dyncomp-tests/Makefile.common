@@ -2,7 +2,8 @@
 
 # Forked from $DAIKONDIR/tests/kvasir-tests/Makefile.common
 
-DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+# DAIKONDIR is the clone of the 'daikon' project.
+DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 
 ifeq ($(shell uname -m),x86_64)
 VALGRIND_ARCH := amd64

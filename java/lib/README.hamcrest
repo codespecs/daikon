@@ -1,0 +1,52 @@
+Java 8 needs to be the default JDK.
+You need to have Ant 1.6 or greater installed.
+
+How to create hamcrest-core-1.3-Daikon.jar
+
+  mkdir -p ~/java
+  cd ~/java
+  git clone git@github.com:hamcrest/JavaHamcrest.git
+  cd JavaHamcrest
+  git checkout bbe9c84
+
+Note that commit bbe9c84 is one commit past the hamcrest-java-1.3 tag.  This additional
+commit adds the release date to CHANGES.txt.
+
+JavaHamcrest must use a newer version of the jarjar tool as its currently installed version does not support Java 8:
+
+  make -C daikon/java/lib/ build-jarjar
+  cp -pf ~/java/jarjar-pantsbuild/dist/jarjar.jar ~/java/JavaHamcrest/lib/generator/jarjar-1.7.2.jar
+
+Next, you need to modify the build.xml file:
+
+  patch build.xml daikon/java/lib/README.hamcrest
+
+Build and verify the jar file with:
+  ant -Doutgen.job.ant.opts=-XX:ActiveProcessorCount=1
+
+This will do a full clean build, run all tests and (if successful) package up a distribution.
+The distribution build will fail with javadoc errors. This can be ignored.
+The argument `-Doutgen.job.ant.opts=-XX:ActiveProcessorCount=1` works around
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=738789 .
+
+  cp -pf build/hamcrest-core-1.3-Daikon.jar daikon/java/lib/
+
+End of instructions.
+
+The following changes are applied by the `patch` command earlier in the file.
+Change the jarjar tool to the one you just installed, change the name of the
+release to hamcrest-core-1.3-Daikon, and change the compile target from JDK 5 to JDK 8.
+
+3c3
+<     <property name="version" value="SNAPSHOT" description="Version number to use in build files"/>
+---
+>     <property name="version" value="1.3-Daikon" description="Version number to use in build files"/>
+20c20
+<         <taskdef name="jarjar" classname="com.tonicsystems.jarjar.JarJarTask" classpath="lib/generator/jarjar-1.3.jar"/>
+---
+>         <taskdef name="jarjar" classname="org.pantsbuild.jarjar.JarJarTask" classpath="lib/generator/jarjar-1.7.2.jar"/>
+287c287
+<             <javac srcdir="@{srcdir}" destdir="build/temp/@{modulename}-${version}.jar.contents" debug="${debug}" target="1.5" includeantruntime="false">
+---
+>             <javac srcdir="@{srcdir}" destdir="build/temp/@{modulename}-${version}.jar.contents" debug="${debug}" source="1.5" target="1.8" includeantruntime="false">
+

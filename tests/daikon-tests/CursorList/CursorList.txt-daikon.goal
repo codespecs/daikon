@@ -10,8 +10,6 @@ DataStructures.CursorList.cursorSpace[].getClass().getName() == [DataStructures.
 DataStructures.CursorList.cursorSpace[].getClass().getName() elements == DataStructures.CursorNode.class
 DataStructures.CursorList.cursorSpace[].next elements >= 0
 size(DataStructures.CursorList.cursorSpace[]) == 100
-DataStructures.CursorList.cursorSpace[].next elements <= size(DataStructures.CursorList.cursorSpace[])-1
-size(DataStructures.CursorList.cursorSpace[])-1 in DataStructures.CursorList.cursorSpace[].next
 ===========================================================================
 DataStructures.CursorList:::OBJECT
 this.header < size(DataStructures.CursorList.cursorSpace[])-1
@@ -27,10 +25,7 @@ DataStructures.CursorList.cursorSpace.getClass().getName() == orig(DataStructure
 DataStructures.CursorList.cursorSpace[] == orig(DataStructures.CursorList.cursorSpace[])
 DataStructures.CursorList.cursorSpace[].element == orig(DataStructures.CursorList.cursorSpace[].element)
 DataStructures.CursorList.cursorSpace[].next is a subset of orig(DataStructures.CursorList.cursorSpace[].next)
-return in orig(DataStructures.CursorList.cursorSpace[].next)
 return < size(DataStructures.CursorList.cursorSpace[])-1
-orig(DataStructures.CursorList.cursorSpace[].next) elements <= size(DataStructures.CursorList.cursorSpace[])-1
-size(DataStructures.CursorList.cursorSpace[])-1 in orig(DataStructures.CursorList.cursorSpace[].next)
 ===========================================================================
 DataStructures.CursorList.find(java.lang.Object):::ENTER
 this.header one of { 1, 4, 20 }
@@ -50,7 +45,6 @@ return != null
 return.current >= 0
 this.header != return.current
 DataStructures.CursorList.cursorSpace.getClass().getName() != orig(x.getClass().getName())
-return.current in DataStructures.CursorList.cursorSpace[].next
 return.current < size(DataStructures.CursorList.cursorSpace[])-1
 ===========================================================================
 DataStructures.CursorList.findPrevious(java.lang.Object):::ENTER
@@ -80,7 +74,6 @@ DataStructures.CursorList.cursorSpace[].element == orig(DataStructures.CursorLis
 DataStructures.CursorList.cursorSpace[].next == orig(DataStructures.CursorList.cursorSpace[].next)
 return != null
 this.header != return.current
-return.current in DataStructures.CursorList.cursorSpace[].next
 return.current < size(DataStructures.CursorList.cursorSpace[])-1
 ===========================================================================
 DataStructures.CursorList.free(int):::ENTER
@@ -92,9 +85,6 @@ DataStructures.CursorList.cursorSpace.getClass().getName() == orig(DataStructure
 DataStructures.CursorList.cursorSpace[] == orig(DataStructures.CursorList.cursorSpace[])
 DataStructures.CursorList.cursorSpace[].element is a subset of orig(DataStructures.CursorList.cursorSpace[].element)
 DataStructures.CursorList.cursorSpace[].next is a superset of orig(DataStructures.CursorList.cursorSpace[].next)
-orig(p) in DataStructures.CursorList.cursorSpace[].next
-orig(DataStructures.CursorList.cursorSpace[].next) elements <= size(DataStructures.CursorList.cursorSpace[])-1
-size(DataStructures.CursorList.cursorSpace[])-1 in orig(DataStructures.CursorList.cursorSpace[].next)
 orig(p) < size(DataStructures.CursorList.cursorSpace[])-1
 ===========================================================================
 DataStructures.CursorList.insert(java.lang.Object, DataStructures.CursorListItr):::ENTER
@@ -114,13 +104,10 @@ p.current == orig(p.current)
 this.header one of { 1, 4, 20 }
 DataStructures.CursorList.cursorSpace.getClass().getName() != orig(x.getClass().getName())
 DataStructures.CursorList.cursorSpace[].element is a superset of orig(DataStructures.CursorList.cursorSpace[].element)
-orig(x) in DataStructures.CursorList.cursorSpace[].element
 orig(x.getClass().getName()) in DataStructures.CursorList.cursorSpace[].element.getClass().getName()
 DataStructures.CursorList.cursorSpace[].next is a subset of orig(DataStructures.CursorList.cursorSpace[].next)
 DataStructures.CursorList.cursorSpace[].next is a superset of orig(DataStructures.CursorList.cursorSpace[].next)
 p.current < size(DataStructures.CursorList.cursorSpace[])-1
-orig(DataStructures.CursorList.cursorSpace[].next) elements <= size(DataStructures.CursorList.cursorSpace[])-1
-size(DataStructures.CursorList.cursorSpace[])-1 in orig(DataStructures.CursorList.cursorSpace[].next)
 ===========================================================================
 DataStructures.CursorList.isEmpty():::ENTER
 ===========================================================================
@@ -158,7 +145,6 @@ DataStructures.CursorList.cursorSpace[].next one of { [20, 3, 21, 5, 0, 7, 0, 9,
 DataStructures.CursorList.cursorSpace[].element is a subset of orig(DataStructures.CursorList.cursorSpace[].element)
 DataStructures.CursorList.cursorSpace[].next is a subset of orig(DataStructures.CursorList.cursorSpace[].next)
 DataStructures.CursorList.cursorSpace[].next is a superset of orig(DataStructures.CursorList.cursorSpace[].next)
-size(DataStructures.CursorList.cursorSpace[])-1 in orig(DataStructures.CursorList.cursorSpace[].next)
 ===========================================================================
 DataStructures.CursorList.printList(DataStructures.CursorList):::ENTER
 theList != null
@@ -190,8 +176,6 @@ DataStructures.CursorList.cursorSpace.getClass().getName() != orig(x.getClass().
 DataStructures.CursorList.cursorSpace[].element is a subset of orig(DataStructures.CursorList.cursorSpace[].element)
 DataStructures.CursorList.cursorSpace[].next is a subset of orig(DataStructures.CursorList.cursorSpace[].next)
 DataStructures.CursorList.cursorSpace[].next is a superset of orig(DataStructures.CursorList.cursorSpace[].next)
-orig(DataStructures.CursorList.cursorSpace[].next) elements <= size(DataStructures.CursorList.cursorSpace[])-1
-size(DataStructures.CursorList.cursorSpace[])-1 in orig(DataStructures.CursorList.cursorSpace[].next)
 ===========================================================================
 DataStructures.CursorList.zeroth():::ENTER
 ===========================================================================
