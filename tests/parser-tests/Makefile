@@ -1,4 +1,5 @@
-DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+# DAIKONDIR is the clone of the 'daikon' project.
+DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
