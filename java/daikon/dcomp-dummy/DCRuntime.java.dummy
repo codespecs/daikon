@@ -16,15 +16,11 @@ public final class DCRuntime {
     return false;
   }
 
-  public static boolean has_instrumented(Class<?> c, String method_name) {
-    return false;
-  }
-
-  public static Object uninstrumented_clone(Object orig_obj, Object clone_obj) {
+  public static Object dcomp_clone(Object orig_obj, Class<?> target_class) throws Throwable {
     return null;
   }
 
-  public static String uninstrumented_toString(Object orig_obj, String result) {
+  public static Object dcomp_super_clone(Object orig_obj, Class<?> target_class) throws Throwable {
     return null;
   }
 
