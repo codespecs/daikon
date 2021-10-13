@@ -104,7 +104,7 @@ public class BuildJDK {
             DCInstrument.class);
     String[] cl_args = options.parse(true, args);
     if (cl_args.length < 1) {
-      System.out.println("must specify destination dir");
+      System.err.println("must specify destination dir");
       options.printUsage();
       System.exit(1);
     }
@@ -203,22 +203,22 @@ public class BuildJDK {
 
     File jrt = new File(JAVA_HOME);
     if (!jrt.exists()) {
-      System.out.printf("Java home directory %s does not exist.%n", jrt);
+      System.err.printf("Java home directory %s does not exist.%n", jrt);
       System.exit(1);
     }
 
     try {
       jrt = jrt.getCanonicalFile();
     } catch (Exception e) {
-      System.out.printf("Error geting canonical file for %s: %s", jrt, e.getMessage());
+      System.err.printf("Error geting canonical file for %s: %s", jrt, e.getMessage());
       System.exit(1);
     }
 
     JAVA_HOME = jrt.getAbsolutePath();
     if (!java_home.startsWith(JAVA_HOME)) {
-      System.out.printf(
+      System.err.printf(
           "JAVA_HOME (%s) does not agree with java.home (%s).%n", JAVA_HOME, java_home);
-      System.out.printf("Please correct your Java environment.%n");
+      System.err.printf("Please correct your Java environment.%n");
       System.exit(1);
     }
   }
@@ -500,10 +500,10 @@ public class BuildJDK {
       return;
     }
 
-    System.out.println(
+    System.err.println(
         "Warning: The following JDK methods could not be instrumented. DynComp will");
-    System.out.println("still work as long as these methods are not called by your application.");
-    System.out.println("If your application calls one, it will throw a NoSuchMethodException.");
+    System.err.println("still work as long as these methods are not called by your application.");
+    System.err.println("If your application calls one, it will throw a NoSuchMethodException.");
 
     List<String> unknown = new ArrayList<>(skipped_methods);
     unknown.removeAll(known_uninstrumentable_methods);
@@ -511,17 +511,17 @@ public class BuildJDK {
     known.retainAll(known_uninstrumentable_methods);
 
     if (!unknown.isEmpty()) {
-      System.out.println("Please report the following problems to the Daikon maintainers.");
-      System.out.println(
+      System.err.println("Please report the following problems to the Daikon maintainers.");
+      System.err.println(
           "Please give sufficient details; see \"Reporting problems\" in the Daikon manual.");
       for (String method : unknown) {
-        System.out.printf("  %s%n", method);
+        System.err.printf("  %s%n", method);
       }
     }
     if (!known.isEmpty()) {
-      System.out.printf("The following are known problems; you do not need to report them.");
+      System.err.printf("The following are known problems; you do not need to report them.");
       for (String method : known) {
-        System.out.printf("  %s%n", method);
+        System.err.printf("  %s%n", method);
       }
     }
   }

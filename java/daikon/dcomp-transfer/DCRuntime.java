@@ -16,16 +16,12 @@ public final class DCRuntime {
     return daikon.dcomp.DCRuntime.dcomp_super_equals(o1, o2);
   }
 
-  public static boolean has_instrumented(Class<?> c, String method_name) {
-    return daikon.dcomp.DCRuntime.has_instrumented(c, method_name);
+  public static Object dcomp_clone(Object orig_obj, Class<?> target_class) throws Throwable {
+    return daikon.dcomp.DCRuntime.dcomp_clone(orig_obj, target_class);
   }
 
-  public static Object uninstrumented_clone(Object orig_obj, Object clone_obj) {
-    return daikon.dcomp.DCRuntime.uninstrumented_clone(orig_obj, clone_obj);
-  }
-
-  public static String uninstrumented_toString(Object orig_obj, String result) {
-    return daikon.dcomp.DCRuntime.uninstrumented_toString(orig_obj, result);
+  public static Object dcomp_super_clone(Object orig_obj, Class<?> target_class) throws Throwable {
+    return daikon.dcomp.DCRuntime.dcomp_super_clone(orig_obj, target_class);
   }
 
   public static boolean object_eq(Object obj1, Object obj2) {

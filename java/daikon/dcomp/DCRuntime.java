@@ -110,9 +110,6 @@ public final class DCRuntime implements ComparabilityProvider {
   /** Log internal data structure sizes. */
   public static SimpleLog map_info = new SimpleLog(false);
 
-  /** Simplifies printouts for debugging if we ignore toString. */
-  private static boolean ignore_toString = true;
-
   /** If true, merge arrays and their indices. */
   private static boolean merge_arrays_and_indices = true;
 
@@ -309,13 +306,6 @@ public final class DCRuntime implements ComparabilityProvider {
   static Map<Object, Class<?>> active_equals_calls = new HashMap<>();
 
   /**
-   * Tracks active {@code super.clone()} calls.
-   *
-   * @see active_equals_calls
-   */
-  static Map<Object, Class<?>> active_clone_calls = new HashMap<>();
-
-  /**
    * Handles {@code super.equals(Object)} calls. Makes the arguments comparable, and returns true if
    * super.equals() returns true for them
    *
@@ -403,179 +393,209 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * Handles {@code clone()} calls.
+   * Clone an object and return the cloned object.
    *
-   * <p>This method throws Throwable because it may throw any checked exception that is thrown by
-   * {@code o.clone()}.
-   */
-  // XXX TODO consolidate this and dcomp_super_clone, since there is a
-  // lot of duplicated code
-  public static Object dcomp_clone(Object o) throws Throwable {
-    Class<?> target_class = o.getClass();
-
-    if (debug) {
-      System.out.printf("In dcomp_clone%n");
-    }
-
-    Object return_val;
-    Method m;
-
-    try {
-      if (target_class.getName().equals("[Ljava.lang.Class;")) {
-        Class<?>[] ca = (Class<?>[]) o;
-        return_val = ca.clone();
-      } else if (target_class.getName().equals("java.lang.Object")) {
-        // call the uninstrumented Object.clone()
-        // Use getDeclaredMethod instead of getMethod because clone is
-        // protected
-        m = target_class.getDeclaredMethod("clone", new Class<?>[] {});
-        return_val = m.invoke(o);
-      } else {
-        // every other class has an instrumented version
-        m = target_class.getDeclaredMethod("clone", new Class<?>[] {dcomp_marker_class});
-
-        // Use length-1 array containing null to distinguish from just
-        // null, which indicates 0 arguments
-        return_val = m.invoke(o, new Object[] {null});
-      }
-    } catch (IllegalAccessException e) {
-      throw new RuntimeException(e);
-    } catch (NoSuchMethodException e) {
-      throw new RuntimeException("error finding clone in " + target_class.getName(), e);
-    } catch (InvocationTargetException e) {
-      throw e.getCause();
-    }
-
-    // Make o and its clone comparable
-    if ((o != null) && (return_val != null)) {
-      TagEntry.union(o, return_val);
-    }
-
-    return return_val;
-  }
-
-  /**
-   * Handles {@code super.clone()} calls.
-   *
-   * @see #active_clone_calls
-   */
-  public static Object dcomp_super_clone(Object o) throws Throwable {
-    Class<?> oc = o.getClass(); // "Don't call it that."
-
-    if (debug) {
-      System.out.printf("In dcomp_super_clone%n");
-    }
-
-    Class<?> target_class; // The class whose method we will invoke
-    if (null == active_clone_calls.get(o)) target_class = oc;
-    else {
-      target_class = active_clone_calls.get(o).getSuperclass();
-    }
-    active_clone_calls.put(o, target_class);
-
-    Object return_val;
-    Method m;
-
-    try {
-      if (target_class.getName().startsWith("[L")) {
-        // Arrays can't use reflection
-        Object[] oa = (Object[]) o;
-        return_val = oa.clone();
-      } else if (target_class.getName().equals("java.lang.Object")) {
-        // call the uninstrumented Object.clone()
-        // Use getDeclaredMethod instead of getMethod because clone is
-        // protected
-        m = oc.getDeclaredMethod("clone", new Class<?>[] {});
-        return_val = m.invoke(o);
-      } else {
-        // every other class has an instrumented version
-        m = target_class.getDeclaredMethod("clone", new Class<?>[] {dcomp_marker_class});
-
-        // Use length-1 array containing null to distinguish from just
-        // null, which indicates 0 arguments
-        return_val = m.invoke(o, new Object[] {null});
-      }
-    } catch (IllegalAccessException e) {
-      // This shouldn't happen
-      active_clone_calls.remove(o);
-      throw new RuntimeException(e);
-    } catch (NoSuchMethodException e) {
-      // This shouldn't happen
-      active_clone_calls.remove(o);
-      throw new RuntimeException(e);
-    } catch (InvocationTargetException e) {
-      // This might happen - if an exception is thrown from clone(),
-      // propagate it by rethrowing it
-      active_clone_calls.remove(o);
-      throw e.getCause();
-    }
-
-    // Make o and its clone comparable
-    if ((o != null) && (return_val != null)) {
-      TagEntry.union(o, return_val);
-    }
-    active_clone_calls.remove(o);
-    return return_val;
-  }
-
-  /**
-   * Returns true if c or any of its superclasses has an instrumented version of method_name.
-   * method_name should be an Object method with no arguments.
-   *
-   * @param c object to be searched
-   * @param method_name method to be searched for
-   * @return true if the method was found
-   */
-  public static boolean has_instrumented(Class<?> c, String method_name) {
-
-    if (debug) {
-      System.out.printf("In has_instrumented%n");
-    }
-
-    // System.out.printf("has_instrumented: %s %s %s%n", c, method_name, dcomp_marker_class);
-
-    Class<?>[] args = new Class<?>[] {dcomp_marker_class};
-    while (!c.getName().equals("java.lang.Object")) {
-      java.lang.reflect.Method m;
-      try {
-        m = c.getDeclaredMethod(method_name, args);
-      } catch (Exception e) {
-        m = null;
-      }
-      // System.out.printf("Class %s instrumented %s = %s%n", c, method_name, m);
-      if (m != null) {
-        return true;
-      }
-      c = c.getSuperclass();
-    }
-    return false;
-  }
-
-  /**
-   * Handle an uninstrumented clone call by making the two objects comparable. Really should make
-   * all of their fields comparable instead. Returns the cloned object.
+   * <p>DCInstrument guarantees we will not see a clone of an array. If the object has been
+   * instrumented, call the instrumented version of clone; if not, call the uninstrumented version
+   * and make the objects comparable. Really should make all of their fields comparable instead.
    *
    * @param orig_obj object being cloned
-   * @param clone_obj result of the clone
+   * @param target_class class to search for clone method
    * @return the result of the clone
+   * @throws Throwable if unable to clone object
    */
-  public static Object uninstrumented_clone(Object orig_obj, Object clone_obj) {
-    TagEntry.union(orig_obj, clone_obj);
-    if (debug) System.out.printf("In uninstrumented_clone%n");
+  public static Object dcomp_clone(Object orig_obj, Class<?> target_class) throws Throwable {
+    if (debug) {
+      System.out.printf("In dcomp_clone%n");
+      System.out.printf("orig: %s, target: %s%n", orig_obj.getClass(), target_class);
+    }
+
+    Object clone_obj = null;
+    while (true) {
+      try {
+        clone_obj = dcomp_clone_worker(orig_obj, target_class);
+        assert (clone_obj != null);
+        break;
+      } catch (Exception e) {
+        if (e.getCause() == null) {
+          // Some exception other than NoSuchMethod.
+          throw e;
+        }
+        if (e.getCause() instanceof java.lang.NoSuchMethodException) {
+          if (debug) {
+            System.out.println("NoSuchMethod " + target_class.getName());
+          }
+
+          // Should never reach top of class heirarchy without finding a clone() method.
+          assert (!target_class.getName().equals("java.lang.Object"));
+
+          // We didn't find a clone method, get next higher super and try again.
+          target_class = target_class.getSuperclass();
+        } else {
+          // Some exception other than NoSuchMethod.
+          throw e;
+        }
+      }
+    }
+
+    // Make orig_obj and its clone comparable.
+    if ((orig_obj != null) && (clone_obj != null)) {
+      TagEntry.union(orig_obj, clone_obj);
+    }
     return clone_obj;
   }
 
   /**
-   * Handle an uninstrumented toString call. Since comparability doesn't seem to be related to
-   * toString, this does nothing.
+   * Tracks active {@code super.clone()} calls.
    *
-   * @param orig_obj object toString has been called on
-   * @param result result of the toString
-   * @return the result of the toString
+   * @see active_equals_calls
    */
-  public static String uninstrumented_toString(Object orig_obj, String result) {
-    if (debug) System.out.printf("In uninstrumented_toString%n");
-    return result;
+  static Map<Object, Class<?>> active_clone_calls = new HashMap<>();
+
+  /**
+   * Handles {@code super.clone()} calls.
+   *
+   * <p>Clone an object using its superclass, and returns the cloned object.
+   *
+   * <p>DCInstrument guarantees we will not see a clone of an array. If the object has been
+   * instrumented, call the instrumented version of clone; if not, call the uninstrumented version
+   * and make the objects comparable. TODO: This really should make all of their fields comparable
+   * instead.
+   *
+   * @param orig_obj object being cloned
+   * @param target_class class to search for clone method
+   * @return the result of the clone
+   * @throws Throwable if unable to clone object
+   * @see #active_clone_calls
+   */
+  public static Object dcomp_super_clone(Object orig_obj, Class<?> target_class) throws Throwable {
+    if (debug) {
+      System.out.printf("In dcomp_super_clone%n");
+      System.out.printf("orig: %s, target: %s%n", orig_obj.getClass(), target_class);
+    }
+
+    // Check to see if we're already in the middle of a super.clone call for this object.
+    if (null != active_clone_calls.get(orig_obj)) {
+      // Yes, we are -- continue up the class hierarchy
+      target_class = active_clone_calls.get(orig_obj).getSuperclass();
+    }
+    // Update the active_clone_calls map
+    active_clone_calls.put(orig_obj, target_class);
+
+    Object clone_obj = null;
+    while (true) {
+      try {
+        clone_obj = dcomp_clone_worker(orig_obj, target_class);
+        assert (clone_obj != null);
+        break;
+      } catch (Exception e) {
+
+        if (e.getCause() == null) {
+          // Some exception other than NoSuchMethod.
+          active_clone_calls.remove(orig_obj);
+          throw e;
+        }
+        if (e.getCause() instanceof java.lang.NoSuchMethodException) {
+          if (debug) {
+            System.out.println("NoSuchMethod " + target_class.getName());
+          }
+
+          // Should never reach top of class heirarchy without finding a clone() method.
+          assert (!target_class.getName().equals("java.lang.Object"));
+
+          // We didn't find a clone method, get next higher super and try again.
+          target_class = active_clone_calls.get(orig_obj).getSuperclass();
+          // Update the active_clone_calls map
+          active_clone_calls.put(orig_obj, target_class);
+        } else {
+          // Some exception other than NoSuchMethod.
+          active_clone_calls.remove(orig_obj);
+          throw e;
+        }
+      }
+    }
+
+    // Make orig_obj and its clone comparable.
+    if ((orig_obj != null) && (clone_obj != null)) {
+      TagEntry.union(orig_obj, clone_obj);
+    }
+    active_clone_calls.remove(orig_obj);
+    return clone_obj;
+  }
+
+  /**
+   * Clone an object and return the cloned object. Throws an exception if unable to clone object.
+   *
+   * <p>DCInstrument guarantees we will not see a clone of an array. If the object has been
+   * instrumented, call the instrumented version of clone; if not, call the uninstrumented version.
+   *
+   * <p>Note: we use getDeclaredMethod as clone is often protected; also, in the case of
+   * dcomp_super_clone we do not want to automatically find clone in a super class. We will search
+   * the hierarchy ourselves.
+   *
+   * @param orig_obj object being cloned
+   * @param target_class class to search for clone method
+   * @return the result of the clone
+   * @throws Throwable if unable to clone object
+   */
+  public static Object dcomp_clone_worker(Object orig_obj, Class<?> target_class) throws Throwable {
+    if (debug) {
+      System.out.printf("In dcomp_clone_worker%n");
+      System.out.printf("orig_obj: %s, target_class: %s%n", obj_str(orig_obj), target_class);
+    }
+
+    Method m = null;
+    try {
+      m = target_class.getDeclaredMethod("clone", new Class<?>[] {dcomp_marker_class});
+    } catch (NoSuchMethodException e) {
+      m = null;
+    } catch (Exception e) {
+      throw new RuntimeException("unexpected error locating clone(DCompMarker)", e);
+    }
+
+    if (m != null) {
+      try {
+        if (debug) System.out.printf("found: %s%n", m);
+        // In case the class containing "clone()" is not accessible
+        // or clone() is protected.
+        m.setAccessible(true);
+        // Since invoke takes a variable number of arguments, we use an array containing null
+        // as the DCompMarker to distinguish from just null, which indicates 0 arguments.
+        return m.invoke(orig_obj, new Object[] {null});
+      } catch (InvocationTargetException e) {
+        // This might happen - if an exception is thrown from clone(),
+        // propagate it by rethrowing it.
+        throw e.getCause();
+      } catch (Exception e) {
+        throw new RuntimeException(
+            "unexpected error invoking clone(DCompMarker) on object of class "
+                + orig_obj.getClass(),
+            e);
+      }
+    }
+
+    // No instrumented clone(), try for uninstrumented version.
+    try {
+      m = target_class.getDeclaredMethod("clone", new Class<?>[] {});
+    } catch (NoSuchMethodException e) {
+      throw new RuntimeException("unable to locate clone()", e);
+    } catch (Exception e) {
+      throw new RuntimeException("unexpected error locating clone()", e);
+    }
+    try {
+      if (debug) System.out.printf("found: %s%n", m);
+      // In case the class containing "clone()" is not accessible
+      // or clone() is protected.
+      m.setAccessible(true);
+      return m.invoke(orig_obj);
+    } catch (InvocationTargetException e) {
+      // This might happen - if an exception is thrown from clone(),
+      // propagate it by rethrowing it.
+      throw e.getCause();
+    } catch (Exception e) {
+      throw new RuntimeException(
+          "unexpected error invoking clone() on object of class " + orig_obj.getClass(), e);
+    }
   }
 
   /**
@@ -823,7 +843,7 @@ public final class DCRuntime implements ComparabilityProvider {
       }
     }
 
-    System.out.printf("Method marker not found in exception exit%n");
+    System.err.printf("Method marker not found in exception exit%n");
   }
 
   /** Cleans up the tag stack when an exception is thrown. */
@@ -1144,15 +1164,11 @@ public final class DCRuntime implements ComparabilityProvider {
       Throwable stack = new Throwable("enter");
       StackTraceElement[] ste_arr = stack.getStackTrace();
       StackTraceElement ste = ste_arr[1];
-      if (ignore_toString && ste.getMethodName().equals("toString")) {
-        in_enter_exit = false;
-        return;
-      }
       System.out.printf("%n%s.%s():::ENTER%n", ste.getClassName(), ste.getMethodName());
       System.out.printf("this = %s%nmi = %s%n", obj_str(obj), methods.get(mi_index));
       System.out.printf("args: ");
       for (Object arg : args) {
-        System.out.printf("%s ", obj_str(arg));
+        System.out.printf("'%s' ", obj_str(arg));
       }
       System.out.println();
     }
@@ -1211,15 +1227,11 @@ public final class DCRuntime implements ComparabilityProvider {
       Throwable stack = new Throwable("exit");
       StackTraceElement[] ste_arr = stack.getStackTrace();
       StackTraceElement ste = ste_arr[1];
-      if (ignore_toString && ste.getMethodName().equals("toString")) {
-        in_enter_exit = false;
-        return;
-      }
       System.out.printf("%n%s.%s():::EXIT%n", ste.getClassName(), ste.getMethodName());
       System.out.printf("this = %s%nmi = %s%n", obj_str(obj), methods.get(mi_index));
       System.out.printf("args: ");
       for (Object arg : args) {
-        System.out.printf("%s ", obj_str(arg));
+        System.out.printf("'%s' ", obj_str(arg));
       }
       System.out.println();
       System.out.printf("ret_val = %s%nexit_line_number= %d%n%n", ret_val, exit_line_number);
@@ -1494,7 +1506,9 @@ public final class DCRuntime implements ComparabilityProvider {
         // It's not a primitive array.
         child_obj = child.getMyValFromParentVal(obj);
       }
+      merge_dv.indent();
       merge_comparability(varmap, obj, child_obj, child);
+      merge_dv.exdent();
     }
   }
 
@@ -2779,13 +2793,15 @@ public final class DCRuntime implements ComparabilityProvider {
                 + Integer.toHexString(System.identityHashCode(obj))
                 + " failed";
       }
-      // TODO: truncate tostring if too long?
       String default_tostring =
           String.format("%s@%s", obj.getClass().getName(), System.identityHashCode(obj));
       if (tostring.equals(default_tostring)) {
         return tostring;
       } else {
-        return String.format("%s [%s]", default_tostring, tostring);
+        // Limit display of object contents to 60 characters.
+        return String.format(
+            "%s [%s]",
+            default_tostring, org.apache.commons.lang3.StringUtils.abbreviate(tostring, 60));
       }
     }
   }
