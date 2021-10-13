@@ -490,6 +490,13 @@ public class DCInstrument extends InstructionListUtils {
       try {
         // Note whether we want to track the daikon variables in this method
         boolean track = should_track(classname, m.getName(), methodEntryName(classname, m));
+
+        // We do not want to track bridge methods the compiler has synthesized as
+        // they are overloaded on return type which normal Java does not support.
+        if ((m.getAccessFlags() & Const.ACC_BRIDGE) != 0) {
+          track = false;
+        }
+
         // If any one method is tracked, then the class is tracked.
         if (track) {
           track_class = true;
