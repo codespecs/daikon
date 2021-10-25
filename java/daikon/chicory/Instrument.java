@@ -84,8 +84,6 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    */
   public static boolean shouldIgnore(String className, String methodName, String pptName) {
 
-    debug_transform.log("shouldIgnore: %s, %s, %s%n", className, methodName, pptName);
-
     // Don't instrument class if it matches an excluded regular expression
     for (Pattern pattern : Runtime.ppt_omit_pattern) {
 
@@ -94,12 +92,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       Matcher mMethod = pattern.matcher(methodName);
 
       if (mPpt.find() || mClass.find() || mMethod.find()) {
-        debug_transform.log(
-            "not instrumenting %s, it matches ppt_omit regex %s%n", pptName, pattern);
-
-        debug_transform.log("filtering 1 true on --- %s", pptName);
-
-        // omit takes priority over include
+        debug_transform.log("ignoring %s, it matches ppt_omit regex %s%n", pptName, pattern);
         return true;
       }
     }
@@ -113,24 +106,22 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         Matcher mClass = pattern.matcher(className);
         Matcher mMethod = pattern.matcher(methodName);
 
-        // System.out.println("--->" + regex);
-
         if (mPpt.find() || mClass.find() || mMethod.find()) {
-          debug_transform.log(
-              "instrumenting %s, it matches ppt_select regex %s%n", pptName, pattern);
-
-          // System.out.println("filtering 2 false on --- " + pptName);
-          return false; // don't filter out
+          debug_transform.log("including %s, it matches ppt_select regex %s%n", pptName, pattern);
+          return false;
         }
       }
     }
 
     // if we're here, this ppt not explicitly included or excluded
     // so keep unless there were items in the "include only" list
-    boolean ret = (Runtime.ppt_select_pattern.size() > 0);
-
-    // System.out.println("filtering 3: " + ret + " on --- " + pptName);
-    return ret;
+    if (Runtime.ppt_select_pattern.size() > 0) {
+      debug_transform.log("ignoring %s, not included in ppt_select pattern(s)%n", pptName);
+      return true;
+    } else {
+      debug_transform.log("including %s, not included in ppt_omit pattern(s)%n", pptName);
+      return false;
+    }
   }
 
   /**
@@ -167,7 +158,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     if (Chicory.boot_classes != null) {
       Matcher matcher = Chicory.boot_classes.matcher(fullClassName);
       if (matcher.find()) {
-        debug_transform.log("ignoring sys class %s, matches boot_classes regex%n", fullClassName);
+        debug_transform.log("ignoring boot class %s, matches boot_classes regex%n", fullClassName);
         return null;
       }
     } else if (loader == null) {
@@ -270,7 +261,6 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         // njc.dump(filename);
         return (njc.getBytes());
       } else {
-        debug_transform.log("not including class %s (filtered out)%n", className);
         // No changes to the bytecodes
         return null;
       }
@@ -448,7 +438,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             continue;
           }
 
-          if (Chicory.debug) {
+          if (debug_instrument.enabled) {
             Type[] arg_types = mg.getArgumentTypes();
             String[] arg_names = mg.getArgumentNames();
             LocalVariableGen[] local_vars = mg.getLocalVariables();
@@ -486,6 +476,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           if (mi == null) // method filtered out!
           continue;
 
+          shouldInclude = true; // at least one method not filtered out
+
           // Create a map of Uninitialized_variable_info offsets to
           // InstructionHandles.  We will use this map after we
           // complete instrumentation to update the offsets due
@@ -494,11 +486,6 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           // not modify these, their Instruction Handles will remain
           // unchanged throught the instrumentaion process.
           build_unitialized_NEW_map(il);
-
-          if (!shouldInclude) {
-            debug_transform.log("Class %s included [%s]%n", cg.getClassName(), mi);
-          }
-          shouldInclude = true; // at least one method not filtered out
 
           method_infos.add(mi);
 
@@ -577,7 +564,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             }
           }
 
-          if (Chicory.debug) {
+          if (debug_instrument.enabled) {
             debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
             dump_code_attributes(mg);
           }
@@ -689,7 +676,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
 
     if (return_local == null) {
-      debug_transform.log("Adding return local of type %s%n", return_type);
+      debug_instrument.log("Adding return local of type %s%n", return_type);
       return_local = mg.addLocalVariable("return__$trace2_val", return_type, null, null);
     }
 
@@ -729,7 +716,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     print_stack_map_table("After cln");
 
-    if (Chicory.debug) {
+    if (debug_instrument.enabled) {
       debug_instrument.log("Modified code: %s%n", c.mgen.getMethod().getCode());
     }
 
@@ -993,7 +980,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   private boolean is_constructor(MethodGen mgen) {
 
     if (mgen.getName().equals("<init>") || mgen.getName().equals("")) {
-      debug_transform.log("method '%s' is a constructor%n", mgen.getName());
+      debug_instrument.log("method '%s' is a constructor%n", mgen.getName());
       return true;
     } else {
       return false;
@@ -1033,7 +1020,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     LocalVariableGen[] lvs = mgen.getLocalVariables();
     int param_offset = 1;
     if (mgen.isStatic()) param_offset = 0;
-    if (Chicory.debug) {
+    if (debug_instrument.enabled) {
       debug_instrument.log("create_method_info1 %s%n", arg_names.length);
       for (int ii = 0; ii < arg_names.length; ii++) {
         debug_instrument.log("arg: %s%n", arg_names[ii]);
@@ -1068,7 +1055,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       }
     }
 
-    if (Chicory.debug) {
+    if (debug_instrument.enabled) {
       debug_instrument.log("create_method_info2 %s%n", arg_names.length);
       for (int ii = 0; ii < arg_names.length; ii++) {
         debug_instrument.log("arg: %s%n", arg_names[ii]);
@@ -1099,7 +1086,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // tells whether each exit loc in the method is included or not (based on filters)
     List<Boolean> isIncluded = new ArrayList<>();
 
-    debug_transform.log("Looking for exit points in %s%n", mgen.getName());
+    debug_instrument.log("Looking for exit points in %s%n", mgen.getName());
     InstructionList il = mgen.getInstructionList();
     int line_number = 0;
     int last_line_number = 0;
@@ -1126,7 +1113,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         case Const.IRETURN:
         case Const.LRETURN:
         case Const.RETURN:
-          debug_transform.log("Exit at line %d%n", line_number);
+          debug_instrument.log("Exit at line %d%n", line_number);
 
           // only do incremental lines if we don't have the line generator
           if (line_number == last_line_number && foundLine == false) {

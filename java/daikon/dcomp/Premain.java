@@ -48,6 +48,8 @@ public class Premain {
   @Option("Turn on most DCRuntime debugging options")
   public static boolean debug_dcruntime_all = false;
 
+  public static boolean verbose = false;
+
   /** Set of pre-instrumented JDK classes. */
   protected static Set<String> pre_instrumented = new HashSet<>();
 
@@ -115,12 +117,15 @@ public class Premain {
     // Because DynComp started Premain in a separate process, we must rescan
     // the options to set up the DynComp static variables.
     Options options = new Options(DynComp.synopsis, DynComp.class, Premain.class);
-    String[] args = options.parse(true, agentArgs.split("  *"));
-    if (args.length > 0) {
-      System.err.printf("Unexpected arguments %s%n", Arrays.toString(args));
+    String[] target_args = options.parse(true, agentArgs.split("  *"));
+    if (target_args.length > 0) {
+      System.err.printf("Unexpected Premain arguments %s%n", Arrays.toString(target_args));
       options.printUsage();
-      System.exit(-1);
+      System.exit(1);
     }
+
+    verbose = DynComp.debug | DynComp.verbose;
+
     if (DynComp.rt_file != null && DynComp.rt_file.getName().equalsIgnoreCase("NONE")) {
       DynComp.no_jdk = true;
       DynComp.rt_file = null;
@@ -142,8 +147,9 @@ public class Premain {
 
     // Another 'trick' to force needed classes to be loaded prior to retransformation.
     String buffer =
-        String.format("In dcomp premain, agentargs ='%s', Instrumentation = '%s'", agentArgs, inst);
-    if (DynComp.verbose) {
+        String.format(
+            "In DynComp premain, agentargs ='%s', Instrumentation = '%s'", agentArgs, inst);
+    if (verbose) {
       System.out.println(buffer);
       System.out.printf("Options settings: %n%s%n", options.settings());
     }
@@ -185,7 +191,7 @@ public class Premain {
     } catch (Exception e) {
       throw new RuntimeException("Unexpected error loading Instrument", e);
     }
-    if (DynComp.verbose) {
+    if (verbose) {
       // If DCInstrument.jdk_instrumented is true then the printf below will output
       // 'null' to indicate we are using the bootstrap loader.
       System.out.printf(
@@ -204,7 +210,7 @@ public class Premain {
     }
 
     // now turn on instrumentation
-    if (DynComp.verbose) {
+    if (verbose) {
       System.out.println("call addTransformer");
     }
     inst.addTransformer(transformer, true);
@@ -246,12 +252,12 @@ public class Premain {
     }
 
     // Initialize the static tag array
-    if (DynComp.verbose) {
+    if (verbose) {
       System.out.println("call DCRuntime.init");
     }
     DCRuntime.init();
 
-    if (DynComp.verbose) {
+    if (verbose) {
       System.out.println("exit premain");
     }
   }
@@ -262,7 +268,7 @@ public class Premain {
     @Override
     public void run() {
 
-      if (DynComp.verbose) {
+      if (Premain.verbose) {
         System.out.println("in shutdown");
       }
       in_shutdown = true;
@@ -275,14 +281,14 @@ public class Premain {
 
       // If requested, write the comparability data to a file
       if (DynComp.comparability_file != null) {
-        if (DynComp.verbose) {
+        if (Premain.verbose) {
           System.out.println("Writing comparability sets to " + DynComp.comparability_file);
         }
         PrintWriter compare_out = open(DynComp.comparability_file);
         long startTime = System.nanoTime();
         DCRuntime.printAllComparable(compare_out);
         compare_out.close();
-        if (DynComp.verbose) {
+        if (Premain.verbose) {
           long duration = System.nanoTime() - startTime;
           System.out.printf(
               "Comparability sets written in %ds%n", TimeUnit.NANOSECONDS.toSeconds(duration));
@@ -290,14 +296,14 @@ public class Premain {
       }
 
       if (DynComp.trace_file != null) {
-        if (DynComp.verbose) {
+        if (Premain.verbose) {
           System.out.println("Writing traced comparability sets to " + DynComp.trace_file);
         }
         PrintWriter trace_out = open(DynComp.trace_file);
         long startTime = System.nanoTime();
         DCRuntime.traceAllComparable(trace_out);
         trace_out.close();
-        if (DynComp.verbose) {
+        if (Premain.verbose) {
           long duration = System.nanoTime() - startTime;
           System.out.printf(
               "Traced comparability sets written in %ds%n",
@@ -307,14 +313,14 @@ public class Premain {
         // Writing comparability sets to standard output?
       }
 
-      if (DynComp.verbose) {
+      if (Premain.verbose) {
         DCRuntime.decl_stats();
       }
 
       // Write the decl file out
       @SuppressWarnings("nullness:argument") // DynComp guarantees decl_file is non null
       File decl_file = new File(DynComp.output_dir, DynComp.decl_file);
-      if (DynComp.verbose) System.out.println("Writing decl file to " + decl_file);
+      if (Premain.verbose) System.out.println("Writing decl file to " + decl_file);
       PrintWriter decl_fp = open(decl_file);
       // Create DeclWriter so can share output code in Chicory.
       DCRuntime.declWriter = new DeclWriter(decl_fp);
@@ -325,7 +331,7 @@ public class Premain {
       long startTime = System.nanoTime();
       DCRuntime.printDeclFile(decl_fp);
       decl_fp.close();
-      if (DynComp.verbose) {
+      if (Premain.verbose) {
         long duration = System.nanoTime() - startTime;
         System.out.printf("Decl file written in %ds%n", TimeUnit.NANOSECONDS.toSeconds(duration));
         System.out.printf("comp_list = %,d%n", DCRuntime.comp_list_ms);
@@ -333,7 +339,7 @@ public class Premain {
         System.out.printf("decl vars = %,d%n", DCRuntime.decl_vars_ms);
         System.out.printf("total     = %,d%n", DCRuntime.total_ms);
       }
-      if (DynComp.verbose) System.out.println("DynComp complete");
+      if (Premain.verbose) System.out.println("DynComp complete");
     }
   }
 

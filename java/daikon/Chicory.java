@@ -31,78 +31,24 @@ import org.checkerframework.dataflow.qual.Pure;
  */
 public class Chicory {
 
+  @Option("-h Display usage information")
+  public static boolean help = false;
+
+  /** Print information about the classes being transformed. */
+  @Option("-v Print progress information")
+  public static boolean verbose = false;
+
+  @Option("-d Print debug information and save instrumented classes")
+  public static boolean debug = false;
+
   @Option("File in which to put dtrace output")
   public static @MonotonicNonNull File dtrace_file = null;
-
-  /** Also see Daikon's {@code --var-omit-pattern} command-line argument. */
-  @Option("Omit variables that match this regular expression.")
-  public static @Nullable Pattern omit_var = null;
-
-  @Option("Directory in which to create output files")
-  public static File output_dir = new File(".");
-
-  @Option("Depth to examine structure components")
-  public static int nesting_depth = 2;
-
-  @Option("Omit all program points that match")
-  public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
-
-  @Option("Include only program points that match")
-  public static List<Pattern> ppt_select_pattern = new ArrayList<>();
 
   @Option("Decl formatted file containing comparability information")
   public static @Nullable File comparability_file = null;
 
-  /**
-   * If true, no variable values are printed. Static variables are not initialized yet when the
-   * routine is entered, and static variable are not necessarily initialized to their final values
-   * when the routine is exited. These .dtrace entries are purely for the benefit of tools that use
-   * Chicory for program tracing, to determine when methods are entered and exited.
-   */
-  @Option("Write static initializer program points")
-  public static boolean instrument_clinit = false;
-
-  @Option("Include variables that are visible under normal java access rules")
-  public static boolean std_visibility = false;
-
-  @Option("Print progress information")
-  public static boolean verbose = false;
-
-  @Option("Print debug information and save instrumented classes")
-  public static boolean debug = false;
-
-  @Option("Print detailed information on which classes are transformed")
-  public static boolean debug_transform = false;
-
-  @Option("Print detailed information on variables being observed")
-  public static boolean debug_decl_print = false;
-
-  @Option("Treat classes that match the regex as boot classes (do not instrument)")
-  public static @Nullable Pattern boot_classes = null;
-
-  // Should perhaps permit specifying the heap for the target program and
-  // for Daikon separately.
-  /** Heap size for the target program, and for Daikon if Daikon is run. */
-  @Option("Size of the heap for the target program, and for Daikon if it is run")
-  public static String heap_size = "3600m";
-
-  /** Print information about each ppt name as it is created. */
-  @Option("Print information about each ppt name as it is created")
-  public static boolean debug_ppt_names = false;
-
-  /**
-   * Path to java agent jar file that performs the transformation. The "main" procedure is {@link
-   * daikon.chicory.ChicoryPremain#premain}.
-   */
-  @Option("Path to the Chicory agent jar file")
-  public static @MonotonicNonNull File premain = null;
-
-  /**
-   * The name of the file to read for a list of pure methods. Should be 1 method per line. Each
-   * method should be in the same format as format output by the purity analysis.
-   */
-  @Option("File of pure methods to use as additional Daikon variables")
-  public static @Nullable File purity_file;
+  @Option("Directory in which to create output files")
+  public static File output_dir = new File(".");
 
   @Option("Directory in which to find configuration files")
   public static @Nullable File config_dir = null;
@@ -122,6 +68,25 @@ public class Chicory {
   @Option("Specify Daikon arguments for either --daikon or --daikon-online")
   public static String daikon_args = "";
 
+  // Should perhaps permit specifying the heap for the target program and
+  // for Daikon separately.
+  /** Heap size for the target program, and for Daikon if Daikon is run. */
+  @Option("Size of the heap for the target program, and for Daikon if it is run")
+  public static String heap_size = "3600m";
+
+  /**
+   * Path to java agent jar file that performs the transformation. The "main" procedure is {@link
+   * daikon.chicory.ChicoryPremain#premain}.
+   */
+  @Option("Path to the Chicory agent jar file")
+  public static @MonotonicNonNull File premain = null;
+
+  @Option("Include only program points that match")
+  public static List<Pattern> ppt_select_pattern = new ArrayList<>();
+
+  @Option("Omit all program points that match")
+  public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
+
   /**
    * When this option is chosen, Chicory will record each program point until that program point has
    * been executed sample-cnt times. Chicory will then begin sampling. Sampling starts at 10% and
@@ -130,6 +95,48 @@ public class Chicory {
    */
   @Option("Number of calls after which sampling will begin")
   public static int sample_start = 0;
+
+  @Option("Treat classes that match the regex as boot classes (do not instrument)")
+  public static @Nullable Pattern boot_classes = null;
+
+  /**
+   * If true, no variable values are printed. Static variables are not initialized yet when the
+   * routine is entered, and static variable are not necessarily initialized to their final values
+   * when the routine is exited. These .dtrace entries are purely for the benefit of tools that use
+   * Chicory for program tracing, to determine when methods are entered and exited.
+   */
+  @Option("Write static initializer program points")
+  public static boolean instrument_clinit = false;
+
+  @Option("Depth to examine structure components")
+  public static int nesting_depth = 2;
+
+  /** Also see Daikon's {@code --var-omit-pattern} command-line argument. */
+  @Option("Omit variables that match this regular expression.")
+  public static @Nullable Pattern omit_var = null;
+
+  @Option("Include variables that are visible under normal java access rules")
+  public static boolean std_visibility = false;
+
+  /**
+   * The name of the file to read for a list of pure methods. Should be 1 method per line. Each
+   * method should be in the same format as format output by the purity analysis.
+   */
+  @Option("File of pure methods to use as additional Daikon variables")
+  public static @Nullable File purity_file;
+
+  // The next three command-line options are internal debugging
+  // options that are primarily for the use of the Daikon developers.
+
+  @Option("Print detailed information on which classes are transformed")
+  public static boolean debug_transform = false;
+
+  @Option("Print detailed information on variables being observed")
+  public static boolean debug_decl_print = false;
+
+  /** Print information about each ppt name as it is created. */
+  @Option("Print information about each ppt name as it is created")
+  public static boolean debug_ppt_names = false;
 
   /** Daikon port number. Daikon writes this to stdout when it is started in online mode. */
   private static int daikon_port = -1;
@@ -158,9 +165,10 @@ public class Chicory {
   /** Flag to initiate a purity analysis and use results to create add vars. */
   private static boolean purityAnalysis = false;
 
+  /** Log file if debug is enabled. */
   private static final SimpleLog basic = new SimpleLog(false);
 
-  /** Synopsis for the chicory command line. */
+  /** Synopsis for the Chicory command line. */
   public static final String synopsis = "daikon.Chicory [options] target [target-args]";
 
   /**
@@ -176,7 +184,7 @@ public class Chicory {
     String[] target_args = options.parse(true, args);
     check_args(options, target_args);
 
-    // Turn on basic logging if the debug was selected
+    // Turn on basic logging if debug was selected
     basic.enabled = debug;
     basic.log("target_args = %s%n", Arrays.toString(target_args));
 
@@ -188,13 +196,17 @@ public class Chicory {
   }
 
   /**
-   * Check the command-line arguments for legality. If not legal, prints a message and exits the
-   * JVM.
+   * Check the command-line arguments for legality. Prints a message and exits if there was an
+   * error.
    *
    * @param options set of legal options to Chicory
    * @param target_args arguments being passed to the target program
    */
   public static void check_args(Options options, String[] target_args) {
+    if (help) {
+      options.printUsage();
+      System.exit(1);
+    }
     if (nesting_depth < 0) {
       System.out.printf("nesting depth (%d) must not be negative%n", nesting_depth);
       options.printUsage();
@@ -228,7 +240,7 @@ public class Chicory {
    */
   void start_target(String premain_args, String[] target_args) {
 
-    // Default the trace file name to the <target-program-name>.dtrace.gz
+    // Default the trace file name to <target-program-name>.dtrace.gz
     if (dtrace_file == null) {
       String target_class = target_args[0].replaceFirst(".*[/.]", "");
       dtrace_file = new File(String.format("%s.dtrace.gz", target_class));
@@ -371,6 +383,7 @@ public class Chicory {
     cmdlist.add("-cp");
     cmdlist.add(cp);
     cmdlist.add("-ea");
+    cmdlist.add("-esa");
     cmdlist.add("-Xmx" + heap_size);
     // cmdlist.add ("-verbose");
 
@@ -397,12 +410,13 @@ public class Chicory {
 
     // Execute the command, sending all output to our streams
     java.lang.Runtime rt = java.lang.Runtime.getRuntime();
-    Process chicory_proc = null;
+    Process chicory_proc;
     try {
       chicory_proc = rt.exec(cmdline);
     } catch (Exception e) {
       System.out.printf("Exception '%s' while executing '%s'%n", e, cmdline);
       System.exit(1);
+      throw new Error("Unreachable control flow");
     }
 
     StreamRedirectThread stdin_thread =
@@ -514,7 +528,7 @@ public class Chicory {
   /** Wait for stream redirect threads to complete and return its exit status. */
   public int redirect_wait(Process p) {
 
-    // Create the redirect theads and start them
+    // Create the redirect threads and start them.
     StreamRedirectThread err_thread =
         new StreamRedirectThread("stderr", p.getErrorStream(), System.err);
 
@@ -569,11 +583,5 @@ public class Chicory {
       str += arg + " ";
     }
     return (str.trim());
-  }
-
-  // parses the single string into arguments
-  public String[] parseDaikonArgs(String arg) {
-    // TODO deal with quotation marks...
-    return arg.split(" ");
   }
 }

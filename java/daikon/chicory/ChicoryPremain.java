@@ -47,7 +47,7 @@ public class ChicoryPremain {
   @Option("Turn on most Runtime debugging options")
   public static boolean debug_runtime = false;
 
-  public static boolean debug = false;
+  public static boolean verbose = false;
 
   /** Set of pure methods returned by Alexandru Salcianu's purity analysis. */
   // Non-null if doPurity == true
@@ -68,17 +68,27 @@ public class ChicoryPremain {
     // System.out.format ("In premain, agentargs ='%s', " +
     //                   "Instrumentation = '%s'%n", agentArgs, inst);
 
-    // Parse our arguments using Chicory's argument parser
+    // Because Chicory started ChicoryPremain in a separate process, we must rescan
+    // the options to set up the Chicory static variables.
     Options options = new Options(Chicory.synopsis, Chicory.class, ChicoryPremain.class);
     String[] target_args = options.parse(true, Options.tokenize(agentArgs));
     if (target_args.length > 0) {
       System.err.printf("Unexpected ChicoryPremain arguments %s%n", Arrays.toString(target_args));
+      options.printUsage();
       System.exit(1);
     }
 
-    debug = Chicory.debug;
+    verbose = Chicory.debug | Chicory.verbose;
     if (debug_runtime) {
       Runtime.debug = true;
+    }
+
+    String buffer =
+        String.format(
+            "In Chicory premain, agentargs ='%s', Instrumentation = '%s'", agentArgs, inst);
+    if (verbose) {
+      System.out.println(buffer);
+      System.out.printf("Options settings: %n%s%n", options.settings());
     }
 
     // Open the dtrace file
@@ -110,7 +120,7 @@ public class ChicoryPremain {
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       }
-      if (debug) {
+      if (verbose) {
         System.out.printf("Read comparability from %s%n", Chicory.comparability_file);
         // Runtime.comp_info.dump();
       }
@@ -127,22 +137,30 @@ public class ChicoryPremain {
     initializeDeclAndDTraceWriters();
 
     // Setup the transformer
-    Object transformer;
+    ClassFileTransformer transformer;
     // use a special classloader to ensure correct version of BCEL is used
     ClassLoader loader = new ChicoryLoader();
     try {
       transformer =
-          loader.loadClass("daikon.chicory.Instrument").getDeclaredConstructor().newInstance();
-      // @SuppressWarnings("unchecked")
-      // Class<Instrument> c = (Class<Instrument>) transformer.getClass();
-      // System.out.printf("Classloader of tranformer = %s%n",
-      //                    c.getClassLoader());
+          (ClassFileTransformer)
+              loader.loadClass("daikon.chicory.Instrument").getDeclaredConstructor().newInstance();
     } catch (Exception e) {
       throw new RuntimeException("Unexpected error loading Instrument", e);
     }
+    if (Chicory.debug) {
+      System.out.printf(
+          "Classloader of transformer = %s%n", transformer.getClass().getClassLoader());
+    }
 
-    // Instrument transformer = new Instrument();
-    inst.addTransformer((ClassFileTransformer) transformer);
+    // now turn on instrumentation
+    if (verbose) {
+      System.out.println("call addTransformer");
+    }
+    inst.addTransformer(transformer);
+
+    if (verbose) {
+      System.out.println("exit premain");
+    }
   }
 
   /** Set up the declaration and dtrace writer. */
@@ -205,7 +223,7 @@ public class ChicoryPremain {
           e);
     }
 
-    if (Chicory.verbose) {
+    if (verbose) {
       System.out.printf("Reading '%s' for pure methods %n", purityFileName);
     }
 
@@ -310,7 +328,7 @@ public class ChicoryPremain {
    */
   public static class ChicoryLoader extends ClassLoader {
 
-    public static final SimpleLog debug = new SimpleLog(Chicory.verbose);
+    public static final SimpleLog debug = new SimpleLog(ChicoryPremain.verbose);
 
     @SuppressWarnings("StaticAssignmentInConstructor") // sets static variable only if aborting
     public ChicoryLoader() throws IOException {

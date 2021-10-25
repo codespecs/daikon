@@ -558,7 +558,9 @@ public class Runtime {
   /** Specify the dtrace file to which to write. */
   @EnsuresNonNull("dtrace")
   public static void setDtrace(String filename, boolean append) {
-    System.out.printf("entered daikon.chicory.Runtime.setDtrace(%s, %b)...%n", filename, append);
+    if (ChicoryPremain.verbose) {
+      System.out.printf("entered daikon.chicory.Runtime.setDtrace(%s, %b)...%n", filename, append);
+    }
 
     if (no_dtrace) {
       throw new Error("setDtrace called when no_dtrace was specified");
