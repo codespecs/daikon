@@ -1,4 +1,4 @@
-There are three versions of DCRuntime.java; the master one (in this directory) that contains
+There are three versions of DCRuntime.java: the master one (in this directory) that contains
 the actual DynComp runtime code, and two small, derivative versions with the same public
 methods: one in ../dcomp-dummy and one in ../dcomp-transfer. This README explains why this
 is the case and, should it be necessary, how to modify the derivative versions.
@@ -8,7 +8,7 @@ core classes contained in the java.base module may not reference anything outsid
 java.base. This means that for JDK 11 we cannot pre-instrument classes in the same manner as
 was done for Java 8 as this would introduce external references to the DynComp runtime.
 
-However, we can get around this restriction in the following manner: We to create a shadow
+We get around this restriction in the following manner.  We create a shadow
 DynComp runtime called java.lang.DCRuntime that contains all the public methods of
 daikon.dcomp.DCRuntime, but the method bodies contain only a return statement.  When we
 pre-instrument java.base we do two things differently from the JDK 8 case: we change all

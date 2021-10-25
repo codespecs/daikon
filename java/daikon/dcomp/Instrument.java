@@ -144,9 +144,9 @@ public class Instrument implements ClassFileTransformer {
         if (DynComp.verbose) System.out.printf("Skipping is_transformer class %s%n", className);
         if (!transformer_seen) {
           transformer_seen = true;
-          System.out.printf(
+          System.err.printf(
               "DynComp warning: This program uses a Java byte code transformer: %s%n", className);
-          System.out.printf(
+          System.err.printf(
               "This may interfere with the DynComp transformer and cause DynComp to fail.%n");
         }
         return null;
@@ -186,7 +186,7 @@ public class Instrument implements ClassFileTransformer {
         return (njc.getBytes());
       }
     } catch (Throwable e) {
-      System.out.printf("Unexpected Error: %s%n", e);
+      System.err.printf("Unexpected Error: %s%n", e);
       e.printStackTrace();
       throw new RuntimeException("Unexpected error", e);
     }
