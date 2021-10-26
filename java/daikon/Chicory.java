@@ -88,11 +88,11 @@ public class Chicory {
   @Option("Path to the Chicory agent jar file")
   public static @MonotonicNonNull File premain = null;
 
-  /** Only emit program points that match regex. */
+  /** Only emit program points that match the given regex. */
   @Option("Include only program points that match")
   public static List<Pattern> ppt_select_pattern = new ArrayList<>();
 
-  /** Suppress program points that match regex. */
+  /** Suppress program points that match the given regex. */
   @Option("Omit all program points that match")
   public static List<Pattern> ppt_omit_pattern = new ArrayList<>();
 
@@ -126,8 +126,8 @@ public class Chicory {
   @Option("Omit variables that match this regular expression.")
   public static @Nullable Pattern omit_var = null;
 
-  /** Include variables that are visible under normal java access rules. */
-  @Option("Include variables that are visible under normal java access rules")
+  /** Include variables that are visible under normal Java access rules. */
+  @Option("Include variables that are visible under normal Java access rules")
   public static boolean std_visibility = false;
 
   /**
