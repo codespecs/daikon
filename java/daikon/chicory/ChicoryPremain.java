@@ -44,9 +44,11 @@ public class ChicoryPremain {
   @Option("socket port to communicate with Daikon")
   public static int daikon_port = -1;
 
+  /** Turn on most Runtime debugging options. */
   @Option("Turn on most Runtime debugging options")
   public static boolean debug_runtime = false;
 
+  /** Print information about the classes being transformed. */
   public static boolean verbose = false;
 
   /** Set of pure methods returned by Alexandru Salcianu's purity analysis. */
@@ -78,7 +80,7 @@ public class ChicoryPremain {
       System.exit(1);
     }
 
-    verbose = Chicory.debug | Chicory.verbose;
+    verbose = Chicory.verbose || Chicory.debug;
     if (debug_runtime) {
       Runtime.debug = true;
     }
@@ -328,8 +330,14 @@ public class ChicoryPremain {
    */
   public static class ChicoryLoader extends ClassLoader {
 
+    /** Log file if verbose is enabled. */
     public static final SimpleLog debug = new SimpleLog(ChicoryPremain.verbose);
 
+    /**
+     * Constructor for special BCEL class loader.
+     *
+     * @throws IOException if unable to load class
+     */
     @SuppressWarnings("StaticAssignmentInConstructor") // sets static variable only if aborting
     public ChicoryLoader() throws IOException {
 

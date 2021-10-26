@@ -555,7 +555,12 @@ public class Runtime {
     }
   }
 
-  /** Specify the dtrace file to which to write. */
+  /**
+   * Specify the dtrace file to which to write.
+   *
+   * @param filename to use as the data trace file
+   * @param append whether to opend dtrace file in append mode
+   */
   @EnsuresNonNull("dtrace")
   public static void setDtrace(String filename, boolean append) {
     if (ChicoryPremain.verbose) {

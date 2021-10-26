@@ -100,7 +100,9 @@ public class DCInstrument extends InstructionListUtils {
   protected static ObjectType javalangObject = new ObjectType("java.lang.Object");
 
   // Debug loggers
+  /** Log file if debug_native is enabled. */
   protected static SimpleLog debug_native = new SimpleLog(false);
+  /** Log file if debug_dup is enabled. */
   protected static SimpleLog debug_dup = new SimpleLog(false);
 
   /** Keeps track of the methods that were not successfully instrumented. */

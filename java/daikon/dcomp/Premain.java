@@ -48,6 +48,7 @@ public class Premain {
   @Option("Turn on most DCRuntime debugging options")
   public static boolean debug_dcruntime_all = false;
 
+  /** Print information about the classes being transformed. */
   public static boolean verbose = false;
 
   /** Set of pre-instrumented JDK classes. */

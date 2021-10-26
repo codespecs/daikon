@@ -21,6 +21,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class DynComp {
 
+  /** Display usage information. */
   @Option("-h Display usage information")
   public static boolean help = false;
 
@@ -185,6 +186,9 @@ public class DynComp {
   /**
    * Starts the target program with the java agent setup to do the transforms. All java agent
    * arguments are passed to it. Our classpath is passed to the new JVM.
+   *
+   * @param premain_args the java agent argument list
+   * @param target_args the test program name and its argument list
    */
   /*TO DO: @PostNonNull("premain")*/
   void start_target(String premain_args, String[] target_args) {
@@ -415,7 +419,12 @@ public class DynComp {
     return (System.currentTimeMillis() - start);
   }
 
-  /** Convert a list of arguments into a command-line string. Only used for debugging output. */
+  /**
+   * Convert a list of arguments into a command-line string. Only used for debugging output.
+   *
+   * @param args the list of arguments
+   * @return argument string
+   */
   public String args_to_string(List<String> args) {
     String str = "";
     for (String arg : args) {
