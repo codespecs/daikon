@@ -4008,7 +4008,7 @@ Print information about the classes being processed.
 @item --dump
 Dump the instrumented class files to the @file{bin} subdirectory of the directory specified by @option{--debug-dir}.
 Dump the original, uninstrumented class files to the @file{orig} subdirectory of the directory specified by @option{--debug-dir}.
-If @option{--debug-dir} is not specified, it defaults to @file{debug} in the current working directory.
+If @option{--debug-dir} is not specified, it defaults to @file{debug/} in the current working directory.
 
 @item --debug
 @itemx -d

@@ -85,11 +85,9 @@ public class ChicoryPremain {
       Runtime.debug = true;
     }
 
-    String buffer =
-        String.format(
-            "In Chicory premain, agentargs ='%s', Instrumentation = '%s'", agentArgs, inst);
     if (verbose) {
-      System.out.println(buffer);
+      System.out.printf(
+          "In Chicory premain, agentargs ='%s', Instrumentation = '%s'", agentArgs, inst);
       System.out.printf("Options settings: %n%s%n", options.settings());
     }
 
