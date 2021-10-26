@@ -125,7 +125,7 @@ public class Premain {
       System.exit(1);
     }
 
-    verbose = DynComp.debug | DynComp.verbose;
+    verbose = DynComp.verbose || DynComp.debug;
 
     if (DynComp.rt_file != null && DynComp.rt_file.getName().equalsIgnoreCase("NONE")) {
       DynComp.no_jdk = true;
