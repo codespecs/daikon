@@ -59,7 +59,7 @@ public class ChicoryPremain {
   private static boolean doPurity = false;
 
   /**
-   * This method is the entry point of the java agent. Its main purpose is to set up the transformer
+   * This method is the entry point of the Java agent. Its main purpose is to set up the transformer
    * so that when classes from the target app are loaded, they are first transformed.
    *
    * <p>This method also sets up some other initialization tasks: it connects to Daikon over a port

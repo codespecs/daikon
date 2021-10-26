@@ -82,7 +82,7 @@ public class Chicory {
   public static String heap_size = "3600m";
 
   /**
-   * Path to java agent jar file that performs the transformation. The "main" procedure is {@link
+   * Path to Java agent jar file that performs the transformation. The "main" procedure is {@link
    * daikon.chicory.ChicoryPremain#premain}.
    */
   @Option("Path to the Chicory agent jar file")
@@ -132,7 +132,7 @@ public class Chicory {
 
   /**
    * The name of the file to read for a list of pure methods. Should be 1 method per line. Each
-   * method should be in the same format as format output by the purity analysis.
+   * method should be in the same format as output by the purity analysis.
    */
   @Option("File of pure methods to use as additional Daikon variables")
   public static @Nullable File purity_file;
@@ -249,10 +249,10 @@ public class Chicory {
   }
 
   /**
-   * Starts the target program with the java agent setup to do the transforms. All java agent
+   * Starts the target program with the Java agent setup to do the transforms. All Java agent
    * arguments are passed to it. Our classpath is passed to the new JVM.
    *
-   * @param premain_args the java agent argument list
+   * @param premain_args the Java agent argument list
    * @param target_args the test program name and its argument list
    */
   void start_target(String premain_args, String[] target_args) {

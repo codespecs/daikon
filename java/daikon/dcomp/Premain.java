@@ -48,7 +48,7 @@ public class Premain {
   @Option("Turn on most DCRuntime debugging options")
   public static boolean debug_dcruntime_all = false;
 
-  /** Print information about the classes being transformed. */
+  /** If true, print information about the classes being transformed. */
   public static boolean verbose = false;
 
   /** Set of pre-instrumented JDK classes. */
@@ -102,7 +102,7 @@ public class Premain {
   // protected static Instrumentation instr;
 
   /**
-   * This method is the entry point of the java agent. Its main purpose is to set up the transformer
+   * This method is the entry point of the Java agent. Its main purpose is to set up the transformer
    * so that when classes from the target app are loaded, they are first transformed in order to add
    * comparability instrumentation.
    *

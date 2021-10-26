@@ -88,8 +88,8 @@ public class DynComp {
   public static int nesting_depth = 2;
 
   /**
-   * Path to java agent jar file that performs the transformation. The "main" procedure is
-   * Premain.premain().
+   * Path to Java agent .jar file that performs the transformation. The "main" procedure is {@code
+   * Premain.premain()}.
    *
    * @see daikon.dcomp.Premain#premain
    */
@@ -108,7 +108,9 @@ public class DynComp {
   @Option("Print detailed information on variables being observed")
   public static boolean debug_decl_print = false;
 
-  /** Do not use the instrumented JDK. No longer an option, now derived from rt_file option. */
+  // Note that this is derived from the rt_file option.  There is no command-line argument that
+  // corresponds to this variable.
+  /** Do not use the instrumented JDK. */
   public static boolean no_jdk = false;
 
   /** starting time (msecs) */
@@ -184,10 +186,10 @@ public class DynComp {
   }
 
   /**
-   * Starts the target program with the java agent setup to do the transforms. All java agent
+   * Starts the target program with the Java agent setup to do the transforms. All Java agent
    * arguments are passed to it. Our classpath is passed to the new JVM.
    *
-   * @param premain_args the java agent argument list
+   * @param premain_args the Java agent argument list
    * @param target_args the test program name and its argument list
    */
   /*TO DO: @PostNonNull("premain")*/
@@ -366,7 +368,7 @@ public class DynComp {
 
     int targetResult = redirect_wait(dcomp_proc);
     if (targetResult != 0) {
-      System.out.printf("Warning: Target exited with %d status%n", targetResult);
+      System.out.printf("Warning: Target exited with %d status.%n", targetResult);
     }
     System.exit(targetResult);
   }
