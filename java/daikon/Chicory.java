@@ -68,9 +68,8 @@ public class Chicory {
   public static boolean daikon_online = false;
 
   /**
-   * Specifies Daikon arguments to be used if Daikon is run on a generated trace file or online via
-   * a socket. If neither {@code --daikon} or {@code --daikon-online} is chosen, this option will
-   * select {@code --daikon}.
+   * Specifies Daikon arguments to be used if Daikon is run on a generated trace file {@code
+   * --daikon} or online via a socket {@code --daikon-online}.
    */
   @Option("Specify Daikon arguments for either --daikon or --daikon-online")
   public static String daikon_args = "";
@@ -126,8 +125,11 @@ public class Chicory {
   @Option("Omit variables that match this regular expression.")
   public static @Nullable Pattern omit_var = null;
 
-  /** Include variables that are visible under normal Java access rules. */
-  @Option("Include variables that are visible under normal Java access rules")
+  /**
+   * If false, every field in an instrumented class is visible. If true, use standard Java behavior
+   * (if the field is in a class in a different package, it is only visible if public, etc.).
+   */
+  @Option("Only include variables that are visible under normal Java access rules")
   public static boolean std_visibility = false;
 
   /**
@@ -228,6 +230,16 @@ public class Chicory {
     }
     if (target_args.length == 0) {
       System.out.println("target program must be specified");
+      options.printUsage();
+      System.exit(1);
+    }
+    if (daikon && daikon_online) {
+      System.out.printf("may not specify both daikon and daikon-onlne%n");
+      options.printUsage();
+      System.exit(1);
+    }
+    if (!daikon_args.trim().isEmpty() && !(daikon || daikon_online)) {
+      System.out.printf("may not specify daikon-args without either daikon or daikon-onlne%n");
       options.printUsage();
       System.exit(1);
     }

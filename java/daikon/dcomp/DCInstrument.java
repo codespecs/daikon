@@ -500,11 +500,8 @@ public class DCInstrument extends InstructionListUtils {
           gen.isPublic(true);
         }
 
-        // Remove exceptions from the full method name
-        String full_name = m.toString().replaceFirst("\\s*throws.*", "");
-        // Remove annotations from full method name
-        full_name = full_name.replaceAll(" \\[.*\\]", "");
-        Instrument.debug_transform.log("  Processing method %s, track=%b%n", full_name, track);
+        Instrument.debug_transform.log(
+            "  Processing method %s, track=%b%n", simplify_method_name(m), track);
         Instrument.debug_transform.indent();
 
         MethodGen mg = new MethodGen(m, classname, pool);
@@ -758,11 +755,7 @@ public class DCInstrument extends InstructionListUtils {
           continue;
         }
 
-        // Remove exceptions from the full method name
-        String full_name = m.toString().replaceFirst("\\s*throws.*", "");
-        // Remove annotations from full method name
-        full_name = full_name.replaceAll(" \\[.*\\]", "");
-        Instrument.debug_transform.log("  Processing method %s%n", full_name);
+        Instrument.debug_transform.log("  Processing method %s%n", simplify_method_name(m));
         Instrument.debug_transform.indent();
 
         MethodGen mg = new MethodGen(m, classname, pool);
@@ -3991,8 +3984,27 @@ public class DCInstrument extends InstructionListUtils {
     }
   }
 
-  /** Return the fully qualified fieldname of the specified field. */
+  /**
+   * Return the fully qualified fieldname of the specified field.
+   *
+   * @param jc class containing the field
+   * @param f the field
+   * @return string containing the fully qualified name
+   */
   protected String full_name(JavaClass jc, Field f) {
     return jc.getClassName() + "." + f.getName();
+  }
+
+  /**
+   * Return simplified name of a method. Both exceptions and annotations are removed.
+   *
+   * @param m the method
+   * @return string containing the simplified method name
+   */
+  protected String simplify_method_name(Method m) {
+    // Remove exceptions from the full method name
+    String full_name = m.toString().replaceFirst("\\s*throws.*", "");
+    // Remove annotations from full method name
+    return full_name.replaceAll(" \\[.*\\]", "");
   }
 }

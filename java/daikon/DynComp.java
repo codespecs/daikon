@@ -431,7 +431,7 @@ public class DynComp {
     String str = "";
     for (String arg : args) {
       if (arg.indexOf(" ") != -1) {
-        str = "'" + str + "'";
+        arg = "'" + arg + "'";
       }
       str += arg + " ";
     }
