@@ -3,6 +3,7 @@ package daikon.dcomp;
 import daikon.DynComp;
 import daikon.chicory.ClassInfo;
 import daikon.chicory.DaikonWriter;
+import daikon.chicory.Instrument;
 import daikon.chicory.MethodInfo;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.InstructionListUtils;
@@ -99,10 +100,10 @@ public class DCInstrument extends InstructionListUtils {
   protected static ObjectType javalangObject = new ObjectType("java.lang.Object");
 
   // Debug loggers
-  protected static SimpleLog debug_transform = new SimpleLog(false);
+  /** Log file if debug_native is enabled. */
   protected static SimpleLog debug_native = new SimpleLog(false);
+  /** Log file if debug_dup is enabled. */
   protected static SimpleLog debug_dup = new SimpleLog(false);
-  protected static SimpleLog debug_track = new SimpleLog(false);
 
   /** Keeps track of the methods that were not successfully instrumented. */
   protected List<String> skipped_methods = new ArrayList<>();
@@ -292,12 +293,8 @@ public class DCInstrument extends InstructionListUtils {
 
     // System.out.printf("DCInstrument %s%n", orig_class.getClassName());
     // Turn on some of the logging based on debug option.
-    debug_transform.enabled =
-        DynComp.debug || DynComp.debug_transform || Premain.debug_dcinstrument;
-    daikon.chicory.Instrument.debug_transform.enabled = debug_transform.enabled;
     debug_instrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
     debug_native.enabled = DynComp.debug;
-    debug_track.enabled = Premain.debug_dcinstrument;
   }
 
   /**
@@ -315,13 +312,13 @@ public class DCInstrument extends InstructionListUtils {
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
-      debug_transform.log("Not instrumenting annotation %s%n", classname);
+      Instrument.debug_transform.log("Not instrumenting annotation %s%n", classname);
       // WHY NOT RETURN NULL?
       return gen.getJavaClass().copy();
     }
 
-    debug_transform.log("Instrumenting class %s%n", classname);
-    debug_transform.indent();
+    Instrument.debug_transform.log("Instrumenting class %s%n", classname);
+    Instrument.debug_transform.indent();
 
     // Create the ClassInfo for this class and its list of methods
     ClassInfo class_info = new ClassInfo(classname, loader);
@@ -337,7 +334,7 @@ public class DCInstrument extends InstructionListUtils {
       // will be created in this class.
       Method eq = gen.containsMethod("equals", "(Ljava/lang/Object;)Z");
       if (eq == null) {
-        debug_transform.log("Added equals method%n");
+        debug_instrument.log("Added equals method%n");
         add_equals_method(gen);
       }
 
@@ -356,9 +353,7 @@ public class DCInstrument extends InstructionListUtils {
     // We must also remember the class name so if we see a subsequent
     // call to one of its methods we do not add the dcomp argument.
 
-    if (DynComp.verbose) {
-      System.out.println(junit_state);
-    }
+    debug_instrument.log("junit_state: %s%n", junit_state);
 
     StackTraceElement[] stack_trace;
 
@@ -411,9 +406,7 @@ public class DCInstrument extends InstructionListUtils {
         throw new Error("invalid junit_state");
     }
 
-    if (DynComp.verbose) {
-      System.out.println(junit_state);
-    }
+    debug_instrument.log("junit_state: %s%n", junit_state);
 
     boolean junit_test_class = false;
     if (junit_state == JUnitState.TEST_DISCOVERY) {
@@ -474,12 +467,10 @@ public class DCInstrument extends InstructionListUtils {
         }
       }
 
-      if (DynComp.verbose) {
-        if (junit_test_class) {
-          System.out.printf("JUnit test class: %s%n", classname);
-        } else {
-          System.out.printf("Not a JUnit test class: %s%n", classname);
-        }
+      if (junit_test_class) {
+        debug_instrument.log("JUnit test class: %s%n", classname);
+      } else {
+        debug_instrument.log("Not a JUnit test class: %s%n", classname);
       }
     }
 
@@ -509,8 +500,9 @@ public class DCInstrument extends InstructionListUtils {
           gen.isPublic(true);
         }
 
-        debug_transform.log("  Processing method %s, track=%b%n", m, track);
-        debug_transform.indent();
+        Instrument.debug_transform.log(
+            "  Processing method %s, track=%b%n", simplify_method_name(m), track);
+        Instrument.debug_transform.indent();
 
         MethodGen mg = new MethodGen(m, classname, pool);
         mgen = mg; // copy to global
@@ -639,7 +631,7 @@ public class DCInstrument extends InstructionListUtils {
             throw e;
           }
         }
-        debug_transform.exdent();
+        Instrument.debug_transform.exdent();
       } catch (Throwable t) {
         // debug code
         // t.printStackTrace();
@@ -654,18 +646,18 @@ public class DCInstrument extends InstructionListUtils {
     // Keep track of when the class is initialized (so we don't look
     // for fields in uninitialized classes)
     track_class_init();
-    debug_transform.exdent();
+    Instrument.debug_transform.exdent();
 
     // The code that builds the list of daikon variables for each ppt
     // needs to know what classes are instrumented.  Its looks in the
     // Chicory runtime for this information.
     if (track_class) {
-      debug_transform.log("DCInstrument adding %s to all class list%n", class_info);
+      Instrument.debug_transform.log("DCInstrument adding %s to all class list%n", class_info);
       synchronized (daikon.chicory.SharedData.all_classes) {
         daikon.chicory.SharedData.all_classes.add(class_info);
       }
     }
-    debug_transform.log("Instrumentation complete: %s%n", classname);
+    Instrument.debug_transform.log("Instrumentation complete: %s%n", classname);
 
     return (gen.getJavaClass().copy());
   }
@@ -715,7 +707,7 @@ public class DCInstrument extends InstructionListUtils {
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
-      debug_transform.log("Not instrumenting annotation %s%n", classname);
+      Instrument.debug_transform.log("Not instrumenting annotation %s%n", classname);
       // MUST NOT RETURN NULL
       return gen.getJavaClass().copy();
     }
@@ -724,14 +716,14 @@ public class DCInstrument extends InstructionListUtils {
       // Don't instrument problem classes.
       // See Premain.java for a list and explainations.
       if (Premain.problem_classes.contains(classname)) {
-        if (DynComp.verbose) System.out.printf("Skipping problem class %s%n", classname);
+        Instrument.debug_transform.log("Skipping problem class %s%n", classname);
         return gen.getJavaClass().copy();
       }
       dcompRuntimeClassName = "java.lang.DCRuntime";
     }
 
-    debug_transform.log("Instrumenting class(JDK) %s%n", classname);
-    debug_transform.indent();
+    Instrument.debug_transform.log("Instrumenting class(JDK) %s%n", classname);
+    Instrument.debug_transform.indent();
 
     // Handle object methods for this class
     handle_object(gen);
@@ -743,7 +735,7 @@ public class DCInstrument extends InstructionListUtils {
       // will be created in this class.
       Method eq = gen.containsMethod("equals", "(Ljava/lang/Object;)Z");
       if (eq == null) {
-        debug_transform.log("Added equals method%n");
+        debug_instrument.log("Added equals method%n");
         add_equals_method(gen);
       }
       // Add DCompInstrumented interface and the required
@@ -763,8 +755,8 @@ public class DCInstrument extends InstructionListUtils {
           continue;
         }
 
-        debug_transform.log("  Processing method %s%n", m);
-        debug_transform.indent();
+        Instrument.debug_transform.log("  Processing method %s%n", simplify_method_name(m));
+        Instrument.debug_transform.indent();
 
         MethodGen mg = new MethodGen(m, classname, pool);
         mgen = mg; // copy to global
@@ -830,7 +822,7 @@ public class DCInstrument extends InstructionListUtils {
 
         gen.addMethod(mg.getMethod());
 
-        debug_transform.exdent();
+        Instrument.debug_transform.exdent();
       } catch (Throwable t) {
         if (debug_instrument.enabled) t.printStackTrace();
         skip_method(mgen);
@@ -851,8 +843,8 @@ public class DCInstrument extends InstructionListUtils {
     // for client classes
     // track_class_init();
 
-    debug_transform.exdent();
-    debug_transform.log("Instrumentation complete: %s%n", classname);
+    Instrument.debug_transform.exdent();
+    Instrument.debug_transform.log("Instrumentation complete: %s%n", classname);
 
     return (gen.getJavaClass().copy());
   }
@@ -1792,11 +1784,9 @@ public class DCInstrument extends InstructionListUtils {
 
       if (BcelUtil.javaVersion > 8) {
         if (Premain.problem_methods.contains(classname + "." + method_name)) {
-          if (DynComp.verbose) {
-            System.out.printf(
-                "Don't call instrumented version of problem method %s%n",
-                classname + "." + method_name);
-          }
+          debug_instrument.log(
+              "Don't call instrumented version of problem method %s%n",
+              classname + "." + method_name);
           callee_instrumented = false;
         }
       }
@@ -2017,7 +2007,7 @@ public class DCInstrument extends InstructionListUtils {
       return false;
     }
 
-    if (Instrument.is_transformer(classname.replace('.', '/'))) {
+    if (daikon.dcomp.Instrument.is_transformer(classname.replace('.', '/'))) {
       return false;
     }
 
@@ -2045,19 +2035,15 @@ public class DCInstrument extends InstructionListUtils {
     int i = classname.lastIndexOf('.');
     if (i > 0) {
       if (Premain.problem_packages.contains(classname.substring(0, i))) {
-        if (DynComp.verbose) {
-          System.out.printf(
-              "Don't call instrumented member of problem package %s%n", classname.substring(0, i));
-        }
+        debug_instrument.log(
+            "Don't call instrumented member of problem package %s%n", classname.substring(0, i));
         return false;
       }
     }
 
     if (BcelUtil.javaVersion > 8) {
       if (Premain.problem_classes.contains(classname)) {
-        if (DynComp.verbose) {
-          System.out.printf("Don't call instrumented member of problem class %s%n", classname);
-        }
+        debug_instrument.log("Don't call instrumented member of problem class %s%n", classname);
         return false;
       }
     }
@@ -2770,17 +2756,19 @@ public class DCInstrument extends InstructionListUtils {
    */
   boolean should_track(@ClassGetName String className, String methodName, String pptName) {
 
-    debug_track.log("Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
+    Instrument.debug_transform.log(
+        "Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
 
     // Don't track any JDK classes
     if (BcelUtil.inJdk(className)) {
-      debug_track.log("  jdk class, return false%n");
+      Instrument.debug_transform.log("ignoring %s, is a JDK class%n", className);
       return false;
     }
 
     // Don't track toString methods because we call them in
     // our debug statements.
     if (pptName.contains("toString")) {
+      Instrument.debug_transform.log("ignoring %s, is a toString method%n", pptName);
       return false;
     }
 
@@ -3740,7 +3728,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   void add_dcomp_interface(ClassGen gen) {
     gen.addInterface(instrumentation_interface);
-    debug_transform.log("Added interface DCompInstrumented%n");
+    Instrument.debug_transform.log("Added interface DCompInstrumented%n");
 
     InstructionList il = new InstructionList();
     int access_flags = Const.ACC_PUBLIC;
@@ -3996,8 +3984,27 @@ public class DCInstrument extends InstructionListUtils {
     }
   }
 
-  /** Return the fully qualified fieldname of the specified field. */
+  /**
+   * Return the fully qualified fieldname of the specified field.
+   *
+   * @param jc class containing the field
+   * @param f the field
+   * @return string containing the fully qualified name
+   */
   protected String full_name(JavaClass jc, Field f) {
     return jc.getClassName() + "." + f.getName();
+  }
+
+  /**
+   * Return simplified name of a method. Both exceptions and annotations are removed.
+   *
+   * @param m the method
+   * @return string containing the simplified method name
+   */
+  protected String simplify_method_name(Method m) {
+    // Remove exceptions from the full method name
+    String full_name = m.toString().replaceFirst("\\s*throws.*", "");
+    // Remove annotations from full method name
+    return full_name.replaceAll(" \\[.*\\]", "");
   }
 }

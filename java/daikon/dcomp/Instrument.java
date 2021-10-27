@@ -2,6 +2,7 @@ package daikon.dcomp;
 
 import daikon.DynComp;
 import daikon.plumelib.bcelutil.BcelUtil;
+import daikon.plumelib.bcelutil.SimpleLog;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.lang.instrument.ClassFileTransformer;
@@ -25,8 +26,15 @@ public class Instrument implements ClassFileTransformer {
   /** Have we seen a class member of a known transformer? */
   static boolean transformer_seen = false;
 
+  /** Debug information about which classes are transformed and why. */
+  private static SimpleLog debug_transform = new SimpleLog(false);
+
   /** Instrument class constructor. Setup debug directories, if needed. */
   public Instrument() {
+    debug_transform.enabled =
+        DynComp.debug || DynComp.debug_transform || Premain.debug_dcinstrument;
+    daikon.chicory.Instrument.debug_transform.enabled = debug_transform.enabled;
+
     debug_dir = DynComp.debug_dir;
     debug_bin_dir = new File(debug_dir, "bin");
     debug_orig_dir = new File(debug_dir, "orig");
@@ -59,9 +67,8 @@ public class Instrument implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    if (DynComp.verbose) {
-      System.out.printf("%ntransform on %s, loader: %s%n", className, loader);
-    }
+    debug_transform.log(
+        "In dcomp.Instrument.transform(): class = %s, loader: %s%n", className, loader);
 
     if (className == null) {
       /*
@@ -83,16 +90,14 @@ public class Instrument implements ClassFileTransformer {
 
     // See comments in Premain.java about meaning and use of in_shutdown.
     if (Premain.in_shutdown) {
-      if (DynComp.verbose) System.out.printf("Skipping in_shutdown class %s%n", className);
+      debug_transform.log("Skipping in_shutdown class %s%n", className);
       return null;
     }
 
     // If already instrumented, nothing to do
     // (This set will be empty if DCInstrument.jdk_instrumented is false)
     if (Premain.pre_instrumented.contains(className)) {
-      if (DynComp.verbose) {
-        System.out.printf("Skipping pre_instrumented JDK class %s%n", className);
-      }
+      debug_transform.log("Skipping pre_instrumented JDK class %s%n", className);
       return null;
     }
 
@@ -102,7 +107,7 @@ public class Instrument implements ClassFileTransformer {
     if (BcelUtil.inJdkInternalform(className)) {
       // If we are not using an instrumented JDK, then skip this class.
       if (!DCInstrument.jdk_instrumented) {
-        if (DynComp.verbose) System.out.printf("Skipping JDK class %s%n", className);
+        debug_transform.log("Skipping JDK class %s%n", className);
         return null;
       }
 
@@ -110,38 +115,37 @@ public class Instrument implements ClassFileTransformer {
       if (lastSlashPos > 0) {
         String packageName = className.substring(0, lastSlashPos).replace('/', '.');
         if (Premain.problem_packages.contains(packageName)) {
-          if (DynComp.verbose) System.out.printf("Skipping problem package %s%n", packageName);
+          debug_transform.log("Skipping problem package %s%n", packageName);
           return null;
         }
       }
 
       if (BcelUtil.javaVersion > 8) {
         if (Premain.problem_classes.contains(className.replace('/', '.'))) {
-          if (DynComp.verbose) System.out.printf("Skipping problem class %s%n", className);
+          debug_transform.log("Skipping problem class %s%n", className);
           return null;
         }
       }
 
       if (className.equals("java/lang/DCRuntime")) {
-        if (DynComp.verbose)
-          System.out.printf("Skipping special DynComp runtime class %s%n", className);
+        debug_transform.log("Skipping special DynComp runtime class %s%n", className);
         return null;
       }
 
       in_jdk = true;
-      if (DynComp.verbose) System.out.printf("Instrumenting JDK class %s%n", className);
+      debug_transform.log("Instrumenting JDK class %s%n", className);
     } else {
 
       // We're not in a JDK class
       // Don't instrument our own classes
       if (is_dcomp(className)) {
-        if (DynComp.verbose) System.out.printf("Skipping is_dcomp class %s%n", className);
+        debug_transform.log("Skipping is_dcomp class %s%n", className);
         return null;
       }
 
       // Don't instrument other byte code transformers
       if (is_transformer(className)) {
-        if (DynComp.verbose) System.out.printf("Skipping is_transformer class %s%n", className);
+        debug_transform.log("Skipping is_transformer class %s%n", className);
         if (!transformer_seen) {
           transformer_seen = true;
           System.err.printf(
@@ -153,10 +157,11 @@ public class Instrument implements ClassFileTransformer {
       }
     }
 
-    if (DynComp.verbose) {
-      System.out.format("In dcomp.Instrument(): class = %s%n", className);
-      // debug code
-      // print_call_stack();
+    if (loader == null) {
+      debug_transform.log("transforming class %s, loader %s%n", className, loader);
+    } else {
+      debug_transform.log(
+          "transforming class %s, loader %s - %s%n", className, loader, loader.getParent());
     }
 
     try {
@@ -173,7 +178,7 @@ public class Instrument implements ClassFileTransformer {
       JavaClass njc = dci.instrument();
 
       if (njc == null) {
-        if (DynComp.verbose) System.out.printf("Didn't instrument %s%n", c.getClassName());
+        debug_transform.log("Didn't instrument %s%n", c.getClassName());
         return null;
       } else {
         if (DynComp.dump) {
