@@ -19,8 +19,8 @@ Further documentation can be found in:
    It is also available at http://plse.cs.washington.edu/daikon/download/api/ .
 
 
-Version 5.8.9 (??? 2021)
-=============================
+Version 5.8.10 (November 1, 2021)
+=================================
 
 DynComp can now handle synthesized bridge methods.
 Merge comparability fix for fields.
@@ -28,11 +28,12 @@ Merge comparability fix for fields.
 Cleaned up the documentation of invocation options for Chicory and DynComp.
 
 Bug fixes and implementation details:
- * Improved implementation of DynComp runtime clone methods.
- * Update JUnit and Hamcrest to be compiled for JDK 8.
+ * Improved implementation of DynComp runtime clone methods (Daikon #358).
+ * Update JUnit and Hamcrest to be compiled for JDK 8 (Daikon #346, #364).
  * Check for <clinit> too large to instrument (#343).
  * Fix dcomp equals (#338).
- * Valgrind update from 3.16.1 to 3.17.0. (#327).
+ * Valgrind update from 3.16.1 to 3.17.0. (Daikon #327, Fjalar #51).
+ * Binutils update from 2.35.1 to 2.37 (Fjalar #53, Fjalar #54).
  * Have Chicory and DynComp use same code for ppt-omit and ppt-select (#342).
  * Update bcel util to version 1.1.12 (#344) (Includes several fixes to local variable table generation).
 
