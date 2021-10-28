@@ -21,8 +21,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public class DynComp {
 
+  /** Display usage information. */
+  @Option("-h Display usage information")
+  public static boolean help = false;
+
   /** Print information about the classes being transformed. */
-  @Option("-v Print information about the classes being transformed")
+  @Option("-v Print progress information")
   public static boolean verbose = false;
 
   /** Dump the instrumented classes to disk. */
@@ -83,8 +87,15 @@ public class DynComp {
   @Option("variable nesting depth")
   public static int nesting_depth = 2;
 
-  /** Do not use the instrumented JDK. No longer an option, now derived from rt_file option. */
-  public static boolean no_jdk = false;
+  /**
+   * Path to Java agent .jar file that performs the transformation. The "main" procedure is {@code
+   * Premain.premain()}.
+   *
+   * @see daikon.dcomp.Premain#premain
+   */
+  // Set by start_target()
+  @Option("Path to the DynComp agent jar file (usually dcomp_premain.jar)")
+  public static @MonotonicNonNull File premain = null;
 
   // The following are internal debugging options primarily for use by the DynComp maintainers.
   // They are not documented in the Daikon User Manual.
@@ -97,20 +108,15 @@ public class DynComp {
   @Option("Print detailed information on variables being observed")
   public static boolean debug_decl_print = false;
 
-  /**
-   * Path to java agent jar file that performs the transformation. The "main" procedure is
-   * Premain.premain().
-   *
-   * @see daikon.dcomp.Premain#premain
-   */
-  // Set by start_target()
-  @Option("Path to the DynComp agent jar file (usually dcomp_premain.jar)")
-  public static @MonotonicNonNull File premain = null;
+  // Note that this is derived from the rt_file option.  There is no command-line argument that
+  // corresponds to this variable.
+  /** Do not use the instrumented JDK. */
+  public static boolean no_jdk = false;
 
   /** starting time (msecs) */
   public static long start = System.currentTimeMillis();
 
-  /** Log file if debugging is enabled. */
+  /** Log file if debug is enabled. */
   private static final SimpleLog basic = new SimpleLog(false);
 
   /** Synopsis for the DynComp command line. */
@@ -125,7 +131,7 @@ public class DynComp {
 
     // Parse our arguments
     Options options = new Options(synopsis, DynComp.class);
-    // options.ignore_options_after_arg (true);
+    options.setParseAfterArg(false);
     String[] target_args = options.parse(true, args);
     check_args(options, target_args);
 
@@ -153,6 +159,10 @@ public class DynComp {
    * @param target_args arguments being passed to the target program
    */
   public static void check_args(Options options, String[] target_args) {
+    if (help) {
+      options.printUsage();
+      System.exit(1);
+    }
     if (nesting_depth < 0) {
       System.out.printf("nesting depth (%d) must not be negative%n", nesting_depth);
       options.printUsage();
@@ -176,18 +186,20 @@ public class DynComp {
   }
 
   /**
-   * Starts the target program with the java agent setup to do the transforms. All java agent
+   * Starts the target program with the Java agent setup to do the transforms. All Java agent
    * arguments are passed to it. Our classpath is passed to the new JVM.
+   *
+   * @param premain_args the Java agent argument list
+   * @param target_args the test program name and its argument list
    */
   /*TO DO: @PostNonNull("premain")*/
   void start_target(String premain_args, String[] target_args) {
 
-    String target_class = target_args[0].replaceFirst(".*[/.]", "");
-
-    // Default the decls file to <target-program-name>.decls-DynComp
+    // Default the decls file name to <target-program-name>.decls-DynComp
     if (decl_file == null) {
+      String target_class = target_args[0].replaceFirst(".*[/.]", "");
       decl_file = String.format("%s.decls-DynComp", target_class);
-      premain_args = "--decl-file=" + decl_file + " " + premain_args;
+      premain_args += " --decl-file=" + decl_file;
     }
 
     // Get the current classpath
@@ -201,7 +213,7 @@ public class DynComp {
     String path_separator = System.getProperty("path.separator");
     basic.log("path_separator = %s%n", path_separator);
     if (!RegexUtil.isRegex(path_separator)) {
-      throw new Daikon.BugInDaikon(
+      throw new Daikon.UserError(
           "Bad regexp "
               + path_separator
               + " for path.separator: "
@@ -348,13 +360,17 @@ public class DynComp {
     Process dcomp_proc;
     try {
       dcomp_proc = rt.exec(cmdline);
-    } catch (Throwable e) {
+    } catch (Exception e) {
       System.out.printf("Exception '%s' while executing '%s'%n", e, cmdline);
       System.exit(1);
       throw new Error("Unreachable control flow");
     }
-    @SuppressWarnings("UnusedVariable") // TODO check result!
-    int result = redirect_wait(dcomp_proc);
+
+    int targetResult = redirect_wait(dcomp_proc);
+    if (targetResult != 0) {
+      System.out.printf("Warning: Target exited with %d status.%n", targetResult);
+    }
+    System.exit(targetResult);
   }
 
   /** Wait for stream redirect threads to complete. */
@@ -392,7 +408,11 @@ public class DynComp {
     return result;
   }
 
-  /** Returns elapsed time as a String since the start of the program. */
+  /**
+   * Returns elapsed time since the start of the program.
+   *
+   * @return elapsed time since the start of the program
+   */
   public static String elapsed() {
     return ("[" + (System.currentTimeMillis() - start) + " msec]");
   }
@@ -401,10 +421,18 @@ public class DynComp {
     return (System.currentTimeMillis() - start);
   }
 
-  /** convert a list of arguments into a command line string */
+  /**
+   * Convert a list of arguments into a command-line string. Only used for debugging output.
+   *
+   * @param args the list of arguments
+   * @return argument string
+   */
   public String args_to_string(List<String> args) {
     String str = "";
     for (String arg : args) {
+      if (arg.indexOf(" ") != -1) {
+        arg = "'" + arg + "'";
+      }
       str += arg + " ";
     }
     return (str.trim());

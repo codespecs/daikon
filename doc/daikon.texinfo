@@ -3498,9 +3498,15 @@ Chicory's output.
 
 @table @option
 @item --help
+@itemx -h
 Print a help message.
 
+@item --verbose
+@itemx -v
+Print information about the classes being processed.
+
 @item --debug
+@itemx -d
 Produce debugging information.  For other debugging options, run Chicory
 with the @option{--help} option.
 
@@ -3577,6 +3583,13 @@ named) Linux pipes (@pxref{Online execution}).
 Specifies arguments to be passed to Daikon if the @option{--daikon} or
 @option{--daikon-online} options are used.
 
+@item --heap-size=@var{max_heap}
+Specifies the maximum size, in bytes, of the memory allocation pool for
+the target program.  Also applies to Daikon, if the @option{--daikon}
+command-line argument is given.
+The size is specified in the same manner as the
+@option{--Xmx} switch to @command{java}; for example: @option{--heap-size=3600m}.
+
 @item --premain=@var{path}
 Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
 Chicory requires this jar file in order to execute.  By default Chicory
@@ -3592,13 +3605,6 @@ switch to specify its name.  For example:
 @example
 --premain=C:\lib\daikon-5.8.9.jar
 @end example
-
-@item --heap-size=@var{max_heap}
-Specifies the maximum size, in bytes, of the memory allocation pool for
-the target program.  Also applies to Daikon, if the @option{--daikon}
-command-line argument is given.
-The size is specified in the same manner as the
-@option{--Xmx} switch to @command{java}; for example: @option{--heap-size=3600m}.
 
 @end table
 
@@ -3991,19 +3997,26 @@ This section lists the optional command-line arguments to DynComp, which
 appear before the @var{classname} on the DynComp command line.
 
 @table @option
+@item --help
+@itemx -h
+Print a help message.
 
 @item --verbose
+@itemx -v
 Print information about the classes being processed.
 
 @item --dump
-Dump the instrumented classes to @file{debug/bin}.
+Dump the instrumented class files to the @file{bin} subdirectory of the directory specified by @option{--debug-dir}.
+Dump the original, uninstrumented class files to the @file{orig} subdirectory of the directory specified by @option{--debug-dir}.
+If @option{--debug-dir} is not specified, it defaults to @file{debug/} in the current working directory.
 
 @item --debug
+@itemx -d
 Produce debugging information.  (This produces a lot of output!)
 This option also turns on @option{--dump}.
 
 @item --debug-dir
-The directory in which to dump instrumented class files (only if
+The directory in which to dump instrumented class files (only if @option{dump} or
 @option{--debug} is specified).  Defaults to @file{debug} in the current
 working directory.
 
@@ -4012,6 +4025,7 @@ The directory in which to create output files.  Defaults to the current
 working directory.
 
 @item --decl-file=@var{file}
+@itemx -f
 Output filename for @file{.decls} file suitable for input to Chicory.  Defaults to
 @file{@var{target_program}.decls-DynComp}.
 
@@ -4086,6 +4100,22 @@ in Chicory output}.
 Depth to which to examine structure components (default 2).  This
 parameter determines which variables the front end causes to be output
 at run time.  For an example, see @ref{Variables in Chicory output}.
+
+@item --premain=@var{path}
+Specifies the absolute pathname to the @file{dcomp_premain.jar} file.
+DynComp requires this jar file in order to execute.  By default DynComp
+looks for the jar file in the classpath and in @file{$DAIKONDIR/java}
+(where @env{DAIKONDIR} is the
+complete installation of Daikon).
+
+DynComp can also use the @file{daikon.jar} file for this purpose.  If it
+doesn't find @file{dcomp_premain.jar} above, it will use @file{daikon.jar}
+itself (if a file named @file{daikon.jar} appears in the classpath).  If
+the Daikon jar file is not named @file{daikon.jar}, you can use this
+switch to specify its name.  For example:
+@example
+--premain=C:\lib\daikon-5.8.9.jar
+@end example
 
 @end table
 

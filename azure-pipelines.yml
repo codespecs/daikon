@@ -25,6 +25,8 @@ jobs:
     - misc_ubuntu_jdk11
     - kvasir_ubuntu_jdk11
     - typecheck_jdk11
+  pool:
+    vmImage: 'ubuntu-latest'
   steps:
   - checkout: none
   - bash: true
