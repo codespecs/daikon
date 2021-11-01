@@ -818,7 +818,7 @@ with information grouping the variables into abstract types.
 Kvasir will also print messages if it observes your program doing
 something with undefined effects; these may indicate bugs in your
 program, or they may be spurious.  (If they are bugs, they can also be
-tracked down by using Valgrind (@uref{http://www.valgrind.org/})
+tracked down by using Valgrind (@uref{https://www.valgrind.org/})
 with its regular memory checking
 tool; if they do not appear with that tool, they are probably
 spurious).
@@ -4230,7 +4230,7 @@ data trace (@file{.dtrace}) files of variables and their values by
 examining the operation of the binary at
 run time.  Kvasir is named after the Norse god of knowledge and beet juice.
 It is built upon the Fjalar dynamic analysis framework for C and C++ programs
-(available at @uref{http://pag.csail.mit.edu/fjalar/}, but already
+(available at @uref{http://groups.csail.mit.edu/pag/fjalar/}, but already
 included in the Daikon distribution).
 
 To use Kvasir, first compile your program using the DWARF-2 debugging

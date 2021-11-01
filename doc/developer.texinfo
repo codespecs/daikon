@@ -618,7 +618,7 @@ memory errors in C, and they need to perform exactly the same memory
 tracking as a Daikon front end must perform.  Therefore, a Daikon front
 end can use the same well-known techniques, and possibly can even be
 built on top of such a tool.  For instance, one C front end, named Kvasir, is
-built on top of the Valgrind tool (@uref{http://valgrind.org/}),
+built on top of the Valgrind tool (@uref{https://valgrind.org/}),
 greatly reducing the implementation effort.  Valgrind only works under
 Linux, but a C front end for another platform could build on a similar
 tool; many other such tools exist.
@@ -2038,7 +2038,7 @@ nothing to commit, working directory clean
 The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
 from, two open source projects.
 The home page for the Valgrind instrumentation framework is
-@uref{http://www.valgrind.org}.
+@uref{https://www.valgrind.org}.
 The home page for the GNU Binutils
 (a collection of binary tools, of which Kvasir uses only readelf) is
 @uref{http://www.gnu.org/software/binutils/}.
@@ -2049,7 +2049,7 @@ File
 these tools that Kvasir uses.
 You can determine whether a newer version of these tools is available
 by comparing the @file{REVISION} file to
-@url{http://valgrind.org/downloads/current.html} and
+@url{https://valgrind.org/downloads/current.html} and
 @url{http://ftp.gnu.org/gnu/binutils/?C=M;O=D}.
 If so, you should update the Fjalar source tree as soon as practical.
 For details, see the separate document ``Merging
