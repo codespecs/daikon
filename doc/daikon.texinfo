@@ -5963,7 +5963,7 @@ Microsoft .NET implementation.
 
 To insert Daikon-inferred invariants in C# source code as Code Contracts,
 use Scout (previously called @nospellcheck{Contract Inserter}):
-@uref{https://bitbucket.org/fmc3/scout}.
+@uref{https://bitbucket.org/michael.ernst/scout-contract-inserter/}.
 
 
 @node    dfepl
