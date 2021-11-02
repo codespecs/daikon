@@ -3,13 +3,12 @@ DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
 CHECKLINK ?= ${DAIKONDIR}/utils/checklink
 HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
 PLUMESCRIPTS ?= ${DAIKONDIR}/utils/plume-scripts
-MERNSTDIR ?= /homes/gws/mernst
+BPHOME ?= ${DAIKONDIR}/utils/bibtex2web/lib
+export BPHOME
+BWBIN = ${BPHOME}/../bin
 BIBDIR ?= ~/bib
 # This should include every file with "usesDaikon" or "\"Invariant dectection\""
 BIBFILES = ${BIBDIR}/bibstring-unabbrev.bib ${BIBDIR}/ernst.bib ${BIBDIR}/invariants.bib ${BIBDIR}/pag.bib ${BIBDIR}/soft-eng.bib ${BIBDIR}/testing.bib ${BIBDIR}/types.bib ${BIBDIR}/crossrefs.bib
-BPHOME ?= ${MERNSTDIR}/bin/src/perl/bibtex2web/lib
-export BPHOME
-BWBIN = ${BPHOME}/../bin
 ###########################################################################
 
 # Files in $pag/www/daikon/pubs-sources/
