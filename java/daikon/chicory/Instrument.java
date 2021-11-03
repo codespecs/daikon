@@ -495,9 +495,6 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           }
 
           // Add nonce local to matchup enter/exits
-          String entry_ppt_name =
-              DaikonWriter.methodEntryName(
-                  fullClassName, getArgTypes(mg), mg.toString(), mg.getName());
           add_entry_instrumentation(il, context);
 
           print_stack_map_table("After add_entry_instrumentation");
@@ -703,6 +700,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    *
    * @param il instruction list for method
    * @param c MethodContext for method
+   * @throws IOException if there is trouble with I/O
    */
   private void add_entry_instrumentation(InstructionList il, MethodContext c) throws IOException {
 
