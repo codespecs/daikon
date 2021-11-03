@@ -1983,7 +1983,12 @@ A clone of
 
 @item
 Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
-[TODO: Is this really necessary?]
+For now, this should be a current version of JDK 8. If the default JDK on your
+system is not JDK 8, you will also need to add @file{$JAVA_HOME/bin} to your @env{PATH}.
+See the example in the next section.
+@c This is necessary as daikon/java/Makefile will set JAVA_HOME to the machine's default
+@c JDK if it is not currently set. Currently, the machine default is often JDK 11 and we
+@c want to build with JDK 8.
 @c Example:  export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 
 @item
@@ -2006,6 +2011,7 @@ run the following (adjust environment variables as necessary):
 @example
 export DAIKONDIR=$inv/daikon
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0
+export PATH=$JAVA_HOME/bin:$PATH
 unset CHECKERFRAMEWORK
 @end example
 
