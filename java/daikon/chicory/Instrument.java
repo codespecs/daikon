@@ -498,8 +498,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           String entry_ppt_name =
               DaikonWriter.methodEntryName(
                   fullClassName, getArgTypes(mg), mg.toString(), mg.getName());
-          add_entry_instrumentation(
-              il, context, !shouldIgnore(fullClassName, mg.getName(), entry_ppt_name));
+          add_entry_instrumentation(il, context);
 
           print_stack_map_table("After add_entry_instrumentation");
 
@@ -701,9 +700,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * (this_invocation_nonce) that is initialized to Runtime.nonce++. This provides a unique id on
    * each method entry/exit that allows them to be matched up from the dtrace file. Inserts code to
    * call daikon.chicory.Runtime.enter().
+   *
+   * @param il instruction list for method
+   * @param c MethodContext for method
    */
-  private void add_entry_instrumentation(
-      InstructionList il, MethodContext c, boolean shouldCallEnter) throws IOException {
+  private void add_entry_instrumentation(InstructionList il, MethodContext c) throws IOException {
 
     String atomic_int_classname = "java.util.concurrent.atomic.AtomicInteger";
     Type atomic_int_type = new ObjectType(atomic_int_classname);
@@ -739,10 +740,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     InstructionHandle end = nl.getEnd();
     int len_part1 = end.getPosition() + end.getInstruction().getLength();
 
-    if (shouldCallEnter) {
-      // call Runtime.enter()
-      nl.append(call_enter_exit(c, "enter", -1));
-    }
+    // call Runtime.enter()
+    nl.append(call_enter_exit(c, "enter", -1));
 
     nl.setPositions();
     end = nl.getEnd();

@@ -2059,7 +2059,7 @@ public class DCInstrument extends InstructionListUtils {
       return false;
     }
 
-    // If the JDK is instrumented, then everthing but object is instrumented
+    // If using the instrumented JDK, then everthing but object is instrumented
     if (jdk_instrumented && !classname.equals("java.lang.Object")) {
       return true;
     }
