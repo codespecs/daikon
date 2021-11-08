@@ -3,13 +3,12 @@ DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
 CHECKLINK ?= ${DAIKONDIR}/utils/checklink
 HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
 PLUMESCRIPTS ?= ${DAIKONDIR}/utils/plume-scripts
-MERNSTDIR ?= /homes/gws/mernst
+BPHOME ?= ${DAIKONDIR}/utils/bibtex2web/lib
+export BPHOME
+BWBIN = ${BPHOME}/../bin
 BIBDIR ?= ~/bib
 # This should include every file with "usesDaikon" or "\"Invariant dectection\""
 BIBFILES = ${BIBDIR}/bibstring-unabbrev.bib ${BIBDIR}/ernst.bib ${BIBDIR}/invariants.bib ${BIBDIR}/pag.bib ${BIBDIR}/soft-eng.bib ${BIBDIR}/testing.bib ${BIBDIR}/types.bib ${BIBDIR}/crossrefs.bib
-BPHOME ?= ${MERNSTDIR}/bin/src/perl/bibtex2web/lib
-export BPHOME
-BWBIN = ${BPHOME}/../bin
 ###########################################################################
 
 # Files in $pag/www/daikon/pubs-sources/
@@ -28,11 +27,12 @@ clean-abstracts:
 	@touch dummy-abstract.html
 	\rm -f *-abstract.html
 
-pull-bibfiles:
+pull-repos:
 	cd ${BIBDIR} && git pull
+	${MAKE} -C ${DAIKONDIR} update-libs
 
 .PHONY: index.html
-index.html: pull-bibfiles
+index.html: pull-repos
 # Avoid error "Cannot write to index.html"
 	rm -f $@
 	${BWBIN}/bwconv.pl -format=bibtex,htmlpubs -outopts=withyears -hfbodyline BODY-INVARIANTDETECTION -headfoot ../pubs-sources/index-headfoot.html -to $(notdir $@)-1 -filter 'defined($$rec{"category"}) && (index($$rec{"category"}, "Specification inference") != -1) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
@@ -53,7 +53,7 @@ writable-abstracts:
 	@\rm -f abstracts-unsplit.html
 
 # Creates *-abstract.html files.
-abstracts: pull-bibfiles writable-abstracts abstracts-testsubject abstracts-methodology abstracts-invariantdetection writable-abstracts
+abstracts: pull-repos writable-abstracts abstracts-testsubject abstracts-methodology abstracts-invariantdetection writable-abstracts
 
 abstracts-invariantdetection:
 	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${HTMLTOOLS}/html-canonical-urls -validurls ${HTMLTOOLS}/html-valid-urls -filter 'defined($$rec{"category"}) && (index($$rec{"category"}, "Specification inference") != -1) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}

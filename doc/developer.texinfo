@@ -42,7 +42,7 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.8.9
+@center Daikon version 5.8.11
 
 @sp 1
 
@@ -83,7 +83,7 @@ Copyright @copyright{} 1998-2020
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.9, released March 3, 2021.
+It describes Daikon version 5.8.11, released November 2, 2021.
 
 @menu
 * Introduction::
@@ -618,7 +618,7 @@ memory errors in C, and they need to perform exactly the same memory
 tracking as a Daikon front end must perform.  Therefore, a Daikon front
 end can use the same well-known techniques, and possibly can even be
 built on top of such a tool.  For instance, one C front end, named Kvasir, is
-built on top of the Valgrind tool (@uref{http://valgrind.org/}),
+built on top of the Valgrind tool (@uref{https://valgrind.org/}),
 greatly reducing the implementation effort.  Valgrind only works under
 Linux, but a C front end for another platform could build on a similar
 tool; many other such tools exist.
@@ -1983,7 +1983,12 @@ A clone of
 
 @item
 Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
-[TODO: Is this really necessary?]
+For now, this should be a current version of JDK 8. If the default JDK on your
+system is not JDK 8, you will also need to add @file{$JAVA_HOME/bin} to your @env{PATH}.
+See the example in the next section.
+@c This is necessary as daikon/java/Makefile will set JAVA_HOME to the machine's default
+@c JDK if it is not currently set. Currently, the machine default is often JDK 11 and we
+@c want to build with JDK 8.
 @c Example:  export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 
 @item
@@ -2006,6 +2011,7 @@ run the following (adjust environment variables as necessary):
 @example
 export DAIKONDIR=$inv/daikon
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0
+export PATH=$JAVA_HOME/bin:$PATH
 unset CHECKERFRAMEWORK
 @end example
 
@@ -2038,7 +2044,7 @@ nothing to commit, working directory clean
 The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
 from, two open source projects.
 The home page for the Valgrind instrumentation framework is
-@uref{http://www.valgrind.org}.
+@uref{https://www.valgrind.org}.
 The home page for the GNU Binutils
 (a collection of binary tools, of which Kvasir uses only readelf) is
 @uref{http://www.gnu.org/software/binutils/}.
@@ -2049,7 +2055,7 @@ File
 these tools that Kvasir uses.
 You can determine whether a newer version of these tools is available
 by comparing the @file{REVISION} file to
-@url{http://valgrind.org/downloads/current.html} and
+@url{https://valgrind.org/downloads/current.html} and
 @url{http://ftp.gnu.org/gnu/binutils/?C=M;O=D}.
 If so, you should update the Fjalar source tree as soon as practical.
 For details, see the separate document ``Merging

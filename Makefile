@@ -706,8 +706,17 @@ showvars:
 
 # If .git does not exist, then directory was created from a daikon archive file.
 # The "git pull" command fails under Centos and Fedora 23, for mysterious reasons.
-update-libs: update-checklink update-html-tools update-plume-scripts update-run-google-java-format
-.PHONY: update-libs update-checklink update-html-tools update-plume-scripts update-run-google-java-format
+update-libs: update-bibtex2web update-checklink update-html-tools update-plume-scripts update-run-google-java-format
+.PHONY: update-libs update-bibtex2web update-checklink update-html-tools update-plume-scripts update-run-google-java-format
+
+update-bibtex2web:
+ifndef NONETWORK
+	if test -d utils/bibtex2web/.git ; then \
+	  (cd utils/bibtex2web && (git pull -q || (echo "git pull failed" && true))) \
+	elif ! test -d utils/bibtex2web ; then \
+	  (mkdir -p utils && (git clone -q --depth 1 https://github.com/mernst/bibtex2web.git utils/bibtex2web || git clone -q --depth 1 https://github.com/mernst/bibtex2web.git utils/bibtex2web)) \
+	fi
+endif
 
 update-checklink:
 ifndef NONETWORK
