@@ -35,6 +35,7 @@ import org.plumelib.util.FilesPlume;
  * options for the Daikon tools. Refer to the {@code --config} command-line option in the Daikon
  * manual for an introduction to the configuration system.
  */
+@SuppressWarnings("nullness") // need help with this
 public class ParameterDoclet11 implements Doclet {
 
   /** A value that indicates a method completed successfully. */
@@ -47,9 +48,7 @@ public class ParameterDoclet11 implements Doclet {
   /** If true, then output format is Texinfo. */
   private boolean formatTexinfo = false;
 
-  /** The doclet environment. */
-  private DocletEnvironment denv;
-  /** The DocTrees instance assocated with {@link #denv}. */
+  /** The DocTrees instance assocated with the DocletEnvironment. */
   private DocTrees docTrees;
   /** Used to report errors. */
   private Reporter reporter;
@@ -84,7 +83,6 @@ public class ParameterDoclet11 implements Doclet {
   @Override
   public boolean run(DocletEnvironment denv) {
 
-    this.denv = denv;
     postprocessOptions();
     docTrees = denv.getDocTrees();
     initDocCategories();

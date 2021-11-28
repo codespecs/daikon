@@ -77,6 +77,19 @@ endif
 # -docletpath doesn't seem to respect path wildcards as -cp does
 DOCLETPATH := $(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):${DAIKON_CLASSPATH}:${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
+DOCLET_FLAGS :=
+DOCLET_SUFFIX :=
+JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
+ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
+  JAVA8 := 1
+else
+  JAVA8 := 0
+  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
+  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 11),1)
+	DOCLET_FLAGS := --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+	DOCLET_SUFFIX := 11
+  endif
+endif
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
@@ -91,7 +104,13 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER = sort
 endif
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | ${SORT_DIRECTORY_ORDER})
-JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
+
+ifeq ($(JAVA8), 1)
+JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v 'Doclet11.java' | ${SORT_DIRECTORY_ORDER})
+else
+JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v 'Doclet.java' | ${SORT_DIRECTORY_ORDER})
+endif
+
 # Copied from
 JAVA_FILES_FOR_STYLE = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name 'WeakHasherMap.java' -o -name 'WeakIdentityHashMap.java' -o -name '\.\#*' -o -path './jtb' -o -path './daikon/dcomp-transfer' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 # Other find commands should perhaps use the recursive grep form instead
@@ -680,20 +699,6 @@ endif
 ### Code quality (static checks of the code)
 ###
 
-DOCLET_FLAGS :=
-DOCLET_SUFFIX :=
-JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
-ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
-  JAVA8 := 1
-else
-  JAVA8 := 0
-  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
-  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 11),1)
-	DOCLET_FLAGS := --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
-	DOCLET_SUFFIX := 11
-  endif
-endif
-
 # See version numbers at https://github.com/google/error-prone/releases
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.7.1-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-shaded-3.11.0.jar:${DAIKONDIR}/java/lib/error-prone/javacutil-3.1.1.jar:${DAIKONDIR}/java/lib/error-prone/jFormatString-3.0.0.jar:${DAIKONDIR}/java/lib/error-prone/caffeine-2.8.4.jar:${DAIKONDIR}/java/lib/error-prone/diffutils-1.3.0.jar:${DAIKONDIR}/java/lib/error-prone/threeten-extra-1.5.0.jar
 
@@ -706,6 +711,8 @@ ifeq ($(JAVA8), 1)
 else
 ## MutablePublicArray is off because Error Prone 2.4.0 crashes: https://github.com/google/error-prone/issues/1645
 	javac -cp ${DAIKON_CLASSPATH} \
+	  --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
+	  --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF' \
 	  -Xmaxwarns 100000 -Werror \
@@ -715,6 +722,8 @@ endif
 # Create an `error-prone.patch` file.
 errorprone-replacements:
 	javac -cp ${DAIKON_CLASSPATH} \
+	  --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
+	  --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -XepPatchChecks:UnnecessaryParentheses,ArrayToString -XepPatchLocation:${DAIKONDIR}/java' \
 	  -Xmaxwarns 100000 ${JAVA_FILES_FOR_STYLE}

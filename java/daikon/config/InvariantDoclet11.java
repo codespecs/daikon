@@ -44,6 +44,10 @@ import org.plumelib.reflection.ReflectionPlume;
  *   <dd>Text format, with each name preceded by "+" characters to indicate depth in the tree.
  * </dl>
  */
+@SuppressWarnings({
+  "nullness", // need help with this
+  "keyfor" // need help with this
+})
 public class InvariantDoclet11 implements Doclet {
 
   private static final String lineSep = System.lineSeparator();
@@ -74,9 +78,7 @@ public class InvariantDoclet11 implements Doclet {
   /** If true, then output format is Texinfo. */
   private boolean formatTexinfo = false;
 
-  /** The doclet environment. */
-  private DocletEnvironment denv;
-  /** The DocTrees instance assocated with {@link #denv}. */
+  /** The DocTrees instance assocated with the DocletEnvironment. */
   private DocTrees docTrees;
   /** Used to report errors. */
   private Reporter reporter;
@@ -84,7 +86,7 @@ public class InvariantDoclet11 implements Doclet {
   /** Map from a class name to its ClassInfo. */
   private Map<String, ClassInfo> cmap;
 
-  class sortBySimpleName implements Comparator<TypeElement> {
+  static class sortBySimpleName implements Comparator<TypeElement> {
     @Override
     public int compare(TypeElement te1, TypeElement te2) {
       if (te1 == null && te2 == null) {
@@ -103,7 +105,7 @@ public class InvariantDoclet11 implements Doclet {
     }
   }
 
-  class sortByBinaryName implements Comparator<TypeElement> {
+  static class sortByBinaryName implements Comparator<TypeElement> {
     @Override
     public int compare(TypeElement te1, TypeElement te2) {
       if (te1 == null && te2 == null) {
@@ -126,7 +128,7 @@ public class InvariantDoclet11 implements Doclet {
     }
   }
 
-  class sortByQualifiedName implements Comparator<TypeElement> {
+  static class sortByQualifiedName implements Comparator<TypeElement> {
     @Override
     public int compare(TypeElement te1, TypeElement te2) {
       if (te1 == null && te2 == null) {
@@ -145,7 +147,7 @@ public class InvariantDoclet11 implements Doclet {
     }
   }
 
-  final class ClassInfo {
+  static final class ClassInfo {
     final TypeElement classInfo;
     // null if top level class or parent is not included
     // in list of classes passed to this doclet
@@ -204,7 +206,6 @@ public class InvariantDoclet11 implements Doclet {
   public boolean run(DocletEnvironment denv) {
     boolean dump_class_tree = false;
 
-    this.denv = denv;
     postprocessOptions();
     docTrees = denv.getDocTrees();
     cmap = new TreeMap<>();
