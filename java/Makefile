@@ -680,11 +680,18 @@ endif
 ### Code quality (static checks of the code)
 ###
 
+DOCLET_FLAGS :=
+DOCLET_SUFFIX :=
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
 ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
   JAVA8 := 1
 else
   JAVA8 := 0
+  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
+  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 11),1)
+	DOCLET_FLAGS := --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+	DOCLET_SUFFIX := 11
+  endif
 endif
 
 # See version numbers at https://github.com/google/error-prone/releases
@@ -1124,10 +1131,10 @@ requireJavadoc: $(JAVA_FILES)
 	${JAVA} -jar $(wildcard ${DAIKONDIR}/java/lib/require-javadoc-*-all.jar) --exclude="dcomp-transfer" ${DAIKONDIR}/java
 
 
-../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet${DOCLET_SUFFIX}.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
 	tmpfile=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet${DOCLET_SUFFIX} ${DOCLET_FLAGS}\
 		--texinfo $tmpfile \
 		@javadoc-files.txt
 	mv -f $tmpfile $@
@@ -1136,10 +1143,10 @@ requireJavadoc: $(JAVA_FILES)
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
 # resulting in a duplicate class warning.
 
-../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet${DOCLET_SUFFIX}.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
 	tmpfile=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet${DOCLET_SUFFIX} ${DOCLET_FLAGS}\
 		--texinfo $tmpfile \
 		@javadoc-files.txt
 	perl -pi -e 's/&#64;cindex/\@cindex/g' $tmpfile
@@ -1149,7 +1156,13 @@ requireJavadoc: $(JAVA_FILES)
 daikon/config/InvariantDoclet.class: daikon/config/InvariantDoclet.java
 	${MAKE} compile
 
+daikon/config/InvariantDoclet11.class: daikon/config/InvariantDoclet11.java
+	${MAKE} compile
+
 daikon/config/ParameterDoclet.class: daikon/config/ParameterDoclet.java
+	${MAKE} compile
+
+daikon/config/ParameterDoclet11.class: daikon/config/ParameterDoclet11.java
 	${MAKE} compile
 
 daikon/config/HtmlToTexinfo.class: daikon/config/HtmlToTexinfo.java
