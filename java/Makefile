@@ -79,6 +79,8 @@ DOCLETPATH := $(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DA
 
 DOCLET_FLAGS :=
 DOCLET_SUFFIX :=
+JUNK := $(shell javac -version 2>&1)
+$(info JUNK = "$(JUNK)")
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
 ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
   JAVA8 := 1
@@ -112,6 +114,7 @@ JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-i
 endif
 
 JAVA_FILES_FOR_API := $(shell echo $(JAVA_FILES) | sed "s: :\n:g" | grep -v '^./jtb/' | grep -v '^./typequals/' | grep -v '/daikon/dcomp-')
+JAVA_FILES_FOR_JAVADOC := $(shell echo $(JAVA_FILES) | sed "s: ./daikon/dcomp-transfer/DCRuntime.java : :")
 
 # Copied from
 JAVA_FILES_FOR_STYLE = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name 'WeakHasherMap.java' -o -name 'WeakIdentityHashMap.java' -o -name '\.\#*' -o -path './jtb' -o -path './daikon/dcomp-transfer' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
@@ -1094,9 +1097,9 @@ javadoc: api
 # Don't run Javadoc on files that require the Checker Framework.
 # .PHONY means regenerate even if the file exists.
 .PHONY: javadoc-files.txt
-javadoc-files.txt: ${JAVA_FILES}
+javadoc-files.txt: ${JAVA_FILES_FOR_JAVADOC}
 	$(MAKE) ${AUTO_GENERATED_FILES}
-	@echo ${JAVA_FILES} > javadoc-files.txt
+	@echo ${JAVA_FILES_FOR_JAVADOC} > javadoc-files.txt
 
 ifeq ($(JAVA8), 1)
   ifneq ($(shell sed -n ';s/^NAME="\(.*\)"/\1/p;' /etc/os-release),Ubuntu)
