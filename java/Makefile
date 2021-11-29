@@ -82,10 +82,13 @@ DOCLET_SUFFIX :=
 JUNK := $(shell javac -version 2>&1)
 $(info JUNK = "$(JUNK)")
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
+$(info "$(JAVA_VERSION_STRING)")
 ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
   JAVA8 := 1
+  $(info JAVA8 := 1)
 else
   JAVA8 := 0
+  $(info JAVA8 := 0)
   JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
   ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 11),1)
 	DOCLET_FLAGS := --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED

@@ -87,6 +87,7 @@ public class InvariantDoclet11 implements Doclet {
   /** Map from a class name to its ClassInfo. */
   private Map<String, ClassInfo> cmap;
 
+  /** Compare TypeElements by their simple name. */
   static class sortBySimpleName implements Comparator<TypeElement> {
     @Override
     public int compare(TypeElement te1, TypeElement te2) {
@@ -106,6 +107,7 @@ public class InvariantDoclet11 implements Doclet {
     }
   }
 
+  /** Compare TypeElements by their binary name. */
   static class sortByBinaryName implements Comparator<TypeElement> {
     @Override
     public int compare(TypeElement te1, TypeElement te2) {
@@ -129,6 +131,7 @@ public class InvariantDoclet11 implements Doclet {
     }
   }
 
+  /** Compare TypeElements by their fully qualified name. */
   static class sortByQualifiedName implements Comparator<TypeElement> {
     @Override
     public int compare(TypeElement te1, TypeElement te2) {
@@ -148,6 +151,7 @@ public class InvariantDoclet11 implements Doclet {
     }
   }
 
+  /** Container for class information. */
   static final class ClassInfo {
     /** Javadoc class information. */
     final TypeElement classInfo;
