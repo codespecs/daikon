@@ -371,7 +371,7 @@ public class ParameterDoclet11 implements Doclet {
   public static String NO_DESCRIPTION = "(no description provided)";
   /** A value that indicates no default value was found. */
   public static String UNKNOWN_DEFAULT = "The default value is not known.";
-
+  /** A Pattern used to check for the end of a sentence. */
   public static Pattern endOfSentence;
 
   static {

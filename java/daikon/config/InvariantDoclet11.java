@@ -50,6 +50,7 @@ import org.plumelib.reflection.ReflectionPlume;
 })
 public class InvariantDoclet11 implements Doclet {
 
+  /** System line separator value. */
   private static final String lineSep = System.lineSeparator();
 
   /**
@@ -148,30 +149,60 @@ public class InvariantDoclet11 implements Doclet {
   }
 
   static final class ClassInfo {
+    /** Javadoc class information. */
     final TypeElement classInfo;
-    // null if top level class or parent is not included
-    // in list of classes passed to this doclet
+    /**
+     * Name of classInfo's superclass. Value is null if classInfo is a top level class or its parent
+     * is not included in list of classes passed to this doclet.
+     */
     String superClass;
+    /** Set of classInfo's derived classes. */
     final Set<TypeElement> derivedClasses;
 
+    /**
+     * Constructor for ClassInfo.
+     *
+     * @param classInfo initial value
+     * @param derivedClasses initial value
+     */
     public ClassInfo(TypeElement classInfo, Set<TypeElement> derivedClasses) {
       this.classInfo = classInfo;
       this.superClass = null;
       this.derivedClasses = derivedClasses;
     }
 
+    /**
+     * Setter for superClass.
+     *
+     * @param className new superClass value
+     */
     void setSuperClass(String className) {
       superClass = className;
     }
 
+    /**
+     * Getter for classInfo.
+     *
+     * @return classInfo
+     */
     TypeElement classInfo() {
       return classInfo;
     }
 
+    /**
+     * Getter for superClass.
+     *
+     * @return superClass
+     */
     String superClass() {
       return superClass;
     }
 
+    /**
+     * Getter for derivedClasses.
+     *
+     * @return derivedClasses
+     */
     Set<TypeElement> derivedClasses() {
       return derivedClasses;
     }

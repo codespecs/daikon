@@ -438,6 +438,7 @@ all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
 	$(MAKE) chicory
 	$(MAKE) dyncomp
 
+.PHONY: java_files.txt
 java_files.txt: ${JAVA_FILES}
 	@echo ${JAVA_FILES} > java_files.txt
 
@@ -1093,11 +1094,11 @@ javadoc: api
 # Don't run Javadoc on files that require the Checker Framework.
 # .PHONY means regenerate even if the file exists.
 .PHONY: javadoc-files.txt
-javadoc-files.txt:
+javadoc-files.txt: ${JAVA_FILES}
 	$(MAKE) ${AUTO_GENERATED_FILES}
-	find * \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -path 'daikon/dcomp-transfer' \) -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
+	@echo ${JAVA_FILES} > javadoc-files.txt
 
-ifeq ($(shell java -version 2>&1 | sed -n ';s/.* version "\(.*\)\.\(.*\)\..*"/\1.\2/p;'),1.8)
+ifeq ($(JAVA8), 1)
   ifneq ($(shell sed -n ';s/^NAME="\(.*\)"/\1/p;' /etc/os-release),Ubuntu)
     SKIP_JAVADOC=1
   endif
@@ -1146,11 +1147,10 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet${DOCLET_SUFFIX}.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	tmpfile=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
 	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet${DOCLET_SUFFIX} ${DOCLET_FLAGS}\
-		--texinfo $tmpfile \
+		--texinfo tmpfile \
 		@javadoc-files.txt
-	mv -f $tmpfile $@
+	mv -f tmpfile $@
 	@rm -f javadoc-files.txt
 
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
@@ -1158,12 +1158,11 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet${DOCLET_SUFFIX}.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	tmpfile=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
 	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet${DOCLET_SUFFIX} ${DOCLET_FLAGS}\
-		--texinfo $tmpfile \
+		--texinfo tmpfile \
 		@javadoc-files.txt
-	perl -pi -e 's/&#64;cindex/\@cindex/g' $tmpfile
-	mv -f $tmpfile $@
+	perl -pi -e 's/&#64;cindex/\@cindex/g' tmpfile
+	mv -f tmpfile $@
 	@rm -f javadoc-files.txt
 
 daikon/config/InvariantDoclet.class: daikon/config/InvariantDoclet.java
