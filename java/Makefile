@@ -111,6 +111,8 @@ else
 JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v 'Doclet.java' | ${SORT_DIRECTORY_ORDER})
 endif
 
+JAVA_FILES_FOR_API := $(shell echo $(JAVA_FILES) | sed "s: :\n:g" | grep -v '^./jtb/' | grep -v '^./typequals/' | grep -v '/daikon/dcomp-')
+
 # Copied from
 JAVA_FILES_FOR_STYLE = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name 'WeakHasherMap.java' -o -name 'WeakIdentityHashMap.java' -o -name '\.\#*' -o -path './jtb' -o -path './daikon/dcomp-transfer' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 # Other find commands should perhaps use the recursive grep form instead
@@ -1079,10 +1081,12 @@ JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
 JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
                 -docletpath "${DOCLETPATH}"
 
+# DAIKON_PACKAGES is no longer used as it includes both Java 8 and Java 11 doclet files.
+# It has been replace by JAVA_FILES_FOR_API.
 # Daikon packages except for util (which is just a copy of plume), plume,
 # and dummy packages such as daikon.dcomp-dummy and daikon.dcomp-transfer.
-DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' | egrep -v 'dcomp-' \
-				   | sed s./.. | sed s/^/daikon./ | tr '\n' ':')
+#DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' | egrep -v 'dcomp-' \
+#				   | sed s./.. | sed s/^/daikon./ | tr '\n' ':')
 
 javadoc: api
 
@@ -1109,7 +1113,7 @@ ifeq ($(SKIP_JAVADOC),1)
 else
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all \
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all ${DOCLET_FLAGS} \
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
@@ -1123,15 +1127,15 @@ endif
 api-test-each: ../utils/plume-scripts ../utils/html-tools
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
+	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) ${DOCLET_FLAGS} $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
 	@rm -f javadoc-files.txt
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	mkdir -p $(JAVADOC_DEST)
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all \
-	  daikon -subpackages $(DAIKON_PACKAGES)
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all ${DOCLET_FLAGS} \
+	  $(JAVA_FILES_FOR_API)
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 
 ## Test that Javadoc exists.

@@ -53,6 +53,7 @@ public class ParameterDoclet11 implements Doclet {
   /** Used to report errors. */
   private Reporter reporter;
 
+  /** A data structure for the document categories. */
   protected DocCategory[] categories;
 
   ///////////////////////////////////////////////////////////////////////////
@@ -226,6 +227,7 @@ public class ParameterDoclet11 implements Doclet {
     }
   }
 
+  /** Initialize the categories data structure. */
   public void initDocCategories() {
     categories =
         new DocCategory[] {
@@ -349,6 +351,8 @@ public class ParameterDoclet11 implements Doclet {
   /**
    * Call Process(String, String, String) for each configuration field found. Intended to be
    * overridden.
+   *
+   * @param field the javadoc element for a member field.
    */
   public void processField(Element field) {
     String name = field.getSimpleName().toString();
@@ -363,15 +367,24 @@ public class ParameterDoclet11 implements Doclet {
     }
   }
 
+  /** A value that indicates no description was found. */
   public static String NO_DESCRIPTION = "(no description provided)";
+  /** A value that indicates no default value was found. */
   public static String UNKNOWN_DEFAULT = "The default value is not known.";
+
   public static Pattern endOfSentence;
 
   static {
     endOfSentence = Pattern.compile("[.?!>](\\))?$");
   }
 
-  /** Add (name, desc) pair to the map field 'fields' for the appropriate category. */
+  /**
+   * Add (name, desc) pair to the map field 'fields' for the appropriate category.
+   *
+   * @param fullname the fully-qualified name of a Daikon configuration variable (no "dkconfig_")
+   * @param name the simple name of the variable (starts with "dkconfig_")
+   * @param desc the javadoc comment for this variable
+   */
   public void process(String fullname, String name, String desc) {
     // System.out.printf("%s - %s%n", fullname, name);
 
@@ -390,6 +403,12 @@ public class ParameterDoclet11 implements Doclet {
     }
   }
 
+  /**
+   * Get the default value of a field as a string.
+   *
+   * @param field the field to inspect
+   * @return the default value
+   */
   private String getDefaultString(String field) {
     try {
       int i = field.lastIndexOf('.');
@@ -410,6 +429,11 @@ public class ParameterDoclet11 implements Doclet {
     }
   }
 
+  /**
+   * Output the parameter info in textinfo format.
+   *
+   * @param out where to write the data
+   */
   public void writeTexInfo(PrintWriter out) {
     out.println("@c BEGIN AUTO-GENERATED CONFIG OPTIONS LISTING");
     out.println();
@@ -465,6 +489,11 @@ public class ParameterDoclet11 implements Doclet {
     out.println();
   }
 
+  /**
+   * Output the parameter info in text format.
+   *
+   * @param out where to write the data
+   */
   public void writeText(PrintWriter out) {
     for (int c = 0; c < categories.length; c++) {
       out.println(categories[c].description);
