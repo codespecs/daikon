@@ -48,7 +48,7 @@ import org.plumelib.reflection.ReflectionPlume;
   "nullness", // need help with this
   "keyfor" // need help with this
 })
-public class InvariantDoclet11 implements Doclet {
+public class InvariantDoclet implements Doclet {
 
   /** System line separator value. */
   private static final String lineSep = System.lineSeparator();

@@ -36,7 +36,7 @@ import org.plumelib.util.FilesPlume;
  * manual for an introduction to the configuration system.
  */
 @SuppressWarnings("nullness") // need help with this
-public class ParameterDoclet11 implements Doclet {
+public class ParameterDoclet implements Doclet {
 
   /** A value that indicates a method completed successfully. */
   private static final boolean OK = true;
