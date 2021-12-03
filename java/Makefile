@@ -77,6 +77,17 @@ endif
 # -docletpath doesn't seem to respect path wildcards as -cp does
 DOCLETPATH := $(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):${DAIKON_CLASSPATH}:${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
+DOCLET_FLAGS :=
+JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
+ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
+  JAVA8 := 1
+else
+  JAVA8 := 0
+  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
+  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 11),1)
+	DOCLET_FLAGS := --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+  endif
+endif
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
@@ -306,6 +317,8 @@ AUTO_GENERATED_FILES = \
 	daikon/derive/unary/SequenceInitialFloat.java \
 	daikon/derive/unary/SequenceInitialFactory.java \
 	daikon/derive/unary/SequenceInitialFactoryFloat.java \
+	daikon/config/InvariantDoclet.java \
+	daikon/config/ParameterDoclet.java \
 
 # These files were auto-generated previously; they still might exist in
 # some user's directory.
@@ -417,6 +430,7 @@ all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
 	$(MAKE) chicory
 	$(MAKE) dyncomp
 
+.PHONY: java_files.txt
 java_files.txt: ${JAVA_FILES}
 	@echo ${JAVA_FILES} > java_files.txt
 
@@ -680,13 +694,6 @@ endif
 ### Code quality (static checks of the code)
 ###
 
-JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
-ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
-  JAVA8 := 1
-else
-  JAVA8 := 0
-endif
-
 # See version numbers at https://github.com/google/error-prone/releases
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.7.1-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-shaded-3.11.0.jar:${DAIKONDIR}/java/lib/error-prone/javacutil-3.1.1.jar:${DAIKONDIR}/java/lib/error-prone/jFormatString-3.0.0.jar:${DAIKONDIR}/java/lib/error-prone/caffeine-2.8.4.jar:${DAIKONDIR}/java/lib/error-prone/diffutils-1.3.0.jar:${DAIKONDIR}/java/lib/error-prone/threeten-extra-1.5.0.jar
 
@@ -699,6 +706,8 @@ ifeq ($(JAVA8), 1)
 else
 ## MutablePublicArray is off because Error Prone 2.4.0 crashes: https://github.com/google/error-prone/issues/1645
 	javac -cp ${DAIKON_CLASSPATH} \
+	  --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
+	  --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF' \
 	  -Xmaxwarns 100000 -Werror \
@@ -708,6 +717,8 @@ endif
 # Create an `error-prone.patch` file.
 errorprone-replacements:
 	javac -cp ${DAIKON_CLASSPATH} \
+	  --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
+	  --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -XepPatchChecks:UnnecessaryParentheses,ArrayToString -XepPatchLocation:${DAIKONDIR}/java' \
 	  -Xmaxwarns 100000 ${JAVA_FILES_FOR_STYLE}
@@ -1077,7 +1088,7 @@ javadoc-files.txt:
 	$(MAKE) ${AUTO_GENERATED_FILES}
 	find * \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -path 'daikon/dcomp-transfer' \) -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
 
-ifeq ($(shell java -version 2>&1 | sed -n ';s/.* version "\(.*\)\.\(.*\)\..*"/\1.\2/p;'),1.8)
+ifeq ($(JAVA8), 1)
   ifneq ($(shell sed -n ';s/^NAME="\(.*\)"/\1/p;' /etc/os-release),Ubuntu)
     SKIP_JAVADOC=1
   endif
@@ -1093,7 +1104,7 @@ ifeq ($(SKIP_JAVADOC),1)
 else
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all \
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all ${DOCLET_FLAGS} \
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
@@ -1107,14 +1118,14 @@ endif
 api-test-each: ../utils/plume-scripts ../utils/html-tools
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
+	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) ${DOCLET_FLAGS} $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
 	@rm -f javadoc-files.txt
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	mkdir -p $(JAVADOC_DEST)
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all \
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all ${DOCLET_FLAGS} \
 	  daikon -subpackages $(DAIKON_PACKAGES)
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 
@@ -1126,11 +1137,10 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	tmpfile=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet \
-		--texinfo $tmpfile \
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS}\
+		--texinfo tmpfile \
 		@javadoc-files.txt
-	mv -f $tmpfile $@
+	mv -f tmpfile $@
 	@rm -f javadoc-files.txt
 
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
@@ -1138,12 +1148,11 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	tmpfile=$(mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir')
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet \
-		--texinfo $tmpfile \
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS}\
+		--texinfo tmpfile \
 		@javadoc-files.txt
-	perl -pi -e 's/&#64;cindex/\@cindex/g' $tmpfile
-	mv -f $tmpfile $@
+	perl -pi -e 's/&#64;cindex/\@cindex/g' tmpfile
+	mv -f tmpfile $@
 	@rm -f javadoc-files.txt
 
 daikon/config/InvariantDoclet.class: daikon/config/InvariantDoclet.java
@@ -1185,6 +1194,7 @@ showvars:
 	@echo DAIKONSCRIPTS = ${DAIKONSCRIPTS}
 	@echo PLUMESCRIPTS = ${PLUMESCRIPTS}
 
+	@echo DAIKON_PACKAGES = $(DAIKON_PACKAGES)
 	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
 	@echo JAVA_FILES = $(JAVA_FILES)
 	@echo JAVA_FILES_FOR_STYLE = $(JAVA_FILES_FOR_STYLE)
@@ -1864,6 +1874,22 @@ daikon/derive/unary/SequenceInitialFactory.java: daikon/derive/unary/SequenceIni
 
 daikon/derive/unary/SequenceInitialFactoryFloat.java: daikon/derive/unary/SequenceInitialFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
+
+# .PHONY means regenerate even if the file exists.
+.PHONY: daikon/config/InvariantDoclet.java daikon/config/ParameterDoclet.java
+daikon/config/InvariantDoclet.java:
+ifeq ($(JAVA8), 1)
+	cp -pf daikon/config/InvariantDoclet.java8 daikon/config/InvariantDoclet.java
+else
+	cp -pf daikon/config/InvariantDoclet.java11 daikon/config/InvariantDoclet.java
+endif
+
+daikon/config/ParameterDoclet.java:
+ifeq ($(JAVA8), 1)
+	cp -pf daikon/config/ParameterDoclet.java8 daikon/config/ParameterDoclet.java
+else
+	cp -pf daikon/config/ParameterDoclet.java11 daikon/config/ParameterDoclet.java
+endif
 
 
 ###########################################################################

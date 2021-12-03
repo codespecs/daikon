@@ -105,10 +105,12 @@ public class InvariantDoclet {
         if (!cmap.containsKey(super_c)) {
           // System.out.println ("NO SUPER: " + cd + " s: " + super_c);
         } else {
-          // System.out.println ("   SUPER: " + cd + "s: " + super_c);
+          // System.out.println ("   SUPER: " + cd + " s: " + super_c);
           Set<@KeyFor("cmap") ClassDoc> derived = cmap.get(super_c);
           derived.add(cd);
         }
+      } else {
+        // System.out.println ("NO SUPER: " + cd + " s: null");
       }
     }
 

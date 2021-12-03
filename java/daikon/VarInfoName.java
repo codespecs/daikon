@@ -66,7 +66,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    * When true, apply orig directly to variables, do not apply orig to derived variables. For
    * example, create 'size(orig(a[]))' rather than 'orig(size(a[]))'.
    */
-  static boolean dkconfig_direct_orig = false;
+  public static boolean dkconfig_direct_orig = false;
 
   /**
    * Given the standard String representation of a variable name (like what appears in the normal
