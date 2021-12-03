@@ -427,7 +427,7 @@ public final class DCRuntime implements ComparabilityProvider {
           }
 
           // Should never reach top of class heirarchy without finding a clone() method.
-          assert (!target_class.getName().equals("java.lang.Object"));
+          assert !target_class.getName().equals("java.lang.Object");
 
           // We didn't find a clone method, get next higher super and try again.
           target_class = target_class.getSuperclass();
@@ -501,7 +501,7 @@ public final class DCRuntime implements ComparabilityProvider {
           }
 
           // Should never reach top of class heirarchy without finding a clone() method.
-          assert (!target_class.getName().equals("java.lang.Object"));
+          assert !target_class.getName().equals("java.lang.Object");
 
           // We didn't find a clone method, get next higher super and try again.
           target_class = active_clone_calls.get(orig_obj).getSuperclass();
@@ -2751,7 +2751,7 @@ public final class DCRuntime implements ComparabilityProvider {
   @Pure
   public static boolean is_class_initialized(Class<?> clazz) {
     debug_primitive.log("is_class_initialized%n");
-    return (initialized_eclassses.contains(clazz.getName()));
+    return initialized_eclassses.contains(clazz.getName());
   }
 
   /** Returns the name of the method that called the caller of caller_name(). */
@@ -2764,7 +2764,7 @@ public final class DCRuntime implements ComparabilityProvider {
     if (ste.getClassName().equals("java.lang.DCRuntime")) {
       ste = ste_arr[3];
     }
-    return (ste.getClassName() + "." + ste.getMethodName());
+    return ste.getClassName() + "." + ste.getMethodName();
   }
 
   /**
@@ -2954,7 +2954,7 @@ public final class DCRuntime implements ComparabilityProvider {
       }
 
       try {
-        return (field.get(null));
+        return field.get(null);
       } catch (Exception e) {
         throw new RuntimeException("Can't get val for static field " + field, e);
       }

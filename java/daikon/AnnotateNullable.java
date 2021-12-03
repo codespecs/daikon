@@ -341,7 +341,7 @@ public class AnnotateNullable {
 
     for (VarInfo vi : ppt.var_infos) {
 
-      assert (!vi.isPrestate()) : vi;
+      assert !vi.isPrestate() : vi;
 
       // Skip anyone with a parent in the hierarchy.  We are only
       // interested in them at the top (e.g., we don't want to see

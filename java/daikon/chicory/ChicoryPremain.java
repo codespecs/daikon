@@ -398,11 +398,11 @@ public class ChicoryPremain {
         //                    url2.getProtocol(), url1.getClass());
         String jar1 = extract_jar_path(url1);
         String jar2 = extract_jar_path(url2);
-        return (jar1.equals(jar2));
+        return jar1.equals(jar2);
       } else if (url1.getProtocol().equals("file")) {
         String loc1 = url1.getFile().replaceFirst("org\\.apache\\.bcel\\..*$", "");
         String loc2 = url2.getFile().replaceFirst("org\\.apache\\.bcel\\..*$", "");
-        return (loc1.equals(loc2));
+        return loc1.equals(loc2);
       } else {
         throw new Error("unexpected protocol " + url1.getProtocol());
       }

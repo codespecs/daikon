@@ -260,7 +260,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
       } else if ((sclvar.derived instanceof SequenceMin)
                  || (sclvar.derived instanceof SequenceMax)) {
         Pair<DiscardCode, String> di = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
-        return (di != null);
+        return di != null;
       }
     }
 

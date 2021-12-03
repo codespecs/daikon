@@ -1,5 +1,7 @@
 package daikon.split;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -183,13 +185,14 @@ public final class FileCompiler {
     boolean timedOut = executor.isFailure(exitValue) && watchdog.killedProcess();
 
     try {
-      compile_errors = errStream.toString();
+      compile_errors = compile_errors = errStream.toString(UTF_8);
+      ;
     } catch (RuntimeException e) {
       throw new Error("Exception getting process error output", e);
     }
 
     try {
-      compile_output = outStream.toString();
+      compile_output = outStream.toString(UTF_8);
     } catch (RuntimeException e) {
       throw new Error("Exception getting process standard output", e);
     }

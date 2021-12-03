@@ -600,11 +600,11 @@ public class Chicory {
    * @return elapsed time since the start of the program
    */
   public static String elapsed() {
-    return ("[" + (System.currentTimeMillis() - start) + " msec]");
+    return "[" + (System.currentTimeMillis() - start) + " msec]";
   }
 
   public static long elapsed_msecs() {
-    return (System.currentTimeMillis() - start);
+    return System.currentTimeMillis() - start;
   }
 
   /** Convert a list of arguments into a command-line string. Only used for debugging output. */
@@ -616,6 +616,6 @@ public class Chicory {
       }
       str += arg + " ";
     }
-    return (str.trim());
+    return str.trim();
   }
 }

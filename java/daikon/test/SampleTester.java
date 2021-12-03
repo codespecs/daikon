@@ -142,7 +142,7 @@ public class SampleTester {
     if (input_file_location == null) {
       return null;
     } else {
-      return (input_file_location.toExternalForm());
+      return input_file_location.toExternalForm();
     }
   }
 

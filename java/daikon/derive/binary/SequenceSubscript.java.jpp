@@ -100,7 +100,7 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
     } else if (index_shift > 0) {
       shift = "+" + index_shift;
     }
-    return (seqvar().name().replace("[]", "") + "[" + sclvar().name() + shift + "]");
+    return seqvar().name().replace("[]", "") + "[" + sclvar().name() + shift + "]";
   }
 
   @Override

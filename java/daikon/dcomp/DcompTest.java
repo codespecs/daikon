@@ -500,6 +500,6 @@ class DcompTest {
   }
 
   public static int java_check(int i1, int i2) {
-    return (Math.max(i1, i2));
+    return Math.max(i1, i2);
   }
 }

@@ -156,7 +156,7 @@ public class NISuppressor {
     if (v2_index == -1) {
       int new_index = 0;
       if (v1_index == 0) new_index = 1;
-      return (new NISuppressor(new_index, inv_class));
+      return new NISuppressor(new_index, inv_class);
     }
     assert v3_index == -1;
 
@@ -173,7 +173,7 @@ public class NISuppressor {
    */
   @Pure
   public boolean is_enabled() {
-    return (sample_inv.enabled());
+    return sample_inv.enabled();
   }
 
   /**
@@ -403,9 +403,9 @@ public class NISuppressor {
    */
   public boolean match_true(Invariant inv) {
     if (NIS.antecedent_method) {
-      return (match(inv) && !inv.is_false());
+      return match(inv) && !inv.is_false();
     } else {
-      return (match(inv));
+      return match(inv);
     }
   }
 
@@ -423,7 +423,7 @@ public class NISuppressor {
       }
       if (!swap_class) {
         BinaryInvariant binv = (BinaryInvariant) inv;
-        return (binv.is_symmetric() || (swap == binv.get_swap()));
+        return binv.is_symmetric() || (swap == binv.get_swap());
       }
       return true;
     }
@@ -515,19 +515,17 @@ public class NISuppressor {
     }
 
     if (v2_index == -1) {
-      return (String.format("%s(%s) [%s]", cname, varname[v1_index], status));
+      return String.format("%s(%s) [%s]", cname, varname[v1_index], status);
     } else if (v3_index == -1) {
       if (swap && !swap_class) {
-        return (String.format(
-            "%s(%s,%s) [%s]", cname, varname[v2_index], varname[v1_index], status));
+        return String.format("%s(%s,%s) [%s]", cname, varname[v2_index], varname[v1_index], status);
       } else {
-        return (String.format(
-            "%s(%s,%s) [%s]", cname, varname[v1_index], varname[v2_index], status));
+        return String.format("%s(%s,%s) [%s]", cname, varname[v1_index], varname[v2_index], status);
       }
     } else {
-      return (String.format(
+      return String.format(
           "%s(%s,%s,%s) [%s]",
-          cname, varname[v1_index], varname[v2_index], varname[v3_index], status));
+          cname, varname[v1_index], varname[v2_index], varname[v3_index], status);
     }
   }
 }

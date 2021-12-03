@@ -455,7 +455,7 @@ public class ExtractConsequent {
   private static boolean contains_exactly_one(String string, Pattern pattern) {
     Matcher m = pattern.matcher(string);
     // return true if first call returns true and second returns false
-    return (m.find() && !m.find());
+    return m.find() && !m.find();
   }
 
   static Pattern orig_pattern, dot_class_pattern, non_word_pattern;

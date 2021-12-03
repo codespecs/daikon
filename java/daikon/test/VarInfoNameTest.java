@@ -77,7 +77,7 @@ public class VarInfoNameTest {
 
     // put output into actual
     List<String> _actual = new ArrayList<>();
-    StringTokenizer tok = new StringTokenizer(out.toString(), lineSep);
+    StringTokenizer tok = new StringTokenizer(out.toString(UTF_8), lineSep);
     while (tok.hasMoreTokens()) {
       _actual.add(tok.nextToken());
     }

@@ -346,7 +346,7 @@ public class DaikonSimple {
   public static boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
 
     // Vars must be compatible
-    return (v1.compatible(v2) && v1.compatible(v3) && v2.compatible(v3));
+    return v1.compatible(v2) && v1.compatible(v3) && v2.compatible(v3);
   }
 
   /**

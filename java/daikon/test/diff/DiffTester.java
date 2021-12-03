@@ -1,5 +1,6 @@
 package daikon.test.diff;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 
 import daikon.*;
@@ -537,7 +538,7 @@ public class DiffTester {
     PrintStream ps = new PrintStream(baos);
     PrintAllVisitor v = new PrintAllVisitor(ps, false, true);
     root.accept(v);
-    return baos.toString();
+    return baos.toString(UTF_8);
   }
 
   ///////////////////////////////////////////////////////////////////////////

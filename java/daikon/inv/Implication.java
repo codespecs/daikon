@@ -230,8 +230,8 @@ public class Implication extends Joiner {
     // created, but somehow that creates other implications.  See the
     // disabled code in PptSplitter.add_implication()
     if (orig_right.is_ni_suppressed()) {
-      return (new DiscardInfo(
-          this, DiscardCode.obvious, "consequent " + orig_right.format() + " is ni suppressed"));
+      return new DiscardInfo(
+          this, DiscardCode.obvious, "consequent " + orig_right.format() + " is ni suppressed");
     }
 
     return orig_right.isObviousDynamically_SomeInEquality();
@@ -246,7 +246,7 @@ public class Implication extends Joiner {
   @Override
   public boolean isSameFormula(@NonNull Invariant other) {
     Implication other_implic = (Implication) other;
-    return ((iff == other_implic.iff) && super.isSameFormula(other_implic));
+    return (iff == other_implic.iff) && super.isSameFormula(other_implic);
   }
 
   @EnsuresNonNullIf(result = true, expression = "#1")

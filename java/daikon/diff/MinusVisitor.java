@@ -45,7 +45,7 @@ public class MinusVisitor extends DepthFirstVisitor {
    */
   @EnsuresNonNullIf(result = true, expression = "#1")
   private static boolean shouldAdd(@Nullable Invariant inv1, @Nullable Invariant inv2) {
-    return ((inv1 != null) && (inv2 == null));
+    return (inv1 != null) && (inv2 == null);
   }
 
   /** Returns the InvMap generated as a result of the traversal. */

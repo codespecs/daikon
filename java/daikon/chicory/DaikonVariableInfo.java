@@ -328,7 +328,7 @@ public abstract class DaikonVariableInfo
             + obj.getClass().getName();
 
     // use wrapper classes toString methods to print value
-    return (obj.toString());
+    return obj.toString();
   }
 
   /** Gets a string representation of the values in an array. */
@@ -1000,7 +1000,7 @@ public abstract class DaikonVariableInfo
 
     // The field must be in an unrelated class, it must be marked
     // public to be visible
-    return (Modifier.isPublic(modifiers));
+    return Modifier.isPublic(modifiers);
   }
 
   // Appends as auxiliary information:
@@ -1247,7 +1247,7 @@ public abstract class DaikonVariableInfo
   public static boolean systemClass(Class<?> type) {
     String class_name = type.getName();
     // System.out.printf("type name is %s%n", class_name);
-    return (class_name.startsWith("java.") || class_name.startsWith("javax."));
+    return class_name.startsWith("java.") || class_name.startsWith("javax.");
   }
 
   /**

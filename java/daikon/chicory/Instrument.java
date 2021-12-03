@@ -259,7 +259,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         // System.out.println ("About to dump class " + className +
         //                     " to " + filename);
         // njc.dump(filename);
-        return (njc.getBytes());
+        return njc.getBytes();
       } else {
         // No changes to the bytecodes
         return null;
@@ -469,7 +469,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           // Create a MethodInfo that describes this methods arguments
           // and exit line numbers (information not available via reflection)
           // and add it to the list for this class.
-          MethodInfo mi = (create_method_info(class_info, mg));
+          MethodInfo mi = create_method_info(class_info, mg);
 
           print_stack_map_table("After create_method_info");
 
@@ -665,9 +665,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     // If a type was specified and the variable was found, they must match
     if (return_local == null) {
-      assert (return_type != null) : " return__$trace2_val doesn't exist";
+      assert return_type != null : " return__$trace2_val doesn't exist";
     } else {
-      assert (return_type.equals(return_local.getType()))
+      assert return_type.equals(return_local.getType())
           : " return_type = " + return_type + "current type = " + return_local.getType();
     }
 

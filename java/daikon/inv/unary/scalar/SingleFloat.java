@@ -27,7 +27,7 @@ public abstract class SingleFloat extends UnaryInvariant {
   /** Returns whether or not the specified types are valid for unary float. */
   @Override
   public final boolean valid_types(VarInfo[] vis) {
-    return ((vis.length == 1) && vis[0].file_rep_type.isFloat());
+    return (vis.length == 1) && vis[0].file_rep_type.isFloat();
   }
 
   public VarInfo var(@GuardSatisfied @UnknownInitialization(SingleFloat.class) SingleFloat this) {
