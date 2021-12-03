@@ -595,14 +595,19 @@ public class Chicory {
   }
 
   /**
-   * Returns elapsed time since the start of the program.
+   * Returns string representation of elapsed time since the start of the program.
    *
-   * @return elapsed time since the start of the program
+   * @return string representation of elapsed time since the start of the program
    */
   public static String elapsed() {
     return "[" + (System.currentTimeMillis() - start) + " msec]";
   }
 
+  /**
+   * Returns number of milliseconds since the start of the program.
+   *
+   * @return number of milliseconds since the start of the program
+   */
   public static long elapsed_msecs() {
     return System.currentTimeMillis() - start;
   }

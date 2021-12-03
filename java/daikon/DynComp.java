@@ -417,6 +417,11 @@ public class DynComp {
     return "[" + (System.currentTimeMillis() - start) + " msec]";
   }
 
+  /**
+   * Returns number of milliseconds since the start of the program.
+   *
+   * @return number of milliseconds since the start of the program
+   */
   public static long elapsed_msecs() {
     return System.currentTimeMillis() - start;
   }

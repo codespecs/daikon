@@ -45,7 +45,11 @@ else
   # The `grep -v` prevents the make target failure from throwing off prefix guessing.
   (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" > "/tmp/$USER/ap-warnings.txt") || true
   "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/ap-warnings.txt" || status=1
-  (make -C java requireJavadoc 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadoc' failed" > "/tmp/$USER/rj-warnings.txt") || true
-  "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt" || status=1
+  # For refactorings that touch a lot of code that you don't understand, create
+  # top-level file SKIP-REQUIRE-JAVADOC.  Delete it after the pull request is merged.
+  if [ ! -f SKIP-REQUIRE-JAVADOC ]; then
+    (make -C java requireJavadoc 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadoc' failed" > "/tmp/$USER/rj-warnings.txt") || true
+    "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt" || status=1
+  fi
   exit $status
 fi

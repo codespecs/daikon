@@ -1122,8 +1122,11 @@ api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 ## Test that Javadoc exists.
 ## You should regenerate api/ after running this.
 requireJavadoc: $(JAVA_FILES)
-	${JAVA} -jar $(wildcard ${DAIKONDIR}/java/lib/require-javadoc-*-all.jar) --exclude="dcomp-transfer" ${DAIKONDIR}/java
-
+# For refactorings that touch a lot of code that you don't understand, create
+# top-level file SKIP-REQUIRE-JAVADOC.  Delete it after the pull request is merged.
+	if [ ! -f SKIP-REQUIRE-JAVADOC ]; then \
+	  ${JAVA} -jar $(wildcard ${DAIKONDIR}/java/lib/require-javadoc-*-all.jar) --exclude="dcomp-transfer" ${DAIKONDIR}/java \
+	fi
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
