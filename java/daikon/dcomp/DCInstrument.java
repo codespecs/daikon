@@ -574,10 +574,12 @@ public class DCInstrument extends InstructionListUtils {
         // the original method to our instrumented method as the signature will
         // not match anything in the JVM's list.  This won't cause an execution
         // problem but will produce a massive number of warnings.
+        // JDK 11: @HotSpotIntrinsicCandidate
+        // JDK 17: @IntrinsicCandidate
         AnnotationEntryGen[] aes = mg.getAnnotationEntries();
         for (AnnotationEntryGen item : aes) {
           String type = item.getTypeName();
-          if (type.endsWith("HotSpotIntrinsicCandidate;")) {
+          if (type.endsWith("IntrinsicCandidate;")) {
             mg.removeAnnotationEntry(item);
           }
         }
@@ -812,10 +814,12 @@ public class DCInstrument extends InstructionListUtils {
         // the original method to our instrumented method as the signature will
         // not match anything in the JVM's list.  This won't cause an execution
         // problem but will produce a massive number of warnings.
+        // JDK 11: @HotSpotIntrinsicCandidate
+        // JDK 17: @IntrinsicCandidate
         AnnotationEntryGen[] aes = mg.getAnnotationEntries();
         for (AnnotationEntryGen item : aes) {
           String type = item.getTypeName();
-          if (type.endsWith("HotSpotIntrinsicCandidate;")) {
+          if (type.endsWith("IntrinsicCandidate;")) {
             mg.removeAnnotationEntry(item);
           }
         }

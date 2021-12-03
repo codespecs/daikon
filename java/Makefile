@@ -520,10 +520,8 @@ dyncomp-update-goals dcomp-update-goals:
 # Rules to build the instrumented JDK for DynComp/Java
 #
 DCOMP_RT	:= dcomp-rt
-#DCOMP_JDK	:= /tmp/$(USER)/dcomp-j2sdk-1.5
-J2SDK15		:= /usr/lib/j2sdk1.5-sun
 dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
-dcomp_rt.jar : dcomp_premain.jar
+$(DCOMP_RT) dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	$(INSTALL) -d $(DCOMP_RT)
 	$(JAVA_COMMAND) -Xmx3600m daikon.dcomp.BuildJDK $(DCOMP_RT)
