@@ -537,7 +537,9 @@ public class DiffTester {
     PrintStream ps = new PrintStream(baos);
     PrintAllVisitor v = new PrintAllVisitor(ps, false, true);
     root.accept(v);
-    return baos.toString();
+    @SuppressWarnings("DefaultCharset") // toString(Charset) was introduced in Java 10
+    String result = baos.toString();
+    return result;
   }
 
   ///////////////////////////////////////////////////////////////////////////

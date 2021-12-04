@@ -74,7 +74,7 @@ public class PptMap implements Serializable {
 
   /** Returns all of the program points in the map. */
   public Collection<PptTopLevel> all_ppts() {
-    return (nameToPpt.values());
+    return nameToPpt.values();
   }
 
   /**
@@ -186,7 +186,7 @@ public class PptMap implements Serializable {
       @Override
       public PptTopLevel next(/*! >>>@GuardSatisfied Iterator<PptTopLevel> this*/ ) {
         if ((cond_iterator != null) && cond_iterator.hasNext()) {
-          return (cond_iterator.next());
+          return cond_iterator.next();
         }
         iter_view.next(); // to check for concurrent modifications
         PptTopLevel ppt = iter_sort.next();

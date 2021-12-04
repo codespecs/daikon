@@ -86,7 +86,7 @@ public abstract class Ppt implements Serializable {
   /** Return a string representation of the variable names. */
   @SideEffectFree
   public String varNames(@GuardSatisfied @UnknownInitialization(Ppt.class) Ppt this) {
-    return (varNames(var_infos));
+    return varNames(var_infos);
   }
 
   /**

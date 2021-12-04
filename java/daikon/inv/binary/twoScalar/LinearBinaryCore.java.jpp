@@ -134,7 +134,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    */
   @Pure
   public boolean isActive() {
-    return (values_seen >= MINPAIRS);
+    return values_seen >= MINPAIRS;
   }
 
   /**
@@ -446,7 +446,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   }
 
   public boolean enoughSamples(@GuardSatisfied CLASSNAME this) {
-    return (values_seen >= MINPAIRS);
+    return values_seen >= MINPAIRS;
   }
 
   public double computeConfidence() {
@@ -669,6 +669,6 @@ public final class CLASSNAME implements Serializable, Cloneable {
       return false;
     }
 
-      return ((-a / b == -other.a / other.b) && (-c / b != -other.c / other.b));
+      return (-a / b == -other.a / other.b) && (-c / b != -other.c / other.b);
   }
 }

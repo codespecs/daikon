@@ -188,7 +188,7 @@ public class Instrument implements ClassFileTransformer {
           // write .bcel file
           BcelUtil.dump(njc, debug_bin_dir);
         }
-        return (njc.getBytes());
+        return njc.getBytes();
       }
     } catch (Throwable e) {
       System.err.printf("Unexpected Error: %s%n", e);

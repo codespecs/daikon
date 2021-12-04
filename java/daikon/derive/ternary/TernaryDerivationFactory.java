@@ -62,6 +62,6 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
    * @return true if vi1 and vi2 are comparable; false otherwise
    */
   public static boolean checkComparability(VarInfo vi1, VarInfo vi2) {
-    return (vi1.indexCompatible(vi2));
+    return vi1.indexCompatible(vi2);
   }
 }

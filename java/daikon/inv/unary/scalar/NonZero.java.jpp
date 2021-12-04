@@ -197,7 +197,7 @@ public class NONZERO extends SINGLESCALAR {
   /** Returns whether or not the variable is a pointer. */
   @Pure
   private boolean is_pointer(@GuardSatisfied NONZERO this) {
-    return (ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE);
+    return ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE;
   }
 
   @Override

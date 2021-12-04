@@ -440,13 +440,13 @@ public class DtraceDiff {
         long v2 = ((Long) val2).longValue();
         return !(((v1 == 0) || (v2 == 0)) && (v1 != v2));
       } else if (type.isScalar()) {
-        return (((Long) val1).longValue() == ((Long) val2).longValue());
+        return ((Long) val1).longValue() == ((Long) val2).longValue();
       } else if (type.isFloat()) {
         double d1 = ((Double) val1).doubleValue();
         double d2 = ((Double) val2).doubleValue();
-        return ((Double.isNaN(d1) && Double.isNaN(d2)) || Global.fuzzy.eq(d1, d2));
+        return (Double.isNaN(d1) && Double.isNaN(d2)) || Global.fuzzy.eq(d1, d2);
       } else if (type.isString()) {
-        return (((String) val1).equals((String) val2));
+        return ((String) val1).equals((String) val2);
       }
     }
     throw new Error("Unexpected value type found"); // should never happen

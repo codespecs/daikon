@@ -241,8 +241,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
   public String format_using(@GuardSatisfied CLASSNAME this, OutputFormat format) {
 
     if (ppt == null) {
-      return (String.format("proto ppt [class %s] format %s", getClass(),
-                             get_format_str(format)));
+      return String.format("proto ppt [class %s] format %s", getClass(),
+                           get_format_str(format));
     }
     String fmt_str = get_format_str(format);
 
@@ -570,7 +570,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // If we can find a size variable for each side build the invariant
     if ((v1_size != null) && (v2_size != null)) {
-      return (new InvDef(v1_size, v2_size, IntEqual.class));
+      return new InvDef(v1_size, v2_size, IntEqual.class);
     }
 
     // If either variable is not derived, there is no possible invariant
@@ -587,7 +587,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // the variables
     if (v1_ss.from_start && v2_ss.from_start
         && (v1_ss.index_shift == v2_ss.index_shift)) {
-      return (new InvDef(v1_ss.sclvar(), v2_ss.sclvar(), IntEqual.class));
+      return new InvDef(v1_ss.sclvar(), v2_ss.sclvar(), IntEqual.class);
     }
 
     return null;
@@ -603,11 +603,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
     assert v.rep_type.isArray();
 
     if (v.derived == null) {
-      return (v.sequenceSize());
+      return v.sequenceSize();
     } else if (v.derived instanceof SEQ_SUBSEQUENCE) {
       SEQ_SUBSEQUENCE ss = (SEQ_SUBSEQUENCE) v.derived;
       if (ss.from_start && (ss.index_shift == -1)) {
-        return (ss.sclvar());
+        return ss.sclvar();
       }
     }
 
@@ -629,7 +629,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * then the invariant is obvious.
    */
   public InvDef[][] obvious_checks(VarInfo[] vis) {
-    return (new InvDef[][] {});
+    return new InvDef[][] {};
   }
 
   public static List<@Prototype Invariant> get_proto_all() {
@@ -1033,7 +1033,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
       if (x == 0) {
-        return (y == 0);
+        return y == 0;
       } else {
         return true;
       }
@@ -1136,7 +1136,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Check to see if x == ~y . */
     @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
-      return (EQUALS(x, ~y));
+      return EQUALS(x, ~y);
     }
   }
 
@@ -1206,7 +1206,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
-      return (EQUALS(x, (y | x)));
+      return EQUALS(x, (y | x));
     }
 
     #if defined(SEQ)
@@ -1322,7 +1322,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
-      return ((x & y) == 0);
+      return (x & y) == 0;
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
@@ -1417,7 +1417,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if ((y < 0) || (y > 63)) {
         throw new ArithmeticException("shift op (" + y + ") is out of range");
       }
-      return ((x >> y) == 0);
+      return (x >> y) == 0;
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
@@ -1516,7 +1516,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     @Override
     public boolean eq_check(PRIMITIVE x, PRIMITIVE y) {
-      return (y.contains(x));
+      return y.contains(x);
     }
 
     /** Justified as long as there are samples. */

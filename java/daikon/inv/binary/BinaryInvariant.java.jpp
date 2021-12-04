@@ -96,6 +96,7 @@ import typequals.prototype.qual.Prototype;
  * less than and greater than) rather than argument swapping should override resurrect_done_swapped
  * to return the correct class.
  */
+@SuppressWarnings("UnnecessaryParentheses")
 public abstract class CLASSNAME extends BinaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -127,7 +128,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
       boolean dim_ok = vis[0].file_rep_type.isArray() && vis[1].file_rep_type.isArray();
     #endif
 
-    return (dim_ok && vis[0].file_rep_type.BASE_IS_TYPE && vis[1].file_rep_type.BASE_IS_TYPE);
+    return dim_ok && vis[0].file_rep_type.BASE_IS_TYPE && vis[1].file_rep_type.BASE_IS_TYPE;
   }
 
   /** Returns whether or not the variable order is currently swapped for this invariant. */
@@ -275,7 +276,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   /** Default implementation simply calls check. Subclasses can override. */
   public InvariantStatus add_modified(PRIMITIVE v1, PRIMITIVE v2, int count) {
-    return (check_modified(v1, v2, count));
+    return check_modified(v1, v2, count);
   }
 
   /** By default, do nothing if the value hasn't been seen yet. Subclasses can override this. */
@@ -298,7 +299,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
   @Override
   public boolean isSameFormula(Invariant other) {
     CLASSNAME inv = (CLASSNAME) other;
-    return ((this.getClass() == inv.getClass()) && (this.swap == inv.swap));
+    return (this.getClass() == inv.getClass()) && (this.swap == inv.swap);
   }
 
   @Override

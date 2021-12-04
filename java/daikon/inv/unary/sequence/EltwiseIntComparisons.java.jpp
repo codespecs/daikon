@@ -260,7 +260,7 @@ public class CLASSNAME extends SUPERCLASS {
 #if defined(EQUAL) || defined(FLOATEQUAL)
     return var().name() + " elements are equal";
 #else
-    return (var().name() + " sorted by " + COMPARATORSTRING);
+    return var().name() + " sorted by " + COMPARATORSTRING;
 #endif
   }
 
@@ -409,7 +409,7 @@ public class CLASSNAME extends SUPERCLASS {
   @Override
   public boolean hasSeenNonSingletonSample() {
     VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();
-    return (vs.nonsingleton_arr_cnt() > 0);
+    return vs.nonsingleton_arr_cnt() > 0;
   }
 
   @Pure

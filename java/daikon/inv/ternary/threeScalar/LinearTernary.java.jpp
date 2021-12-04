@@ -434,7 +434,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   @Override
   public boolean mergeFormulasOk() {
-    return (core.mergeFormulasOk());
+    return core.mergeFormulasOk();
   }
 
   /**

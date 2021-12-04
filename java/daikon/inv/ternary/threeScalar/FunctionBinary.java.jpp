@@ -410,7 +410,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     assert fb_arr != null;
     for (int ii = 0; ii < fb_arr.length; ii++) {
       if ((fb_arr[ii] != null) && (fb_arr[ii].get_var_order() == var_order)) {
-        return (fb_arr[ii].instantiate_dyn(ppt));
+        return fb_arr[ii].instantiate_dyn(ppt);
       }
     }
 

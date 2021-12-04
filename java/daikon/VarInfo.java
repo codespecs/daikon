@@ -131,7 +131,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     if (FileIO.new_decl_format) {
       return str_name;
     } else {
-      return (var_info_name.name().intern()); // vin ok
+      return var_info_name.name().intern(); // vin ok
     }
   }
 
@@ -1804,7 +1804,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // varj_shift + ", " + (test_lessequal?"<=":">=") + ")");
     if (vari == varj) {
       // same variable
-      return (test_lessequal ? (vari_shift <= varj_shift) : (vari_shift >= varj_shift));
+      return test_lessequal ? (vari_shift <= varj_shift) : (vari_shift >= varj_shift);
     }
     // different variables
     boolean samePpt = (vari.ppt == varj.ppt);
@@ -2581,7 +2581,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       // (Then what is the type of the visitor; what does everything return?)
       private List<VarInfo> addVarInfo(List<VarInfo> result, VarInfo vi) {
         assert vi != null;
-        assert (!vi.isDerived() || vi.isDerived()) : "addVar on derived variable: " + vi;
+        assert !vi.isDerived() || vi.isDerived() : "addVar on derived variable: " + vi;
         // Don't guard primitives
         if ( // TODO: ***** make changes here *****
         // vi.file_rep_type.isScalar() &&
@@ -2711,7 +2711,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // build the name of the object ppt based on the variable type
     String type_str = type.base().replaceFirst("\\$", ".");
     PptName objname = new PptName(type_str, null, FileIO.object_suffix);
-    return (all_ppts.get(objname));
+    return all_ppts.get(objname);
   }
 
   /**
@@ -2748,19 +2748,19 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       }
 
       Pair o = (Pair) obj;
-      return ((o.v1 == v1) && (o.v2 == v2));
+      return (o.v1 == v1) && (o.v2 == v2);
     }
 
     @Pure
     @Override
     public int hashCode(@GuardSatisfied Pair this) {
-      return (v1.hashCode() + v2.hashCode());
+      return v1.hashCode() + v2.hashCode();
     }
 
     @SideEffectFree
     @Override
     public String toString(@GuardSatisfied Pair this) {
-      return (v1.name() + " = " + v2.name());
+      return v1.name() + " = " + v2.name();
     }
   }
 
@@ -2990,7 +2990,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * Temporary to let things compile now that name is private. Eventually this should be removed.
    */
   public VarInfoName get_VarInfoName() {
-    return (var_info_name); // vin ok
+    return var_info_name; // vin ok
   }
 
   private static boolean isStatic(String variable, String enclosing) {
@@ -3213,7 +3213,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       return var_info_name.esc_name(); // vin ok
     }
 
-    return (esc_name(null));
+    return esc_name(null);
   }
 
   /**
@@ -3283,7 +3283,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       return var_info_name.jml_name(this); // vin ok
     }
 
-    return (jml_name(null));
+    return jml_name(null);
   }
 
   /**
@@ -3892,7 +3892,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   @Pure
   public boolean is_this() {
     return name().equals("this");
-    // return (get_VarInfoName().equals (VarInfoName.THIS));
+    // return get_VarInfoName().equals(VarInfoName.THIS);
   }
 
   /**
@@ -3982,7 +3982,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     VarInfoName.Field name1 = (VarInfoName.Field) var_info_name;
     VarInfoName.Field name2 = (VarInfoName.Field) other.var_info_name;
 
-    return (name1.term.equals(name2.term));
+    return name1.term.equals(name2.term);
   }
 
   /**
@@ -4351,12 +4351,12 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     if ((derived == null) && (vi.derived == null)) {
 
       // true if vi is the prestate version of this
-      return (!isPrestate() && vi.isPrestate() && name().equals(vi.postState.name()));
+      return !isPrestate() && vi.isPrestate() && name().equals(vi.postState.name());
 
       // else if both variables are derived
     } else if ((derived != null) && (vi.derived != null)) {
 
-      return (derived.is_prestate_version(vi.derived));
+      return derived.is_prestate_version(vi.derived);
 
       // one is derived and the other isn't
     } else {

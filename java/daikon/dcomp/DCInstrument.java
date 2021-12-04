@@ -659,7 +659,7 @@ public class DCInstrument extends InstructionListUtils {
     }
     Instrument.debug_transform.log("Instrumentation complete: %s%n", classname);
 
-    return (gen.getJavaClass().copy());
+    return gen.getJavaClass().copy();
   }
 
   /**
@@ -846,7 +846,7 @@ public class DCInstrument extends InstructionListUtils {
     Instrument.debug_transform.exdent();
     Instrument.debug_transform.log("Instrumentation complete: %s%n", classname);
 
-    return (gen.getJavaClass().copy());
+    return gen.getJavaClass().copy();
   }
 
   /**
@@ -1311,9 +1311,9 @@ public class DCInstrument extends InstructionListUtils {
         // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
         // return a boolean which is used in a ifeq/ifne instruction
       case Const.IF_ACMPEQ:
-        return (object_comparison((BranchInstruction) inst, "object_eq", Const.IFNE));
+        return object_comparison((BranchInstruction) inst, "object_eq", Const.IFNE);
       case Const.IF_ACMPNE:
-        return (object_comparison((BranchInstruction) inst, "object_ne", Const.IFNE));
+        return object_comparison((BranchInstruction) inst, "object_ne", Const.IFNE);
 
         // These instructions compare the integer on the top of the stack
         // to zero.  Nothing is made comparable by this, so we need only
@@ -2422,7 +2422,7 @@ public class DCInstrument extends InstructionListUtils {
     if (return_local == null) {
       assert (return_type != null) : " return__$trace2_val doesn't exist";
     } else {
-      assert (return_type.equals(return_local.getType()))
+      assert return_type.equals(return_local.getType())
           : " return_type = " + return_type + "current type = " + return_local.getType();
     }
 
@@ -3122,7 +3122,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   @Pure
   boolean is_primitive(Type type) {
-    return ((type instanceof BasicType) && (type != Type.VOID));
+    return (type instanceof BasicType) && (type != Type.VOID);
   }
 
   /**
@@ -3133,7 +3133,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   @Pure
   boolean is_category2(Type type) {
-    return ((type == Type.DOUBLE) || (type == Type.LONG));
+    return (type == Type.DOUBLE) || (type == Type.LONG);
   }
 
   /**
@@ -3219,7 +3219,7 @@ public class DCInstrument extends InstructionListUtils {
           e);
     }
 
-    return (Modifier.isNative(modifiers));
+    return Modifier.isNative(modifiers);
   }
 
   /**

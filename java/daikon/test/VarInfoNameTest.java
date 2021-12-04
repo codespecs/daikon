@@ -77,6 +77,7 @@ public class VarInfoNameTest {
 
     // put output into actual
     List<String> _actual = new ArrayList<>();
+    @SuppressWarnings("DefaultCharset") // toString(Charset) was introduced in Java 10
     StringTokenizer tok = new StringTokenizer(out.toString(), lineSep);
     while (tok.hasMoreTokens()) {
       _actual.add(tok.nextToken());

@@ -449,10 +449,10 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
       #endif
     #elif defined (IS_STRING)
       #if defined (EQUALSTRING) || defined (NONEQUALSTRING)
-        boolean result = (!(vis[0].has_typeof() ^ vis[1].has_typeof()));
+        boolean result = !(vis[0].has_typeof() ^ vis[1].has_typeof());
         return result;
       #else
-        boolean result = (!(vis[0].has_typeof() || vis[1].has_typeof()));
+        boolean result = !(vis[0].has_typeof() || vis[1].has_typeof());
         // System.out.printf(INTEQUALstring + ".instantiate_ok(");
         // for (VarInfo vi : vis) {
         //   System.out.printf("%s ", vi.name());
@@ -812,7 +812,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 #if defined(EQUAL_OP)
   @Override
   public boolean enoughSamples(@GuardSatisfied INTEQUAL this) {
-    return (ppt.num_samples() > 0);
+    return ppt.num_samples() > 0;
   }
 
   // For Comparison interface, which is satisfied only by exact equalities.

@@ -307,7 +307,7 @@ public class SpinfoFile {
    */
   @Pure
   private static boolean isComment(String line) {
-    return (line.trim().startsWith("#"));
+    return line.trim().startsWith("#");
   }
 
   /**
@@ -316,6 +316,6 @@ public class SpinfoFile {
    */
   @Pure
   private static boolean isFormatting(String line) {
-    return (line.startsWith("\t") || line.startsWith(" "));
+    return line.startsWith("\t") || line.startsWith(" ");
   }
 }

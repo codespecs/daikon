@@ -364,20 +364,20 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #if defined(SCALAR)
   @Pure
   public boolean is_boolean(@GuardSatisfied ONEOFSCALAR this) {
-     return (var().file_rep_type == ProglangType.BOOLEAN);
+     return var().file_rep_type == ProglangType.BOOLEAN;
   }
   @Pure
   public boolean is_hashcode(@GuardSatisfied ONEOFSCALAR this) {
-    return (var().file_rep_type == ProglangType.HASHCODE);
+    return var().file_rep_type == ProglangType.HASHCODE;
   }
 #else
   @Pure
   public boolean is_boolean(@GuardSatisfied ONEOFSCALAR this) {
-    return (var().file_rep_type.elementType() == ProglangType.BOOLEAN);
+    return var().file_rep_type.elementType() == ProglangType.BOOLEAN;
   }
   @Pure
   public boolean is_hashcode(@GuardSatisfied ONEOFSCALAR this) {
-    return (var().file_rep_type.elementType() == ProglangType.HASHCODE);
+    return var().file_rep_type.elementType() == ProglangType.HASHCODE;
   }
 #endif
 
@@ -2016,7 +2016,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
   @Pure
   @Override
   public boolean isExact() {
-    return (num_elts == 1);
+    return num_elts == 1;
   }
 
   // Look up a previously instantiated invariant.
@@ -2163,7 +2163,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       return val;
     }
     dummy_hashcode_vals.put(hashcode, next_dummy_hashcode);
-    return (next_dummy_hashcode++);
+    return next_dummy_hashcode++;
   }
 #endif
 }
