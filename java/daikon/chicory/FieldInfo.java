@@ -124,7 +124,7 @@ public class FieldInfo extends DaikonVariableInfo {
   }
 
   public Class<?> getType() {
-    return (field.getType());
+    return field.getType();
   }
 
   public int get_field_num() {

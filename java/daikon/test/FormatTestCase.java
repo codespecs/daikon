@@ -1050,7 +1050,7 @@ class FormatTestCase {
       Method get_proto = theClass.getMethod("get_proto", arg_types);
       @Prototype Invariant proto = (@Prototype Invariant) get_proto.invoke(null, arg_vals);
 
-      return (proto.instantiate(slice));
+      return proto.instantiate(slice);
     } catch (Exception e) {
       e.printStackTrace(System.out);
       throw new RuntimeException(

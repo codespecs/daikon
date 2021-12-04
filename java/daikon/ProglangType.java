@@ -626,7 +626,7 @@ public final @Interned class ProglangType implements Serializable {
 
   @Pure
   public boolean isPrimitive() {
-    return ((dimensions == 0) && baseIsPrimitive());
+    return (dimensions == 0) && baseIsPrimitive();
   }
 
   // Does not include boolean.  Is that intentional?  (If it were added,
@@ -643,20 +643,20 @@ public final @Interned class ProglangType implements Serializable {
 
   @Pure
   public boolean isIntegral() {
-    return ((dimensions == 0) && baseIsIntegral());
+    return (dimensions == 0) && baseIsIntegral();
   }
 
   // More efficient than elementType().isIntegral()
   public boolean elementIsIntegral() {
-    return ((dimensions == 1) && baseIsIntegral());
+    return (dimensions == 1) && baseIsIntegral();
   }
 
   public boolean elementIsFloat() {
-    return ((dimensions == 1) && baseIsFloat());
+    return (dimensions == 1) && baseIsFloat();
   }
 
   public boolean elementIsString() {
-    return ((dimensions == 1) && baseIsString());
+    return (dimensions == 1) && baseIsString();
   }
 
   // Return true if this variable is sensible as an array index.
@@ -669,24 +669,24 @@ public final @Interned class ProglangType implements Serializable {
   public boolean isScalar() {
     // For reptypes, checking against INT is sufficient, rather than
     // calling isIntegral().
-    return (isIntegral() || (this == HASHCODE) || (this == BOOLEAN));
+    return isIntegral() || (this == HASHCODE) || (this == BOOLEAN);
   }
 
   public boolean baseIsScalar() {
-    return (baseIsIntegral() || (base == BASE_BOOLEAN) || (base == BASE_HASHCODE));
+    return baseIsIntegral() || (base == BASE_BOOLEAN) || (base == BASE_HASHCODE);
   }
 
   public boolean baseIsBoolean() {
-    return (base == BASE_BOOLEAN);
+    return base == BASE_BOOLEAN;
   }
 
   public boolean baseIsFloat() {
-    return ((base == BASE_DOUBLE) || (base == BASE_FLOAT));
+    return (base == BASE_DOUBLE) || (base == BASE_FLOAT);
   }
 
   @Pure
   public boolean isFloat() {
-    return ((dimensions == 0) && baseIsFloat());
+    return (dimensions == 0) && baseIsFloat();
   }
 
   /**
@@ -696,7 +696,7 @@ public final @Interned class ProglangType implements Serializable {
    */
   @Pure
   public boolean isObject() {
-    return ((dimensions == 0) && baseIsObject());
+    return (dimensions == 0) && baseIsObject();
   }
 
   /**
@@ -706,16 +706,16 @@ public final @Interned class ProglangType implements Serializable {
    * @return true if the base is Object
    */
   public boolean baseIsObject() {
-    return (!baseIsIntegral() && !baseIsFloat() && !(base == BASE_BOOLEAN));
+    return !baseIsIntegral() && !baseIsFloat() && !(base == BASE_BOOLEAN);
   }
 
   public boolean baseIsString() {
-    return (base == BASE_STRING);
+    return base == BASE_STRING;
   }
 
   @Pure
   public boolean isString() {
-    return ((dimensions == 0) && baseIsString());
+    return (dimensions == 0) && baseIsString();
   }
 
   public boolean baseIsHashcode() {
@@ -724,13 +724,13 @@ public final @Interned class ProglangType implements Serializable {
 
   @Pure
   public boolean isHashcode() {
-    return ((dimensions == 0) && baseIsHashcode());
+    return (dimensions == 0) && baseIsHashcode();
   }
 
   /** Does this type represent a pointer? Should only be applied to file_rep types. */
   @Pure
   public boolean isPointerFileRep() {
-    return (base == BASE_HASHCODE);
+    return base == BASE_HASHCODE;
   }
 
   /**

@@ -143,7 +143,6 @@ public class ClassInfo {
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied ClassInfo this) {
-    return (String.format(
-        "ClassInfo %s [%s] %s", System.identityHashCode(this), class_name, clazz));
+    return String.format("ClassInfo %s [%s] %s", System.identityHashCode(this), class_name, clazz);
   }
 }

@@ -162,13 +162,13 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
       }
     #endif
 
-    return (FUNC(arg1, arg2));
+    return FUNC(arg1, arg2);
   }
 
   @Override
   public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y,
                                       PRIMITIVE z, int count) {
-    return (check_ordered(resultvar, arg1, arg2, count));
+    return check_ordered(resultvar, arg1, arg2, count);
   }
 
   @Override
@@ -177,7 +177,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     if (Debug.logDetail()) {
       log("result=%s, arg1=%s, arg2=%s", resultvar, arg1, arg2);
     }
-    return (add_ordered(resultvar, arg1, arg2, count));
+    return add_ordered(resultvar, arg1, arg2, count);
   }
 
   @Pure

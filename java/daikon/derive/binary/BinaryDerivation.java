@@ -97,7 +97,7 @@ public abstract class BinaryDerivation extends Derivation {
   @Pure
   @Override
   protected boolean isParam() {
-    return (base1.isParam() || base2.isParam());
+    return base1.isParam() || base2.isParam();
   }
 
   @Override

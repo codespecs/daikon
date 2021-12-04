@@ -119,7 +119,7 @@ public final class CLASSNAME extends SUPERCLASS {
   /** Returns whether or not the variable is a pointer. */
   @Pure
   private boolean is_pointer(@GuardSatisfied CLASSNAME this) {
-    return (!ppt.var_infos[0].type.BASEISTYPE);
+    return !ppt.var_infos[0].type.BASEISTYPE;
   }
 
   @Override
@@ -238,7 +238,7 @@ public final class CLASSNAME extends SUPERCLASS {
     //  log ("max=" + vs.max() + " array=" + Arrays.toString (a));
     // }
 
-    return (check_modified(a, count));
+    return check_modified(a, count);
   }
 
   @Override

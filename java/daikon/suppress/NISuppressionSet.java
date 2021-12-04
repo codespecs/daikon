@@ -352,7 +352,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    */
   public boolean suppressed(PptSlice slice) {
 
-    return (suppressed(slice.parent, slice.var_infos));
+    return suppressed(slice.parent, slice.var_infos);
   }
 
   /**
@@ -413,7 +413,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   @Pure
   public boolean is_instantiate_ok(PptSlice slice) {
 
-    return (is_instantiate_ok(slice.parent, slice.var_infos));
+    return is_instantiate_ok(slice.parent, slice.var_infos);
   }
 
   /**

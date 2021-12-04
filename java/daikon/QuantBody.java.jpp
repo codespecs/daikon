@@ -229,7 +229,7 @@ The correct way to build the system is to run 'make'.
 #else
 
   private static boolean eq(_TYPE x, _TYPE y) {
-    return (x == y);
+    return x == y;
   }
 
   private static boolean ne(_TYPE x, _TYPE y) {

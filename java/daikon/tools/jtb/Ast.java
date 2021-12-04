@@ -182,7 +182,7 @@ public class Ast {
   ///
 
   public static boolean isAccessModifier(String s) {
-    return (s.equals("public") || s.equals("protected") || s.equals("private"));
+    return s.equals("public") || s.equals("protected") || s.equals("private");
   }
 
   // f4 -> VariableDeclaratorId()
@@ -1326,7 +1326,7 @@ public class Ast {
   public static boolean isInAnonymousClass(Node node) {
     ClassOrInterfaceBody clsbody =
         (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, node);
-    return (!(clsbody.getParent() instanceof ClassOrInterfaceDeclaration));
+    return !(clsbody.getParent() instanceof ClassOrInterfaceDeclaration);
   }
 
   public static boolean isInterface(ClassOrInterfaceBody n) {

@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -397,7 +398,8 @@ public class InvariantAddAndCheckTester {
       Class<? extends Invariant> classToTest = asInvClass(getClass(className));
 
       try {
-        classToTest.getField("dkconfig_enabled"); // Enable if needs to be done
+        @SuppressWarnings("UnusedVariable")
+        Field ignore = classToTest.getField("dkconfig_enabled"); // Enable if needs to be done
         InvariantAddAndCheckTester.config.apply(className + ".enabled", "true");
       } catch (NoSuchFieldException e) { // Otherwise do nothing
       }

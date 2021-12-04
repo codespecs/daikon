@@ -880,7 +880,7 @@ public class NIS {
   @RequiresNonNull("NIS.suppressor_map")
   @Pure
   public static boolean is_suppressor(Class<? extends Invariant> cls) {
-    return (suppressor_map.containsKey(cls));
+    return suppressor_map.containsKey(cls);
   }
 
   /** Dump out the suppressor map. */
@@ -985,7 +985,7 @@ public class NIS {
       assert ss != null
           : "@AssumeAssertion(nullness):  dependent:  this invariant's class can be suppressed, so"
               + " ss != null";
-      return (ss.suppressed(ppt, vis));
+      return ss.suppressed(ppt, vis);
     }
 
     /** Instantiate this invariant on the specified ppt. */

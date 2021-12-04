@@ -101,7 +101,7 @@ public class CLASSNAME extends SUPERCLASS {
       return false;
     }
 
-    return (dkconfig_hashcode_seqs || vis[0].file_rep_type.BASE_IS_INTEGRAL);
+    return dkconfig_hashcode_seqs || vis[0].file_rep_type.BASE_IS_INTEGRAL;
   }
 
   /** instantiate an invariant on the specified slice */
@@ -151,7 +151,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   public String format_daikon(@GuardSatisfied CLASSNAME this) {
-    return (printIntersect() + " subset of " + var().name());
+    return printIntersect() + " subset of " + var().name();
   }
 
   public String format_csharp_contract(@GuardSatisfied CLASSNAME this) {

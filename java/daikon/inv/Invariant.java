@@ -694,7 +694,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @return the permuted invariant
    */
   public @NonPrototype Invariant permute(@NonPrototype Invariant this, int[] permutation) {
-    return (resurrect_done(permutation));
+    return resurrect_done(permutation);
   }
 
   /**
@@ -1686,13 +1686,13 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       }
 
       Match ic = (Match) obj;
-      return (ic.inv.match(inv));
+      return ic.inv.match(inv);
     }
 
     @Pure
     @Override
     public int hashCode(@GuardSatisfied Match this) {
-      return (inv.getClass().hashCode());
+      return inv.getClass().hashCode();
     }
   }
 
@@ -1706,7 +1706,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   public boolean match(@Prototype Invariant inv) {
 
     if (inv.getClass() == getClass()) {
-      return (inv.mergeFormulasOk() || isSameFormula(inv));
+      return inv.mergeFormulasOk() || isSameFormula(inv);
     } else {
       return false;
     }
@@ -1956,14 +1956,14 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
       VarInfo v = ppt.var_infos[0];
       UnaryInvariant unary_inv = (UnaryInvariant) this;
-      return (unary_inv.add(vt.getValue(v), vt.getModified(v), count));
+      return unary_inv.add(vt.getValue(v), vt.getModified(v), count);
 
     } else if (ppt instanceof PptSlice2) {
 
       VarInfo v1 = ppt.var_infos[0];
       VarInfo v2 = ppt.var_infos[1];
       BinaryInvariant bin_inv = (BinaryInvariant) this;
-      return (bin_inv.add_unordered(vt.getValue(v1), vt.getValue(v2), vt.getModified(v1), count));
+      return bin_inv.add_unordered(vt.getValue(v1), vt.getValue(v2), vt.getModified(v1), count);
 
     } else /* must be ternary */ {
 
@@ -1973,8 +1973,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       assert (this instanceof TernaryInvariant)
           : "invariant '" + format() + "' in slice " + ppt.name() + " is not ternary";
       TernaryInvariant ternary_inv = (TernaryInvariant) this;
-      return (ternary_inv.add(
-          vt.getValue(v1), vt.getValue(v2), vt.getValue(v3), vt.getModified(v1), count));
+      return ternary_inv.add(
+          vt.getValue(v1), vt.getValue(v2), vt.getValue(v3), vt.getModified(v1), count);
     }
   }
 
@@ -2012,7 +2012,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @see daikon.Debug#logOn()
    */
   public static boolean logDetail() {
-    return (Debug.logDetail());
+    return Debug.logDetail();
   }
 
   /**
@@ -2021,7 +2021,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @see daikon.Debug#logOn()
    */
   public static boolean logOn() {
-    return (Debug.logOn());
+    return Debug.logOn();
   }
 
   // Using `@link` leads to javadoc -Xdoclint:all crashing with:
@@ -2061,7 +2061,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     if (ppt != null) {
       String msg = format;
       if (args.length > 0) msg = String.format(format, args);
-      return (Debug.log(getClass(), ppt, msg));
+      return Debug.log(getClass(), ppt, msg);
     } else {
       return false;
     }

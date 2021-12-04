@@ -118,7 +118,7 @@ public class NISuppressee {
   public @Nullable Invariant instantiate(VarInfo[] vis, PptTopLevel ppt) {
 
     PptSlice slice = ppt.get_or_instantiate_slice(vis);
-    return (instantiate(slice));
+    return instantiate(slice);
   }
 
   //   /**
@@ -250,7 +250,7 @@ public class NISuppressee {
     if (binv.is_symmetric()) {
       return false;
     }
-    return (binv.get_swap());
+    return binv.get_swap();
   }
 
   /**
@@ -261,9 +261,9 @@ public class NISuppressee {
     BinaryInvariant binv = (BinaryInvariant) sample_inv;
     if (binv != null) assert !binv.is_symmetric();
     if ((binv == null) || binv.get_swap()) {
-      return (new NISuppressee(sup_class, false));
+      return new NISuppressee(sup_class, false);
     } else {
-      return (new NISuppressee(sup_class, true));
+      return new NISuppressee(sup_class, true);
     }
   }
 

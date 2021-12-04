@@ -25,7 +25,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  *
  * <pre>daikon.Quant.eltsGTE(a, 1)</pre>
  *
- * <h3>Naming</h3>
+ * <h2>Naming</h2>
  *
  * The library methods have names of the following forms, where OP indicates an operation: Equal,
  * NotEqual, GT (greater than), GTE (greater than or equal to), LT, LTE.
@@ -42,12 +42,12 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  *     a[0] OP 0, a[1] OP 1, etc.
  * </ul>
  *
- * <h3>Equality semantics</h3>
+ * <h2>Equality semantics</h2>
  *
  * <p>Whenever a method involves comparing two elements for equality, this is always "==" equality
  * (even for Objects and Strings).
  *
- * <h3>No exceptions thrown</h3>
+ * <h2>No exceptions thrown</h2>
  *
  * <p>The library strives not to throw exceptions, even if illegal arguments are passed to the
  * routines. This has two consequences.

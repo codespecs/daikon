@@ -52,7 +52,7 @@ public final class PptConditional extends PptTopLevel {
   }
 
   private static VarInfo[] ctor_vis_helper(PptTopLevel parent) {
-    return (VarInfo.arrayclone_simple(parent.var_infos));
+    return VarInfo.arrayclone_simple(parent.var_infos);
   }
 
   // This is tested after constructing a PptConditional but before

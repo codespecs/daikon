@@ -164,7 +164,7 @@ public class InvariantFilters {
 
     //  Property filters.
     invariant.log("Processing %s Prop filters", propertyFilters.size());
-    return (shouldKeepPropFilters(invariant));
+    return shouldKeepPropFilters(invariant);
   }
 
   public Iterator<InvariantFilter> getPropertyFiltersIterator() {

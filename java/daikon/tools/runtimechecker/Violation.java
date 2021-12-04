@@ -197,7 +197,7 @@ public class Violation implements Serializable {
       return false;
     }
     Violation other = (Violation) o;
-    return (this.property.equals(other.property) && this.time.equals(other.time));
+    return this.property.equals(other.property) && this.time.equals(other.time);
   }
 
   @Pure
