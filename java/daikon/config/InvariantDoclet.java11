@@ -3,7 +3,6 @@ package daikon.config;
 import com.sun.source.doctree.DocCommentTree;
 import com.sun.source.doctree.DocTree;
 import com.sun.source.util.DocTrees;
-import com.sun.tools.javac.code.Symbol.ClassSymbol;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
@@ -19,6 +18,7 @@ import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.element.NestingKind;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
@@ -87,6 +87,24 @@ public class InvariantDoclet implements Doclet {
   /** Map from a class name to its ClassInfo. */
   private Map<String, ClassInfo> cmap;
 
+  /**
+   * This method mimics the JDK 8 com.sun.javadoc.Doc.name() method. It returned a 'non-qualified
+   * name' which differs from JDK 11+ javax.lang.model.element.TypeElement.getSimpleName() for a
+   * nested class. name() would return 'Outer$Inner' while getSimpleName() returns 'Inner'. Note
+   * that this version returns 'Outer.Inner'.
+   *
+   * @param te a class TypeElement
+   * @return the class's 'partially' qualified name
+   */
+  public static String getBinaryName(TypeElement te) {
+    String qualifiedName = te.getQualifiedName().toString();
+    int i2 = qualifiedName.lastIndexOf('.');
+    if (te.getNestingKind() == NestingKind.MEMBER) {
+      i2 = qualifiedName.substring(0, i2).lastIndexOf('.');
+    }
+    return qualifiedName.substring(i2 + 1);
+  }
+
   /** Compare TypeElements by their simple name. */
   static class sortBySimpleName implements Comparator<TypeElement> {
     @Override
@@ -120,14 +138,7 @@ public class InvariantDoclet implements Doclet {
       if (te2 == null) {
         return 1;
       }
-      String binaryName1 = ((ClassSymbol) te1).flatName().toString();
-      int i1 = binaryName1.lastIndexOf('.');
-      String binaryName2 = ((ClassSymbol) te2).flatName().toString();
-      int i2 = binaryName2.lastIndexOf('.');
-      return binaryName1
-          .substring(i1 + 1)
-          .toLowerCase()
-          .compareTo(binaryName2.substring(i2 + 1).toLowerCase());
+      return getBinaryName(te1).toLowerCase().compareTo(getBinaryName(te2).toLowerCase());
     }
   }
 
@@ -384,9 +395,7 @@ public class InvariantDoclet implements Doclet {
       // System.out.println(dc.getQualifiedName() + ": COMMENT: " + comment);
       comment = HtmlToTexinfo.javadocHtmlToTexinfo(comment);
 
-      String binaryName = ((ClassSymbol) dc).flatName().toString();
-      int i2 = binaryName.lastIndexOf('.');
-      String name = binaryName.substring(i2 + 1).replace('$', '.');
+      String name = getBinaryName(dc);
       if (name.startsWith("FunctionBinary")) {
         String[] parts = name.split("[._]");
         String fb_function = parts[1];
