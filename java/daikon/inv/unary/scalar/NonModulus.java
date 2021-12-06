@@ -68,7 +68,7 @@ public class NonModulus extends SingleScalar {
       return false;
     }
 
-    return (vis[0].file_rep_type.baseIsIntegral());
+    return vis[0].file_rep_type.baseIsIntegral();
   }
 
   /** Returns whether or not this invariant is enabled. */
@@ -211,7 +211,7 @@ public class NonModulus extends SingleScalar {
       return false;
     }
 
-    return ((modulus == this.modulus) && (remainder == this.remainder));
+    return (modulus == this.modulus) && (remainder == this.remainder);
   }
 
   @Pure
@@ -227,10 +227,10 @@ public class NonModulus extends SingleScalar {
       if (other.no_result_yet) {
         return false;
       }
-      return ((modulus == other.modulus) && (remainder != other.remainder));
+      return (modulus == other.modulus) && (remainder != other.remainder);
     } else if (o instanceof Modulus) {
       Modulus other = (Modulus) o;
-      return ((modulus == other.modulus) && (remainder == other.remainder));
+      return (modulus == other.modulus) && (remainder == other.remainder);
     }
 
     return false;

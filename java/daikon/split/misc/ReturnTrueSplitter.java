@@ -39,7 +39,7 @@ public final class ReturnTrueSplitter extends Splitter {
   @EnsuresNonNullIf(result = true, expression = "return_varinfo")
   @Override
   public boolean valid() {
-    return ((return_varinfo != null) && (return_varinfo.type == ProglangType.BOOLEAN));
+    return (return_varinfo != null) && (return_varinfo.type == ProglangType.BOOLEAN);
   }
 
   @SuppressWarnings(

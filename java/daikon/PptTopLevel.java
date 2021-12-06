@@ -688,7 +688,7 @@ public class PptTopLevel extends Ppt {
     //                    + "derivedDepth=" + vi.derivedDepth()
     //                    + ", isCanonical=" + vi.isCanonical()
     //                    + ", canBeMissing=" + vi.canBeMissing);
-    return ((vi.derivedDepth() < 2));
+    return (vi.derivedDepth() < 2);
 
     // Should add this (back) in:
     // && !vi.always_missing()
@@ -1325,7 +1325,7 @@ public class PptTopLevel extends Ppt {
   @EnsuresNonNullIf(result = true, expression = "constants")
   @Pure
   public boolean is_constant(VarInfo v) {
-    return ((constants != null) && constants.is_constant(v));
+    return (constants != null) && constants.is_constant(v);
   }
 
   /**
@@ -1336,7 +1336,7 @@ public class PptTopLevel extends Ppt {
   @EnsuresNonNullIf(result = true, expression = "constants")
   @Pure
   public boolean is_prev_constant(VarInfo v) {
-    return ((constants != null) && constants.is_prev_constant(v));
+    return (constants != null) && constants.is_prev_constant(v);
   }
 
   /** Returns whether or not the specified variable has been missing for all samples seen so far. */
@@ -1344,7 +1344,7 @@ public class PptTopLevel extends Ppt {
   @EnsuresNonNullIf(result = true, expression = "constants")
   @Pure
   public boolean is_missing(VarInfo v) {
-    return ((constants != null) && constants.is_missing(v));
+    return (constants != null) && constants.is_missing(v);
   }
 
   /**
@@ -1355,7 +1355,7 @@ public class PptTopLevel extends Ppt {
   @EnsuresNonNullIf(result = true, expression = "constants")
   @Pure
   public boolean is_prev_missing(VarInfo v) {
-    return ((constants != null) && constants.is_prev_missing(v));
+    return (constants != null) && constants.is_prev_missing(v);
   }
 
   /** Returns the number of true invariants at this ppt. */
@@ -1477,7 +1477,7 @@ public class PptTopLevel extends Ppt {
 
   /** Returns the number of slices at this ppt. */
   public int slice_cnt() {
-    return (views.size());
+    return views.size();
   }
 
   /** Create all the derived variables. */
@@ -1951,7 +1951,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // Look for the invariant
-    return (slice.is_inv_true(inv));
+    return slice.is_inv_true(inv);
   }
 
   /** Returns whether or not v1 is always non-zero. */
@@ -2045,7 +2045,7 @@ public class PptTopLevel extends Ppt {
     if (inv == null) {
       return false;
     }
-    return (slice.is_inv_true(inv));
+    return slice.is_inv_true(inv);
   }
 
   /**
@@ -2129,7 +2129,7 @@ public class PptTopLevel extends Ppt {
       inv = inv.permute(permute_swap);
     }
 
-    return (slice.is_inv_true(inv));
+    return slice.is_inv_true(inv);
   }
 
   /** Returns true if varr is empty. Supports ints, doubles, and strings. */
@@ -2177,7 +2177,7 @@ public class PptTopLevel extends Ppt {
       return false;
     }
 
-    return (slice.is_inv_true(inv));
+    return slice.is_inv_true(inv);
   }
 
   /**
@@ -2447,11 +2447,11 @@ public class PptTopLevel extends Ppt {
   @Pure
   public boolean is_slice_ok(VarInfo[] vis, int arity) {
     if (arity == 1) {
-      return (is_slice_ok(vis[0]));
+      return is_slice_ok(vis[0]);
     } else if (arity == 2) {
-      return (is_slice_ok(vis[0], vis[1]));
+      return is_slice_ok(vis[0], vis[1]);
     } else {
-      return (is_slice_ok(vis[0], vis[1], vis[2]));
+      return is_slice_ok(vis[0], vis[1], vis[2]);
     }
   }
 
@@ -3291,7 +3291,7 @@ public class PptTopLevel extends Ppt {
 
     @Override
     public boolean hasNext(@GuardSatisfied ViewsIteratorIterator this) {
-      return (vitor.hasNext() || (implication_iterator != null));
+      return vitor.hasNext() || (implication_iterator != null);
     }
 
     @Override
@@ -3502,7 +3502,7 @@ public class PptTopLevel extends Ppt {
       out.add("[" + set_str + "]");
     }
 
-    return (out.toString());
+    return out.toString();
   }
 
   /** Returns whether or not the specified variable in this ppt has any parents. */
@@ -4112,7 +4112,7 @@ public class PptTopLevel extends Ppt {
       if (slice.var_infos[0].isCanonical() && slice.var_infos[1].isCanonical()) {
         continue;
       }
-      assert (slice.var_infos[0].canonicalRep() == slice.var_infos[1].canonicalRep()) : slice;
+      assert slice.var_infos[0].canonicalRep() == slice.var_infos[1].canonicalRep() : slice;
       slices_to_remove.add(slice);
     }
     for (PptSlice slice : slices_to_remove) {
@@ -4570,7 +4570,7 @@ public class PptTopLevel extends Ppt {
   @Pure
   public boolean is_exit() {
     if (type != null) {
-      return ((type == PptType.EXIT) || (type == PptType.SUBEXIT));
+      return (type == PptType.EXIT) || (type == PptType.SUBEXIT);
     } else {
       return ppt_name.isExitPoint();
     }
@@ -4602,7 +4602,7 @@ public class PptTopLevel extends Ppt {
     if (type != null) {
       return (type == PptType.SUBEXIT);
     } else {
-      return (ppt_name.isExitPoint() && !ppt_name.isCombinedExitPoint());
+      return ppt_name.isExitPoint() && !ppt_name.isCombinedExitPoint();
     }
   }
 

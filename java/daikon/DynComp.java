@@ -414,11 +414,16 @@ public class DynComp {
    * @return elapsed time since the start of the program
    */
   public static String elapsed() {
-    return ("[" + (System.currentTimeMillis() - start) + " msec]");
+    return "[" + (System.currentTimeMillis() - start) + " msec]";
   }
 
+  /**
+   * Returns number of milliseconds since the start of the program.
+   *
+   * @return number of milliseconds since the start of the program
+   */
   public static long elapsed_msecs() {
-    return (System.currentTimeMillis() - start);
+    return System.currentTimeMillis() - start;
   }
 
   /**
@@ -435,6 +440,6 @@ public class DynComp {
       }
       str += arg + " ";
     }
-    return (str.trim());
+    return str.trim();
   }
 }

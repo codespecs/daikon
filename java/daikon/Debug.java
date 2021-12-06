@@ -309,7 +309,7 @@ public final class Debug {
    * @see #logOn()
    */
   public static final boolean logDetail() {
-    return (dkconfig_logDetail && debugTrack.isLoggable(Level.FINE));
+    return dkconfig_logDetail && debugTrack.isLoggable(Level.FINE);
   }
 
   /**
@@ -446,7 +446,7 @@ public final class Debug {
     if (!logOn()) {
       return false;
     }
-    return (log(cache_class, cache_ppt, cache_vis, msg));
+    return log(cache_class, cache_ppt, cache_vis, msg);
   }
 
   /**
@@ -459,7 +459,7 @@ public final class Debug {
   public static boolean log(
       Class<?> inv_class, @UnknownInitialization(PptTopLevel.class) Ppt ppt, String msg) {
 
-    return (log(inv_class, ppt, ppt.var_infos, msg));
+    return log(inv_class, ppt, ppt.var_infos, msg);
   }
 
   /**
@@ -552,7 +552,7 @@ public final class Debug {
   public static boolean class_match(@Nullable Class<?> inv_class) {
 
     if ((debugTrackClass.length > 0) && (inv_class != null)) {
-      return (strContainsElem(inv_class.getName(), debugTrackClass));
+      return strContainsElem(inv_class.getName(), debugTrackClass);
     }
     return true;
   }
@@ -562,7 +562,7 @@ public final class Debug {
       @Nullable @UnknownInitialization(daikon.PptTopLevel.class) Ppt ppt) {
 
     if (debugTrackPpt.length > 0) {
-      return ((ppt != null) && strContainsElem(ppt.name(), debugTrackPpt));
+      return (ppt != null) && strContainsElem(ppt.name(), debugTrackPpt);
     }
     return true;
   }

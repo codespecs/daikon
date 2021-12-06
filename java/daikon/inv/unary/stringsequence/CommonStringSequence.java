@@ -98,7 +98,7 @@ public class CommonStringSequence extends SingleStringSequence {
   }
 
   public String format_daikon(@GuardSatisfied CommonStringSequence this) {
-    return (printIntersect() + " subset of " + var().name());
+    return printIntersect() + " subset of " + var().name();
   }
 
   public String format_csharp_contract(@GuardSatisfied CommonStringSequence this) {

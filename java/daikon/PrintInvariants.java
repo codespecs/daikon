@@ -625,7 +625,7 @@ public final class PrintInvariants {
         sb.append(print_reasons_from_ppt(pcond, ppts));
       }
     }
-    return (toPrint + sb.toString());
+    return toPrint + sb.toString();
   }
 
   /**

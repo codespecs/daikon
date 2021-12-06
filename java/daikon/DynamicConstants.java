@@ -203,13 +203,13 @@ public class DynamicConstants implements Serializable {
         return false;
       }
       Constant c = (Constant) obj;
-      return (c.vi == vi);
+      return c.vi == vi;
     }
 
     @Pure
     @Override
     public int hashCode(@GuardSatisfied Constant this) {
-      return (vi.hashCode());
+      return vi.hashCode();
     }
 
     @Override
@@ -235,7 +235,7 @@ public class DynamicConstants implements Serializable {
               + ", previous_missing="
               + previous_missing
               + "]");
-      return (out.toString());
+      return out.toString();
     }
   }
 
@@ -251,7 +251,7 @@ public class DynamicConstants implements Serializable {
     @Pure
     @Override
     public int compare(Constant con1, Constant con2) {
-      return (con1.vi.varinfo_index - con2.vi.varinfo_index);
+      return con1.vi.varinfo_index - con2.vi.varinfo_index;
     }
 
     public static ConIndexComparator getInstance() {
@@ -405,7 +405,7 @@ public class DynamicConstants implements Serializable {
   private boolean missing(VarInfo vi, ValueTuple vt) {
 
     int mod = vt.getModified(vi);
-    return ((mod == ValueTuple.MISSING_FLOW) || (mod == ValueTuple.MISSING_NONSENSICAL));
+    return (mod == ValueTuple.MISSING_FLOW) || (mod == ValueTuple.MISSING_NONSENSICAL);
   }
 
   /** Returns the Constant for the specified variable. */
@@ -449,7 +449,7 @@ public class DynamicConstants implements Serializable {
   @Pure
   public boolean is_missing(VarInfo vi) {
 
-    return (getConstant(vi).always_missing);
+    return getConstant(vi).always_missing;
   }
 
   /**
@@ -460,7 +460,7 @@ public class DynamicConstants implements Serializable {
   public boolean is_prev_missing(VarInfo vi) {
 
     Constant c = all_vars[vi.varinfo_index];
-    return (c.always_missing || c.previous_missing);
+    return c.always_missing || c.previous_missing;
   }
 
   /** Returns the number of constants that are leaders. */

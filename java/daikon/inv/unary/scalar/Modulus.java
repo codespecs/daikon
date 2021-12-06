@@ -69,7 +69,7 @@ public class Modulus extends SingleScalar {
       return false;
     }
 
-    return (vis[0].file_rep_type.baseIsIntegral());
+    return vis[0].file_rep_type.baseIsIntegral();
   }
 
   /** Instantiate an invariant on the specified slice. */
@@ -253,7 +253,7 @@ public class Modulus extends SingleScalar {
     //  * x = 1 mod 4  is exclusive with  x = 0 mod 2
     //  * x = 0 mod 4  is exclusive with  1 <= x <= 3
     if (other instanceof Modulus) {
-      return ((modulus == ((Modulus) other).modulus) && (remainder != ((Modulus) other).remainder));
+      return (modulus == ((Modulus) other).modulus) && (remainder != ((Modulus) other).remainder);
     } else if (other instanceof NonModulus) {
       return ((NonModulus) other).hasModulusRemainder(modulus, remainder);
     }
@@ -288,7 +288,7 @@ public class Modulus extends SingleScalar {
     // than presuming it is true.
     VarInfo x = vis[0];
     if ((x.derived instanceof SequenceLength) && (((SequenceLength) x.derived).shift != 0)) {
-      return (new DiscardInfo(
+      return new DiscardInfo(
           this,
           DiscardCode.obvious,
           "The invariant "
@@ -296,7 +296,7 @@ public class Modulus extends SingleScalar {
               + " is implied by a mod invariant "
               + "over "
               + x.name()
-              + " without the offset"));
+              + " without the offset");
     }
     return null;
   }

@@ -2305,7 +2305,7 @@ public final class FileIO {
       int vi_index = 0;
       for (int val_index = 0; val_index < ppt.num_orig_vars; val_index++) {
         VarInfo vi = vis[ppt.num_tracevars + ppt.num_static_constant_vars + val_index];
-        assert (!vi.is_static_constant) : "orig constant " + vi;
+        assert !vi.is_static_constant : "orig constant " + vi;
 
         // Skip over constants in the entry point
         while (invoc.ppt.var_infos[vi_index].is_static_constant) {
@@ -2681,7 +2681,7 @@ public final class FileIO {
       if (comparability == null) {
         throw new AssertionError("missing comparability information for variable " + name);
       }
-      assert ((kind == VarKind.FUNCTION) || (function_args == null))
+      assert (kind == VarKind.FUNCTION) || (function_args == null)
           : String.format(
               "incompatible kind=%s and function_args=%s for VarDefinition %s",
               kind, function_args, name);
@@ -2922,7 +2922,7 @@ public final class FileIO {
      * if there is no next token.
      */
     public @Interned String need(Scanner scanner, String description) {
-      return (FileIO.need(state, scanner, description));
+      return FileIO.need(state, scanner, description);
     }
 
     /** Throws Daikon.UserError if the scanner is not at end of line */
@@ -3009,9 +3009,9 @@ public final class FileIO {
   @Pure
   private static boolean is_declaration_header(String line) {
     if (new_decl_format) {
-      return (line.startsWith("ppt "));
+      return line.startsWith("ppt ");
     } else {
-      return (line.equals(declaration_header));
+      return line.equals(declaration_header);
     }
   }
 

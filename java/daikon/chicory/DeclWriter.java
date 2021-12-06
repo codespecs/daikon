@@ -363,7 +363,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
      */
     @Pure
     public boolean is_class_relation() {
-      return (parent_ppt_name.endsWith(":::CLASS"));
+      return parent_ppt_name.endsWith(":::CLASS");
     }
 
     /**

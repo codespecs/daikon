@@ -46,9 +46,9 @@ public abstract class BinaryInvariant extends Invariant {
 
     // If one argument is scalar and the other an array, put the scalar first.
     if (v2.rep_type.isArray() && !v1.rep_type.isArray()) {
-      return (add(val2, val1, mod_index, count));
+      return add(val2, val1, mod_index, count);
     } else {
-      return (add(val1, val2, mod_index, count));
+      return add(val1, val2, mod_index, count);
     }
   }
 
@@ -72,9 +72,9 @@ public abstract class BinaryInvariant extends Invariant {
         && !((val1 instanceof long[])
             || (val1 instanceof String[])
             || (val1 instanceof double[]))) {
-      return (check(val2, val1, mod_index, count));
+      return check(val2, val1, mod_index, count);
     } else {
-      return (check(val1, val2, mod_index, count));
+      return check(val1, val2, mod_index, count);
     }
   }
 

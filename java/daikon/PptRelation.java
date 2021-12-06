@@ -129,7 +129,7 @@ public class PptRelation implements Serializable {
   /** Returns the number of parent to child variable relations. */
   @Pure
   public int size() {
-    return (parent_to_child_map.size());
+    return parent_to_child_map.size();
   }
 
   @SideEffectFree
@@ -188,7 +188,7 @@ public class PptRelation implements Serializable {
    */
   @Pure
   public boolean is_primary() {
-    return ((relationship != PptRelationType.USER) && (relationship != PptRelationType.ENTER_EXIT));
+    return (relationship != PptRelationType.USER) && (relationship != PptRelationType.ENTER_EXIT);
   }
 
   /** Returns a string describing the parent-child relationship. */

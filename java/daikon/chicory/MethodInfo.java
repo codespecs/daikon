@@ -181,7 +181,7 @@ public class MethodInfo {
    */
   @Pure
   public boolean is_constructor() {
-    return (method_name.equals("<init>") || method_name.equals(""));
+    return method_name.equals("<init>") || method_name.equals("");
   }
 
   /**
@@ -191,7 +191,7 @@ public class MethodInfo {
    */
   @Pure
   public boolean is_class_initializer() {
-    return (method_name.equals("<clinit>"));
+    return method_name.equals("<clinit>");
   }
 
   /**

@@ -132,7 +132,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     }
     @Pure
     public boolean equals(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z) {
-      return ((this.x == x) && (this.y == y) && (this.z == z));
+      return (this.x == x) && (this.y == y) && (this.z == z);
     }
     @SideEffectFree
     @Override
@@ -142,7 +142,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     @SideEffectFree
     @Override
     public String toString(@GuardSatisfied Point this) {
-      return ("(" + x + ", " + y + " ," + z + ")");
+      return "(" + x + ", " + y + " ," + z + ")";
     }
   }
 
@@ -264,7 +264,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   // a full linear ternary invariant exists, not a degenerate one
   @Pure
   public boolean isActive(@GuardSatisfied CLASSNAME this) {
-    return (line_flag == Flag.NO_LINE && values_seen >= MINTRIPLES && a != 0 && b != 0 && c != 0);
+    return line_flag == Flag.NO_LINE && values_seen >= MINTRIPLES && a != 0 && b != 0 && c != 0;
   }
 
   /**

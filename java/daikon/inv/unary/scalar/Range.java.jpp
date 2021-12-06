@@ -306,7 +306,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     @Override
     public boolean eq_check(PRIMITIVE x) {
-      return (x == 0);
+      return x == 0;
     }
   }
 
@@ -359,7 +359,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     @Override
     public boolean eq_check(PRIMITIVE x) {
-      return (x == 1);
+      return x == 1;
     }
   }
 
@@ -412,7 +412,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     @Override
     public boolean eq_check(PRIMITIVE x) {
-      return (x == -1);
+      return x == -1;
     }
   }
 
@@ -465,7 +465,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     @Override
     public boolean eq_check(PRIMITIVE x) {
-      return (x >= 0);
+      return x >= 0;
     }
   }
 
@@ -518,7 +518,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     @Override
     public boolean eq_check(PRIMITIVE x) {
-      return (x >= 64);
+      return x >= 64;
     }
   }
 
@@ -572,7 +572,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     @Override
     public boolean eq_check(PRIMITIVE x) {
-      return ((x == 0) || (x == 1));
+      return (x == 0) || (x == 1);
     }
   }
 
@@ -641,7 +641,7 @@ public abstract class RANGE extends SUPERCLASS {
      */
     @Override
     public boolean eq_check(PRIMITIVE x) {
-      return ((x >= 1) && ((x & (x - 1)) == 0));
+      return (x >= 1) && ((x & (x - 1)) == 0);
     }
 
     /**
@@ -718,7 +718,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     @Override
     public boolean eq_check(PRIMITIVE x) {
-      return ((x & 1) == 0);
+      return (x & 1) == 0;
     }
 
     /**
@@ -787,7 +787,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     @Override
     public boolean eq_check(PRIMITIVE x) {
-      return ((x >= 0) && (x <= 63));
+      return (x >= 0) && (x <= 63);
     }
   }
 

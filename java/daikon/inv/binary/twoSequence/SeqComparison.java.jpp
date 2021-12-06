@@ -340,10 +340,10 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
 
       // This intentonally checks dimensions(), not pseudoDimensions.
       boolean only_eq =
-        (!((type1.dimensions() == 1)
-           && type1.BASE_IS_TYPE
-           && (type2.dimensions() == 1)
-           && type2.BASE_IS_TYPE));
+        !((type1.dimensions() == 1)
+          && type1.BASE_IS_TYPE
+          && (type2.dimensions() == 1)
+          && type2.BASE_IS_TYPE);
       if (only_eq) {
         return false;
       }

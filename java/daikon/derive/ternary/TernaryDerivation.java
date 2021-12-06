@@ -84,7 +84,7 @@ public abstract class TernaryDerivation extends Derivation {
   @Pure
   @Override
   protected boolean isParam() {
-    return (base1.isParam() || base2.isParam() || base3.isParam());
+    return base1.isParam() || base2.isParam() || base3.isParam();
   }
 
   @Override

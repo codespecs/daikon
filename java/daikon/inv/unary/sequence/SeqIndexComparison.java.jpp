@@ -207,7 +207,7 @@ public class CLASSNAME extends SUPERCLASS {
   /** returns whether or not we are enabled */
   @Override
   public boolean enabled() {
-    return (dkconfig_enabled && !dkconfig_SeqIndexDisableAll);
+    return dkconfig_enabled && !dkconfig_SeqIndexDisableAll;
   }
 
   /** Check that SeqIndex comparisons make sense over these vars. */

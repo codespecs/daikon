@@ -94,9 +94,9 @@ public final class SEQUENCESCALARSUBSEQUENCE extends SequenceSubsequence {
     }
     String seqname = seqvar().name().replace("[]", "");
     if (from_start) {
-      return (seqname + "[.." + sclvar().name() + shift + "]");
+      return seqname + "[.." + sclvar().name() + shift + "]";
     } else {
-      return (seqname + "[" + sclvar().name() + shift + "..]");
+      return seqname + "[" + sclvar().name() + shift + "..]";
     }
   }
 

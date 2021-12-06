@@ -350,7 +350,7 @@ public class PptName implements Serializable {
   @EnsuresNonNullIf(result = true, expression = "point")
   @Pure
   public boolean isNumberedExitPoint() {
-    return ((point != null) && (isExitPoint() && !isCombinedExitPoint()));
+    return (point != null) && (isExitPoint() && !isCombinedExitPoint());
   }
 
   /**

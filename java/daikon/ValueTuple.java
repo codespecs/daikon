@@ -138,7 +138,7 @@ public final class ValueTuple implements Cloneable {
   @EnsuresNonNullIf(result = false, expression = "vals[#1]")
   @Pure
   boolean isMissing(@UnknownInitialization(ValueTuple.class) ValueTuple this, int value_index) {
-    return (isMissingNonsensical(value_index) || isMissingFlow(value_index));
+    return isMissingNonsensical(value_index) || isMissingFlow(value_index);
   }
 
   // The arguments ints represent modification information.
@@ -494,12 +494,12 @@ public final class ValueTuple implements Cloneable {
       return "null";
     }
     if (val instanceof long[]) {
-      return (Arrays.toString((long[]) val));
+      return Arrays.toString((long[]) val);
     } else if (val instanceof int[]) {
       // shouldn't reach this case -- should be long[], not int[]
-      return (Arrays.toString((int[]) val));
+      return Arrays.toString((int[]) val);
     } else {
-      return (val.toString());
+      return val.toString();
     }
   }
 
