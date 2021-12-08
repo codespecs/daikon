@@ -234,6 +234,11 @@ else
   # Old Java releases (e.g. 7) will set JAVA_RELEASE_NUMBER to 1.
   # This will cause the JAVA8_OR_NEWER test to fail as desired.
   JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
+  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 17),1)
+    JAVA17_OR_NEWER := 1
+  else
+    JAVA17_OR_NEWER := 0
+  endif
   ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 11),1)
     JAVA11_OR_NEWER := 1
   else
@@ -251,8 +256,12 @@ ifneq ($(JAVA8_OR_NEWER), 1)
     $(error Must use Java version 8 or later)
 endif
 
-# Function to compute goal filename extension.  Java 8 is now the default.
-# If we are running Java 11 and if filename.test.goal.j11 exists, use it;
+# Function to compute goal filename extension.  Java 8 is the default.
+# If we are running Java 17:
+#    if filename.test.goal.j17 exists, use it;
+#    otherwise, if filename.test.goal.j11 exists, use it;
+# otherwise, if we are running Java 11:
+#    if filename.test.goal.j11 exists, use it;
 # otherwise, use filename.test.goal
 # Reasons for different behavior between Java 8 and Java 11 include:
 # - javac versions 8 & 9 sometimes generate dummy field accessor methods
@@ -267,9 +276,17 @@ endif
 
 goal_name = $(if $(findstring 0, $(JAVA11_OR_NEWER)), \
 				$(1).goal, \
-				$(if $(shell if [ -f $(1).goal.j11 ] ; then echo true; fi), \
-					$(1).goal.j11, \
-					$(1).goal) \
+				$(if $(findstring 1, $(JAVA17_OR_NEWER)), \
+					$(if $(shell if [ -f $(1).goal.j17 ] ; then echo true; fi), \
+						$(1).goal.j17, \
+						$(if $(shell if [ -f $(1).goal.j11 ] ; then echo true; fi), \
+							$(1).goal.j11, \
+							$(1).goal) \
+					), \
+					$(if $(shell if [ -f $(1).goal.j11 ] ; then echo true; fi), \
+						$(1).goal.j11, \
+						$(1).goal) \
+				) \
 			)
 
 
