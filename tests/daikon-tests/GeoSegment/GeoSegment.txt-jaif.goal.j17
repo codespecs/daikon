@@ -1,0 +1,60 @@
+package org.checkerframework.checker.nullness.qual:
+annotation @Nullable:
+annotation @NonNull:
+
+package MapQuick1:
+class GeoPoint : // 474202/474202 obj/class samples
+  field REP_SCALE_FACTOR :  // double
+  field latitude :  // int
+  field longitude :  // int
+  method <init>(II)V : // 164 samples
+    return:
+    parameter #0 :  // latitude
+    parameter #1 :  // longitude
+  method distanceTo(LMapQuick1/GeoPoint;)D : // 3132 samples
+    return:
+    parameter #0 :  // gp
+  method equals(Ljava/lang/Object;)Z : // 5871 samples
+    return:
+    parameter #0 :  // o
+  method hashCode()I : // 227720 samples
+    return:
+  method headingTo(LMapQuick1/GeoPoint;)D : // 296 samples
+    return:
+    parameter #0 :  // gp
+  method toString()Ljava/lang/String; : // 0 samples
+    return:
+
+
+package MapQuick1:
+class GeoSegment : // 259782/- obj/class samples
+  field name :  // java.lang.String
+  field p1 :  // MapQuick1.GeoPoint
+  field REP_SCALE_FACTOR :  // double
+  field p2 :  // MapQuick1.GeoPoint
+  method <init>(Ljava/lang/String;LMapQuick1/GeoPoint;LMapQuick1/GeoPoint;)V : // 82 samples
+    return:
+    parameter #0 :  // name
+    parameter #1 :  // p1
+    parameter #2 :  // p2
+  method equals(Ljava/lang/Object;)Z : // 611 samples
+    return:
+    parameter #0 :  // o
+  method hashCode()I : // 113860 samples
+    return:
+  method heading()D : // 296 samples
+    return:
+  method length()D : // 1553 samples
+    return:
+  method name()Ljava/lang/String; : // 608 samples
+    return:
+  method p1()LMapQuick1/GeoPoint; : // 4882 samples
+    return:
+  method p2()LMapQuick1/GeoPoint; : // 8040 samples
+    return:
+  method reverse()LMapQuick1/GeoSegment; : // 0 samples
+    return:
+  method toString()Ljava/lang/String; : // 0 samples
+    return:
+
+
