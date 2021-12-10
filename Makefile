@@ -114,7 +114,7 @@ GIT_OPTIONS ?=
 
 RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
 
-TMPDIR ?= $(if $(shell if [ -d /scratch ] ; then echo true; fi),/scratch/$(USER),/tmp/$(USER))
+TMPDIR ?= $(if $(shell if [ -d /scratch ] ; then echo true; fi),/scratch/$(USER),/tmp/$(USER))$(shell date +%Y%m%d%H%M%S)
 
 # For deterministic sorting
 export LC_ALL=C
