@@ -2360,7 +2360,7 @@ Here is a workflow that may be used to deal with broken links:
 @item
 Use the @samp{Wayback Machine}, @url{http://archive.org/web/}, and enter the URL.
 @item
-You will get a time line.  Select a year and day, then you have to click on the time of day,
+You will get a timeline.  Select a year and day, then you have to click on the time of day,
 and then you get a version of the page at that time.
 @item
 Copy the URL from the address bar of your browser.

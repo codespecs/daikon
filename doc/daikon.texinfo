@@ -3659,9 +3659,10 @@ recent version of Java.  (In the example above, classfile version
 49 corresponds to Java 5, which was released in 2004; Java 6 was released
 in 2006, and Java 8 was released in 2014.)
 
-It is worth noting that programs that are run via JUnit often benefit from using
+Programs that are run via JUnit often benefit from using
 @option{--ppt-omit-pattern=org.junit}
-as an option to Chicory (and DynComp) to remove what is, almost always, uninteresting output.
+as an option to Chicory (and DynComp).  This avoids inferring invariants
+about the JUnit library, which are almost always uninteresting.
 
 
 @node    DynComp for Java
@@ -4212,9 +4213,10 @@ If you are generating JUnit test suites with
 @uref{https://randoop.github.io/randoop/, ,Randoop}, then supply the
 @option{--junit-reflection-allowed=false} command-line option to Randoop.
 
-On a related note, programs that are run via JUnit often benefit from using
+Programs that are run via JUnit often benefit from using
 @option{--ppt-omit-pattern=org.junit}
-as an option to both Chicory and DynComp to remove what is, almost always, uninteresting output.
+as an option to Chicory (and DynComp).  This avoids inferring invariants
+about the JUnit library, which are almost always uninteresting.
 
 @item
 @c The manual should be more specific about how a user can know this is the
