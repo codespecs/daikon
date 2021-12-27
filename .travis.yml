@@ -37,13 +37,16 @@ env:
     - OS=ubuntu JDKVER=jdk17-plus GROUP=kvasir
     - OS=fedora JDKVER=jdk8 GROUP=quick-txt-diff
     - OS=fedora JDKVER=jdk11 GROUP=quick-txt-diff
-    - OS=fedora JDKVER=jdk17 GROUP=quick-txt-diff
+    # Having trouble building Fedora Docker file; revisit later.
+    # - OS=fedora JDKVER=jdk17 GROUP=quick-txt-diff
     - OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
     - OS=fedora JDKVER=jdk11 GROUP=nonquick-txt-diff
-    - OS=fedora JDKVER=jdk17 GROUP=nonquick-txt-diff
+    # Having trouble building Fedora Docker file; revisit later.
+    # - OS=fedora JDKVER=jdk17 GROUP=nonquick-txt-diff
     - OS=fedora JDKVER=jdk8 GROUP=non-txt-diff
     - OS=fedora JDKVER=jdk11 GROUP=non-txt-diff
-    - OS=fedora JDKVER=jdk17 GROUP=non-txt-diff
+    # Having trouble building Fedora Docker file; revisit later.
+    # - OS=fedora JDKVER=jdk17 GROUP=non-txt-diff
 ## Fails on Travis but not on CircleCI.
 ## This might be https://bugs.openjdk.java.net/browse/JDK-8215542
 #    - OS=fedora JDKVER=jdk8-plus GROUP=misc
