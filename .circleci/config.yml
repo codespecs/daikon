@@ -970,9 +970,9 @@ workflows:
       - quick-txt-diff-fedora-jdk11:
           requires:
             - quick-txt-diff-fedora-jdk8
-      - quick-txt-diff-febora-jdk17:
+      - quick-txt-diff-fedora-jdk17:
           requires:
-            - quick-txt-diff-febora-jdk11
+            - quick-txt-diff-fedora-jdk11
       - nonquick-txt-diff-fedora-jdk8:
           requires:
             - ubuntu-jdk8-jobs
@@ -980,9 +980,9 @@ workflows:
       - nonquick-txt-diff-fedora-jdk11:
           requires:
             - nonquick-txt-diff-fedora-jdk8
-      - nonquick-txt-diff-febora-jdk17:
+      - nonquick-txt-diff-fedora-jdk17:
           requires:
-            - nonquick-txt-diff-febora-jdk11
+            - nonquick-txt-diff-fedora-jdk11
       - non-txt-diff-fedora-jdk8:
           requires:
             - ubuntu-jdk8-jobs
@@ -990,9 +990,9 @@ workflows:
       - non-txt-diff-fedora-jdk11:
           requires:
             - non-txt-diff-fedora-jdk8
-      - non-txt-diff-febora-jdk17:
+      - non-txt-diff-fedora-jdk17:
           requires:
-            - non-txt-diff-febora-jdk11
+            - non-txt-diff-fedora-jdk11
       - misc-fedora-jdk8:
           requires:
             - ubuntu-jdk8-jobs
@@ -1000,9 +1000,9 @@ workflows:
       - misc-fedora-jdk11:
           requires:
             - misc-fedora-jdk8
-      - misc-febora-jdk17:
+      - misc-fedora-jdk17:
           requires:
-            - misc-diff-febora-jdk11
+            - misc-diff-fedora-jdk11
       ## Flaky, needs to be fixed
       # - kvasir-fedora-jdk8:
       #     requires:
