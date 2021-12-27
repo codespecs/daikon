@@ -50,6 +50,24 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
+  quick-txt-diff-ubuntu-jdk17:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk17
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-quick-txt-diff.sh
+
   nonquick-txt-diff-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
@@ -71,6 +89,24 @@ jobs:
   nonquick-txt-diff-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
+  nonquick-txt-diff-ubuntu-jdk17:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk17
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
@@ -122,6 +158,24 @@ jobs:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
 
+  non-txt-diff-ubuntu-jdk17:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk17
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-non-txt-diff.sh
+
   misc-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8-plus
@@ -143,6 +197,24 @@ jobs:
   misc-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11-plus
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-misc.sh
+
+  misc-ubuntu-jdk17:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk17-plus
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
@@ -194,6 +266,24 @@ jobs:
             - ".git"
       - run: ./scripts/test-kvasir.sh
 
+  kvasir-ubuntu-jdk17:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk17-plus
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-kvasir.sh
+
   quick-txt-diff-fedora-jdk8:
     docker:
       - image: mdernst/daikon-fedora-jdk8
@@ -215,6 +305,24 @@ jobs:
   quick-txt-diff-fedora-jdk11:
     docker:
       - image: mdernst/daikon-fedora-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-quick-txt-diff.sh
+
+  quick-txt-diff-fedora-jdk17:
+    docker:
+      - image: mdernst/daikon-fedora-jdk17
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
@@ -266,6 +374,24 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
+  nonquick-txt-diff-fedora-jdk17:
+    docker:
+      - image: mdernst/daikon-fedora-jdk17
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
   non-txt-diff-fedora-jdk8:
     docker:
       - image: mdernst/daikon-fedora-jdk8
@@ -302,6 +428,24 @@ jobs:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
 
+  non-txt-diff-fedora-jdk17:
+    docker:
+      - image: mdernst/daikon-fedora-jdk17
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-non-txt-diff.sh
+
   misc-fedora-jdk8:
     docker:
       - image: mdernst/daikon-fedora-jdk8-plus
@@ -320,9 +464,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-misc.sh
 
-  misc-fedora-jdk11:
+  misc-fedora-jdk17:
     docker:
-      - image: mdernst/daikon-fedora-jdk11-plus
+      - image: mdernst/daikon-fedora-jdk17-plus
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
@@ -338,43 +482,59 @@ jobs:
             - ".git"
       - run: ./scripts/test-misc.sh
 
-  ## Flaky; needs to be fixed.
-  # kvasir-fedora-jdk8:
-  #   docker:
-  #     - image: mdernst/daikon-fedora-jdk8-plus
-  #   environment:
-  #     CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-  #   steps:
-  #     - restore_cache:
-  #         keys:
-  #           - source-v1-{{ .Branch }}-{{ .Revision }}
-  #           - source-v1-{{ .Branch }}-
-  #           - source-v1-
-  #     - checkout
-  #     - save_cache:
-  #         key: source-v1-{{ .Branch }}-{{ .Revision }}
-  #         paths:
-  #           - ".git"
-  #     - run: ./scripts/test-kvasir.sh
+  kvasir-fedora-jdk8:
+    docker:
+      - image: mdernst/daikon-fedora-jdk8-plus
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-kvasir.sh
 
-  ## Flaky; needs to be fixed.
-  # kvasir-fedora-jdk11:
-  #   docker:
-  #     - image: mdernst/daikon-fedora-jdk11-plus
-  #   environment:
-  #     CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-  #   steps:
-  #     - restore_cache:
-  #         keys:
-  #           - source-v1-{{ .Branch }}-{{ .Revision }}
-  #           - source-v1-{{ .Branch }}-
-  #           - source-v1-
-  #     - checkout
-  #     - save_cache:
-  #         key: source-v1-{{ .Branch }}-{{ .Revision }}
-  #         paths:
-  #           - ".git"
-  #     - run: ./scripts/test-kvasir.sh
+  kvasir-fedora-jdk11:
+    docker:
+      - image: mdernst/daikon-fedora-jdk11-plus
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-kvasir.sh
+
+  kvasir-fedora-jdk17:
+    docker:
+      - image: mdernst/daikon-fedora-jdk17-plus
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-kvasir.sh
 
   quick-txt-diff-centos-jdk8:
     docker:
@@ -397,6 +557,24 @@ jobs:
   quick-txt-diff-centos-jdk11:
     docker:
       - image: mdernst/daikon-centos-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-quick-txt-diff.sh
+
+  quick-txt-diff-centos-jdk17:
+    docker:
+      - image: mdernst/daikon-centos-jdk17
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
@@ -448,6 +626,24 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
+  nonquick-txt-diff-centos-jdk17:
+    docker:
+      - image: mdernst/daikon-centos-jdk17
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
   non-txt-diff-centos-jdk8:
     docker:
       - image: mdernst/daikon-centos-jdk8
@@ -469,6 +665,24 @@ jobs:
   non-txt-diff-centos-jdk11:
     docker:
       - image: mdernst/daikon-centos-jdk11
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-non-txt-diff.sh
+
+  non-txt-diff-centos-jdk17:
+    docker:
+      - image: mdernst/daikon-centos-jdk17
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
@@ -526,6 +740,27 @@ jobs:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
 
+  misc-centos-jdk17:
+    docker:
+      - image: mdernst/daikon-centos-jdk17-plus
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run:
+          command: ./scripts/test-misc.sh
+          no_output_timeout: 20m
+
   kvasir-centos-jdk8:
     docker:
       - image: mdernst/daikon-centos-jdk8-plus
@@ -547,6 +782,24 @@ jobs:
   kvasir-centos-jdk11:
     docker:
       - image: mdernst/daikon-centos-jdk11-plus
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-kvasir.sh
+
+  kvasir-centos-jdk17:
+    docker:
+      - image: mdernst/daikon-centos-jdk17-plus
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
@@ -630,6 +883,27 @@ jobs:
           command: scripts/test-typecheck.sh
           no_output_timeout: 30m
 
+  typecheck-with-locally-built-CF-jdk17:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk17
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: env
+      - run:
+          command: scripts/test-typecheck.sh
+          no_output_timeout: 30m
+
 
 workflows:
   version: 2
@@ -647,30 +921,48 @@ workflows:
           requires:
             - ubuntu-jdk8-jobs
             - quick-txt-diff-ubuntu-jdk8
+      - quick-txt-diff-ubuntu-jdk17:
+          requires:
+            - quick-txt-diff-ubuntu-jdk11
       - nonquick-txt-diff-ubuntu-jdk8
       - nonquick-txt-diff-ubuntu-jdk11:
           requires:
             - ubuntu-jdk8-jobs
             - nonquick-txt-diff-ubuntu-jdk8
+      - nonquick-txt-diff-ubuntu-jdk17:
+          requires:
+            - nonquick-txt-diff-ubuntu-jdk11
       - non-txt-diff-ubuntu-jdk8
       - non-txt-diff-ubuntu-jdk11:
           requires:
             - ubuntu-jdk8-jobs
             - non-txt-diff-ubuntu-jdk8
+      - non-txt-diff-ubuntu-jdk17:
+          requires:
+            - non-txt-diff-ubuntu-jdk11
       - misc-ubuntu-jdk8
       - misc-ubuntu-jdk11:
           requires:
             - ubuntu-jdk8-jobs
             - misc-ubuntu-jdk8
+      - misc-ubuntu-jdk17:
+          requires:
+            - misc-ubuntu-jdk11
       - kvasir-ubuntu-jdk8
       - kvasir-ubuntu-jdk11:
           requires:
             - ubuntu-jdk8-jobs
             - kvasir-ubuntu-jdk8
+      - kvasir-ubuntu-jdk17:
+          requires:
+            - kvasir-ubuntu-jdk11
       - kvasir-centos-jdk8
       - kvasir-centos-jdk11:
           requires:
             - kvasir-centos-jdk8
+      - kvasir-centos-jdk17:
+          requires:
+            - kvasir-centos-jdk11
       - quick-txt-diff-fedora-jdk8:
           requires:
             - ubuntu-jdk8-jobs
@@ -678,6 +970,9 @@ workflows:
       - quick-txt-diff-fedora-jdk11:
           requires:
             - quick-txt-diff-fedora-jdk8
+      - quick-txt-diff-febora-jdk17:
+          requires:
+            - quick-txt-diff-febora-jdk11
       - nonquick-txt-diff-fedora-jdk8:
           requires:
             - ubuntu-jdk8-jobs
@@ -685,6 +980,9 @@ workflows:
       - nonquick-txt-diff-fedora-jdk11:
           requires:
             - nonquick-txt-diff-fedora-jdk8
+      - nonquick-txt-diff-febora-jdk17:
+          requires:
+            - nonquick-txt-diff-febora-jdk11
       - non-txt-diff-fedora-jdk8:
           requires:
             - ubuntu-jdk8-jobs
@@ -692,6 +990,9 @@ workflows:
       - non-txt-diff-fedora-jdk11:
           requires:
             - non-txt-diff-fedora-jdk8
+      - non-txt-diff-febora-jdk17:
+          requires:
+            - non-txt-diff-febora-jdk11
       - misc-fedora-jdk8:
           requires:
             - ubuntu-jdk8-jobs
@@ -699,6 +1000,10 @@ workflows:
       - misc-fedora-jdk11:
           requires:
             - misc-fedora-jdk8
+      - misc-febora-jdk17:
+          requires:
+            - misc-diff-febora-jdk11
+      ## Flaky, needs to be fixed
       # - kvasir-fedora-jdk8:
       #     requires:
       #       - ubuntu-jdk8-jobs
@@ -706,6 +1011,9 @@ workflows:
       # - kvasir-fedora-jdk11
       #     requires:
       #       - kvasir-fedora-jdk8
+      # - kvasir-fedora-jdk17
+      #     requires:
+      #       - kvasir-fedora-jdk11
       - quick-txt-diff-centos-jdk8:
           requires:
             - ubuntu-jdk8-jobs
@@ -713,6 +1021,9 @@ workflows:
       - quick-txt-diff-centos-jdk11:
           requires:
             - quick-txt-diff-centos-jdk8
+      - quick-txt-diff-centos-jdk17:
+          requires:
+            - quick-txt-diff-centos-jdk11
       - nonquick-txt-diff-centos-jdk8:
           requires:
             - ubuntu-jdk8-jobs
@@ -720,6 +1031,9 @@ workflows:
       - nonquick-txt-diff-centos-jdk11:
           requires:
             - nonquick-txt-diff-centos-jdk8
+      - nonquick-txt-diff-centos-jdk17:
+          requires:
+            - nonquick-txt-diff-centos-jdk11
       - non-txt-diff-centos-jdk8:
           requires:
             - ubuntu-jdk8-jobs
@@ -727,6 +1041,9 @@ workflows:
       - non-txt-diff-centos-jdk11:
           requires:
             - non-txt-diff-centos-jdk8
+      - non-txt-diff-centos-jdk17:
+          requires:
+            - non-txt-diff-centos-jdk11
       - misc-centos-jdk8:
           requires:
             - ubuntu-jdk8-jobs
@@ -734,6 +1051,9 @@ workflows:
       - misc-centos-jdk11:
           requires:
             - misc-centos-jdk8
+      - misc-centos-jdk17:
+          requires:
+            - misc-centos-jdk11
 #      - typecheck-with-included-CF-jdk8
 # Seems to run out of memory on CircleCI.  It's being checked on Azure Pipelines.
 #      -  typecheck-with-locally-built-CF-jdk8:

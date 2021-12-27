@@ -3,21 +3,20 @@
 # But it's used primarily for running miscellaneous tests such as the manual
 # and Javadoc.
 
-FROM fedora:35
+FROM centos
 MAINTAINER Michael Ernst <mernst@cs.washington.edu>
 
 # According to
 # https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
 #  * Put "apt-get update" and "apt-get install" in the same RUN command.
 #  * Do not run "apt-get upgrade"; instead get upstream to update.
-RUN dnf -qy upgrade && dnf -qy install \
+RUN dnf -q -y upgrade && dnf -q -y install \
   autoconf \
   automake \
   bc \
   binutils-devel \
   gcc \
   git \
-  jq \
   m4 \
   make \
   redhat-lsb \
@@ -26,23 +25,43 @@ RUN dnf -qy upgrade && dnf -qy install \
   unzip \
   which
 
+# Needed for JDK 17, I guess.
 RUN dnf -q -y install \
-  java-1.8.0-openjdk \
-  java-1.8.0-openjdk-devel
+  rsync
 
-RUN dnf -qy install \
+RUN dnf -q -y install \
+  java-17-openjdk \
+  java-17-openjdk-devel
+
+# This enables the repository that contains jq
+RUN dnf -q -y install \
+  epel-release
+
+RUN dnf -q -y install \
+  jq
+
+RUN dnf -q -y install \
+  ctags \
   curl \
   ctags \
   gcc-c++ \
   graphviz \
   netpbm \
-  python \
+  netpbm-progs \
+  python2 \
   python3 \
-  python3-distutils \
-  texi2html \
-  texinfo \
-  texinfo-tex \
+  python3-distutils-extra \
+  rsync \
   texlive \
   wget
+
+# Make default be Python 2, for backward compatibility just in case.
+RUN alternatives --set python /usr/bin/python2
+
+# Texinfo is in the PowerTools repository, as of CentOS 8.
+# Alternately, run: dnf --enablerepo=PowerTools install PACKAGENAME
+RUN dnf -y install dnf-plugins-core \
+&& dnf config-manager --set-enabled PowerTools \
+&& dnf -y install texi2html texinfo texinfo-tex
 
 RUN dnf -q clean all
