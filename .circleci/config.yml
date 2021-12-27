@@ -482,6 +482,24 @@ jobs:
             - ".git"
       - run: ./scripts/test-misc.sh
 
+  misc-fedora-jdk11:
+    docker:
+      - image: mdernst/daikon-fedora-jdk11-plus
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-misc.sh
+
   kvasir-fedora-jdk8:
     docker:
       - image: mdernst/daikon-fedora-jdk8-plus
