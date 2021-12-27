@@ -1020,7 +1020,7 @@ workflows:
             - misc-fedora-jdk8
       - misc-fedora-jdk17:
           requires:
-            - misc-diff-fedora-jdk11
+            - misc-fedora-jdk11
       ## Flaky, needs to be fixed
       # - kvasir-fedora-jdk8:
       #     requires:
