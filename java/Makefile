@@ -78,6 +78,7 @@ endif
 DOCLETPATH := $(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):${DAIKON_CLASSPATH}:${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
 DOCLET_FLAGS :=
+LINKOFFLINE := https://docs.oracle.com/javase/8/docs/api/
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
 ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
   JAVA8 := 1
@@ -86,6 +87,7 @@ else
   JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
   ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 11),1)
 	DOCLET_FLAGS := --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+	LINKOFFLINE := https://docs.oracle.com/en/java/javase/11/docs/api/
   endif
 endif
 
@@ -705,8 +707,16 @@ ifeq ($(JAVA8), 1)
 else
 ## MutablePublicArray is off because Error Prone 2.4.0 crashes: https://github.com/google/error-prone/issues/1645
 	javac -cp ${DAIKON_CLASSPATH} \
-	  --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
-	  --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
+	  -J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
+	  -J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
+	  -J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED \
+	  -J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED \
+	  -J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
+	  -J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED \
+	  -J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
+	  -J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
+	  -J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
+	  -J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF' \
 	  -Xmaxwarns 100000 -Werror \
@@ -1068,7 +1078,7 @@ JAVADOC_DEST = api
 JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
                 -Xmaxerrs 100000 -Xmaxwarns 100000 \
                 -d $(JAVADOC_DEST) \
-                -linkoffline https://docs.oracle.com/javase/8/docs/api/ https://docs.oracle.com/javase/8/docs/api/ \
+                -linkoffline $(LINKOFFLINE) $(LINKOFFLINE) \
                 -classpath "$(subst ${DAIKONDIR}/java:,,${DAIKON_CLASSPATH})"
 JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
                 -docletpath "${DOCLETPATH}"

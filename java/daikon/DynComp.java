@@ -195,6 +195,9 @@ public class DynComp {
   /*TO DO: @PostNonNull("premain")*/
   void start_target(String premain_args, String[] target_args) {
 
+    String version = System.getProperty("java.version");
+    System.out.println("java.version: " + version);
+
     // Default the decls file name to <target-program-name>.decls-DynComp
     if (decl_file == null) {
       String target_class = target_args[0].replaceFirst(".*[/.]", "");
