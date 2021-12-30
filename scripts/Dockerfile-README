@@ -50,6 +50,16 @@ export JDKVER=jdk11-plus
 export PROJECT=daikon
 create_upload_docker_image
 
+export OS=ubuntu
+export JDKVER=jdk17
+export PROJECT=daikon
+create_upload_docker_image
+
+export OS=ubuntu
+export JDKVER=jdk17-plus
+export PROJECT=daikon
+create_upload_docker_image
+
 export OS=fedora
 export JDKVER=jdk8
 export PROJECT=daikon
@@ -70,6 +80,16 @@ export JDKVER=jdk11-plus
 export PROJECT=daikon
 create_upload_docker_image
 
+export OS=fedora
+export JDKVER=jdk17
+export PROJECT=daikon
+create_upload_docker_image
+
+export OS=fedora
+export JDKVER=jdk17-plus
+export PROJECT=daikon
+create_upload_docker_image
+
 export OS=centos
 export JDKVER=jdk8
 export PROJECT=daikon
@@ -87,6 +107,16 @@ create_upload_docker_image
 
 export OS=centos
 export JDKVER=jdk11-plus
+export PROJECT=daikon
+create_upload_docker_image
+
+export OS=centos
+export JDKVER=jdk17
+export PROJECT=daikon
+create_upload_docker_image
+
+export OS=centos
+export JDKVER=jdk17-plus
 export PROJECT=daikon
 create_upload_docker_image
 
