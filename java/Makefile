@@ -801,7 +801,17 @@ CHECKER_ARGS_ALL_JDK_VERSIONS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -ArequirePrefi
 ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
   CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} -J-Xbootclasspath/p:${CHECKERFRAMEWORK_JAVAC}
 else
-  CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} -J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED
+  CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
+	-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
+	-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED
 endif
 
 ## All of the following targets need to depend on "compile".
