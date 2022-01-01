@@ -87,7 +87,7 @@ else
   JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
   ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 11),1)
 	DOCLET_FLAGS := --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
-	LINKOFFLINE := https://docs.oracle.com/en/java/javase/11/docs/api/
+	LINKOFFLINE := https://docs.oracle.com/en/java/javase/17/docs/api/
   endif
 endif
 
@@ -698,6 +698,18 @@ endif
 # and https://errorprone.info/docs/installation .
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.10.0-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.15.0.jar:${DAIKONDIR}/java/lib/error-prone/javacutil-3.1.1.jar:${DAIKONDIR}/java/lib/error-prone/jFormatString-3.0.0.jar:${DAIKONDIR}/java/lib/error-prone/caffeine-2.8.4.jar:${DAIKONDIR}/java/lib/error-prone/diffutils-1.3.0.jar:${DAIKONDIR}/java/lib/error-prone/threeten-extra-1.5.0.jar
 
+JAVAC_ANNOTATION_PROCESSOR_ARGS ?= \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
+	-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
+	-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
+	-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED
+
 error-prone: errorprone
 errorprone: compile errorprone-nocompile
 # Some of the -Xep are temporary
@@ -707,16 +719,7 @@ ifeq ($(JAVA8), 1)
 else
 ## MutablePublicArray is off because Error Prone 2.4.0 crashes: https://github.com/google/error-prone/issues/1645
 	javac -cp ${DAIKON_CLASSPATH} \
-	  -J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
-	  -J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
-	  -J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED \
-	  -J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED \
-	  -J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
-	  -J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED \
-	  -J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
-	  -J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
-	  -J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
-	  -J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED \
+	  ${JAVAC_ANNOTATION_PROCESSOR_ARGS} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF' \
 	  -Xmaxwarns 100000 -Werror \
@@ -802,16 +805,7 @@ ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
   CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} -J-Xbootclasspath/p:${CHECKERFRAMEWORK_JAVAC}
 else
   CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} \
-	-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
-	-J--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
-	-J--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED \
-	-J--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED \
-	-J--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
-	-J--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED \
-	-J--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
-	-J--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
-	-J--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
-	-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED
+    ${JAVAC_ANNOTATION_PROCESSOR_ARGS}
 endif
 
 ## All of the following targets need to depend on "compile".
