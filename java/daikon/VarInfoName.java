@@ -1394,8 +1394,6 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         String term_name = null;
         if (format == OutputFormat.JML) {
           term_name = term.jml_name(v);
-        } else if (format == OutputFormat.JAVA) {
-          term_name = term.java_name(v);
         } else {
           term_name = term.dbc_name(v);
         }
