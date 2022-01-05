@@ -4304,6 +4304,6 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  UnaryInvariant BinaryInvariant TernaryInvariant EM64T www
 @c  LocalWords:  runtime var1 PptSlice1 over1 config EXIT99 var2 var3 val1
 @c  LocalWords:  EXITNN val2 arg1 arg2 EXIT35 plse fjalar myfjalar ln nsf
-@c  LocalWords:  chmod og rwx BIBDIR CHECKERFRAMEWORK pipefail wget
+@c  LocalWords:  chmod og rwx BIBDIR CHECKERFRAMEWORK pipefail wget OSNAME
 @c  LocalWords:  readelf DAIKONVERSION xargs codespecs kvasir repo
-@c  LocalWords:  untracked
+@c  LocalWords:  untracked Makefile's
