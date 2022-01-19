@@ -1,0 +1,48 @@
+# Create a Docker image that is ready to run the full Daikon tests,
+# including building the manual and Javadoc.
+# But it's used primarily for running miscellaneous tests such as the manual
+# and Javadoc.
+
+FROM fedora:35
+MAINTAINER Michael Ernst <mernst@cs.washington.edu>
+
+# According to
+# https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
+#  * Put "apt-get update" and "apt-get install" in the same RUN command.
+#  * Do not run "apt-get upgrade"; instead get upstream to update.
+RUN dnf -qy upgrade && dnf -qy install \
+  autoconf \
+  automake \
+  bc \
+  binutils-devel \
+  gcc \
+  git \
+  jq \
+  m4 \
+  make \
+  redhat-lsb \
+  rsync \
+  tar \
+  unzip \
+  which
+
+RUN dnf -q -y install \
+  java-17-openjdk \
+  java-17-openjdk-devel
+
+RUN dnf -qy install \
+  curl \
+  ctags \
+  gcc-c++ \
+  graphviz \
+  netpbm \
+  python \
+  python3 \
+  python3-distutils \
+  texi2html \
+  texinfo \
+  texinfo-tex \
+  texlive \
+  wget
+
+RUN dnf -q clean all
