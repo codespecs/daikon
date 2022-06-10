@@ -1101,9 +1101,14 @@ javadoc-files.txt:
 	$(MAKE) ${AUTO_GENERATED_FILES}
 	find * \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -path 'daikon/dcomp-transfer' \) -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
 
+# If Java 8, only run JAVADOC on Ubuntu.
 ifeq ($(JAVA8), 1)
-  ifneq ($(shell sed -n ';s/^NAME="\(.*\)"/\1/p;' /etc/os-release),Ubuntu)
-    SKIP_JAVADOC=1
+  ifneq ("$(wildcard /etc/os-release)","")
+    # File /etc/os-release exists
+    ifneq ($(shell sed -n ';s/^NAME="\(.*\)"/\1/p;' /etc/os-release),Ubuntu)
+      # This is not Ubuntu
+      SKIP_JAVADOC=1
+    endif
   endif
 endif
 
