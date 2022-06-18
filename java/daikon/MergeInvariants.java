@@ -2,7 +2,8 @@ package daikon;
 
 import daikon.split.PptSplitter;
 import daikon.suppress.NIS;
-import gnu.getopt.*;
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

@@ -1,6 +1,7 @@
 package daikon;
 
-import gnu.getopt.*;
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
 import java.io.File;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;

@@ -3,8 +3,9 @@ package daikon.split;
 import daikon.tools.jtb.Ast;
 import java.util.List;
 import jtb.ParseException;
-import jtb.syntaxtree.*;
-import jtb.visitor.*;
+import jtb.syntaxtree.Node;
+import jtb.syntaxtree.NodeToken;
+import jtb.visitor.DepthFirstVisitor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
