@@ -812,7 +812,7 @@ endif
 
 # Just check that the Index Checker doesn't crash -- -AsuppressWarnings="index"
 # command-line argument suppresses all type-checking errors.
-JAVAC_CALLEDMETHODS_ARGS = -processor org.checkerframework.checker.calledmethods.CalledMethodsChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_RESOURCELEAK_ARGS = -processor org.checkerframework.checker.resourceleak.ResourceLeakChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_FORMATTER_ARGS = -processor org.checkerframework.checker.formatter.FormatterChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_INDEX_ARGS = -processor org.checkerframework.checker.index.IndexChecker -implicit:class -Xlint:-processing -AskipDefs='${INDEX_SKIPDEFS}' -AassumeAssertionsAreEnabled -AsuppressWarnings="index"
 # JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -implicit:class -Xlint:-processing
@@ -857,14 +857,10 @@ show_nullness_java_files:
 
 ## TODO: Reinstate these dependencies later:  typecheck-prototype typecheck-vindex
 # Check is in two parts because Travis won't run jobs longer than 50 minutes.
-typecheck-part1: typecheck-calledmethods typecheck-formatter typecheck-index typecheck-interning typecheck-lock
-typecheck-part2: typecheck-nullness typecheck-regex typecheck-signature
+typecheck-part1: typecheck-formatter typecheck-index typecheck-interning typecheck-lock
+typecheck-part2: typecheck-nullness typecheck-regex typecheck-resourceleak typecheck-signature
 typecheck-all: typecheck-part1 typecheck-part2
 typecheck: typecheck-all
-
-typecheck-calledmethods: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND} ${JAVAC_CALLEDMETHODS_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_CALLEDMETHODS_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 typecheck-formatter: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ...
@@ -903,6 +899,10 @@ typecheck-interning-all: ${ALL_GENERATED_FILES} compile
 INTERNING_ONEFILE ?= daikon/PptTopLevel.java
 typecheck-interning-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_ONEFILE}
+
+typecheck-resourceleak: ${ALL_GENERATED_FILES} compile
+	@echo ${JAVAC_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 typecheck-signature: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ...

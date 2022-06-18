@@ -50,6 +50,8 @@ import java.util.zip.GZIPInputStream;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.mustcall.qual.MustCall;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
@@ -1107,6 +1109,7 @@ public final class FileIO {
     }
   }
 
+  @SuppressWarnings("builder:required.method.not.called") //  daikonServer is not closed
   private static InputStream connectToChicory() {
 
     ServerSocket daikonServer;
@@ -1257,7 +1260,7 @@ public final class FileIO {
     public PptMap all_ppts;
 
     /** Input stream. */
-    public LineNumberReader reader;
+    public @Owning @MustCall("close") LineNumberReader reader;
 
     /** Total number of lines in the input file. */
     public long total_lines;
