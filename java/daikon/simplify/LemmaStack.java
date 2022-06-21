@@ -514,7 +514,7 @@ public class LemmaStack {
     // effectively final.  If a bug exists whereby this.session
     // is not effectively final, this would unfortunately mask that error.
     final SessionManager session = this.session;
-    session.session_done();
+    session.close();
     synchronized (session) {
       session.notifyAll();
     }

@@ -14,7 +14,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /** A SessionManager is a component which handles the threading interaction with the Session. */
-public class SessionManager {
+public class SessionManager implements Closeable {
   /** The command to be performed (point of communication with worker thread). */
   private @Nullable Cmd pending;
 
@@ -84,7 +84,7 @@ public class SessionManager {
       }
       // command finished iff the command was nulled out
       if (pending != null) {
-        session_done();
+        close();
         throw new TimeoutException();
       }
       // check for error
@@ -96,8 +96,8 @@ public class SessionManager {
 
   /** Shutdown this session. No further commands may be executed. */
   @SuppressWarnings("nullness") // nulling worker for fast failure (& for GC)
-  public void session_done() {
-    worker.session_done();
+  public void close() {
+    worker.close();
     worker = null;
   }
 
@@ -212,12 +212,12 @@ public class SessionManager {
     }
 
     @RequiresNonNull("session")
-    private void session_done() {
+    private void close() {
       finished = true;
       final @GuardedBy("<self>") Session tmp = session;
       session = null;
       synchronized (tmp) {
-        tmp.kill();
+        tmp.close();
       }
     }
   }
