@@ -215,6 +215,7 @@ public class SessionManager implements Closeable {
     }
 
     @RequiresNonNull("session")
+    @Override
     public void close(@GuardSatisfied Worker this) {
       finished = true;
       final @GuardedBy("<self>") Session tmp = session;
