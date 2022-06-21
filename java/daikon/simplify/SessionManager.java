@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -97,7 +98,8 @@ public class SessionManager implements Closeable {
 
   /** Shutdown this session. No further commands may be executed. */
   @SuppressWarnings("nullness") // nulling worker for fast failure (& for GC)
-  public void close() {
+  @Override
+  public void close(@GuardSatisfied SessionManager this) {
     worker.close();
     worker = null;
   }
@@ -213,7 +215,7 @@ public class SessionManager implements Closeable {
     }
 
     @RequiresNonNull("session")
-    public void close() {
+    public void close(@GuardSatisfied Worker this) {
       finished = true;
       final @GuardedBy("<self>") Session tmp = session;
       session = null;

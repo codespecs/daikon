@@ -151,7 +151,6 @@ public class Session implements Closeable {
   }
 
   @Override
-  @Holding("this")
   public void close(@GuardSatisfied Session this) {
     process.destroy();
     if (dkconfig_trace_input) {

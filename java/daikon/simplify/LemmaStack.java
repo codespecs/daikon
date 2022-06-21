@@ -1,6 +1,7 @@
 package daikon.simplify;
 
 import daikon.inv.Invariant;
+import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 
 /**
@@ -17,7 +19,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
  * it's also a convenient place to hang routines that any Simplify client can use.
  */
 @SuppressWarnings("JdkObsolete") // Stack has methods that ArrayDeque lacks, such as elementAt()
-public class LemmaStack {
+public class LemmaStack implements Closeable {
   /**
    * Boolean. Controls Daikon's response when inconsistent invariants are discovered while running
    * Simplify. If false, Daikon will give up on using Simplify for that program point. If true,
@@ -505,7 +507,9 @@ public class LemmaStack {
     }
   }
 
-  public void closeSession() {
+  /** Releases resources held by this. */
+  @Override
+  public void close(@GuardSatisfied LemmaStack this) {
     // this.session should be effectively final in that it refers
     // to the same value throughout the execution of this method.
     // Unfortunately, the Lock Checker cannot verify this,
