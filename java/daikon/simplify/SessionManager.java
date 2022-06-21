@@ -3,6 +3,7 @@ package daikon.simplify;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -212,7 +213,7 @@ public class SessionManager implements Closeable {
     }
 
     @RequiresNonNull("session")
-    private void close() {
+    public void close() {
       finished = true;
       final @GuardedBy("<self>") Session tmp = session;
       session = null;
