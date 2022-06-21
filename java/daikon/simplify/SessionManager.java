@@ -214,6 +214,7 @@ public class SessionManager implements Closeable {
       }
     }
 
+    @SuppressWarnings("nullness:contracts.precondition.override")
     @RequiresNonNull("session")
     @Override
     public void close(@GuardSatisfied Worker this) {
