@@ -188,8 +188,7 @@ public class SplitterFactory {
       @SuppressWarnings("signature") // safe, has been quoted
       @BinaryName String fileName_bn = fileName;
       splitObj.setClassName(fileName_bn);
-      try {
-        BufferedWriter writer = FilesPlume.newBufferedFileWriter(fileAddress + ".java");
+      try (BufferedWriter writer = FilesPlume.newBufferedFileWriter(fileAddress + ".java")) {
         if (dkconfig_delete_splitters_on_exit) {
           new File(fileAddress + ".java").deleteOnExit();
           new File(fileAddress + ".class").deleteOnExit();

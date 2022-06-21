@@ -190,13 +190,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     // Parse the bytes of the classfile, die on any errors
     JavaClass c;
-    {
-      ClassParser parser = new ClassParser(new ByteArrayInputStream(classfileBuffer), className);
-      try {
-        c = parser.parse();
-      } catch (Exception e) {
-        throw new RuntimeException("Unexpected error", e);
-      }
+    try (ByteArrayInputStream bais = new ByteArrayInputStream(classfileBuffer)) {
+      ClassParser parser = new ClassParser(bais, className);
+      c = parser.parse();
+    } catch (Exception e) {
+      throw new RuntimeException("Unexpected error", e);
     }
 
     try {

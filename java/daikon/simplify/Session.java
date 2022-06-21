@@ -3,6 +3,7 @@ package daikon.simplify;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,10 +12,13 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.checkerframework.checker.lock.qual.Holding;
+import org.checkerframework.checker.mustcall.qual.MustCall;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -23,7 +27,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * A session is a channel to the Simplify theorem-proving tool. Once a session is started, commands
  * may be applied to the session to make queries and manipulate its state.
  */
-public class Session {
+@MustCall("kill") public class Session implements Closeable {
   /**
    * A non-negative integer, representing the largest number of iterations for which Simplify should
    * be allowed to run on any single conjecture before giving up. Larger values may cause Simplify
@@ -67,7 +71,8 @@ public class Session {
   public static boolean dkconfig_trace_input = false;
 
   // non-null if dkconfig_trace_input==true
-  private @MonotonicNonNull PrintStream trace_file;
+  private @Owning @MustCall("close") @MonotonicNonNull PrintStream trace_file;
+
   private static int trace_count = 0;
 
   /* package */ final Process process;
@@ -102,7 +107,9 @@ public class Session {
 
       if (dkconfig_trace_input) {
         File f;
-        while ((f = new File("simplify" + trace_count + ".in")).exists()) trace_count++;
+        while ((f = new File("simplify" + trace_count + ".in")).exists()) {
+          trace_count++;
+        }
         trace_file = new PrintStream(new FileOutputStream(f));
       }
 
@@ -129,6 +136,13 @@ public class Session {
     } catch (IOException e) {
       throw new SimplifyError(e.toString());
     }
+  }
+
+  /** Releases the resources held by this. */
+  @EnsuresCalledMethods(value = "trace_file", methods = "close")
+  @Override
+  public void close() {
+    trace_file.close();
   }
 
   /* package access */ void sendLine(

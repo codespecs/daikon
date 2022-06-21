@@ -9,17 +9,19 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.lock.qual.GuardedBy;
+import org.checkerframework.checker.mustcall.qual.MustCall;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /** A SessionManager is a component which handles the threading interaction with the Session. */
-public class SessionManager {
+public class SessionManager implements Closeable {
   /** The command to be performed (point of communication with worker thread). */
   private @Nullable Cmd pending;
 
   /** Our worker thread; hold onto it so that we can stop it. */
-  private Worker worker;
+  private @Owning Worker worker;
 
   // The error message returned by the worked thread, or null
   private @Nullable String error = null;
@@ -171,7 +173,7 @@ public class SessionManager {
   }
 
   /** Helper thread which interacts with a Session, according to the enclosing manager. */
-  private class Worker extends Thread {
+  @MustCall("session_done") private class Worker extends Thread {
     private final SessionManager mgr = SessionManager.this; // just sugar
 
     /** The associated session, or null if the thread should shutdown. */

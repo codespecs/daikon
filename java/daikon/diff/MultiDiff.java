@@ -34,18 +34,25 @@ public class MultiDiff {
   public static void mainHelper(final String[] args)
       throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException,
           InvocationTargetException, NoSuchMethodException {
-    PrintStream out = new PrintStream(new FileOutputStream("rand_sel.spinfo"));
-    /*
-      try {
-        if (args.length != 0) {
-            FileOutputStream file = new FileOutputStream (args[0]);
-            out = new PrintStream (file);
-        }
-    }
+    FileOutputStream fos = null; // dummy initialization for comiler's definite assignment check
+    try {
+      fos = new FileOutputStream("rand_sel.spinfo");
+      PrintStream out = new PrintStream(fos);
+      /*
+        try {
+          if (args.length != 0) {
+              FileOutputStream file = new FileOutputStream (args[0]);
+              out = new PrintStream (file);
+          }
+      }
 
-    catch (IOException e) {e.printStackTrace(); }
-    */
-    MultiDiffVisitor.setForSpinfoOut(out);
-    Diff.main(args);
+      catch (IOException e) {e.printStackTrace(); }
+      */
+      MultiDiffVisitor.setForSpinfoOut(out);
+      Diff.main(args);
+    } catch (IOException e) {
+      fos.close();
+      throw e;
+    }
   }
 }

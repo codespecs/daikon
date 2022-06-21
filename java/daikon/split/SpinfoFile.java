@@ -56,8 +56,7 @@ public class SpinfoFile {
   SpinfoFile(File spinfoFile, String tempDir) {
     this.tempDir = tempDir;
     this.spinfoFileName = spinfoFile.toString();
-    try {
-      LineNumberReader reader = FilesPlume.newLineNumberFileReader(spinfoFile);
+    try (LineNumberReader reader = FilesPlume.newLineNumberFileReader(spinfoFile)) {
       parseFile(reader);
     } catch (FileNotFoundException e) {
       throw new RuntimeException(e);

@@ -158,22 +158,23 @@ public class Premain {
     // Read the list of pre-instrumented classes.
     if (DCInstrument.jdk_instrumented) {
       // location is: daikon/java/dcomp-rt/java/lang/jdk_classes.txt .
-      InputStream strm = Object.class.getResourceAsStream("jdk_classes.txt");
-      if (strm == null) {
-        System.err.println(
-            "Can't find jdk_classes.txt;"
-                + " see Daikon manual, section \"Instrumenting the JDK with DynComp\"");
-        System.exit(1);
-      }
-      BufferedReader reader = new BufferedReader(new InputStreamReader(strm, UTF_8));
-
-      while (true) {
-        String line = reader.readLine();
-        if (line == null) {
-          break;
+      try (InputStream strm = Object.class.getResourceAsStream("jdk_classes.txt")) {
+        if (strm == null) {
+          System.err.println(
+              "Can't find jdk_classes.txt;"
+                  + " see Daikon manual, section \"Instrumenting the JDK with DynComp\"");
+          System.exit(1);
         }
-        // System.out.printf("adding '%s'%n", line);
-        pre_instrumented.add(line);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(strm, UTF_8));
+
+        while (true) {
+          String line = reader.readLine();
+          if (line == null) {
+            break;
+          }
+          // System.out.printf("adding '%s'%n", line);
+          pre_instrumented.add(line);
+        }
       }
     }
 
@@ -232,8 +233,7 @@ public class Premain {
       String classname = "daikon/dcomp-transfer/DCRuntime.class";
       URL class_url = ClassLoader.getSystemResource(classname);
       if (class_url != null) {
-        try {
-          InputStream inputStream = class_url.openStream();
+        try (InputStream inputStream = class_url.openStream()) {
           if (inputStream != null) {
             int size = inputStream.read(repClass, 0, repClass.length);
             byte[] truncated = new byte[size];
