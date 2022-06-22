@@ -2488,7 +2488,7 @@ public final class Daikon {
 
     // Make sure the Simplify process and helper threads are finished
     if (PptTopLevel.getProverStack() != null) {
-      PptTopLevel.getProverStack().closeSession();
+      PptTopLevel.getProverStack().close();
     }
   }
 
