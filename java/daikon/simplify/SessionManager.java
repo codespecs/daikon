@@ -175,6 +175,7 @@ public class SessionManager implements Closeable {
 
   /** Helper thread which interacts with a Session, according to the enclosing manager. */
   private class Worker extends Thread implements Closeable {
+    /** The session mananger. */
     private final SessionManager mgr = SessionManager.this; // just sugar
 
     /** The associated session, or null if the thread should shutdown. */
