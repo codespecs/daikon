@@ -2,10 +2,11 @@ package daikon.test;
 
 import static org.junit.Assert.assertEquals;
 
-import daikon.*;
+import daikon.FileIO;
+import daikon.LogHelper;
+import daikon.ProglangType;
 import java.util.Arrays;
 import java.util.Comparator;
-import junit.framework.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.plumelib.util.ArraysPlume;

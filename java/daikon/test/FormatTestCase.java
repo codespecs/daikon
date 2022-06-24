@@ -4,7 +4,17 @@ import static daikon.inv.Invariant.asInvClass;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import daikon.*;
+import daikon.FileIO;
+import daikon.Global;
+import daikon.PptSlice;
+import daikon.PptSlice1;
+import daikon.PptSlice2;
+import daikon.PptSlice3;
+import daikon.PptTopLevel;
+import daikon.ProglangType;
+import daikon.VarComparabilityNone;
+import daikon.VarInfo;
+import daikon.VarInfoAux;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import daikon.inv.binary.BinaryInvariant;

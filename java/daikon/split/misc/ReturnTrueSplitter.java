@@ -5,7 +5,6 @@ import daikon.ProglangType;
 import daikon.ValueTuple;
 import daikon.VarInfo;
 import daikon.inv.DummyInvariant;
-import daikon.split.*;
 import daikon.split.Splitter;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
