@@ -8,7 +8,7 @@ jobs:
   # Only proceed to other jobs if ubuntu-jdk8-jobs passes.
   ubuntu-jdk8-jobs:
     docker:
-      - image: cimg/base:2020.01
+      - image: cimg/base:2022.06
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
     steps:
