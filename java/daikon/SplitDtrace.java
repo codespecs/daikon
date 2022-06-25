@@ -10,7 +10,6 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import org.checkerframework.checker.mustcall.qual.MustCall;
 import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.dataflow.qual.Pure;
 
@@ -178,7 +177,7 @@ public final class SplitDtrace {
     "JdkObsolete", // ZipFile uses Enumeration
     "builder:required.method.not.called" // @MustCall flows through an enumeration
   })
-  static @Owning @MustCall("close") BufferedReader getStream(String filename) throws IOException {
+  static @Owning BufferedReader getStream(String filename) throws IOException {
     InputStream stream = null; // dummy initialization for compiler's definite assignment check
     ZipFile zipfile = null; // declare outside try so that it can be closed if an exception occurs
     try {

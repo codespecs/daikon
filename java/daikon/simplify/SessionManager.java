@@ -24,7 +24,7 @@ public class SessionManager implements Closeable {
   private @Nullable Cmd pending;
 
   /** Our worker thread; hold onto it so that we can stop it. */
-  private @Owning @MustCall("close") Worker worker;
+  private @Owning Worker worker;
 
   // The error message returned by the worked thread, or null
   private @Nullable String error = null;

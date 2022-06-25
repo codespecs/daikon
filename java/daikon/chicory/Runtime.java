@@ -31,7 +31,6 @@ import java.util.zip.GZIPOutputStream;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.checkerframework.checker.lock.qual.Holding;
-import org.checkerframework.checker.mustcall.qual.MustCall;
 import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -106,7 +105,7 @@ public class Runtime {
       "nullness:initialization.static.field.uninitialized" // initialized and used in generated
   // instrumentation code that cannot be type-checked by a source code checker.
   )
-  static @Owning @MustCall("close") @GuardedBy("<self>") PrintWriter dtrace;
+  static @Owning @GuardedBy("<self>") PrintWriter dtrace;
 
   /** Set to true when the dtrace stream is closed. */
   static boolean dtrace_closed = false;
@@ -600,7 +599,7 @@ public class Runtime {
         try {
           os.close();
         } catch (IOException e2) {
-          throw new Error(e2);
+          // do nothing, Exception `e` will be thrown below
         }
       }
       e.printStackTrace();

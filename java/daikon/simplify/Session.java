@@ -71,7 +71,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
   public static boolean dkconfig_trace_input = false;
 
   // non-null if dkconfig_trace_input==true
-  private final @Owning @MustCall("close") @MonotonicNonNull PrintStream trace_file;
+  private final @Owning @MonotonicNonNull PrintStream trace_file;
 
   private static int trace_count = 0;
 

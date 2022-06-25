@@ -1243,7 +1243,7 @@ public final class FileIO {
    * </ol>
    */
   @UsesObjectEquals
-  public static class ParseState implements Closeable {
+  @MustCall("close") public static class ParseState implements Closeable {
 
     //
     // This is the global information about the state of the parser.
@@ -1265,7 +1265,7 @@ public final class FileIO {
     public PptMap all_ppts;
 
     /** Input stream. */
-    public final @Owning @MustCall("close") LineNumberReader reader;
+    public final @Owning LineNumberReader reader;
 
     /** Total number of lines in the input file. */
     public long total_lines;
@@ -1307,7 +1307,7 @@ public final class FileIO {
      * @throws IOException if there is a problem reading or writing a file
      */
     @SuppressWarnings("StaticAssignmentInConstructor") // for progress output
-    @MustCall("close") public ParseState(
+    public ParseState(
         String raw_filename, boolean decl_file_p, boolean ppts_may_be_new, PptMap ppts)
         throws IOException {
       // Pretty up raw_filename for use in messages

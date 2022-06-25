@@ -51,7 +51,6 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import org.checkerframework.checker.mustcall.qual.MustCall;
 import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -250,7 +249,7 @@ public final class PrintInvariants {
   private static String print_csharp_metadata_SWITCH = "print_csharp_metadata";
 
   // Stores the output file stream if --output is specified.  Null means System.out.
-  private static @Owning @MustCall("close") @Nullable OutputStream out_stream = null;
+  private static @Owning @Nullable OutputStream out_stream = null;
   private static boolean print_csharp_metadata = false;
 
   // Fields that will be used if the --disc_reason switch is used (in other

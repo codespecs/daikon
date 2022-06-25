@@ -53,7 +53,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   public static boolean dkconfig_synchronous_errors = false;
 
   private Stack<Lemma> lemmas;
-  private @Owning @MustCall("close") SessionManager session;
+  private @Owning SessionManager session;
 
   /** Tell Simplify to assume a lemma, which should already be on our stack. */
   private void assume(@UnknownInitialization(LemmaStack.class) LemmaStack this, Lemma lemma)
