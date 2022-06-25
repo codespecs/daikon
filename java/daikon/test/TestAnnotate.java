@@ -2,8 +2,7 @@ package daikon.test;
 
 import static org.junit.Assert.assertEquals;
 
-import daikon.tools.jtb.*;
-import junit.framework.*;
+import daikon.tools.jtb.AnnotateVisitor;
 import org.junit.Test;
 
 /** Tests that Annotate respects tabs. */

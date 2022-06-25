@@ -1,6 +1,10 @@
 package daikon.test;
 
-import daikon.*;
+import daikon.PptTopLevel;
+import daikon.ProglangType;
+import daikon.VarComparabilityNone;
+import daikon.VarInfo;
+import daikon.VarInfoAux;
 import java.util.ArrayList;
 import java.util.List;
 

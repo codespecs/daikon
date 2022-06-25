@@ -23,9 +23,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import org.apache.bcel.*;
-import org.apache.bcel.classfile.*;
-import org.apache.bcel.generic.*;
 
 /**
  * This class is the entry point for the DynComp instrumentation agent. It is the only code in

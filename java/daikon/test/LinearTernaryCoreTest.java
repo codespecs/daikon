@@ -6,7 +6,6 @@ import daikon.FileIO;
 import daikon.LogHelper;
 import daikon.inv.OutputFormat;
 import daikon.inv.ternary.threeScalar.LinearTernaryCore;
-import junit.framework.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

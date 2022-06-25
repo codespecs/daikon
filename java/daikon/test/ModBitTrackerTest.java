@@ -2,10 +2,12 @@ package daikon.test;
 
 import static org.junit.Assert.assertEquals;
 
-import daikon.*;
+import daikon.FileIO;
+import daikon.LogHelper;
+import daikon.ModBitTracker;
+import daikon.ValueTuple;
 import java.util.BitSet;
 import java.util.Random;
-import junit.framework.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
