@@ -239,7 +239,8 @@ public class BuildJDK {
     Map<String, InputStream> class_stream_map = new HashMap<>();
     String jar_name = java_home + "/lib/rt.jar";
     System.out.printf("using jar file %s%n", jar_name);
-    try (JarFile jfile = new JarFile(jar_name)) {
+    try {
+      JarFile jfile = new JarFile(jar_name);
       // Get each class to be instrumented and store it away
       Enumeration<JarEntry> entries = jfile.entries();
       while (entries.hasMoreElements()) {
