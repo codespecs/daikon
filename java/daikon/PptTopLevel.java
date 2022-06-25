@@ -102,6 +102,7 @@ import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
@@ -2872,7 +2873,7 @@ public class PptTopLevel extends Ppt {
   // Created upon first use, then saved.  Do not eagerly initialize,
   // because doing so runs Simplify (which crashes if Simplify is not
   // installed).
-  private static @MonotonicNonNull LemmaStack proverStack = null;
+  private static @Owning @MonotonicNonNull LemmaStack proverStack = null;
 
   /**
    * Interface used by mark_implied_via_simplify to determine what invariants should be considered
@@ -2889,7 +2890,9 @@ public class PptTopLevel extends Ppt {
   @SuppressWarnings("nullness") // reinitialization if error occurs
   public void mark_implied_via_simplify(PptMap all_ppts) {
     try {
-      if (proverStack == null) proverStack = new LemmaStack();
+      if (proverStack == null) {
+        proverStack = new LemmaStack();
+      }
       markImpliedViaSimplify_int(
           new SimplifyInclusionTester() {
             @Override
@@ -2898,6 +2901,9 @@ public class PptTopLevel extends Ppt {
             }
           });
     } catch (SimplifyError e) {
+      if (proverStack != null) {
+        proverStack.close();
+      }
       proverStack = null;
     }
   }

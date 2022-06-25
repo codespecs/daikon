@@ -119,23 +119,23 @@ public class CreateSpinfo {
           "Error: No .java file arguments supplied." + Global.lineSep + usage);
     }
     if (outputfilename != null) {
-      PrintWriter output =
-          new PrintWriter(Files.newBufferedWriter(Paths.get(outputfilename), UTF_8));
-      for (; argindex < args.length; argindex++) {
-        String javaFileName = args[argindex];
-        writeSplitters(javaFileName, output);
+      try (PrintWriter output =
+          new PrintWriter(Files.newBufferedWriter(Paths.get(outputfilename), UTF_8))) {
+        for (; argindex < args.length; argindex++) {
+          String javaFileName = args[argindex];
+          writeSplitters(javaFileName, output);
+        }
+        output.flush();
       }
-      output.flush();
-      output.close();
     } else {
       for (; argindex < args.length; argindex++) {
         String javaFileName = args[argindex];
         String spinfoFileName = spinfoFileName(javaFileName);
-        PrintWriter output =
-            new PrintWriter(Files.newBufferedWriter(Paths.get(spinfoFileName), UTF_8));
-        writeSplitters(javaFileName, output);
-        output.flush();
-        output.close();
+        try (PrintWriter output =
+            new PrintWriter(Files.newBufferedWriter(Paths.get(spinfoFileName), UTF_8))) {
+          writeSplitters(javaFileName, output);
+          output.flush();
+        }
       }
     }
   }
@@ -170,10 +170,9 @@ public class CreateSpinfo {
    * @param output the PrintWriter to which this spinfo file is being wrote
    */
   private static void writeSplitters(String javaFileName, PrintWriter output) throws IOException {
-    Reader input = Files.newBufferedReader(Paths.get(javaFileName), UTF_8);
-    JavaParser parser = new JavaParser(input);
     Node root;
-    try {
+    try (Reader input = Files.newBufferedReader(Paths.get(javaFileName), UTF_8)) {
+      JavaParser parser = new JavaParser(input);
       root = parser.CompilationUnit();
     } catch (ParseException e) {
       e.printStackTrace();

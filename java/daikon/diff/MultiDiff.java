@@ -34,9 +34,7 @@ public class MultiDiff {
   public static void mainHelper(final String[] args)
       throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException,
           InvocationTargetException, NoSuchMethodException {
-    FileOutputStream fos = null; // dummy initialization for comiler's definite assignment check
-    try {
-      fos = new FileOutputStream("rand_sel.spinfo");
+    try (FileOutputStream fos = new FileOutputStream("rand_sel.spinfo")) {
       PrintStream out = new PrintStream(fos);
       /*
         try {
@@ -50,9 +48,6 @@ public class MultiDiff {
       */
       MultiDiffVisitor.setForSpinfoOut(out);
       Diff.main(args);
-    } catch (IOException e) {
-      fos.close();
-      throw e;
     }
   }
 }

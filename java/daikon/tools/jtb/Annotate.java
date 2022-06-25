@@ -239,31 +239,25 @@ public class Annotate {
         throw new Error("unsupported output file format " + Daikon.output_format);
       }
       // outputFile.getParentFile().mkdirs();
-      Writer output = Files.newBufferedWriter(outputFile.toPath(), UTF_8);
+      try (Writer output = Files.newBufferedWriter(outputFile.toPath(), UTF_8)) {
 
-      debug.fine("Parsing file " + javafilename);
+        debug.fine("Parsing file " + javafilename);
 
-      // Annotate the file
-      Reader input;
-      try {
-        input = Files.newBufferedReader(Paths.get(javafilename), UTF_8);
-      } catch (FileNotFoundException e) {
-        throw new Error(e);
-      }
+        // Annotate the file
+        Node root;
+        try (Reader input = Files.newBufferedReader(Paths.get(javafilename), UTF_8)) {
+          JavaParser parser = new JavaParser(input);
+          root = parser.CompilationUnit();
+        } catch (FileNotFoundException e) {
+          throw new Error(e);
+        } catch (ParseException e) {
+          // e.printStackTrace();
+          System.err.println(javafilename + ": " + e);
+          throw new Daikon.UserError("ParseException in applyVisitorInsertComments");
+        }
 
-      JavaParser parser = new JavaParser(input);
-      Node root;
-      try {
-        root = parser.CompilationUnit();
-      } catch (ParseException e) {
-        // e.printStackTrace();
-        System.err.println(javafilename + ": " + e);
-        throw new Daikon.UserError("ParseException in applyVisitorInsertComments");
-      }
+        debug.fine("Processing file " + javafilename);
 
-      debug.fine("Processing file " + javafilename);
-
-      try {
         Ast.applyVisitorInsertComments(
             javafilename,
             root,

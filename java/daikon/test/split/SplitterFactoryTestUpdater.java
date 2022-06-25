@@ -166,10 +166,11 @@ public class SplitterFactoryTestUpdater {
       // Delete the file, in case it is unwriteable (in which case deleting
       // works, but overwriting does not).
       new File(splitDir + "SplitterFactoryTest.java").delete();
-      BufferedWriter writer =
-          FilesPlume.newBufferedFileWriter(splitDir + "SplitterFactoryTest.java");
-      writer.write(code);
-      writer.flush();
+      try (BufferedWriter writer =
+          FilesPlume.newBufferedFileWriter(splitDir + "SplitterFactoryTest.java")) {
+        writer.write(code);
+        writer.flush();
+      }
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

@@ -151,6 +151,7 @@ import daikon.inv.unary.string.PrintableString;
 import daikon.inv.unary.stringsequence.CommonStringSequence;
 import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.unary.stringsequence.OneOfStringSequence;
+import daikon.simplify.LemmaStack;
 import daikon.split.ContextSplitterFactory;
 import daikon.split.PptSplitter;
 import daikon.split.SpinfoFile;
@@ -2487,8 +2488,9 @@ public final class Daikon {
     System.out.println(TimeUnit.NANOSECONDS.toSeconds(duration));
 
     // Make sure the Simplify process and helper threads are finished
-    if (PptTopLevel.getProverStack() != null) {
-      PptTopLevel.getProverStack().close();
+    LemmaStack proverStack = PptTopLevel.getProverStack();
+    if (proverStack != null) {
+      proverStack.close();
     }
   }
 

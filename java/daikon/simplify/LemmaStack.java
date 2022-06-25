@@ -9,8 +9,12 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
+import org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.mustcall.qual.CreatesMustCallFor;
+import org.checkerframework.checker.mustcall.qual.MustCall;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 
 /**
@@ -19,7 +23,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
  * it's also a convenient place to hang routines that any Simplify client can use.
  */
 @SuppressWarnings("JdkObsolete") // Stack has methods that ArrayDeque lacks, such as elementAt()
-public class LemmaStack implements Closeable {
+@MustCall("close") public class LemmaStack implements Closeable {
   /**
    * Boolean. Controls Daikon's response when inconsistent invariants are discovered while running
    * Simplify. If false, Daikon will give up on using Simplify for that program point. If true,
@@ -49,7 +53,7 @@ public class LemmaStack implements Closeable {
   public static boolean dkconfig_synchronous_errors = false;
 
   private Stack<Lemma> lemmas;
-  private SessionManager session;
+  private @Owning @MustCall("close") SessionManager session;
 
   /** Tell Simplify to assume a lemma, which should already be on our stack. */
   private void assume(@UnknownInitialization(LemmaStack.class) LemmaStack this, Lemma lemma)
@@ -87,9 +91,17 @@ public class LemmaStack implements Closeable {
   }
 
   /** Try to start Simplify. */
+  @CreatesMustCallFor("this")
   @EnsuresNonNull("session")
   private void startProver(@UnknownInitialization LemmaStack this) throws SimplifyError {
     SessionManager session_try = SessionManager.attemptProverStartup();
+    if (session != null) {
+      try {
+        session.close();
+      } catch (Exception e) {
+        throw new SimplifyError(e);
+      }
+    }
     if (session_try != null) {
       session = session_try;
     } else {
@@ -98,6 +110,7 @@ public class LemmaStack implements Closeable {
   }
 
   /** Try to restart Simplify back where we left off, after killing it. */
+  @CreatesMustCallFor("this")
   private void restartProver(@UnknownInitialization(LemmaStack.class) LemmaStack this)
       throws SimplifyError {
     startProver();
@@ -108,6 +121,8 @@ public class LemmaStack implements Closeable {
     }
   }
 
+  /** Create a new LemmaStack. */
+  @SuppressWarnings("builder:reset.not.owning") // issue #5175: https://tinyurl.com/cfissue/5175
   public LemmaStack() throws SimplifyError {
     startProver();
     lemmas = new Stack<Lemma>();
@@ -121,6 +136,7 @@ public class LemmaStack implements Closeable {
   }
 
   /** Push an assumption onto our and Simplify's stacks. */
+  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   public boolean pushLemma(@UnknownInitialization(LemmaStack.class) LemmaStack this, Lemma lem)
       throws SimplifyError {
     SimpUtil.assert_well_formed(lem.formula);
@@ -160,6 +176,7 @@ public class LemmaStack implements Closeable {
    * Simplify says yes, 'F' if Simplify says no, or '?' if we have to kill Simplify because it won't
    * answer.
    */
+  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   private char checkString(@UnknownInitialization(LemmaStack.class) LemmaStack this, String str)
       throws SimplifyError {
     SimpUtil.assert_well_formed(str);
@@ -350,6 +367,7 @@ public class LemmaStack implements Closeable {
    *
    * @param str the expression to make true
    */
+  @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   private List<Lemma> minimizeReasons(String str) throws SimplifyError {
     assert checkString(str) == 'T';
     unAssumeAll(lemmas);
@@ -508,6 +526,8 @@ public class LemmaStack implements Closeable {
   }
 
   /** Releases resources held by this. */
+  @SuppressWarnings("builder:contracts.postcondition") // performed on a local alias, not the field
+  @EnsuresCalledMethods(value = "session", methods = "close")
   @Override
   public void close(@GuardSatisfied LemmaStack this) {
     // this.session should be effectively final in that it refers

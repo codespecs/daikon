@@ -71,7 +71,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
   public static boolean dkconfig_trace_input = false;
 
   // non-null if dkconfig_trace_input==true
-  private @Owning @MustCall("close") @MonotonicNonNull PrintStream trace_file;
+  private final @Owning @MustCall("close") @MonotonicNonNull PrintStream trace_file;
 
   private static int trace_count = 0;
 
@@ -111,6 +111,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
           trace_count++;
         }
         trace_file = new PrintStream(new FileOutputStream(f));
+      } else {
+        trace_file = null;
       }
 
       // set up command stream
@@ -138,13 +140,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
     }
   }
 
-  /** Releases the resources held by this. */
-  @EnsuresCalledMethods(value = "trace_file", methods = "close")
-  @Override
-  public void close() {
-    trace_file.close();
-  }
-
   /* package access */ void sendLine(
       @UnknownInitialization(Session.class) @GuardSatisfied Session this, String s) {
     if (dkconfig_trace_input) {
@@ -163,13 +158,15 @@ import org.checkerframework.checker.nullness.qual.Nullable;
     return output.readLine();
   }
 
+  /** Releases the resources held by this. */
+  @EnsuresCalledMethods(value = "trace_file", methods = "close")
   @Override
   public void close(@GuardSatisfied Session this) {
     process.destroy();
-    if (dkconfig_trace_input) {
-      assert trace_file != null
-          : "@AssumeAssertion(nullness): conditional: trace_file is non-null if"
-              + " dkconfig_trace_input==true";
+    assert dkconfig_trace_input == (trace_file != null)
+        : "@AssumeAssertion(nullness): conditional: trace_file is non-null if"
+            + " dkconfig_trace_input==true";
+    if (trace_file != null) {
       trace_file.close();
     }
   }
@@ -177,31 +174,32 @@ import org.checkerframework.checker.nullness.qual.Nullable;
   // for testing and playing around, not for real use
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    @GuardedBy("<self>") Session s = new Session();
+    try (@GuardedBy("<self>") Session s = new Session()) {
 
-    CmdCheck cc;
+      CmdCheck cc;
 
-    cc = new CmdCheck("(EQ 1 1)");
-    cc.apply(s);
-    assert cc.valid;
+      cc = new CmdCheck("(EQ 1 1)");
+      cc.apply(s);
+      assert cc.valid;
 
-    cc = new CmdCheck("(EQ 1 2)");
-    cc.apply(s);
-    assert !cc.valid;
+      cc = new CmdCheck("(EQ 1 2)");
+      cc.apply(s);
+      assert !cc.valid;
 
-    cc = new CmdCheck("(EQ x z)");
-    cc.apply(s);
-    assert !cc.valid;
+      cc = new CmdCheck("(EQ x z)");
+      cc.apply(s);
+      assert !cc.valid;
 
-    CmdAssume a = new CmdAssume("(AND (EQ x y) (EQ y z))");
-    a.apply(s);
+      CmdAssume a = new CmdAssume("(AND (EQ x y) (EQ y z))");
+      a.apply(s);
 
-    cc.apply(s);
-    assert cc.valid;
+      cc.apply(s);
+      assert cc.valid;
 
-    CmdUndoAssume.single.apply(s);
+      CmdUndoAssume.single.apply(s);
 
-    cc.apply(s);
-    assert !cc.valid;
+      cc.apply(s);
+      assert !cc.valid;
+    }
   }
 }

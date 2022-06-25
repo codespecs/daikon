@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.plumelib.util.StringsPlume;
@@ -79,7 +80,7 @@ public class InvariantChecker {
           "      Print debug info on the specified invariant class, vars, and ppt");
 
   public static List<String> dtrace_files = new ArrayList<>();
-  static PrintStream output_stream = System.out;
+  static @Owning PrintStream output_stream = System.out;
   static int error_cnt = 0;
   static int sample_cnt = 0;
 

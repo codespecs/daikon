@@ -174,25 +174,43 @@ public final class SplitDtrace {
     }
   }
 
-  @SuppressWarnings("JdkObsolete") // ZipFile uses Enumeration
+  @SuppressWarnings({
+    "JdkObsolete", // ZipFile uses Enumeration
+    "builder:required.method.not.called" // @MustCall flows through an enumeration
+  })
   static @Owning @MustCall("close") BufferedReader getStream(String filename) throws IOException {
     InputStream stream = null; // dummy initialization for compiler's definite assignment check
+    ZipFile zipfile = null; // declare outside try so that it can be closed if an exception occurs
     try {
       if (filename.endsWith(".dtrace.zip")) {
-        ZipFile zipfile = new ZipFile(filename);
+        zipfile = new ZipFile(filename);
         Enumeration<? extends ZipEntry> e = zipfile.entries();
         if (!e.hasMoreElements()) throw new RuntimeException("No entries in the gz");
         ZipEntry entry = e.nextElement();
         if (e.hasMoreElements()) throw new RuntimeException("More than one entry in the gz");
         stream = zipfile.getInputStream(entry);
         assert stream != null : "@AssumeAssertion(nullness): just tested that one entry exists";
-      } else if (filename.endsWith(".dtrace.gz")) {
-        stream = new GZIPInputStream(new FileInputStream(filename));
       } else {
         stream = new FileInputStream(filename);
+        if (filename.endsWith(".dtrace.gz")) {
+          stream = new GZIPInputStream(stream);
+        }
       }
     } catch (IOException e) {
-      stream.close();
+      if (zipfile != null) {
+        try {
+          zipfile.close();
+        } catch (IOException e2) {
+          // do nothing
+        }
+      }
+      if (stream != null) {
+        try {
+          stream.close();
+        } catch (IOException e2) {
+          // do nothing
+        }
+      }
       throw e;
     }
     return new BufferedReader(new InputStreamReader(stream, "ISO-8859-1"));
