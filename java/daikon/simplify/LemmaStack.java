@@ -135,7 +135,11 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
     lemmas.pop();
   }
 
-  /** Push an assumption onto our and Simplify's stacks. */
+  /**
+   * Push an assumption onto our and Simplify's stacks.
+   *
+   * @param lem the assumption
+   */
   @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   public boolean pushLemma(@UnknownInitialization(LemmaStack.class) LemmaStack this, Lemma lem)
       throws SimplifyError {
@@ -175,6 +179,9 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
    * Ask Simplify whether a string is a valid statement, given our assumptions. Returns 'T' if
    * Simplify says yes, 'F' if Simplify says no, or '?' if we have to kill Simplify because it won't
    * answer.
+   *
+   * @param str the string to check
+   * @return 'T' if Simplify says yes, 'F' if Simplify says no, or '?' if Simplify does not answer
    */
   @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   private char checkString(@UnknownInitialization(LemmaStack.class) LemmaStack this, String str)
@@ -366,6 +373,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
    * Return a minimal set of assumptions from the stack that imply a given string.
    *
    * @param str the expression to make true
+   * @return a minimal set of assumptions from the stack that imply the given string
    */
   @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   private List<Lemma> minimizeReasons(String str) throws SimplifyError {

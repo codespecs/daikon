@@ -1296,7 +1296,16 @@ public final class FileIO {
     /** Miscellaneous text in the parsed item. */
     public @Nullable Object payload; // used when status=COMMENT
 
-    /** Start parsing the given file. */
+    /**
+     * Start parsing the given file.
+     *
+     * @param raw_filename the file name supplied by the user; may be "-" or "+"
+     * @param decl_file_p true if the file is a declaration file
+     * @param ppts_may_be_new true if declarations of ppts read from the data trace file are new
+     *     (and thus are not in all_ppts). false if the ppts may already be there.
+     * @param ppts the program points
+     * @throws IOException if there is a problem reading or writing a file
+     */
     @SuppressWarnings("StaticAssignmentInConstructor") // for progress output
     @MustCall("close") public ParseState(
         String raw_filename, boolean decl_file_p, boolean ppts_may_be_new, PptMap ppts)
@@ -1390,7 +1399,11 @@ public final class FileIO {
       }
     }
 
-    /** Returns the current line number in the input file, or -1 if not available. */
+    /**
+     * Returns the current line number in the input file, or -1 if not available.
+     *
+     * @return the current line number in the input file, or -1 if not available
+     */
     public int get_linenum() {
       return reader.getLineNumber();
     }

@@ -168,6 +168,7 @@ public class CreateSpinfo {
    *
    * @param javaFileName the name of the java file from which this spinfo file is being made
    * @param output the PrintWriter to which this spinfo file is being wrote
+   * @throws IOException if there is a problem reading or writing files
    */
   private static void writeSplitters(String javaFileName, PrintWriter output) throws IOException {
     Node root;

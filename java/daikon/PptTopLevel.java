@@ -2886,6 +2886,8 @@ public class PptTopLevel extends Ppt {
   /**
    * Use the Simplify theorem prover to flag invariants that are logically implied by others.
    * Considers only invariants that pass isWorthPrinting.
+   *
+   * @param all_ppts all the program points
    */
   @SuppressWarnings("nullness") // reinitialization if error occurs
   public void mark_implied_via_simplify(PptMap all_ppts) {
