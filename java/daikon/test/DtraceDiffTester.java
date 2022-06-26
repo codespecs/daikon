@@ -3,10 +3,9 @@ package daikon.test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import daikon.*;
 import daikon.tools.DtraceDiff;
 import java.net.URL;
-import junit.framework.*;
+import junit.framework.TestSuite;
 import org.junit.Test;
 
 public class DtraceDiffTester {

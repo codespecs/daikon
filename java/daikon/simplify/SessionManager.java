@@ -3,18 +3,20 @@ package daikon.simplify;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /** A SessionManager is a component which handles the threading interaction with the Session. */
-public class SessionManager {
+public class SessionManager implements Closeable {
   /** The command to be performed (point of communication with worker thread). */
   private @Nullable Cmd pending;
 
@@ -84,7 +86,7 @@ public class SessionManager {
       }
       // command finished iff the command was nulled out
       if (pending != null) {
-        session_done();
+        close();
         throw new TimeoutException();
       }
       // check for error
@@ -96,8 +98,9 @@ public class SessionManager {
 
   /** Shutdown this session. No further commands may be executed. */
   @SuppressWarnings("nullness") // nulling worker for fast failure (& for GC)
-  public void session_done() {
-    worker.session_done();
+  @Override
+  public void close(@GuardSatisfied SessionManager this) {
+    worker.close();
     worker = null;
   }
 
@@ -171,7 +174,8 @@ public class SessionManager {
   }
 
   /** Helper thread which interacts with a Session, according to the enclosing manager. */
-  private class Worker extends Thread {
+  private class Worker extends Thread implements Closeable {
+    /** The session mananger. */
     private final SessionManager mgr = SessionManager.this; // just sugar
 
     /** The associated session, or null if the thread should shutdown. */
@@ -211,13 +215,15 @@ public class SessionManager {
       }
     }
 
+    @SuppressWarnings("nullness:contracts.precondition.override")
     @RequiresNonNull("session")
-    private void session_done() {
+    @Override
+    public void close(@GuardSatisfied Worker this) {
       finished = true;
       final @GuardedBy("<self>") Session tmp = session;
       session = null;
       synchronized (tmp) {
-        tmp.kill();
+        tmp.close();
       }
     }
   }

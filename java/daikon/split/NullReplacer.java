@@ -2,8 +2,9 @@ package daikon.split;
 
 import daikon.tools.jtb.Ast;
 import jtb.ParseException;
-import jtb.syntaxtree.*;
-import jtb.visitor.*;
+import jtb.syntaxtree.Node;
+import jtb.syntaxtree.NodeToken;
+import jtb.visitor.DepthFirstVisitor;
 
 /**
  * NullReplacer is a JTB syntax tree visitor that replaces all instances of "null" with "0" in a
