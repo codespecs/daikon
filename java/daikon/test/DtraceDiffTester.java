@@ -1,5 +1,6 @@
 package daikon.test;
 
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -11,7 +12,7 @@ import org.junit.Test;
 public class DtraceDiffTester {
 
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     junit.textui.TestRunner.run(new TestSuite(DtraceDiffTester.class));
   }
 

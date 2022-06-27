@@ -1,11 +1,12 @@
 package daikon.tools;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
 import daikon.FileIO;
 import daikon.Global;
-import daikon.LogHelper;
 import daikon.Ppt;
 import daikon.PptMap;
 import daikon.PptTopLevel;
@@ -104,7 +105,7 @@ public class ExtractConsequent {
    */
   public static void mainHelper(final String[] args)
       throws FileNotFoundException, IOException, ClassNotFoundException {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     LongOpt[] longopts =
         new LongOpt[] {
           new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -131,7 +132,7 @@ public class ExtractConsequent {
           } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
             Global.debugAll = true;
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
-            LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
+            daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else {
             throw new RuntimeException("Unknown long option received: " + option_name);
           }

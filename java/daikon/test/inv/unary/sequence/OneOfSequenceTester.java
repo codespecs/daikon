@@ -1,10 +1,10 @@
 package daikon.test.inv.unary.sequence;
 
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import daikon.FileIO;
-import daikon.LogHelper;
 import daikon.PptSlice;
 import daikon.PptSlice1;
 import daikon.PptTopLevel;
@@ -32,7 +32,7 @@ public class OneOfSequenceTester {
 
   @BeforeClass
   public static void setUpClass() {
-    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     FileIO.new_decl_format = true;
   }
 

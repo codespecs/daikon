@@ -1,13 +1,14 @@
 package daikon.simplify;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.lock.qual.GuardedBy;
@@ -34,7 +35,7 @@ public class SessionManager implements Closeable {
   //    // Use "java -DDEBUG_SIMPLIFY=1 daikon.Daikon ..." or
   //    //     "make USER_JAVA_FLAGS=-DDEBUG_SIMPLIFY=1 ..."
 
-  private static final boolean debug_mgr = debug.isLoggable(Level.FINE);
+  private static final boolean debug_mgr = debug.isLoggable(FINE);
 
   public static void debugln(String s) {
     if (!debug_mgr) {
@@ -65,7 +66,7 @@ public class SessionManager implements Closeable {
   public void request(Cmd command) throws TimeoutException {
     assert worker != null : "Cannot use closed SessionManager";
     assert pending == null : "Cannot queue requests";
-    if (debug.isLoggable(Level.FINE)) {
+    if (debug.isLoggable(FINE)) {
       System.err.println("Running command " + command);
       System.err.println(" called from");
       Throwable t = new Throwable();
@@ -229,7 +230,7 @@ public class SessionManager implements Closeable {
   }
 
   public static void main(String[] args) throws Exception {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     SessionManager m = new SessionManager();
     CmdCheck cc;
 

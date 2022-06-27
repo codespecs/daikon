@@ -1,5 +1,6 @@
 package daikon.test.diff;
 
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertEquals;
 
 import daikon.*;
@@ -45,7 +46,7 @@ public class DiffTester {
 
   @BeforeClass
   public static void setUpClass() {
-    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     FileIO.new_decl_format = true;
   }
 
