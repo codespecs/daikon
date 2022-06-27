@@ -102,9 +102,9 @@ public class ExtractConsequent {
    * appropriate to be called progrmmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
+   * @throws IOException if there is trouble reading the file
    */
-  public static void mainHelper(final String[] args)
-      throws FileNotFoundException, IOException, ClassNotFoundException {
+  public static void mainHelper(final String[] args) throws IOException {
     daikon.LogHelper.setupLogs(INFO);
     LongOpt[] longopts =
         new LongOpt[] {
