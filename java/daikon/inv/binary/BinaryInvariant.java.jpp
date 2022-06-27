@@ -10,7 +10,7 @@
   #define PRIMITIVE double
   #define PRIMITIVENONCOMMENT double
   #define EXAMPLE_INVARIANT An example is {@code y = abs(x)}.
-  #define GET_VAL(obj) (((Double) obj).doubleValue())
+  #define GET_VAL(obj) ((Double) obj).doubleValue()
   #define BASE_IS_TYPE baseIsFloat()
 #elif defined(TYPELONG)
   #define PACKAGE twoScalar
@@ -18,7 +18,7 @@
   #define PRIMITIVE long
   #define PRIMITIVENONCOMMENT long
   #define EXAMPLE_INVARIANT An example is {@code y = abs(x)}.
-  #define GET_VAL(obj) (((Long) obj).longValue())
+  #define GET_VAL(obj) ((Long) obj).longValue()
   #define BASE_IS_TYPE baseIsScalar()
 #elif defined(TYPESTRING)
   #define PACKAGE twoString
@@ -96,7 +96,6 @@ import typequals.prototype.qual.Prototype;
  * less than and greater than) rather than argument swapping should override resurrect_done_swapped
  * to return the correct class.
  */
-@SuppressWarnings("UnnecessaryParentheses")
 public abstract class CLASSNAME extends BinaryInvariant {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
