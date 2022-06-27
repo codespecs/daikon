@@ -287,6 +287,7 @@ public final class Daikon {
 
   // When true, show how much time each program point took.
   // Has no effect unless no_text_output is true.
+  // TODO: The statement above makes sense, but is not true.  (markro 6/9/2022)
   public static boolean show_progress = false;
 
   /**
@@ -411,6 +412,7 @@ public final class Daikon {
   public static final String no_text_output_SWITCH = "no_text_output";
   public static final String format_SWITCH = "format";
   public static final String show_progress_SWITCH = "show_progress";
+  public static final String show_detail_progress_SWITCH = "show_detail_progress";
   public static final String no_show_progress_SWITCH = "no_show_progress";
   public static final String noversion_SWITCH = "noversion";
   public static final String output_num_samples_SWITCH = "output_num_samples";
@@ -699,6 +701,9 @@ public final class Daikon {
    */
   @SuppressWarnings("nullness:contracts.precondition") // private field
   public static void mainHelper(final String[] args) {
+    long startTime = System.nanoTime();
+    long duration;
+
     // Cleanup from any previous runs
     cleanup();
 
@@ -721,7 +726,7 @@ public final class Daikon {
     if (Daikon.dkconfig_quiet) {
       Daikon.dkconfig_progress_delay = -1;
     }
-    if (System.console() == null) {
+    if (System.console() == null && !show_progress) {
       // not connected to a terminal
       Daikon.dkconfig_progress_delay = -1;
     }
@@ -807,6 +812,8 @@ public final class Daikon {
       processOmissions(all_ppts);
     }
 
+    debugProgress.fine(" Writing Serialized Pptmap ... ");
+    long startWriteTime = System.nanoTime();
     // Write serialized output - must be done before guarding invariants
     if (inv_file != null) {
       try {
@@ -815,6 +822,9 @@ public final class Daikon {
         throw new RuntimeException("Error while writing .inv file: " + inv_file, e);
       }
     }
+    duration = System.nanoTime() - startWriteTime;
+    debugProgress.fine(
+        " Writing Serialized Pptmap ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
 
     //     if ((Daikon.dkconfig_guardNulls == "always") // interned
     //         || (Daikon.dkconfig_guardNulls == "missing")) { // interned
@@ -895,6 +905,9 @@ public final class Daikon {
         PrintInvariants.print_filter_stats(debugStats, ppt, all_ppts);
       }
     }
+
+    duration = System.nanoTime() - startTime;
+    debugProgress.fine(" Total time spent in Daikon: " + TimeUnit.NANOSECONDS.toSeconds(duration));
 
     // Done
     if (!Daikon.dkconfig_quiet) {
@@ -984,6 +997,7 @@ public final class Daikon {
           new LongOpt(no_text_output_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(format_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+          new LongOpt(show_detail_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(no_show_progress_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(noversion_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(output_num_samples_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -1036,6 +1050,9 @@ public final class Daikon {
           } else if (show_progress_SWITCH.equals(option_name)) {
             show_progress = true;
             LogHelper.setLevel("daikon.Progress", LogHelper.FINE);
+          } else if (show_detail_progress_SWITCH.equals(option_name)) {
+            show_progress = true;
+            LogHelper.setLevel("daikon.Progress", LogHelper.FINER);
           } else if (no_show_progress_SWITCH.equals(option_name)) {
             show_progress = false;
           } else if (noversion_SWITCH.equals(option_name)) {
@@ -2426,7 +2443,7 @@ public final class Daikon {
       }
       duration = System.nanoTime() - startTime;
       debugProgress.fine(
-          "Time spent adding implications: " + TimeUnit.NANOSECONDS.toSeconds(duration));
+          "Adding Implications ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
     }
   }
 

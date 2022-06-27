@@ -22,6 +22,7 @@ public final class LogHelper {
 
   // Class variables so user doesn't have to use "Level." prefix.
   public static final Level FINE = Level.FINE;
+  public static final Level FINER = Level.FINER;
   public static final Level INFO = Level.INFO;
   public static final Level WARNING = Level.WARNING;
   public static final Level SEVERE = Level.SEVERE;
