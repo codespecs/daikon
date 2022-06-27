@@ -1114,7 +1114,6 @@ public final class FileIO {
     }
   }
 
-  @SuppressWarnings("builder:required.method.not.called") //  daikonServer is not closed
   private static @Owning InputStream connectToChicory() {
 
     ServerSocket daikonServer;
