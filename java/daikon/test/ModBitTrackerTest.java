@@ -24,6 +24,7 @@ public class ModBitTrackerTest {
 
   private Random r = new Random(20031014L);
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);

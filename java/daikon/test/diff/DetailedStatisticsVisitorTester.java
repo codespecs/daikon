@@ -53,6 +53,7 @@ public class DetailedStatisticsVisitorTester {
   Invariant ternary_2_just = new DiffDummyInvariant(slice3, "2", true);
   Invariant ternary_2_unjust = new DiffDummyInvariant(slice3, "2", false);
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);

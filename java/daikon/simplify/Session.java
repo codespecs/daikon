@@ -162,7 +162,11 @@ public class Session implements Closeable {
     }
   }
 
-  // for testing and playing around, not for real use
+  /**
+   * for testing and playing around, not for real use
+   *
+   * @param args command-line arguments
+   */
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(INFO);
     @GuardedBy("<self>") Session s = new Session();

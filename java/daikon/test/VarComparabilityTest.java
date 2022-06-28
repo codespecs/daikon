@@ -15,6 +15,7 @@ public class VarComparabilityTest {
   static final int NONE = VarComparability.NONE;
   static final int IMPLICIT = VarComparability.IMPLICIT;
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);

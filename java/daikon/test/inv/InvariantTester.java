@@ -18,6 +18,7 @@ import org.junit.Test;
 @SuppressWarnings("nullness") // testing code
 public class InvariantTester {
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);

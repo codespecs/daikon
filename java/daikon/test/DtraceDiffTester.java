@@ -11,6 +11,11 @@ import org.junit.Test;
 
 public class DtraceDiffTester {
 
+  /**
+   * The entry point of DtraceDiffTester
+   *
+   * @param args command-line arguments
+   */
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(INFO);
     junit.textui.TestRunner.run(new TestSuite(DtraceDiffTester.class));

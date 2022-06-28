@@ -281,8 +281,10 @@ public final class Daikon {
   public static final boolean invariants_check_canBeMissing_arrayelt = true;
 
   public static final boolean disable_modbit_check_message = false;
-  // Not a good idea to set this to true, as it is too easy to ignore the
-  // warnings and the modbit problem can cause an error later.
+  /**
+   * Not a good idea to set this to true, as it is too easy to ignore the warnings and the modbit
+   * problem can cause an error later.
+   */
   public static final boolean disable_modbit_check_error = false;
 
   /** When true, don't print textual output. */
@@ -426,10 +428,13 @@ public final class Daikon {
   /** option no-show-progress */
   public static final String no_show_progress_SWITCH = "no_show_progress";
 
+  /** option noversion */
   public static final String noversion_SWITCH = "noversion";
+
   public static final String output_num_samples_SWITCH = "output_num_samples";
   public static final String files_from_SWITCH = "files_from";
   public static final String omit_from_output_SWITCH = "omit_from_output";
+
   // Control invariant detection
   public static final String conf_limit_SWITCH = "conf_limit";
   public static final String list_type_SWITCH = "list_type";
@@ -437,16 +442,19 @@ public final class Daikon {
   public static final String disable_all_invariants_SWITCH = "disable-all-invariants";
   public static final String no_dataflow_hierarchy_SWITCH = "nohierarchy";
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
+
   // Process only part of the trace file
   public static final String ppt_regexp_SWITCH = "ppt-select-pattern";
   public static final String ppt_omit_regexp_SWITCH = "ppt-omit-pattern";
   public static final String var_regexp_SWITCH = "var-select-pattern";
   public static final String var_omit_regexp_SWITCH = "var-omit-pattern";
+
   // Configuration options
   public static final String server_SWITCH =
       "server"; // YOAV: server mode for Daikon: reads dtrace files as they appear
   public static final String config_SWITCH = "config";
   public static final String config_option_SWITCH = "config_option";
+
   // Debugging
   public static final String debugAll_SWITCH = "debug";
   public static final String debug_SWITCH = "dbg";
@@ -2041,6 +2049,12 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Read decls, dtrace, etc. files
 
+  /**
+   * Load a set of decl files.
+   *
+   * @param decl_files the files to load
+   * @return the PptMap for the loaded files
+   */
   @RequiresNonNull("fileio_progress")
   // set in mainHelper
   private static PptMap load_decls_files(Set<File> decl_files) {
@@ -2231,7 +2245,11 @@ public final class Daikon {
       }
       display(message);
     }
-    /** Displays the given message. */
+    /**
+     * Displays the given message.
+     *
+     * @param message message to be displayed
+     */
     public void display(String message) {
       if (dkconfig_progress_delay == -1) {
         return;

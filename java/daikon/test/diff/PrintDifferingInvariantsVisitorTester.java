@@ -28,6 +28,7 @@ public class PrintDifferingInvariantsVisitorTester {
   /** An invariant that is justified but not worth printing. */
   Invariant null_noprint = new DiffDummyInvariant(slice0, "0", true, false);
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);

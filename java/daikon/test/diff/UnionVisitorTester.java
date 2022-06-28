@@ -16,6 +16,7 @@ public class UnionVisitorTester {
 
   private Diff diff = new Diff(true, new Invariant.ClassVarnameFormulaComparator());
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);

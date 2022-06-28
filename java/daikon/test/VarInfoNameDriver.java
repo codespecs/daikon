@@ -26,7 +26,11 @@ import java.util.StringTokenizer;
 @SuppressWarnings("nullness") // testing code
 public class VarInfoNameDriver {
 
-  // for convenience
+  /**
+   * Convenience entry point for TraceSelect
+   *
+   * @param args command-line arguments
+   */
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(INFO);
     run(System.in, System.out);

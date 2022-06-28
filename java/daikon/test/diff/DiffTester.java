@@ -44,6 +44,7 @@ public class DiffTester {
   private PptMap imps1;
   private PptMap imps2;
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);

@@ -35,8 +35,14 @@ public class SessionManager implements Closeable {
   //    // Use "java -DDEBUG_SIMPLIFY=1 daikon.Daikon ..." or
   //    //     "make USER_JAVA_FLAGS=-DDEBUG_SIMPLIFY=1 ..."
 
+  /** debugging flag */
   private static final boolean debug_mgr = debug.isLoggable(FINE);
 
+  /**
+   * log debug message
+   *
+   * @param s message to log
+   */
   public static void debugln(String s) {
     if (!debug_mgr) {
       return;
@@ -229,6 +235,11 @@ public class SessionManager implements Closeable {
     }
   }
 
+  /**
+   * testing entry point
+   *
+   * @param args command-line arguments
+   */
   public static void main(String[] args) throws Exception {
     daikon.LogHelper.setupLogs(INFO);
     SessionManager m = new SessionManager();

@@ -11,6 +11,7 @@ import org.junit.Test;
 
 public class LinearTernaryCoreTest {
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);

@@ -35,6 +35,7 @@ public class VarInfoNameTest {
 
   private static final String lineSep = daikon.Global.lineSep;
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);

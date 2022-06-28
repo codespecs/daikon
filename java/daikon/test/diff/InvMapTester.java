@@ -27,6 +27,7 @@ public class InvMapTester {
   private List<Invariant> invsB = new ArrayList<>();
   private List<Invariant> invsC = new ArrayList<>();
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);

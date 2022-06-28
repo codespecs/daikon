@@ -30,6 +30,7 @@ public class OneOfSequenceTester {
 
   private static final int DOESNT_MATTER = 0;
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);

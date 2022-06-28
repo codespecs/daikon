@@ -17,6 +17,7 @@ import org.junit.Test;
 @SuppressWarnings("nullness") // testing code
 public class ConsequentCVFPairComparatorTester {
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);
