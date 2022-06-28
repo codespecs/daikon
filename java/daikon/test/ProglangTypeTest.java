@@ -1,9 +1,9 @@
 package daikon.test;
 
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertEquals;
 
 import daikon.FileIO;
-import daikon.LogHelper;
 import daikon.ProglangType;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -19,9 +19,10 @@ public class ProglangTypeTest {
   static Comparator<String[]> comparrcomparator =
       new ArraysPlume.ComparableArrayComparatorLexical<String>();
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
-    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     FileIO.new_decl_format = true;
   }
 

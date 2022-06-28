@@ -1,6 +1,8 @@
 package daikon.tools.jtb;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
 
 import daikon.*;
 import daikon.inv.OutputFormat;
@@ -161,7 +163,7 @@ public class Annotate {
           } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
             Global.debugAll = true;
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
-            LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
+            daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else if (Daikon.format_SWITCH.equals(option_name)) {
             String format_name = Daikon.getOptarg(g);
             Daikon.output_format = OutputFormat.get(format_name);
@@ -202,7 +204,7 @@ public class Annotate {
     }
 
     // Set up debug traces; note this comes after reading command line options.
-    LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
+    daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
 
     // The index of the first non-option argument -- the name of the .inv file
     int argindex = g.getOptind();

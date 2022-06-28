@@ -1,5 +1,6 @@
 package daikon.test.diff;
 
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertEquals;
 
 import daikon.*;
@@ -15,9 +16,10 @@ public class UnionVisitorTester {
 
   private Diff diff = new Diff(true, new Invariant.ClassVarnameFormulaComparator());
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
-    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     FileIO.new_decl_format = true;
   }
 

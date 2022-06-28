@@ -1,11 +1,12 @@
 package daikon.tools.runtimechecker;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
 import daikon.FileIO;
 import daikon.Global;
-import daikon.LogHelper;
 import daikon.PptMap;
 import daikon.tools.jtb.ParseResults;
 import gnu.getopt.Getopt;
@@ -89,7 +90,7 @@ public class InstrumentHandler extends CommandHandler {
     }
 
     // Set up debug traces; note this comes after reading command line options.
-    LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
+    daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
 
     // Create instrumented-classes dir.
     File outputDir = new File(instrumented_directory);
@@ -238,7 +239,7 @@ public class InstrumentHandler extends CommandHandler {
           } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
             Global.debugAll = true;
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
-            LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
+            daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else {
             System.err.println("Unknown long option received: " + option_name);
           }
