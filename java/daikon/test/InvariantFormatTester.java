@@ -1,6 +1,7 @@
 package daikon.test;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.fail;
 
 import daikon.Daikon;
@@ -62,7 +63,7 @@ public class InvariantFormatTester {
    *     selected tests assuming the output that the tests provide is the correct output.
    */
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
 
     String usage = "java daikon.test.InvariantFormatTester";
     Options options = new Options(usage, InvariantFormatTester.class);

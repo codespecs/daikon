@@ -1,6 +1,8 @@
 package daikon;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
 
 import daikon.FileIO.ParentRelation;
 import daikon.PptRelation.PptRelationType;
@@ -48,7 +50,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.KeyFor;
@@ -407,9 +408,9 @@ public final class PrintInvariants {
           } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
             Global.debugAll = true;
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
-            LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
+            LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else if (Daikon.track_SWITCH.equals(option_name)) {
-            LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
+            LogHelper.setLevel("daikon.Debug", FINE);
             String error = Debug.add_track(Daikon.getOptarg(g));
             if (error != null) {
               throw new Daikon.UserError(
@@ -433,7 +434,7 @@ public final class PrintInvariants {
     }
 
     // Set up debug traces; note this comes after reading command line options.
-    LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
+    LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
 
     validateGuardNulls();
 
@@ -470,7 +471,7 @@ public final class PrintInvariants {
     //     }
 
     // Debug print the hierarchy is a more readable manner
-    if (debug.isLoggable(Level.FINE)) {
+    if (debug.isLoggable(FINE)) {
       debug.fine("Printing PPT Hierarchy");
       for (PptTopLevel my_ppt : ppts.pptIterable()) {
         if (my_ppt.parents.size() == 0) my_ppt.debug_print_tree(debug, 0, null);
@@ -750,7 +751,7 @@ public final class PrintInvariants {
     for (int i = 0; i < ppts.length; i++) {
       PptTopLevel ppt = ppts[i];
 
-      if (debug.isLoggable(Level.FINE)) {
+      if (debug.isLoggable(FINE)) {
         debug.fine("Looking at point " + ppt.name());
       }
 
@@ -851,7 +852,7 @@ public final class PrintInvariants {
     // (Maybe this test isn't even necessary, but will be subsumed by others,
     // as all the invariants will be unjustified.)
     if (ppt.num_samples() == 0) {
-      if (debugPrint.isLoggable(Level.FINE)) {
+      if (debugPrint.isLoggable(FINE)) {
         debugPrint.fine("[No samples for " + ppt.name() + "]");
       }
       if (Daikon.output_num_samples) {
@@ -860,7 +861,7 @@ public final class PrintInvariants {
       return;
     }
     if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0)) {
-      if (debugPrint.isLoggable(Level.FINE)) {
+      if (debugPrint.isLoggable(FINE)) {
         debugPrint.fine("[No views for " + ppt.name() + "]");
       }
       if (!(ppt instanceof PptConditional)) {
@@ -1135,9 +1136,9 @@ public final class PrintInvariants {
       inv_rep += num_values_samples;
     }
 
-    if (debugRepr.isLoggable(Level.FINE)) {
+    if (debugRepr.isLoggable(FINE)) {
       debugRepr.fine("Printing: [" + inv.repr_prob() + "]");
-    } else if (debugPrint.isLoggable(Level.FINE)) {
+    } else if (debugPrint.isLoggable(FINE)) {
       debugPrint.fine("Printing: [" + inv.repr_prob() + "]");
     }
 
@@ -1165,7 +1166,7 @@ public final class PrintInvariants {
     } else {
       out.println(inv_rep);
     }
-    if (debug.isLoggable(Level.FINE)) {
+    if (debug.isLoggable(FINE)) {
       debug.fine(inv.repr());
     }
   }
@@ -1348,7 +1349,7 @@ public final class PrintInvariants {
     print_modified_vars(ppt, out);
 
     // Dump some debugging info, if enabled
-    if (debugPrint.isLoggable(Level.FINE)) {
+    if (debugPrint.isLoggable(FINE)) {
       debugPrint.fine("Variables for ppt " + ppt.name());
       for (int i = 0; i < ppt.var_infos.length; i++) {
         VarInfo vi = ppt.var_infos[i];
@@ -1359,7 +1360,7 @@ public final class PrintInvariants {
       debugPrint.fine("Equality set: ");
       debugPrint.fine((ppt.equality_view == null) ? "null" : ppt.equality_view.toString());
     }
-    if (debugFiltering.isLoggable(Level.FINE)) {
+    if (debugFiltering.isLoggable(FINE)) {
       debugFiltering.fine(
           "---------------------------------------------------------------------------");
       debugFiltering.fine(ppt.name());
@@ -1373,14 +1374,14 @@ public final class PrintInvariants {
     // probably not a bottleneck anyway.
     List<Invariant> invs_vector = new ArrayList<>(ppt.getInvariants());
 
-    if (PptSplitter.debug.isLoggable(Level.FINE)) {
+    if (PptSplitter.debug.isLoggable(FINE)) {
       PptSplitter.debug.fine("Joiner View for ppt " + ppt.name);
       for (Invariant inv : ppt.joiner_view.invs) {
         PptSplitter.debug.fine("-- " + inv.format());
       }
     }
 
-    if (debugBound.isLoggable(Level.FINE)) {
+    if (debugBound.isLoggable(FINE)) {
       ppt.debug_unary_info(debugBound);
     }
 
@@ -1409,7 +1410,7 @@ public final class PrintInvariants {
           filter_result = fi.shouldKeep(inv);
           fi_accepted = (filter_result == null);
         }
-        if ((inv instanceof Implication) && PptSplitter.debug.isLoggable(Level.FINE)) {
+        if ((inv instanceof Implication) && PptSplitter.debug.isLoggable(FINE)) {
           PptSplitter.debug.fine("filter result = " + filter_result + " for inv " + inv);
         }
       }
@@ -1424,7 +1425,7 @@ public final class PrintInvariants {
         Global.reported_invariants++;
         accepted_invariants.add(inv);
       } else {
-        if (Invariant.logOn() || debugPrint.isLoggable(Level.FINE)) {
+        if (Invariant.logOn() || debugPrint.isLoggable(FINE)) {
           inv.log(
               debugPrint,
               "fi_accepted = "
@@ -1439,7 +1440,7 @@ public final class PrintInvariants {
 
     accepted_invariants = InvariantFilters.addEqualityInvariants(accepted_invariants);
 
-    if (debugFiltering.isLoggable(Level.FINE)) {
+    if (debugFiltering.isLoggable(FINE)) {
       for (Invariant current_inv : accepted_invariants) {
         if (current_inv instanceof Equality) {
           debugFiltering.fine("Found Equality that says " + current_inv.format());
@@ -1447,7 +1448,7 @@ public final class PrintInvariants {
       }
     }
 
-    if (debugFiltering.isLoggable(Level.FINE)) {
+    if (debugFiltering.isLoggable(FINE)) {
       for (int i = 0; i < ppt.var_infos.length; i++) {
         // VarInfo vi = ppt.var_infos[i];
         // ... print it

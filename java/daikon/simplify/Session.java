@@ -1,6 +1,7 @@
 package daikon.simplify;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.logging.Level.INFO;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -161,9 +162,13 @@ public class Session implements Closeable {
     }
   }
 
-  // for testing and playing around, not for real use
+  /**
+   * for testing and playing around, not for real use
+   *
+   * @param args command-line arguments
+   */
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     @GuardedBy("<self>") Session s = new Session();
 
     CmdCheck cc;

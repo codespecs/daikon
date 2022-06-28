@@ -14,7 +14,7 @@
   #define SUPERCLASS ThreeScalar
   #define PRIMITIVE long
   #define PRIMITIVE_CNAME Long
-  #define EQUAL(a,b) ((a) == (b))
+  #define EQUAL(a,b) (a == b)
   #define IS_INTEGRAL isIntegral()
   #define POW MathPlume.pow
   #define EQUALITY IntEqual
@@ -114,9 +114,7 @@ import typequals.prototype.qual.Prototype;
  * here. The subclasses basically define the function and return information describing the function
  * and permutation to these methods.
  */
-@SuppressWarnings({"UnusedVariable",  // generated code, complex rules for when var is used
-     "UnnecessaryParentheses"  // generated code, parens are sometimes necessary
-})
+@SuppressWarnings("UnusedVariable")  // generated code, complex rules for when var is used
 public abstract class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or

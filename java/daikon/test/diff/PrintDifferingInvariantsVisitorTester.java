@@ -1,5 +1,6 @@
 package daikon.test.diff;
 
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -27,9 +28,10 @@ public class PrintDifferingInvariantsVisitorTester {
   /** An invariant that is justified but not worth printing. */
   Invariant null_noprint = new DiffDummyInvariant(slice0, "0", true, false);
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
-    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     FileIO.new_decl_format = true;
   }
 

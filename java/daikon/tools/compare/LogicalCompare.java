@@ -1,11 +1,12 @@
 package daikon.tools.compare;
 
 import static daikon.tools.nullness.NullnessUtil.*;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
 import daikon.FileIO;
 import daikon.Global;
-import daikon.LogHelper;
 import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.VarInfo;
@@ -677,7 +678,7 @@ public class LogicalCompare {
           } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
             Global.debugAll = true;
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
-            LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
+            daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else if (option_name.equals("proofs")) {
             opt_proofs = true;
           } else if (option_name.equals("show-count")) {
@@ -722,7 +723,7 @@ public class LogicalCompare {
     }
 
     // Set up debug traces; note this comes after reading command line options.
-    LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
+    daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
 
     int num_args = args.length - g.getOptind();
 

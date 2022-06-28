@@ -1,9 +1,9 @@
 package daikon.test;
 
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertEquals;
 
 import daikon.FileIO;
-import daikon.LogHelper;
 import daikon.ModBitTracker;
 import daikon.ValueTuple;
 import java.util.BitSet;
@@ -24,9 +24,10 @@ public class ModBitTrackerTest {
 
   private Random r = new Random(20031014L);
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
-    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     FileIO.new_decl_format = true;
   }
 

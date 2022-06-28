@@ -898,7 +898,7 @@ public class PptRelation implements Serializable {
       // rels is solely for debugging; each relation is stored in the
       // parent and child ppts
       List<PptRelation> rels = new ArrayList<>();
-      Daikon.debugProgress.fine("Processing ppt " + pname);
+      Daikon.debugProgress.finer("Processing ppt " + pname);
       debug.fine("Processing ppt " + pname);
 
       assert ppt.parent_relations != null : "missing parent_relations in ppt " + ppt.name();
