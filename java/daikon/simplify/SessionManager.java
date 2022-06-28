@@ -239,8 +239,9 @@ public class SessionManager implements Closeable {
    * testing entry point
    *
    * @param args command-line arguments
+   * @throws TimeoutException if SessionManager times out
    */
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) throws TimeoutException {
     daikon.LogHelper.setupLogs(INFO);
     SessionManager m = new SessionManager();
     CmdCheck cc;
