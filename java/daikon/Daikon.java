@@ -410,9 +410,6 @@ public final class Daikon {
   // Command-line options / command-line arguments
   // These variables are public so other programs can reuse the same
   // command-line options.
-  // Please use these switches in the same order in all places where they
-  // appear (in the code and in the documentation); it makes the code
-  // easier to read and the documentation easier to keep up to date.
 
   /** option help */
   public static final String help_SWITCH = "help";
@@ -434,7 +431,6 @@ public final class Daikon {
   public static final String output_num_samples_SWITCH = "output_num_samples";
   public static final String files_from_SWITCH = "files_from";
   public static final String omit_from_output_SWITCH = "omit_from_output";
-
   // Control invariant detection
   public static final String conf_limit_SWITCH = "conf_limit";
   public static final String list_type_SWITCH = "list_type";
@@ -442,19 +438,16 @@ public final class Daikon {
   public static final String disable_all_invariants_SWITCH = "disable-all-invariants";
   public static final String no_dataflow_hierarchy_SWITCH = "nohierarchy";
   public static final String suppress_redundant_SWITCH = "suppress_redundant";
-
   // Process only part of the trace file
   public static final String ppt_regexp_SWITCH = "ppt-select-pattern";
   public static final String ppt_omit_regexp_SWITCH = "ppt-omit-pattern";
   public static final String var_regexp_SWITCH = "var-select-pattern";
   public static final String var_omit_regexp_SWITCH = "var-omit-pattern";
-
   // Configuration options
   public static final String server_SWITCH =
       "server"; // YOAV: server mode for Daikon: reads dtrace files as they appear
   public static final String config_SWITCH = "config";
   public static final String config_option_SWITCH = "config_option";
-
   // Debugging
   public static final String debugAll_SWITCH = "debug";
   public static final String debug_SWITCH = "dbg";
