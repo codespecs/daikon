@@ -22,6 +22,7 @@ public class ModBitTrackerTest {
   // I should probably add some tests that test arguments other than 1 for
   // the "count" argument to ModBitTracker.add().
 
+  /** Random seed */
   private Random r = new Random(20031014L);
 
   /** prepare for tests */

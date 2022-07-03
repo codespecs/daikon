@@ -9,6 +9,7 @@ import java.net.URL;
 import junit.framework.TestSuite;
 import org.junit.Test;
 
+/** Daikon unit test class. */
 public class DtraceDiffTester {
 
   /**

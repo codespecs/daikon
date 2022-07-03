@@ -9,6 +9,7 @@ import daikon.inv.ternary.threeScalar.LinearTernaryCore;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/** Daikon unit test class. */
 public class LinearTernaryCoreTest {
 
   /** prepare for tests */
