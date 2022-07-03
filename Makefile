@@ -116,7 +116,7 @@ RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name SCCS -o -name RCS -o -n
 
 # cannot use ?= to set TMPDIR as the evaulation is defered and the time might change
 ifeq ($(origin TMPDIR), undefined)
-  TMPDIR = $(if $(shell if [ -d /scratch ] ; then echo true; fi),/scratch/$(USER),/tmp/$(USER))$(shell date +%Y%m%d%H%M%S)
+  TMPDIR := $(if $(shell if [ -d /scratch ] ; then echo true; fi),/scratch/$(USER),/tmp/$(USER))$(shell date +%Y%m%d%H%M%S)
 endif
 
 # For deterministic sorting
