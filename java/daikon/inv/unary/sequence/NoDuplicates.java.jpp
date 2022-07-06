@@ -16,7 +16,7 @@ The correct way to build the system is to run 'make'.
   #define SEQUENCESPREDICATE SequencesPredicate
   #define SEQUENCESJOIN SequencesJoin
   #define SUBSEQUENCE SubSequence
-  #define EQUAL(a,b) ((a) == (b))
+  #define EQUAL(a,b) (a == b)
   #define VALUE_SET ValueSet.ValueSetScalarArray
 #elif (defined(TYPEDOUBLE))
   #define CLASSNAME NoDuplicatesFloat
@@ -147,7 +147,6 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
-  @SuppressWarnings("UnnecessaryParentheses")  // generated code, parentheses are sometimes needed
   public InvariantStatus check_modified(PRIMITIVE @Interned [] a, int count) {
     // if (logDetail())
     //   log ("sample " + Arrays.toString (a));

@@ -1,6 +1,8 @@
 package daikon.tools.jtb;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
 
 import daikon.*;
 import gnu.getopt.*;
@@ -72,7 +74,7 @@ public class CreateSpinfo {
     // If not set, put output in files named after the input (source) files.
     String outputfilename = null;
 
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     LongOpt[] longopts =
         new LongOpt[] {
           new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -93,7 +95,7 @@ public class CreateSpinfo {
           } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
             Global.debugAll = true;
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
-            LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
+            daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else {
             throw new RuntimeException("Unknown long option received: " + option_name);
           }

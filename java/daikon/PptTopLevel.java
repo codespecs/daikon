@@ -3534,10 +3534,10 @@ public class PptTopLevel extends Ppt {
    */
   public void mergeInvs() {
 
-    if (Daikon.debugProgress.isLoggable(Level.FINE)) {
+    if (Daikon.debugProgress.isLoggable(Level.FINER)) {
       // String hashCode = String.format(" [%s]", System.identityHashCode(this));
       String hashCode = "";
-      Daikon.debugProgress.fine(
+      Daikon.debugProgress.finer(
           String.format(
               "Merging ppt %s%s with %d children, %d parents, %d variables",
               name, hashCode, children.size(), parents.size(), var_infos.length));

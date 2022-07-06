@@ -1,6 +1,7 @@
 package daikon;
 
 import static daikon.Global.lineSep;
+import static java.util.logging.Level.INFO;
 
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
@@ -86,7 +87,7 @@ public class DaikonSimple {
   public static void mainHelper(final String[] args) throws IOException, FileNotFoundException {
 
     // set up logging information
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
 
     // No optimizations used in the simple incremental algorithm so
     // optimizations are turned off.

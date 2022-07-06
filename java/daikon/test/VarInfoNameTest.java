@@ -1,10 +1,10 @@
 package daikon.test;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.fail;
 
 import daikon.FileIO;
-import daikon.LogHelper;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,9 +35,10 @@ public class VarInfoNameTest {
 
   private static final String lineSep = daikon.Global.lineSep;
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
-    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     FileIO.new_decl_format = true;
   }
 

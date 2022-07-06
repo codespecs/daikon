@@ -1,5 +1,6 @@
 package daikon.test.diff;
 
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -13,12 +14,14 @@ import junit.framework.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/** Daikon unit test class. */
 @SuppressWarnings("nullness") // testing code
 public class ConsequentCVFSortComparatorTester {
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
-    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     FileIO.new_decl_format = true;
   }
 

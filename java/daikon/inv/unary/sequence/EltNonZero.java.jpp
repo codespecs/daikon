@@ -9,7 +9,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #if defined(TYPELONG)
-  #define EQUAL(a,b) ((a) == (b))
+  #define EQUAL(a,b) (a == b)
   #define CLASSNAME EltNonZero
   #define CLASSSTRING "EltNonZero"
   #define SUPERCLASS SingleScalarSequence
