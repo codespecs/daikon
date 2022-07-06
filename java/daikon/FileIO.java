@@ -1109,41 +1109,39 @@ public final class FileIO {
           "Warning: Daikon is using a dataflow"
               + " hierarchy analysis on a data trace"
               + " that does not appear to be over a"
-              + " program execution, consider running"
+              + " program execution.  Consider running"
               + " Daikon with the --nohierarchy flag.");
     }
   }
 
   private static @Owning InputStream connectToChicory() {
 
-    ServerSocket daikonServer;
-    try {
-      daikonServer = new ServerSocket(0); // bind to any free port
+    // bind to any free port
+    try (ServerSocket daikonServer = new ServerSocket(0)) {
 
       // tell Chicory what port we have!
       System.out.println("DaikonChicoryOnlinePort=" + daikonServer.getLocalPort());
 
       daikonServer.setReceiveBufferSize(64000);
 
+      Socket chicSocket;
+      try {
+        daikonServer.setSoTimeout(5000);
+
+        // System.out.println("waiting for chicory connection on port " +
+        // daikonServer.getLocalPort());
+        chicSocket = daikonServer.accept();
+      } catch (IOException e) {
+        throw new RuntimeException("Unable to connect to Chicory", e);
+      }
+
+      try {
+        return chicSocket.getInputStream();
+      } catch (IOException e) {
+        throw new RuntimeException("Unable to get Chicory's input stream", e);
+      }
     } catch (IOException e) {
       throw new RuntimeException("Unable to create server", e);
-    }
-
-    Socket chicSocket;
-    try {
-      daikonServer.setSoTimeout(5000);
-
-      // System.out.println("waiting for chicory connection on port " +
-      // daikonServer.getLocalPort());
-      chicSocket = daikonServer.accept();
-    } catch (IOException e) {
-      throw new RuntimeException("Unable to connect to Chicory", e);
-    }
-
-    try {
-      return chicSocket.getInputStream();
-    } catch (IOException e) {
-      throw new RuntimeException("Unable to get Chicory's input stream", e);
     }
   }
 
@@ -1390,7 +1388,7 @@ public final class FileIO {
     /** Releases resources held by this. */
     @Override
     @EnsuresCalledMethods(value = "reader", methods = "close")
-    public void close() {
+    public void close(@GuardSatisfied ParseState this) {
       try {
         reader.close();
       } catch (IOException e) {

@@ -122,7 +122,6 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /** Create a new LemmaStack. */
-  @SuppressWarnings("builder:reset.not.owning") // issue #5175: https://tinyurl.com/cfissue/5175
   public LemmaStack() throws SimplifyError {
     startProver();
     lemmas = new Stack<Lemma>();
