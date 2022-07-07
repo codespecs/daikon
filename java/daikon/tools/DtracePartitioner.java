@@ -47,7 +47,7 @@ public class DtracePartitioner implements Closeable, Partitioner<String, String>
   /** Releases resources held by this. */
   @EnsuresCalledMethods(value = "br", methods = "close")
   @Override
-  public void close() throws IOException {
+  public void close(@GuardSatisfied DtracePartitioner this) throws IOException {
     br.close();
   }
 
