@@ -877,7 +877,12 @@ public class NIS {
     }
   }
 
-  /** Returns true if the specified class is an antecedent in any NI suppression. */
+  /**
+   * Returns true if the specified class is an antecedent in any NI suppression.
+   *
+   * @param cls the class for some subtype of Invariant
+   * @return true if the specified class is an antecedent in any NI suppression
+   */
   @RequiresNonNull("NIS.suppressor_map")
   @Pure
   public static boolean is_suppressor(Class<? extends @MustCallUnknown Invariant> cls) {

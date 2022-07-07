@@ -138,6 +138,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
    * Push an assumption onto our and Simplify's stacks.
    *
    * @param lem the assumption
+   * @return true if success, false if Simplify times out
    */
   @SuppressWarnings("builder:reset.not.owning") // only resets conditionally, on exception path
   public boolean pushLemma(@UnknownInitialization(LemmaStack.class) LemmaStack this, Lemma lem)
