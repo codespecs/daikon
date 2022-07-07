@@ -204,7 +204,7 @@ public final class Global {
 
   public static final boolean debugPrintDtrace = false;
 
-  // used only if debugPrintDtrace is true.  Users need not set this.
+  /** Used only if debugPrintDtrace is true. Users need not set this. */
   public static @Owning @MonotonicNonNull PrintWriter dtraceWriter = null;
 
   // Global Fuzzy Float comparator to use

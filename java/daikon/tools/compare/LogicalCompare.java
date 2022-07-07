@@ -86,7 +86,7 @@ public class LogicalCompare {
   // TODO: both of these fields should be instance fields and the main
   // method should create an instance.
 
-  // key = ppt name
+  /** key = ppt name */
   private static @MonotonicNonNull Map<String, List<Lemma>> extra_assumptions;
 
   private static @Owning @MonotonicNonNull LemmaStack lemmas;

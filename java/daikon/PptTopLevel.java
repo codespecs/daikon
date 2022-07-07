@@ -2870,9 +2870,10 @@ public class PptTopLevel extends Ppt {
   /// Locating implied (same) invariants via the Simplify theorem-prover
   ///
 
-  // Created upon first use, then saved.  Do not eagerly initialize,
-  // because doing so runs Simplify (which crashes if Simplify is not
-  // installed).
+  /**
+   * Created upon first use, then saved. Do not eagerly initialize, because doing so runs Simplify
+   * (which crashes if Simplify is not installed).
+   */
   private static @Owning @MonotonicNonNull LemmaStack proverStack = null;
 
   /**

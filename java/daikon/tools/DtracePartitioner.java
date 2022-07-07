@@ -24,11 +24,12 @@ import org.plumelib.util.Partitioner;
  */
 public class DtracePartitioner implements Closeable, Partitioner<String, String>, Iterator<String> {
 
+  /** The system-specific line separator. */
   private static final String lineSep = System.lineSeparator();
 
-  // reading from the file as a lazy iterator
+  /** reading from the file as a lazy iterator */
   private @Owning BufferedReader br;
-  // the name of the Daikon trace file
+  /** the name of the Daikon trace file */
   private String filename;
 
   /** @param filename the Daikon trace file to be partitioned */
