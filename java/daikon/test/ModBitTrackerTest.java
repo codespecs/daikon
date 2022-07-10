@@ -1,11 +1,13 @@
 package daikon.test;
 
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertEquals;
 
-import daikon.*;
+import daikon.FileIO;
+import daikon.ModBitTracker;
+import daikon.ValueTuple;
 import java.util.BitSet;
 import java.util.Random;
-import junit.framework.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -20,11 +22,13 @@ public class ModBitTrackerTest {
   // I should probably add some tests that test arguments other than 1 for
   // the "count" argument to ModBitTracker.add().
 
+  /** Random seed */
   private Random r = new Random(20031014L);
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
-    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     FileIO.new_decl_format = true;
   }
 

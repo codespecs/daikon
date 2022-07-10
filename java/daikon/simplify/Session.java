@@ -1,8 +1,10 @@
 package daikon.simplify;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.logging.Level.INFO;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,7 +25,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * A session is a channel to the Simplify theorem-proving tool. Once a session is started, commands
  * may be applied to the session to make queries and manipulate its state.
  */
-public class Session {
+public class Session implements Closeable {
   /**
    * A non-negative integer, representing the largest number of iterations for which Simplify should
    * be allowed to run on any single conjecture before giving up. Larger values may cause Simplify
@@ -149,8 +151,8 @@ public class Session {
     return output.readLine();
   }
 
-  @Holding("this")
-  public void kill(@GuardSatisfied Session this) {
+  @Override
+  public void close(@GuardSatisfied Session this) {
     process.destroy();
     if (dkconfig_trace_input) {
       assert trace_file != null
@@ -160,9 +162,13 @@ public class Session {
     }
   }
 
-  // for testing and playing around, not for real use
+  /**
+   * for testing and playing around, not for real use
+   *
+   * @param args command-line arguments
+   */
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     @GuardedBy("<self>") Session s = new Session();
 
     CmdCheck cc;

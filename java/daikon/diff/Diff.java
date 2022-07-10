@@ -1,5 +1,8 @@
 package daikon.diff;
 
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
+
 import daikon.Daikon;
 import daikon.FileIO;
 import daikon.Ppt;
@@ -7,7 +10,8 @@ import daikon.PptConditional;
 import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.inv.Invariant;
-import gnu.getopt.*;
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -21,7 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NavigableSet;
 import java.util.TreeSet;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
@@ -147,7 +150,7 @@ public final class Diff {
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
           ClassNotFoundException, InstantiationException, IllegalAccessException,
           InvocationTargetException, NoSuchMethodException {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
 
     boolean printDiff = false;
     boolean printAll = false;
@@ -170,8 +173,8 @@ public final class Diff {
 
     boolean optionSelected = false;
 
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
-    //     daikon.LogHelper.setLevel ("daikon.diff", daikon.LogHelper.FINE);
+    daikon.LogHelper.setupLogs(INFO);
+    //     daikon.LogHelper.setLevel ("daikon.diff", FINE);
 
     LongOpt[] longOpts =
         new LongOpt[] {
@@ -458,7 +461,7 @@ public final class Diff {
         root.accept(v);
         InvMap resultMap = v.getResult();
         FilesPlume.writeObject(resultMap, outputFile);
-        if (debug.isLoggable(Level.FINE)) {
+        if (debug.isLoggable(FINE)) {
           debug.fine("Result: " + resultMap.toString());
         }
 

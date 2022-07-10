@@ -2,6 +2,9 @@
 
 package daikon;
 
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
+
 import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -171,7 +174,7 @@ public final class Global {
   static {
     // Set up debug traces.
     // Better to do this here than in each separate program.
-    LogHelper.setupLogs(debugAll ? LogHelper.FINE : LogHelper.INFO);
+    LogHelper.setupLogs(debugAll ? FINE : INFO);
   }
 
   /** Debug tracer for debugging statistics output. */

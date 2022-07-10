@@ -1,5 +1,6 @@
 package daikon.test.diff;
 
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -52,9 +53,10 @@ public class DetailedStatisticsVisitorTester {
   Invariant ternary_2_just = new DiffDummyInvariant(slice3, "2", true);
   Invariant ternary_2_unjust = new DiffDummyInvariant(slice3, "2", false);
 
+  /** prepare for tests */
   @BeforeClass
   public static void setUpClass() {
-    daikon.LogHelper.setupLogs(LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
     FileIO.new_decl_format = true;
   }
 

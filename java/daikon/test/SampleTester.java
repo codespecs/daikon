@@ -2,13 +2,24 @@ package daikon.test;
 
 import static java.io.StreamTokenizer.TT_WORD;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import daikon.*;
+import daikon.Daikon;
+import daikon.Debug;
+import daikon.FileIO;
+import daikon.Global;
+import daikon.PptMap;
+import daikon.PptSlice;
+import daikon.PptTopLevel;
+import daikon.PrintInvariants;
+import daikon.ValueTuple;
 import daikon.VarInfo;
-import daikon.inv.*;
-import gnu.getopt.*;
+import daikon.inv.Invariant;
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,9 +33,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import junit.framework.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.junit.Test;
@@ -95,9 +104,9 @@ public class SampleTester {
             Global.debugAll = true;
 
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
-            LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
+            daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else if (Daikon.track_SWITCH.equals(option_name)) {
-            LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
+            daikon.LogHelper.setLevel("daikon.Debug", FINE);
             String error = Debug.add_track(Daikon.getOptarg(g));
             if (error != null) {
               throw new Daikon.UserError(
@@ -121,7 +130,7 @@ public class SampleTester {
       }
     }
 
-    daikon.LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
+    daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
 
     InputStream commands = SampleTester.class.getResourceAsStream("SampleTester.commands");
     if (commands == null) {
@@ -392,7 +401,7 @@ public class SampleTester {
     if (name.equals("inv")) {
       result = proc_inv_assert(args);
       if (!result && !negate) {
-        LogHelper.setLevel(debug, Level.FINE);
+        daikon.LogHelper.setLevel(debug, FINE);
         proc_inv_assert(args);
       }
     } else if (name.equals("show_invs")) {

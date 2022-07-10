@@ -5,8 +5,10 @@ import java.io.StringReader;
 import jtb.JavaParser;
 import jtb.JavaParserConstants;
 import jtb.ParseException;
-import jtb.syntaxtree.*;
-import jtb.visitor.*;
+import jtb.syntaxtree.Node;
+import jtb.syntaxtree.NodeToken;
+import jtb.syntaxtree.VariableInitializer;
+import jtb.visitor.DepthFirstVisitor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 

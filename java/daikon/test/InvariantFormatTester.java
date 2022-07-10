@@ -1,9 +1,10 @@
 package daikon.test;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.logging.Level.INFO;
 import static org.junit.Assert.fail;
 
-import daikon.*;
+import daikon.Daikon;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -15,7 +16,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import junit.framework.*;
+import junit.framework.TestSuite;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.junit.Test;
@@ -62,7 +63,7 @@ public class InvariantFormatTester {
    *     selected tests assuming the output that the tests provide is the correct output.
    */
   public static void main(String[] args) {
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
 
     String usage = "java daikon.test.InvariantFormatTester";
     Options options = new Options(usage, InvariantFormatTester.class);

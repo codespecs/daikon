@@ -12,7 +12,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME LinearBinaryCore
   #define PRIMITIVE long
   #define CLASSSTRING "LinearBinaryCore"
-  #define EQUAL(a,b) ((a) == (b))
+  #define EQUAL(a,b) (a == b)
 #elif defined(TYPEDOUBLE)
   #define CLASSNAME LinearBinaryCoreFloat
   #define PRIMITIVE double
@@ -152,7 +152,6 @@ public final class CLASSNAME implements Serializable, Cloneable {
   // it can calculate different a/b and change whether or not it even
   // finds a line with a different order.  Current code always guarantees
   // that the points arrive in the same order (I think).
-  @SuppressWarnings("UnnecessaryParentheses")  // generated code; parens are sometimes necessary
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, int count) {
     if (values_seen < MINPAIRS) {
       if (debug.isLoggable(Level.FINE)) {
@@ -226,9 +225,9 @@ public final class CLASSNAME implements Serializable, Cloneable {
           // is very close.  It would probably be better to calculate the
           // actual distance from the line, but it would be unclear what to
           // compare this to (average or X and Y?).  This seems like a
-          // reasonable compromise
-          if ((!EQUAL(-b * y_cache[i],  a * x_cache[i] + c))
-              && (!EQUAL(x_cache[i], ((-b * y_cache[i] - c) / a)))) {
+          // reasonable compromise.
+          if (!EQUAL(-b * y_cache[i],  a * x_cache[i] + c)
+              && !EQUAL(x_cache[i], (-b * y_cache[i] - c) / a)) {
             if (debug.isLoggable(Level.FINE)) {
               debug.fine(
                   "Suppressing " + CLASSSTRING + " ("
@@ -252,9 +251,9 @@ public final class CLASSNAME implements Serializable, Cloneable {
         }
       }
     } else {
-      // Check the new value against a and b. (see prev explanation for double
-      // EQUAL check)
-      if ((!EQUAL(y, (-c - a * x)/b)) && (!EQUAL(x, (-c - b * y)/ a))) {
+      // Check the new value against a and b. (See previous explanation for double
+      // EQUAL check.)
+      if (!EQUAL(y, (-c - a * x)/b) && !EQUAL(x, (-c - b * y)/ a)) {
         // see if this new point is off one end or the other
         if (x < min_x) {
           min_x = x;

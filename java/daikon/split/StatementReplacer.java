@@ -4,8 +4,15 @@ import daikon.tools.jtb.Ast;
 import java.util.ArrayList;
 import java.util.List;
 import jtb.ParseException;
-import jtb.syntaxtree.*;
-import jtb.visitor.*;
+import jtb.syntaxtree.ArgumentList;
+import jtb.syntaxtree.Arguments;
+import jtb.syntaxtree.Name;
+import jtb.syntaxtree.Node;
+import jtb.syntaxtree.NodeListOptional;
+import jtb.syntaxtree.NodeToken;
+import jtb.syntaxtree.PrimaryExpression;
+import jtb.syntaxtree.PrimarySuffix;
+import jtb.visitor.DepthFirstVisitor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.dataflow.qual.Pure;
 

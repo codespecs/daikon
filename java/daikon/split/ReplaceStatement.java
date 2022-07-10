@@ -5,9 +5,12 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import jtb.*;
-import jtb.syntaxtree.*;
-import jtb.visitor.*;
+import jtb.JavaParser;
+import jtb.ParseException;
+import jtb.syntaxtree.FormalParameter;
+import jtb.syntaxtree.MethodDeclaration;
+import jtb.syntaxtree.Node;
+import jtb.visitor.DepthFirstVisitor;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 

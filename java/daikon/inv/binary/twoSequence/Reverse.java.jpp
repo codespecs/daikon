@@ -14,7 +14,7 @@ The correct way to build the system is to run 'make'.
   #define PRIMITIVE long
   #define CLASSSTRING "Reverse"
   #define BASE_IS_TYPE baseIsScalar()
-  #define EQUAL(a,b) ((a) == (b))
+  #define EQUAL(a,b) (a == b)
 #elif defined(TYPEDOUBLE)
   #define CLASSNAME ReverseFloat
   #define SUPERCLASS TwoSequenceFloat
@@ -207,7 +207,6 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
-  @SuppressWarnings("UnnecessaryParentheses")  // generated code; parens are sometimes necessary
   public InvariantStatus check_modified(PRIMITIVE @Interned [] a1, PRIMITIVE @Interned [] a2, int count) {
     if (a1.length != a2.length) {
       return InvariantStatus.FALSIFIED;

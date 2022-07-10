@@ -1,8 +1,12 @@
 package daikon;
 
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.INFO;
+
 import daikon.split.PptSplitter;
 import daikon.suppress.NIS;
-import gnu.getopt.*;
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.FilesPlume;
@@ -84,7 +87,7 @@ public final class MergeInvariants {
       throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
           ClassNotFoundException {
 
-    daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
+    daikon.LogHelper.setupLogs(INFO);
 
     LongOpt[] longopts =
         new LongOpt[] {
@@ -115,9 +118,9 @@ public final class MergeInvariants {
             Global.debugAll = true;
 
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
-            LogHelper.setLevel(Daikon.getOptarg(g), LogHelper.FINE);
+            LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else if (Daikon.track_SWITCH.equals(option_name)) {
-            LogHelper.setLevel("daikon.Debug", LogHelper.FINE);
+            LogHelper.setLevel("daikon.Debug", FINE);
             String error = Debug.add_track(Daikon.getOptarg(g));
             if (error != null) {
               throw new Daikon.UserError(
@@ -160,7 +163,7 @@ public final class MergeInvariants {
       }
     }
 
-    daikon.LogHelper.setupLogs(Global.debugAll ? LogHelper.FINE : LogHelper.INFO);
+    daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
 
     List<File> inv_files = new ArrayList<>();
     File decl_file = null;
@@ -361,7 +364,7 @@ public final class MergeInvariants {
     merge_ppts.repCheck();
 
     // Debug print the hierarchy is a more readable manner
-    if (debug.isLoggable(Level.FINE)) {
+    if (debug.isLoggable(FINE)) {
       debug.fine("PPT Hierarchy");
       for (PptTopLevel ppt : merge_ppts.pptIterable()) {
         if (ppt.parents.size() == 0) ppt.debug_print_tree(debug, 0, null);
