@@ -847,7 +847,8 @@ kvasir-dtrace --no-dyncomp --dtrace-file=daikon-output/wordplay2.dtrace \
     ./wordplay -f words.txt 'better results from multiple runs'
 kvasir-dtrace --no-dyncomp --dtrace-file=daikon-output/wordplay3.dtrace \
     ./wordplay -f words.txt 'more testing equals better testing'
-java -Xmx3600m daikon.Daikon daikon-output/wordplay*.dtrace daikon-output/wordplay.decls
+java -Xmx3600m -cp $DAIKONDIR/daikon.jar daikon.Daikon \
+    daikon-output/wordplay*.dtrace daikon-output/wordplay.decls
 @end smallexample
 
 @noindent
@@ -867,7 +868,8 @@ kvasir-dtrace --no-dyncomp --dtrace-append \
 kvasir-dtrace --no-dyncomp --dtrace-append \
     --dtrace-file=daikon-output/wordplay-all.dtrace \
     ./wordplay -f words.txt 'more testing equals better testing'
-java -Xmx3600m daikon.Daikon daikon-output/wordplay-all.dtrace daikon-output/wordplay.decls
+java -Xmx3600m -cp $DAIKONDIR/daikon.jar daikon.Daikon \
+    daikon-output/wordplay-all.dtrace daikon-output/wordplay.decls
 @end smallexample
 
 @item
@@ -1685,7 +1687,7 @@ These expression are obviously not valid Java code.
 @cindex JML output format
 @cindex output format, JML
 @item JML format
-Produces output in JVM (Java Modeling Language,
+Produces output in JML (Java Modeling Language,
 @uref{https://www.cs.ucf.edu/~leavens/JML/}); for details, see the
 @uref{http://www.eecs.ucf.edu/~leavens/JML/documentation.shtml, ,JML Manual}.  @option{JML}
 format lets you use the various JVM tools on Daikon invariants,

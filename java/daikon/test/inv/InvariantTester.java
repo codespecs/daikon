@@ -15,6 +15,7 @@ import junit.framework.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+/** Daikon unit test class. */
 @SuppressWarnings("nullness") // testing code
 public class InvariantTester {
 
