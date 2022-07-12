@@ -24,6 +24,7 @@ Version 5.8.12 (July 12, 2022)
 
 All Daikon tools now work with Java 17.
 Javadoc Doclets are supported for Java 8, 11 and 17.
+(Later versions of Java probably work, but are not tested.)
 
 Daikon:
  * Reduced output for --show-progress; added --show-detail-progress option.
