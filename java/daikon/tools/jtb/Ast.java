@@ -145,18 +145,6 @@ public class Ast {
     return print(current);
   }
 
-  /** @deprecated Use format(Node) instead */
-  @Deprecated
-  public static String print(Node n) {
-    return format(n);
-  }
-
-  /** @deprecated Use formatCurrentLine(Node) instead */
-  @Deprecated
-  public static String printCurrentLine(Node n) {
-    return formatCurrentLine(n);
-  }
-
   // Creates an AST from a String
   public static Node create(String type, String stringRep) {
     return create(type, new Class<?>[] {}, new Object[] {}, stringRep);
