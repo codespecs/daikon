@@ -59,7 +59,9 @@ public class PptName implements Serializable {
 
   // ==================== CONSTRUCTORS ====================
 
-  /** @param name non-null ppt name as given in the decls file */
+  /**
+   * @param name non-null ppt name as given in the decls file
+   */
   public PptName(String name) {
     // If the name is well-formed, like "mvspc.setupGUI()V:::EXIT75",
     // then this constructor will extract the class and method names.
