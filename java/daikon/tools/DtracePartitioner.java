@@ -2,6 +2,7 @@
 package daikon.tools;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +11,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
+import org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.mustcall.qual.CreatesMustCallFor;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.Partitioner;
 
@@ -18,13 +22,14 @@ import org.plumelib.util.Partitioner;
  * This class partitions Daikon trace files so that invocations of the same program point are
  * grouped together for use with random selection.
  */
-public class DtracePartitioner implements Partitioner<String, String>, Iterator<String> {
+public class DtracePartitioner implements Closeable, Partitioner<String, String>, Iterator<String> {
 
+  /** The system-specific line separator. */
   private static final String lineSep = System.lineSeparator();
 
-  // reading from the file as a lazy iterator
-  private BufferedReader br;
-  // the name of the Daikon trace file
+  /** reading from the file as a lazy iterator */
+  private @Owning BufferedReader br;
+  /** the name of the Daikon trace file */
   private String filename;
 
   /**
@@ -40,6 +45,13 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
       e.printStackTrace();
       throw new Error(e);
     }
+  }
+
+  /** Releases resources held by this. */
+  @EnsuresCalledMethods(value = "br", methods = "close")
+  @Override
+  public void close(@GuardSatisfied DtracePartitioner this) throws IOException {
+    br.close();
   }
 
   @Override
@@ -111,6 +123,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
    * @return an ArrayList containing all of the elements of 'enters'. The original order is NOT
    *     guaranteed.
    */
+  @CreatesMustCallFor("this")
   public List<String> patchValues(List<String> enters) {
     return patchValues(enters, false);
   }
@@ -126,6 +139,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
    * @return an ArrayList containing all of the elements of 'enters'. The original order is NOT
    *     guaranteed.
    */
+  @CreatesMustCallFor("this")
   public List<String> patchValues(List<String> enters, boolean includeUnreturnedEnters) {
     try {
       System.out.println("Entering patchValues");
@@ -152,6 +166,7 @@ public class DtracePartitioner implements Partitioner<String, String>, Iterator<
         nonceMap.put(theNonce, enterStr);
       }
 
+      br.close();
       // look for EXIT half of invocations and augment
       // the values of nonceMap so that the map eventually
       // maps nonces --> full invocations with ENTER / EXIT

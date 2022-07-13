@@ -375,8 +375,9 @@ public class ChicoryPremain {
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       } else {
-        JarFile bcel_jar = new JarFile(extract_jar_path(plse));
-        debug.log("Daikon BCEL found in jar %s%n", bcel_jar.getName());
+        try (JarFile bcel_jar = new JarFile(extract_jar_path(plse))) {
+          debug.log("Daikon BCEL found in jar %s%n", bcel_jar.getName());
+        }
       }
     }
 

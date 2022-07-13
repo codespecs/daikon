@@ -132,16 +132,17 @@ public class SampleTester {
 
     daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
 
-    InputStream commands = SampleTester.class.getResourceAsStream("SampleTester.commands");
-    if (commands == null) {
-      fail(
-          "Input file SampleTester.commands missing."
-              + " (Should be in daikon.test and it must be within the classpath)");
-    }
+    try (InputStream commands = SampleTester.class.getResourceAsStream("SampleTester.commands")) {
+      if (commands == null) {
+        fail(
+            "Input file SampleTester.commands missing."
+                + " (Should be in daikon.test and it must be within the classpath)");
+      }
 
-    SampleTester ts = new SampleTester();
-    ts.proc_sample_file(commands, "SampleTester.commands");
-    System.out.println("Test Passes");
+      SampleTester ts = new SampleTester();
+      ts.proc_sample_file(commands, "SampleTester.commands");
+      System.out.println("Test Passes");
+    }
   }
 
   private static @Nullable String find_file(String fname) {
@@ -165,15 +166,16 @@ public class SampleTester {
 
     FileIO.new_decl_format = null;
 
-    InputStream commands = getClass().getResourceAsStream("SampleTester.commands");
-    if (commands == null) {
-      fail(
-          "Input file SampleTester.commands missing."
-              + " (Should be in daikon.test and it must be within the classpath)");
-    }
+    try (InputStream commands = getClass().getResourceAsStream("SampleTester.commands")) {
+      if (commands == null) {
+        fail(
+            "Input file SampleTester.commands missing."
+                + " (Should be in daikon.test and it must be within the classpath)");
+      }
 
-    SampleTester ts = new SampleTester();
-    ts.proc_sample_file(commands, "SampleTester.commands");
+      SampleTester ts = new SampleTester();
+      ts.proc_sample_file(commands, "SampleTester.commands");
+    }
   }
 
   public void proc_sample_file(InputStream commands, String filename) throws IOException {

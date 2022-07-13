@@ -93,6 +93,7 @@ public class BuildJDK {
    * @throws IOException if unable to read or write file {@code dcomp_jdk_static_field_id} or if
    *     unable to write {@code jdk_classes.txt}
    */
+  @SuppressWarnings("builder:required.method.not.called") // assignment into collection of @Owning
   public static void main(String[] args) throws IOException {
 
     System.out.println("BuildJDK starting at " + LocalDateTime.now(ZoneId.systemDefault()));
@@ -231,7 +232,10 @@ public class BuildJDK {
    *
    * @return a map from class file name to the associated InputStream
    */
-  @SuppressWarnings("JdkObsolete") // JarEntry.entries() returns Enumeration
+  @SuppressWarnings({
+    "JdkObsolete", // JarEntry.entries() returns Enumeration
+    "builder:required.method.not.called" // assignment into collection of @Owning
+  })
   Map<String, InputStream> gather_runtime_from_jar() {
 
     Map<String, InputStream> class_stream_map = new HashMap<>();
@@ -296,6 +300,7 @@ public class BuildJDK {
    *     path
    * @param class_stream_map a map from class file name to InputStream that collects the results
    */
+  @SuppressWarnings("builder:required.method.not.called") // assignment into collection of @Owning
   void gather_runtime_from_modules_directory(
       Path path, int modulePrefixLength, Map<String, InputStream> class_stream_map) {
 
@@ -363,9 +368,8 @@ public class BuildJDK {
         }
 
         // Get the binary for this class
-        InputStream is = class_stream_map.get(classFileName);
         JavaClass jc;
-        try {
+        try (InputStream is = class_stream_map.get(classFileName)) {
           ClassParser parser = new ClassParser(is, classFileName);
           jc = parser.parse();
         } catch (Throwable e) {

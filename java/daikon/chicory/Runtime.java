@@ -31,6 +31,7 @@ import java.util.zip.GZIPOutputStream;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.checkerframework.checker.lock.qual.Holding;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -104,7 +105,7 @@ public class Runtime {
       "nullness:initialization.static.field.uninitialized" // initialized and used in generated
   // instrumentation code that cannot be type-checked by a source code checker.
   )
-  static @GuardedBy("<self>") PrintWriter dtrace;
+  static @Owning @GuardedBy("<self>") PrintWriter dtrace;
 
   /** Set to true when the dtrace stream is closed. */
   static boolean dtrace_closed = false;
@@ -570,11 +571,12 @@ public class Runtime {
     if (no_dtrace) {
       throw new Error("setDtrace called when no_dtrace was specified");
     }
+    File file = new File(filename);
+    File parent = file.getParentFile();
+    if (parent != null) parent.mkdirs();
+    OutputStream os = null; // dummy initialization for compiler's definite assignment check
     try {
-      File file = new File(filename);
-      File parent = file.getParentFile();
-      if (parent != null) parent.mkdirs();
-      OutputStream os = new FileOutputStream(filename, append);
+      os = new FileOutputStream(filename, append);
       if (filename.endsWith(".gz")) {
         if (append) {
           throw new Error(
@@ -593,6 +595,13 @@ public class Runtime {
       BufferedOutputStream bos = new BufferedOutputStream(os, 8192);
       dtrace = new PrintWriter(new BufferedWriter(new OutputStreamWriter(bos, UTF_8)));
     } catch (Exception e) {
+      if (os != null) {
+        try {
+          os.close();
+        } catch (IOException e2) {
+          // do nothing, Exception `e` will be thrown below
+        }
+      }
       e.printStackTrace();
       throw new Error(e);
     }

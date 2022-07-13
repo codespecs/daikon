@@ -49,15 +49,15 @@ public class ParameterDoclet {
       } else if ("--text".equals(opt)) {
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintWriter outf = new PrintWriter(FilesPlume.newBufferedFileWriter(fname));
-        pd.writeText(outf);
-        outf.close();
+	try (PrintWriter outf = new PrintWriter(FilesPlume.newBufferedFileWriter(fname))) {
+          pd.writeText(outf);
+        }
       } else if ("--list".equals(opt)) {
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintWriter outf = new PrintWriter(FilesPlume.newBufferedFileWriter(fname));
-        pd.writeList(outf);
-        outf.close();
+	try (PrintWriter outf = new PrintWriter(FilesPlume.newBufferedFileWriter(fname))) {
+          pd.writeList(outf);
+	}
       }
     }
 

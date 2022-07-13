@@ -13,10 +13,13 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.checkerframework.checker.lock.qual.Holding;
+import org.checkerframework.checker.mustcall.qual.MustCall;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -25,7 +28,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * A session is a channel to the Simplify theorem-proving tool. Once a session is started, commands
  * may be applied to the session to make queries and manipulate its state.
  */
-public class Session implements Closeable {
+@MustCall("close") public class Session implements Closeable {
   /**
    * A non-negative integer, representing the largest number of iterations for which Simplify should
    * be allowed to run on any single conjecture before giving up. Larger values may cause Simplify
@@ -68,8 +71,10 @@ public class Session implements Closeable {
    */
   public static boolean dkconfig_trace_input = false;
 
-  // non-null if dkconfig_trace_input==true
-  private @MonotonicNonNull PrintStream trace_file;
+  /** non-null if dkconfig_trace_input==true */
+  private final @Owning @MonotonicNonNull PrintStream trace_file;
+
+  /** A unique identifier for creating unique filenames for trace files. */
   private static int trace_count = 0;
 
   /* package */ final Process process;
@@ -104,8 +109,12 @@ public class Session implements Closeable {
 
       if (dkconfig_trace_input) {
         File f;
-        while ((f = new File("simplify" + trace_count + ".in")).exists()) trace_count++;
+        while ((f = new File("simplify" + trace_count + ".in")).exists()) {
+          trace_count++;
+        }
         trace_file = new PrintStream(new FileOutputStream(f));
+      } else {
+        trace_file = null;
       }
 
       // set up command stream
@@ -151,13 +160,15 @@ public class Session implements Closeable {
     return output.readLine();
   }
 
+  /** Releases the resources held by this. */
+  @EnsuresCalledMethods(value = "trace_file", methods = "close")
   @Override
   public void close(@GuardSatisfied Session this) {
     process.destroy();
-    if (dkconfig_trace_input) {
-      assert trace_file != null
-          : "@AssumeAssertion(nullness): conditional: trace_file is non-null if"
-              + " dkconfig_trace_input==true";
+    assert dkconfig_trace_input == (trace_file != null)
+        : "@AssumeAssertion(nullness): conditional: trace_file is non-null if"
+            + " dkconfig_trace_input==true";
+    if (trace_file != null) {
       trace_file.close();
     }
   }
@@ -169,31 +180,32 @@ public class Session implements Closeable {
    */
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs(INFO);
-    @GuardedBy("<self>") Session s = new Session();
+    try (@GuardedBy("<self>") Session s = new Session()) {
 
-    CmdCheck cc;
+      CmdCheck cc;
 
-    cc = new CmdCheck("(EQ 1 1)");
-    cc.apply(s);
-    assert cc.valid;
+      cc = new CmdCheck("(EQ 1 1)");
+      cc.apply(s);
+      assert cc.valid;
 
-    cc = new CmdCheck("(EQ 1 2)");
-    cc.apply(s);
-    assert !cc.valid;
+      cc = new CmdCheck("(EQ 1 2)");
+      cc.apply(s);
+      assert !cc.valid;
 
-    cc = new CmdCheck("(EQ x z)");
-    cc.apply(s);
-    assert !cc.valid;
+      cc = new CmdCheck("(EQ x z)");
+      cc.apply(s);
+      assert !cc.valid;
 
-    CmdAssume a = new CmdAssume("(AND (EQ x y) (EQ y z))");
-    a.apply(s);
+      CmdAssume a = new CmdAssume("(AND (EQ x y) (EQ y z))");
+      a.apply(s);
 
-    cc.apply(s);
-    assert cc.valid;
+      cc.apply(s);
+      assert cc.valid;
 
-    CmdUndoAssume.single.apply(s);
+      CmdUndoAssume.single.apply(s);
 
-    cc.apply(s);
-    assert !cc.valid;
+      cc.apply(s);
+      assert !cc.valid;
+    }
   }
 }

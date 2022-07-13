@@ -18,6 +18,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
@@ -42,28 +43,28 @@ public final class SplitDtrace {
       throw new RuntimeException(
           "Filename must end with .dtrace or .dtrace.gz: filename=" + filename);
     }
-    BufferedReader reader = getStream(filename);
     int declNum = 1;
     int recNum = 0;
-    ArrayList<String> rec = new ArrayList<>();
-    while (true) {
-      readRec(reader, rec);
-      if (isDeclare(rec)) {
-        break;
+    try (BufferedReader reader = getStream(filename)) {
+      ArrayList<String> rec = new ArrayList<>();
+      while (true) {
+        readRec(reader, rec);
+        if (isDeclare(rec)) {
+          break;
+        }
+      }
+      while (true) {
+        readRec(reader, rec);
+        if (rec.size() == 0) {
+          break;
+        }
+        if (isDeclare(rec)) {
+          declNum++;
+        } else {
+          recNum++;
+        }
       }
     }
-    while (true) {
-      readRec(reader, rec);
-      if (rec.size() == 0) {
-        break;
-      }
-      if (isDeclare(rec)) {
-        declNum++;
-      } else {
-        recNum++;
-      }
-    }
-    reader.close();
 
     System.out.println(
         "Number of DECLARE statements: " + declNum + " and number of records is: " + recNum);
@@ -77,51 +78,49 @@ public final class SplitDtrace {
       throws IOException {
     String out = filename.replace(".dtrace", "." + out_name + ".dtrace");
     System.out.println("Writing file " + out);
-    OutputStream output = new FileOutputStream(out);
-    boolean isGz = filename.endsWith(".dtrace.gz");
-    if (isGz) output = new GZIPOutputStream(output);
-    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, UTF_8));
-    BufferedReader reader = getStream(filename);
+    try (FileOutputStream fos = new FileOutputStream(out);
+        OutputStream output = filename.endsWith(".dtrace.gz") ? new GZIPOutputStream(fos) : fos;
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, UTF_8));
+        BufferedReader reader = getStream(filename)) {
 
-    int currRecCount = 0;
-    HashSet<Integer> nonceSet = new HashSet<>();
-    ArrayList<String> rec = new ArrayList<>();
-    while (true) {
-      readRec(reader, rec);
-      if (isDeclare(rec)) writer.newLine();
-      writeRec(writer, rec);
-      if (isDeclare(rec)) {
-        break;
-      }
-    }
-    while (true) {
-      readRec(reader, rec);
-      if (rec.size() == 0) {
-        break;
-      }
-      boolean isDecl = isDeclare(rec);
-      if ((currRecCount >= fromRec || isDecl) && currRecCount <= toRec) {
-        boolean shouldWrite = true;
-        if (!isDecl) {
-          int nonce = getNonce(rec);
-          if (isEnter(rec)) {
-            nonceSet.add(nonce);
-          } else {
-            if (!isExit(rec)) {
-              throw new RuntimeException("Must be either ENTER or EXIT:" + rec);
-            }
-            if (!nonceSet.contains(nonce)) {
-              shouldWrite = false;
-            }
-            nonceSet.remove(nonce);
-          }
+      int currRecCount = 0;
+      HashSet<Integer> nonceSet = new HashSet<>();
+      ArrayList<String> rec = new ArrayList<>();
+      while (true) {
+        readRec(reader, rec);
+        if (isDeclare(rec)) writer.newLine();
+        writeRec(writer, rec);
+        if (isDeclare(rec)) {
+          break;
         }
-        if (shouldWrite) writeRec(writer, rec);
       }
-      if (!isDecl) currRecCount++;
+      while (true) {
+        readRec(reader, rec);
+        if (rec.size() == 0) {
+          break;
+        }
+        boolean isDecl = isDeclare(rec);
+        if ((currRecCount >= fromRec || isDecl) && currRecCount <= toRec) {
+          boolean shouldWrite = true;
+          if (!isDecl) {
+            int nonce = getNonce(rec);
+            if (isEnter(rec)) {
+              nonceSet.add(nonce);
+            } else {
+              if (!isExit(rec)) {
+                throw new RuntimeException("Must be either ENTER or EXIT:" + rec);
+              }
+              if (!nonceSet.contains(nonce)) {
+                shouldWrite = false;
+              }
+              nonceSet.remove(nonce);
+            }
+          }
+          if (shouldWrite) writeRec(writer, rec);
+        }
+        if (!isDecl) currRecCount++;
+      }
     }
-    reader.close();
-    writer.close();
   }
 
   static int getNonce(ArrayList<String> res) {
@@ -182,21 +181,44 @@ public final class SplitDtrace {
     }
   }
 
-  @SuppressWarnings("JdkObsolete") // ZipFile uses Enumeration
-  static BufferedReader getStream(String filename) throws IOException {
-    InputStream stream;
-    if (filename.endsWith(".dtrace.zip")) {
-      ZipFile zipfile = new ZipFile(filename);
-      Enumeration<? extends ZipEntry> e = zipfile.entries();
-      if (!e.hasMoreElements()) throw new RuntimeException("No entries in the gz");
-      ZipEntry entry = e.nextElement();
-      if (e.hasMoreElements()) throw new RuntimeException("More than one entry in the gz");
-      stream = zipfile.getInputStream(entry);
-      assert stream != null : "@AssumeAssertion(nullness): just tested that one entry exists";
-    } else if (filename.endsWith(".dtrace.gz")) {
-      stream = new GZIPInputStream(new FileInputStream(filename));
-    } else {
-      stream = new FileInputStream(filename);
+  @SuppressWarnings({
+    "JdkObsolete", // ZipFile uses Enumeration
+    "builder:required.method.not.called" // @MustCall flows through an enumeration
+  })
+  static @Owning BufferedReader getStream(String filename) throws IOException {
+    InputStream stream = null; // dummy initialization for compiler's definite assignment check
+    ZipFile zipfile = null; // declare outside try so that it can be closed if an exception occurs
+    try {
+      if (filename.endsWith(".dtrace.zip")) {
+        zipfile = new ZipFile(filename);
+        Enumeration<? extends ZipEntry> e = zipfile.entries();
+        if (!e.hasMoreElements()) throw new RuntimeException("No entries in the gz");
+        ZipEntry entry = e.nextElement();
+        if (e.hasMoreElements()) throw new RuntimeException("More than one entry in the gz");
+        stream = zipfile.getInputStream(entry);
+        assert stream != null : "@AssumeAssertion(nullness): just tested that one entry exists";
+      } else {
+        stream = new FileInputStream(filename);
+        if (filename.endsWith(".dtrace.gz")) {
+          stream = new GZIPInputStream(stream);
+        }
+      }
+    } catch (IOException e) {
+      if (zipfile != null) {
+        try {
+          zipfile.close();
+        } catch (IOException e2) {
+          // do nothing
+        }
+      }
+      if (stream != null) {
+        try {
+          stream.close();
+        } catch (IOException e2) {
+          // do nothing
+        }
+      }
+      throw e;
     }
     return new BufferedReader(new InputStreamReader(stream, "ISO-8859-1"));
   }
