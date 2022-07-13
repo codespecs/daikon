@@ -19,6 +19,20 @@ Further documentation can be found in:
    It is also available at http://plse.cs.washington.edu/daikon/download/api/ .
 
 
+Version 5.8.12 (July 12, 2022)
+=================================
+
+All Daikon tools now work with Java 17.
+Javadoc Doclets are supported for Java 8, 11 and 17.
+(Later versions of Java probably work, but are not tested.)
+
+Daikon:
+ * Reduced output for --show-progress; added --show-detail-progress option.
+
+Bug fixes and implementation details:
+ * Update bcel util to version 1.1.15 (Support for Groovy objects and improvements to local variable table generation).
+
+
 Version 5.8.10 (November 1, 2021)
 =================================
 

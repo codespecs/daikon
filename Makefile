@@ -339,7 +339,7 @@ DISTTESTDIRJAVA := ${TMPDIR}/daikon.dist/daikon/java
 test-staged-dist: $(STAGING_DIR)
 	## First, get and test daikon.jar.
 	-rm -rf $(DISTTESTDIR)
-	mkdir $(DISTTESTDIR)
+	mkdir -p $(DISTTESTDIR)
 	(cd $(DISTTESTDIR); tar xzf $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz)
 	(cd $(DISTTESTDIR); mv $(NEW_RELEASE_NAME) daikon)
 	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) junit)
@@ -414,7 +414,8 @@ staging:
 	# it also causes doc/CHANGELOG.md time stamp to be checked; which
 	# we do not care about at this point.
 	touch doc/CHANGELOG.md
-	$(MAKE) daikon.tar
+	# keep same TMPDIR value
+	$(MAKE) TMPDIR=${TMPDIR} daikon.tar
 	gzip -c ${TMPDIR}/$(NEW_RELEASE_NAME).tar > $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz
 	cp -pf ${TMPDIR}/$(NEW_RELEASE_NAME).zip $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).zip
 	cp -pf daikon.jar $(STAGING_DIR)/download
@@ -595,11 +596,12 @@ daikon.tar daikon.zip: kvasir $(README_PATHS) $(DAIKON_JAVA_FILES) java/Makefile
 	make doc-all
 	# `make doc-all` just did the work, but check that the files exist.
 	make $(DOC_PATHS)
-	make daikon.jar
+	# keep same TMPDIR value
+	$(MAKE) TMPDIR=${TMPDIR} daikon.jar
 
 	-chmod -R +w ${TMPDIR}/daikon-* ${TMPDIR}/daikon-*.tar ${TMPDIR}/daikon-*.zip ${TMPDIR}/daikon
 	-rm -rf ${TMPDIR}/daikon-* ${TMPDIR}/daikon-*.tar ${TMPDIR}/daikon-*.zip ${TMPDIR}/daikon
-	mkdir ${TMPDIR}/daikon
+	mkdir -p ${TMPDIR}/daikon
 
 	mkdir ${TMPDIR}/daikon/doc
 	cp -p README ${TMPDIR}/daikon/README
