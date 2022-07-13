@@ -18,6 +18,7 @@ fi
 
 # Code formatting
 ls -l java/daikon/config
+ls -l java/daikon/config/ParameterDoclet.java
 echo "---------------- ParameterDoclet.java ----------------
 cat java/daikon/config/ParameterDoclet.java
 echo "---------------- end of ParameterDoclet.java ----------------
