@@ -998,18 +998,6 @@ public class Runtime {
    * <p>If the argument is not a field descriptor, returns it as is. This enables this method to be
    * used on the output of {@link Class#getName()}.
    */
-  @Deprecated
-  public static String classnameFromJvm(@FieldDescriptor String classname) {
-    return fieldDescriptorToBinaryName(classname);
-  }
-
-  /**
-   * Convert a classname from JVML format to Java format. For example, convert "[Ljava/lang/Object;"
-   * to "java.lang.Object[]".
-   *
-   * <p>If the argument is not a field descriptor, returns it as is. This enables this method to be
-   * used on the output of {@link Class#getName()}.
-   */
   @SuppressWarnings("signature") // conversion routine
   public static String fieldDescriptorToBinaryName(@FieldDescriptor String classname) {
 

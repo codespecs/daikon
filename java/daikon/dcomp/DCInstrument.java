@@ -2338,47 +2338,6 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Handles load and store static instructions. The instructions must be augmented to either push
-   * (load) or pop (store) the tag on the tag stack. This is accomplished by calling the specified
-   * method in DCRuntime and passing that method the object containing the the field and the offset
-   * of that field within the object
-   *
-   * @deprecated use load_store_field
-   */
-  @java.lang.Deprecated
-  InstructionList load_store_static(FieldInstruction f, String method) {
-
-    Type field_type = f.getFieldType(pool);
-    if (field_type instanceof ReferenceType) {
-      return null;
-    }
-    // String name = f.getClassName(pool) + "." + f.getFieldName(pool);
-    // System.out.printf("static field name for %s = %s%n", f, name);
-
-    // Get the index of this static in the list of all statics and allocate
-    // a tag for it.
-    Integer index = null; // DCRuntime.static_field_id.get (name);
-    if (index == null) {
-      // index = DCRuntime.static_field_id.size();
-      // DCRuntime.static_field_id.put (name, index);
-      DCRuntime.static_tags.add(new Object());
-    }
-
-    // Create code to call the method passing it the static's index
-    InstructionList il = new InstructionList();
-    il.append(ifact.createConstant(index));
-    il.append(
-        ifact.createInvoke(
-            DCRuntime.class.getName(),
-            method,
-            Type.VOID,
-            new Type[] {Type.INT},
-            Const.INVOKESTATIC));
-    il.append(f);
-    return il;
-  }
-
-  /**
    * Handles load and store local instructions. The instructions must be augmented to either push
    * (load) or pop (store) the tag on the tag stack. This is accomplished by calling the specified
    * method in DCRuntime and passing that method the tag frame and the offset of local/parameter.
