@@ -71,9 +71,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
    */
   public static boolean dkconfig_trace_input = false;
 
-  // non-null if dkconfig_trace_input==true
+  /** non-null if dkconfig_trace_input==true */
   private final @Owning @MonotonicNonNull PrintStream trace_file;
 
+  /** A unique identifier for creating unique filenames for trace files. */
   private static int trace_count = 0;
 
   /* package */ final Process process;

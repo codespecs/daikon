@@ -249,8 +249,9 @@ public final class PrintInvariants {
    */
   private static String print_csharp_metadata_SWITCH = "print_csharp_metadata";
 
-  // Stores the output file stream if --output is specified.  Null means System.out.
+  /** Stores the output file stream if --output is specified. Null means System.out. */
   private static @Owning @Nullable OutputStream out_stream = null;
+  /** If true, print C# metadata. */
   private static boolean print_csharp_metadata = false;
 
   // Fields that will be used if the --disc_reason switch is used (in other

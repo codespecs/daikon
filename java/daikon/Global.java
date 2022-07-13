@@ -202,6 +202,7 @@ public final class Global {
   /** Debug tracer for debugging invariant printing. */
   public static Logger debugPrint = Logger.getLogger("daikon.print");
 
+  /** If true, print logging information about printing of dtrace files. */
   public static final boolean debugPrintDtrace = false;
 
   /** Used only if debugPrintDtrace is true. Users need not set this. */

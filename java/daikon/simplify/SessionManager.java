@@ -192,6 +192,7 @@ public class SessionManager implements Closeable {
     /** The associated session, or null if the thread should shutdown. */
     private @Owning @Nullable @GuardedBy("<self>") Session session = new Session();
 
+    /** True if this has been closed. */
     private boolean finished = false;
 
     @Override
