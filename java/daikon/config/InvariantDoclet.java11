@@ -310,9 +310,9 @@ public class InvariantDoclet implements Doclet {
     try (PrintStream outf = new PrintStream(new FileOutputStream(outFilename))) {
       ClassInfo inv = cmap.get("daikon.inv.Invariant");
       if (formatTexinfo) {
-	process_class_sorted_texinfo(outf, inv);
+        process_class_sorted_texinfo(outf, inv);
       } else {
-	process_class_tree_txt(outf, inv, 0);
+        process_class_tree_txt(outf, inv, 0);
       }
     } catch (Exception e) {
       throw new Error("Unable to open file: " + outFilename, e);
