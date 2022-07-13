@@ -150,7 +150,7 @@ public class Ast {
    *
    * @param type the type of the result
    * @param stringRep the string to parse
-   * @param an AST created from the string
+   * @return an AST created from the string
    */
   public static Node create(String type, String stringRep) {
     return create(type, new Class<?>[] {}, new Object[] {}, stringRep);
