@@ -32,7 +32,9 @@ public class DtracePartitioner implements Closeable, Partitioner<String, String>
   /** the name of the Daikon trace file */
   private String filename;
 
-  /** @param filename the Daikon trace file to be partitioned */
+  /**
+   * @param filename the Daikon trace file to be partitioned
+   */
   public DtracePartitioner(String filename) {
     try {
       this.filename = filename;
