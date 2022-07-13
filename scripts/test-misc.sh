@@ -21,7 +21,7 @@ ls -l java/daikon/config
 echo "---------------- ParameterDoclet.java ----------------
 cat java/daikon/config/ParameterDoclet.java
 echo "---------------- end of ParameterDoclet.java ----------------
-chmod +w java/daikon/confug/ParameterDoclet.java java/daikon/confug/InvariantDoclet.java
+chmod +w java/daikon/config/ParameterDoclet.java java/daikon/config/InvariantDoclet.java
 make -C java reformat
 echo "---------------- ParameterDoclet.java ----------------
 cat java/daikon/config/ParameterDoclet.java
