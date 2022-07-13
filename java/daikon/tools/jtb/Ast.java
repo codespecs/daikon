@@ -146,22 +146,12 @@ public class Ast {
   }
 
   /**
-   * @deprecated Use format(Node) instead
+   * Creates an AST from a String.
+   *
+   * @param type the type of the result
+   * @param stringRep the string to parse
+   * @param an AST created from the string
    */
-  @Deprecated
-  public static String print(Node n) {
-    return format(n);
-  }
-
-  /**
-   * @deprecated Use formatCurrentLine(Node) instead
-   */
-  @Deprecated
-  public static String printCurrentLine(Node n) {
-    return formatCurrentLine(n);
-  }
-
-  // Creates an AST from a String
   public static Node create(String type, String stringRep) {
     return create(type, new Class<?>[] {}, new Object[] {}, stringRep);
   }
