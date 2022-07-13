@@ -1114,6 +1114,11 @@ public final class FileIO {
     }
   }
 
+  /**
+   * Connect to Chicory.
+   *
+   * @return the stream that is connected to Chicory
+   */
   private static @Owning InputStream connectToChicory() {
 
     // bind to any free port

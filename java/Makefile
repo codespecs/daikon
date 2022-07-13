@@ -782,7 +782,9 @@ audit:
 
 reformat:
 	${MAKE} -C .. update-run-google-java-format
+	chmod +w daikon/config/ParameterDoclet.java daikon/config/InvariantDoclet.java
 	@../utils/run-google-java-format/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
+	chmod -w daikon/config/ParameterDoclet.java daikon/config/InvariantDoclet.java
 
 check-format:
 	${MAKE} -C .. update-run-google-java-format
