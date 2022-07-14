@@ -414,6 +414,8 @@ staging:
 	# it also causes doc/CHANGELOG.md time stamp to be checked; which
 	# we do not care about at this point.
 	touch doc/CHANGELOG.md
+	# create TMPDIR
+	install -d ${TMPDIR}
 	# keep same TMPDIR value
 	$(MAKE) TMPDIR=${TMPDIR} daikon.tar
 	gzip -c ${TMPDIR}/$(NEW_RELEASE_NAME).tar > $(STAGING_DIR)/download/$(NEW_RELEASE_NAME).tar.gz
