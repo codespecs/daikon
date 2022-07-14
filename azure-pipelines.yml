@@ -506,8 +506,8 @@ jobs:
 - job: quick_txt_diff_centos_jdk11
   dependsOn:
     - jdk17_jobs
-    - quick_txt_diff_ubuntu_jdk17
-    - quick_txt_diff_centos_jdk11
+    - quick_txt_diff_centos_jdk17
+    - quick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-centos-jdk11:latest
