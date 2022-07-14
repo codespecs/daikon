@@ -11,9 +11,10 @@ pr:
 
 jobs:
 
-# The dependsOn clauses are:
+# The dependsOn clauses (in this file and in .circleci/config.yml) are:
 #  * Everything not *_ubuntu_jdk17 or typecheck_jdk17 depends on jdk17_jobs.
 #  * Anything *_jdk8 or *_jdk11 depends on *_jdk17.
+#  * Anything *_centos_* or *_fedora_* depends on *_ubuntu_*.
 
 # The remainder of jobs are run only if the jdk17_jobs pass.
 - job: jdk17_jobs

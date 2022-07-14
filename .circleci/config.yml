@@ -5,8 +5,8 @@ version: 2.1
 
 jobs:
 
-  # Only proceed to other jobs if ubuntu-jdk8-jobs passes.
-  ubuntu-jdk8-jobs:
+  # Only proceed to other jobs if ubuntu-jdk17-jobs passes.
+  jdk17-jobs:
     docker:
       - image: cimg/base:2022.06
     environment:
@@ -845,7 +845,7 @@ jobs:
   # If this task fails but task `typecheck-with-locally-built-CF-jdk8` succeeds, then update the
   # Checker Framework jar files in java/lib/ .  If it still fails, that's OK.  It will pass once the
   # next Checker Framework is released and java/lib/ is updated.
-  typecheck-with-included-CF-jdk8:
+  typecheck-with-included-CF-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
     environment:
@@ -932,156 +932,208 @@ jobs:
           no_output_timeout: 30m
 
 
+# For dependence logic, see ../azure-pipelines.yml .
+
 workflows:
   version: 2
   build:
     jobs:
-      - ubuntu-jdk8-jobs:
+      - jdk17-jobs:
           requires:
-            - quick-txt-diff-ubuntu-jdk8
-            - nonquick-txt-diff-ubuntu-jdk8
-            - non-txt-diff-ubuntu-jdk8
-            - misc-ubuntu-jdk8
-            - kvasir-ubuntu-jdk8
-      - quick-txt-diff-ubuntu-jdk8
+            - quick-txt-diff-ubuntu-jdk17
+            - nonquick-txt-diff-ubuntu-jdk17
+            - non-txt-diff-ubuntu-jdk17
+            - misc-ubuntu-jdk17
+            - kvasir-ubuntu-jdk17
+            - typecheck-with-included-CF-jdk17
+      - quick-txt-diff-ubuntu-jdk8:
+          requires:
+            - jdk17-jobs
+            - quick-txt-diff-ubuntu-jdk17
       - quick-txt-diff-ubuntu-jdk11:
           requires:
-            - ubuntu-jdk8-jobs
-            - quick-txt-diff-ubuntu-jdk8
-      - quick-txt-diff-ubuntu-jdk17:
+            - jdk17-jobs
+            - quick-txt-diff-ubuntu-jdk17
+      - quick-txt-diff-ubuntu-jdk17
+      - nonquick-txt-diff-ubuntu-jdk8:
           requires:
-            - quick-txt-diff-ubuntu-jdk11
-      - nonquick-txt-diff-ubuntu-jdk8
+            - jdk17-jobs
+            - nonquick-txt-diff-ubuntu-jdk17
       - nonquick-txt-diff-ubuntu-jdk11:
           requires:
-            - ubuntu-jdk8-jobs
-            - nonquick-txt-diff-ubuntu-jdk8
-      - nonquick-txt-diff-ubuntu-jdk17:
+            - jdk17-jobs
+            - nonquick-txt-diff-ubuntu-jdk17
+      - nonquick-txt-diff-ubuntu-jdk17
+      - non-txt-diff-ubuntu-jdk8:
           requires:
-            - nonquick-txt-diff-ubuntu-jdk11
-      - non-txt-diff-ubuntu-jdk8
+            - jdk17-jobs
+            - non-txt-diff-ubuntu-jdk17
       - non-txt-diff-ubuntu-jdk11:
           requires:
-            - ubuntu-jdk8-jobs
-            - non-txt-diff-ubuntu-jdk8
-      - non-txt-diff-ubuntu-jdk17:
+            - jdk17-jobs
+            - non-txt-diff-ubuntu-jdk17
+      - non-txt-diff-ubuntu-jdk17
+      - misc-ubuntu-jdk8:
           requires:
-            - non-txt-diff-ubuntu-jdk11
-      - misc-ubuntu-jdk8
+            - jdk17-jobs
+            - misc-ubuntu-jdk17
       - misc-ubuntu-jdk11:
           requires:
-            - ubuntu-jdk8-jobs
-            - misc-ubuntu-jdk8
-      - misc-ubuntu-jdk17:
+            - jdk17-jobs
+            - misc-ubuntu-jdk17
+      - misc-ubuntu-jdk17
+      - kvasir-ubuntu-jdk8:
           requires:
-            - misc-ubuntu-jdk11
-      - kvasir-ubuntu-jdk8
+            - jdk17-jobs
+            - kvasir-ubuntu-jdk17
       - kvasir-ubuntu-jdk11:
           requires:
-            - ubuntu-jdk8-jobs
-            - kvasir-ubuntu-jdk8
-      - kvasir-ubuntu-jdk17:
+            - jdk17-jobs
+            - kvasir-ubuntu-jdk17
+      - kvasir-ubuntu-jdk17
+      - kvasir-centos-jdk8:
           requires:
-            - kvasir-ubuntu-jdk11
-      - kvasir-centos-jdk8
+            - jdk17-jobs
+            - kvasir-centos-jdk17
+            - kvasir-ubuntu-jdk8
       - kvasir-centos-jdk11:
           requires:
-            - kvasir-centos-jdk8
+            - jdk17-jobs
+            - kvasir-centos-jdk17
+            - kvasir-ubuntu-jdk11
       - kvasir-centos-jdk17:
           requires:
-            - kvasir-centos-jdk11
+            - jdk17-jobs
+            - kvasir-ubuntu-jdk17
       - quick-txt-diff-fedora-jdk8:
           requires:
-            - ubuntu-jdk8-jobs
+            - jdk17-jobs
+            - quick-txt-diff-fedora-jdk17
             - quick-txt-diff-ubuntu-jdk8
       - quick-txt-diff-fedora-jdk11:
           requires:
-            - quick-txt-diff-fedora-jdk8
-      # - quick-txt-diff-fedora-jdk17:
-      #     requires:
-      #       - quick-txt-diff-fedora-jdk11
+            - jdk17-jobs
+            - quick-txt-diff-fedora-jdk17
+            - quick-txt-diff-ubuntu-jdk11
+      - quick-txt-diff-fedora-jdk17:
+          requires:
+            - jdk17-jobs
+            - quick-txt-diff-ubuntu-jdk17
       - nonquick-txt-diff-fedora-jdk8:
           requires:
-            - ubuntu-jdk8-jobs
+            - jdk17-jobs
+            - nonquick-txt-diff-fedora-jdk17
             - nonquick-txt-diff-ubuntu-jdk8
       - nonquick-txt-diff-fedora-jdk11:
           requires:
-            - nonquick-txt-diff-fedora-jdk8
-      # - nonquick-txt-diff-fedora-jdk17:
-      #     requires:
-      #       - nonquick-txt-diff-fedora-jdk11
+            - jdk17-jobs
+            - nonquick-txt-diff-fedora-jdk17
+            - nonquick-txt-diff-ubuntu-jdk11
+      - nonquick-txt-diff-fedora-jdk17:
+          requires:
+            - jdk17-jobs
+            - nonquick-txt-diff-ubuntu-jdk17
       - non-txt-diff-fedora-jdk8:
           requires:
-            - ubuntu-jdk8-jobs
+            - jdk17-jobs
+            - non-txt-diff-fedora-jdk17
             - non-txt-diff-ubuntu-jdk8
       - non-txt-diff-fedora-jdk11:
           requires:
-            - non-txt-diff-fedora-jdk8
-      # - non-txt-diff-fedora-jdk17:
-      #     requires:
-      #       - non-txt-diff-fedora-jdk11
+            - jdk17-jobs
+            - non-txt-diff-fedora-jdk17
+            - non-txt-diff-ubuntu-jdk11
+      - non-txt-diff-fedora-jdk17:
+          requires:
+            - jdk17-jobs
+            - non-txt-diff-ubuntu-jdk17
       - misc-fedora-jdk8:
           requires:
-            - ubuntu-jdk8-jobs
+            - jdk17-jobs
+            - misc-fedora-jdk17
             - misc-ubuntu-jdk8
       - misc-fedora-jdk11:
           requires:
-            - misc-fedora-jdk8
-      # - misc-fedora-jdk17:
-      #     requires:
-      #       - misc-fedora-jdk11
+            - jdk17-jobs
+            - misc-fedora-jdk17
+            - misc-ubuntu-jdk11
+      - misc-fedora-jdk17:
+          requires:
+            - jdk17-jobs
+            - misc-ubuntu-jdk17
       ## Flaky, needs to be fixed
       # - kvasir-fedora-jdk8:
       #     requires:
-      #       - ubuntu-jdk8-jobs
+      #       - jdk17-jobs
+      #       - kvasir-fedora-jdk17
       #       - kvasir-ubuntu-jdk8
       # - kvasir-fedora-jdk11
       #     requires:
-      #       - kvasir-fedora-jdk8
+      #       - jdk17-jobs
+      #       - kvasir-fedora-jdk17
+      #       - kvasir-ubuntu-jdk11
       # - kvasir-fedora-jdk17
       #     requires:
-      #       - kvasir-fedora-jdk11
+      #       - jdk17-jobs
+      #       - kvasir-ubuntu-jdk17
       - quick-txt-diff-centos-jdk8:
           requires:
-            - ubuntu-jdk8-jobs
+            - jdk17-jobs
+            - quick-txt-diff-centos-jdk17
             - quick-txt-diff-ubuntu-jdk8
       - quick-txt-diff-centos-jdk11:
           requires:
-            - quick-txt-diff-centos-jdk8
+            - jdk17-jobs
+            - quick-txt-diff-centos-jdk17
+            - quick-txt-diff-ubuntu-jdk11
       - quick-txt-diff-centos-jdk17:
           requires:
-            - quick-txt-diff-centos-jdk11
+            - jdk17-jobs
+            - quick-txt-diff-ubuntu-jdk17
       - nonquick-txt-diff-centos-jdk8:
           requires:
-            - ubuntu-jdk8-jobs
+            - jdk17-jobs
+            - nonquick-txt-diff-centos-jdk17
             - nonquick-txt-diff-ubuntu-jdk8
       - nonquick-txt-diff-centos-jdk11:
           requires:
-            - nonquick-txt-diff-centos-jdk8
+            - jdk17-jobs
+            - nonquick-txt-diff-centos-jdk17
+            - nonquick-txt-diff-ubuntu-jdk11
       - nonquick-txt-diff-centos-jdk17:
           requires:
-            - nonquick-txt-diff-centos-jdk11
+            - jdk17-jobs
+            - nonquick-txt-diff-ubuntu-jdk17
       - non-txt-diff-centos-jdk8:
           requires:
-            - ubuntu-jdk8-jobs
+            - jdk17-jobs
+            - non-txt-diff-centos-jdk17
             - non-txt-diff-ubuntu-jdk8
       - non-txt-diff-centos-jdk11:
           requires:
-            - non-txt-diff-centos-jdk8
+            - jdk17-jobs
+            - non-txt-diff-centos-jdk17
+            - non-txt-diff-ubuntu-jdk11
       - non-txt-diff-centos-jdk17:
           requires:
-            - non-txt-diff-centos-jdk11
+            - jdk17-jobs
+            - non-txt-diff-ubuntu-jdk17
       - misc-centos-jdk8:
           requires:
-            - ubuntu-jdk8-jobs
+            - jdk17-jobs
+            - misc-centos-jdk17
             - misc-ubuntu-jdk8
       - misc-centos-jdk11:
           requires:
-            - misc-centos-jdk8
+            - jdk17-jobs
+            - misc-centos-jdk17
+            - misc-ubuntu-jdk11
       - misc-centos-jdk17:
           requires:
-            - misc-centos-jdk11
-#      - typecheck-with-included-CF-jdk8
+            - jdk17-jobs
+            - misc-ubuntu-jdk17
+      - typecheck-with-included-CF-jdk17
 # Seems to run out of memory on CircleCI.  It's being checked on Azure Pipelines.
 #      -  typecheck-with-locally-built-CF-jdk8:
 #      -  typecheck-with-locally-built-CF-jdk11:
+#      -  typecheck-with-locally-built-CF-jdk17:
