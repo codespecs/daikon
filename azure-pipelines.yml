@@ -296,14 +296,14 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
+# TODO: Having trouble building Fedora Docker file; revisit later
+#   container: mdernst/daikon-fedora-jdk17:latest
  - job: quick_txt_diff_fedora_jdk17
    dependsOn:
      - jdk17_jobs
      - quick_txt_diff_ubuntu_jdk17
    pool:
      vmImage: 'ubuntu-latest'
-# TODO: Having trouble building Fedora Docker file; revisit later
-#   container: mdernst/daikon-fedora-jdk17:latest
   container: mdernst/daikon-fedora-jdk11:latest
   steps:
   - checkout: self
@@ -339,6 +339,8 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
+# TODO: having trouble building Fedora Docker file; revisit later
+#   container: mdernst/daikon-fedora-jdk17:latest
 - job: nonquick_txt_diff_fedora_jdk17
   dependsOn:
     - jdk17_jobs
@@ -346,8 +348,6 @@ jobs:
     - nonquick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-# TODO: having trouble building Fedora Docker file; revisit later
-#   container: mdernst/daikon-fedora-jdk17:latest
   container: mdernst/daikon-fedora-jdk11:latest
   steps:
   - checkout: self
@@ -383,6 +383,8 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
+# TODO: Having trouble building Fedora Docker file; revisit later
+#   container: mdernst/daikon-fedora-jdk17:latest
 - job: non_txt_diff_fedora_jdk17
   dependsOn:
     - jdk17_jobs
@@ -390,8 +392,6 @@ jobs:
     - non_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-# TODO: Having trouble building Fedora Docker file; revisit later
-#   container: mdernst/daikon-fedora-jdk17:latest
   container: mdernst/daikon-fedora-jdk11:latest
   steps:
   - checkout: self
@@ -431,6 +431,8 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
+# TODO: Having trouble building Fedora Docker file; revisit later
+#   container: mdernst/daikon-fedora-jdk17-plus:latest
 - job: misc_fedora_jdk17
   dependsOn:
     - jdk17_jobs
@@ -438,8 +440,6 @@ jobs:
     - misc_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-# TODO: Having trouble building Fedora Docker file; revisit later
-#   container: mdernst/daikon-fedora-jdk17-plus:latest
   container: mdernst/daikon-fedora-jdk11-plus:latest
   steps:
   - checkout: self
@@ -477,6 +477,8 @@ jobs:
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
+# TODO: Having trouble building Fedora Docker file; revisit later
+#   container: mdernst/daikon-fedora-jdk17-plus:latest
 - job: kvasir_fedora_jdk17
   dependsOn:
     - jdk17_jobs
@@ -484,8 +486,6 @@ jobs:
     - kvasir_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-# TODO: Having trouble building Fedora Docker file; revisit later
-#   container: mdernst/daikon-fedora-jdk17-plus:latest
   container: mdernst/daikon-fedora-jdk11-plus:latest
   steps:
   - checkout: self
