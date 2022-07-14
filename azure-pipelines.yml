@@ -12,20 +12,18 @@ pr:
 jobs:
 
 # The dependsOn clauses are:
-#  * Everything not *_ubuntu_jdk11 or typecheck_jdk11 depends on jdk11_jobs.
-#  * Anything *_jdk8 depends on *_jdk11.
-#  * Anything *_jdk17 depends on *_jdk11.
-#  * Anything *_centos_* or *_fedora_* depends on *_ubuntu_*.
+#  * Everything not *_ubuntu_jdk17 or typecheck_jdk17 depends on jdk17_jobs.
+#  * Anything *_jdk8 or *_jdk11 depends on *_jdk17.
 
-# The remainder of jobs are run only if the jdk11_jobs pass.
-- job: jdk11_jobs
+# The remainder of jobs are run only if the jdk17_jobs pass.
+- job: jdk17_jobs
   dependsOn:
-    - quick_txt_diff_ubuntu_jdk11
-    - nonquick_txt_diff_ubuntu_jdk11
-    - non_txt_diff_ubuntu_jdk11
-    - misc_ubuntu_jdk11
-    - kvasir_ubuntu_jdk11
-    - typecheck_jdk11
+    - quick_txt_diff_ubuntu_jdk17
+    - nonquick_txt_diff_ubuntu_jdk17
+    - non_txt_diff_ubuntu_jdk17
+    - misc_ubuntu_jdk17
+    - kvasir_ubuntu_jdk17
+    - typecheck_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   steps:
@@ -34,8 +32,8 @@ jobs:
 
 - job: quick_txt_diff_ubuntu_jdk8
   dependsOn:
-    - jdk11_jobs
-    - quick_txt_diff_ubuntu_jdk11
+    - jdk17_jobs
+    - quick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8:latest
@@ -46,6 +44,9 @@ jobs:
     displayName: test-quick-txt-diff.sh
 
 - job: quick_txt_diff_ubuntu_jdk11
+  dependsOn:
+    - jdk17_jobs
+    - quick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11:latest
@@ -56,9 +57,6 @@ jobs:
     displayName: test-quick-txt-diff.sh
 
 - job: quick_txt_diff_ubuntu_jdk17
-  dependsOn:
-    - jdk11_jobs
-    - quick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17:latest
@@ -70,8 +68,8 @@ jobs:
 
 - job: nonquick_txt_diff_ubuntu_jdk8
   dependsOn:
-    - jdk11_jobs
-    - nonquick_txt_diff_ubuntu_jdk11
+    - jdk17_jobs
+    - nonquick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8:latest
@@ -82,6 +80,9 @@ jobs:
     displayName: test-nonquick-txt-diff.sh
 
 - job: nonquick_txt_diff_ubuntu_jdk11
+  dependsOn:
+    - jdk17_jobs
+    - nonquick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11:latest
@@ -92,9 +93,6 @@ jobs:
     displayName: test-nonquick-txt-diff.sh
 
 - job: nonquick_txt_diff_ubuntu_jdk17
-  dependsOn:
-    - jdk11_jobs
-    - nonquick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17:latest
@@ -106,8 +104,8 @@ jobs:
 
 - job: non_txt_diff_ubuntu_jdk8
   dependsOn:
-    - jdk11_jobs
-    - non_txt_diff_ubuntu_jdk11
+    - jdk17_jobs
+    - non_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8:latest
@@ -118,6 +116,9 @@ jobs:
     displayName: test-non-txt-diff.sh
 
 - job: non_txt_diff_ubuntu_jdk11
+  dependsOn:
+    - jdk17_jobs
+    - non_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11:latest
@@ -128,9 +129,6 @@ jobs:
     displayName: test-non-txt-diff.sh
 
 - job: non_txt_diff_ubuntu_jdk17
-  dependsOn:
-    - jdk11_jobs
-    - non_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17:latest
@@ -142,8 +140,8 @@ jobs:
 
 - job: misc_ubuntu_jdk8
   dependsOn:
-    - jdk11_jobs
-    - misc_ubuntu_jdk11
+    - jdk17_jobs
+    - misc_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8-plus:latest
@@ -156,6 +154,9 @@ jobs:
     displayName: test-misc.sh
 
 - job: misc_ubuntu_jdk11
+  dependsOn:
+    - jdk17_jobs
+    - misc_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11-plus:latest
@@ -168,9 +169,6 @@ jobs:
     displayName: test-misc.sh
 
 - job: misc_ubuntu_jdk17
-  dependsOn:
-    - jdk11_jobs
-    - misc_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17-plus:latest
@@ -184,8 +182,8 @@ jobs:
 
 - job: kvasir_ubuntu_jdk8
   dependsOn:
-    - jdk11_jobs
-    - kvasir_ubuntu_jdk11
+    - jdk17_jobs
+    - kvasir_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8-plus:latest
@@ -196,6 +194,9 @@ jobs:
     displayName: test-kvasir.sh
 
 - job: kvasir_ubuntu_jdk11
+  dependsOn:
+    - jdk17_jobs
+    - kvasir_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11-plus:latest
@@ -206,9 +207,6 @@ jobs:
     displayName: test-kvasir.sh
 
 - job: kvasir_ubuntu_jdk17
-  dependsOn:
-    - jdk11_jobs
-    - kvasir_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17-plus:latest
@@ -220,7 +218,8 @@ jobs:
 
 - job: typecheck_jdk8
   dependsOn:
-    - jdk11_jobs
+    - jdk17_jobs
+    - typecheck_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8-plus:latest
@@ -236,6 +235,9 @@ jobs:
     displayName: test-typecheck.sh
 
 - job: typecheck_jdk11
+  dependsOn:
+    - jdk17_jobs
+    - typecheck_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11-plus:latest
@@ -251,8 +253,6 @@ jobs:
     displayName: test-typecheck.sh
 
 - job: typecheck_jdk17
-  dependsOn:
-    - jdk11_jobs
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17-plus:latest
@@ -269,8 +269,8 @@ jobs:
 
 - job: quick_txt_diff_fedora_jdk8
   dependsOn:
-    - jdk11_jobs
-    - quick_txt_diff_fedora_jdk11
+    - jdk17_jobs
+    - quick_txt_diff_fedora_jdk17
     - quick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -283,7 +283,8 @@ jobs:
 
 - job: quick_txt_diff_fedora_jdk11
   dependsOn:
-    - jdk11_jobs
+    - jdk17_jobs
+    - quick_txt_diff_fedora_jdk17
     - quick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -297,8 +298,7 @@ jobs:
 # Having trouble building Fedora Docker file; revisit later
 # - job: quick_txt_diff_fedora_jdk17
 #   dependsOn:
-#     - jdk11_jobs
-#     - quick_txt_diff_fedora_jdk11
+#     - jdk17_jobs
 #     - quick_txt_diff_ubuntu_jdk17
 #   pool:
 #     vmImage: 'ubuntu-latest'
@@ -311,8 +311,8 @@ jobs:
 
 - job: nonquick_txt_diff_fedora_jdk8
   dependsOn:
-    - jdk11_jobs
-    - nonquick_txt_diff_fedora_jdk11
+    - jdk17_jobs
+    - nonquick_txt_diff_fedora_jdk17
     - nonquick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -325,7 +325,8 @@ jobs:
 
 - job: nonquick_txt_diff_fedora_jdk11
   dependsOn:
-    - jdk11_jobs
+    - jdk17_jobs
+    - nonquick_txt_diff_fedora_jdk17
     - nonquick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -339,7 +340,7 @@ jobs:
 # Having trouble building Fedora Docker file; revisit later
 # - job: nonquick_txt_diff_fedora_jdk17
 #   dependsOn:
-#     - jdk11_jobs
+#     - jdk17_jobs
 #     - nonquick_txt_diff_fedora_jdk11
 #     - nonquick_txt_diff_ubuntu_jdk17
 #   pool:
@@ -353,8 +354,8 @@ jobs:
 
 - job: non_txt_diff_fedora_jdk8
   dependsOn:
-    - jdk11_jobs
-    - non_txt_diff_fedora_jdk11
+    - jdk17_jobs
+    - non_txt_diff_fedora_jdk17
     - non_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -367,7 +368,8 @@ jobs:
 
 - job: non_txt_diff_fedora_jdk11
   dependsOn:
-    - jdk11_jobs
+    - jdk17_jobs
+    - non_txt_diff_fedora_jdk17
     - non_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -381,7 +383,7 @@ jobs:
 # Having trouble building Fedora Docker file; revisit later
 # - job: non_txt_diff_fedora_jdk17
 #   dependsOn:
-#     - jdk11_jobs
+#     - jdk17_jobs
 #     - non_txt_diff_fedora_jdk11
 #     - non_txt_diff_ubuntu_jdk17
 #   pool:
@@ -395,8 +397,8 @@ jobs:
 
 - job: misc_fedora_jdk8
   dependsOn:
-    - jdk11_jobs
-    - misc_fedora_jdk11
+    - jdk17_jobs
+    - misc_fedora_jdk17
     - misc_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -411,7 +413,8 @@ jobs:
 
 - job: misc_fedora_jdk11
   dependsOn:
-    - jdk11_jobs
+    - jdk17_jobs
+    - misc_fedora_jdk17
     - misc_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -427,7 +430,7 @@ jobs:
 # Having trouble building Fedora Docker file; revisit later
 # - job: misc_fedora_jdk17
 #   dependsOn:
-#     - jdk11_jobs
+#     - jdk17_jobs
 #     - misc_fedora_jdk11
 #     - misc_ubuntu_jdk17
 #   pool:
@@ -443,8 +446,8 @@ jobs:
 
 - job: kvasir_fedora_jdk8
   dependsOn:
-    - jdk11_jobs
-    - kvasir_fedora_jdk11
+    - jdk17_jobs
+    - kvasir_fedora_jdk17
     - kvasir_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -457,7 +460,8 @@ jobs:
 
 - job: kvasir_fedora_jdk11
   dependsOn:
-    - jdk11_jobs
+    - jdk17_jobs
+    - kvasir_fedora_jdk17
     - kvasir_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -471,7 +475,7 @@ jobs:
 # Having trouble building Fedora Docker file; revisit later
 # - job: kvasir_fedora_jdk17
 #   dependsOn:
-#     - jdk11_jobs
+#     - jdk17_jobs
 #     - kvasir_fedora_jdk11
 #     - kvasir_ubuntu_jdk17
 #   pool:
@@ -485,8 +489,8 @@ jobs:
 
 - job: quick_txt_diff_centos_jdk8
   dependsOn:
-    - jdk11_jobs
-    - quick_txt_diff_centos_jdk11
+    - jdk17_jobs
+    - quick_txt_diff_centos_jdk17
     - quick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -499,8 +503,9 @@ jobs:
 
 - job: quick_txt_diff_centos_jdk11
   dependsOn:
-    - jdk11_jobs
-    - quick_txt_diff_ubuntu_jdk11
+    - jdk17_jobs
+    - quick_txt_diff_ubuntu_jdk17
+    - quick_txt_diff_centos_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-centos-jdk11:latest
@@ -512,8 +517,7 @@ jobs:
 
 - job: quick_txt_diff_centos_jdk17
   dependsOn:
-    - jdk11_jobs
-    - quick_txt_diff_centos_jdk11
+    - jdk17_jobs
     - quick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
@@ -526,8 +530,8 @@ jobs:
 
 - job: nonquick_txt_diff_centos_jdk8
   dependsOn:
-    - jdk11_jobs
-    - nonquick_txt_diff_centos_jdk11
+    - jdk17_jobs
+    - nonquick_txt_diff_centos_jdk17
     - nonquick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -540,7 +544,8 @@ jobs:
 
 - job: nonquick_txt_diff_centos_jdk11
   dependsOn:
-    - jdk11_jobs
+    - jdk17_jobs
+    - nonquick_txt_diff_centos_jdk17
     - nonquick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -553,8 +558,7 @@ jobs:
 
 - job: nonquick_txt_diff_centos_jdk17
   dependsOn:
-    - jdk11_jobs
-    - nonquick_txt_diff_centos_jdk11
+    - jdk17_jobs
     - nonquick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
@@ -567,8 +571,8 @@ jobs:
 
 - job: non_txt_diff_centos_jdk8
   dependsOn:
-    - jdk11_jobs
-    - non_txt_diff_centos_jdk11
+    - jdk17_jobs
+    - non_txt_diff_centos_jdk17
     - non_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -581,7 +585,8 @@ jobs:
 
 - job: non_txt_diff_centos_jdk11
   dependsOn:
-    - jdk11_jobs
+    - jdk17_jobs
+    - non_txt_diff_centos_jdk17
     - non_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -594,8 +599,7 @@ jobs:
 
 - job: non_txt_diff_centos_jdk17
   dependsOn:
-    - jdk11_jobs
-    - non_txt_diff_centos_jdk11
+    - jdk17_jobs
     - non_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
@@ -608,8 +612,8 @@ jobs:
 
 - job: misc_centos_jdk8
   dependsOn:
-    - jdk11_jobs
-    - misc_centos_jdk11
+    - jdk17_jobs
+    - misc_centos_jdk17
     - misc_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -624,7 +628,8 @@ jobs:
 
 - job: misc_centos_jdk11
   dependsOn:
-    - jdk11_jobs
+    - jdk17_jobs
+    - misc_centos_jdk17
     - misc_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -639,8 +644,7 @@ jobs:
 
 - job: misc_centos_jdk17
   dependsOn:
-    - jdk11_jobs
-    - misc_centos_jdk11
+    - jdk17_jobs
     - misc_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
@@ -655,8 +659,8 @@ jobs:
 
 - job: kvasir_centos_jdk8
   dependsOn:
-    - jdk11_jobs
-    - kvasir_centos_jdk11
+    - jdk17_jobs
+    - kvasir_centos_jdk17
     - kvasir_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -669,7 +673,8 @@ jobs:
 
 - job: kvasir_centos_jdk11
   dependsOn:
-    - jdk11_jobs
+    - jdk17_jobs
+    - kvasir_centos_jdk17
     - kvasir_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -682,8 +687,7 @@ jobs:
 
 - job: kvasir_centos_jdk17
   dependsOn:
-    - jdk11_jobs
-    - kvasir_centos_jdk11
+    - jdk17_jobs
     - kvasir_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
