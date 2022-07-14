@@ -781,12 +781,22 @@ audit:
 .PHONY: reformat check-format
 
 reformat:
+ifeq ($(JAVA8), 1)
+	echo "Formatting is not run under Java 8"
+else
 	${MAKE} -C .. update-run-google-java-format
+	chmod +w daikon/config/InvariantDoclet.java daikon/config/ParameterDoclet.java
 	@../utils/run-google-java-format/run-google-java-format.py ${JAVA_FILES_FOR_FORMAT}
+	chmod -w daikon/config/InvariantDoclet.java daikon/config/ParameterDoclet.java
+endif
 
 check-format:
+ifeq ($(JAVA8), 1)
+	echo "Formatting is not checked under Java 8"
+else
 	${MAKE} -C .. update-run-google-java-format
 	@../utils/run-google-java-format/check-google-java-format.py ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && /bin/false)
+endif
 
 
 ###########################################################################
