@@ -344,7 +344,6 @@ jobs:
 - job: nonquick_txt_diff_fedora_jdk17
   dependsOn:
     - jdk17_jobs
-    - nonquick_txt_diff_fedora_jdk11
     - nonquick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
@@ -388,7 +387,6 @@ jobs:
 - job: non_txt_diff_fedora_jdk17
   dependsOn:
     - jdk17_jobs
-    - non_txt_diff_fedora_jdk11
     - non_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
@@ -436,7 +434,6 @@ jobs:
 - job: misc_fedora_jdk17
   dependsOn:
     - jdk17_jobs
-    - misc_fedora_jdk11
     - misc_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
@@ -482,7 +479,6 @@ jobs:
 - job: kvasir_fedora_jdk17
   dependsOn:
     - jdk17_jobs
-    - kvasir_fedora_jdk11
     - kvasir_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
