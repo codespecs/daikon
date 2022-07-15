@@ -135,22 +135,21 @@ public class InvariantDoclet {
 
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintStream outf = new PrintStream(new FileOutputStream(fname));
-
-        @SuppressWarnings("keyfor") // Invariant is always a key
-        @KeyFor("this.cmap") ClassDoc inv = root.classNamed("daikon.inv.Invariant");
-        process_class_sorted_texinfo(outf, inv);
-        outf.close();
+        try (PrintStream outf = new PrintStream(new FileOutputStream(fname))) {
+          @SuppressWarnings("keyfor") // Invariant is always a key
+          @KeyFor("this.cmap") ClassDoc inv = root.classNamed("daikon.inv.Invariant");
+          process_class_sorted_texinfo(outf, inv);
+        }
 
       } else if ("--text".equals(opt)) {
 
         String fname = optset[1];
         System.out.println("Opening " + fname + " for output...");
-        PrintStream outf = new PrintStream(new FileOutputStream(fname));
-        @SuppressWarnings("keyfor") // Invariant is always present
-        @KeyFor("cmap") ClassDoc inv = root.classNamed("daikon.inv.Invariant");
-        process_class_tree_txt(outf, inv, 0);
-        outf.close();
+        try (PrintStream outf = new PrintStream(new FileOutputStream(fname))) {
+          @SuppressWarnings("keyfor") // Invariant is always present
+          @KeyFor("cmap") ClassDoc inv = root.classNamed("daikon.inv.Invariant");
+          process_class_tree_txt(outf, inv, 0);
+        }
       }
     }
   }

@@ -198,8 +198,7 @@ public class DtraceDiff {
             break;
           } else if (Daikon.config_SWITCH.equals(option_name)) {
             String config_file = Daikon.getOptarg(g);
-            try {
-              InputStream stream = new FileInputStream(config_file);
+            try (InputStream stream = new FileInputStream(config_file)) {
               Configuration.getInstance().apply(stream);
             } catch (IOException e) {
               throw new RuntimeException("Could not open config file " + config_file);
@@ -259,112 +258,117 @@ public class DtraceDiff {
       PptMap ppts1 = FileIO.read_declaration_files(declsfile1);
       PptMap ppts2 = FileIO.read_declaration_files(declsfile2);
 
-      FileIO.ParseState state1 = new FileIO.ParseState(dtracefile1, false, true, ppts1);
-      FileIO.ParseState state2 = new FileIO.ParseState(dtracefile2, false, true, ppts2);
+      try (FileIO.ParseState state1 = new FileIO.ParseState(dtracefile1, false, true, ppts1);
+          FileIO.ParseState state2 = new FileIO.ParseState(dtracefile2, false, true, ppts2)) {
 
-      while (true) {
-        // *** should do some kind of progress bar here?
-        // read from dtracefile1 until we get a data trace record or EOF
         while (true) {
-          FileIO.read_data_trace_record_setstate(state1);
-          if (state1.rtype == FileIO.RecordType.SAMPLE) {
-            break;
-          } else if ((state1.rtype == FileIO.RecordType.EOF)
-              || (state1.rtype == FileIO.RecordType.TRUNCATED)) {
-            break;
+          // *** should do some kind of progress bar here?
+          // read from dtracefile1 until we get a data trace record or EOF
+          while (true) {
+            FileIO.read_data_trace_record_setstate(state1);
+            if (state1.rtype == FileIO.RecordType.SAMPLE) {
+              break;
+            } else if ((state1.rtype == FileIO.RecordType.EOF)
+                || (state1.rtype == FileIO.RecordType.TRUNCATED)) {
+              break;
+            }
           }
-        }
-        // read from dtracefile2 until we get a data trace record or EOF
-        while (true) {
-          FileIO.read_data_trace_record_setstate(state2);
-          if (state2.rtype == FileIO.RecordType.SAMPLE) {
-            break;
-          } else if ((state2.rtype == FileIO.RecordType.EOF)
-              || (state2.rtype == FileIO.RecordType.TRUNCATED)) {
-            break;
+          // read from dtracefile2 until we get a data trace record or EOF
+          while (true) {
+            FileIO.read_data_trace_record_setstate(state2);
+            if (state2.rtype == FileIO.RecordType.SAMPLE) {
+              break;
+            } else if ((state2.rtype == FileIO.RecordType.EOF)
+                || (state2.rtype == FileIO.RecordType.TRUNCATED)) {
+              break;
+            }
           }
-        }
 
-        // things had better be the same
-        if (state1.rtype == state2.rtype) {
-          if (state1.rtype == FileIO.RecordType.SAMPLE) {
-            @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
-            @NonNull PptTopLevel ppt1 = state1.ppt;
-            @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
-            @NonNull PptTopLevel ppt2 = state2.ppt;
-            @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
-            @NonNull ValueTuple vt1 = state1.vt;
-            @SuppressWarnings("nullness") // dependent:  state2 is SAMPLE
-            @NonNull ValueTuple vt2 = state2.vt;
-            VarInfo[] vis1 = ppt1.var_infos;
-            VarInfo[] vis2 = ppt2.var_infos;
+          // things had better be the same
+          if (state1.rtype == state2.rtype) {
+            if (state1.rtype == FileIO.RecordType.SAMPLE) {
+              @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
+              @NonNull PptTopLevel ppt1 = state1.ppt;
+              @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
+              @NonNull PptTopLevel ppt2 = state2.ppt;
+              @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
+              @NonNull ValueTuple vt1 = state1.vt;
+              @SuppressWarnings("nullness") // dependent:  state2 is SAMPLE
+              @NonNull ValueTuple vt2 = state2.vt;
+              VarInfo[] vis1 = ppt1.var_infos;
+              VarInfo[] vis2 = ppt2.var_infos;
 
-            // Check to see that Ppts match the first time we encounter them
-            PptTopLevel foundppt = pptmap.get(ppt1);
-            if (foundppt == null) {
-              if (!ppt1.name.equals(ppt2.name)) {
+              // Check to see that Ppts match the first time we encounter them
+              PptTopLevel foundppt = pptmap.get(ppt1);
+              if (foundppt == null) {
+                if (!ppt1.name.equals(ppt2.name)) {
+                  ppt_mismatch_error(state1, dtracefile1, state2, dtracefile2);
+                }
+                for (int i = 0; (i < ppt1.num_tracevars) && (i < ppt2.num_tracevars); i++) {
+                  // *** what about comparability and aux info?
+                  if (!vis1[i].name().equals(vis2[i].name())
+                      || (vis1[i].is_static_constant != vis2[i].is_static_constant)
+                      || (vis1[i].isStaticConstant()
+                          && vis2[i].isStaticConstant()
+                          && !values_are_equal(
+                              vis1[i], vis1[i].constantValue(), vis2[i].constantValue()))
+                      || ((vis1[i].type != vis2[i].type)
+                          || (vis1[i].file_rep_type != vis2[i].file_rep_type)))
+                    ppt_var_decl_error(vis1[i], state1, dtracefile1, vis2[i], state2, dtracefile2);
+                }
+                if (ppt1.num_tracevars != ppt2.num_tracevars) {
+                  ppt_decl_error(state1, dtracefile1, state2, dtracefile2);
+                }
+                pptmap.put(ppt1, ppt2);
+              } else if (foundppt != ppt2) {
                 ppt_mismatch_error(state1, dtracefile1, state2, dtracefile2);
               }
-              for (int i = 0; (i < ppt1.num_tracevars) && (i < ppt2.num_tracevars); i++) {
-                // *** what about comparability and aux info?
-                if (!vis1[i].name().equals(vis2[i].name())
-                    || (vis1[i].is_static_constant != vis2[i].is_static_constant)
-                    || (vis1[i].isStaticConstant()
-                        && vis2[i].isStaticConstant()
-                        && !values_are_equal(
-                            vis1[i], vis1[i].constantValue(), vis2[i].constantValue()))
-                    || ((vis1[i].type != vis2[i].type)
-                        || (vis1[i].file_rep_type != vis2[i].file_rep_type)))
-                  ppt_var_decl_error(vis1[i], state1, dtracefile1, vis2[i], state2, dtracefile2);
-              }
-              if (ppt1.num_tracevars != ppt2.num_tracevars) {
-                ppt_decl_error(state1, dtracefile1, state2, dtracefile2);
-              }
-              pptmap.put(ppt1, ppt2);
-            } else if (foundppt != ppt2) {
-              ppt_mismatch_error(state1, dtracefile1, state2, dtracefile2);
-            }
 
-            // check to see that variables on this pair of samples match
-            for (int i = 0; i < ppt1.num_tracevars; i++) {
-              if (vis1[i].is_static_constant) {
-                continue;
+              // check to see that variables on this pair of samples match
+              for (int i = 0; i < ppt1.num_tracevars; i++) {
+                if (vis1[i].is_static_constant) {
+                  continue;
+                }
+                boolean missing1 = vt1.isMissingNonsensical(vis1[i]);
+                boolean missing2 = vt2.isMissingNonsensical(vis2[i]);
+                Object val1 = vt1.getValueOrNull(vis1[i]);
+                Object val2 = vt2.getValueOrNull(vis2[i]);
+                // Require that missing1 == missing2.  Also require that if
+                // the values are present, they are the same.
+                if (!((missing1 == missing2)
+                    && (missing1
+                        // At this point, missing1 == false, missing2 == false,
+                        // val1 != null, val2 != null.
+                        || values_are_equal(
+                            vis1[i],
+                            castNonNull(val1),
+                            castNonNull(val2))))) // application invariant
+                ppt_var_value_error(
+                      vis1[i], val1, state1, dtracefile1, vis2[i], val2, state2, dtracefile2);
               }
-              boolean missing1 = vt1.isMissingNonsensical(vis1[i]);
-              boolean missing2 = vt2.isMissingNonsensical(vis2[i]);
-              Object val1 = vt1.getValueOrNull(vis1[i]);
-              Object val2 = vt2.getValueOrNull(vis2[i]);
-              // Require that missing1 == missing2.  Also require that if
-              // the values are present, they are the same.
-              if (!((missing1 == missing2)
-                  && (missing1
-                      // At this point, missing1 == false, missing2 == false,
-                      // val1 != null, val2 != null.
-                      || values_are_equal(
-                          vis1[i], castNonNull(val1), castNonNull(val2))))) // application invariant
-              ppt_var_value_error(
-                    vis1[i], val1, state1, dtracefile1, vis2[i], val2, state2, dtracefile2);
+            } else {
+              return; // EOF on both files ==> normal return
             }
+          } else if ((state1.rtype == FileIO.RecordType.TRUNCATED)
+              || (state2.rtype == FileIO.RecordType.TRUNCATED))
+            return; // either file reached truncation limit, return quietly
+          else if (state1.rtype == FileIO.RecordType.EOF) {
+            assert state2.ppt != null
+                : "@AssumeAssertion(nullness): application invariant: status is not EOF or"
+                    + " TRUNCATED";
+            throw new DiffError(
+                String.format(
+                    "ppt %s is at line %d in %s but is missing at end of %s",
+                    state2.ppt.name(), state2.get_linenum(), dtracefile2, dtracefile1));
           } else {
-            return; // EOF on both files ==> normal return
+            assert state1.ppt != null
+                : "@AssumeAssertion(nullness): application invariant: status is not EOF or"
+                    + " TRUNCATED";
+            throw new DiffError(
+                String.format(
+                    "ppt %s is at line %d in %s but is missing at end of %s",
+                    state1.ppt.name(), state1.get_linenum(), dtracefile1, dtracefile2));
           }
-        } else if ((state1.rtype == FileIO.RecordType.TRUNCATED)
-            || (state2.rtype == FileIO.RecordType.TRUNCATED))
-          return; // either file reached truncation limit, return quietly
-        else if (state1.rtype == FileIO.RecordType.EOF) {
-          assert state2.ppt != null
-              : "@AssumeAssertion(nullness): application invariant: status is not EOF or TRUNCATED";
-          throw new DiffError(
-              String.format(
-                  "ppt %s is at line %d in %s but is missing at end of %s",
-                  state2.ppt.name(), state2.get_linenum(), dtracefile2, dtracefile1));
-        } else {
-          assert state1.ppt != null
-              : "@AssumeAssertion(nullness): application invariant: status is not EOF or TRUNCATED";
-          throw new DiffError(
-              String.format(
-                  "ppt %s is at line %d in %s but is missing at end of %s",
-                  state1.ppt.name(), state1.get_linenum(), dtracefile1, dtracefile2));
         }
       }
     } catch (IOException e) {

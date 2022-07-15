@@ -3995,12 +3995,14 @@ public class DCInstrument extends InstructionListUtils {
    * @see #save_static_field_id(File)
    */
   static void restore_static_field_id(File file) throws IOException {
-    for (String line : new EntryReader(file, "UTF-8")) {
-      String[] key_val = line.split("  *");
-      assert !static_field_id.containsKey(key_val[0]) : key_val[0] + " " + key_val[1];
-      static_field_id.put(key_val[0], Integer.valueOf(key_val[1]));
-      // System.out.printf("Adding %s %s to static map%n", key_val[0],
-      //                   key_val[1]);
+    try (EntryReader er = new EntryReader(file, "UTF-8")) {
+      for (String line : er) {
+        String[] key_val = line.split("  *");
+        assert !static_field_id.containsKey(key_val[0]) : key_val[0] + " " + key_val[1];
+        static_field_id.put(key_val[0], Integer.valueOf(key_val[1]));
+        // System.out.printf("Adding %s %s to static map%n", key_val[0],
+        //                   key_val[1]);
+      }
     }
   }
 

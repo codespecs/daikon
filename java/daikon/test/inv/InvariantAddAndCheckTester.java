@@ -169,8 +169,12 @@ public class InvariantAddAndCheckTester {
    * @return false if any tests fail
    */
   private static boolean execute() {
-    LineNumberReader commandReader = getCommands();
-    String output = performTest(commandReader);
+    String output;
+    try (LineNumberReader commandReader = getCommands()) {
+      output = performTest(commandReader);
+    } catch (IOException e) {
+      throw new Error(e);
+    }
 
     if (output == null) { // no errors
       return true;

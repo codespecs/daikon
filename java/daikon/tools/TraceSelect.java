@@ -183,19 +183,22 @@ public class TraceSelect {
 
       while (num_reps > 0) {
 
-        DtracePartitioner dec = new DtracePartitioner(fileName);
-        MultiRandSelector<String> mrs = new MultiRandSelector<>(numPerSample, dec);
-
-        while (dec.hasNext()) {
-          mrs.accept(dec.next());
-        }
         List<String> al = new ArrayList<>();
+        try (DtracePartitioner dec = new DtracePartitioner(fileName)) {
+          MultiRandSelector<String> mrs = new MultiRandSelector<>(numPerSample, dec);
 
-        for (Iterator<String> i = mrs.valuesIter(); i.hasNext(); ) {
-          al.add(i.next());
+          while (dec.hasNext()) {
+            mrs.accept(dec.next());
+          }
+
+          for (Iterator<String> i = mrs.valuesIter(); i.hasNext(); ) {
+            al.add(i.next());
+          }
+
+          @SuppressWarnings("builder:reset.not.owning") // Resource Leak Checker bug, probably
+          List<String> al_tmp = dec.patchValues(al, INCLUDE_UNRETURNED);
+          al = al_tmp;
         }
-
-        al = dec.patchValues(al, INCLUDE_UNRETURNED);
 
         String filePrefix = calcOut(fileName);
 
@@ -203,13 +206,12 @@ public class TraceSelect {
         // but now add a '-p' in the front so it's all good
         sampleNames[num_reps] = filePrefix + ".inv";
 
-        PrintWriter pwOut = new PrintWriter(FilesPlume.newBufferedFileWriter(filePrefix));
-
-        for (String toPrint : al) {
-          pwOut.println(toPrint);
+        try (PrintWriter pwOut = new PrintWriter(FilesPlume.newBufferedFileWriter(filePrefix))) {
+          for (String toPrint : al) {
+            pwOut.println(toPrint);
+          }
+          pwOut.flush();
         }
-        pwOut.flush();
-        pwOut.close();
 
         invokeDaikon(filePrefix);
 

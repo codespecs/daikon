@@ -10,11 +10,14 @@ import static daikon.VarInfo.VarKind;
 import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import daikon.Daikon.BugInDaikon;
 import daikon.config.Configuration;
 import daikon.derive.ValueAndModified;
 import daikon.diff.InvMap;
 import daikon.inv.Invariant;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.Closeable;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +34,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.NumberFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -47,9 +51,12 @@ import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
+import org.checkerframework.checker.calledmethods.qual.EnsuresCalledMethods;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.mustcall.qual.MustCall;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
@@ -1102,41 +1109,44 @@ public final class FileIO {
           "Warning: Daikon is using a dataflow"
               + " hierarchy analysis on a data trace"
               + " that does not appear to be over a"
-              + " program execution, consider running"
+              + " program execution.  Consider running"
               + " Daikon with the --nohierarchy flag.");
     }
   }
 
-  private static InputStream connectToChicory() {
+  /**
+   * Connect to Chicory.
+   *
+   * @return the stream that is connected to Chicory
+   */
+  private static @Owning InputStream connectToChicory() {
 
-    ServerSocket daikonServer;
-    try {
-      daikonServer = new ServerSocket(0); // bind to any free port
+    // bind to any free port
+    try (ServerSocket daikonServer = new ServerSocket(0)) {
 
       // tell Chicory what port we have!
       System.out.println("DaikonChicoryOnlinePort=" + daikonServer.getLocalPort());
 
       daikonServer.setReceiveBufferSize(64000);
 
+      Socket chicSocket;
+      try {
+        daikonServer.setSoTimeout(5000);
+
+        // System.out.println("waiting for chicory connection on port " +
+        // daikonServer.getLocalPort());
+        chicSocket = daikonServer.accept();
+      } catch (IOException e) {
+        throw new RuntimeException("Unable to connect to Chicory", e);
+      }
+
+      try {
+        return chicSocket.getInputStream();
+      } catch (IOException e) {
+        throw new RuntimeException("Unable to get Chicory's input stream", e);
+      }
     } catch (IOException e) {
       throw new RuntimeException("Unable to create server", e);
-    }
-
-    Socket chicSocket;
-    try {
-      daikonServer.setSoTimeout(5000);
-
-      // System.out.println("waiting for chicory connection on port " +
-      // daikonServer.getLocalPort());
-      chicSocket = daikonServer.accept();
-    } catch (IOException e) {
-      throw new RuntimeException("Unable to connect to Chicory", e);
-    }
-
-    try {
-      return chicSocket.getInputStream();
-    } catch (IOException e) {
-      throw new RuntimeException("Unable to get Chicory's input stream", e);
     }
   }
 
@@ -1235,7 +1245,7 @@ public final class FileIO {
    * </ol>
    */
   @UsesObjectEquals
-  public static class ParseState {
+  @MustCall("close") public static class ParseState implements Closeable {
 
     //
     // This is the global information about the state of the parser.
@@ -1257,7 +1267,7 @@ public final class FileIO {
     public PptMap all_ppts;
 
     /** Input stream. */
-    public LineNumberReader reader;
+    public final @Owning LineNumberReader reader;
 
     /** Total number of lines in the input file. */
     public long total_lines;
@@ -1288,7 +1298,16 @@ public final class FileIO {
     /** Miscellaneous text in the parsed item. */
     public @Nullable Object payload; // used when status=COMMENT
 
-    /** Start parsing the given file. */
+    /**
+     * Start parsing the given file.
+     *
+     * @param raw_filename the file name supplied by the user; may be "-" or "+"
+     * @param decl_file_p true if the file is a declaration file
+     * @param ppts_may_be_new true if declarations of ppts read from the data trace file are new
+     *     (and thus are not in all_ppts). false if the ppts may already be there.
+     * @param ppts the program points
+     * @throws IOException if there is a problem reading or writing a file
+     */
     @SuppressWarnings("StaticAssignmentInConstructor") // for progress output
     public ParseState(
         String raw_filename, boolean decl_file_p, boolean ppts_may_be_new, PptMap ppts)
@@ -1348,12 +1367,19 @@ public final class FileIO {
         reader = new LineNumberReader(chicReader);
       } else if (is_url) {
         URL url = new URL(raw_filename);
-        InputStream stream = url.openStream();
-        if (raw_filename.endsWith(".gz")) {
-          GZIPInputStream gzip_stream = new GZIPInputStream(stream);
-          reader = new LineNumberReader(new InputStreamReader(gzip_stream, UTF_8));
-        } else {
-          reader = new LineNumberReader(new InputStreamReader(stream, UTF_8));
+        InputStream stream = null; // dummy initialization for compiler's definite assignment check
+        try {
+          stream = url.openStream();
+          InputStream gzip_stream =
+              raw_filename.endsWith(".gz") ? new GZIPInputStream(stream) : stream;
+          InputStreamReader isr = new InputStreamReader(gzip_stream, UTF_8);
+          LineNumberReader lnr = new LineNumberReader(isr);
+          reader = lnr;
+        } catch (IOException e) {
+          if (stream != null) {
+            stream.close();
+          }
+          throw e;
         }
       } else {
         reader = FilesPlume.newLineNumberFileReader(raw_filename);
@@ -1364,7 +1390,22 @@ public final class FileIO {
       ppt = null;
     }
 
-    /** Returns the current line number in the input file, or -1 if not available. */
+    /** Releases resources held by this. */
+    @Override
+    @EnsuresCalledMethods(value = "reader", methods = "close")
+    public void close(@GuardSatisfied ParseState this) {
+      try {
+        reader.close();
+      } catch (IOException e) {
+        throw new BugInDaikon(e);
+      }
+    }
+
+    /**
+     * Returns the current line number in the input file, or -1 if not available.
+     *
+     * @return the current line number in the input file, or -1 if not available
+     */
     public int get_linenum() {
       return reader.getLineNumber();
     }
@@ -1451,62 +1492,73 @@ public final class FileIO {
               + ((Daikon.ppt_omit_regexp != null) ? " " + Daikon.ppt_omit_regexp.pattern() : ""));
     }
 
-    ParseState data_trace_state = new ParseState(filename, is_decl_file, ppts_may_be_new, all_ppts);
-    FileIO.data_trace_state = data_trace_state;
+    try (ParseState data_trace_state =
+        new ParseState(filename, is_decl_file, ppts_may_be_new, all_ppts)) {
+      FileIO.data_trace_state = data_trace_state;
 
-    // Used for debugging: write new data trace file.
-    if (Global.debugPrintDtrace) {
-      Global.dtraceWriter =
-          new PrintWriter(Files.newBufferedWriter(new File(filename + ".debug").toPath(), UTF_8));
-    }
-
-    while (true) {
-      read_data_trace_record(data_trace_state);
-
-      if (data_trace_state.rtype == RecordType.SAMPLE) {
-        assert data_trace_state.ppt != null
-            : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
-        assert data_trace_state.vt != null
-            : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
-        // Nonce may be null
-        samples_processed++;
-        // Add orig and derived variables; pass to inference (add_and_flow)
+      // Used for debugging: write new data trace file.
+      if (Global.debugPrintDtrace) {
+        Path p = new File(filename + ".debug").toPath();
+        BufferedWriter bw = null; // dummy initialization for compiler's definite assignment check
         try {
-          processor.process_sample(
-              data_trace_state.all_ppts,
-              data_trace_state.ppt,
-              data_trace_state.vt,
-              data_trace_state.nonce);
-        } catch (Error e) {
-          // e.printStackTrace();
-          if (!dkconfig_continue_after_file_exception) {
-            throw new Daikon.UserError(e, data_trace_state);
-          } else {
-            System.out.println();
-            System.out.println(
-                "WARNING: Error while processing trace file; subsequent records ignored.");
-            System.out.print("Ignored backtrace:");
-            e.printStackTrace(System.out);
-            System.out.println();
+          bw = Files.newBufferedWriter(p, UTF_8);
+          Global.dtraceWriter = new PrintWriter(bw);
+        } catch (IOException e) {
+          if (bw != null) {
+            bw.close();
           }
+          throw e;
         }
-      } else if ((data_trace_state.rtype == RecordType.EOF)
-          || (data_trace_state.rtype == RecordType.TRUNCATED)) {
-        break;
-      } else {
-        // don't need to do anything explicit for other records found
       }
+
+      while (true) {
+        read_data_trace_record(data_trace_state);
+
+        if (data_trace_state.rtype == RecordType.SAMPLE) {
+          assert data_trace_state.ppt != null
+              : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
+          assert data_trace_state.vt != null
+              : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
+          // Nonce may be null
+          samples_processed++;
+          // Add orig and derived variables; pass to inference (add_and_flow)
+          try {
+            processor.process_sample(
+                data_trace_state.all_ppts,
+                data_trace_state.ppt,
+                data_trace_state.vt,
+                data_trace_state.nonce);
+          } catch (Error e) {
+            // e.printStackTrace();
+            if (!dkconfig_continue_after_file_exception) {
+              throw new Daikon.UserError(e, data_trace_state);
+            } else {
+              System.out.println();
+              System.out.println(
+                  "WARNING: Error while processing trace file; subsequent records ignored.");
+              System.out.print("Ignored backtrace:");
+              e.printStackTrace(System.out);
+              System.out.println();
+            }
+          }
+        } else if ((data_trace_state.rtype == RecordType.EOF)
+            || (data_trace_state.rtype == RecordType.TRUNCATED)) {
+          break;
+        } else {
+          // don't need to do anything explicit for other records found
+        }
+      }
+
+      if (Global.debugPrintDtrace) {
+        assert Global.dtraceWriter != null
+            : "@AssumeAssertion(nullness): dependent: set if debugPrintDtrace is true";
+        Global.dtraceWriter.close();
+      }
+
+      Daikon.progress = "Finished reading " + data_trace_state.filename;
+
+      clear_data_trace_state();
     }
-
-    if (Global.debugPrintDtrace) {
-      assert Global.dtraceWriter != null
-          : "@AssumeAssertion(nullness): dependent: set if debugPrintDtrace is true";
-      Global.dtraceWriter.close();
-    }
-
-    Daikon.progress = "Finished reading " + data_trace_state.filename;
-
-    clear_data_trace_state();
   }
 
   /**
