@@ -28,7 +28,7 @@ public class PurityTester {
 			c.retrieve(l);
 		}
 	}
-		
+
 	public static void basics(Purity i) {
 		i.getValue();
 		i.getShift();
