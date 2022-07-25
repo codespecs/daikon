@@ -21,13 +21,12 @@ import org.plumelib.util.EntryReader;
  * configuration, which classloads that class, and we would have a classloading circularity.
  */
 public final class Configuration implements Serializable {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
+  /** If you add or remove fields, change this number to the current date. */
   static final long serialVersionUID = 20020122L;
 
   // ============================== REPRESENTATION ==============================
 
+  /** The statements that set the configuration. */
   @SuppressWarnings("serial")
   private List<String> statements = new ArrayList<>();
 
@@ -115,6 +114,11 @@ public final class Configuration implements Serializable {
 
   // ============================== ADT COMPONENT ==============================
 
+  /**
+   * Apply the settings in the given InputStream.
+   *
+   * @param input the commands to set confiuration
+   */
   public void apply(InputStream input) {
     assert input != null;
     for (String line : new EntryReader(input)) {
@@ -125,6 +129,11 @@ public final class Configuration implements Serializable {
     }
   }
 
+  /**
+   * Apply the setting in the given InputStream.
+   *
+   * @param input the command to set confiuration
+   */
   public void apply(String line) {
     assert line != null;
 
@@ -139,6 +148,12 @@ public final class Configuration implements Serializable {
     apply(name, value);
   }
 
+  /**
+   * Set the given setting to the given value.
+   *
+   * @param name the setting to modify
+   * @param value the setting's new value
+   */
   public void apply(String name, String value) {
     assert name != null;
     assert value != null;
