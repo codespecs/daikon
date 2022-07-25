@@ -132,7 +132,7 @@ public final class Configuration implements Serializable {
   /**
    * Apply the setting in the given InputStream.
    *
-   * @param input the command to set confiuration
+   * @param line the command to set confiuration
    */
   public void apply(String line) {
     assert line != null;
