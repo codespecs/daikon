@@ -1104,13 +1104,13 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
   /** A function of multiple parameters. */
   public static @Interned class FunctionOfN extends VarInfoName {
-    // We are Serializable, so we specify a version to allow changes to
-    // method signatures without breaking serialization.  If you add or
-    // remove fields, you should change this number to the current date.
+    /** If you add or remove fields, change this number to the current date. */
     static final long serialVersionUID = 20020130L;
 
+    /** The function being invoked. */
     public final String function;
 
+    /** The parameters. */
     @SuppressWarnings("serial")
     public final List<VarInfoName> args;
 

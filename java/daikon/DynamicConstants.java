@@ -98,9 +98,11 @@ public class DynamicConstants implements Serializable {
   List<Constant> missing_list = new ArrayList<>();
 
   // Same contents in both.  Why two data structures?
-  /** List of all variables. Some may be non-constant. */
+  /** Array of all variables. Some may be non-constant. */
   Constant[] all_vars;
 
+  // Same contents in both.  Why two data structures?
+  /** List of all variables. Some may be non-constant. */
   @SuppressWarnings("serial")
   List<Constant> all_list = new ArrayList<>();
 

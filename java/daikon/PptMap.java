@@ -25,11 +25,10 @@ import org.plumelib.util.CollectionsPlume;
 // Why doesn't this implement Map<String,PptTopLevel> or extend
 // LinkedHashMap<String,PptTopLevel>?
 public class PptMap implements Serializable {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
+  /** If you add or remove fields, change this number to the current date. */
   static final long serialVersionUID = 20040921L;
 
+  /** The map that represents this PptMap. */
   @SuppressWarnings("serial")
   private final Map<String, PptTopLevel> nameToPpt = new LinkedHashMap<>();
 

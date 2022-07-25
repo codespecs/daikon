@@ -110,6 +110,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    */
   public static final String PACKAGE_NAME = "declaringClassPackageName";
 
+  /** See {@link #PACKAGE_NAME}. */
   public static final String NO_PACKAGE_NAME = "no_package_name_string";
 
   /** Interned default options. */
@@ -139,7 +140,11 @@ public final class VarInfoAux implements Cloneable, Serializable {
     this.isInterned = false;
   }
 
-  /** Create a new VarInfoAux with default options. */
+  /**
+   * Create a new VarInfoAux with default options.
+   *
+   * @param map the map from property names to values
+   */
   private VarInfoAux(Map<@Interned String, @Interned String> map) {
     this.map = map;
     this.isInterned = false;
@@ -245,7 +250,11 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return result;
   }
 
-  /** Create a new VarInfoAux with default options. */
+  /**
+   * Create a new VarInfoAux with default options.
+   *
+   * @return a new VarInfoAux with default options
+   */
   public static @Interned VarInfoAux getDefault() {
     return theDefault;
   }
