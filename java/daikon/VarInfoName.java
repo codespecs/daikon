@@ -1110,6 +1110,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     static final long serialVersionUID = 20020130L;
 
     public final String function;
+
+    @SuppressWarnings("serial")
     public final List<VarInfoName> args;
 
     /**

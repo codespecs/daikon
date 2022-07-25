@@ -35,10 +35,12 @@ public class InvMap implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20090612L;
 
+  @SuppressWarnings("serial")
   private Map<PptTopLevel, List<Invariant>> pptToInvs = new HashMap<>();
   // The purpose of this field is apparently to permit the ppts to be
   // extracted in the same order in which they were inserted.
   // Why not use a LinkedHashMap?  Maybe because it was only added in JDK 1.4.
+  @SuppressWarnings("serial")
   private List<PptTopLevel> ppts = new ArrayList<>();
 
   public InvMap() {}

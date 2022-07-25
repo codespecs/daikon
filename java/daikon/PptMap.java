@@ -30,6 +30,7 @@ public class PptMap implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040921L;
 
+  @SuppressWarnings("serial")
   private final Map<String, PptTopLevel> nameToPpt = new LinkedHashMap<>();
 
   public void add(PptTopLevel ppt) {

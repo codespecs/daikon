@@ -49,6 +49,7 @@ public final class CompleteOneOfString extends SingleString {
 
   /** List of values seen. */
   @Unused(when = Prototype.class)
+  @SuppressWarnings("serial")
   public List<Info> vals;
 
   /** Boolean. True iff CompleteOneOfString invariants should be considered. */

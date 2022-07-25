@@ -32,6 +32,7 @@ public class NonModulus extends SingleScalar {
   public static boolean dkconfig_enabled = false;
 
   // Set elements = new HashSet();
+  @SuppressWarnings("serial")
   NavigableSet<Long> elements = new TreeSet<>();
 
   private long modulus = 0;

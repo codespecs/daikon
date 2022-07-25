@@ -26,6 +26,11 @@ public final class Configuration implements Serializable {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
+  // ============================== REPRESENTATION ==============================
+
+  @SuppressWarnings("serial")
+  private List<String> statements = new ArrayList<>();
+
   // ============================== STATIC COMPONENT ==============================
 
   static final String PREFIX = "dkconfig_";
@@ -109,8 +114,6 @@ public final class Configuration implements Serializable {
   }
 
   // ============================== ADT COMPONENT ==============================
-
-  private List<String> statements = new ArrayList<>();
 
   public void apply(InputStream input) {
     assert input != null;
