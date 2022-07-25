@@ -54,7 +54,7 @@ public class HuffmanMain {
   private static List stringToList(String s) {
     List l = new ArrayList();
     for (int i=0; i < s.length(); i++) {
-      l.add(new Character(s.charAt(i)));
+      l.add(Character.valueOf(s.charAt(i)));
     }
     return l;
   }
@@ -104,12 +104,12 @@ public class HuffmanMain {
     LinkedHashMap map = new LinkedHashMap();
 
     for (int i=0; i < s.length(); i++) {
-      Character c = new Character(s.charAt(i));
+      Character c = Character.valueOf(s.charAt(i));
       if (map.containsKey(c)) {
         Integer j = ((Integer) map.get(c));
-        map.put(c, new Integer(j.intValue() + 1));
+        map.put(c, Integer.valueOf(j.intValue() + 1));
       } else {
-        map.put(c, new Integer(1));
+        map.put(c, Integer.valueOf(1));
       }
     }
 

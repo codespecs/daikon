@@ -30,8 +30,8 @@ public class WalkingRouteFormatterTest extends TestCase {
      * Test simple directions with one distance and one origHeading.
      */
     public void testShortDirections() throws IOException {
-        assertEquals(new Double(90.0),
-                     new Double(mShortRoute.getStartHeading()));
+        assertEquals(Double.valueOf(90.0),
+                     Double.valueOf(mShortRoute.getStartHeading()));
 
         assertEquals("Turn left onto Penny Lane and walk for 102 minutes.\n",
                      mDirections.computeDirections(mShortRoute, 180));

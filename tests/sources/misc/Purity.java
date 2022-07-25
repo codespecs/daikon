@@ -18,8 +18,8 @@ public class Purity {
 		list1 = new LinkedList<Number>();
 		list2 = new ArrayList<Number>();
 		for (int j = 0; j < 11; j++) {
-			list1.add(new Integer(j));
-			list2.add(new Integer(j));
+			list1.add(Integer.valueOf(j));
+			list2.add(Integer.valueOf(j));
 		}
 	}
 	
@@ -36,11 +36,11 @@ public class Purity {
 	}
 	
 	public Number getNum() {
-		return (Number) new Integer(value);
+		return (Number) Integer.valueOf(value);
 	}
 	
 	public Integer getJWrap() {
-		return new Integer(value);
+		return Integer.valueOf(value);
 	}
 	
 	public int scale(int scale) {

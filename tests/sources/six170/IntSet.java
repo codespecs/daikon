@@ -24,7 +24,7 @@ public class IntSet {
   public void insert (int x) {
     // @modifies: this
     // @effects:  Adds x to the elements of this.
-    Integer y = new Integer(x);
+    Integer y = Integer.valueOf(x);
     if (getIndex(y) < 0) els.add(y);
   }
 

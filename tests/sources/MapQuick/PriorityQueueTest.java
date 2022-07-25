@@ -56,7 +56,7 @@ public class PriorityQueueTest
     Double[] d = new Double[5];
     boolean[] in = new boolean[d.length];
     for (int i=0; i < d.length; i++) {
-      d[i] = new Double(i);
+      d[i] = Double.valueOf(i);
       in[i] = false;
     }
 
@@ -81,7 +81,7 @@ public class PriorityQueueTest
     Double[] d = new Double[5];
     boolean[] in = new boolean[d.length];
     for (int i=0; i < d.length; i++) {
-      d[i] = new Double(i);
+      d[i] = Double.valueOf(i);
       in[i] = false;
     }
 
