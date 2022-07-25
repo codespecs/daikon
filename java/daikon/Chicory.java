@@ -523,7 +523,7 @@ public class Chicory {
       cp = ".";
     }
 
-    List<String> cmd = new List<>();
+    List<String> cmd = new ArrayList<>();
     cmd.add("java");
     cmd.add("-Xmx" + heap_size);
     cmd.add("-cp");

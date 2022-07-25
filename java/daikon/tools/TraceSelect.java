@@ -1,12 +1,14 @@
 // TraceSelect.java
 package daikon.tools;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.StringTokenizer;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -273,9 +275,13 @@ public class TraceSelect {
     ProcessBuilder pb = new ProcessBuilder("java", "daikon.PrintInvariants", dtraceName + ".inv");
     Map<String, String> env = pb.environment();
     File log = new File("log");
-    pb.redirectOutput(dtraceName + ".txt");
+    pb.redirectOutput(new File(dtraceName + ".txt"));
     Process p = pb.start();
-    p.waitFor();
+    try {
+      p.waitFor();
+    } catch (InterruptedException e) {
+      // do nothing
+    }
 
     return;
   }
