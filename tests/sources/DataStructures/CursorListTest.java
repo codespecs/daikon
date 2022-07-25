@@ -18,11 +18,11 @@ public class CursorListTest
     itemno = (itemno + 1) % 10;
     switch (itemno) {
     case 0: return new Object();
-    case 1: return new Integer(1978);
+    case 1: return Integer.valueOf(1978);
     case 2: return new String("Hi MoM");
     case 3: return new MyInteger(12345);
-    case 4: return new Double(42.0);
-    case 5: return new Long(101010);
+    case 4: return Double.valueOf(42.0);
+    case 5: return Long.valueOf(101010);
     case 6: return new String("I wish I were an Oscar Meyer weiner");
     case 7: return new String("Then everyone would be in love with me");
     case 8: return System.out;
@@ -50,7 +50,7 @@ public class CursorListTest
     }
     ls.makeEmpty();
     observe();
-    
+
     System.out.println("run loop 3");
     theItr = ls.zeroth();
     for(int i = 0; i < 20; i += 1) {
@@ -81,7 +81,7 @@ public class CursorListTest
       ls.findPrevious(item()).retrieve();
     }
   }
-    
+
   public static void original_main() {
     CursorList    theList = new CursorList( );
     CursorListItr theItr;

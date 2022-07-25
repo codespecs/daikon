@@ -12,7 +12,7 @@ public class PurityTester {
 			Purity c = new Purity(i, 10);
 			List<Number> l = new ArrayList<Number>();
 			for (int j = 0; j < 20; j++) {
-				l.add(new Integer(j));
+				l.add(Integer.valueOf(j));
 			}
 			basics(a);
 			basics(b);
@@ -20,15 +20,15 @@ public class PurityTester {
 			a.scale(i);
 			b.scale(i);
 			c.scale(i);
-			a.sum(new Integer(i));
-			b.sum((Number)new Integer(i));
-			c.sum(new Integer(i));
+			a.sum(Integer.valueOf(i));
+			b.sum((Number)Integer.valueOf(i));
+			c.sum(Integer.valueOf(i));
 			a.retrieve(l);
 			b.retrieve(l);
 			c.retrieve(l);
 		}
 	}
-		
+
 	public static void basics(Purity i) {
 		i.getValue();
 		i.getShift();
