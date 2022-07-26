@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+@SuppressWarnings("removal") // use "new Integer" to obtain different Objects
 public class Purity {
 	private int value;
 	private int shift;
@@ -18,8 +19,8 @@ public class Purity {
 		list1 = new LinkedList<Number>();
 		list2 = new ArrayList<Number>();
 		for (int j = 0; j < 11; j++) {
-			list1.add(Integer.valueOf(j));
-			list2.add(Integer.valueOf(j));
+			list1.add(new Integer(j));
+			list2.add(new Integer(j));
 		}
 	}
 
@@ -36,11 +37,11 @@ public class Purity {
 	}
 
 	public Number getNum() {
-		return (Number) Integer.valueOf(value);
+		return (Number) new Integer(value);
 	}
 
 	public Integer getJWrap() {
-		return Integer.valueOf(value);
+		return new Integer(value);
 	}
 
 	public int scale(int scale) {
