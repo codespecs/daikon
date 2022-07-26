@@ -233,7 +233,7 @@ ifneq (,$(findstring start1.8,$(startJVS)))
 else
   # Old Java releases (e.g. 7) will set JAVA_RELEASE_NUMBER to 1.
   # This will cause the JAVA8_OR_NEWER test to fail as desired.
-  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
+  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
   ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 17),1)
     JAVA17_OR_NEWER := 1
   else
@@ -253,7 +253,7 @@ else
 endif
 
 ifneq ($(JAVA8_OR_NEWER), 1)
-    $(error Must use Java version 8 or later)
+    $(error Must use Java version 8 or later; found ${JAVA_RELEASE_NUMBER} in ${JAVA_VERSION_STRING})
 endif
 
 # Function to compute goal filename extension.  Java 8 is the default.
