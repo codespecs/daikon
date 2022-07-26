@@ -166,6 +166,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   public ProglangType rep_type; // interned (as are all ProglangType objects)
 
   /** Comparability info. */
+  @SuppressWarnings("serial")
   public VarComparability comparability;
 
   /** Auxiliary info. */
@@ -190,6 +191,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   public boolean is_static_constant;
 
   /** Null if not statically constant. */
+  @SuppressWarnings("serial")
   @Nullable @Interned Object static_constant_value;
 
   /** Whether and how derived. Null if this is not derived. */
@@ -261,9 +263,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * The arguments that were used to create this function application. Null if this variable is not
    * a function application.
    */
+  @SuppressWarnings("serial")
   public @MonotonicNonNull List<VarInfo> function_args = null;
 
   /** Parent program points in ppt hierarchy (optional) */
+  @SuppressWarnings("serial")
   public List<VarParent> parents;
 
   /**

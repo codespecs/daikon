@@ -31,7 +31,8 @@ public class NonModulus extends SingleScalar {
   /** Boolean. True iff NonModulus invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  // Set elements = new HashSet();
+  /** The values to be tested for the non-modulus property. */
+  @SuppressWarnings("serial")
   NavigableSet<Long> elements = new TreeSet<>();
 
   private long modulus = 0;

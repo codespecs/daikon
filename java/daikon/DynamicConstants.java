@@ -86,6 +86,7 @@ public class DynamicConstants implements Serializable {
    *
    * <p>Each element, c, has c.constant = true, c.count &gt; 0, elt.val != null.
    */
+  @SuppressWarnings("serial")
   List<Constant> con_list = new ArrayList<>();
 
   /**
@@ -93,12 +94,16 @@ public class DynamicConstants implements Serializable {
    *
    * <p>For each element c, c.always_missing = true or con.vi.missingOutOfBounds().
    */
+  @SuppressWarnings("serial")
   List<Constant> missing_list = new ArrayList<>();
 
   // Same contents in both.  Why two data structures?
-  /** List of all variables. Some may be non-constant. */
+  /** Array of all variables. Some may be non-constant. */
   Constant[] all_vars;
 
+  // Same contents in both.  Why two data structures?
+  /** List of all variables. Some may be non-constant. */
+  @SuppressWarnings("serial")
   List<Constant> all_list = new ArrayList<>();
 
   /** Program point of these constants. */
@@ -128,6 +133,7 @@ public class DynamicConstants implements Serializable {
      * The value of the constant, or the previous constant value if constant==false and
      * previously_constant==true. Null iff count=0.
      */
+    @SuppressWarnings("serial")
     public @MonotonicNonNull @Interned Object val = null;
 
     /** The sample count of the constant. */

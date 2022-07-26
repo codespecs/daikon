@@ -2679,6 +2679,7 @@ public final class FileIO {
      * Non-null iff (vardef.kind == VarKind.FUNCTION). The arguments that were used to create this
      * function application.
      */
+    @SuppressWarnings("serial")
     public @Nullable List<String> function_args = null;
     /** The type of the variable as stored in the dtrace file (required) */
     public ProglangType rep_type = null;
@@ -2689,10 +2690,13 @@ public final class FileIO {
     /** Language specific variable flags (optional) */
     public EnumSet<LangFlags> lang_flags = EnumSet.noneOf(LangFlags.class);
     /** Comparability of this variable (required. */
+    @SuppressWarnings("serial")
     public VarComparability comparability = null;
     /** Parent program points in ppt hierarchy (optional) */
+    @SuppressWarnings("serial")
     public List<VarParent> parents;
     /** Non-null if this 'variable' always has the same value (optional) */
+    @SuppressWarnings("serial")
     public @Nullable @Interned Object static_constant_value = null;
     /**
      * Non-null if it is statically known that the value of the variable will be always greater than
