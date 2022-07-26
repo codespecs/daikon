@@ -30,6 +30,7 @@ RUN dnf -q -y install \
   java-11-openjdk \
   java-11-openjdk-devel
 
+# Needed in later versions of Fedora:   python3-distutils \
 RUN dnf -qy install \
   curl \
   ctags \
@@ -38,7 +39,6 @@ RUN dnf -qy install \
   netpbm \
   python \
   python3 \
-  python3-distutils \
   texi2html \
   texinfo \
   texinfo-tex \
