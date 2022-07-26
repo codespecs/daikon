@@ -60,6 +60,7 @@ public abstract class PptSlice extends Ppt {
    * particular, subclasses such as PptSlice0 need to synchronize it with other values. Therefore,
    * it should be manipulated via {@link #addInvariant} and {@link #removeInvariant}.
    */
+  @SuppressWarnings("serial")
   public List<Invariant> invs;
 
   PptSlice(PptTopLevel parent, VarInfo[] var_infos) {

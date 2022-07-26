@@ -269,6 +269,7 @@ public class PptTopLevel extends Ppt {
    * <p>For a client to access this private variable, it should use {@link #viewsAsCollection},
    * {@link #views_iterable}, or {@link #views_iterator}.
    */
+  @SuppressWarnings("serial")
   private Map<List<Integer>, PptSlice> views;
 
   /** List of all of the splitters for this ppt. */
@@ -353,15 +354,18 @@ public class PptTopLevel extends Ppt {
   }
 
   /** All children relations in the variable/ppt hierarchy. */
+  @SuppressWarnings("serial")
   public List<PptRelation> children = new ArrayList<>();
 
   /** All parent relations in the variable/ppt hierarchy. */
+  @SuppressWarnings("serial")
   public List<PptRelation> parents = new ArrayList<>();
 
   /**
    * List of parent relations in the variable/ppt hierarchy as specified in the declaration record.
    * These are used to build the detailed parents/children lists of PptRelation above.
    */
+  @SuppressWarnings("serial")
   public List<ParentRelation> parent_relations;
 
   /**
@@ -398,8 +402,10 @@ public class PptTopLevel extends Ppt {
   // The redundant_invs* variables are filled in by method
   // mark_implied_via_simplify.
   /** Redundant invariants, except for Equality invariants. */
+  @SuppressWarnings("serial")
   public Set<Invariant> redundant_invs = new LinkedHashSet<>(0);
   /** The canonical VarInfo for the equality. */
+  @SuppressWarnings("serial")
   public Set<VarInfo> redundant_invs_equality = new LinkedHashSet<>(0);
 
   @SuppressWarnings("fields.uninitialized") // todo: initialization and helper methods
@@ -3215,6 +3221,7 @@ public class PptTopLevel extends Ppt {
   ///
 
   /** Cached VarInfos that are parameter variables. */
+  @SuppressWarnings("serial")
   private @MonotonicNonNull Set<VarInfo> paramVars = null;
 
   /** Returns variables in this Ppt that are parameters. */

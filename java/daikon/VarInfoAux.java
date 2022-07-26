@@ -110,7 +110,45 @@ public final class VarInfoAux implements Cloneable, Serializable {
    */
   public static final String PACKAGE_NAME = "declaringClassPackageName";
 
+  /** See {@link #PACKAGE_NAME}. */
   public static final String NO_PACKAGE_NAME = "no_package_name_string";
+
+  /** Interned default options. */
+  private static @Interned VarInfoAux theDefault = new VarInfoAux().intern();
+
+  /** Contains the actual hashMap for this. */
+  @SuppressWarnings("serial")
+  private Map<@Interned String, @Interned String> map;
+
+  /** Whether this is interned. */
+  private boolean isInterned = false;
+
+  /** Make the default map here. */
+  private VarInfoAux() {
+    HashMap<@Interned String, @Interned String> defaultMap = new HashMap<>();
+    // The following are default values.
+    defaultMap.put(HAS_DUPLICATES, TRUE);
+    defaultMap.put(HAS_ORDER, TRUE);
+    defaultMap.put(HAS_SIZE, TRUE);
+    defaultMap.put(HAS_NULL, TRUE);
+    defaultMap.put(NULL_TERMINATING, TRUE);
+    defaultMap.put(IS_PARAM, FALSE);
+    defaultMap.put(PACKAGE_NAME, NO_PACKAGE_NAME);
+    defaultMap.put(IS_STRUCT, FALSE);
+    defaultMap.put(IS_NON_NULL, FALSE);
+    this.map = defaultMap;
+    this.isInterned = false;
+  }
+
+  /**
+   * Create a new VarInfoAux with default options.
+   *
+   * @param map the map from property names to values
+   */
+  private VarInfoAux(Map<@Interned String, @Interned String> map) {
+    this.map = map;
+    this.isInterned = false;
+  }
 
   /**
    * Return an interned VarInfoAux that represents a given string. Elements are separated by commas,
@@ -132,6 +170,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     tok.ordinaryChar(']');
     tok.ordinaryChars(',', ',');
     tok.ordinaryChars('=', '=');
+    @SuppressWarnings("serial")
     Map<@Interned String, @Interned String> map = theDefault.map;
 
     String key = "";
@@ -211,10 +250,11 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return result;
   }
 
-  /** Interned default options. */
-  private static @Interned VarInfoAux theDefault = new VarInfoAux().intern();
-
-  /** Create a new VarInfoAux with default options. */
+  /**
+   * Create a new VarInfoAux with default options.
+   *
+   * @return a new VarInfoAux with default options
+   */
   public static @Interned VarInfoAux getDefault() {
     return theDefault;
   }
@@ -234,35 +274,6 @@ public final class VarInfoAux implements Cloneable, Serializable {
     }
     map = newMap;
     return this.intern();
-  }
-
-  /** Contains the actual hashMap for this. */
-  private Map<@Interned String, @Interned String> map;
-
-  /** Whether this is interned. */
-  private boolean isInterned = false;
-
-  /** Make the default map here. */
-  private VarInfoAux() {
-    HashMap<@Interned String, @Interned String> defaultMap = new HashMap<>();
-    // The following are default values.
-    defaultMap.put(HAS_DUPLICATES, TRUE);
-    defaultMap.put(HAS_ORDER, TRUE);
-    defaultMap.put(HAS_SIZE, TRUE);
-    defaultMap.put(HAS_NULL, TRUE);
-    defaultMap.put(NULL_TERMINATING, TRUE);
-    defaultMap.put(IS_PARAM, FALSE);
-    defaultMap.put(PACKAGE_NAME, NO_PACKAGE_NAME);
-    defaultMap.put(IS_STRUCT, FALSE);
-    defaultMap.put(IS_NON_NULL, FALSE);
-    this.map = defaultMap;
-    this.isInterned = false;
-  }
-
-  /** Create a new VarInfoAux with default options. */
-  private VarInfoAux(Map<@Interned String, @Interned String> map) {
-    this.map = map;
-    this.isInterned = false;
   }
 
   /** Creates and returns a copy of this. */
