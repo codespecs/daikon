@@ -104,7 +104,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
       } else {
         simplifyPath = System.getProperty("simplify.path");
       }
-      process = java.lang.Runtime.getRuntime().exec(simplifyPath + " -nosc", envArray);
+      process = java.lang.Runtime.getRuntime().exec(new String[] {simplifyPath, "-nosc"}, envArray);
       SessionManager.debugln("Session: exec ok");
 
       if (dkconfig_trace_input) {

@@ -16,8 +16,8 @@ public class VectorTest13 extends TestCase {
     o[0] = new Object();
     o[1] = o[0];
     o[2] = null;
-    o[3] = Integer.valueOf(0);
-    o[4] = Integer.valueOf(1);
+    o[3] = new Integer(0);
+    o[4] = new Integer(1);
 
     for (int i=0; i < NUM; i++) {
       vectors[i] = new Vector13(NUM);

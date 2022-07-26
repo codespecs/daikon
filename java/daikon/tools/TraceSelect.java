@@ -1,6 +1,7 @@
 // TraceSelect.java
 package daikon.tools;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -217,7 +218,7 @@ public class TraceSelect {
 
         // cleanup the mess
         if (CLEAN) {
-          Runtime.getRuntime().exec("rm " + filePrefix);
+          Runtime.getRuntime().exec(new String[] {"rm", filePrefix});
         }
 
         num_reps--;
@@ -234,7 +235,7 @@ public class TraceSelect {
       // cleanup the mess!
       for (int j = 0; j < sampleNames.length; j++) {
         if (CLEAN) {
-          Runtime.getRuntime().exec("rm " + sampleNames[j]);
+          Runtime.getRuntime().exec(new String[] {"rm", sampleNames[j]});
         }
       }
 
@@ -269,8 +270,15 @@ public class TraceSelect {
     // initializes daikon again or else an exception is thrown
     reinitializeDaikon();
     daikon.Daikon.main(daikonArgs);
-    Runtime.getRuntime()
-        .exec("java daikon.PrintInvariants " + dtraceName + ".inv > " + dtraceName + ".txt");
+    // Run: java daikon.PrintInvariants dtraceName.inv > dtraceName.txt
+    ProcessBuilder pb = new ProcessBuilder("java", "daikon.PrintInvariants", dtraceName + ".inv");
+    pb.redirectOutput(new File(dtraceName + ".txt"));
+    Process p = pb.start();
+    try {
+      p.waitFor();
+    } catch (InterruptedException e) {
+      // do nothing
+    }
 
     return;
   }
