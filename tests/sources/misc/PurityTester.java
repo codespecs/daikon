@@ -3,6 +3,7 @@ package misc;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("removal") // use "new Integer" to obtain different Objects
 public class PurityTester {
 
 	public static void main(String[] args) {
@@ -12,7 +13,7 @@ public class PurityTester {
 			Purity c = new Purity(i, 10);
 			List<Number> l = new ArrayList<Number>();
 			for (int j = 0; j < 20; j++) {
-				l.add(Integer.valueOf(j));
+				l.add(new Integer(j));
 			}
 			basics(a);
 			basics(b);
@@ -20,9 +21,9 @@ public class PurityTester {
 			a.scale(i);
 			b.scale(i);
 			c.scale(i);
-			a.sum(Integer.valueOf(i));
-			b.sum((Number)Integer.valueOf(i));
-			c.sum(Integer.valueOf(i));
+			a.sum(new Integer(i));
+			b.sum((Number)new Integer(i));
+			c.sum(new Integer(i));
 			a.retrieve(l);
 			b.retrieve(l);
 			c.retrieve(l);
