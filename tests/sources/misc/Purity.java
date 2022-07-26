@@ -11,6 +11,7 @@ public class Purity {
 	private LinkedList<Number> list1;
 	private List<Number> list2;
 
+	@SuppressWarnings("removal") // use "new Integer" to obtain different Objects
 	public Purity(int value, int shift) {
 		this.value = value;
 		this.shift = shift;
@@ -18,8 +19,8 @@ public class Purity {
 		list1 = new LinkedList<Number>();
 		list2 = new ArrayList<Number>();
 		for (int j = 0; j < 11; j++) {
-			list1.add(Integer.valueOf(j));
-			list2.add(Integer.valueOf(j));
+			list1.add(new Integer(j));
+			list2.add(new Integer(j));
 		}
 	}
 
