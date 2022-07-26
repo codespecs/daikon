@@ -67,11 +67,9 @@ public class Chicory {
   @Option("Send trace information to Daikon over a socket")
   public static boolean daikon_online = false;
 
-  // TODO: splitting on whitespace is error-prone.
   /**
    * Specifies Daikon arguments to be used if Daikon is run on a generated trace file {@code
-   * --daikon} or online via a socket {@code --daikon-online}. These arguments will be split on
-   * whitespace.
+   * --daikon} or online via a socket {@code --daikon-online}.
    */
   @Option("Specify Daikon arguments for either --daikon or --daikon-online")
   public static String daikon_args = "";
@@ -523,31 +521,28 @@ public class Chicory {
       cp = ".";
     }
 
-    List<String> cmd = new ArrayList<>();
-    cmd.add("java");
-    cmd.add("-Xmx" + heap_size);
-    cmd.add("-cp");
-    cmd.add(cp);
-    for (String arg : daikon_args.split(" +")) {
-      cmd.add(arg);
-    }
+    String cmdstr;
     if (daikon_online) {
-      cmd.add("+");
+      cmdstr =
+          String.format("java -Xmx%s -cp %s -ea daikon.Daikon %s +", heap_size, cp, daikon_args);
     } else {
-      cmd.add(output_dir + File.separator + dtrace_file);
+      cmdstr =
+          String.format(
+              "java -Xmx%s -cp %s -ea daikon.Daikon %s %s/%s",
+              heap_size, cp, daikon_args, output_dir, dtrace_file);
     }
 
     // System.out.println("daikon command is " + daikon_cmd);
-    // System.out.println("daikon command cmd " + cmd);
+    // System.out.println("daikon command cmdstr " + cmdstr);
 
     if (verbose) {
-      System.out.printf("%nExecuting daikon: %s%n", cmd);
+      System.out.printf("%nExecuting daikon: %s%n", cmdstr);
     }
 
     try {
-      daikon_proc = rt.exec(cmd.toArray(new String[0]));
+      daikon_proc = rt.exec(cmdstr);
     } catch (Exception e) {
-      System.out.printf("Exception '%s' while executing '%s'%n", e, cmd);
+      System.out.printf("Exception '%s' while executing '%s'%n", e, cmdstr);
       System.exit(1);
     }
   }
