@@ -41,6 +41,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
 
   /** List of values seen. */
   @Unused(when = Prototype.class)
+  @SuppressWarnings("serial")
   public List<Info> vals;
 
   /** Boolean. True iff CompleteOneOfScalar invariants should be considered. */
