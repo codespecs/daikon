@@ -1,5 +1,5 @@
 // Declarations for misc.Purity
-// Declarations written 2020-11-18T07:28:26.252 by daikon.DynComp
+// Declarations written 2022-07-26T09:55:04.261823831 by daikon.DynComp
 
 decl-version 2.0
 var-comparability implicit
@@ -91,7 +91,7 @@ variable shift
   flags is_param
   comparability 2
 
-ppt misc.Purity.Purity(int, int):::EXIT24
+ppt misc.Purity.Purity(int, int):::EXIT25
 ppt-type subexit
 variable this
   var-kind variable
@@ -241,7 +241,7 @@ variable this.list2.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt misc.Purity.getValue():::EXIT27
+ppt misc.Purity.getValue():::EXIT28
 ppt-type subexit
 variable this
   var-kind variable
@@ -384,7 +384,7 @@ variable this.list2.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt misc.Purity.getShift():::EXIT31
+ppt misc.Purity.getShift():::EXIT32
 ppt-type subexit
 variable this
   var-kind variable
@@ -527,7 +527,7 @@ variable this.list2.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt misc.Purity.isHeavy():::EXIT35
+ppt misc.Purity.isHeavy():::EXIT36
 ppt-type subexit
 variable this
   var-kind variable
@@ -670,7 +670,7 @@ variable this.list2.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt misc.Purity.getNum():::EXIT39
+ppt misc.Purity.getNum():::EXIT40
 ppt-type subexit
 variable this
   var-kind variable
@@ -820,7 +820,7 @@ variable this.list2.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt misc.Purity.getJWrap():::EXIT43
+ppt misc.Purity.getJWrap():::EXIT44
 ppt-type subexit
 variable this
   var-kind variable
@@ -969,7 +969,7 @@ variable scale
   flags is_param
   comparability 2
 
-ppt misc.Purity.scale(int):::EXIT47
+ppt misc.Purity.scale(int):::EXIT48
 ppt-type subexit
 variable this
   var-kind variable
@@ -1131,7 +1131,7 @@ variable n.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt misc.Purity.sum(java.lang.Number):::EXIT51
+ppt misc.Purity.sum(java.lang.Number):::EXIT52
 ppt-type subexit
 variable this
   var-kind variable
@@ -1314,7 +1314,7 @@ variable l.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt misc.Purity.retrieve(java.util.List):::EXIT55
+ppt misc.Purity.retrieve(java.util.List):::EXIT56
 ppt-type subexit
 variable this
   var-kind variable
