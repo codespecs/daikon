@@ -106,7 +106,7 @@ public class HuffmanCodec {
     }
 
     if (subTree.left() != null) {
-      bitStack.add(new Boolean(false));
+      bitStack.add(Boolean.valueOf(false));
       addToMap(encodingMap,
                subTree.left(),
                bitStack);
@@ -114,7 +114,7 @@ public class HuffmanCodec {
     }
 
     if (subTree.right() != null) {
-      bitStack.add(new Boolean(true));
+      bitStack.add(Boolean.valueOf(true));
       addToMap(encodingMap,
                subTree.right(),
                bitStack);

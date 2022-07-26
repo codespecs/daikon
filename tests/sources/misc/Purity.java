@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+@SuppressWarnings("removal") // use "new Integer" to obtain different Objects
 public class Purity {
 	private int value;
 	private int shift;
