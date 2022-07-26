@@ -163,7 +163,6 @@ public class HuffmanCodec {
   @ requires subTree.symbol.symbol.getClass().getName() == java.lang.Character.class.getName();
   @ requires subTree.symbol.frequency >= 1;
   @ requires bitStack != null;
-  @ requires daikon.Quant.noDups(bitStack);
   @ requires daikon.Quant.eltsNotEqual(bitStack, null);
   @ requires bitStack.getClass().getName() == java.util.ArrayList.class.getName();
   @ requires encodingMap.getClass().getName() != subTree.symbol.symbol.getClass().getName();
@@ -185,7 +184,6 @@ public class HuffmanCodec {
   @ ensures subTree.symbol.symbol != null;
   @ ensures subTree.symbol.symbol.getClass().getName() == java.lang.Character.class.getName();
   @ ensures subTree.symbol.frequency >= 1;
-  @ ensures daikon.Quant.noDups(bitStack);
   @ ensures daikon.Quant.eltsNotEqual(bitStack, null);
   @ ensures subTree.symbol.symbol.getClass().getName() != \old(encodingMap.getClass().getName());
   @ ensures subTree.symbol.symbol.getClass().getName() != \old(bitStack.getClass().getName());

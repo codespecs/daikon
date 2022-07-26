@@ -1,5 +1,7 @@
 ###########################################################################
 
+# NOTE: I think this requires daikon.jar to exist.  However, there is no dependency here.
+
 # Read Makefile.common for what all of this means
 
 MAIN_CLASS:=MyEvenOddTest
