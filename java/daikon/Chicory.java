@@ -67,9 +67,11 @@ public class Chicory {
   @Option("Send trace information to Daikon over a socket")
   public static boolean daikon_online = false;
 
+  // TODO: splitting on whitespace is error-prone.
   /**
    * Specifies Daikon arguments to be used if Daikon is run on a generated trace file {@code
-   * --daikon} or online via a socket {@code --daikon-online}.
+   * --daikon} or online via a socket {@code --daikon-online}. These arguments will be split on
+   * whitespace.
    */
   @Option("Specify Daikon arguments for either --daikon or --daikon-online")
   public static String daikon_args = "";
@@ -283,7 +285,7 @@ public class Chicory {
       cp = ".";
     }
 
-    // The the separator for items in the class path
+    // The separator for items in the class path
     String path_separator = System.getProperty("path.separator");
     basic.log("path_separator = %s%n", path_separator);
     if (!RegexUtil.isRegex(path_separator)) {
