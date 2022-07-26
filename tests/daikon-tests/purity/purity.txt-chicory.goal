@@ -19,7 +19,7 @@ variable shift
   flags is_param
   comparability 22
 
-ppt misc.Purity.Purity(int,\_int):::EXIT24
+ppt misc.Purity.Purity(int,\_int):::EXIT25
 ppt-type subexit
 parent parent misc.Purity:::OBJECT 1
 variable this
