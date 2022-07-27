@@ -31,7 +31,6 @@ subTree.symbol.symbol != null
 subTree.symbol.symbol.getClass().getName() == java.lang.Character.class
 subTree.symbol.frequency >= 1
 bitStack != null
-bitStack[] contains no duplicates
 bitStack[] elements != null
 bitStack[].getClass().getName() elements == java.lang.Boolean.class
 bitStack.getClass().getName() == java.util.ArrayList.class
@@ -56,7 +55,6 @@ bitStack[] == orig(bitStack[])
 subTree.symbol.symbol != null
 subTree.symbol.symbol.getClass().getName() == java.lang.Character.class
 subTree.symbol.frequency >= 1
-bitStack[] contains no duplicates
 bitStack[] elements != null
 bitStack[].getClass().getName() elements == java.lang.Boolean.class
 subTree.symbol.symbol.getClass().getName() != orig(encodingMap.getClass().getName())

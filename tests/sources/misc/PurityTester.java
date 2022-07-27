@@ -3,6 +3,7 @@ package misc;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("removal") // use "new Integer" to obtain different Objects
 public class PurityTester {
 
 	public static void main(String[] args) {
