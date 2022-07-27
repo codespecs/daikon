@@ -1827,7 +1827,7 @@ put a semi-colon at the end of your expression!).
 @node       Using Git with Eclipse
 @subsection Using Git with Eclipse
 
-This section has yet to be completed, although you can just do all the editing,
+This section has yet to be written, although you can just do all the editing,
 compiling, and
 running from the Eclipse IDE while doing version control commands from the shell
 or whatever current system you use.
