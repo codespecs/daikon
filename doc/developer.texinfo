@@ -1827,7 +1827,7 @@ put a semi-colon at the end of your expression!).
 @node       Using Git with Eclipse
 @subsection Using Git with Eclipse
 
-This section has yet to be completed, although you can just do all the editing,
+This section has yet to be written, although you can just do all the editing,
 compiling, and
 running from the Eclipse IDE while doing version control commands from the shell
 or whatever current system you use.
@@ -1861,7 +1861,7 @@ be the same), and you may replace @code{@@chapter} by @code{@@section},
 Follow the Texinfo conventions for marking up text.  In particular:
 @itemize
 @item
-Don't use regular double quotes (&quot;) in running text.  Instead, use
+Don't use regular double quotes (") in running text.  Instead, use
 two single back quotes and two regular quotes, ``like this''.  Emacs will
 do this substitution for you if you are using its Texinfo mode.
 
