@@ -554,11 +554,14 @@ public class Chicory {
     }
   }
 
-  /** Wait for daikon to complete and return its exit status. */
+  /**
+   * Wait for daikon to complete and return its exit status.
+   *
+   * @return Daikon's exit status
+   */
   @RequiresNonNull("daikon_proc")
   private int waitForDaikon() {
-    int result = redirect_wait(daikon_proc);
-    return result;
+    return redirect_wait(daikon_proc);
   }
 
   /**
