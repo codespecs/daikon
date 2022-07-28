@@ -405,10 +405,14 @@ public class Chicory {
     cmdlist.add("java");
 
     if (RemoteDebug) {
-      // -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n
-      cmdlist.add("-Xdebug -Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
-      // cmdlist.add("-Xdebug -Xnoagent
-      // -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=8000 -Djava.compiler=NONE");
+      cmdlist.add("-Xdebug");
+
+      cmdlist.add("-Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
+      // cmdlist.add("-Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n");
+
+      // cmdlist.add("-Xnoagent");
+      // cmdlist.add("-Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=n");
+      // cmdlist.add("-Djava.compiler=NONE");
     }
 
     cmdlist.add("-cp");
@@ -418,7 +422,9 @@ public class Chicory {
     cmdlist.add("-Xmx" + heap_size);
     // cmdlist.add ("-verbose");
 
-    if (dtraceLim != null) cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
+    if (dtraceLim != null) {
+      cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
+    }
     if (terminate != null) {
       cmdlist.add("-D" + traceLimTermString + "=" + terminate);
     }
