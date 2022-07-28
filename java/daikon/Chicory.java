@@ -575,7 +575,6 @@ public class Chicory {
     // Create the redirect threads and start them.
     StreamRedirectThread err_thread =
         new StreamRedirectThread("stderr", p.getErrorStream(), System.err);
-
     StreamRedirectThread out_thread =
         new StreamRedirectThread("stdout", p.getInputStream(), System.out);
 
