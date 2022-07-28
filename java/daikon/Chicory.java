@@ -450,10 +450,6 @@ public class Chicory {
       throw new Error("Unreachable control flow");
     }
 
-    StreamRedirectThread stdin_thread =
-        new StreamRedirectThread("stdin", System.in, chicory_proc.getOutputStream(), false);
-    stdin_thread.start();
-
     int targetResult = redirect_wait(chicory_proc);
 
     if (daikon) {
@@ -554,11 +550,14 @@ public class Chicory {
     }
   }
 
-  /** Wait for daikon to complete and return its exit status. */
+  /**
+   * Wait for daikon to complete and return its exit status.
+   *
+   * @return Daikon's exit status
+   */
   @RequiresNonNull("daikon_proc")
   private int waitForDaikon() {
-    int result = redirect_wait(daikon_proc);
-    return result;
+    return redirect_wait(daikon_proc);
   }
 
   /**
@@ -570,12 +569,14 @@ public class Chicory {
   public int redirect_wait(Process p) {
 
     // Create the redirect threads and start them.
+    StreamRedirectThread in_thread =
+        new StreamRedirectThread("stdin", System.in, p.getOutputStream(), false);
     StreamRedirectThread err_thread =
-        new StreamRedirectThread("stderr", p.getErrorStream(), System.err);
-
+        new StreamRedirectThread("stderr", p.getErrorStream(), System.err, true);
     StreamRedirectThread out_thread =
-        new StreamRedirectThread("stdout", p.getInputStream(), System.out);
+        new StreamRedirectThread("stdout", p.getInputStream(), System.out, true);
 
+    in_thread.start();
     err_thread.start();
     out_thread.start();
 
