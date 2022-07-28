@@ -534,6 +534,8 @@ public class Chicory {
     cmd.add("-Xmx" + heap_size);
     cmd.add("-cp");
     cmd.add(cp);
+    cmd.add("-ea");
+    cmd.add("daikon.Daikon");
     for (String arg : daikon_args.split(" +")) {
       cmd.add(arg);
     }
