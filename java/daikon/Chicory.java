@@ -523,28 +523,33 @@ public class Chicory {
       cp = ".";
     }
 
-    String cmdstr;
+    List<String> cmd = new ArrayList<>();
+    cmd.add("java");
+    cmd.add("-Xmx" + heap_size);
+    cmd.add("-cp");
+    cmd.add(cp);
+    cmd.add("-ea");
+    cmd.add("daikon.Daikon");
+    for (String arg : daikon_args.split(" +")) {
+      cmd.add(arg);
+    }
     if (daikon_online) {
-      cmdstr =
-          String.format("java -Xmx%s -cp %s -ea daikon.Daikon %s +", heap_size, cp, daikon_args);
+      cmd.add("+");
     } else {
-      cmdstr =
-          String.format(
-              "java -Xmx%s -cp %s -ea daikon.Daikon %s %s/%s",
-              heap_size, cp, daikon_args, output_dir, dtrace_file);
+      cmd.add(output_dir + File.separator + dtrace_file);
     }
 
     // System.out.println("daikon command is " + daikon_cmd);
-    // System.out.println("daikon command cmdstr " + cmdstr);
+    // System.out.println("daikon command cmd " + cmd);
 
     if (verbose) {
-      System.out.printf("%nExecuting daikon: %s%n", cmdstr);
+      System.out.printf("%nExecuting daikon: %s%n", cmd);
     }
 
     try {
-      daikon_proc = rt.exec(cmdstr);
+      daikon_proc = rt.exec(cmd.toArray(new String[0]));
     } catch (Exception e) {
-      System.out.printf("Exception '%s' while executing '%s'%n", e, cmdstr);
+      System.out.printf("Exception '%s' while executing '%s'%n", e, cmd);
       System.exit(1);
     }
   }
