@@ -377,11 +377,14 @@ public class DynComp {
   public int redirect_wait(Process p) {
 
     // Create the redirect threads and start them.
+    StreamRedirectThread in_thread =
+        new StreamRedirectThread("stdin", System.in, p.getOutputStream(), false);
     StreamRedirectThread err_thread =
         new StreamRedirectThread("stderr", p.getErrorStream(), System.err, true);
     StreamRedirectThread out_thread =
         new StreamRedirectThread("stdout", p.getInputStream(), System.out, true);
 
+    in_thread.start();
     err_thread.start();
     out_thread.start();
 
