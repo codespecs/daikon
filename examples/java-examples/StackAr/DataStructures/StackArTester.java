@@ -66,7 +66,7 @@ public class StackArTester
     doNew(n);
     for (int i=0; i <= n / 2; i++) {
       try {
-	s.push(s);
+        s.push(s);
         observe();
       } catch (Overflow e) { }
     }

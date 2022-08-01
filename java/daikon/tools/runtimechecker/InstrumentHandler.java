@@ -160,25 +160,25 @@ public class InstrumentHandler extends CommandHandler {
         File instrumentedFile = new File(instrumentedFileDir, instrumentedFileName);
         debug.fine("instrumented file name: " + instrumentedFile.getPath());
         System.out.println("Writing " + instrumentedFile);
-        Writer output = Files.newBufferedWriter(instrumentedFile.toPath(), UTF_8);
-        // Bug: JTB seems to order the modifiers in a non-standard way,
-        // such as "static final public" instead of "public static final".
-        oneFile.compilationUnit.accept(new TreeFormatter());
-        TreeDumper dumper = new TreeDumper(output);
-        dumper.printSpecials(false);
-        oneFile.compilationUnit.accept(dumper);
-
-        output.close();
+        try (Writer output = Files.newBufferedWriter(instrumentedFile.toPath(), UTF_8)) {
+          // Bug: JTB seems to order the modifiers in a non-standard way,
+          // such as "static final public" instead of "public static final".
+          oneFile.compilationUnit.accept(new TreeFormatter());
+          TreeDumper dumper = new TreeDumper(output);
+          dumper.printSpecials(false);
+          oneFile.compilationUnit.accept(dumper);
+        }
 
         // Output checker classes
         for (CheckerClass cls : checkerClasses) {
           String checkerClassFileName = cls.getCheckerClassName() + ".java";
           File checkerClassFile = new File(checkerClassesDir, checkerClassFileName);
           System.out.println("Writing " + checkerClassFile);
-          output = Files.newBufferedWriter(checkerClassFile.toPath(), UTF_8);
-          CompilationUnit cu = cls.getCompilationUnit();
-          cu.accept(new TreeFormatter());
-          cu.accept(new TreeDumper(output));
+          try (Writer output = Files.newBufferedWriter(checkerClassFile.toPath(), UTF_8)) {
+            CompilationUnit cu = cls.getCompilationUnit();
+            cu.accept(new TreeFormatter());
+            cu.accept(new TreeDumper(output));
+          }
         }
 
       } catch (IOException e) {

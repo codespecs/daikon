@@ -18,14 +18,14 @@ public class VectorTest13 extends TestCase {
     o[2] = null;
     o[3] = new Integer(0);
     o[4] = new Integer(1);
-    
+
     for (int i=0; i < NUM; i++) {
       vectors[i] = new Vector13(NUM);
       for (int j=0; j < i; j++) {
         vectors[i].addElement(o[j]);
       }
     }
-    
+
   }
 
   public static void main(String[] args) {
@@ -54,7 +54,7 @@ public class VectorTest13 extends TestCase {
     }
   }
 
-  
+
   public void testCopyInto() {
     VectorCommand c = new VectorCommand() {
         public void run(Vector13 v, int cap, int inc, int elems) {
@@ -68,7 +68,7 @@ public class VectorTest13 extends TestCase {
           v.copyInto(a);
         }
       };
-    runVectorCommand(c);    
+    runVectorCommand(c);
   }
 
 
@@ -99,7 +99,7 @@ public class VectorTest13 extends TestCase {
 
   }
 
-  
+
   public void testSetSize() {
     VectorCommand c = new VectorCommand() {
         public void run(Vector13 v, int cap, int inc, int elems) {
@@ -108,7 +108,7 @@ public class VectorTest13 extends TestCase {
       };
     runVectorCommand(c);
   }
-  
+
   public void testObservers() {
     VectorCommand c = new VectorCommand() {
         public void run(Vector13 v, int cap, int inc, int elems) {
@@ -159,7 +159,7 @@ public class VectorTest13 extends TestCase {
           }
         }
       };
-    runVectorCommand(c);    
+    runVectorCommand(c);
   }
 
   public void testRemoveElementAt() {
@@ -170,7 +170,7 @@ public class VectorTest13 extends TestCase {
           }
         }
       };
-    runVectorCommand(c);    
+    runVectorCommand(c);
   }
 
   public void testInsertElementAt() {
@@ -183,9 +183,9 @@ public class VectorTest13 extends TestCase {
           }
         }
       };
-    runVectorCommand(c);    
+    runVectorCommand(c);
   }
-  
+
   // Runs command c on many vectors of different size, capacity, and contents
   public void runVectorCommand(VectorCommand command) {
     for (int cap=0; cap < NUM; cap++) {

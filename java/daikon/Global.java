@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.plumelib.util.FuzzyFloat;
 
@@ -201,10 +202,11 @@ public final class Global {
   /** Debug tracer for debugging invariant printing. */
   public static Logger debugPrint = Logger.getLogger("daikon.print");
 
+  /** If true, print logging information about printing of dtrace files. */
   public static final boolean debugPrintDtrace = false;
 
-  // used only if debugPrintDtrace is true.  Users need not set this.
-  public static @MonotonicNonNull PrintWriter dtraceWriter = null;
+  /** Used only if debugPrintDtrace is true. Users need not set this. */
+  public static @Owning @MonotonicNonNull PrintWriter dtraceWriter = null;
 
   // Global Fuzzy Float comparator to use
   public static FuzzyFloat fuzzy = new FuzzyFloat();

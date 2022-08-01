@@ -30,7 +30,7 @@ public class StackArTester
     case 1:
       return new Integer(i);
     case 2:
-      return new Double(i);
+      return Double.valueOf(i);
     case 3:
       return new Float(i);
     case 4:

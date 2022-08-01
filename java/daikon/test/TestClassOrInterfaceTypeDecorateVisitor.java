@@ -3,6 +3,7 @@ package daikon.test;
 import static org.junit.Assert.assertEquals;
 
 import daikon.tools.jtb.*;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,18 +63,21 @@ public final class TestClassOrInterfaceTypeDecorateVisitor {
   @Test
   public void testTheVisitor() {
 
-    // Parse the file "GenericTestClass.java" (under same dir as this class)
-    InputStream sourceIn = this.getClass().getResourceAsStream("GenericTestClass.java");
-    if (sourceIn == null) {
-      throw new Error("Couldn't find file GenericTestClass.java");
-    }
-    JavaParser parser = new JavaParser(sourceIn);
-
     CompilationUnit compilationUnit;
 
-    try {
-      compilationUnit = parser.CompilationUnit();
-    } catch (ParseException e) {
+    // Parse the file "GenericTestClass.java" (under same dir as this class)
+    try (InputStream sourceIn = this.getClass().getResourceAsStream("GenericTestClass.java")) {
+      if (sourceIn == null) {
+        throw new Error("Couldn't find file GenericTestClass.java");
+      }
+      JavaParser parser = new JavaParser(sourceIn);
+
+      try {
+        compilationUnit = parser.CompilationUnit();
+      } catch (ParseException e) {
+        throw new Error(e);
+      }
+    } catch (IOException e) {
       throw new Error(e);
     }
 

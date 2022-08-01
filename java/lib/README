@@ -11,7 +11,7 @@ bcel-util-1.1.15.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-ut
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
 checker-framework/ and checker-qual.jar : https://github.com/typetools/checker-framework/releases
-  VER=3.21.1
+  VER=3.23.0
   wget https://github.com/typetools/checker-framework/releases/download/checker-framework-$VER/checker-framework-$VER.zip
   unzip checker-framework-$VER.zip
   mv -f checker-framework-$VER/checker/dist/checker.jar checker-framework-$VER/checker/dist/javac.jar checker-framework/
@@ -47,12 +47,12 @@ options-1.0.5.jar : https://search.maven.org/#search%7Cga%7C1%7Coptions
   wget https://repo.maven.apache.org/maven2/org/plumelib/options/1.0.5/options-1.0.5.jar
   When you update this, remove the old daikon-plumelib.jar then remake it (see above).
 
-plume-util-1.5.5.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
-  wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/1.5.5/plume-util-1.5.5.jar
+plume-util-1.5.9.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
+  wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/1.5.9/plume-util-1.5.9.jar
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
-reflection-util-1.0.3.jar : https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/
-  wget https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/1.0.3/reflection-util-1.0.3.jar
+reflection-util-1.0.5.jar : https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/
+  wget https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/1.0.5/reflection-util-1.0.5.jar
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
 require-javadoc-1.0.2-all.jar : https://github.com/plume-lib/require-javadoc/releases
