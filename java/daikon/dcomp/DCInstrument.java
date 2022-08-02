@@ -1850,11 +1850,13 @@ public class DCInstrument extends InstructionListUtils {
    * @param arg_types the target method's argument types
    * @return name of class containing target method or null if not found
    */
-  String search_interfaces(JavaClass targetClass, String method_name, Type[] arg_types) {
+  @ClassGetName String search_interfaces(JavaClass targetClass, String method_name, Type[] arg_types) {
 
     // debug code
     // System.out.println("search_interfaces of: " + targetClass.getClassName());
-    for (String interfac : targetClass.getInterfaceNames()) {
+    for (String interfac_temp : targetClass.getInterfaceNames()) {
+      @SuppressWarnings("signature:assignment")
+      @ClassGetName String interfac = interfac_temp;
       // debug code
       // System.out.println("interface: " + interfac);
       JavaClass ji;
@@ -1875,7 +1877,7 @@ public class DCInstrument extends InstructionListUtils {
         }
       }
       // no match found; does this interface extend other interfaces?
-      String found = search_interfaces(ji, method_name, arg_types);
+      @ClassGetName String found = search_interfaces(ji, method_name, arg_types);
       if (found != null) {
         // we have a match
         return found;
@@ -2014,7 +2016,7 @@ public class DCInstrument extends InstructionListUtils {
           // System.out.println("arg_types: " + Arrays.toString(arg_types));
           // System.out.printf("invoke host: %s%n", gen.getClassName() + "." + mgen.getName());
 
-          String targetClassname = classname;
+          @ClassGetName String targetClassname = classname;
           mainloop:
           while (true) {
             // Check that the class exists
@@ -2050,7 +2052,7 @@ public class DCInstrument extends InstructionListUtils {
             }
 
             // no methods match - does this class implement interfaces?
-            String found;
+            @ClassGetName String found;
             try {
               found = search_interfaces(targetClass, method_name, arg_types);
             } catch (Throwable e) {
@@ -2078,7 +2080,9 @@ public class DCInstrument extends InstructionListUtils {
               callee_instrumented = false;
               break;
             }
-            targetClassname = targetClass.getSuperclassName();
+            @SuppressWarnings("signature:assignment")
+            @ClassGetName String temp = targetClass.getSuperclassName();
+            targetClassname = temp;
           }
         }
       }
