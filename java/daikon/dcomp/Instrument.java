@@ -236,6 +236,12 @@ public class Instrument implements ClassFileTransformer {
   @Pure
   protected static boolean is_transformer(String classname) {
 
+    if (classname.startsWith("org/codehaus/groovy")) {
+      return true;
+    }
+    if (classname.startsWith("groovy/lang")) {
+      return true;
+    }
     if (classname.startsWith("org/mockito")) {
       return true;
     }

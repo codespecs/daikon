@@ -1,0 +1,170 @@
+// Declarations for FirstUnitTest
+// Declarations written by Chicory 2022-07-26T13:07:17.521498
+
+decl-version 2.0
+var-comparability implicit
+
+ppt FirstUnitTest.FirstUnitTest():::ENTER
+ppt-type enter
+
+ppt FirstUnitTest.FirstUnitTest():::EXIT8
+ppt-type subexit
+parent parent FirstUnitTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+  parent FirstUnitTest:::OBJECT 1
+
+ppt FirstUnitTest.whenThis_thenThat():::ENTER
+ppt-type enter
+parent parent FirstUnitTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+  parent FirstUnitTest:::OBJECT 1
+
+ppt FirstUnitTest.whenThis_thenThat():::EXIT13
+ppt-type subexit
+parent parent FirstUnitTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+  parent FirstUnitTest:::OBJECT 1
+
+ppt FirstUnitTest.whenSomething_thenSomething():::ENTER
+ppt-type enter
+parent parent FirstUnitTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+  parent FirstUnitTest:::OBJECT 1
+
+ppt FirstUnitTest.whenSomething_thenSomething():::EXIT18
+ppt-type subexit
+parent parent FirstUnitTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+  parent FirstUnitTest:::OBJECT 1
+
+ppt FirstUnitTest.whenSomethingElse_thenSomethingElse():::ENTER
+ppt-type enter
+parent parent FirstUnitTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+  parent FirstUnitTest:::OBJECT 1
+
+ppt FirstUnitTest.whenSomethingElse_thenSomethingElse():::EXIT23
+ppt-type subexit
+parent parent FirstUnitTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+  parent FirstUnitTest:::OBJECT 1
+
+ppt FirstUnitTest:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+FirstUnitTest.FirstUnitTest():::ENTER
+this_invocation_nonce
+0
+
+FirstUnitTest.FirstUnitTest():::EXIT8
+this_invocation_nonce
+0
+this
+1903745041
+1
+
+FirstUnitTest.whenThis_thenThat():::ENTER
+this_invocation_nonce
+1
+this
+1903745041
+1
+
+FirstUnitTest.whenThis_thenThat():::EXIT13
+this_invocation_nonce
+1
+this
+1903745041
+1
+
+FirstUnitTest.FirstUnitTest():::ENTER
+this_invocation_nonce
+2
+
+FirstUnitTest.FirstUnitTest():::EXIT8
+this_invocation_nonce
+2
+this
+1660409789
+1
+
+FirstUnitTest.whenSomethingElse_thenSomethingElse():::ENTER
+this_invocation_nonce
+3
+this
+1660409789
+1
+
+FirstUnitTest.whenSomethingElse_thenSomethingElse():::EXIT23
+this_invocation_nonce
+3
+this
+1660409789
+1
+
+FirstUnitTest.FirstUnitTest():::ENTER
+this_invocation_nonce
+4
+
+FirstUnitTest.FirstUnitTest():::EXIT8
+this_invocation_nonce
+4
+this
+233191753
+1
+
+FirstUnitTest.whenSomething_thenSomething():::ENTER
+this_invocation_nonce
+5
+this
+233191753
+1
+
+FirstUnitTest.whenSomething_thenSomething():::EXIT18
+this_invocation_nonce
+5
+this
+233191753
+1
+

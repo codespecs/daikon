@@ -1,0 +1,29 @@
+
+Variable sets for FirstUnitTest.<init>() enter
+Variable sets for FirstUnitTest.<init>() exit
+  [1] [this]
+
+Variable sets for FirstUnitTest.whenThis_thenThat() enter
+  [1] [this]
+Variable sets for FirstUnitTest.whenThis_thenThat() exit
+  [1] [this]
+
+Variable sets for FirstUnitTest.whenSomething_thenSomething() enter
+  [1] [this]
+Variable sets for FirstUnitTest.whenSomething_thenSomething() exit
+  [1] [this]
+
+Variable sets for FirstUnitTest.whenSomethingElse_thenSomethingElse() enter
+  [1] [this]
+Variable sets for FirstUnitTest.whenSomethingElse_thenSomethingElse() exit
+  [1] [this]
+
+Variable sets for FirstUnitTest.equals(java.lang.Object obj) enter
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+Variable sets for FirstUnitTest.equals(java.lang.Object obj) exit
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]

@@ -192,11 +192,14 @@ else
 endif
 JAVA  := $(JAVA_HOME)/bin/java
 JAVAC ?= $(JAVA_HOME)/bin/javac
+
+JUNIT_CLASSPATH ?=
+
 JAVALIB_CLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
-export DAIKON_TESTS_CLASSPATH := .:$(JAVALIB_CLASSPATH):$(SCRATCH_FOR_DAIKON):$(DAIKON_CLASSPATH)
+export DAIKON_TESTS_CLASSPATH := .:$(JAVALIB_CLASSPATH):$(SCRATCH_FOR_DAIKON):$(JUNIT_CLASSPATH):$(DAIKON_CLASSPATH)
 
 # Dynamic instrumentation based java front end command.
 CHICORY := $(JAVA) -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.Chicory
@@ -379,7 +382,7 @@ clean-output:
 	@echo
 	rm -f *.bak *.diff ${PROJECT_FILE}.{inv.gz,spinfo.inv.gz,decls-DynComp{,-nojdk},txt{,-merge}-{chicory,daikon{,-end2end},simplify,logicalcompare,csharpcontract,esc,jml,cset{,-nojdk},daikon-suppress,daikon-suppress-diffed,jaif,trace{,-nojdk}}{,-failed},esc,stats,spinfo-static}
 	rm -rf merged *txt-chicory.dtrace rtc-violations.txt
-	rm -f *.bak *.diff ${PROJECT_FILE}-suppress.inv.gz ${PROJECT_FILE}-jaif.inv.gz
+	rm -f *.class ${PROJECT_FILE}-suppress.inv.gz ${PROJECT_FILE}-jaif.inv.gz
 ifeq (csv,${STORED_TRACE_FORMAT})
 	rm -f ${PROJECT_FILE}.dtrace.gz ${PROJECT_FILE}.decls
 endif

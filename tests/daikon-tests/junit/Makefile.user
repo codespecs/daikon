@@ -6,5 +6,6 @@ else
   JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
 endif
 
-# need daikon.jar on classpath to compile all junit references
-JAVAC := $(JAVA_HOME)/bin/javac -cp $(DAIKONDIR)/daikon.jar
+# need junit.jar on classpath to compile all junit references
+JUNIT_CLASSPATH := $(wildcard ${DAIKONDIR}/java/lib/junit-4*-Daikon.jar)
+JAVAC := $(JAVA_HOME)/bin/javac -cp $(JUNIT_CLASSPATH)
