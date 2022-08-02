@@ -533,8 +533,8 @@ public class DCInstrument extends InstructionListUtils {
               for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
                 // debug code
                 // System.out.printf("item: %s%n", item.toString());
-                if ((item.toString().endsWith("org/junit/Test;")) // JUnit4
-                    || (item.toString().endsWith("org/junit/jupiter/api/Test;"))) { // JUnit5
+                if (item.toString().endsWith("org/junit/Test;") // JUnit4
+                    || item.toString().endsWith("org/junit/jupiter/api/Test;")) { // JUnit5
                   junit_test_class = true;
                   junit_test_set.add(this_class);
                   break searchloop;
@@ -2005,9 +2005,9 @@ public class DCInstrument extends InstructionListUtils {
       // actual target of an INVOKEVIRTUAL to see if it has been instrumented or not.
       if (invoke instanceof INVOKEVIRTUAL) {
         if (!jdk_instrumented
-            && !(mgen.getName().equals("equals_dcomp_instrumented"))
-            && !(is_object_clone(method_name, ret_type, arg_types))
-            && !(is_object_equals(method_name, ret_type, arg_types))) {
+            && !mgen.getName().equals("equals_dcomp_instrumented")
+            && !is_object_clone(method_name, ret_type, arg_types)
+            && !is_object_equals(method_name, ret_type, arg_types)) {
 
           // debug code
           // System.out.println("method: " + method_name);
