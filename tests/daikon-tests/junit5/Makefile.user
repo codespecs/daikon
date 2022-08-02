@@ -1,0 +1,11 @@
+###########################################################################
+
+ifeq ($(shell uname), Darwin)
+  JAVA_HOME ?= $(/usr/libexec/java_home)
+else
+  JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
+endif
+
+# need junit.jar on classpath to compile all junit references
+JUNIT_CLASSPATH := $(wildcard ${DAIKONDIR}/java/lib/junit-p*-Daikon.jar)
+JAVAC := $(JAVA_HOME)/bin/javac -cp $(JUNIT_CLASSPATH)
