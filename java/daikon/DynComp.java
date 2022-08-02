@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.regex.qual.Regex;
 
 /**
  * This is the main class for DynComp. It uses the -javaagent switch to Java (which allows classes
@@ -233,8 +234,9 @@ public class DynComp {
       }
     }
 
+    @SuppressWarnings("regex:assignment")
+    @Regex String file_separator = System.getProperty("file.separator");
     // If not on the classpath look in ${DAIKONDIR}/java
-    String file_separator = System.getProperty("file.separator");
     String daikon_dir = System.getenv("DAIKONDIR");
     if (premain == null) {
       if (daikon_dir != null) {
