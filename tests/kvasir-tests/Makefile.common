@@ -106,6 +106,9 @@ endif
 endif
 
 ifeq ($(OS_ID),Ubuntu)
+ifeq ($(OS_REL),22.04)
+	GOAL := goal-Ubuntu2204
+endif
 ifeq ($(OS_REL),20.04)
 # Recent versions of Ubuntu set -fstack-clash-protection on by default.
 # This breaks stack frame discovery in Kvasir.
@@ -115,7 +118,6 @@ GCC_MAJOR_VERSION := $(shell gcc -dumpversion)
 ifeq ($(shell expr $(GCC_MAJOR_VERSION) \>= 7),1)
 CFLAGS += -fno-stack-clash-protection
 endif
-
 	GOAL := goal-Ubuntu2004
 endif
 ifeq ($(OS_REL),18.04)
