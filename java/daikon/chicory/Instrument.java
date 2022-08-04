@@ -190,13 +190,14 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     // Parse the bytes of the classfile, die on any errors
     JavaClass c;
-    {
-      ClassParser parser = new ClassParser(new ByteArrayInputStream(classfileBuffer), className);
-      try {
-        c = parser.parse();
-      } catch (Exception e) {
-        throw new RuntimeException("Unexpected error", e);
-      }
+    try (ByteArrayInputStream bais = new ByteArrayInputStream(classfileBuffer)) {
+      @SuppressWarnings("builder:required.method.not.called" // Resource Leak Checker bug, I think.
+      // I was not able to reproduce this in a small test case.
+      )
+      ClassParser parser = new ClassParser(bais, className);
+      c = parser.parse();
+    } catch (Exception e) {
+      throw new RuntimeException("Unexpected error", e);
     }
 
     try {

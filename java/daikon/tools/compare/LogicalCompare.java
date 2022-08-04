@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Logger;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -85,10 +86,10 @@ public class LogicalCompare {
   // TODO: both of these fields should be instance fields and the main
   // method should create an instance.
 
-  // key = ppt name
+  /** key = ppt name */
   private static @MonotonicNonNull Map<String, List<Lemma>> extra_assumptions;
 
-  private static @MonotonicNonNull LemmaStack lemmas;
+  private static @Owning @MonotonicNonNull LemmaStack lemmas;
 
   /** The usage message for this program. */
   private static String usage =
@@ -560,8 +561,7 @@ public class LogicalCompare {
   @RequiresNonNull("extra_assumptions")
   private static void readExtraAssumptions(String filename) {
     File file = new File(filename);
-    try {
-      LineNumberReader reader = FilesPlume.newLineNumberFileReader(file);
+    try (LineNumberReader reader = FilesPlume.newLineNumberFileReader(file)) {
       String line;
       String ppt_name = null;
       while ((line = reader.readLine()) != null) {
@@ -666,8 +666,7 @@ public class LogicalCompare {
             throw new Daikon.NormalTermination();
           } else if (option_name.equals("config-file")) {
             String config_file = Daikon.getOptarg(g);
-            try {
-              InputStream stream = new FileInputStream(config_file);
+            try (InputStream stream = new FileInputStream(config_file)) {
               Configuration.getInstance().apply(stream);
             } catch (IOException e) {
               throw new RuntimeException("Could not open config file " + config_file);

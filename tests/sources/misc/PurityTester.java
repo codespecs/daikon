@@ -3,6 +3,7 @@ package misc;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("removal") // use "new Integer" to obtain different Objects
 public class PurityTester {
 
 	public static void main(String[] args) {
@@ -28,7 +29,7 @@ public class PurityTester {
 			c.retrieve(l);
 		}
 	}
-		
+
 	public static void basics(Purity i) {
 		i.getValue();
 		i.getShift();

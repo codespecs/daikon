@@ -102,8 +102,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     // Read the Java file into a list of Strings.
     this.javaFileLines = new ArrayList<String>();
-    try {
-      for (String line : new EntryReader(javafilename)) {
+    try (EntryReader er = new EntryReader(javafilename)) {
+      for (String line : er) {
         this.javaFileLines.add(line);
       }
     } catch (IOException e) {

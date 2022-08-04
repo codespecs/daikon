@@ -70,9 +70,11 @@ public class PptRelation implements Serializable {
   public PptTopLevel child;
 
   /** Map from parent vars to matching child vars. */
+  @SuppressWarnings("serial")
   public Map<VarInfo, VarInfo> parent_to_child_map;
 
   /** Map from child vars to matching parent vars. */
+  @SuppressWarnings("serial")
   public Map<VarInfo, VarInfo> child_to_parent_map;
 
   /** Boolean. Controls whether the object-user relation is created in the variable hierarchy. */

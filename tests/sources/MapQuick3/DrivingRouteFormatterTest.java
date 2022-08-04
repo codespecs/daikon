@@ -30,8 +30,8 @@ public class DrivingRouteFormatterTest extends TestCase {
      * Test simple directions with one distance and one origHeading.
      */
     public void testShortDirections() throws IOException {
-        assertEquals(new Double(90.0),
-                     new Double(mShortRoute.getStartHeading()));
+        assertEquals(Double.valueOf(90.0),
+                     Double.valueOf(mShortRoute.getStartHeading()));
 
         assertEquals("Turn left onto Penny Lane and go 5.1 miles.\n",
                      mDirections.computeDirections(mShortRoute, 180));

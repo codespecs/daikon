@@ -139,25 +139,19 @@ public class Ast {
   // Formats the line enclosing a node
   public static String formatCurrentLine(Node n) {
     Node current = n;
-    while (current.getParent() != null && print(current.getParent()).indexOf(lineSep) < 0) {
+    while (current.getParent() != null && format(current.getParent()).indexOf(lineSep) < 0) {
       current = current.getParent();
     }
-    return print(current);
+    return format(current);
   }
 
-  /** @deprecated Use format(Node) instead */
-  @Deprecated
-  public static String print(Node n) {
-    return format(n);
-  }
-
-  /** @deprecated Use formatCurrentLine(Node) instead */
-  @Deprecated
-  public static String printCurrentLine(Node n) {
-    return formatCurrentLine(n);
-  }
-
-  // Creates an AST from a String
+  /**
+   * Creates an AST from a String.
+   *
+   * @param type the type of the result
+   * @param stringRep the string to parse
+   * @return an AST created from the string
+   */
   public static Node create(String type, String stringRep) {
     return create(type, new Class<?>[] {}, new Object[] {}, stringRep);
   }
@@ -187,7 +181,7 @@ public class Ast {
 
   // f4 -> VariableDeclaratorId()
   public static String getName(FormalParameter p) {
-    String name = print(p.f4);
+    String name = format(p.f4);
     int startBrackets = name.indexOf('[');
     if (startBrackets == -1) {
       return name;
@@ -207,10 +201,10 @@ public class Ast {
 
     p.accept(new TreeFormatter());
 
-    String type = print(p.f2);
-    String name = print(p.f4);
+    String type = format(p.f2);
+    String name = format(p.f4);
 
-    // print() removes whitespace around brackets, so this test is safe.
+    // format() removes whitespace around brackets, so this test is safe.
     while (name.endsWith("[]")) {
       type += "[]";
       name = name.substring(0, name.length() - 2);
@@ -235,7 +229,7 @@ public class Ast {
     NodeOptional o = u.f0;
     if (o.present()) {
       PackageDeclaration p = (PackageDeclaration) o.node;
-      return print(p.f2); // f2 -> Name()
+      return format(p.f2); // f2 -> Name()
     } else {
       return null;
     }
@@ -1018,17 +1012,17 @@ public class Ast {
 
   // Returns the body of a method, including the leading "{" and trailing "}"
   public static String getBody(MethodDeclaration m) {
-    return print(m.f4.choice);
+    return format(m.f4.choice);
   }
 
   public static String getReturnType(MethodDeclaration m) {
     Node n = m.f1.f0.choice;
-    return print(n);
+    return format(n);
   }
 
   public static String getMethodDeclarator(MethodDeclaration m) {
     MethodDeclarator d = m.f2;
-    return print(d);
+    return format(d);
   }
 
   // Returns the parameters of the method, as a list of
@@ -1153,7 +1147,7 @@ public class Ast {
               return;
             }
           }
-          symbolNames.add(print(n));
+          symbolNames.add(format(n));
         }
       }
     }

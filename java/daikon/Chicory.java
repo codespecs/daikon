@@ -67,9 +67,11 @@ public class Chicory {
   @Option("Send trace information to Daikon over a socket")
   public static boolean daikon_online = false;
 
+  // TODO: splitting on whitespace is error-prone.
   /**
    * Specifies Daikon arguments to be used if Daikon is run on a generated trace file {@code
-   * --daikon} or online via a socket {@code --daikon-online}.
+   * --daikon} or online via a socket {@code --daikon-online}. These arguments will be split on
+   * whitespace.
    */
   @Option("Specify Daikon arguments for either --daikon or --daikon-online")
   public static String daikon_args = "";
@@ -283,7 +285,7 @@ public class Chicory {
       cp = ".";
     }
 
-    // The the separator for items in the class path
+    // The separator for items in the class path
     String path_separator = System.getProperty("path.separator");
     basic.log("path_separator = %s%n", path_separator);
     if (!RegexUtil.isRegex(path_separator)) {
@@ -403,10 +405,14 @@ public class Chicory {
     cmdlist.add("java");
 
     if (RemoteDebug) {
-      // -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n
-      cmdlist.add("-Xdebug -Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
-      // cmdlist.add("-Xdebug -Xnoagent
-      // -Xrunjdwp:transport=dt_socket,server=n,suspend=n,address=8000 -Djava.compiler=NONE");
+      cmdlist.add("-Xdebug");
+
+      cmdlist.add("-Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=y");
+      // cmdlist.add("-Xrunjdwp:server=y,transport=dt_socket,address=4142,suspend=n");
+
+      // cmdlist.add("-Xnoagent");
+      // cmdlist.add("-Xrunjdwp:server=n,transport=dt_socket,address=8000,suspend=n");
+      // cmdlist.add("-Djava.compiler=NONE");
     }
 
     cmdlist.add("-cp");
@@ -416,7 +422,9 @@ public class Chicory {
     cmdlist.add("-Xmx" + heap_size);
     // cmdlist.add ("-verbose");
 
-    if (dtraceLim != null) cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
+    if (dtraceLim != null) {
+      cmdlist.add("-D" + traceLimString + "=" + dtraceLim);
+    }
     if (terminate != null) {
       cmdlist.add("-D" + traceLimTermString + "=" + terminate);
     }
@@ -447,10 +455,6 @@ public class Chicory {
       System.exit(1);
       throw new Error("Unreachable control flow");
     }
-
-    StreamRedirectThread stdin_thread =
-        new StreamRedirectThread("stdin", System.in, chicory_proc.getOutputStream(), false);
-    stdin_thread.start();
 
     int targetResult = redirect_wait(chicory_proc);
 
@@ -521,37 +525,45 @@ public class Chicory {
       cp = ".";
     }
 
-    String cmdstr;
+    List<String> cmd = new ArrayList<>();
+    cmd.add("java");
+    cmd.add("-Xmx" + heap_size);
+    cmd.add("-cp");
+    cmd.add(cp);
+    cmd.add("-ea");
+    cmd.add("daikon.Daikon");
+    for (String arg : daikon_args.split(" +")) {
+      cmd.add(arg);
+    }
     if (daikon_online) {
-      cmdstr =
-          String.format("java -Xmx%s -cp %s -ea daikon.Daikon %s +", heap_size, cp, daikon_args);
+      cmd.add("+");
     } else {
-      cmdstr =
-          String.format(
-              "java -Xmx%s -cp %s -ea daikon.Daikon %s %s/%s",
-              heap_size, cp, daikon_args, output_dir, dtrace_file);
+      cmd.add(output_dir + File.separator + dtrace_file);
     }
 
     // System.out.println("daikon command is " + daikon_cmd);
-    // System.out.println("daikon command cmdstr " + cmdstr);
+    // System.out.println("daikon command cmd " + cmd);
 
     if (verbose) {
-      System.out.printf("%nExecuting daikon: %s%n", cmdstr);
+      System.out.printf("%nExecuting daikon: %s%n", cmd);
     }
 
     try {
-      daikon_proc = rt.exec(cmdstr);
+      daikon_proc = rt.exec(cmd.toArray(new String[0]));
     } catch (Exception e) {
-      System.out.printf("Exception '%s' while executing '%s'%n", e, cmdstr);
+      System.out.printf("Exception '%s' while executing '%s'%n", e, cmd);
       System.exit(1);
     }
   }
 
-  /** Wait for daikon to complete and return its exit status. */
+  /**
+   * Wait for daikon to complete and return its exit status.
+   *
+   * @return Daikon's exit status
+   */
   @RequiresNonNull("daikon_proc")
   private int waitForDaikon() {
-    int result = redirect_wait(daikon_proc);
-    return result;
+    return redirect_wait(daikon_proc);
   }
 
   /**
@@ -563,12 +575,14 @@ public class Chicory {
   public int redirect_wait(Process p) {
 
     // Create the redirect threads and start them.
+    StreamRedirectThread in_thread =
+        new StreamRedirectThread("stdin", System.in, p.getOutputStream(), false);
     StreamRedirectThread err_thread =
-        new StreamRedirectThread("stderr", p.getErrorStream(), System.err);
-
+        new StreamRedirectThread("stderr", p.getErrorStream(), System.err, true);
     StreamRedirectThread out_thread =
-        new StreamRedirectThread("stdout", p.getInputStream(), System.out);
+        new StreamRedirectThread("stdout", p.getInputStream(), System.out, true);
 
+    in_thread.start();
     err_thread.start();
     out_thread.start();
 

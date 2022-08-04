@@ -206,9 +206,8 @@ public class DeclReader {
   public void read(File pathname) throws IOException {
 
     // have caller deal with FileNotFound
-    EntryReader decl_file = new EntryReader(pathname, "^(//|#).*", null);
 
-    try {
+    try (EntryReader decl_file = new EntryReader(pathname, "^(//|#).*", null)) {
       for (String line = decl_file.readLine(); line != null; line = decl_file.readLine()) {
         // Skip all input until we find a ppt.
         if (!line.startsWith("ppt ")) {
@@ -220,7 +219,7 @@ public class DeclReader {
         read_decl(decl_file);
       }
     } catch (Exception e) {
-      throw new Error("Error reading comparability decl file", e);
+      throw new Error("Error reading comparability decl file " + pathname, e);
     }
   }
 

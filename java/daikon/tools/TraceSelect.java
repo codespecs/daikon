@@ -1,6 +1,7 @@
 // TraceSelect.java
 package daikon.tools;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -183,19 +184,22 @@ public class TraceSelect {
 
       while (num_reps > 0) {
 
-        DtracePartitioner dec = new DtracePartitioner(fileName);
-        MultiRandSelector<String> mrs = new MultiRandSelector<>(numPerSample, dec);
-
-        while (dec.hasNext()) {
-          mrs.accept(dec.next());
-        }
         List<String> al = new ArrayList<>();
+        try (DtracePartitioner dec = new DtracePartitioner(fileName)) {
+          MultiRandSelector<String> mrs = new MultiRandSelector<>(numPerSample, dec);
 
-        for (Iterator<String> i = mrs.valuesIter(); i.hasNext(); ) {
-          al.add(i.next());
+          while (dec.hasNext()) {
+            mrs.accept(dec.next());
+          }
+
+          for (Iterator<String> i = mrs.valuesIter(); i.hasNext(); ) {
+            al.add(i.next());
+          }
+
+          @SuppressWarnings("builder:reset.not.owning") // Resource Leak Checker bug, probably
+          List<String> al_tmp = dec.patchValues(al, INCLUDE_UNRETURNED);
+          al = al_tmp;
         }
-
-        al = dec.patchValues(al, INCLUDE_UNRETURNED);
 
         String filePrefix = calcOut(fileName);
 
@@ -203,19 +207,18 @@ public class TraceSelect {
         // but now add a '-p' in the front so it's all good
         sampleNames[num_reps] = filePrefix + ".inv";
 
-        PrintWriter pwOut = new PrintWriter(FilesPlume.newBufferedFileWriter(filePrefix));
-
-        for (String toPrint : al) {
-          pwOut.println(toPrint);
+        try (PrintWriter pwOut = new PrintWriter(FilesPlume.newBufferedFileWriter(filePrefix))) {
+          for (String toPrint : al) {
+            pwOut.println(toPrint);
+          }
+          pwOut.flush();
         }
-        pwOut.flush();
-        pwOut.close();
 
         invokeDaikon(filePrefix);
 
         // cleanup the mess
         if (CLEAN) {
-          Runtime.getRuntime().exec("rm " + filePrefix);
+          Runtime.getRuntime().exec(new String[] {"rm", filePrefix});
         }
 
         num_reps--;
@@ -232,7 +235,7 @@ public class TraceSelect {
       // cleanup the mess!
       for (int j = 0; j < sampleNames.length; j++) {
         if (CLEAN) {
-          Runtime.getRuntime().exec("rm " + sampleNames[j]);
+          Runtime.getRuntime().exec(new String[] {"rm", sampleNames[j]});
         }
       }
 
@@ -267,8 +270,15 @@ public class TraceSelect {
     // initializes daikon again or else an exception is thrown
     reinitializeDaikon();
     daikon.Daikon.main(daikonArgs);
-    Runtime.getRuntime()
-        .exec("java daikon.PrintInvariants " + dtraceName + ".inv > " + dtraceName + ".txt");
+    // Run: java daikon.PrintInvariants dtraceName.inv > dtraceName.txt
+    ProcessBuilder pb = new ProcessBuilder("java", "daikon.PrintInvariants", dtraceName + ".inv");
+    pb.redirectOutput(new File(dtraceName + ".txt"));
+    Process p = pb.start();
+    try {
+      p.waitFor();
+    } catch (InterruptedException e) {
+      // do nothing
+    }
 
     return;
   }

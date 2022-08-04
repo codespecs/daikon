@@ -102,6 +102,7 @@ import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
@@ -268,6 +269,7 @@ public class PptTopLevel extends Ppt {
    * <p>For a client to access this private variable, it should use {@link #viewsAsCollection},
    * {@link #views_iterable}, or {@link #views_iterator}.
    */
+  @SuppressWarnings("serial")
   private Map<List<Integer>, PptSlice> views;
 
   /** List of all of the splitters for this ppt. */
@@ -352,15 +354,18 @@ public class PptTopLevel extends Ppt {
   }
 
   /** All children relations in the variable/ppt hierarchy. */
+  @SuppressWarnings("serial")
   public List<PptRelation> children = new ArrayList<>();
 
   /** All parent relations in the variable/ppt hierarchy. */
+  @SuppressWarnings("serial")
   public List<PptRelation> parents = new ArrayList<>();
 
   /**
    * List of parent relations in the variable/ppt hierarchy as specified in the declaration record.
    * These are used to build the detailed parents/children lists of PptRelation above.
    */
+  @SuppressWarnings("serial")
   public List<ParentRelation> parent_relations;
 
   /**
@@ -397,8 +402,10 @@ public class PptTopLevel extends Ppt {
   // The redundant_invs* variables are filled in by method
   // mark_implied_via_simplify.
   /** Redundant invariants, except for Equality invariants. */
+  @SuppressWarnings("serial")
   public Set<Invariant> redundant_invs = new LinkedHashSet<>(0);
   /** The canonical VarInfo for the equality. */
+  @SuppressWarnings("serial")
   public Set<VarInfo> redundant_invs_equality = new LinkedHashSet<>(0);
 
   @SuppressWarnings("fields.uninitialized") // todo: initialization and helper methods
@@ -2869,10 +2876,11 @@ public class PptTopLevel extends Ppt {
   /// Locating implied (same) invariants via the Simplify theorem-prover
   ///
 
-  // Created upon first use, then saved.  Do not eagerly initialize,
-  // because doing so runs Simplify (which crashes if Simplify is not
-  // installed).
-  private static @MonotonicNonNull LemmaStack proverStack = null;
+  /**
+   * Created upon first use, then saved. Do not eagerly initialize, because doing so runs Simplify
+   * (which crashes if Simplify is not installed).
+   */
+  private static @Owning @MonotonicNonNull LemmaStack proverStack = null;
 
   /**
    * Interface used by mark_implied_via_simplify to determine what invariants should be considered
@@ -2885,11 +2893,15 @@ public class PptTopLevel extends Ppt {
   /**
    * Use the Simplify theorem prover to flag invariants that are logically implied by others.
    * Considers only invariants that pass isWorthPrinting.
+   *
+   * @param all_ppts all the program points
    */
   @SuppressWarnings("nullness") // reinitialization if error occurs
   public void mark_implied_via_simplify(PptMap all_ppts) {
     try {
-      if (proverStack == null) proverStack = new LemmaStack();
+      if (proverStack == null) {
+        proverStack = new LemmaStack();
+      }
       markImpliedViaSimplify_int(
           new SimplifyInclusionTester() {
             @Override
@@ -2898,6 +2910,9 @@ public class PptTopLevel extends Ppt {
             }
           });
     } catch (SimplifyError e) {
+      if (proverStack != null) {
+        proverStack.close();
+      }
       proverStack = null;
     }
   }
@@ -3206,6 +3221,7 @@ public class PptTopLevel extends Ppt {
   ///
 
   /** Cached VarInfos that are parameter variables. */
+  @SuppressWarnings("serial")
   private @MonotonicNonNull Set<VarInfo> paramVars = null;
 
   /** Returns variables in this Ppt that are parameters. */

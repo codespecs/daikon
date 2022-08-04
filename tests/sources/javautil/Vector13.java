@@ -4,7 +4,7 @@
  * Copyright 1995-1998 by Sun Microsystems, Inc.,
  * 901 San Antonio Road, Palo Alto, California, 94303, U.S.A.
  * All rights reserved.
- * 
+ *
  * This software is the confidential and proprietary information
  * of Sun Microsystems, Inc. ("Confidential Information").  You
  * shall not disclose such Confidential Information and shall use
@@ -19,20 +19,20 @@ import java.util.NoSuchElementException;
 
 
 /**
- * The <code>Vector</code> class implements a growable array of 
- * objects. Like an array, it contains components that can be 
- * accessed using an integer index. However, the size of a 
- * <code>Vector</code> can grow or shrink as needed to accommodate 
+ * The <code>Vector</code> class implements a growable array of
+ * objects. Like an array, it contains components that can be
+ * accessed using an integer index. However, the size of a
+ * <code>Vector</code> can grow or shrink as needed to accommodate
  * adding and removing items after the <code>Vector</code> has been created.
  * <p>
- * Each vector tries to optimize storage management by maintaining a 
- * <code>capacity</code> and a <code>capacityIncrement</code>. The 
- * <code>capacity</code> is always at least as large as the vector 
- * size; it is usually larger because as components are added to the 
- * vector, the vector's storage increases in chunks the size of 
- * <code>capacityIncrement</code>. An application can increase the 
- * capacity of a vector before inserting a large number of 
- * components; this reduces the amount of incremental reallocation. 
+ * Each vector tries to optimize storage management by maintaining a
+ * <code>capacity</code> and a <code>capacityIncrement</code>. The
+ * <code>capacity</code> is always at least as large as the vector
+ * size; it is usually larger because as components are added to the
+ * vector, the vector's storage increases in chunks the size of
+ * <code>capacityIncrement</code>. An application can increase the
+ * capacity of a vector before inserting a large number of
+ * components; this reduces the amount of incremental reallocation.
  *
  * @author  Lee Boynton
  * @author  Jonathan Payne
@@ -42,7 +42,7 @@ import java.util.NoSuchElementException;
 public
 class Vector13 implements Cloneable, java.io.Serializable {
     /**
-     * The array buffer into which the components of the vector are 
+     * The array buffer into which the components of the vector are
      * stored. The capacity of the vector is the length of this array buffer.
      *
      * @since   JDK1.0
@@ -50,17 +50,17 @@ class Vector13 implements Cloneable, java.io.Serializable {
     protected Object elementData[];
 
     /**
-     * The number of valid components in the vector. 
+     * The number of valid components in the vector.
      *
      * @since   JDK1.0
      */
     protected int elementCount;
 
     /**
-     * The amount by which the capacity of the vector is automatically 
-     * incremented when its size becomes greater than its capacity. If 
-     * the capacity increment is <code>0</code>, the capacity of the 
-     * vector is doubled each time it needs to grow. 
+     * The amount by which the capacity of the vector is automatically
+     * incremented when its size becomes greater than its capacity. If
+     * the capacity increment is <code>0</code>, the capacity of the
+     * vector is doubled each time it needs to grow.
      *
      * @since   JDK1.0
      */
@@ -71,7 +71,7 @@ class Vector13 implements Cloneable, java.io.Serializable {
 
     /**
      * Constructs an empty vector with the specified initial capacity and
-     * capacity increment. 
+     * capacity increment.
      *
      * @param   initialCapacity     the initial capacity of the vector.
      * @param   capacityIncrement   the amount by which the capacity is
@@ -95,7 +95,7 @@ class Vector13 implements Cloneable, java.io.Serializable {
     }
 
     /**
-     * Constructs an empty vector. 
+     * Constructs an empty vector.
      *
      * @since   JDK1.0
      */
@@ -104,7 +104,7 @@ class Vector13 implements Cloneable, java.io.Serializable {
     }
 
     /**
-     * Copies the components of this vector into the specified array. 
+     * Copies the components of this vector into the specified array.
      * The array must be big enough to hold all the objects in this  vector.
      *
      * @param   anArray   the array into which the components get copied.
@@ -118,9 +118,9 @@ class Vector13 implements Cloneable, java.io.Serializable {
     }
 
     /**
-     * Trims the capacity of this vector to be the vector's current 
-     * size. An application can use this operation to minimize the 
-     * storage of a vector. 
+     * Trims the capacity of this vector to be the vector's current
+     * size. An application can use this operation to minimize the
+     * storage of a vector.
      *
      * @since   JDK1.0
      */
@@ -134,9 +134,9 @@ class Vector13 implements Cloneable, java.io.Serializable {
     }
 
     /**
-     * Increases the capacity of this vector, if necessary, to ensure 
-     * that it can hold at least the number of components specified by 
-     * the minimum capacity argument. 
+     * Increases the capacity of this vector, if necessary, to ensure
+     * that it can hold at least the number of components specified by
+     * the minimum capacity argument.
      *
      * @param   minCapacity   the desired minimum capacity.
      * @since   JDK1.0
@@ -149,12 +149,12 @@ class Vector13 implements Cloneable, java.io.Serializable {
 
     /**
      * This implements the unsynchronized semantics of ensureCapacity.
-     * Synchronized methods in this class can internally call this 
-     * method for ensuring capacity without incurring the cost of an 
+     * Synchronized methods in this class can internally call this
+     * method for ensuring capacity without incurring the cost of an
      * extra synchronization.
      *
      * @see java.util.Vector#ensureCapacity(int)
-     */ 
+     */
     private void ensureCapacityHelper(int minCapacity) {
 	int oldCapacity = elementData.length;
 	Object oldData[] = elementData;
@@ -166,11 +166,11 @@ class Vector13 implements Cloneable, java.io.Serializable {
 	elementData = new Object[newCapacity];
 	System.arraycopy(oldData, 0, elementData, 0, elementCount);
     }
-    
+
     /**
-     * Sets the size of this vector. If the new size is greater than the 
-     * current size, new <code>null</code> items are added to the end of 
-     * the vector. If the new size is less than the current size, all 
+     * Sets the size of this vector. If the new size is greater than the
+     * current size, new <code>null</code> items are added to the end of
+     * the vector. If the new size is less than the current size, all
      * components at index <code>newSize</code> and greater are discarded.
      *
      * @param   newSize   the new size of this vector.
@@ -228,7 +228,7 @@ class Vector13 implements Cloneable, java.io.Serializable {
     public final synchronized Enumeration elements() {
 	return new VectorEnumerator13(this);
     }
-    
+
     /**
      * Tests if the specified object is a component in this vector.
      *
@@ -242,8 +242,8 @@ class Vector13 implements Cloneable, java.io.Serializable {
     }
 
     /**
-     * Searches for the first occurence of the given argument, testing 
-     * for equality using the <code>equals</code> method. 
+     * Searches for the first occurence of the given argument, testing
+     * for equality using the <code>equals</code> method.
      *
      * @param   elem   an object.
      * @return  the index of the first occurrence of the argument in this
@@ -256,9 +256,9 @@ class Vector13 implements Cloneable, java.io.Serializable {
     }
 
     /**
-     * Searches for the first occurence of the given argument, beginning 
-     * the search at <code>index</code>, and testing for equality using 
-     * the <code>equals</code> method. 
+     * Searches for the first occurence of the given argument, beginning
+     * the search at <code>index</code>, and testing for equality using
+     * the <code>equals</code> method.
      *
      * @param   elem    an object.
      * @param   index   the index to start searching from.
@@ -291,8 +291,8 @@ class Vector13 implements Cloneable, java.io.Serializable {
     }
 
     /**
-     * Searches backwards for the specified object, starting from the 
-     * specified index, and returns an index to it. 
+     * Searches backwards for the specified object, starting from the
+     * specified index, and returns an index to it.
      *
      * @param   elem    the desired component.
      * @param   index   the index to start searching from.
@@ -365,12 +365,12 @@ class Vector13 implements Cloneable, java.io.Serializable {
     }
 
     /**
-     * Sets the component at the specified <code>index</code> of this 
-     * vector to be the specified object. The previous component at that 
-     * position is discarded. 
+     * Sets the component at the specified <code>index</code> of this
+     * vector to be the specified object. The previous component at that
+     * position is discarded.
      * <p>
-     * The index must be a value greater than or equal to <code>0</code> 
-     * and less than the current size of the vector. 
+     * The index must be a value greater than or equal to <code>0</code>
+     * and less than the current size of the vector.
      *
      * @param      obj     what the component is to be set to.
      * @param      index   the specified index.
@@ -380,20 +380,20 @@ class Vector13 implements Cloneable, java.io.Serializable {
      */
     public final synchronized void setElementAt(Object obj, int index) {
 	if (index >= elementCount) {
-	    throw new ArrayIndexOutOfBoundsException(index + " >= " + 
+	    throw new ArrayIndexOutOfBoundsException(index + " >= " +
 						     elementCount);
 	}
 	elementData[index] = obj;
     }
 
     /**
-     * Deletes the component at the specified index. Each component in 
-     * this vector with an index greater or equal to the specified 
-     * <code>index</code> is shifted downward to have an index one 
-     * smaller than the value it had previously. 
+     * Deletes the component at the specified index. Each component in
+     * this vector with an index greater or equal to the specified
+     * <code>index</code> is shifted downward to have an index one
+     * smaller than the value it had previously.
      * <p>
-     * The index must be a value greater than or equal to <code>0</code> 
-     * and less than the current size of the vector. 
+     * The index must be a value greater than or equal to <code>0</code>
+     * and less than the current size of the vector.
      *
      * @param      index   the index of the object to remove.
      * @exception  ArrayIndexOutOfBoundsException  if the index was invalid.
@@ -402,7 +402,7 @@ class Vector13 implements Cloneable, java.io.Serializable {
      */
     public final synchronized void removeElementAt(int index) {
 	if (index >= elementCount) {
-	    throw new ArrayIndexOutOfBoundsException(index + " >= " + 
+	    throw new ArrayIndexOutOfBoundsException(index + " >= " +
 						     elementCount);
 	}
 	else if (index < 0) {
@@ -417,14 +417,14 @@ class Vector13 implements Cloneable, java.io.Serializable {
     }
 
     /**
-     * Inserts the specified object as a component in this vector at the 
-     * specified <code>index</code>. Each component in this vector with 
-     * an index greater or equal to the specified <code>index</code> is 
-     * shifted upward to have an index one greater than the value it had 
-     * previously. 
+     * Inserts the specified object as a component in this vector at the
+     * specified <code>index</code>. Each component in this vector with
+     * an index greater or equal to the specified <code>index</code> is
+     * shifted upward to have an index one greater than the value it had
+     * previously.
      * <p>
-     * The index must be a value greater than or equal to <code>0</code> 
-     * and less than or equal to the current size of the vector. 
+     * The index must be a value greater than or equal to <code>0</code>
+     * and less than or equal to the current size of the vector.
      *
      * @param      obj     the component to insert.
      * @param      index   where to insert the new component.
@@ -447,9 +447,9 @@ class Vector13 implements Cloneable, java.io.Serializable {
     }
 
     /**
-     * Adds the specified component to the end of this vector, 
-     * increasing its size by one. The capacity of this vector is 
-     * increased if its size becomes greater than its capacity. 
+     * Adds the specified component to the end of this vector,
+     * increasing its size by one. The capacity of this vector is
+     * increased if its size becomes greater than its capacity.
      *
      * @param   obj   the component to be added.
      * @since   JDK1.0
@@ -463,9 +463,9 @@ class Vector13 implements Cloneable, java.io.Serializable {
     }
 
     /**
-     * Removes the first occurrence of the argument from this vector. If 
-     * the object is found in this vector, each component in the vector 
-     * with an index greater or equal to the object's index is shifted 
+     * Removes the first occurrence of the argument from this vector. If
+     * the object is found in this vector, each component in the vector
+     * with an index greater or equal to the object's index is shifted
      * downward to have an index one smaller than the value it had previously.
      *
      * @param   obj   the component to be removed.
@@ -501,19 +501,19 @@ class Vector13 implements Cloneable, java.io.Serializable {
      * @since   JDK1.0
      */
     public synchronized Object clone() {
-	try { 
+	try {
 	    Vector13 v = (Vector13)super.clone();
 	    v.elementData = new Object[elementCount];
 	    System.arraycopy(elementData, 0, v.elementData, 0, elementCount);
 	    return v;
-	} catch (CloneNotSupportedException e) { 
+	} catch (CloneNotSupportedException e) {
 	    // this shouldn't happen, since we are Cloneable
 	    throw new InternalError();
 	}
     }
 
     /**
-     * Returns a string representation of this vector. 
+     * Returns a string representation of this vector.
      *
      * @return  a string representation of this vector.
      * @since   JDK1.0

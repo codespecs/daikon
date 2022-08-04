@@ -52,6 +52,7 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -248,8 +249,9 @@ public final class PrintInvariants {
    */
   private static String print_csharp_metadata_SWITCH = "print_csharp_metadata";
 
-  // Stores the output file stream if --output is specified.  Null means System.out.
-  private static @Nullable OutputStream out_stream = null;
+  /** Stores the output file stream if --output is specified. Null means System.out. */
+  private static @Owning @Nullable OutputStream out_stream = null;
+  /** If true, print C# metadata. */
   private static boolean print_csharp_metadata = false;
 
   // Fields that will be used if the --disc_reason switch is used (in other
@@ -385,8 +387,7 @@ public final class PrintInvariants {
             Daikon.output_num_samples = true;
           } else if (Daikon.config_SWITCH.equals(option_name)) {
             String config_file = Daikon.getOptarg(g);
-            try {
-              InputStream stream = new FileInputStream(config_file);
+            try (InputStream stream = new FileInputStream(config_file)) {
               Configuration.getInstance().apply(stream);
             } catch (IOException e) {
               throw new RuntimeException("Could not open config file " + config_file);

@@ -42,7 +42,7 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.8.11
+@center Daikon version 5.8.13
 
 @sp 1
 
@@ -83,7 +83,7 @@ Copyright @copyright{} 1998-2020
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.11, released November 2, 2021.
+It describes Daikon version 5.8.13, released July 14, 2022.
 
 @menu
 * Introduction::
@@ -1827,7 +1827,7 @@ put a semi-colon at the end of your expression!).
 @node       Using Git with Eclipse
 @subsection Using Git with Eclipse
 
-This section has yet to be completed, although you can just do all the editing,
+This section has yet to be written, although you can just do all the editing,
 compiling, and
 running from the Eclipse IDE while doing version control commands from the shell
 or whatever current system you use.
@@ -1861,7 +1861,7 @@ be the same), and you may replace @code{@@chapter} by @code{@@section},
 Follow the Texinfo conventions for marking up text.  In particular:
 @itemize
 @item
-Don't use regular double quotes (&quot;) in running text.  Instead, use
+Don't use regular double quotes (") in running text.  Instead, use
 two single back quotes and two regular quotes, ``like this''.  Emacs will
 do this substitution for you if you are using its Texinfo mode.
 
@@ -2424,8 +2424,8 @@ by invariant output being written to the screen.
 make test-staged-dist
 @end example
 
-@c Time on buffalo as of 04/1r36/201r65
-[Time: 1 min]
+@c Time on buffalo as of 07/14/2022
+[Time: 5 min]
 
 
 @need 1000

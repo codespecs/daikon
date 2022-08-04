@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.mustcall.qual.MustCallUnknown;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -876,10 +877,15 @@ public class NIS {
     }
   }
 
-  /** Returns true if the specified class is an antecedent in any NI suppression. */
+  /**
+   * Returns true if the specified class is an antecedent in any NI suppression.
+   *
+   * @param cls the class for some subtype of Invariant
+   * @return true if the specified class is an antecedent in any NI suppression
+   */
   @RequiresNonNull("NIS.suppressor_map")
   @Pure
-  public static boolean is_suppressor(Class<? extends Invariant> cls) {
+  public static boolean is_suppressor(Class<? extends @MustCallUnknown Invariant> cls) {
     return suppressor_map.containsKey(cls);
   }
 

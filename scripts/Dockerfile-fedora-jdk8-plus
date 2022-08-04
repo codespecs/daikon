@@ -3,7 +3,7 @@
 # But it's used primarily for running miscellaneous tests such as the manual
 # and Javadoc.
 
-FROM fedora:35
+FROM fedora:32
 MAINTAINER Michael Ernst <mernst@cs.washington.edu>
 
 # According to
@@ -30,6 +30,7 @@ RUN dnf -q -y install \
   java-1.8.0-openjdk \
   java-1.8.0-openjdk-devel
 
+# Needed in later versions of Fedora:   python3-distutils \
 RUN dnf -qy install \
   curl \
   ctags \
@@ -38,7 +39,6 @@ RUN dnf -qy install \
   netpbm \
   python \
   python3 \
-  python3-distutils \
   texi2html \
   texinfo \
   texinfo-tex \

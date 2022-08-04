@@ -155,6 +155,7 @@ import daikon.inv.unary.string.PrintableString;
 import daikon.inv.unary.stringsequence.CommonStringSequence;
 import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.unary.stringsequence.OneOfStringSequence;
+import daikon.simplify.LemmaStack;
 import daikon.split.ContextSplitterFactory;
 import daikon.split.PptSplitter;
 import daikon.split.SpinfoFile;
@@ -221,9 +222,9 @@ public final class Daikon {
   public static int dkconfig_progress_delay = 1000;
 
   /** The current version of Daikon. */
-  public static final String release_version = "5.8.11";
+  public static final String release_version = "5.8.13";
   /** The date for the current version of Daikon. */
-  public static final String release_date = "November 2, 2021";
+  public static final String release_date = "July 14, 2022";
   /** A description of the Daikon release (version number, date, and URL). */
   public static final String release_string =
       "Daikon version "
@@ -1074,8 +1075,8 @@ public final class Daikon {
             output_num_samples = true;
           } else if (files_from_SWITCH.equals(option_name)) {
             String files_from_filename = getOptarg(g);
-            try {
-              for (String filename : new EntryReader(files_from_filename)) {
+            try (EntryReader entryReader = new EntryReader(files_from_filename)) {
+              for (String filename : entryReader) {
                 // Ignore blank lines in file.
                 if (filename.equals("")) {
                   continue;
@@ -1315,8 +1316,7 @@ public final class Daikon {
 
           } else if (config_SWITCH.equals(option_name)) {
             String config_file = getOptarg(g);
-            try {
-              InputStream stream = new FileInputStream(config_file);
+            try (InputStream stream = new FileInputStream(config_file)) {
               Configuration.getInstance().apply(stream);
             } catch (IOException e) {
               throw new Daikon.UserError(
@@ -2528,8 +2528,9 @@ public final class Daikon {
     System.out.println(TimeUnit.NANOSECONDS.toSeconds(duration));
 
     // Make sure the Simplify process and helper threads are finished
-    if (PptTopLevel.getProverStack() != null) {
-      PptTopLevel.getProverStack().close();
+    LemmaStack proverStack = PptTopLevel.getProverStack();
+    if (proverStack != null) {
+      proverStack.close();
     }
   }
 
@@ -2649,25 +2650,24 @@ public final class Daikon {
       for (File file : decl_files) {
 
         // Open the file
-        LineNumberReader fp = FilesPlume.newLineNumberFileReader(file);
+        try (LineNumberReader fp = FilesPlume.newLineNumberFileReader(file)) {
 
-        // Read each ppt name from the file
-        for (String line = fp.readLine(); line != null; line = fp.readLine()) {
-          if (line.equals("") || FileIO.isComment(line)) {
-            continue;
+          // Read each ppt name from the file
+          for (String line = fp.readLine(); line != null; line = fp.readLine()) {
+            if (line.equals("") || FileIO.isComment(line)) {
+              continue;
+            }
+            if (!line.equals("DECLARE")) {
+              continue;
+            }
+            // Just read "DECLARE", so next line has ppt name.
+            String ppt_name = fp.readLine();
+            if (ppt_name == null) {
+              throw new Daikon.UserError("File " + file + " terminated prematurely");
+            }
+            ppts.add(ppt_name);
           }
-          if (!line.equals("DECLARE")) {
-            continue;
-          }
-          // Just read "DECLARE", so next line has ppt name.
-          String ppt_name = fp.readLine();
-          if (ppt_name == null) {
-            throw new Daikon.UserError("File " + file + " terminated prematurely");
-          }
-          ppts.add(ppt_name);
         }
-
-        fp.close();
       }
     } catch (IOException e) {
       e.printStackTrace();

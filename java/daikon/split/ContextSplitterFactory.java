@@ -114,8 +114,8 @@ public class ContextSplitterFactory {
   public static MapfileEntry[] parse_mapfile(File mapfile) throws IOException {
     ArrayList<MapfileEntry> result = new ArrayList<>();
 
-    try {
-      for (String reader_line : new EntryReader(mapfile.toString())) {
+    try (EntryReader er = new EntryReader(mapfile.toString())) {
+      for (String reader_line : er) {
         String line = reader_line;
         // Remove comments, skip blank lines
         {
