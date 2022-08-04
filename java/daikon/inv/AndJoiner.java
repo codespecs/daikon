@@ -23,10 +23,6 @@ public class AndJoiner extends Joiner {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
-  private AndJoiner(PptSlice ppt, Invariant left, Invariant right) {
-    super(ppt, left, right);
-  }
-
   public AndJoiner(PptTopLevel ppt, Invariant left, Invariant right) {
     super(ppt, left, right);
   }

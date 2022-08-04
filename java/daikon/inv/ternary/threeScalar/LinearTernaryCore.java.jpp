@@ -465,7 +465,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
       } else {
 
         // try to fit to the current line
-        if (!try_points_linear(x, y, z)) {
+        if (!try_points_linear( x,  y,  z)) {
           // put the crucial point in, so that it can be tested against the new line
           def_points[MINTRIPLES - 1] = new Point(x, y, z);
 
@@ -629,6 +629,19 @@ public final class CLASSNAME implements Serializable, Cloneable {
       }
     }
 
+  }
+
+  /**
+   * Attempts to fit the new point (x,y,z) onto the current line (indicated by line_flag and
+   * coefficients[]). Method should only be called if the current points define a line (line_flag is
+   * not Flag.NO_LINE)
+   *
+   * @param x x component of the point
+   * @param x y component of the point
+   * @param x z component of the point
+   */
+  private boolean try_points_linear(long x, long y, long z) {
+    return try_points_linear((double) x, (double) y, (double) z);
   }
 
   /**

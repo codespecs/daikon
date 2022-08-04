@@ -75,6 +75,7 @@ public final class DCRuntime implements ComparabilityProvider {
   static int max_jdk_static = 100000;
 
   /** If the application exits with an exception, it should be placed here. */
+  @SuppressWarnings("StaticAssignmentOfThrowable") // for debugging (I presume)
   public static @Nullable Throwable exit_exception = null;
 
   /** Storage for each static tag. */
@@ -162,15 +163,10 @@ public final class DCRuntime implements ComparabilityProvider {
    * Class used as a tag for uninitialized instance fields. Only different from Object for debugging
    * purposes.
    */
+  @SuppressWarnings("UnusedVariable") // used only for debugging
   private static class UninitFieldTag {
     String descr;
-    @Nullable Throwable stack_trace = null;
-
-    public UninitFieldTag() {}
-
-    public UninitFieldTag(String descr) {
-      this.descr = descr;
-    }
+    Throwable stack_trace;
 
     public UninitFieldTag(String descr, Throwable stack_trace) {
       this.descr = descr;

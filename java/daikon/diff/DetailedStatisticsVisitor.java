@@ -26,7 +26,8 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   public static final int NUM_ARITIES = 4;
 
   /** A string representations for each arity. Length = NUM_ARITIES. */
-  public static final String[] ARITY_LABELS = {"Nul", "Una", "Bin", "Ter"};
+  public static final ImmutableList<String> ARITY_LABELS =
+      new ImmutableList("Nul", "Una", "Bin", "Ter");
 
   // Relationships between invariants
   public static final int NUM_RELATIONSHIPS = 12;
