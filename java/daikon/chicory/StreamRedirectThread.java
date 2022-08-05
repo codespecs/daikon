@@ -98,7 +98,7 @@ public class StreamRedirectThread extends Thread {
               + ", "
               + line_by_line
               + ", "
-              + "true" // debug
+              + "true" // value of the `debug` variable
               + ")");
     }
     if (in == null || out == null) {

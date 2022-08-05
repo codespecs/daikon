@@ -465,7 +465,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
       } else {
 
         // try to fit to the current line
-        if (!try_points_linear( x,  y,  z)) {
+        if (!try_points_linear(x, y, z)) {
           // put the crucial point in, so that it can be tested against the new line
           def_points[MINTRIPLES - 1] = new Point(x, y, z);
 
