@@ -19,6 +19,12 @@ Further documentation can be found in:
    It is also available at http://plse.cs.washington.edu/daikon/download/api/ .
 
 
+Version 5.8.14 (??? 2022)
+=================================
+Bug fixes and implementation details:
+ * Valgrind update from 3.17.0 to 3.19.0.
+
+
 Version 5.8.12 (July 14, 2022)
 =================================
 
