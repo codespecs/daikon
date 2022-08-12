@@ -356,6 +356,7 @@ public class InvariantAddAndCheckTester {
      * @return a String containing the proper add and check commands for this input lines of this
      *     test case
      */
+    @SuppressWarnings("UnusedMethod")
     public static @Nullable String generateTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, true);
       if (endOfFile) {

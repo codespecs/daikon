@@ -191,6 +191,7 @@ public final class ValueTuple implements Cloneable {
   public static final int MODIFIED_BITVAL = MathPlume.pow(2, MODIFIED);
   public static final int MISSING_NONSENSICAL_BITVAL = MathPlume.pow(2, MISSING_NONSENSICAL);
   public static final int MISSING_FLOW_BITVAL = MathPlume.pow(2, MISSING_FLOW);
+
   // Various slices of the 8 (=TUPLEMOD_VALUES) possible tuplemod values.
   // The arrays are filled up in a static block below.
   // (As of 1/9/2000, tuplemod_modified_not_missing is used only in
