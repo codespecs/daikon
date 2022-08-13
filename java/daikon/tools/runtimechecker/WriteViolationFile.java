@@ -4,10 +4,12 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import org.checkerframework.checker.signature.qual.BinaryName;
@@ -86,7 +88,8 @@ class WriteViolationFile {
 
       // On-the-fly implementation should flush after each violation is
       // written to disk.
-      try (BufferedWriter writer = Files.newBufferedWriter(Paths.get("violations.txt"), UTF_8)) {
+      Path violationsPath = Paths.get("violations.txt");
+      try (BufferedWriter writer = Files.newBufferedWriter(violationsPath, UTF_8)) {
         writer.write(
             "# Times an invariant was evaluated ----------- "
                 + Long.toString(Runtime.numEvaluations)
@@ -116,7 +119,7 @@ class WriteViolationFile {
           }
         }
       } catch (IOException e) {
-        throw new Error("Problem while writing file violations.txt", e);
+        throw new UncheckedIOException("Problem while writing file " + violationsPath, e);
       }
     }
   }

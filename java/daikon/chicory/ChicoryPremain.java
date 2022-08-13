@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Member;
@@ -218,7 +219,7 @@ public class ChicoryPremain {
       System.exit(1);
       throw new Error("Unreachable control flow");
     } catch (IOException e) {
-      throw new Error(
+      throw new UncheckedIOException(
           "Problem reading purity file " + purityFileName + " = " + purityFile.getAbsolutePath(),
           e);
     }
@@ -232,7 +233,7 @@ public class ChicoryPremain {
       try {
         line = reader.readLine();
       } catch (IOException e) {
-        throw new Error(
+        throw new UncheckedIOException(
             "Error reading file " + purityFileName + " = " + purityFile.getAbsolutePath(), e);
       }
 
