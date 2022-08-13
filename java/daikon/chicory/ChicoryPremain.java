@@ -233,6 +233,11 @@ public class ChicoryPremain {
       try {
         line = reader.readLine();
       } catch (IOException e) {
+        try {
+          reader.close();
+        } catch (IOException e2) {
+          // Do nothing
+        }
         throw new UncheckedIOException(
             "Error reading file " + purityFileName + " = " + purityFileAbsolutePath, e);
       }
