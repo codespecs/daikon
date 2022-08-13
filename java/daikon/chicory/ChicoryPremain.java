@@ -208,20 +208,20 @@ public class ChicoryPremain {
   private static void readPurityFile(File purityFileName, @Nullable File pathLoc) {
     pureMethods = new HashSet<String>();
     File purityFile = new File(pathLoc, purityFileName.getPath());
+    String purityFileAbsolutePath = purityFile.getAbsolutePath();
 
     BufferedReader reader;
     try {
       reader = FilesPlume.newBufferedFileReader(purityFile);
     } catch (FileNotFoundException e) {
       System.err.printf(
-          "%nCould not find purity file %s = %s%n", purityFileName, purityFile.getAbsolutePath());
+          "%nCould not find purity file %s = %s%n", purityFileName, purityFileAbsolutePath);
       Runtime.chicoryLoaderInstantiationError = true;
       System.exit(1);
       throw new Error("Unreachable control flow");
     } catch (IOException e) {
       throw new UncheckedIOException(
-          "Problem reading purity file " + purityFileName + " = " + purityFile.getAbsolutePath(),
-          e);
+          "Problem reading purity file " + purityFileName + " = " + purityFileAbsolutePath, e);
     }
 
     if (verbose) {
