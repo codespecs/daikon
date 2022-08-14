@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import daikon.tools.jtb.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import jtb.*;
@@ -78,7 +79,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor {
         throw new Error(e);
       }
     } catch (IOException e) {
-      throw new Error(e);
+      throw new UncheckedIOException(e);
     }
 
     UngenerifiedTypeCollector ungenerifiedCollector = new UngenerifiedTypeCollector();

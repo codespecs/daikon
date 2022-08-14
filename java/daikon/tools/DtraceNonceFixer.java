@@ -5,6 +5,7 @@ package daikon.tools;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UncheckedIOException;
 import java.util.StringTokenizer;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
@@ -107,7 +108,7 @@ public class DtraceNonceFixer {
         out2.flush();
       }
     } catch (IOException e) {
-      throw new Error(e);
+      throw new UncheckedIOException(e);
     }
   }
 

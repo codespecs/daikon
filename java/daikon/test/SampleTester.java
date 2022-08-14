@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.StreamTokenizer;
 import java.io.StringReader;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -350,7 +351,7 @@ public class SampleTester {
     try {
       ttype = stok.nextToken();
     } catch (IOException e) {
-      throw new Error(e);
+      throw new UncheckedIOException(e);
     }
     if (ttype == TT_WORD || ttype == '"') {
       return stok.sval;
