@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -49,7 +50,7 @@ public class CreateSpinfoC {
         @SuppressWarnings("UnusedVariable") // sets static variables for TranslationUnit()
         CParser parser = new CParser(fis);
       } catch (IOException e) {
-        throw new Error(e);
+        throw new UncheckedIOException("problem reading " + temp, e);
       }
       TranslationUnit root = CParser.TranslationUnit();
       StringFinder finder = new StringFinder();

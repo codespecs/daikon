@@ -192,6 +192,7 @@ public class PptSlice0 extends PptSlice {
     }
 
     // Returns the value of "isSameInvariant()".
+    @SuppressWarnings("AlreadyChecked") // debugging code
     @EnsuresNonNullIf(result = true, expression = "#1")
     @Pure
     @Override
