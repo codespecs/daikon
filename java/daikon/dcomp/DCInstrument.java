@@ -430,11 +430,7 @@ public class DCInstrument extends InstructionListUtils {
           // debug code
           // Instrument.debug_transform.log(stack_trace[i].getClassName() + " : " +
           // stack_trace[i].getMethodName());
-          String st_classname = stack_trace[i].getClassName();
-          if ((st_classname.contains("JUnitCommandLineParseResult") // JUnit4
-                  && stack_trace[i].getMethodName().equals("parse"))
-              || (st_classname.contains("EngineDiscoveryRequestResolution") // JUnit5
-                  && stack_trace[i].getMethodName().equals("resolve"))) {
+          if (is_junit_trigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
             junit_parse_seen = true;
             junit_state = JUnitState.TEST_DISCOVERY;
             break;
@@ -451,11 +447,7 @@ public class DCInstrument extends InstructionListUtils {
           // debug code
           // Instrument.debug_transform.log(stack_trace[i].getClassName() + " : " +
           // stack_trace[i].getMethodName());
-          String st_classname = stack_trace[i].getClassName();
-          if ((st_classname.contains("JUnitCommandLineParseResult") // JUnit4
-                  && stack_trace[i].getMethodName().equals("parse"))
-              || (st_classname.contains("EngineDiscoveryRequestResolution") // JUnit5
-                  && stack_trace[i].getMethodName().equals("resolve"))) {
+          if (is_junit_trigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
             local_junit_parse_seen = true;
             break;
           }
@@ -469,12 +461,14 @@ public class DCInstrument extends InstructionListUtils {
         break;
 
       case RUNNING:
-        stack_trace = Thread.currentThread().getStackTrace();
-        // [0] is getStackTrace
-        for (int i = 1; i < stack_trace.length; i++) {
-          // debug code
-          // Instrument.debug_transform.log(stack_trace[i].getClassName() + " : " +
-          // stack_trace[i].getMethodName());
+        // debug code
+        if (false) {
+          stack_trace = Thread.currentThread().getStackTrace();
+          // [0] is getStackTrace
+          for (int i = 1; i < stack_trace.length; i++) {
+            Instrument.debug_transform.log(
+                "%s : %s", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
+          }
         }
         // nothing to do
         break;
@@ -740,6 +734,23 @@ public class DCInstrument extends InstructionListUtils {
     Instrument.debug_transform.log("Instrumentation complete: %s%n", classname);
 
     return gen.getJavaClass().copy();
+  }
+
+  /**
+   * Returns whether or not the specified classname.method_name is the root of junit startup code.
+   *
+   * @param classname class to be checked
+   * @param method_name to be checked
+   * @return true if classname is trigger
+   */
+  boolean is_junit_trigger(String classname, String method_name) {
+    if ((classname.contains("JUnitCommandLineParseResult") // JUnit4
+            && method_name.equals("parse"))
+        || (classname.contains("EngineDiscoveryRequestResolution") // JUnit5
+            && method_name.equals("resolve"))) {
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -1843,17 +1854,20 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Search interfaces for implementation of target method.
+   * Search the interfaces of a class for an implementation of the target method. For each interface
+   * found, test its methods to see if there is a match for the target method. If not found,
+   * recursively search the interfaces of each method.
    *
    * @param targetClass JavaClass to search
    * @param method_name target method to search for
    * @param arg_types the target method's argument types
    * @return name of class containing target method or null if not found
    */
-  @ClassGetName String search_interfaces(JavaClass targetClass, String method_name, Type[] arg_types) {
+  @Nullable @ClassGetName String search_class_interfaces_for_target_method(
+      JavaClass targetClass, String method_name, Type[] arg_types) {
 
     // debug code
-    // System.out.println("search_interfaces of: " + targetClass.getClassName());
+    // System.out.println("searching interfaces of: " + targetClass.getClassName());
     for (String interfac_temp : targetClass.getInterfaceNames()) {
       @SuppressWarnings("signature:assignment")
       @ClassGetName String interfac = interfac_temp;
@@ -1864,9 +1878,7 @@ public class DCInstrument extends InstructionListUtils {
         // will throw if it can't find or load class
         ji = findJavaClass(interfac);
       } catch (Throwable e) {
-        // debug code
-        System.out.printf("Unable to locate class: %s%n%n", interfac);
-        throw e;
+        throw new Error(String.format("Unable to locate class: %s", interfac), e);
       }
       for (Method jm : ji.getMethods()) {
         // debug code
@@ -1877,7 +1889,7 @@ public class DCInstrument extends InstructionListUtils {
         }
       }
       // no match found; does this interface extend other interfaces?
-      @ClassGetName String found = search_interfaces(ji, method_name, arg_types);
+      @ClassGetName String found = search_class_interfaces_for_target_method(ji, method_name, arg_types);
       if (found != null) {
         // we have a match
         return found;
@@ -2054,7 +2066,8 @@ public class DCInstrument extends InstructionListUtils {
             // no methods match - does this class implement interfaces?
             @ClassGetName String found;
             try {
-              found = search_interfaces(targetClass, method_name, arg_types);
+              found =
+                  search_class_interfaces_for_target_method(targetClass, method_name, arg_types);
             } catch (Throwable e) {
               // We cannot locate or read the .class file, better assume not instrumented.
               callee_instrumented = false;

@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.regex.qual.Regex;
 
 /**
  * This is the main class for DynComp. It uses the -javaagent switch to Java (which allows classes
@@ -234,13 +233,11 @@ public class DynComp {
       }
     }
 
-    @SuppressWarnings("regex:assignment")
-    @Regex String file_separator = System.getProperty("file.separator");
     // If not on the classpath look in ${DAIKONDIR}/java
     String daikon_dir = System.getenv("DAIKONDIR");
     if (premain == null) {
       if (daikon_dir != null) {
-        File poss_premain = new File(daikon_dir + file_separator + "java", "dcomp_premain.jar");
+        File poss_premain = new File(daikon_dir + File.separator + "java", "dcomp_premain.jar");
         if (poss_premain.canRead()) {
           premain = poss_premain;
         }
@@ -283,7 +280,7 @@ public class DynComp {
       // If not on the classpath look in ${DAIKONDIR}/java
       if (rt_file == null) {
         if (daikon_dir != null) {
-          File poss_rt = new File(daikon_dir + file_separator + "java", "dcomp_rt.jar");
+          File poss_rt = new File(daikon_dir + File.separator + "java", "dcomp_rt.jar");
           if (poss_rt.canRead()) rt_file = poss_rt;
         }
       }
@@ -307,15 +304,14 @@ public class DynComp {
     String[] cpaths = cp.split(path_separator);
     for (int i = 0; i < cpaths.length; i++) {
       if (cpaths[i].contains("groovy")) {
-        String[] path_elements = cpaths[i].split(file_separator);
+        @SuppressWarnings("regex:argument")
+        String[] path_elements = cpaths[i].split(File.separator);
         if (path_elements[path_elements.length - 1].matches("^groovy.*\\.jar$")) {
           cpaths[i] = "";
         }
       }
     }
     String boot_path = String.join(path_separator, cpaths);
-    // debug code
-    // System.out.println(boot_path);
 
     // Build the command line to execute the target with the javaagent
     List<String> cmdlist = new ArrayList<>();
