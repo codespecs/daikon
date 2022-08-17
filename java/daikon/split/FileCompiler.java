@@ -3,6 +3,7 @@ package daikon.split;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -170,7 +171,7 @@ public final class FileCompiler {
     try {
       executor.execute(cmdLine, resultHandler);
     } catch (IOException e) {
-      throw new Error("exception starting process", e);
+      throw new UncheckedIOException("exception starting process: " + cmdLine, e);
     }
 
     int exitValue = -1;

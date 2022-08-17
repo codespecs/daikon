@@ -3,6 +3,7 @@ package daikon.split;
 import daikon.split.misc.CallerContextSplitter;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -63,7 +64,7 @@ public class ContextSplitterFactory {
         MapfileEntry[] entries = parse_mapfile(file);
         splitters = make_context_splitters(entries, grain);
       } catch (IOException e) {
-        throw new Error(e);
+        throw new UncheckedIOException("problem reading " + file, e);
       }
 
       for (int j = 0; j < splitters.length; j++) {

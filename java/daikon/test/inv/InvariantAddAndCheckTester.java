@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
@@ -173,7 +174,7 @@ public class InvariantAddAndCheckTester {
     try (LineNumberReader commandReader = getCommands()) {
       output = performTest(commandReader);
     } catch (IOException e) {
-      throw new Error(e);
+      throw new UncheckedIOException(e);
     }
 
     if (output == null) { // no errors
@@ -356,6 +357,7 @@ public class InvariantAddAndCheckTester {
      * @return a String containing the proper add and check commands for this input lines of this
      *     test case
      */
+    @SuppressWarnings("UnusedMethod")
     public static @Nullable String generateTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, true);
       if (endOfFile) {

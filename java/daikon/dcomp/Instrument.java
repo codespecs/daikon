@@ -165,9 +165,6 @@ public class Instrument implements ClassFileTransformer {
 
     // Parse the bytes of the classfile, die on any errors
     try (ByteArrayInputStream bais = new ByteArrayInputStream(classfileBuffer)) {
-      @SuppressWarnings("builder:required.method.not.called" // Resource Leak Checker bug, I think.
-      // I was not able to reproduce this in a small test case.
-      )
       ClassParser parser = new ClassParser(bais, className);
 
       JavaClass c = parser.parse();

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.UncheckedIOException;
 import java.lang.instrument.ClassDefinition;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
@@ -357,15 +358,15 @@ public class Premain {
     try {
       canonicalFile = filename.getCanonicalFile();
     } catch (IOException e) {
-      throw new Error(
-          "Can't get canonical file for " + filename + " in " + System.getProperty("user.dir"));
+      throw new UncheckedIOException(
+          "Can't get canonical file for " + filename + " in " + System.getProperty("user.dir"), e);
     }
 
     // I don't know why, but without this, the call to newBufferedWriter fails in some contexts.
     try {
       canonicalFile.createNewFile();
     } catch (IOException e) {
-      throw new Error("createNewFile failed for " + canonicalFile, e);
+      throw new UncheckedIOException("createNewFile failed for " + canonicalFile, e);
     }
 
     try {

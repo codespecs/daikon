@@ -12,6 +12,7 @@ import daikon.inv.unary.stringsequence.OneOfStringSequence;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -107,7 +108,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         this.javaFileLines.add(line);
       }
     } catch (IOException e) {
-      throw new Error(e);
+      throw new UncheckedIOException("problem reading " + javafilename, e);
     }
 
     this.ppts = ppts;

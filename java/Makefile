@@ -696,7 +696,7 @@ endif
 
 # See version numbers at https://github.com/google/error-prone/releases
 # and https://errorprone.info/docs/installation .
-ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.10.0-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.15.0.jar:${DAIKONDIR}/java/lib/error-prone/javacutil-3.1.1.jar:${DAIKONDIR}/java/lib/error-prone/jFormatString-3.0.0.jar:${DAIKONDIR}/java/lib/error-prone/caffeine-2.8.4.jar:${DAIKONDIR}/java/lib/error-prone/diffutils-1.3.0.jar:${DAIKONDIR}/java/lib/error-prone/threeten-extra-1.5.0.jar
+ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.15.0-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.15.0.jar
 
 JAVAC_ANNOTATION_PROCESSOR_ARGS ?= \
 	-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
@@ -717,11 +717,11 @@ errorprone-nocompile:
 ifeq ($(JAVA8), 1)
 	echo "Error Prone is not run under Java 8"
 else
-## MutablePublicArray is off because Error Prone 2.4.0 crashes: https://github.com/google/error-prone/issues/1645
+## MutablePublicArray is off because it suggests a dependency on Google Guava.
 	javac -cp ${DAIKON_CLASSPATH} \
 	  ${JAVAC_ANNOTATION_PROCESSOR_ARGS} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
-	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF' \
+	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:ExtendsObject:OFF' \
 	  -Xmaxwarns 100000 -Werror \
 	  ${JAVA_FILES_FOR_STYLE}
 endif

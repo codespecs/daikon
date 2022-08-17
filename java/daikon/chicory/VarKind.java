@@ -14,4 +14,4 @@ public enum VarKind {
   ARRAY,
   VARIABLE,
   RETURN
-};
+}
