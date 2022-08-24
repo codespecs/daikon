@@ -51,8 +51,8 @@ import typequals.prototype.qual.Prototype;
  *
  * <p>Each command line is starts with a command: "add:" or "check:". Following the command comes
  * the arguments to be checked or added to the invariant. These arguments should be in the same
- * format as in a dtrace file. Next comes the the InvariantStatus that is expected to be returned by
- * the check or add command on checking or adding the arguments. Finally, the expected format of the
+ * format as in a dtrace file. Next comes the InvariantStatus that is expected to be returned by the
+ * check or add command on checking or adding the arguments. Finally, the expected format of the
  * Invariant after checking or adding the arguments is included. (The format of the invariant is
  * given by "Invariant.format_using(OutputFormat.DAIKON)")
  *

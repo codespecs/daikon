@@ -19,8 +19,8 @@ class ReplaceStatementMap {
   /**
    * Creates a new instance of ReplaceStatementMap of the replaceStatements of replaceStatements.
    *
-   * @param replaceStatements a list of ReplaceStatements that specifies the the ReplaceStatements
-   *     of this
+   * @param replaceStatements a list of ReplaceStatements that specifies the ReplaceStatements of
+   *     this
    */
   ReplaceStatementMap(List<ReplaceStatement> replaceStatements) {
     map = new HashMap<>();

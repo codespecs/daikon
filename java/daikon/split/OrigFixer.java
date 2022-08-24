@@ -126,7 +126,7 @@ class OrigFixer extends DepthFirstVisitor {
     lastToken = n;
   }
 
-  /** Returns if the the last token represents a variable name. */
+  /** Returns if the last token represents a variable name. */
   @EnsuresNonNullIf(result = true, expression = "lastToken")
   @Pure
   private boolean isLastTokenVar(NodeToken n) {

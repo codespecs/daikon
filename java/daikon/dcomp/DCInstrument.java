@@ -3722,7 +3722,7 @@ public class DCInstrument extends InstructionListUtils {
     int offset = field_map.size();
 
     // Determine the offset for each primitive field in the class
-    // Also make sure the the static_tags list is large enough for
+    // Also make sure the static_tags list is large enough for
     // of the tags.
     for (Field f : jc.getFields()) {
       if (!is_primitive(f.getType())) {
