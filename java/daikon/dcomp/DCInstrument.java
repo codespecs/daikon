@@ -2293,7 +2293,7 @@ public class DCInstrument extends InstructionListUtils {
     }
   }
 
-  /** JavaClass cache. */
+  /** Cache for {@link #findJavaClass} method. */
   private static Map<String, JavaClass> javaClasses = new ConcurrentHashMap<String, JavaClass>();
 
   /**
@@ -2304,14 +2304,12 @@ public class DCInstrument extends InstructionListUtils {
    * <p>Given a class name, we treat it as a system resource and try to open it as an input stream
    * that we can pass to BCEL to read and convert to a JavaClass object.
    *
-   * @param classname the fully qualified name of the class in binary form. E.g., "java.util.List"
-   * @return JavaClass of the corresponding classname or null
+   * @param classname the fully qualified name of the class in binary form, e.g., "java.util.List"
+   * @return the JavaClass of the corresponding classname or null
    */
-  JavaClass findJavaClass(String classname) {
-    // check the JavaClass cache
-    JavaClass c = javaClasses.get(classname);
-    if (c != null) {
-      return c;
+  @Nullable JavaClass findJavaClass(String classname) {
+    if (javaClasses.containsKey(classname)) {
+      return javaClasses.get(classname);
     }
 
     URL class_url = ClassLoader.getSystemResource(classname.replace('.', '/') + ".class");
@@ -2321,14 +2319,15 @@ public class DCInstrument extends InstructionListUtils {
         if (inputStream != null) {
           // Parse the bytes of the classfile, die on any errors
           ClassParser parser = new ClassParser(inputStream, classname + "<internal>");
-          c = parser.parse();
-          javaClasses.put(classname, c);
-          return c;
+          JavaClass result = parser.parse();
+          javaClasses.put(classname, result);
+          return result;
         }
       } catch (Throwable t) {
         throw new Error("Unexpected error reading " + class_url, t);
       }
     }
+    javaClasses.put(classname, null);
     return null;
   }
 
