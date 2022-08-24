@@ -446,9 +446,8 @@ public class BuildJDK {
       dcomp_class
           .getJavaClass()
           .dump(
-              new File(
-                  destDir,
-                  "java" + File.separator + "lang" + File.separator + className + ".class"));
+              // Path.of exists in Java 11 and later.
+              new File(new File(new File(destDir, "java"), "lang"), className + ".class"));
     } catch (Exception e) {
       throw new Error(e);
     }

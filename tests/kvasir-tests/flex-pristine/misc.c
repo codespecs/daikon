@@ -705,7 +705,7 @@ const char str[];
 	}
 
 
-/* readable_form - return the the human-readable form of a character
+/* readable_form - return the human-readable form of a character
  *
  * The returned string is in static storage.
  */

@@ -312,8 +312,7 @@ public class Chicory {
     String daikon_dir = System.getenv("DAIKONDIR");
     if (premain == null) {
       if (daikon_dir != null) {
-        String file_separator = System.getProperty("file.separator");
-        File poss_premain = new File(daikon_dir + file_separator + "java", "ChicoryPremain.jar");
+        File poss_premain = new File(new File(daikon_dir, "java"), "ChicoryPremain.jar");
         if (poss_premain.canRead()) {
           premain = poss_premain;
         }

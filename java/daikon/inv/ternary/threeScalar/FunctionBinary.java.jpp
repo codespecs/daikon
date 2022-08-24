@@ -345,7 +345,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   /**
    * Reorganize our already-seen state as if the variables had shifted order underneath us
    * (re-arrangement given by the permutation). We accomplish this by returning the class that
-   * corresponds to the the new permutation.
+   * corresponds to the new permutation.
    */
   @Override
   protected Invariant resurrect_done(int[] permutation) {

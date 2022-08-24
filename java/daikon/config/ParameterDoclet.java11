@@ -296,7 +296,7 @@ public class ParameterDoclet implements Doclet {
               "Splitter options",
               new String[] {
                 "@cindex Splitters, configuring",
-                "The configuration options in this section are used to customize the the behavior"
+                "The configuration options in this section are used to customize the behavior"
                     + " of splitters,",
                 "which yield conditional invariants and implications"
                     + " (@pxref{Conditional invariants})."
