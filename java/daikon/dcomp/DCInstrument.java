@@ -737,11 +737,11 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not the specified classname.method_name is the root of junit startup code.
+   * Returns true if the specified classname.method_name is the root of JUnit startup code.
    *
    * @param classname class to be checked
    * @param method_name to be checked
-   * @return true if classname is trigger
+   * @return true if the given method is a JUnit trigger
    */
   boolean is_junit_trigger(String classname, String method_name) {
     if ((classname.contains("JUnitCommandLineParseResult") // JUnit4

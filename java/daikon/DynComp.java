@@ -237,7 +237,7 @@ public class DynComp {
     String daikon_dir = System.getenv("DAIKONDIR");
     if (premain == null) {
       if (daikon_dir != null) {
-        File poss_premain = new File(daikon_dir + File.separator + "java", "dcomp_premain.jar");
+        File poss_premain = new File(new File(daikon_dir, "java"), "dcomp_premain.jar");
         if (poss_premain.canRead()) {
           premain = poss_premain;
         }
@@ -280,7 +280,7 @@ public class DynComp {
       // If not on the classpath look in ${DAIKONDIR}/java
       if (rt_file == null) {
         if (daikon_dir != null) {
-          File poss_rt = new File(daikon_dir + File.separator + "java", "dcomp_rt.jar");
+          File poss_rt = new File(new File(daikon_dir, "java"), "dcomp_rt.jar");
           if (poss_rt.canRead()) rt_file = poss_rt;
         }
       }
