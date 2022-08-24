@@ -981,7 +981,7 @@ copy_array (ary)
 
 /* A call is being made to FUNC.  The call types are at PC.  Process
    the parameters by doing an auto on the parameter variable and then
-   store the value at the new variable or put a pointer the the array
+   store the value at the new variable or put a pointer the array
    variable. */
 
 void

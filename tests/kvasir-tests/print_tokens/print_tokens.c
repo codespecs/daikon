@@ -174,7 +174,7 @@ string FILENAME;
                    token_stream.The type of token is integer and specifies 
                    only the type of the token. DFA is used for finding the
                    next token. cu_state is initialized to zero and charcter
-                   are read until the the is the final state and it
+                   are read until the is the final state and it
                    returns the token type.
 * ******************************************************************* */
 
