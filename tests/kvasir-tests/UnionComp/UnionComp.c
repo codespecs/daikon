@@ -5,7 +5,7 @@
 // with regards to Kvasir's handling of Unions. Kvasir
 // will treat all members of a valid union as valid themselves.
 // This becomes problematic in the case of a char*, in which
-// it will read from the the beginning of the memory region
+// it will read from the beginning of the memory region
 // pointed to until the first 00 byte. This continuous reading
 // of a memory region causes all variable comparabilities to
 // be merged.

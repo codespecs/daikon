@@ -558,7 +558,7 @@ update-doc-dist-version:
 # This is done immediately after releasing a new version; thus, VERSION
 # refers to the next version to be released, not the previously-released one.
 # (Tip: If you want the next version to end with ".0", then before running
-# this target you can set the the last element of VERSION to "-1".)
+# this target you can set the last element of VERSION to "-1".)
 update-dist-version-file:
 	@perl -wpi -e 's/\.(-?[0-9]+)$$/"." . ($$1+1)/e' doc/VERSION
 	@echo -n "doc/VERSION now contains: "

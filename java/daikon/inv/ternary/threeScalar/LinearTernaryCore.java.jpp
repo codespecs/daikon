@@ -593,7 +593,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   }
 
   /**
-   * Attempts to fit the points in def_point to a line and calculates the the corresponding line
+   * Attempts to fit the points in def_point to a line and calculates the corresponding line
    * classification (line_flag) and coefficients (coefficients[]) if possible. If not (points in
    * def_point form a plane) resets line_flag to Flag.NO_LINE and coefficients[] elements to -999.
    *

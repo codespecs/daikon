@@ -209,7 +209,7 @@ public class DynComp {
       cp = ".";
     }
 
-    // The the separator for items in the class path
+    // The separator for items in the class path
     String path_separator = System.getProperty("path.separator");
     basic.log("path_separator = %s%n", path_separator);
     if (!RegexUtil.isRegex(path_separator)) {

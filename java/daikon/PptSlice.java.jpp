@@ -112,7 +112,7 @@ public final class PPTSLICE1 extends PptSlice {
     return ARITY;
   }
   /**
-   * Creates all of the the invariants that are appropriate for this slice. No invariants are
+   * Creates all of the invariants that are appropriate for this slice. No invariants are
    * created unless the variables in the slice are compatible. If the variables are compatible,
    * invariants that match the type of the slices variables are created.
    */
@@ -122,7 +122,7 @@ public final class PPTSLICE1 extends PptSlice {
   }
 
   /**
-   * Creates all of the the invariants that are appropriate for this slice based on the list of
+   * Creates all of the invariants that are appropriate for this slice based on the list of
    * invariants passed in. No invariants are created unless the variables in the slice are
    * compatible. If the variables are compatible, invariants that match the type of the slices
    * variables are created.
