@@ -410,7 +410,7 @@ public class DCInstrument extends InstructionListUtils {
     // We must also remember the class name so if we see a subsequent
     // call to one of its methods we do not add the dcomp argument.
 
-    debug_instrument.log("junit_state: %s%n", junit_state);
+    Instrument.debug_transform.log("junit_state: %s%n", junit_state);
 
     StackTraceElement[] stack_trace;
 
@@ -463,7 +463,7 @@ public class DCInstrument extends InstructionListUtils {
         throw new Error("invalid junit_state");
     }
 
-    debug_instrument.log("junit_state: %s%n", junit_state);
+    Instrument.debug_transform.log("junit_state: %s%n", junit_state);
 
     boolean junit_test_class = false;
     if (junit_state == JUnitState.TEST_DISCOVERY) {
@@ -525,9 +525,9 @@ public class DCInstrument extends InstructionListUtils {
       }
 
       if (junit_test_class) {
-        debug_instrument.log("JUnit test class: %s%n", classname);
+        Instrument.debug_transform.log("JUnit test class: %s%n", classname);
       } else {
-        debug_instrument.log("Not a JUnit test class: %s%n", classname);
+        Instrument.debug_transform.log("Not a JUnit test class: %s%n", classname);
       }
     }
 
@@ -3748,7 +3748,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   void add_dcomp_interface(ClassGen gen) {
     gen.addInterface(instrumentation_interface);
-    Instrument.debug_transform.log("Added interface DCompInstrumented%n");
+    debug_instrument.log("Added interface DCompInstrumented%n");
 
     InstructionList il = new InstructionList();
     int access_flags = Const.ACC_PUBLIC;
