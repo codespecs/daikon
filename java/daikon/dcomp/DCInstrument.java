@@ -2308,8 +2308,9 @@ public class DCInstrument extends InstructionListUtils {
    * @return the JavaClass of the corresponding classname or null
    */
   @Nullable JavaClass findJavaClass(String classname) {
-    if (javaClasses.containsKey(classname)) {
-      return javaClasses.get(classname);
+    JavaClass cached = javaClasses.get(classname);
+    if (cached != null) {
+      return cached;
     }
 
     URL class_url = ClassLoader.getSystemResource(classname.replace('.', '/') + ".class");
@@ -2327,7 +2328,7 @@ public class DCInstrument extends InstructionListUtils {
         throw new Error("Unexpected error reading " + class_url, t);
       }
     }
-    javaClasses.put(classname, null);
+    // Do not cache a null result, because a subsequent invocation might return non-null.
     return null;
   }
 
@@ -3907,7 +3908,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   void add_dcomp_interface(ClassGen gen) {
     gen.addInterface(instrumentation_interface);
-    Instrument.debug_transform.log("Added interface DCompInstrumented%n");
+    debug_instrument.log("Added interface DCompInstrumented%n");
 
     InstructionList il = new InstructionList();
     int access_flags = Const.ACC_PUBLIC;
