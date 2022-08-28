@@ -30,6 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import org.apache.bcel.Const;
 import org.apache.bcel.classfile.AnnotationEntry;
@@ -2144,6 +2145,9 @@ public class DCInstrument extends InstructionListUtils {
     }
   }
 
+  /** Cache for {@link #findJavaClass} method. */
+  private static Map<String, JavaClass> javaClasses = new ConcurrentHashMap<String, JavaClass>();
+
   /**
    * There are times when it is useful to inspect a class file other than the one we are currently
    * instrumenting. Note we cannot use classForName to do this as it might trigger a recursive call
@@ -2152,10 +2156,15 @@ public class DCInstrument extends InstructionListUtils {
    * <p>Given a class name, we treat it as a system resource and try to open it as an input stream
    * that we can pass to BCEL to read and convert to a JavaClass object.
    *
-   * @param classname the fully qualified name of the class in binary form. E.g., "java.util.List"
-   * @return JavaClass of the corresponding classname or null
+   * @param classname the fully qualified name of the class in binary form, e.g., "java.util.List"
+   * @return the JavaClass of the corresponding classname or null
    */
-  JavaClass findJavaClass(String classname) {
+  @Nullable JavaClass findJavaClass(String classname) {
+    JavaClass cached = javaClasses.get(classname);
+    if (cached != null) {
+      return cached;
+    }
+
     URL class_url = ClassLoader.getSystemResource(classname.replace('.', '/') + ".class");
     if (class_url != null) {
       try {
@@ -2163,12 +2172,15 @@ public class DCInstrument extends InstructionListUtils {
         if (inputStream != null) {
           // Parse the bytes of the classfile, die on any errors
           ClassParser parser = new ClassParser(inputStream, classname + "<internal>");
-          return parser.parse();
+          JavaClass result = parser.parse();
+          javaClasses.put(classname, result);
+          return result;
         }
       } catch (Throwable t) {
         throw new Error("Unexpected error reading " + class_url, t);
       }
     }
+    // Do not cache a null result, because a subsequent invocation might return non-null.
     return null;
   }
 
