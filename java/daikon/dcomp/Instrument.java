@@ -25,7 +25,10 @@ public class Instrument implements ClassFileTransformer {
   /** Have we seen a class member of a known transformer? */
   static boolean transformer_seen = false;
 
-  /** Debug information about which classes are transformed and why. */
+  /**
+   * Debug information about which classes and/or methods are transformed and why. Use
+   * debug_instrument for actual instrumentation details.
+   */
   private static SimpleLog debug_transform = new SimpleLog(false);
 
   /** Instrument class constructor. Setup debug directories, if needed. */
@@ -165,9 +168,6 @@ public class Instrument implements ClassFileTransformer {
 
     // Parse the bytes of the classfile, die on any errors
     try (ByteArrayInputStream bais = new ByteArrayInputStream(classfileBuffer)) {
-      @SuppressWarnings("builder:required.method.not.called" // Resource Leak Checker bug, I think.
-      // I was not able to reproduce this in a small test case.
-      )
       ClassParser parser = new ClassParser(bais, className);
 
       JavaClass c = parser.parse();

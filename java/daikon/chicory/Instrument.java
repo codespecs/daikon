@@ -191,9 +191,6 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // Parse the bytes of the classfile, die on any errors
     JavaClass c;
     try (ByteArrayInputStream bais = new ByteArrayInputStream(classfileBuffer)) {
-      @SuppressWarnings("builder:required.method.not.called" // Resource Leak Checker bug, I think.
-      // I was not able to reproduce this in a small test case.
-      )
       ClassParser parser = new ClassParser(bais, className);
       c = parser.parse();
     } catch (Exception e) {
@@ -1167,15 +1164,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /** Any information needed by InstTransform routines about the method and class. */
   private static class MethodContext {
 
-    public ClassGen cg;
-    public ConstantPoolGen cpg;
     public InstructionFactory ifact;
     public MethodGen mgen;
 
     public MethodContext(ClassGen cg, MethodGen mgen) {
-      this.cg = cg;
       ifact = new InstructionFactory(cg);
-      cpg = cg.getConstantPool();
       this.mgen = mgen;
     }
   }

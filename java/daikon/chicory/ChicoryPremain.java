@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Member;
@@ -207,20 +208,20 @@ public class ChicoryPremain {
   private static void readPurityFile(File purityFileName, @Nullable File pathLoc) {
     pureMethods = new HashSet<String>();
     File purityFile = new File(pathLoc, purityFileName.getPath());
+    String purityFileAbsolutePath = purityFile.getAbsolutePath();
 
     BufferedReader reader;
     try {
       reader = FilesPlume.newBufferedFileReader(purityFile);
     } catch (FileNotFoundException e) {
       System.err.printf(
-          "%nCould not find purity file %s = %s%n", purityFileName, purityFile.getAbsolutePath());
+          "%nCould not find purity file %s = %s%n", purityFileName, purityFileAbsolutePath);
       Runtime.chicoryLoaderInstantiationError = true;
       System.exit(1);
       throw new Error("Unreachable control flow");
     } catch (IOException e) {
-      throw new Error(
-          "Problem reading purity file " + purityFileName + " = " + purityFile.getAbsolutePath(),
-          e);
+      throw new UncheckedIOException(
+          "Problem reading purity file " + purityFileName + " = " + purityFileAbsolutePath, e);
     }
 
     if (verbose) {
@@ -232,8 +233,13 @@ public class ChicoryPremain {
       try {
         line = reader.readLine();
       } catch (IOException e) {
-        throw new Error(
-            "Error reading file " + purityFileName + " = " + purityFile.getAbsolutePath(), e);
+        try {
+          reader.close();
+        } catch (IOException e2) {
+          // Do nothing
+        }
+        throw new UncheckedIOException(
+            "Error reading file " + purityFileName + " = " + purityFileAbsolutePath, e);
       }
 
       if (line != null) {

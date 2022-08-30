@@ -4,6 +4,7 @@ package daikon.tools;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -83,7 +84,7 @@ public class DtracePartitioner implements Closeable, Partitioner<String, String>
         return ret;
       }
     } catch (IOException e) {
-      throw new Error(e);
+      throw new UncheckedIOException(e);
     }
   }
 
@@ -200,7 +201,7 @@ public class DtracePartitioner implements Closeable, Partitioner<String, String>
       return al;
 
     } catch (IOException e) {
-      throw new Error(e);
+      throw new UncheckedIOException(e);
     }
   }
 

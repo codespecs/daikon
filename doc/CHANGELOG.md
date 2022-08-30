@@ -19,14 +19,18 @@ Further documentation can be found in:
    It is also available at http://plse.cs.washington.edu/daikon/download/api/ .
 
 
-Version 5.8.14 (?? ??, ??)
+Version 5.8.14 (??? ??, 2022)
 =================================
 
 All Daikon tools now work with Java 18.
 
+Bug fixes and implementation details:
+ * Valgrind update from 3.17.0 to 3.19.0.
+ * Binutils update from 2.37 to 2.39.
+
 
 Version 5.8.12 (July 14, 2022)
-=================================
+==============================
 
 All Daikon tools now work with Java 17.
 Javadoc Doclets are supported for Java 8, 11 and 17.

@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
@@ -50,8 +51,8 @@ import typequals.prototype.qual.Prototype;
  *
  * <p>Each command line is starts with a command: "add:" or "check:". Following the command comes
  * the arguments to be checked or added to the invariant. These arguments should be in the same
- * format as in a dtrace file. Next comes the the InvariantStatus that is expected to be returned by
- * the check or add command on checking or adding the arguments. Finally, the expected format of the
+ * format as in a dtrace file. Next comes the InvariantStatus that is expected to be returned by the
+ * check or add command on checking or adding the arguments. Finally, the expected format of the
  * Invariant after checking or adding the arguments is included. (The format of the invariant is
  * given by "Invariant.format_using(OutputFormat.DAIKON)")
  *
@@ -173,7 +174,7 @@ public class InvariantAddAndCheckTester {
     try (LineNumberReader commandReader = getCommands()) {
       output = performTest(commandReader);
     } catch (IOException e) {
-      throw new Error(e);
+      throw new UncheckedIOException(e);
     }
 
     if (output == null) { // no errors
@@ -356,6 +357,7 @@ public class InvariantAddAndCheckTester {
      * @return a String containing the proper add and check commands for this input lines of this
      *     test case
      */
+    @SuppressWarnings("UnusedMethod")
     public static @Nullable String generateTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, true);
       if (endOfFile) {

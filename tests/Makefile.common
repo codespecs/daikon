@@ -377,9 +377,10 @@ clean-output:
 	@echo
 	@echo "### clean-output (${PROJECT_FILE})"
 	@echo
-	rm -f *.bak *.diff ${PROJECT_FILE}.{inv.gz,spinfo.inv.gz,decls-DynComp{,-nojdk},txt{,-merge}-{chicory,daikon{,-end2end},simplify,logicalcompare,csharpcontract,esc,jml,cset{,-nojdk},daikon-suppress,daikon-suppress-diffed,jaif,trace{,-nojdk}}{,-failed},esc,stats,spinfo-static}
+	rm -f *.bak *.class *.diff
 	rm -rf merged *txt-chicory.dtrace rtc-violations.txt
-	rm -f *.bak *.diff ${PROJECT_FILE}-suppress.inv.gz ${PROJECT_FILE}-jaif.inv.gz
+	rm -f ${PROJECT_FILE}.{inv.gz,spinfo.inv.gz,decls-DynComp{,-nojdk},txt{,-merge}-{chicory,daikon{,-end2end},simplify,logicalcompare,csharpcontract,esc,jml,cset{,-nojdk},daikon-suppress,daikon-suppress-diffed,jaif,trace{,-nojdk}}{,-failed},esc,stats,spinfo-static}
+	rm -f ${PROJECT_FILE}-suppress.inv.gz ${PROJECT_FILE}-jaif.inv.gz
 ifeq (csv,${STORED_TRACE_FORMAT})
 	rm -f ${PROJECT_FILE}.dtrace.gz ${PROJECT_FILE}.decls
 endif

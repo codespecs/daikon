@@ -30,6 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import org.apache.bcel.Const;
 import org.apache.bcel.classfile.AnnotationEntry;
@@ -410,7 +411,7 @@ public class DCInstrument extends InstructionListUtils {
     // We must also remember the class name so if we see a subsequent
     // call to one of its methods we do not add the dcomp argument.
 
-    debug_instrument.log("junit_state: %s%n", junit_state);
+    Instrument.debug_transform.log("junit_state: %s%n", junit_state);
 
     StackTraceElement[] stack_trace;
 
@@ -463,7 +464,7 @@ public class DCInstrument extends InstructionListUtils {
         throw new Error("invalid junit_state");
     }
 
-    debug_instrument.log("junit_state: %s%n", junit_state);
+    Instrument.debug_transform.log("junit_state: %s%n", junit_state);
 
     boolean junit_test_class = false;
     if (junit_state == JUnitState.TEST_DISCOVERY) {
@@ -525,9 +526,9 @@ public class DCInstrument extends InstructionListUtils {
       }
 
       if (junit_test_class) {
-        debug_instrument.log("JUnit test class: %s%n", classname);
+        Instrument.debug_transform.log("JUnit test class: %s%n", classname);
       } else {
-        debug_instrument.log("Not a JUnit test class: %s%n", classname);
+        Instrument.debug_transform.log("Not a JUnit test class: %s%n", classname);
       }
     }
 
@@ -1813,7 +1814,7 @@ public class DCInstrument extends InstructionListUtils {
 
   /**
    * Discards primitive tags for each primitive argument to a non-instrumented method and adds a tag
-   * for a primitive return value. Insures that the tag stack is correct for non-instrumented
+   * for a primitive return value. Ensures that the tag stack is correct for non-instrumented
    * methods.
    */
   InstructionList handle_invoke(InvokeInstruction invoke) {
@@ -1821,16 +1822,15 @@ public class DCInstrument extends InstructionListUtils {
 
     // Get information about the call
     String method_name = invoke.getMethodName(pool);
-    String classname = null;
+    @ClassGetName String classname = null;
     Type ret_type = invoke.getReturnType(pool);
     Type[] arg_types = invoke.getArgumentTypes(pool);
 
     InstructionList il = new InstructionList();
 
     if (invoke instanceof INVOKEDYNAMIC) {
-      // we don't instrument lambda methods
-      // BUG: BCEL doesn't know how to get classname from an
-      // INVOKEDYNAMIC instruction.
+      // We don't instrument lambda methods.
+      // BUG: BCEL doesn't know how to get classname from an INVOKEDYNAMIC instruction.
       // debug code
       // System.out.printf("invokedynamic NOT the classname: %s%n", invoke.getClassName(pool));
       callee_instrumented = false;
@@ -1857,17 +1857,17 @@ public class DCInstrument extends InstructionListUtils {
       //   calls to functional interfaces
       //
       // Annotation classes are never instrumented so we must set
-      // the callee_instrumented flag false.
+      // the callee_instrumented flag to false.
       //
       // Functional interfaces are a bit more complicated. These are primarily (only?)
       // used by Lambda functions.  Lambda methods are generated dynamically at
       // run time via the InvokeDynamic instruction.  They are not seen by our
       // ClassFileTransformer so are never instrumented.  Thus we must set the
-      // callee_instrumented flag false when we see a call to a Lambda method.
+      // callee_instrumented flag to false when we see a call to a Lambda method.
       // The heuristic we use is to assume that any InvokeInterface or InvokeVirtual
       // call to a functional interface is a call to a Lambda method.
       //
-      // The java compiler detects functional interfaces automatically, but the
+      // The Java compiler detects functional interfaces automatically, but the
       // user can declare their intent with the @FunctionInterface annotation.
       // The Java runtime is annotated in this manner.  Hence, we look for this
       // annotation to detect a call to a functional interface.  In practice, we
@@ -1878,12 +1878,11 @@ public class DCInstrument extends InstructionListUtils {
       // interface to ANNOTATION in our class_access_map.
       //
       if (invoke instanceof INVOKEINTERFACE || invoke instanceof INVOKEVIRTUAL) {
-        // Check to see if we have seen this class before.
         Integer access = class_access_map.get(classname);
         if (access == null) {
           // We have not seen this class before. Check to see if the target class is
           // an Annotation or a FunctionalInterface.
-          JavaClass c = findJavaClass(classname);
+          JavaClass c = getJavaClass(classname);
           if (c != null) {
             access = c.getAccessFlags();
 
@@ -2136,13 +2135,16 @@ public class DCInstrument extends InstructionListUtils {
    * @return superclass name of classname or null if there is an error
    */
   String getSuperclassName(String classname) {
-    JavaClass jc = findJavaClass(classname);
+    JavaClass jc = getJavaClass(classname);
     if (jc != null) {
       return jc.getSuperclassName();
     } else {
       return null;
     }
   }
+
+  /** Cache for {@link #getJavaClass} method. */
+  private static Map<String, JavaClass> javaClasses = new ConcurrentHashMap<String, JavaClass>();
 
   /**
    * There are times when it is useful to inspect a class file other than the one we are currently
@@ -2152,10 +2154,15 @@ public class DCInstrument extends InstructionListUtils {
    * <p>Given a class name, we treat it as a system resource and try to open it as an input stream
    * that we can pass to BCEL to read and convert to a JavaClass object.
    *
-   * @param classname the fully qualified name of the class in binary form. E.g., "java.util.List"
-   * @return JavaClass of the corresponding classname or null
+   * @param classname the fully qualified name of the class in binary form, e.g., "java.util.List"
+   * @return the JavaClass of the corresponding classname or null
    */
-  JavaClass findJavaClass(String classname) {
+  @Nullable JavaClass getJavaClass(String classname) {
+    JavaClass cached = javaClasses.get(classname);
+    if (cached != null) {
+      return cached;
+    }
+
     URL class_url = ClassLoader.getSystemResource(classname.replace('.', '/') + ".class");
     if (class_url != null) {
       try {
@@ -2163,12 +2170,15 @@ public class DCInstrument extends InstructionListUtils {
         if (inputStream != null) {
           // Parse the bytes of the classfile, die on any errors
           ClassParser parser = new ClassParser(inputStream, classname + "<internal>");
-          return parser.parse();
+          JavaClass result = parser.parse();
+          javaClasses.put(classname, result);
+          return result;
         }
       } catch (Throwable t) {
         throw new Error("Unexpected error reading " + class_url, t);
       }
     }
+    // Do not cache a null result, because a subsequent invocation might return non-null.
     return null;
   }
 
@@ -3563,7 +3573,7 @@ public class DCInstrument extends InstructionListUtils {
     int offset = field_map.size();
 
     // Determine the offset for each primitive field in the class
-    // Also make sure the the static_tags list is large enough for
+    // Also make sure the static_tags list is large enough for
     // of the tags.
     for (Field f : jc.getFields()) {
       if (!is_primitive(f.getType())) {
@@ -3748,7 +3758,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   void add_dcomp_interface(ClassGen gen) {
     gen.addInterface(instrumentation_interface);
-    Instrument.debug_transform.log("Added interface DCompInstrumented%n");
+    debug_instrument.log("Added interface DCompInstrumented%n");
 
     InstructionList il = new InstructionList();
     int access_flags = Const.ACC_PUBLIC;

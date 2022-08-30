@@ -254,7 +254,12 @@ public abstract class Derivation implements Serializable, Cloneable {
     return 1;
   }
 
-  /** Returns a string that corresponds to the the specified shift. */
+  /**
+   * Returns a string that corresponds to the specified shift.
+   *
+   * @param shift how much to shift the string
+   * @return the shifted string
+   */
   protected String shift_str(int shift) {
     String shift_str = "";
     if (shift != 0) shift_str = String.format("%+d", shift);

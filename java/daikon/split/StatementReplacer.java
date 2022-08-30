@@ -63,7 +63,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * Makes the replacements in statement that are designated by this. See class description for
    * details.
    *
-   * @param expression a segment of valid java code in which the the replacements should be made
+   * @param expression a segment of valid java code in which the replacements should be made
    * @return statement with the correct replacements made
    */
   public String makeReplacements(String expression) throws ParseException {

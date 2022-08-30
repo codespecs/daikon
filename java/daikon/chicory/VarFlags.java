@@ -23,4 +23,4 @@ public enum VarFlags {
   CLASSNAME,
   TO_STRING,
   NON_NULL
-};
+}

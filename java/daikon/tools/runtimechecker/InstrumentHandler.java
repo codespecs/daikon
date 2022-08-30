@@ -136,20 +136,14 @@ public class InstrumentHandler extends CommandHandler {
       try {
 
         File instrumentedFileDir =
-            new File(
-                outputDir.getPath()
-                    + File.separator
-                    + oneFile.packageName.replace(".", File.separator));
+            new File(outputDir.getPath(), oneFile.packageName.replace(".", File.separator));
 
         if (!instrumentedFileDir.exists()) {
           instrumentedFileDir.mkdirs();
         }
 
         File checkerClassesDir =
-            new File(
-                checkersOutputDirName
-                    + File.separator
-                    + oneFile.packageName.replace(".", File.separator));
+            new File(checkersOutputDirName, oneFile.packageName.replace(".", File.separator));
 
         if (!checkerClassesDir.exists()) {
           checkerClassesDir.mkdirs();

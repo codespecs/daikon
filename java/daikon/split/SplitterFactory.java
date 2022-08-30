@@ -316,7 +316,8 @@ public class SplitterFactory {
   }
 
   /**
-   * Creates the temporary directory in which splitter files will be stored.
+   * Creates the temporary directory in which splitter files will be stored. The return value
+   * includes a trailing file separtor (e.g., "/"), unless the return value is "".
    *
    * @return the name of the temporary directory. This is where the Splitters are created.
    */

@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystem;
@@ -285,7 +286,7 @@ public class BuildJDK {
             moduleDir, moduleDir.toString().length(), class_stream_map);
       }
     } catch (IOException e) {
-      throw new Error(e);
+      throw new UncheckedIOException(e);
     }
     return class_stream_map;
   }
@@ -310,7 +311,7 @@ public class BuildJDK {
           gather_runtime_from_modules_directory(subpath, modulePrefixLength, class_stream_map);
         }
       } catch (IOException e) {
-        throw new Error(e);
+        throw new UncheckedIOException(e);
       }
     } else {
       String entryName = path.toString().substring(modulePrefixLength + 1);
@@ -445,9 +446,8 @@ public class BuildJDK {
       dcomp_class
           .getJavaClass()
           .dump(
-              new File(
-                  destDir,
-                  "java" + File.separator + "lang" + File.separator + className + ".class"));
+              // Path.of exists in Java 11 and later.
+              new File(new File(new File(destDir, "java"), "lang"), className + ".class"));
     } catch (Exception e) {
       throw new Error(e);
     }

@@ -209,7 +209,7 @@ public class DynComp {
       cp = ".";
     }
 
-    // The the separator for items in the class path
+    // The separator for items in the class path
     String path_separator = System.getProperty("path.separator");
     basic.log("path_separator = %s%n", path_separator);
     if (!RegexUtil.isRegex(path_separator)) {
@@ -242,8 +242,7 @@ public class DynComp {
     String daikon_dir = System.getenv("DAIKONDIR");
     if (premain == null) {
       if (daikon_dir != null) {
-        String file_separator = System.getProperty("file.separator");
-        File poss_premain = new File(daikon_dir + file_separator + "java", "dcomp_premain.jar");
+        File poss_premain = new File(new File(daikon_dir, "java"), "dcomp_premain.jar");
         if (poss_premain.canRead()) {
           premain = poss_premain;
         }
@@ -286,8 +285,7 @@ public class DynComp {
       // If not on the classpath look in ${DAIKONDIR}/java
       if (rt_file == null) {
         if (daikon_dir != null) {
-          String file_separator = System.getProperty("file.separator");
-          File poss_rt = new File(daikon_dir + file_separator + "java", "dcomp_rt.jar");
+          File poss_rt = new File(new File(daikon_dir, "java"), "dcomp_rt.jar");
           if (poss_rt.canRead()) rt_file = poss_rt;
         }
       }
@@ -377,12 +375,14 @@ public class DynComp {
   public int redirect_wait(Process p) {
 
     // Create the redirect threads and start them.
+    StreamRedirectThread in_thread =
+        new StreamRedirectThread("stdin", System.in, p.getOutputStream(), false);
     StreamRedirectThread err_thread =
         new StreamRedirectThread("stderr", p.getErrorStream(), System.err, true);
-
     StreamRedirectThread out_thread =
         new StreamRedirectThread("stdout", p.getInputStream(), System.out, true);
 
+    in_thread.start();
     err_thread.start();
     out_thread.start();
 
