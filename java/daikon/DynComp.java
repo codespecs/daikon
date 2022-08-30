@@ -311,7 +311,9 @@ public class DynComp {
         }
       }
     }
-    String boot_path = String.join(path_separator, cpaths);
+    String boot_path =
+        String.join(path_separator, cpaths)
+            .replaceAll(path_separator + path_separator, path_separator);
 
     // Build the command line to execute the target with the javaagent
     List<String> cmdlist = new ArrayList<>();

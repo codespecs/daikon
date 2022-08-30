@@ -228,7 +228,7 @@ public class Instrument implements ClassFileTransformer {
 
   /**
    * Returns whether or not the specified class is part of a tool known to do Java byte code
-   * transformation. We need to warn user this may not work correctly.
+   * transformation. We need to warn the user that this may not work correctly.
    *
    * @param classname class to be checked
    * @return true if classname is a known transformer
