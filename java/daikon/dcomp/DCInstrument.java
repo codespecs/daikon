@@ -1814,7 +1814,7 @@ public class DCInstrument extends InstructionListUtils {
 
   /**
    * Discards primitive tags for each primitive argument to a non-instrumented method and adds a tag
-   * for a primitive return value. Insures that the tag stack is correct for non-instrumented
+   * for a primitive return value. Ensures that the tag stack is correct for non-instrumented
    * methods.
    */
   InstructionList handle_invoke(InvokeInstruction invoke) {
@@ -1822,16 +1822,15 @@ public class DCInstrument extends InstructionListUtils {
 
     // Get information about the call
     String method_name = invoke.getMethodName(pool);
-    String classname = null;
+    @ClassGetName String classname = null;
     Type ret_type = invoke.getReturnType(pool);
     Type[] arg_types = invoke.getArgumentTypes(pool);
 
     InstructionList il = new InstructionList();
 
     if (invoke instanceof INVOKEDYNAMIC) {
-      // we don't instrument lambda methods
-      // BUG: BCEL doesn't know how to get classname from an
-      // INVOKEDYNAMIC instruction.
+      // We don't instrument lambda methods.
+      // BUG: BCEL doesn't know how to get classname from an INVOKEDYNAMIC instruction.
       // debug code
       // System.out.printf("invokedynamic NOT the classname: %s%n", invoke.getClassName(pool));
       callee_instrumented = false;
@@ -1858,17 +1857,17 @@ public class DCInstrument extends InstructionListUtils {
       //   calls to functional interfaces
       //
       // Annotation classes are never instrumented so we must set
-      // the callee_instrumented flag false.
+      // the callee_instrumented flag to false.
       //
       // Functional interfaces are a bit more complicated. These are primarily (only?)
       // used by Lambda functions.  Lambda methods are generated dynamically at
       // run time via the InvokeDynamic instruction.  They are not seen by our
       // ClassFileTransformer so are never instrumented.  Thus we must set the
-      // callee_instrumented flag false when we see a call to a Lambda method.
+      // callee_instrumented flag to false when we see a call to a Lambda method.
       // The heuristic we use is to assume that any InvokeInterface or InvokeVirtual
       // call to a functional interface is a call to a Lambda method.
       //
-      // The java compiler detects functional interfaces automatically, but the
+      // The Java compiler detects functional interfaces automatically, but the
       // user can declare their intent with the @FunctionInterface annotation.
       // The Java runtime is annotated in this manner.  Hence, we look for this
       // annotation to detect a call to a functional interface.  In practice, we
@@ -1879,12 +1878,11 @@ public class DCInstrument extends InstructionListUtils {
       // interface to ANNOTATION in our class_access_map.
       //
       if (invoke instanceof INVOKEINTERFACE || invoke instanceof INVOKEVIRTUAL) {
-        // Check to see if we have seen this class before.
         Integer access = class_access_map.get(classname);
         if (access == null) {
           // We have not seen this class before. Check to see if the target class is
           // an Annotation or a FunctionalInterface.
-          JavaClass c = findJavaClass(classname);
+          JavaClass c = getJavaClass(classname);
           if (c != null) {
             access = c.getAccessFlags();
 
@@ -2137,7 +2135,7 @@ public class DCInstrument extends InstructionListUtils {
    * @return superclass name of classname or null if there is an error
    */
   String getSuperclassName(String classname) {
-    JavaClass jc = findJavaClass(classname);
+    JavaClass jc = getJavaClass(classname);
     if (jc != null) {
       return jc.getSuperclassName();
     } else {
@@ -2145,7 +2143,7 @@ public class DCInstrument extends InstructionListUtils {
     }
   }
 
-  /** Cache for {@link #findJavaClass} method. */
+  /** Cache for {@link #getJavaClass} method. */
   private static Map<String, JavaClass> javaClasses = new ConcurrentHashMap<String, JavaClass>();
 
   /**
@@ -2159,7 +2157,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param classname the fully qualified name of the class in binary form, e.g., "java.util.List"
    * @return the JavaClass of the corresponding classname or null
    */
-  @Nullable JavaClass findJavaClass(String classname) {
+  @Nullable JavaClass getJavaClass(String classname) {
     JavaClass cached = javaClasses.get(classname);
     if (cached != null) {
       return cached;
