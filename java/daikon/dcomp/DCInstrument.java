@@ -430,7 +430,7 @@ public class DCInstrument extends InstructionListUtils {
           // debug code
           // Instrument.debug_transform.log(stack_trace[i].getClassName() + " : " +
           // stack_trace[i].getMethodName());
-          if (is_junit_trigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
+          if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
             junit_parse_seen = true;
             junit_state = JUnitState.TEST_DISCOVERY;
             break;
@@ -447,7 +447,7 @@ public class DCInstrument extends InstructionListUtils {
           // debug code
           // Instrument.debug_transform.log(stack_trace[i].getClassName() + " : " +
           // stack_trace[i].getMethodName());
-          if (is_junit_trigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
+          if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
             local_junit_parse_seen = true;
             break;
           }
@@ -744,7 +744,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param method_name method to be checked
    * @return true if the given method is a JUnit trigger
    */
-  boolean is_junit_trigger(String classname, String method_name) {
+  boolean isJunitTrigger(String classname, String method_name) {
     if ((classname.contains("JUnitCommandLineParseResult")
             && method_name.equals("parse")) // JUnit 4
         || (classname.contains("EngineDiscoveryRequestResolution")
