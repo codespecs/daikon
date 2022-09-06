@@ -427,8 +427,10 @@ public class DCInstrument extends InstructionListUtils {
         stack_trace = Thread.currentThread().getStackTrace();
         // [0] is getStackTrace
         for (int i = 1; i < stack_trace.length; i++) {
-          if (stack_trace[i].getClassName().contains("JUnitCommandLineParseResult")
-              && stack_trace[i].getMethodName().equals("parse")) {
+          // debug code
+          // Instrument.debug_transform.log(stack_trace[i].getClassName() + " : " +
+          // stack_trace[i].getMethodName());
+          if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
             junit_parse_seen = true;
             junit_state = JUnitState.TEST_DISCOVERY;
             break;
@@ -442,8 +444,10 @@ public class DCInstrument extends InstructionListUtils {
         stack_trace = Thread.currentThread().getStackTrace();
         // [0] is getStackTrace
         for (int i = 1; i < stack_trace.length; i++) {
-          if (stack_trace[i].getClassName().contains("JUnitCommandLineParseResult")
-              && stack_trace[i].getMethodName().equals("parse")) {
+          // debug code
+          // Instrument.debug_transform.log(stack_trace[i].getClassName() + " : " +
+          // stack_trace[i].getMethodName());
+          if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
             local_junit_parse_seen = true;
             break;
           }
@@ -514,7 +518,9 @@ public class DCInstrument extends InstructionListUtils {
               for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
                 // debug code
                 // System.out.printf("item: %s%n", item.toString());
-                if (item.toString().endsWith("org/junit/Test;")) {
+                if (item.toString().endsWith("org/junit/Test;") // JUnit 4
+                    || item.toString().endsWith("org/junit/jupiter/api/Test;") // JUnit 5
+                ) {
                   junit_test_class = true;
                   junit_test_set.add(this_class);
                   break searchloop;
@@ -720,6 +726,24 @@ public class DCInstrument extends InstructionListUtils {
     Instrument.debug_transform.log("Instrumentation complete: %s%n", classname);
 
     return gen.getJavaClass().copy();
+  }
+
+  /**
+   * Returns true if the specified classname.method_name is the root of JUnit startup code.
+   *
+   * @param classname class to be checked
+   * @param method_name method to be checked
+   * @return true if the given method is a JUnit trigger
+   */
+  boolean isJunitTrigger(String classname, String method_name) {
+    if ((classname.contains("JUnitCommandLineParseResult")
+            && method_name.equals("parse")) // JUnit 4
+        || (classname.contains("EngineDiscoveryRequestResolution")
+            && method_name.equals("resolve")) // JUnit 5
+    ) {
+      return true;
+    }
+    return false;
   }
 
   /**
