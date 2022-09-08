@@ -60,6 +60,16 @@ export JDKVER=jdk17-plus
 export PROJECT=daikon
 create_upload_docker_image
 
+export OS=ubuntu
+export JDKVER=jdk18
+export PROJECT=daikon
+create_upload_docker_image
+
+export OS=ubuntu
+export JDKVER=jdk18-plus
+export PROJECT=daikon
+create_upload_docker_image
+
 export OS=fedora
 export JDKVER=jdk8
 export PROJECT=daikon
