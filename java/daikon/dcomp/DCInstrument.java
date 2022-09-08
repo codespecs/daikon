@@ -163,6 +163,14 @@ public class DCInstrument extends InstructionListUtils {
   /** Log file if debug_dup is enabled. */
   protected static SimpleLog debug_dup = new SimpleLog(false);
 
+  // Flags to turn on additional debugging code.
+  /** Turn on JUnit debugging. */
+  protected static final boolean debugJUnitCode = false;
+  /** Turn on findTargetInterface debugging. */
+  protected static final boolean debugFindTargetInterface = false;
+  /** Turn on handleInvoke debugging. */
+  protected static final boolean debugHandleInvoke = false;
+
   /** Keeps track of the methods that were not successfully instrumented. */
   protected List<String> skipped_methods = new ArrayList<>();
 
@@ -213,7 +221,7 @@ public class DCInstrument extends InstructionListUtils {
 
   /**
    * Map from class name to its access_flags. Used to cache the results of the lookup done in
-   * handle_invoke. If a class is marked ACC_ANNOTATION then it will not have been instrumented.
+   * handleInvoke. If a class is marked ACC_ANNOTATION then it will not have been instrumented.
    */
   static Map<String, Integer> class_access_map = new HashMap<>();
   /** Integer constant of access_flag value of ACC_ANNOTATION. */
@@ -427,9 +435,10 @@ public class DCInstrument extends InstructionListUtils {
         stack_trace = Thread.currentThread().getStackTrace();
         // [0] is getStackTrace
         for (int i = 1; i < stack_trace.length; i++) {
-          // debug code
-          // Instrument.debug_transform.log(stack_trace[i].getClassName() + " : " +
-          // stack_trace[i].getMethodName());
+          if (debugJUnitCode) {
+            Instrument.debug_transform.log(
+                stack_trace[i].getClassName() + " : " + stack_trace[i].getMethodName());
+          }
           if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
             junit_parse_seen = true;
             junit_state = JUnitState.TEST_DISCOVERY;
@@ -444,9 +453,10 @@ public class DCInstrument extends InstructionListUtils {
         stack_trace = Thread.currentThread().getStackTrace();
         // [0] is getStackTrace
         for (int i = 1; i < stack_trace.length; i++) {
-          // debug code
-          // Instrument.debug_transform.log(stack_trace[i].getClassName() + " : " +
-          // stack_trace[i].getMethodName());
+          if (debugJUnitCode) {
+            Instrument.debug_transform.log(
+                stack_trace[i].getClassName() + " : " + stack_trace[i].getMethodName());
+          }
           if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
             local_junit_parse_seen = true;
             break;
@@ -461,8 +471,7 @@ public class DCInstrument extends InstructionListUtils {
         break;
 
       case RUNNING:
-        // debug code
-        if (false) {
+        if (debugJUnitCode) {
           stack_trace = Thread.currentThread().getStackTrace();
           // [0] is getStackTrace
           for (int i = 1; i < stack_trace.length; i++) {
@@ -494,9 +503,10 @@ public class DCInstrument extends InstructionListUtils {
           // something has gone wrong
           break;
         }
-        // debug code
-        // System.out.printf("this_class: %s%n", this_class);
-        // System.out.printf("super_class: %s%n", super_class);
+        if (debugJUnitCode) {
+          System.out.printf("this_class: %s%n", this_class);
+          System.out.printf("super_class: %s%n", super_class);
+        }
         if (super_class.equals("junit.framework.TestCase")) {
           // This is a junit test class and so are the
           // elements of classnameStack.
@@ -522,11 +532,13 @@ public class DCInstrument extends InstructionListUtils {
         for (Method m : gen.getMethods()) {
           for (final Attribute attribute : m.getAttributes()) {
             if (attribute instanceof RuntimeVisibleAnnotations) {
-              // debug code
-              // System.out.printf("attribute: %s%n", attribute.toString());
+              if (debugJUnitCode) {
+                System.out.printf("attribute: %s%n", attribute.toString());
+              }
               for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
-                // debug code
-                // System.out.printf("item: %s%n", item.toString());
+                if (debugJUnitCode) {
+                  System.out.printf("item: %s%n", item.toString());
+                }
                 if (item.toString().endsWith("org/junit/Test;") // JUnit 4
                     || item.toString().endsWith("org/junit/jupiter/api/Test;") // JUnit 5
                 ) {
@@ -1752,7 +1764,7 @@ public class DCInstrument extends InstructionListUtils {
       case Const.INVOKESPECIAL:
       case Const.INVOKEINTERFACE:
       case Const.INVOKEDYNAMIC:
-        return handle_invoke((InvokeInstruction) inst);
+        return handleInvoke((InvokeInstruction) inst);
 
         // Throws an exception.  This clears the operand stack of the current
         // frame.  We need to clear the tag stack as well.
@@ -1857,25 +1869,29 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Search the interfaces of a class for an implementation of the target method. For each interface
-   * found, test its methods to see if there is a match for the target method. If not found,
-   * recursively search the interfaces of each method.
+   * Find the interface class containing the implementation of the target method.
    *
-   * @param targetClass the JavaClass whose interfaces to search
+   * <p>Search the interfaces of a class for an implementation of the target method. For each
+   * interface found, test its methods to see if there is a match for the target method. If found,
+   * return the interface name. If not found, recursively search the interfaces of the found
+   * interfaces.
+   *
+   * @param startClass the JavaClass whose interfaces are to be searched
    * @param method_name target method to search for
    * @param arg_types the target method's argument types
-   * @return name of class containing target method, or null if not found
+   * @return name of interface class containing target method, or null if not found
    */
-  @Nullable @ClassGetName String search_class_interfaces_for_target_method(
-      JavaClass targetClass, String method_name, Type[] arg_types) {
+  @Nullable @ClassGetName String findTargetInterface(JavaClass startClass, String method_name, Type[] arg_types) {
 
-    // debug code
-    // System.out.println("searching interfaces of: " + targetClass.getClassName());
-    for (String interfaceNameString : targetClass.getInterfaceNames()) {
+    if (debugFindTargetInterface) {
+      System.out.println("searching interfaces of: " + startClass.getClassName());
+    }
+    for (String interfaceNameString : startClass.getInterfaceNames()) {
       @SuppressWarnings("signature:assignment")
       @ClassGetName String interfaceName = interfaceNameString;
-      // debug code
-      // System.out.println("interface: " + interfaceName);
+      if (debugFindTargetInterface) {
+        System.out.println("interface: " + interfaceName);
+      }
       JavaClass ji;
       try {
         ji = getJavaClass(interfaceName);
@@ -1883,15 +1899,16 @@ public class DCInstrument extends InstructionListUtils {
         throw new Error(String.format("Unable to load class: %s", interfaceName), e);
       }
       for (Method jm : ji.getMethods()) {
-        // debug code
-        // System.out.println("  " + jm.getName() + Arrays.toString(jm.getArgumentTypes()));
+        if (debugFindTargetInterface) {
+          System.out.println("  " + jm.getName() + Arrays.toString(jm.getArgumentTypes()));
+        }
         if (jm.getName().equals(method_name) && Arrays.equals(jm.getArgumentTypes(), arg_types)) {
           // We have a match.
           return interfaceName;
         }
       }
       // no match found; does this interface extend other interfaces?
-      @ClassGetName String found = search_class_interfaces_for_target_method(ji, method_name, arg_types);
+      @ClassGetName String found = findTargetInterface(ji, method_name, arg_types);
       if (found != null) {
         // We have a match.
         return found;
@@ -1902,11 +1919,25 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Discards primitive tags for each primitive argument to a non-instrumented method and adds a tag
-   * for a primitive return value. Ensures that the tag stack is correct for non-instrumented
-   * methods.
+   * Process an Invoke instruction. There are three cases:
+   *
+   * <ul>
+   *   <li>convert calls to Object.equals to calls to dcomp_equals or dcomp_super_equals
+   *   <li>convert calls to Object.clone to calls to dcomp_clone or dcomp_super_clone
+   *   <li>otherwise, determine if the target of the invoke is instrumented or not
+   * </ul>
+   *
+   * In the third case:
+   *
+   * <p>If the target method is not instrumented, generate code to discard a primitive tag from the
+   * runtime stack for each primitive argument. If the return type of the target method is a
+   * primitive, add code to push a tag on the the runtime stack to represent the primitive return
+   * value.
+   *
+   * <p>If the target method is instrumented, a DCompMarker argument is added to the end of the
+   * argument list.
    */
-  InstructionList handle_invoke(InvokeInstruction invoke) {
+  InstructionList handleInvoke(InvokeInstruction invoke) {
     boolean callee_instrumented;
 
     // Get information about the call
@@ -1920,17 +1951,19 @@ public class DCInstrument extends InstructionListUtils {
     if (invoke instanceof INVOKEDYNAMIC) {
       // We don't instrument lambda methods.
       // BUG: BCEL doesn't know how to get classname from an INVOKEDYNAMIC instruction.
-      // debug code
-      // System.out.printf("invokedynamic NOT the classname: %s%n", invoke.getClassName(pool));
+      if (debugHandleInvoke) {
+        System.out.printf("invokedynamic NOT the classname: %s%n", invoke.getClassName(pool));
+      }
       callee_instrumented = false;
     } else {
       classname = invoke.getClassName(pool);
       callee_instrumented = callee_instrumented(classname, method_name);
 
-      // debug code
-      // System.out.printf("callee_instrumented: %s%n", callee_instrumented);
-      // System.out.printf("invoke host: %s%n", gen.getClassName() + "." + mgen.getName());
-      // System.out.printf("invoke targ: %s%n", classname + "." + method_name);
+      if (debugHandleInvoke) {
+        System.out.printf("callee_instrumented: %s%n", callee_instrumented);
+        System.out.printf("invoke host: %s%n", gen.getClassName() + "." + mgen.getName());
+        System.out.printf("invoke targ: %s%n", classname + "." + method_name);
+      }
 
       if (BcelUtil.javaVersion > 8) {
         if (Premain.problem_methods.contains(classname + "." + method_name)) {
@@ -1979,16 +2012,18 @@ public class DCInstrument extends InstructionListUtils {
             for (final AnnotationEntry item : c.getAnnotationEntries()) {
               if (item.getAnnotationType().endsWith("FunctionalInterface;")) {
                 access = Integer_ACC_ANNOTATION;
-                // debug code
-                // System.out.println(item.getAnnotationType());
+                if (debugHandleInvoke) {
+                  System.out.println(item.getAnnotationType());
+                }
                 break;
               }
             }
             class_access_map.put(classname, access);
           } else {
             // We cannot locate or read the .class file, better pretend it is an Annotation.
-            // debug code
-            // System.out.printf("Unable to locate class: %s%n", classname);
+            if (debugHandleInvoke) {
+              System.out.printf("Unable to locate class: %s%n", classname);
+            }
             access = Integer_ACC_ANNOTATION;
           }
         }
@@ -2023,12 +2058,15 @@ public class DCInstrument extends InstructionListUtils {
             && !is_object_clone(method_name, ret_type, arg_types)
             && !is_object_equals(method_name, ret_type, arg_types)) {
 
-          // debug code
-          // System.out.println("method: " + method_name);
-          // System.out.println("arg_types: " + Arrays.toString(arg_types));
-          // System.out.printf("invoke host: %s%n", gen.getClassName() + "." + mgen.getName());
+          if (debugHandleInvoke) {
+            System.out.println("method: " + method_name);
+            System.out.println("arg_types: " + Arrays.toString(arg_types));
+            System.out.printf("invoke host: %s%n", gen.getClassName() + "." + mgen.getName());
+          }
 
           @ClassGetName String targetClassname = classname;
+          // Search this class for the target method. If not found, set targetClassname to
+          // its super class and try again.
           mainloop:
           while (true) {
             // Check that the class exists
@@ -2040,22 +2078,26 @@ public class DCInstrument extends InstructionListUtils {
             }
             if (targetClass == null) {
               // We cannot locate or read the .class file, better assume not instrumented.
-              // debug code
-              System.out.printf("Unable to locate class: %s%n%n", targetClassname);
+              if (debugHandleInvoke) {
+                System.out.printf("Unable to locate class: %s%n%n", targetClassname);
+              }
               callee_instrumented = false;
               break;
             }
-            // debug code
-            // System.out.println("target class: " + targetClassname);
+            if (debugHandleInvoke) {
+              System.out.println("target class: " + targetClassname);
+            }
 
             for (Method m : targetClass.getMethods()) {
-              // debug code
-              // System.out.println("  " + m.getName() + Arrays.toString(m.getArgumentTypes()));
+              if (debugHandleInvoke) {
+                System.out.println("  " + m.getName() + Arrays.toString(m.getArgumentTypes()));
+              }
               if (m.getName().equals(method_name)
                   && Arrays.equals(m.getArgumentTypes(), arg_types)) {
                 // We have a match.
-                // debug code
-                // System.out.printf("we have a match%n%n");
+                if (debugHandleInvoke) {
+                  System.out.printf("we have a match%n%n");
+                }
                 if (BcelUtil.inJdk(targetClassname)) {
                   callee_instrumented = false;
                 }
@@ -2063,11 +2105,10 @@ public class DCInstrument extends InstructionListUtils {
               }
             }
 
-            // no methods match - does this class implement interfaces?
+            // no methods match - search this class's interfaces
             @ClassGetName String found;
             try {
-              found =
-                  search_class_interfaces_for_target_method(targetClass, method_name, arg_types);
+              found = findTargetInterface(targetClass, method_name, arg_types);
             } catch (Throwable e) {
               // We cannot locate or read the .class file, better assume it is not instrumented.
               callee_instrumented = false;
@@ -2075,8 +2116,9 @@ public class DCInstrument extends InstructionListUtils {
             }
             if (found != null) {
               // We have a match.
-              // debug code
-              // System.out.printf("we have a match%n%n");
+              if (debugHandleInvoke) {
+                System.out.printf("we have a match%n%n");
+              }
               if (BcelUtil.inJdk(found)) {
                 callee_instrumented = false;
               }
@@ -2088,11 +2130,13 @@ public class DCInstrument extends InstructionListUtils {
             // not have been loaded into BCEL yet.
             if (targetClass.getSuperclassNameIndex() == 0) {
               // The target class is Object; the search completed without finding a matching method.
-              // debug code
-              System.out.printf("Unable to locate method: %s%n%n", method_name);
+              if (debugHandleInvoke) {
+                System.out.printf("Unable to locate method: %s%n%n", method_name);
+              }
               callee_instrumented = false;
               break;
             }
+            // Recurse looking in the super class.
             @SuppressWarnings("signature:assignment")
             @ClassGetName String temp = targetClass.getSuperclassName();
             targetClassname = temp;
