@@ -166,9 +166,9 @@ public class DCInstrument extends InstructionListUtils {
   // Debugging flags
   /** If true, enable JUnit debugging. */
   protected static final boolean debugJUnitCode = false;
-  /** If true, enable findTargetInterface debugging. */
+  /** If true, enable {@link #findTargetInterface} debugging. */
   protected static final boolean debugFindTargetInterface = false;
-  /** If true, enable handleInvoke debugging. */
+  /** If true, enable {@link #handleInvoke} debugging. */
   protected static final boolean debugHandleInvoke = false;
 
   /** Keeps track of the methods that were not successfully instrumented. */
@@ -1920,7 +1920,7 @@ public class DCInstrument extends InstructionListUtils {
    * <ul>
    *   <li>convert calls to Object.equals to calls to dcomp_equals or dcomp_super_equals
    *   <li>convert calls to Object.clone to calls to dcomp_clone or dcomp_super_clone
-   *   <li>otherwise, determine if the target of the invoke is instrumented or not
+   *   <li>otherwise, determine whether the target of the invoke is instrumented or not
    *       <ul>
    *         <li>If the target method is not instrumented, generate code to discard a primitive tag
    *             from the runtime stack for each primitive argument. If the return type of the
