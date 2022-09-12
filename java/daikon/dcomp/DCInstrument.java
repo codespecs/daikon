@@ -220,8 +220,8 @@ public class DCInstrument extends InstructionListUtils {
   static Map<String, Integer> static_field_id = new LinkedHashMap<>();
 
   /**
-   * Map from class name to its access_flags. Used to cache the results of the lookup done in
-   * handleInvoke. If a class is marked ACC_ANNOTATION then it will not have been instrumented.
+   * Map from class name to its access_flags. Used to cache the results of the lookup done in {@link
+   * #handleInvoke}. If a class is marked ACC_ANNOTATION then it will not have been instrumented.
    */
   static Map<String, Integer> class_access_map = new HashMap<>();
   /** Integer constant of access_flag value of ACC_ANNOTATION. */
@@ -437,7 +437,7 @@ public class DCInstrument extends InstructionListUtils {
         for (int i = 1; i < stack_trace.length; i++) {
           if (debugJUnitCode) {
             Instrument.debug_transform.log(
-                "%s : %s", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
+                stack_trace[i].getClassName() + " : " + stack_trace[i].getMethodName());
           }
           if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
             junit_parse_seen = true;
@@ -455,7 +455,7 @@ public class DCInstrument extends InstructionListUtils {
         for (int i = 1; i < stack_trace.length; i++) {
           if (debugJUnitCode) {
             Instrument.debug_transform.log(
-                "%s : %s", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
+                stack_trace[i].getClassName() + " : " + stack_trace[i].getMethodName());
           }
           if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
             local_junit_parse_seen = true;
@@ -1869,12 +1869,8 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Find the interface class containing the implementation of the target method.
-   *
-   * <p>Search the interfaces of a class for an implementation of the target method. For each
-   * interface found, test its methods to see if there is a match for the target method. If found,
-   * return the interface name. If not found, recursively search the interfaces of the found
-   * interfaces.
+   * Return the interface class containing the implementation of the target method. The interfaces
+   * of {@code startClass} are recursively searched.
    *
    * @param startClass the JavaClass whose interfaces are to be searched
    * @param method_name target method to search for
@@ -1925,17 +1921,15 @@ public class DCInstrument extends InstructionListUtils {
    *   <li>convert calls to Object.equals to calls to dcomp_equals or dcomp_super_equals
    *   <li>convert calls to Object.clone to calls to dcomp_clone or dcomp_super_clone
    *   <li>otherwise, determine if the target of the invoke is instrumented or not
+   *       <ul>
+   *         <li>If the target method is not instrumented, generate code to discard a primitive tag
+   *             from the runtime stack for each primitive argument. If the return type of the
+   *             target method is a primitive, add code to push a tag on the the runtime stack to
+   *             represent the primitive return value.
+   *         <li>If the target method is instrumented, add a DCompMarker argument to the end of the
+   *             argument list.
+   *       </ul>
    * </ul>
-   *
-   * In the third case:
-   *
-   * <p>If the target method is not instrumented, generate code to discard a primitive tag from the
-   * runtime stack for each primitive argument. If the return type of the target method is a
-   * primitive, add code to push a tag on the the runtime stack to represent the primitive return
-   * value.
-   *
-   * <p>If the target method is instrumented, a DCompMarker argument is added to the end of the
-   * argument list.
    *
    * @param invoke a method invocation bytecode instruction
    * @return instructions to replace the given instruction
