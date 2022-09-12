@@ -2033,6 +2033,10 @@ public class DCInstrument extends InstructionListUtils {
   /**
    * Return instructions that will discard any primitive tags corresponding to the specified
    * arguments. An empty instruction list will be returned if there are no primitive arguments.
+   *
+   * @param arg_types argument types of target method
+   * @return instruction list that discards primitive tags from DCRuntime's per-thread comparability
+   *     data stack
    */
   InstructionList discard_primitive_tags(Type[] arg_types) {
 
