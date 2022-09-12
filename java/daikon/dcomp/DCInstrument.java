@@ -437,7 +437,7 @@ public class DCInstrument extends InstructionListUtils {
         for (int i = 1; i < stack_trace.length; i++) {
           if (debugJUnitCode) {
             Instrument.debug_transform.log(
-                stack_trace[i].getClassName() + " : " + stack_trace[i].getMethodName());
+                "%s : %s", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
           }
           if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
             junit_parse_seen = true;
@@ -455,7 +455,7 @@ public class DCInstrument extends InstructionListUtils {
         for (int i = 1; i < stack_trace.length; i++) {
           if (debugJUnitCode) {
             Instrument.debug_transform.log(
-                stack_trace[i].getClassName() + " : " + stack_trace[i].getMethodName());
+                "%s : %s", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
           }
           if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
             local_junit_parse_seen = true;
