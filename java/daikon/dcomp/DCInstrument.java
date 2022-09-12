@@ -212,8 +212,8 @@ public class DCInstrument extends InstructionListUtils {
   static Map<String, Integer> static_field_id = new LinkedHashMap<>();
 
   /**
-   * Map from class name to its access_flags. Used to cache the results of the lookup done in
-   * handle_invoke. If a class is marked ACC_ANNOTATION then it will not have been instrumented.
+   * Map from class name to its access_flags. Used to cache the results of the lookup done in {@link
+   * #handleInvoke}. If a class is marked ACC_ANNOTATION then it will not have been instrumented.
    */
   static Map<String, Integer> class_access_map = new HashMap<>();
   /** Integer constant of access_flag value of ACC_ANNOTATION. */
@@ -1732,7 +1732,7 @@ public class DCInstrument extends InstructionListUtils {
       case Const.INVOKESPECIAL:
       case Const.INVOKEINTERFACE:
       case Const.INVOKEDYNAMIC:
-        return handle_invoke((InvokeInstruction) inst);
+        return handleInvoke((InvokeInstruction) inst);
 
         // Throws an exception.  This clears the operand stack of the current
         // frame.  We need to clear the tag stack as well.
@@ -1840,8 +1840,11 @@ public class DCInstrument extends InstructionListUtils {
    * Discards primitive tags for each primitive argument to a non-instrumented method and adds a tag
    * for a primitive return value. Ensures that the tag stack is correct for non-instrumented
    * methods.
+   *
+   * @param invoke a method invocation bytecode instruction
+   * @return instructions to replace the given instruction
    */
-  InstructionList handle_invoke(InvokeInstruction invoke) {
+  InstructionList handleInvoke(InvokeInstruction invoke) {
     boolean callee_instrumented;
 
     // Get information about the call
