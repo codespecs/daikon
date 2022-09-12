@@ -163,12 +163,12 @@ public class DCInstrument extends InstructionListUtils {
   /** Log file if debug_dup is enabled. */
   protected static SimpleLog debug_dup = new SimpleLog(false);
 
-  // Flags to turn on additional debugging code.
-  /** Turn on JUnit debugging. */
+  // Debugging flags
+  /** If true, enable JUnit debugging. */
   protected static final boolean debugJUnitCode = false;
-  /** Turn on findTargetInterface debugging. */
+  /** If true, enable findTargetInterface debugging. */
   protected static final boolean debugFindTargetInterface = false;
-  /** Turn on handleInvoke debugging. */
+  /** If true, enable handleInvoke debugging. */
   protected static final boolean debugHandleInvoke = false;
 
   /** Keeps track of the methods that were not successfully instrumented. */
@@ -1937,8 +1937,8 @@ public class DCInstrument extends InstructionListUtils {
    * <p>If the target method is instrumented, a DCompMarker argument is added to the end of the
    * argument list.
    *
-   * @param invoke the instruction to inspect
-   * @return InstructionList possibly modified instruction list for the invoke
+   * @param invoke a method invocation bytecode instruction
+   * @return instructions to replace the given instruction
    */
   InstructionList handleInvoke(InvokeInstruction invoke) {
     boolean callee_instrumented;
