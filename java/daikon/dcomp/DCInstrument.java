@@ -244,7 +244,7 @@ public class DCInstrument extends InstructionListUtils {
   /**
    * List of Object methods. Since we can't instrument Object, none of these can be instrumented,
    * and most of them don't provide useful comparability information anyway. The equals method and
-   * the clone method are special cased in the {@link #handleInvoke} routine.
+   * the clone method are special-cased in the {@link #handleInvoke} routine.
    */
   protected static MethodDef[] obj_methods =
       new MethodDef[] {
@@ -1935,7 +1935,6 @@ public class DCInstrument extends InstructionListUtils {
    * @return instructions to replace the given instruction
    */
   InstructionList handleInvoke(InvokeInstruction invoke) {
-    boolean callee_instrumented;
 
     // Get information about the call
     String method_name = invoke.getMethodName(pool);
@@ -1985,7 +1984,7 @@ public class DCInstrument extends InstructionListUtils {
       return il;
     }
 
-    callee_instrumented = isTargetInstrumented(invoke, classname, method_name, arg_types);
+    boolean callee_instrumented = isTargetInstrumented(invoke, classname, method_name, arg_types);
 
     if (debugHandleInvoke) {
       System.out.printf("handle invoke: %s%n", invoke);
@@ -2072,6 +2071,8 @@ public class DCInstrument extends InstructionListUtils {
         System.out.printf("invokedynamic NOT the classname: %s%n", classname);
       }
       callee_instrumented = false;
+    } else if (is_object_method(method_name, invoke.getArgumentTypes(pool))) {
+      callee_instrumented = false;
     } else {
       classname = invoke.getClassName(pool);
       callee_instrumented = isClassnameInstrumented(classname, method_name);
@@ -2084,7 +2085,7 @@ public class DCInstrument extends InstructionListUtils {
       if (BcelUtil.javaVersion > 8) {
         if (Premain.problem_methods.contains(classname + "." + method_name)) {
           debug_instrument.log(
-              "Don't call instrumented version of problem method %s%n",
+              "Don't call instrumented version of problem method %s.%n",
               classname + "." + method_name);
           callee_instrumented = false;
         }
@@ -2112,7 +2113,7 @@ public class DCInstrument extends InstructionListUtils {
       // could detect functional interfaces in a manner similar to the Java
       // compiler, but for now we will go with this simpler method.
       //
-      // Note that to simplfy our code we set the access flags for a functional
+      // Note that to simplify our code we set the access flags for a functional
       // interface to ANNOTATION in our class_access_map.
       //
       if (invoke instanceof INVOKEINTERFACE || invoke instanceof INVOKEVIRTUAL) {
@@ -2264,19 +2265,15 @@ public class DCInstrument extends InstructionListUtils {
       }
     }
 
-    if (is_object_method(method_name, invoke.getArgumentTypes(pool))) {
-      callee_instrumented = false;
-    }
-
     return callee_instrumented;
   }
 
   /**
-   * Returns whether or not the specified classname is instrumented.
+   * Returns true if the specified classname is instrumented.
    *
    * @param classname class to be checked
    * @param method_name method to be checked (currently unused)
-   * @return true classname if instrumented
+   * @return true if classname is instrumented
    */
   boolean isClassnameInstrumented(@ClassGetName String classname, String method_name) {
 
