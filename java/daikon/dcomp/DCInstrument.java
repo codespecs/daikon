@@ -1866,13 +1866,13 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Return the interface class containing the implementation of the target method. The interfaces
-   * of {@code startClass} are recursively searched.
+   * Return the interface class containing the implementation of the given method. The interfaces of
+   * {@code startClass} are recursively searched.
    *
    * @param startClass the JavaClass whose interfaces are to be searched
-   * @param method_name target method to search for
+   * @param method_name the target method to search for
    * @param arg_types the target method's argument types
-   * @return name of interface class containing target method, or null if not found
+   * @return the name of the interface class containing target method, or null if not found
    */
   @Nullable @ClassGetName String getDefiningInterface(JavaClass startClass, String method_name, Type[] arg_types) {
 
