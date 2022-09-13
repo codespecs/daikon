@@ -542,7 +542,7 @@ public class Annotate {
 // --------------
 //
 //    Contracts are inherited. If the derived class or overriding method doesn't
-// define a contract, it inherits that of the super class or interface.
+// define a contract, it inherits that of the superclass or interface.
 //    Note that a contract of $none implies that the super contract is applied.
 //
 //    If an overriding method does define a contract then it can only:

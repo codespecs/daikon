@@ -1957,8 +1957,8 @@ public class DCInstrument extends InstructionListUtils {
         if (!jdk_instrumented) {
           // debug code
           // System.out.printf("invoke virtual: %s : %s%n", classname, method_name);
-          // System.out.printf("super class: %s%n", gen.getSuperclassName());
-          // Technically, we should verify the target class has super class
+          // System.out.printf("superclass: %s%n", gen.getSuperclassName());
+          // Technically, we should verify the target class has a superclass
           // of java.lang.Enum. But that can be difficult if we haven't already
           // processed that class. And since the worst that happens is we
           // loose some tag interactions, we just go ahead.
