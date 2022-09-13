@@ -2180,7 +2180,7 @@ public class DCInstrument extends InstructionListUtils {
 
           @ClassGetName String targetClassname = classname;
           // Search this class for the target method. If not found, set targetClassname to
-          // its super class and try again.
+          // its superclass and try again.
           mainloop:
           while (true) {
             // Check that the class exists
@@ -2250,7 +2250,7 @@ public class DCInstrument extends InstructionListUtils {
               callee_instrumented = false;
               break;
             }
-            // Recurse looking in the super class.
+            // Recurse looking in the superclass.
             @SuppressWarnings("signature:assignment")
             @ClassGetName String temp = targetClass.getSuperclassName();
             targetClassname = temp;

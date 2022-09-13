@@ -526,7 +526,7 @@ public final class DCRuntime implements ComparabilityProvider {
    * instrumented, call the instrumented version of clone; if not, call the uninstrumented version.
    *
    * <p>Note: we use getDeclaredMethod as clone is often protected; also, in the case of
-   * dcomp_super_clone we do not want to automatically find clone in a super class. We will search
+   * dcomp_super_clone we do not want to automatically find clone in a superclass. We will search
    * the hierarchy ourselves.
    *
    * @param orig_obj object being cloned
