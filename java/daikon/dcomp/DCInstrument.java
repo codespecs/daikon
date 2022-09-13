@@ -195,7 +195,7 @@ public class DCInstrument extends InstructionListUtils {
   protected static final String GET_TAG = "get_tag";
 
   /** Set of JUnit test classes. */
-  protected static Set<String> junit_test_set = new HashSet<>();
+  protected static Set<String> junitTestClasses = new HashSet<>();
 
   /** Possible states of JUnit test discovery. */
   protected enum JUnitState {
@@ -221,7 +221,7 @@ public class DCInstrument extends InstructionListUtils {
 
   /**
    * Map from class name to its access_flags. Used to cache the results of the lookup done in {@link
-   * #handleInvoke}. If a class is marked ACC_ANNOTATION then it will not have been instrumented.
+   * #getAccessFlags}. If a class is marked ACC_ANNOTATION then it will not have been instrumented.
    */
   static Map<String, Integer> class_access_map = new HashMap<>();
   /** Integer constant of access_flag value of ACC_ANNOTATION. */
@@ -508,9 +508,9 @@ public class DCInstrument extends InstructionListUtils {
           // This is a junit test class and so are the
           // elements of classnameStack.
           junit_test_class = true;
-          junit_test_set.add(this_class);
+          junitTestClasses.add(this_class);
           while (!classnameStack.isEmpty()) {
-            junit_test_set.add(classnameStack.pop());
+            junitTestClasses.add(classnameStack.pop());
           }
           break;
         } else if (super_class.equals("java.lang.Object")) {
@@ -540,7 +540,7 @@ public class DCInstrument extends InstructionListUtils {
                     || item.toString().endsWith("org/junit/jupiter/api/Test;") // JUnit 5
                 ) {
                   junit_test_class = true;
-                  junit_test_set.add(this_class);
+                  junitTestClasses.add(this_class);
                   break searchloop;
                 }
               }
@@ -1901,10 +1901,10 @@ public class DCInstrument extends InstructionListUtils {
         }
       }
       // no match found; does this interface extend other interfaces?
-      @ClassGetName String found = getDefiningInterface(ji, method_name, arg_types);
-      if (found != null) {
+      @ClassGetName String foundAbove = getDefiningInterface(ji, method_name, arg_types);
+      if (foundAbove != null) {
         // We have a match.
-        return found;
+        return foundAbove;
       }
     }
     // nothing found
@@ -1944,8 +1944,6 @@ public class DCInstrument extends InstructionListUtils {
     Type ret_type = invoke.getReturnType(pool);
     Type[] arg_types = invoke.getArgumentTypes(pool);
 
-    InstructionList il = new InstructionList();
-
     if (is_object_equals(method_name, ret_type, arg_types)) {
 
       // Replace calls to Object's equals method with calls to our
@@ -1953,25 +1951,14 @@ public class DCInstrument extends InstructionListUtils {
 
       Type[] new_arg_types = new Type[] {javalangObject, javalangObject};
 
-      if (invoke.getOpcode() == Const.INVOKESPECIAL) {
-        // this is a super.equals(Object) call
-        il.append(
-            ifact.createInvoke(
-                dcompRuntimeClassName,
-                "dcomp_super_equals",
-                ret_type,
-                new_arg_types,
-                Const.INVOKESTATIC));
-      } else {
-        // just a regular equals(Object) call
-        il.append(
-            ifact.createInvoke(
-                dcompRuntimeClassName,
-                "dcomp_equals",
-                ret_type,
-                new_arg_types,
-                Const.INVOKESTATIC));
-      }
+      InstructionList il = new InstructionList();
+      il.append(
+          ifact.createInvoke(
+              dcompRuntimeClassName,
+              (invoke.getOpcode() == Const.INVOKESPECIAL) ? "dcomp_super_equals" : "dcomp_equals",
+              ret_type,
+              new_arg_types,
+              Const.INVOKESTATIC));
       return il;
     }
 
@@ -1980,7 +1967,7 @@ public class DCInstrument extends InstructionListUtils {
       // Replace calls to Object's clone method with calls to our
       // replacement, a static method in DCRuntime.
 
-      il = instrument_clone_call(invoke);
+      InstructionList il = instrument_clone_call(invoke);
       return il;
     }
 
@@ -1995,7 +1982,8 @@ public class DCInstrument extends InstructionListUtils {
 
     if (callee_instrumented) {
 
-      // Add the DCompMarker argument so that it calls the instrumented version
+      InstructionList il = new InstructionList();
+      // Add the DCompMarker argument so that it calls the instrumented version.
       il.append(new ACONST_NULL());
       Type[] new_arg_types = BcelUtil.postpendToArray(arg_types, dcomp_marker);
       Constant methodref = pool.getConstant(invoke.getIndex());
@@ -2007,26 +1995,28 @@ public class DCInstrument extends InstructionListUtils {
               new_arg_types,
               invoke.getOpcode(),
               methodref instanceof ConstantInterfaceMethodref));
+      return il;
 
     } else { // not instrumented, discard the tags before making the call
 
+      InstructionList il = new InstructionList();
       // JUnit test classes are a bit strange.  They are marked as not being callee_instrumented
       // because they do not have the dcomp_marker added to the argument list, but
       // they actually contain instrumentation code.  So we do not want to discard
       // the primitive tags prior to the call.
-      if (!junit_test_set.contains(classname)) {
+      if (!junitTestClasses.contains(classname)) {
         il.append(discard_primitive_tags(arg_types));
       }
 
-      // Add a tag for the return type if it is primitive
+      // Add a tag for the return type if it is primitive.
       if ((ret_type instanceof BasicType) && (ret_type != Type.VOID)) {
         // System.out.printf("push tag for return  type of %s%n",
         //                   invoke.getReturnType(pool));
         il.append(dcr_call("push_const", Type.VOID, Type.NO_ARGS));
       }
       il.append(invoke);
+      return il;
     }
-    return il;
   }
 
   /**
@@ -2042,20 +2032,24 @@ public class DCInstrument extends InstructionListUtils {
     InstructionList il = new InstructionList();
     int primitive_cnt = 0;
     for (Type arg_type : arg_types) {
-      if (arg_type instanceof BasicType) primitive_cnt++;
+      if (arg_type instanceof BasicType) {
+        primitive_cnt++;
+      }
     }
-    if (primitive_cnt > 0) il.append(discard_tag_code(new NOP(), primitive_cnt));
+    if (primitive_cnt > 0) {
+      il.append(discard_tag_code(new NOP(), primitive_cnt));
+    }
     return il;
   }
 
   /**
-   * Returns whether or not the invoke target is instrumented.
+   * Returns true if the invoke target is instrumented.
    *
    * @param invoke instruction whose target is to be checked
    * @param classname target class of the invoke
    * @param method_name target method of the invoke
    * @param arg_types argument types of target method
-   * @return true if target instrumented
+   * @return true if the target is instrumented
    */
   boolean isTargetInstrumented(
       InvokeInstruction invoke,
@@ -2091,6 +2085,10 @@ public class DCInstrument extends InstructionListUtils {
         }
       }
 
+      // callee_instrumented (the return value of this method) has been set.
+      // Now, adjust it for some special cases.
+      // Every adjustment is from `true` to `false`.
+
       // There are two special cases we need to detect:
       //   calls to annotations
       //   calls to functional interfaces
@@ -2116,34 +2114,9 @@ public class DCInstrument extends InstructionListUtils {
       // Note that to simplify our code we set the access flags for a functional
       // interface to ANNOTATION in our class_access_map.
       //
-      if (invoke instanceof INVOKEINTERFACE || invoke instanceof INVOKEVIRTUAL) {
-        Integer access = class_access_map.get(classname);
-        if (access == null) {
-          // We have not seen this class before. Check to see if the target class is
-          // an Annotation or a FunctionalInterface.
-          JavaClass c = getJavaClass(classname);
-          if (c != null) {
-            access = c.getAccessFlags();
-
-            // Now check for FunctionalInterface
-            for (final AnnotationEntry item : c.getAnnotationEntries()) {
-              if (item.getAnnotationType().endsWith("FunctionalInterface;")) {
-                access = Integer_ACC_ANNOTATION;
-                if (debugHandleInvoke) {
-                  System.out.println(item.getAnnotationType());
-                }
-                break;
-              }
-            }
-            class_access_map.put(classname, access);
-          } else {
-            // We cannot locate or read the .class file, better pretend it is an Annotation.
-            if (debugHandleInvoke) {
-              System.out.printf("Unable to locate class: %s%n", classname);
-            }
-            access = Integer_ACC_ANNOTATION;
-          }
-        }
+      if (callee_instrumented == true
+          && (invoke instanceof INVOKEINTERFACE || invoke instanceof INVOKEVIRTUAL)) {
+        Integer access = getAccessFlags(classname);
 
         if ((access.intValue() & Const.ACC_ANNOTATION) != 0) {
           callee_instrumented = false;
@@ -2167,9 +2140,9 @@ public class DCInstrument extends InstructionListUtils {
         }
       }
 
-      // if we are not using the instrumented JDK, then we need to track down the
+      // If we are not using the instrumented JDK, then we need to track down the
       // actual target of an INVOKEVIRTUAL to see if it has been instrumented or not.
-      if (invoke instanceof INVOKEVIRTUAL) {
+      if (callee_instrumented == true && invoke instanceof INVOKEVIRTUAL) {
         if (!jdk_instrumented && !mgen.getName().equals("equals_dcomp_instrumented")) {
 
           if (debugHandleInvoke) {
@@ -2219,24 +2192,26 @@ public class DCInstrument extends InstructionListUtils {
               }
             }
 
-            // no methods match - search this class's interfaces
-            @ClassGetName String found;
-            try {
-              found = getDefiningInterface(targetClass, method_name, arg_types);
-            } catch (Throwable e) {
-              // We cannot locate or read the .class file, better assume it is not instrumented.
-              callee_instrumented = false;
-              break;
-            }
-            if (found != null) {
-              // We have a match.
-              if (debugHandleInvoke) {
-                System.out.printf("we have a match%n%n");
-              }
-              if (BcelUtil.inJdk(found)) {
+            {
+              // no methods match - search this class's interfaces
+              @ClassGetName String found;
+              try {
+                found = getDefiningInterface(targetClass, method_name, arg_types);
+              } catch (Throwable e) {
+                // We cannot locate or read the .class file, better assume it is not instrumented.
                 callee_instrumented = false;
+                break;
               }
-              break;
+              if (found != null) {
+                // We have a match.
+                if (debugHandleInvoke) {
+                  System.out.printf("we have a match%n%n");
+                }
+                if (BcelUtil.inJdk(found)) {
+                  callee_instrumented = false;
+                }
+                break;
+              }
             }
 
             // Method not found; perhaps inherited from superclass.
@@ -2269,6 +2244,43 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
+   * Returns the access flags for the given class.
+   *
+   * @param classname the class whose access flags to return
+   * @return the access flags for the given class
+   */
+  private Integer getAccessFlags(String classname) {
+    Integer access = class_access_map.get(classname);
+    if (access == null) {
+      // We have not seen this class before. Check to see if the target class is
+      // an Annotation or a FunctionalInterface.
+      JavaClass c = getJavaClass(classname);
+      if (c != null) {
+        access = c.getAccessFlags();
+
+        // Now check for FunctionalInterface
+        for (final AnnotationEntry item : c.getAnnotationEntries()) {
+          if (item.getAnnotationType().endsWith("FunctionalInterface;")) {
+            access = Integer_ACC_ANNOTATION;
+            if (debugHandleInvoke) {
+              System.out.println(item.getAnnotationType());
+            }
+            break;
+          }
+        }
+        class_access_map.put(classname, access);
+      } else {
+        // We cannot locate or read the .class file, better pretend it is an Annotation.
+        if (debugHandleInvoke) {
+          System.out.printf("Unable to locate class: %s%n", classname);
+        }
+        access = Integer_ACC_ANNOTATION;
+      }
+    }
+    return access;
+  }
+
+  /**
    * Returns true if the specified classname is instrumented.
    *
    * @param classname class to be checked
@@ -2286,8 +2298,8 @@ public class DCInstrument extends InstructionListUtils {
       return false;
     }
 
-    // Special case JUnit test classes.
-    if (junit_test_set.contains(classname)) {
+    // Special-case JUnit test classes.
+    if (junitTestClasses.contains(classname)) {
       return false;
     }
 
