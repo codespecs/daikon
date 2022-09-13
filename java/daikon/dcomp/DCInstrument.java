@@ -187,7 +187,7 @@ public class DCInstrument extends InstructionListUtils {
   protected static final String GET_TAG = "get_tag";
 
   /** Set of JUnit test classes. */
-  protected static Set<String> junit_test_set = new HashSet<>();
+  protected static Set<String> junitTestClasses = new HashSet<>();
 
   /** Possible states of JUnit test discovery. */
   protected enum JUnitState {
@@ -492,9 +492,9 @@ public class DCInstrument extends InstructionListUtils {
           // This is a junit test class and so are the
           // elements of classnameStack.
           junit_test_class = true;
-          junit_test_set.add(this_class);
+          junitTestClasses.add(this_class);
           while (!classnameStack.isEmpty()) {
-            junit_test_set.add(classnameStack.pop());
+            junitTestClasses.add(classnameStack.pop());
           }
           break;
         } else if (super_class.equals("java.lang.Object")) {
@@ -522,7 +522,7 @@ public class DCInstrument extends InstructionListUtils {
                     || item.toString().endsWith("org/junit/jupiter/api/Test;") // JUnit 5
                 ) {
                   junit_test_class = true;
-                  junit_test_set.add(this_class);
+                  junitTestClasses.add(this_class);
                   break searchloop;
                 }
               }
@@ -2041,7 +2041,7 @@ public class DCInstrument extends InstructionListUtils {
       // because they do not have the dcomp_marker added to the argument list, but
       // they actually contain instrumentation code.  So we do not want to discard
       // the primitive tags prior to the call.
-      if (!junit_test_set.contains(classname)) {
+      if (!junitTestClasses.contains(classname)) {
         il.append(discard_primitive_tags(arg_types));
       }
 
@@ -2089,8 +2089,8 @@ public class DCInstrument extends InstructionListUtils {
       return false;
     }
 
-    // Special case JUnit test classes.
-    if (junit_test_set.contains(classname)) {
+    // Special-case JUnit test classes.
+    if (junitTestClasses.contains(classname)) {
       return false;
     }
 
