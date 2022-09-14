@@ -2288,8 +2288,9 @@ public class DCInstrument extends InstructionListUtils {
    */
   private boolean isClassnameInstrumented(@ClassGetName String classname, String method_name) {
 
-    // debug code
-    // System.out.printf("Checking callee instrumented on %s%n", classname);
+    if (debugHandleInvoke) {
+      System.out.printf("Checking callee instrumented on %s%n", classname);
+    }
 
     // Our copy of daikon.plumelib is not instrumented.  It would be odd, though,
     // to see calls to this.
@@ -2316,8 +2317,9 @@ public class DCInstrument extends InstructionListUtils {
     // If any of the omit patterns match, use the uninstrumented version of the method
     for (Pattern p : DynComp.ppt_omit_pattern) {
       if (p.matcher(classname).find()) {
-        // debug code
-        // System.out.printf("callee instrumented = false: %s.%s%n", classname, method_name);
+        if (debugHandleInvoke) {
+          System.out.printf("callee instrumented = false: %s.%s%n", classname, method_name);
+        }
         return false;
       }
     }
