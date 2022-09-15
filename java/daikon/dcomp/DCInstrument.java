@@ -2435,7 +2435,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns true if the specified method is Object.clone()
+   * Returns true if the specified method is Object.clone().
    *
    * @param methodName method to check
    * @param returnType return type of method
