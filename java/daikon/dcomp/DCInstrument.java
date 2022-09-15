@@ -2434,7 +2434,14 @@ public class DCInstrument extends InstructionListUtils {
         && args[0].equals(javalangObject));
   }
 
-  /** Returns true if the specified method is Object.clone() */
+  /**
+   * Returns true if the specified method is Object.clone()
+   *
+   * @param methodName method to check
+   * @param returnType return type of method
+   * @param args array of argument types to method
+   * @return true if method is Object.clone()
+   */
   @Pure
   boolean is_object_clone(String methodName, Type returnType, Type[] args) {
     return methodName.equals("clone") && returnType.equals(javalangObject) && (args.length == 0);
