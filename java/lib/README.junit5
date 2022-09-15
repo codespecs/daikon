@@ -1,0 +1,29 @@
+How to create junit-platform-console-standalone-1.9.0-Daikon.jar:
+
+  git clone git@github.com:junit-team/junit5.git
+  cd junit5
+  git co v5.9.0
+
+You now need to modify one file:
+  junit-jupiter-engine/src/main/java/org/junit/jupiter/engine/descriptor/JupiterEngineDescriptor.java
+
+The change identifies this version of the jar as being made for Daikon.
+@@ -37,3 +37,3 @@ public class JupiterEngineDescriptor extends EngineDescriptor implements Node<Ju
+        public JupiterEngineDescriptor(UniqueId uniqueId, JupiterConfiguration configuration) {
+-               super(uniqueId, "JUnit Jupiter");
++               super(uniqueId, "JUnit Jupiter Daikon");
+                this.configuration = configuration;
+
+After you have made the edit, build the jar file with:
+  ./gradlew junit-platform-console-standalone:build
+
+NOTE: This build requires Java 17.  You may need to do something like:
+  sudo update-java-alternatives --set java-17-oracle
+
+The result of the build will be:
+ ./junit-platform-console-standalone/build/libs/junit-platform-console-standalone-1.9.0.jar
+
+Copy this file to this directory (daikon/java/lib) and insert 'Daikon' in the file name prior to '.jar'.
+
+NOTE: Don't forget to change your java-alternatives back if you modified them above.
+

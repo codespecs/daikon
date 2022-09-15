@@ -139,11 +139,6 @@ public class DynComp {
     basic.enabled = debug;
     basic.log("target_args = %s%n", Arrays.toString(target_args));
 
-    // Turn on dumping of instrumented classes if debug was selected
-    if (debug) {
-      dump = true;
-    }
-
     // Start the target.  Pass the same options to the premain as
     // were passed here.
 
@@ -305,6 +300,21 @@ public class DynComp {
       }
     }
 
+    // For some unknown reason, groovy cannot be on the boot classpath.
+    String[] cpaths = cp.split(path_separator);
+    for (int i = 0; i < cpaths.length; i++) {
+      if (cpaths[i].contains("groovy")) {
+        @SuppressWarnings("regex:argument")
+        String[] path_elements = cpaths[i].split(File.separator);
+        if (path_elements[path_elements.length - 1].matches("^groovy.*\\.jar$")) {
+          cpaths[i] = "";
+        }
+      }
+    }
+    String boot_path =
+        String.join(path_separator, cpaths)
+            .replaceAll(path_separator + path_separator, path_separator);
+
     // Build the command line to execute the target with the javaagent
     List<String> cmdlist = new ArrayList<>();
     cmdlist.add("java");
@@ -321,7 +331,7 @@ public class DynComp {
     if (BcelUtil.javaVersion <= 8) {
       if (!no_jdk) {
         // prepend to rather than replace bootclasspath
-        cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + cp);
+        cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + boot_path);
       }
     } else {
       // allow DCRuntime to make reflective access to java.land.Object.clone() without a warning
@@ -330,7 +340,7 @@ public class DynComp {
       if (!no_jdk) {
         // If we are processing JDK classes, then we need our code on the bootclasspath as well.
         // Otherwise, references to DCRuntime from the JDK would fail.
-        cmdlist.add("-Xbootclasspath/a:" + rt_file + path_separator + cp);
+        cmdlist.add("-Xbootclasspath/a:" + rt_file + path_separator + boot_path);
         // allow java.base to access daikon.jar (for instrumentation runtime)
         cmdlist.add("--add-reads");
         cmdlist.add("java.base=ALL-UNNAMED");

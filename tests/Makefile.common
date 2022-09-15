@@ -192,11 +192,14 @@ else
 endif
 JAVA  := $(JAVA_HOME)/bin/java
 JAVAC ?= $(JAVA_HOME)/bin/javac
+
+JUNIT_CLASSPATH ?=
+
 JAVALIB_CLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
-export DAIKON_TESTS_CLASSPATH := .:$(JAVALIB_CLASSPATH):$(SCRATCH_FOR_DAIKON):$(DAIKON_CLASSPATH)
+export DAIKON_TESTS_CLASSPATH := .:$(JAVALIB_CLASSPATH):$(SCRATCH_FOR_DAIKON):$(JUNIT_CLASSPATH):$(DAIKON_CLASSPATH)
 
 # Dynamic instrumentation based java front end command.
 CHICORY := $(JAVA) -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.Chicory

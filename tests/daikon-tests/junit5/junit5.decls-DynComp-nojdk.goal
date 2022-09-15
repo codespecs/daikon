@@ -1,0 +1,182 @@
+// Declarations for FirstUnitTest
+// Declarations written 2022-07-26T13:00:54.816084 by daikon.DynComp
+
+decl-version 2.0
+var-comparability implicit
+
+ppt FirstUnitTest:::CLASS
+ppt-type class
+
+ppt FirstUnitTest:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt FirstUnitTest.FirstUnitTest():::ENTER
+ppt-type enter
+
+ppt FirstUnitTest.FirstUnitTest():::EXIT8
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt FirstUnitTest.whenThis_thenThat():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt FirstUnitTest.whenThis_thenThat():::EXIT13
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt FirstUnitTest.whenSomething_thenSomething():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt FirstUnitTest.whenSomething_thenSomething():::EXIT18
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt FirstUnitTest.whenSomethingElse_thenSomethingElse():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt FirstUnitTest.whenSomethingElse_thenSomethingElse():::EXIT23
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt FirstUnitTest.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt FirstUnitTest.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt FirstUnitTest.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt FirstUnitTest.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type FirstUnitTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+

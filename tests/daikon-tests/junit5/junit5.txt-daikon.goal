@@ -1,0 +1,19 @@
+===========================================================================
+FirstUnitTest:::OBJECT
+===========================================================================
+FirstUnitTest.FirstUnitTest():::EXIT
+===========================================================================
+FirstUnitTest.whenSomethingElse_thenSomethingElse():::ENTER
+this has only one value
+===========================================================================
+FirstUnitTest.whenSomethingElse_thenSomethingElse():::EXIT
+===========================================================================
+FirstUnitTest.whenSomething_thenSomething():::ENTER
+this has only one value
+===========================================================================
+FirstUnitTest.whenSomething_thenSomething():::EXIT
+===========================================================================
+FirstUnitTest.whenThis_thenThat():::ENTER
+this has only one value
+===========================================================================
+FirstUnitTest.whenThis_thenThat():::EXIT
