@@ -649,7 +649,7 @@ very-clean: clean clean-generated-files
 	-rm -rf dcomp_premain.jar dcomp_rt.jar $(DCOMP_RT)
 	-rm -rf api
 	-rm -rf daikon/dcomp/std_dcomp_out.diff daikon/dcomp/std_dcomp_out.txt
-
+	-rm -rf daikon/chicory/ChicoryTest.inv.out
 
 run:	all
 	${JAVA_COMMAND} daikon.Daikon
