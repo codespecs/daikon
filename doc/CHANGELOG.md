@@ -1344,7 +1344,7 @@ Daikon
   User visible changes
 
     A new front end for Eiffel programs is available.  See
-    http://se.inf.ethz.ch/people/polikarpova/citadel/ .
+    https://se.inf.ethz.ch/people/polikarpova/citadel/ .
 
     A new tool (MergeInvariants) for merging serialized invariant files has
     been added.  See section 8.1.2 of the user manual for more information.

@@ -228,7 +228,7 @@ public class Instrument implements ClassFileTransformer {
 
   /**
    * Returns whether or not the specified class is part of a tool known to do Java byte code
-   * transformation. We need to warn user this may not work correctly.
+   * transformation. We need to warn the user that this may not work correctly.
    *
    * @param classname class to be checked
    * @return true if classname is a known transformer
@@ -236,6 +236,12 @@ public class Instrument implements ClassFileTransformer {
   @Pure
   protected static boolean is_transformer(String classname) {
 
+    if (classname.startsWith("org/codehaus/groovy")) {
+      return true;
+    }
+    if (classname.startsWith("groovy/lang")) {
+      return true;
+    }
     if (classname.startsWith("org/mockito")) {
       return true;
     }

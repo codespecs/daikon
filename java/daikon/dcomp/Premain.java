@@ -123,6 +123,11 @@ public class Premain {
       System.exit(1);
     }
 
+    // Turn on dumping of instrumented classes if debug was selected
+    if (DynComp.debug) {
+      DynComp.dump = true;
+    }
+
     verbose = DynComp.verbose || DynComp.debug;
 
     if (DynComp.rt_file != null && DynComp.rt_file.getName().equalsIgnoreCase("NONE")) {

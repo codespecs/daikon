@@ -1143,7 +1143,7 @@ were declared, but since every stand-alone program uses the
 
 CITADEL is an Eiffel front-end to the Daikon invariant detector.
 You can obtain Citadel from
-@uref{http://se.inf.ethz.ch/people/polikarpova/citadel/}.
+@uref{https://se.inf.ethz.ch/people/polikarpova/citadel/}.
 
 
 @node    Detecting invariants in Simulink/Stateflow programs
@@ -6441,7 +6441,7 @@ separately; see @uref{http://web.archive.org/web/20160528161316/https://neptuno.
 @cindex instrumentation, of Eiffel programs
 
 A front end for the Eiffel programming language, named CITADEL, is distributed
-separately; see @uref{http://se.inf.ethz.ch/people/polikarpova/citadel/}.
+separately; see @uref{https://se.inf.ethz.ch/people/polikarpova/citadel/}.
 
 @cindex Hynger front end for Simulink/Stateflow (SLSF) block diagrams
 @cindex front end for Simulink/Stateflow (SLSF) block diagrams

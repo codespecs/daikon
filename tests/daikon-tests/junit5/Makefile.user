@@ -7,5 +7,5 @@ else
 endif
 
 # need junit.jar on classpath to compile all junit references
-JUNIT_CLASSPATH := $(wildcard ${DAIKONDIR}/java/lib/junit-4*-Daikon.jar)
+JUNIT_CLASSPATH := $(wildcard ${DAIKONDIR}/java/lib/junit-p*-Daikon.jar)
 JAVAC := $(JAVA_HOME)/bin/javac -cp $(JUNIT_CLASSPATH)
