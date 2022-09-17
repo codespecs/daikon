@@ -525,12 +525,15 @@ public final @Interned class ProglangType implements Serializable {
           } else if (parser.ttype == StreamTokenizer.TT_NUMBER) {
             v.add(Integer.toString((int) parser.nval));
           } else {
-            @Signed char tmpChar = (@Signed char) parser.ttype;
             System.out.printf(
                 "Warning: at %s line %d%n"
                     + "  bad ttype %c [int=%d] while parsing %s%n"
                     + "  Proceeding with value 'null'%n",
-                filename, reader.getLineNumber(), tmpChar, parser.ttype, value_orig);
+                filename,
+                reader.getLineNumber(),
+                (@Signed char) parser.ttype,
+                parser.ttype,
+                value_orig);
             v.add(null);
           }
         }

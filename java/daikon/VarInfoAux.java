@@ -196,8 +196,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
             : "@AssumeAssertion(nullness): representation invariant of StreamTokenizer";
         token = tok.sval.trim().intern();
       } else {
-        @Signed char tmpChar = (@Signed char) tok.ttype;
-        token = (tmpChar + "").intern();
+        token = ((@Signed char) tok.ttype + "").intern();
       }
 
       debug.fine("Token info: " + tokInfo + " " + token);
