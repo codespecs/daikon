@@ -827,13 +827,13 @@ JAVAC_FORMATTER_ARGS = -processor org.checkerframework.checker.formatter.Formatt
 JAVAC_INDEX_ARGS = -processor org.checkerframework.checker.index.IndexChecker -implicit:class -Xlint:-processing -AskipDefs='${INDEX_SKIPDEFS}' -AassumeAssertionsAreEnabled -AsuppressWarnings="index"
 # JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'
-JAVAC_SIGNATURE_ARGS = -processor org.checkerframework.checker.signature.SignatureChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_SIGNEDNESS_ARGS = -processor org.checkerframework.checker.signedness.SignednessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_NULLNESS_ARGS = -processor org.checkerframework.checker.nullness.NullnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_PROTOTYPE_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
-JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
 JAVAC_REGEX_ARGS = -processor org.checkerframework.checker.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_REGEX_QUAL_ARGS = -processor org.checkerframework.checker.experimental.regex_qual.RegexCheckerAdapter -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_SIGNATURE_ARGS = -processor org.checkerframework.checker.signature.SignatureChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_SIGNEDNESS_ARGS = -processor org.checkerframework.checker.signedness.SignednessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
 # -AsuppressWarnings=lock:method.guarantee.violated,lock:override.sideeffect is temporary.
 # Once the Purity Checker and -AsuggestPureMethods are fixed, they can be run on plume-lib
 # and Daikon and this can be removed. The method.guarantee.violated warning is issued by
@@ -911,31 +911,13 @@ INTERNING_ONEFILE ?= daikon/PptTopLevel.java
 typecheck-interning-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_ONEFILE}
 
-typecheck-resourceleak: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-
-typecheck-signature: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-
-typecheck-signedness: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-
-# This target runs the Signature checker on just one file.
-# Typical command:
-# SIGNATURE_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make typecheck-signature-onefile
-# SIGNATURE_ONEFILE ?= daikon/chicory/Instrument.java daikon/dcomp/DCInstrument.java
-SIGNATURE_ONEFILE ?= daikon/dcomp/TypeStack.java
-typecheck-signature-onefile: ${ALL_GENERATED_FILES} compile
-	${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
-
+typecheck-lock: ${ALL_GENERATED_FILES} compile
+	@echo ${JAVAC_COMMAND} ${CHECKER_ARGS} ${JAVAC_LOCK_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_LOCK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 typecheck-nullness: compile compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-
 
 # These targets run the Nullness checker on just one file.
 # Typical command:
@@ -952,10 +934,6 @@ typecheck-prototype: compile compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
-typecheck-vindex: compile compile-typequals
-	@echo ${JAVAC_COMMAND} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-
 typecheck-regex: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
@@ -964,9 +942,29 @@ typecheck-regex-qual: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
-typecheck-lock: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND} ${CHECKER_ARGS} ${JAVAC_LOCK_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_LOCK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+typecheck-resourceleak: ${ALL_GENERATED_FILES} compile
+	@echo ${JAVAC_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+
+typecheck-signature: ${ALL_GENERATED_FILES} compile
+	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+
+# This target runs the Signature checker on just one file.
+# Typical command:
+# SIGNATURE_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make typecheck-signature-onefile
+# SIGNATURE_ONEFILE ?= daikon/chicory/Instrument.java daikon/dcomp/DCInstrument.java
+SIGNATURE_ONEFILE ?= daikon/dcomp/TypeStack.java
+typecheck-signature-onefile: ${ALL_GENERATED_FILES} compile
+	${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
+
+typecheck-signedness: ${ALL_GENERATED_FILES} compile
+	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+
+typecheck-vindex: compile compile-typequals
+	@echo ${JAVAC_COMMAND} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 TYPEQUALS_JAVA_FILES = $(wildcard typequals/*.java)
 TYPEQUALS_CLASSES = $(subst .java,.class,${TYPEQUALS_JAVA_FILES})
