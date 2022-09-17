@@ -60,7 +60,7 @@ public class ModBitTracker implements Serializable, Cloneable {
   private @SignednessGlb int[] this_bits_exception_index;
 
   /**
-   * ModBitTracker constructor.
+   * Creates a ModBitTracker.
    *
    * @param num_vars number of variables to allocate space for
    */
