@@ -3,6 +3,7 @@ package daikon.chicory;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
+import org.checkerframework.checker.signedness.qual.Signed;
 
 /**
  * The StringInfo class is a subtype of DaikonVariableInfo used for variable types that can be
@@ -63,7 +64,8 @@ public class StringInfo extends DaikonVariableInfo {
 
     buf.append("[");
     for (Iterator<?> iter = theValues.iterator(); iter.hasNext(); ) {
-      Object str = iter.next();
+      @SuppressWarnings("signedness:cast.unsafe")
+      Object str = (@Signed Object) iter.next();
 
       if (str == null) {
         buf.append(str); // appends "null"

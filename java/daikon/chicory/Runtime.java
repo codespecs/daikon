@@ -793,6 +793,7 @@ public class Runtime {
     }
 
     @Override
+    @SuppressWarnings("signedness:override.return") // conversion routine
     public Character getJavaWrapper() {
       return val;
     }

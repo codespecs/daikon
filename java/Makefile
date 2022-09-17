@@ -828,6 +828,7 @@ JAVAC_INDEX_ARGS = -processor org.checkerframework.checker.index.IndexChecker -i
 # JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'
 JAVAC_SIGNATURE_ARGS = -processor org.checkerframework.checker.signature.SignatureChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_SIGNEDNESS_ARGS = -processor org.checkerframework.checker.signedness.SignednessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_NULLNESS_ARGS = -processor org.checkerframework.checker.nullness.NullnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_PROTOTYPE_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
 JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
@@ -868,7 +869,7 @@ show_nullness_java_files:
 ## TODO: Reinstate these dependencies later:  typecheck-prototype typecheck-vindex
 # Check is in two parts because Travis won't run jobs longer than 50 minutes.
 typecheck-part1: typecheck-formatter typecheck-index typecheck-interning typecheck-lock
-typecheck-part2: typecheck-nullness typecheck-regex typecheck-resourceleak typecheck-signature
+typecheck-part2: typecheck-nullness typecheck-regex typecheck-resourceleak typecheck-signature typecheck-signedness
 typecheck-all: typecheck-part1 typecheck-part2
 typecheck: typecheck-all
 
@@ -917,6 +918,10 @@ typecheck-resourceleak: ${ALL_GENERATED_FILES} compile
 typecheck-signature: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+
+typecheck-signedness: ${ALL_GENERATED_FILES} compile
+	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 # This target runs the Signature checker on just one file.
 # Typical command:

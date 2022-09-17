@@ -611,6 +611,7 @@ class FormatTestCase {
     // - The ProglangType will be specified in the parameters
     // - The comparability will be none
     VarInfo result;
+    @SuppressWarnings("signedness:cast.unsafe")
     String base_name = new String(new char[] {(char) ('a' + i)});
     String name = base_name + arrayModifier;
     if (FileIO.new_decl_format) {
