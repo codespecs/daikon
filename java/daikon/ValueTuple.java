@@ -57,11 +57,11 @@ public final class ValueTuple implements Cloneable {
   public static final @Signed int MISSING_FLOW = 3;
   /** Maximum mod bit value. Always set to 1+ last modbit value. */
   public static final @Signed int MODBIT_VALUES = 4;
-  // Out of the range of MODBIT_VALUES because this won't appear in the
-  // tables; it gets converted to UNMODIFIED or MODIFIED, depending on
-  // whether this is the first sample.  (Not sure whether that is the right
-  // strategy in the long term; it does let me avoid changing code in the
-  // short term.)
+  /**
+   * Out of the range of MODBIT_VALUES because this won't appear in the tables; it gets converted to
+   * UNMODIFIED or MODIFIED, depending on whether this is the first sample. (Not sure whether that
+   * is the right strategy in the long term; it does let me avoid changing code in the short term.)
+   */
   public static final @Signed int STATIC_CONSTANT = 22;
 
   // Implementation for unpacked representation.
