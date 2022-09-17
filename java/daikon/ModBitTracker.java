@@ -59,6 +59,11 @@ public class ModBitTracker implements Serializable, Cloneable {
    */
   private @SignednessGlb int[] this_bits_exception_index;
 
+  /**
+   * ModBitTracker constructor.
+   *
+   * @param num_vars number of variables to allocate space for
+   */
   public ModBitTracker(int num_vars) {
     assert num_vars >= 0;
     this.num_vars = num_vars;
@@ -132,7 +137,12 @@ public class ModBitTracker implements Serializable, Cloneable {
     return get(varindex).get(sampleno);
   }
 
-  /** Split the specified equivalence set into two pieces. Returns the index of the copy. */
+  /**
+   * Split the specified equivalence set into two pieces. Returns the index of the copy.
+   *
+   * @param split_index where to split modbits_arrays
+   * @return the index of the copy
+   */
   private @SignednessGlb int split(int split_index) {
     @SuppressWarnings("nullness") // application invariant: split_index is in range
     @NonNull BitSet bs = (BitSet) modbits_arrays[split_index].clone();
