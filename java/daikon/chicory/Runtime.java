@@ -792,8 +792,8 @@ public class Runtime {
       return Integer.toString(val);
     }
 
-    @Override
     @SuppressWarnings("signedness:override.return") // conversion routine
+    @Override
     public Character getJavaWrapper() {
       return val;
     }

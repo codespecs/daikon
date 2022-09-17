@@ -6,7 +6,7 @@ import java.util.BitSet;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signedness.qual.SignednessGlb;
+import org.checkerframework.checker.signedness.qual.Signed;
 
 // "ModBitTracker" is a poor name for this class, since it tracks
 // whether a value is missing, not whether it is modified.
@@ -46,7 +46,7 @@ public class ModBitTracker implements Serializable, Cloneable {
    * The number of BitSets (equivalence sets) in use. All elements of modbits_arrays before this
    * index are non-null, and all elements at or past this index are null.
    */
-  private @SignednessGlb int num_sets;
+  private int num_sets;
 
   // Member variables to avoid re-allocating every time "add" is entered.
   /** The bits for this ValueTuple (indexed by equivalence set. */
@@ -57,7 +57,7 @@ public class ModBitTracker implements Serializable, Cloneable {
    * The equivalence set for when an equivalence set is split: if a variable has a conflicting bit,
    * then it goes to the specified index instead.
    */
-  private @SignednessGlb int[] this_bits_exception_index;
+  private int[] this_bits_exception_index;
 
   /**
    * Creates a ModBitTracker.
@@ -143,7 +143,7 @@ public class ModBitTracker implements Serializable, Cloneable {
    * @param split_index where to split modbits_arrays
    * @return the index of the copy
    */
-  private @SignednessGlb int split(int split_index) {
+  private int split(int split_index) {
     @SuppressWarnings("nullness") // application invariant: split_index is in range
     @NonNull BitSet bs = (BitSet) modbits_arrays[split_index].clone();
     modbits_arrays[num_sets] = bs;
@@ -160,7 +160,7 @@ public class ModBitTracker implements Serializable, Cloneable {
       return;
     }
     Arrays.fill(this_bits_valid, false);
-    Arrays.fill(this_bits_exception_index, -1);
+    Arrays.fill(this_bits_exception_index, (@Signed int) -1);
     for (int i = 0; i < num_vars; i++) {
       int this_index = index[i];
       // Should this use the whole modbit, not just a boolean?

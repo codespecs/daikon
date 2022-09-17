@@ -110,7 +110,6 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
-import org.checkerframework.checker.signedness.qual.SignednessGlb;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.reflection.ReflectionPlume;
@@ -3623,7 +3622,7 @@ public class PptTopLevel extends Ppt {
     int num_tracevars = mbtracker.num_vars();
     // warning: shadows field of same name
     @Nullable Object[] vals = new Object[num_tracevars];
-    @SignednessGlb int[] mods = new int[num_tracevars];
+    int[] mods = new int[num_tracevars];
     ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
     for (PptRelation rel : children) {
       ModBitTracker child_mbtracker = rel.child.mbtracker;
