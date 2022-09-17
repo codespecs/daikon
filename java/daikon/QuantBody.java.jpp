@@ -2254,7 +2254,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
         _TYPE[] intermediate = new _TYPE[collection.size()];
         int index = 0;
         for (Iterator<? extends Object> i = collection.iterator() ; i.hasNext() ; ) {
-          Object obj =  i.next();
+          Object obj = i.next();
           _TYPE_NAME[] oneEltArray = COLLECT_TYPE(obj, fields, fieldsStartIdx + 1);
           if (oneEltArray == null) {
             throw new Error("bad fields: " + (obj == null ? "null" : obj.getClass()) + " " + Arrays.toString(fields) + " " + (fieldsStartIdx + 1));
