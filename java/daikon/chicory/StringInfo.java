@@ -26,10 +26,8 @@ public class StringInfo extends DaikonVariableInfo {
 
   /** Returns a String that contains a string representation of val, used for dtrace information. */
   @Override
-  @SuppressWarnings("unchecked")
   public String getDTraceValueString(Object val) {
     if (isArray) {
-      @SuppressWarnings("unchecked")
       List<?> valAsList = (List<?>) val;
       return getStringList(valAsList);
     } else {
