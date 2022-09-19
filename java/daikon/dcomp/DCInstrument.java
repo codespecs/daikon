@@ -1301,7 +1301,9 @@ public class DCInstrument extends InstructionListUtils {
       offset += argType.getSize();
     }
     for (int ii = plist.size() - 1; ii >= 0; ii--) {
-      params += (char) (plist.get(ii) + '0');
+      @SuppressWarnings("signedness:cast.unsafe") // offset is small so + '0' is valid character
+      char tmpChar = (char) (plist.get(ii) + '0');
+      params += tmpChar;
       // Character.forDigit (plist.get(ii), Character.MAX_RADIX);
     }
 

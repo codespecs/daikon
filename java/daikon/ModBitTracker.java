@@ -6,6 +6,7 @@ import java.util.BitSet;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.Signed;
 
 // "ModBitTracker" is a poor name for this class, since it tracks
 // whether a value is missing, not whether it is modified.
@@ -159,7 +160,7 @@ public class ModBitTracker implements Serializable, Cloneable {
       return;
     }
     Arrays.fill(this_bits_valid, false);
-    Arrays.fill(this_bits_exception_index, -1);
+    Arrays.fill(this_bits_exception_index, (@Signed int) -1);
     for (int i = 0; i < num_vars; i++) {
       int this_index = index[i];
       // Should this use the whole modbit, not just a boolean?

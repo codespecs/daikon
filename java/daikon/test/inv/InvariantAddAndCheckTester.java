@@ -758,7 +758,10 @@ public class InvariantAddAndCheckTester {
       // invariant, "b" for the second, and so on
       // - The ProglangType will be specified in the parameters
       // - The comparability will be none
-      @SuppressWarnings("interning")
+      @SuppressWarnings({
+        "interning",
+        "signedness:cast.unsafe" // `i` is small enough to prevent overflow
+      })
       @Interned VarInfo result =
           new VarInfo(
               new String(new char[] {(char) ('a' + i)}) + arrayModifier,
