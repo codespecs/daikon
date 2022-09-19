@@ -22,6 +22,8 @@ Further documentation can be found in:
 Version 5.8.14 (??? 2022)
 =================================
 
+DynComp now supports the JUnit 5 test framework.
+
 Bug fixes and implementation details:
  * Valgrind update from 3.17.0 to 3.19.0.
  * Binutils update from 2.37 to 2.39.
