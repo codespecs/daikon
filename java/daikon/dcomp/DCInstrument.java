@@ -1884,9 +1884,7 @@ public class DCInstrument extends InstructionListUtils {
     if (debugGetDefiningInterface) {
       System.out.println("searching interfaces of: " + startClass.getClassName());
     }
-    for (String interfaceNameString : startClass.getInterfaceNames()) {
-      @SuppressWarnings("signature:assignment")
-      @ClassGetName String interfaceName = interfaceNameString;
+    for (@ClassGetName String interfaceName : startClass.getInterfaceNames()) {
       if (debugGetDefiningInterface) {
         System.out.println("interface: " + interfaceName);
       }
@@ -2228,9 +2226,7 @@ public class DCInstrument extends InstructionListUtils {
               break;
             }
             // Recurse looking in the superclass.
-            @SuppressWarnings("signature:assignment")
-            @ClassGetName String temp = targetClass.getSuperclassName();
-            targetClassname = temp;
+            targetClassname = targetClass.getSuperclassName();
           }
         }
       }
@@ -2372,7 +2368,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param classname the fully qualified name of the class in binary form. E.g., "java.util.List"
    * @return superclass name of classname or null if there is an error
    */
-  private String getSuperclassName(String classname) {
+  private @ClassGetName String getSuperclassName(String classname) {
     JavaClass jc = getJavaClass(classname);
     if (jc != null) {
       return jc.getSuperclassName();
@@ -2403,8 +2399,7 @@ public class DCInstrument extends InstructionListUtils {
 
     URL class_url = ClassLoader.getSystemResource(classname.replace('.', '/') + ".class");
     if (class_url != null) {
-      try {
-        InputStream inputStream = class_url.openStream();
+      try (InputStream inputStream = class_url.openStream()) {
         if (inputStream != null) {
           // Parse the bytes of the classfile, die on any errors
           ClassParser parser = new ClassParser(inputStream, classname + "<internal>");
