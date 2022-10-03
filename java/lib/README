@@ -36,8 +36,8 @@ The release version contains Java 5 bytecodes.  When a program that uses JUnit i
 it produces lots of warnings about the use of old bytes codes. More importantly, the Java 5 bytecodes
 generated for try finally statements confuse the BCEL bytecode verifier and it reports a fatal error.
 Note that if a user wishes to use the release version of JUnit, or any other version of JUnit, they
-can simply put it on their class path prior to daikon.jar and/or daikon/java/lib/*.  See the file
-README.junit for details on how to create junit-4.13.2-Daikon.jar.
+can simply put it on their class path prior to daikon.jar and/or daikon/java/lib/*.  To create this
+file clone git@github.com:typetools/junit4.git and follow the instructions in README-typetools.txt.
 
 hamcrest-core.1.3-Daikon.jar : This is our Java 8 recompilation of the release version of
 hamcrest-core.1.3.jar. It has the same issue as junit-4.13.2.jar. See the file README.hamcrest
