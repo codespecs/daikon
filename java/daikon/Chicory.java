@@ -531,8 +531,10 @@ public class Chicory {
     cmd.add(cp);
     cmd.add("-ea");
     cmd.add("daikon.Daikon");
-    for (String arg : daikon_args.split(" +")) {
-      cmd.add(arg);
+    if (!daikon_args.trim().isEmpty()) {
+      for (String arg : daikon_args.split(" +")) {
+        cmd.add(arg);
+      }
     }
     if (daikon_online) {
       cmd.add("+");
@@ -540,7 +542,6 @@ public class Chicory {
       cmd.add(output_dir + File.separator + dtrace_file);
     }
 
-    // System.out.println("daikon command is " + daikon_cmd);
     // System.out.println("daikon command cmd " + cmd);
 
     if (verbose) {
