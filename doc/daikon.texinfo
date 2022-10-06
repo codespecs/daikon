@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2020
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.8.14, released October 4, 2022.
+It describes Daikon version 5.8.14, released October 6, 2022.
 
 @menu
 * Introduction::
@@ -8673,7 +8673,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.8.14, released October 4, 2022.
+This manual describes Daikon version 5.8.14, released October 6, 2022.
 A more detailed list of revisions since mid-2001 can be found in file
 @url{CHANGELOG.md,,@file{doc/CHANGELOG.md}}
 in the distribution; this section gives a
