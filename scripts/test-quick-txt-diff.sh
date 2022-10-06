@@ -13,4 +13,5 @@ make dyncomp-jdk
 # if [[ $MAKE_VERSION =~ "GNU Make 4" ]]; then
 #   MPARG_ARG="MPARG=-Otarget"
 # fi
+make quick-test
 make -C tests MPARG=-j1 quick-txt-diff results
