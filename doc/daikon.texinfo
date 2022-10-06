@@ -3487,7 +3487,7 @@ name, it is searched for in the configuration directory specified via
 configuration directory is specified.
 
 One way to create a @file{.pure} file is to run the Purity Analysis Kit
-(@uref{http://jppa.sourceforge.net/}).  If you supply
+(@uref{https://jppa.sourceforge.net/}).  If you supply
 the @option{--daikon-purity-file} when running the Purity Analysis Kit,
 it writes a file that can be supplied to Chicory.
 
