@@ -138,6 +138,9 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   }
 
   @Override
+  #if FTYPE == FTYPE_RshiftUnsigned
+  @SuppressWarnings("signedness:shift.unsigned") // RshiftUnsigned treats arg1 as unsigned, though we do not know how the program under test treats it
+  #endif
   public PRIMITIVE func(PRIMITIVE arg1, PRIMITIVE arg2) {
     #ifdef ARG1_BOUND
       if ((arg1 < arg1_bound[0]) || (arg1 > arg1_bound[1])) {

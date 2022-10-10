@@ -19,14 +19,22 @@ Further documentation can be found in:
    It is also available at http://plse.cs.washington.edu/daikon/download/api/ .
 
 
-Version 5.8.14 (??? ??, 2022)
-=================================
+Version 5.8.16 (??? ??, 2022)
+=============================
 
 All Daikon tools now work with Java 18.
+
+
+Version 5.8.14 (October 6, 2022)
+================================
+
+DynComp now supports the JUnit 5 test framework.
 
 Bug fixes and implementation details:
  * Valgrind update from 3.17.0 to 3.19.0.
  * Binutils update from 2.37 to 2.39.
+ * fix DynComp command line input (#399)
+ * fix Fjalar support for Ubuntu 22.04 (#56)
 
 
 Version 5.8.12 (July 14, 2022)

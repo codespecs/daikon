@@ -2250,10 +2250,10 @@ The "defined(INT)" test ensures that it only appears once in the output.
 
       if (daikon.ProglangType.list_implementors.contains(fieldObj.getClass().getName())) {
 
-        java.util.AbstractCollection<?> collection = (java.util.AbstractCollection<?>)fieldObj;
+        java.util.AbstractCollection<? extends Object> collection = (java.util.AbstractCollection<? extends Object>)fieldObj;
         _TYPE[] intermediate = new _TYPE[collection.size()];
         int index = 0;
-        for (Iterator<?> i = collection.iterator() ; i.hasNext() ; ) {
+        for (Iterator<? extends Object> i = collection.iterator() ; i.hasNext() ; ) {
           Object obj = i.next();
           _TYPE_NAME[] oneEltArray = COLLECT_TYPE(obj, fields, fieldsStartIdx + 1);
           if (oneEltArray == null) {

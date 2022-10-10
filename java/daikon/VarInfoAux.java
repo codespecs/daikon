@@ -19,6 +19,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.Signed;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -195,7 +196,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
             : "@AssumeAssertion(nullness): representation invariant of StreamTokenizer";
         token = tok.sval.trim().intern();
       } else {
-        token = ((char) tok.ttype + "").intern();
+        token = ((@Signed char) tok.ttype + "").intern();
       }
 
       debug.fine("Token info: " + tokInfo + " " + token);

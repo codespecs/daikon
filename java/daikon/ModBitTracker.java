@@ -6,6 +6,7 @@ import java.util.BitSet;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.Signed;
 
 // "ModBitTracker" is a poor name for this class, since it tracks
 // whether a value is missing, not whether it is modified.
@@ -58,6 +59,11 @@ public class ModBitTracker implements Serializable, Cloneable {
    */
   private int[] this_bits_exception_index;
 
+  /**
+   * Creates a ModBitTracker.
+   *
+   * @param num_vars number of variables to allocate space for
+   */
   public ModBitTracker(int num_vars) {
     assert num_vars >= 0;
     this.num_vars = num_vars;
@@ -131,7 +137,12 @@ public class ModBitTracker implements Serializable, Cloneable {
     return get(varindex).get(sampleno);
   }
 
-  /** Split the specified equivalence set into two pieces. Returns the index of the copy. */
+  /**
+   * Split the specified equivalence set into two pieces. Returns the index of the copy.
+   *
+   * @param split_index where to split modbits_arrays
+   * @return the index of the copy
+   */
   private int split(int split_index) {
     @SuppressWarnings("nullness") // application invariant: split_index is in range
     @NonNull BitSet bs = (BitSet) modbits_arrays[split_index].clone();
@@ -149,7 +160,7 @@ public class ModBitTracker implements Serializable, Cloneable {
       return;
     }
     Arrays.fill(this_bits_valid, false);
-    Arrays.fill(this_bits_exception_index, -1);
+    Arrays.fill(this_bits_exception_index, (@Signed int) -1);
     for (int i = 0; i < num_vars; i++) {
       int this_index = index[i];
       // Should this use the whole modbit, not just a boolean?

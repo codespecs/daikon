@@ -9,5 +9,9 @@ chicory:
 dcomp:
 	cd .. && $(MAKE) dcomp
 
+.PHONY: quick-test
+quick-test:
+	cd ../.. && $(MAKE) quick-test
+
 %:
 	cd .. && $(MAKE) $@
