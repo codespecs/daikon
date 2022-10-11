@@ -37,7 +37,6 @@ RUN dnf -qy install \
   gcc-c++ \
   graphviz \
   netpbm \
-  python \
   python3 \
   texi2html \
   texinfo \
