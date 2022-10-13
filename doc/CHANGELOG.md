@@ -19,8 +19,14 @@ Further documentation can be found in:
    It is also available at http://plse.cs.washington.edu/daikon/download/api/ .
 
 
-Version 5.8.14 (October 4, 2022)
-=================================
+Version 5.8.16 (??? ??, 2022)
+=============================
+
+All Daikon tools now work with Java 18.
+
+
+Version 5.8.14 (October 6, 2022)
+================================
 
 DynComp now supports the JUnit 5 test framework.
 
@@ -32,7 +38,7 @@ Bug fixes and implementation details:
 
 
 Version 5.8.12 (July 14, 2022)
-=================================
+==============================
 
 All Daikon tools now work with Java 17.
 Javadoc Doclets are supported for Java 8, 11 and 17.

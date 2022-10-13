@@ -55,9 +55,6 @@ RUN dnf -q -y install \
   texlive \
   wget
 
-# Make default be Python 2, for backward compatibility just in case.
-RUN alternatives --set python /usr/bin/python2
-
 # Texinfo is in the PowerTools repository, as of CentOS 8.
 # Alternately, run: dnf --enablerepo=PowerTools install PACKAGENAME
 RUN dnf -y install dnf-plugins-core \
