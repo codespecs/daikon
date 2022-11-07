@@ -108,11 +108,11 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 public class DCInstrument extends InstructionListUtils {
 
   /**
-   * Used when testing to terminate processing if an error occurs. Currently, This flag is only used
+   * Used when testing to continue processing if an error occurs. Currently, This flag is only used
    * by BuildJDK.
    */
   @Option("Halt if an instrumentation error occurs")
-  public static boolean quit_if_error = false;
+  public static boolean quit_if_error = true;
 
   /** Unmodified version of input class. */
   protected JavaClass orig_class;

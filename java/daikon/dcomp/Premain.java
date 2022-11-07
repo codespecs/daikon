@@ -119,6 +119,7 @@ public class Premain {
     String[] target_args = options.parse(true, agentArgs.split("  *"));
     if (target_args.length > 0) {
       System.err.printf("Unexpected Premain arguments %s%n", Arrays.toString(target_args));
+      System.out.println();
       options.printUsage();
       System.exit(1);
     }
