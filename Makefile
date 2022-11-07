@@ -95,7 +95,7 @@ WWW_DIR := $(WWW_PARENT)/daikon
 INV_DIR := $(shell pwd)
 
 JAR_DIR := $(INV_DIR)
-QT_PATH := ../../../daikon.jar:.
+QT_PATH := ../../../daikon.jar:.:../../../java/*
 
 # Staging area for the distribution
 STAGING_DIR := $(WWW_PARENT)/staging-daikon
