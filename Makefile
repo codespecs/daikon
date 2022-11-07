@@ -278,8 +278,15 @@ junit:
 # are working properly.
 quick-test:
 	cd examples/java-examples/StackAr; \
-	javac -g DataStructures/*.java; \
+	javac -g DataStructures/*.java
+	@echo "Running Chicory/Daikon"
+	cd examples/java-examples/StackAr; \
 	java -cp $(QT_PATH) daikon.Chicory --daikon DataStructures.StackArTester
+	@echo "Running DynComp/Chicory/Daikon"
+	cd examples/java-examples/StackAr; \
+	java -cp $(QT_PATH) daikon.DynComp DataStructures.StackArTester; \
+	java -cp $(QT_PATH) daikon.Chicory --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester; \
+	java -cp $(QT_PATH) daikon.Daikon StackArTester.dtrace.gz
 
 # Sanity check, suitable for continuous integration such as Jenkins or Travis.
 nightly-test:
