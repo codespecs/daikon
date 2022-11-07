@@ -284,9 +284,10 @@ you from having to edit the main Makefile directly).
 
 @item
 Compile Daikon and build other tools.
-Strictly speaking, this step is optional, but some parts of
+(Strictly speaking, this step is optional, but it is highly recommended:
+some parts of
 this are required in order to infer invariants in Java programs,
-and other parts are needed in order to infer invariants in C programs.
+and other parts are needed in order to infer invariants in C programs.)
 First, make sure that you have satisfied the requirements in
 @ref{Requirements for compiling Daikon,,,developer,Daikon Developer Manual}.
 Then, run:
@@ -379,6 +380,10 @@ Daikon, @pxref{Front ends (instrumentation)}.
 
 @node    Detecting invariants in Java programs
 @section Detecting invariants in Java programs
+
+Before detecting invariants in Java programs, you must run
+@command{make -C $DAIKONDIR/java dcomp_rt.jar}
+(for more details, see @ref{Instrumenting the JDK with DynComp}).
 
 In order to detect invariants in a Java program, you will run the program
 twice --- once using DynComp (@pxref{DynComp for Java}) to create a
