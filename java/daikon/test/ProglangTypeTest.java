@@ -14,7 +14,7 @@ import org.plumelib.util.ArraysPlume;
 @SuppressWarnings("nullness") // testing code
 public class ProglangTypeTest {
 
-  static Comparator<long[]> longarrcomparator = new ArraysPlume.LongArrayComparatorLexical();
+  static Comparator<long[]> longarrcomparator = ArraysPlume.LongArrayComparatorLexical.it;
 
   static Comparator<String[]> comparrcomparator =
       new ArraysPlume.ComparableArrayComparatorLexical<String>();

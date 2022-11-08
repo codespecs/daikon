@@ -424,10 +424,10 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
   static Comparator<@Nullable String> comparator = Comparator.nullsFirst(Comparator.naturalOrder());
   #define COMPARATOR_ARG , comparator
 #elif defined(SEQUENCE)
-  static Comparator<long[]> comparator = new ArraysPlume.LongArrayComparatorLexical();
+  static Comparator<long[]> comparator = ArraysPlume.LongArrayComparatorLexical.it;
 #define COMPARATOR_ARG , comparator
 #elif defined(FLOATSEQUENCE)
-  static Comparator<double[]> comparator = new ArraysPlume.DoubleArrayComparatorLexical();
+  static Comparator<double[]> comparator = ArraysPlume.DoubleArrayComparatorLexical.it;
 #define COMPARATOR_ARG , comparator
 #elif defined(STRINGSEQUENCE)
   static Comparator<String[]> comparator = new ArraysPlume.ComparableArrayComparatorLexical<String>(); // need to figure out proper generic type -MDE
