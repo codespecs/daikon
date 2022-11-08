@@ -11,11 +11,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.plumelib.util.ArraysPlume;
 
+/** Test the ProglangType class. */
 @SuppressWarnings("nullness") // testing code
 public class ProglangTypeTest {
 
+  /** Comparator for arrays of longs. */
   static Comparator<long[]> longarrcomparator = ArraysPlume.LongArrayComparatorLexical.it;
 
+  /** Comparator for arrays of Strings. */
   static Comparator<String[]> comparrcomparator =
       new ArraysPlume.ComparableArrayComparatorLexical<String>();
 
