@@ -360,8 +360,8 @@ test-staged-dist: $(STAGING_DIR)
 	cd $(DISTTESTDIR)/daikon && make
 	## Test that we can build docs.
 	cd $(DISTTESTDIR)/daikon && $(MAKE) doc-all
-	## Test the basic operation of Chicory/Daikon.
-	cd $(DISTTESTDIR)/daikon && $(MAKE) quick-test
+	## Test the basic operation of Chicory/DynComp/Daikon.
+	cd $(DISTTESTDIR)/daikon && $(MAKE) distribution-check
 
 # I would rather define this inside the repository-test rule.  (In that case I
 # must use "$$FOO", not $(FOO), to refer to it.)
