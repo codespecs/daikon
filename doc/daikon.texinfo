@@ -9191,7 +9191,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  ifndef preinclude XTerm cl dirname cnt mwdefines url linux von
 @c  LocalWords:  libc Leitner Quinonez Rodric Rabbah DDTRACEAPPEND createItem
 @c  LocalWords:  maxPhase largestlet anag adjacentdups specfirstword DynComp's
-@c  LocalWords:  maxdepthspec jdk dcomp BuildJDK FIFOs EXIT75 clinit VM
+@c  LocalWords:  maxdepthspec jdk dcomp BuildJDK FIFOs EXIT75 clinit VM md
 @c  LocalWords:  amd Itanium Yuan schoolDays breakDays DCompInstrumented OSTYPE
 @c  LocalWords:  AnnotateNullable instrumenter toolset JHP pm PptMap loophead
 @c  LocalWords:  instrumenters NoSuchMethodException myprogram glibc NonNull XP
@@ -9222,7 +9222,13 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  MyProblemMethod Liu Galeotti Mangala Gowri ABB LVTT LVT
 @c  LocalWords:  ClassFormatError javautil ArrayList17 Simulink Stateflow
 @c  LocalWords:  untyped splitter filename substring boolean splitters CVC
-@c  LocalWords:  dimensionality consequents UNRETURNED getter globals
+@c  LocalWords:  dimensionality consequents UNRETURNED getter globals pwd
 @c  LocalWords:  typedefs celeriacArg Inserter comparator roundoff bitwise
 @c  LocalWords:  Kellen Florian Laure Raytheon pathname customizable ctags
-@c  LocalWords:  myclasspath runtime Year2 typedef
+@c  LocalWords:  myclasspath runtime Year2 typedef ubuntu openjdk graphviz
+@c  LocalWords:  netpbm texlive autoconf automake m4 zlib1g fno ClassFile
+@c  LocalWords:  example1c Ldaikon sayHello FunctionalInterface valgrind
+@c  LocalWords:  Bourne accessors subparts MERCHANTABILITY merchantability
+@c  LocalWords:  uniq Cemal Akcaba Marinov McArthur Rayside Pickard Thaine
+@c  LocalWords:  Massimiliano Menarini Tatyana Nikolova Hellendoorn Xing
+@c  LocalWords:  Weitian Yoav Zibin
