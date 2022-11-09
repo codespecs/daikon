@@ -16,7 +16,7 @@ import org.plumelib.util.ArraysPlume;
 public class ProglangTypeTest {
 
   /** Creates a ProglangTypeTest. */
-  ProglangTypeTest() {}
+  public ProglangTypeTest() {}
 
   /** Comparator for arrays of longs. */
   static Comparator<long[]> longarrcomparator = ArraysPlume.LongArrayComparatorLexical.it;
