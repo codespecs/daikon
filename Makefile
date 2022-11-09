@@ -95,7 +95,7 @@ WWW_DIR := $(WWW_PARENT)/daikon
 INV_DIR := $(shell pwd)
 
 JAR_DIR := $(INV_DIR)
-QT_PATH := ../../../daikon.jar:.
+QT_PATH := ../../../daikon.jar:.:../../../java/*
 
 # Staging area for the distribution
 STAGING_DIR := $(WWW_PARENT)/staging-daikon
@@ -278,8 +278,15 @@ junit:
 # are working properly.
 quick-test:
 	cd examples/java-examples/StackAr; \
-	javac -g DataStructures/*.java; \
+	javac -g DataStructures/*.java
+	@echo "Running Chicory/Daikon"
+	cd examples/java-examples/StackAr; \
 	java -cp $(QT_PATH) daikon.Chicory --daikon DataStructures.StackArTester
+	@echo "Running DynComp/Chicory/Daikon"
+	cd examples/java-examples/StackAr; \
+	java -cp $(QT_PATH) daikon.DynComp DataStructures.StackArTester; \
+	java -cp $(QT_PATH) daikon.Chicory --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester; \
+	java -cp $(QT_PATH) daikon.Daikon StackArTester.dtrace.gz
 
 # Sanity check, suitable for continuous integration such as Jenkins or Travis.
 nightly-test:

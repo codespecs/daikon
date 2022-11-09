@@ -29,6 +29,7 @@ checklink
 CircleCI
 classfile
 classpath
+clinit
 codebase
 codespecs
 comparabilities
@@ -75,6 +76,7 @@ gdb
 getters
 GitHub
 globals
+Hamcrest
 hashcode
 hashcodes
 hasn
@@ -138,6 +140,7 @@ popup
 postcondition
 postconditions
 postprocessed
+ppt
 pragma
 prepend
 prepended

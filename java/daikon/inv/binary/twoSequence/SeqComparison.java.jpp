@@ -13,7 +13,7 @@ The correct way to build the system is to run 'make'.
   #define PRIMITIVE long
   #define NUMERIC
   #define IS_INT
-  #define ARRAYCOMPARATOR new ArraysPlume.LongArrayComparatorLexical()
+  #define ARRAYCOMPARATOR ArraysPlume.LongArrayComparatorLexical.it
   #define ELEM_MATCH_COMPARE(v1, v2) (ArraysPlume.isSubset(v1, v2) && \
                                       ArraysPlume.isSubset(v2, v1))
   #define SUBSEQUENCE SubSequence
@@ -55,7 +55,7 @@ The correct way to build the system is to run 'make'.
   #define SUPERCLASS TwoSequenceString
   #define PRIMITIVE String
   #define IS_STRING
-  #define ARRAYCOMPARATOR new ArraysPlume.StringArrayComparatorLexical()
+  #define ARRAYCOMPARATOR ArraysPlume.StringArrayComparatorLexical.it
   #define ELEM_MATCH_COMPARE(v1, v2) (ArraysPlume.isSubset(v1, v2) && \
                                       ArraysPlume.isSubset(v2, v1))
   #define SUBSEQUENCE SubSequenceString

@@ -19,10 +19,12 @@ Further documentation can be found in:
    It is also available at http://plse.cs.washington.edu/daikon/download/api/ .
 
 
-Version 5.8.16 (??? ??, 2022)
-=============================
+Version 5.8.16 (Nov 8, 2022)
+============================
 
 All Daikon tools now work with Java 18.
+
+Fixed a bug in DynComp's command-line processing.
 
 
 Version 5.8.14 (October 6, 2022)

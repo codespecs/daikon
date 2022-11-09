@@ -116,7 +116,7 @@ public class Premain {
     // Because DynComp started Premain in a separate process, we must rescan
     // the options to set up the DynComp static variables.
     Options options = new Options(DynComp.synopsis, DynComp.class, Premain.class);
-    String[] target_args = options.parse(true, agentArgs.split("  *"));
+    String[] target_args = options.parse(true, agentArgs.trim().split("  *"));
     if (target_args.length > 0) {
       System.err.printf("Unexpected Premain arguments %s%n", Arrays.toString(target_args));
       System.out.println();
