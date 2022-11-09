@@ -2313,6 +2313,7 @@ git clone --depth 3 https://github.com/codespecs/daikon
 cd daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0
+export PATH=$JAVA_HOME/bin:$PATH
 unset CHECKERFRAMEWORK
 make compile && make staging
 @end example
