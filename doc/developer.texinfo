@@ -83,7 +83,7 @@ Copyright @copyright{} 1998-2020
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.16, released November 8, 2022.
+It describes Daikon version 5.8.16, released November 9, 2022.
 
 @menu
 * Introduction::
