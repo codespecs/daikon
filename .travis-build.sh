@@ -71,7 +71,7 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
   if [ -d "/tmp/plume-scripts" ] ; then
     (cd /tmp/plume-scripts && git pull -q) > /dev/null 2>&1
   else
-    (cd /tmp && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)
+    (cd /tmp && (git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git || git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git))
   fi
   # For refactorings that touch a lot of code that you don't understand, create
   # top-level file SKIP-REQUIRE-JAVADOC.  Delete it after the pull request is merged.
