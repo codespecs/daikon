@@ -230,8 +230,7 @@ they maintain multiple copies of code.  Oracle recognizes these tradeoffs.
 They wish
 to <a href="https://www.oracle.com/technetwork/java/jvmls2016-goetz-3126134.pdf">&ldquo;Stop
 making users choose between performance and abstraction&rdquo;</a>.
-Project Valhalla will improve the situation and is planned for a future
-version of Java, but is not yet available.  Likewise, the
+Likewise, the
 book <a href="http://shop.oreilly.com/product/9780596527754.do"><em>Java
 Generics and Collections</em></a> says, &ldquo;you should measure
 performance to justify such a design&rdquo; (of specializing or not).  In a
@@ -287,8 +286,8 @@ concurrency and parallelism.
 Daikon's input and output are large ASCII files.
 Writing and parsing these files can take 50% of the total
     run time of the system!  A binary format would be much smaller on
-    disk.  It would also speed up IO, and it would reduce computation time (by
-    eliminating time to format data into ASCII and then parse it back out).
+    disk.  It would speed up IO.  It would reduce computation time by
+    reducing the time to format and parse data.
 <!--
 See file daikon/doc/todo-daikon-binary-format.txt, which is
 http://daikon.googlecode.com/hg/doc/todo-daikon-binary-format.txt
