@@ -46,6 +46,8 @@ PRINT_INV := java -Xmx3600M -cp "${DAIKON_CLASSPATH}" daikon.PrintInvariants
 
 default: summary
 
+goal_name = $(1).goal
+
 ifdef COMPRESS_DTRACE
 export DTRACEGZIP := 1
 DTRACE_EXT := .dtrace.gz
