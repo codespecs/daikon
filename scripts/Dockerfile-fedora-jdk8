@@ -1,5 +1,4 @@
-# Create a Docker image that is ready to run the Daikon tests,
-# using JDK 8.
+# Create a Docker image that is ready to run the Daikon tests.
 
 FROM fedora:32
 MAINTAINER Michael Ernst <mernst@cs.washington.edu>

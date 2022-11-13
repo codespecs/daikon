@@ -1,4 +1,7 @@
-# Create a Docker image that is ready to run the Daikon tests.
+# Create a Docker image that is ready to run the full Daikon tests,
+# including building the manual and Javadoc.
+# But it's used primarily for running miscellaneous tests such as the manual
+# and Javadoc.
 
 FROM centos
 MAINTAINER Michael Ernst <mernst@cs.washington.edu>
@@ -36,5 +39,26 @@ RUN dnf -q -y install \
 
 RUN dnf -q -y install \
   jq
+
+RUN dnf -q -y install \
+  ctags \
+  curl \
+  ctags \
+  gcc-c++ \
+  graphviz \
+  netpbm \
+  netpbm-progs \
+  python2 \
+  python3 \
+  python3-distutils-extra \
+  rsync \
+  texlive \
+  wget
+
+# Texinfo is in the PowerTools repository, as of CentOS 8.
+# Alternately, run: dnf --enablerepo=PowerTools install PACKAGENAME
+RUN dnf -y install dnf-plugins-core \
+&& dnf config-manager --set-enabled PowerTools \
+&& dnf -y install texi2html texinfo texinfo-tex
 
 RUN dnf -q clean all

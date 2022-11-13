@@ -1,5 +1,4 @@
-# Create a Docker image that is ready to run the Daikon tests,
-# using JDK 8.
+# Create a Docker image that is ready to run the Daikon tests.
 
 # "ubuntu" is the latest LTS release.  "ubuntu:rolling" is the latest release.
 FROM ubuntu:rolling
