@@ -36,7 +36,6 @@ RUN_MANY := ../run-many.pl
 DTRACE_DIFF ?= dtrace-diff.pl
 SORT_DTRACE_INPLACE := perl -Si ${DAIKONDIR}/scripts/sort-dtrace.pl
 SORT_DECLS := ${DAIKONDIR}/scripts/sort-decls-2.py
-LSB_RELEASE ?= ${DAIKONDIR}/scripts/lsb_release
 INCLUDES ?=
 LIBS ?=
 LIBFLAGS ?=
@@ -56,12 +55,13 @@ endif
 default: summary-w-daikon
 
 # Set up potential OS_ID and OS_ID+OS_REL specific goal targets.
-OS_ID := $(shell $(LSB_RELEASE) -si)
-OS_REL := $(shell $(LSB_RELEASE) -sr)
+OS_ID := $(shell grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')
+OS_VERSION_ID := $(shell grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"')
+# echo $ID:$VERSION
 GOAL := goal
 
 ifeq ($(OS_ID),CentOS)
-#ifeq ($(OS_REL),7.8.2003)
+#ifeq ($(OS_VERSION_ID),7.8.2003)
 #ifeq (washington,$(findstring washington,$(shell uname -n)))
 # UW CSE version of CentOS
 #	GOAL := goal-CentOS-UWCSE
@@ -70,22 +70,22 @@ ifeq ($(OS_ID),CentOS)
 #       GOAL := goal-CentOS2003
 #endif
 #endif
-ifeq ($(OS_REL),8.2.2004)
+ifeq ($(OS_VERSION_ID),8.2.2004)
        GOAL := goal-CentOS2004
 endif
-ifeq ($(OS_REL),8.1.1911)
+ifeq ($(OS_VERSION_ID),8.1.1911)
        GOAL := goal-CentOS1911
 endif
-ifeq ($(OS_REL),7.9.2009)
+ifeq ($(OS_VERSION_ID),7.9.2009)
        GOAL := goal-CentOS2009
 endif
-ifeq ($(OS_REL),7.8.2003)
+ifeq ($(OS_VERSION_ID),7.8.2003)
        GOAL := goal-CentOS2003
 endif
-ifeq ($(OS_REL),7.7.1908)
+ifeq ($(OS_VERSION_ID),7.7.1908)
        GOAL := goal-CentOS1908
 endif
-ifeq ($(OS_REL),7.6.1810)
+ifeq ($(OS_VERSION_ID),7.6.1810)
        GOAL := goal-CentOS1810
 endif
 # other versions of CentOS will use goal-CentOS if it exists
@@ -93,13 +93,13 @@ endif
 endif
 
 ifeq ($(OS_ID),Fedora)
-ifeq ($(OS_REL),28)
+ifeq ($(OS_VERSION_ID),28)
 	GOAL := goal-Fedora28
 endif
-ifeq ($(OS_REL),30)
+ifeq ($(OS_VERSION_ID),30)
 	GOAL := goal-Fedora30
 endif
-ifeq ($(OS_REL),32)
+ifeq ($(OS_VERSION_ID),32)
 	GOAL := goal-Fedora32
 endif
 # other versions of Fedora will use goal-Fedora if it exists
@@ -107,7 +107,7 @@ endif
 endif
 
 ifeq ($(OS_ID),Rocky)
-ifeq ($(OS_REL),9.0)
+ifeq ($(OS_VERSION_ID),9.0)
 	GOAL := goal-Rocky90
 endif
 # other versions of Rocky will use goal-Rocky if it exists
@@ -115,10 +115,10 @@ endif
 endif
 
 ifeq ($(OS_ID),Ubuntu)
-ifeq ($(OS_REL),22.04)
+ifeq ($(OS_VERSION_ID),22.04)
 	GOAL := goal-Ubuntu2204
 endif
-ifeq ($(OS_REL),20.04)
+ifeq ($(OS_VERSION_ID),20.04)
 # Recent versions of Ubuntu set -fstack-clash-protection on by default.
 # This breaks stack frame discovery in Kvasir.
 # Some gcc version 7 compilers have this option and some don't.
@@ -129,10 +129,10 @@ CFLAGS += -fno-stack-clash-protection
 endif
 	GOAL := goal-Ubuntu2004
 endif
-ifeq ($(OS_REL),18.04)
+ifeq ($(OS_VERSION_ID),18.04)
 	GOAL := goal-Ubuntu1804
 endif
-ifeq ($(OS_REL),16.04)
+ifeq ($(OS_VERSION_ID),16.04)
 	GOAL := goal-Ubuntu1604
 endif
 # other versions of Ubuntu will use goal-Ubuntu if it exists
@@ -146,7 +146,7 @@ endif
 # The function below identifies the correct goal file based on:
 # the test case => $(1)
 # the OS => $(OS_ID)
-# the OS version => $(OS_REL)
+# the OS version => $(OS_VERSION_ID)
 # There are three general steps:
 #   if a OS type and version specific goal file exists [$(1).$(GOAL)] - use it
 #   else, if a generic OS goal file exists [$(1).goal-Fedora for example] - use it
@@ -176,7 +176,7 @@ goal_name = $(if $(shell if [ -f $(1).$(GOAL) ] ; then echo true; fi), \
 			)
 
 show-os:
-	@echo $(OS_ID) $(OS_REL)
+	@echo "${OS_ID} ${OS_VERSION_ID}"
 
 ifdef COMPRESS_DTRACE
 export DTRACEGZIP := 1

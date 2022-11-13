@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # Get some system info for debugging.
-# Note that on some systems, lsb_release fails if 'set -e' is on.
-lsb_release -a
+cat /etc/*release || true
 gcc --version
 make --version
 ldd --version
