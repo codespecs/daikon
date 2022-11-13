@@ -58,6 +58,6 @@ RUN alternatives --set python /usr/bin/python2
 # Alternately, run: dnf --enablerepo=PowerTools install PACKAGENAME
 RUN dnf -y install dnf-plugins-core \
 && dnf config-manager --set-enabled PowerTools \
-&& dnf -y install texi2html texinfo texinfo-tex
+&& dnf -y install texinfo texinfo-tex
 
 RUN dnf -q clean all
