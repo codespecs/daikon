@@ -55,8 +55,8 @@ endif
 default: summary-w-daikon
 
 # Set up potential OS_ID and OS_ID+OS_REL specific goal targets.
-OS_ID=$(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')
-OS_VERSION_ID=$(grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"')
+OS_ID := $(shell grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')
+OS_VERSION_ID := $(shell grep -oP '(?<=^VERSION_ID=).+' /etc/os-release | tr -d '"')
 # echo $ID:$VERSION
 GOAL := goal
 

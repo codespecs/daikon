@@ -8,7 +8,7 @@ DTRACE_DIFF := dtrace-diff-fast.pl
 COUNTS_ONLY := 1
 
 # This test seems to be non-deterministic on CentOS.
-OS_ID := $(grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')
+OS_ID := $(shell grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')
 ifeq ($(OS_ID),CentOS)
 SKIP_COMP_DIFF := 1
 endif
