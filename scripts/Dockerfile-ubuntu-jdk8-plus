@@ -19,7 +19,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   automake \
   bc \
   binutils-dev \
-  ctags \
+  universal-ctags \
   gcc \
   git \
   graphviz \
