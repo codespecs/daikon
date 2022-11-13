@@ -3,7 +3,7 @@
 # But it's used primarily for running miscellaneous tests such as the manual
 # and Javadoc.
 
-FROM centos
+FROM rockylinux
 MAINTAINER Michael Ernst <mernst@cs.washington.edu>
 
 # According to
@@ -55,7 +55,6 @@ RUN dnf -q -y install \
   texlive \
   wget
 
-# Texinfo is in the PowerTools repository, as of CentOS 8.
 # Alternately, run: dnf --enablerepo=PowerTools install PACKAGENAME
 RUN dnf -y install dnf-plugins-core \
 && dnf config-manager --set-enabled PowerTools \

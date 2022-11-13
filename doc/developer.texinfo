@@ -174,8 +174,8 @@ For more information about compiling Daikon, see the comments in the Makefiles.
 
 Before compiling Daikon, you need to install some dependencies (that is,
 software used to build Daikon).  For
-@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-centos-jdk17-plus,
-,CentOS},
+@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-rockylinux-jdk17-plus,
+,Rocky Linux},
 @uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-fedora-jdk17-plus,
 , Fedora}, and
 @uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-ubuntu-jdk17-plus,
