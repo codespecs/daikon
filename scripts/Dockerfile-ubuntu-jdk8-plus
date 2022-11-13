@@ -51,7 +51,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   g++ \
   graphviz \
   libc6-dbg \
-  lsb-release \
   python3-distutils \
   texi2html \
   texinfo \
