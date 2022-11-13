@@ -36,6 +36,7 @@ RUN_MANY := ../run-many.pl
 DTRACE_DIFF ?= dtrace-diff.pl
 SORT_DTRACE_INPLACE := perl -Si ${DAIKONDIR}/scripts/sort-dtrace.pl
 SORT_DECLS := ${DAIKONDIR}/scripts/sort-decls-2.py
+LSB_RELEASE ?= ${DAIKONDIR}/scripts/lsb_release
 INCLUDES ?=
 LIBS ?=
 LIBFLAGS ?=
@@ -55,8 +56,8 @@ endif
 default: summary-w-daikon
 
 # Set up potential OS_ID and OS_ID+OS_REL specific goal targets.
-OS_ID := $(shell lsb_release -si)
-OS_REL := $(shell lsb_release -sr)
+OS_ID := $(shell $(LSB_RELEASE) -si)
+OS_REL := $(shell $(LSB_RELEASE) -sr)
 GOAL := goal
 
 ifeq ($(OS_ID),CentOS)
@@ -102,6 +103,14 @@ ifeq ($(OS_REL),32)
 	GOAL := goal-Fedora32
 endif
 # other versions of Fedora will use goal-Fedora if it exists
+# otherwise the default goal file
+endif
+
+ifeq ($(OS_ID),Rocky)
+ifeq ($(OS_REL),9.0)
+	GOAL := goal-Rocky90
+endif
+# other versions of Rocky will use goal-Rocky if it exists
 # otherwise the default goal file
 endif
 
@@ -152,11 +161,16 @@ goal_name = $(if $(shell if [ -f $(1).$(GOAL) ] ; then echo true; fi), \
 						$(if $(shell if [ -f $(1).goal-Fedora ] ; then echo true; fi), \
 							$(1).goal-Fedora, \
 							$(1).goal), \
-					    $(if $(findstring Ubuntu, $(OS_ID)), \
-						    $(if $(shell if [ -f $(1).goal-Ubuntu ] ; then echo true; fi), \
-							    $(1).goal-Ubuntu, \
+					    $(if $(findstring Rocky, $(OS_ID)), \
+						    $(if $(shell if [ -f $(1).goal-Rocky ] ; then echo true; fi), \
+							    $(1).goal-Rocky, \
 							    $(1).goal), \
-						    $(1).goal) \
+					        $(if $(findstring Ubuntu, $(OS_ID)), \
+						        $(if $(shell if [ -f $(1).goal-Ubuntu ] ; then echo true; fi), \
+							        $(1).goal-Ubuntu, \
+							        $(1).goal), \
+						        $(1).goal) \
+				         ) \
 				     ) \
 				) \
 			)

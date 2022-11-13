@@ -46,20 +46,7 @@ PRINT_INV := java -Xmx3600M -cp "${DAIKON_CLASSPATH}" daikon.PrintInvariants
 
 default: summary
 
-# Set up potential OS_ID and OS_ID+OS_REL specific goal targets.
-OS_ID := $(shell lsb_release -si)
-OS_REL := $(shell lsb_release -sr)
-
-# Function to compute goal filename extension.  If we are on x86_64 then
-# use filename.test.goal.  If not x86_64 (which we assume means 386) then
-# if filename.test.goal.386 exists, use it; otherwise, use filename.test.goal.
-# The argument ($(1)) is '<filename>.<test>'
-goal_name = $(if $(findstring x86_64, $(shell uname -m)), \
-			$(1).goal, \
-			$(if $(shell if [ -f $(1).goal.386 ] ; then echo true; fi), \
-				$(1).goal.386, \
-				$(1).goal) \
-			)
+goal_name = $(1).goal
 
 ifdef COMPRESS_DTRACE
 export DTRACEGZIP := 1
