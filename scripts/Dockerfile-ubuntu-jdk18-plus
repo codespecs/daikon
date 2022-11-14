@@ -19,7 +19,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   automake \
   bc \
   binutils-dev \
-  universal-ctags \
   gcc \
   git \
   graphviz \
@@ -52,10 +51,10 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   libc6-dbg \
   lsb-release \
   python3-distutils \
-  texi2html \
   texinfo \
   texlive \
   texlive-latex-extra \
+  universal-ctags \
   wget \
   zlib1g-dev
 

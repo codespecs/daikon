@@ -17,7 +17,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   automake \
   bc \
   binutils-dev \
-  ctags \
   gcc \
   git \
   graphviz \
@@ -33,14 +32,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy install \
   openjdk-8-jdk \
 && update-java-alternatives --set java-1.8.0-openjdk-amd64
-
-# These are needed to build the Checker Framework, used by the "typecheck" job in CI.
-RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt-get -qqy update \
-&& apt-get -qqy install \
-  ant \
-  maven \
-  python3
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get clean \
