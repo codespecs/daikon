@@ -47,19 +47,15 @@ RUN dnf -q -y install \
   graphviz \
   netpbm \
   netpbm-progs \
-  python2 \
   python3 \
   python3-distutils-extra \
   rsync \
   texlive \
   wget
 
-# Make default be Python 2, for backward compatibility just in case.
-RUN alternatives --set python /usr/bin/python2
-
-# Alternately, run: dnf --enablerepo=PowerTools install PACKAGENAME
+# Alternately, run: dnf --enablerepo=crb install PACKAGENAME
 RUN dnf -y install dnf-plugins-core \
-&& dnf config-manager --set-enabled PowerTools \
+&& dnf config-manager --set-enabled crb \
 && dnf -y install texi2html texinfo texinfo-tex
 
 RUN dnf -q clean all
