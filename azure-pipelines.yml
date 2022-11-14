@@ -1,14 +1,3 @@
-# Workaround for https://status.dev.azure.com/_event/179641421
-trigger:
-  branches:
-    include:
-    - '*'
-pr:
-  branches:
-    include:
-    - '*'
-
-
 jobs:
 
 # The dependsOn clauses (in this file and in .circleci/config.yml) are:
