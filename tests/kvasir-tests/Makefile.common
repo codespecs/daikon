@@ -60,6 +60,9 @@ OS_ID := $(shell $(LSB_RELEASE) -si)
 OS_REL := $(shell $(LSB_RELEASE) -sr)
 GOAL := goal
 
+$(info OS_ID="$(OS_ID)")
+$(info OS_REL="$(OS_REL)")
+
 ifeq ($(OS_ID),CentOS)
 #ifeq ($(OS_REL),7.8.2003)
 #ifeq (washington,$(findstring washington,$(shell uname -n)))
