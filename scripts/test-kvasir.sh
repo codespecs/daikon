@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get some system info for debugging.
-cat /etc/*release || true
+more /etc/*release || true
 gcc --version
 make --version
 ldd --version
