@@ -14,5 +14,5 @@ print_tokens.c.get_actual_token() ENTER/33: 11 EXIT0/36: 11
 print_tokens.c.keyword() ENTER/30: 12 EXIT0/33: 12
 print_tokens.c.next_state() ENTER/33: 1163 EXIT0/36: 1163
 print_tokens.c.numeric_case() ENTER/72: 1 EXIT0/84: 1
-print_tokens.c.skip() ENTER/45: 107 EXIT0/48: 15
+print_tokens.c.skip() ENTER/45: 15 EXIT0/48: 15
 print_tokens.c.special() ENTER/30: 8 EXIT0/33: 8

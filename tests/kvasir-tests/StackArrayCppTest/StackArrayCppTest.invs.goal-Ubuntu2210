@@ -1,0 +1,142 @@
+===========================================================================
+..main():::EXIT
+return == 0
+===========================================================================
+Stack:::OBJECT
+this->maxElts one of { 5, 10 }
+this->myName one of { "My first stack", "My second stack" }
+this->stackRep != null
+this->stackRep[] sorted by <
+this->stackRep[i] > i
+this->maxElts > this->numElts
+this->stackRep[] elements > this->maxElts
+this->stackRep[] elements > this->numElts
+===========================================================================
+Stack.Stack(char*, int):::ENTER
+Stack::numStacksCreated one of { 0, 1 }
+maxSize one of { 5, 10 }
+name one of { "My first stack", "My second stack" }
+===========================================================================
+Stack.Stack(char*, int):::EXIT
+this->maxElts == orig(maxSize)
+this->myName == orig(name)
+Stack::numStacksCreated one of { 1, 2 }
+this->numElts == 0
+===========================================================================
+Stack.getMaxElts():::ENTER
+Stack::numStacksCreated one of { 1, 2 }
+this->numElts one of { 3, 5 }
+this->stackRep[] one of { [101, 102, 103, 104, 105], [1001, 1002, 1003] }
+===========================================================================
+Stack.getMaxElts():::EXIT
+Stack::numStacksCreated == orig(Stack::numStacksCreated)
+return == this->maxElts
+return == orig(this->maxElts)
+this->myName == orig(this->myName)
+this->numElts == orig(this->numElts)
+this->stackRep == orig(this->stackRep)
+this->stackRep[] == orig(this->stackRep[])
+this[0] == orig(this[0])
+Stack::numStacksCreated one of { 1, 2 }
+return one of { 5, 10 }
+this->numElts one of { 3, 5 }
+this->stackRep[] one of { [101, 102, 103, 104, 105], [1001, 1002, 1003] }
+===========================================================================
+Stack.getName():::ENTER
+Stack::numStacksCreated one of { 1, 2 }
+this->numElts one of { 3, 5 }
+this->stackRep[] one of { [101, 102, 103, 104, 105], [1001, 1002, 1003] }
+===========================================================================
+Stack.getName():::EXIT
+Stack::numStacksCreated == orig(Stack::numStacksCreated)
+return == this->myName
+return == orig(this->myName)
+this->maxElts == orig(this->maxElts)
+this->numElts == orig(this->numElts)
+this->stackRep == orig(this->stackRep)
+this->stackRep[] == orig(this->stackRep[])
+this[0] == orig(this[0])
+Stack::numStacksCreated one of { 1, 2 }
+return one of { "My first stack", "My second stack" }
+this->numElts one of { 3, 5 }
+this->stackRep[] one of { [101, 102, 103, 104, 105], [1001, 1002, 1003] }
+===========================================================================
+Stack.getNumStacksCreated():::ENTER
+Stack::numStacksCreated one of { 1, 2 }
+===========================================================================
+Stack.getNumStacksCreated():::EXIT
+Stack::numStacksCreated == return
+Stack::numStacksCreated == orig(Stack::numStacksCreated)
+Stack::numStacksCreated one of { 1, 2 }
+===========================================================================
+Stack.pop():::ENTER
+Stack::numStacksCreated one of { 1, 2 }
+this->stackRep[] one of { [101, 102, 103, 104, 105], [1001, 1002, 1003] }
+this->stackRep[] elements > Stack::numStacksCreated
+===========================================================================
+Stack.pop():::EXIT
+Stack::numStacksCreated == orig(Stack::numStacksCreated)
+this->maxElts == orig(this->maxElts)
+this->myName == orig(this->myName)
+this->stackRep == orig(this->stackRep)
+this->stackRep[] == orig(this->stackRep[])
+this[0] == orig(this[0])
+Stack::numStacksCreated one of { 1, 2 }
+this->numElts >= 0
+this->stackRep[] one of { [101, 102, 103, 104, 105], [1001, 1002, 1003] }
+this->stackRep[] elements > Stack::numStacksCreated
+this->maxElts > orig(this->numElts)
+(orig(this->numElts) == 0) ==> (this->numElts == 0)
+this->numElts <= orig(this->numElts)
+this->stackRep[] elements > orig(this->numElts)
+===========================================================================
+Stack.privateStuff():::ENTER
+Stack::numStacksCreated one of { 1, 2 }
+this->stackRep[] one of { [101, 102, 103, 104, 105], [1001, 1002, 1003] }
+this->stackRep[] elements > Stack::numStacksCreated
+===========================================================================
+Stack.privateStuff():::EXIT
+Stack::numStacksCreated == orig(Stack::numStacksCreated)
+this->maxElts == orig(this->maxElts)
+this->myName == orig(this->myName)
+this->numElts == orig(this->numElts)
+this->stackRep == orig(this->stackRep)
+this->stackRep[] == orig(this->stackRep[])
+this[0] == orig(this[0])
+Stack::numStacksCreated one of { 1, 2 }
+return == 42
+this->stackRep[] one of { [101, 102, 103, 104, 105], [1001, 1002, 1003] }
+this->stackRep[] elements > Stack::numStacksCreated
+this->stackRep[] elements > return
+===========================================================================
+Stack.push(int):::ENTER
+Stack::numStacksCreated one of { 1, 2 }
+===========================================================================
+Stack.push(int):::EXIT
+Stack::numStacksCreated == orig(Stack::numStacksCreated)
+this->maxElts == orig(this->maxElts)
+this->myName == orig(this->myName)
+this->stackRep == orig(this->stackRep)
+this[0] == orig(this[0])
+Stack::numStacksCreated one of { 1, 2 }
+this->stackRep[] elements > Stack::numStacksCreated
+this->maxElts > orig(this->numElts)
+this->numElts - orig(this->numElts) - 1 == 0
+orig(dat) in this->stackRep[]
+this->stackRep[] elements <= orig(dat)
+this->stackRep[] elements > orig(this->numElts)
+orig(this->stackRep[]) is a subsequence of this->stackRep[]
+===========================================================================
+Stack.~Stack():::ENTER
+Stack::numStacksCreated == 2
+this->numElts == 0
+this->stackRep[] one of { [101, 102, 103, 104, 105], [1001, 1002, 1003] }
+===========================================================================
+Stack.~Stack():::EXIT
+Stack::numStacksCreated == orig(Stack::numStacksCreated)
+this->maxElts == orig(this->maxElts)
+this->numElts == orig(this->numElts)
+this->stackRep == orig(this->stackRep)
+this[0] == orig(this[0])
+Stack::numStacksCreated == 2
+this->numElts == 0
