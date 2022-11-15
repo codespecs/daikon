@@ -5,8 +5,8 @@ set -e
 
 echo "Don't use .travis-build-without-test.sh; instead run: make compile daikon.jar"
 
-# quick and dirty way to get version info and avoid python 2/3 problems with lsb_release
-cat /etc/*release || true
+# Print OS version info.
+more /etc/*release || true
 
 export SHELLOPTS
 
