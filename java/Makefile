@@ -1110,8 +1110,6 @@ JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
 DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' | egrep -v 'dcomp-' \
 				   | sed s./.. | sed s/^/daikon./ | tr '\n' ':')
 
-javadoc: api
-
 # Don't run Javadoc on files that require the Checker Framework.
 # .PHONY means regenerate even if the file exists.
 .PHONY: javadoc-files.txt
@@ -1119,18 +1117,13 @@ javadoc-files.txt:
 	$(MAKE) ${AUTO_GENERATED_FILES}
 	find * \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -path 'daikon/dcomp-transfer' \) -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
 
-# If Java 8, only run javadoc on Ubuntu.
+# If Java 8, don't run javadoc; a bug in javadoc causes it to crash.
 ifeq ($(JAVA8), 1)
-  ifneq ("$(wildcard /etc/os-release)","")
-    # File /etc/os-release exists
-    ifneq ($(shell sed -n ';s/^NAME="\(.*\)"/\1/p;' /etc/os-release),Ubuntu)
-      # This is not Ubuntu
-      SKIP_JAVADOC=1
-    endif
-  endif
+  SKIP_JAVADOC=1
 endif
 
 # Build javadoc using the daikon package and all subpackages of daikon.
+javadoc: api
 .PHONY: api
 api: ../utils/plume-scripts ../utils/html-tools $(JAVA_FILES)
 ifeq ($(SKIP_JAVADOC),1)

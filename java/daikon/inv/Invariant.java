@@ -2001,15 +2001,14 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // the receiver, suggesting that they have something to do with the
   // receiver.  This should be corrected.  -MDE
 
-  // TODO: This text crashes Javadoc 1.8.0_181 on Fedora and CentOS:
-  //  * @see daikon.Debug#log(Logger, Class, Ppt, String)
-  // Reinstate the text when Javadoc is fixed.
   /**
-   * Returns whether or not detailed logging is on. Note that this check is not performed inside the
+   * Returns true if detailed logging is on. Note that this check is not performed inside the
    * logging calls themselves, it must be performed by the caller.
    *
+   * @return true if detailed logging is on
    * @see daikon.Debug#logDetail()
    * @see daikon.Debug#logOn()
+   * @see daikon.Debug#log(Logger, Class, Ppt, String)
    */
   public static boolean logDetail() {
     return Debug.logDetail();
