@@ -2002,9 +2002,10 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // receiver.  This should be corrected.  -MDE
 
   /**
-   * Returns whether or not detailed logging is on. Note that this check is not performed inside the
+   * Returns true if detailed logging is on. Note that this check is not performed inside the
    * logging calls themselves, it must be performed by the caller.
    *
+   * @return true if detailed logging is on
    * @see daikon.Debug#logDetail()
    * @see daikon.Debug#logOn()
    * @see daikon.Debug#log(Logger, Class, Ppt, String)
