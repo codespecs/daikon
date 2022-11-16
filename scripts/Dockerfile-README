@@ -131,7 +131,6 @@ export PROJECT=daikon
 create_upload_docker_image
 
 
-
 Cleanup:
 
 After creating docker images, consider deleting the docker containers,
