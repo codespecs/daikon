@@ -35,35 +35,12 @@ env:
     - OS=ubuntu JDKVER=jdk8-plus GROUP=kvasir
     - OS=ubuntu JDKVER=jdk11-plus GROUP=kvasir
     - OS=ubuntu JDKVER=jdk17-plus GROUP=kvasir
-    - OS=fedora JDKVER=jdk8 GROUP=quick-txt-diff
-    - OS=fedora JDKVER=jdk11 GROUP=quick-txt-diff
-    # Having trouble building Fedora Docker file; revisit later.
-    # - OS=fedora JDKVER=jdk17 GROUP=quick-txt-diff
-    - OS=fedora JDKVER=jdk8 GROUP=nonquick-txt-diff
-    - OS=fedora JDKVER=jdk11 GROUP=nonquick-txt-diff
-    # Having trouble building Fedora Docker file; revisit later.
-    # - OS=fedora JDKVER=jdk17 GROUP=nonquick-txt-diff
-    - OS=fedora JDKVER=jdk8 GROUP=non-txt-diff
-    - OS=fedora JDKVER=jdk11 GROUP=non-txt-diff
-    # Having trouble building Fedora Docker file; revisit later.
-    # - OS=fedora JDKVER=jdk17 GROUP=non-txt-diff
-## Fails on Travis but not on CircleCI.
-## This might be https://bugs.openjdk.java.net/browse/JDK-8215542
-#    - OS=fedora JDKVER=jdk8-plus GROUP=misc
-#    - OS=fedora JDKVER=jdk11-plus GROUP=misc
-#    - OS=fedora JDKVER=jdk17-plus GROUP=misc
-## Flaky; needs to be fixed.
-#    - OS=fedora JDKVER=jdk8-plus GROUP=kvasir
-#    - OS=fedora JDKVER=jdk11-plus GROUP=kvasir
-#    - OS=fedora JDKVER=jdk17-plus GROUP=kvasir
     - OS=rockylinux JDKVER=jdk8 GROUP=nonquick-txt-diff
     - OS=rockylinux JDKVER=jdk11 GROUP=nonquick-txt-diff
     - OS=rockylinux JDKVER=jdk17 GROUP=nonquick-txt-diff
-## Fails on Travis but not on CircleCI.
-## This might be https://bugs.openjdk.java.net/browse/JDK-8215542
-#    - OS=rockylinux JDKVER=jdk8-plus GROUP=misc
-#    - OS=rockylinux JDKVER=jdk11-plus GROUP=misc
-#    - OS=rockylinux JDKVER=jdk17-plus GROUP=misc
+    - OS=rockylinux JDKVER=jdk8-plus GROUP=misc
+    - OS=rockylinux JDKVER=jdk11-plus GROUP=misc
+    - OS=rockylinux JDKVER=jdk17-plus GROUP=misc
     - OS=rockylinux JDKVER=jdk8-plus GROUP=kvasir
     - OS=rockylinux JDKVER=jdk11-plus GROUP=kvasir
     - OS=rockylinux JDKVER=jdk17-plus GROUP=kvasir
@@ -73,7 +50,6 @@ env:
 # It repeats things that were listed above in the "env" section.
 # matrix:
 #   allow_failures:
-#     - env: OS=fedora JDKVER=jdk8-plus GROUP=kvasir
 #     - env: OS=rockylinux JDKVER=jdk8-plus GROUP=kvasir
 
 # The "docker run" command will pull if needed.
