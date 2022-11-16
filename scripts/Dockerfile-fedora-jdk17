@@ -13,6 +13,8 @@ RUN dnf -qy upgrade && dnf -qy install \
   automake \
   bc \
   binutils-devel \
+  diffutils \
+  findutils \
   gcc \
   git \
   jq \
