@@ -7,9 +7,12 @@ EXTRA_OUTPUTS := cbc_d_m.txt cbc_e_m.txt ecb_d_m.txt ecb_e_m.txt ecb_iv.txt \
 DTRACE_DIFF := dtrace-diff-fast.pl
 COUNTS_ONLY := 1
 
-# This test seems to be non-deterministic on CentOS.
+# This test seems to be non-deterministic on Rocky Linux and Rocky Linux.
 OS_ID := $(shell grep -oP '(?<=^ID=).+' /etc/os-release | tr -d '"')
 ifeq ($(OS_ID),centos)
+SKIP_COMP_DIFF := 1
+endif
+ifeq ($(OS_ID),rocky)
 SKIP_COMP_DIFF := 1
 endif
 
