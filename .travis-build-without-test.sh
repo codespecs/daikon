@@ -6,7 +6,7 @@ set -e
 echo "Don't use .travis-build-without-test.sh; instead run: make compile daikon.jar"
 
 # Print system information, for debugging.
-more /etc/*release || true
+for file in /etc/*release; do echo "$file"; cat "$file"; echo; done
 
 export SHELLOPTS
 
