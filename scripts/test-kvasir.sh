@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get some system info for debugging.
-cat /etc/*release || true
+for file in /etc/*release; do echo "$file"; cat "$file"; echo; done
 gcc --version
 make --version
 ldd --version
