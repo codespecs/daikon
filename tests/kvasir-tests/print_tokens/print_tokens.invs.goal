@@ -612,7 +612,6 @@ stream_ptr[].fp contains no nulls and has only one value, of length 1
 stream_ptr[i].stream_ind > i
 stream_ptr[].stream_ind elements > return
 orig(stream_ptr[].stream_ind) elements > return
-stream_ptr[].stream_ind - orig(stream_ptr[].stream_ind) - 1 == 0
 stream_ptr[].stream_ind > orig(stream_ptr[].stream_ind) (elementwise)
 ===========================================================================
 print_tokens.c.special():::ENTER
