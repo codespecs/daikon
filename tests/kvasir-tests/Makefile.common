@@ -36,7 +36,6 @@ RUN_MANY := ../run-many.pl
 DTRACE_DIFF ?= dtrace-diff.pl
 SORT_DTRACE_INPLACE := perl -Si ${DAIKONDIR}/scripts/sort-dtrace.pl
 SORT_DECLS := ${DAIKONDIR}/scripts/sort-decls-2.py
-LSB_RELEASE ?= ${DAIKONDIR}/scripts/lsb_release
 INCLUDES ?=
 LIBS ?=
 LIBFLAGS ?=
@@ -56,8 +55,8 @@ endif
 default: summary-w-daikon
 
 # Set up potential OS_ID and OS_ID+OS_REL specific goal targets.
-OS_ID := $(shell $(LSB_RELEASE) -si)
-OS_REL := $(shell $(LSB_RELEASE) -sr)
+OS_ID := $(shell ${DAIKONDIR}/scripts/lsb_release -si)
+OS_REL := $(shell ${DAIKONDIR}/scripts/lsb_release -sr)
 GOAL := goal
 
 $(info OS_ID="$(OS_ID)")
