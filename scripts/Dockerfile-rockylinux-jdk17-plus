@@ -19,14 +19,11 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   git \
   m4 \
   make \
+  perl-filetest \
   rsync \
   tar \
   unzip \
   which
-
-# Needed for JDK 17, I guess.
-RUN dnf -q -y install \
-  rsync
 
 RUN dnf -q -y install \
   java-17-openjdk \
@@ -49,7 +46,6 @@ RUN dnf -q -y install \
   netpbm-progs \
   python3 \
   python3-distutils-extra \
-  rsync \
   texlive \
   wget
 
