@@ -37,7 +37,6 @@ RUN dnf -qy install \
   graphviz \
   netpbm \
   python3 \
-  texi2html \
   texinfo \
   texinfo-tex \
   texlive \

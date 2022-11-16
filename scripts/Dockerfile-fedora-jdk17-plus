@@ -37,7 +37,6 @@ RUN dnf -qy install \
   netpbm \
   python3 \
   python-distutils-extra \
-  texi2html \
   texinfo \
   texinfo-tex \
   texlive \
