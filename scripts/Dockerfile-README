@@ -100,12 +100,10 @@ export JDKVER=jdk17-plus
 export PROJECT=daikon
 create_upload_docker_image
 
-
 Cleanup:
 
-After creating docker images, consider deleting the docker containers,
-which can take up a lot of disk space.
-To stop and remove/delete all docker containers:
+docker image prune && docker images | grep none | awk '{ print $3; }' | xargs docker rmi --force
+
+To stop and remove/delete *all* docker containers:
   docker stop $(docker ps -a -q)
   docker rm $(docker ps -a -q)
-or you can just remove some of them.

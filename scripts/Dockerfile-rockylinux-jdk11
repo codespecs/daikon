@@ -16,6 +16,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   git \
   m4 \
   make \
+  perl-English \
   perl-filetest \
   rsync \
   tar \
