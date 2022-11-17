@@ -102,7 +102,7 @@ create_upload_docker_image
 
 Cleanup:
 
-docker image prune && docker images | grep none | awk '{ print $3; }' | xargs docker rmi --force
+docker image prune && docker images | grep none | awk '{ print $3; }' | xargs --no-run-if-empty docker rmi --force
 
 To stop and remove/delete *all* docker containers:
   docker stop $(docker ps -a -q)

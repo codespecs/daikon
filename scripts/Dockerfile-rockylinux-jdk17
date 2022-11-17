@@ -12,6 +12,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   automake \
   bc \
   binutils-devel \
+  diffutils \
   gcc \
   git \
   m4 \
