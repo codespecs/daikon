@@ -144,7 +144,7 @@ endif
 # otherwise the default goal file
 endif
 
-# We test Kvasir on three different OS platforms: Ubuntu, Fedora and Rocky Linux.
+# We test Kvasir on Ubuntu and Rocky Linux.
 # The code above has set $(GOAL) to a value that represents the current OS type
 # and version number; e.g. 'goal-Fedora25'.
 
