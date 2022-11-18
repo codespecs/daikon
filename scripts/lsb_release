@@ -1,4 +1,10 @@
 #!/bin/sh
+
+# This program is from https://github.com/OpenMandrivaSoftware/lsb-release .
+# That repository's COPYING file says:
+#   GNU GENERAL PUBLIC LICENSE Version 2, June 1991
+
+#!/bin/sh
 #
 # lsb_release - collect LSB conformance status about a system
 #
