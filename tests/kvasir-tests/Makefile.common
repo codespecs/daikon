@@ -203,11 +203,8 @@ COMPILER := $(CC)
 CFLAGS += -std=gnu89
 endif
 
-ifneq ($(OS_ID),CentOS)
-# Ubuntu (17.10) sets -pie on by default
-# we must turn it back off
+# Don't create a position-independent executable.
 CFLAGS += -no-pie
-endif
 
 SOURCES ?= $(NAME).$(C_EXT)
 
