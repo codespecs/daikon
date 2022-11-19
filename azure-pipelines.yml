@@ -3,7 +3,7 @@ jobs:
 # The dependsOn clauses (in this file and in .circleci/config.yml) are:
 #  * Everything not *_ubuntu_jdk17 or typecheck_jdk17 depends on jdk17_jobs.
 #  * Anything *_jdk8 or *_jdk11 or _jdk18 depends on *_jdk17.
-#  * Anything *_centos_* or *_fedora_* depends on *_ubuntu_*.
+#  * Anything *_rockylinux_* depends on *_ubuntu_*.
 
 # The remainder of jobs are run only if the jdk17_jobs pass.
 - job: jdk17_jobs
@@ -342,137 +342,137 @@ jobs:
   - bash: ./scripts/test-typecheck.sh
     displayName: test-typecheck.sh
 
-- job: quick_txt_diff_fedora_jdk8
+- job: quick_txt_diff_rockylinux_jdk8
   dependsOn:
     - jdk17_jobs
-    - quick_txt_diff_fedora_jdk17
+    - quick_txt_diff_rockylinux_jdk17
     - quick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk8:latest
+  container: mdernst/daikon-rockylinux-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: quick_txt_diff_fedora_jdk11
+- job: quick_txt_diff_rockylinux_jdk11
   dependsOn:
     - jdk17_jobs
-    - quick_txt_diff_fedora_jdk17
+    - quick_txt_diff_rockylinux_jdk17
     - quick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk11:latest
+  container: mdernst/daikon-rockylinux-jdk11:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: quick_txt_diff_fedora_jdk17
+- job: quick_txt_diff_rockylinux_jdk17
   dependsOn:
     - jdk17_jobs
     - quick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk17:latest
+  container: mdernst/daikon-rockylinux-jdk17:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: nonquick_txt_diff_fedora_jdk8
+- job: nonquick_txt_diff_rockylinux_jdk8
   dependsOn:
     - jdk17_jobs
-    - nonquick_txt_diff_fedora_jdk17
+    - nonquick_txt_diff_rockylinux_jdk17
     - nonquick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk8:latest
+  container: mdernst/daikon-rockylinux-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: nonquick_txt_diff_fedora_jdk11
+- job: nonquick_txt_diff_rockylinux_jdk11
   dependsOn:
     - jdk17_jobs
-    - nonquick_txt_diff_fedora_jdk17
+    - nonquick_txt_diff_rockylinux_jdk17
     - nonquick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk11:latest
+  container: mdernst/daikon-rockylinux-jdk11:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: nonquick_txt_diff_fedora_jdk17
+- job: nonquick_txt_diff_rockylinux_jdk17
   dependsOn:
     - jdk17_jobs
     - nonquick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk17:latest
+  container: mdernst/daikon-rockylinux-jdk17:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: non_txt_diff_fedora_jdk8
+- job: non_txt_diff_rockylinux_jdk8
   dependsOn:
     - jdk17_jobs
-    - non_txt_diff_fedora_jdk17
+    - non_txt_diff_rockylinux_jdk17
     - non_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk8:latest
+  container: mdernst/daikon-rockylinux-jdk8:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: non_txt_diff_fedora_jdk11
+- job: non_txt_diff_rockylinux_jdk11
   dependsOn:
     - jdk17_jobs
-    - non_txt_diff_fedora_jdk17
+    - non_txt_diff_rockylinux_jdk17
     - non_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk11:latest
+  container: mdernst/daikon-rockylinux-jdk11:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: non_txt_diff_fedora_jdk17
+- job: non_txt_diff_rockylinux_jdk17
   dependsOn:
     - jdk17_jobs
     - non_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk17:latest
+  container: mdernst/daikon-rockylinux-jdk17:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-non-txt-diff.sh
+    displayName: test-non-txt-diff.sh
 
-
-- job: misc_fedora_jdk8
+- job: misc_rockylinux_jdk8
   dependsOn:
     - jdk17_jobs
-    - misc_fedora_jdk17
+    - misc_rockylinux_jdk17
     - misc_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk8-plus:latest
+  container: mdernst/daikon-rockylinux-jdk8-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -481,14 +481,14 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-- job: misc_fedora_jdk11
+- job: misc_rockylinux_jdk11
   dependsOn:
     - jdk17_jobs
-    - misc_fedora_jdk17
+    - misc_rockylinux_jdk17
     - misc_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk11-plus:latest
+  container: mdernst/daikon-rockylinux-jdk11-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -497,13 +497,13 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-- job: misc_fedora_jdk17
+- job: misc_rockylinux_jdk17
   dependsOn:
     - jdk17_jobs
     - misc_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk17-plus:latest
+  container: mdernst/daikon-rockylinux-jdk17-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -512,255 +512,41 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-- job: kvasir_fedora_jdk8
+- job: kvasir_rockylinux_jdk8
   dependsOn:
     - jdk17_jobs
-    - kvasir_fedora_jdk17
+    - kvasir_rockylinux_jdk17
     - kvasir_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk8-plus:latest
+  container: mdernst/daikon-rockylinux-jdk8-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
-- job: kvasir_fedora_jdk11
+- job: kvasir_rockylinux_jdk11
   dependsOn:
     - jdk17_jobs
-    - kvasir_fedora_jdk17
+    - kvasir_rockylinux_jdk17
     - kvasir_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk11-plus:latest
+  container: mdernst/daikon-rockylinux-jdk11-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
-- job: kvasir_fedora_jdk17
+- job: kvasir_rockylinux_jdk17
   dependsOn:
     - jdk17_jobs
     - kvasir_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-fedora-jdk17-plus:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: echo "NOT RUN" && true
-
-# TODO: reinstate this above, when Fedora is updated to a version that supports JDK 17.
-#  - bash: ./scripts/test-kvasir.sh
-#    displayName: test-kvasir.sh
-
-- job: quick_txt_diff_centos_jdk8
-  dependsOn:
-    - jdk17_jobs
-    - quick_txt_diff_centos_jdk17
-    - quick_txt_diff_ubuntu_jdk8
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk8:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-quick-txt-diff.sh
-    displayName: test-quick-txt-diff.sh
-
-- job: quick_txt_diff_centos_jdk11
-  dependsOn:
-    - jdk17_jobs
-    - quick_txt_diff_centos_jdk17
-    - quick_txt_diff_ubuntu_jdk11
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk11:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-quick-txt-diff.sh
-    displayName: test-quick-txt-diff.sh
-
-- job: quick_txt_diff_centos_jdk17
-  dependsOn:
-    - jdk17_jobs
-    - quick_txt_diff_ubuntu_jdk17
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk17:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-quick-txt-diff.sh
-    displayName: test-quick-txt-diff.sh
-
-- job: nonquick_txt_diff_centos_jdk8
-  dependsOn:
-    - jdk17_jobs
-    - nonquick_txt_diff_centos_jdk17
-    - nonquick_txt_diff_ubuntu_jdk8
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk8:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-nonquick-txt-diff.sh
-    displayName: test-nonquick-txt-diff.sh
-
-- job: nonquick_txt_diff_centos_jdk11
-  dependsOn:
-    - jdk17_jobs
-    - nonquick_txt_diff_centos_jdk17
-    - nonquick_txt_diff_ubuntu_jdk11
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk11:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-nonquick-txt-diff.sh
-    displayName: test-nonquick-txt-diff.sh
-
-- job: nonquick_txt_diff_centos_jdk17
-  dependsOn:
-    - jdk17_jobs
-    - nonquick_txt_diff_ubuntu_jdk17
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk17:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-nonquick-txt-diff.sh
-    displayName: test-nonquick-txt-diff.sh
-
-- job: non_txt_diff_centos_jdk8
-  dependsOn:
-    - jdk17_jobs
-    - non_txt_diff_centos_jdk17
-    - non_txt_diff_ubuntu_jdk8
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk8:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-non-txt-diff.sh
-    displayName: test-non-txt-diff.sh
-
-- job: non_txt_diff_centos_jdk11
-  dependsOn:
-    - jdk17_jobs
-    - non_txt_diff_centos_jdk17
-    - non_txt_diff_ubuntu_jdk11
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk11:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-non-txt-diff.sh
-    displayName: test-non-txt-diff.sh
-
-- job: non_txt_diff_centos_jdk17
-  dependsOn:
-    - jdk17_jobs
-    - non_txt_diff_ubuntu_jdk17
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk17:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-non-txt-diff.sh
-    displayName: test-non-txt-diff.sh
-
-- job: misc_centos_jdk8
-  dependsOn:
-    - jdk17_jobs
-    - misc_centos_jdk17
-    - misc_ubuntu_jdk8
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk8-plus:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: make showvars
-    displayName: make showvars
-  - bash: ./scripts/test-misc.sh
-    displayName: test-misc.sh
-
-- job: misc_centos_jdk11
-  dependsOn:
-    - jdk17_jobs
-    - misc_centos_jdk17
-    - misc_ubuntu_jdk11
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk11-plus:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: make showvars
-    displayName: make showvars
-  - bash: ./scripts/test-misc.sh
-    displayName: test-misc.sh
-
-- job: misc_centos_jdk17
-  dependsOn:
-    - jdk17_jobs
-    - misc_ubuntu_jdk17
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk17-plus:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: make showvars
-    displayName: make showvars
-  - bash: ./scripts/test-misc.sh
-    displayName: test-misc.sh
-
-- job: kvasir_centos_jdk8
-  dependsOn:
-    - jdk17_jobs
-    - kvasir_centos_jdk17
-    - kvasir_ubuntu_jdk8
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk8-plus:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-kvasir.sh
-    displayName: test-kvasir.sh
-
-- job: kvasir_centos_jdk11
-  dependsOn:
-    - jdk17_jobs
-    - kvasir_centos_jdk17
-    - kvasir_ubuntu_jdk11
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk11-plus:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-kvasir.sh
-    displayName: test-kvasir.sh
-
-- job: kvasir_centos_jdk17
-  dependsOn:
-    - jdk17_jobs
-    - kvasir_ubuntu_jdk17
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-centos-jdk17-plus:latest
+  container: mdernst/daikon-rockylinux-jdk17-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
