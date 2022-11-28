@@ -37,6 +37,7 @@ RUN dnf -qy install \
   gcc-c++ \
   graphviz \
   netpbm \
+  netpbm-progs \
   python3 \
   python-distutils-extra \
   texinfo \
