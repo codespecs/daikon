@@ -16,6 +16,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   bc \
   binutils-devel \
   diffutils \
+  findutils \
   gcc \
   git \
   m4 \

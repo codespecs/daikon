@@ -22,7 +22,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   jq \
   m4 \
   make \
-  netpbm \
   rsync \
   unzip
 
