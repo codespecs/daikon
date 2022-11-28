@@ -144,7 +144,7 @@ endif
 # otherwise the default goal file
 endif
 
-# We test Kvasir on three different OS platforms: Ubuntu, Fedora and CentOS.
+# We test Kvasir on Ubuntu and Rocky Linux.
 # The code above has set $(GOAL) to a value that represents the current OS type
 # and version number; e.g. 'goal-Fedora25'.
 
@@ -181,7 +181,7 @@ goal_name = $(if $(shell if [ -f $(1).$(GOAL) ] ; then echo true; fi), \
 			)
 
 show-os:
-	@echo $(OS_ID) $(OS_REL)
+	@echo OS_ID=$(OS_ID) OS_REL=$(OS_REL)
 
 ifdef COMPRESS_DTRACE
 export DTRACEGZIP := 1
@@ -203,11 +203,8 @@ COMPILER := $(CC)
 CFLAGS += -std=gnu89
 endif
 
-ifneq ($(OS_ID),CentOS)
-# Ubuntu (17.10) sets -pie on by default
-# we must turn it back off
+# Don't create a position-independent executable.
 CFLAGS += -no-pie
-endif
 
 SOURCES ?= $(NAME).$(C_EXT)
 

@@ -3,7 +3,7 @@
 # But it's used primarily for running miscellaneous tests such as the manual
 # and Javadoc.
 
-FROM centos
+FROM rockylinux:9
 MAINTAINER Michael Ernst <mernst@cs.washington.edu>
 
 # According to
@@ -15,22 +15,22 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   automake \
   bc \
   binutils-devel \
+  diffutils \
+  findutils \
   gcc \
   git \
   m4 \
   make \
+  perl-English \
+  perl-filetest \
   rsync \
   tar \
   unzip \
   which
 
-# Needed for JDK 11, I guess.
 RUN dnf -q -y install \
-  rsync
-
-RUN dnf -q -y install \
-  java-11-openjdk \
-  java-11-openjdk-devel
+  java-17-openjdk \
+  java-17-openjdk-devel
 
 # This enables the repository that contains jq
 RUN dnf -q -y install \
@@ -47,20 +47,14 @@ RUN dnf -q -y install \
   graphviz \
   netpbm \
   netpbm-progs \
-  python2 \
   python3 \
   python3-distutils-extra \
-  rsync \
   texlive \
   wget
 
-# Make default be Python 2, for backward compatibility just in case.
-RUN alternatives --set python /usr/bin/python2
-
-# Texinfo is in the PowerTools repository, as of CentOS 8.
-# Alternately, run: dnf --enablerepo=PowerTools install PACKAGENAME
-RUN dnf -y install dnf-plugins-core \
-&& dnf config-manager --set-enabled PowerTools \
+# Alternately, run: dnf --enablerepo=crb install PACKAGENAME
+RUN dnf config-manager --set-enabled crb \
+&& dnf -y install dnf-plugins-core \
 && dnf -y install texinfo texinfo-tex
 
 RUN dnf -q clean all

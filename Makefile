@@ -321,7 +321,7 @@ tags:
 
 # This is the target we use to verify that the software we are about
 # to distribute runs correctly in a variety of target environments.
-# Currently, we test CentOS, Fedora, Mac OS X, and Ubuntu client machines.
+# Currently, we test Rocky Linux, Mac OS X, and Ubuntu client machines.
 distribution-check:
 	$(MAKE) -C scripts
 ifdef DAIKONCLASS_SOURCES
@@ -719,7 +719,6 @@ showvars:
 	${MAKE} -C java showvars
 
 # If .git does not exist, then directory was created from a daikon archive file.
-# The "git pull" command fails under Centos and Fedora 23, for mysterious reasons.
 update-libs: update-bibtex2web update-checklink update-html-tools update-plume-scripts update-run-google-java-format
 .PHONY: update-libs update-bibtex2web update-checklink update-html-tools update-plume-scripts update-run-google-java-format
 
