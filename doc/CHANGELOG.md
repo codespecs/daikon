@@ -19,7 +19,13 @@ Further documentation can be found in:
    It is also available at http://plse.cs.washington.edu/daikon/download/api/ .
 
 
-Version 5.8.16 (Nov 8, 2022)
+Version 5.8.18 (??? ?, 2022)
+============================
+
+Support Rocky Linux.
+
+
+Version 5.8.16 (Nov 9, 2022)
 ============================
 
 All Daikon tools now work with Java 18.

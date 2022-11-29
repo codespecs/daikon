@@ -42,7 +42,7 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.8.16
+@center Daikon version 5.8.17
 
 @sp 1
 
@@ -83,7 +83,7 @@ Copyright @copyright{} 1998-2020
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.16, released November 8, 2022.
+It describes Daikon version 5.8.17, released November 9, 2022.
 
 @menu
 * Introduction::
@@ -174,17 +174,13 @@ For more information about compiling Daikon, see the comments in the Makefiles.
 
 Before compiling Daikon, you need to install some dependencies (that is,
 software used to build Daikon).  For
-@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-centos-jdk17-plus,
-,CentOS},
-@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-fedora-jdk17-plus,
-, Fedora}, and
+@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-rockylinux-jdk17-plus,
+,Rocky Linux} and
 @uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-ubuntu-jdk17-plus,
 , Ubuntu}, you can
 find the commands to install these dependencies in file
 @file{$DAIKONDIR/scripts/Dockerfile-@emph{OSNAME}-jdk@emph{N}-plus}.
-For other operating systems, use similar commands.  (If you determine
-commands for some other operating system, please share
-them with the Daikon developers so that we can share them with other users.)
+For other operating systems, use similar commands.
 
 Note that Kvasir, the Daikon front end for the C language
 (@pxref{Kvasir,,,daikon,Daikon User Manual}), does not work on Mac OS.
@@ -2313,6 +2309,7 @@ git clone --depth 3 https://github.com/codespecs/daikon
 cd daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0
+export PATH=$JAVA_HOME/bin:$PATH
 unset CHECKERFRAMEWORK
 make compile && make staging
 @end example
@@ -2415,7 +2412,7 @@ but on two long lines without any @code{\} line continuation characters.
 
 @need 1000
 @item
-Test the staged distribution on a 64-bit Fedora machine.
+Test the staged distribution on a 64-bit Rocky Linux machine.
 Since the machine you are using to build the release is probably
 such a machine, you may simply run the command below.  Success is indicated
 by invariant output being written to the screen.

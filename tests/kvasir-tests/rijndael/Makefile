@@ -7,10 +7,11 @@ EXTRA_OUTPUTS := cbc_d_m.txt cbc_e_m.txt ecb_d_m.txt ecb_e_m.txt ecb_iv.txt \
 DTRACE_DIFF := dtrace-diff-fast.pl
 COUNTS_ONLY := 1
 
-# This test seems to be non-deterministic on CentOS.
-OS_ID := $(shell lsb_release -si)
-ifeq ($(OS_ID),CentOS)
+include ../Makefile.common
+
+# This test seems to be non-deterministic on Rocky Linux.  (TODO: re-check)
+OS_ID := $(shell ${DAIKONDIR}/scripts/lsb_release -si)
+ifeq ($(OS_ID),Rocky Linux)
 SKIP_COMP_DIFF := 1
 endif
 
-include ../Makefile.common

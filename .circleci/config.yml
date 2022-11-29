@@ -308,9 +308,9 @@ jobs:
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
 
-  quick-txt-diff-fedora-jdk8:
+  quick-txt-diff-rockylinux-jdk8:
     docker:
-      - image: mdernst/daikon-fedora-jdk8
+      - image: mdernst/daikon-rockylinux-jdk8
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -327,9 +327,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
-  quick-txt-diff-fedora-jdk11:
+  quick-txt-diff-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-fedora-jdk11
+      - image: mdernst/daikon-rockylinux-jdk11
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -346,9 +346,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
-  quick-txt-diff-fedora-jdk17:
+  quick-txt-diff-rockylinux-jdk17:
     docker:
-      - image: mdernst/daikon-fedora-jdk17
+      - image: mdernst/daikon-rockylinux-jdk17
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -365,9 +365,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
-  nonquick-txt-diff-fedora-jdk8:
+  nonquick-txt-diff-rockylinux-jdk8:
     docker:
-      - image: mdernst/daikon-fedora-jdk8
+      - image: mdernst/daikon-rockylinux-jdk8
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -384,9 +384,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
-  nonquick-txt-diff-fedora-jdk11:
+  nonquick-txt-diff-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-fedora-jdk11
+      - image: mdernst/daikon-rockylinux-jdk11
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -403,9 +403,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
-  nonquick-txt-diff-fedora-jdk17:
+  nonquick-txt-diff-rockylinux-jdk17:
     docker:
-      - image: mdernst/daikon-fedora-jdk17
+      - image: mdernst/daikon-rockylinux-jdk17
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -422,9 +422,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
-  non-txt-diff-fedora-jdk8:
+  non-txt-diff-rockylinux-jdk8:
     docker:
-      - image: mdernst/daikon-fedora-jdk8
+      - image: mdernst/daikon-rockylinux-jdk8
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -441,9 +441,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
 
-  non-txt-diff-fedora-jdk11:
+  non-txt-diff-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-fedora-jdk11
+      - image: mdernst/daikon-rockylinux-jdk11
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -460,9 +460,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
 
-  non-txt-diff-fedora-jdk17:
+  non-txt-diff-rockylinux-jdk17:
     docker:
-      - image: mdernst/daikon-fedora-jdk17
+      - image: mdernst/daikon-rockylinux-jdk17
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -479,294 +479,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
 
-  misc-fedora-jdk8:
+  misc-rockylinux-jdk8:
     docker:
-      - image: mdernst/daikon-fedora-jdk8-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-misc.sh
-
-  misc-fedora-jdk17:
-    docker:
-      - image: mdernst/daikon-fedora-jdk17-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-misc.sh
-
-  misc-fedora-jdk11:
-    docker:
-      - image: mdernst/daikon-fedora-jdk11-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-misc.sh
-
-  kvasir-fedora-jdk8:
-    docker:
-      - image: mdernst/daikon-fedora-jdk8-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-kvasir.sh
-
-  kvasir-fedora-jdk11:
-    docker:
-      - image: mdernst/daikon-fedora-jdk11-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-kvasir.sh
-
-  kvasir-fedora-jdk17:
-    docker:
-      - image: mdernst/daikon-fedora-jdk17-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-kvasir.sh
-
-  quick-txt-diff-centos-jdk8:
-    docker:
-      - image: mdernst/daikon-centos-jdk8
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
-
-  quick-txt-diff-centos-jdk11:
-    docker:
-      - image: mdernst/daikon-centos-jdk11
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
-
-  quick-txt-diff-centos-jdk17:
-    docker:
-      - image: mdernst/daikon-centos-jdk17
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
-
-  nonquick-txt-diff-centos-jdk8:
-    docker:
-      - image: mdernst/daikon-centos-jdk8
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
-
-  nonquick-txt-diff-centos-jdk11:
-    docker:
-      - image: mdernst/daikon-centos-jdk11
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
-
-  nonquick-txt-diff-centos-jdk17:
-    docker:
-      - image: mdernst/daikon-centos-jdk17
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
-
-  non-txt-diff-centos-jdk8:
-    docker:
-      - image: mdernst/daikon-centos-jdk8
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
-
-  non-txt-diff-centos-jdk11:
-    docker:
-      - image: mdernst/daikon-centos-jdk11
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
-
-  non-txt-diff-centos-jdk17:
-    docker:
-      - image: mdernst/daikon-centos-jdk17
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
-
-  misc-centos-jdk8:
-    docker:
-      - image: mdernst/daikon-centos-jdk8-plus
+      - image: mdernst/daikon-rockylinux-jdk8-plus
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -786,9 +501,9 @@ jobs:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
 
-  misc-centos-jdk11:
+  misc-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-centos-jdk11-plus
+      - image: mdernst/daikon-rockylinux-jdk11-plus
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -808,9 +523,9 @@ jobs:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
 
-  misc-centos-jdk17:
+  misc-rockylinux-jdk17:
     docker:
-      - image: mdernst/daikon-centos-jdk17-plus
+      - image: mdernst/daikon-rockylinux-jdk17-plus
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -830,9 +545,9 @@ jobs:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
 
-  kvasir-centos-jdk8:
+  kvasir-rockylinux-jdk8:
     docker:
-      - image: mdernst/daikon-centos-jdk8-plus
+      - image: mdernst/daikon-rockylinux-jdk8-plus
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -849,9 +564,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-kvasir.sh
 
-  kvasir-centos-jdk11:
+  kvasir-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-centos-jdk11-plus
+      - image: mdernst/daikon-rockylinux-jdk11-plus
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -868,9 +583,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-kvasir.sh
 
-  kvasir-centos-jdk17:
+  kvasir-rockylinux-jdk17:
     docker:
-      - image: mdernst/daikon-centos-jdk17-plus
+      - image: mdernst/daikon-rockylinux-jdk17-plus
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -1040,144 +755,73 @@ workflows:
             - jdk17-jobs
             - kvasir-ubuntu-jdk17
       - kvasir-ubuntu-jdk17
-      - kvasir-centos-jdk8:
+      - kvasir-rockylinux-jdk8:
           requires:
             - jdk17-jobs
-            - kvasir-centos-jdk17
+            - kvasir-rockylinux-jdk17
             - kvasir-ubuntu-jdk8
-      - kvasir-centos-jdk11:
+      - kvasir-rockylinux-jdk11:
           requires:
             - jdk17-jobs
-            - kvasir-centos-jdk17
+            - kvasir-rockylinux-jdk17
             - kvasir-ubuntu-jdk11
-      - kvasir-centos-jdk17:
+      - kvasir-rockylinux-jdk17:
           requires:
             - jdk17-jobs
             - kvasir-ubuntu-jdk17
-      - quick-txt-diff-fedora-jdk8:
+      - quick-txt-diff-rockylinux-jdk8:
           requires:
             - jdk17-jobs
-            - quick-txt-diff-fedora-jdk17
+            - quick-txt-diff-rockylinux-jdk17
             - quick-txt-diff-ubuntu-jdk8
-      - quick-txt-diff-fedora-jdk11:
+      - quick-txt-diff-rockylinux-jdk11:
           requires:
             - jdk17-jobs
-            - quick-txt-diff-fedora-jdk17
+            - quick-txt-diff-rockylinux-jdk17
             - quick-txt-diff-ubuntu-jdk11
-      - quick-txt-diff-fedora-jdk17:
+      - quick-txt-diff-rockylinux-jdk17:
           requires:
             - jdk17-jobs
             - quick-txt-diff-ubuntu-jdk17
-      - nonquick-txt-diff-fedora-jdk8:
+      - nonquick-txt-diff-rockylinux-jdk8:
           requires:
             - jdk17-jobs
-            - nonquick-txt-diff-fedora-jdk17
+            - nonquick-txt-diff-rockylinux-jdk17
             - nonquick-txt-diff-ubuntu-jdk8
-      - nonquick-txt-diff-fedora-jdk11:
+      - nonquick-txt-diff-rockylinux-jdk11:
           requires:
             - jdk17-jobs
-            - nonquick-txt-diff-fedora-jdk17
+            - nonquick-txt-diff-rockylinux-jdk17
             - nonquick-txt-diff-ubuntu-jdk11
-      - nonquick-txt-diff-fedora-jdk17:
+      - nonquick-txt-diff-rockylinux-jdk17:
           requires:
             - jdk17-jobs
             - nonquick-txt-diff-ubuntu-jdk17
-      - non-txt-diff-fedora-jdk8:
+      - non-txt-diff-rockylinux-jdk8:
           requires:
             - jdk17-jobs
-            - non-txt-diff-fedora-jdk17
+            - non-txt-diff-rockylinux-jdk17
             - non-txt-diff-ubuntu-jdk8
-      - non-txt-diff-fedora-jdk11:
+      - non-txt-diff-rockylinux-jdk11:
           requires:
             - jdk17-jobs
-            - non-txt-diff-fedora-jdk17
+            - non-txt-diff-rockylinux-jdk17
             - non-txt-diff-ubuntu-jdk11
-      - non-txt-diff-fedora-jdk17:
+      - non-txt-diff-rockylinux-jdk17:
           requires:
             - jdk17-jobs
             - non-txt-diff-ubuntu-jdk17
-      - misc-fedora-jdk8:
+      - misc-rockylinux-jdk8:
           requires:
             - jdk17-jobs
-            - misc-fedora-jdk17
+            - misc-rockylinux-jdk17
             - misc-ubuntu-jdk8
-      - misc-fedora-jdk11:
+      - misc-rockylinux-jdk11:
           requires:
             - jdk17-jobs
-            - misc-fedora-jdk17
+            - misc-rockylinux-jdk17
             - misc-ubuntu-jdk11
-      - misc-fedora-jdk17:
-          requires:
-            - jdk17-jobs
-            - misc-ubuntu-jdk17
-      ## Flaky, needs to be fixed
-      # - kvasir-fedora-jdk8:
-      #     requires:
-      #       - jdk17-jobs
-      #       - kvasir-fedora-jdk17
-      #       - kvasir-ubuntu-jdk8
-      # - kvasir-fedora-jdk11
-      #     requires:
-      #       - jdk17-jobs
-      #       - kvasir-fedora-jdk17
-      #       - kvasir-ubuntu-jdk11
-      # - kvasir-fedora-jdk17
-      #     requires:
-      #       - jdk17-jobs
-      #       - kvasir-ubuntu-jdk17
-      - quick-txt-diff-centos-jdk8:
-          requires:
-            - jdk17-jobs
-            - quick-txt-diff-centos-jdk17
-            - quick-txt-diff-ubuntu-jdk8
-      - quick-txt-diff-centos-jdk11:
-          requires:
-            - jdk17-jobs
-            - quick-txt-diff-centos-jdk17
-            - quick-txt-diff-ubuntu-jdk11
-      - quick-txt-diff-centos-jdk17:
-          requires:
-            - jdk17-jobs
-            - quick-txt-diff-ubuntu-jdk17
-      - nonquick-txt-diff-centos-jdk8:
-          requires:
-            - jdk17-jobs
-            - nonquick-txt-diff-centos-jdk17
-            - nonquick-txt-diff-ubuntu-jdk8
-      - nonquick-txt-diff-centos-jdk11:
-          requires:
-            - jdk17-jobs
-            - nonquick-txt-diff-centos-jdk17
-            - nonquick-txt-diff-ubuntu-jdk11
-      - nonquick-txt-diff-centos-jdk17:
-          requires:
-            - jdk17-jobs
-            - nonquick-txt-diff-ubuntu-jdk17
-      - non-txt-diff-centos-jdk8:
-          requires:
-            - jdk17-jobs
-            - non-txt-diff-centos-jdk17
-            - non-txt-diff-ubuntu-jdk8
-      - non-txt-diff-centos-jdk11:
-          requires:
-            - jdk17-jobs
-            - non-txt-diff-centos-jdk17
-            - non-txt-diff-ubuntu-jdk11
-      - non-txt-diff-centos-jdk17:
-          requires:
-            - jdk17-jobs
-            - non-txt-diff-ubuntu-jdk17
-      - misc-centos-jdk8:
-          requires:
-            - jdk17-jobs
-            - misc-centos-jdk17
-            - misc-ubuntu-jdk8
-      - misc-centos-jdk11:
-          requires:
-            - jdk17-jobs
-            - misc-centos-jdk17
-            - misc-ubuntu-jdk11
-      - misc-centos-jdk17:
+      - misc-rockylinux-jdk17:
           requires:
             - jdk17-jobs
             - misc-ubuntu-jdk17

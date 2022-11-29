@@ -321,7 +321,7 @@ tags:
 
 # This is the target we use to verify that the software we are about
 # to distribute runs correctly in a variety of target environments.
-# Currently, we test CentOS, Fedora, Mac OS X, and Ubuntu client machines.
+# Currently, we test Rocky Linux, Mac OS X, and Ubuntu client machines.
 distribution-check:
 	$(MAKE) -C scripts
 ifdef DAIKONCLASS_SOURCES
@@ -360,8 +360,8 @@ test-staged-dist: $(STAGING_DIR)
 	cd $(DISTTESTDIR)/daikon && make
 	## Test that we can build docs.
 	cd $(DISTTESTDIR)/daikon && $(MAKE) doc-all
-	## Test the basic operation of Chicory/Daikon.
-	cd $(DISTTESTDIR)/daikon && $(MAKE) quick-test
+	## Test the basic operation of Chicory/DynComp/Daikon.
+	cd $(DISTTESTDIR)/daikon && $(MAKE) distribution-check
 
 # I would rather define this inside the repository-test rule.  (In that case I
 # must use "$$FOO", not $(FOO), to refer to it.)
@@ -719,7 +719,6 @@ showvars:
 	${MAKE} -C java showvars
 
 # If .git does not exist, then directory was created from a daikon archive file.
-# The "git pull" command fails under Centos and Fedora 23, for mysterious reasons.
 update-libs: update-bibtex2web update-checklink update-html-tools update-plume-scripts update-run-google-java-format
 .PHONY: update-libs update-bibtex2web update-checklink update-html-tools update-plume-scripts update-run-google-java-format
 

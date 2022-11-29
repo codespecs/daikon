@@ -55,9 +55,12 @@ endif
 default: summary-w-daikon
 
 # Set up potential OS_ID and OS_ID+OS_REL specific goal targets.
-OS_ID := $(shell lsb_release -si)
-OS_REL := $(shell lsb_release -sr)
+OS_ID := $(shell ${DAIKONDIR}/scripts/lsb_release -si)
+OS_REL := $(shell ${DAIKONDIR}/scripts/lsb_release -sr)
 GOAL := goal
+
+$(info OS_ID="$(OS_ID)")
+$(info OS_REL="$(OS_REL)")
 
 ifeq ($(OS_ID),CentOS)
 #ifeq ($(OS_REL),7.8.2003)
@@ -105,7 +108,18 @@ endif
 # otherwise the default goal file
 endif
 
+ifeq ($(OS_ID),Rocky)
+ifeq ($(OS_REL),9.0)
+	GOAL := goal-Rocky90
+endif
+# other versions of Rocky will use goal-Rocky if it exists
+# otherwise the default goal file
+endif
+
 ifeq ($(OS_ID),Ubuntu)
+ifeq ($(OS_REL),22.10)
+	GOAL := goal-Ubuntu2210
+endif
 ifeq ($(OS_REL),22.04)
 	GOAL := goal-Ubuntu2204
 endif
@@ -130,7 +144,7 @@ endif
 # otherwise the default goal file
 endif
 
-# We test Kvasir on three different OS platforms: Ubuntu, Fedora and CentOS.
+# We test Kvasir on Ubuntu and Rocky Linux.
 # The code above has set $(GOAL) to a value that represents the current OS type
 # and version number; e.g. 'goal-Fedora25'.
 
@@ -152,17 +166,22 @@ goal_name = $(if $(shell if [ -f $(1).$(GOAL) ] ; then echo true; fi), \
 						$(if $(shell if [ -f $(1).goal-Fedora ] ; then echo true; fi), \
 							$(1).goal-Fedora, \
 							$(1).goal), \
-					    $(if $(findstring Ubuntu, $(OS_ID)), \
-						    $(if $(shell if [ -f $(1).goal-Ubuntu ] ; then echo true; fi), \
-							    $(1).goal-Ubuntu, \
+					    $(if $(findstring Rocky, $(OS_ID)), \
+						    $(if $(shell if [ -f $(1).goal-Rocky ] ; then echo true; fi), \
+							    $(1).goal-Rocky, \
 							    $(1).goal), \
-						    $(1).goal) \
+					        $(if $(findstring Ubuntu, $(OS_ID)), \
+						        $(if $(shell if [ -f $(1).goal-Ubuntu ] ; then echo true; fi), \
+							        $(1).goal-Ubuntu, \
+							        $(1).goal), \
+						        $(1).goal) \
+				         ) \
 				     ) \
 				) \
 			)
 
 show-os:
-	@echo $(OS_ID) $(OS_REL)
+	@echo OS_ID=$(OS_ID) OS_REL=$(OS_REL)
 
 ifdef COMPRESS_DTRACE
 export DTRACEGZIP := 1
@@ -184,11 +203,8 @@ COMPILER := $(CC)
 CFLAGS += -std=gnu89
 endif
 
-ifneq ($(OS_ID),CentOS)
-# Ubuntu (17.10) sets -pie on by default
-# we must turn it back off
+# Don't create a position-independent executable.
 CFLAGS += -no-pie
-endif
 
 SOURCES ?= $(NAME).$(C_EXT)
 
