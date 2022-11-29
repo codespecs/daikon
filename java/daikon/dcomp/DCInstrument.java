@@ -98,6 +98,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 import org.checkerframework.dataflow.qual.Pure;
@@ -183,7 +184,7 @@ public class DCInstrument extends InstructionListUtils {
 
   /** Either "java.lang.DCompInstrumented" or "daikon.dcomp.DCompInstrumented". */
   // Static because used in DCRuntime
-  protected static String instrumentation_interface;
+  protected static @BinaryName String instrumentation_interface;
   /** Either "java.lang" or "daikon.dcomp". */
   protected @DotSeparatedIdentifiers String dcomp_prefix;
   /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
@@ -333,7 +334,6 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /** Initialize with the original class and whether or not the class is part of the JDK. */
-  @SuppressWarnings("StaticAssignmentInConstructor") // instrumentation_interface
   public DCInstrument(JavaClass orig_class, boolean in_jdk, @Nullable ClassLoader loader) {
     super();
     this.orig_class = orig_class;
