@@ -3027,9 +3027,11 @@ public final class FileIO {
       E e = Enum.valueOf(enum_class, str.toUpperCase());
       return e;
     } catch (Exception exception) {
-      @SuppressWarnings(
-          "nullness") // getEnumConstants returns non-null because enum_class is an enum class
-      E @NonNull [] all = enum_class.getEnumConstants();
+      @SuppressWarnings({
+        "nullness", // getEnumConstants returns non-null because enum_class is an enum class
+        "interning" // generics; #979 ?
+      })
+      @Interned E @NonNull [] all = enum_class.getEnumConstants();
       StringJoiner msg = new StringJoiner(", ");
       for (E e : all) {
         msg.add(String.format("'%s'", e.name().toLowerCase()));
