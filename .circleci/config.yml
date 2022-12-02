@@ -71,6 +71,25 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
+  quick-txt-diff-ubuntu-jdk19:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk19
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-quick-txt-diff.sh
+
   nonquick-txt-diff-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
@@ -112,6 +131,25 @@ jobs:
   nonquick-txt-diff-ubuntu-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk17
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
+  nonquick-txt-diff-ubuntu-jdk19:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk19
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -185,6 +223,25 @@ jobs:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
 
+  non-txt-diff-ubuntu-jdk19:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk19
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-non-txt-diff.sh
+
   misc-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8-plus
@@ -226,6 +283,25 @@ jobs:
   misc-ubuntu-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk17-plus
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-misc.sh
+
+  misc-ubuntu-jdk19:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk19-plus
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -289,6 +365,28 @@ jobs:
   kvasir-ubuntu-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk17-plus
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run:
+          name: Test Kvasir
+          command: ./scripts/test-kvasir.sh
+          no_output_timeout: 20m
+
+  kvasir-ubuntu-jdk19:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk19-plus
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -719,6 +817,10 @@ workflows:
             - jdk17-jobs
             - quick-txt-diff-ubuntu-jdk17
       - quick-txt-diff-ubuntu-jdk17
+      - quick-txt-diff-ubuntu-jdk19:
+          requires:
+            - jdk17-jobs
+            - quick-txt-diff-ubuntu-jdk17
       - nonquick-txt-diff-ubuntu-jdk8:
           requires:
             - jdk17-jobs
@@ -728,6 +830,10 @@ workflows:
             - jdk17-jobs
             - nonquick-txt-diff-ubuntu-jdk17
       - nonquick-txt-diff-ubuntu-jdk17
+      - nonquick-txt-diff-ubuntu-jdk19:
+          requires:
+            - jdk17-jobs
+            - nonquick-txt-diff-ubuntu-jdk17
       - non-txt-diff-ubuntu-jdk8:
           requires:
             - jdk17-jobs
@@ -737,6 +843,10 @@ workflows:
             - jdk17-jobs
             - non-txt-diff-ubuntu-jdk17
       - non-txt-diff-ubuntu-jdk17
+      - non-txt-diff-ubuntu-jdk19:
+          requires:
+            - jdk17-jobs
+            - non-txt-diff-ubuntu-jdk17
       - misc-ubuntu-jdk8:
           requires:
             - jdk17-jobs
@@ -746,6 +856,10 @@ workflows:
             - jdk17-jobs
             - misc-ubuntu-jdk17
       - misc-ubuntu-jdk17
+      - misc-ubuntu-jdk19:
+          requires:
+            - jdk17-jobs
+            - misc-ubuntu-jdk17
       - kvasir-ubuntu-jdk8:
           requires:
             - jdk17-jobs
@@ -755,6 +869,10 @@ workflows:
             - jdk17-jobs
             - kvasir-ubuntu-jdk17
       - kvasir-ubuntu-jdk17
+      - kvasir-ubuntu-jdk19:
+          requires:
+            - jdk17-jobs
+            - kvasir-ubuntu-jdk17
       - kvasir-rockylinux-jdk8:
           requires:
             - jdk17-jobs
