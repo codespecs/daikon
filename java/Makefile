@@ -759,15 +759,6 @@ jar: ../daikon.jar
 ../daikon.jar: ../utils/plume-scripts ${AUTO_GENERATED_FILES} compile
 	cd .. && $(MAKE) daikon.jar
 
-checkstyle: checkstyle-cs checkstyle-sun
-checkstyle-cs: .checkstyle-cschecks-output
-checkstyle-sun: .checkstyle-sunchecks-output
-.PHONY: checkstyle checkstyle-cs checkstyle-sun
-
-checkstyle:
-# This invocation works on Ubuntu.
-	checkstyle -c /usr/share/checkstyle/sun_checks.xml ${JAVA_FILES_FOR_STYLE}
-
 jlint:
 	jlint . | grep -v "Value of referenced variable '.*' may be NULL" | grep -v "Compare strings as object references" | perl -p -e 's:^daikon/::'
 
