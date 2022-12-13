@@ -356,7 +356,7 @@ public class DCInstrument extends InstructionListUtils {
 
     // System.out.printf("DCInstrument %s%n", orig_class.getClassName());
     // Turn on some of the logging based on debug option.
-    debug_instrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
+    debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
     debug_native.enabled = DynComp.debug;
   }
 
@@ -397,7 +397,7 @@ public class DCInstrument extends InstructionListUtils {
       // will be created in this class.
       Method eq = gen.containsMethod("equals", "(Ljava/lang/Object;)Z");
       if (eq == null) {
-        debug_instrument.log("Added equals method%n");
+        debugInstrument.log("Added equals method%n");
         add_equals_method(gen);
       }
 
@@ -592,11 +592,11 @@ public class DCInstrument extends InstructionListUtils {
         InstructionList il = mg.getInstructionList();
         boolean has_code = (il != null);
         if (has_code) {
-          set_current_stack_map_table(mg, gen.getMajor());
-          build_unitialized_NEW_map(il);
+          setCurrentStackMapTable(mg, gen.getMajor());
+          buildUninitializedNewMap(il);
         }
 
-        fix_local_variable_table(mg);
+        fixLocalVariableTable(mg);
 
         // If the method is native
         if (mg.isNative()) {
@@ -604,7 +604,7 @@ public class DCInstrument extends InstructionListUtils {
           // Create Java code that cleans up the tag stack and calls the real native method.
           fix_native(gen, mg);
           has_code = true;
-          set_current_stack_map_table(mg, gen.getMajor());
+          setCurrentStackMapTable(mg, gen.getMajor());
 
           // Add the DCompMarker argument to distinguish our version
           add_dcomp_arg(mg);
@@ -641,8 +641,8 @@ public class DCInstrument extends InstructionListUtils {
         }
 
         if (has_code) {
-          update_uninitialized_NEW_offsets(mg.getInstructionList());
-          create_new_stack_map_attribute(mg);
+          updateUninitializedNewOffsets(mg.getInstructionList());
+          createNewStackMapAttribute(mg);
           mg.setMaxLocals();
           mg.setMaxStack();
         } else {
@@ -721,7 +721,7 @@ public class DCInstrument extends InstructionListUtils {
       } catch (Throwable t) {
         // debug code
         // t.printStackTrace();
-        if (debug_instrument.enabled) t.printStackTrace();
+        if (debugInstrument.enabled) t.printStackTrace();
         throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
       }
     }
@@ -850,7 +850,7 @@ public class DCInstrument extends InstructionListUtils {
       // will be created in this class.
       Method eq = gen.containsMethod("equals", "(Ljava/lang/Object;)Z");
       if (eq == null) {
-        debug_instrument.log("Added equals method%n");
+        debugInstrument.log("Added equals method%n");
         add_equals_method(gen);
       }
       // Add DCompInstrumented interface and the required
@@ -879,11 +879,11 @@ public class DCInstrument extends InstructionListUtils {
         InstructionList il = mg.getInstructionList();
         boolean has_code = (il != null);
         if (has_code) {
-          set_current_stack_map_table(mg, gen.getMajor());
-          build_unitialized_NEW_map(il);
+          setCurrentStackMapTable(mg, gen.getMajor());
+          buildUninitializedNewMap(il);
         }
 
-        fix_local_variable_table(mg);
+        fixLocalVariableTable(mg);
 
         // If the method is native
         if (mg.isNative()) {
@@ -891,7 +891,7 @@ public class DCInstrument extends InstructionListUtils {
           // Create Java code that cleans up the tag stack and calls the real native method.
           fix_native(gen, mg);
           has_code = true;
-          set_current_stack_map_table(mg, gen.getMajor());
+          setCurrentStackMapTable(mg, gen.getMajor());
 
           // Add the DCompMarker argument to distinguish our version
           add_dcomp_arg(mg);
@@ -912,8 +912,8 @@ public class DCInstrument extends InstructionListUtils {
         }
 
         if (has_code) {
-          update_uninitialized_NEW_offsets(mg.getInstructionList());
-          create_new_stack_map_attribute(mg);
+          updateUninitializedNewOffsets(mg.getInstructionList());
+          createNewStackMapAttribute(mg);
           mg.setMaxLocals();
           mg.setMaxStack();
         } else {
@@ -941,7 +941,7 @@ public class DCInstrument extends InstructionListUtils {
 
         Instrument.debug_transform.exdent();
       } catch (Throwable t) {
-        if (debug_instrument.enabled) t.printStackTrace();
+        if (debugInstrument.enabled) t.printStackTrace();
         skip_method(mgen);
         if (quit_if_error) {
           throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
@@ -983,7 +983,7 @@ public class DCInstrument extends InstructionListUtils {
     // Calculate the operand stack value(s) for revised code.
     mg.setMaxStack();
     // Calculate stack types information
-    StackTypes stack_types = bcel_calc_stack_types(mg);
+    StackTypes stack_types = bcelCalcStackTypes(mg);
     if (stack_types == null) {
       skip_method(mg);
       return;
@@ -1010,10 +1010,10 @@ public class DCInstrument extends InstructionListUtils {
     while (ih != null) {
       handle_offsets[index++] = ih.getPosition();
 
-      if (debug_instrument.enabled) {
-        debug_instrument.log("inst: %s %n", ih);
+      if (debugInstrument.enabled) {
+        debugInstrument.log("inst: %s %n", ih);
         for (InstructionTargeter it : ih.getTargeters()) {
-          debug_instrument.log("targeter: %s %n", it);
+          debugInstrument.log("targeter: %s %n", it);
         }
       }
 
@@ -1023,7 +1023,7 @@ public class DCInstrument extends InstructionListUtils {
     index = 0;
     // Loop through each instruction, making substitutions
     for (ih = orig_start; ih != null; ) {
-      debug_instrument.log("instrumenting instruction %s%n", ih);
+      debugInstrument.log("instrumenting instruction %s%n", ih);
       InstructionList new_il = null;
 
       // Remember the next instruction to process
@@ -1039,7 +1039,7 @@ public class DCInstrument extends InstructionListUtils {
       // instruction list. If this instruction was the target of any
       // jumps or line numbers, replace them with the first
       // instruction in the new list.
-      replace_instructions(mg, il, ih, new_il);
+      replaceInstructions(mg, il, ih, new_il);
 
       ih = next_ih;
     }
@@ -1134,13 +1134,13 @@ public class DCInstrument extends InstructionListUtils {
 
     int exc_offset = exc.getPosition();
 
-    debug_instrument.log(
+    debugInstrument.log(
         "New ExceptionHandler: %x %x %x %n", start.getPosition(), end.getPosition(), exc_offset);
 
-    // This is a trick to get running_offset set to
+    // This is a trick to get runningOffset set to
     // value of last stack map entry.
-    update_stack_map_offset(exc_offset, 0);
-    int map_offset = exc_offset - running_offset - 1;
+    updateStackMapOffset(exc_offset, 0);
+    int map_offset = exc_offset - runningOffset - 1;
 
     // Get the argument types for this method
     Type[] arg_types = mg.getArgumentTypes();
@@ -1153,7 +1153,7 @@ public class DCInstrument extends InstructionListUtils {
               Const.ITEM_Object, pool.addClass(mg.getClassName()), pool.getConstantPool());
     }
     for (int ii = 0; ii < arg_types.length; ii++) {
-      arg_map_types[arg_index++] = generate_StackMapType_from_Type(arg_types[ii]);
+      arg_map_types[arg_index++] = generateStackMapTypeFromType(arg_types[ii]);
     }
 
     StackMapEntry map_entry;
@@ -1165,11 +1165,11 @@ public class DCInstrument extends InstructionListUtils {
         new StackMapEntry(
             Const.FULL_FRAME, map_offset, arg_map_types, stack_map_types, pool.getConstantPool());
 
-    int orig_size = stack_map_table.length;
+    int orig_size = stackMapTable.length;
     StackMapEntry[] new_stack_map_table = new StackMapEntry[orig_size + 1];
-    System.arraycopy(stack_map_table, 0, new_stack_map_table, 0, orig_size);
+    System.arraycopy(stackMapTable, 0, new_stack_map_table, 0, orig_size);
     new_stack_map_table[orig_size] = map_entry;
-    stack_map_table = new_stack_map_table;
+    stackMapTable = new_stack_map_table;
   }
 
   /**
@@ -1191,7 +1191,7 @@ public class DCInstrument extends InstructionListUtils {
     // -1 because of the NOP we inserted.
     int len_code = code.length - 1;
 
-    insert_at_method_start(mg, nl);
+    insertAtMethodStart(mg, nl);
 
     if (!needStackMap) {
       return;
@@ -1203,7 +1203,7 @@ public class DCInstrument extends InstructionListUtils {
     // adjustments for the new 'tag_frame' local.
 
     // Get existing StackMapTable (if present)
-    if (stack_map_table.length > 0) {
+    if (stackMapTable.length > 0) {
       // Each stack map frame specifies (explicity or implicitly) an
       // offset_delta that is used to calculate the actual bytecode
       // offset at which the frame applies.  This is caluclated by
@@ -1222,15 +1222,15 @@ public class DCInstrument extends InstructionListUtils {
       // original first entry having an offset of 0 because of the
       // NOP we inserted above.
 
-      stack_map_table[0].updateByteCodeOffset(-(len_code + 1));
+      stackMapTable[0].updateByteCodeOffset(-(len_code + 1));
     }
 
-    int new_table_length = stack_map_table.length + 1;
+    int new_table_length = stackMapTable.length + 1;
     StackMapEntry[] new_stack_map_table = new StackMapEntry[new_table_length];
 
     // Insert a new StackMapEntry at the beginning of the table
     // that adds the tag_frame variable.
-    StackMapType tag_frame_type = generate_StackMapType_from_Type(object_arr);
+    StackMapType tag_frame_type = generateStackMapTypeFromType(object_arr);
     StackMapType[] stack_map_type_arr = {tag_frame_type};
     new_stack_map_table[0] =
         new StackMapEntry(
@@ -1238,11 +1238,11 @@ public class DCInstrument extends InstructionListUtils {
 
     // We can just copy the rest of the stack frames over as the FULL_FRAME
     // ones were already updated when the tag_frame variable was allocated.
-    for (int i = 0; i < stack_map_table.length; i++) {
-      new_stack_map_table[i + 1] = stack_map_table[i];
+    for (int i = 0; i < stackMapTable.length; i++) {
+      new_stack_map_table[i + 1] = stackMapTable[i];
     }
-    stack_map_table = new_stack_map_table;
-    // print_stack_map_table ("add_create_tag_frame");
+    stackMapTable = new_stack_map_table;
+    // print_stackMapTable ("add_create_tag_frame");
   }
 
   /**
@@ -1254,7 +1254,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   public void add_enter(MethodGen mg, MethodInfo mi, int method_info_index) {
     InstructionList il = mg.getInstructionList();
-    replace_instructions(
+    replaceInstructions(
         mg, il, insertion_placeholder, call_enter_exit(mg, method_info_index, "enter", -1));
   }
 
@@ -1314,7 +1314,7 @@ public class DCInstrument extends InstructionListUtils {
         ifact.createInvoke(
             dcompRuntimeClassName, "create_tag_frame", object_arr, string_arg, Const.INVOKESTATIC));
     il.append(InstructionFactory.createStore(object_arr, tag_frame_local.getIndex()));
-    debug_instrument.log("Store Tag frame local at index %d%n", tag_frame_local.getIndex());
+    debugInstrument.log("Store Tag frame local at index %d%n", tag_frame_local.getIndex());
 
     return il;
   }
@@ -1862,7 +1862,7 @@ public class DCInstrument extends InstructionListUtils {
         }
         new_il.append(call_enter_exit(mg, method_info_index, "exit", exit_iter.next()));
         new_il.append(inst);
-        replace_instructions(mg, il, ih, new_il);
+        replaceInstructions(mg, il, ih, new_il);
       }
 
       ih = next_ih;
@@ -2080,7 +2080,7 @@ public class DCInstrument extends InstructionListUtils {
       }
 
       if (Premain.problem_methods.contains(classname + "." + methodName)) {
-        debug_instrument.log(
+        debugInstrument.log(
             "Don't call instrumented version of problem method %s.%n",
             classname + "." + methodName);
         targetInstrumented = false;
@@ -2331,14 +2331,14 @@ public class DCInstrument extends InstructionListUtils {
     int i = classname.lastIndexOf('.');
     if (i > 0) {
       if (Premain.problem_packages.contains(classname.substring(0, i))) {
-        debug_instrument.log(
+        debugInstrument.log(
             "Don't call instrumented member of problem package %s%n", classname.substring(0, i));
         return false;
       }
     }
 
     if (Premain.problem_classes.contains(classname)) {
-      debug_instrument.log("Don't call instrumented member of problem class %s%n", classname);
+      debugInstrument.log("Don't call instrumented member of problem class %s%n", classname);
       return false;
     }
 
@@ -2602,7 +2602,7 @@ public class DCInstrument extends InstructionListUtils {
 
     // Push the tag frame and the index of this local
     il.append(InstructionFactory.createLoad(object_arr, tag_frame_local.getIndex()));
-    debug_instrument.log("CreateLoad %s %d%n", object_arr, tag_frame_local.getIndex());
+    debugInstrument.log("CreateLoad %s %d%n", object_arr, tag_frame_local.getIndex());
     il.append(ifact.createConstant(lvi.getIndex()));
 
     // Call the runtime method to handle loading/storing the local/parameter
@@ -2842,7 +2842,7 @@ public class DCInstrument extends InstructionListUtils {
 
     try {
       MethodGen cinit_gen = new MethodGen(cinit, gen.getClassName(), pool);
-      set_current_stack_map_table(cinit_gen, gen.getMajor());
+      setCurrentStackMapTable(cinit_gen, gen.getMajor());
 
       // Add a call to DCRuntime.set_class_initialized to the beginning of the method
       InstructionList il = new InstructionList();
@@ -2855,13 +2855,13 @@ public class DCInstrument extends InstructionListUtils {
               string_arg,
               Const.INVOKESTATIC));
 
-      insert_at_method_start(cinit_gen, il);
-      create_new_stack_map_attribute(cinit_gen);
+      insertAtMethodStart(cinit_gen, il);
+      createNewStackMapAttribute(cinit_gen);
       cinit_gen.setMaxLocals();
       cinit_gen.setMaxStack();
       gen.replaceMethod(cinit, cinit_gen.getMethod());
     } catch (Throwable t) {
-      if (debug_instrument.enabled) t.printStackTrace();
+      if (debugInstrument.enabled) t.printStackTrace();
       throw new Error(
           "Unexpected error processing " + gen.getClassName() + "." + cinit.getName(), t);
     }
@@ -4022,7 +4022,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   void add_dcomp_interface(ClassGen gen) {
     gen.addInterface(instrumentation_interface);
-    debug_instrument.log("Added interface DCompInstrumented%n");
+    debugInstrument.log("Added interface DCompInstrumented%n");
 
     InstructionList il = new InstructionList();
     int access_flags = Const.ACC_PUBLIC;
@@ -4155,7 +4155,7 @@ public class DCInstrument extends InstructionListUtils {
 
     // Add the dcomp marker argument to indicate this is the
     // instrumented version of the method.
-    add_new_parameter(mg, "marker", dcomp_marker);
+    addNewParameter(mg, "marker", dcomp_marker);
   }
 
   /**
@@ -4232,7 +4232,7 @@ public class DCInstrument extends InstructionListUtils {
 
     // Create the method
     Type[] argTypes = BcelUtil.postpendToArray(mg.getArgumentTypes(), dcomp_marker);
-    String[] argNames = add_string(mg.getArgumentNames(), "marker");
+    String[] argNames = addString(mg.getArgumentNames(), "marker");
     MethodGen dcomp_mg =
         new MethodGen(
             mg.getAccessFlags(),

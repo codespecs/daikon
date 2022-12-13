@@ -27,7 +27,7 @@ public class Instrument implements ClassFileTransformer {
 
   /**
    * Debug information about which classes and/or methods are transformed and why. Use
-   * debug_instrument for actual instrumentation details.
+   * debugInstrument for actual instrumentation details.
    */
   private static SimpleLog debug_transform = new SimpleLog(false);
 
