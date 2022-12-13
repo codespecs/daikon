@@ -1,4 +1,7 @@
-# Create a Docker image that is ready to run the Daikon tests.
+# Create a Docker image that is ready to run the full Daikon tests,
+# including building the manual and Javadoc.
+# But it's used primarily for running miscellaneous tests such as the manual
+# and Javadoc.
 
 # "ubuntu" is the latest LTS release.  "ubuntu:rolling" is the latest release.
 FROM ubuntu:rolling
@@ -28,7 +31,31 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
-  openjdk-18-jdk
+  openjdk-19-jdk
+
+# These are needed to build the Checker Framework, used by the "typecheck" job in CI.
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
+  ant \
+  maven \
+  python3
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
+  curl \
+  g++ \
+  graphviz \
+  libc6-dbg \
+  netpbm \
+  python3-distutils \
+  texinfo \
+  texlive \
+  texlive-latex-extra \
+  universal-ctags \
+  wget \
+  zlib1g-dev
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get clean \

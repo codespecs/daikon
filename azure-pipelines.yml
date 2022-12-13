@@ -2,7 +2,7 @@ jobs:
 
 # The dependsOn clauses (in this file and in .circleci/config.yml) are:
 #  * Everything not *_ubuntu_jdk17 or typecheck_jdk17 depends on jdk17_jobs.
-#  * Anything *_jdk8 or *_jdk11 or _jdk18 depends on *_jdk17.
+#  * Anything *_jdk8 or *_jdk11 or _jdk19 depends on *_jdk17.
 #  * Anything *_rockylinux_* depends on *_ubuntu_*.
 
 # The remainder of jobs are run only if the jdk17_jobs pass.
@@ -56,13 +56,13 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: quick_txt_diff_ubuntu_jdk18
+- job: quick_txt_diff_ubuntu_jdk19
   dependsOn:
     - jdk17_jobs
     - quick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk18:latest
+  container: mdernst/daikon-ubuntu-jdk19:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -105,13 +105,13 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: nonquick_txt_diff_ubuntu_jdk18
+- job: nonquick_txt_diff_ubuntu_jdk19
   dependsOn:
     - jdk17_jobs
     - nonquick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk18:latest
+  container: mdernst/daikon-ubuntu-jdk19:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -154,13 +154,13 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: non_txt_diff_ubuntu_jdk18
+- job: non_txt_diff_ubuntu_jdk19
   dependsOn:
     - jdk17_jobs
     - non_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk18:latest
+  container: mdernst/daikon-ubuntu-jdk19:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -209,13 +209,13 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-- job: misc_ubuntu_jdk18
+- job: misc_ubuntu_jdk19
   dependsOn:
     - jdk17_jobs
     - misc_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk18-plus:latest
+  container: mdernst/daikon-ubuntu-jdk19-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -260,13 +260,13 @@ jobs:
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
-- job: kvasir_ubuntu_jdk18
+- job: kvasir_ubuntu_jdk19
   dependsOn:
     - jdk17_jobs
     - kvasir_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk18-plus:latest
+  container: mdernst/daikon-ubuntu-jdk19-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -324,13 +324,13 @@ jobs:
   - bash: ./scripts/test-typecheck.sh
     displayName: test-typecheck.sh
 
-- job: typecheck_jdk18
+- job: typecheck_jdk19
   dependsOn:
     - jdk17_jobs
     - typecheck_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk18-plus:latest
+  container: mdernst/daikon-ubuntu-jdk19-plus:latest
   timeoutInMinutes: 70
   steps:
   - checkout: self
