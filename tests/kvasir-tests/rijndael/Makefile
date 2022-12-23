@@ -17,8 +17,9 @@ else
   JAVA19_OR_NEWER := 0
 endif
 
-OS_ID := $(shell ${DAIKONDIR}/scripts/lsb_release -si)
-OS_REL := $(shell ${DAIKONDIR}/scripts/lsb_release -sr)
+LDAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
+OS_ID := $(shell $(LDAIKONDIR)/scripts/lsb_release -si)
+OS_REL := $(shell $(LDAIKONDIR)/scripts/lsb_release -sr)
 ifeq ($(OS_ID),Ubuntu)
 ifeq ($(OS_REL),22.10)
 ifeq ($(JAVA19_OR_NEWER),1)
