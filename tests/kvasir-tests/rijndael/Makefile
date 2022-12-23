@@ -7,11 +7,24 @@ EXTRA_OUTPUTS := cbc_d_m.txt cbc_e_m.txt ecb_d_m.txt ecb_e_m.txt ecb_iv.txt \
 DTRACE_DIFF := dtrace-diff-fast.pl
 COUNTS_ONLY := 1
 
-include ../Makefile.common
+# This test seems to be non-deterministic on Ubuntu 22.10 with JDK 19.
 
-# This test seems to be non-deterministic on Rocky Linux.  (TODO: re-check)
-OS_ID := $(shell ${DAIKONDIR}/scripts/lsb_release -si)
-ifeq ($(OS_ID),Rocky Linux)
-SKIP_COMP_DIFF := 1
+JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
+JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
+ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 19),1)
+  JAVA19_OR_NEWER := 1
+else
+  JAVA19_OR_NEWER := 0
 endif
 
+OS_ID := $(shell ${DAIKONDIR}/scripts/lsb_release -si)
+OS_REL := $(shell ${DAIKONDIR}/scripts/lsb_release -sr)
+ifeq ($(OS_ID),Ubuntu)
+ifeq ($(OS_REL),22.10)
+ifeq ($(JAVA19_OR_NEWER),1)
+SKIP_COMP_DIFF := 1
+endif
+endif
+endif
+
+include ../Makefile.common
