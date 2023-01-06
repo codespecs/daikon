@@ -49,8 +49,8 @@ options-1.0.6.jar : https://search.maven.org/#search%7Cga%7C1%7Coptions
   wget https://repo.maven.apache.org/maven2/org/plumelib/options/1.0.6/options-1.0.6.jar
   When you update this, remove the old daikon-plumelib.jar then remake it (see above).
 
-plume-util-1.6.0.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
-  wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/1.6.0/plume-util-1.6.0.jar
+plume-util-1.6.1.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
+  wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/1.6.1/plume-util-1.6.1.jar
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
 reflection-util-1.0.5.jar : https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/
