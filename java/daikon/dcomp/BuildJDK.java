@@ -422,7 +422,7 @@ public class BuildJDK {
               "java.lang.Object",
               "daikon.dcomp.BuildJDK tool",
               Const.ACC_INTERFACE | Const.ACC_PUBLIC | Const.ACC_ABSTRACT,
-              new String[0]);
+              new @BinaryName String[0]);
       dcomp_class.setMinor(0);
       // Convert from JDK version number to ClassFile major_version.
       // A bit of a hack, but seems OK.

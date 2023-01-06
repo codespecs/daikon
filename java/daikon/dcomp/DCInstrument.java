@@ -98,6 +98,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 import org.checkerframework.dataflow.qual.Pure;
@@ -183,7 +184,7 @@ public class DCInstrument extends InstructionListUtils {
 
   /** Either "java.lang.DCompInstrumented" or "daikon.dcomp.DCompInstrumented". */
   // Static because used in DCRuntime
-  protected static String instrumentation_interface;
+  protected static @BinaryName String instrumentation_interface;
   /** Either "java.lang" or "daikon.dcomp". */
   protected @DotSeparatedIdentifiers String dcomp_prefix;
   /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
@@ -701,6 +702,8 @@ public class DCInstrument extends InstructionListUtils {
             // argument and no instrumentation.
             // first, restore unmodified method
             mg = new MethodGen(m, classname, pool);
+            // restore StackMapTable
+            setCurrentStackMapTable(mg, gen.getMajor());
             // Add the DCompMarker argument
             add_dcomp_arg(mg);
             remove_local_variable_type_table(mg);
@@ -937,7 +940,43 @@ public class DCInstrument extends InstructionListUtils {
           }
         }
 
-        gen.addMethod(mg.getMethod());
+        try {
+          if (has_code) {
+            il = mg.getInstructionList();
+            InstructionHandle end = il.getEnd();
+            int length = end.getPosition() + end.getInstruction().getLength();
+            if (length >= Const.MAX_CODE_SIZE) {
+              throw new ClassGenException(
+                  "Code array too big: must be smaller than " + Const.MAX_CODE_SIZE + " bytes.");
+            }
+          }
+          gen.addMethod(mg.getMethod());
+        } catch (Exception e) {
+          String s = e.getMessage();
+          if (s == null) {
+            throw e;
+          }
+          if (s.startsWith("Branch target offset too large")
+              || s.startsWith("Code array too big")) {
+            System.err.printf(
+                "DynComp warning: ClassFile: %s - method %s is too large to instrument and is"
+                    + " being skipped.%n",
+                classname, mg.getName());
+            // Build a dummy instrumented method that has DCompMarker
+            // argument and no instrumentation.
+            // first, restore unmodified method
+            mg = new MethodGen(m, classname, pool);
+            // restore StackMapTable
+            setCurrentStackMapTable(mg, gen.getMajor());
+            // Add the DCompMarker argument
+            add_dcomp_arg(mg);
+            remove_local_variable_type_table(mg);
+            // try again
+            gen.addMethod(mg.getMethod());
+          } else {
+            throw e;
+          }
+        }
 
         Instrument.debug_transform.exdent();
       } catch (Throwable t) {
@@ -1040,6 +1079,13 @@ public class DCInstrument extends InstructionListUtils {
       // jumps or line numbers, replace them with the first
       // instruction in the new list.
       replaceInstructions(mg, il, ih, new_il);
+
+      // If the modified method is now too large, we quit instrumenting the method
+      // and will rediscover the problem in the main instrumentation loop above
+      // and deal with it there.
+      if (ih.getPosition() >= Const.MAX_CODE_SIZE) {
+        break;
+      }
 
       ih = next_ih;
     }
