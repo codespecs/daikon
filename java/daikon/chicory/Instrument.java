@@ -69,7 +69,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   public Instrument() {
     super();
     debug_transform.enabled = Chicory.debug_transform;
-    debug_instrument.enabled = Chicory.debug;
+    debugInstrument.enabled = Chicory.debug;
   }
 
   /**
@@ -245,7 +245,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       if (Chicory.debug) {
         Path dir = Files.createTempDirectory("chicory-debug");
         Path file = dir.resolve(njc.getClassName() + ".class");
-        debug_instrument.log("Dumping %s to %s%n", njc.getClassName(), file);
+        debugInstrument.log("Dumping %s to %s%n", njc.getClassName(), file);
         Files.createDirectories(dir);
         njc.dump(file.toFile());
       }
@@ -276,7 +276,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     try {
       InstructionList il = mg.getInstructionList();
-      set_current_stack_map_table(mg, cg.getMajor());
+      setCurrentStackMapTable(mg, cg.getMajor());
       MethodContext context = new MethodContext(cg, mg);
 
       for (InstructionHandle ih = il.getStart(); ih != null; ) {
@@ -289,14 +289,14 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         InstructionHandle next_ih = ih.getNext();
 
         // will do nothing if new_il == null
-        insert_before_handle(mg, ih, new_il, false);
+        insertBeforeHandle(mg, ih, new_il, false);
 
         // Go on to the next instruction in the list
         ih = next_ih;
       }
 
       remove_local_variable_type_table(mg);
-      create_new_stack_map_attribute(mg);
+      createNewStackMapAttribute(mg);
 
       // Update the max stack and Max Locals
       mg.setMaxLocals();
@@ -436,7 +436,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             continue;
           }
 
-          if (debug_instrument.enabled) {
+          if (debugInstrument.enabled) {
             Type[] arg_types = mg.getArgumentTypes();
             String[] arg_names = mg.getArgumentNames();
             LocalVariableGen[] local_vars = mg.getLocalVariables();
@@ -451,25 +451,25 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             for (int j = 0; j < local_vars.length; j++) {
               locals = locals + local_vars[j].getName() + " ";
             }
-            debug_instrument.log("%nMethod = %s%n", mg);
-            debug_instrument.log("arg_types(%d): %s%n", arg_types.length, types);
-            debug_instrument.log("arg_names(%d): %s%n", arg_names.length, names);
-            debug_instrument.log("localvars(%d): %s%n", local_vars.length, locals);
-            debug_instrument.log("Original code: %s%n", mg.getMethod().getCode());
-            debug_instrument.log("%n");
+            debugInstrument.log("%nMethod = %s%n", mg);
+            debugInstrument.log("arg_types(%d): %s%n", arg_types.length, types);
+            debugInstrument.log("arg_names(%d): %s%n", arg_names.length, names);
+            debugInstrument.log("localvars(%d): %s%n", local_vars.length, locals);
+            debugInstrument.log("Original code: %s%n", mg.getMethod().getCode());
+            debugInstrument.log("%n");
           }
 
           // Get existing StackMapTable (if present)
-          set_current_stack_map_table(mg, cg.getMajor());
+          setCurrentStackMapTable(mg, cg.getMajor());
 
-          fix_local_variable_table(mg);
+          fixLocalVariableTable(mg);
 
           // Create a MethodInfo that describes this methods arguments
           // and exit line numbers (information not available via reflection)
           // and add it to the list for this class.
           MethodInfo mi = create_method_info(class_info, mg);
 
-          print_stack_map_table("After create_method_info");
+          printStackMapTable("After create_method_info");
 
           if (mi == null) // method filtered out!
           continue;
@@ -483,7 +483,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           // The offsets point to 'new' instructions; since we do
           // not modify these, their Instruction Handles will remain
           // unchanged throught the instrumentaion process.
-          build_unitialized_NEW_map(il);
+          buildUninitializedNewMap(il);
 
           method_infos.add(mi);
 
@@ -495,14 +495,14 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           // Add nonce local to matchup enter/exits
           add_entry_instrumentation(il, context);
 
-          print_stack_map_table("After add_entry_instrumentation");
+          printStackMapTable("After add_entry_instrumentation");
 
-          debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
+          debugInstrument.log("Modified code: %s%n", mg.getMethod().getCode());
 
           // Need to see if there are any switches after this location.
           // If so, we may need to update the corresponding stackmap if
           // the amount of the switch padding changed.
-          modify_stack_maps_for_switches(il.getStart(), il);
+          modifyStackMapsForSwitches(il.getStart(), il);
 
           Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
           Iterator<Integer> exitIter = mi.exit_locations.iterator();
@@ -521,7 +521,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             // If this instruction was modified, replace it with the new
             // instruction list. If this instruction was the target of any
             // jumps, replace it with the first instruction in the new list
-            insert_before_handle(mg, ih, new_il, true);
+            insertBeforeHandle(mg, ih, new_il, true);
 
             // Go on to the next instruction in the list
             ih = next_ih;
@@ -529,9 +529,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
           // Update the Uninitialized_variable_info offsets before
           // we write out the new StackMapTable.
-          update_uninitialized_NEW_offsets(il);
+          updateUninitializedNewOffsets(il);
 
-          create_new_stack_map_attribute(mg);
+          createNewStackMapAttribute(mg);
 
           remove_local_variable_type_table(mg);
 
@@ -558,8 +558,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             }
           }
 
-          if (debug_instrument.enabled) {
-            debug_instrument.log("Modified code: %s%n", mg.getMethod().getCode());
+          if (debugInstrument.enabled) {
+            debugInstrument.log("Modified code: %s%n", mg.getMethod().getCode());
             dump_code_attributes(mg);
           }
           cg.update();
@@ -670,7 +670,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
 
     if (return_local == null) {
-      debug_instrument.log("Adding return local of type %s%n", return_type);
+      debugInstrument.log("Adding return local of type %s%n", return_type);
       return_local = mg.addLocalVariable("return__$trace2_val", return_type, null, null);
     }
 
@@ -711,10 +711,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     LocalVariableGen nonce_lv =
         create_method_scope_local(c.mgen, "this_invocation_nonce", Type.INT);
 
-    print_stack_map_table("After cln");
+    printStackMapTable("After cln");
 
-    if (debug_instrument.enabled) {
-      debug_instrument.log("Modified code: %s%n", c.mgen.getMethod().getCode());
+    if (debugInstrument.enabled) {
+      debugInstrument.log("Modified code: %s%n", c.mgen.getMethod().getCode());
     }
 
     // The following implements:
@@ -764,7 +764,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     boolean skipFirst = false;
 
     // Modify existing StackMapTable (if present)
-    if (stack_map_table.length > 0) {
+    if (stackMapTable.length > 0) {
       // Each stack map frame specifies (explicity or implicitly) an
       // offset_delta that is used to calculate the actual bytecode
       // offset at which the frame applies.  This is caluclated by
@@ -783,15 +783,15 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       // we must delete it as it will be replaced by the new frames
       // we are adding.  (did you get all of that? - markro)
 
-      if (stack_map_table[0].getByteCodeOffset() == 0) {
+      if (stackMapTable[0].getByteCodeOffset() == 0) {
         skipFirst = true;
       } else {
-        stack_map_table[0].updateByteCodeOffset(-1);
+        stackMapTable[0].updateByteCodeOffset(-1);
       }
     }
 
     // Create new StackMap entries for our instrumentation code.
-    int new_table_length = stack_map_table.length + ((len_part2 > 0) ? 2 : 1) - (skipFirst ? 1 : 0);
+    int new_table_length = stackMapTable.length + ((len_part2 > 0) ? 2 : 1) - (skipFirst ? 1 : 0);
     StackMapEntry[] new_map = new StackMapEntry[new_table_length];
     StackMapType nonce_type = new StackMapType(Const.ITEM_Integer, -1, pool.getConstantPool());
     StackMapType[] old_nonce_type = {nonce_type};
@@ -815,10 +815,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     // We can just copy the rest of the stack frames over as the FULL_FRAME
     // ones were already updated when the nonce variable was allocated.
-    for (int i = (skipFirst ? 1 : 0); i < stack_map_table.length; i++) {
-      new_map[new_index++] = stack_map_table[i];
+    for (int i = (skipFirst ? 1 : 0); i < stackMapTable.length; i++) {
+      new_map[new_index++] = stackMapTable[i];
     }
-    stack_map_table = new_map;
+    stackMapTable = new_map;
   }
 
   /**
@@ -975,7 +975,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   private boolean is_constructor(MethodGen mgen) {
 
     if (mgen.getName().equals("<init>") || mgen.getName().equals("")) {
-      debug_instrument.log("method '%s' is a constructor%n", mgen.getName());
+      debugInstrument.log("method '%s' is a constructor%n", mgen.getName());
       return true;
     } else {
       return false;
@@ -1015,10 +1015,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     LocalVariableGen[] lvs = mgen.getLocalVariables();
     int param_offset = 1;
     if (mgen.isStatic()) param_offset = 0;
-    if (debug_instrument.enabled) {
-      debug_instrument.log("create_method_info1 %s%n", arg_names.length);
+    if (debugInstrument.enabled) {
+      debugInstrument.log("create_method_info1 %s%n", arg_names.length);
       for (int ii = 0; ii < arg_names.length; ii++) {
-        debug_instrument.log("arg: %s%n", arg_names[ii]);
+        debugInstrument.log("arg: %s%n", arg_names[ii]);
       }
     }
 
@@ -1050,10 +1050,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       }
     }
 
-    if (debug_instrument.enabled) {
-      debug_instrument.log("create_method_info2 %s%n", arg_names.length);
+    if (debugInstrument.enabled) {
+      debugInstrument.log("create_method_info2 %s%n", arg_names.length);
       for (int ii = 0; ii < arg_names.length; ii++) {
-        debug_instrument.log("arg: %s%n", arg_names[ii]);
+        debugInstrument.log("arg: %s%n", arg_names[ii]);
       }
     }
 
@@ -1081,7 +1081,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // tells whether each exit loc in the method is included or not (based on filters)
     List<Boolean> isIncluded = new ArrayList<>();
 
-    debug_instrument.log("Looking for exit points in %s%n", mgen.getName());
+    debugInstrument.log("Looking for exit points in %s%n", mgen.getName());
     InstructionList il = mgen.getInstructionList();
     int line_number = 0;
     int last_line_number = 0;
@@ -1094,7 +1094,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         for (InstructionTargeter it : ih.getTargeters()) {
           if (it instanceof LineNumberGen) {
             LineNumberGen lng = (LineNumberGen) it;
-            // debug_instrument.log("  line number at %s: %d%n", ih, lng.getSourceLine());
+            // debugInstrument.log("  line number at %s: %d%n", ih, lng.getSourceLine());
             line_number = lng.getSourceLine();
             foundLine = true;
           }
@@ -1108,11 +1108,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         case Const.IRETURN:
         case Const.LRETURN:
         case Const.RETURN:
-          debug_instrument.log("Exit at line %d%n", line_number);
+          debugInstrument.log("Exit at line %d%n", line_number);
 
           // only do incremental lines if we don't have the line generator
           if (line_number == last_line_number && foundLine == false) {
-            debug_instrument.log("Could not find line... at %d%n", line_number);
+            debugInstrument.log("Could not find line... at %d%n", line_number);
             line_number++;
           }
 
@@ -1157,7 +1157,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       int con_index = a.getNameIndex();
       Constant c = pool.getConstant(con_index);
       String att_name = ((ConstantUtf8) c).getBytes();
-      debug_instrument.log("Attribute Index: %s Name: %s%n", con_index, att_name);
+      debugInstrument.log("Attribute Index: %s Name: %s%n", con_index, att_name);
     }
   }
 

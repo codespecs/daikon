@@ -2040,7 +2040,7 @@ nothing to commit, working directory clean
 The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
 from, two open source projects.
 The home page for the Valgrind instrumentation framework is
-@uref{https://www.valgrind.org}.
+@uref{https://valgrind.org}.
 The home page for the GNU Binutils
 (a collection of binary tools, of which Kvasir uses only readelf) is
 @uref{http://www.gnu.org/software/binutils/}.
