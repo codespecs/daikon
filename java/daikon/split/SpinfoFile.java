@@ -200,7 +200,7 @@ public class SpinfoFile {
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed
    * @param pptSections the List into which the List of lines for this pptSection are to be added
    * @param pptName name of the ppt
-   * @throws IOException if an I/O error occurs.
+   * @throws IOException if an I/O error occurs
    */
   private void readPptStatements(
       @UnknownInitialization SpinfoFile this,
