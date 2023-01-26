@@ -199,6 +199,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.EntryReader;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.RegexUtil;
@@ -1470,6 +1471,7 @@ public final class Daikon {
    * Just like {@code g.getOptarg()}, but only to be called in circumstances when the programmer
    * knows that the return value is non-null.
    */
+  @Pure
   public static String getOptarg(Getopt g) {
     String result = g.getOptarg();
     if (result == null) {

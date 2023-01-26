@@ -484,6 +484,8 @@ public final class PrintInvariants {
     // Close the output stream if --output was specified.
     if (out_stream != null) {
       out_stream.flush();
+      assert out_stream != null
+          : "@AssumeAssertion(nullness): flush() does not affect any global variables";
       out_stream.close();
     }
   }

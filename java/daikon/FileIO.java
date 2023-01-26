@@ -1652,7 +1652,7 @@ public final class FileIO {
         if (state.ppt != null) {
           if (!state.all_ppts.containsName(state.ppt.name())) {
             state.all_ppts.add(state.ppt);
-            assert state.ppt != null; // for nullness checker
+            assert state.ppt != null : "@AssumeAssertion(nullness)";
             try {
               Daikon.init_ppt(state.ppt, state.all_ppts);
             } catch (Exception e) {
