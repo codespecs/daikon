@@ -1470,6 +1470,9 @@ public final class Daikon {
   /**
    * Just like {@code g.getOptarg()}, but only to be called in circumstances when the programmer
    * knows that the return value is non-null.
+   *
+   * @param g a command-line argument processor
+   * @return the value for an argument found by {@code g}
    */
   @Pure
   public static String getOptarg(Getopt g) {
