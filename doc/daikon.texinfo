@@ -7966,9 +7966,8 @@ correct, but more verbose than it would be if you used Simplify.
 @c File http://www.hpl.hp.com/downloads/crl/jtk/simplify.tar.z
 @c is dated Nov 16 2004 (as of Mar 30 2015).
 
-@c This link is broken as of June 17 2022.
 Obtain Simplify from
-@uref{https://www.kindsoftware.com/products/opensource/archives/Simplify-1.5.5-13-06-07-binary.zip},
+@uref{https://web.archive.org/web/20170201034825/https://www.kindsoftware.com/products/opensource/archives/Simplify-1.5.5-13-06-07-binary.zip},
 and unzip the zip file.
 
 Either place the appropriate binary on your path, named @command{Simplify},
