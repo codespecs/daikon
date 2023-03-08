@@ -1325,7 +1325,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
   /** Returns the non-instantiating suppressions for this invariant. */
   @Pure
   @Override
-  public @NonNull NISuppressionSet get_ni_suppressions() {
+  public NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
         NISuppressee suppressee = new NISuppressee(INTEQUAL.class, 2);

@@ -159,12 +159,12 @@
 
 package daikon.inv.binary.PACKAGE;
 
-import org.checkerframework.checker.signature.qual.ClassGetName;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import static daikon.inv.Invariant.asInvClass;
 
 import daikon.*;
@@ -778,7 +778,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns a list of non-instantiating suppressions for this invariant. */
     @Pure
     @Override
-    public @NonNull NISuppressionSet get_ni_suppressions() {
+    public NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
       } else {
@@ -1042,7 +1042,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns a list of non-instantiating suppressions for this invariant. */
     @Pure
     @Override
-    public @NonNull NISuppressionSet get_ni_suppressions() {
+    public NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
       } else {
@@ -1229,7 +1229,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns a list of non-instantiating suppressions for this invariant. */
     @Pure
     @Override
-    public @NonNull NISuppressionSet get_ni_suppressions() {
+    public NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
       } else {
@@ -1423,7 +1423,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns a list of non-instantiating suppressions for this invariant. */
     @Pure
     @Override
-    public @NonNull NISuppressionSet get_ni_suppressions() {
+    public NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
       } else {
@@ -1532,7 +1532,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns a list of non-instantiating suppressions for this invariant. */
     @Pure
     @Override
-    public @NonNull NISuppressionSet get_ni_suppressions() {
+    public NISuppressionSet get_ni_suppressions() {
       if (swap) {
         return suppressions_swap;
       } else {

@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.reflection.ReflectionPlume;
@@ -55,7 +54,7 @@ public final class Configuration implements Serializable {
     return instance;
   }
 
-  private static volatile @NonNull Configuration instance = new Configuration();
+  private static volatile Configuration instance = new Configuration();
 
   /**
    * This used to read a file containing all of the configurable options so that when the options

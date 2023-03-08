@@ -145,7 +145,7 @@ public final class NullnessUtil {
     return (@NonNull T[]) arr;
   }
 
-  private static void checkIfArray(@NonNull Object ref) {
+  private static void checkIfArray(Object ref) {
     assert ref != null : "Misuse of checkIfArray: called with a null argument";
     Class<?> comp = ref.getClass().getComponentType();
     if (comp != null) {

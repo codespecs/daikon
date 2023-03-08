@@ -11,7 +11,6 @@ import org.checkerframework.checker.formatter.qual.FormatMethod;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -244,7 +243,7 @@ public class Implication extends Joiner {
 
   @Pure
   @Override
-  public boolean isSameFormula(@NonNull Invariant other) {
+  public boolean isSameFormula(Invariant other) {
     Implication other_implic = (Implication) other;
     return (iff == other_implic.iff) && super.isSameFormula(other_implic);
   }

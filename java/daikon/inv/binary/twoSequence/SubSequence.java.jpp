@@ -849,7 +849,7 @@ public class CLASSNAME extends SUPERCLASS {
   /** returns the ni-suppressions for SubSequence */
   @Pure
   @Override
-  public @NonNull NISuppressionSet get_ni_suppressions() {
+  public NISuppressionSet get_ni_suppressions() {
     return suppressions;
   }
 

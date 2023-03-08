@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
-import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.mustcall.qual.MustCallUnknown;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
@@ -125,10 +124,6 @@ public class NIS {
     /** suppressor contains a variable that has always been nonsensical */
     NONSENSICAL
   }
-
-  // This should be an enum!!
-  /** initial state -- suppressor has not been checked yet */
-  static final @Interned String NONE = "none";
 
   /**
    * Map from invariant class to a list of all of the suppression sets that contain a suppressor of
