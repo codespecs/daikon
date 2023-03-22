@@ -273,23 +273,24 @@ jobs:
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
-- job: typecheck_jdk8
-  dependsOn:
-    - jdk17_jobs
-    - typecheck_jdk17
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk8-plus:latest
-  timeoutInMinutes: 70
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: |
-      java -version
-      javac -version
-    displayName: show Java version
-  - bash: ./scripts/test-typecheck.sh
-    displayName: test-typecheck.sh
+## The Checker Framework cannot be built under Java 8.
+# - job: typecheck_jdk8
+#   dependsOn:
+#     - jdk17_jobs
+#     - typecheck_jdk17
+#   pool:
+#     vmImage: 'ubuntu-latest'
+#   container: mdernst/daikon-ubuntu-jdk8-plus:latest
+#   timeoutInMinutes: 70
+#   steps:
+#   - checkout: self
+#     fetchDepth: 25
+#   - bash: |
+#       java -version
+#       javac -version
+#     displayName: show Java version
+#   - bash: ./scripts/test-typecheck.sh
+#     displayName: test-typecheck.sh
 
 - job: typecheck_jdk11
   dependsOn:
