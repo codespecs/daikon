@@ -196,7 +196,6 @@ public class TraceSelect {
             al.add(i.next());
           }
 
-          @SuppressWarnings("builder:reset.not.owning") // Resource Leak Checker bug, probably
           List<String> al_tmp = dec.patchValues(al, INCLUDE_UNRETURNED);
           al = al_tmp;
         }
