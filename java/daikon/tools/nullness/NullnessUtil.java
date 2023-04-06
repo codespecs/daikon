@@ -82,7 +82,7 @@ public final class NullnessUtil {
    */
   public static @EnsuresNonNull("#1") <T extends @Nullable Object>
       @NonNull T @NonNull [] castNonNullDeep(T @Nullable [] arr) {
-    return (@NonNull T[]) castNonNullArray(arr);
+    return (@NonNull T[]) castNonNullDeepArray(arr);
   }
 
   /**
@@ -94,7 +94,7 @@ public final class NullnessUtil {
    */
   public static <T extends @Nullable Object> @NonNull T @NonNull [][] castNonNullDeep(
       T @Nullable [] @Nullable [] arr) {
-    return (@NonNull T[][]) castNonNullArray(arr);
+    return (@NonNull T[][]) castNonNullDeepArray(arr);
   }
 
   /**
@@ -106,7 +106,7 @@ public final class NullnessUtil {
    */
   public static <T extends @Nullable Object> @NonNull T @NonNull [][][] castNonNullDeep(
       T @Nullable [] @Nullable [] @Nullable [] arr) {
-    return (@NonNull T[][][]) castNonNullArray(arr);
+    return (@NonNull T[][][]) castNonNullDeepArray(arr);
   }
 
   /**
@@ -119,7 +119,7 @@ public final class NullnessUtil {
   public static @EnsuresNonNull("#1") <T extends @Nullable Object>
       @NonNull T @NonNull [][][][] castNonNullDeep(
           T @Nullable [] @Nullable [] @Nullable [] @Nullable [] arr) {
-    return (@NonNull T[][][][]) castNonNullArray(arr);
+    return (@NonNull T[][][][]) castNonNullDeepArray(arr);
   }
 
   /**
@@ -132,21 +132,32 @@ public final class NullnessUtil {
   public static @EnsuresNonNull("#1") <T extends @Nullable Object>
       @NonNull T @NonNull [][][][][] castNonNullDeep(
           T @Nullable [] @Nullable [] @Nullable [] @Nullable [] @Nullable [] arr) {
-    return (@NonNull T[][][][][]) castNonNullArray(arr);
+    return (@NonNull T[][][][][]) castNonNullDeepArray(arr);
   }
 
-  private static <T extends @Nullable Object> @NonNull T @NonNull [] castNonNullArray(
+  /**
+   * Does the work for the {@code castNonNullDeep} family of overloads. Throws an exception if any
+   * level of the array contains a null element.
+   *
+   * @param arr an array that should contain no null elements at any level
+   */
+  private static <T extends @Nullable Object> @NonNull T @NonNull [] castNonNullDeepArray(
       T @Nullable [] arr) {
-    assert arr != null : "Misuse of castNonNullArray: called with a null array argument";
+    assert arr != null : "Misuse of castNonNullDeepArray: called with a null array argument";
     for (int i = 0; i < arr.length; ++i) {
       assert arr[i] != null : "Misuse of castNonNull: called with a null array element";
-      checkIfArray(arr[i]);
+      castNonNullIfArray(arr[i]);
     }
     return (@NonNull T[]) arr;
   }
 
-  private static void checkIfArray(Object ref) {
-    assert ref != null : "Misuse of checkIfArray: called with a null argument";
+  /**
+   * If the argument is an array, calls {@link #castNonNullDeepArray}.
+   *
+   * @param ref a value that might be an array, and if so should be null at all levels
+   */
+  private static void castNonNullDeepIfArray(Object ref) {
+    assert ref != null : "Misuse of castNonNullIfArray: called with a null argument";
     Class<?> comp = ref.getClass().getComponentType();
     if (comp != null) {
       // comp is non-null for arrays, otherwise null.
@@ -154,7 +165,7 @@ public final class NullnessUtil {
         // Nothing to do for arrays of primitive type: primitives are
         // never null.
       } else {
-        castNonNullArray((Object[]) ref);
+        castNonNullDeepArray((Object[]) ref);
       }
     }
   }

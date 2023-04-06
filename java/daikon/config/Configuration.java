@@ -46,14 +46,15 @@ public final class Configuration implements Serializable {
   }
 
   /**
-   * Returns singleton instance of this class.
+   * Returns the singleton instance of this class.
    *
-   * @return singleton instance of this class
+   * @return the singleton instance of this class
    */
   public static Configuration getInstance() {
     return instance;
   }
 
+  /** The singleton instance of this class. */
   private static volatile Configuration instance = new Configuration();
 
   /**
