@@ -11,7 +11,7 @@ bcel-util-1.2.1.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-uti
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
 checker-framework/ and checker-qual.jar : https://github.com/typetools/checker-framework/releases
-  VER=3.29.0
+  VER=3.33.0
   wget https://github.com/typetools/checker-framework/releases/download/checker-framework-$VER/checker-framework-$VER.zip
   unzip checker-framework-$VER.zip
   mv -f checker-framework-$VER/checker/dist/checker.jar checker-framework-$VER/checker/dist/javac.jar checker-framework/
