@@ -146,7 +146,7 @@ public final class NullnessUtil {
     assert arr != null : "Misuse of castNonNullDeepArray: called with a null array argument";
     for (int i = 0; i < arr.length; ++i) {
       assert arr[i] != null : "Misuse of castNonNull: called with a null array element";
-      castNonNullIfArray(arr[i]);
+      castNonNullDeepIfArray(arr[i]);
     }
     return (@NonNull T[]) arr;
   }
