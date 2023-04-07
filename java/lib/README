@@ -17,8 +17,12 @@ checker-framework/ and checker-qual.jar : https://github.com/typetools/checker-f
   mv -f checker-framework-$VER/checker/dist/checker.jar checker-framework-$VER/checker/dist/javac.jar checker-framework/
   mv -f checker-framework-$VER/checker/dist/checker-qual.jar .
   rm -rf checker-framework-$VER.zip checker-framework-$VER
+To install a snapshot of the current Checker Framework:
+  (cd $CHECKERFRAMEWORK && ./gradlew assembleForJavac)
+  cp -pf $CHECKERFRAMEWORK/checker/dist/checker.jar $CHECKERFRAMEWORK/checker/dist/javac.jar checker-framework/
+  cp -pf $CHECKERFRAMEWORK/checker/dist/checker-qual.jar .
 If environment variable CHECKERFRAMEWORK is set, compilation uses it instead of
-these files.
+these .jar files in this directory.
 
 commons-exec-1.3.jar : https://commons.apache.org/proper/commons-exec/
 
