@@ -396,7 +396,7 @@ public final class CLASSNAME extends SUPERCLASS {
   /** returns the ni-suppressions for CLASSNAME */
   @Pure
   @Override
-  public @NonNull NISuppressionSet get_ni_suppressions() {
+  public NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       NISuppressee suppressee = new NISuppressee(CLASSNAME.class, 1);
 

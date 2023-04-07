@@ -390,7 +390,7 @@ public class SUBSET extends TWOSEQUENCE {
   /** returns the ni-suppressions for SUBSET */
   @Pure
   @Override
-  public @NonNull NISuppressionSet get_ni_suppressions() {
+  public NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       NISuppressee suppressee = new NISuppressee(SUBSET.class, 2);
 
