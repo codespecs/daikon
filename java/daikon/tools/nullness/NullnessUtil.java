@@ -171,8 +171,6 @@ public final class NullnessUtil {
   /**
    * If the argument is an array, calls {@link #castNonNullDeepArray}.
    *
-   * @param <T> the type of array elements
-   * @param arr an array that contains no null elements at any level
    * @param ref a value that might be an array, and if so should be null at all levels
    */
   private static void castNonNullDeepIfArray(Object ref) {
