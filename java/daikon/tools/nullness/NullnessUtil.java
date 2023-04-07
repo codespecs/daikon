@@ -78,6 +78,9 @@ public final class NullnessUtil {
    * traverses all levels of the argument array. The array is recursively checked to ensure that all
    * elements at every array level are non-null.
    *
+   * @param <T> the type of array elements
+   * @param arr an array that contains no null elements at any level
+   * @return the argument, with each array level casted to {@code @NonNull}
    * @see #castNonNull(Object)
    */
   public static @EnsuresNonNull("#1") <T extends @Nullable Object>
@@ -90,6 +93,9 @@ public final class NullnessUtil {
    * traverses all levels of the argument array. The array is recursively checked to ensure that all
    * elements at every array level are non-null.
    *
+   * @param <T> the type of array elements
+   * @param arr an array that contains no null elements at any level
+   * @return the argument, with each array level casted to {@code @NonNull}
    * @see #castNonNull(Object)
    */
   public static <T extends @Nullable Object> @NonNull T @NonNull [][] castNonNullDeep(
@@ -102,6 +108,9 @@ public final class NullnessUtil {
    * traverses all levels of the argument array. The array is recursively checked to ensure that all
    * elements at every array level are non-null.
    *
+   * @param <T> the type of array elements
+   * @param arr an array that contains no null elements at any level
+   * @return the argument, with each array level casted to {@code @NonNull}
    * @see #castNonNull(Object)
    */
   public static <T extends @Nullable Object> @NonNull T @NonNull [][][] castNonNullDeep(
@@ -114,6 +123,9 @@ public final class NullnessUtil {
    * traverses all levels of the argument array. The array is recursively checked to ensure that all
    * elements at every array level are non-null.
    *
+   * @param <T> the type of array elements
+   * @param arr an array that contains no null elements at any level
+   * @return the argument, with each array level casted to {@code @NonNull}
    * @see #castNonNull(Object)
    */
   public static @EnsuresNonNull("#1") <T extends @Nullable Object>
@@ -127,6 +139,9 @@ public final class NullnessUtil {
    * traverses all levels of the argument array. The array is recursively checked to ensure that all
    * elements at every array level are non-null.
    *
+   * @param <T> the type of array elements
+   * @param arr an array that contains no null elements at any level
+   * @return the argument, with each array level casted to {@code @NonNull}
    * @see #castNonNull(Object)
    */
   public static @EnsuresNonNull("#1") <T extends @Nullable Object>
@@ -139,7 +154,9 @@ public final class NullnessUtil {
    * Does the work for the {@code castNonNullDeep} family of overloads. Throws an exception if any
    * level of the array contains a null element.
    *
-   * @param arr an array that should contain no null elements at any level
+   * @param <T> the type of array elements
+   * @param arr an array that contains no null elements at any level
+   * @return the argument, with each array level casted to {@code @NonNull}
    */
   private static <T extends @Nullable Object> @NonNull T @NonNull [] castNonNullDeepArray(
       T @Nullable [] arr) {
@@ -154,6 +171,8 @@ public final class NullnessUtil {
   /**
    * If the argument is an array, calls {@link #castNonNullDeepArray}.
    *
+   * @param <T> the type of array elements
+   * @param arr an array that contains no null elements at any level
    * @param ref a value that might be an array, and if so should be null at all levels
    */
   private static void castNonNullDeepIfArray(Object ref) {
