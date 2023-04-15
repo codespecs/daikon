@@ -254,7 +254,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     for (int rel = 0; rel < NUM_RELATIONSHIPS; rel++) {
       int sum = 0;
       for (int arity = 0; arity < NUM_ARITIES; arity++) {
-        sum += freq[arity][rel];
+        sum += (int) freq[arity][rel];
       }
       pw.print(StringsPlume.rpad(sum, FIELD_WIDTH));
     }

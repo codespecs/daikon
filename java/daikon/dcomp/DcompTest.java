@@ -452,7 +452,15 @@ class DcompTest {
     list.contains(a11);
   }
 
-  @SuppressWarnings("NarrowingCompoundAssignment")
+  /**
+   * Test code. (Dummy Javadoc comment to satisfy require-javadoc.)
+   *
+   * @param d1 a double
+   * @param wrapper an Integer
+   * @param i1 an int
+   * @return a double
+   */
+  @SuppressWarnings({"NarrowingCompoundAssignment", "lossy-conversions"})
   public static double double_check(double d1, Integer wrapper, int i1) {
 
     double loc1 = 22.4;
