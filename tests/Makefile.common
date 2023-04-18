@@ -228,7 +228,7 @@ default: help
 # Note that version 11 (or 21 or ...) requires the 'start' anchor below
 # to make the old vs. new test work properly.
 
-JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
+JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
 startJVS := $(shell echo start$(JAVA_VERSION_STRING))
 ifneq (,$(findstring start1.8,$(startJVS)))
   JAVA_RELEASE_NUMBER := 8

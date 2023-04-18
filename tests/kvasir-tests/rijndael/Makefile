@@ -9,7 +9,7 @@ COUNTS_ONLY := 1
 
 # This test seems to be non-deterministic on Ubuntu 22.10 with JDK 19.
 
-JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
+JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
 JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
 ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 19),1)
   JAVA19_OR_NEWER := 1

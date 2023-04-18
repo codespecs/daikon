@@ -31,7 +31,7 @@ PROBLEM: Pants's jarjar requires Python 2.  We should find a more modern
 program like jarjar.
 NOTE: you may need to install package libpython<version>-dev for jarjar to compile.
 To create, run from this directory, using JDK 8:
-JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1) && \
+JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//') && \
 [ "$JAVA_VER" == "8" ] && make || echo "Use Java 8"
 
 java-getopt-1.0.14.0.1.jar : https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.checkerframework.annotatedlib%22%20a%3A%22java-getopt%22
