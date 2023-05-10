@@ -44,7 +44,7 @@ public class RootInfo extends DaikonVariableInfo {
           mi.class_info,
           Modifier.isStatic(mi.member.getModifiers()),
           mi.member.getDeclaringClass(),
-          /*offset = */ "",
+          /* offset= */ "",
           depth);
     }
 
@@ -121,7 +121,7 @@ public class RootInfo extends DaikonVariableInfo {
     ppt_statics.clear();
 
     root.addClassVars(
-        cinfo, /*dontPrintInstanceVars = */ false, cinfo.clazz, /*offset = */ "", depth);
+        cinfo, /* dontPrintInstanceVars= */ false, cinfo.clazz, /* offset= */ "", depth);
 
     // debug_vars.log("exit getObjectPpt%n");
 
@@ -144,7 +144,7 @@ public class RootInfo extends DaikonVariableInfo {
     ppt_statics.clear();
 
     root.addClassVars(
-        cinfo, /*dontPrintInstanceVars = */ true, cinfo.clazz, /*offset = */ "", depth);
+        cinfo, /* dontPrintInstanceVars= */ true, cinfo.clazz, /* offset= */ "", depth);
 
     // debug_vars.log("exit getClassPpt%n");
 
