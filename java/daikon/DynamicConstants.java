@@ -31,6 +31,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
+import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -214,7 +215,7 @@ public class DynamicConstants implements Serializable {
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied Constant this) {
+    public int hashCode(@GuardSatisfied @UnknownSignedness Constant this) {
       return vi.hashCode();
     }
 

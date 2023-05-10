@@ -34,6 +34,7 @@ import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.StringsPlume;
@@ -421,7 +422,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    *
    * @return the name, in a debugging format
    */
-  public String repr(@GuardSatisfied VarInfoName this) {
+  public String repr(@GuardSatisfied @UnknownSignedness VarInfoName this) {
     // AAD: Used to be interned for space reasons, but removed during
     // profiling when it was determined that the interns are unique
     // anyway.
@@ -434,7 +435,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   private String repr_cached = null;
 
   /** Return the name in a verbose debugging format. Cached by repr. */
-  protected abstract String repr_impl(@GuardSatisfied VarInfoName this);
+  protected abstract String repr_impl(@GuardSatisfied @UnknownSignedness VarInfoName this);
 
   // It would be nice if a generalized form of the mechanics of
   // interning were abstracted out somewhere.
@@ -623,7 +624,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   // returned string, so their hashCode()s should be the same.
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied VarInfoName this) {
+  public int hashCode(@GuardSatisfied @UnknownSignedness VarInfoName this) {
     return repr().hashCode();
   }
 
@@ -689,7 +690,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     @Override
-    protected String repr_impl(@GuardSatisfied Simple this) {
+    protected String repr_impl(@GuardSatisfied @UnknownSignedness Simple this) {
       return name;
     }
 
@@ -882,7 +883,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     @Override
-    protected String repr_impl(@GuardSatisfied SizeOf this) {
+    protected String repr_impl(@GuardSatisfied @UnknownSignedness SizeOf this) {
       return "SizeOf[" + sequence.repr() + "]";
     }
 
@@ -1034,7 +1035,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     @Override
-    protected String repr_impl(@GuardSatisfied FunctionOf this) {
+    protected String repr_impl(@GuardSatisfied @UnknownSignedness FunctionOf this) {
       return "FunctionOf{" + function + "}[" + argument.repr() + "]";
     }
 
@@ -1127,7 +1128,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       this.function = function;
     }
 
-    private List<String> elts_repr(@GuardSatisfied FunctionOfN this) {
+    private List<String> elts_repr(@GuardSatisfied @UnknownSignedness FunctionOfN this) {
       List<String> elts = new ArrayList<>(args.size());
       for (VarInfoName vin : args) {
         elts.add(vin.repr());
@@ -1140,12 +1141,12 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
      *
      * @return comma-separated list of element names
      */
-    private String elts_repr_commas(@GuardSatisfied FunctionOfN this) {
+    private String elts_repr_commas(@GuardSatisfied @UnknownSignedness FunctionOfN this) {
       return String.join(", ", elts_repr());
     }
 
     @Override
-    protected String repr_impl(@GuardSatisfied FunctionOfN this) {
+    protected String repr_impl(@GuardSatisfied @UnknownSignedness FunctionOfN this) {
       return "FunctionOfN{" + function + "}[" + elts_repr_commas() + "]";
     }
 
@@ -1313,7 +1314,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     @Override
-    protected String repr_impl(@GuardSatisfied Field this) {
+    protected String repr_impl(@GuardSatisfied @UnknownSignedness Field this) {
       return "Field{" + field + "}[" + term.repr() + "]";
     }
 
@@ -1537,7 +1538,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     @Override
-    protected String repr_impl(@GuardSatisfied TypeOf this) {
+    protected String repr_impl(@GuardSatisfied @UnknownSignedness TypeOf this) {
       return "TypeOf[" + term.repr() + "]";
     }
 
@@ -1631,7 +1632,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     @Override
-    protected String repr_impl(@GuardSatisfied Prestate this) {
+    protected String repr_impl(@GuardSatisfied @UnknownSignedness Prestate this) {
       return "Prestate[" + term.repr() + "]";
     }
 
@@ -1741,7 +1742,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     @Override
-    protected String repr_impl(@GuardSatisfied Poststate this) {
+    protected String repr_impl(@GuardSatisfied @UnknownSignedness Poststate this) {
       return "Poststate[" + term.repr() + "]";
     }
 
@@ -1817,8 +1818,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       return (amount < 0) ? String.valueOf(amount) : "+" + amount;
     }
 
+    @SuppressWarnings("signedness:method.invocation")
     @Override
-    protected String repr_impl(@GuardSatisfied Add this) {
+    protected String repr_impl(@GuardSatisfied @UnknownSignedness Add this) {
       return "Add{" + amount() + "}[" + term.repr() + "]";
     }
 
@@ -1910,7 +1912,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     @Override
-    protected String repr_impl(@GuardSatisfied Elements this) {
+    protected String repr_impl(@GuardSatisfied @UnknownSignedness Elements this) {
       return "Elements[" + term.repr() + "]";
     }
 
@@ -2091,7 +2093,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     @Override
-    protected String repr_impl(@GuardSatisfied Subscript this) {
+    protected String repr_impl(@GuardSatisfied @UnknownSignedness Subscript this) {
       return "Subscript{" + index.repr() + "}[" + sequence.repr() + "]";
     }
 
@@ -2206,7 +2208,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     @Override
-    protected String repr_impl(@GuardSatisfied Slice this) {
+    protected String repr_impl(@GuardSatisfied @UnknownSignedness Slice this) {
       return "Slice{"
           + ((i == null) ? "" : i.repr())
           + ","
@@ -3303,7 +3305,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       }
 
       @Override
-      protected String repr_impl(@GuardSatisfied FreeVar this) {
+      protected String repr_impl(@GuardSatisfied @UnknownSignedness FreeVar this) {
         return "Free[" + super.repr_impl() + "]";
       }
 

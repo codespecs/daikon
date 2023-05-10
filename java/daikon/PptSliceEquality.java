@@ -21,6 +21,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -92,7 +93,7 @@ public class PptSliceEquality extends PptSlice {
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied VarInfoAndComparability this) {
+    public int hashCode(@GuardSatisfied @UnknownSignedness VarInfoAndComparability this) {
       // This is very coarse but is about as good as we can do it.  Can't do hashcode of
       // the comparability because two comparabilities may be
       // comparable and yet be not the same.
