@@ -95,7 +95,10 @@ public class InvariantChecker {
   static LinkedHashSet<String> outputComma = new LinkedHashSet<>(); // Yoav added
 
   public static void main(String[] args)
-      throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
+      throws FileNotFoundException,
+          StreamCorruptedException,
+          OptionalDataException,
+          IOException,
           ClassNotFoundException {
     try {
       if (args.length == 0) {
@@ -114,7 +117,10 @@ public class InvariantChecker {
    * @param args command-line arguments, like those of {@link #main}
    */
   public static void mainHelper(final String[] args)
-      throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
+      throws FileNotFoundException,
+          StreamCorruptedException,
+          OptionalDataException,
+          IOException,
           ClassNotFoundException {
     daikon.LogHelper.setupLogs(INFO);
 

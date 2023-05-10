@@ -110,7 +110,7 @@ public class DummyInvariant extends Invariant {
             dbcFormat,
             csharpFormat,
             // Not valid until we find a slice for it
-            /*valid=*/ false);
+            /* valid= */ false);
 
     // Find between 1 and 3 unique variables, to pick a slice to put
     // this in.

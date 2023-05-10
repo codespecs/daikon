@@ -62,7 +62,10 @@ public final class MergeInvariants {
           "      Specify an output inv file.  If not specified, the results are printed");
 
   public static void main(final String[] args)
-      throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
+      throws FileNotFoundException,
+          StreamCorruptedException,
+          OptionalDataException,
+          IOException,
           ClassNotFoundException {
     try {
       mainHelper(args);
@@ -84,7 +87,10 @@ public final class MergeInvariants {
    */
   @SuppressWarnings("nullness:contracts.precondition") // private field
   public static void mainHelper(String[] args)
-      throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
+      throws FileNotFoundException,
+          StreamCorruptedException,
+          OptionalDataException,
+          IOException,
           ClassNotFoundException {
 
     daikon.LogHelper.setupLogs(INFO);
