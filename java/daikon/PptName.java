@@ -433,7 +433,11 @@ public class PptName implements Serializable {
     return false;
   }
 
-  /** Debugging output. */
+  /**
+   * Debugging output.
+   *
+   * @return a string representation of this
+   */
   public String repr(@UnknownSignedness PptName this) {
     return "PptName: fullname="
         + fullname

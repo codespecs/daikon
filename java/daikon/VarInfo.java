@@ -912,14 +912,23 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return name();
   }
 
-  /** Helper function for repr(). */
+  /**
+   * Returns the argument or, if it is null, {@code "null"}.
+   *
+   * @param o a reference
+   * @return the argument or, if it is null, {@code "null"}
+   */
   @SuppressWarnings("signedness:cast.unsafe") // this cast should be considered safe
   private @PolySigned Object checkNull(
       @GuardSatisfied @UnknownSignedness VarInfo this, @Nullable @PolySigned Object o) {
     return (o == null) ? (@PolySigned Object) "null" : o;
   }
 
-  /** Returns a complete string description of the variable. */
+  /**
+   * Returns a complete string description of the variable.
+   *
+   * @return a complete string description of the variable
+   */
   public String repr(@UnknownSignedness VarInfo this) {
     return "<VarInfo "
         + var_info_name // vin ok
@@ -1025,7 +1034,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Return all derived variables that build off this one. */
+  /**
+   * Return all derived variables that build off this one.
+   *
+   * @return all derived variables that build off this one
+   */
   @SuppressWarnings("signedness:argument") // needs ArraysPlume annotations
   public List<Derivation> derivees(@UnknownSignedness VarInfo this) {
     ArrayList<Derivation> result = new ArrayList<>();
@@ -1539,7 +1552,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return (String[]) raw;
   }
 
-  /** Whether this VarInfo is the leader of its equality set. */
+  /**
+   * Whether this VarInfo is the leader of its equality set.
+   *
+   * @return true if this VarInfo is the leader of its equality set
+   */
   @Pure
   public boolean isCanonical(@UnknownSignedness VarInfo this) {
     if (equalitySet == null) {

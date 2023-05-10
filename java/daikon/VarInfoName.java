@@ -434,7 +434,11 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
   private String repr_cached = null;
 
-  /** Return the name in a verbose debugging format. Cached by repr. */
+  /**
+   * Returns the name in a verbose debugging format. Cached by repr.
+   *
+   * @return the name in a verbose debugging format
+   */
   protected abstract String repr_impl(@GuardSatisfied @UnknownSignedness VarInfoName this);
 
   // It would be nice if a generalized form of the mechanics of
@@ -1128,6 +1132,11 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       this.function = function;
     }
 
+    /**
+     * Returns a string representation of the elements of this.
+     *
+     * @return a string representation of the elements of this
+     */
     private List<String> elts_repr(@GuardSatisfied @UnknownSignedness FunctionOfN this) {
       List<String> elts = new ArrayList<>(args.size());
       for (VarInfoName vin : args) {

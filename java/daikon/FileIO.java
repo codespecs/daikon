@@ -883,14 +883,23 @@ public final class FileIO {
       this.mods = mods;
     }
 
-    // Print the Invocation on two lines, indented by two spaces
-    // The receiver Invocation may be canonicalized or not.
+    /**
+     * Return a string representation of this. The Invocation is formatted on two lines, indented by
+     * two spaces. The receiver Invocation may be canonicalized or not.
+     *
+     * @return a string representation of this
+     */
     String format(@GuardSatisfied @UnknownSignedness Invocation this) {
       return format(true);
     }
 
-    // Print the Invocation on one or two lines, indented by two spaces.
-    // The receiver Invocation may be canonicalized or not.
+    /**
+     * Return a string representation of this. The Invocation is formatted on two lines, indented by
+     * two spaces. The receiver Invocation may be canonicalized or not.
+     *
+     * @param show_values if true, show values; otherwise, return just the Ppt name
+     * @return a string representation of this
+     */
     String format(@GuardSatisfied @UnknownSignedness Invocation this, boolean show_values) {
       if (!show_values) {
         return "  " + ppt.ppt_name.getNameWithoutPoint();

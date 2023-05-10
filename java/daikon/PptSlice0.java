@@ -174,6 +174,11 @@ public class PptSlice0 extends PptSlice {
     }
 
     // Abstracted out to permit use of a cached value
+    /**
+     * Returns a string representation of this.
+     *
+     * @return a string representation of this
+     */
     private String format(@GuardSatisfied @UnknownSignedness ImplicationWrapper this) {
       // return format;
       return theImp.format();
