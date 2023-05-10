@@ -431,9 +431,10 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     return repr_cached;
   }
 
+  /** The cached output of {@link #repr_impl}, or null. */
   private String repr_cached = null;
 
-  /** Return the name in a verbose debugging format. Cached by repr. */
+  /** Return the name in a verbose debugging format. Cached by {@link #repr}. */
   protected abstract String repr_impl(@GuardSatisfied VarInfoName this);
 
   // It would be nice if a generalized form of the mechanics of
