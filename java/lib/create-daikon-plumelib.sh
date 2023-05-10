@@ -6,6 +6,7 @@ set -e
 set -x
 
 java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt plume-util-*.jar daikon-util.jar
+java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt hashmap-util-*.jar daikon-util.jar
 java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt bcel-util-*.jar daikon-bcelutil.jar
 java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt options-*.jar daikon-options.jar
 java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt reflection-util-*.jar daikon-reflection.jar
