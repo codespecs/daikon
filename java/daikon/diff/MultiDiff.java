@@ -18,8 +18,12 @@ public class MultiDiff {
   }
 
   public static void main(String[] args)
-      throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException,
-          NoSuchMethodException, InvocationTargetException {
+      throws IOException,
+          ClassNotFoundException,
+          InstantiationException,
+          IllegalAccessException,
+          NoSuchMethodException,
+          InvocationTargetException {
     try {
       mainHelper(args);
     } catch (daikon.Daikon.DaikonTerminationException e) {
@@ -32,8 +36,12 @@ public class MultiDiff {
    * appropriate to be called progrmmatically.
    */
   public static void mainHelper(final String[] args)
-      throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException,
-          InvocationTargetException, NoSuchMethodException {
+      throws IOException,
+          ClassNotFoundException,
+          InstantiationException,
+          IllegalAccessException,
+          InvocationTargetException,
+          NoSuchMethodException {
     try (FileOutputStream fos = new FileOutputStream("rand_sel.spinfo")) {
       PrintStream out = new PrintStream(fos);
       /*

@@ -32,7 +32,8 @@ public class CheckerClass {
     // f3 -> ";"
     // Get the package and imports from clazz. We'll include them.
     @SuppressWarnings("nullness") // application invariant: every body is in a compilation unit
-    @NonNull CompilationUnit clazzCU = (CompilationUnit) Ast.getParent(CompilationUnit.class, clazz);
+    @NonNull CompilationUnit clazzCU =
+        (CompilationUnit) Ast.getParent(CompilationUnit.class, clazz);
     NodeOptional no = clazzCU.f0;
     String packageName;
     if (no.present()) {
