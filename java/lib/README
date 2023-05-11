@@ -11,7 +11,7 @@ bcel-util-1.2.1.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-uti
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
 checker-framework/ and checker-qual.jar : https://github.com/typetools/checker-framework/releases
-  VER=3.33.0
+  VER=3.34.0
   wget https://github.com/typetools/checker-framework/releases/download/checker-framework-$VER/checker-framework-$VER.zip
   unzip checker-framework-$VER.zip
   mv -f checker-framework-$VER/checker/dist/checker.jar checker-framework-$VER/checker/dist/javac.jar checker-framework/
@@ -26,13 +26,18 @@ these .jar files in this directory.
 
 commons-exec-1.3.jar : https://commons.apache.org/proper/commons-exec/
 
-daikon-plumelib.jar : Contains bcel-util, options, plume-util, and reflection-util, but in package daikon.plumelib.
+daikon-plumelib.jar : Contains bcel-util, options, hashmap-util,
+  plume-util, and reflection-util, but in package "daikon.plumelib".
 PROBLEM: Pants's jarjar requires Python 2.  We should find a more modern
 program like jarjar.
 NOTE: you may need to install package libpython<version>-dev for jarjar to compile.
 To create, run from this directory, using JDK 8:
 JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//') && \
 [ "$JAVA_VER" == "8" ] && make || echo "Use Java 8"
+
+hashmap-util-0.0.1.jar : https://central.sonatype.com/search?q=hashmap-util
+  wget https://repo.maven.apache.org/maven2/org/plumelib/hashmap-util/0.0.1/hashmap-util-0.0.1.jar
+  When you update this, remove the old daikon-plumelib.jar then remake it.
 
 java-getopt-1.0.14.0.1.jar : https://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.checkerframework.annotatedlib%22%20a%3A%22java-getopt%22
   wget https://repo.maven.apache.org/maven2/org/checkerframework/annotatedlib/java-getopt/1.0.14.0.1/java-getopt-1.0.14.0.1.jar
@@ -45,20 +50,21 @@ Note that if a user wishes to use the release version of JUnit, or any other ver
 can simply put it on their class path prior to daikon.jar and/or daikon/java/lib/*.  To create this
 file clone git@github.com:typetools/junit4.git and follow the instructions in README-typetools.txt.
 
+https://search.maven.org/artifact/org.hamcrest/hamcrest
 hamcrest-core.1.3-Daikon.jar : This is our Java 8 recompilation of the release version of
 hamcrest-core.1.3.jar. hamcrest-core.1.3.jar has the same issue as junit-4.13.2.jar.
 See the file README.hamcrest for details on how to create hamcrest-core.1.3-Daikon.jar.
 
-options-1.0.6.jar : https://search.maven.org/#search%7Cga%7C1%7Coptions
+options-1.0.6.jar : https://search.maven.org/#search%7Cga%7C1%7Cplumelib+options
   wget https://repo.maven.apache.org/maven2/org/plumelib/options/1.0.6/options-1.0.6.jar
   When you update this, remove the old daikon-plumelib.jar then remake it (see above).
 
-plume-util-1.6.3.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
-  wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/1.6.3/plume-util-1.6.3.jar
+plume-util-1.7.0.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
+  wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/1.7.0/plume-util-1.7.0.jar
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
-reflection-util-1.0.5.jar : https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/
-  wget https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/1.0.5/reflection-util-1.0.5.jar
+reflection-util-1.0.6.jar : https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/
+  wget https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/1.0.6/reflection-util-1.0.6.jar
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
 require-javadoc-1.0.5-all.jar : https://github.com/plume-lib/require-javadoc/releases

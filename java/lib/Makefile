@@ -10,4 +10,4 @@ all:
 build-jarjar: ~/java/jarjar-pantsbuild
 	@(cd ~/java/jarjar-pantsbuild && git pull)
 #	(cd ~/java/jarjar-pantsbuild && ./pants doc test ::)
-	(cd ~/java/jarjar-pantsbuild && ./pants binary ::)
+	(cd ~/java/jarjar-pantsbuild && ~/bin/pants test ::)
