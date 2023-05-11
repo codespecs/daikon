@@ -10,6 +10,7 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 
 // This is a fake PptSlice for use with Implication invariants.
@@ -173,7 +174,12 @@ public class PptSlice0 extends PptSlice {
     }
 
     // Abstracted out to permit use of a cached value
-    private String format(@GuardSatisfied ImplicationWrapper this) {
+    /**
+     * Returns a string representation of this.
+     *
+     * @return a string representation of this
+     */
+    private String format(@GuardSatisfied @UnknownSignedness ImplicationWrapper this) {
       // return format;
       return theImp.format();
       // return theImp.repr();
@@ -181,7 +187,7 @@ public class PptSlice0 extends PptSlice {
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied ImplicationWrapper this) {
+    public int hashCode(@GuardSatisfied @UnknownSignedness ImplicationWrapper this) {
       if (hashCode == 0) {
         hashCode = format().hashCode();
         // hashCode = (theImp.iff ? 1 : 0);

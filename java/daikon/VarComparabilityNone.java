@@ -2,6 +2,7 @@ package daikon;
 
 import java.io.Serializable;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -46,7 +47,7 @@ public final class VarComparabilityNone extends VarComparability implements Seri
 
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied VarComparabilityNone this) {
+  public int hashCode(@GuardSatisfied @UnknownSignedness VarComparabilityNone this) {
     return 0;
   }
 
