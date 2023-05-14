@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -396,7 +395,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
 
     @Override
     @Pure
-    public int hashCode(@GuardSatisfied @UnknownSignedness VarRelation this) {
+    public int hashCode(@GuardSatisfied VarRelation this) {
       return (parent_ppt_name.hashCode()
           + ((local_variable == null) ? 0 : local_variable.hashCode()));
     }

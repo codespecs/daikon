@@ -8,7 +8,6 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
@@ -403,7 +402,7 @@ public final class ValueTuple implements Cloneable {
 
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied @UnknownSignedness ValueTuple this) {
+  public int hashCode(@GuardSatisfied ValueTuple this) {
     return Arrays.hashCode(vals) * 31 + Arrays.hashCode(mods);
   }
 

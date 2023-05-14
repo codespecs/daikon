@@ -9,7 +9,6 @@ import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -242,7 +241,7 @@ public class Annotation {
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied @UnknownSignedness Kind this) {
+    public int hashCode(@GuardSatisfied Kind this) {
       return name.hashCode();
     }
 
@@ -287,7 +286,7 @@ public class Annotation {
 
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied @UnknownSignedness Annotation this) {
+  public int hashCode(@GuardSatisfied Annotation this) {
     return daikonRep.hashCode() + kind.hashCode() + method.hashCode();
   }
 

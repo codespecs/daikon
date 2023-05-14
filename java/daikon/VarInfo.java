@@ -66,7 +66,6 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signedness.qual.PolySigned;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
@@ -918,9 +917,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * @param o a reference
    * @return the argument or, if it is null, {@code "null"}
    */
-  @SuppressWarnings("signedness:cast.unsafe") // this cast should be considered safe
   private @PolySigned Object checkNull(
-      @GuardSatisfied @UnknownSignedness VarInfo this, @Nullable @PolySigned Object o) {
+      @GuardSatisfied VarInfo this, @Nullable @PolySigned Object o) {
     return (o == null) ? (@PolySigned Object) "null" : o;
   }
 
@@ -929,7 +927,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    *
    * @return a complete string description of the variable
    */
-  public String repr(@UnknownSignedness VarInfo this) {
+  public String repr() {
     return "<VarInfo "
         + var_info_name // vin ok
         + ": "
@@ -1039,8 +1037,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    *
    * @return all derived variables that build off this one
    */
-  @SuppressWarnings("signedness:argument") // needs ArraysPlume annotations
-  public List<Derivation> derivees(@UnknownSignedness VarInfo this) {
+  public List<Derivation> derivees() {
     ArrayList<Derivation> result = new ArrayList<>();
     // This method is only called from the debugging routine 'repr()'.
     // So let's protect ourselves from a mistake somewhere else.
@@ -1558,7 +1555,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * @return true if this VarInfo is the leader of its equality set
    */
   @Pure
-  public boolean isCanonical(@UnknownSignedness VarInfo this) {
+  public boolean isCanonical() {
     if (equalitySet == null) {
       return true;
     }
@@ -2779,7 +2776,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied @UnknownSignedness Pair this) {
+    public int hashCode(@GuardSatisfied Pair this) {
       return v1.hashCode() + v2.hashCode();
     }
 
