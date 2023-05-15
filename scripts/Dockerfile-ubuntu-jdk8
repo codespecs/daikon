@@ -12,6 +12,11 @@ MAINTAINER Michael Ernst <mernst@cs.washington.edu>
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
+  apt-utils
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
   autoconf \
   automake \
   bc \
