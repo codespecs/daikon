@@ -13,7 +13,7 @@ make compile daikon.jar
 if [ -d "/tmp/$USER/plume-scripts" ] ; then
   (cd "/tmp/$USER/plume-scripts" && git pull -q) > /dev/null 2>&1
 else
-  mkdir -p "/tmp/$USER" && (cd "/tmp/$USER" && (git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git || git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git))
+  mkdir -p "/tmp/$USER" && (cd "/tmp/$USER" && (git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git || (sleep 1m && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)))
 fi
 
 # Code style & quality
