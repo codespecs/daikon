@@ -24,7 +24,7 @@ Version 5.8.18 (??? ?, 2023)
 
 Support Rocky Linux.
 
-All Daikon tools now work with Java 19.
+All Daikon tools now work with Java 20.
 
 
 Version 5.8.16 (Nov 9, 2022)

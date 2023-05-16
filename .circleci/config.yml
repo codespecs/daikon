@@ -71,9 +71,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
-  quick-txt-diff-ubuntu-jdk19:
+  quick-txt-diff-ubuntu-jdk20:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk19
+      - image: mdernst/daikon-ubuntu-jdk20
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -147,9 +147,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
-  nonquick-txt-diff-ubuntu-jdk19:
+  nonquick-txt-diff-ubuntu-jdk20:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk19
+      - image: mdernst/daikon-ubuntu-jdk20
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -223,9 +223,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
 
-  non-txt-diff-ubuntu-jdk19:
+  non-txt-diff-ubuntu-jdk20:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk19
+      - image: mdernst/daikon-ubuntu-jdk20
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -299,9 +299,9 @@ jobs:
             - ".git"
       - run: ./scripts/test-misc.sh
 
-  misc-ubuntu-jdk19:
+  misc-ubuntu-jdk20:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk19-plus
+      - image: mdernst/daikon-ubuntu-jdk20-plus
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -384,9 +384,9 @@ jobs:
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
 
-  kvasir-ubuntu-jdk19:
+  kvasir-ubuntu-jdk20:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk19-plus
+      - image: mdernst/daikon-ubuntu-jdk20-plus
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -817,7 +817,7 @@ workflows:
             - jdk17-jobs
             - quick-txt-diff-ubuntu-jdk17
       - quick-txt-diff-ubuntu-jdk17
-      - quick-txt-diff-ubuntu-jdk19:
+      - quick-txt-diff-ubuntu-jdk20:
           requires:
             - jdk17-jobs
             - quick-txt-diff-ubuntu-jdk17
@@ -830,7 +830,7 @@ workflows:
             - jdk17-jobs
             - nonquick-txt-diff-ubuntu-jdk17
       - nonquick-txt-diff-ubuntu-jdk17
-      - nonquick-txt-diff-ubuntu-jdk19:
+      - nonquick-txt-diff-ubuntu-jdk20:
           requires:
             - jdk17-jobs
             - nonquick-txt-diff-ubuntu-jdk17
@@ -843,7 +843,7 @@ workflows:
             - jdk17-jobs
             - non-txt-diff-ubuntu-jdk17
       - non-txt-diff-ubuntu-jdk17
-      - non-txt-diff-ubuntu-jdk19:
+      - non-txt-diff-ubuntu-jdk20:
           requires:
             - jdk17-jobs
             - non-txt-diff-ubuntu-jdk17
@@ -856,7 +856,7 @@ workflows:
             - jdk17-jobs
             - misc-ubuntu-jdk17
       - misc-ubuntu-jdk17
-      - misc-ubuntu-jdk19:
+      - misc-ubuntu-jdk20:
           requires:
             - jdk17-jobs
             - misc-ubuntu-jdk17
@@ -869,7 +869,7 @@ workflows:
             - jdk17-jobs
             - kvasir-ubuntu-jdk17
       - kvasir-ubuntu-jdk17
-      - kvasir-ubuntu-jdk19:
+      - kvasir-ubuntu-jdk20:
           requires:
             - jdk17-jobs
             - kvasir-ubuntu-jdk17

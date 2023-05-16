@@ -31,7 +31,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
-  openjdk-19-jdk
+  openjdk-20-jdk
 
 # These are needed to build the Checker Framework, used by the "typecheck" job in CI.
 RUN export DEBIAN_FRONTEND=noninteractive \
