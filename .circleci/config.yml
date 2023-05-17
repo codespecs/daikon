@@ -73,7 +73,7 @@ jobs:
 
   quick-txt-diff-ubuntu-jdk19:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk19
+      - image: mdernst/daikon-ubuntu-jdk19-testing
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -149,7 +149,7 @@ jobs:
 
   nonquick-txt-diff-ubuntu-jdk19:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk19
+      - image: mdernst/daikon-ubuntu-jdk19-testing
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -225,7 +225,7 @@ jobs:
 
   non-txt-diff-ubuntu-jdk19:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk19
+      - image: mdernst/daikon-ubuntu-jdk19-testing
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -301,7 +301,7 @@ jobs:
 
   misc-ubuntu-jdk19:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk19-plus
+      - image: mdernst/daikon-ubuntu-jdk19-plus-testing
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -386,7 +386,7 @@ jobs:
 
   kvasir-ubuntu-jdk19:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk19-plus
+      - image: mdernst/daikon-ubuntu-jdk19-plus-testing
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
