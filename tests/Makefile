@@ -122,6 +122,5 @@ summary:
 
 summary2: # omit pristine tests
 	@$(MAKE) --no-print-directory summary | egrep -v '^0' || echo 'No differences'
-
 summary3: # also omit esc differences
 	@$(MAKE) --no-print-directory summary2 | grep -v 'txt-esc' || echo 'No non-ESC differences'
