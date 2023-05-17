@@ -33,6 +33,8 @@ import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -1377,7 +1379,13 @@ public final class FileIO {
         InputStreamReader chicReader = new InputStreamReader(chicoryInput, UTF_8);
         reader = new LineNumberReader(chicReader);
       } else if (is_url) {
-        URL url = new URL(raw_filename);
+        // `raw_filename` starts with "file:" or "jar:".
+        URL url = null; // dummy initialization for compiler's definite assignment check
+        try {
+          url = new URI(raw_filename).toURL();
+        } catch (URISyntaxException e) {
+          throw new Error(e);
+        }
         InputStream stream = null; // dummy initialization for compiler's definite assignment check
         try {
           stream = url.openStream();
