@@ -22,6 +22,7 @@ class DcompTest {
   static A sa1 = new A("sa1");
   static A sa2 = new A("sa2");
   static boolean verbose = false;
+
   // A[] at_arr;
   // double[] d_arr;
 
@@ -275,10 +276,13 @@ class DcompTest {
 
     /** An object. */
     Obj obj1;
+
     /** Another object. */
     Obj obj2;
+
     /** An uncloneable object. */
     Uncloneable u1;
+
     /** Another uncloneable object. */
     Uncloneable u2;
 

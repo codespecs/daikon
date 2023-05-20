@@ -182,6 +182,7 @@ class FormatTestCase {
       return "";
     }
   }
+
   // End of SingleOutputTestCase
 
   /** Prefix to each goal line in the file for identitication. */

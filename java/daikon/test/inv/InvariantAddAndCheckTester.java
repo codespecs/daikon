@@ -661,6 +661,7 @@ public class InvariantAddAndCheckTester {
       }
       throw new RuntimeException("Cannot find format_using method");
     }
+
     /**
      * This function loads a class from file into the JVM given its fully-qualified name.
      *

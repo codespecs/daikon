@@ -34,7 +34,6 @@ import java.io.UncheckedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -88,28 +87,38 @@ public final class FileIO {
   // Program point name tags
   /** String used to append a ppt type to a ppt name. */
   public static final String ppt_tag_separator = ":::";
+
   /** String used to identify entry ppt names. */
   public static final String enter_suffix = "ENTER";
+
   /** String used to mark entry ppt names. */
   public static final String enter_tag = ppt_tag_separator + enter_suffix;
+
   // EXIT does not necessarily appear at the end of the program point name;
   // a number may follow it.
   /** String used to identify exit ppt names. */
   public static final String exit_suffix = "EXIT";
+
   /** String used to mark exit ppt names. */
   public static final String exit_tag = ppt_tag_separator + exit_suffix;
+
   /** To be deleted. */
   public static final String throws_suffix = "THROWS";
+
   /** To be deleted. */
   public static final String throws_tag = ppt_tag_separator + throws_suffix;
 
   public static final String object_suffix = "OBJECT";
+
   /** String used to mark object ppt names. */
   public static final String object_tag = ppt_tag_separator + object_suffix;
+
   /** String used to identify class ppt names. */
   public static final String class_static_suffix = "CLASS";
+
   /** String used to mark class ppt names. */
   public static final String class_static_tag = ppt_tag_separator + class_static_suffix;
+
   /** String used to identify global ppt names. */
   public static final String global_suffix = "GLOBAL";
 
@@ -221,6 +230,7 @@ public final class FileIO {
 
   /** Debug tracer for reading. */
   public static final Logger debugRead = Logger.getLogger("daikon.FileIO.read");
+
   /** Debug tracer for printing. */
   public static final Logger debugPrint = Logger.getLogger("daikon.FileIO.printDtrace");
 
@@ -1378,13 +1388,7 @@ public final class FileIO {
         InputStreamReader chicReader = new InputStreamReader(chicoryInput, UTF_8);
         reader = new LineNumberReader(chicReader);
       } else if (is_url) {
-        // `raw_filename` starts with "file:" or "jar:".
-        URL url = null; // dummy initialization for compiler's definite assignment check
-        try {
-          url = new URI(raw_filename).toURL();
-        } catch (URISyntaxException e) {
-          throw new Error(e);
-        }
+        URL url = URI.create(raw_filename).toURL();
         InputStream stream = null; // dummy initialization for compiler's definite assignment check
         try {
           stream = url.openStream();
@@ -1473,6 +1477,7 @@ public final class FileIO {
   // The @MonotonicNonNull property is not true globally, but within every
   // method it's true, so it is a useful annotation.
   public static @MonotonicNonNull ParseState data_trace_state = null;
+
   // The variable is only ever cleared at the end of a routine that set it.
   @SuppressWarnings("nullness") // reinitialization
   private static void clear_data_trace_state() {
@@ -2678,58 +2683,78 @@ public final class FileIO {
       "nullness") // undocumented class needs documentation before annotating with nullness
   public static class VarDefinition implements java.io.Serializable, Cloneable {
     static final long serialVersionUID = 20060524L;
+
     /** Current information about input file and previously parsed values. */
     transient ParseState state;
+
     /** Name of the variable (required). */
     public String name;
+
     /** Type of the variable (required). */
     public VarKind kind = null;
+
     /** Name of variable that contains this variable (optional) */
     // seems non-null for arrays/sequences
     public @Nullable String enclosing_var_name;
+
     /** the simple (not fully specified) name of this variable (optional) */
     public @Nullable String relative_name = null;
+
     /** Type of reference for structure/class variables. */
     public RefType ref_type = RefType.POINTER;
+
     /** Number of array dimensions (0 or 1). */
     public int arr_dims = 0;
+
     /**
      * Non-null iff (vardef.kind == VarKind.FUNCTION). The arguments that were used to create this
      * function application.
      */
     @SuppressWarnings("serial")
     public @Nullable List<String> function_args = null;
+
     /** The type of the variable as stored in the dtrace file (required) */
     public ProglangType rep_type = null;
+
     /** Declared type of the variable as an arbitrary string (required) */
     public ProglangType declared_type = null;
+
     /** Variable flags (optional) */
     public EnumSet<VarFlags> flags = EnumSet.noneOf(VarFlags.class);
+
     /** Language specific variable flags (optional) */
     public EnumSet<LangFlags> lang_flags = EnumSet.noneOf(LangFlags.class);
+
     /** Comparability of this variable (required. */
     @SuppressWarnings("serial")
     public VarComparability comparability = null;
+
     /** Parent program points in ppt hierarchy (optional) */
     @SuppressWarnings("serial")
     public List<VarParent> parents;
+
     /** Non-null if this 'variable' always has the same value (optional) */
     @SuppressWarnings("serial")
     public @Nullable @Interned Object static_constant_value = null;
+
     /**
      * Non-null if it is statically known that the value of the variable will be always greater than
      * or equal to this value.
      */
     public @Nullable String min_value = null;
+
     /**
      * Non-null if it is statically known that the value of the variable will be always less than or
      * equal to this value.
      */
     public @Nullable String max_value = null;
+
     /** Non-null if it is statically known that the array will have at least this many elements. */
     public @Nullable Integer min_length = null;
+
     /** Non-null if it is statically known that the array will have up to this many elements. */
     public @Nullable Integer max_length = null;
+
     /** Non-null if the set of valid values for the variable is statically known. */
     public @Nullable String valid_values = null;
 

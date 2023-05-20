@@ -216,6 +216,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     ANNOTATION,
     ENUM
   };
+
   // These enums are intentionally duplicated in Chicory and other
   // front-ends. These values are written into decl files, and as
   // such, should stay constant between front-ends. They should not be
@@ -251,6 +252,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   public EnumSet<LangFlags> lang_flags = EnumSet.noneOf(LangFlags.class);
 
   public VarDefinition vardef;
+
   /**
    * For documentation, see {@link #get_enclosing_var()}. Null if no variable encloses this one --
    * that is, this is not a field of another variable, nor a "method call" like tostring or class.

@@ -316,14 +316,19 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
   private static class VarRelation {
     /** Name of the program point for the parent. */
     String parent_ppt_name;
+
     /** Prefix of the variable name that is not part of the parent name. */
     String local_prefix;
+
     /** Prefix of the parent that replaces the local prefix. Normally 'this'. */
     String parent_prefix;
+
     /** Top level variable for the relation. */
     String local_variable;
+
     /** Type of the relation (parent, user, etc) */
     String type;
+
     /** Number that identifies this relation within this ppt. */
     int id;
 

@@ -328,6 +328,7 @@ public abstract class PptSlice extends Ppt {
         + " samples: "
         + num_samples();
   }
+
   /**
    * Returns whether or not this slice already contains the specified invariant. Whether not
    * invariants match is determine by Invariant.match() This will return true for invariants of the

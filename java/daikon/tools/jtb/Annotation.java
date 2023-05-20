@@ -63,24 +63,28 @@ public class Annotation {
 
   /** Daikon representation (as output by Daikon's default output format). */
   private final String daikonRep;
+
   /** The way this annotation would be printed by Daikon. */
   public String daikonRep(@GuardSatisfied Annotation this) {
     return daikonRep;
   }
 
   private final String method;
+
   /** The method that this annotation refers to. */
   public String method(@GuardSatisfied Annotation this) {
     return method;
   }
 
   private final Kind kind;
+
   /** The kind of this annotation. */
   public Kind kind(@GuardSatisfied Annotation this) {
     return kind;
   }
 
   private String invRep;
+
   /**
    * Representation of this annotation (the format depends on which output format was used to create
    * the annotation in Daikon; it's one of JAVA, JML, ESC or DBC).
@@ -90,6 +94,7 @@ public class Annotation {
   }
 
   public String daikonClass;
+
   /** The Daikon class name that this invariant represents an instance of. */
   public String daikonClass() {
     return daikonClass;
