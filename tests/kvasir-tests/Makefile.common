@@ -121,13 +121,13 @@ endif
 
 ifeq ($(OS_ID),Ubuntu)
 ifeq ($(OS_REL),23.04)
-	GOAL := goal-UbuntuLatest
+	GOAL := goal-Ubuntu2304
 endif
 ifeq ($(OS_REL),22.10)
-	GOAL := goal-UbuntuLatest
+	GOAL := goal-Ubuntu2210
 endif
 ifeq ($(OS_REL),22.04)
-	GOAL := goal-UbuntuLatest
+	GOAL := goal-Ubuntu2204
 endif
 ifeq ($(OS_REL),20.04)
 # Recent versions of Ubuntu set -fstack-clash-protection on by default.
