@@ -31,10 +31,13 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
 
   /** Names of all fields. */
   private List<String> allNames;
+
   /** Names of all fields with owner annotations. */
   private List<String> ownedNames;
+
   /** Names of all final fields. */
   private List<String> finalNames;
+
   /**
    * True if the fields {@code allNames}, {@code ownedNames}, and {@code finalNames} are up-to-date.
    */

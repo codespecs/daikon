@@ -62,6 +62,7 @@ public class InstrumentHandler extends CommandHandler {
   // Default values; can be overridden by the command-line switches above.
   /** Default directory for instrumented classes. */
   private String instrumented_directory = "instrumented-classes";
+
   /** Default directory for checker classes. */
   private String checkersOutputDirName = "checker-classes";
 

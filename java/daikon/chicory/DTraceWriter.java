@@ -30,6 +30,7 @@ public class DTraceWriter extends DaikonWriter {
 
   /** instance of a nonsensical value */
   private static NonsensicalObject nonsenseValue = NonsensicalObject.getInstance();
+
   /** instance of a nonsensical list */
   private static List<Object> nonsenseList = NonsensicalList.getInstance();
 

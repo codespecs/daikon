@@ -90,24 +90,34 @@ public final class DCRuntime implements ComparabilityProvider {
 
   /** Control debug printing. */
   public static boolean debug = false;
+
   /** Log comparability tage stack operations. */
   public static boolean debug_tag_frame = false;
+
   /** Log object compare operations. */
   public static boolean debug_objects = false;
+
   /** Log variable comparability operations. */
   public static SimpleLog merge_dv = new SimpleLog(false);
+
   /** Log array comparability operations. */
   public static SimpleLog debug_arr_index = new SimpleLog(false);
+
   /** Log primitive operations. */
   public static SimpleLog debug_primitive = new SimpleLog(false);
+
   /** Log comparability merges. */
   public static SimpleLog debug_merge_comp = new SimpleLog(false);
+
   /** Log excution time. */
   public static SimpleLog debug_timing = new SimpleLog(false);
+
   /** Log decl output. */
   public static SimpleLog debug_decl_print = new SimpleLog(false);
+
   /** Log excution time. */
   public static SimpleLog time_decl = new SimpleLog(false);
+
   /** Log internal data structure sizes. */
   public static SimpleLog map_info = new SimpleLog(false);
 
@@ -1041,6 +1051,7 @@ public final class DCRuntime implements ComparabilityProvider {
     // Execute the array store
     arr[index] = val;
   }
+
   /**
    * Execute an dastore instruction and manipulate the tags accordingly. The tag at the top of stack
    * is stored into the tag storage for the array.
@@ -1757,6 +1768,7 @@ public final class DCRuntime implements ComparabilityProvider {
   static long ppt_name_ms = 0;
   static long decl_vars_ms = 0;
   static long total_ms = 0;
+
   // static Stopwatch watch = new Stopwatch();
 
   /**
@@ -1817,8 +1829,10 @@ public final class DCRuntime implements ComparabilityProvider {
 
   /** Map from array name to comparability for its indices (if any). */
   private static Map<String, Integer> arr_index_map;
+
   /** Map from variable to its comparability. */
   private static IdentityHashMap<DaikonVariableInfo, Integer> dv_comp_map;
+
   /** Comparability value for a variable. */
   private static int base_comp;
 

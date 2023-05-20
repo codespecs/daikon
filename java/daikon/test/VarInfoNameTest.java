@@ -47,6 +47,7 @@ public class VarInfoNameTest {
   public void testParse() {
     run("testParse");
   }
+
   // Fails mysteriously, only when run from a cron job.  The failure is in
   // obsolescent code (VarInfoNameTest), so comment it out rather than
   // debugging it.

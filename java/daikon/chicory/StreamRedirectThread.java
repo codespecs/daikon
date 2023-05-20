@@ -64,6 +64,7 @@ public class StreamRedirectThread extends Thread {
   private boolean debug = false;
 
   private static final int BUFFER_SIZE = 2048;
+
   // for debugging: private static final int BUFFER_SIZE = 1;
 
   public StreamRedirectThread(String name, InputStream in, OutputStream out) {

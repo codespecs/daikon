@@ -165,20 +165,28 @@ public class NIS {
 
   /** Whether or not to keep statistics. */
   public static boolean keep_stats = false;
+
   /** Number of falsified invariants in the program point. */
   public static int false_cnts = 0;
+
   /** Number of falsified invariants in the program point that are potential suppressors. */
   public static int false_invs = 0;
+
   /** Number of suppressions processed. */
   public static int suppressions_processed = 0;
+
   /** Number of suppressions processed by the falsified method. */
   public static int suppressions_processed_falsified = 0;
+
   /** Number of invariants that are no longer suppressed by a suppression. */
   static int new_invs_cnt = 0;
+
   /** Number of new_invs_cnt that are falsified by the sample. */
   public static int false_invs_cnt = 0;
+
   /** Number of invariants actually created. */
   public static int created_invs_cnt = 0;
+
   /** Number of invariants that are still suppressed. */
   static int still_suppressed_cnt = 0;
 
