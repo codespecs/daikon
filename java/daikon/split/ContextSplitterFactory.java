@@ -30,8 +30,10 @@ public class ContextSplitterFactory {
 
   /** Callsite granularity at the line level. */
   public static final int GRAIN_LINE = 0;
+
   /** Callsite granularity at the method level. */
   public static final int GRAIN_METHOD = 1;
+
   /** Callsite granularity at the class level. */
   public static final int GRAIN_CLASS = 2;
 

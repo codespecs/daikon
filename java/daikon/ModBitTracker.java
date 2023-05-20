@@ -25,6 +25,7 @@ public class ModBitTracker implements Serializable, Cloneable {
 
   /** The maximum number of BitSets; the size of modbits_arrays. */
   private int num_vars;
+
   /** The size of each BitSet in modbits_arrays. */
   private int num_samples;
 
@@ -51,8 +52,10 @@ public class ModBitTracker implements Serializable, Cloneable {
   // Member variables to avoid re-allocating every time "add" is entered.
   /** The bits for this ValueTuple (indexed by equivalence set. */
   private boolean[] this_bits;
+
   /** True if the corresponding element of this_bits has a valid value. */
   private boolean[] this_bits_valid;
+
   /**
    * The equivalence set for when an equivalence set is split: if a variable has a conflicting bit,
    * then it goes to the specified index instead.

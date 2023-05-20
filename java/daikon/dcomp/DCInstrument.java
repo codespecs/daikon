@@ -118,17 +118,22 @@ public class DCInstrument extends InstructionListUtils {
 
   /** Unmodified version of input class. */
   protected JavaClass orig_class;
+
   /** ClassGen for the current class. */
   protected ClassGen gen;
+
   /** MethodGen for the current method. */
   protected MethodGen mgen;
+
   /** Is the current class a member of the JDK? */
   protected boolean in_jdk;
 
   /** The BCEL InstructionFactory for generating byte code instructions. */
   protected InstructionFactory ifact;
+
   /** The loader that loaded the Class to instrument. */
   protected @Nullable ClassLoader loader;
+
   /** Has an {@code <init>} method completed initialization? */
   protected boolean constructor_is_initialized;
 
@@ -162,14 +167,17 @@ public class DCInstrument extends InstructionListUtils {
   // Debug loggers
   /** Log file if debug_native is enabled. */
   protected static SimpleLog debug_native = new SimpleLog(false);
+
   /** Log file if debug_dup is enabled. */
   protected static SimpleLog debug_dup = new SimpleLog(false);
 
   // Flags to enable additional console output for debugging
   /** If true, enable JUnit analysis debugging. */
   protected static final boolean debugJUnitAnalysis = false;
+
   /** If true, enable {@link #getDefiningInterface} debugging. */
   protected static final boolean debugGetDefiningInterface = false;
+
   /** If true, enable {@link #handleInvoke} debugging. */
   protected static final boolean debugHandleInvoke = false;
 
@@ -186,13 +194,16 @@ public class DCInstrument extends InstructionListUtils {
   /** Either "java.lang.DCompInstrumented" or "daikon.dcomp.DCompInstrumented". */
   // Static because used in DCRuntime
   protected static @BinaryName String instrumentation_interface;
+
   /** Either "java.lang" or "daikon.dcomp". */
   protected @DotSeparatedIdentifiers String dcomp_prefix;
+
   /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
   protected @DotSeparatedIdentifiers String dcompRuntimeClassName = "daikon.dcomp.DCRuntime";
 
   /** Name prefix for tag setter methods. */
   protected static final String SET_TAG = "set_tag";
+
   /** Name prefix for tag getter methods. */
   protected static final String GET_TAG = "get_tag";
 
@@ -209,6 +220,7 @@ public class DCInstrument extends InstructionListUtils {
 
   /** Current state of JUnit test discovery. */
   protected static JUnitState junit_state = JUnitState.NOT_SEEN;
+
   /** Have we seen 'JUnitCommandLineParseResult.parse'? */
   protected static boolean junit_parse_seen = false;
 
@@ -226,6 +238,7 @@ public class DCInstrument extends InstructionListUtils {
    * #getAccessFlags}. If a class is marked ACC_ANNOTATION then it will not have been instrumented.
    */
   static Map<String, Integer> accessFlags = new HashMap<>();
+
   /** Integer constant of access_flag value of ACC_ANNOTATION. */
   static Integer Integer_ACC_ANNOTATION = Integer.valueOf(Const.ACC_ANNOTATION);
 

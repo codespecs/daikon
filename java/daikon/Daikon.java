@@ -224,8 +224,10 @@ public final class Daikon {
 
   /** The current version of Daikon. */
   public static final String release_version = "5.8.17";
+
   /** The date for the current version of Daikon. */
   public static final String release_date = "November 9, 2022";
+
   /** A description of the Daikon release (version number, date, and URL). */
   public static final String release_string =
       "Daikon version "
@@ -283,6 +285,7 @@ public final class Daikon {
   public static final boolean invariants_check_canBeMissing_arrayelt = true;
 
   public static final boolean disable_modbit_check_message = false;
+
   /**
    * Not a good idea to set this to true, as it is too easy to ignore the warnings and the modbit
    * problem can cause an error later.
@@ -415,15 +418,20 @@ public final class Daikon {
 
   /** option help */
   public static final String help_SWITCH = "help";
+
   // "-o" switch: file to which serialized output is written
   /** option no-text-output */
   public static final String no_text_output_SWITCH = "no_text_output";
+
   /** option format */
   public static final String format_SWITCH = "format";
+
   /** option show-progress */
   public static final String show_progress_SWITCH = "show_progress";
+
   /** option show-detail-progress */
   public static final String show_detail_progress_SWITCH = "show_detail_progress";
+
   /** option no-show-progress */
   public static final String no_show_progress_SWITCH = "no_show_progress";
 
@@ -2185,6 +2193,7 @@ public final class Daikon {
     public FileIOProgress() {
       setDaemon(true);
     }
+
     /**
      * Clients should set this variable instead of calling Thread.stop(), which is deprecated.
      * Typically a client calls "display()" before setting this. The stopping happens later, and
@@ -2210,6 +2219,7 @@ public final class Daikon {
         }
       }
     }
+
     /** Clear the display; good to do before printing to System.out. */
     public void clear() {
       if (dkconfig_progress_delay == -1) {
@@ -2222,6 +2232,7 @@ public final class Daikon {
       System.out.print("\r"); // return to beginning of line
       System.out.flush();
     }
+
     /**
      * Displays the current status. Call this if you don't want to wait until the next automatic
      * display.
@@ -2243,6 +2254,7 @@ public final class Daikon {
       }
       display(message);
     }
+
     /**
      * Displays the given message.
      *

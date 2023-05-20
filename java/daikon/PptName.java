@@ -38,12 +38,14 @@ public class PptName implements Serializable {
   // fn_name and point together comprise fullname
   /** The part of fullname before ":::" */
   private @Interned String fn_name;
+
   /** Post-separator (separator is ":::") */
   private @Interned String point;
 
   // cls and method together comprise fn_name
   /** Fully-qualified class name. */
   private @Nullable @Interned String cls;
+
   /** Method signature, including types. */
   private final @Nullable @Interned String method;
 

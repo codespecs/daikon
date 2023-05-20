@@ -17,8 +17,10 @@ public class DiffDummyInvariant extends Invariant {
 
   /** A string representation of the formula that this dummy invariant represents. */
   public String formula;
+
   /** The confidence fro this dummy invariant. */
   public double confidence;
+
   /** Whether the invariant is worth printing. */
   public boolean isWorthPrinting;
 
