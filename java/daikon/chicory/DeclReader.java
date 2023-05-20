@@ -68,6 +68,7 @@ public class DeclReader {
   public static class DeclPpt {
     /** Program point name. */
     public String name;
+
     /** Map from variable name to corresponding DeclVarInfo. */
     public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<>();
 

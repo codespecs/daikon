@@ -71,16 +71,19 @@ public class InvariantDoclet implements Doclet {
 
   /** A value that indicates a method completed successfully. */
   private static final boolean OK = true;
+
   /** A value that indicates a method did not complete successfully. */
   private static final boolean FAILED = false;
 
   /** File name of destination for output. */
   private @Nullable String outFilename = null;
+
   /** If true, then output format is Texinfo. */
   private boolean formatTexinfo = false;
 
   /** The DocTrees instance assocated with the DocletEnvironment. */
   private DocTrees docTrees;
+
   /** Used to report errors. */
   private Reporter reporter;
 
@@ -166,11 +169,13 @@ public class InvariantDoclet implements Doclet {
   static final class ClassInfo {
     /** Javadoc class information. */
     final TypeElement classInfo;
+
     /**
      * Name of classInfo's superclass. Value is null if classInfo is a top level class or its parent
      * is not included in list of classes passed to this doclet.
      */
     String superClass;
+
     /** Set of classInfo's derived classes. */
     final Set<TypeElement> derivedClasses;
 

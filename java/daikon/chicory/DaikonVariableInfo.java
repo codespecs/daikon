@@ -97,8 +97,10 @@ public abstract class DaikonVariableInfo
    * @see #getTypeNameOnly()
    */
   protected String typeName;
+
   /** The printed representation type that will appear in the .decls declaration. */
   protected String repTypeName;
+
   /** The printed comparability information that will appear in the .decls declaration. */
   protected String compareInfoString = compareInfoDefaultString;
 

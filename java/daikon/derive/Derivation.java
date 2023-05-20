@@ -118,6 +118,7 @@ public abstract class Derivation implements Serializable, Cloneable {
   protected abstract boolean isParam();
 
   public boolean missing_array_bounds = false;
+
   /**
    * True if we have encountered to date any missing values in this derivation due to array indices
    * being out of bounds. This can happen with both simple subscripts and subsequences. Note that

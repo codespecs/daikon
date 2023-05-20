@@ -37,9 +37,11 @@ public final class VarComparabilityImplicit extends VarComparability implements 
 
   /** The number that indicates which comparable set the VarInfo belongs to. */
   int base;
+
   /** indexTypes[0] is comparability of the first index of this array. */
   // null only for the "unknown" type??
   VarComparabilityImplicit @Nullable [] indexTypes;
+
   /** Indicates how many of the indices are in use; there may be more indices than this. */
   int dimensions;
 

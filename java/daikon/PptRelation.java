@@ -658,6 +658,7 @@ public class PptRelation implements Serializable {
       this.ppt_split = ppt_split;
     }
   }
+
   /**
    * Initialize the hierarchical relationship between ppts. Specifically process each ppt, find its
    * parent(s) in the partial order, and fill this point into the children field in the parent. Note
