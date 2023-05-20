@@ -1,0 +1,5123 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+Stack::numStacksCreated
+0
+1
+Stack::publicNumLinksCreated
+0
+1
+
+Stack.Stack(char*):::ENTER
+this_invocation_nonce
+1
+Stack::numStacksCreated
+0
+1
+Stack::publicNumLinksCreated
+0
+1
+name
+"My first stack"
+1
+this
+<STACK_ADDR>
+1
+this->head
+nonsensical
+2
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+nonsensical
+2
+this->numElements
+nonsensical
+2
+this[0]
+nonsensical
+2
+
+Stack.Stack(char*):::EXIT0
+this_invocation_nonce
+1
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+0
+1
+name
+"My first stack"
+1
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My first stack"
+1
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.push(char*):::ENTER
+this_invocation_nonce
+2
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+0
+1
+dat
+"First line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My first stack"
+1
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+Link.initialize(char*,\_Stack::Link*):::ENTER
+this_invocation_nonce
+3
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+0
+1
+dat
+"First line"
+1
+nxt
+0x0
+1
+nxt[..]
+nonsensical
+2
+nxt[..].data
+nonsensical
+2
+nxt[..].next
+nonsensical
+2
+nxt[..].next->data
+nonsensical
+2
+nxt[..].next->next
+nonsensical
+2
+nxt[..].next->next->data
+nonsensical
+2
+nxt[..].next->next->next
+nonsensical
+2
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+nonsensical
+2
+nxt[..].next[0]
+nonsensical
+2
+this
+<HEAP_ADDR>
+1
+this->data
+nonsensical
+2
+this->next
+nonsensical
+2
+this->next[..]
+nonsensical
+2
+this->next[..].data
+nonsensical
+2
+this->next[..].next
+nonsensical
+2
+this->next[..].next->data
+nonsensical
+2
+this->next[..].next->next
+nonsensical
+2
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+nonsensical
+2
+this[0]
+nonsensical
+2
+
+Link.initialize(char*,\_Stack::Link*):::EXIT0
+this_invocation_nonce
+3
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+0
+1
+dat
+"First line"
+1
+nxt
+0x0
+1
+nxt[..]
+nonsensical
+2
+nxt[..].data
+nonsensical
+2
+nxt[..].next
+nonsensical
+2
+nxt[..].next->data
+nonsensical
+2
+nxt[..].next->next
+nonsensical
+2
+nxt[..].next->next->data
+nonsensical
+2
+nxt[..].next->next->next
+nonsensical
+2
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+nonsensical
+2
+nxt[..].next[0]
+nonsensical
+2
+this
+<HEAP_ADDR>
+1
+this->data
+"First line"
+1
+this->next
+0x0
+1
+this->next[..]
+nonsensical
+2
+this->next[..].data
+nonsensical
+2
+this->next[..].next
+nonsensical
+2
+this->next[..].next->data
+nonsensical
+2
+this->next[..].next->next
+nonsensical
+2
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+nonsensical
+2
+this[0]
+<HEAP_ADDR>
+1
+
+Stack.push(char*):::EXIT0
+this_invocation_nonce
+2
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+1
+1
+dat
+"First line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "First line" ]
+1
+this->head[..].next
+[ 0x0 ]
+1
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My first stack"
+1
+this->numElements
+1
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.push(char*):::ENTER
+this_invocation_nonce
+4
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+1
+1
+dat
+"Second line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "First line" ]
+1
+this->head[..].next
+[ 0x0 ]
+1
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My first stack"
+1
+this->numElements
+1
+1
+this[0]
+<STACK_ADDR>
+1
+
+Link.initialize(char*,\_Stack::Link*):::ENTER
+this_invocation_nonce
+5
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+1
+1
+dat
+"Second line"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "First line" ]
+1
+nxt[..].next
+[ 0x0 ]
+1
+nxt[..].next->data
+nonsensical
+2
+nxt[..].next->next
+nonsensical
+2
+nxt[..].next->next->data
+nonsensical
+2
+nxt[..].next->next->next
+nonsensical
+2
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+nonsensical
+2
+nxt[..].next[0]
+nonsensical
+2
+this
+<HEAP_ADDR>
+1
+this->data
+nonsensical
+2
+this->next
+nonsensical
+2
+this->next[..]
+nonsensical
+2
+this->next[..].data
+nonsensical
+2
+this->next[..].next
+nonsensical
+2
+this->next[..].next->data
+nonsensical
+2
+this->next[..].next->next
+nonsensical
+2
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+nonsensical
+2
+this[0]
+nonsensical
+2
+
+Link.initialize(char*,\_Stack::Link*):::EXIT0
+this_invocation_nonce
+5
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+1
+1
+dat
+"Second line"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "First line" ]
+1
+nxt[..].next
+[ 0x0 ]
+1
+nxt[..].next->data
+nonsensical
+2
+nxt[..].next->next
+nonsensical
+2
+nxt[..].next->next->data
+nonsensical
+2
+nxt[..].next->next->next
+nonsensical
+2
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+nonsensical
+2
+nxt[..].next[0]
+nonsensical
+2
+this
+<HEAP_ADDR>
+1
+this->data
+"Second line"
+1
+this->next
+<HEAP_ADDR>
+1
+this->next[..]
+[ <HEAP_ADDR> ]
+1
+this->next[..].data
+[ "First line" ]
+1
+this->next[..].next
+[ 0x0 ]
+1
+this->next[..].next->data
+nonsensical
+2
+this->next[..].next->next
+nonsensical
+2
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+nonsensical
+2
+this[0]
+<HEAP_ADDR>
+1
+
+Stack.push(char*):::EXIT0
+this_invocation_nonce
+4
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+2
+1
+dat
+"Second line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Second line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "First line" ]
+1
+this->head[..].next->next
+[ 0x0 ]
+1
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+2
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.push(char*):::ENTER
+this_invocation_nonce
+6
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+2
+1
+dat
+"Third line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Second line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "First line" ]
+1
+this->head[..].next->next
+[ 0x0 ]
+1
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+2
+1
+this[0]
+<STACK_ADDR>
+1
+
+Link.initialize(char*,\_Stack::Link*):::ENTER
+this_invocation_nonce
+7
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+2
+1
+dat
+"Third line"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "Second line" ]
+1
+nxt[..].next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->data
+[ "First line" ]
+1
+nxt[..].next->next
+[ 0x0 ]
+1
+nxt[..].next->next->data
+nonsensical
+2
+nxt[..].next->next->next
+nonsensical
+2
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+nonsensical
+2
+nxt[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this
+<HEAP_ADDR>
+1
+this->data
+nonsensical
+2
+this->next
+nonsensical
+2
+this->next[..]
+nonsensical
+2
+this->next[..].data
+nonsensical
+2
+this->next[..].next
+nonsensical
+2
+this->next[..].next->data
+nonsensical
+2
+this->next[..].next->next
+nonsensical
+2
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+nonsensical
+2
+this[0]
+nonsensical
+2
+
+Link.initialize(char*,\_Stack::Link*):::EXIT0
+this_invocation_nonce
+7
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+2
+1
+dat
+"Third line"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "Second line" ]
+1
+nxt[..].next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->data
+[ "First line" ]
+1
+nxt[..].next->next
+[ 0x0 ]
+1
+nxt[..].next->next->data
+nonsensical
+2
+nxt[..].next->next->next
+nonsensical
+2
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+nonsensical
+2
+nxt[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this
+<HEAP_ADDR>
+1
+this->data
+"Third line"
+1
+this->next
+<HEAP_ADDR>
+1
+this->next[..]
+[ <HEAP_ADDR> ]
+1
+this->next[..].data
+[ "Second line" ]
+1
+this->next[..].next
+[ <HEAP_ADDR> ]
+1
+this->next[..].next->data
+[ "First line" ]
+1
+this->next[..].next->next
+[ 0x0 ]
+1
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this[0]
+<HEAP_ADDR>
+1
+
+Stack.push(char*):::EXIT0
+this_invocation_nonce
+6
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+3
+1
+dat
+"Third line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Third line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Second line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "First line" ]
+1
+this->head[..].next->next->next
+[ 0x0 ]
+1
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+3
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.push(char*):::ENTER
+this_invocation_nonce
+8
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+3
+1
+dat
+"Fourth line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Third line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Second line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "First line" ]
+1
+this->head[..].next->next->next
+[ 0x0 ]
+1
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+3
+1
+this[0]
+<STACK_ADDR>
+1
+
+Link.initialize(char*,\_Stack::Link*):::ENTER
+this_invocation_nonce
+9
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+3
+1
+dat
+"Fourth line"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "Third line" ]
+1
+nxt[..].next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->data
+[ "Second line" ]
+1
+nxt[..].next->next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->next->data
+[ "First line" ]
+1
+nxt[..].next->next->next
+[ 0x0 ]
+1
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+nxt[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this
+<HEAP_ADDR>
+1
+this->data
+nonsensical
+2
+this->next
+nonsensical
+2
+this->next[..]
+nonsensical
+2
+this->next[..].data
+nonsensical
+2
+this->next[..].next
+nonsensical
+2
+this->next[..].next->data
+nonsensical
+2
+this->next[..].next->next
+nonsensical
+2
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+nonsensical
+2
+this[0]
+nonsensical
+2
+
+Link.initialize(char*,\_Stack::Link*):::EXIT0
+this_invocation_nonce
+9
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+3
+1
+dat
+"Fourth line"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "Third line" ]
+1
+nxt[..].next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->data
+[ "Second line" ]
+1
+nxt[..].next->next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->next->data
+[ "First line" ]
+1
+nxt[..].next->next->next
+[ 0x0 ]
+1
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+nxt[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this
+<HEAP_ADDR>
+1
+this->data
+"Fourth line"
+1
+this->next
+<HEAP_ADDR>
+1
+this->next[..]
+[ <HEAP_ADDR> ]
+1
+this->next[..].data
+[ "Third line" ]
+1
+this->next[..].next
+[ <HEAP_ADDR> ]
+1
+this->next[..].next->data
+[ "Second line" ]
+1
+this->next[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->next[..].next->next->data
+[ "First line" ]
+1
+this->next[..].next->next->next
+[ 0x0 ]
+1
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->next[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this[0]
+<HEAP_ADDR>
+1
+
+Stack.push(char*):::EXIT0
+this_invocation_nonce
+8
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+4
+1
+dat
+"Fourth line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Fourth line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Third line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Second line" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+4
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.push(char*):::ENTER
+this_invocation_nonce
+10
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+4
+1
+dat
+"Fifth line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Fourth line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Third line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Second line" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+4
+1
+this[0]
+<STACK_ADDR>
+1
+
+Link.initialize(char*,\_Stack::Link*):::ENTER
+this_invocation_nonce
+11
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+4
+1
+dat
+"Fifth line"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "Fourth line" ]
+1
+nxt[..].next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->data
+[ "Third line" ]
+1
+nxt[..].next->next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->next->data
+[ "Second line" ]
+1
+nxt[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->next->next->data
+[ "First line" ]
+1
+nxt[..].next->next->next->next
+[ 0x0 ]
+1
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+nxt[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this
+<HEAP_ADDR>
+1
+this->data
+nonsensical
+2
+this->next
+nonsensical
+2
+this->next[..]
+nonsensical
+2
+this->next[..].data
+nonsensical
+2
+this->next[..].next
+nonsensical
+2
+this->next[..].next->data
+nonsensical
+2
+this->next[..].next->next
+nonsensical
+2
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+nonsensical
+2
+this[0]
+nonsensical
+2
+
+Link.initialize(char*,\_Stack::Link*):::EXIT0
+this_invocation_nonce
+11
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+4
+1
+dat
+"Fifth line"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "Fourth line" ]
+1
+nxt[..].next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->data
+[ "Third line" ]
+1
+nxt[..].next->next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->next->data
+[ "Second line" ]
+1
+nxt[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->next->next->data
+[ "First line" ]
+1
+nxt[..].next->next->next->next
+[ 0x0 ]
+1
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+nxt[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this
+<HEAP_ADDR>
+1
+this->data
+"Fifth line"
+1
+this->next
+<HEAP_ADDR>
+1
+this->next[..]
+[ <HEAP_ADDR> ]
+1
+this->next[..].data
+[ "Fourth line" ]
+1
+this->next[..].next
+[ <HEAP_ADDR> ]
+1
+this->next[..].next->data
+[ "Third line" ]
+1
+this->next[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->next[..].next->next->data
+[ "Second line" ]
+1
+this->next[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->next[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->next[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->next[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this[0]
+<HEAP_ADDR>
+1
+
+Stack.push(char*):::EXIT0
+this_invocation_nonce
+10
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+dat
+"Fifth line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Fifth line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Fourth line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Third line" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+5
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.peek():::ENTER
+this_invocation_nonce
+12
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Fifth line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Fourth line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Third line" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+5
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.peek():::EXIT0
+this_invocation_nonce
+12
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+return
+"Fifth line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Fifth line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Fourth line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Third line" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+5
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.getName():::ENTER
+this_invocation_nonce
+13
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Fifth line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Fourth line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Third line" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+5
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.privateStuff():::ENTER
+this_invocation_nonce
+14
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Fifth line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Fourth line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Third line" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+5
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.privateStuff():::EXIT0
+this_invocation_nonce
+14
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+return
+42
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Fifth line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Fourth line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Third line" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+5
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.getName():::EXIT0
+this_invocation_nonce
+13
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+return
+"My first stack"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Fifth line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Fourth line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Third line" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+5
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::ENTER
+this_invocation_nonce
+15
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Fifth line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Fourth line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Third line" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+5
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::EXIT0
+this_invocation_nonce
+15
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+return
+"Fifth line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Fourth line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Third line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Second line" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+4
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::ENTER
+this_invocation_nonce
+16
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Fourth line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Third line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Second line" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+4
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::EXIT0
+this_invocation_nonce
+16
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+return
+"Fourth line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Third line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Second line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "First line" ]
+1
+this->head[..].next->next->next
+[ 0x0 ]
+1
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+3
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::ENTER
+this_invocation_nonce
+17
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Third line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Second line" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "First line" ]
+1
+this->head[..].next->next->next
+[ 0x0 ]
+1
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+3
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::EXIT0
+this_invocation_nonce
+17
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+return
+"Third line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Second line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "First line" ]
+1
+this->head[..].next->next
+[ 0x0 ]
+1
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+2
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::ENTER
+this_invocation_nonce
+18
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Second line" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "First line" ]
+1
+this->head[..].next->next
+[ 0x0 ]
+1
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My first stack"
+1
+this->numElements
+2
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::EXIT0
+this_invocation_nonce
+18
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+return
+"Second line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "First line" ]
+1
+this->head[..].next
+[ 0x0 ]
+1
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My first stack"
+1
+this->numElements
+1
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::ENTER
+this_invocation_nonce
+19
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "First line" ]
+1
+this->head[..].next
+[ 0x0 ]
+1
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My first stack"
+1
+this->numElements
+1
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::EXIT0
+this_invocation_nonce
+19
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+return
+"First line"
+1
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My first stack"
+1
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::ENTER
+this_invocation_nonce
+20
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My first stack"
+1
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::EXIT0
+this_invocation_nonce
+20
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+return
+nonsensical
+2
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My first stack"
+1
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.getNumStacksCreated():::ENTER
+this_invocation_nonce
+21
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+
+Stack.getNumStacksCreated():::EXIT0
+this_invocation_nonce
+21
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+return
+1
+1
+
+Stack.Stack(char*):::ENTER
+this_invocation_nonce
+22
+Stack::numStacksCreated
+1
+1
+Stack::publicNumLinksCreated
+5
+1
+name
+"My second stack"
+1
+this
+<STACK_ADDR>
+1
+this->head
+nonsensical
+2
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+nonsensical
+2
+this->numElements
+nonsensical
+2
+this[0]
+nonsensical
+2
+
+Stack.Stack(char*):::EXIT0
+this_invocation_nonce
+22
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+5
+1
+name
+"My second stack"
+1
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My second stack"
+1
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.push(char*):::ENTER
+this_invocation_nonce
+23
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+5
+1
+dat
+"Uno"
+1
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My second stack"
+1
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+Link.initialize(char*,\_Stack::Link*):::ENTER
+this_invocation_nonce
+24
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+5
+1
+dat
+"Uno"
+1
+nxt
+0x0
+1
+nxt[..]
+nonsensical
+2
+nxt[..].data
+nonsensical
+2
+nxt[..].next
+nonsensical
+2
+nxt[..].next->data
+nonsensical
+2
+nxt[..].next->next
+nonsensical
+2
+nxt[..].next->next->data
+nonsensical
+2
+nxt[..].next->next->next
+nonsensical
+2
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+nonsensical
+2
+nxt[..].next[0]
+nonsensical
+2
+this
+<HEAP_ADDR>
+1
+this->data
+nonsensical
+2
+this->next
+nonsensical
+2
+this->next[..]
+nonsensical
+2
+this->next[..].data
+nonsensical
+2
+this->next[..].next
+nonsensical
+2
+this->next[..].next->data
+nonsensical
+2
+this->next[..].next->next
+nonsensical
+2
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+nonsensical
+2
+this[0]
+nonsensical
+2
+
+Link.initialize(char*,\_Stack::Link*):::EXIT0
+this_invocation_nonce
+24
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+5
+1
+dat
+"Uno"
+1
+nxt
+0x0
+1
+nxt[..]
+nonsensical
+2
+nxt[..].data
+nonsensical
+2
+nxt[..].next
+nonsensical
+2
+nxt[..].next->data
+nonsensical
+2
+nxt[..].next->next
+nonsensical
+2
+nxt[..].next->next->data
+nonsensical
+2
+nxt[..].next->next->next
+nonsensical
+2
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+nonsensical
+2
+nxt[..].next[0]
+nonsensical
+2
+this
+<HEAP_ADDR>
+1
+this->data
+"Uno"
+1
+this->next
+0x0
+1
+this->next[..]
+nonsensical
+2
+this->next[..].data
+nonsensical
+2
+this->next[..].next
+nonsensical
+2
+this->next[..].next->data
+nonsensical
+2
+this->next[..].next->next
+nonsensical
+2
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+nonsensical
+2
+this[0]
+<HEAP_ADDR>
+1
+
+Stack.push(char*):::EXIT0
+this_invocation_nonce
+23
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+6
+1
+dat
+"Uno"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Uno" ]
+1
+this->head[..].next
+[ 0x0 ]
+1
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My second stack"
+1
+this->numElements
+1
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.push(char*):::ENTER
+this_invocation_nonce
+25
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+6
+1
+dat
+"Dos"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Uno" ]
+1
+this->head[..].next
+[ 0x0 ]
+1
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My second stack"
+1
+this->numElements
+1
+1
+this[0]
+<STACK_ADDR>
+1
+
+Link.initialize(char*,\_Stack::Link*):::ENTER
+this_invocation_nonce
+26
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+6
+1
+dat
+"Dos"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "Uno" ]
+1
+nxt[..].next
+[ 0x0 ]
+1
+nxt[..].next->data
+nonsensical
+2
+nxt[..].next->next
+nonsensical
+2
+nxt[..].next->next->data
+nonsensical
+2
+nxt[..].next->next->next
+nonsensical
+2
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+nonsensical
+2
+nxt[..].next[0]
+nonsensical
+2
+this
+<HEAP_ADDR>
+1
+this->data
+nonsensical
+2
+this->next
+nonsensical
+2
+this->next[..]
+nonsensical
+2
+this->next[..].data
+nonsensical
+2
+this->next[..].next
+nonsensical
+2
+this->next[..].next->data
+nonsensical
+2
+this->next[..].next->next
+nonsensical
+2
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+nonsensical
+2
+this[0]
+nonsensical
+2
+
+Link.initialize(char*,\_Stack::Link*):::EXIT0
+this_invocation_nonce
+26
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+6
+1
+dat
+"Dos"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "Uno" ]
+1
+nxt[..].next
+[ 0x0 ]
+1
+nxt[..].next->data
+nonsensical
+2
+nxt[..].next->next
+nonsensical
+2
+nxt[..].next->next->data
+nonsensical
+2
+nxt[..].next->next->next
+nonsensical
+2
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+nonsensical
+2
+nxt[..].next[0]
+nonsensical
+2
+this
+<HEAP_ADDR>
+1
+this->data
+"Dos"
+1
+this->next
+<HEAP_ADDR>
+1
+this->next[..]
+[ <HEAP_ADDR> ]
+1
+this->next[..].data
+[ "Uno" ]
+1
+this->next[..].next
+[ 0x0 ]
+1
+this->next[..].next->data
+nonsensical
+2
+this->next[..].next->next
+nonsensical
+2
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+nonsensical
+2
+this[0]
+<HEAP_ADDR>
+1
+
+Stack.push(char*):::EXIT0
+this_invocation_nonce
+25
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+7
+1
+dat
+"Dos"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Dos" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Uno" ]
+1
+this->head[..].next->next
+[ 0x0 ]
+1
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+2
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.push(char*):::ENTER
+this_invocation_nonce
+27
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+7
+1
+dat
+"Tres"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Dos" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Uno" ]
+1
+this->head[..].next->next
+[ 0x0 ]
+1
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+2
+1
+this[0]
+<STACK_ADDR>
+1
+
+Link.initialize(char*,\_Stack::Link*):::ENTER
+this_invocation_nonce
+28
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+7
+1
+dat
+"Tres"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "Dos" ]
+1
+nxt[..].next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->data
+[ "Uno" ]
+1
+nxt[..].next->next
+[ 0x0 ]
+1
+nxt[..].next->next->data
+nonsensical
+2
+nxt[..].next->next->next
+nonsensical
+2
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+nonsensical
+2
+nxt[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this
+<HEAP_ADDR>
+1
+this->data
+nonsensical
+2
+this->next
+nonsensical
+2
+this->next[..]
+nonsensical
+2
+this->next[..].data
+nonsensical
+2
+this->next[..].next
+nonsensical
+2
+this->next[..].next->data
+nonsensical
+2
+this->next[..].next->next
+nonsensical
+2
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+nonsensical
+2
+this[0]
+nonsensical
+2
+
+Link.initialize(char*,\_Stack::Link*):::EXIT0
+this_invocation_nonce
+28
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+7
+1
+dat
+"Tres"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "Dos" ]
+1
+nxt[..].next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->data
+[ "Uno" ]
+1
+nxt[..].next->next
+[ 0x0 ]
+1
+nxt[..].next->next->data
+nonsensical
+2
+nxt[..].next->next->next
+nonsensical
+2
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+nonsensical
+2
+nxt[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this
+<HEAP_ADDR>
+1
+this->data
+"Tres"
+1
+this->next
+<HEAP_ADDR>
+1
+this->next[..]
+[ <HEAP_ADDR> ]
+1
+this->next[..].data
+[ "Dos" ]
+1
+this->next[..].next
+[ <HEAP_ADDR> ]
+1
+this->next[..].next->data
+[ "Uno" ]
+1
+this->next[..].next->next
+[ 0x0 ]
+1
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this[0]
+<HEAP_ADDR>
+1
+
+Stack.push(char*):::EXIT0
+this_invocation_nonce
+27
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+8
+1
+dat
+"Tres"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Tres" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Dos" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Uno" ]
+1
+this->head[..].next->next->next
+[ 0x0 ]
+1
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+3
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.push(char*):::ENTER
+this_invocation_nonce
+29
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+8
+1
+dat
+"Cuatro"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Tres" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Dos" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Uno" ]
+1
+this->head[..].next->next->next
+[ 0x0 ]
+1
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+3
+1
+this[0]
+<STACK_ADDR>
+1
+
+Link.initialize(char*,\_Stack::Link*):::ENTER
+this_invocation_nonce
+30
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+8
+1
+dat
+"Cuatro"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "Tres" ]
+1
+nxt[..].next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->data
+[ "Dos" ]
+1
+nxt[..].next->next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->next->data
+[ "Uno" ]
+1
+nxt[..].next->next->next
+[ 0x0 ]
+1
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+nxt[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this
+<HEAP_ADDR>
+1
+this->data
+nonsensical
+2
+this->next
+nonsensical
+2
+this->next[..]
+nonsensical
+2
+this->next[..].data
+nonsensical
+2
+this->next[..].next
+nonsensical
+2
+this->next[..].next->data
+nonsensical
+2
+this->next[..].next->next
+nonsensical
+2
+this->next[..].next->next->data
+nonsensical
+2
+this->next[..].next->next->next
+nonsensical
+2
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+nonsensical
+2
+this->next[..].next[0]
+nonsensical
+2
+this[0]
+nonsensical
+2
+
+Link.initialize(char*,\_Stack::Link*):::EXIT0
+this_invocation_nonce
+30
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+8
+1
+dat
+"Cuatro"
+1
+nxt
+<HEAP_ADDR>
+1
+nxt[..]
+[ <HEAP_ADDR> ]
+1
+nxt[..].data
+[ "Tres" ]
+1
+nxt[..].next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->data
+[ "Dos" ]
+1
+nxt[..].next->next
+[ <HEAP_ADDR> ]
+1
+nxt[..].next->next->data
+[ "Uno" ]
+1
+nxt[..].next->next->next
+[ 0x0 ]
+1
+nxt[..].next->next->next->data
+nonsensical
+2
+nxt[..].next->next->next->next
+nonsensical
+2
+nxt[..].next->next->next->next[0]
+nonsensical
+2
+nxt[..].next->next->next[0]
+nonsensical
+2
+nxt[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+nxt[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this
+<HEAP_ADDR>
+1
+this->data
+"Cuatro"
+1
+this->next
+<HEAP_ADDR>
+1
+this->next[..]
+[ <HEAP_ADDR> ]
+1
+this->next[..].data
+[ "Tres" ]
+1
+this->next[..].next
+[ <HEAP_ADDR> ]
+1
+this->next[..].next->data
+[ "Dos" ]
+1
+this->next[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->next[..].next->next->data
+[ "Uno" ]
+1
+this->next[..].next->next->next
+[ 0x0 ]
+1
+this->next[..].next->next->next[0]
+nonsensical
+2
+this->next[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->next[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this[0]
+<HEAP_ADDR>
+1
+
+Stack.push(char*):::EXIT0
+this_invocation_nonce
+29
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+dat
+"Cuatro"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Cuatro" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Tres" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Dos" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+4
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.getName():::ENTER
+this_invocation_nonce
+31
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Cuatro" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Tres" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Dos" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+4
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.privateStuff():::ENTER
+this_invocation_nonce
+32
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Cuatro" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Tres" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Dos" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+4
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.privateStuff():::EXIT0
+this_invocation_nonce
+32
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+return
+42
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Cuatro" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Tres" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Dos" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+4
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.getName():::EXIT0
+this_invocation_nonce
+31
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+return
+"My second stack"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Cuatro" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Tres" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Dos" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+4
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::ENTER
+this_invocation_nonce
+33
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Cuatro" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Tres" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Dos" ]
+1
+this->head[..].next->next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+4
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::EXIT0
+this_invocation_nonce
+33
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+return
+"Cuatro"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Tres" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Dos" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Uno" ]
+1
+this->head[..].next->next->next
+[ 0x0 ]
+1
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+3
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::ENTER
+this_invocation_nonce
+34
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Tres" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Dos" ]
+1
+this->head[..].next->next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->next->data
+[ "Uno" ]
+1
+this->head[..].next->next->next
+[ 0x0 ]
+1
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+[ <HEAP_ADDR> ]
+1
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+3
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::EXIT0
+this_invocation_nonce
+34
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+return
+"Tres"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Dos" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Uno" ]
+1
+this->head[..].next->next
+[ 0x0 ]
+1
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+2
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::ENTER
+this_invocation_nonce
+35
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Dos" ]
+1
+this->head[..].next
+[ <HEAP_ADDR> ]
+1
+this->head[..].next->data
+[ "Uno" ]
+1
+this->head[..].next->next
+[ 0x0 ]
+1
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+[ <HEAP_ADDR> ]
+1
+this->myName
+"My second stack"
+1
+this->numElements
+2
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::EXIT0
+this_invocation_nonce
+35
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+return
+"Dos"
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Uno" ]
+1
+this->head[..].next
+[ 0x0 ]
+1
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My second stack"
+1
+this->numElements
+1
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::ENTER
+this_invocation_nonce
+36
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+this
+<STACK_ADDR>
+1
+this->head
+<HEAP_ADDR>
+1
+this->head[..]
+[ <HEAP_ADDR> ]
+1
+this->head[..].data
+[ "Uno" ]
+1
+this->head[..].next
+[ 0x0 ]
+1
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My second stack"
+1
+this->numElements
+1
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::EXIT0
+this_invocation_nonce
+36
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+return
+"Uno"
+1
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My second stack"
+1
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::ENTER
+this_invocation_nonce
+37
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My second stack"
+1
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.pop():::EXIT0
+this_invocation_nonce
+37
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+return
+nonsensical
+2
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My second stack"
+1
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.getNumStacksCreated():::ENTER
+this_invocation_nonce
+38
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+
+Stack.getNumStacksCreated():::EXIT0
+this_invocation_nonce
+38
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+return
+2
+1
+
+Stack.~Stack():::ENTER
+this_invocation_nonce
+39
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My second stack"
+1
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.~Stack():::EXIT0
+this_invocation_nonce
+39
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+nonsensical
+2
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.~Stack():::ENTER
+this_invocation_nonce
+40
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+"My first stack"
+1
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+Stack.~Stack():::EXIT0
+this_invocation_nonce
+40
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+this
+<STACK_ADDR>
+1
+this->head
+0x0
+1
+this->head[..]
+nonsensical
+2
+this->head[..].data
+nonsensical
+2
+this->head[..].next
+nonsensical
+2
+this->head[..].next->data
+nonsensical
+2
+this->head[..].next->next
+nonsensical
+2
+this->head[..].next->next->data
+nonsensical
+2
+this->head[..].next->next->next
+nonsensical
+2
+this->head[..].next->next->next[0]
+nonsensical
+2
+this->head[..].next->next[0]
+nonsensical
+2
+this->head[..].next[0]
+nonsensical
+2
+this->myName
+nonsensical
+2
+this->numElements
+0
+1
+this[0]
+<STACK_ADDR>
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+Stack::numStacksCreated
+2
+1
+Stack::publicNumLinksCreated
+9
+1
+return
+0
+1
+
