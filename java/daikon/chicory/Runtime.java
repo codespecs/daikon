@@ -137,6 +137,7 @@ public class Runtime {
   private static class CallInfo {
     /** nonce of call */
     int nonce;
+
     /** whether or not the call was captured on enter */
     boolean captured;
 
@@ -785,6 +786,7 @@ public class Runtime {
     public CharWrap(char val) {
       this.val = val;
     }
+
     // Print characters as integers.
     @SideEffectFree
     @Override

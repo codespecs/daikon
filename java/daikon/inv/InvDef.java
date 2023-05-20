@@ -45,18 +45,25 @@ public class InvDef {
 
   /** The array {0}. */
   public static final long[] elts_zero = {0};
+
   /** The array {0.0}. */
   public static final double[] elts_zero_float = {0.0};
+
   /** The array {-1}. */
   public static final long[] elts_minus_one = {-1};
+
   /** The array {-1.0}. */
   public static final double[] elts_minus_one_float = {-1.0};
+
   /** The array {-1, 1}. */
   public static final long[] elts_minus_one_and_plus_one = {-1, 1};
+
   /** The array {-1.0, 1.0}. */
   public static final double[] elts_minus_one_and_plus_one_float = {-1.0, 1.0};
+
   /** The array {1}. */
   public static final long[] elts_one = {1};
+
   /** The array {1.0}. */
   public static final double[] elts_one_float = {1.0};
 

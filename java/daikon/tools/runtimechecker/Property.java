@@ -25,6 +25,7 @@ public class Property implements Serializable {
 
   // The name of the method that this property describes.
   private final String method;
+
   /** The name of the method that this property describes. ("null" for object invariants.) */
   public String method(@GuardSatisfied Property this) {
     return method;
@@ -32,6 +33,7 @@ public class Property implements Serializable {
 
   // The kind of proerty (enter, exit or objectInvariant).
   private final Kind kind;
+
   /** The kind of property (enter, exit or objectInvariant). */
   public Kind kind(@GuardSatisfied Property this) {
     return kind;
@@ -39,6 +41,7 @@ public class Property implements Serializable {
 
   /** Daikon representation (as output by Daikon's default output format). */
   private final String daikonRep;
+
   /** Daikon representation (as output by Daikon's default output format). */
   public String daikonRep(@GuardSatisfied Property this) {
     return daikonRep;

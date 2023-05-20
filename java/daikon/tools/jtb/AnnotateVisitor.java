@@ -62,10 +62,13 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   public List<String> javaFileLines;
 
   public PptMap ppts;
+
   /** if true, use "//" comments; if false, use "/*" comments. */
   public boolean slashslash;
+
   /** If true, insert annotations not supported by ESC. */
   public boolean insert_inexpressible;
+
   /** If false, use full JML specs; if true, use lightweight ESC specs. */
   public boolean lightweight;
 

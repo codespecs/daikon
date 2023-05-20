@@ -30,13 +30,16 @@ public final class FileCompiler {
 
   /** The Runtime of the JVM. */
   public static Runtime runtime = java.lang.Runtime.getRuntime();
+
   /** Matches the names of Java source files. Match group 1 is the complete filename. */
   static @Regex(1) Pattern java_filename_pattern;
+
   /**
    * External command used to compile Java files, and command-line arguments. Guaranteed to be
    * non-empty.
    */
   private String @MinLen(1) [] compiler;
+
   /** Time limit for compilation jobs. */
   private long timeLimit;
 

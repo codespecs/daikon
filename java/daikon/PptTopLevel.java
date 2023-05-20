@@ -404,6 +404,7 @@ public class PptTopLevel extends Ppt {
   /** Redundant invariants, except for Equality invariants. */
   @SuppressWarnings("serial")
   public Set<Invariant> redundant_invs = new LinkedHashSet<>(0);
+
   /** The canonical VarInfo for the equality. */
   @SuppressWarnings("serial")
   public Set<VarInfo> redundant_invs_equality = new LinkedHashSet<>(0);
@@ -1842,6 +1843,7 @@ public class PptTopLevel extends Ppt {
 
     return new DiscardInfo(imp_inv, DiscardCode.obvious, reason);
   }
+
   /**
    * If the prototype invariant is true over the specified variables returns DiscardInfo indicating
    * that the prototype invariant implies imp_inv. Otherwise returns null.
@@ -4226,6 +4228,7 @@ public class PptTopLevel extends Ppt {
 
     invariants_removed = true;
   }
+
   /** Builds a permutation from vis1 to vis2. The result is vis1[i] = vis2[permute[i]]. */
   public static int[] build_permute(VarInfo[] vis1, VarInfo[] vis2) {
 
