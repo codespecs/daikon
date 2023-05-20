@@ -17,6 +17,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 public class InvariantLemma extends Lemma {
   public String from; // A note explaining our derivation
   public Invariant invariant; // A pointer back to the invariant we
+
   // were made from
 
   public InvariantLemma(Invariant inv) {

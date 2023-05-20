@@ -24,6 +24,7 @@ public class ParentFilter extends InvariantFilter {
   }
 
   private static boolean debug = false;
+
   // private static boolean debug = true;
 
   @Override

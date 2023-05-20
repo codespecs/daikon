@@ -316,6 +316,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   }
 
   private @Interned String jml_name_cached = null; // interned
+
   /** Returns the name in JML style output format. Cached and interned by {@link #jml_name}. */
   protected abstract String jml_name_impl(VarInfo v);
 
@@ -356,6 +357,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   }
 
   private @Interned String dbc_name_cached = null; // interned
+
   /**
    * Return the name in the DBC style output format. If v is null, uses JML style instead. Cached
    * and interned by {@link #dbc_name}.
@@ -446,6 +448,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   // interning were abstracted out somewhere.
   private static final WeakHashMap<VarInfoName, WeakReference<VarInfoName>> internTable =
       new WeakHashMap<>();
+
   // This does not make any guarantee that the components of the
   // VarInfoName are themselves interned.  Should it?  (I suspect so...)
   @InternMethod
@@ -717,6 +720,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         return simplify_name_impl(name, prestate);
       }
     }
+
     // Names must be either a legal C/Java style identifier, or
     // surrounded by vertical bars (Simplify's quoting mechanism);
     // other than that, they only have to be consistent within one
@@ -1879,6 +1883,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     public <T> T accept(Visitor<T> v) {
       return v.visitAdd(this);
     }
+
     // override for cleanliness
     @Override
     public VarInfoName applyAdd(int _amount) {
@@ -2464,6 +2469,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     public T visitElements(Elements o) {
       return o.term.accept(this);
     }
+
     // leave abstract; traversal order and return values matter
     @Override
     public abstract T visitSubscript(Subscript o);
@@ -2488,6 +2494,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       this.goal = goal;
       assert root.accept(this) != null;
     }
+
     // state and accessors
     private final VarInfoName goal;
     private boolean pre;
@@ -2495,6 +2502,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     public boolean inPre() {
       return pre;
     }
+
     // visitor methods that get the job done
     @Override
     public VarInfoName visitSimple(Simple o) {
@@ -3244,6 +3252,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       // return o.args.get(0).accept(this); // Return value doesn't matter
       // We only use one of them because we don't want double quantifiers
     }
+
     /**
      * We do *not* want to pull out array members of FunctionOfN because a FunctionOfN creates a
      * black-box array with respect to quantification. (Also, otherwise, there may be two or more
@@ -3323,6 +3332,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       protected String jml_name_impl(VarInfo v) {
         return super.jml_name_impl(v);
       }
+
       // protected String esc_name_impl() {
       //   return super.esc_name_impl();
       // }
