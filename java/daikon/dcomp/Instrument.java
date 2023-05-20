@@ -18,10 +18,13 @@ public class Instrument implements ClassFileTransformer {
 
   /** Directory for debug output. */
   File debug_dir;
+
   /** Directory for debug instrumented class output. */
   File debug_bin_dir;
+
   /** Directory for debug original class output. */
   File debug_orig_dir;
+
   /** Have we seen a class member of a known transformer? */
   static boolean transformer_seen = false;
 

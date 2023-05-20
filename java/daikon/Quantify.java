@@ -319,6 +319,7 @@ public class Quantify {
   public static class QuantifyReturn {
     /** Variable being quantified. */
     public VarInfo var;
+
     /** Index into the variable. If null, variable is not a sequence. */
     public @Nullable Term index;
 

@@ -14,9 +14,11 @@ import org.checkerframework.dataflow.qual.Pure;
 public class InvariantInfo {
 
   private String ppt;
+
   // vars is maintained as "var1,var2,.." sorted in ascending lexicographical order
   /** If null, treated as a wildcard. */
   private final @Nullable String vars;
+
   /** If null, treated as a wildcard. */
   private @Nullable String className;
 
