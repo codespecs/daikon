@@ -62,7 +62,7 @@ jobs:
     - quick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk19-testing:latest
+  container: mdernst/daikon-ubuntu-jdk19:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -111,7 +111,7 @@ jobs:
     - nonquick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk19-testing:latest
+  container: mdernst/daikon-ubuntu-jdk19:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -160,7 +160,7 @@ jobs:
     - non_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk19-testing:latest
+  container: mdernst/daikon-ubuntu-jdk19:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -215,7 +215,7 @@ jobs:
     - misc_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk19-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk19-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -266,7 +266,7 @@ jobs:
     - kvasir_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk19-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk19-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -331,7 +331,7 @@ jobs:
     - typecheck_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk19-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk19-plus:latest
   timeoutInMinutes: 70
   steps:
   - checkout: self
