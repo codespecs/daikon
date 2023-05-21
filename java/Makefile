@@ -857,8 +857,9 @@ show_nullness_java_files:
 
 ## TODO: Reinstate these dependencies later:  typecheck-prototype typecheck-vindex
 # Check is in two parts because Travis won't run jobs longer than 50 minutes.
-typecheck-part1: typecheck-formatter typecheck-index typecheck-interning typecheck-lock
-typecheck-part2: typecheck-nullness typecheck-regex typecheck-resourceleak typecheck-signature typecheck-signedness
+# Index Checker takes much longer than any other checker.
+typecheck-part1: typecheck-formatter typecheck-index typecheck-nullness
+typecheck-part2: typecheck-interning typecheck-lock typecheck-regex typecheck-resourceleak typecheck-signature typecheck-signedness
 typecheck-all: typecheck-part1 typecheck-part2
 typecheck: typecheck-all
 
