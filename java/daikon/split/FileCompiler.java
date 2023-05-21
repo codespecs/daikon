@@ -101,6 +101,7 @@ public final class FileCompiler {
    *     split on spaces.
    * @param timeLimit the maximum permitted compilation time, in msec
    */
+  @SuppressWarnings("value:argument") // this looks like a false positive (a Checker Framework bug)
   public FileCompiler(String compiler, @Positive long timeLimit) {
     this(compiler.trim().split(" +"), timeLimit);
   }
