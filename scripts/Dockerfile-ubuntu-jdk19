@@ -37,5 +37,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   openjdk-19-jdk
 
 RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get autoremove \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/*
