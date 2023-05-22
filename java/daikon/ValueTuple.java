@@ -8,6 +8,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
@@ -42,20 +43,25 @@ public final class ValueTuple implements Cloneable {
   // Right now there are only three meaningful values for a mod:
   /** Not modified. */
   public static final int UNMODIFIED = 0;
+
   /** Modified. */
   public static final int MODIFIED = 1;
+
   /**
    * Missing value because the expression doesn't make sense: x.a when x is null. Data trace files
    * can contain this modbit.
    */
   public static final int MISSING_NONSENSICAL = 2;
+
   /**
    * Missing value because of data flow: this.x.x isn't available from a ppt. Data trace files must
    * not contain this modbit.
    */
   public static final int MISSING_FLOW = 3;
+
   /** Maximum mod bit value. Always set to 1+ last modbit value. */
   public static final int MODBIT_VALUES = 4;
+
   /**
    * Out of the range of MODBIT_VALUES because this won't appear in the tables; it gets converted to
    * UNMODIFIED or MODIFIED, depending on whether this is the first sample. (Not sure whether that
@@ -402,7 +408,7 @@ public final class ValueTuple implements Cloneable {
 
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied ValueTuple this) {
+  public int hashCode(@GuardSatisfied @UnknownSignedness ValueTuple this) {
     return Arrays.hashCode(vals) * 31 + Arrays.hashCode(mods);
   }
 

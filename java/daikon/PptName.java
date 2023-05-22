@@ -7,6 +7,7 @@ import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.reflection.ReflectionPlume;
@@ -37,12 +38,14 @@ public class PptName implements Serializable {
   // fn_name and point together comprise fullname
   /** The part of fullname before ":::" */
   private @Interned String fn_name;
+
   /** Post-separator (separator is ":::") */
   private @Interned String point;
 
   // cls and method together comprise fn_name
   /** Fully-qualified class name. */
   private @Nullable @Interned String cls;
+
   /** Method signature, including types. */
   private final @Nullable @Interned String method;
 
@@ -432,8 +435,12 @@ public class PptName implements Serializable {
     return false;
   }
 
-  /** Debugging output. */
-  public String repr() {
+  /**
+   * Debugging output.
+   *
+   * @return a string representation of this
+   */
+  public String repr(@UnknownSignedness PptName this) {
     return "PptName: fullname="
         + fullname
         + "; fn_name="
@@ -518,7 +525,7 @@ public class PptName implements Serializable {
 
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied PptName this) {
+  public int hashCode(@GuardSatisfied @UnknownSignedness PptName this) {
     return fullname.hashCode();
   }
 

@@ -30,6 +30,7 @@ public class DtracePartitioner implements Closeable, Partitioner<String, String>
 
   /** reading from the file as a lazy iterator */
   private @Owning BufferedReader br;
+
   /** the name of the Daikon trace file */
   private String filename;
 

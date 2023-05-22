@@ -35,6 +35,7 @@ import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.framework.qual.Unused;
@@ -1691,7 +1692,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied Match this) {
+    public int hashCode(@GuardSatisfied @UnknownSignedness Match this) {
       return inv.getClass().hashCode();
     }
   }

@@ -7,6 +7,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -36,9 +37,11 @@ public final class VarComparabilityImplicit extends VarComparability implements 
 
   /** The number that indicates which comparable set the VarInfo belongs to. */
   int base;
+
   /** indexTypes[0] is comparability of the first index of this array. */
   // null only for the "unknown" type??
   VarComparabilityImplicit @Nullable [] indexTypes;
+
   /** Indicates how many of the indices are in use; there may be more indices than this. */
   int dimensions;
 
@@ -55,7 +58,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
 
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied VarComparabilityImplicit this) {
+  public int hashCode(@GuardSatisfied @UnknownSignedness VarComparabilityImplicit this) {
     if (base < 0) {
       // This is equals() to everything
       return -1;
@@ -123,7 +126,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   @Override
-  public VarComparability elementType(@GuardSatisfied VarComparabilityImplicit this) {
+  public VarComparability elementType(
+      @GuardSatisfied @UnknownSignedness VarComparabilityImplicit this) {
     if (cached_element_type == null) {
       // When Ajax is modified to output non-atomic info for arrays, this
       // check will no longer be necessary.
@@ -150,7 +154,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
 
   @Pure
   @Override
-  public VarComparability indexType(@GuardSatisfied VarComparabilityImplicit this, int dim) {
+  public VarComparability indexType(
+      @GuardSatisfied @UnknownSignedness VarComparabilityImplicit this, int dim) {
     // When Ajax is modified to output non-atomic info for arrays, this
     // check will no longer be necessary.
     if (dim < dimensions) {

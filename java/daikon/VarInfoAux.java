@@ -20,6 +20,7 @@ import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signedness.qual.Signed;
+import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -295,7 +296,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied VarInfoAux this) {
+  public int hashCode(@GuardSatisfied @UnknownSignedness VarInfoAux this) {
     return map.hashCode();
   }
 

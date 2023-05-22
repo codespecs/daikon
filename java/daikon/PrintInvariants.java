@@ -251,6 +251,7 @@ public final class PrintInvariants {
 
   /** Stores the output file stream if --output is specified. Null means System.out. */
   private static @Owning @Nullable OutputStream out_stream = null;
+
   /** If true, print C# metadata. */
   private static boolean print_csharp_metadata = false;
 
@@ -260,11 +261,13 @@ public final class PrintInvariants {
   // invariant.
   /** Output discard reasons for this class. If null, output discard reasons for all classes. */
   private static @MonotonicNonNull String discClass = null;
+
   /**
    * Comma-separated variable names. Output discard reasons if those are the variables. If null,
    * output discard reasons for all variable tuples.
    */
   private static @MonotonicNonNull String discVars = null;
+
   /**
    * Output discard reasons for this program point. If null, output discard reasons fro all program
    * points.
@@ -298,7 +301,10 @@ public final class PrintInvariants {
 
   /** See the documentation for this class. */
   public static void main(final String[] args)
-      throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
+      throws FileNotFoundException,
+          StreamCorruptedException,
+          OptionalDataException,
+          IOException,
           ClassNotFoundException {
     try {
       mainHelper(args);
@@ -314,7 +320,10 @@ public final class PrintInvariants {
    * appropriate to be called progrmmatically.
    */
   public static void mainHelper(String[] args)
-      throws FileNotFoundException, StreamCorruptedException, OptionalDataException, IOException,
+      throws FileNotFoundException,
+          StreamCorruptedException,
+          OptionalDataException,
+          IOException,
           ClassNotFoundException {
 
     LongOpt[] longopts =

@@ -40,16 +40,19 @@ public class ParameterDoclet implements Doclet {
 
   /** A value that indicates a method completed successfully. */
   private static final boolean OK = true;
+
   /** A value that indicates a method did not complete successfully. */
   private static final boolean FAILED = false;
 
   /** File name of destination for output. */
   private @Nullable String outFilename = null;
+
   /** If true, then output format is Texinfo. */
   private boolean formatTexinfo = false;
 
   /** The DocTrees instance assocated with the DocletEnvironment. */
   private DocTrees docTrees;
+
   /** Used to report errors. */
   private Reporter reporter;
 
@@ -137,18 +140,22 @@ public class ParameterDoclet implements Doclet {
      * If non-null, then include only variables whose fully-qualified name starts with this prefix.
      */
     public @Nullable String prefix;
+
     /**
      * If non-null, then include only variables with this simple name. Note that this is a field
      * name that starts with "dkconfig_", not a configuration option name.
      */
     public @Nullable String fieldName;
+
     /** Include all configuration options whose fully-qualified name is in the list. */
     public List<String> fqNames;
 
     /** The subsection name. */
     public String description;
+
     /** Text that appears in the subsection before the list of configuration options. */
     public String blurb;
+
     /** A map from a field name to its description. */
     public Map<String, String> fields;
 
@@ -369,8 +376,10 @@ public class ParameterDoclet implements Doclet {
 
   /** A value that indicates no description was found. */
   public static String NO_DESCRIPTION = "(no description provided)";
+
   /** A value that indicates no default value was found. */
   public static String UNKNOWN_DEFAULT = "The default value is not known.";
+
   /** A Pattern used to check for the end of a sentence. */
   public static Pattern endOfSentence;
 

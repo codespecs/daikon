@@ -132,6 +132,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   // Accessors
 
   private @Nullable VarInfo leaderCache = null;
+
   /**
    * Return the canonical VarInfo of this. Note that the leader never changes.
    *

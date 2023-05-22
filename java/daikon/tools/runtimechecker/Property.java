@@ -11,6 +11,7 @@ import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -24,6 +25,7 @@ public class Property implements Serializable {
 
   // The name of the method that this property describes.
   private final String method;
+
   /** The name of the method that this property describes. ("null" for object invariants.) */
   public String method(@GuardSatisfied Property this) {
     return method;
@@ -31,6 +33,7 @@ public class Property implements Serializable {
 
   // The kind of proerty (enter, exit or objectInvariant).
   private final Kind kind;
+
   /** The kind of property (enter, exit or objectInvariant). */
   public Kind kind(@GuardSatisfied Property this) {
     return kind;
@@ -38,6 +41,7 @@ public class Property implements Serializable {
 
   /** Daikon representation (as output by Daikon's default output format). */
   private final String daikonRep;
+
   /** Daikon representation (as output by Daikon's default output format). */
   public String daikonRep(@GuardSatisfied Property this) {
     return daikonRep;
@@ -98,7 +102,7 @@ public class Property implements Serializable {
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied Kind this) {
+    public int hashCode(@GuardSatisfied @UnknownSignedness Kind this) {
       return name.hashCode();
     }
 
@@ -157,7 +161,7 @@ public class Property implements Serializable {
 
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied Property this) {
+  public int hashCode(@GuardSatisfied @UnknownSignedness Property this) {
     return daikonRep.hashCode() + kind.hashCode() + (method == null ? 0 : method.hashCode());
   }
 

@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -316,14 +317,19 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
   private static class VarRelation {
     /** Name of the program point for the parent. */
     String parent_ppt_name;
+
     /** Prefix of the variable name that is not part of the parent name. */
     String local_prefix;
+
     /** Prefix of the parent that replaces the local prefix. Normally 'this'. */
     String parent_prefix;
+
     /** Top level variable for the relation. */
     String local_variable;
+
     /** Type of the relation (parent, user, etc) */
     String type;
+
     /** Number that identifies this relation within this ppt. */
     int id;
 
@@ -395,7 +401,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
 
     @Override
     @Pure
-    public int hashCode(@GuardSatisfied VarRelation this) {
+    public int hashCode(@GuardSatisfied @UnknownSignedness VarRelation this) {
       return (parent_ppt_name.hashCode()
           + ((local_variable == null) ? 0 : local_variable.hashCode()));
     }
