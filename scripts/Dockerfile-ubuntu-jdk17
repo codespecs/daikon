@@ -12,6 +12,11 @@ MAINTAINER Michael Ernst <mernst@cs.washington.edu>
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
+  apt-utils
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
   autoconf \
   automake \
   bc \
@@ -20,6 +25,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   git \
   graphviz \
   jq \
+  lsb-release \
   m4 \
   make \
   rsync \
@@ -31,5 +37,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   openjdk-17-jdk
 
 RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get autoremove \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/*

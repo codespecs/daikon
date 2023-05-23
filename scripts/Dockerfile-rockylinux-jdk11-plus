@@ -41,7 +41,6 @@ RUN dnf -q -y install \
 
 RUN dnf -q -y install \
   ctags \
-  curl \
   ctags \
   gcc-c++ \
   graphviz \

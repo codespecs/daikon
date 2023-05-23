@@ -1,0 +1,99 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== COPYRIGHT
+==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
+==PID== Command: ./perl sort-half.t
+==PID== 
+MISMATCHED on exit_function! f: ..Perl_mg_get() !=  ..Perl_magic_get()
+DetectedEntryIP: <STATIC_ADDR> - AssumedEntryIP: <STATIC_ADDR>
+DetctedExitIP: <STATIC_ADDR> - AssumedExitIp: <STATIC_ADDR>
+MISMATCHED on exit_function! f: ..Perl_mg_set() !=  ..Perl_magic_set()
+DetectedEntryIP: <STATIC_ADDR> - AssumedEntryIP: <STATIC_ADDR>
+DetctedExitIP: <STATIC_ADDR> - AssumedExitIp: <STATIC_ADDR>
+MISMATCHED on exit_function! f: ..Perl_mg_get() !=  ..Perl_magic_get()
+DetectedEntryIP: <STATIC_ADDR> - AssumedEntryIP: <STATIC_ADDR>
+DetctedExitIP: <STATIC_ADDR> - AssumedExitIp: <STATIC_ADDR>
+MISMATCHED on exit_function! f: ..perl_run() !=  perl.c.S_my_exit_jump()
+DetectedEntryIP: <STATIC_ADDR> - AssumedEntryIP: <STATIC_ADDR>
+DetctedExitIP: <STATIC_ADDR> - AssumedExitIp: <STATIC_ADDR>
+1..129
+# 1: x = 'AbelCaincatdogx', expected = 'AbelCaincatdogx'
+ok 1
+# 2: x = 'xdogcatCainAbel', expected = 'xdogcatCainAbel'
+ok 2
+# 3: x = 'xdogcatCainAbel', expected = 'xdogcatCainAbel'
+ok 3
+# 4: x = 'AbelAxedCaincatchaseddoggonepunishedtoxyz', expected = 'AbelAxedCaincatchaseddoggonepunishedtoxyz'
+ok 4
+ok 5
+ok 6
+ok 7
+ok 8
+ok 9
+ok 10
+# 11: x = xdogcatCainAbel, expected = 'xdogcatCainAbel'
+ok 11
+# 12: x = xdogcatCainAbel, expected = 'xdogcatCainAbel'
+ok 12
+ok 13
+# x = '1 2 3 4'
+ok 14
+# x = '1 2 3 4'
+ok 15
+# x = '1 2 3 4'
+ok 16
+# x = '1 2 3 4'
+ok 17
+ok 18
+ok 19
+ok 20
+ok 21
+ok 22
+ok 23
+ok 24
+ok 25
+ok 26
+ok 27
+ok 28
+ok 29
+ok 30
+ok 31
+ok 32
+ok 33
+ok 34
+ok 35
+ok 36
+ok 37
+ok 38
+ok 39
+ok 40
+# x = '1996 255 90 19 5'
+ok 41
+# x = 'AbelCaincatdogx'; expected = 'AbelCaincatdogx'
+ok 42
+# x = 'xdogcatCainAbel'; expected = 'xdogcatCainAbel'
+ok 43
+# x = '5 19 90 255 1996'
+ok 44
+# x = '1996 255 90 19 5'
+ok 45
+# x = 'AbelCaincatdogx'; expected = 'AbelCaincatdogx'
+ok 46
+# x = 'xdogcatCainAbel'; expected = 'xdogcatCainAbel'
+ok 47
+ok 48
+# x = '1996 255 90 19 5'
+ok 49
+# x = '90 5 255 1996 19'
+ok 50
+ok 51
+ok 52
+ok 53
+ok 54
+ok 55
+ok 56
+# x = '1 2 3 4'
+ok 57
+ok 58
+==PID== 
+==PID== For lists of detected and suppressed errors, rerun with: -s
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
