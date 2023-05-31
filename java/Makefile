@@ -924,8 +924,8 @@ NULLNESS_ONEFILE ?= daikon/AnnotateNullable.java daikon/suppress/NIS.java
 typecheck-nullness-onefile: compile compile-typequals
 	${MAKE} typecheck-nullness-onefile-norecompile
 typecheck-nullness-onefile-norecompile:
-	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} -AstubWarnIfNotFound ${NULLNESS_ONEFILE}
-	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} -AstubWarnIfNotFound ${NULLNESS_ONEFILE}
+	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} -AstubWarnIfNotFound -verbose -AdumpOnErrors -AstubDebug -Ashowchecks ${NULLNESS_ONEFILE}
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} -AstubWarnIfNotFound -verbose -AdumpOnErrors -AstubDebug -Ashowchecks ${NULLNESS_ONEFILE}
 
 typecheck-prototype: compile compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
