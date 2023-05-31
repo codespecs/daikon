@@ -30,6 +30,7 @@ INSTALL ?= /usr/bin/install
 # By default, if environment variable CHECKERFRAMEWORK is set, that Checker Framework is used.
 # To force use of the Checker Framework in java/lib/, run like this:
 #   make NO_LOCAL_CHECKERFRAMEWORK=true typecheck-nullness
+# Note that CI uses the Checker Framework built from the repository.
 ifndef NO_LOCAL_CHECKERFRAMEWORK
   ifdef CHECKERFRAMEWORK
     ifneq ("$(wildcard $(CHECKERFRAMEWORK))","")
@@ -919,11 +920,12 @@ typecheck-nullness: compile compile-typequals
 # NULLNESS_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make typecheck-nullness-onefile
 # NULLNESS_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
 # NULLNESS_ONEFILE ?= daikon/FileIO.java
-NULLNESS_ONEFILE ?= daikon/Daikon.java
+NULLNESS_ONEFILE ?= daikon/AnnotateNullable.java daikon/suppress/NIS.java
 typecheck-nullness-onefile: compile compile-typequals
 	${MAKE} typecheck-nullness-onefile-norecompile
 typecheck-nullness-onefile-norecompile:
-	${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_ONEFILE}
+	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} -AstubWarnIfNotFound ${NULLNESS_ONEFILE}
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} -AstubWarnIfNotFound ${NULLNESS_ONEFILE}
 
 typecheck-prototype: compile compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
