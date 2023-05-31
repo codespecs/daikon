@@ -920,7 +920,7 @@ typecheck-nullness: compile compile-typequals
 # NULLNESS_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make typecheck-nullness-onefile
 # NULLNESS_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
 # NULLNESS_ONEFILE ?= daikon/FileIO.java
-NULLNESS_ONEFILE ?= daikon/AnnotateNullableSmall.java
+NULLNESS_ONEFILE ?= daikon/AnnotateNullable.java daikon/suppress/NIS.java
 typecheck-nullness-onefile: compile compile-typequals
 	${MAKE} typecheck-nullness-onefile-norecompile
 typecheck-nullness-onefile-norecompile:
