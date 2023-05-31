@@ -27,9 +27,14 @@ JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -sourc
 
 INSTALL ?= /usr/bin/install
 
-ifdef CHECKERFRAMEWORK
-  ifneq ("$(wildcard $(CHECKERFRAMEWORK))","")
-    CHECKERFRAMEWORK_JAR_DIR ?= ${CHECKERFRAMEWORK}/checker/dist
+# By default, if environment variable CHECKERFRAMEWORK is set, that Checker Framework is used.
+# To force use of the Checker Framework in java/lib/, run like this:
+#   make NO_LOCAL_CHECKERFRAMEWORK=true typecheck-nullness
+ifndef NO_LOCAL_CHECKERFRAMEWORK
+  ifdef CHECKERFRAMEWORK
+    ifneq ("$(wildcard $(CHECKERFRAMEWORK))","")
+      CHECKERFRAMEWORK_JAR_DIR ?= ${CHECKERFRAMEWORK}/checker/dist
+    endif
   endif
 endif
 CHECKERFRAMEWORK_JAR_DIR ?= ${DAIKONDIR}/java/lib/checker-framework
