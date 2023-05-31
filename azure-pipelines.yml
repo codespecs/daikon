@@ -355,7 +355,7 @@ jobs:
       java -version
       javac -version
     displayName: show Java version
-  - bash: ./scripts/test-typecheck.sh
+  - bash: ./scripts/test-typecheck-onefile.sh
     displayName: test-typecheck-onefile.sh
 
 - job: quick_txt_diff_rockylinux_jdk8
