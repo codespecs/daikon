@@ -94,14 +94,6 @@ public class AnnotateNullable2 {
           object_ppt.ppt_name.getShortClassName(), object_ppt.num_samples(), class_samples);
     }
 
-    // Process static fields
-    if (class_ppt != null) {
-      process_obj_fields(class_ppt);
-    }
-
-    // Process member (non-static) fields
-    process_obj_fields(object_ppt);
-
     // Process static methods
     if (class_ppt != null) {
       for (PptRelation child_rel : class_ppt.children) {
@@ -111,7 +103,6 @@ public class AnnotateNullable2 {
           continue;
         }
         // debug.log("processing static method %s, type %s", child, child.type);
-        process_method(child);
       }
     } else {
       String classname = object_ppt.ppt_name.getFullClassName();
@@ -119,9 +110,7 @@ public class AnnotateNullable2 {
       @SuppressWarnings("nullness") // map: class_map has entry per classname
       @NonNull List<PptTopLevel> static_methods = class_map.get(classname);
       assert static_methods != null : classname;
-      for (PptTopLevel child : static_methods) {
-        process_method(child);
-      }
+      for (PptTopLevel child : static_methods) {}
     }
 
     // Process member (non-static) methods
@@ -132,7 +121,6 @@ public class AnnotateNullable2 {
         continue;
       }
       // debug.log("processing method %s, type %s", child, child.type);
-      process_method(child);
     }
 
     if (stub_format) {
