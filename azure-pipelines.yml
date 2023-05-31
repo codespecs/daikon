@@ -47,6 +47,8 @@ jobs:
     displayName: test-quick-txt-diff.sh
 
 - job: quick_txt_diff_ubuntu_jdk17
+  dependsOn:
+    - typecheck_onefile_jdk20
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17:latest
@@ -96,6 +98,8 @@ jobs:
     displayName: test-nonquick-txt-diff.sh
 
 - job: nonquick_txt_diff_ubuntu_jdk17
+  dependsOn:
+    - typecheck_onefile_jdk20
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17:latest
@@ -145,6 +149,8 @@ jobs:
     displayName: test-non-txt-diff.sh
 
 - job: non_txt_diff_ubuntu_jdk17
+  dependsOn:
+    - typecheck_onefile_jdk20
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17:latest
@@ -198,6 +204,8 @@ jobs:
     displayName: test-misc.sh
 
 - job: misc_ubuntu_jdk17
+  dependsOn:
+    - typecheck_onefile_jdk20
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17-plus:latest
@@ -251,6 +259,8 @@ jobs:
     displayName: test-kvasir.sh
 
 - job: kvasir_ubuntu_jdk17
+  dependsOn:
+    - typecheck_onefile_jdk20
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17-plus:latest
@@ -311,6 +321,8 @@ jobs:
     displayName: test-typecheck.sh
 
 - job: typecheck_jdk17
+  dependsOn:
+    - typecheck_onefile_jdk20
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17-plus:latest
