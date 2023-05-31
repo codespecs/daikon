@@ -27,7 +27,7 @@ import org.plumelib.options.Options;
  * This is not necessary, however, for correct operation. File {@code annotate_nullable.config} in
  * the distribution does this.
  */
-public class AnnotateNullable {
+public class AnnotateNullable2 {
 
   // Why is this variable static?
   static PptMap ppts = new PptMap(); // dummy value, to satisfy Nullness Checker
