@@ -344,9 +344,6 @@ jobs:
     displayName: test-typecheck.sh
 
 - job: typecheck_onefile_jdk20
-  dependsOn:
-    - jdk17_jobs
-    - typecheck_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk20-plus:latest
@@ -359,7 +356,7 @@ jobs:
       javac -version
     displayName: show Java version
   - bash: ./scripts/test-typecheck.sh
-    displayName: test-typecheck.sh
+    displayName: test-typecheck-onefile.sh
 
 - job: quick_txt_diff_rockylinux_jdk8
   dependsOn:
