@@ -210,14 +210,6 @@ public class AnnotateNullable2 {
           object_ppt.ppt_name.getShortClassName(), object_ppt.num_samples(), class_samples);
     }
 
-    // Process static fields
-    if (class_ppt != null) {
-      process_obj_fields(class_ppt);
-    }
-
-    // Process member (non-static) fields
-    process_obj_fields(object_ppt);
-
     // Process static methods
     if (class_ppt != null) {
       for (PptRelation child_rel : class_ppt.children) {
@@ -331,46 +323,6 @@ public class AnnotateNullable2 {
       for (int i = 0; i < params.size(); i++) {
         // Print the annotation for this parameter
         System.out.printf("    parameter #%d : %s // %s%n", i, annos.get(i), names.get(i));
-      }
-    }
-  }
-
-  /** Print out the annotations for each field in the object or class. */
-  public static void process_obj_fields(PptTopLevel ppt) {
-
-    for (VarInfo vi : ppt.var_infos) {
-
-      assert !vi.isPrestate() : vi;
-
-      // Skip anyone with a parent in the hierarchy.  We are only
-      // interested in them at the top (e.g., we don't want to see
-      // object fields in each method).
-      if (!vi.parents.isEmpty()) {
-        continue;
-      }
-
-      // Skip variables that are always non-null.
-      if (vi.aux.isNonNull()) {
-        continue;
-      }
-
-      // Skip any variable that is enclosed by a variable other than 'this'.
-      // These are fields and can only be annotated where they are declared.
-      VarInfo evar = vi.get_enclosing_var();
-      if ((evar != null) && !evar.name().equals("this")) {
-        // System.out.printf("  enclosed %s %s%n", vi.type, vi.name());
-        continue;
-      }
-
-      // print out the entry for this field
-      String annotation = "";
-      if (vi.file_rep_type.isHashcode()) {
-        annotation = get_annotation(ppt, vi);
-      }
-      if (stub_format) {
-        System.out.printf("  field %s %s {} // %s%n", vi, annotation, vi.type);
-      } else {
-        System.out.printf("  field %s : %s // %s%n", vi, annotation, vi.type);
       }
     }
   }
