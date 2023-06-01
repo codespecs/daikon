@@ -1,18 +1,12 @@
 package daikon;
 
 import daikon.PptTopLevel.PptType;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.checkerframework.checker.interning.qual.Interned;
-import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.options.Option;
-import org.plumelib.options.Options;
 
 /**
  * AnnotateNullable reads a Daikon invariant file and determines which reference variables have seen
@@ -56,132 +50,12 @@ public class AnnotateNullable2 {
   @Option("-n Insert NonNull as well as Nullable annotations")
   public static boolean nonnull_annotations = false;
 
-  public static void main(String[] args) throws IOException {
-
-    Options options =
-        new Options("plume.AnnotateNullable [options] <inv_file>", AnnotateNullable.class);
-    String[] inv_files = options.parse(true, args);
-    assert inv_files.length == 1;
-
-    // Read the serialized invariant file
-    File inv_file = new File(inv_files[0]);
-    ppts = FileIO.read_serialized_pptmap(inv_file, true);
-    Daikon.all_ppts = ppts;
-    // verbose.log("Finished reading %d program points", ppts.size());
-
-    // Setup the list of proto invariants and initialize NIS suppressions
-    Daikon.setup_proto_invs();
-    Daikon.setup_NISuppression();
-
-    // Write out the definitions of our annotations
-    if (stub_format) {
-      System.out.println("import org.checkerframework.checker.nullness.qual.Nullable;");
-      System.out.println("import org.checkerframework.checker.nullness.qual.NonNull;");
-      System.out.println();
-    } else {
-      System.out.println("package org.checkerframework.checker.nullness.qual:");
-      System.out.println("annotation @Nullable:");
-      System.out.println("annotation @NonNull:");
-      System.out.println();
-    }
-
-    // Find all exit ppts that do not have a parent and determine what
-    // class they are associated with.  These are static methods for classes
-    // without any static variables (no class ppt is created if there are no
-    // static variables)
-
-    // First find all of the classes
-    for (PptTopLevel ppt : ppts.pptIterable()) {
-      if (ppt.is_object()) {
-        String classname = ppt.name().replace(":::OBJECT", "");
-        assert !class_map.containsKey(classname) : classname;
-        List<PptTopLevel> static_methods = new ArrayList<>();
-        class_map.put(classname, static_methods);
-      }
-    }
-
-    // Then, add combined exit points for static methods to their class.  A
-    // static method can be identified because it will not have the OBJECT
-    // point as a parent.
-    for (PptTopLevel ppt : ppts.pptIterable()) {
-      if (!ppt.is_combined_exit()) {
-        continue;
-      }
-
-      String name = ppt.name().replaceFirst("[(].*$", "");
-      int lastdot = name.lastIndexOf('.');
-      @SuppressWarnings("keyfor") // application invariant:  KeyFor and substring
-      // @KeyFor because class_map has entry per class, and this method is in some class
-      @KeyFor("class_map") String classname = name.substring(0, lastdot);
-      // System.out.printf("classname for ppt %s is '%s'%n", name, classname);
-      @NonNull List<PptTopLevel> static_methods = class_map.get(classname);
-      assert static_methods != null : classname;
-      static_methods.add(ppt);
-    }
-
-    // Debug print all of the static methods
-    if (false) {
-      for (String classname : class_map.keySet()) {
-        System.out.printf("class %s static methods: %s%n", classname, class_map.get(classname));
-      }
-    }
-
-    // Make sure that the static methods found by inference, match those
-    // found for any class ppts
-    for (PptTopLevel ppt : ppts.pptIterable()) {
-      if (ppt.is_class()) {
-        @SuppressWarnings(
-            "nullness") // map: retrieve class name from class Ppt name, with string manipulation
-        @NonNull List<PptTopLevel> static_methods =
-            class_map.get(ppt.name().replace(":::CLASS", ""));
-        int child_cnt = 0;
-        // TODO: Once Checker Framework issue 565 has been fixed (https://tinyurl.com/cfissue/565),
-        // change the following two lines back to
-        // for (PptRelation child_rel : ppt.children) {
-        for (int i = 0; i < ppt.children.size(); i++) {
-          PptRelation child_rel = ppt.children.get(i);
-          PptTopLevel child = child_rel.child;
-          // Skip enter ppts, all of the info is at the exit.
-          if ((child.type == PptType.ENTER) || (child.type == PptType.OBJECT)) {
-            continue;
-          }
-          child_cnt++;
-          assert static_methods.contains(child) : child;
-        }
-        assert child_cnt == static_methods.size() : static_methods;
-      }
-    }
-
-    // Process each class.
-    for (PptTopLevel ppt : ppts.pptIterable()) {
-
-      // Skip synthetic program points
-      if (ppt.name().startsWith("$")) {
-        continue;
-      }
-
-      // Skip program points that are not OBJECT ppts
-      if (ppt.is_object()) {
-        process_class(ppt);
-      }
-    }
-  }
-
-  // Returns null if no corresponding class ppt exists
-  private static @Nullable PptTopLevel class_for_object(PptTopLevel object_ppt) {
-    if (object_ppt.parents.size() == 0) {
-      return null;
-    }
-    assert object_ppt.parents.size() == 1 : object_ppt;
-    return object_ppt.parents.get(0).parent;
-  }
-
   // Process a class, including all its methods.
   // Takes the object program point as its argument.
   public static void process_class(PptTopLevel object_ppt) {
 
     // Get the class program point (if any)
-    PptTopLevel class_ppt = class_for_object(object_ppt);
+    PptTopLevel class_ppt = object_ppt;
 
     String class_samples = "-";
     if (class_ppt != null) {
