@@ -362,7 +362,7 @@ jobs:
   timeoutInMinutes: 70
   steps:
   - checkout: self
-    fetchDepth: 25
+    fetchDepth: 1
   - bash: |
       java -version
       javac -version
