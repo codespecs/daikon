@@ -11,10 +11,8 @@ import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
-import org.plumelib.reflection.Signatures;
 
 /**
  * AnnotateNullable reads a Daikon invariant file and determines which reference variables have seen
@@ -106,7 +104,7 @@ public class AnnotateNullable2 {
     // static method can be identified because it will not have the OBJECT
     // point as a parent.
     for (PptTopLevel ppt : ppts.pptIterable()) {
-      if (!ppt.is_combined_exit() || !is_static_method(ppt)) {
+      if (!ppt.is_combined_exit()) {
         continue;
       }
 
@@ -370,9 +368,9 @@ public class AnnotateNullable2 {
         annotation = get_annotation(ppt, vi);
       }
       if (stub_format) {
-        System.out.printf("  field %s %s {} // %s%n", field_name(vi), annotation, vi.type);
+        System.out.printf("  field %s %s {} // %s%n", vi, annotation, vi.type);
       } else {
-        System.out.printf("  field %s : %s // %s%n", field_name(vi), annotation, vi.type);
+        System.out.printf("  field %s : %s // %s%n", vi, annotation, vi.type);
       }
     }
   }
@@ -389,58 +387,6 @@ public class AnnotateNullable2 {
     if (method.equals(ppt.ppt_name.getShortClassName())) {
       method = "<init>";
     }
-
-    // Problem:  I need the return type, but Chicory does not output it.
-    // So, I could try to retrieve it from the "return" variable in the
-    // program point (which is, fortunately, always an exit point), or
-    // change Chicory to output it.
-    VarInfo returnVar = ppt.find_var_by_name("return");
-    @SuppressWarnings(
-        "signature" // application invariant: returnVar.type.toString() is a binary name (if
-    // returnVar is non-null), because we are processing a Java program
-    )
-    String returnType =
-        returnVar == null ? "V" : Signatures.binaryNameToFieldDescriptor(returnVar.type.toString());
-
-    return method + Signatures.arglistToJvm(java_args) + returnType;
-  }
-
-  /**
-   * Returns the field name of the specified variable. This is the relative name for instance
-   * fields, but the relative name is not specified for static fields (because there is no enclosing
-   * variable with the full name). The field name is obtained in that case, by removing the
-   * package/class specifier.
-   */
-  public static String field_name(VarInfo vi) {
-
-    if (vi.relative_name != null) {
-      return vi.relative_name;
-    }
-
-    String field_name = vi.name();
-    int pt = field_name.lastIndexOf('.');
-    if (pt == -1) {
-      return field_name;
-    } else {
-      return field_name.substring(pt + 1);
-    }
-  }
-
-  /**
-   * Returns whether or not the method of the specified ppt is static or not. The ppt must be an
-   * exit ppt. Exit ppts that do not have an object as a parent are inferred to be static. This does
-   * not work for enter ppts, because constructors do not have the object as a parent on entry.
-   */
-  @Pure
-  public static boolean is_static_method(PptTopLevel ppt) {
-
-    assert ppt.is_exit() : ppt;
-    for (PptRelation rel : ppt.parents) {
-      if (rel.parent.is_object()) {
-        return false;
-      }
-    }
-
-    return true;
+    return method;
   }
 }
