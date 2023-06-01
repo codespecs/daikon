@@ -219,7 +219,6 @@ public class AnnotateNullable2 {
           continue;
         }
         // debug.log("processing static method %s, type %s", child, child.type);
-        process_method(child);
       }
     } else {
       String classname = object_ppt.ppt_name.getFullClassName();
@@ -227,9 +226,7 @@ public class AnnotateNullable2 {
       @SuppressWarnings("nullness") // map: class_map has entry per classname
       @NonNull List<PptTopLevel> static_methods = class_map.get(classname);
       assert static_methods != null : classname;
-      for (PptTopLevel child : static_methods) {
-        process_method(child);
-      }
+      for (PptTopLevel child : static_methods) {}
     }
 
     // Process member (non-static) methods
@@ -240,7 +237,6 @@ public class AnnotateNullable2 {
         continue;
       }
       // debug.log("processing method %s, type %s", child, child.type);
-      process_method(child);
     }
 
     if (stub_format) {
@@ -272,59 +268,6 @@ public class AnnotateNullable2 {
       annotation = "@" + annotation;
     }
     return annotation;
-  }
-
-  /** Print out the annotations for the specified method. */
-  public static void process_method(PptTopLevel ppt) {
-
-    assert ppt.type == PptType.EXIT : ppt;
-
-    // Get all of the parameters to the method and the return value
-    List<VarInfo> params = new ArrayList<>();
-    VarInfo retvar = null;
-    for (VarInfo vi : ppt.var_infos) {
-      if (vi.var_kind == VarInfo.VarKind.RETURN) {
-        retvar = vi;
-      } else {
-        if (vi.isParam()
-            && (vi.name() != "this") // interned
-            && !vi.isPrestate()) {
-          params.add(vi);
-        }
-      }
-    }
-
-    // The formatted annotation for the return value with a leading space, or empty string
-    String return_annotation = (retvar == null ? "" : " " + get_annotation(ppt, retvar));
-
-    // Look up the annotation for each parameter.
-    List<String> names = new ArrayList<>();
-    List<String> annos = new ArrayList<>();
-    for (VarInfo param : params) {
-      String annotation = "";
-      names.add(param.name());
-      if (param.file_rep_type.isHashcode()) {
-        annotation = get_annotation(ppt, param);
-      }
-      annos.add(annotation);
-    }
-
-    // Print out the method declaration
-    if (stub_format) {
-      System.out.printf(" %s %s(", return_annotation, ppt.ppt_name.getMethodName());
-      for (int i = 0; i < params.size(); i++) {
-        if (i != 0) System.out.printf(" ,");
-        System.out.printf("%s %s %s", annos.get(i), "type-goes-here", names.get(i));
-      }
-      System.out.printf("); // %d samples%n", ppt.num_samples());
-    } else {
-      System.out.printf("  method %s : // %d samples%n", jvm_signature(ppt), ppt.num_samples());
-      System.out.printf("    return:%s%n", return_annotation);
-      for (int i = 0; i < params.size(); i++) {
-        // Print the annotation for this parameter
-        System.out.printf("    parameter #%d : %s // %s%n", i, annos.get(i), names.get(i));
-      }
-    }
   }
 
   /** Returns a JVM signature for the method. */
