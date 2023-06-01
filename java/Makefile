@@ -921,7 +921,7 @@ typecheck-nullness: compile compile-typequals
 # NULLNESS_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
 # NULLNESS_ONEFILE ?= daikon/FileIO.java
 # NULLNESS_ONEFILE ?= daikon/AnnotateNullable.java daikon/suppress/NIS.java
-NULLNESS_ONEFILE ?= daikon/AnnotateNullable2.java daikon/suppress/NIS.java
+NULLNESS_ONEFILE ?= daikon/AnnotateNullable2.java
 typecheck-nullness-onefile: compile compile-typequals
 	${MAKE} typecheck-nullness-onefile-norecompile
 typecheck-nullness-onefile-norecompile:
