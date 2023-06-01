@@ -11,8 +11,10 @@ import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
+import org.plumelib.reflection.Signatures;
 
 /**
  * AnnotateNullable reads a Daikon invariant file and determines which reference variables have seen
@@ -104,7 +106,7 @@ public class AnnotateNullable2 {
     // static method can be identified because it will not have the OBJECT
     // point as a parent.
     for (PptTopLevel ppt : ppts.pptIterable()) {
-      if (!ppt.is_combined_exit()) {
+      if (!ppt.is_combined_exit() || !is_static_method(ppt)) {
         continue;
       }
 
@@ -326,7 +328,7 @@ public class AnnotateNullable2 {
       }
       System.out.printf("); // %d samples%n", ppt.num_samples());
     } else {
-      System.out.printf("  method %s : // %d samples%n", ppt, ppt.num_samples());
+      System.out.printf("  method %s : // %d samples%n", jvm_signature(ppt), ppt.num_samples());
       System.out.printf("    return:%s%n", return_annotation);
       for (int i = 0; i < params.size(); i++) {
         // Print the annotation for this parameter
@@ -368,10 +370,77 @@ public class AnnotateNullable2 {
         annotation = get_annotation(ppt, vi);
       }
       if (stub_format) {
-        System.out.printf("  field %s %s {} // %s%n", vi, annotation, vi.type);
+        System.out.printf("  field %s %s {} // %s%n", field_name(vi), annotation, vi.type);
       } else {
-        System.out.printf("  field %s : %s // %s%n", vi, annotation, vi.type);
+        System.out.printf("  field %s : %s // %s%n", field_name(vi), annotation, vi.type);
       }
     }
+  }
+
+  /** Returns a JVM signature for the method. */
+  public static String jvm_signature(PptTopLevel ppt) {
+
+    @SuppressWarnings("nullness") // Java method, so getMethodName() != null
+    @NonNull String method = ppt.ppt_name.getMethodName();
+    @SuppressWarnings("nullness") // Java method, so getSignature() != null
+    @NonNull String java_sig = ppt.ppt_name.getSignature();
+    String java_args = java_sig.replace(method, "");
+    // System.out.printf("m/s/a = %s %s %s%n", method, java_sig, java_args);
+    if (method.equals(ppt.ppt_name.getShortClassName())) {
+      method = "<init>";
+    }
+
+    // Problem:  I need the return type, but Chicory does not output it.
+    // So, I could try to retrieve it from the "return" variable in the
+    // program point (which is, fortunately, always an exit point), or
+    // change Chicory to output it.
+    VarInfo returnVar = ppt.find_var_by_name("return");
+    @SuppressWarnings(
+        "signature" // application invariant: returnVar.type.toString() is a binary name (if
+    // returnVar is non-null), because we are processing a Java program
+    )
+    String returnType =
+        returnVar == null ? "V" : Signatures.binaryNameToFieldDescriptor(returnVar.type.toString());
+
+    return method + Signatures.arglistToJvm(java_args) + returnType;
+  }
+
+  /**
+   * Returns the field name of the specified variable. This is the relative name for instance
+   * fields, but the relative name is not specified for static fields (because there is no enclosing
+   * variable with the full name). The field name is obtained in that case, by removing the
+   * package/class specifier.
+   */
+  public static String field_name(VarInfo vi) {
+
+    if (vi.relative_name != null) {
+      return vi.relative_name;
+    }
+
+    String field_name = vi.name();
+    int pt = field_name.lastIndexOf('.');
+    if (pt == -1) {
+      return field_name;
+    } else {
+      return field_name.substring(pt + 1);
+    }
+  }
+
+  /**
+   * Returns whether or not the method of the specified ppt is static or not. The ppt must be an
+   * exit ppt. Exit ppts that do not have an object as a parent are inferred to be static. This does
+   * not work for enter ppts, because constructors do not have the object as a parent on entry.
+   */
+  @Pure
+  public static boolean is_static_method(PptTopLevel ppt) {
+
+    assert ppt.is_exit() : ppt;
+    for (PptRelation rel : ppt.parents) {
+      if (rel.parent.is_object()) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
