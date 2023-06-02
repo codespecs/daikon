@@ -34,7 +34,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
-  openjdk-19-jdk
+  openjdk-20-jdk
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get autoremove \

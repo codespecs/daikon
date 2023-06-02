@@ -27,9 +27,15 @@ JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -sourc
 
 INSTALL ?= /usr/bin/install
 
-ifdef CHECKERFRAMEWORK
-  ifneq ("$(wildcard $(CHECKERFRAMEWORK))","")
-    CHECKERFRAMEWORK_JAR_DIR ?= ${CHECKERFRAMEWORK}/checker/dist
+# By default, if environment variable CHECKERFRAMEWORK is set, that Checker Framework is used.
+# To force use of the Checker Framework in java/lib/, run like this:
+#   make NO_LOCAL_CHECKERFRAMEWORK=true typecheck-nullness
+# Note that CI uses the Checker Framework built from the repository.
+ifndef NO_LOCAL_CHECKERFRAMEWORK
+  ifdef CHECKERFRAMEWORK
+    ifneq ("$(wildcard $(CHECKERFRAMEWORK))","")
+      CHECKERFRAMEWORK_JAR_DIR ?= ${CHECKERFRAMEWORK}/checker/dist
+    endif
   endif
 endif
 CHECKERFRAMEWORK_JAR_DIR ?= ${DAIKONDIR}/java/lib/checker-framework
@@ -918,7 +924,8 @@ NULLNESS_ONEFILE ?= daikon/Daikon.java
 typecheck-nullness-onefile: compile compile-typequals
 	${MAKE} typecheck-nullness-onefile-norecompile
 typecheck-nullness-onefile-norecompile:
-	${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_ONEFILE}
+	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_ONEFILE}
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_ONEFILE}
 
 typecheck-prototype: compile compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
