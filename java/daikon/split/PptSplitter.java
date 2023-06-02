@@ -34,8 +34,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.CollectionsPlume;
+import org.plumelib.util.MPair;
 import org.plumelib.util.OrderedPairIterator;
-import org.plumelib.util.Pair;
 
 /**
  * PptSplitter contains the splitter and its associated PptConditional ppts. Currently all splitters
@@ -700,11 +700,11 @@ public class PptSplitter implements Serializable {
     for (OrderedPairIterator<Invariant> opi =
             new OrderedPairIterator<Invariant>(ss1.iterator(), ss2.iterator(), icfp);
         opi.hasNext(); ) {
-      Pair<@Nullable Invariant, @Nullable Invariant> pair = opi.next();
-      if ((pair.a == null) || (pair.b == null)
+      MPair<@Nullable Invariant, @Nullable Invariant> pair = opi.next();
+      if ((pair.first == null) || (pair.second == null)
       // || (icfp.compare(pair.a, pair.b) != 0)
       ) {
-        result.add(new @Nullable Invariant[] {pair.a, pair.b});
+        result.add(new @Nullable Invariant[] {pair.first, pair.second});
       }
     }
     return result;
@@ -735,7 +735,7 @@ public class PptSplitter implements Serializable {
     // for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<>(ss1.iterator(),
     //                                 ss2.iterator(), icfp);
     //      opi.hasNext(); ) {
-    //   Pair<@Nullable Invariant,@Nullable Invariant> pair = opi.next();
+    //   IPair<@Nullable Invariant,@Nullable Invariant> pair = opi.next();
     //   if (pair.a != null && pair.b != null) {
     //     Invariant inv1 = pair.a;
     //     Invariant inv2 = pair.b;

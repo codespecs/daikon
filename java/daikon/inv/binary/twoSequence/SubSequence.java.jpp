@@ -93,7 +93,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
-import org.plumelib.util.Pair;
+import org.plumelib.util.IPair;
 import org.plumelib.util.UtilPlume;
 import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
@@ -320,22 +320,22 @@ public class CLASSNAME extends SUPERCLASS {
 @return a DiscardInfo, or null if the Invariant is not an obvious subsequence  */
   @Pure
   public static @Nullable DiscardInfo isObviousSubSequence(Invariant inv, VarInfo subvar, VarInfo supervar) {
-    Pair<DiscardCode,String> pcds = isObviousSubSequence(subvar, supervar);
+    IPair<DiscardCode,String> pcds = isObviousSubSequence(subvar, supervar);
     if (pcds == null) {
       return null;
     } else {
-      return new DiscardInfo(inv, pcds.a, pcds.b);
+      return new DiscardInfo(inv, pcds.first, pcds.second);
     }
   }
 
   /**
-   * Returns a Pair of a DiscardCode and a discardReason string, or null if the Invariant is not an
+   * Returns a IPair of a DiscardCode and a discardReason string, or null if the Invariant is not an
    * obvious subsequence.
-   * @return a Pair of a DiscardCode and a discardReason string, or null if the Invariant is not an
+   * @return a IPair of a DiscardCode and a discardReason string, or null if the Invariant is not an
    *   obvious subsequence
    */
   @Pure
-  public static @Nullable Pair<DiscardCode,String> isObviousSubSequence(VarInfo subvar, VarInfo supervar) {
+  public static @Nullable IPair<DiscardCode,String> isObviousSubSequence(VarInfo subvar, VarInfo supervar) {
     // Must typecheck since this could be called with non-sequence variables in
     // some methods.
     ProglangType rep1 = subvar.rep_type;
@@ -372,7 +372,7 @@ public class CLASSNAME extends SUPERCLASS {
       discardCode = DiscardCode.obvious;
       discardString = "Invariants involving subsets/subsequences of unions/intersections are suppressed";
       debug.fine("  returning true because of union or intersection");
-      return Pair.<DiscardCode,String>of(discardCode, discardString);
+      return IPair.<DiscardCode,String>of(discardCode, discardString);
     }
 
     if (subvar.derived instanceof SEQUENCESPREDICATE) {
@@ -383,7 +383,7 @@ public class CLASSNAME extends SUPERCLASS {
         discardCode = DiscardCode.obvious;
         discardString = subvar.name()+" is derived from "+supervar.name();
         debug.fine("  returning true because of predicate slicing");
-        return Pair.of(discardCode, discardString + " [pred slicing]");
+        return IPair.of(discardCode, discardString + " [pred slicing]");
       }
     }
 
@@ -400,7 +400,7 @@ public class CLASSNAME extends SUPERCLASS {
       discardCode = DiscardCode.obvious;
       discardString = subvar.name()+"=="+supervar.name();
       debug.fine("  returning true because subvar_super == supervar");
-      return Pair.of(discardCode,
+      return IPair.of(discardCode,
                      discardString + " [subvar_super == supervar]");
     }
 
@@ -473,7 +473,7 @@ public class CLASSNAME extends SUPERCLASS {
         if (left_included && right_included) {
           discardCode = DiscardCode.obvious;
           discardString = subvar.name()+" obvious subset/subsequence of "+supervar.name();
-          return Pair.of(discardCode, discardString + " [obvious]")
+          return IPair.of(discardCode, discardString + " [obvious]")
 ;
         }
       } else if ((subvar.derived instanceof SEQUENCESTRINGSUBSEQUENCE)
@@ -492,11 +492,11 @@ public class CLASSNAME extends SUPERCLASS {
         if (index1 == index2) {
           if (start1 == true && start2 == true) {
             if (shift1 <= shift2) {
-              return Pair.of(discardCode, discardString + " [shift1]");
+              return IPair.of(discardCode, discardString + " [shift1]");
             }
           } else if (start1 == false && start2 == false) {
             if (shift1 >= shift2) {
-              return Pair.of(discardCode, discardString + " [shift2]");
+              return IPair.of(discardCode, discardString + " [shift2]");
             }
           }
         }
