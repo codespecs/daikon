@@ -6,6 +6,7 @@ import org.plumelib.util.IPair;
 /** The root of the tree. All its children are PptNodes. */
 public class RootNode extends Node<Void, PptNode> {
 
+  /** Creates a new RootNode object. */
   @SuppressWarnings({"rawtypes", "unchecked"})
   public RootNode() {
     super((IPair<Void, Void>) (IPair) IPair.of(new Object(), new Object()));

@@ -14,10 +14,17 @@ import org.plumelib.util.IPair;
  */
 public abstract class Node<CONTENT extends @Nullable Object, CHILD> {
 
+  /** The children of this node. */
   private List<CHILD> children = new ArrayList<>();
-  // Nonsensical for RootNode
+
+  /** Nonsensical for RootNode. */
   private IPair<CONTENT, CONTENT> userObject;
 
+  /**
+   * Creates a new Node.
+   *
+   * @param userObject the user object
+   */
   protected Node(IPair<CONTENT, CONTENT> userObject) {
     this.userObject = userObject;
   }
@@ -34,15 +41,30 @@ public abstract class Node<CONTENT extends @Nullable Object, CHILD> {
     return children.iterator();
   }
 
+  /**
+   * Returns the user object pair.
+   *
+   * @return the user object pair
+   */
   public IPair<CONTENT, CONTENT> getUserObject() {
     return userObject;
   }
 
+  /**
+   * Returns the first element of the user object pair.
+   *
+   * @return the first element of the user object pair
+   */
   @Pure
   public CONTENT getUserLeft() {
     return userObject.first;
   }
 
+  /**
+   * Returns the second element of the user object pair.
+   *
+   * @return the second element of the user object pair
+   */
   @Pure
   public CONTENT getUserRight() {
     return userObject.second;
