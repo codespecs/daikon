@@ -1041,7 +1041,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    *
    * @return all derived variables that build off this one
    */
-  @SuppressWarnings("signedness:argument") // needs ArraysPlume annotations
   public List<Derivation> derivees(@UnknownSignedness VarInfo this) {
     ArrayList<Derivation> result = new ArrayList<>();
     // This method is only called from the debugging routine 'repr()'.

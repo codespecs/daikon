@@ -79,7 +79,7 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-import org.plumelib.util.Pair;
+import org.plumelib.util.IPair;
 import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
@@ -259,7 +259,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
       // else if the scalar is min or max of a sequence
       } else if ((sclvar.derived instanceof SequenceMin)
                  || (sclvar.derived instanceof SequenceMax)) {
-        Pair<DiscardCode, String> di = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
+        IPair<DiscardCode, String> di = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
         return di != null;
       }
     }
