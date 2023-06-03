@@ -8,9 +8,11 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.IPair;
 
 /**
- * All nodes must subclass this class. The type parameter CONTENT is (half of) the type of the
- * objects stored in this node: they are {@code IPair<CONTENT,CONTENT>}. The type parameter CHILD is
- * the type of the children (and is ignored if there are no children).
+ * All nodes must subclass this class.
+ *
+ * @param <CONTENT> half of the type of the objects stored in this node, which are {@code
+ *     IPair<CONTENT,CONTENT>}
+ * @param <CHILD> the type of the children; it is is ignored if there are no children
  */
 public abstract class Node<CONTENT extends @Nullable Object, CHILD> {
 
