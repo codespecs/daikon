@@ -12,6 +12,7 @@ jobs:
     - nonquick_txt_diff_ubuntu_jdk17
     - non_txt_diff_ubuntu_jdk17
     - misc_ubuntu_jdk17
+    - misc_ubuntu_jdk20
     - kvasir_ubuntu_jdk17
     - typecheck_jdk17
   pool:
@@ -211,7 +212,7 @@ jobs:
 
 - job: misc_ubuntu_jdk20
   dependsOn:
-    - jdk17_jobs
+#   - jdk17_jobs
     - misc_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
