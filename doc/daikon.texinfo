@@ -6422,6 +6422,17 @@ at all from the Daikon developers.  For more information about building
 a new front end,
 see @ref{New front ends,,,developer,Daikon Developer Manual}.
 
+@cindex Beet front end for OpenAPI
+@cindex front end for OpenAPI
+@cindex OpenAPI front end
+@cindex instrumentation, of OpenAPI
+
+A front end for OpenAPI, Beet, is distributed separately; see
+@url{https://github.com/isa-group/Beet}.  Beet converts any OpenAPI
+specification and a collection of API requests (and responses) into input
+for Daikon.  Beet is part of AGORA, which generates test oracles for REST
+APIs.
+
 @cindex Udon front end for LLVM
 @cindex front end for LLVM
 @cindex LLVM front end
