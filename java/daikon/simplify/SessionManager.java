@@ -168,9 +168,6 @@ public class SessionManager implements Closeable {
     try {
       prover_instantiate_count++;
       prover = new SessionManager();
-      if (daikon.Daikon.no_text_output) {
-        System.out.print("...");
-      }
     } catch (SimplifyError e) {
       System.err.println("Could not utilize Simplify: " + e);
       return null;
