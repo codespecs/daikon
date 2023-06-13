@@ -106,7 +106,7 @@ It describes Daikon version 5.8.17, released November 9, 2022.
 * Running Daikon::
 * Daikon output::
 * Enhancing Daikon output::
-* Front ends (instrumentation)::
+* Front ends and instrumentation::
 * Tools::
 * Troubleshooting::
 * Details::
@@ -367,7 +367,7 @@ with a variety of tools.
 This section briefly describes how to obtain data traces for Java, C,
 C#, Perl, and Eiffel programs, and how to run Daikon.  For detailed
 information about these and other front ends that are available for
-Daikon, @pxref{Front ends (instrumentation)}.
+Daikon, @pxref{Front ends and instrumentation}.
 
 @menu
 * Detecting invariants in Java programs::
@@ -1168,7 +1168,7 @@ This section describes how to run Daikon on a data trace
 This section assumes you have already run a front end (e.g., an
 instrumenter) to produce a @file{.dtrace} file (and optionally
 @file{.decls} and @file{.spinfo} files); to learn more about that
-process, @pxref{Example usage}, and @pxref{Front ends (instrumentation)}.
+process, @pxref{Example usage}, and @pxref{Front ends and instrumentation}.
 
 Run the Daikon invariant detector via the command
 @example
@@ -3103,25 +3103,30 @@ into
 @end example
 
 
-@node    Front ends (instrumentation)
-@chapter Front ends (instrumentation)
+@node    Front ends and instrumentation
+@chapter Front ends and instrumentation
 
 @cindex front end
 @cindex instrumentation
 
 The Daikon invariant detector is a machine learning tool that finds
-patterns (invariants) in data.  That data can come from any source, but
-Daikon is typically used to find invariants over variable values in
-running programs.  A front end is a tool that converts data from some
-other format into Daikon's input format.  The most common type of front
-end is an instrumenter, which causes your program to output a
-@file{.dtrace} file that Daikon can process, or that you can process
+patterns (invariants) in data.  That data can come from any source.
+A front end is a tool that converts data from some
+other format into Daikon's input format.
+
+Daikon is often used to find invariants over variable values in
+a running program.  For that use case, the most common type of front
+end is an instrumenter.  An instrumenter changes a program to add
+instrumentation (sometimes called probes) so that when the program runs, it
+does all its usual operations and also produces output to a side file, such
+as a Daikon @file{.dtrace} file
 (@pxref{Reading dtrace files,,,developer,Daikon Developer Manual}).
 
-This chapter describes several front ends (instrumenters) that are part
-of Daikon.  It
+This chapter describes several front ends that are distributed with
+Daikon.  It
 is relatively easy to build your own front end, if these do not serve
-your purpose; we are aware of a number of users who have done so.  For
+your purpose; we are aware of a number of users who have done so
+(@pxref{Other front ends}).  For
 more information about building a new front end, see @ref{New front
 ends,,,developer,Daikon Developer Manual}.
 
@@ -6421,6 +6426,17 @@ or run-time system.  For example, people have done this without any help
 at all from the Daikon developers.  For more information about building
 a new front end,
 see @ref{New front ends,,,developer,Daikon Developer Manual}.
+
+@cindex Beet front end for OpenAPI
+@cindex front end for OpenAPI
+@cindex OpenAPI front end
+@cindex instrumentation, of OpenAPI
+
+A front end for OpenAPI, Beet, is distributed separately; see
+@url{https://github.com/isa-group/Beet}.  Beet converts any OpenAPI
+specification and a collection of API requests (and responses) into input
+for Daikon.  Beet is part of AGORA, which generates test oracles for REST
+APIs.
 
 @cindex Udon front end for LLVM
 @cindex front end for LLVM

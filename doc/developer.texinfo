@@ -386,22 +386,22 @@ Manual}), among others.  More often, users apply a programming language
 front end (also called an @dfn{instrumenter}) to a program, causing
 executions of the program to write files in Daikon's format.  (For
 information about existing front ends, see
-@ref{Front ends (instrumentation),,,daikon,Daikon User Manual}.)
+@ref{Front ends and instrumentation,,,daikon,Daikon User Manual}.)
 When a general front end is not
 available, it is possible to manually instrument a specific program so
 that it writes files in Daikon's format.  The resulting instrumented
 program is very similar to what an instrumenter would have created, so
 this section is relevant to both approaches.
 
-Conceptually, instrumentation is very simple.  For each program point
-(say, a line of code or the entry or exit from a procedure) at which you
-wish to detect invariants, the front end must arrange to create a
+Conceptually, a front end instrumenter has two tasks.  Suppose you want to
+infer invariants at a program point (say, a line of code or the entry or
+exit from a procedure).  The front end must create a
 declaration (@pxref{Declarations}) that
-lists the variables in scope at that program point, and the front end
-must arrange that execution creates a data trace record (@pxref{Data
-trace records}) for each execution of that
-program point.  Conventionally, the way to create a data trace record is
-to insert a @code{printf} (or similar) statement that outputs the current
+lists the variables in scope at that program point.  Every time that
+program point is executed, the program must output a data trace record
+(@pxref{Data trace records}).  A front end can make the program output a
+data trace record by inserting a @code{printf} (or similar) statement that
+outputs the current
 values of the variables of interest.
 
 
@@ -2723,7 +2723,7 @@ trunk (respectively, the branch).
 This chapter contains information about the file format of Daikon's
 input files.  It is of most information to those who wish to write a
 front end, also known as an instrumenter
-(@pxref{Front ends (instrumentation),,,daikon,Daikon User Manual}).
+(@pxref{Front ends and instrumentation,,,daikon,Daikon User Manual}).
 A new front end enables Daikon to detect
 invariants in another programming language.
 
@@ -4302,5 +4302,6 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  runtime var1 PptSlice1 over1 config EXIT99 var2 var3 val1
 @c  LocalWords:  EXITNN val2 arg1 arg2 EXIT35 plse fjalar myfjalar ln nsf
 @c  LocalWords:  chmod og rwx BIBDIR CHECKERFRAMEWORK pipefail wget OSNAME
-@c  LocalWords:  readelf DAIKONVERSION xargs codespecs kvasir repo
-@c  LocalWords:  untracked Makefile's
+@c  LocalWords:  readelf DAIKONVERSION xargs codespecs kvasir repo rf pwd
+@c  LocalWords:  untracked Makefile's mernstdaikon mkdir checklink Wayback
+@c  LocalWords:  URI md cvsaa cvsai cvsa merging'' substrings splitter
