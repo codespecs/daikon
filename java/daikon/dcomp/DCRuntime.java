@@ -151,7 +151,7 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /** Map from Thread to ThreadData. */
-  private static Map<Thread, ThreadData> thread_to_data =
+  private static Map<Thread, @MustCall({}) ThreadData> thread_to_data =
       new ConcurrentHashMap<Thread, ThreadData>();
 
   /** Map from each object to the tags used for each primitive value in the object. */

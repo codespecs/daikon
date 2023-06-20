@@ -94,7 +94,7 @@ public class BuildJDK {
    * @throws IOException if unable to read or write file {@code dcomp_jdk_static_field_id} or if
    *     unable to write {@code jdk_classes.txt}
    */
-  @SuppressWarnings("builder:required.method.not.called") // assignment into collection of @Owning
+  @SuppressWarnings({"builder:required.method.not.called", "mustcall:type.argument"}) // assignment into collection of @Owning
   public static void main(String[] args) throws IOException {
 
     System.out.println("BuildJDK starting at " + LocalDateTime.now(ZoneId.systemDefault()));
