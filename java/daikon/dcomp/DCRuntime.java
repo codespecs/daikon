@@ -152,7 +152,7 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /** Map from Thread to ThreadData. */
-  private static Map<Thread, @MustCall({}) ThreadData> thread_to_data =
+  private static Map<Thread, ThreadData> thread_to_data =
       new ConcurrentHashMap<Thread, ThreadData>();
 
   /** Map from each object to the tags used for each primitive value in the object. */
@@ -368,6 +368,7 @@ public final class DCRuntime implements ComparabilityProvider {
         return_val = ((Boolean) m.invoke(o1, o2, null));
       } else {
         // Push tag for return value, and call the uninstrumented version
+        @SuppressWarnings("builder:required.method.not.known") // Threads have no must call obligations
         ThreadData td = thread_to_data.get(Thread.currentThread());
         td.tag_stack.push(new Constant());
         Method m = o1super.getMethod("equals", new Class<?>[] {java_lang_Object_class});
