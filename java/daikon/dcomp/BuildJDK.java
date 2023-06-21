@@ -51,6 +51,11 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 @SuppressWarnings("mustcall:type.argument") // assignments into owning collection
 public class BuildJDK {
 
+  /** Do not instantiate. */
+  private BuildJDK() {
+    throw new Error("Do not instantiate");
+  }
+
   /**
    * The "java.home" system property. Note that there is also a JAVA_HOME variable that contains
    * {@code System.getenv("JAVA_HOME")}.
