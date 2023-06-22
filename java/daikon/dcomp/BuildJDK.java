@@ -51,7 +51,7 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 @SuppressWarnings("mustcall:type.argument") // assignments into owning collection
 public class BuildJDK {
 
-  /** Do Creates a new BuildJDK. */
+  /** Creates a new BuildJDK. */
   private BuildJDK() {}
 
   /**
