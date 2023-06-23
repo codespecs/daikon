@@ -300,7 +300,7 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11-plus:latest
-  timeoutInMinutes: 70
+  timeoutInMinutes: 80
   steps:
   - checkout: self
     fetchDepth: 25
@@ -315,7 +315,7 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17-plus:latest
-  timeoutInMinutes: 70
+  timeoutInMinutes: 80
   steps:
   - checkout: self
     fetchDepth: 25
@@ -333,7 +333,7 @@ jobs:
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk20-plus:latest
-  timeoutInMinutes: 70
+  timeoutInMinutes: 80
   steps:
   - checkout: self
     fetchDepth: 25
