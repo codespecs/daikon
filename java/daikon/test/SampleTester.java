@@ -47,7 +47,7 @@ import org.plumelib.util.StringsPlume;
  *
  * <p>The input file format is documented in the developer manual.
  */
-@SuppressWarnings("nullness") // test code
+@SuppressWarnings({"nullness", "builder"}) // test code
 public class SampleTester {
 
   public static final Logger debug = Logger.getLogger("daikon.test.SampleTester");
