@@ -4,9 +4,11 @@ accessors
 acyclic
 ADDR
 AFS
+AGORA
 AMD
 amd64
 API
+APIs
 aren
 arity
 Athlon
@@ -126,6 +128,7 @@ mkdir
 namespace
 namespaces
 nullness
+OpenAPI
 openjdk
 optimizations
 outliers
