@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Download the distribution and run "make distribution-check".
 
