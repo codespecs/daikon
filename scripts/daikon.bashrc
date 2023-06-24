@@ -18,6 +18,9 @@ if [ ! -d "$JAVA_HOME" ]; then
   return 2
 fi
 
+echo "test"
+echo "$0"
+
 if [ -z "$0" ]; then
   # Cannot infer DAIKONDIR.
   if [ -z ${DAIKONDIR+x} ]; then
