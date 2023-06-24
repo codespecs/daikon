@@ -1,5 +1,3 @@
-#!/bin/bash
-
 ## daikon.bashrc
 ## Daikon initialization file for bash users.
 
@@ -20,7 +18,7 @@ if [ ! -d "$JAVA_HOME" ]; then
   return 2
 fi
 
-if [ ${#BASH_SOURCE[@]} -eq 0 ]; then
+if [ -z "$0" ]; then
   # Cannot infer DAIKONDIR.
   if [ -z ${DAIKONDIR+x} ]; then
     echo "Please set DAIKONDIR environment variable.  Aborting daikon.bashrc ."
@@ -35,7 +33,7 @@ else
   # Mac OS does not have "-e" argument to readlink
   # export DAIKONDIR="$( readlink -e "$( dirname "${BASH_SOURCE[0]}" )/..")"
   # Code from: https://stackoverflow.com/q/59895/173852
-  export DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." >/dev/null && pwd )"
+  export DAIKONDIR="$( cd "$( dirname "$0" )/.." >/dev/null && pwd )"
 fi
 
 if [ -z "$DAIKONSCRIPTS" ]; then
