@@ -48,7 +48,7 @@ import org.checkerframework.checker.signature.qual.BinaryName;
  * Based on its invocation arguments, DynComp will decide whether to call the instrumented or
  * uninstrumented version of a method.
  */
-@SuppressWarnings("mustcall:type.argument") // assignments into owning collection
+// @SuppressWarnings("mustcall:type.argument") // assignments into owning collection
 public class BuildJDK {
 
   /** Creates a new BuildJDK. */
