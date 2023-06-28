@@ -703,7 +703,7 @@ jobs:
   # This task typechecks Daikon using the Checker Framework that is bundled with Daikon.
   # If this task fails but task `typecheck-with-latest-CF-jdk*` succeeds, then update the
   # Checker Framework jar files in java/lib/ .
-  typecheck-with-included-CF-jdk17:
+  typecheck-with-bundled-CF-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
     resource_class: large
@@ -807,7 +807,7 @@ workflows:
             - non-txt-diff-ubuntu-jdk17
             - misc-ubuntu-jdk17
             - kvasir-ubuntu-jdk17
-            - typecheck-with-included-CF-jdk17
+            - typecheck-with-bundled-CF-jdk17
       - quick-txt-diff-ubuntu-jdk8:
           requires:
             - jdk17-jobs
@@ -943,7 +943,7 @@ workflows:
           requires:
             - jdk17-jobs
             - misc-ubuntu-jdk17
-      - typecheck-with-included-CF-jdk17
+      - typecheck-with-bundled-CF-jdk17
 # Seems to run out of memory on CircleCI.  It's being checked on Azure Pipelines.
 #      -  typecheck-with-latest-CF-jdk8:
 #      -  typecheck-with-latest-CF-jdk11:
