@@ -29,7 +29,7 @@ INSTALL ?= /usr/bin/install
 
 # By default, if environment variable CHECKERFRAMEWORK is set, that Checker Framework is used.
 # To force use of the Checker Framework in java/lib/, run like this:
-#   make NO_LOCAL_CHECKERFRAMEWORK=true typecheck-nullness
+#   make NO_LOCAL_CHECKERFRAMEWORK=true typecheck
 # Note that CI uses the Checker Framework built from the repository.
 ifndef NO_LOCAL_CHECKERFRAMEWORK
   ifdef CHECKERFRAMEWORK
