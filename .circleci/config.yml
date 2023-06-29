@@ -724,7 +724,7 @@ jobs:
           make showvars
           make compile daikon.jar
       - run:
-          command: JAVACHECK_EXTRA_ARGS="-AsuppressWarnings=unneeded.suppression" make -C java typecheck
+          command: ASUPPRESSWARNINGS_EXTRA_ARGS="unneeded.suppression" make -C java typecheck
           no_output_timeout: 30m
 
   typecheck-with-latest-CF-jdk8:
