@@ -58,7 +58,12 @@ if [ -d ${DAIKONDIR}/java ]; then
 fi
 export DAIKON_CLASSPATH
 
-export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${JAVA_HOME}/bin:$PATH
+# Only add JAVA_HOME to PATH if JAVA_HOME is not set; see GitHub issue #493
+if [ -z "$JAVA_HOME" ]; then
+  export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${JAVA_HOME}/bin:$PATH
+else
+  export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:$PATH
+fi
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if [ $PERL5LIB ]; then
