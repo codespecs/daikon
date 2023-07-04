@@ -14,7 +14,7 @@ import typequals.prototype.qual.Prototype;
 
 /**
  * Indicates that all the elements of an array of strings have a fixed length n.
- * Prints as {@code All the elements of x have LENGTH=n`}.
+ * Prints as {@code All the elements of x have LENGTH=n}.
  */
 public class SequenceFixedLengthString extends SingleStringSequence {
   // We are Serializable, so we specify a version to allow changes to

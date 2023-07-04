@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 /**
  * Indicates that the value of a string variable is always a time in 24-hour format,
  * including seconds. Prints as {@code x is Hour: HH:MM:SS 24-hour format with optional
- * leading 0`}.
+ * leading 0}.
  */
 public class IsHourWithSeconds extends SingleString {
     // We are Serializable, so we specify a version to allow changes to

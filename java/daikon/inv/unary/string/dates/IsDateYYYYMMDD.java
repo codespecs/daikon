@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 /**
  * Indicates that the value of a string variable is always a date following the format
- * YYYY/MM/DD (the separator can be “/” or “-“). Prints as {@code x is a Date. Format: YYYY/MM/DD}.
+ * YYYY/MM/DD (the separator can be ``/'' or ``-''). Prints as {@code x is a Date. Format: YYYY/MM/DD}.
  */
 public class IsDateYYYYMMDD extends SingleString {
     // We are Serializable, so we specify a version to allow changes to
