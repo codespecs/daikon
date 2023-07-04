@@ -11,6 +11,7 @@ import org.checkerframework.framework.type.treeannotator.TreeAnnotator;
 import org.checkerframework.javacutil.AnnotationBuilder;
 import org.checkerframework.javacutil.TreeUtils;
 import org.checkerframework.javacutil.TypesUtils;
+import typequals.vindex.qual.VIndexTop;
 
 /**
  * Adds a type qualifier from the VIndex type system to the type of tree, in the following cases:

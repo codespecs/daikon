@@ -378,7 +378,10 @@ public final class CLASSNAME extends SEQUENCESCALAR {
 
   @Override
   protected double computeConfidence() {
-    return Invariant.CONFIDENCE_JUSTIFIED;
+      if (ppt.num_samples() == 0) {
+        return CONFIDENCE_UNJUSTIFIED;
+      }
+  return CONFIDENCE_JUSTIFIED;
   }
 
   @Pure

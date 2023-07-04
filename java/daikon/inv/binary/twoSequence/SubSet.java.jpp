@@ -309,7 +309,10 @@ public class SUBSET extends TWOSEQUENCE {
 
   @Override
   protected double computeConfidence() {
-    return Invariant.CONFIDENCE_JUSTIFIED;
+      if (ppt.num_samples() == 0) {
+        return CONFIDENCE_UNJUSTIFIED;
+      }
+  return CONFIDENCE_JUSTIFIED;
   }
 
   // Convenience name to make this easier to find.
