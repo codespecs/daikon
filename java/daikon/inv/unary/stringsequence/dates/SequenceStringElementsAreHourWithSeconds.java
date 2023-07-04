@@ -6,6 +6,8 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.inv.unary.stringsequence.SingleStringSequence;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -13,13 +15,10 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
- * Indicates that all elements of an array of strings are hours
- * in 24-hour format, including seconds. Prints as {@code All the elements of x are Hours:
- * HH:MM:SS 24-hour format with optional leading 0}.
+ * Indicates that all elements of an array of strings are hours in 24-hour format, including
+ * seconds. Prints as {@code All the elements of x are Hours: HH:MM:SS 24-hour format with optional
+ * leading 0}.
  */
 public class SequenceStringElementsAreHourWithSeconds extends SingleStringSequence {
   // We are Serializable, so we specify a version to allow changes to
@@ -31,20 +30,20 @@ public class SequenceStringElementsAreHourWithSeconds extends SingleStringSequen
   // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = false;
 
-  // Set to true if the array is empty. If we do not use this property, the invariant would be considered true if all the arrays are empty
+  // Set to true if the array is empty. If we do not use this property, the invariant would be
+  // considered true if all the arrays are empty
   private boolean alwaysEmpty = true;
 
   protected SequenceStringElementsAreHourWithSeconds(PptSlice ppt) {
     super(ppt);
-
   }
 
-  protected @Prototype
-  SequenceStringElementsAreHourWithSeconds() {
+  protected @Prototype SequenceStringElementsAreHourWithSeconds() {
     super();
   }
 
-  private static @Prototype SequenceStringElementsAreHourWithSeconds proto = new @Prototype SequenceStringElementsAreHourWithSeconds();
+  private static @Prototype SequenceStringElementsAreHourWithSeconds proto =
+      new @Prototype SequenceStringElementsAreHourWithSeconds();
 
   /** Returns the prototype invariant for CommonStringSequence. */
   public static @Prototype SequenceStringElementsAreHourWithSeconds get_proto() {
@@ -60,7 +59,7 @@ public class SequenceStringElementsAreHourWithSeconds extends SingleStringSequen
   /** instantiate an invariant on the specified slice */
   @Override
   protected SequenceStringElementsAreHourWithSeconds instantiate_dyn(
-          @Prototype SequenceStringElementsAreHourWithSeconds this, PptSlice slice) {
+      @Prototype SequenceStringElementsAreHourWithSeconds this, PptSlice slice) {
     return new SequenceStringElementsAreHourWithSeconds(slice);
   }
 
@@ -74,29 +73,30 @@ public class SequenceStringElementsAreHourWithSeconds extends SingleStringSequen
 
   @SideEffectFree
   @Override
-  public String format_using(@GuardSatisfied SequenceStringElementsAreHourWithSeconds this, OutputFormat format) {
-    return "All the elements of " + var().name() + " are Hours: HH:MM:SS 24-hour format with optional leading 0";
+  public String format_using(
+      @GuardSatisfied SequenceStringElementsAreHourWithSeconds this, OutputFormat format) {
+    return "All the elements of "
+        + var().name()
+        + " are Hours: HH:MM:SS 24-hour format with optional leading 0";
   }
-
 
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
 
     Pattern pattern = Pattern.compile("^(?:\\d|[01]\\d|2[0-3]):(?:[0-5]\\d):(?:[0-5]\\d)$");
 
-    if(a.length>0){
+    if (a.length > 0) {
       alwaysEmpty = false;
     }
-    
-    for(int i=0; i<a.length; i++) {
+
+    for (int i = 0; i < a.length; i++) {
       Matcher matcher = pattern.matcher(a[i]);
-      if(!matcher.matches()) {
+      if (!matcher.matches()) {
         return InvariantStatus.FALSIFIED;
       }
     }
 
     return InvariantStatus.NO_CHANGE;
-
   }
 
   @Override
@@ -107,7 +107,7 @@ public class SequenceStringElementsAreHourWithSeconds extends SingleStringSequen
   @Override
   protected double computeConfidence() {
 
-    if(alwaysEmpty) {
+    if (alwaysEmpty) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     }
 

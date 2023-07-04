@@ -5,6 +5,8 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -12,11 +14,9 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
- * Indicates that all elements of an array of strings are URLs. Prints as {@code All the elements of x are URLs}
+ * Indicates that all elements of an array of strings are URLs. Prints as {@code All the elements of
+ * x are URLs}
  */
 public class SequenceStringElementsAreUrl extends SingleStringSequence {
   // We are Serializable, so we specify a version to allow changes to
@@ -28,20 +28,20 @@ public class SequenceStringElementsAreUrl extends SingleStringSequence {
   // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = false;
 
-  // Set to true if the array is empty. If we do not use this property, the invariant would be considered true if all the arrays are empty
+  // Set to true if the array is empty. If we do not use this property, the invariant would be
+  // considered true if all the arrays are empty
   private boolean alwaysEmpty = true;
 
   protected SequenceStringElementsAreUrl(PptSlice ppt) {
     super(ppt);
-
   }
 
-  protected @Prototype
-  SequenceStringElementsAreUrl() {
+  protected @Prototype SequenceStringElementsAreUrl() {
     super();
   }
 
-  private static @Prototype SequenceStringElementsAreUrl proto = new @Prototype SequenceStringElementsAreUrl();
+  private static @Prototype SequenceStringElementsAreUrl proto =
+      new @Prototype SequenceStringElementsAreUrl();
 
   /** Returns the prototype invariant for CommonStringSequence. */
   public static @Prototype SequenceStringElementsAreUrl get_proto() {
@@ -57,7 +57,7 @@ public class SequenceStringElementsAreUrl extends SingleStringSequence {
   /** instantiate an invariant on the specified slice */
   @Override
   protected SequenceStringElementsAreUrl instantiate_dyn(
-          @Prototype SequenceStringElementsAreUrl this, PptSlice slice) {
+      @Prototype SequenceStringElementsAreUrl this, PptSlice slice) {
     return new SequenceStringElementsAreUrl(slice);
   }
 
@@ -71,30 +71,31 @@ public class SequenceStringElementsAreUrl extends SingleStringSequence {
 
   @SideEffectFree
   @Override
-  public String format_using(@GuardSatisfied SequenceStringElementsAreUrl this, OutputFormat format) {
+  public String format_using(
+      @GuardSatisfied SequenceStringElementsAreUrl this, OutputFormat format) {
     return "All the elements of " + var().name() + " are URLs";
   }
-
 
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
 
-    Pattern pattern = Pattern.compile("^(?:(?:https?|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?!10(?:\\.\\d{1,3}){3})(?!127(?:\\.\\d{1,3}){3})(?!169\\.254(?:\\.\\d{1,3}){2})(?!192\\.168(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,})))(?::\\d{2,5})?(?:/[^\\s]*)?$");
+    Pattern pattern =
+        Pattern.compile(
+            "^(?:(?:https?|ftp)://)(?:\\S+(?::\\S*)?@)?(?:(?!10(?:\\.\\d{1,3}){3})(?!127(?:\\.\\d{1,3}){3})(?!169\\.254(?:\\.\\d{1,3}){2})(?!192\\.168(?:\\.\\d{1,3}){2})(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|(?:(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}0-9]+-?)*[a-z\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-z\\x{00a1}-\\x{ffff}]{2,})))(?::\\d{2,5})?(?:/[^\\s]*)?$");
 
-    if(a.length>0){
+    if (a.length > 0) {
       alwaysEmpty = false;
     }
 
-    for(int i=0; i<a.length; i++) {
+    for (int i = 0; i < a.length; i++) {
       Matcher matcher = pattern.matcher(a[i]);
       // The invariant is falsified if one of the elements of the array is NOT of type URL
-      if(!matcher.matches()) {
+      if (!matcher.matches()) {
         return InvariantStatus.FALSIFIED;
       }
     }
 
     return InvariantStatus.NO_CHANGE;
-
   }
 
   @Override
@@ -104,7 +105,7 @@ public class SequenceStringElementsAreUrl extends SingleStringSequence {
 
   @Override
   protected double computeConfidence() {
-    if(alwaysEmpty) {
+    if (alwaysEmpty) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     }
 

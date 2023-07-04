@@ -1627,7 +1627,6 @@ public final class Daikon {
       proto_invs.add(SequenceStringElementsAreHourWithSeconds.get_proto());
       proto_invs.add(SequenceStringElementsAreHourAMPM.get_proto());
       proto_invs.add(SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm.get_proto());
-
     }
 
     // Binary scalar-scalar invariants

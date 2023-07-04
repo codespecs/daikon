@@ -6,6 +6,8 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.inv.unary.stringsequence.SingleStringSequence;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -13,13 +15,9 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
- * Indicates that all the elements of an array of strings are
- * dates following the format MM/DD/YYYY. Represented as {@code All the elements of x are dates.
- * Format: MM/DD/YYYY}.
+ * Indicates that all the elements of an array of strings are dates following the format MM/DD/YYYY.
+ * Represented as {@code All the elements of x are dates. Format: MM/DD/YYYY}.
  */
 public class SequenceStringElementsAreDateMMDDYYYY extends SingleStringSequence {
   // We are Serializable, so we specify a version to allow changes to
@@ -31,20 +29,20 @@ public class SequenceStringElementsAreDateMMDDYYYY extends SingleStringSequence 
   // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = false;
 
-  // Set to true if the array is empty. If we do not use this property, the invariant would be considered true if all the arrays are empty
+  // Set to true if the array is empty. If we do not use this property, the invariant would be
+  // considered true if all the arrays are empty
   private boolean alwaysEmpty = true;
 
   protected SequenceStringElementsAreDateMMDDYYYY(PptSlice ppt) {
     super(ppt);
-
   }
 
-  protected @Prototype
-  SequenceStringElementsAreDateMMDDYYYY() {
+  protected @Prototype SequenceStringElementsAreDateMMDDYYYY() {
     super();
   }
 
-  private static @Prototype SequenceStringElementsAreDateMMDDYYYY proto = new @Prototype SequenceStringElementsAreDateMMDDYYYY();
+  private static @Prototype SequenceStringElementsAreDateMMDDYYYY proto =
+      new @Prototype SequenceStringElementsAreDateMMDDYYYY();
 
   /** Returns the prototype invariant for CommonStringSequence. */
   public static @Prototype SequenceStringElementsAreDateMMDDYYYY get_proto() {
@@ -60,7 +58,7 @@ public class SequenceStringElementsAreDateMMDDYYYY extends SingleStringSequence 
   /** instantiate an invariant on the specified slice */
   @Override
   protected SequenceStringElementsAreDateMMDDYYYY instantiate_dyn(
-          @Prototype SequenceStringElementsAreDateMMDDYYYY this, PptSlice slice) {
+      @Prototype SequenceStringElementsAreDateMMDDYYYY this, PptSlice slice) {
     return new SequenceStringElementsAreDateMMDDYYYY(slice);
   }
 
@@ -74,10 +72,10 @@ public class SequenceStringElementsAreDateMMDDYYYY extends SingleStringSequence 
 
   @SideEffectFree
   @Override
-  public String format_using(@GuardSatisfied SequenceStringElementsAreDateMMDDYYYY this, OutputFormat format) {
+  public String format_using(
+      @GuardSatisfied SequenceStringElementsAreDateMMDDYYYY this, OutputFormat format) {
     return "All the elements of " + var().name() + " are dates. Format: MM/DD/YYYY";
   }
-
 
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
@@ -90,21 +88,22 @@ public class SequenceStringElementsAreDateMMDDYYYY extends SingleStringSequence 
      *       - 10-30-2050
      */
     // ^(?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])[-/.](?:19\d{2}|20[0134][0-9]|2050)$
-    Pattern pattern = Pattern.compile("^(?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])[-/.](?:19\\d{2}|20[0134][0-9]|2050)$");
+    Pattern pattern =
+        Pattern.compile(
+            "^(?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])[-/.](?:19\\d{2}|20[0134][0-9]|2050)$");
 
-    if(a.length>0){
+    if (a.length > 0) {
       alwaysEmpty = false;
     }
 
-    for(int i=0; i<a.length; i++) {
+    for (int i = 0; i < a.length; i++) {
       Matcher matcher = pattern.matcher(a[i]);
-      if(!matcher.matches()) {
+      if (!matcher.matches()) {
         return InvariantStatus.FALSIFIED;
       }
     }
 
     return InvariantStatus.NO_CHANGE;
-
   }
 
   @Override
@@ -115,7 +114,7 @@ public class SequenceStringElementsAreDateMMDDYYYY extends SingleStringSequence 
   @Override
   protected double computeConfidence() {
 
-    if(alwaysEmpty) {
+    if (alwaysEmpty) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     }
 

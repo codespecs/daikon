@@ -6,6 +6,8 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.inv.unary.stringsequence.SingleStringSequence;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -13,13 +15,10 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
- * Indicates that all elements of an array of strings are hours in
- * 12-hour format. Prints as {@code All the elements of x are Hours: HH:MM 12-hour format,
- * optional leading 0, mandatory meridiems (AM/PM)}.
+ * Indicates that all elements of an array of strings are hours in 12-hour format. Prints as {@code
+ * All the elements of x are Hours: HH:MM 12-hour format, optional leading 0, mandatory meridiems
+ * (AM/PM)}.
  */
 public class SequenceStringElementsAreHourAMPM extends SingleStringSequence {
   // We are Serializable, so we specify a version to allow changes to
@@ -31,20 +30,20 @@ public class SequenceStringElementsAreHourAMPM extends SingleStringSequence {
   // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = false;
 
-  // Set to true if the array is empty. If we do not use this property, the invariant would be considered true if all the arrays are empty
+  // Set to true if the array is empty. If we do not use this property, the invariant would be
+  // considered true if all the arrays are empty
   private boolean alwaysEmpty = true;
 
   protected SequenceStringElementsAreHourAMPM(PptSlice ppt) {
     super(ppt);
-
   }
 
-  protected @Prototype
-  SequenceStringElementsAreHourAMPM() {
+  protected @Prototype SequenceStringElementsAreHourAMPM() {
     super();
   }
 
-  private static @Prototype SequenceStringElementsAreHourAMPM proto = new @Prototype SequenceStringElementsAreHourAMPM();
+  private static @Prototype SequenceStringElementsAreHourAMPM proto =
+      new @Prototype SequenceStringElementsAreHourAMPM();
 
   /** Returns the prototype invariant for CommonStringSequence. */
   public static @Prototype SequenceStringElementsAreHourAMPM get_proto() {
@@ -60,7 +59,7 @@ public class SequenceStringElementsAreHourAMPM extends SingleStringSequence {
   /** instantiate an invariant on the specified slice */
   @Override
   protected SequenceStringElementsAreHourAMPM instantiate_dyn(
-          @Prototype SequenceStringElementsAreHourAMPM this, PptSlice slice) {
+      @Prototype SequenceStringElementsAreHourAMPM this, PptSlice slice) {
     return new SequenceStringElementsAreHourAMPM(slice);
   }
 
@@ -74,29 +73,30 @@ public class SequenceStringElementsAreHourAMPM extends SingleStringSequence {
 
   @SideEffectFree
   @Override
-  public String format_using(@GuardSatisfied SequenceStringElementsAreHourAMPM this, OutputFormat format) {
-    return "All the elements of " + var().name() + " are Hours: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)";
+  public String format_using(
+      @GuardSatisfied SequenceStringElementsAreHourAMPM this, OutputFormat format) {
+    return "All the elements of "
+        + var().name()
+        + " are Hours: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)";
   }
-
 
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
 
     Pattern pattern = Pattern.compile("^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$");
 
-    if(a.length>0){
+    if (a.length > 0) {
       alwaysEmpty = false;
     }
-    
-    for(int i=0; i<a.length; i++) {
+
+    for (int i = 0; i < a.length; i++) {
       Matcher matcher = pattern.matcher(a[i]);
-      if(!matcher.matches()) {
+      if (!matcher.matches()) {
         return InvariantStatus.FALSIFIED;
       }
     }
 
     return InvariantStatus.NO_CHANGE;
-
   }
 
   @Override
@@ -107,12 +107,11 @@ public class SequenceStringElementsAreHourAMPM extends SingleStringSequence {
   @Override
   protected double computeConfidence() {
 
-    if(alwaysEmpty) {
+    if (alwaysEmpty) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     }
 
     return 1 - Math.pow(.1, ppt.num_samples());
-
   }
 
   @Pure

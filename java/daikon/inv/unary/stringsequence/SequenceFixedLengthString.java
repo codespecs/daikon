@@ -13,8 +13,8 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 
 /**
- * Indicates that all the elements of an array of strings have a fixed length n.
- * Prints as {@code All the elements of x have LENGTH=n}.
+ * Indicates that all the elements of an array of strings have a fixed length n. Prints as {@code
+ * All the elements of x have LENGTH=n}.
  */
 public class SequenceFixedLengthString extends SingleStringSequence {
   // We are Serializable, so we specify a version to allow changes to
@@ -30,14 +30,14 @@ public class SequenceFixedLengthString extends SingleStringSequence {
 
   protected SequenceFixedLengthString(PptSlice ppt) {
     super(ppt);
-
   }
 
   protected @Prototype SequenceFixedLengthString() {
     super();
   }
 
-  private static @Prototype SequenceFixedLengthString proto = new @Prototype SequenceFixedLengthString();
+  private static @Prototype SequenceFixedLengthString proto =
+      new @Prototype SequenceFixedLengthString();
 
   /** Returns the prototype invariant for CommonStringSequence. */
   public static @Prototype SequenceFixedLengthString get_proto() {
@@ -53,7 +53,7 @@ public class SequenceFixedLengthString extends SingleStringSequence {
   /** instantiate an invariant on the specified slice */
   @Override
   protected SequenceFixedLengthString instantiate_dyn(
-          @Prototype SequenceFixedLengthString this, PptSlice slice) {
+      @Prototype SequenceFixedLengthString this, PptSlice slice) {
     return new SequenceFixedLengthString(slice);
   }
 
@@ -71,11 +71,10 @@ public class SequenceFixedLengthString extends SingleStringSequence {
     return "All the elements of " + var().name() + " have LENGTH=" + length;
   }
 
-
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
 
-    if (a==null || a.length == 0) {
+    if (a == null || a.length == 0) {
       return InvariantStatus.NO_CHANGE;
     }
 
@@ -83,21 +82,20 @@ public class SequenceFixedLengthString extends SingleStringSequence {
     if (length == null) {
       length = a[0].length();
       // Check that all the elements of the array have the same length
-      for(int i=0; i<a.length;i++){
-        if(a[i].length() != length) {
+      for (int i = 0; i < a.length; i++) {
+        if (a[i].length() != length) {
           return InvariantStatus.FALSIFIED;
         }
       }
     } else {
-      for (int i = 0; i<a.length;i++) {
-        if(a[i].length() != length) {
-          return  InvariantStatus.FALSIFIED;
+      for (int i = 0; i < a.length; i++) {
+        if (a[i].length() != length) {
+          return InvariantStatus.FALSIFIED;
         }
       }
     }
 
     return InvariantStatus.NO_CHANGE;
-
   }
 
   @Override
@@ -107,7 +105,7 @@ public class SequenceFixedLengthString extends SingleStringSequence {
 
   @Override
   protected double computeConfidence() {
-    if(length==null) {
+    if (length == null) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     }
     return 1 - Math.pow(.1, ppt.num_samples());
