@@ -13,7 +13,6 @@ import daikon.suppress.NISuppressionSet;
 import daikon.suppress.NISuppressor;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -37,16 +36,13 @@ public class FixedLengthString extends SingleString {
   public static boolean dkconfig_enabled = false;
 
   @Unused(when = Prototype.class)
-  private Integer length;
+  private @Nullable Integer length = null;
 
   ///
   /// Required methods
   ///
   private FixedLengthString(PptSlice ppt) {
     super(ppt);
-
-    // Initialize the length as null
-    length = null;
   }
 
   private @Prototype FixedLengthString() {
@@ -119,7 +115,7 @@ public class FixedLengthString extends SingleString {
   /** returns the ni-suppressions for SeqIndexFloatGreaterEqual */
   @Pure
   @Override
-  public @NonNull NISuppressionSet get_ni_suppressions() {
+  public NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
 
       NISuppressee suppressee = new NISuppressee(FixedLengthString.class, 1);
