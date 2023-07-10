@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # This is the "typecheck" job of the pull request.
+# It uses the HEAD version of the Checker Framework: the latest commit in the GitHub repository.
 
 set -e
 set -o pipefail

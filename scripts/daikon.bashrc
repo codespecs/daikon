@@ -1,5 +1,3 @@
-#!/bin/bash
-
 ## daikon.bashrc
 ## Daikon initialization file for bash users.
 

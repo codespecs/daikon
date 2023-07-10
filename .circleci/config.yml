@@ -700,10 +700,10 @@ jobs:
             - ".git"
       - run: ./scripts/test-kvasir.sh
 
-  # If this task fails but task `typecheck-with-locally-built-CF-jdk8` succeeds, then update the
-  # Checker Framework jar files in java/lib/ .  If it still fails, that's OK.  It will pass once the
-  # next Checker Framework is released and java/lib/ is updated.
-  typecheck-with-included-CF-jdk17:
+  # This task typechecks Daikon using the Checker Framework that is bundled with Daikon.
+  # If this task fails but task `typecheck-with-latest-CF-jdk*` succeeds, then update the
+  # Checker Framework jar files in java/lib/ .
+  typecheck-with-bundled-CF-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
     resource_class: large
@@ -724,10 +724,10 @@ jobs:
           make showvars
           make compile daikon.jar
       - run:
-          command: make -C java typecheck
+          command: JAVACHECK_EXTRA_ARGS="-AsuppressWarnings=unneeded.suppression" make -C java typecheck
           no_output_timeout: 30m
 
-  typecheck-with-locally-built-CF-jdk8:
+  typecheck-with-latest-CF-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
     resource_class: large
@@ -749,7 +749,7 @@ jobs:
           command: scripts/test-typecheck.sh
           no_output_timeout: 30m
 
-  typecheck-with-locally-built-CF-jdk11:
+  typecheck-with-latest-CF-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11
     resource_class: large
@@ -771,7 +771,7 @@ jobs:
           command: scripts/test-typecheck.sh
           no_output_timeout: 30m
 
-  typecheck-with-locally-built-CF-jdk17:
+  typecheck-with-latest-CF-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
@@ -807,7 +807,7 @@ workflows:
             - non-txt-diff-ubuntu-jdk17
             - misc-ubuntu-jdk17
             - kvasir-ubuntu-jdk17
-            - typecheck-with-included-CF-jdk17
+            - typecheck-with-bundled-CF-jdk17
       - quick-txt-diff-ubuntu-jdk8:
           requires:
             - jdk17-jobs
@@ -943,8 +943,8 @@ workflows:
           requires:
             - jdk17-jobs
             - misc-ubuntu-jdk17
-      - typecheck-with-included-CF-jdk17
+      - typecheck-with-bundled-CF-jdk17
 # Seems to run out of memory on CircleCI.  It's being checked on Azure Pipelines.
-#      -  typecheck-with-locally-built-CF-jdk8:
-#      -  typecheck-with-locally-built-CF-jdk11:
-#      -  typecheck-with-locally-built-CF-jdk17:
+#      -  typecheck-with-latest-CF-jdk8:
+#      -  typecheck-with-latest-CF-jdk11:
+#      -  typecheck-with-latest-CF-jdk17:
