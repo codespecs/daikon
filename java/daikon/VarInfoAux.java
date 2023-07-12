@@ -29,9 +29,6 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  * whether order matters in a collection. This is immutable and interned.
  */
 public final class VarInfoAux implements Cloneable, Serializable {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020614L;
 
   /** General debug tracer. */

@@ -190,9 +190,6 @@ import typequals.prototype.qual.Prototype;
  */
 public abstract class CLASSNAME extends SUPERCLASS {
 
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20060609L;
 
   protected CLASSNAME(PptSlice ppt, boolean swap) {

@@ -45,9 +45,6 @@ import org.plumelib.util.StringsPlume;
 // known_types = integral_types + ("pointer", "address")
 
 public final @Interned class ProglangType implements Serializable {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
   /** Maps from a base type name to its ProglangTypes and arrays with that base. */

@@ -26,10 +26,10 @@ The correct way to build the system is to run 'make'.
 
 package daikon.inv.binary.twoScalar;
 
-import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import daikon.*;
 import daikon.inv.*;
 import java.io.Serializable;
@@ -39,9 +39,6 @@ import java.util.logging.Logger;
 import org.plumelib.util.MathPlume;
 
 public final class CLASSNAME implements Serializable, Cloneable {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
   /** Debug tracer. */

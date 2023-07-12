@@ -58,9 +58,6 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /** Debugging Logger. */
   public static Logger debug = Logger.getLogger("daikon.VarInfoName");
 
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020614L;
 
   /**

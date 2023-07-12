@@ -14,9 +14,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 // For now, it's convenient to take advantage of its functionality.
 // And they're so similar that maybe this is the right thing after all.
 public final class PptConditional extends PptTopLevel {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20041216L;
 
   public PptTopLevel parent;

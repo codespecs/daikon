@@ -68,9 +68,6 @@ import typequals.prototype.qual.NonPrototype;
 
 /** Contains all of the invariants over a particular set of ARITY variables. */
 public final class PPTSLICE1 extends PptSlice {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040921L;
 
   /** Debug tracer. */

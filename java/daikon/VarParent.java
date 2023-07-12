@@ -9,9 +9,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * variable name is also specified.
  */
 public class VarParent implements Serializable {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   private static final long serialVersionUID = 20130425L;
 
   /** Parent ppt for this variable. */

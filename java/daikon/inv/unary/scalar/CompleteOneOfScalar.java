@@ -22,9 +22,6 @@ import typequals.prototype.qual.Prototype;
  * ...}.
  */
 public final class CompleteOneOfScalar extends SingleScalar {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20091210L;
 
   /** Information about each value encountered. */
