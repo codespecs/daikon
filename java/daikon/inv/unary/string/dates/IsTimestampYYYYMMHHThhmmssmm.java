@@ -17,9 +17,6 @@ import typequals.prototype.qual.Prototype;
  * Timestamp. Prints as {@code YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)}.
  */
 public class IsTimestampYYYYMMHHThhmmssmm extends SingleString {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the

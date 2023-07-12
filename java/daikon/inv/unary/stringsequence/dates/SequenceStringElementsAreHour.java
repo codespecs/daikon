@@ -20,9 +20,6 @@ import typequals.prototype.qual.Prototype;
  * All the elements of x are Hours: HH:MM 24-hour format, optional leading 0}.
  */
 public class SequenceStringElementsAreHour extends SingleStringSequence {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the

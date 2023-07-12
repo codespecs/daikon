@@ -25,9 +25,6 @@ import typequals.prototype.qual.Prototype;
  */
 public class FixedLengthString extends SingleString {
 
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the

@@ -20,10 +20,7 @@ import typequals.prototype.qual.Prototype;
  * x are Timestamps. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)`
  */
 public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleStringSequence {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20230704L;
+x  static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.

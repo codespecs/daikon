@@ -16,9 +16,6 @@ import typequals.prototype.qual.Prototype;
  * Numeric}.
  */
 public class IsNumeric extends SingleString {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20230704L;
 
   // True if the string is always empty

@@ -19,9 +19,6 @@ import typequals.prototype.qual.Prototype;
  * x are URLs}
  */
 public class SequenceStringElementsAreUrl extends SingleStringSequence {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
