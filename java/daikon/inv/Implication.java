@@ -25,9 +25,6 @@ import typequals.prototype.qual.Prototype;
  * only true when certain other conditions are also true (splitting).
  */
 public class Implication extends Joiner {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
   // orig_left and orig_right are the original invariants, in the original

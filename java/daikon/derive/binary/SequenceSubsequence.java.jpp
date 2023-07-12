@@ -26,19 +26,16 @@ The correct way to build the system is to run 'make'.
 
 package daikon.derive.binary;
 
-import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.dataflow.qual.SideEffectFree;
 import daikon.*;
 import daikon.derive.*;
 import org.plumelib.util.Intern;
 import org.plumelib.util.UtilPlume;
 
 public final class SEQUENCESCALARSUBSEQUENCE extends SequenceSubsequence {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020801L;
 
   // Variables starting with dkconfig_ should only be set via the

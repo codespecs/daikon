@@ -236,9 +236,6 @@ import typequals.prototype.qual.Prototype;
  * {@code x[1]} to {@code y[1]}, and so forth. Prints as {@code x[] EQUALScode y[]}.
  */
 public class PAIRWISEINTEQUAL extends SUPERCLASS {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
   /** Debug tracer. */

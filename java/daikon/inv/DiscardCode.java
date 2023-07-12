@@ -55,9 +55,6 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  */
 public class DiscardCode implements Comparable<DiscardCode>, Serializable {
 
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20031016L;
 
   /** used when an invariant is implied by other known invariants */

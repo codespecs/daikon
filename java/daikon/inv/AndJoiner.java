@@ -18,9 +18,6 @@ import typequals.prototype.qual.Prototype;
  * implication where that antecedent consists of two invariants anded together.
  */
 public class AndJoiner extends Joiner {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
   public AndJoiner(PptTopLevel ppt, Invariant left, Invariant right) {

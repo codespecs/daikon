@@ -7,9 +7,6 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** Derivations of the form A[0..i] or A[i..<em>end</em>], derived from A and i. */
 public abstract class SequenceSubsequence extends BinaryDerivation {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020801L;
 
   // Variables starting with dkconfig_ should only be set via the
