@@ -31,7 +31,6 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
@@ -973,7 +972,7 @@ public class NIS {
     /** Hash on class and variables. */
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied @UnknownSignedness SupInv this) {
+    public int hashCode(@GuardSatisfied SupInv this) {
       int code = suppressee.sup_class.hashCode();
       for (int i = 0; i < vis.length; i++) {
         code += vis[i].hashCode();

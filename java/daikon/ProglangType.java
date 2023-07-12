@@ -13,7 +13,6 @@ import java.util.List;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signedness.qual.Signed;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
@@ -529,11 +528,7 @@ public final @Interned class ProglangType implements Serializable {
                 "Warning: at %s line %d%n"
                     + "  bad ttype %c [int=%d] while parsing %s%n"
                     + "  Proceeding with value 'null'%n",
-                filename,
-                reader.getLineNumber(),
-                (@Signed char) parser.ttype,
-                parser.ttype,
-                value_orig);
+                filename, reader.getLineNumber(), (char) parser.ttype, parser.ttype, value_orig);
             v.add(null);
           }
         }
