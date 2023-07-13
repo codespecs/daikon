@@ -24,6 +24,17 @@ public class IsDateYYYYMMDD extends SingleString {
   /** Boolean. True iff Positive invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
+  /*
+   *   The regex matches on a date with the YYYY/MM/DD format (Year min: 1900, Year max: 2050).
+   *   For example:
+   *       - 1900/12/01
+   *       - 2019.01.25
+   *       - 2050-10-30
+   */
+  // ^(?:19\d{2}|20[01234][0-9]|2050)[-/.](?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])$
+  private static Pattern pattern =
+          Pattern.compile("^(?:19\\d{2}|20[01234][0-9]|2050)[-/.](?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])$");
+
   ///
   /// Required methods
   ///
@@ -61,18 +72,6 @@ public class IsDateYYYYMMDD extends SingleString {
 
   @Override
   public InvariantStatus check_modified(String v, int count) {
-    /*
-     *   The regex matches on a date with the YYYY/MM/DD format (Year min: 1900, Year max: 2050).
-     *   For example:
-     *       - 1900/12/01
-     *       - 2019.01.25
-     *       - 2050-10-30
-     */
-    // ^(?:19\d{2}|20[01234][0-9]|2050)[-/.](?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])$
-    Pattern pattern =
-        Pattern.compile(
-            "^(?:19\\d{2}|20[01234][0-9]|2050)[-/.](?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])$");
-
     Matcher matcher = pattern.matcher(v);
 
     if (matcher.matches()) {

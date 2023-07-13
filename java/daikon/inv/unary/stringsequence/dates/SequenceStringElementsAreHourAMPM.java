@@ -31,6 +31,8 @@ public class SequenceStringElementsAreHourAMPM extends SingleStringSequence {
   // considered true if all the arrays are empty
   private boolean alwaysEmpty = true;
 
+  private static Pattern pattern = Pattern.compile("^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$");
+
   protected SequenceStringElementsAreHourAMPM(PptSlice ppt) {
     super(ppt);
   }
@@ -79,9 +81,6 @@ public class SequenceStringElementsAreHourAMPM extends SingleStringSequence {
 
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
-
-    Pattern pattern = Pattern.compile("^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$");
-
     if (a.length > 0) {
       alwaysEmpty = false;
     }

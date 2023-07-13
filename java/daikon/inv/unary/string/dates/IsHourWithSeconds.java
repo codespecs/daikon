@@ -24,6 +24,8 @@ public class IsHourWithSeconds extends SingleString {
   /** Boolean. True iff Positive invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
+  private static Pattern pattern = Pattern.compile("^(?:\\d|[01]\\d|2[0-3]):(?:[0-5]\\d):(?:[0-5]\\d)$");
+
   ///
   /// Required methods
   ///
@@ -61,8 +63,6 @@ public class IsHourWithSeconds extends SingleString {
 
   @Override
   public InvariantStatus check_modified(String v, int count) {
-    Pattern pattern = Pattern.compile("^(?:\\d|[01]\\d|2[0-3]):(?:[0-5]\\d):(?:[0-5]\\d)$");
-
     Matcher matcher = pattern.matcher(v);
 
     if (matcher.matches()) {

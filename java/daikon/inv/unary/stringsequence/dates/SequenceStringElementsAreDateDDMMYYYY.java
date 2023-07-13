@@ -30,6 +30,18 @@ public class SequenceStringElementsAreDateDDMMYYYY extends SingleStringSequence 
   // considered true if all the arrays are empty
   private boolean alwaysEmpty = true;
 
+  /*
+   *   The regex matches on a date with the DD/MM/YYYY format (Year min: 1900, Year max: 2050).
+   *   For example:
+   *       - 01/12/1900
+   *       - 25.01.2019
+   *       - 30-10-2050
+   */
+  // ^(?:0[1-9]|[12][0-9]|3[01])[-/.](?:0[1-9]|1[012])[-/.](?:19\d{2}|20[01234][0-9]|2050)$
+  private static Pattern pattern =
+          Pattern.compile(
+                  "^(?:0[1-9]|[12][0-9]|3[01])[-/.](?:0[1-9]|1[012])[-/.](?:19\\d{2}|20[01234][0-9]|2050)$");
+
   protected SequenceStringElementsAreDateDDMMYYYY(PptSlice ppt) {
     super(ppt);
   }
@@ -76,19 +88,6 @@ public class SequenceStringElementsAreDateDDMMYYYY extends SingleStringSequence 
 
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
-
-    /*
-     *   The regex matches on a date with the DD/MM/YYYY format (Year min: 1900, Year max: 2050).
-     *   For example:
-     *       - 01/12/1900
-     *       - 25.01.2019
-     *       - 30-10-2050
-     */
-    // ^(?:0[1-9]|[12][0-9]|3[01])[-/.](?:0[1-9]|1[012])[-/.](?:19\d{2}|20[01234][0-9]|2050)$
-    Pattern pattern =
-        Pattern.compile(
-            "^(?:0[1-9]|[12][0-9]|3[01])[-/.](?:0[1-9]|1[012])[-/.](?:19\\d{2}|20[01234][0-9]|2050)$");
-
     if (a.length > 0) {
       alwaysEmpty = false;
     }

@@ -24,6 +24,8 @@ public class IsHourAMPM extends SingleString {
   /** Boolean. True iff Positive invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
+  private static Pattern pattern = Pattern.compile("^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$");
+
   ///
   /// Required methods
   ///
@@ -62,8 +64,6 @@ public class IsHourAMPM extends SingleString {
 
   @Override
   public InvariantStatus check_modified(String v, int count) {
-    Pattern pattern = Pattern.compile("^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$");
-
     Matcher matcher = pattern.matcher(v);
 
     if (matcher.matches()) {
