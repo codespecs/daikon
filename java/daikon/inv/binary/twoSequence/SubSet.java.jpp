@@ -309,6 +309,9 @@ public class SUBSET extends TWOSEQUENCE {
 
   @Override
   protected double computeConfidence() {
+    if (ppt.num_samples() == 0) {
+      return Invariant.CONFIDENCE_UNJUSTIFIED;
+    }
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
