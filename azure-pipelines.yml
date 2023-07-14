@@ -1,7 +1,7 @@
 jobs:
 
 # The dependsOn clauses (in this file and in .circleci/config.yml) are:
-#  * Everything not *_ubuntu_jdk17 or typecheck_jdk17 depends on jdk17_jobs.
+#  * Everything not *_ubuntu_jdk17 or typecheck_*_jdk17 depends on jdk17_jobs.
 #  * Anything *_jdk8 or *_jdk11 or _jdk20 depends on *_jdk17.
 #  * Anything *_rockylinux_* depends on *_ubuntu_*.
 
@@ -14,7 +14,8 @@ jobs:
     - misc_ubuntu_jdk17
     - misc_ubuntu_jdk20
     - kvasir_ubuntu_jdk17
-    - typecheck_jdk17
+    - typecheck_latest_jdk17
+    - typecheck_bundled_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   steps:
@@ -290,13 +291,13 @@ jobs:
 #       java -version
 #       javac -version
 #     displayName: show Java version
-#   - bash: ./scripts/test-typecheck.sh
-#     displayName: test-typecheck.sh
+#   - bash: ./scripts/test-typecheck-with-latest-cf.sh
+#     displayName: test-typecheck-with-latest-cf.sh
 
-- job: typecheck_jdk11
+- job: typecheck_latest_jdk11
   dependsOn:
     - jdk17_jobs
-    - typecheck_jdk17
+    - typecheck_latest_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11-plus:latest
@@ -308,10 +309,28 @@ jobs:
       java -version
       javac -version
     displayName: show Java version
-  - bash: ./scripts/test-typecheck.sh
-    displayName: test-typecheck.sh
+  - bash: ./scripts/test-typecheck-with-latest-cf.sh
+    displayName: test-typecheck-with-latest-cf.sh
 
-- job: typecheck_jdk17
+- job: typecheck_bundled_jdk11
+  dependsOn:
+    - jdk17_jobs
+    - typecheck_bundled_jdk17
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-ubuntu-jdk11-plus:latest
+  timeoutInMinutes: 80
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: |
+      java -version
+      javac -version
+    displayName: show Java version
+  - bash: ./scripts/test-typecheck-with-bundled-cf.sh
+    displayName: test-typecheck-with-bundled-cf.sh
+
+- job: typecheck_latest_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17-plus:latest
@@ -323,13 +342,28 @@ jobs:
       java -version
       javac -version
     displayName: show Java version
-  - bash: ./scripts/test-typecheck.sh
-    displayName: test-typecheck.sh
+  - bash: ./scripts/test-typecheck-with-latest-cf.sh
+    displayName: test-typecheck-with-latest-cf.sh
 
-- job: typecheck_jdk20
+- job: typecheck_bundled_jdk17
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-ubuntu-jdk17-plus:latest
+  timeoutInMinutes: 80
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: |
+      java -version
+      javac -version
+    displayName: show Java version
+  - bash: ./scripts/test-typecheck-with-bundled-cf.sh
+    displayName: test-typecheck-with-bundled-cf.sh
+
+- job: typecheck_latest_jdk20
   dependsOn:
     - jdk17_jobs
-    - typecheck_jdk17
+    - typecheck_latest_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk20-plus:latest
@@ -341,8 +375,26 @@ jobs:
       java -version
       javac -version
     displayName: show Java version
-  - bash: ./scripts/test-typecheck.sh
-    displayName: test-typecheck.sh
+  - bash: ./scripts/test-typecheck-with-latest-cf.sh
+    displayName: test-typecheck-with-latest-cf.sh
+
+- job: typecheck_bundled_jdk20
+  dependsOn:
+    - jdk17_jobs
+    - typecheck_bundled_jdk17
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-ubuntu-jdk20-plus:latest
+  timeoutInMinutes: 80
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: |
+      java -version
+      javac -version
+    displayName: show Java version
+  - bash: ./scripts/test-typecheck-with-bundled-cf.sh
+    displayName: test-typecheck-with-bundled-cf.sh
 
 - job: quick_txt_diff_rockylinux_jdk8
   dependsOn:
