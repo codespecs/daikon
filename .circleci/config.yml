@@ -746,7 +746,7 @@ jobs:
             - ".git"
       - run: env
       - run:
-          command: scripts/test-typecheck.sh
+          command: scripts/test-typecheck-with-latest-cf.sh
           no_output_timeout: 30m
 
   typecheck-with-latest-CF-jdk11:
@@ -768,7 +768,7 @@ jobs:
             - ".git"
       - run: env
       - run:
-          command: scripts/test-typecheck.sh
+          command: scripts/test-typecheck-with-latest-cf.sh
           no_output_timeout: 30m
 
   typecheck-with-latest-CF-jdk17:
@@ -790,7 +790,7 @@ jobs:
             - ".git"
       - run: env
       - run:
-          command: scripts/test-typecheck.sh
+          command: scripts/test-typecheck-with-latest-cf.sh
           no_output_timeout: 30m
 
 
