@@ -375,7 +375,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
 
   @Override
   protected double computeConfidence() {
-  return CONFIDENCE_JUSTIFIED;
+  return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
   @Pure
