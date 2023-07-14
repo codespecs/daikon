@@ -101,7 +101,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -317,7 +316,7 @@ public class DCInstrument extends InstructionListUtils {
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied @UnknownSignedness MethodDef this) {
+    public int hashCode(@GuardSatisfied MethodDef this) {
       int code = name.hashCode();
       for (Type arg : arg_types) {
         code += arg.hashCode();
@@ -1361,7 +1360,6 @@ public class DCInstrument extends InstructionListUtils {
       offset += argType.getSize();
     }
     for (int ii = plist.size() - 1; ii >= 0; ii--) {
-      @SuppressWarnings("signedness:cast.unsafe") // offset is small so + '0' is valid character
       char tmpChar = (char) (plist.get(ii) + '0');
       params += tmpChar;
       // Character.forDigit (plist.get(ii), Character.MAX_RADIX);

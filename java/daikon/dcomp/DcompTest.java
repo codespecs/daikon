@@ -7,7 +7,6 @@ import java.util.List;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -351,7 +350,7 @@ class DcompTest {
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied @UnknownSignedness Obj this) {
+    public int hashCode(@GuardSatisfied Obj this) {
       return this.x + this.y;
     }
 
