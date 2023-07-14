@@ -12,7 +12,6 @@ import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -64,7 +63,7 @@ public class Violation implements Serializable {
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied @UnknownSignedness Time this) {
+    public int hashCode(@GuardSatisfied Time this) {
       return name.hashCode();
     }
 
@@ -203,7 +202,7 @@ public class Violation implements Serializable {
 
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied @UnknownSignedness Violation this) {
+  public int hashCode(@GuardSatisfied Violation this) {
     return property.hashCode() + time.hashCode();
   }
 

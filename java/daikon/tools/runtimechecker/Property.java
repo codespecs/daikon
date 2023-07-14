@@ -11,7 +11,6 @@ import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -102,7 +101,7 @@ public class Property implements Serializable {
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied @UnknownSignedness Kind this) {
+    public int hashCode(@GuardSatisfied Kind this) {
       return name.hashCode();
     }
 
@@ -161,7 +160,7 @@ public class Property implements Serializable {
 
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied @UnknownSignedness Property this) {
+  public int hashCode(@GuardSatisfied Property this) {
     return daikonRep.hashCode() + kind.hashCode() + (method == null ? 0 : method.hashCode());
   }
 
