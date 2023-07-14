@@ -436,7 +436,7 @@ public class PptName implements Serializable {
    *
    * @return a string representation of this
    */
-  public String repr(PptName this) {
+  public String repr() {
     return "PptName: fullname="
         + fullname
         + "; fn_name="

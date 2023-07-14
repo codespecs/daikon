@@ -926,7 +926,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    *
    * @return a complete string description of the variable
    */
-  public String repr(VarInfo this) {
+  public String repr() {
     return "<VarInfo "
         + var_info_name // vin ok
         + ": "
@@ -1036,7 +1036,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    *
    * @return all derived variables that build off this one
    */
-  public List<Derivation> derivees(VarInfo this) {
+  public List<Derivation> derivees() {
     ArrayList<Derivation> result = new ArrayList<>();
     // This method is only called from the debugging routine 'repr()'.
     // So let's protect ourselves from a mistake somewhere else.
@@ -1554,7 +1554,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * @return true if this VarInfo is the leader of its equality set
    */
   @Pure
-  public boolean isCanonical(VarInfo this) {
+  public boolean isCanonical() {
     if (equalitySet == null) {
       return true;
     }
