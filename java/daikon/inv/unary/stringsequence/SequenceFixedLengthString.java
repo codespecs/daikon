@@ -10,6 +10,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+import org.checkerframework.framework.qual.Unused;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -23,7 +24,8 @@ public class SequenceFixedLengthString extends SingleStringSequence {
   // daikon.config.Configuration interface.
   public static boolean dkconfig_enabled = false;
 
-  private Integer length = null;
+  @Unused(when = Prototype.class)
+  private @Nullable Integer length = null;
 
   protected SequenceFixedLengthString(PptSlice ppt) {
     super(ppt);

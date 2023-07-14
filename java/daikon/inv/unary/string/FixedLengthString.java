@@ -99,7 +99,7 @@ public class FixedLengthString extends SingleString {
     assert other instanceof FixedLengthString;
 
     FixedLengthString o = (FixedLengthString) other;
-    if (!o.length.equals(length)) {
+    if (o.length != null && !o.length.equals(length)) {
       return false;
     }
 
