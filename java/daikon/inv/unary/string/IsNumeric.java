@@ -18,7 +18,8 @@ import typequals.prototype.qual.Prototype;
 public class IsNumeric extends SingleString {
   static final long serialVersionUID = 20230704L;
 
-  private static Pattern pattern = Pattern.compile("^[+-]{0,1}(0|([1-9](\\d*|\\d{0,2}(,\\d{3})*)))?(\\.\\d*[0-9])?$");
+  private static Pattern pattern =
+      Pattern.compile("^[+-]{0,1}(0|([1-9](\\d*|\\d{0,2}(,\\d{3})*)))?(\\.\\d*[0-9])?$");
 
   // True if the string is always empty
   private boolean alwaysEmpty;

@@ -39,8 +39,8 @@ public class SequenceStringElementsAreDateMMDDYYYY extends SingleStringSequence 
    */
   // ^(?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])[-/.](?:19\d{2}|20[0134][0-9]|2050)$
   private static Pattern pattern =
-          Pattern.compile(
-                  "^(?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])[-/.](?:19\\d{2}|20[0134][0-9]|2050)$");
+      Pattern.compile(
+          "^(?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])[-/.](?:19\\d{2}|20[0134][0-9]|2050)$");
 
   protected SequenceStringElementsAreDateMMDDYYYY(PptSlice ppt) {
     super(ppt);

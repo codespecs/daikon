@@ -29,7 +29,8 @@ public class SequenceStringElementsAreNumeric extends SingleStringSequence {
   // considered true if all the arrays are empty
   private boolean alwaysEmpty = true;
 
-  private static Pattern pattern = Pattern.compile("^[+-]{0,1}(0|([1-9](\\d*|\\d{0,2}(,\\d{3})*)))?(\\.\\d*[0-9])?$");
+  private static Pattern pattern =
+      Pattern.compile("^[+-]{0,1}(0|([1-9](\\d*|\\d{0,2}(,\\d{3})*)))?(\\.\\d*[0-9])?$");
 
   protected SequenceStringElementsAreNumeric(PptSlice ppt) {
     super(ppt);

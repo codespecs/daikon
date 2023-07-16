@@ -31,7 +31,8 @@ public class SequenceStringElementsAreHourWithSeconds extends SingleStringSequen
   // considered true if all the arrays are empty
   private boolean alwaysEmpty = true;
 
-  private static Pattern pattern = Pattern.compile("^(?:\\d|[01]\\d|2[0-3]):(?:[0-5]\\d):(?:[0-5]\\d)$");
+  private static Pattern pattern =
+      Pattern.compile("^(?:\\d|[01]\\d|2[0-3]):(?:[0-5]\\d):(?:[0-5]\\d)$");
 
   protected SequenceStringElementsAreHourWithSeconds(PptSlice ppt) {
     super(ppt);
