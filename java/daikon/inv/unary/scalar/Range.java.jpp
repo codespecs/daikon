@@ -189,7 +189,7 @@ public abstract class RANGE extends SUPERCLASS {
 
   @Override
   protected double computeConfidence() {
-  return Invariant.CONFIDENCE_JUSTIFIED;
+    return CONFIDENCE_JUSTIFIED;
   }
 
   @Pure
