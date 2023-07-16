@@ -9,9 +9,6 @@ import typequals.prototype.qual.Prototype;
 
 /** Abstract base class for invariants over one variable of type {@code double[]}. */
 public abstract class SingleFloatSequence extends SingleSequence {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020813L;
 
   protected SingleFloatSequence(PptSlice ppt) {

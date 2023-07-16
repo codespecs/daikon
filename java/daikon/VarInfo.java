@@ -82,9 +82,6 @@ import org.plumelib.util.ArraysPlume;
   "interning"
 })
 public final @Interned class VarInfo implements Cloneable, Serializable {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20060815L;
 
   /**

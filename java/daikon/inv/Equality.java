@@ -56,9 +56,6 @@ import typequals.prototype.qual.Prototype;
  * z}.
  */
 public final /*(at)Interned*/ class Equality extends Invariant {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20021231L;
 
   public static final Logger debug = Logger.getLogger("daikon.inv.Equality");

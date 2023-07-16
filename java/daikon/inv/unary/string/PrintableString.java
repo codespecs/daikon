@@ -20,9 +20,6 @@ import typequals.prototype.qual.Prototype;
  * (tab).
  */
 public final class PrintableString extends SingleString {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20061016L;
 
   /** Boolean. True iff PrintableString invariants should be considered. */

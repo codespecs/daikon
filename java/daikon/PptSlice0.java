@@ -23,9 +23,6 @@ import org.checkerframework.dataflow.qual.Pure;
 // names tweaked, and temporarily use that as the invariant's ppt.
 
 public class PptSlice0 extends PptSlice {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
   PptSlice0(PptTopLevel parent) {
