@@ -13,6 +13,8 @@ import typequals.prototype.qual.Prototype;
 
 /** Indicates that the value of a string variable is always a URL. Prints as {@code is Url}. */
 public class IsUrl extends SingleString {
+
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -27,17 +29,29 @@ public class IsUrl extends SingleString {
   ///
   /// Required methods
   ///
+
+  /**
+   * Creates a new IsUrl.
+   *
+   * @param ppt the slice with the variable of interest
+   */
   private IsUrl(PptSlice ppt) {
     super(ppt);
   }
 
+  /** Creates a new prototype IsUrl. */
   private @Prototype IsUrl() {
     super();
   }
 
+  /** The prototype invariant. */
   private static @Prototype IsUrl proto = new @Prototype IsUrl();
 
-  // Returns the prototype invariant
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
   public static @Prototype IsUrl get_proto() {
     return proto;
   }

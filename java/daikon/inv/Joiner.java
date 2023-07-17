@@ -58,6 +58,7 @@ public abstract class Joiner extends Invariant {
     return false;
   }
 
+  @Pure
   public @Nullable DiscardInfo isObviousImplied() {
     return null;
   }

@@ -20,6 +20,8 @@ import typequals.prototype.qual.Prototype;
  * x are Timestamps. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)`
  */
 public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleStringSequence {
+
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -30,18 +32,29 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
   // considered true if all the arrays are empty
   private boolean alwaysEmpty = true;
 
+  /**
+   * Creates a new SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm.
+   *
+   * @param ppt the slice with the variable of interest
+   */
   protected SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm(PptSlice ppt) {
     super(ppt);
   }
 
+  /** Creates a new prototype SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm. */
   protected @Prototype SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm() {
     super();
   }
 
+  /** The prototype invariant. */
   private static @Prototype SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm proto =
       new @Prototype SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm();
 
-  /** Returns the prototype invariant for CommonStringSequence. */
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
   public static @Prototype SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm get_proto() {
     return proto;
   }

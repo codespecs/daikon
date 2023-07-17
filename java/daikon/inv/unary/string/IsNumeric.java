@@ -16,6 +16,7 @@ import typequals.prototype.qual.Prototype;
  * Numeric}.
  */
 public class IsNumeric extends SingleString {
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   private static Pattern pattern =
@@ -32,18 +33,30 @@ public class IsNumeric extends SingleString {
   ///
   /// Required methods
   ///
+
+  /**
+   * Creates a new IsNumeric.
+   *
+   * @param ppt the slice with the variable of interest
+   */
   private IsNumeric(PptSlice ppt) {
     super(ppt);
     alwaysEmpty = true;
   }
 
+  /** Creates a new prototype IsNumeric. */
   private @Prototype IsNumeric() {
     super();
   }
 
+  /** The prototype invariant. */
   private static @Prototype IsNumeric proto = new @Prototype IsNumeric();
 
-  // Returns the prototype invariant
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
   public static @Prototype IsNumeric get_proto() {
     return proto;
   }

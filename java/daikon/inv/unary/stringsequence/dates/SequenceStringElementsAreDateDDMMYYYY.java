@@ -20,6 +20,8 @@ import typequals.prototype.qual.Prototype;
  * Prints as {@code All the elements of x are dates. Format: DD/MM/YYYY}.
  */
 public class SequenceStringElementsAreDateDDMMYYYY extends SingleStringSequence {
+
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -42,18 +44,29 @@ public class SequenceStringElementsAreDateDDMMYYYY extends SingleStringSequence 
       Pattern.compile(
           "^(?:0[1-9]|[12][0-9]|3[01])[-/.](?:0[1-9]|1[012])[-/.](?:19\\d{2}|20[01234][0-9]|2050)$");
 
+  /**
+   * Creates a new SequenceStringElementsAreDateDDMMYYYY.
+   *
+   * @param ppt the slice with the variable of interest
+   */
   protected SequenceStringElementsAreDateDDMMYYYY(PptSlice ppt) {
     super(ppt);
   }
 
+  /** Creates a new prototype SequenceStringElementsAreDateDDMMYYYY. */
   protected @Prototype SequenceStringElementsAreDateDDMMYYYY() {
     super();
   }
 
+  /** The prototype invariant. */
   private static @Prototype SequenceStringElementsAreDateDDMMYYYY proto =
       new @Prototype SequenceStringElementsAreDateDDMMYYYY();
 
-  /** Returns the prototype invariant for CommonStringSequence. */
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
   public static @Prototype SequenceStringElementsAreDateDDMMYYYY get_proto() {
     return proto;
   }

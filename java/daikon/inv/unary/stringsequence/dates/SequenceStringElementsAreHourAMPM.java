@@ -21,6 +21,8 @@ import typequals.prototype.qual.Prototype;
  * (AM/PM)}.
  */
 public class SequenceStringElementsAreHourAMPM extends SingleStringSequence {
+
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -34,18 +36,29 @@ public class SequenceStringElementsAreHourAMPM extends SingleStringSequence {
   private static Pattern pattern =
       Pattern.compile("^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$");
 
+  /**
+   * Creates a new SequenceStringElementsAreDateYYYYMMDD.
+   *
+   * @param ppt the slice with the variable of interest
+   */
   protected SequenceStringElementsAreHourAMPM(PptSlice ppt) {
     super(ppt);
   }
 
+  /** Creates a new prototype SequenceStringElementsAreDateYYYYMMDD. */
   protected @Prototype SequenceStringElementsAreHourAMPM() {
     super();
   }
 
+  /** The prototype invariant. */
   private static @Prototype SequenceStringElementsAreHourAMPM proto =
       new @Prototype SequenceStringElementsAreHourAMPM();
 
-  /** Returns the prototype invariant for CommonStringSequence. */
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
   public static @Prototype SequenceStringElementsAreHourAMPM get_proto() {
     return proto;
   }
