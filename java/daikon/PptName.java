@@ -7,7 +7,6 @@ import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.reflection.ReflectionPlume;
@@ -25,9 +24,6 @@ import org.plumelib.reflection.ReflectionPlume;
 // No "@Deprecated" annotation yet, but we should add it once support for
 // file format 1 is removed from Daikon.
 public class PptName implements Serializable {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
   // These are never changed but cannot be declared "final", because they
@@ -440,7 +436,7 @@ public class PptName implements Serializable {
    *
    * @return a string representation of this
    */
-  public String repr(@UnknownSignedness PptName this) {
+  public String repr() {
     return "PptName: fullname="
         + fullname
         + "; fn_name="
@@ -525,7 +521,7 @@ public class PptName implements Serializable {
 
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied @UnknownSignedness PptName this) {
+  public int hashCode(@GuardSatisfied PptName this) {
     return fullname.hashCode();
   }
 

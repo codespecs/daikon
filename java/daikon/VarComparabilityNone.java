@@ -2,7 +2,6 @@ package daikon;
 
 import java.io.Serializable;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -11,9 +10,6 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  * variable is considered comparable to every other variable.
  */
 public final class VarComparabilityNone extends VarComparability implements Serializable {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
   // There is only one VarComparabilityNone object.
@@ -47,7 +43,7 @@ public final class VarComparabilityNone extends VarComparability implements Seri
 
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied @UnknownSignedness VarComparabilityNone this) {
+  public int hashCode(@GuardSatisfied VarComparabilityNone this) {
     return 0;
   }
 

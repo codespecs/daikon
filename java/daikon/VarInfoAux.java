@@ -19,8 +19,6 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signedness.qual.Signed;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -29,9 +27,6 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  * whether order matters in a collection. This is immutable and interned.
  */
 public final class VarInfoAux implements Cloneable, Serializable {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020614L;
 
   /** General debug tracer. */
@@ -197,7 +192,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
             : "@AssumeAssertion(nullness): representation invariant of StreamTokenizer";
         token = tok.sval.trim().intern();
       } else {
-        token = ((@Signed char) tok.ttype + "").intern();
+        token = ((char) tok.ttype + "").intern();
       }
 
       debug.fine("Token info: " + tokInfo + " " + token);
@@ -296,7 +291,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
 
   @Pure
   @Override
-  public int hashCode(@GuardSatisfied @UnknownSignedness VarInfoAux this) {
+  public int hashCode(@GuardSatisfied VarInfoAux this) {
     return map.hashCode();
   }
 
