@@ -306,7 +306,7 @@ public class SUBSET extends TWOSEQUENCE {
 
   @Override
   protected double computeConfidence() {
-    return Invariant.CONFIDENCE_JUSTIFIED;
+  return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
   // Convenience name to make this easier to find.

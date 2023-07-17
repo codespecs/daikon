@@ -310,7 +310,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   @Override
   protected double computeConfidence() {
-    return Invariant.CONFIDENCE_JUSTIFIED;
+  return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
   /** Returns a DiscardInfo, or null if the Invariant is not an obvious subsequence.

@@ -224,7 +224,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   @Override
   protected double computeConfidence() {
-    return Invariant.CONFIDENCE_JUSTIFIED;
+  return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
   @Pure

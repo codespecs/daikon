@@ -150,11 +150,33 @@ import daikon.inv.unary.sequence.SeqIndexIntLessEqual;
 import daikon.inv.unary.sequence.SeqIndexIntLessThan;
 import daikon.inv.unary.sequence.SeqIndexIntNonEqual;
 import daikon.inv.unary.string.CompleteOneOfString;
+import daikon.inv.unary.string.FixedLengthString;
+import daikon.inv.unary.string.IsEmail;
+import daikon.inv.unary.string.IsNumeric;
+import daikon.inv.unary.string.IsUrl;
 import daikon.inv.unary.string.OneOfString;
 import daikon.inv.unary.string.PrintableString;
+import daikon.inv.unary.string.dates.IsDateDDMMYYYY;
+import daikon.inv.unary.string.dates.IsDateMMDDYYYY;
+import daikon.inv.unary.string.dates.IsDateYYYYMMDD;
+import daikon.inv.unary.string.dates.IsHour;
+import daikon.inv.unary.string.dates.IsHourAMPM;
+import daikon.inv.unary.string.dates.IsHourWithSeconds;
+import daikon.inv.unary.string.dates.IsTimestampYYYYMMHHThhmmssmm;
 import daikon.inv.unary.stringsequence.CommonStringSequence;
 import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.unary.stringsequence.OneOfStringSequence;
+import daikon.inv.unary.stringsequence.SequenceFixedLengthString;
+import daikon.inv.unary.stringsequence.SequenceStringElementsAreEmail;
+import daikon.inv.unary.stringsequence.SequenceStringElementsAreNumeric;
+import daikon.inv.unary.stringsequence.SequenceStringElementsAreUrl;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateDDMMYYYY;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateMMDDYYYY;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateYYYYMMDD;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreHour;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreHourAMPM;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreHourWithSeconds;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm;
 import daikon.simplify.LemmaStack;
 import daikon.split.ContextSplitterFactory;
 import daikon.split.PptSplitter;
@@ -1538,6 +1560,19 @@ public final class Daikon {
       proto_invs.add(CompleteOneOfString.get_proto());
       proto_invs.add(CompleteOneOfScalar.get_proto());
 
+      // String formats
+      proto_invs.add(IsUrl.get_proto());
+      proto_invs.add(FixedLengthString.get_proto());
+      proto_invs.add(IsNumeric.get_proto());
+      proto_invs.add(IsEmail.get_proto());
+      proto_invs.add(IsDateYYYYMMDD.get_proto());
+      proto_invs.add(IsDateDDMMYYYY.get_proto());
+      proto_invs.add(IsDateMMDDYYYY.get_proto());
+      proto_invs.add(IsHour.get_proto());
+      proto_invs.add(IsHourWithSeconds.get_proto());
+      proto_invs.add(IsHourAMPM.get_proto());
+      proto_invs.add(IsTimestampYYYYMMHHThhmmssmm.get_proto());
+
       // Positive (x > 0) (Postive.java).  Positive is a sample invariant
       // that is only included as an example.
       // proto_invs.add (Postive.get_proto());
@@ -1603,6 +1638,19 @@ public final class Daikon {
 
       // CommonStringSequence (CommonStringSubsequence.java)
       proto_invs.add(CommonStringSequence.get_proto());
+
+      // String formats
+      proto_invs.add(SequenceFixedLengthString.get_proto());
+      proto_invs.add(SequenceStringElementsAreUrl.get_proto());
+      proto_invs.add(SequenceStringElementsAreNumeric.get_proto());
+      proto_invs.add(SequenceStringElementsAreEmail.get_proto());
+      proto_invs.add(SequenceStringElementsAreDateYYYYMMDD.get_proto());
+      proto_invs.add(SequenceStringElementsAreDateDDMMYYYY.get_proto());
+      proto_invs.add(SequenceStringElementsAreDateMMDDYYYY.get_proto());
+      proto_invs.add(SequenceStringElementsAreHour.get_proto());
+      proto_invs.add(SequenceStringElementsAreHourWithSeconds.get_proto());
+      proto_invs.add(SequenceStringElementsAreHourAMPM.get_proto());
+      proto_invs.add(SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm.get_proto());
     }
 
     // Binary scalar-scalar invariants
