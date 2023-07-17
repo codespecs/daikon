@@ -159,9 +159,9 @@ import daikon.inv.unary.string.PrintableString;
 import daikon.inv.unary.string.dates.IsDateDDMMYYYY;
 import daikon.inv.unary.string.dates.IsDateMMDDYYYY;
 import daikon.inv.unary.string.dates.IsDateYYYYMMDD;
-import daikon.inv.unary.string.dates.IsHour;
-import daikon.inv.unary.string.dates.IsHourAMPM;
-import daikon.inv.unary.string.dates.IsHourWithSeconds;
+import daikon.inv.unary.string.dates.IsTimeOfDay;
+import daikon.inv.unary.string.dates.IsTimeOfDayAMPM;
+import daikon.inv.unary.string.dates.IsTimeOfDayWithSeconds;
 import daikon.inv.unary.string.dates.IsTimestampYYYYMMHHThhmmssmm;
 import daikon.inv.unary.stringsequence.CommonStringSequence;
 import daikon.inv.unary.stringsequence.EltOneOfString;
@@ -173,9 +173,9 @@ import daikon.inv.unary.stringsequence.SequenceStringElementsAreUrl;
 import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateDDMMYYYY;
 import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateMMDDYYYY;
 import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateYYYYMMDD;
-import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreHour;
-import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreHourAMPM;
-import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreHourWithSeconds;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreTimeOfDay;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreTimeOfDayAMPM;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreTimeOfDayWithSeconds;
 import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm;
 import daikon.simplify.LemmaStack;
 import daikon.split.ContextSplitterFactory;
@@ -1568,9 +1568,9 @@ public final class Daikon {
       proto_invs.add(IsDateYYYYMMDD.get_proto());
       proto_invs.add(IsDateDDMMYYYY.get_proto());
       proto_invs.add(IsDateMMDDYYYY.get_proto());
-      proto_invs.add(IsHour.get_proto());
-      proto_invs.add(IsHourWithSeconds.get_proto());
-      proto_invs.add(IsHourAMPM.get_proto());
+      proto_invs.add(IsTimeOfDay.get_proto());
+      proto_invs.add(IsTimeOfDayWithSeconds.get_proto());
+      proto_invs.add(IsTimeOfDayAMPM.get_proto());
       proto_invs.add(IsTimestampYYYYMMHHThhmmssmm.get_proto());
 
       // Positive (x > 0) (Postive.java).  Positive is a sample invariant
@@ -1647,9 +1647,9 @@ public final class Daikon {
       proto_invs.add(SequenceStringElementsAreDateYYYYMMDD.get_proto());
       proto_invs.add(SequenceStringElementsAreDateDDMMYYYY.get_proto());
       proto_invs.add(SequenceStringElementsAreDateMMDDYYYY.get_proto());
-      proto_invs.add(SequenceStringElementsAreHour.get_proto());
-      proto_invs.add(SequenceStringElementsAreHourWithSeconds.get_proto());
-      proto_invs.add(SequenceStringElementsAreHourAMPM.get_proto());
+      proto_invs.add(SequenceStringElementsAreTimeOfDay.get_proto());
+      proto_invs.add(SequenceStringElementsAreTimeOfDayWithSeconds.get_proto());
+      proto_invs.add(SequenceStringElementsAreTimeOfDayAMPM.get_proto());
       proto_invs.add(SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm.get_proto());
     }
 

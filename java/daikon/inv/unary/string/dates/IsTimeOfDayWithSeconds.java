@@ -1,5 +1,7 @@
 package daikon.inv.unary.string.dates;
 
+import static daikon.inv.unary.string.dates.DateRegexes.*;
+
 import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
@@ -14,9 +16,10 @@ import typequals.prototype.qual.Prototype;
 
 /**
  * Indicates that the value of a string variable is always a time in 24-hour format, including
- * seconds. Prints as {@code x is Hour: HH:MM:SS 24-hour format with optional leading 0}.
+ * seconds. Prints as {@code x is time of day: HH:MM:SS 24-hour format with optional leading 0}.
  */
-public class IsHourWithSeconds extends SingleString {
+public class IsTimeOfDayWithSeconds extends SingleString {
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -24,24 +27,37 @@ public class IsHourWithSeconds extends SingleString {
   /** Boolean. True iff Positive invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  private static Pattern pattern =
-      Pattern.compile("^(?:\\d|[01]\\d|2[0-3]):(?:[0-5]\\d):(?:[0-5]\\d)$");
+  /** Matches a time of day in HH:MM:SS 24-hour format with optional leading 0. */
+  public static final Pattern PATTERN =
+      Pattern.compile("^" + H + ":" + MINUTES + ":" + SECONDS + "$");
 
   ///
   /// Required methods
   ///
-  private IsHourWithSeconds(PptSlice ppt) {
+
+  /**
+   * Creates a new IsTimeOfDayWithSeconds.
+   *
+   * @param ppt the slice with the variable of interest
+   */
+  private IsTimeOfDayWithSeconds(PptSlice ppt) {
     super(ppt);
   }
 
-  private @Prototype IsHourWithSeconds() {
+  /** Creates a new prototype IsTimeOfDayWithSeconds. */
+  private @Prototype IsTimeOfDayWithSeconds() {
     super();
   }
 
-  private static @Prototype IsHourWithSeconds proto = new @Prototype IsHourWithSeconds();
+  /** The prototype invariant. */
+  private static @Prototype IsTimeOfDayWithSeconds proto = new @Prototype IsTimeOfDayWithSeconds();
 
-  // Returns the prototype invariant
-  public static @Prototype IsHourWithSeconds get_proto() {
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
+  public static @Prototype IsTimeOfDayWithSeconds get_proto() {
     return proto;
   }
 
@@ -51,20 +67,21 @@ public class IsHourWithSeconds extends SingleString {
   }
 
   @Override
-  public IsHourWithSeconds instantiate_dyn(@Prototype IsHourWithSeconds this, PptSlice slice) {
-    return new IsHourWithSeconds(slice);
+  public IsTimeOfDayWithSeconds instantiate_dyn(
+      @Prototype IsTimeOfDayWithSeconds this, PptSlice slice) {
+    return new IsTimeOfDayWithSeconds(slice);
   }
 
   // A printed representation for user output
   @SideEffectFree
   @Override
-  public String format_using(@GuardSatisfied IsHourWithSeconds this, OutputFormat format) {
-    return var().name() + " is Hour: HH:MM:SS 24-hour format with optional leading 0";
+  public String format_using(@GuardSatisfied IsTimeOfDayWithSeconds this, OutputFormat format) {
+    return var().name() + " is time of day: HH:MM:SS 24-hour format with optional leading 0";
   }
 
   @Override
   public InvariantStatus check_modified(String v, int count) {
-    Matcher matcher = pattern.matcher(v);
+    Matcher matcher = PATTERN.matcher(v);
 
     if (matcher.matches()) {
       return InvariantStatus.NO_CHANGE;
@@ -85,7 +102,7 @@ public class IsHourWithSeconds extends SingleString {
   @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
-    assert other instanceof IsHourWithSeconds;
+    assert other instanceof IsTimeOfDayWithSeconds;
     return true;
   }
 }

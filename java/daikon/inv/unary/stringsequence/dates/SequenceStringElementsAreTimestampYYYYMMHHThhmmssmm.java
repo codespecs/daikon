@@ -5,9 +5,9 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import daikon.inv.unary.string.dates.IsTimestampYYYYMMHHThhmmssmm;
 import daikon.inv.unary.stringsequence.SingleStringSequence;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -80,16 +80,12 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
 
-    Pattern pattern =
-        Pattern.compile(
-            "^[0-9]{4}-((0[13578]|1[02])-(0[1-9]|[12][0-9]|3[01])|(0[469]|11)-(0[1-9]|[12][0-9]|30)|(02)-(0[1-9]|[12][0-9]))T(0[0-9]|1[0-9]|2[0-3]):(0[0-9]|[1-5][0-9]):(0[0-9]|[1-5][0-9])(\\.[0-9]{3}){0,1}Z$");
-
     if (a.length > 0) {
       alwaysEmpty = false;
     }
 
     for (int i = 0; i < a.length; i++) {
-      Matcher matcher = pattern.matcher(a[i]);
+      Matcher matcher = IsTimestampYYYYMMHHThhmmssmm.PATTERN.matcher(a[i]);
       if (!matcher.matches()) {
         return InvariantStatus.FALSIFIED;
       }

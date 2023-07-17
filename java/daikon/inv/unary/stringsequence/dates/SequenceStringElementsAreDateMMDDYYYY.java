@@ -5,9 +5,9 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import daikon.inv.unary.string.dates.IsDateMMDDYYYY;
 import daikon.inv.unary.stringsequence.SingleStringSequence;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -29,18 +29,6 @@ public class SequenceStringElementsAreDateMMDDYYYY extends SingleStringSequence 
   // Set to true if the array is empty. If we do not use this property, the invariant would be
   // considered true if all the arrays are empty
   private boolean alwaysEmpty = true;
-
-  /*
-   *   The regex matches on a date with the MM/DD/YYYY format (Year min: 1900, Year max: 2050).
-   *   For example:
-   *       - 12/01/1900
-   *       - 01.25.2019
-   *       - 10-30-2050
-   */
-  // ^(?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])[-/.](?:19\d{2}|20[0134][0-9]|2050)$
-  private static Pattern pattern =
-      Pattern.compile(
-          "^(?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])[-/.](?:19\\d{2}|20[0134][0-9]|2050)$");
 
   protected SequenceStringElementsAreDateMMDDYYYY(PptSlice ppt) {
     super(ppt);
@@ -93,7 +81,7 @@ public class SequenceStringElementsAreDateMMDDYYYY extends SingleStringSequence 
     }
 
     for (int i = 0; i < a.length; i++) {
-      Matcher matcher = pattern.matcher(a[i]);
+      Matcher matcher = IsDateMMDDYYYY.PATTERN.matcher(a[i]);
       if (!matcher.matches()) {
         return InvariantStatus.FALSIFIED;
       }

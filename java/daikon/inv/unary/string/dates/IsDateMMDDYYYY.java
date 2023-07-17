@@ -1,5 +1,7 @@
 package daikon.inv.unary.string.dates;
 
+import static daikon.inv.unary.string.dates.DateRegexes.*;
+
 import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
@@ -13,10 +15,11 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 
 /**
- * Indicates that the value of a string variable is always a date following the format MM/DD/YYYY
- * (the separator can be ``/'' or ``-''). Prints as {@code x is a Date. Format: MM/DD/YYYY}.
+ * Indicates that the value of a string variable is always a date following the format MM/DD/YYYY,
+ * MM-DD-YYYY, or MM.DD.YYYY. Prints as {@code x is a Date. Format: MM/DD/YYYY}.
  */
 public class IsDateMMDDYYYY extends SingleString {
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -24,32 +27,39 @@ public class IsDateMMDDYYYY extends SingleString {
   /** Boolean. True iff Positive invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  /*
-   *   The regex matches on a date with the MM/DD/YYYY format (Year min: 1900, Year max: 2050).
-   *   For example:
-   *       - 12/01/1900
-   *       - 01.25.2019
-   *       - 10-30-2050
+  /**
+   * The regex matches a date in MM/DD/YYYY format (Year min: 1900, Year max: 2050). For example:
+   * "12/01/1900", "01.25.2019", "10-30-2050".
    */
-  // ^(?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])[-/.](?:19\d{2}|20[0134][0-9]|2050)$
-  private static Pattern pattern =
-      Pattern.compile(
-          "^(?:0[1-9]|1[012])[-/.](?:0[1-9]|[12][0-9]|3[01])[-/.](?:19\\d{2}|20[0134][0-9]|2050)$");
+  public static final Pattern PATTERN =
+      Pattern.compile("^" + MONTH_NUMBER + "[-/.]" + DAY_OF_MONTH + "[-/.]" + YYYY2050 + "$");
 
   ///
   /// Required methods
   ///
+
+  /**
+   * Creates a new IsDateMMDDYYYY.
+   *
+   * @param ppt the slice with the variable of interest
+   */
   private IsDateMMDDYYYY(PptSlice ppt) {
     super(ppt);
   }
 
+  /** Creates a new prototype IsDateMMDDYYYY. */
   private @Prototype IsDateMMDDYYYY() {
     super();
   }
 
+  /** The prototype invariant. */
   private static @Prototype IsDateMMDDYYYY proto = new @Prototype IsDateMMDDYYYY();
 
-  // Returns the prototype invariant
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
   public static @Prototype IsDateMMDDYYYY get_proto() {
     return proto;
   }
@@ -73,7 +83,7 @@ public class IsDateMMDDYYYY extends SingleString {
 
   @Override
   public InvariantStatus check_modified(String v, int count) {
-    Matcher matcher = pattern.matcher(v);
+    Matcher matcher = PATTERN.matcher(v);
 
     if (matcher.matches()) {
       return InvariantStatus.NO_CHANGE;

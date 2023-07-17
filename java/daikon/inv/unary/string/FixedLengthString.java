@@ -25,6 +25,7 @@ import typequals.prototype.qual.Prototype;
  */
 public class FixedLengthString extends SingleString {
 
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -38,17 +39,29 @@ public class FixedLengthString extends SingleString {
   ///
   /// Required methods
   ///
+
+  /**
+   * Creates a new FixedLengthString.
+   *
+   * @param ppt the slice with the variable of interest
+   */
   private FixedLengthString(PptSlice ppt) {
     super(ppt);
   }
 
+  /** Creates a new prototype FixedLengthString. */
   private @Prototype FixedLengthString() {
     super();
   }
 
+  /** The prototype invariant. */
   private static @Prototype FixedLengthString proto = new @Prototype FixedLengthString();
 
-  // Returns the prototype invariant
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
   public static @Prototype FixedLengthString get_proto() {
     return proto;
   }

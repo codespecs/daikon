@@ -5,9 +5,9 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import daikon.inv.unary.string.dates.IsTimeOfDay;
 import daikon.inv.unary.stringsequence.SingleStringSequence;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -16,11 +16,10 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 
 /**
- * Indicates that all elements of an array of strings are hours in 24-hour format, including
- * seconds. Prints as {@code All the elements of x are Hours: HH:MM:SS 24-hour format with optional
- * leading 0}.
+ * Indicates that all elements of an array of strings are hours in 24-hour format. Prints as {@code
+ * All the elements of x are TimeOfDays: HH:MM 24-hour format, optional leading 0}.
  */
-public class SequenceStringElementsAreHourWithSeconds extends SingleStringSequence {
+public class SequenceStringElementsAreTimeOfDay extends SingleStringSequence {
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -31,22 +30,19 @@ public class SequenceStringElementsAreHourWithSeconds extends SingleStringSequen
   // considered true if all the arrays are empty
   private boolean alwaysEmpty = true;
 
-  private static Pattern pattern =
-      Pattern.compile("^(?:\\d|[01]\\d|2[0-3]):(?:[0-5]\\d):(?:[0-5]\\d)$");
-
-  protected SequenceStringElementsAreHourWithSeconds(PptSlice ppt) {
+  protected SequenceStringElementsAreTimeOfDay(PptSlice ppt) {
     super(ppt);
   }
 
-  protected @Prototype SequenceStringElementsAreHourWithSeconds() {
+  protected @Prototype SequenceStringElementsAreTimeOfDay() {
     super();
   }
 
-  private static @Prototype SequenceStringElementsAreHourWithSeconds proto =
-      new @Prototype SequenceStringElementsAreHourWithSeconds();
+  private static @Prototype SequenceStringElementsAreTimeOfDay proto =
+      new @Prototype SequenceStringElementsAreTimeOfDay();
 
   /** Returns the prototype invariant for CommonStringSequence. */
-  public static @Prototype SequenceStringElementsAreHourWithSeconds get_proto() {
+  public static @Prototype SequenceStringElementsAreTimeOfDay get_proto() {
     return proto;
   }
 
@@ -58,26 +54,26 @@ public class SequenceStringElementsAreHourWithSeconds extends SingleStringSequen
 
   /** instantiate an invariant on the specified slice */
   @Override
-  protected SequenceStringElementsAreHourWithSeconds instantiate_dyn(
-      @Prototype SequenceStringElementsAreHourWithSeconds this, PptSlice slice) {
-    return new SequenceStringElementsAreHourWithSeconds(slice);
+  protected SequenceStringElementsAreTimeOfDay instantiate_dyn(
+      @Prototype SequenceStringElementsAreTimeOfDay this, PptSlice slice) {
+    return new SequenceStringElementsAreTimeOfDay(slice);
   }
 
   // Don't write clone, because this.intersect is read-only
   // protected Object clone();
 
   @Override
-  public String repr(@GuardSatisfied SequenceStringElementsAreHourWithSeconds this) {
-    return "SequenceStringElementsAreHourWithSeconds " + varNames();
+  public String repr(@GuardSatisfied SequenceStringElementsAreTimeOfDay this) {
+    return "SequenceStringElementsAreTimeOfDay " + varNames();
   }
 
   @SideEffectFree
   @Override
   public String format_using(
-      @GuardSatisfied SequenceStringElementsAreHourWithSeconds this, OutputFormat format) {
+      @GuardSatisfied SequenceStringElementsAreTimeOfDay this, OutputFormat format) {
     return "All the elements of "
         + var().name()
-        + " are Hours: HH:MM:SS 24-hour format with optional leading 0";
+        + " are TimeOfDays: HH:MM 24-hour format, optional leading 0";
   }
 
   @Override
@@ -87,7 +83,7 @@ public class SequenceStringElementsAreHourWithSeconds extends SingleStringSequen
     }
 
     for (int i = 0; i < a.length; i++) {
-      Matcher matcher = pattern.matcher(a[i]);
+      Matcher matcher = IsTimeOfDay.PATTERN.matcher(a[i]);
       if (!matcher.matches()) {
         return InvariantStatus.FALSIFIED;
       }
@@ -119,7 +115,7 @@ public class SequenceStringElementsAreHourWithSeconds extends SingleStringSequen
   @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
-    assert other instanceof SequenceStringElementsAreHourWithSeconds;
+    assert other instanceof SequenceStringElementsAreTimeOfDay;
     return true;
   }
 }
