@@ -18,6 +18,8 @@ import typequals.prototype.qual.Prototype;
  * All the elements of x have LENGTH=n}.
  */
 public class SequenceFixedLengthString extends SingleStringSequence {
+
+  /** UID for serialization. */
   static final long serialVersionUID = 20220423L;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -27,18 +29,29 @@ public class SequenceFixedLengthString extends SingleStringSequence {
   @Unused(when = Prototype.class)
   private @Nullable Integer length = null;
 
+  /**
+   * Creates a new SequenceFixedLengthString.
+   *
+   * @param ppt the slice with the variable of interest
+   */
   protected SequenceFixedLengthString(PptSlice ppt) {
     super(ppt);
   }
 
+  /** Creates a new prototype SequenceFixedLengthString. */
   protected @Prototype SequenceFixedLengthString() {
     super();
   }
 
+  /** The prototype invariant. */
   private static @Prototype SequenceFixedLengthString proto =
       new @Prototype SequenceFixedLengthString();
 
-  /** Returns the prototype invariant for CommonStringSequence. */
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
   public static @Prototype SequenceFixedLengthString get_proto() {
     return proto;
   }

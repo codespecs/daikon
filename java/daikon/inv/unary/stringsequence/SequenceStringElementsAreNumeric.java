@@ -19,6 +19,8 @@ import typequals.prototype.qual.Prototype;
  * Prints as {@code All the elements of x are Numeric}.
  */
 public class SequenceStringElementsAreNumeric extends SingleStringSequence {
+
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -32,18 +34,29 @@ public class SequenceStringElementsAreNumeric extends SingleStringSequence {
   private static Pattern pattern =
       Pattern.compile("^[+-]{0,1}(0|([1-9](\\d*|\\d{0,2}(,\\d{3})*)))?(\\.\\d*[0-9])?$");
 
+  /**
+   * Creates a new SequenceStringElementsAreNumeric.
+   *
+   * @param ppt the slice with the variable of interest
+   */
   protected SequenceStringElementsAreNumeric(PptSlice ppt) {
     super(ppt);
   }
 
+  /** Creates a new prototype SequenceStringElementsAreNumeric. */
   protected @Prototype SequenceStringElementsAreNumeric() {
     super();
   }
 
+  /** The prototype invariant. */
   private static @Prototype SequenceStringElementsAreNumeric proto =
       new @Prototype SequenceStringElementsAreNumeric();
 
-  /** Returns the prototype invariant for CommonStringSequence. */
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
   public static @Prototype SequenceStringElementsAreNumeric get_proto() {
     return proto;
   }

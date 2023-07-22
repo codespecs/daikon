@@ -20,6 +20,8 @@ import typequals.prototype.qual.Prototype;
  * All the elements of x are Hours: HH:MM 24-hour format, optional leading 0}.
  */
 public class SequenceStringElementsAreHour extends SingleStringSequence {
+
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -32,18 +34,29 @@ public class SequenceStringElementsAreHour extends SingleStringSequence {
 
   private static Pattern pattern = Pattern.compile("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$");
 
+  /**
+   * Creates a new SequenceStringElementsAreHour.
+   *
+   * @param ppt the slice with the variable of interest
+   */
   protected SequenceStringElementsAreHour(PptSlice ppt) {
     super(ppt);
   }
 
+  /** Creates a new prototype SequenceStringElementsAreHour. */
   protected @Prototype SequenceStringElementsAreHour() {
     super();
   }
 
+  /** The prototype invariant. */
   private static @Prototype SequenceStringElementsAreHour proto =
       new @Prototype SequenceStringElementsAreHour();
 
-  /** Returns the prototype invariant for CommonStringSequence. */
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
   public static @Prototype SequenceStringElementsAreHour get_proto() {
     return proto;
   }
