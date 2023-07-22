@@ -1,5 +1,7 @@
 package daikon.inv.unary.string.dates;
 
+import static daikon.inv.unary.string.dates.DateRegexes.*;
+
 import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
@@ -14,9 +16,10 @@ import typequals.prototype.qual.Prototype;
 
 /**
  * Indicates that the value of a string variable is always a time in 24-hour format. Prints as
- * {@code x is Hour: HH:MM 24-hour format, optional leading 0}.
+ * {@code x is time of day: HH:MM 24-hour format, optional leading 0}.
  */
-public class IsHour extends SingleString {
+public class IsTimeOfDay extends SingleString {
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -24,23 +27,36 @@ public class IsHour extends SingleString {
   /** Boolean. True iff Positive invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  private static Pattern pattern = Pattern.compile("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$");
+  /** Matches a time of day in HH:MM 24-hour format, with optional leading 0. */
+  public static final Pattern PATTERN = Pattern.compile("^" + H + ":" + MINUTES + "$");
 
   ///
   /// Required methods
   ///
-  private IsHour(PptSlice ppt) {
+
+  /**
+   * Creates a new IsTimeOfDay.
+   *
+   * @param ppt the slice with the variable of interest
+   */
+  private IsTimeOfDay(PptSlice ppt) {
     super(ppt);
   }
 
-  private @Prototype IsHour() {
+  /** Creates a new prototype IsTimeOfDay. */
+  private @Prototype IsTimeOfDay() {
     super();
   }
 
-  private static @Prototype IsHour proto = new @Prototype IsHour();
+  /** The prototype invariant. */
+  private static @Prototype IsTimeOfDay proto = new @Prototype IsTimeOfDay();
 
-  // Returns the prototype invariant
-  public static @Prototype IsHour get_proto() {
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
+  public static @Prototype IsTimeOfDay get_proto() {
     return proto;
   }
 
@@ -50,20 +66,20 @@ public class IsHour extends SingleString {
   }
 
   @Override
-  public IsHour instantiate_dyn(@Prototype IsHour this, PptSlice slice) {
-    return new IsHour(slice);
+  public IsTimeOfDay instantiate_dyn(@Prototype IsTimeOfDay this, PptSlice slice) {
+    return new IsTimeOfDay(slice);
   }
 
   // A printed representation for user output
   @SideEffectFree
   @Override
-  public String format_using(@GuardSatisfied IsHour this, OutputFormat format) {
-    return var().name() + " is Hour: HH:MM 24-hour format, optional leading 0";
+  public String format_using(@GuardSatisfied IsTimeOfDay this, OutputFormat format) {
+    return var().name() + " is time of day: HH:MM 24-hour format, optional leading 0";
   }
 
   @Override
   public InvariantStatus check_modified(String v, int count) {
-    Matcher matcher = pattern.matcher(v);
+    Matcher matcher = PATTERN.matcher(v);
 
     if (matcher.matches()) {
       return InvariantStatus.NO_CHANGE;
@@ -84,7 +100,7 @@ public class IsHour extends SingleString {
   @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
-    assert other instanceof IsHour;
+    assert other instanceof IsTimeOfDay;
     return true;
   }
 }

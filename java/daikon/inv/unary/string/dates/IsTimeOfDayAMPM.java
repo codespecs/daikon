@@ -1,5 +1,7 @@
 package daikon.inv.unary.string.dates;
 
+import static daikon.inv.unary.string.dates.DateRegexes.*;
+
 import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
@@ -14,9 +16,10 @@ import typequals.prototype.qual.Prototype;
 
 /**
  * Indicates that the value of a string variable is always a time in 12-hour format. Prints as
- * {@code x is Hour: HH:MM 12-hour format, optional leading 0}.
+ * {@code x is time of day: HH:MM PM 12-hour format, optional leading 0}.
  */
-public class IsHourAMPM extends SingleString {
+public class IsTimeOfDayAMPM extends SingleString {
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -24,24 +27,38 @@ public class IsHourAMPM extends SingleString {
   /** Boolean. True iff Positive invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  private static Pattern pattern =
-      Pattern.compile("^((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))$");
+  /**
+   * Matches a time of day in 12-hour format, with optional leading 0 and with trailing AM or PM.
+   */
+  public static final Pattern PATTERN = Pattern.compile("^" + H + ":" + MINUTES + AMPM + "$");
 
   ///
   /// Required methods
   ///
-  private IsHourAMPM(PptSlice ppt) {
+
+  /**
+   * Creates a new IsTimeOfDayAMPM.
+   *
+   * @param ppt the slice with the variable of interest
+   */
+  private IsTimeOfDayAMPM(PptSlice ppt) {
     super(ppt);
   }
 
-  private @Prototype IsHourAMPM() {
+  /** Creates a new prototype IsTimeOfDayAMPM. */
+  private @Prototype IsTimeOfDayAMPM() {
     super();
   }
 
-  private static @Prototype IsHourAMPM proto = new @Prototype IsHourAMPM();
+  /** The prototype invariant. */
+  private static @Prototype IsTimeOfDayAMPM proto = new @Prototype IsTimeOfDayAMPM();
 
-  // Returns the prototype invariant
-  public static @Prototype IsHourAMPM get_proto() {
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
+  public static @Prototype IsTimeOfDayAMPM get_proto() {
     return proto;
   }
 
@@ -51,21 +68,22 @@ public class IsHourAMPM extends SingleString {
   }
 
   @Override
-  public IsHourAMPM instantiate_dyn(@Prototype IsHourAMPM this, PptSlice slice) {
-    return new IsHourAMPM(slice);
+  public IsTimeOfDayAMPM instantiate_dyn(@Prototype IsTimeOfDayAMPM this, PptSlice slice) {
+    return new IsTimeOfDayAMPM(slice);
   }
 
   // A printed representation for user output
   @SideEffectFree
   @Override
-  public String format_using(@GuardSatisfied IsHourAMPM this, OutputFormat format) {
+  public String format_using(@GuardSatisfied IsTimeOfDayAMPM this, OutputFormat format) {
     return var().name()
-        + " is Hour: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)";
+        + " is time of day: HH:MM PM x12-hour format, optional leading 0, mandatory meridiems"
+        + " (AM/PM)";
   }
 
   @Override
   public InvariantStatus check_modified(String v, int count) {
-    Matcher matcher = pattern.matcher(v);
+    Matcher matcher = PATTERN.matcher(v);
 
     if (matcher.matches()) {
       return InvariantStatus.NO_CHANGE;
@@ -86,7 +104,7 @@ public class IsHourAMPM extends SingleString {
   @Pure
   @Override
   public boolean isSameFormula(Invariant other) {
-    assert other instanceof IsHourAMPM;
+    assert other instanceof IsTimeOfDayAMPM;
     return true;
   }
 }

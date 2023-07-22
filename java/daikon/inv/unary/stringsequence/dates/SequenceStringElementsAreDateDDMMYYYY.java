@@ -5,9 +5,9 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import daikon.inv.unary.string.dates.IsDateDDMMYYYY;
 import daikon.inv.unary.stringsequence.SingleStringSequence;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -106,7 +106,7 @@ public class SequenceStringElementsAreDateDDMMYYYY extends SingleStringSequence 
     }
 
     for (int i = 0; i < a.length; i++) {
-      Matcher matcher = pattern.matcher(a[i]);
+      Matcher matcher = IsDateDDMMYYYY.PATTERN.matcher(a[i]);
       if (!matcher.matches()) {
         return InvariantStatus.FALSIFIED;
       }
