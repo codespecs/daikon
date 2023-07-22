@@ -8,6 +8,7 @@ import daikon.inv.OutputFormat;
 import daikon.inv.unary.string.dates.IsDateDDMMYYYY;
 import daikon.inv.unary.stringsequence.SingleStringSequence;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
