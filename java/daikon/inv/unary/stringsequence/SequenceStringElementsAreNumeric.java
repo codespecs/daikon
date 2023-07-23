@@ -5,8 +5,8 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import daikon.inv.unary.string.IsNumeric;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -30,9 +30,6 @@ public class SequenceStringElementsAreNumeric extends SingleStringSequence {
   // Set to true if the array is empty. If we do not use this property, the invariant would be
   // considered true if all the arrays are empty
   private boolean alwaysEmpty = true;
-
-  private static Pattern pattern =
-      Pattern.compile("^[+-]{0,1}(0|([1-9](\\d*|\\d{0,2}(,\\d{3})*)))?(\\.\\d*[0-9])?$");
 
   /**
    * Creates a new SequenceStringElementsAreNumeric.
@@ -96,7 +93,7 @@ public class SequenceStringElementsAreNumeric extends SingleStringSequence {
     }
 
     for (int i = 0; i < a.length; i++) {
-      Matcher matcher = pattern.matcher(a[i]);
+      Matcher matcher = IsNumeric.PATTERN.matcher(a[i]);
       // The invariant is falsified if one of the elements of the array is NOT numeric
       if (!matcher.matches()) {
         return InvariantStatus.FALSIFIED;

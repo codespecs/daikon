@@ -33,6 +33,7 @@ public class FixedLengthString extends SingleString {
   /** Boolean. True iff Positive invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
+  /** Numerical variable specifying the string length */
   @Unused(when = Prototype.class)
   private @Nullable Integer length = null;
 

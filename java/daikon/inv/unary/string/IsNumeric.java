@@ -19,10 +19,23 @@ public class IsNumeric extends SingleString {
   /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
-  private static Pattern pattern =
-      Pattern.compile("^[+-]{0,1}(0|([1-9](\\d*|\\d{0,2}(,\\d{3})*)))?(\\.\\d*[0-9])?$");
+  /**
+   * This regular expression is designed to match positive and negative decimal numbers with
+   * optional decimal plates. It has three components: 1. Optional plus or minus sign: Zero or one
+   * occurrences of either '+' or '-'. 2. Whole part of the number: It can be either 0 or a sequence
+   * of digits not starting with a leading 0. It supports comma separated sequences of three digits
+   * (i.e., thousands). 3. Decimal part of the number: Decimal point followed by at least one digit.
+   */
+  public static Pattern PATTERN =
+      Pattern.compile(
+          // Optional plus or minus sign
+          "^[+-]{0,1}"
+              // Whole part of the number
+              + "(0|([1-9](\\d*|\\d{0,2}(,\\d{3})*)))?"
+              // Decimal part of the number
+              + "(\\.\\d*[0-9])?$");
 
-  // True if the string is always empty
+  /** true if the string is always empty If false, the invariant is unjustified */
   private boolean alwaysEmpty;
 
   // Variables starting with dkconfig_ should only be set via the
@@ -80,7 +93,7 @@ public class IsNumeric extends SingleString {
 
   @Override
   public InvariantStatus check_modified(String v, int count) {
-    Matcher matcher = pattern.matcher(v);
+    Matcher matcher = PATTERN.matcher(v);
 
     if (v.length() > 0) {
       alwaysEmpty = false;
