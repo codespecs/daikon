@@ -25,22 +25,33 @@ public class IsEmail extends SingleString {
   public static boolean dkconfig_enabled = false;
 
   /**
-   * Source: https://emailregex.com/index.html This regular expression is designed to match email
-   * addresses. It has three components: 1. Username: There are two alternatives: usernames with
-   * alphanumeric characters and some special characters (e.g., !, #, $, %, &, ', *, +, /, =, ?, ^,
-   * _, `, {, |, }, ~, -); or usernames enclosed in double quotes and special characters. 2. @: It
-   * simply matches the "@" character. 3. Domain: Domain of the email address. There are two
-   * alternatives: domain names with alphanumeric characters and hyphens (separated by periods); or
-   * IP addresses enclosed in square brackets, allowing for IPv4 and IPv6 addresses with an optional
-   * port number.
+   * Regular expression that matches email addresses. Source: <a
+   * href="https://emailregex.com/index.html">https://emailregex.com/index.html</a>.
    */
   public static Pattern PATTERN =
       Pattern.compile(
           // username
-          "^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")"
+          ("^("
+                  // usernames with alphanumeric characters and some special characters
+                  + "?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*"
+                  // or
+                  + "|"
+                  // usernames enclosed in double quotes
+
+                  + "\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")")
               + "@"
               // domain
-              + "(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]^[0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])$");
+              + ("("
+                  // domain names with alphanumeric characters and hyphens (separated by periods)
+                  + "?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]^[0-9]?"
+                  // or
+                  + "|"
+                  // IP addresses enclosed in square brackets, allowing for IPv4 and IPv6 addresses
+                  // with
+                  // an optional port number.
+                  + "[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\]"
+                  + ")")
+              + "$");
 
   ///
   /// Required methods
