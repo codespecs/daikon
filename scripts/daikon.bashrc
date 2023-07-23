@@ -58,7 +58,7 @@ if [ -d ${DAIKONDIR}/java ]; then
 fi
 export DAIKON_CLASSPATH
 
-export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${JAVA_HOME}/bin:$PATH
+export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:$PATH:${JAVA_HOME}/bin
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if [ $PERL5LIB ]; then
