@@ -121,7 +121,11 @@ public class SequenceStringElementsAreDateMMDDYYYY extends SingleStringSequence 
     return 1 - Math.pow(.1, ppt.num_samples());
   }
 
-  /** DiscardInfo is not used for this invariant */
+  /**
+   * DiscardInfo is not used for this invariant
+   *
+   * @return null
+   */
   @Pure
   public @Nullable DiscardInfo isObviousImplied() {
     return null;

@@ -26,10 +26,16 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean. True iff SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm invariants should be
+   * considered.
+   */
   public static boolean dkconfig_enabled = false;
 
-  // Set to true if the array is empty. If we do not use this property, the invariant would be
-  // considered true if all the arrays are empty
+  /**
+   * true if the array is always empty. Without this property, the invariant would be considered
+   * true if all the arrays are empty
+   */
   private boolean alwaysEmpty = true;
 
   /**
@@ -120,6 +126,11 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
     return 1 - Math.pow(.1, ppt.num_samples());
   }
 
+  /**
+   * DiscardInfo is not used for this invariant
+   *
+   * @return null
+   */
   @Pure
   public @Nullable DiscardInfo isObviousImplied() {
     return null;

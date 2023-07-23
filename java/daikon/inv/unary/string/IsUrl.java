@@ -23,21 +23,23 @@ public class IsUrl extends SingleString {
   public static boolean dkconfig_enabled = false;
 
   /**
-   * Source: https://mathiasbynens.be/demo/url-regex This regular expression is designed to match
-   * URLs or web addresses. It has the following components: 1. Protocol of the URL: Either 'http',
-   * 'https', or 'ftp', followed by '://'. 2. Username and password: Optional group for matching the
-   * username and password, if they exist in the URL. It allows supporting URLs with the format
-   * 'username:password@'. 3. Reserved IP address ranges: Negative lookahead construction, which
-   * ensures that the URL does not match reserved IP address ranges: 3.1. 10.x.x.x 3.2. Loopback
-   * address: 127.0.0.0 to 127.255.255.255 3.3. Link-local address: 169.254.0.0 to 169.254.255.255
-   * 3.4. Private network: 192.168.0.0 to 192.168.255.255 3.5. Private network (2): 172.16.0.0 to
-   * 172.31.255.255 4. IP address OR domain name: Allows the URL to match either and IP address or a
-   * domain name. 4.1. IP address: IP addresses in the format 'x.x.x.x', where x can be a number
-   * from 0 to 255. 4.2. Domain name: One of more segments separated by dots. Each segment can
-   * contain letters, numbers, and special characters, but cannot start or end with and hyphen. 5.
-   * Port number: Optional group for matching the port number, which follows the colon ":" after the
-   * domain or IP address. The port number consists of two to five digits. 6. Optional part of the
-   * URL: Any characters, except whitespaces, starts with '/'.
+   * Source: <a
+   * href="https://mathiasbynens.be/demo/url-regex">https://mathiasbynens.be/demo/url-regex</a> This
+   * regular expression is designed to match URLs or web addresses. It has the following components:
+   * 1. Protocol of the URL: Either 'http', 'https', or 'ftp', followed by '://'. 2. Username and
+   * password: Optional group for matching the username and password, if they exist in the URL. It
+   * allows supporting URLs with the format 'username:password@'. 3. Reserved IP address ranges:
+   * Negative lookahead construction, which ensures that the URL does not match reserved IP address
+   * ranges: 3.1. 10.x.x.x 3.2. Loopback address: 127.0.0.0 to 127.255.255.255 3.3. Link-local
+   * address: 169.254.0.0 to 169.254.255.255 3.4. Private network: 192.168.0.0 to 192.168.255.255
+   * 3.5. Private network (2): 172.16.0.0 to 172.31.255.255 4. IP address OR domain name: Allows the
+   * URL to match either and IP address or a domain name. 4.1. IP address: IP addresses in the
+   * format 'x.x.x.x', where x can be a number from 0 to 255. 4.2. Domain name: One of more segments
+   * separated by dots. Each segment can contain letters, numbers, and special characters, but
+   * cannot start or end with and hyphen. 5. Port number: Optional group for matching the port
+   * number, which follows the colon ":" after the domain or IP address. The port number consists of
+   * two to five digits. 6. Optional part of the URL: Any characters, except whitespaces, starts
+   * with '/'.
    */
   public static Pattern PATTERN =
       Pattern.compile(

@@ -20,28 +20,44 @@ import typequals.prototype.qual.Prototype;
  * All the elements of x are TimeOfDays: HH:MM 24-hour format, optional leading 0}.
  */
 public class SequenceStringElementsAreTimeOfDay extends SingleStringSequence {
+
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /** Boolean. True iff SequenceStringElementsAreTimeOfDay invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  // Set to true if the array is empty. If we do not use this property, the invariant would be
-  // considered true if all the arrays are empty
+  /**
+   * true if the array is always empty. Without this property, the invariant would be considered
+   * true if all the arrays are empty
+   */
   private boolean alwaysEmpty = true;
 
+  /**
+   * Creates a new SequenceStringElementsAreTimeOfDay.
+   *
+   * @param ppt the slice with the variable of interest
+   */
   protected SequenceStringElementsAreTimeOfDay(PptSlice ppt) {
     super(ppt);
   }
 
+  /** Creates a new prototype SequenceStringElementsAreTimeOfDay. */
   protected @Prototype SequenceStringElementsAreTimeOfDay() {
     super();
   }
 
+  /** The prototype invariant. */
   private static @Prototype SequenceStringElementsAreTimeOfDay proto =
       new @Prototype SequenceStringElementsAreTimeOfDay();
 
-  /** Returns the prototype invariant for CommonStringSequence. */
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
   public static @Prototype SequenceStringElementsAreTimeOfDay get_proto() {
     return proto;
   }
@@ -107,6 +123,11 @@ public class SequenceStringElementsAreTimeOfDay extends SingleStringSequence {
     return 1 - Math.pow(.1, ppt.num_samples());
   }
 
+  /**
+   * DiscardInfo is not used for this invariant
+   *
+   * @return null
+   */
   @Pure
   public @Nullable DiscardInfo isObviousImplied() {
     return null;

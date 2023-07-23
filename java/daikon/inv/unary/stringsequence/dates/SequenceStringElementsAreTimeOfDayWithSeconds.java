@@ -21,28 +21,47 @@ import typequals.prototype.qual.Prototype;
  * optional leading 0}.
  */
 public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringSequence {
+
+  /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
+  /**
+   * Boolean. True iff SequenceStringElementsAreTimeOfDayWithSeconds invariants should be
+   * considered.
+   */
   public static boolean dkconfig_enabled = false;
 
-  // Set to true if the array is empty. If we do not use this property, the invariant would be
-  // considered true if all the arrays are empty
+  /**
+   * true if the array is always empty. Without this property, the invariant would be considered
+   * true if all the arrays are empty
+   */
   private boolean alwaysEmpty = true;
 
+  /**
+   * Creates a new SequenceStringElementsAreTimeOfDayWithSeconds.
+   *
+   * @param ppt the slice with the variable of interest
+   */
   protected SequenceStringElementsAreTimeOfDayWithSeconds(PptSlice ppt) {
     super(ppt);
   }
 
+  /** Creates a new prototype SequenceStringElementsAreTimeOfDayWithSeconds. */
   protected @Prototype SequenceStringElementsAreTimeOfDayWithSeconds() {
     super();
   }
 
+  /** The prototype invariant. */
   private static @Prototype SequenceStringElementsAreTimeOfDayWithSeconds proto =
       new @Prototype SequenceStringElementsAreTimeOfDayWithSeconds();
 
-  /** Returns the prototype invariant for CommonStringSequence. */
+  /**
+   * Returns the prototype invariant.
+   *
+   * @return the prototype invariant
+   */
   public static @Prototype SequenceStringElementsAreTimeOfDayWithSeconds get_proto() {
     return proto;
   }
@@ -108,6 +127,11 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
     return 1 - Math.pow(.1, ppt.num_samples());
   }
 
+  /**
+   * DiscardInfo is not used for this invariant
+   *
+   * @return null
+   */
   @Pure
   public @Nullable DiscardInfo isObviousImplied() {
     return null;
