@@ -60,6 +60,7 @@ public abstract class Joiner extends Invariant {
 
   /**
    * DiscardInfo is not used for this invariant
+   *
    * @return null
    */
   @Pure
