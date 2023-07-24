@@ -47,11 +47,24 @@ else
     # relative to the same directory.  Always run both to avoid one masking
     # failures in the other.
     status=0
+    reason=""
     # The `grep -v` prevents the make target failure from throwing off prefix guessing.
     (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" > "/tmp/$USER/ap-warnings.txt") || true
-    "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/ap-warnings.txt" || status=1
+    if ! "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/ap-warnings.txt"; then
+      status=1
+      reason="$reason
+target 'api-private' failed"
+    fi
     (make -C java requireJavadoc 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadoc' failed" > "/tmp/$USER/rj-warnings.txt") || true
-    "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt" || status=1
+    if ! "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt" ; then
+      status=1
+      reason="$reason
+target 'requireJavadoc' failed"
+    fi
+    if $status ; then
+      echo "$reason"
+      echo "See output above"
+      exit 1
+    fi
   fi
-  exit $status
 fi
