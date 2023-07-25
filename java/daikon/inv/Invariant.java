@@ -56,9 +56,6 @@ import typequals.prototype.qual.Prototype;
 @Prototype
 public abstract class Invariant implements Serializable, Cloneable // but don't YOU clone it
 {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040921L;
 
   /** General debug tracer. */

@@ -97,9 +97,6 @@ import typequals.prototype.qual.Prototype;
  * to return the correct class.
  */
 public abstract class CLASSNAME extends BinaryInvariant {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040113L;
 
   // if true, swap the order of the invariant variables

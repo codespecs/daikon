@@ -24,9 +24,6 @@ import org.plumelib.reflection.ReflectionPlume;
 // No "@Deprecated" annotation yet, but we should add it once support for
 // file format 1 is removed from Daikon.
 public class PptName implements Serializable {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
   // These are never changed but cannot be declared "final", because they

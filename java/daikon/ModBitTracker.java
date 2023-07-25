@@ -15,9 +15,6 @@ import org.checkerframework.checker.signedness.qual.Signed;
  * each sample seen in order, whether that variable was present or not.
  */
 public class ModBitTracker implements Serializable, Cloneable {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20031014L;
 
   // Should make this a configuration option.

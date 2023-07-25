@@ -11,9 +11,6 @@ import org.plumelib.util.Intern;
 
 /** Length of String variables. */
 public final class StringLength extends UnaryDerivation {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20061016L;
 
   /** Boolean. True iff StringLength derived variables should be generated. */

@@ -32,9 +32,6 @@ import typequals.prototype.qual.Prototype;
  * supplied in the splitter info file.
  */
 public class DummyInvariant extends Invariant {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030220L;
 
   private @Nullable String daikonFormat;

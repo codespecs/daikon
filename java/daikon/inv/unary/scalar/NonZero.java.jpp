@@ -71,9 +71,6 @@ import typequals.prototype.qual.Prototype;
 /** Represents double scalars that are non-zero. Prints as {@code x != 0}. */
 #endif
 public class NONZERO extends SINGLESCALAR {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
   // Variables starting with dkconfig_ should only be set via the
