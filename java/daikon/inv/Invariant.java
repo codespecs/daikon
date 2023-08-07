@@ -35,7 +35,6 @@ import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.framework.qual.Unused;
@@ -57,9 +56,6 @@ import typequals.prototype.qual.Prototype;
 @Prototype
 public abstract class Invariant implements Serializable, Cloneable // but don't YOU clone it
 {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040921L;
 
   /** General debug tracer. */
@@ -1692,7 +1688,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied @UnknownSignedness Match this) {
+    public int hashCode(@GuardSatisfied Match this) {
       return inv.getClass().hashCode();
     }
   }

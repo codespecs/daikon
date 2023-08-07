@@ -31,7 +31,6 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -44,9 +43,6 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  */
 public class DynamicConstants implements Serializable {
 
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040401L;
 
   // If true don't create any invariants (including OneOfs) over dynamic
@@ -215,7 +211,7 @@ public class DynamicConstants implements Serializable {
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied @UnknownSignedness Constant this) {
+    public int hashCode(@GuardSatisfied Constant this) {
       return vi.hashCode();
     }
 

@@ -66,7 +66,6 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.CollectionsPlume;
@@ -901,7 +900,7 @@ public final class FileIO {
      *
      * @return a string representation of this
      */
-    String format(@GuardSatisfied @UnknownSignedness Invocation this) {
+    String format(@GuardSatisfied Invocation this) {
       return format(true);
     }
 
@@ -912,7 +911,7 @@ public final class FileIO {
      * @param show_values if true, show values; otherwise, return just the Ppt name
      * @return a string representation of this
      */
-    String format(@GuardSatisfied @UnknownSignedness Invocation this, boolean show_values) {
+    String format(@GuardSatisfied Invocation this, boolean show_values) {
       if (!show_values) {
         return "  " + ppt.ppt_name.getNameWithoutPoint();
       }
@@ -985,7 +984,7 @@ public final class FileIO {
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied @UnknownSignedness Invocation this) {
+    public int hashCode(@GuardSatisfied Invocation this) {
       return this.format().hashCode();
     }
   }
@@ -3090,7 +3089,10 @@ public final class FileIO {
    * @param args arguments for the format string
    */
   private static void decl_error(ParseState state, String format, @Nullable Object... args) {
-    @SuppressWarnings("formatter:format.string") // https://tinyurl.com/cfissue/2584
+    @SuppressWarnings({
+      "formatter:unneeded.suppression", // temporary?
+      "formatter:format.string" // https://tinyurl.com/cfissue/2584
+    })
     String msg = String.format(format, args) + state.line_file_message();
     throw new Daikon.UserError(msg);
   }

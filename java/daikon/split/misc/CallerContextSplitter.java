@@ -15,9 +15,6 @@ import org.plumelib.util.ArraysPlume;
 
 /** This splitter tests the condition "$caller one of { some set of integers }". */
 public final class CallerContextSplitter extends Splitter {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030112L;
 
   /** Create a new splitter for the given ppt using this as a prototype. */

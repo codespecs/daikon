@@ -12,9 +12,6 @@ import typequals.prototype.qual.Prototype;
 
 /** Abstract base class for invariants over one variable of type {@code String[]}. */
 public abstract class SingleStringSequence extends UnaryInvariant {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
   protected SingleStringSequence(PptSlice ppt) {

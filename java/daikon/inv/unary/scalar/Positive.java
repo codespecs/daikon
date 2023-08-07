@@ -18,9 +18,6 @@ import typequals.prototype.qual.Prototype;
  * general invariant LowerBound).
  */
 public class Positive extends SingleScalar {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040728L;
 
   // Variables starting with dkconfig_ should only be set via the

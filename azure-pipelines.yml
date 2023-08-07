@@ -1,8 +1,8 @@
 jobs:
 
 # The dependsOn clauses (in this file and in .circleci/config.yml) are:
-#  * Everything not *_ubuntu_jdk17 or typecheck_jdk17 depends on jdk17_jobs.
-#  * Anything *_jdk8 or *_jdk11 or _jdk19 depends on *_jdk17.
+#  * Everything not *_ubuntu_jdk17 or typecheck_*_jdk17 depends on jdk17_jobs.
+#  * Anything *_jdk8 or *_jdk11 or _jdk20 depends on *_jdk17.
 #  * Anything *_rockylinux_* depends on *_ubuntu_*.
 
 # The remainder of jobs are run only if the jdk17_jobs pass.
@@ -12,8 +12,10 @@ jobs:
     - nonquick_txt_diff_ubuntu_jdk17
     - non_txt_diff_ubuntu_jdk17
     - misc_ubuntu_jdk17
+    - misc_ubuntu_jdk20
     - kvasir_ubuntu_jdk17
-    - typecheck_jdk17
+    - typecheck_latest_jdk17
+    - typecheck_bundled_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   steps:
@@ -56,13 +58,13 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: quick_txt_diff_ubuntu_jdk19
+- job: quick_txt_diff_ubuntu_jdk20
   dependsOn:
     - jdk17_jobs
     - quick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk19:latest
+  container: mdernst/daikon-ubuntu-jdk20:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -105,13 +107,13 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: nonquick_txt_diff_ubuntu_jdk19
+- job: nonquick_txt_diff_ubuntu_jdk20
   dependsOn:
     - jdk17_jobs
     - nonquick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk19:latest
+  container: mdernst/daikon-ubuntu-jdk20:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -154,13 +156,13 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: non_txt_diff_ubuntu_jdk19
+- job: non_txt_diff_ubuntu_jdk20
   dependsOn:
     - jdk17_jobs
     - non_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk19:latest
+  container: mdernst/daikon-ubuntu-jdk20:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -209,13 +211,13 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-- job: misc_ubuntu_jdk19
+- job: misc_ubuntu_jdk20
   dependsOn:
-    - jdk17_jobs
+#   - jdk17_jobs
     - misc_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk19-plus:latest
+  container: mdernst/daikon-ubuntu-jdk20-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -260,13 +262,13 @@ jobs:
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
-- job: kvasir_ubuntu_jdk19
+- job: kvasir_ubuntu_jdk20
   dependsOn:
     - jdk17_jobs
     - kvasir_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk19-plus:latest
+  container: mdernst/daikon-ubuntu-jdk20-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -289,17 +291,17 @@ jobs:
 #       java -version
 #       javac -version
 #     displayName: show Java version
-#   - bash: ./scripts/test-typecheck.sh
-#     displayName: test-typecheck.sh
+#   - bash: ./scripts/test-typecheck-with-latest-cf.sh
+#     displayName: test-typecheck-with-latest-cf.sh
 
-- job: typecheck_jdk11
+- job: typecheck_latest_jdk11
   dependsOn:
     - jdk17_jobs
-    - typecheck_jdk17
+    - typecheck_latest_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11-plus:latest
-  timeoutInMinutes: 70
+  timeoutInMinutes: 80
   steps:
   - checkout: self
     fetchDepth: 25
@@ -307,14 +309,32 @@ jobs:
       java -version
       javac -version
     displayName: show Java version
-  - bash: ./scripts/test-typecheck.sh
-    displayName: test-typecheck.sh
+  - bash: ./scripts/test-typecheck-with-latest-cf.sh
+    displayName: test-typecheck-with-latest-cf.sh
 
-- job: typecheck_jdk17
+- job: typecheck_bundled_jdk11
+  dependsOn:
+    - jdk17_jobs
+    - typecheck_bundled_jdk17
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-ubuntu-jdk11-plus:latest
+  timeoutInMinutes: 80
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: |
+      java -version
+      javac -version
+    displayName: show Java version
+  - bash: ./scripts/test-typecheck-with-bundled-cf.sh
+    displayName: test-typecheck-with-bundled-cf.sh
+
+- job: typecheck_latest_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17-plus:latest
-  timeoutInMinutes: 70
+  timeoutInMinutes: 80
   steps:
   - checkout: self
     fetchDepth: 25
@@ -322,17 +342,14 @@ jobs:
       java -version
       javac -version
     displayName: show Java version
-  - bash: ./scripts/test-typecheck.sh
-    displayName: test-typecheck.sh
+  - bash: ./scripts/test-typecheck-with-latest-cf.sh
+    displayName: test-typecheck-with-latest-cf.sh
 
-- job: typecheck_jdk19
-  dependsOn:
-    - jdk17_jobs
-    - typecheck_jdk17
+- job: typecheck_bundled_jdk17
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk19-plus:latest
-  timeoutInMinutes: 70
+  container: mdernst/daikon-ubuntu-jdk17-plus:latest
+  timeoutInMinutes: 80
   steps:
   - checkout: self
     fetchDepth: 25
@@ -340,8 +357,44 @@ jobs:
       java -version
       javac -version
     displayName: show Java version
-  - bash: ./scripts/test-typecheck.sh
-    displayName: test-typecheck.sh
+  - bash: ./scripts/test-typecheck-with-bundled-cf.sh
+    displayName: test-typecheck-with-bundled-cf.sh
+
+- job: typecheck_latest_jdk20
+  dependsOn:
+    - jdk17_jobs
+    - typecheck_latest_jdk17
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-ubuntu-jdk20-plus:latest
+  timeoutInMinutes: 80
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: |
+      java -version
+      javac -version
+    displayName: show Java version
+  - bash: ./scripts/test-typecheck-with-latest-cf.sh
+    displayName: test-typecheck-with-latest-cf.sh
+
+- job: typecheck_bundled_jdk20
+  dependsOn:
+    - jdk17_jobs
+    - typecheck_bundled_jdk17
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-ubuntu-jdk20-plus:latest
+  timeoutInMinutes: 80
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: |
+      java -version
+      javac -version
+    displayName: show Java version
+  - bash: ./scripts/test-typecheck-with-bundled-cf.sh
+    displayName: test-typecheck-with-bundled-cf.sh
 
 - job: quick_txt_diff_rockylinux_jdk8
   dependsOn:

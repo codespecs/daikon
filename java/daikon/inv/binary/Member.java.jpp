@@ -79,7 +79,7 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
-import org.plumelib.util.Pair;
+import org.plumelib.util.IPair;
 import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
@@ -89,9 +89,6 @@ import typequals.prototype.qual.Prototype;
  * of SCALAR.
  */
 public final class CLASSNAME extends SEQUENCESCALAR {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20031024L;
 
   public static final Logger debug = Logger.getLogger("daikon.inv.binary.Member");
@@ -259,7 +256,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
       // else if the scalar is min or max of a sequence
       } else if ((sclvar.derived instanceof SequenceMin)
                  || (sclvar.derived instanceof SequenceMax)) {
-        Pair<DiscardCode, String> di = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
+        IPair<DiscardCode, String> di = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
         return di != null;
       }
     }

@@ -9,9 +9,6 @@ import typequals.prototype.qual.Prototype;
 
 /** Invariants on a single sequence (array) variable, such as {@code a[] contains no duplicates}. */
 public abstract class SingleSequence extends UnaryInvariant {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20031024L;
 
   /**

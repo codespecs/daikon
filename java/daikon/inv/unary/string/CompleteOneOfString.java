@@ -25,9 +25,6 @@ import typequals.prototype.qual.Prototype;
  * or as {@code x has values: "v1" "v2" "v3" ...}.
  */
 public final class CompleteOneOfString extends SingleString {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20091210L;
 
   /** Information about each value encountered. */

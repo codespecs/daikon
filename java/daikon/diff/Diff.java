@@ -32,8 +32,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.FilesPlume;
+import org.plumelib.util.MPair;
 import org.plumelib.util.OrderedPairIterator;
-import org.plumelib.util.Pair;
 import org.plumelib.util.StringsPlume;
 
 /**
@@ -577,15 +577,15 @@ public final class Diff {
   public RootNode diffInvMap(InvMap map1, InvMap map2, boolean includeUnjustified) {
     RootNode root = new RootNode();
 
-    Iterator<Pair<@Nullable PptTopLevel, @Nullable PptTopLevel>> opi =
+    Iterator<MPair<@Nullable PptTopLevel, @Nullable PptTopLevel>> opi =
         new OrderedPairIterator<PptTopLevel>(
             map1.pptSortedIterator(PPT_COMPARATOR),
             map2.pptSortedIterator(PPT_COMPARATOR),
             PPT_COMPARATOR);
     while (opi.hasNext()) {
-      Pair<@Nullable PptTopLevel, @Nullable PptTopLevel> ppts = opi.next();
-      PptTopLevel ppt1 = ppts.a;
-      PptTopLevel ppt2 = ppts.b;
+      MPair<@Nullable PptTopLevel, @Nullable PptTopLevel> ppts = opi.next();
+      PptTopLevel ppt1 = ppts.first;
+      PptTopLevel ppt2 = ppts.second;
       if (shouldAdd(ppt1) || shouldAdd(ppt2)) {
         PptNode node = diffPptTopLevel(ppt1, ppt2, map1, map2, includeUnjustified);
         root.add(node);
@@ -662,12 +662,12 @@ public final class Diff {
       invs2 = new ArrayList<Invariant>();
     }
 
-    Iterator<Pair<@Nullable Invariant, @Nullable Invariant>> opi =
+    Iterator<MPair<@Nullable Invariant, @Nullable Invariant>> opi =
         new OrderedPairIterator<Invariant>(invs1.iterator(), invs2.iterator(), invPairComparator);
     while (opi.hasNext()) {
-      Pair<@Nullable Invariant, @Nullable Invariant> invariants = opi.next();
-      Invariant inv1 = invariants.a;
-      Invariant inv2 = invariants.b;
+      MPair<@Nullable Invariant, @Nullable Invariant> invariants = opi.next();
+      Invariant inv1 = invariants.first;
+      Invariant inv2 = invariants.second;
       if (!includeUnjustified) {
         if ((inv1 != null) && !inv1.justified()) {
           inv1 = null;

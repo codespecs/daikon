@@ -11,9 +11,9 @@ bcel-util-1.2.1.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-uti
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
 checker-framework/ and checker-qual.jar : https://github.com/typetools/checker-framework/releases
-  VER=3.34.0
+  VER=3.35.0
   wget https://github.com/typetools/checker-framework/releases/download/checker-framework-$VER/checker-framework-$VER.zip
-  unzip checker-framework-$VER.zip
+  unzip -q checker-framework-$VER.zip
   mv -f checker-framework-$VER/checker/dist/checker.jar checker-framework-$VER/checker/dist/javac.jar checker-framework/
   mv -f checker-framework-$VER/checker/dist/checker-qual.jar .
   rm -rf checker-framework-$VER.zip checker-framework-$VER
@@ -71,8 +71,8 @@ options-1.0.6.jar : https://search.maven.org/#search%7Cga%7C1%7Cplumelib+options
   wget https://repo.maven.apache.org/maven2/org/plumelib/options/1.0.6/options-1.0.6.jar
   When you update this, remove the old daikon-plumelib.jar then remake it (see above).
 
-plume-util-1.7.0.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
-  wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/1.7.0/plume-util-1.7.0.jar
+plume-util-1.8.1.jar : https://search.maven.org/#search%7Cga%7C1%7Cplume-util
+  VER=1.8.1 && wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/${VER}/plume-util-${VER}.jar
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
 reflection-util-1.0.6.jar : https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/

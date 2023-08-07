@@ -13,9 +13,6 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 // This splitter tests the condition "X>0".
 @SuppressWarnings("nullness") // uses private fields, client code not analyzed
 public final class SplitterExample extends Splitter {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030218L;
 
   static @Nullable DummyInvariant dummyInvFactory;

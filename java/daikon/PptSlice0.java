@@ -10,7 +10,6 @@ import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signedness.qual.UnknownSignedness;
 import org.checkerframework.dataflow.qual.Pure;
 
 // This is a fake PptSlice for use with Implication invariants.
@@ -24,9 +23,6 @@ import org.checkerframework.dataflow.qual.Pure;
 // names tweaked, and temporarily use that as the invariant's ppt.
 
 public class PptSlice0 extends PptSlice {
-  // We are Serializable, so we specify a version to allow changes to
-  // method signatures without breaking serialization.  If you add or
-  // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
   PptSlice0(PptTopLevel parent) {
@@ -179,7 +175,7 @@ public class PptSlice0 extends PptSlice {
      *
      * @return a string representation of this
      */
-    private String format(@GuardSatisfied @UnknownSignedness ImplicationWrapper this) {
+    private String format(@GuardSatisfied ImplicationWrapper this) {
       // return format;
       return theImp.format();
       // return theImp.repr();
@@ -187,7 +183,7 @@ public class PptSlice0 extends PptSlice {
 
     @Pure
     @Override
-    public int hashCode(@GuardSatisfied @UnknownSignedness ImplicationWrapper this) {
+    public int hashCode(@GuardSatisfied ImplicationWrapper this) {
       if (hashCode == 0) {
         hashCode = format().hashCode();
         // hashCode = (theImp.iff ? 1 : 0);
