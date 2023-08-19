@@ -24,13 +24,13 @@ public class IsTimeOfDayAMPM extends SingleString {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean. True iff Positive invariants should be considered. */
+  /** Boolean. True iff IsTimeOfDayAMPM invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   /**
    * Matches a time of day in 12-hour format, with optional leading 0 and with trailing AM or PM.
    */
-  public static final Pattern PATTERN = Pattern.compile("^" + H + ":" + MINUTES + AMPM + "$");
+  public static final Pattern PATTERN = Pattern.compile("^" + H12 + ":" + MINUTES + AMPM + "$");
 
   ///
   /// Required methods
@@ -72,12 +72,11 @@ public class IsTimeOfDayAMPM extends SingleString {
     return new IsTimeOfDayAMPM(slice);
   }
 
-  // A printed representation for user output
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied IsTimeOfDayAMPM this, OutputFormat format) {
     return var().name()
-        + " is time of day: HH:MM PM x12-hour format, optional leading 0, mandatory meridiems"
+        + " is time of day: HH:MM PM 12-hour format, optional leading 0, mandatory meridiems"
         + " (AM/PM)";
   }
 

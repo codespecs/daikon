@@ -33,6 +33,11 @@ public class DateRegexes {
    */
   public static final @Regex String H = "(?:0?[0-9]|1[0-9]|2[0-3])";
 
+  /**
+   * A regex for a 1-digit or 2-digit hour in 12-hour format. The regex is unanchored and ungrouped.
+   */
+  public static final @Regex String H12 = "(?:0?[0-9]|1[0-2])";
+
   /** A regex for a 2-digit minutes. The regex is unanchored and ungrouped. */
   public static final @Regex String MINUTES = "[0-5][0-9]";
 
@@ -46,8 +51,8 @@ public class DateRegexes {
   public static final @Regex String mmmOptional = "(?:" + mmm + ")?";
 
   /**
-   * A regex for meridiens (AM/PM), with optional leading space. The regex is unanchored and
+   * A regex for meridiems (AM/PM), with optional leading space. The regex is unanchored and
    * ungrouped.
    */
-  public static final @Regex String AMPM = " ?(?:0[1-9]|1[012])";
+  public static final @Regex String AMPM = " ?([AaPp][Mm])";
 }

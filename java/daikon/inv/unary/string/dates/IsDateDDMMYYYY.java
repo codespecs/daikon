@@ -24,7 +24,7 @@ public class IsDateDDMMYYYY extends SingleString {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean. True iff Positive invariants should be considered. */
+  /** Boolean. True iff IsDateDDMMYYYY invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   /**
@@ -32,7 +32,12 @@ public class IsDateDDMMYYYY extends SingleString {
    * "01/12/1900", "25.01.2019", "30-10-2050".
    */
   public static final Pattern PATTERN =
-      Pattern.compile("^" + DAY_OF_MONTH + "[-/.]" + MONTH_NUMBER + "[-/.]" + YYYY2050 + "$");
+      Pattern.compile(
+          ("^" + DAY_OF_MONTH + "/" + MONTH_NUMBER + "/" + YYYY2050 + "$")
+              + "|"
+              + ("^" + DAY_OF_MONTH + "-" + MONTH_NUMBER + "-" + YYYY2050 + "$")
+              + "|"
+              + ("^" + DAY_OF_MONTH + "[.]" + MONTH_NUMBER + "[.]" + YYYY2050 + "$"));
 
   ///
   /// Required methods
@@ -74,7 +79,6 @@ public class IsDateDDMMYYYY extends SingleString {
     return new IsDateDDMMYYYY(slice);
   }
 
-  // A printed representation for user output
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied IsDateDDMMYYYY this, OutputFormat format) {

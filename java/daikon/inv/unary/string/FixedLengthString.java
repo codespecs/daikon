@@ -30,7 +30,7 @@ public class FixedLengthString extends SingleString {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean. True iff Positive invariants should be considered. */
+  /** Boolean. True iff FixedLengthString invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   /** Numerical variable specifying the string length */
@@ -120,10 +120,9 @@ public class FixedLengthString extends SingleString {
     return true;
   }
 
-  /** NI suppressions, initialized in get_ni_suppressions() */
+  /** NI suppressions, initialized in get_ni_suppressions(). */
   private static @Nullable NISuppressionSet suppressions = null;
 
-  /** returns the ni-suppressions for SeqIndexFloatGreaterEqual */
   @Pure
   @Override
   public NISuppressionSet get_ni_suppressions() {

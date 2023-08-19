@@ -16,8 +16,8 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 
 /**
- * Indicates that all the elements of an array of strings are dates following the format YYYY/MM/DD.
- * Prints as {@code All the elements of x are dates. Format: YYYY/MM/DD}
+ * Indicates that all the elements of an array of strings are dates following the format YYYY-MM-DD.
+ * Prints as {@code All the elements of x are dates. Format: YYYY-MM-DD}
  */
 public class SequenceStringElementsAreDateYYYYMMDD extends SingleStringSequence {
 
@@ -87,7 +87,7 @@ public class SequenceStringElementsAreDateYYYYMMDD extends SingleStringSequence 
   @Override
   public String format_using(
       @GuardSatisfied SequenceStringElementsAreDateYYYYMMDD this, OutputFormat format) {
-    return "All the elements of " + var().name() + " are dates. Format: YYYY/MM/DD";
+    return "All the elements of " + var().name() + " are dates. Format: YYYY-MM-DD";
   }
 
   @Override

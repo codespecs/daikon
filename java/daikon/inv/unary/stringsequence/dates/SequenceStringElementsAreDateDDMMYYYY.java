@@ -30,8 +30,8 @@ public class SequenceStringElementsAreDateDDMMYYYY extends SingleStringSequence 
   public static boolean dkconfig_enabled = false;
 
   /**
-   * true if the array is always empty. Without this property, the invariant would be considered
-   * true if all the arrays are empty
+   * True if the array is always empty. Without this property, the invariant would be considered
+   * true if all the arrays are empty.
    */
   private boolean alwaysEmpty = true;
 

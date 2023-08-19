@@ -19,35 +19,22 @@ public class IsUrl extends SingleString {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean. True iff Positive invariants should be considered. */
+  /** Boolean. True iff IsUrl invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   /**
-   * Source: <a
-   * href="https://mathiasbynens.be/demo/url-regex">https://mathiasbynens.be/demo/url-regex</a> This
-   * regular expression is designed to match URLs or web addresses. It has the following components:
-   * 1. Protocol of the URL: Either 'http', 'https', or 'ftp', followed by '://'. 2. Username and
-   * password: Optional group for matching the username and password, if they exist in the URL. It
-   * allows supporting URLs with the format 'username:password@'. 3. Reserved IP address ranges:
-   * Negative lookahead construction, which ensures that the URL does not match reserved IP address
-   * ranges: 3.1. 10.x.x.x 3.2. Loopback address: 127.0.0.0 to 127.255.255.255 3.3. Link-local
-   * address: 169.254.0.0 to 169.254.255.255 3.4. Private network: 192.168.0.0 to 192.168.255.255
-   * 3.5. Private network (2): 172.16.0.0 to 172.31.255.255 4. IP address OR domain name: Allows the
-   * URL to match either and IP address or a domain name. 4.1. IP address: IP addresses in the
-   * format 'x.x.x.x', where x can be a number from 0 to 255. 4.2. Domain name: One of more segments
-   * separated by dots. Each segment can contain letters, numbers, and special characters, but
-   * cannot start or end with and hyphen. 5. Port number: Optional group for matching the port
-   * number, which follows the colon ":" after the domain or IP address. The port number consists of
-   * two to five digits. 6. Optional part of the URL: Any characters, except whitespaces, starts
-   * with '/'.
+   * Regex that matches a URL. Source: <a
+   * href="https://mathiasbynens.be/demo/url-regex">https://mathiasbynens.be/demo/url-regex</a>
    */
   public static Pattern PATTERN =
       Pattern.compile(
-          // Protocol of the URL
-          "^(?:(?:https?|ftp)://)"
-              // Username and password
+          "^"
+              // Protocol of the URL: 'http', 'https', or 'ftp', followed by '://'
+              + "(?:(?:https?|ftp)://)"
+              // Optional username and password, for URLs containing "...username:password@..."
               + "(?:\\S+(?::\\S*)?@)?"
-              // Reserved IP address ranges
+
+              // Reserved IP address ranges: fordid matching via negative lookahead.
               // 10.x.x.x
               + "(?:(?!10(?:\\.\\d{1,3}){3})"
               // Loopback address
@@ -58,15 +45,21 @@ public class IsUrl extends SingleString {
               + "(?!192\\.168(?:\\.\\d{1,3}){2})"
               // Private network (2)
               + "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})"
+
               // IP address OR domain name
-              // IP address
-              + "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))|"
-              // Domain name
-              + "(?:(?:[\\w\\x{00a1}-\\x{ffff}0-9]+-?)*[\\w\\x{00a1}-\\x{ffff}0-9]+)(?:\\.(?:[\\w\\x{00a1}-\\x{ffff}0-9]+-)*[\\w\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-zA-Z\\x{00a1}-\\x{ffff}]{2,})))"
-              // Port number
+              + ("("
+                  // IP address
+                  + "?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))"
+                  + "|"
+                  // Domain name
+                  + "(?:(?:[\\w\\x{00a1}-\\x{ffff}0-9]+-?)*[\\w\\x{00a1}-\\x{ffff}0-9]+)(?:\\.(?:[\\w\\x{00a1}-\\x{ffff}0-9]+-)*[\\w\\x{00a1}-\\x{ffff}0-9]+)*(?:\\.(?:[a-zA-Z\\x{00a1}-\\x{ffff}]{2,}))"
+                  // end of IP address OR domain name
+                  + ")")
+              // Optional port number
               + "(?::\\d{2,5})?"
               // Optional part of the URL
-              + "(?:/[^\\s]*)?$");
+              + "(?:/[^\\s]*)?"
+              + "$");
 
   ///
   /// Required methods
@@ -108,7 +101,6 @@ public class IsUrl extends SingleString {
     return new IsUrl(slice);
   }
 
-  // A printed representation for user output
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied IsUrl this, OutputFormat format) {

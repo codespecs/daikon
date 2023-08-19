@@ -21,7 +21,7 @@ public class IsEmail extends SingleString {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean. True iff Positive invariants should be considered. */
+  /** Boolean. True iff IsEmail invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   /**
@@ -47,8 +47,7 @@ public class IsEmail extends SingleString {
                   // or
                   + "|"
                   // IP addresses enclosed in square brackets, allowing for IPv4 and IPv6 addresses
-                  // with
-                  // an optional port number.
+                  // with an optional port number.
                   + "[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\]"
                   + ")")
               + "$");
@@ -93,7 +92,6 @@ public class IsEmail extends SingleString {
     return new IsEmail(slice);
   }
 
-  // A printed representation for user output
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied IsEmail this, OutputFormat format) {

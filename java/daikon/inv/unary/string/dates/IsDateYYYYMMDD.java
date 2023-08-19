@@ -16,7 +16,7 @@ import typequals.prototype.qual.Prototype;
 
 /**
  * Indicates that the value of a string variable is always a date following the format YYYY/MM/DD,
- * YYYY-MM-DD, or YYYY.MM.DD. Prints as {@code x is a Date. Format: YYYY/MM/DD}.
+ * YYYY-MM-DD, or YYYY.MM.DD. Prints as {@code x is a Date. Format: YYYY-MM-DD}.
  */
 public class IsDateYYYYMMDD extends SingleString {
   /** UID for serialization. */
@@ -24,15 +24,23 @@ public class IsDateYYYYMMDD extends SingleString {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean. True iff Positive invariants should be considered. */
+  /** Boolean. True iff IsDateYYYYMMDD invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   /**
-   * The regex matches a date in YYYY/MM/DD format (Year min: 1900, Year max: 2050). For example:
+   * The regex matches a date in YYYY-MM-DD format (Year min: 1900, Year max: 2050). For example:
    * "1900/12/01", "2019.01.25", "2050-10-30".
    */
   public static final Pattern PATTERN =
-      Pattern.compile("^" + YYYY2050 + "[-/.]" + MONTH_NUMBER + "[-/.]" + DAY_OF_MONTH + "$");
+      Pattern.compile(
+          ("^" + YYYY2050 + "/" + MONTH_NUMBER + "/" + DAY_OF_MONTH + "$")
+              + "|"
+              + ("^" + YYYY2050 + "-" + MONTH_NUMBER + "/" + DAY_OF_MONTH + "$")
+              + "|"
+              + ("^" + YYYY2050 + "[.]" + MONTH_NUMBER + "[.]" + DAY_OF_MONTH + "$")
+              + "|"
+              // The ISO 8610 standard permits "-" separator or no separator.
+              + ("^" + YYYY2050 + MONTH_NUMBER + DAY_OF_MONTH + "$"));
 
   ///
   /// Required methods
@@ -74,11 +82,10 @@ public class IsDateYYYYMMDD extends SingleString {
     return new IsDateYYYYMMDD(slice);
   }
 
-  // A printed representation for user output
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied IsDateYYYYMMDD this, OutputFormat format) {
-    return var().name() + " is a Date. Format: YYYY/MM/DD";
+    return var().name() + " is a Date. Format: YYYY-MM-DD";
   }
 
   @Override

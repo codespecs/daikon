@@ -24,7 +24,7 @@ public class IsTimeOfDay extends SingleString {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean. True iff Positive invariants should be considered. */
+  /** Boolean. True iff IsTimeOfDay invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   /** Matches a time of day in HH:MM 24-hour format, with optional leading 0. */
@@ -70,7 +70,6 @@ public class IsTimeOfDay extends SingleString {
     return new IsTimeOfDay(slice);
   }
 
-  // A printed representation for user output
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied IsTimeOfDay this, OutputFormat format) {

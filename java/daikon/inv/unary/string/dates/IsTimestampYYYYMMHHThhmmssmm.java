@@ -15,8 +15,8 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 
 /**
- * Indicates that the value of a string variable is always a timestamp. Represented as x is
- * Timestamp. Prints as {@code YYYY-MM-DDTHH:MM:SS.mmZ (Millsiseconds are optional)}.
+ * Indicates that the value of a string variable is always a timestamp. Prints as {@code x is
+ * Timestamp Format: YYYY-MM-DDTHH:MM:SS.mmZ (Millsiseconds are optional)}.
  */
 public class IsTimestampYYYYMMHHThhmmssmm extends SingleString {
   /** UID for serialization. */
@@ -24,7 +24,7 @@ public class IsTimestampYYYYMMHHThhmmssmm extends SingleString {
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean. True iff Positive invariants should be considered. */
+  /** Boolean. True iff IsTimestampYYYYMMHHThhmmssmm invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   /** Matches a timestamp in the form {@code YYYY-MM-DDTHH:MM:SS.mmZ}. Milliseconds are optional. */
@@ -88,7 +88,6 @@ public class IsTimestampYYYYMMHHThhmmssmm extends SingleString {
     return new IsTimestampYYYYMMHHThhmmssmm(slice);
   }
 
-  // A printed representation for user output
   @SideEffectFree
   @Override
   public String format_using(

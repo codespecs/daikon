@@ -12,35 +12,34 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
 
 /**
- * Indicates that the characters of a string variable are always numeric. Prints as {@code x is
- * Numeric}.
+ * Indicates that the string variable always represents a number. Prints as {@code x is Numeric}.
  */
 public class IsNumeric extends SingleString {
   /** UID for serialization. */
   static final long serialVersionUID = 20230704L;
 
   /**
-   * This regular expression is designed to match positive and negative decimal numbers with
-   * optional decimal plates. It has three components: 1. Optional plus or minus sign: Zero or one
-   * occurrences of either '+' or '-'. 2. Whole part of the number: It can be either 0 or a sequence
-   * of digits not starting with a leading 0. It supports comma separated sequences of three digits
-   * (i.e., thousands). 3. Decimal part of the number: Decimal point followed by at least one digit.
+   * Regular expression that match positive and negative decimal numbers with optional fractional
+   * part (decimal places). Permits "," every three digits. Forbids leading zero. Forbids trailing
+   * "." without any fractional digits. Forbids leading "." without any whole-number digits.
    */
   public static Pattern PATTERN =
       Pattern.compile(
-          // Optional plus or minus sign
-          "^[+-]{0,1}"
+          "^"
+              // Optional plus or minus sign
+              + "[-+]?"
               // Whole part of the number
               + "(0|([1-9](\\d*|\\d{0,2}(,\\d{3})*)))?"
-              // Decimal part of the number
-              + "(\\.\\d*[0-9])?$");
+              // Fractional part of the number
+              + "(\\.\\d+)?"
+              + "$");
 
-  /** true if the string is always empty If false, the invariant is unjustified */
+  /** True if the string is always empty. If false, the invariant is unjustified */
   private boolean alwaysEmpty;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
-  /** Boolean. True iff Positive invariants should be considered. */
+  /** Boolean. True iff IsNumeric invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
   ///
@@ -84,7 +83,6 @@ public class IsNumeric extends SingleString {
     return new IsNumeric(slice);
   }
 
-  // A printed representation for user output
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied IsNumeric this, OutputFormat format) {
