@@ -25,7 +25,7 @@ public class IsTimestampYYYYMMHHThhmmssmm extends SingleString {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /** Boolean. True iff IsTimestampYYYYMMHHThhmmssmm invariants should be considered. */
-  public static boolean dkconfig_enabled = false;
+  public static boolean dkconfig_enabled = true;
 
   /** Matches a timestamp in the form {@code YYYY-MM-DDTHH:MM:SS.mmZ}. Milliseconds are optional. */
   public static final Pattern PATTERN =

@@ -22,7 +22,7 @@ public class IsEmail extends SingleString {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /** Boolean. True iff IsEmail invariants should be considered. */
-  public static boolean dkconfig_enabled = false;
+  public static boolean dkconfig_enabled = true;
 
   /**
    * Regular expression that matches email addresses. Source: <a

@@ -23,7 +23,7 @@ Version 5.9.0 (June 23, 2023)
 =============================
 
 Daikon supports the following new invariants, over strings and sequences of
-strings:
+strings; all of them are enabled by default:
  * IsUrl
  * FixedLengthString
  * IsNumeric

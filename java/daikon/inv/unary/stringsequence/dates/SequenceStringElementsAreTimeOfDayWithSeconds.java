@@ -31,7 +31,7 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
    * Boolean. True iff SequenceStringElementsAreTimeOfDayWithSeconds invariants should be
    * considered.
    */
-  public static boolean dkconfig_enabled = false;
+  public static boolean dkconfig_enabled = true;
 
   /**
    * true if the array is always empty. Without this property, the invariant would be considered

@@ -25,7 +25,7 @@ public class SequenceFixedLengthString extends SingleStringSequence {
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /** Boolean. true iff SequenceFixedLengthString invariants should be considered. */
-  public static boolean dkconfig_enabled = false;
+  public static boolean dkconfig_enabled = true;
 
   /** Numerical variable specifying the strings length */
   @Unused(when = Prototype.class)
