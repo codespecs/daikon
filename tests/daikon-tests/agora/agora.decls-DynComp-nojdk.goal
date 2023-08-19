@@ -1,34 +1,34 @@
-// Declarations for agora.Agora
-// Declarations written 2023-08-19T15:17:01.559295985 by daikon.DynComp
+// Declarations for agora.AgoraTest
+// Declarations written 2023-08-19T15:50:06.821191051 by daikon.DynComp
 
 decl-version 2.0
 var-comparability implicit
 
-ppt agora.Agora:::CLASS
+ppt agora.AgoraTest:::CLASS
 ppt-type class
 
-ppt agora.Agora:::OBJECT
+ppt agora.AgoraTest:::OBJECT
 ppt-type object
 variable this
   var-kind variable
-  dec-type agora.Agora
+  dec-type agora.AgoraTest
   rep-type hashcode
   flags is_param non_null
   comparability 2
 
-ppt agora.Agora.Agora():::ENTER
+ppt agora.AgoraTest.AgoraTest():::ENTER
 ppt-type enter
 
-ppt agora.Agora.Agora():::EXIT7
+ppt agora.AgoraTest.AgoraTest():::EXIT7
 ppt-type subexit
 variable this
   var-kind variable
-  dec-type agora.Agora
+  dec-type agora.AgoraTest
   rep-type hashcode
   flags is_param non_null
   comparability 2
 
-ppt agora.Agora.main(java.lang.String[]):::ENTER
+ppt agora.AgoraTest.main(java.lang.String[]):::ENTER
 ppt-type enter
 variable args
   var-kind variable
@@ -58,7 +58,7 @@ variable args[..].toString
   flags synthetic to_string
   comparability 4[6]
 
-ppt agora.Agora.main(java.lang.String[]):::EXIT21
+ppt agora.AgoraTest.main(java.lang.String[]):::EXIT53
 ppt-type subexit
 variable args
   var-kind variable
@@ -88,11 +88,11 @@ variable args[..].toString
   flags synthetic to_string
   comparability 4[6]
 
-ppt agora.Agora.emptySequence(java.util.List):::ENTER
+ppt agora.AgoraTest.emptySequence(java.util.List):::ENTER
 ppt-type enter
 variable this
   var-kind variable
-  dec-type agora.Agora
+  dec-type agora.AgoraTest
   rep-type hashcode
   flags is_param non_null
   comparability 4
@@ -124,11 +124,11 @@ variable lst.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt agora.Agora.emptySequence(java.util.List):::EXIT23
+ppt agora.AgoraTest.emptySequence(java.util.List):::EXIT55
 ppt-type subexit
 variable this
   var-kind variable
-  dec-type agora.Agora
+  dec-type agora.AgoraTest
   rep-type hashcode
   flags is_param non_null
   comparability 4
@@ -160,11 +160,187 @@ variable lst.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt agora.Agora.equals(java.lang.Object):::ENTER
+ppt agora.AgoraTest.emptyString(java.lang.String):::ENTER
 ppt-type enter
 variable this
   var-kind variable
-  dec-type agora.Agora
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.emptyString(java.lang.String):::EXIT57
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.stringParameter2(java.lang.String):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.stringParameter2(java.lang.String):::EXIT61
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.stringParameter3(java.lang.String):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.stringParameter3(java.lang.String):::EXIT63
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
   rep-type hashcode
   flags is_param non_null
   comparability 3
@@ -182,11 +358,11 @@ variable obj.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt agora.Agora.equals(java.lang.Object):::EXIT1
+ppt agora.AgoraTest.equals(java.lang.Object):::EXIT1
 ppt-type subexit
 variable this
   var-kind variable
-  dec-type agora.Agora
+  dec-type agora.AgoraTest
   rep-type hashcode
   flags is_param non_null
   comparability 4
@@ -209,11 +385,11 @@ variable return
   rep-type boolean
   comparability 3
 
-ppt agora.Agora.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt agora.AgoraTest.equals_dcomp_instrumented(java.lang.Object):::ENTER
 ppt-type enter
 variable this
   var-kind variable
-  dec-type agora.Agora
+  dec-type agora.AgoraTest
   rep-type hashcode
   flags is_param non_null
   comparability 3
@@ -231,11 +407,11 @@ variable obj.getClass().getName()
   flags synthetic classname non_null
   comparability 1
 
-ppt agora.Agora.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt agora.AgoraTest.equals_dcomp_instrumented(java.lang.Object):::EXIT1
 ppt-type subexit
 variable this
   var-kind variable
-  dec-type agora.Agora
+  dec-type agora.AgoraTest
   rep-type hashcode
   flags is_param non_null
   comparability 4

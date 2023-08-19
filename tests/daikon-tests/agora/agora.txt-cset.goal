@@ -1,37 +1,73 @@
 
-Variable sets for agora.Agora.<init>() enter
-Variable sets for agora.Agora.<init>() exit
+Variable sets for agora.AgoraTest.<init>() enter
+Variable sets for agora.AgoraTest.<init>() exit
   [1] [this]
 
-Variable sets for agora.Agora.main([Ljava.lang.String; args) enter
+Variable sets for agora.AgoraTest.main([Ljava.lang.String; args) enter
   [1] [Parameter args]
   [1] [Class of args]
   [1] [Array args[..]]
   [1] [String args[..].toString]
-Variable sets for agora.Agora.main([Ljava.lang.String; args) exit
+Variable sets for agora.AgoraTest.main([Ljava.lang.String; args) exit
   [1] [Parameter args]
   [1] [Class of args]
   [1] [Array args[..]]
   [1] [String args[..].toString]
 
-Variable sets for agora.Agora.emptySequence(java.util.List lst) enter
+Variable sets for agora.AgoraTest.emptySequence(java.util.List lst) enter
   [1] [Parameter lst]
   [1] [Class of lst]
   [1] [List lst[..]]
   [1] [Class of lst[..]]
   [1] [this]
-Variable sets for agora.Agora.emptySequence(java.util.List lst) exit
+Variable sets for agora.AgoraTest.emptySequence(java.util.List lst) exit
   [1] [Parameter lst]
   [1] [Class of lst]
   [1] [List lst[..]]
   [1] [Class of lst[..]]
   [1] [this]
 
-Variable sets for agora.Agora.equals(java.lang.Object obj) enter
+Variable sets for agora.AgoraTest.emptyString(java.lang.String s) enter
+  [1] [Parameter s]
+  [1] [String s.toString]
+  [1] [this]
+Variable sets for agora.AgoraTest.emptyString(java.lang.String s) exit
+  [1] [Parameter s]
+  [1] [String s.toString]
+  [1] [this]
+
+Variable sets for agora.AgoraTest.stringParameter1(java.lang.String s) enter
+  [1] [Parameter s]
+  [1] [String s.toString]
+  [1] [this]
+Variable sets for agora.AgoraTest.stringParameter1(java.lang.String s) exit
+  [1] [Parameter s]
+  [1] [String s.toString]
+  [1] [this]
+
+Variable sets for agora.AgoraTest.stringParameter2(java.lang.String s) enter
+  [1] [Parameter s]
+  [1] [String s.toString]
+  [1] [this]
+Variable sets for agora.AgoraTest.stringParameter2(java.lang.String s) exit
+  [1] [Parameter s]
+  [1] [String s.toString]
+  [1] [this]
+
+Variable sets for agora.AgoraTest.stringParameter3(java.lang.String s) enter
+  [1] [Parameter s]
+  [1] [String s.toString]
+  [1] [this]
+Variable sets for agora.AgoraTest.stringParameter3(java.lang.String s) exit
+  [1] [Parameter s]
+  [1] [String s.toString]
+  [1] [this]
+
+Variable sets for agora.AgoraTest.equals(java.lang.Object obj) enter
   [1] [Parameter obj]
   [1] [Class of obj]
   [1] [this]
-Variable sets for agora.Agora.equals(java.lang.Object obj) exit
+Variable sets for agora.AgoraTest.equals(java.lang.Object obj) exit
   [1] [Parameter obj]
   [1] [Class of obj]
   [1] [return]

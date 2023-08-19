@@ -2,11 +2,11 @@
 
 # Read Makefile.common for what all of this means
 
-MAIN_CLASS:=agora.Agora
+MAIN_CLASS:=agora.AgoraTest
 
 ESC_ON:=1
 
 include ../../Makefile.common
 
 instrument-files-revise:
-	echo "agora/Agora.java" >| ${INST_LIST_FILE}
+	echo "agora/AgoraTest.java" >| ${INST_LIST_FILE}

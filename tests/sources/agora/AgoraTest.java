@@ -6,11 +6,6 @@ import java.util.List;
 
 public class AgoraTest {
 
-  /*@ invariant this != null; */
-  /*@ requires args != null; */
-  /*@ requires \typeof(args) == \type(java.lang.String[]); */
-  /*@ requires (args.length == 0) && ((\forall int i; (0 <= i && i <= args.length-1) ==> (args[i] != null))); */
-  /*@ ensures (args.length == 0) && ((\forall int i; (0 <= i && i <= args.length-1) ==> (args[i] != null))); */
   public static void main(String[] args) {
     AgoraTest a = new AgoraTest();
     a.emptySequence(new ArrayList<>());
@@ -59,16 +54,11 @@ public class AgoraTest {
 
   void emptySequence(List<String> lst) {}
 
-  /*@ requires LENGTH(s.toString)==0; */
-  /*@ ensures LENGTH(s.toString)==0; */
   void emptyString(String s) {}
 
-  /*@ requires s != null; */
   void stringParameter1(String s) {}
 
-  /*@ modifies s.toString; */
   void stringParameter2(String s) {}
 
-  /*@ modifies s.toString; */
   void stringParameter3(String s) {}
 }
