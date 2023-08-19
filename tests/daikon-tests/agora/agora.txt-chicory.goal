@@ -1,0 +1,600 @@
+// Declarations for agora.Agora
+// Declarations written by Chicory 2023-08-19T15:17:03.073747149
+
+decl-version 2.0
+var-comparability implicit
+
+ppt agora.Agora.Agora():::ENTER
+ppt-type enter
+
+ppt agora.Agora.Agora():::EXIT7
+ppt-type subexit
+parent parent agora.Agora:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.Agora
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+  parent agora.Agora:::OBJECT 1
+
+ppt agora.Agora.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
+
+ppt agora.Agora.main(java.lang.String[]):::EXIT21
+ppt-type subexit
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
+
+ppt agora.Agora.emptySequence(java.util.List):::ENTER
+ppt-type enter
+parent parent agora.Agora:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.Agora
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+  parent agora.Agora:::OBJECT 1
+variable lst
+  var-kind variable
+  dec-type java.util.List
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable lst[..]
+  var-kind array
+  enclosing-var lst
+  array 1
+  dec-type java.util.List
+  rep-type hashcode[]
+  comparability 3[5]
+variable lst[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var lst[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args lst[]
+  flags synthetic classname non_null
+  comparability 1[6]
+variable lst.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var lst
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args lst
+  flags synthetic classname non_null
+  comparability 1
+
+ppt agora.Agora.emptySequence(java.util.List):::EXIT23
+ppt-type subexit
+parent parent agora.Agora:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.Agora
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+  parent agora.Agora:::OBJECT 1
+variable lst
+  var-kind variable
+  dec-type java.util.List
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable lst[..]
+  var-kind array
+  enclosing-var lst
+  array 1
+  dec-type java.util.List
+  rep-type hashcode[]
+  comparability 3[5]
+variable lst[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var lst[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args lst[]
+  flags synthetic classname non_null
+  comparability 1[6]
+variable lst.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var lst
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args lst
+  flags synthetic classname non_null
+  comparability 1
+
+ppt agora.Agora:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type agora.Agora
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+agora.Agora.main(java.lang.String[]):::ENTER
+this_invocation_nonce
+0
+args
+513169028
+1
+args.getClass().getName()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+
+agora.Agora.Agora():::ENTER
+this_invocation_nonce
+1
+
+agora.Agora.Agora():::EXIT7
+this_invocation_nonce
+1
+this
+1301664418
+1
+
+agora.Agora.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+2
+this
+1301664418
+1
+lst
+1408652377
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.Agora.emptySequence(java.util.List):::EXIT23
+this_invocation_nonce
+2
+this
+1301664418
+1
+lst
+1408652377
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.Agora.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+3
+this
+1301664418
+1
+lst
+990416209
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.Agora.emptySequence(java.util.List):::EXIT23
+this_invocation_nonce
+3
+this
+1301664418
+1
+lst
+990416209
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.Agora.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+4
+this
+1301664418
+1
+lst
+394714818
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.Agora.emptySequence(java.util.List):::EXIT23
+this_invocation_nonce
+4
+this
+1301664418
+1
+lst
+394714818
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.Agora.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+5
+this
+1301664418
+1
+lst
+1952779858
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.Agora.emptySequence(java.util.List):::EXIT23
+this_invocation_nonce
+5
+this
+1301664418
+1
+lst
+1952779858
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.Agora.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+6
+this
+1301664418
+1
+lst
+366004251
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.Agora.emptySequence(java.util.List):::EXIT23
+this_invocation_nonce
+6
+this
+1301664418
+1
+lst
+366004251
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.Agora.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+7
+this
+1301664418
+1
+lst
+1791868405
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.Agora.emptySequence(java.util.List):::EXIT23
+this_invocation_nonce
+7
+this
+1301664418
+1
+lst
+1791868405
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.Agora.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+8
+this
+1301664418
+1
+lst
+1260134048
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.Agora.emptySequence(java.util.List):::EXIT23
+this_invocation_nonce
+8
+this
+1301664418
+1
+lst
+1260134048
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.Agora.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+9
+this
+1301664418
+1
+lst
+391618063
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.Agora.emptySequence(java.util.List):::EXIT23
+this_invocation_nonce
+9
+this
+1301664418
+1
+lst
+391618063
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.Agora.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+10
+this
+1301664418
+1
+lst
+674483268
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.Agora.emptySequence(java.util.List):::EXIT23
+this_invocation_nonce
+10
+this
+1301664418
+1
+lst
+674483268
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.Agora.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+11
+this
+1301664418
+1
+lst
+54495403
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.Agora.emptySequence(java.util.List):::EXIT23
+this_invocation_nonce
+11
+this
+1301664418
+1
+lst
+54495403
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.Agora.main(java.lang.String[]):::EXIT21
+this_invocation_nonce
+0
+args
+513169028
+1
+args.getClass().getName()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+
