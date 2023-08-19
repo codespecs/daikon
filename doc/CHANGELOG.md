@@ -19,8 +19,37 @@ Further documentation can be found in:
    It is also available at http://plse.cs.washington.edu/daikon/download/api/ .
 
 
+Version 5.9.0 (June 23, 2023)
+=============================
+
+Daikon supports the following new invariants, over strings and sequences of
+strings:
+ * IsUrl
+ * FixedLengthString
+ * IsNumeric
+ * IsEmail
+ * IsDateYYYYMMDD
+ * IsDateDDMMYYYY
+ * IsDateMMDDYYYY
+ * IsTimeOfDay
+ * IsTimeOfDayWithSeconds
+ * IsTimeOfDayAMPM
+ * IsTimestampYYYYMMHHThhmmssmm
+ * SequenceFixedLengthString
+ * SequenceStringElementsAreUrl
+ * SequenceStringElementsAreNumeric
+ * SequenceStringElementsAreEmail
+ * SequenceStringElementsAreDateYYYYMMDD
+ * SequenceStringElementsAreDateDDMMYYYY
+ * SequenceStringElementsAreDateMMDDYYYY
+ * SequenceStringElementsAreTimeOfDay
+ * SequenceStringElementsAreTimeOfDayWithSeconds
+ * SequenceStringElementsAreTimeOfDayAMPM
+ * SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm
+
+
 Version 5.8.18 (June 23, 2023)
-============================
+==============================
 
 Support Rocky Linux.
 
