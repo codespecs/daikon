@@ -114,11 +114,6 @@ public class SequenceStringElementsAreDateYYYYMMDD extends SingleStringSequence 
 
   @Override
   protected double computeConfidence() {
-
-    if (alwaysEmpty) {
-      return Invariant.CONFIDENCE_UNJUSTIFIED;
-    }
-
     return 1 - Math.pow(.1, ppt.num_samples());
   }
 
