@@ -1,0 +1,16 @@
+package org.checkerframework.checker.nullness.qual:
+annotation @Nullable:
+annotation @NonNull:
+
+package agora:
+class Agora : // 21/- obj/class samples
+  method main([Ljava/lang/String;)V : // 1 samples
+    return:
+    parameter #0 :  // args
+  method <init>()V : // 1 samples
+    return:
+  method emptySequence(Ljava/util/List;)V : // 10 samples
+    return:
+    parameter #0 :  // lst
+
+

@@ -1,0 +1,260 @@
+// Declarations for agora.Agora
+// Declarations written 2023-08-19T15:17:00.894132792 by daikon.DynComp
+
+decl-version 2.0
+var-comparability implicit
+
+ppt agora.Agora:::CLASS
+ppt-type class
+
+ppt agora.Agora:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type agora.Agora
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt agora.Agora.Agora():::ENTER
+ppt-type enter
+
+ppt agora.Agora.Agora():::EXIT7
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type agora.Agora
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+ppt agora.Agora.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
+
+ppt agora.Agora.main(java.lang.String[]):::EXIT21
+ppt-type subexit
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
+
+ppt agora.Agora.emptySequence(java.util.List):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type agora.Agora
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable lst
+  var-kind variable
+  dec-type java.util.List
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable lst[..]
+  var-kind array
+  array 1
+  dec-type java.util.List
+  rep-type hashcode[]
+  comparability 3[5]
+variable lst[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args lst[]
+  flags synthetic classname non_null
+  comparability 1[6]
+variable lst.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args lst
+  flags synthetic classname non_null
+  comparability 1
+
+ppt agora.Agora.emptySequence(java.util.List):::EXIT23
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type agora.Agora
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable lst
+  var-kind variable
+  dec-type java.util.List
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable lst[..]
+  var-kind array
+  array 1
+  dec-type java.util.List
+  rep-type hashcode[]
+  comparability 3[5]
+variable lst[..].getClass().getName()
+  var-kind function getClass().getName()
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args lst[]
+  flags synthetic classname non_null
+  comparability 1[6]
+variable lst.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args lst
+  flags synthetic classname non_null
+  comparability 1
+
+ppt agora.Agora.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type agora.Agora
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt agora.Agora.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type agora.Agora
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
+ppt agora.Agora.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type agora.Agora
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt agora.Agora.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type agora.Agora
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 3
+
