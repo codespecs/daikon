@@ -103,7 +103,7 @@ public class SequenceStringElementsAreUrl extends SingleStringSequence {
 
   @Override
   protected double computeConfidence() {
-    if (true) {
+    if (alwaysEmpty) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     }
 
