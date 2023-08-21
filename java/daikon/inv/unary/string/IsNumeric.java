@@ -34,9 +34,6 @@ public class IsNumeric extends SingleString {
               + "(\\.\\d+)?"
               + "$");
 
-  /** True if the string is always empty. If false, the invariant is unjustified */
-  private boolean alwaysEmpty;
-
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /** Boolean. True iff IsNumeric invariants should be considered. */
@@ -53,7 +50,6 @@ public class IsNumeric extends SingleString {
    */
   private IsNumeric(PptSlice ppt) {
     super(ppt);
-    alwaysEmpty = true;
   }
 
   /** Creates a new prototype IsNumeric. */
@@ -92,10 +88,6 @@ public class IsNumeric extends SingleString {
   @Override
   public InvariantStatus check_modified(String v, int count) {
     Matcher matcher = PATTERN.matcher(v);
-
-    if (v.length() > 0) {
-      alwaysEmpty = false;
-    }
 
     if (matcher.matches()) {
       return InvariantStatus.NO_CHANGE;

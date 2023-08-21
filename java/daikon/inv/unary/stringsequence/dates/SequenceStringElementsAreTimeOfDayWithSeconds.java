@@ -34,12 +34,6 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
   public static boolean dkconfig_enabled = true;
 
   /**
-   * true if the array is always empty. Without this property, the invariant would be considered
-   * true if all the arrays are empty
-   */
-  private boolean alwaysEmpty = true;
-
-  /**
    * Creates a new SequenceStringElementsAreTimeOfDayWithSeconds.
    *
    * @param ppt the slice with the variable of interest
@@ -98,10 +92,6 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
 
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
-    if (a.length > 0) {
-      alwaysEmpty = false;
-    }
-
     for (int i = 0; i < a.length; i++) {
       Matcher matcher = IsTimeOfDayWithSeconds.PATTERN.matcher(a[i]);
       if (!matcher.matches()) {

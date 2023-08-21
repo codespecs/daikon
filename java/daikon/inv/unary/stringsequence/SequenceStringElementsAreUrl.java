@@ -29,12 +29,6 @@ public class SequenceStringElementsAreUrl extends SingleStringSequence {
   public static boolean dkconfig_enabled = true;
 
   /**
-   * true if the array is always empty. Without this property, the invariant would be considered
-   * true if all the arrays are empty
-   */
-  private boolean alwaysEmpty = true;
-
-  /**
    * Creates a new SequenceStringElementsAreUrl.
    *
    * @param ppt the slice with the variable of interest
@@ -91,10 +85,6 @@ public class SequenceStringElementsAreUrl extends SingleStringSequence {
 
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
-    if (a.length > 0) {
-      alwaysEmpty = false;
-    }
-
     for (int i = 0; i < a.length; i++) {
       Matcher matcher = IsUrl.PATTERN.matcher(a[i]);
       // The invariant is falsified if one of the elements of the array is NOT of type URL

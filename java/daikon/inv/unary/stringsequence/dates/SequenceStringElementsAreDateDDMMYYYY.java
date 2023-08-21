@@ -30,12 +30,6 @@ public class SequenceStringElementsAreDateDDMMYYYY extends SingleStringSequence 
   public static boolean dkconfig_enabled = true;
 
   /**
-   * True if the array is always empty. Without this property, the invariant would be considered
-   * true if all the arrays are empty.
-   */
-  private boolean alwaysEmpty = true;
-
-  /**
    * Creates a new SequenceStringElementsAreDateDDMMYYYY.
    *
    * @param ppt the slice with the variable of interest
@@ -92,10 +86,6 @@ public class SequenceStringElementsAreDateDDMMYYYY extends SingleStringSequence 
 
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
-    if (a.length > 0) {
-      alwaysEmpty = false;
-    }
-
     for (int i = 0; i < a.length; i++) {
       Matcher matcher = IsDateDDMMYYYY.PATTERN.matcher(a[i]);
       if (!matcher.matches()) {
