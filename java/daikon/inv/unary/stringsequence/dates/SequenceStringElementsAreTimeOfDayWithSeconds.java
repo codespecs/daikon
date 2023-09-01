@@ -40,8 +40,8 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
   private boolean alwaysEmpty = true;
 
   /**
-   * true if all the elements of the array are null. Without this property, the invariant would be reported if
-   * all the arrays contain only null elements.
+   * true if all the elements of the array are null. Without this property, the invariant would be
+   * reported if all the arrays contain only null elements.
    */
   private boolean allElementsAreNull = true;
 

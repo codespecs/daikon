@@ -27,7 +27,7 @@ public class SequenceFixedLengthString extends SingleStringSequence {
   /** Boolean. true iff SequenceFixedLengthString invariants should be considered. */
   public static boolean dkconfig_enabled = true;
 
-  /** Numerical variable specifying the length of the array string elements*/
+  /** Numerical variable specifying the length of the array string elements */
   @Unused(when = Prototype.class)
   private @Nullable Integer elements_length = null;
 
@@ -97,8 +97,8 @@ public class SequenceFixedLengthString extends SingleStringSequence {
 
       // Set the length of the first array element that is not null as the value of elements_length
       int firstNonNullElementIndex = 0;
-      while(firstNonNullElementIndex < a.length) {
-        if(a[firstNonNullElementIndex] != null) {
+      while (firstNonNullElementIndex < a.length) {
+        if (a[firstNonNullElementIndex] != null) {
           elements_length = a[firstNonNullElementIndex].length();
           break;
         }
@@ -107,8 +107,9 @@ public class SequenceFixedLengthString extends SingleStringSequence {
 
       // Check that the all the remaining array elements have the same length
       // We start counting from the index of the firstNonNullElement
-      for(int i = firstNonNullElementIndex; i < a.length; i++) {
-        // If the array element is not null and its length is different to elements_length, the invariant is falsified
+      for (int i = firstNonNullElementIndex; i < a.length; i++) {
+        // If the array element is not null and its length is different to elements_length, the
+        // invariant is falsified
         if (a[i] != null && a[i].length() != elements_length) {
           return InvariantStatus.FALSIFIED;
         }
@@ -116,7 +117,8 @@ public class SequenceFixedLengthString extends SingleStringSequence {
 
     } else {
       for (int i = 0; i < a.length; i++) {
-        // If the array element is not null and its length is different to elements_length, the invariant is falsified
+        // If the array element is not null and its length is different to elements_length, the
+        // invariant is falsified
         if (a[i] != null && a[i].length() != elements_length) {
           return InvariantStatus.FALSIFIED;
         }
