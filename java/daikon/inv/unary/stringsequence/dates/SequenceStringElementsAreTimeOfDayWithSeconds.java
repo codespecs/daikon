@@ -40,6 +40,12 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
   private boolean alwaysEmpty = true;
 
   /**
+   * true if all the elements of the array are null. Without this property, the invariant would be reported if
+   * all the arrays contain only null elements.
+   */
+  private boolean allElementsAreNull = true;
+
+  /**
    * Creates a new SequenceStringElementsAreTimeOfDayWithSeconds.
    *
    * @param ppt the slice with the variable of interest
@@ -103,9 +109,13 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
     }
 
     for (int i = 0; i < a.length; i++) {
-      Matcher matcher = IsTimeOfDayWithSeconds.PATTERN.matcher(a[i]);
-      if (!matcher.matches()) {
-        return InvariantStatus.FALSIFIED;
+      String arrayElement = a[i];
+      if (arrayElement != null) {
+        allElementsAreNull = false;
+        Matcher matcher = IsTimeOfDayWithSeconds.PATTERN.matcher(arrayElement);
+        if (!matcher.matches()) {
+          return InvariantStatus.FALSIFIED;
+        }
       }
     }
 
@@ -120,7 +130,7 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
   @Override
   protected double computeConfidence() {
 
-    if (alwaysEmpty) {
+    if (alwaysEmpty || allElementsAreNull) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     }
 

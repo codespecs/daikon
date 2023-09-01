@@ -27,9 +27,9 @@ public class SequenceFixedLengthString extends SingleStringSequence {
   /** Boolean. true iff SequenceFixedLengthString invariants should be considered. */
   public static boolean dkconfig_enabled = true;
 
-  /** Numerical variable specifying the strings length */
+  /** Numerical variable specifying the length of the array string elements*/
   @Unused(when = Prototype.class)
-  private @Nullable Integer length = null;
+  private @Nullable Integer elements_length = null;
 
   /**
    * Creates a new SequenceFixedLengthString.
@@ -76,13 +76,13 @@ public class SequenceFixedLengthString extends SingleStringSequence {
 
   @Override
   public String repr(@GuardSatisfied SequenceFixedLengthString this) {
-    return "SequenceFixedLengthString " + varNames() + ": length=\"" + length;
+    return "SequenceFixedLengthString " + varNames() + ": length=\"" + elements_length;
   }
 
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied SequenceFixedLengthString this, OutputFormat format) {
-    return "All the elements of " + var().name() + " have LENGTH=" + length;
+    return "All the elements of " + var().name() + " have LENGTH=" + elements_length;
   }
 
   @Override
@@ -92,18 +92,32 @@ public class SequenceFixedLengthString extends SingleStringSequence {
       return InvariantStatus.NO_CHANGE;
     }
 
-    // Initialize the length for the first time
-    if (length == null) {
-      length = a[0].length();
-      // Check that all the elements of the array have the same length
-      for (int i = 0; i < a.length; i++) {
-        if (a[i].length() != length) {
+    // Initialize elements_length for the first time
+    if (elements_length == null) {
+
+      // Set the length of the first array element that is not null as the value of elements_length
+      int firstNonNullElementIndex = 0;
+      while(firstNonNullElementIndex < a.length) {
+        if(a[firstNonNullElementIndex] != null) {
+          elements_length = a[firstNonNullElementIndex].length();
+          break;
+        }
+        firstNonNullElementIndex++;
+      }
+
+      // Check that the all the remaining array elements have the same length
+      // We start counting from the index of the firstNonNullElement
+      for(int i = firstNonNullElementIndex; i < a.length; i++) {
+        // If the array element is not null and its length is different to elements_length, the invariant is falsified
+        if (a[i] != null && a[i].length() != elements_length) {
           return InvariantStatus.FALSIFIED;
         }
       }
+
     } else {
       for (int i = 0; i < a.length; i++) {
-        if (a[i].length() != length) {
+        // If the array element is not null and its length is different to elements_length, the invariant is falsified
+        if (a[i] != null && a[i].length() != elements_length) {
           return InvariantStatus.FALSIFIED;
         }
       }
@@ -119,7 +133,7 @@ public class SequenceFixedLengthString extends SingleStringSequence {
 
   @Override
   protected double computeConfidence() {
-    if (length == null) {
+    if (elements_length == null) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     }
     return 1 - Math.pow(.1, ppt.num_samples());

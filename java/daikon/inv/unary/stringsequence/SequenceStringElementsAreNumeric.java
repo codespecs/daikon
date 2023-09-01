@@ -35,6 +35,12 @@ public class SequenceStringElementsAreNumeric extends SingleStringSequence {
   private boolean alwaysEmpty = true;
 
   /**
+   * true if all the elements of the array are null. Without this property, the invariant would be reported if
+   * all the arrays contain only null elements.
+   */
+  private boolean allElementsAreNull = true;
+
+  /**
    * Creates a new SequenceStringElementsAreNumeric.
    *
    * @param ppt the slice with the variable of interest
@@ -96,10 +102,14 @@ public class SequenceStringElementsAreNumeric extends SingleStringSequence {
     }
 
     for (int i = 0; i < a.length; i++) {
-      Matcher matcher = IsNumeric.PATTERN.matcher(a[i]);
-      // The invariant is falsified if one of the elements of the array is NOT numeric
-      if (!matcher.matches()) {
-        return InvariantStatus.FALSIFIED;
+      String arrayElement = a[i];
+      if (arrayElement != null) {
+        allElementsAreNull = false;
+        Matcher matcher = IsNumeric.PATTERN.matcher(arrayElement);
+        // The invariant is falsified if one of the elements of the array is NOT numeric
+        if (!matcher.matches()) {
+          return InvariantStatus.FALSIFIED;
+        }
       }
     }
 
@@ -114,7 +124,7 @@ public class SequenceStringElementsAreNumeric extends SingleStringSequence {
   @Override
   protected double computeConfidence() {
 
-    if (alwaysEmpty) {
+    if (alwaysEmpty || allElementsAreNull) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     }
 

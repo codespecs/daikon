@@ -35,6 +35,11 @@ public class SequenceStringElementsAreEmail extends SingleStringSequence {
   private boolean alwaysEmpty = true;
 
   /**
+   * true if all the elements of the array are null. Without this property, the invariant would be reported if
+   * all the arrays contain only null elements.
+   */
+  private boolean allElementsAreNull = true;
+  /**
    * Creates a new SequenceStringElementsAreEmail.
    *
    * @param ppt the slice with the variable of interest
@@ -96,10 +101,14 @@ public class SequenceStringElementsAreEmail extends SingleStringSequence {
     }
 
     for (int i = 0; i < a.length; i++) {
-      Matcher matcher = IsEmail.PATTERN.matcher(a[i]);
-      // The invariant is falsified if one of the elements of the array is NOT an email
-      if (!matcher.matches()) {
-        return InvariantStatus.FALSIFIED;
+      String arrayElement = a[i];
+      if (arrayElement != null) {
+        allElementsAreNull = false;
+        Matcher matcher = IsEmail.PATTERN.matcher(arrayElement);
+        // The invariant is falsified if one of the elements of the array is NOT an email
+        if (!matcher.matches()) {
+          return InvariantStatus.FALSIFIED;
+        }
       }
     }
 
@@ -114,7 +123,7 @@ public class SequenceStringElementsAreEmail extends SingleStringSequence {
   @Override
   protected double computeConfidence() {
 
-    if (alwaysEmpty) {
+    if (alwaysEmpty || allElementsAreNull) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     }
 

@@ -39,6 +39,12 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
   private boolean alwaysEmpty = true;
 
   /**
+   * true if all the elements of the array are null. Without this property, the invariant would be reported if
+   * all the arrays contain only null elements.
+   */
+  private boolean allElementsAreNull = true;
+
+  /**
    * Creates a new SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm.
    *
    * @param ppt the slice with the variable of interest
@@ -104,9 +110,13 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
     }
 
     for (int i = 0; i < a.length; i++) {
-      Matcher matcher = IsTimestampYYYYMMHHThhmmssmm.PATTERN.matcher(a[i]);
-      if (!matcher.matches()) {
-        return InvariantStatus.FALSIFIED;
+      String arrayElement = a[i];
+      if (arrayElement != null) {
+        allElementsAreNull = false;
+        Matcher matcher = IsTimestampYYYYMMHHThhmmssmm.PATTERN.matcher(arrayElement);
+        if (!matcher.matches()) {
+          return InvariantStatus.FALSIFIED;
+        }
       }
     }
 
@@ -120,7 +130,7 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
 
   @Override
   protected double computeConfidence() {
-    if (alwaysEmpty) {
+    if (alwaysEmpty || allElementsAreNull) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     }
     return 1 - Math.pow(.1, ppt.num_samples());
