@@ -1,10 +1,15 @@
 package daikon.inv.unary.stringsequence;
 
 import daikon.PptSlice;
-import daikon.inv.DiscardInfo;
-import daikon.inv.Invariant;
-import daikon.inv.InvariantStatus;
-import daikon.inv.OutputFormat;
+import daikon.VarInfo;
+import daikon.inv.*;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateDDMMYYYY;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateMMDDYYYY;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateYYYYMMDD;
+import daikon.suppress.NISuppressee;
+import daikon.suppress.NISuppression;
+import daikon.suppress.NISuppressionSet;
+import daikon.suppress.NISuppressor;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -159,5 +164,62 @@ public class SequenceFixedLengthString extends SingleStringSequence {
   public boolean isSameFormula(Invariant other) {
     assert other instanceof SequenceFixedLengthString;
     return true;
+  }
+
+  /** NI suppressions, initialized in get_ni_suppressions(). */
+  private static @Nullable NISuppressionSet suppressions = null;
+
+  @Pure
+  @Override
+  public NISuppressionSet get_ni_suppressions() {
+    if (suppressions == null) {
+
+      NISuppressee suppressee = new NISuppressee(SequenceFixedLengthString.class, 1);
+
+      // suppressor definitions (used in suppressions below)
+      NISuppressor sequenceStringElementsAreDateMMDDYYYY =
+          new NISuppressor(0, SequenceStringElementsAreDateMMDDYYYY.class);
+      NISuppressor sequenceStringElementsAreDateDDMMYYYY =
+          new NISuppressor(0, SequenceStringElementsAreDateDDMMYYYY.class);
+      NISuppressor sequenceStringElementsAreDateYYYYMMDD =
+          new NISuppressor(0, SequenceStringElementsAreDateYYYYMMDD.class);
+
+      suppressions =
+          new NISuppressionSet(
+              new NISuppression[] {
+                new NISuppression(sequenceStringElementsAreDateMMDDYYYY, suppressee),
+                new NISuppression(sequenceStringElementsAreDateDDMMYYYY, suppressee),
+                new NISuppression(sequenceStringElementsAreDateYYYYMMDD, suppressee)
+              });
+    }
+    return suppressions;
+  }
+
+  /** SequenceFixedLengthString invariant will not be reported if EltOneOfString is not falsified */
+  @Pure
+  @Override
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo di = super.isObviousDynamically(vis);
+    if (di != null) {
+      return di;
+    }
+
+    VarInfo var1 = vis[0];
+
+    PptSlice ppt_over1 = ppt.parent.findSlice(var1);
+    if (ppt_over1 == null) {
+      return null;
+    }
+
+    for (Invariant inv : ppt_over1.invs) {
+      if (inv instanceof EltOneOfString) {
+        return new DiscardInfo(
+            this,
+            DiscardCode.obvious,
+            "SequenceFixedLengthString is obvious if EltOneOfString is not discarded");
+      }
+    }
+
+    return null;
   }
 }
