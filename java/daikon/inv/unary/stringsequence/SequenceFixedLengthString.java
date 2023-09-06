@@ -7,6 +7,7 @@ import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -29,7 +30,7 @@ public class SequenceFixedLengthString extends SingleStringSequence {
 
   /** Numerical variable specifying the length of the array string elements */
   @Unused(when = Prototype.class)
-  private @Nullable Integer elements_length = null;
+  private @MonotonicNonNull Integer elements_length = null;
 
   /**
    * Creates a new SequenceFixedLengthString.
@@ -105,13 +106,15 @@ public class SequenceFixedLengthString extends SingleStringSequence {
         firstNonNullElementIndex++;
       }
 
-      // Check that the all the remaining array elements have the same length
-      // We start counting from the index of the firstNonNullElement
-      for (int i = firstNonNullElementIndex; i < a.length; i++) {
-        // If the array element is not null and its length is different to elements_length, the
-        // invariant is falsified
-        if (a[i] != null && a[i].length() != elements_length) {
-          return InvariantStatus.FALSIFIED;
+      if (elements_length != null) {
+        // Check that the all the remaining array elements have the same length
+        // We start counting from the index of the firstNonNullElement
+        for (int i = firstNonNullElementIndex; i < a.length; i++) {
+          // If the array element is not null and its length is different to elements_length, the
+          // invariant is falsified
+          if (a[i] != null && a[i].length() != elements_length) {
+            return InvariantStatus.FALSIFIED;
+          }
         }
       }
 

@@ -135,12 +135,15 @@ public class FixedLengthString extends SingleString {
       NISuppressor isDateDDMMYYYY = new NISuppressor(0, IsDateDDMMYYYY.class);
       NISuppressor isDateYYYYMMDD = new NISuppressor(0, IsDateYYYYMMDD.class);
 
+      NISuppressor oneOfString = new NISuppressor(0, OneOfString.class);
+
       suppressions =
           new NISuppressionSet(
               new NISuppression[] {
                 new NISuppression(isDateMMDDYYYY, suppressee),
                 new NISuppression(isDateDDMMYYYY, suppressee),
                 new NISuppression(isDateYYYYMMDD, suppressee),
+                new NISuppression(oneOfString, suppressee)
               });
     }
     return suppressions;
