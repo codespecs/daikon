@@ -1,9 +1,8 @@
 package daikon.inv.unary.string;
 
 import daikon.PptSlice;
-import daikon.inv.Invariant;
-import daikon.inv.InvariantStatus;
-import daikon.inv.OutputFormat;
+import daikon.VarInfo;
+import daikon.inv.*;
 import daikon.inv.unary.string.dates.IsDateDDMMYYYY;
 import daikon.inv.unary.string.dates.IsDateMMDDYYYY;
 import daikon.inv.unary.string.dates.IsDateYYYYMMDD;
@@ -135,17 +134,42 @@ public class FixedLengthString extends SingleString {
       NISuppressor isDateDDMMYYYY = new NISuppressor(0, IsDateDDMMYYYY.class);
       NISuppressor isDateYYYYMMDD = new NISuppressor(0, IsDateYYYYMMDD.class);
 
-      NISuppressor oneOfString = new NISuppressor(0, OneOfString.class);
-
       suppressions =
           new NISuppressionSet(
               new NISuppression[] {
                 new NISuppression(isDateMMDDYYYY, suppressee),
                 new NISuppression(isDateDDMMYYYY, suppressee),
-                new NISuppression(isDateYYYYMMDD, suppressee),
-                new NISuppression(oneOfString, suppressee)
+                new NISuppression(isDateYYYYMMDD, suppressee)
               });
     }
     return suppressions;
+  }
+
+  /** FixedLengthString invariant will not be reported if OneOfString is not falsified */
+  @Pure
+  @Override
+  public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo di = super.isObviousDynamically(vis);
+    if (di != null) {
+      return di;
+    }
+
+    VarInfo var1 = vis[0];
+
+    PptSlice ppt_over1 = ppt.parent.findSlice(var1);
+    if (ppt_over1 == null) {
+      return null;
+    }
+
+    for (Invariant inv : ppt_over1.invs) {
+      if (inv instanceof OneOfString) {
+        return new DiscardInfo(
+            this,
+            DiscardCode.obvious,
+            "FixedLengthString is obvious if OneOfString is not discarded");
+      }
+    }
+
+    return null;
   }
 }
