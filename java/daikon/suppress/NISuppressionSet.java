@@ -335,7 +335,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
       if (suppression_set[i].invalidated()) {
 
         Invariant v = suppression_set[i].suppressee.instantiate(vis, ppt);
-        if (v != null) new_invs.add(v);
+        if (v != null) {
+          new_invs.add(v);
+        }
         return;
       }
     }

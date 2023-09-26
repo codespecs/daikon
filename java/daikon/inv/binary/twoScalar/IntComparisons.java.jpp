@@ -723,7 +723,6 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
         return var1name + ".compareTo(" + var2name +") >= 0";
       #else
         if ((var1name.indexOf("daikon.Quant.collectObject") != -1)
-
             || (var2name.indexOf("daikon.Quant.collectObject") != -1)) {
           return "(warning: it is meaningless to compare hashcodes for values obtained through daikon.Quant.collect... methods:"
             + var1name + " " + EQUALSstring + " " + var2name + ")";

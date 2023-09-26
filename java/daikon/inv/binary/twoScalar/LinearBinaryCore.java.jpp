@@ -285,7 +285,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
         if (new_b < min_b) min_b = new_b;
         if (new_b > max_b) max_b = new_b;
         if (new_c < min_c) min_c = new_c;
-        if (new_c > max_c)           max_c = new_c;
+        if (new_c > max_c) max_c = new_c;
 
         // pick a new a, b, c as the average of their endpoints
         new_a = (min_a + max_a) / 2;

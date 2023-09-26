@@ -223,10 +223,18 @@ public final class ValueTuple implements Cloneable {
   static int make_tuplemod(
       boolean unmodified, boolean modified, boolean missingNonsensical, boolean missingFlow) {
     int result = 0;
-    if (unmodified) result += UNMODIFIED_BITVAL;
-    if (modified) result += MODIFIED_BITVAL;
-    if (missingNonsensical) result += MISSING_NONSENSICAL_BITVAL;
-    if (missingFlow) result += MISSING_FLOW_BITVAL;
+    if (unmodified) {
+      result += UNMODIFIED_BITVAL;
+    }
+    if (modified) {
+      result += MODIFIED_BITVAL;
+    }
+    if (missingNonsensical) {
+      result += MISSING_NONSENSICAL_BITVAL;
+    }
+    if (missingFlow) {
+      result += MISSING_FLOW_BITVAL;
+    }
     return result;
   }
 
@@ -443,7 +451,9 @@ public final class ValueTuple implements Cloneable {
     assert vals.length == mods.length;
     assert vis == null || vals.length == vis.length;
     for (int i = 0; i < vals.length; i++) {
-      if (i > 0) sb.append("; ");
+      if (i > 0) {
+        sb.append("; ");
+      }
       if (vis != null) {
         sb.append(vis[i].name() + "=");
       }
@@ -488,7 +498,9 @@ public final class ValueTuple implements Cloneable {
   public static String valsToString(@Nullable Object[] vals) {
     StringBuilder sb = new StringBuilder("[");
     for (int i = 0; i < vals.length; i++) {
-      if (i > 0) sb.append(", ");
+      if (i > 0) {
+        sb.append(", ");
+      }
       sb.append(valToString(vals[i]));
     }
     sb.append("]");

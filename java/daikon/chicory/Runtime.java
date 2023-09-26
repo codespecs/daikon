@@ -438,7 +438,9 @@ public class Runtime {
         break;
       }
 
-      if (debug) System.out.println("processing class " + class_info.class_name);
+      if (debug) {
+        System.out.println("processing class " + class_info.class_name);
+      }
       if (first_class) {
         decl_writer.printHeaderInfo(class_info.class_name);
         first_class = false;
@@ -574,7 +576,9 @@ public class Runtime {
     }
     File file = new File(filename);
     File parent = file.getParentFile();
-    if (parent != null) parent.mkdirs();
+    if (parent != null) {
+      parent.mkdirs();
+    }
     OutputStream os = null; // dummy initialization for compiler's definite assignment check
     try {
       os = new FileOutputStream(filename, append);
@@ -1017,9 +1021,9 @@ public class Runtime {
       result = classname.substring(1, classname.length() - 1);
       result = result.replace('/', '.');
     } else {
-      if (dims > 0) // array of primitives
-      result = primitiveClassesFromJvm.get(classname);
-      else {
+      if (dims > 0) { // array of primitives
+        result = primitiveClassesFromJvm.get(classname);
+      } else {
         // just a primitive
         result = classname;
       }

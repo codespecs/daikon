@@ -222,7 +222,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             //                    " --- " + valString);
           }
 
-          if (valString != null) c_info.staticMap.put(field.getName(), valString);
+          if (valString != null) {
+            c_info.staticMap.put(field.getName(), valString);
+          }
         }
       }
 
@@ -471,8 +473,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
           printStackMapTable("After create_method_info");
 
-          if (mi == null) // method filtered out!
-          continue;
+          if (mi == null) { // method filtered out!
+            continue;
+          }
 
           shouldInclude = true; // at least one method not filtered out
 
@@ -1014,7 +1017,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     String[] arg_names = mgen.getArgumentNames();
     LocalVariableGen[] lvs = mgen.getLocalVariables();
     int param_offset = 1;
-    if (mgen.isStatic()) param_offset = 0;
+    if (mgen.isStatic()) {
+      param_offset = 0;
+    }
     if (debugInstrument.enabled) {
       debugInstrument.log("create_method_info1 %s%n", arg_names.length);
       for (int ii = 0; ii < arg_names.length; ii++) {
@@ -1046,7 +1051,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     if (lvs != null) {
       for (int ii = lv_start; ii < arg_names.length; ii++) {
-        if ((ii + param_offset) < lvs.length) arg_names[ii] = lvs[ii + param_offset].getName();
+        if ((ii + param_offset) < lvs.length) {
+          arg_names[ii] = lvs[ii + param_offset].getName();
+        }
       }
     }
 

@@ -74,7 +74,9 @@ public class StringInfo extends DaikonVariableInfo {
       }
 
       // Put space between elements in array
-      if (iter.hasNext()) buf.append(" ");
+      if (iter.hasNext()) {
+        buf.append(" ");
+      }
     }
     buf.append("]");
 

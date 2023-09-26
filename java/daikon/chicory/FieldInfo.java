@@ -68,7 +68,9 @@ public class FieldInfo extends DaikonVariableInfo {
       if (Modifier.isStatic(f.getModifiers())) {
         continue;
       }
-      if (f.getType().isPrimitive()) field_num++;
+      if (f.getType().isPrimitive()) {
+        field_num++;
+      }
     }
     throw new Error("Can't find " + field + " in " + field.getDeclaringClass());
   }
@@ -84,7 +86,9 @@ public class FieldInfo extends DaikonVariableInfo {
         if (Modifier.isStatic(f.getModifiers())) {
           continue;
         }
-        if (f.getType().isPrimitive()) field_cnt++;
+        if (f.getType().isPrimitive()) {
+          field_cnt++;
+        }
       }
       return field_cnt;
     }

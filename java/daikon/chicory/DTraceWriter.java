@@ -225,7 +225,9 @@ public class DTraceWriter extends DaikonWriter {
 
       if (debug_vars) {
         String out = curInfo.getDTraceValueString(val);
-        if (out.length() > 20) out = out.substring(0, 20);
+        if (out.length() > 20) {
+          out = out.substring(0, 20);
+        }
         System.out.printf(
             "  --variable %s [%d]= %s%n", curInfo.getName(), curInfo.children.size(), out);
       }

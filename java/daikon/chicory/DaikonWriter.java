@@ -122,7 +122,9 @@ public abstract class DaikonWriter {
     for (int i = 0; i < types.length; i++) {
       paramTypes.append(types[i]);
 
-      if (i != types.length - 1) paramTypes.append(",");
+      if (i != types.length - 1) {
+        paramTypes.append(",");
+      }
     }
     paramTypes.append(")");
     String pptname = fullClassName + "." + short_name + paramTypes + ":::" + point;
@@ -160,7 +162,9 @@ public abstract class DaikonWriter {
     }
     String arg_str = "";
     for (Class<?> arg : args) {
-      if (arg_str.length() > 0) arg_str += ", ";
+      if (arg_str.length() > 0) {
+        arg_str += ", ";
+      }
       if (arg.isArray()) {
         arg_str += Signatures.fieldDescriptorToBinaryName(arg.getName());
       } else {

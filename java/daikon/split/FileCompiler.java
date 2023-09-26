@@ -208,7 +208,9 @@ public final class FileCompiler {
       // System.out.println ("Compile errors: " + compile_errors);
       // System.out.println ("Compile output: " + compile_output);
       ExecuteException e = resultHandler.getException();
-      if (e != null) e.printStackTrace();
+      if (e != null) {
+        e.printStackTrace();
+      }
       runtime.exit(1);
     }
     return compile_errors;
