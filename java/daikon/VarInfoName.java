@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -3830,44 +3831,39 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
       // build the forall predicate
       String[] result = new String[(includeIndex ? 2 : 1) * roots.length + 2];
-      StringBuilder int_list, conditions;
+
+      StringJoiner int_list, conditions;
       {
         // "i j ..."
-        int_list = new StringBuilder();
+        int_list = new StringJoiner(" ");
         // "(AND (<= ai i) (<= i bi) (<= aj j) (<= j bj) ...)"
         // if elementwise, also insert "(EQ (- i ai) (- j aj)) ..."
-        conditions = new StringBuilder();
+        conditions = new StringJoiner(" ");
         for (int i = 0; i < qret.bound_vars.size(); i++) {
           VarInfoName[] boundv = qret.bound_vars.get(i);
           VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
-          if (i != 0) {
-            int_list.append(" ");
-            conditions.append(" ");
-          }
-          int_list.append(idx.simplify_name());
-          conditions.append("(<= " + low.simplify_name() + " " + idx.simplify_name() + ")");
-          conditions.append(" (<= " + idx.simplify_name() + " " + high.simplify_name() + ")");
+          int_list.add(idx.simplify_name());
+          conditions.add("(<= " + low.simplify_name() + " " + idx.simplify_name() + ")");
+          conditions.add("(<= " + idx.simplify_name() + " " + high.simplify_name() + ")");
           if (elementwise && (i >= 1)) {
             VarInfoName[] _boundv = qret.bound_vars.get(i - 1);
             VarInfoName _idx = _boundv[0], _low = _boundv[1];
             if (_low.simplify_name().equals(low.simplify_name())) {
-              conditions.append(" (EQ " + _idx.simplify_name() + " " + idx.simplify_name() + ")");
+              conditions.add("(EQ " + _idx.simplify_name() + " " + idx.simplify_name() + ")");
             } else {
-              conditions.append(
-                  " (EQ (- " + _idx.simplify_name() + " " + _low.simplify_name() + ")");
-              conditions.append(" (- " + idx.simplify_name() + " " + low.simplify_name() + "))");
+              conditions.add(" (EQ (- " + _idx.simplify_name() + " " + _low.simplify_name() + ")");
+              conditions.add("(- " + idx.simplify_name() + " " + low.simplify_name() + "))");
             }
           }
           if (i == 1 && (adjacent || distinct)) {
             VarInfoName[] _boundv = qret.bound_vars.get(i - 1);
             VarInfoName prev_idx = _boundv[0];
             if (adjacent) {
-              conditions.append(
-                  " (EQ (+ " + prev_idx.simplify_name() + " 1) " + idx.simplify_name() + ")");
+              conditions.add(
+                  "(EQ (+ " + prev_idx.simplify_name() + " 1) " + idx.simplify_name() + ")");
             }
             if (distinct) {
-              conditions.append(
-                  " (NEQ " + prev_idx.simplify_name() + " " + idx.simplify_name() + ")");
+              conditions.add("(NEQ " + prev_idx.simplify_name() + " " + idx.simplify_name() + ")");
             }
           }
         }

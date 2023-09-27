@@ -320,7 +320,7 @@ public abstract class PptSlice extends Ppt {
     return this.getClass().getName()
         + ": "
         + parent.ppt_name
-        + " "
+        // sb starts with a space
         + sb
         + " samples: "
         + num_samples();

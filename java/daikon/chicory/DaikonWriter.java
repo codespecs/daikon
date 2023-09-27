@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.StringJoiner;
 import org.checkerframework.checker.signature.qual.BinaryName;
 
 /** DaikonWriter is the parent class of DeclWriter and DTraceWriter. */
@@ -117,14 +118,10 @@ public abstract class DaikonWriter {
     }
 
     // build up the string to go inside the parens
-    StringBuilder paramTypes = new StringBuilder();
-    paramTypes.append("(");
+    StringJoiner paramTypes = new StringJoiner(",", "(", ")");
     for (int i = 0; i < types.length; i++) {
-      paramTypes.append(types[i]);
-
-      if (i != types.length - 1) paramTypes.append(",");
+      paramTypes.add(types[i]);
     }
-    paramTypes.append(")");
     String pptname = fullClassName + "." + short_name + paramTypes + ":::" + point;
 
     if (Chicory.debug_ppt_names) {

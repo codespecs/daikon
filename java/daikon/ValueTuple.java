@@ -1,6 +1,7 @@
 package daikon;
 
 import java.util.Arrays;
+import java.util.StringJoiner;
 import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.Interned;
@@ -486,13 +487,11 @@ public final class ValueTuple implements Cloneable {
   }
 
   public static String valsToString(@Nullable Object[] vals) {
-    StringBuilder sb = new StringBuilder("[");
+    StringJoiner sj = new StringJoiner(", ", "[", "]");
     for (int i = 0; i < vals.length; i++) {
-      if (i > 0) sb.append(", ");
-      sb.append(valToString(vals[i]));
+      sj.add(valToString(vals[i]));
     }
-    sb.append("]");
-    return sb.toString();
+    return sj.toString();
   }
 
   public static String valToString(@Nullable Object val) {
