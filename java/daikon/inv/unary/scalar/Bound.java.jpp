@@ -565,8 +565,7 @@ public class LOWERBOUND extends SINGLESCALAR {
         changed = true;
         status = InvariantStatus.WEAKENED;
       }
-      if (core.add_modified(value[i], count) ==
-          InvariantStatus.FALSIFIED) {
+      if (core.add_modified(value[i], count) == InvariantStatus.FALSIFIED) {
         return InvariantStatus.FALSIFIED;
       }
     }

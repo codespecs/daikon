@@ -373,7 +373,9 @@ public final class MergeInvariants {
     if (debug.isLoggable(FINE)) {
       debug.fine("PPT Hierarchy");
       for (PptTopLevel ppt : merge_ppts.pptIterable()) {
-        if (ppt.parents.size() == 0) ppt.debug_print_tree(debug, 0, null);
+        if (ppt.parents.size() == 0) {
+          ppt.debug_print_tree(debug, 0, null);
+        }
       }
     }
 
@@ -392,7 +394,9 @@ public final class MergeInvariants {
     // System.out.println("Creating implications ");
     debugProgress.fine("Adding Implications ... ");
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
-      if (ppt.num_samples() > 0) ppt.addImplications();
+      if (ppt.num_samples() > 0) {
+        ppt.addImplications();
+      }
     }
     long duration = System.nanoTime() - startTime;
     debugProgress.fine("Time spent in implications: " + TimeUnit.NANOSECONDS.toSeconds(duration));

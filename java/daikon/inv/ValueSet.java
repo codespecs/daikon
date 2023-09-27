@@ -250,8 +250,12 @@ public abstract class ValueSet extends LimitedSizeLongSet implements Serializabl
         }
       }
       elem_cnt += val.length;
-      if (val.length > 1) nonsingleton_arr_cnt++;
-      if (val.length > max_length) max_length = val.length;
+      if (val.length > 1) {
+        nonsingleton_arr_cnt++;
+      }
+      if (val.length > max_length) {
+        max_length = val.length;
+      }
       add(Arrays.hashCode((long[]) v1));
     }
 
@@ -328,8 +332,12 @@ public abstract class ValueSet extends LimitedSizeLongSet implements Serializabl
         }
       }
       elem_cnt += val.length;
-      if (val.length > 1) nonsingleton_arr_cnt++;
-      if (val.length > max_length) max_length = val.length;
+      if (val.length > 1) {
+        nonsingleton_arr_cnt++;
+      }
+      if (val.length > max_length) {
+        max_length = val.length;
+      }
       add(Arrays.hashCode(val));
     }
 
@@ -428,7 +436,9 @@ public abstract class ValueSet extends LimitedSizeLongSet implements Serializabl
       assert v1 != null;
       String[] val = (String[]) v1;
       elem_cnt += val.length;
-      if (val.length > 1) nonsingleton_arr_cnt++;
+      if (val.length > 1) {
+        nonsingleton_arr_cnt++;
+      }
       add(Arrays.deepHashCode(val));
     }
 

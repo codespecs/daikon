@@ -143,7 +143,9 @@ public class PptRelation implements Serializable {
     StringBuilder var_str = new StringBuilder();
     for (VarInfo pv : parent_to_child_map.keySet()) {
       VarInfo cv = parent_to_child_map.get(pv);
-      if (var_str.length() > 0) var_str.append(", ");
+      if (var_str.length() > 0) {
+        var_str.append(", ");
+      }
       var_str.append(pv.name() + "->" + cv.name());
     }
 
@@ -694,7 +696,9 @@ public class PptRelation implements Serializable {
             rel = newObjectMethodRel(parent, ppt);
           } else {
             parent = all_ppts.get(parent.ppt_name.makeClassStatic());
-            if (parent != null) rel = newObjectMethodRel(parent, ppt);
+            if (parent != null) {
+              rel = newObjectMethodRel(parent, ppt);
+            }
           }
         }
 
@@ -703,7 +707,9 @@ public class PptRelation implements Serializable {
         PptTopLevel parent = all_ppts.get(pname.makeExit());
         // System.out.printf("Parent of %s is %s%n", pname.name(),
         //                   parent.name());
-        if (parent != null) rel = newCombinedExitExitNNRel(parent, ppt);
+        if (parent != null) {
+          rel = newCombinedExitExitNNRel(parent, ppt);
+        }
       }
 
       // If a relation was created, connect it into its ppts
@@ -874,7 +880,9 @@ public class PptRelation implements Serializable {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("PPT Hierarchy");
       for (PptTopLevel ppt : all_ppts.pptIterable()) {
-        if (ppt.parents.size() == 0) ppt.debug_print_tree(debug, 0, null);
+        if (ppt.parents.size() == 0) {
+          ppt.debug_print_tree(debug, 0, null);
+        }
       }
     }
 
@@ -1043,7 +1051,9 @@ public class PptRelation implements Serializable {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("PPT Hierarchy");
       for (PptTopLevel ppt : all_ppts.pptIterable()) {
-        if (ppt.parents.size() == 0) ppt.debug_print_tree(debug, 0, null);
+        if (ppt.parents.size() == 0) {
+          ppt.debug_print_tree(debug, 0, null);
+        }
       }
     }
 

@@ -281,7 +281,9 @@ public class DynComp {
       if (rt_file == null) {
         if (daikon_dir != null) {
           File poss_rt = new File(new File(daikon_dir, "java"), "dcomp_rt.jar");
-          if (poss_rt.canRead()) rt_file = poss_rt;
+          if (poss_rt.canRead()) {
+            rt_file = poss_rt;
+          }
         }
       }
 

@@ -64,18 +64,24 @@ public class PptSliceEquality extends PptSlice {
   // Not valid for this type of slice.  Always pretend there are enough.
   @Override
   public int num_samples(@UnknownInitialization @GuardSatisfied PptSliceEquality this) {
-    if (true) throw new Error();
+    if (true) {
+      throw new Error();
+    }
     return Integer.MAX_VALUE;
   }
 
   public int num_mod_samples() {
-    if (true) throw new Error();
+    if (true) {
+      throw new Error();
+    }
     return Integer.MAX_VALUE;
   }
 
   @Override
   public int num_values() {
-    if (true) throw new Error();
+    if (true) {
+      throw new Error();
+    }
     return Integer.MAX_VALUE;
   }
 
@@ -177,7 +183,9 @@ public class PptSliceEquality extends PptSlice {
           debug.fine("   vi: " + vi + " aux : " + vi.aux);
         }
       }
-      if (Debug.logOn()) Debug.log(getClass(), parent, Debug.vis(eq.leader()), "Created");
+      if (Debug.logOn()) {
+        Debug.log(getClass(), parent, Debug.vis(eq.leader()), "Created");
+      }
       invCount++;
     }
     // Ensure determinism
@@ -225,7 +233,9 @@ public class PptSliceEquality extends PptSlice {
       List<VarInfo> vlist = varmap.computeIfAbsent(v, Collections::singletonList);
       Equality eq = new Equality(vlist, this);
       Integer sample_cnt = sample_cnt_map.get(v);
-      if (sample_cnt != null) eq.setSamples(sample_cnt.intValue());
+      if (sample_cnt != null) {
+        eq.setSamples(sample_cnt.intValue());
+      }
       v.equalitySet = eq;
       newInvs.add(eq);
     }
@@ -497,7 +507,9 @@ public class PptSliceEquality extends PptSlice {
             }
           }
         }
-        if (slice.invs.size() == 0) i.remove();
+        if (slice.invs.size() == 0) {
+          i.remove();
+        }
       }
     }
 

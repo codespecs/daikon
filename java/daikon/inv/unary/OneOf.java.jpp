@@ -1084,7 +1084,9 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     String oneOfArray = "new String[] { ";
   #endif
     for (int i = 0 ; i < num_elts ; i++) {
-      if (i != 0) { oneOfArray += ", "; }
+      if (i != 0) {
+        oneOfArray += ", ";
+      }
       oneOfArray = oneOfArray + TOSTRING(elts[i]);
     }
     oneOfArray += " }";
@@ -1140,7 +1142,9 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     {
       result = "";
       for (int i = 0; i < num_elts; i++) {
-        if (i != 0) { result += " || "; }
+        if (i != 0) {
+          result += " || ";
+        }
 
         #if defined(FLOAT)
         result += "daikon.Quant.fuzzy.eq(" + varname + ", " + TOSTRING(elts[i]) + ")";
@@ -1155,7 +1159,9 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     result = "";
     boolean is_type = is_type();
     for (int i = 0; i < num_elts; i++) {
-      if (i != 0) { result += " || "; }
+      if (i != 0) {
+        result += " || ";
+      }
       String str = elts[i];
       if (!is_type) {
         result += varname + JAVA_EQUALS_STRING(TOSTRING(str));
@@ -1187,7 +1193,9 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
 
     result = "";
     for (int i = 0; i < num_elts; i++) {
-      if (i != 0) { result += " || "; }
+      if (i != 0) {
+        result += " || ";
+      }
 
     #if defined(STRINGSEQUENCE)
       String seq = "new String[] { ";

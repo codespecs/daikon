@@ -124,8 +124,13 @@ public final class Configuration implements Serializable {
     assert input != null;
     for (String line : new EntryReader(input)) {
       line = line.trim();
-      if (line.length() == 0) continue; // skip blank lines
-      if (line.charAt(0) == '#') continue; // skip # comment lines
+      // Skip blank and comment lines
+      if (line.length() == 0) {
+        continue;
+      }
+      if (line.charAt(0) == '#') {
+        continue;
+      }
       apply(line);
     }
   }
