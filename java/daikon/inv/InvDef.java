@@ -78,7 +78,7 @@ public class InvDef {
   }
 
   /**
-   * Create a new InvDef with one variable and the given state
+   * Create a new InvDef with one variable and the given state.
    *
    * @param v1 the variable
    * @param cls the class of the invariant to be defined

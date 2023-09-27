@@ -346,13 +346,11 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   public ONEOFSCALAR instantiate_dyn(@Prototype ONEOFSCALAR this, PptSlice slice) {
     return new ONEOFSCALAR(slice);
@@ -1686,7 +1684,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     return null;
   }
 #elif defined(IS_SEQUENCE)
-  /** {@inheritDoc} */
   @Override
   public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
@@ -1786,7 +1783,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     return null;
   }
 #elif defined(STRING) || defined(ELTSTRING)
-  /** {@inheritDoc} */
   @Override
   public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);

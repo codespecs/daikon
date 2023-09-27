@@ -48,7 +48,7 @@ public class MethodInfo {
   /** Array of argument types as classes for this method. */
   public Class<?>[] arg_types;
 
-  /** exit locations for this method */
+  /** Exit locations for this method. */
   public List<Integer> exit_locations;
 
   /** Tells whether each exit point in method is instrumented, based on filters. */

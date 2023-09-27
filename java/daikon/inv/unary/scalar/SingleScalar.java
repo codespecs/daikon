@@ -35,7 +35,6 @@ public abstract class SingleScalar extends UnaryInvariant {
     return (vis.length == 1) && vis[0].file_rep_type.isScalar();
   }
 
-  /** Returns whether or not the specified types are valid for unary scalar. */
   @Override
   public final boolean valid_types(VarInfo[] vis) {
     return valid_types_static(vis);

@@ -56,10 +56,10 @@ import org.checkerframework.dataflow.qual.Pure;
 @SuppressWarnings("nullness")
 public class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
-  /** the index of this method into SharedData.methods */
+  /** The index of this method in SharedData.methods. */
   int cur_method_info_index = 0;
 
-  /** the location of the runtime support class */
+  /** The location of the runtime support class. */
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
   /** Debug information about which classes are transformed and why. */

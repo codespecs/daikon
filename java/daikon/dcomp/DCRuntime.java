@@ -144,7 +144,7 @@ public final class DCRuntime implements ComparabilityProvider {
     /** Number of methods currently on tag_stack. */
     int tag_stack_call_depth;
 
-    /** class initializer */
+    /** class initializer. */
     ThreadData() {
       tag_stack = new ArrayDeque<Object>();
       tag_stack_call_depth = 0;
@@ -2622,7 +2622,7 @@ public final class DCRuntime implements ComparabilityProvider {
     if (debug_tag_frame) System.out.printf("tag stack size: %d%n", td.tag_stack.size());
   }
 
-  /** swaps the two elements on the top of the tag stack */
+  /** Swaps the two elements on the top of the tag stack. */
   public static void swap() {
     ThreadData td = thread_to_data.get(Thread.currentThread());
     debug_primitive.log("swap%n");

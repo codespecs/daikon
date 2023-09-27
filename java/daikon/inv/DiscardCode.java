@@ -57,43 +57,43 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
 
   static final long serialVersionUID = 20031016L;
 
-  /** used when an invariant is implied by other known invariants */
+  /** used when an invariant is implied by other known invariants. */
   public static final DiscardCode obvious = new DiscardCode(0);
 
-  /** used when an invariant is falsified by a seen example */
+  /** used when an invariant is falsified by a seen example. */
   public static final DiscardCode bad_sample = new DiscardCode(1);
 
-  /** used when an invariant has an unjustified confidence */
+  /** used when an invariant has an unjustified confidence. */
   public static final DiscardCode bad_confidence = new DiscardCode(2);
 
-  /** used when an invariant has not had enough samples */
+  /** used when an invariant has not had enough samples. */
   public static final DiscardCode not_enough_samples = new DiscardCode(4);
 
-  /** used when an invariant contains a non-canonical variable */
+  /** used when an invariant contains a non-canonical variable. */
   public static final DiscardCode non_canonical_var = new DiscardCode(5);
 
-  /** used when an invariant is implied by some prestate conditions */
+  /** used when an invariant is implied by some prestate conditions. */
   public static final DiscardCode implied_post_condition = new DiscardCode(6);
 
-  /** used when an invariant's expression contains only constant variables */
+  /** used when an invariant's expression contains only constant variables. */
   public static final DiscardCode only_constant_vars = new DiscardCode(7);
 
   /** used when an invariant's VarInfo returns true for isDerivedParamAndUninteresting() */
   public static final DiscardCode derived_param = new DiscardCode(8);
 
-  /** used for invariants that describe unmodified variables */
+  /** used for invariants that describe unmodified variables. */
   public static final DiscardCode unmodified_var = new DiscardCode(9);
 
-  /** used for invariants discarded because of the ControlledInvariantsFilter */
+  /** used for invariants discarded because of the ControlledInvariantsFilter. */
   public static final DiscardCode control_check = new DiscardCode(10);
 
-  /** used for invariants discarded when isExact() fails */
+  /** used for invariants discarded when isExact() fails. */
   public static final DiscardCode exact = new DiscardCode(11);
 
-  /** used for invariants that don't contain desired variables */
+  /** used for invariants that don't contain desired variables. */
   public static final DiscardCode var_filtered = new DiscardCode(12);
 
-  /** used for invariants that are filtered by some means not in the above list */
+  /** used for invariants that are filtered by some means not in the above list. */
   public static final DiscardCode filtered = new DiscardCode(13);
 
   /** Each member of the enumeration is associated with a distinct int for comparability. */

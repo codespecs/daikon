@@ -262,13 +262,11 @@ public class LOWERBOUND extends SINGLESCALAR {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** LOWERBOUND is only valid on integral types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -279,7 +277,6 @@ public class LOWERBOUND extends SINGLESCALAR {
     return vis[0].file_rep_type.BASE_IS_INTEGRAL;
     }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   public LOWERBOUND instantiate_dyn(@Prototype LOWERBOUND this, PptSlice slice) {
     return new LOWERBOUND(slice);

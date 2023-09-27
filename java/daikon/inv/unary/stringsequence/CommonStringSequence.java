@@ -47,13 +47,11 @@ public class CommonStringSequence extends SingleStringSequence {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   protected CommonStringSequence instantiate_dyn(
       @Prototype CommonStringSequence this, PptSlice slice) {

@@ -40,13 +40,11 @@ public final class PrintableString extends SingleString {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   public PrintableString instantiate_dyn(@Prototype PrintableString this, PptSlice slice) {
     return new PrintableString(slice);
@@ -63,13 +61,13 @@ public final class PrintableString extends SingleString {
     }
   }
 
-  /** Check to see if a only contains printable ascii characters. */
+  /** Check to see if a only contains printable ASCII characters. */
   @Override
   public InvariantStatus add_modified(@Interned String a, int count) {
     return check_modified(a, count);
   }
 
-  /** Check to see if a only contains printable ascii characters. */
+  /** Check to see if a only contains printable ASCII characters. */
   @Override
   public InvariantStatus check_modified(@Interned String a, int count) {
     for (int ii = 0; ii < a.length(); ii++) {

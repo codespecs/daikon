@@ -123,7 +123,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   private @Interned String str_name; // interned
 
-  /** returns the interned name of the variable */
+  /** returns the interned name of the variable. */
   @Pure
   public @Interned String name(@GuardSatisfied VarInfo this) {
     if (FileIO.new_decl_format) {
@@ -1022,7 +1022,11 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return (derived != null);
   }
 
-  /** returns the depth of derivation */
+  /**
+   * Returns the depth of derivation.
+   *
+   * @return the depth of derivation
+   */
   public int derivedDepth() {
     if (derived == null) {
       return 0;

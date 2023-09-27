@@ -108,7 +108,6 @@ public final class SequencesConcat extends BinaryDerivation {
     return (other instanceof SequencesConcat);
   }
 
-  /** Returns the ESC name for sequence subsequence. */
   @SideEffectFree
   @Override
   public String esc_name(String index) {
