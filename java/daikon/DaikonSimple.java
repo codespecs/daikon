@@ -540,7 +540,7 @@ public class DaikonSimple {
         wait = false;
       }
 
-      if (object_ppt != null) { // apply object vt
+      if (object_ppt != null) {
         add(object_ppt, object_vt, nonce);
       }
 

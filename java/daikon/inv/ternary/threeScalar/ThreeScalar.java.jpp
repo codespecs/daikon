@@ -49,7 +49,6 @@ public abstract class CLASSNAME extends TernaryInvariant {
     super();
   }
 
-  /** Returns whether or not the specified types are valid. */
   @Override
   public final boolean valid_types(VarInfo[] vis) {
 

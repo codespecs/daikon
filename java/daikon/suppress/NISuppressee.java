@@ -259,7 +259,9 @@ public class NISuppressee {
   public NISuppressee swap() {
     assert var_count == 2;
     BinaryInvariant binv = (BinaryInvariant) sample_inv;
-    if (binv != null) assert !binv.is_symmetric();
+    if (binv != null) {
+      assert !binv.is_symmetric();
+    }
     if ((binv == null) || binv.get_swap()) {
       return new NISuppressee(sup_class, false);
     } else {

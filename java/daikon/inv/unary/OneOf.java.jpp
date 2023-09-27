@@ -346,13 +346,11 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   public ONEOFSCALAR instantiate_dyn(@Prototype ONEOFSCALAR this, PptSlice slice) {
     return new ONEOFSCALAR(slice);
@@ -1086,7 +1084,9 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     String oneOfArray = "new String[] { ";
   #endif
     for (int i = 0 ; i < num_elts ; i++) {
-      if (i != 0) { oneOfArray += ", "; }
+      if (i != 0) {
+        oneOfArray += ", ";
+      }
       oneOfArray = oneOfArray + TOSTRING(elts[i]);
     }
     oneOfArray += " }";
@@ -1143,7 +1143,9 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     {
       result = "";
       for (int i = 0; i < num_elts; i++) {
-        if (i != 0) { result += " || "; }
+        if (i != 0) {
+          result += " || ";
+        }
 
         #if defined(FLOAT)
         result += "daikon.Quant.fuzzy.eq(" + varname + ", " + TOSTRING(elts[i]) + ")";
@@ -1158,7 +1160,9 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     result = "";
     boolean is_type = is_type();
     for (int i = 0; i < num_elts; i++) {
-      if (i != 0) { result += " || "; }
+      if (i != 0) {
+        result += " || ";
+      }
       String str = elts[i];
       if (!is_type) {
         result += varname + JAVA_EQUALS_STRING(TOSTRING(str));
@@ -1190,7 +1194,9 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
 
     result = "";
     for (int i = 0; i < num_elts; i++) {
-      if (i != 0) { result += " || "; }
+      if (i != 0) {
+        result += " || ";
+      }
 
     #if defined(STRINGSEQUENCE)
       String seq = "new String[] { ";
@@ -1690,7 +1696,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     return null;
   }
 #elif defined(IS_SEQUENCE)
-  /** {@inheritDoc} */
   @Override
   public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
@@ -1790,7 +1795,6 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     return null;
   }
 #elif defined(STRING) || defined(ELTSTRING)
-  /** {@inheritDoc} */
   @Override
   public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);

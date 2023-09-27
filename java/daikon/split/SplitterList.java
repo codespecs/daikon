@@ -67,7 +67,9 @@ public abstract class SplitterList {
     StringBuilder sb = new StringBuilder();
     sb.append("[");
     for (int i = 0; i < splits.length; i++) {
-      if (i != 0) sb.append(", ");
+      if (i != 0) {
+        sb.append(", ");
+      }
       sb.append("\"");
       sb.append(splits[i].condition());
       sb.append("\"");

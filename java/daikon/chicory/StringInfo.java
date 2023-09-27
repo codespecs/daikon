@@ -74,7 +74,9 @@ public class StringInfo extends DaikonVariableInfo {
       }
 
       // Put space between elements in array
-      if (iter.hasNext()) buf.append(" ");
+      if (iter.hasNext()) {
+        buf.append(" ");
+      }
     }
     buf.append("]");
 
@@ -119,7 +121,7 @@ public class StringInfo extends DaikonVariableInfo {
     return Runtime.quote(input);
   }
 
-  /** toString is a function */
+  /** toString is a function. */
   @Override
   public VarKind get_var_kind() {
     return VarKind.FUNCTION;

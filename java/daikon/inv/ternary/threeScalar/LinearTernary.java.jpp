@@ -101,13 +101,11 @@ public class CLASSNAME extends SUPERCLASS {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** LinearTernary is only valid on non-constant integral types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -154,8 +152,12 @@ public class CLASSNAME extends SUPERCLASS {
     VarInfo x_summand = null;
     VarInfo y_summand = null;
     VarInfo z_summand = null;
-    if (x.derived instanceof SequenceSum) x_summand = ((SequenceSum) x.derived).base;
-    if (y.derived instanceof SequenceSum) y_summand = ((SequenceSum) y.derived).base;
+    if (x.derived instanceof SequenceSum) {
+      x_summand = ((SequenceSum) x.derived).base;
+    }
+    if (y.derived instanceof SequenceSum) {
+      y_summand = ((SequenceSum) y.derived).base;
+    }
     if (z.derived instanceof SequenceSum) {
     z_summand = ((SequenceSum) z.derived).base;
     }
@@ -292,7 +294,6 @@ public class CLASSNAME extends SUPERCLASS {
     return true;
   }
 
-  /** Instantiate the invariant on the specified slice. */
   @Override
   public CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);

@@ -21,16 +21,16 @@ public class FieldInfo extends DaikonVariableInfo {
   /** The offset of this field in its containing class. */
   private int field_num;
 
-  /** whether or not this is a static field */
+  /** Whether or not this is a static field. */
   private boolean is_static;
 
-  /** whether or not this field is final */
+  /** Whether or not this field is final. */
   private boolean is_final;
 
-  /** whether or not this field is of a primitive type */
+  /** Whether or not this field is of a primitive type. */
   private boolean is_primitive;
 
-  /** whether or not this field is an outer this variable */
+  /** Whether or not this field is an outer this variable. */
   private boolean is_outer_this;
 
   /**
@@ -68,7 +68,9 @@ public class FieldInfo extends DaikonVariableInfo {
       if (Modifier.isStatic(f.getModifiers())) {
         continue;
       }
-      if (f.getType().isPrimitive()) field_num++;
+      if (f.getType().isPrimitive()) {
+        field_num++;
+      }
     }
     throw new Error("Can't find " + field + " in " + field.getDeclaringClass());
   }
@@ -84,7 +86,9 @@ public class FieldInfo extends DaikonVariableInfo {
         if (Modifier.isStatic(f.getModifiers())) {
           continue;
         }
-        if (f.getType().isPrimitive()) field_cnt++;
+        if (f.getType().isPrimitive()) {
+          field_cnt++;
+        }
       }
       return field_cnt;
     }
@@ -191,7 +195,7 @@ public class FieldInfo extends DaikonVariableInfo {
   }
   */
 
-  /** static final fields are NOMOD. */
+  /** Static final fields are NOMOD. */
   @Override
   public EnumSet<VarFlags> get_var_flags() {
     EnumSet<VarFlags> flags = super.get_var_flags();

@@ -322,7 +322,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * returns an iterator over all of the PptConditionals at this ppt
+   * Returns an iterator over all of the PptConditionals at this ppt.
    *
    * @see #cond_iterable()
    */
@@ -331,7 +331,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * returns an iterable over all of the PptConditionals at this ppt
+   * Returns an iterable over all of the PptConditionals at this ppt.
    *
    * @see #cond_iterator()
    */
@@ -767,7 +767,9 @@ public class PptTopLevel extends Ppt {
     if (Debug.logOn()) {
       for (int di = 0; di < binary.length; di++) {
         BinaryDerivationFactory d = binary[di];
-        if (Debug.class_match(d.getClass())) debug_bin_possible = true;
+        if (Debug.class_match(d.getClass())) {
+          debug_bin_possible = true;
+        }
       }
     }
 
@@ -1087,7 +1089,9 @@ public class PptTopLevel extends Ppt {
 
     // Add samples to constants, adding new invariants as required
     if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
-      if (constants == null) constants = new DynamicConstants(this);
+      if (constants == null) {
+        constants = new DynamicConstants(this);
+      }
       constants.add(vt, count);
     }
 
@@ -1099,9 +1103,13 @@ public class PptTopLevel extends Ppt {
       int slice2_cnt = 0;
       int slice3_cnt = 0;
       for (PptSlice slice : views_iterable()) {
-        if (slice instanceof PptSlice1) slice1_cnt++;
-        else if (slice instanceof PptSlice2) slice2_cnt++;
-        else if (slice instanceof PptSlice3) slice3_cnt++;
+        if (slice instanceof PptSlice1) {
+          slice1_cnt++;
+        } else if (slice instanceof PptSlice2) {
+          slice2_cnt++;
+        } else if (slice instanceof PptSlice3) {
+          slice3_cnt++;
+        }
       }
       System.out.println("ppt " + name());
       debugInstantiate.fine("slice1 (" + slice1_cnt + ") slices");
@@ -1273,7 +1281,9 @@ public class PptTopLevel extends Ppt {
 
       // Skip any invariants with a missing variable
       for (int j = 0; j < inv.ppt.var_infos.length; j++) {
-        if (inv.ppt.var_infos[j].isMissing(vt)) continue inv_loop;
+        if (inv.ppt.var_infos[j].isMissing(vt)) {
+          continue inv_loop;
+        }
       }
 
       // // Add the slice containing this invariant to the set of slices
@@ -1446,10 +1456,15 @@ public class PptTopLevel extends Ppt {
       UpperBound ub = null;
       UpperBoundFloat ubf = null;
       for (Invariant inv : slice.invs) {
-        if (inv instanceof LowerBound) lb = (LowerBound) inv;
-        else if (inv instanceof LowerBoundFloat) lbf = (LowerBoundFloat) inv;
-        else if (inv instanceof UpperBound) ub = (UpperBound) inv;
-        else if (inv instanceof UpperBoundFloat) ubf = (UpperBoundFloat) inv;
+        if (inv instanceof LowerBound) {
+          lb = (LowerBound) inv;
+        } else if (inv instanceof LowerBoundFloat) {
+          lbf = (LowerBoundFloat) inv;
+        } else if (inv instanceof UpperBound) {
+          ub = (UpperBound) inv;
+        } else if (inv instanceof UpperBoundFloat) {
+          ubf = (UpperBoundFloat) inv;
+        }
       }
       if ((lb != null) && (ub != null)) {
         log.fine(lb.min() + " <= " + slice.var_infos[0].name() + " <= " + ub.max());
@@ -1593,7 +1608,9 @@ public class PptTopLevel extends Ppt {
     // slice.repCheck();
 
     views.put(sliceIndex(slice.var_infos), slice);
-    if (Debug.logOn()) slice.log("Adding slice");
+    if (Debug.logOn()) {
+      slice.log("Adding slice");
+    }
   }
 
   /** Remove a slice from this PptTopLevel. */
@@ -1732,7 +1749,9 @@ public class PptTopLevel extends Ppt {
       // Skip slices that use v in more than one slot (eg, v = v/1)
       int cnt = 0;
       for (VarInfo vi : slice.var_infos) {
-        if (vi == v) cnt++;
+        if (vi == v) {
+          cnt++;
+        }
       }
       if (cnt > 1) {
         continue;
@@ -1907,7 +1926,9 @@ public class PptTopLevel extends Ppt {
 
     // Build a new discardString that includes the variable equality
     String reason = di.discardString();
-    if (leader1 != v1) reason += " and (" + leader1 + "==" + v1 + ")";
+    if (leader1 != v1) {
+      reason += " and (" + leader1 + "==" + v1 + ")";
+    }
     if (leader2 != v2) {
       reason += " and (" + leader2 + "==" + v2 + ")";
     }
@@ -2236,7 +2257,9 @@ public class PptTopLevel extends Ppt {
       PptSlice1 slice1 = new PptSlice1(this, vi);
       slice1.instantiate_invariants();
 
-      if (Debug.logOn() || debug_on) Debug.log(debug, getClass(), slice1, "Created unary slice");
+      if (Debug.logOn() || debug_on) {
+        Debug.log(debug, getClass(), slice1, "Created unary slice");
+      }
       unary_views.add(slice1);
     }
     addViews(unary_views);
@@ -2549,7 +2572,9 @@ public class PptTopLevel extends Ppt {
 
     // Vars must be compatible
     if (!v1.compatible(v2) || !v1.compatible(v3) || !v2.compatible(v3)) {
-      if (dlog != null) dlog.log(debug, "Ternary slice not created, vars not compatible");
+      if (dlog != null) {
+        dlog.log(debug, "Ternary slice not created, vars not compatible");
+      }
       return false;
     }
 
@@ -2586,7 +2611,9 @@ public class PptTopLevel extends Ppt {
           return false;
         }
       }
-      if (vis[i] != null) prev = vis[i];
+      if (vis[i] != null) {
+        prev = vis[i];
+      }
     }
     return true;
   }
@@ -2785,7 +2812,9 @@ public class PptTopLevel extends Ppt {
       //                   children.size());
       List<PptTopLevel> exit_points = new ArrayList<>();
       for (PptRelation rel : children) {
-        if (rel.getRelationType() == PptRelationType.EXIT_EXITNN) exit_points.add(rel.child);
+        if (rel.getRelationType() == PptRelationType.EXIT_EXITNN) {
+          exit_points.add(rel.child);
+        }
       }
       // System.out.printf("exit point count = %d%n", exit_points.size());
       if (exit_points.size() == 2) {
@@ -2839,7 +2868,9 @@ public class PptTopLevel extends Ppt {
       PptSlice slice = iSlices.next();
       boolean needPivoting = false;
       for (int i = 0; i < slice.arity(); i++) {
-        if (slice.var_infos[i].canonicalRep() != slice.var_infos[i]) needPivoting = true;
+        if (slice.var_infos[i].canonicalRep() != slice.var_infos[i]) {
+          needPivoting = true;
+        }
       }
       if (!needPivoting) {
         continue;
@@ -3141,7 +3172,9 @@ public class PptTopLevel extends Ppt {
             proverStack.pushLemma(lemmas[i]);
           }
         }
-        if (!isInvariant) proverStack.removeLemma(bad);
+        if (!isInvariant) {
+          proverStack.removeLemma(bad);
+        }
         if (LemmaStack.dkconfig_print_contradictions) {
           System.err.println("Removing " + bad.summarize());
         } else if (Daikon.no_text_output && Daikon.show_progress) {
@@ -3190,14 +3223,18 @@ public class PptTopLevel extends Ppt {
       int mark = proverStack.markLevel();
       // First, assume the first half and check the second half
       for (int i = start; i <= first_half_end; i++) {
-        if (present[i]) proverStack.pushLemma(lemmas[i]);
+        if (present[i]) {
+          proverStack.pushLemma(lemmas[i]);
+        }
       }
       flagRedundantRecursive(lemmas, present, second_half_start, end);
       proverStack.popToMark(mark);
       // Now, assume what's left of the second half, and check the
       // first half.
       for (int i = second_half_start; i <= end; i++) {
-        if (present[i]) proverStack.pushLemma(lemmas[i]);
+        if (present[i]) {
+          proverStack.pushLemma(lemmas[i]);
+        }
       }
       flagRedundantRecursive(lemmas, present, start, first_half_end);
       proverStack.popToMark(mark);
@@ -3511,7 +3548,9 @@ public class PptTopLevel extends Ppt {
       StringJoiner set_str = new StringJoiner(",");
       for (VarInfo v : vars) {
         String name = v.name();
-        if (v.missingOutOfBounds()) name += "{MOB}";
+        if (v.missingOutOfBounds()) {
+          name += "{MOB}";
+        }
         set_str.add(name);
       }
       out.add("[" + set_str + "]");
@@ -3882,7 +3921,9 @@ public class PptTopLevel extends Ppt {
         PptSlice2 slice2 = new PptSlice2(this, leaders[i], leaders[j]);
 
         slice2.merge_invariants();
-        if (slice2.invs.size() > 0) binary_slices.add(slice2);
+        if (slice2.invs.size() > 0) {
+          binary_slices.add(slice2);
+        }
       }
     }
     addSlices(binary_slices);
@@ -3913,7 +3954,9 @@ public class PptTopLevel extends Ppt {
 
           slice3.merge_invariants();
 
-          if (slice3.invs.size() > 0) ternary_slices.add(slice3);
+          if (slice3.invs.size() > 0) {
+            ternary_slices.add(slice3);
+          }
         }
       }
     }
@@ -4213,7 +4256,9 @@ public class PptTopLevel extends Ppt {
       }
 
       // If all of the invariants in a slice were removed, note it for removal
-      if (slice.invs.size() == 0) slices_to_remove.add(slice);
+      if (slice.invs.size() == 0) {
+        slices_to_remove.add(slice);
+      }
     }
 
     // Remove all of the slices with 0 invariants
@@ -4300,7 +4345,9 @@ public class PptTopLevel extends Ppt {
     if (invEquals != null) {
       newSlice.addInvariant(invEquals);
     } else {
-      if (newSlice.invs.size() == 0) newSlice.parent.removeSlice(newSlice);
+      if (newSlice.invs.size() == 0) {
+        newSlice.parent.removeSlice(newSlice);
+      }
     }
     return newSlice;
   }
@@ -4308,34 +4355,34 @@ public class PptTopLevel extends Ppt {
   /** Stores various statistics about a ppt. */
   public static class Stats {
 
-    /** sample count */
+    /** sample count. */
     public int sample_cnt = 0;
 
-    /** number of equality sets */
+    /** number of equality sets. */
     public int set_cnt = 0;
 
-    /** total number of variables in all equality sets */
+    /** total number of variables in all equality sets. */
     public int var_cnt = 0;
 
-    /** time (milliseconds) to process this sample */
+    /** time (milliseconds) to process this sample. */
     public int time = 0;
 
-    /** additional memory (bytes) allocated to processing this sample */
+    /** additional memory (bytes) allocated to processing this sample. */
     public long memory = 0;
 
-    /** number of invariants */
+    /** number of invariants. */
     public int inv_cnt = 0;
 
-    /** number of slices */
+    /** number of slices. */
     public int slice_cnt = 0;
 
-    /** number of instantiated invariants before the sample is applied */
+    /** number of instantiated invariants before the sample is applied. */
     public int instantiated_inv_cnt = 0;
 
-    /** number of instantiated slices */
+    /** number of instantiated slices. */
     public int instantiated_slice_cnt = 0;
 
-    /** program point of the stat */
+    /** program point of the stat. */
     // Initialized by the set() method.
     public @MonotonicNonNull PptTopLevel ppt;
 
@@ -4372,11 +4419,15 @@ public class PptTopLevel extends Ppt {
       inv_cnt = ppt.invariant_cnt();
       instantiated_slice_cnt = ppt.instantiated_slice_cnt;
       instantiated_inv_cnt = ppt.instantiated_inv_cnt;
-      if (ppt.constants != null) constant_leader_cnt = ppt.constants.constant_leader_cnt();
+      if (ppt.constants != null) {
+        constant_leader_cnt = ppt.constants.constant_leader_cnt();
+      }
       this.time = time;
       this.memory = memory;
 
-      if (cnt_inv_classes) inv_map = ppt.invariant_cnt_by_class();
+      if (cnt_inv_classes) {
+        inv_map = ppt.invariant_cnt_by_class();
+      }
     }
 
     static void dump_header(Logger log) {
@@ -4443,7 +4494,9 @@ public class PptTopLevel extends Ppt {
           PptSlice slice = j.next();
           for (Invariant inv : slice.invs) {
             String falsify = "";
-            if (inv.is_false()) falsify = "(falsified) ";
+            if (inv.is_false()) {
+              falsify = "(falsified) ";
+            }
             log.fine(" : " + falsify + inv.format());
           }
         }
@@ -4515,7 +4568,9 @@ public class PptTopLevel extends Ppt {
       avg_equality_cnt = avg_equality_cnt / sample_cnt;
       avg_var_cnt = avg_var_cnt / sample_cnt;
 
-      if (avg_equality_cnt > 0) avg_vars_per_equality = avg_var_cnt / avg_equality_cnt;
+      if (avg_equality_cnt > 0) {
+        avg_vars_per_equality = avg_var_cnt / avg_equality_cnt;
+      }
       log.fine(
           ppt.name()
               + " : "
@@ -4543,7 +4598,9 @@ public class PptTopLevel extends Ppt {
         for (int j = 0; j < slist.size(); j++) {
           Stats stats = slist.get(j);
           double vars_per_eq = 0;
-          if (stats.set_cnt > 0) vars_per_eq = (double) stats.var_cnt / stats.set_cnt;
+          if (stats.set_cnt > 0) {
+            vars_per_eq = (double) stats.var_cnt / stats.set_cnt;
+          }
           if ((j == (slist.size() - 1)) || (stats.time > (2 * avg_time))) {
             log.fine(
                 " : "
@@ -4572,7 +4629,7 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /** sets the sample count */
+  /** sets the sample count. */
   void set_sample_number(int val) {
     values_num_samples = val;
   }
@@ -4592,7 +4649,11 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /** is this an enter ppt */
+  /**
+   * Returns true if this is an enter ppt.
+   *
+   * @return true if this is an enter ppt
+   */
   @Pure
   public boolean is_enter() {
     if (type != null) {

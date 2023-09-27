@@ -198,8 +198,12 @@ public final class VarInfoAux implements Cloneable, Serializable {
       debug.fine("Token info: " + tokInfo + " " + token);
 
       if (token == "[") { // interned
-        if (!seenEqual) throw new IOException("Aux option did not contain an '='");
-        if (insideVector) throw new IOException("Vectors cannot be nested in an aux option");
+        if (!seenEqual) {
+          throw new IOException("Aux option did not contain an '='");
+        }
+        if (insideVector) {
+          throw new IOException("Vectors cannot be nested in an aux option");
+        }
         if (value.length() > 0) {
           throw new IOException("Cannot mix scalar and vector values");
         }
@@ -207,18 +211,28 @@ public final class VarInfoAux implements Cloneable, Serializable {
         insideVector = true;
         value = "";
       } else if (token == "]") { // interned
-        if (!insideVector) throw new IOException("']' without preceding '['");
+        if (!insideVector) {
+          throw new IOException("']' without preceding '['");
+        }
         insideVector = false;
       } else if (token == ",") { // interned
-        if (!seenEqual) throw new IOException("Aux option did not contain an '='");
-        if (insideVector) throw new IOException("',' cannot be used inside a vector");
+        if (!seenEqual) {
+          throw new IOException("Aux option did not contain an '='");
+        }
+        if (insideVector) {
+          throw new IOException("',' cannot be used inside a vector");
+        }
         map.put(key.intern(), value.intern());
         key = "";
         value = "";
         seenEqual = false;
       } else if (token == "=") { // interned
-        if (seenEqual) throw new IOException("Aux option contained more than one '='");
-        if (insideVector) throw new IOException("'=' cannot be used inside a vector");
+        if (seenEqual) {
+          throw new IOException("Aux option contained more than one '='");
+        }
+        if (insideVector) {
+          throw new IOException("'=' cannot be used inside a vector");
+        }
         seenEqual = true;
       } else {
         if (!seenEqual) {

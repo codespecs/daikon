@@ -125,7 +125,9 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   public LemmaStack() throws SimplifyError {
     startProver();
     lemmas = new Stack<Lemma>();
-    if (daikon.inv.Invariant.dkconfig_simplify_define_predicates) pushLemmas(Lemma.lemmasList());
+    if (daikon.inv.Invariant.dkconfig_simplify_define_predicates) {
+      pushLemmas(Lemma.lemmasList());
+    }
   }
 
   /** Pop a lemma from our and Simplify's stacks. */
@@ -282,7 +284,9 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
     } while (reduced);
     List<Lemma> new_invs = new ArrayList<>();
     for (int i = 0; i < invs.length; i++) {
-      if (!excluded[i]) new_invs.add(invs[i]);
+      if (!excluded[i]) {
+        new_invs.add(invs[i]);
+      }
     }
     return new_invs;
   }
@@ -325,7 +329,9 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
       Set<Class<? extends Invariant>> used = new HashSet<Class<? extends Invariant>>();
       for (Lemma mlem : mini) {
         Class<? extends Invariant> c = mlem.invClass();
-        if (c != null) used.add(c);
+        if (c != null) {
+          used.add(c);
+        }
       }
       for (Lemma mlem : mini) {
         System.err.println(mlem.summarize());

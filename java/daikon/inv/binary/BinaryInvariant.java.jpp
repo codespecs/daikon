@@ -110,7 +110,6 @@ public abstract class CLASSNAME extends BinaryInvariant {
     super();
   }
 
-  /** Returns whether or not the specified types are valid. */
   @Override
   final public boolean valid_types(VarInfo[] vis) {
 

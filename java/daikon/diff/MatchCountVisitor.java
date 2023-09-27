@@ -60,8 +60,9 @@ public class MatchCountVisitor extends PrintAllVisitor {
       String bucketKey = thisPptName1.substring(0, thisPptName1.lastIndexOf(";condition"));
       key1 = bucketKey + "$" + inv1.format_using(OutputFormat.JAVA);
       // checks for justification
-      if (shouldPrint(inv1, inv1)) // [???]
-      cnt.add(key1);
+      if (shouldPrint(inv1, inv1)) { // [???]
+        cnt.add(key1);
+      }
     }
 
     if (inv2 != null && inv2.justified() && !filterOut(inv2)) {
@@ -159,7 +160,10 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
   public double calcRecall() {
     System.out.println("Recall: " + recall.size() + " / " + targSet.size());
-    if (targSet.size() == 0) return -1; // avoids divide by zero
+    if (targSet.size() == 0) {
+      // avoids divide by zero
+      return -1;
+    }
     return (double) recall.size() / targSet.size();
   }
 
@@ -191,7 +195,10 @@ public class MatchCountVisitor extends PrintAllVisitor {
   public double calcPrecision() {
 
     System.out.println("Prec: " + recall.size() + " / " + cnt.size());
-    if (cnt.size() == 0) return -1; // to avoid a divide by zero -LL
+    if (cnt.size() == 0) {
+      // to avoid a divide by zero
+      return -1;
+    }
     return (double) recall.size() / cnt.size();
   }
 

@@ -115,7 +115,6 @@ public final class SCALARSEQUENCESUNION extends BinaryDerivation {
     return (other instanceof SCALARSEQUENCESUNION);
   }
 
-  /** Returns the ESC name. */
   @SideEffectFree
   @Override
   public String esc_name(String index) {

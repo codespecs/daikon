@@ -579,8 +579,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /** Replace the first instance of node by replacement, in the data structure rooted at this. */
   public VarInfoName replace(
       @Interned VarInfoName this, VarInfoName node, VarInfoName replacement) {
-    if (node == replacement) // "interned": equality optimization pattern
-    return this;
+    if (node == replacement) { // "interned": equality optimization pattern
+      return this;
+    }
     Replacer r = new Replacer(node, replacement);
     return r.replace(this).intern();
   }
@@ -588,8 +589,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /** Replace all instances of node by replacement, in the data structure rooted at this. */
   public VarInfoName replaceAll(
       @Interned VarInfoName this, VarInfoName node, VarInfoName replacement) {
-    if (node == replacement) // "interned": equality optimization pattern
-    return this;
+    if (node == replacement) { // "interned": equality optimization pattern
+      return this;
+    }
 
     // assert ! replacement.hasNode(node); // no infinite loop
 
@@ -656,13 +658,27 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   // Manually re-intern any interned fields upon deserialization.
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
-    if (name_cached != null) name_cached = name_cached.intern();
-    if (esc_name_cached != null) esc_name_cached = esc_name_cached.intern();
-    if (simplify_name_cached[0] != null) simplify_name_cached[0] = simplify_name_cached[0].intern();
-    if (simplify_name_cached[1] != null) simplify_name_cached[1] = simplify_name_cached[1].intern();
-    if (java_name_cached != null) java_name_cached = java_name_cached.intern();
-    if (jml_name_cached != null) jml_name_cached = jml_name_cached.intern();
-    if (dbc_name_cached != null) dbc_name_cached = dbc_name_cached.intern();
+    if (name_cached != null) {
+      name_cached = name_cached.intern();
+    }
+    if (esc_name_cached != null) {
+      esc_name_cached = esc_name_cached.intern();
+    }
+    if (simplify_name_cached[0] != null) {
+      simplify_name_cached[0] = simplify_name_cached[0].intern();
+    }
+    if (simplify_name_cached[1] != null) {
+      simplify_name_cached[1] = simplify_name_cached[1].intern();
+    }
+    if (java_name_cached != null) {
+      java_name_cached = java_name_cached.intern();
+    }
+    if (jml_name_cached != null) {
+      jml_name_cached = jml_name_cached.intern();
+    }
+    if (dbc_name_cached != null) {
+      dbc_name_cached = dbc_name_cached.intern();
+    }
   }
 
   // ============================================================
@@ -3115,8 +3131,12 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     public NoReturnValue visitSlice(Slice o) {
       result.add(o);
       o.sequence.accept(this);
-      if (o.i != null) o.i.accept(this);
-      if (o.j != null) o.j.accept(this);
+      if (o.i != null) {
+        o.i.accept(this);
+      }
+      if (o.j != null) {
+        o.j.accept(this);
+      }
       return null;
     }
   }
@@ -3418,7 +3438,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         VarInfoName index_vin;
         if (index_base != null) {
           index_vin = index_base;
-          if (index_off != 0) index_vin = index_vin.applyAdd(index_off);
+          if (index_off != 0) {
+            index_vin = index_vin.applyAdd(index_off);
+          }
         } else {
           index_vin = new Simple(Integer.toString(index_off)).intern();
         }
@@ -3444,7 +3466,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       } else if (unquants.size() == 1) {
         VarInfoName index_vin;
         if (index_base != null) {
-          if (index_off != 0) index_base += "+" + index_off;
+          if (index_off != 0) {
+            index_base += "+" + index_off;
+          }
           if (free) {
             index_vin = new FreeVar(index_base);
           } else {

@@ -60,13 +60,11 @@ public final class CompleteOneOfScalar extends SingleScalar {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   public CompleteOneOfScalar instantiate_dyn(@Prototype CompleteOneOfScalar this, PptSlice slice) {
     return new CompleteOneOfScalar(slice);
@@ -87,13 +85,11 @@ public final class CompleteOneOfScalar extends SingleScalar {
     }
   }
 
-  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus add_modified(long a, int count) {
     return check_modified(a, count);
   }
 
-  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus check_modified(long a, int count) {
     for (Info val : vals) {
