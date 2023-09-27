@@ -271,7 +271,9 @@ public final class Debug {
       System.out.println("vis = null");
     } else {
       for (int i = 0; i < vis.length; i++) {
-        if (vis[i] == null) System.out.println("vis[" + i + "] == null");
+        if (vis[i] == null) {
+          System.out.println("vis[" + i + "] == null");
+        }
       }
     }
     cache_match = class_match(c) && ppt_match(ppt) && var_match(vis);
@@ -326,7 +328,9 @@ public final class Debug {
    * described in {@link #log(Logger, Class, Ppt, VarInfo[], String)}.
    */
   public void log(Logger debug, String msg) {
-    if (cache_match) log(debug, cache_class, cache_ppt, cache_vis, msg);
+    if (cache_match) {
+      log(debug, cache_class, cache_ppt, cache_vis, msg);
+    }
   }
 
   /**
@@ -620,8 +624,12 @@ public final class Debug {
                 this_match = true;
                 if (!cv[j].equals(vis[j].name())) {
                   ourvars[j] = v.name();
-                  if (j != k) ourvars[j] += " (" + j + "/" + k + ")";
-                  if (v.isCanonical()) ourvars[j] += " (Leader)";
+                  if (j != k) {
+                    ourvars[j] += " (" + j + "/" + k + ")";
+                  }
+                  if (v.isCanonical()) {
+                    ourvars[j] += " (Leader)";
+                  }
                 }
                 break eachvis;
               }
@@ -630,7 +638,9 @@ public final class Debug {
             if (cv[j].equals("*") || cv[j].equals(vis[k].name())) this_match = true;
           }
         }
-        if (!this_match) continue outer;
+        if (!this_match) {
+          continue outer;
+        }
       }
       match = true;
       break outer;
@@ -659,7 +669,9 @@ public final class Debug {
     boolean found = false;
 
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
-      if (ppt_match(ppt)) debugTrack.fine("Matched ppt '" + ppt.name() + "' at " + msg);
+      if (ppt_match(ppt)) {
+        debugTrack.fine("Matched ppt '" + ppt.name() + "' at " + msg);
+      }
       for (PptSlice slice : ppt.views_iterable()) {
         for (int k = 0; k < slice.invs.size(); k++) {
           Invariant inv = slice.invs.get(k);
@@ -667,7 +679,9 @@ public final class Debug {
         }
       }
     }
-    if (!found) debugTrack.fine("Found no points at '" + msg + "'");
+    if (!found) {
+      debugTrack.fine("Found no points at '" + msg + "'");
+    }
   }
 
   /** Returns a string containing the integer variables and their values. */

@@ -540,9 +540,13 @@ public class DaikonSimple {
         wait = false;
       }
 
-      if (object_ppt != null) add(object_ppt, object_vt, nonce); // apply object vt
+      if (object_ppt != null) { // apply object vt
+        add(object_ppt, object_vt, nonce);
+      }
 
-      if (class_ppt != null) add(class_ppt, class_vt, nonce);
+      if (class_ppt != null) {
+        add(class_ppt, class_vt, nonce);
+      }
     }
 
     /**
@@ -641,7 +645,9 @@ public class DaikonSimple {
             for (VarInfo vi : inv.ppt.var_infos) {
               assert vt.getValue(vi) != null : vi;
             }
-            if (inv.ppt instanceof PptSlice2) assert inv.ppt.var_infos.length == 2;
+            if (inv.ppt instanceof PptSlice2) {
+              assert inv.ppt.var_infos.length == 2;
+            }
             InvariantStatus status = inv.add_sample(vt, 1);
             if (status == InvariantStatus.FALSIFIED) {
               k.remove();

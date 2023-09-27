@@ -41,7 +41,7 @@ class StatementReplacer extends DepthFirstVisitor {
   private ReplaceStatementMap statementMap;
 
   /**
-   * true iff a match between the method name in the PrimaryExpression currently being visited and
+   * True iff a match between the method name in the PrimaryExpression currently being visited and
    * one of the members of methodNames is found.
    */
   private boolean matchFound = false;

@@ -34,13 +34,13 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
   public static boolean dkconfig_enabled = true;
 
   /**
-   * true if the array is always empty. Without this property, the invariant would be considered
-   * true if all the arrays are empty
+   * True if the array is always empty. Without this property, the invariant would be considered
+   * true if all the arrays are empty.
    */
   private boolean alwaysEmpty = true;
 
   /**
-   * true if all the elements of the array are null. Without this property, the invariant would be
+   * True if all the elements of the array are null. Without this property, the invariant would be
    * reported if all the arrays contain only null elements.
    */
   private boolean allElementsAreNull = true;

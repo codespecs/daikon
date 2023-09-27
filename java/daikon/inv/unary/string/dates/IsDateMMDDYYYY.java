@@ -28,7 +28,7 @@ public class IsDateMMDDYYYY extends SingleString {
   public static boolean dkconfig_enabled = true;
 
   /**
-   * The regex matches a date in MM/DD/YYYY format (Year min: 1900, Year max: 2050). For example:
+   * This regex matches a date in MM/DD/YYYY format (Year min: 1900, Year max: 2050). For example:
    * "12/01/1900", "01.25.2019", "10-30-2050".
    */
   public static final Pattern PATTERN =

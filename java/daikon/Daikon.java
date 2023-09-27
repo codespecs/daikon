@@ -780,7 +780,9 @@ public final class Daikon {
     LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
 
     if (!noversion_output) {
-      if (!Daikon.dkconfig_quiet) System.out.println(release_string);
+      if (!Daikon.dkconfig_quiet) {
+        System.out.println(release_string);
+      }
     }
 
     // figure out which algorithm to use in NIS to process suppressions
@@ -1838,7 +1840,9 @@ public final class Daikon {
     for (Iterator<@Prototype Invariant> i = proto_invs.iterator(); i.hasNext(); ) {
       @Prototype Invariant inv = i.next();
       assert inv != null;
-      if (!inv.enabled()) i.remove();
+      if (!inv.enabled()) {
+        i.remove();
+      }
     }
   }
 
@@ -2458,7 +2462,9 @@ public final class Daikon {
       debugProgress.fine("Constant Post Processing ... ");
       startTime = System.nanoTime();
       for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
-        if (ppt.constants != null) ppt.constants.post_process();
+        if (ppt.constants != null) {
+          ppt.constants.post_process();
+        }
       }
       duration = System.nanoTime() - startTime;
       debugProgress.fine(
@@ -2686,7 +2692,9 @@ public final class Daikon {
 
   /** Removed invariants as specified in omit_types. */
   private static void processOmissions(PptMap allPpts) {
-    if (omit_types['0']) allPpts.removeUnsampled();
+    if (omit_types['0']) {
+      allPpts.removeUnsampled();
+    }
     for (PptTopLevel ppt : allPpts.asCollection()) {
       ppt.processOmissions(omit_types);
     }
