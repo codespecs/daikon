@@ -143,7 +143,6 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
       && (((SEQUENCESCALARSUBSCRIPT) other).index_shift == this.index_shift);
   }
 
-  /** Returns the ESC name for sequence subscript. */
   @SuppressWarnings("nullness")
   @SideEffectFree
   @Override
@@ -160,7 +159,6 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
     }
   }
 
-  /** Returns the JML name for sequence subscript. */
   @SuppressWarnings("nullness")
   @Override
   public String jml_name(String index) {
@@ -186,7 +184,6 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
     }
   }
 
-  /** Returns the CSHARPCONTRACT name for sequence subscript. */
   @SuppressWarnings("nullness")
   @SideEffectFree
   @Override
@@ -204,7 +201,6 @@ public final class SEQUENCESCALARSUBSCRIPT extends BinaryDerivation {
     }
   }
 
-  /** Return the simplify name for sequence subscript. */
   @SuppressWarnings("nullness")
   @SideEffectFree
   @Override

@@ -147,10 +147,10 @@ public final class Debug {
   // Note that throughout this file, inv_class is not necessarily a
   // subclass of Invariant -- for instance, it might be a subclass of
   // BinaryDerivationFactory.
-  /** cached class: class to use by default when calling variants of log() with few arguments */
+  /** cached class: class to use by default when calling variants of log() with few arguments. */
   public @Nullable Class<?> cache_class;
 
-  /** cached ppt: ppt to use by default when calling variants of log() with few arguments */
+  /** Cached ppt: ppt to use by default when calling variants of log() with few arguments. */
   public @Nullable Ppt cache_ppt;
 
   /**
@@ -822,7 +822,7 @@ public final class Debug {
    * <pre>{@code class|class|...<var,var,var>@ppt}</pre>
    *
    * As shown, multiple class arguments can be specified separated by pipe symbols (|). The
-   * variables are specified in angle brackets (&lt;&gt;) and the program point is preceeded by an
+   * variables are specified in angle brackets ({@code <>}) and the program point is preceeded by an
    * at sign (@). Each is optional and can be left out. The add_track routine can be called multiple
    * times. An invariant that matches any of the specifications will be tracked.
    */

@@ -16,31 +16,31 @@ public class Quantify {
 
   /** Flags describing how quantifications are to be built. */
   public enum QuantFlags {
-    /** two indices where they refer to corresponding positions */
+    /** two indices where they refer to corresponding positions. */
     ELEMENT_WISE,
-    /** two indices where the second is one more than the first */
+    /** two indices where the second is one more than the first. */
     ADJACENT,
-    /** two indices are different */
+    /** two indices are different. */
     DISTINCT,
     /** Return the names of the index variables. */
     INCLUDE_INDEX;
 
-    /** set with just ELEMENT_WISE turned on */
+    /** set with just ELEMENT_WISE turned on. */
     public static EnumSet<QuantFlags> element_wise() {
       return EnumSet.of(QuantFlags.ELEMENT_WISE);
     }
 
-    /** set with just ADJACENT turned on */
+    /** set with just ADJACENT turned on. */
     public static EnumSet<QuantFlags> adjacent() {
       return EnumSet.of(QuantFlags.ADJACENT);
     }
 
-    /** set with just DISTINCT turned on */
+    /** set with just DISTINCT turned on. */
     public static EnumSet<QuantFlags> distinct() {
       return EnumSet.of(QuantFlags.DISTINCT);
     }
 
-    /** set with just INCLUDE_INDEX turned on */
+    /** set with just INCLUDE_INDEX turned on. */
     public static EnumSet<QuantFlags> include_index() {
       return EnumSet.of(QuantFlags.INCLUDE_INDEX);
     }

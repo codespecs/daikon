@@ -28,10 +28,10 @@ public class DTraceWriter extends DaikonWriter {
   //          - checkForVarRecursion: recursive check on on argument
   //        - traceClassVars: prints fields in a class
 
-  /** instance of a nonsensical value */
+  /** instance of a nonsensical value. */
   private static NonsensicalObject nonsenseValue = NonsensicalObject.getInstance();
 
-  /** instance of a nonsensical list */
+  /** instance of a nonsensical list. */
   private static List<Object> nonsenseList = NonsensicalList.getInstance();
 
   // certain class names
@@ -41,7 +41,7 @@ public class DTraceWriter extends DaikonWriter {
   /** Where to print output. */
   private PrintWriter outFile;
 
-  /** debug information about daikon variables */
+  /** Debug information about daikon variables. */
   private boolean debug_vars = false;
 
   /**

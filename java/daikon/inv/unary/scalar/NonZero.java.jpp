@@ -99,13 +99,11 @@ public class NONZERO extends SINGLESCALAR {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Make sure the NonZero make sense on these vars. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -121,7 +119,6 @@ public class NONZERO extends SINGLESCALAR {
     return true;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   public NONZERO instantiate_dyn(@Prototype NONZERO this, PptSlice slice) {
     return new NONZERO(slice);

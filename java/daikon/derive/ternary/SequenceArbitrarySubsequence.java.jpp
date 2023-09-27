@@ -186,19 +186,16 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE extends TernaryDerivation 
         seqvar(), startvar(), (left_closed ? 0 : 1), endvar(), (right_closed ? 0 : -1));
   }
 
-    /** Returns the lower bound of the slice. */
   @Override
   public Quantify.Term get_lower_bound() {
     return new Quantify.VarPlusOffset(startvar(), (left_closed ? 0 : 1));
   }
 
-  /** Returns the upper bound of the slice. */
   @Override
   public Quantify.Term get_upper_bound() {
     return new Quantify.VarPlusOffset(endvar(), (right_closed ? 0 : 1));
   }
 
-  /** Returns the array variable for this slice. */
   @Override
   public VarInfo get_array_var() {
     return seqvar();
@@ -222,7 +219,6 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE extends TernaryDerivation 
     return seqvar().csharp_name() + ".Slice(" + lower + ", " + upper + ")";
   }
 
-  /** Returns the ESC name. */
   @SideEffectFree
   @Override
   public String esc_name(String index) {

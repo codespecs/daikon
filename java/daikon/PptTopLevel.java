@@ -322,7 +322,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * returns an iterator over all of the PptConditionals at this ppt
+   * Returns an iterator over all of the PptConditionals at this ppt.
    *
    * @see #cond_iterable()
    */
@@ -331,7 +331,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * returns an iterable over all of the PptConditionals at this ppt
+   * Returns an iterable over all of the PptConditionals at this ppt.
    *
    * @see #cond_iterator()
    */
@@ -4355,34 +4355,34 @@ public class PptTopLevel extends Ppt {
   /** Stores various statistics about a ppt. */
   public static class Stats {
 
-    /** sample count */
+    /** sample count. */
     public int sample_cnt = 0;
 
-    /** number of equality sets */
+    /** number of equality sets. */
     public int set_cnt = 0;
 
-    /** total number of variables in all equality sets */
+    /** total number of variables in all equality sets. */
     public int var_cnt = 0;
 
-    /** time (milliseconds) to process this sample */
+    /** time (milliseconds) to process this sample. */
     public int time = 0;
 
-    /** additional memory (bytes) allocated to processing this sample */
+    /** additional memory (bytes) allocated to processing this sample. */
     public long memory = 0;
 
-    /** number of invariants */
+    /** number of invariants. */
     public int inv_cnt = 0;
 
-    /** number of slices */
+    /** number of slices. */
     public int slice_cnt = 0;
 
-    /** number of instantiated invariants before the sample is applied */
+    /** number of instantiated invariants before the sample is applied. */
     public int instantiated_inv_cnt = 0;
 
-    /** number of instantiated slices */
+    /** number of instantiated slices. */
     public int instantiated_slice_cnt = 0;
 
-    /** program point of the stat */
+    /** program point of the stat. */
     // Initialized by the set() method.
     public @MonotonicNonNull PptTopLevel ppt;
 
@@ -4629,7 +4629,7 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /** sets the sample count */
+  /** sets the sample count. */
   void set_sample_number(int val) {
     values_num_samples = val;
   }
@@ -4649,7 +4649,11 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /** is this an enter ppt */
+  /**
+   * Returns true if this is an enter ppt.
+   *
+   * @return true if this is an enter ppt
+   */
   @Pure
   public boolean is_enter() {
     if (type != null) {

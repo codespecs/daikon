@@ -60,7 +60,6 @@ public final class SequenceMax extends UnaryDerivation {
     return (other instanceof SequenceMax);
   }
 
-  /** Returns the ESC name. */
   @SideEffectFree
   @Override
   public String esc_name(String index) {

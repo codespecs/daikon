@@ -416,26 +416,26 @@ public final class Daikon {
   // These variables are public so other programs can reuse the same
   // command-line options.
 
-  /** option help */
+  /** option help. */
   public static final String help_SWITCH = "help";
 
   // "-o" switch: file to which serialized output is written
-  /** option no-text-output */
+  /** option no-text-output. */
   public static final String no_text_output_SWITCH = "no_text_output";
 
-  /** option format */
+  /** option format. */
   public static final String format_SWITCH = "format";
 
-  /** option show-progress */
+  /** option show-progress. */
   public static final String show_progress_SWITCH = "show_progress";
 
-  /** option show-detail-progress */
+  /** option show-detail-progress. */
   public static final String show_detail_progress_SWITCH = "show_detail_progress";
 
-  /** option no-show-progress */
+  /** option no-show-progress. */
   public static final String no_show_progress_SWITCH = "no_show_progress";
 
-  /** option noversion */
+  /** option noversion. */
   public static final String noversion_SWITCH = "noversion";
 
   public static final String output_num_samples_SWITCH = "output_num_samples";

@@ -61,7 +61,6 @@ public final class SequenceMin extends UnaryDerivation {
     return (other instanceof SequenceMin);
   }
 
-  /** Returns the ESC name. */
   @SideEffectFree
   @Override
   public String esc_name(String index) {
