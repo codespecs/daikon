@@ -5,6 +5,7 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -489,13 +490,13 @@ public class Quantify {
       QuantifyReturn[] qrets = quantify(vars);
 
       // build the forall predicate
-      StringBuilder int_list, conditions;
+      StringJoiner int_list, conditions;
       {
         // "i j ..."
-        int_list = new StringBuilder();
+        int_list = new StringJoiner(" ");
         // "(AND (<= ai i) (<= i bi) (<= aj j) (<= j bj) ...)"
         // if elementwise, also insert "(EQ (- i ai) (- j aj)) ..."
-        conditions = new StringBuilder();
+        conditions = new StringJoiner(" ");
         for (int i = 0; i < qrets.length; i++) {
           Term idx = qrets[i].index;
           if (idx == null) {
@@ -504,13 +505,9 @@ public class Quantify {
           VarInfo vi = qrets[i].var;
           Term low = vi.get_lower_bound();
           Term high = vi.get_upper_bound();
-          if (i != 0) {
-            int_list.append(" ");
-            conditions.append(" ");
-          }
-          int_list.append(idx.simplify_name());
-          conditions.append("(<= " + low.simplify_name() + " " + idx.simplify_name() + ")");
-          conditions.append(" (<= " + idx.simplify_name() + " " + high.simplify_name() + ")");
+          int_list.add(idx.simplify_name());
+          conditions.add("(<= " + low.simplify_name() + " " + idx.simplify_name() + ")");
+          conditions.add("(<= " + idx.simplify_name() + " " + high.simplify_name() + ")");
           if (flags.contains(QuantFlags.ELEMENT_WISE) && (i >= 1)) {
             // Term[] _boundv = qret.bound_vars.get(i-1);
             // Term _idx = _boundv[0], _low = _boundv[1];
@@ -519,11 +516,10 @@ public class Quantify {
             @NonNull Term _idx = qrets[i - 1].index;
             Term _low = qrets[i - 1].var.get_lower_bound();
             if (_low.simplify_name().equals(low.simplify_name())) {
-              conditions.append(" (EQ " + _idx.simplify_name() + " " + idx.simplify_name() + ")");
+              conditions.add("(EQ " + _idx.simplify_name() + " " + idx.simplify_name() + ")");
             } else {
-              conditions.append(
-                  " (EQ (- " + _idx.simplify_name() + " " + _low.simplify_name() + ")");
-              conditions.append(" (- " + idx.simplify_name() + " " + low.simplify_name() + "))");
+              conditions.add("(EQ (- " + _idx.simplify_name() + " " + _low.simplify_name() + ")");
+              conditions.add("(- " + idx.simplify_name() + " " + low.simplify_name() + "))");
             }
           }
           if (i == 1
@@ -534,12 +530,11 @@ public class Quantify {
                 "nullness") // if variable is a sequence (is it?), then index is non-null
             @NonNull Term prev_idx = qrets[i - 1].index;
             if (flags.contains(QuantFlags.ADJACENT)) {
-              conditions.append(
-                  " (EQ (+ " + prev_idx.simplify_name() + " 1) " + idx.simplify_name() + ")");
+              conditions.add(
+                  "(EQ (+ " + prev_idx.simplify_name() + " 1) " + idx.simplify_name() + ")");
             }
             if (flags.contains(QuantFlags.DISTINCT)) {
-              conditions.append(
-                  " (NEQ " + prev_idx.simplify_name() + " " + idx.simplify_name() + ")");
+              conditions.add("(NEQ " + prev_idx.simplify_name() + " " + idx.simplify_name() + ")");
             }
           }
         }

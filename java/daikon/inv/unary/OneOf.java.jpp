@@ -469,13 +469,8 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     // Not so efficient an implementation, but simple;
     // and how often will we need to print this anyway?
     sort_rep();
-    StringBuilder sb = new StringBuilder();
-    sb.append("{ ");
+    StringJoiner sj = new StringJoiner(", ", "{ ", " }");
     for (int i = 0; i < num_elts; i++) {
-      if (i != 0) {
-        sb.append(", ");
-      }
-
 #if defined(SCALAR) || defined(ELT) || defined(SEQUENCE) || defined(STRING) || defined(ELTSTRING)
       if (PrintInvariants.dkconfig_static_const_infer) {
         boolean curVarMatch = false;
@@ -484,17 +479,17 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
           if (vi.isStaticConstant() && VarComparability.comparable(vi, var())) {
             Object constantVal = vi.constantValue();
             if (constantVal.equals(elts[i])) {
-              sb.append(vi.name());
+              sj.add(vi.name());
               curVarMatch = true;
             }
           }
         }
 
         if (curVarMatch == false) {
-          sb.append(TOSTRING(elts[i]));
+          sj.add(TOSTRING(elts[i]));
         }
       } else {
-        sb.append(TOSTRING(elts[i]));
+        sj.add(TOSTRING(elts[i]));
       }
 #elif defined(FLOAT) || defined(ELTFLOAT)
       if (PrintInvariants.dkconfig_static_const_infer) {
@@ -506,7 +501,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
             if (vi.rep_type == ProglangType.DOUBLE) {
               Double constantVal = (Double)vi.constantValue();
               if (Global.fuzzy.eq(constantVal, elts[i]) || (Double.isNaN(constantVal) && Double.isNaN(elts[i]))) {
-                sb.append(vi.name());
+                sj.add(vi.name());
                 curVarMatch = true;
               }
             }
@@ -514,7 +509,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
             else {
               Object constantVal = vi.constantValue();
               if (constantVal.equals(elts[i])) {
-                sb.append(vi.name());
+                sj.add(vi.name());
                 curVarMatch = true;
               }
             }
@@ -522,17 +517,16 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
         }
 
         if (curVarMatch == false) {
-          sb.append(TOSTRING(elts[i]));
+          sj.add(TOSTRING(elts[i]));
         }
       } else {
-        sb.append(TOSTRING(elts[i]));
+        sj.add(TOSTRING(elts[i]));
       }
 #else
-      sb.append(TOSTRING(elts[i]));
+      sj.add(TOSTRING(elts[i]));
 #endif
     }
-    sb.append(" }");
-    return sb.toString();
+    return sj.toString();
   }
 
   @Override

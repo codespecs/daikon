@@ -3086,16 +3086,15 @@ public class PptTopLevel extends Ppt {
     boolean[] present = new boolean[lemmas.length];
     Arrays.fill(present, 0, present.length, true);
     for (int checking = invs.length - 1; checking >= 0; checking--) {
-      StringBuilder bg = new StringBuilder("(AND ");
+      StringJoiner bg = new StringJoiner(" ", "(", ")");
+      bg.add("AND");
       for (int i = 0; i < present.length; i++) {
         if (present[i] && (i != checking)) {
-          bg.append(" ");
           // format_using(OutputFormat.SIMPLIFY) is guaranteed to return
           // a sensible result for invariants in invs[].
-          bg.append(invs[i].format_using(OutputFormat.SIMPLIFY));
+          bg.add(invs[i].format_using(OutputFormat.SIMPLIFY));
         }
       }
-      bg.append(")");
 
       // Debugging
       if (Global.debugSimplify.isLoggable(Level.FINE)) {
