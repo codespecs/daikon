@@ -157,7 +157,9 @@ public abstract class DaikonWriter {
     }
     String arg_str = "";
     for (Class<?> arg : args) {
-      if (arg_str.length() > 0) arg_str += ", ";
+      if (arg_str.length() > 0) {
+        arg_str += ", ";
+      }
       if (arg.isArray()) {
         arg_str += Signatures.fieldDescriptorToBinaryName(arg.getName());
       } else {

@@ -40,7 +40,9 @@ public final class CompleteOneOfString extends SingleString {
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
-      if (val != null) val = val.intern();
+      if (val != null) {
+        val = val.intern();
+      }
     }
   }
 
@@ -68,13 +70,11 @@ public final class CompleteOneOfString extends SingleString {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   public CompleteOneOfString instantiate_dyn(@Prototype CompleteOneOfString this, PptSlice slice) {
     return new CompleteOneOfString(slice);
@@ -99,13 +99,11 @@ public final class CompleteOneOfString extends SingleString {
     }
   }
 
-  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus add_modified(@Interned String a, int count) {
     return check_modified(a, count);
   }
 
-  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus check_modified(@Interned String a, int count) {
     for (Info val : vals) {

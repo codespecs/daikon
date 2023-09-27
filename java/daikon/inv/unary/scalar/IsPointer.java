@@ -98,8 +98,10 @@ public class IsPointer extends SingleScalar {
   @SideEffectFree
   public String format_using(@GuardSatisfied IsPointer this, OutputFormat format) {
     String varname = var().name_using(format);
-    if (format == OutputFormat.SIMPLIFY) return "(AND)"; // trivially true
-    if (format == OutputFormat.JAVA) {
+    if (format == OutputFormat.SIMPLIFY) {
+      // trivially true
+      return "(AND)";
+    } else if (format == OutputFormat.JAVA) {
       return "daikon.tools.runtimechecker.Runtime.isWithinPointerRange(" + varname + ")";
     } else {
       return varname + " is a pointer";

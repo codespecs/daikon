@@ -177,18 +177,16 @@ public final class SEQINTEQUAL extends SUPERCLASS {
 
   private static @Prototype SEQINTEQUAL proto = new @Prototype SEQINTEQUAL();
 
-  /** Returns the prototype invariant for SEQINTEQUAL */
+  /** Returns the prototype invariant for SEQINTEQUAL. */
   public static @Prototype SEQINTEQUAL get_proto() {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled. */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Non-equal SeqIntComparison is only valid on integral types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -218,7 +216,6 @@ public final class SEQINTEQUAL extends SUPERCLASS {
     return true;
   }
 
-  /** instantiates the invariant on the specified slice */
   @Override
   protected SEQINTEQUAL instantiate_dyn(@Prototype SEQINTEQUAL this, PptSlice slice) {
     return new SEQINTEQUAL(slice);

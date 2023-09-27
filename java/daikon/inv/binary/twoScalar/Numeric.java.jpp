@@ -202,7 +202,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     this.swap = swap;
   }
 
-  /** Returns true if it is ok to instantiate a numeric invariant over the specified slice. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -722,7 +721,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff divides invariants should be considered. */
     public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
-    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -923,7 +921,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff square invariants should be considered. */
     public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
-    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -1005,7 +1002,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff zero-track invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -1098,7 +1094,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff bitwise complement invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -1173,7 +1168,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff bitwise subset invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -1285,7 +1279,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff BitwiseAndZero invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -1383,7 +1376,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff ShiftZero invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;
@@ -1483,7 +1475,6 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Boolean. True iff SubString invariants should be considered. */
     public static boolean dkconfig_enabled = false;
 
-    /** Returns whether or not this invariant is enabled. */
     @Override
     public boolean enabled() {
       return dkconfig_enabled;

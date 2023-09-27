@@ -190,7 +190,9 @@ public class PptMap implements Serializable {
         }
         iter_view.next(); // to check for concurrent modifications
         PptTopLevel ppt = iter_sort.next();
-        if ((ppt != null) && ppt.has_splitters()) cond_iterator = ppt.cond_iterator();
+        if ((ppt != null) && ppt.has_splitters()) {
+          cond_iterator = ppt.cond_iterator();
+        }
         return ppt;
       }
 
@@ -255,7 +257,9 @@ public class PptMap implements Serializable {
     Iterator<PptTopLevel> iter = nameToPpt.values().iterator();
     while (iter.hasNext()) {
       PptTopLevel ppt = iter.next();
-      if ((ppt.num_samples() == 0) && !FileIO.has_unmatched_procedure_entry(ppt)) iter.remove();
+      if ((ppt.num_samples() == 0) && !FileIO.has_unmatched_procedure_entry(ppt)) {
+        iter.remove();
+      }
     }
   }
 }

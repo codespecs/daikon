@@ -131,7 +131,9 @@ public class InvMatch {
       for (Iterator<Invariant> j = ppt2.invariants_iterator(); j.hasNext(); ) {
         Invariant inv2 = j.next();
         InvTranslate xlate = new InvTranslate(inv1, inv2);
-        if (xlate.quality > 0) inv_xlate_list.add(xlate);
+        if (xlate.quality > 0) {
+          inv_xlate_list.add(xlate);
+        }
       }
       // What is the purpose of this?  Maybe it separates the translation
       // results for different invariants.  How/where is it used/checked?
@@ -225,7 +227,9 @@ public class InvMatch {
     for (List<InvTranslate> current_translation : valid_translations) {
       int quality = 0;
       for (InvTranslate xlate : current_translation) {
-        if (xlate != null) quality += xlate.quality;
+        if (xlate != null) {
+          quality += xlate.quality;
+        }
       }
       if (quality > best_quality) {
         best_translation = current_translation;

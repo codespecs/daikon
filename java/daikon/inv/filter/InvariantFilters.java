@@ -84,7 +84,9 @@ public class InvariantFilters {
   private static @MonotonicNonNull InvariantFilters default_filters = null;
 
   public static InvariantFilters defaultFilters() {
-    if (default_filters == null) default_filters = new InvariantFilters();
+    if (default_filters == null) {
+      default_filters = new InvariantFilters();
+    }
     return default_filters;
   }
 
@@ -105,7 +107,9 @@ public class InvariantFilters {
           }
         }
         if (!hasAnyVariable) {
-          if (Invariant.logOn()) invariant.log("Failed ANY_VARIABLE filter");
+          if (Invariant.logOn()) {
+            invariant.log("Failed ANY_VARIABLE filter");
+          }
           return variableFilters.get(0);
         }
       } else if (variableFilterType == InvariantFilters.ALL_VARIABLES) {
@@ -274,7 +278,9 @@ public class InvariantFilters {
   static String reprVarInfoList(List<VarInfo> vis) {
     String result = "";
     for (int i = 0; i < vis.size(); i++) {
-      if (i != 0) result += " ";
+      if (i != 0) {
+        result += " ";
+      }
       VarInfo vi = vis.get(i);
       result += vi.name();
     }

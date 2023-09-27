@@ -21,7 +21,6 @@ public abstract class SingleString extends UnaryInvariant {
     super();
   }
 
-  /** Returns whether or not the specified types are valid for unary string. */
   @Override
   public final boolean valid_types(VarInfo[] vis) {
     return (vis.length == 1) && vis[0].file_rep_type.isString();

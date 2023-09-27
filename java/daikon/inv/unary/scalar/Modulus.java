@@ -52,13 +52,11 @@ public class Modulus extends SingleScalar {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled. */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Modulus is only valid on integral types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -69,7 +67,6 @@ public class Modulus extends SingleScalar {
     return vis[0].file_rep_type.baseIsIntegral();
   }
 
-  /** Instantiate an invariant on the specified slice. */
   @Override
   protected Modulus instantiate_dyn(@Prototype Modulus this, PptSlice slice) {
     return new Modulus(slice);

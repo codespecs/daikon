@@ -323,7 +323,9 @@ public class AnnotateNullable {
     if (stub_format) {
       System.out.printf(" %s %s(", return_annotation, ppt.ppt_name.getMethodName());
       for (int i = 0; i < params.size(); i++) {
-        if (i != 0) System.out.printf(" ,");
+        if (i != 0) {
+          System.out.printf(" ,");
+        }
         System.out.printf("%s %s %s", annos.get(i), "type-goes-here", names.get(i));
       }
       System.out.printf("); // %d samples%n", ppt.num_samples());

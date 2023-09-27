@@ -147,10 +147,18 @@ public final class CLASSNAME extends BinaryDerivation {
     int mod = ValueTuple.UNMODIFIED;
     int mod1 = var1().getModified(full_vt);
     int mod2 = var2().getModified(full_vt);
-    if (mod1 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
-    if (mod2 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
-    if (mod1 == ValueTuple.MISSING_NONSENSICAL) mod = ValueTuple.MISSING_NONSENSICAL;
-    if (mod2 == ValueTuple.MISSING_NONSENSICAL) mod = ValueTuple.MISSING_NONSENSICAL;
+    if (mod1 == ValueTuple.MODIFIED) {
+      mod = ValueTuple.MODIFIED;
+    }
+    if (mod2 == ValueTuple.MODIFIED) {
+      mod = ValueTuple.MODIFIED;
+    }
+    if (mod1 == ValueTuple.MISSING_NONSENSICAL) {
+      mod = ValueTuple.MISSING_NONSENSICAL;
+    }
+    if (mod2 == ValueTuple.MISSING_NONSENSICAL) {
+      mod = ValueTuple.MISSING_NONSENSICAL;
+    }
     /*
      * v1\v2  Unm  Mod  Mis
      *
@@ -163,7 +171,9 @@ public final class CLASSNAME extends BinaryDerivation {
     int count = 0;
     // Find length of output first
     for (int i = 0; i < predicate.length; i++) {
-      if ((predicate[i] == choose) ^ !keep) count += 1;
+      if ((predicate[i] == choose) ^ !keep) {
+        count += 1;
+      }
     }
 
     if (val1 instanceof PRIMITIVE[]) {
@@ -223,7 +233,6 @@ public final class CLASSNAME extends BinaryDerivation {
     return false;
   }
 
-  /** Returns the ESC name. */
   @SideEffectFree
   @Override
   public String esc_name(String index) {

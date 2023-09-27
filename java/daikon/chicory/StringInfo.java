@@ -114,7 +114,7 @@ public class StringInfo extends DaikonVariableInfo {
     return Runtime.quote(input);
   }
 
-  /** toString is a function */
+  /** toString is a function. */
   @Override
   public VarKind get_var_kind() {
     return VarKind.FUNCTION;

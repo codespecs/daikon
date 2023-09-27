@@ -563,9 +563,12 @@ public final @Interned class ProglangType implements Serializable {
       for (int i = 0; i < len; i++) {
         if (value_strings[i].equals("nonsensical")) {
           return null;
-        } else if (value_strings[i].equals("null")) result[i] = 0;
-        else if (value_strings[i].equalsIgnoreCase("NaN")) result[i] = Double.NaN;
-        else if (value_strings[i].equalsIgnoreCase("Infinity") || value_strings[i].equals("inf")) {
+        } else if (value_strings[i].equals("null")) {
+          result[i] = 0;
+        } else if (value_strings[i].equalsIgnoreCase("NaN")) {
+          result[i] = Double.NaN;
+        } else if (value_strings[i].equalsIgnoreCase("Infinity")
+            || value_strings[i].equals("inf")) {
           result[i] = Double.POSITIVE_INFINITY;
         } else if (value_strings[i].equalsIgnoreCase("-Infinity")
             || value_strings[i].equals("-inf")) {
@@ -764,8 +767,9 @@ public final @Interned class ProglangType implements Serializable {
    * but not the other way around. This is a transitive method, but not reflexive.
    */
   public boolean comparableOrSuperclassOf(ProglangType other) {
-    if (this == other) // ProglangType objects are interned
-    return true;
+    if (this == other) { // ProglangType objects are interned
+      return true;
+    }
     if (this.dimensions != other.dimensions) {
       return false;
     }
@@ -775,8 +779,9 @@ public final @Interned class ProglangType implements Serializable {
       return true;
     }
     // Make Object castable to everything, except booleans
-    if ((this.base == BASE_OBJECT) && other.baseIsObject()) // interned strings
-    return true;
+    if ((this.base == BASE_OBJECT) && other.baseIsObject()) { // interned strings
+      return true;
+    }
 
     return false;
   }

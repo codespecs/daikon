@@ -84,7 +84,7 @@ class TokenReplacer extends DepthFirstVisitor {
 
   /**
    * This method should not be directly used by users of this class; however, it must be public to
-   * full-fill the Visitor interface. If lastToken.tokenImage is a complete variable name and an
+   * fulfill the Visitor interface. If lastToken.tokenImage is a complete variable name and an
    * element of oldVars, lastToken.tokenImage is replaced by the corresponding element of newVars.
    * The beginColumn and endColumn of all NodeTokens are set to -1 to ensure that Ast printing
    * exceptions are not thrown from the lengths of tokens changing.
@@ -104,8 +104,9 @@ class TokenReplacer extends DepthFirstVisitor {
     }
     n.beginColumn = -1;
     n.endColumn = -1;
-    if (lastToken != null) // test is to quiet the Nullness Checker
-    twoTokensAgo = lastToken;
+    if (lastToken != null) { // test is to quiet the Nullness Checker
+      twoTokensAgo = lastToken;
+    }
     lastToken = n;
     super.visit(n);
   }

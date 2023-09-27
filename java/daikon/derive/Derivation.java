@@ -260,7 +260,9 @@ public abstract class Derivation implements Serializable, Cloneable {
    */
   protected String shift_str(int shift) {
     String shift_str = "";
-    if (shift != 0) shift_str = String.format("%+d", shift);
+    if (shift != 0) {
+      shift_str = String.format("%+d", shift);
+    }
     return shift_str;
   }
 

@@ -737,7 +737,9 @@ public class DCInstrument extends InstructionListUtils {
       } catch (Throwable t) {
         // debug code
         // t.printStackTrace();
-        if (debugInstrument.enabled) t.printStackTrace();
+        if (debugInstrument.enabled) {
+          t.printStackTrace();
+        }
         throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
       }
     }
@@ -993,7 +995,9 @@ public class DCInstrument extends InstructionListUtils {
 
         Instrument.debug_transform.exdent();
       } catch (Throwable t) {
-        if (debugInstrument.enabled) t.printStackTrace();
+        if (debugInstrument.enabled) {
+          t.printStackTrace();
+        }
         skip_method(mgen);
         if (quit_if_error) {
           throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
@@ -2919,7 +2923,9 @@ public class DCInstrument extends InstructionListUtils {
       cinit_gen.setMaxStack();
       gen.replaceMethod(cinit, cinit_gen.getMethod());
     } catch (Throwable t) {
-      if (debugInstrument.enabled) t.printStackTrace();
+      if (debugInstrument.enabled) {
+        t.printStackTrace();
+      }
       throw new Error(
           "Unexpected error processing " + gen.getClassName() + "." + cinit.getName(), t);
     }
@@ -3175,7 +3181,9 @@ public class DCInstrument extends InstructionListUtils {
    */
   InstructionList dup_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
-    if (debug_dup.enabled) debug_dup.log("DUP -> %s [... %s]%n", "dup", stack_contents(stack, 2));
+    if (debug_dup.enabled) {
+      debug_dup.log("DUP -> %s [... %s]%n", "dup", stack_contents(stack, 2));
+    }
     if (is_primitive(top)) {
       return build_il(dcr_call("dup", Type.VOID, Type.NO_ARGS), inst);
     }
@@ -3250,14 +3258,17 @@ public class DCInstrument extends InstructionListUtils {
   InstructionList dup2_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
     String op;
-    if (is_category2(top)) op = "dup";
-    else if (is_primitive(top) && is_primitive(stack.peek(1))) op = "dup2";
+    if (is_category2(top)) {
+      op = "dup";
+    } else if (is_primitive(top) && is_primitive(stack.peek(1))) op = "dup2";
     else if (is_primitive(top) || is_primitive(stack.peek(1))) op = "dup";
     else {
       // both of the top two items are not primitive, nothing to dup
       op = null;
     }
-    if (debug_dup.enabled) debug_dup.log("DUP2 -> %s [... %s]%n", op, stack_contents(stack, 2));
+    if (debug_dup.enabled) {
+      debug_dup.log("DUP2 -> %s [... %s]%n", op, stack_contents(stack, 2));
+    }
     if (op != null) {
       return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
     }
@@ -3279,7 +3290,9 @@ public class DCInstrument extends InstructionListUtils {
         op = "dup";
       }
     }
-    if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
+    if (debug_dup.enabled) {
+      debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
+    }
     if (op != null) {
       return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
     }
@@ -3344,7 +3357,9 @@ public class DCInstrument extends InstructionListUtils {
         op = null; // nothing to dup
       }
     }
-    if (debug_dup.enabled) debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
+    if (debug_dup.enabled) {
+      debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
+    }
     if (op != null) {
       return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
     }
@@ -3373,8 +3388,12 @@ public class DCInstrument extends InstructionListUtils {
       return discard_tag_code(inst, 1);
     } else {
       int cnt = 0;
-      if (is_primitive(top)) cnt++;
-      if (is_primitive(stack.peek(1))) cnt++;
+      if (is_primitive(top)) {
+        cnt++;
+      }
+      if (is_primitive(stack.peek(1))) {
+        cnt++;
+      }
       if (cnt > 0) {
         return discard_tag_code(inst, cnt);
       }
@@ -3401,9 +3420,9 @@ public class DCInstrument extends InstructionListUtils {
    */
   @Nullable InstructionList ldc_tag(Instruction inst, OperandStack stack) {
     Type type;
-    if (inst instanceof LDC) // LDC_W extends LDC
-    type = ((LDC) inst).getType(pool);
-    else {
+    if (inst instanceof LDC) { // LDC_W extends LDC
+      type = ((LDC) inst).getType(pool);
+    } else {
       type = ((LDC2_W) inst).getType(pool);
     }
     if (!(type instanceof BasicType)) {

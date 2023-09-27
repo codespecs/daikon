@@ -128,8 +128,12 @@ public final class CLASSNAME extends BinaryDerivation {
       if (val2 instanceof Object[]) {
         e2 = ((Object[]) val2)[i];
       }
-      if (e1 == null) e1 = NUMWRAPPER.valueOf(0);
-      if (e2 == null) e2 = NUMWRAPPER.valueOf(0);
+      if (e1 == null) {
+        e1 = NUMWRAPPER.valueOf(0);
+      }
+      if (e2 == null) {
+        e2 = NUMWRAPPER.valueOf(0);
+      }
       // Loses top 8 bits, but we're just mixing two hashCodes.
       result[i] = ((long) e1.hashCode() << 8L) + e2.hashCode();
     }
@@ -157,10 +161,18 @@ public final class CLASSNAME extends BinaryDerivation {
     int mod1 = var1().getModified(full_vt);
     int mod2 = var2().getModified(full_vt);
 
-    if (mod1 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
-    if (mod2 == ValueTuple.MODIFIED) mod = ValueTuple.MODIFIED;
-    if (mod1 == ValueTuple.MISSING_NONSENSICAL) mod = ValueTuple.MISSING_NONSENSICAL;
-    if (mod2 == ValueTuple.MISSING_NONSENSICAL) mod = ValueTuple.MISSING_NONSENSICAL;
+    if (mod1 == ValueTuple.MODIFIED) {
+      mod = ValueTuple.MODIFIED;
+    }
+    if (mod2 == ValueTuple.MODIFIED) {
+      mod = ValueTuple.MODIFIED;
+    }
+    if (mod1 == ValueTuple.MISSING_NONSENSICAL) {
+      mod = ValueTuple.MISSING_NONSENSICAL;
+    }
+    if (mod2 == ValueTuple.MISSING_NONSENSICAL) {
+      mod = ValueTuple.MISSING_NONSENSICAL;
+    }
     /*
      * v1\v2  Unm  Mod  Mis
      *
@@ -206,7 +218,6 @@ public final class CLASSNAME extends BinaryDerivation {
     return (other instanceof CLASSNAME);
   }
 
-  /** Returns the ESC name. */
   @SideEffectFree
   @Override
   public String esc_name(String index) {

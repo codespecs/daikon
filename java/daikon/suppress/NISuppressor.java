@@ -155,7 +155,9 @@ public class NISuppressor {
 
     if (v2_index == -1) {
       int new_index = 0;
-      if (v1_index == 0) new_index = 1;
+      if (v1_index == 0) {
+        new_index = 1;
+      }
       return new NISuppressor(new_index, inv_class);
     }
     assert v3_index == -1;
@@ -266,7 +268,9 @@ public class NISuppressor {
               uinv.check(ppt.constants.constant_value(v1), ValueTuple.MODIFIED, 1);
           valid = (status == InvariantStatus.NO_CHANGE);
         }
-        if (NIS.debug.isLoggable(Level.FINE)) NIS.debug.fine("constant args - " + valid);
+        if (NIS.debug.isLoggable(Level.FINE)) {
+          NIS.debug.fine("constant args - " + valid);
+        }
         if (valid) {
           current_state_str = "true over constant " + ppt.constants.constant_value(v1);
         } else {
@@ -362,7 +366,9 @@ public class NISuppressor {
         Object const2 = ppt.constants.constant_value(v2);
         current_state_str =
             "true over constants " + Debug.toString(const1) + " and " + Debug.toString(const2);
-        if (!valid) current_state_str = "not " + current_state_str;
+        if (!valid) {
+          current_state_str = "not " + current_state_str;
+        }
         return (state = (valid ? NIS.SuppressState.VALID : NIS.SuppressState.INVALID));
       }
 
