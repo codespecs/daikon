@@ -74,7 +74,9 @@ public class CommonStringSequence extends SingleStringSequence {
     String result = "{";
     for (int i = 0; i < intersect.length; i++) {
       result += intersect[i];
-      if (i != intersect.length - 1) result += ", ";
+      if (i != intersect.length - 1) {
+        result += ", ";
+      }
     }
     result += "}";
     return result;

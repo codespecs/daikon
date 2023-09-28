@@ -116,7 +116,9 @@ public class DummyInvariant extends Invariant {
       uniqVarsSet.add(vars[i].canonicalRep());
     }
     int sliceSize = uniqVarsSet.size();
-    if (sliceSize > 3) sliceSize = 3;
+    if (sliceSize > 3) {
+      sliceSize = 3;
+    }
     /*NNC:@MonotonicNonNull*/ VarInfo[] newVars = new VarInfo[sliceSize];
     {
       Iterator<VarInfo> it = uniqVarsSet.iterator();

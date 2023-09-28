@@ -302,7 +302,9 @@ public class ExtractConsequent {
         // extract the consequent (predicate) if the predicate
         // (consequent) uses the variable "cluster".  Ignore if they
         // both depend on "cluster"
-        if (consequent.usesVarDerived("cluster")) cons_uses_cluster = true;
+        if (consequent.usesVarDerived("cluster")) {
+          cons_uses_cluster = true;
+        }
         if (predicate.usesVarDerived("cluster")) {
           pred_uses_cluster = true;
         }

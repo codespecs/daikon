@@ -40,7 +40,9 @@ public final class CompleteOneOfString extends SingleString {
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
-      if (val != null) val = val.intern();
+      if (val != null) {
+        val = val.intern();
+      }
     }
   }
 

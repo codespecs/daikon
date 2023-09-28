@@ -134,13 +134,19 @@ public abstract class PptSlice extends Ppt {
   // and to take action if the vector becomes void.
   public void removeInvariant(Invariant inv) {
 
-    if (Debug.logDetail()) log("Removing invariant '" + inv.format() + "'");
-    if (Debug.logOn()) inv.log("Removed from slice: %s", inv.format());
+    if (Debug.logDetail()) {
+      log("Removing invariant '" + inv.format() + "'");
+    }
+    if (Debug.logOn()) {
+      inv.log("Removed from slice: %s", inv.format());
+    }
     boolean removed = invs.remove(inv);
     assert removed : "inv " + inv + " not in ppt " + name();
     Global.falsified_invariants++;
     if (invs.size() == 0) {
-      if (Debug.logDetail()) log("last invariant removed");
+      if (Debug.logDetail()) {
+        log("last invariant removed");
+      }
     }
   }
 
@@ -158,7 +164,9 @@ public abstract class PptSlice extends Ppt {
       assert old_invs_size - invs.size() == to_remove.size();
       Global.falsified_invariants += to_remove.size();
       if (invs.size() == 0) {
-        if (Debug.logDetail()) log("last invariant removed");
+        if (Debug.logDetail()) {
+          log("last invariant removed");
+        }
       }
     }
   }
@@ -259,7 +267,9 @@ public abstract class PptSlice extends Ppt {
     }
     List<Invariant> toRemove = new ArrayList<>();
     for (Invariant inv : invs) {
-      if (omitTypes['r'] && inv.isReflexive()) toRemove.add(inv);
+      if (omitTypes['r'] && inv.isReflexive()) {
+        toRemove.add(inv);
+      }
     }
     removeInvariants(toRemove);
   }
@@ -320,7 +330,7 @@ public abstract class PptSlice extends Ppt {
     return this.getClass().getName()
         + ": "
         + parent.ppt_name
-        + " "
+        // sb starts with a space
         + sb
         + " samples: "
         + num_samples();

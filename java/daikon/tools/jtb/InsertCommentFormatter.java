@@ -75,11 +75,12 @@ public class InsertCommentFormatter extends DepthFirstVisitor {
     boolean prev_is_double_slash_comment = false;
 
     // Handle special tokens first
-    if (n.numSpecials() > 0) // handles case when n.specialTokens is null
-    for (NodeToken s : n.specialTokens) {
+    if (n.numSpecials() > 0) { // handles case when n.specialTokens is null
+      for (NodeToken s : n.specialTokens) {
         visit(s);
         prev_is_double_slash_comment = s.tokenImage.startsWith("//");
       }
+    }
 
     if ((columnshift == 0) && (lineshift == 0)) {
       // nothing to do
