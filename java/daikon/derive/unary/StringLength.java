@@ -51,27 +51,23 @@ public final class StringLength extends UnaryDerivation {
     return (other instanceof StringLength);
   }
 
-  /** Returns the ESC name. */
   @Override
   @SideEffectFree
   public String csharp_name(String index) {
     return String.format("%s.Length", base.csharp_name());
   }
 
-  /** Returns the ESC name. */
   @Override
   @SideEffectFree
   public String esc_name(String index) {
     return String.format("%s.length()", base.esc_name());
   }
 
-  /** Returns the JML name. */
   @Override
   public String jml_name(String index) {
     return String.format("%s.length()", base.jml_name());
   }
 
-  /** Returns the simplify name. */
   @Override
   @SideEffectFree
   public String simplify_name() {

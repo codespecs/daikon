@@ -325,7 +325,9 @@ public class Premain {
       // Write the decl file out
       @SuppressWarnings("nullness:argument") // DynComp guarantees decl_file is non null
       File decl_file = new File(DynComp.output_dir, DynComp.decl_file);
-      if (Premain.verbose) System.out.println("Writing decl file to " + decl_file);
+      if (Premain.verbose) {
+        System.out.println("Writing decl file to " + decl_file);
+      }
       PrintWriter decl_fp = open(decl_file);
       // Create DeclWriter so can share output code in Chicory.
       DCRuntime.declWriter = new DeclWriter(decl_fp);
@@ -344,7 +346,9 @@ public class Premain {
         System.out.printf("decl vars = %,d%n", DCRuntime.decl_vars_ms);
         System.out.printf("total     = %,d%n", DCRuntime.total_ms);
       }
-      if (Premain.verbose) System.out.println("DynComp complete");
+      if (Premain.verbose) {
+        System.out.println("DynComp complete");
+      }
     }
   }
 

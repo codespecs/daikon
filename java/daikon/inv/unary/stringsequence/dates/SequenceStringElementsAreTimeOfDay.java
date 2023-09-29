@@ -30,6 +30,12 @@ public class SequenceStringElementsAreTimeOfDay extends SingleStringSequence {
   public static boolean dkconfig_enabled = true;
 
   /**
+   * True if all the elements of the array are null. Without this property, the invariant would be
+   * reported if all the arrays contain only null elements.
+   */
+  private boolean allElementsAreNull = true;
+
+  /**
    * Creates a new SequenceStringElementsAreTimeOfDay.
    *
    * @param ppt the slice with the variable of interest
@@ -89,9 +95,13 @@ public class SequenceStringElementsAreTimeOfDay extends SingleStringSequence {
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
     for (int i = 0; i < a.length; i++) {
-      Matcher matcher = IsTimeOfDay.PATTERN.matcher(a[i]);
-      if (!matcher.matches()) {
-        return InvariantStatus.FALSIFIED;
+      String arrayElement = a[i];
+      if (arrayElement != null) {
+        allElementsAreNull = false;
+        Matcher matcher = IsTimeOfDay.PATTERN.matcher(arrayElement);
+        if (!matcher.matches()) {
+          return InvariantStatus.FALSIFIED;
+        }
       }
     }
 

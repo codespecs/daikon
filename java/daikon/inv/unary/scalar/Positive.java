@@ -44,13 +44,11 @@ public class Positive extends SingleScalar {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   public Positive instantiate_dyn(@Prototype Positive this, PptSlice slice) {
     return new Positive(slice);

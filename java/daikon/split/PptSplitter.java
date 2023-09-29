@@ -417,7 +417,9 @@ public class PptSplitter implements Serializable {
         for (Invariant orig_inv : cslice.invs) {
           Invariant inv = orig_inv.clone_and_permute(permute);
           inv.ppt = pslice;
-          if ((eq_inv != null) && orig_inv.getClass().equals(eq_inv.getClass())) orig_inv = eq_inv;
+          if ((eq_inv != null) && orig_inv.getClass().equals(eq_inv.getClass())) {
+            orig_inv = eq_inv;
+          }
           assert !orig_invs.containsKey(inv);
           orig_invs.put(inv, orig_inv);
           invs[childno].add(inv);
@@ -428,7 +430,9 @@ public class PptSplitter implements Serializable {
 
       // If neither child slice has invariants there is nothing to do
       if ((invs[0].size() == 0) && (invs[1].size() == 0)) {
-        if (pslice.invs.size() == 0) parent.removeSlice(pslice);
+        if (pslice.invs.size() == 0) {
+          parent.removeSlice(pslice);
+        }
         continue;
       }
 
@@ -456,8 +460,12 @@ public class PptSplitter implements Serializable {
       }
       debug.fine("Found " + different_invs_vec.size() + " different invariants ");
       for (@Nullable Invariant[] invs : different_invs_vec) {
-        if (invs[0] != null) invs[0].log("%s differs from %s", invs[0], invs[1]);
-        if (invs[1] != null) invs[1].log("%s differs from %s", invs[0], invs[1]);
+        if (invs[0] != null) {
+          invs[0].log("%s differs from %s", invs[0], invs[1]);
+        }
+        if (invs[1] != null) {
+          invs[1].log("%s differs from %s", invs[0], invs[1]);
+        }
         debug.fine("-- " + invs[0] + " -- " + invs[1]);
       }
     }
@@ -545,7 +553,9 @@ public class PptSplitter implements Serializable {
           @SuppressWarnings("nullness") // map
           @NonNull Invariant orig = orig_invs.get(invs[jj]);
           assert orig != null : "Not in orig_invs: " + invs[jj] + " " + invs[jj].getClass();
-          if ((orig.isObvious() == null) && !orig.is_ni_suppressed()) con_invs[jj] = invs[jj];
+          if ((orig.isObvious() == null) && !orig.is_ni_suppressed()) {
+            con_invs[jj] = invs[jj];
+          }
         }
       }
     }
@@ -574,7 +584,9 @@ public class PptSplitter implements Serializable {
     // Create single implication for each different invariant
     for (@Nullable Invariant[] invs : different_invs_vec) {
       for (int jj = 0; jj < con_invs.length; jj++) {
-        if (invs[jj] != null) add_implication(parent, con_invs[jj], invs[jj], false, orig_invs);
+        if (invs[jj] != null) {
+          add_implication(parent, con_invs[jj], invs[jj], false, orig_invs);
+        }
       }
     }
   } // add_implications_pair
@@ -796,7 +808,9 @@ public class PptSplitter implements Serializable {
     if (dkconfig_split_bi_implications && iff) {
       Implication imp =
           Implication.makeImplication(ppt, predicate, consequent, false, orig_pred, orig_cons);
-      if (imp != null) ppt.joiner_view.addInvariant(imp);
+      if (imp != null) {
+        ppt.joiner_view.addInvariant(imp);
+      }
       imp = Implication.makeImplication(ppt, consequent, predicate, false, orig_cons, orig_pred);
       if (imp != null) {
         ppt.joiner_view.addInvariant(imp);

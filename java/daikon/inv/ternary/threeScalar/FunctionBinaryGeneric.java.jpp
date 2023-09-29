@@ -83,7 +83,6 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     return proto;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   protected CNAME(FUNCTION,PERM_NAME) instantiate_dyn(@Prototype CNAME(FUNCTION,PERM_NAME) this, PptSlice slice) {
     return new CNAME(FUNCTION,PERM_NAME) (slice);

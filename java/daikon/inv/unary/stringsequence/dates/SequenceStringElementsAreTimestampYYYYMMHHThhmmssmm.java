@@ -33,6 +33,12 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
   public static boolean dkconfig_enabled = true;
 
   /**
+   * True if all the elements of the array are null. Without this property, the invariant would be
+   * reported if all the arrays contain only null elements.
+   */
+  private boolean allElementsAreNull = true;
+
+  /**
    * Creates a new SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm.
    *
    * @param ppt the slice with the variable of interest
@@ -93,9 +99,13 @@ public class SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm extends SingleS
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
     for (int i = 0; i < a.length; i++) {
-      Matcher matcher = IsTimestampYYYYMMHHThhmmssmm.PATTERN.matcher(a[i]);
-      if (!matcher.matches()) {
-        return InvariantStatus.FALSIFIED;
+      String arrayElement = a[i];
+      if (arrayElement != null) {
+        allElementsAreNull = false;
+        Matcher matcher = IsTimestampYYYYMMHHThhmmssmm.PATTERN.matcher(arrayElement);
+        if (!matcher.matches()) {
+          return InvariantStatus.FALSIFIED;
+        }
       }
     }
 

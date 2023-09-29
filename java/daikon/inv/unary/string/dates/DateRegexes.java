@@ -44,10 +44,16 @@ public class DateRegexes {
   /** A regex for a 2-digit seconds. The regex is unanchored and ungrouped. */
   public static final @Regex String SECONDS = "[0-5][0-9]";
 
-  /** A regex for a 3-digit milliseconds. The regex is unanchored and ungrouped. */
+  /**
+   * A regex for a 3-digit milliseconds, starting with a period. The regex is unanchored and
+   * ungrouped.
+   */
   public static final @Regex String mmm = "\\.[0-9]{3}";
 
-  /** A regex for optional 3-digit milliseconds. The regex is unanchored and ungrouped. */
+  /**
+   * A regex for an optional 3-digit milliseconds, starting with a period. The regex is unanchored
+   * and ungrouped.
+   */
   public static final @Regex String mmmOptional = "(?:" + mmm + ")?";
 
   /**

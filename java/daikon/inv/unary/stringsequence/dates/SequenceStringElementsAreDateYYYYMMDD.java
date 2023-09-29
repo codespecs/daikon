@@ -30,6 +30,12 @@ public class SequenceStringElementsAreDateYYYYMMDD extends SingleStringSequence 
   public static boolean dkconfig_enabled = true;
 
   /**
+   * True if all the elements of the array are null. Without this property, the invariant would be
+   * reported if all the arrays contain only null elements.
+   */
+  private boolean allElementsAreNull = true;
+
+  /**
    * Creates a new SequenceStringElementsAreDateYYYYMMDD.
    *
    * @param ppt the slice with the variable of interest
@@ -87,10 +93,14 @@ public class SequenceStringElementsAreDateYYYYMMDD extends SingleStringSequence 
   @Override
   public InvariantStatus check_modified(@Interned String @Interned [] a, int count) {
     for (int i = 0; i < a.length; i++) {
-      Matcher matcher = IsDateYYYYMMDD.PATTERN.matcher(a[i]);
-      // The invariant is falsified if one of the elements of the array is NOT an email
-      if (!matcher.matches()) {
-        return InvariantStatus.FALSIFIED;
+      String arrayElement = a[i];
+      if (arrayElement != null) {
+        allElementsAreNull = false;
+        Matcher matcher = IsDateYYYYMMDD.PATTERN.matcher(arrayElement);
+        // The invariant is falsified if one of the elements of the array is NOT an email
+        if (!matcher.matches()) {
+          return InvariantStatus.FALSIFIED;
+        }
       }
     }
 

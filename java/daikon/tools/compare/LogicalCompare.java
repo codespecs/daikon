@@ -145,7 +145,9 @@ public class LogicalCompare {
     for (Invariant inv : invs) {
       Invariant guarded_inv = inv;
       //       System.err.println("Examining " + inv.format());
-      if (inv instanceof GuardingImplication) inv = ((Implication) inv).consequent();
+      if (inv instanceof GuardingImplication) {
+        inv = ((Implication) inv).consequent();
+      }
       if (inv instanceof LowerBound
           || inv instanceof UpperBound
           || inv instanceof EltLowerBound
@@ -249,7 +251,9 @@ public class LogicalCompare {
   private static List<Lemma> translateRemovePre(List<Invariant> invs) {
     List<Lemma> lems = new ArrayList<>();
     for (Invariant inv : invs) {
-      if (!inv.isAllPrestate()) lems.add(new InvariantLemma(inv));
+      if (!inv.isAllPrestate()) {
+        lems.add(new InvariantLemma(inv));
+      }
     }
     return lems;
   }
@@ -350,20 +354,30 @@ public class LogicalCompare {
         } else if (opt_show_valid) {
           System.out.print("Valid: ");
           System.out.println(inv.summary);
-          if (opt_show_formulas) System.out.println("    " + inv.formula);
+          if (opt_show_formulas) {
+            System.out.println("    " + inv.formula);
+          }
         }
       } else if (result == 'F') {
         invalidCount++;
-        if (opt_proofs) System.out.println();
+        if (opt_proofs) {
+          System.out.println();
+        }
         System.out.print("Invalid: ");
         System.out.println(inv.summary);
-        if (opt_show_formulas) System.out.println("    " + inv.formula);
+        if (opt_show_formulas) {
+          System.out.println("    " + inv.formula);
+        }
       } else {
         assert result == '?';
-        if (opt_proofs) System.out.println();
+        if (opt_proofs) {
+          System.out.println();
+        }
         System.out.print("Timeout: ");
         System.out.println(inv.summary);
-        if (opt_show_formulas) System.out.println("    " + inv.formula);
+        if (opt_show_formulas) {
+          System.out.println("    " + inv.formula);
+        }
       }
     }
     return invalidCount;
@@ -474,7 +488,9 @@ public class LogicalCompare {
     List<Invariant> a_post = app_exit_ppt.invariants_vector();
     List<Invariant> t_post = test_exit_ppt.invariants_vector();
 
-    if (opt_timing) System.out.println("Starting timer");
+    if (opt_timing) {
+      System.out.println("Starting timer");
+    }
     long processing_time_start = System.currentTimeMillis();
 
     a_pre = filterInvariants(a_pre, false);
@@ -554,8 +570,12 @@ public class LogicalCompare {
     evaluateImplicationsCarefully(post_assumptions_safe, post_assumptions_unsafe, post_conclusions);
     long time_elapsed = System.currentTimeMillis() - processing_time_start;
     num_checked += post_conclusions.size();
-    if (opt_show_count) System.out.println("Checked " + num_checked + " invariants total");
-    if (opt_timing) System.out.println("Total time " + time_elapsed + "ms");
+    if (opt_show_count) {
+      System.out.println("Checked " + num_checked + " invariants total");
+    }
+    if (opt_timing) {
+      System.out.println("Total time " + time_elapsed + "ms");
+    }
   }
 
   @RequiresNonNull("extra_assumptions")
