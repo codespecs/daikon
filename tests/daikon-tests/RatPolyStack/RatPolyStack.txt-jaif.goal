@@ -45,3 +45,5 @@ class RatPolyStack : // 825/- obj/class samples
     return:
   method swap()V : // 3 samples
     return:
+
+

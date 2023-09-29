@@ -363,3 +363,5 @@ this.topOfStack <= this.theArray.getClass().getName().length()
 (\result != null)  ==>  (daikon.Quant.size(this.theArray) != \result.getClass().getName().length())
 (\result != null)  ==>  ((daikon.Quant.size(this.theArray)-1 >> \result.getClass().getName().length() == 0))
 (\result != null)  ==>  (daikon.Quant.size(this.theArray)-1 != \result.getClass().getName().length())
+
+

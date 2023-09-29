@@ -30,3 +30,5 @@ class Person : // 609/- obj/class samples
     parameter #2 :  // weight
   method getName()Ljava/lang/String; : // 0 samples
     return:
+
+

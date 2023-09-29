@@ -15,3 +15,5 @@ class Compar1 : // 0/- obj/class samples
     parameter #0 :  // args
   method <init>()V : // 0 samples
     return:
+
+
