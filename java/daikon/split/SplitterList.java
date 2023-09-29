@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.logging.Level;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -64,18 +65,11 @@ public abstract class SplitterList {
     if (splits == null) {
       return "null";
     }
-    StringBuilder sb = new StringBuilder();
-    sb.append("[");
-    for (int i = 0; i < splits.length; i++) {
-      if (i != 0) {
-        sb.append(", ");
-      }
-      sb.append("\"");
-      sb.append(splits[i].condition());
-      sb.append("\"");
+    StringJoiner sj = new StringJoiner(", ", "[", "]");
+    for (Splitter split : splits) {
+      sj.add("\"" + split.condition() + "\"");
     }
-    sb.append("]");
-    return sb.toString();
+    return sj.toString();
   }
 
   public static Splitter @Nullable [] get_raw(String pptname) {

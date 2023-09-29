@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -380,22 +381,15 @@ public abstract class DaikonVariableInfo
       return "nonsensical";
     }
 
-    StringBuilder buf = new StringBuilder();
+    StringJoiner buf = new StringJoiner(" ", "[", "]");
 
-    buf.append("[");
     for (Iterator<Object> iter = theValues.iterator(); iter.hasNext(); ) {
       Object elementVal = iter.next();
 
       // hash arrays...
       // don't want to print arrays within arrays
-      buf.append(getValueStringOfObject(elementVal, true));
-
-      // put space between elements in array
-      if (iter.hasNext()) {
-        buf.append(" ");
-      }
+      buf.add(getValueStringOfObject(elementVal, true));
     }
-    buf.append("]");
 
     return buf.toString();
   }

@@ -107,7 +107,7 @@ class ArrayFixer extends DepthFirstVisitor {
 
   /**
    * This method should not be directly used by users of this class; however, must be public by to
-   * full-fill Visitor interface. Adds "_identity" or "_array" if needed at this node token.
+   * fulfill Visitor interface. Adds "_identity" or "_array" if needed at this node token.
    */
   @Override
   public void visit(NodeToken n) {
