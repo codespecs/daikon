@@ -829,11 +829,10 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       } else {
         throw new Error("Contains more than 2 elements");
       }
-    } else {
+    } else
   #endif
     {
       result = "";
-    }
       for (int i = 0; i < num_elts; i++) {
         if (i != 0) { result += " || "; }
         result += varname + " == " + TOSTRING(elts[i]);
@@ -955,11 +954,10 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       } else if (is_hashcode()) {
         String null_str = elts[0] == 0 ? " == null" : " != null"; // interned
         result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + null_str + ")";
-      } else {
+      } else
     #endif
       {
         result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + equalsString + args + endString + ")";
-      }
       }
     } else {
       assert num_elts > 1;
@@ -1097,12 +1095,11 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
           ((elts[0] == 0)
            ? ("daikon.Quant.eltsEqual(" + varname + ", null)")
            : ("daikon.Quant.eltsNotEqual(" + varname + ", null)"));
-      } else {
+      } else
     #endif
         {
           result = "daikon.Quant.eltsEqual(" + varname + ", "
             + TOSTRING(elts[0]) + ")";
-        }
         }
     } else {
       assert num_elts > 1;
@@ -1277,11 +1274,10 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       } else {
         throw new Error("Contains more than 2 elements");
       }
-    } else {
+    } else
   #endif
     {
       result = "";
-    }
       for (int i = 0; i < num_elts; i++) {
         result += " (EQ " + varname + " " + TOSTRING_SIMPLIFY(elts[i]) + ")";
       }
