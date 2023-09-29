@@ -6,18 +6,16 @@ package DataStructures:
 class DisjSets : // 23589/- obj/class samples
   field s :  // int[]
   method <init>(I)V : // 29 samples
-    return: 
+    return:
     parameter #0 :  // numElements
   method find(I)I : // 11018 samples
-    return: 
+    return:
     parameter #0 :  // x
   method unionCareful(II)V : // 576 samples
-    return: 
+    return:
     parameter #0 :  // set1
     parameter #1 :  // set2
   method unionDisjoint(II)V : // 186 samples
-    return: 
+    return:
     parameter #0 :  // root1
     parameter #1 :  // root2
-
-

@@ -9,13 +9,13 @@ class EncapsulateDowncast : // 0/130 obj/class samples
   field random :  // java.util.Random
   field random2 :  // java.util.Random
   method main([Ljava/lang/String;)V : // 1 samples
-    return: 
+    return:
     parameter #0 :  // argv
   method showLastPerson(Ljava/util/Vector;)V : // 64 samples
-    return: 
+    return:
     parameter #0 :  // list
   method <init>()V : // 0 samples
-    return: 
+    return:
 
 
 package misc:
@@ -24,11 +24,9 @@ class Person : // 609/- obj/class samples
   field _height :  // int
   field _weight :  // int
   method <init>(Ljava/lang/String;II)V : // 609 samples
-    return: 
+    return:
     parameter #0 :  // name
     parameter #1 :  // height
     parameter #2 :  // weight
   method getName()Ljava/lang/String; : // 0 samples
-    return: 
-
-
+    return:

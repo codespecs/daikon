@@ -7,22 +7,20 @@ class StackAr : // 5193/- obj/class samples
   field theArray :  // java.lang.Object[]
   field topOfStack :  // int
   method <init>(I)V : // 29 samples
-    return: 
+    return:
     parameter #0 :  // capacity
   method isEmpty()Z : // 1190 samples
-    return: 
+    return:
   method isFull()Z : // 573 samples
-    return: 
+    return:
   method makeEmpty()V : // 55 samples
-    return: 
+    return:
   method pop()V : // 48 samples
-    return: 
+    return:
   method push(Ljava/lang/Object;)V : // 199 samples
-    return: 
+    return:
     parameter #0 :  // x
   method top()Ljava/lang/Object; : // 431 samples
     return: @Nullable
   method topAndPop()Ljava/lang/Object; : // 86 samples
     return: @Nullable
-
-

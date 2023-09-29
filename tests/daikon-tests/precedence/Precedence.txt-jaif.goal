@@ -6,12 +6,10 @@ package misc:
 class Precedence : // 3/- obj/class samples
   field i :  // int
   method main([Ljava/lang/String;)V : // 1 samples
-    return: 
+    return:
     parameter #0 :  // args
   method <init>()V : // 1 samples
-    return: 
+    return:
   method lets_calculate(I)I : // 1 samples
-    return: 
+    return:
     parameter #0 :  // j
-
-

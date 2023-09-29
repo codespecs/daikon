@@ -5,15 +5,13 @@ annotation @NonNull:
 package misc:
 class Compar1 : // 0/- obj/class samples
   method bar(IIII)V : // 100 samples
-    return: 
+    return:
     parameter #0 :  // i
     parameter #1 :  // j
     parameter #2 :  // k
     parameter #3 :  // l
   method main([Ljava/lang/String;)V : // 1 samples
-    return: 
+    return:
     parameter #0 :  // args
   method <init>()V : // 0 samples
-    return: 
-
-
+    return:

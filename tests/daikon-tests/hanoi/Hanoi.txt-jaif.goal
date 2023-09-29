@@ -8,26 +8,24 @@ class Hanoi : // 2208/- obj/class samples
   field height :  // int
   field noOutput :  // boolean
   method otherPeg(II)I : // 342 samples
-    return: 
+    return:
     parameter #0 :  // pegA
     parameter #1 :  // pegB
   method <init>(I)V : // 6 samples
-    return: 
+    return:
     parameter #0 :  // height
   method <init>(IZ)V : // 6 samples
-    return: 
+    return:
     parameter #0 :  // height
     parameter #1 :  // noOutput
   method moveDisk(II)V : // 360 samples
-    return: 
+    return:
     parameter #0 :  // fromPeg
     parameter #1 :  // toPeg
   method moveTower(III)V : // 360 samples
-    return: 
+    return:
     parameter #0 :  // fromPeg
     parameter #1 :  // toPeg
     parameter #2 :  // towerHeight
   method showTowers()V : // 378 samples
-    return: 
-
-
+    return:
