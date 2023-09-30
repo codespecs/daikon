@@ -22,3 +22,5 @@ class FixedSizeSet : // 23458/- obj/class samples
   method union(Lsix170/FixedSizeSet;)V : // 19 samples
     return:
     parameter #0 :  // other
+
+
