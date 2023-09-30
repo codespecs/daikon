@@ -4,31 +4,31 @@ annotation @NonNull:
 
 package DataStructures:
 class BinarySearchTree : // 14292/- obj/class samples
-  field root : @Nullable  // DataStructures.BinaryNode
+  field root : @Nullable // DataStructures.BinaryNode
   method <init>()V : // 16 samples
-    return: 
+    return:
   method elementAt(LDataStructures/BinaryNode;)LDataStructures/Comparable; : // 1223 samples
-    return: @Nullable 
-    parameter #0 : @Nullable  // t
+    return: @Nullable
+    parameter #0 : @Nullable // t
   method find(LDataStructures/Comparable;)LDataStructures/Comparable; : // 153 samples
-    return: @Nullable 
+    return: @Nullable
     parameter #0 :  // x
   method find(LDataStructures/Comparable;LDataStructures/BinaryNode;)LDataStructures/BinaryNode; : // 567 samples
-    return: @Nullable 
+    return: @Nullable
     parameter #0 :  // x
-    parameter #1 : @Nullable  // t
+    parameter #1 : @Nullable // t
   method findMax()LDataStructures/Comparable; : // 493 samples
-    return: @Nullable 
+    return: @Nullable
   method findMax(LDataStructures/BinaryNode;)LDataStructures/BinaryNode; : // 493 samples
-    return: @Nullable 
-    parameter #0 : @Nullable  // t
+    return: @Nullable
+    parameter #0 : @Nullable // t
   method findMin()LDataStructures/Comparable; : // 577 samples
-    return: @Nullable 
+    return: @Nullable
   method findMin(LDataStructures/BinaryNode;)LDataStructures/BinaryNode; : // 1450 samples
-    return: @Nullable 
-    parameter #0 : @Nullable  // t
+    return: @Nullable
+    parameter #0 : @Nullable // t
   method insert(LDataStructures/Comparable;)V : // 221 samples
-    return: 
+    return:
     parameter #0 :  // x
   method insert(LDataStructures/Comparable;LDataStructures/BinaryNode;)LDataStructures/BinaryNode; : // 782 samples
     return: 
@@ -37,18 +37,18 @@ class BinarySearchTree : // 14292/- obj/class samples
   method isEmpty()Z : // 566 samples
     return: 
   method makeEmpty()V : // 20 samples
-    return: 
+    return:
   method printTree()V : // 0 samples
-    return: 
+    return:
   method printTree(LDataStructures/BinaryNode;)V : // 0 samples
-    return: 
+    return:
     parameter #0 :  // t
   method remove(LDataStructures/Comparable;)V : // 164 samples
-    return: 
+    return:
     parameter #0 :  // x
   method remove(LDataStructures/Comparable;LDataStructures/BinaryNode;)LDataStructures/BinaryNode; : // 429 samples
-    return: @Nullable 
+    return: @Nullable
     parameter #0 :  // x
-    parameter #1 : @Nullable  // t
+    parameter #1 : @Nullable // t
 
 

@@ -16,12 +16,10 @@ lst[].getClass().getName() == []
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::ENTER
 s.toString == ""
-LENGTH(s.toString)==0
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::EXIT
 s.toString == orig(s.toString)
 s.toString == ""
-LENGTH(s.toString)==0
 ===========================================================================
 agora.AgoraTest.main(java.lang.String[]):::ENTER
 args has only one value
