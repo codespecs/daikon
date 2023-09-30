@@ -7,144 +7,144 @@ class RatNum : // 185420/- obj/class samples
   field numer :  // int
   field denom :  // int
   method gcd(II)I : // 11298 samples
-    return: 
+    return:
     parameter #0 :  // _a
     parameter #1 :  // _b
   method parse(Ljava/lang/String;)LPolyCalc/RatNum; : // 171 samples
-    return: 
+    return:
     parameter #0 :  // ratStr
   method <init>(I)V : // 16856 samples
-    return: 
+    return:
     parameter #0 :  // n
   method <init>(II)V : // 16356 samples
-    return: 
+    return:
     parameter #0 :  // n
     parameter #1 :  // d
   method add(LPolyCalc/RatNum;)LPolyCalc/RatNum; : // 5192 samples
-    return: 
+    return:
     parameter #0 :  // arg
   method approx()D : // 1719 samples
-    return: 
+    return:
   method compareTo(LPolyCalc/RatNum;)I : // 1887 samples
-    return: 
+    return:
     parameter #0 :  // rn
   method debugPrint()Ljava/lang/String; : // 94 samples
-    return: 
+    return:
   method div(LPolyCalc/RatNum;)LPolyCalc/RatNum; : // 2083 samples
-    return: 
+    return:
     parameter #0 :  // arg
   method equals(Ljava/lang/Object;)Z : // 15102 samples
-    return: 
+    return:
     parameter #0 :  // obj
   method hashCode()I : // 0 samples
-    return: 
+    return:
   method isNaN()Z : // 31457 samples
-    return: 
+    return:
   method isNegative()Z : // 2527 samples
-    return: 
+    return:
   method isPositive()Z : // 1697 samples
-    return: 
+    return:
   method mul(LPolyCalc/RatNum;)LPolyCalc/RatNum; : // 2611 samples
-    return: 
+    return:
     parameter #0 :  // arg
   method negate()LPolyCalc/RatNum; : // 5007 samples
-    return: 
+    return:
   method sub(LPolyCalc/RatNum;)LPolyCalc/RatNum; : // 3226 samples
-    return: 
+    return:
     parameter #0 :  // arg
   method toString()Ljava/lang/String; : // 94 samples
-    return: 
+    return:
   method unparse()Ljava/lang/String; : // 3408 samples
-    return: 
+    return:
 
 
 package PolyCalc:
 class RatPoly : // 22981/- obj/class samples
   field terms :  // PolyCalc.RatTermVec
   method appendTerm(Ljava/lang/StringBuffer;LPolyCalc/RatTerm;)V : // 830 samples
-    return: 
+    return:
     parameter #0 :  // sb
     parameter #1 :  // rt
   method assertSorted(LPolyCalc/RatTermVec;)V : // 758 samples
-    return: 
+    return:
     parameter #0 :  // v
   method containsNaN(LPolyCalc/RatTermVec;)Z : // 0 samples
-    return: 
+    return:
     parameter #0 :  // vec
   method findTermIndex(LPolyCalc/RatTermVec;I)I : // 687 samples
-    return: 
+    return:
     parameter #0 :  // ts
     parameter #1 :  // expt
   method hintedGet(LPolyCalc/RatTermVec;II)LPolyCalc/RatTerm; : // 687 samples
-    return: 
+    return:
     parameter #0 :  // ts
     parameter #1 :  // i
     parameter #2 :  // expt
   method incremExpt(LPolyCalc/RatTermVec;I)V : // 84 samples
-    return: 
+    return:
     parameter #0 :  // vec
     parameter #1 :  // degree
   method parse(Ljava/lang/String;)LPolyCalc/RatPoly; : // 90 samples
-    return: 
+    return:
     parameter #0 :  // polyStr
   method replaceExpt(LPolyCalc/RatTerm;LPolyCalc/RatTermVec;I)V : // 500 samples
-    return: 
+    return:
     parameter #0 :  // term
     parameter #1 :  // ts
     parameter #2 :  // index
   method scaleCoeff(LPolyCalc/RatTermVec;LPolyCalc/RatNum;)V : // 106 samples
-    return: 
+    return:
     parameter #0 :  // vec
     parameter #1 :  // scalar
   method sortedAdd(LPolyCalc/RatTermVec;LPolyCalc/RatTerm;)V : // 379 samples
-    return: 
+    return:
     parameter #0 :  // vec
     parameter #1 :  // newTerm
   method <init>()V : // 320 samples
-    return: 
+    return:
   method <init>(LPolyCalc/RatTermVec;)V : // 454 samples
-    return: 
+    return:
     parameter #0 :  // rt
   method <init>(II)V : // 263 samples
-    return: 
+    return:
     parameter #0 :  // c
     parameter #1 :  // e
   method add(LPolyCalc/RatPoly;)LPolyCalc/RatPoly; : // 343 samples
-    return: 
+    return:
     parameter #0 :  // p
   method checkRep()V : // 7645 samples
-    return: 
+    return:
   method coeff(I)LPolyCalc/RatNum; : // 789 samples
-    return: 
+    return:
     parameter #0 :  // deg
   method degree()I : // 144 samples
-    return: 
+    return:
   method div(LPolyCalc/RatPoly;)LPolyCalc/RatPoly; : // 52 samples
-    return: 
+    return:
     parameter #0 :  // p
   method divAndRem(LPolyCalc/RatPoly;)[LPolyCalc/RatPoly; : // 28 samples
-    return: 
+    return:
     parameter #0 :  // p
   method eval(D)D : // 21 samples
-    return: 
+    return:
     parameter #0 :  // d
   method isNaN()Z : // 980 samples
-    return: 
+    return:
   method mul(LPolyCalc/RatPoly;)LPolyCalc/RatPoly; : // 70 samples
-    return: 
+    return:
     parameter #0 :  // p
   method negate()LPolyCalc/RatPoly; : // 22 samples
-    return: 
+    return:
   method scaleBy(LPolyCalc/RatTerm;)LPolyCalc/RatPoly; : // 84 samples
-    return: 
+    return:
     parameter #0 :  // scalar
   method sub(LPolyCalc/RatPoly;)LPolyCalc/RatPoly; : // 25 samples
-    return: 
+    return:
     parameter #0 :  // p
   method toString()Ljava/lang/String; : // 46 samples
-    return: 
+    return:
   method unparse()Ljava/lang/String; : // 723 samples
-    return: 
+    return:
 
 
 package PolyCalc:
@@ -152,47 +152,47 @@ class RatTerm : // 3114/- obj/class samples
   field coeff :  // PolyCalc.RatNum
   field expt :  // int
   method <init>(LPolyCalc/RatNum;I)V : // 2190 samples
-    return: 
+    return:
     parameter #0 :  // c
     parameter #1 :  // e
   method debugPrint()Ljava/lang/String; : // 231 samples
-    return: 
+    return:
   method equals(Ljava/lang/Object;)Z : // 0 samples
-    return: 
+    return:
     parameter #0 :  // obj
   method toString()Ljava/lang/String; : // 231 samples
-    return: 
+    return:
 
 
 package PolyCalc:
 class RatTermVec : // 164488/- obj/class samples
   field wrapped :  // java.util.ArrayList
   method <init>()V : // 1042 samples
-    return: 
+    return:
   method addElement(LPolyCalc/RatTerm;)V : // 749 samples
-    return: 
+    return:
     parameter #0 :  // t
   method copy()LPolyCalc/RatTermVec; : // 426 samples
-    return: 
+    return:
   method get(I)LPolyCalc/RatTerm; : // 37190 samples
-    return: 
+    return:
     parameter #0 :  // index
   method insert(LPolyCalc/RatTerm;I)V : // 116 samples
-    return: 
+    return:
     parameter #0 :  // t
     parameter #1 :  // index
   method printDebug()Ljava/lang/String; : // 26 samples
-    return: 
+    return:
   method remove(I)V : // 96 samples
-    return: 
+    return:
     parameter #0 :  // index
   method set(LPolyCalc/RatTerm;I)V : // 518 samples
-    return: 
+    return:
     parameter #0 :  // t
     parameter #1 :  // index
   method size()I : // 42576 samples
-    return: 
+    return:
   method toString()Ljava/lang/String; : // 26 samples
-    return: 
+    return:
 
 

@@ -2,12 +2,12 @@
 
 # prepare-texinfo-for-spellcheck.pl
 # argument: .texinfo file
-# 
+#
 # Reads the input .texinfo file and outputs a filtered
 # version that elides the texinfo commands.  It also
 # removes other text that is not appropriate as input
 # to spellcheckx such as examples and comments.
-# 
+#
 # The resulting file can be spell-checked in batch mode
 # to output misspelled words; then the user can correct
 # those misspellings in the original version.
@@ -167,12 +167,12 @@ while (<>) {
 
     #skip blank lines
     if (/^[     ]*$/ ) {
-        next;             
+        next;
     }
-    
-    # preprocess input line to set up for tokenizing  
+
+    # preprocess input line to set up for tokenizing
     # quotewords doesn't like appostrope's
-    $_ =~ s/'/''/g;         
+    $_ =~ s/'/''/g;
     # make } a separate token
     $_ =~ s/}/  } /g;
     # make { a separate token
@@ -215,7 +215,7 @@ while (<>) {
                     # we'll just fall into loop below to process
                 }
             }
-        }    
+        }
     }
 
     for ( ; $index < $#tokens; $index++) {
@@ -232,7 +232,7 @@ while (<>) {
             # we have a '}'; process according to current state
             given ($cur_state) {
                 when (NORMAL) {
-                    print "} "; 
+                    print "} ";
                 }
                 when (SKIPPING_TO_BRACE) {
                     if ($#state_stack < 0) { die "Missmatched \'{}\', stopped"; }
@@ -274,15 +274,15 @@ while (<>) {
                         print STDERR "unknown $tokens[$index] at line ", $. + 1, "\n";
                     }
                 }
-            }    
+            }
         } else {
             # regular text
             if ($cur_state == NORMAL || $cur_state == PRINTING_TO_BRACE) {
                 # need to undouble single quotes
-                $tokens[$index] =~ s/''/'/g;         
-                # now get rid of any remaining double quotes as 
+                $tokens[$index] =~ s/''/'/g;
+                # now get rid of any remaining double quotes as
                 # they confuse the spell checker.
-                $tokens[$index] =~ s/''//g;         
+                $tokens[$index] =~ s/''//g;
                 print "$tokens[$index] ";
             }
         }
@@ -290,5 +290,5 @@ while (<>) {
 
 } continue {
     # end of line; print it out
-    print "\n";  
+    print "\n";
 }
