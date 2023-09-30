@@ -21,13 +21,11 @@ warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(Outpu
 agora.AgoraTest.emptyString(java.lang.String):::ENTER
     Variables: this s s.toString
 warning: method daikon.inv.unary.string.OneOfString.format(OutputFormat:ESC/Java) needs to be implemented: s.toString == ""
-LENGTH(s.toString)==0
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::EXIT
     Variables: this s s.toString orig(this) orig(s) orig(s.toString)
       Unmodified variables: this s s.toString
 warning: method daikon.inv.unary.string.OneOfString.format(OutputFormat:ESC/Java) needs to be implemented: s.toString == ""
-LENGTH(s.toString)==0
 ===========================================================================
 agora.AgoraTest.main(java.lang.String[]):::ENTER
     Variables: args args.getClass().getName() args[] args[].toString size(args[]) size(args[])-1

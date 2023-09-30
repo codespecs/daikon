@@ -59,8 +59,6 @@ public class AgoraTest {
 
   void emptySequence(List<String> lst) {}
 
-  /*@ requires LENGTH(s.toString)==0; */
-  /*@ ensures LENGTH(s.toString)==0; */
   void emptyString(String s) {}
 
   /*@ requires s != null; */

@@ -15,9 +15,11 @@ Variable sets for misc.Compar1.main([Ljava.lang.String; args) exit
   [1] [String args[..].toString]
 
 Variable sets for misc.Compar1.bar(int i, int j, int k, int l) enter
-  [4] [Parameter i, Parameter j, Parameter k, Parameter l]
+  [2] [Parameter i, Parameter j]
+  [2] [Parameter k, Parameter l]
 Variable sets for misc.Compar1.bar(int i, int j, int k, int l) exit
-  [4] [Parameter i, Parameter j, Parameter k, Parameter l]
+  [2] [Parameter i, Parameter j]
+  [2] [Parameter k, Parameter l]
 
 Variable sets for misc.Compar1.equals(java.lang.Object obj) enter
   [1] [Parameter obj]
