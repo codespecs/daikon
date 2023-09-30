@@ -31,11 +31,11 @@ class BinarySearchTree : // 14292/- obj/class samples
     return:
     parameter #0 :  // x
   method insert(LDataStructures/Comparable;LDataStructures/BinaryNode;)LDataStructures/BinaryNode; : // 782 samples
-    return: 
+    return:
     parameter #0 :  // x
     parameter #1 :  // t
   method isEmpty()Z : // 566 samples
-    return: 
+    return:
   method makeEmpty()V : // 20 samples
     return:
   method printTree()V : // 0 samples

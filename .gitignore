@@ -449,6 +449,7 @@ tools/kmeans/*.o
 
 
 examples/**/*.class
+examples/**/*.decls-DynComp
 examples/**/*.dtrace.gz
 examples/**/*.inv.gz
 examples/c-examples/wordplay/daikon-output/

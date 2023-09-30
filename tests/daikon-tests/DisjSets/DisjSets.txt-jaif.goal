@@ -9,7 +9,7 @@ class DisjSets : // 23589/- obj/class samples
     return:
     parameter #0 :  // numElements
   method find(I)I : // 11018 samples
-    return: 
+    return:
     parameter #0 :  // x
   method unionCareful(II)V : // 576 samples
     return:

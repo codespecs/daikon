@@ -10,9 +10,9 @@ class StackAr : // 5193/- obj/class samples
     return:
     parameter #0 :  // capacity
   method isEmpty()Z : // 1190 samples
-    return: 
+    return:
   method isFull()Z : // 573 samples
-    return: 
+    return:
   method makeEmpty()V : // 55 samples
     return:
   method pop()V : // 48 samples

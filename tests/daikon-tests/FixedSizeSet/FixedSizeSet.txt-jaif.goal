@@ -11,7 +11,7 @@ class FixedSizeSet : // 23458/- obj/class samples
     return:
     parameter #0 :  // n
   method contains(I)Z : // 10040 samples
-    return: 
+    return:
     parameter #0 :  // n
   method intersect(Lsix170/FixedSizeSet;)V : // 31 samples
     return:
