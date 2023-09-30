@@ -7,7 +7,7 @@ class Cons : // 87/- obj/class samples
   field head :  // PolyCalc.RatPoly
   field tail : @Nullable  // PolyCalc.Cons
   method <init>(LPolyCalc/RatPoly;LPolyCalc/;)V : // 87 samples
-    return: 
+    return:
     parameter #0 :  // h
     parameter #1 : @Nullable  // t
 
@@ -17,33 +17,33 @@ class RatPolyStack : // 825/- obj/class samples
   field polys : @Nullable  // PolyCalc.Cons
   field size :  // int
   method <init>()V : // 23 samples
-    return: 
+    return:
   method add()V : // 5 samples
-    return: 
+    return:
   method clear()V : // 2 samples
-    return: 
+    return:
   method div()V : // 4 samples
-    return: 
+    return:
   method dup()V : // 3 samples
-    return: 
+    return:
   method get(I)LPolyCalc/RatPoly; : // 99 samples
-    return: 
+    return:
     parameter #0 :  // index
   method getCons(I)LPolyCalc/Cons; : // 99 samples
-    return: 
+    return:
     parameter #0 :  // index
   method mul()V : // 5 samples
-    return: 
+    return:
   method pop()LPolyCalc/RatPoly; : // 41 samples
-    return: 
+    return:
   method push(LPolyCalc/RatPoly;)V : // 84 samples
-    return: 
+    return:
     parameter #0 :  // p
   method size()I : // 51 samples
-    return: 
+    return:
   method sub()V : // 5 samples
-    return: 
+    return:
   method swap()V : // 3 samples
-    return: 
+    return:
 
 
