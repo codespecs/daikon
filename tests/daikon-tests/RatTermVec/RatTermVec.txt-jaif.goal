@@ -6,31 +6,31 @@ package PolyCalc:
 class RatTermVec : // 164488/- obj/class samples
   field wrapped :  // java.util.ArrayList
   method <init>()V : // 1042 samples
-    return: 
+    return:
   method addElement(LPolyCalc/RatTerm;)V : // 749 samples
-    return: 
+    return:
     parameter #0 :  // t
   method copy()LPolyCalc/RatTermVec; : // 426 samples
-    return: 
+    return:
   method get(I)LPolyCalc/RatTerm; : // 37190 samples
-    return: 
+    return:
     parameter #0 :  // index
   method insert(LPolyCalc/RatTerm;I)V : // 116 samples
-    return: 
+    return:
     parameter #0 :  // t
     parameter #1 :  // index
   method printDebug()Ljava/lang/String; : // 26 samples
-    return: 
+    return:
   method remove(I)V : // 96 samples
-    return: 
+    return:
     parameter #0 :  // index
   method set(LPolyCalc/RatTerm;I)V : // 518 samples
-    return: 
+    return:
     parameter #0 :  // t
     parameter #1 :  // index
   method size()I : // 42576 samples
-    return: 
+    return:
   method toString()Ljava/lang/String; : // 26 samples
-    return: 
+    return:
 
 

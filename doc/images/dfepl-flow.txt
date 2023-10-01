@@ -1,6 +1,6 @@
 
   source code to instrument
-   Module.pm, program.pl   
+   Module.pm, program.pl
      |	     --
      | 	       \--
      | 		  \V
@@ -35,7 +35,7 @@
 	     |			    	  |	        /
 	     |			       	   V	       /
 	     V			     +-----+-------+ -/
-    program point declarations       | dtrace-perl |< 
+    program point declarations       | dtrace-perl |<
    daikon-output/package.decls	     +-----+-------+
 	       \       	    		   |
 	      	\ 	     		   |
@@ -53,4 +53,3 @@
 			    |
 			    |
                        invariants
-                           

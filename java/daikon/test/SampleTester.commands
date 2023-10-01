@@ -13,12 +13,12 @@
 #
 decl: daikon/test/SampleTester.decls
 ppt: foo.f():::EXIT35
-  vars: x y 
+  vars: x y
   data: - 1
-  data: 1 1 
+  data: 1 1
   assert: inv ("x == y", x, y)
-  assert: !inv ("x >= y", x, y)  
-  data: 2 1 
+  assert: !inv ("x >= y", x, y)
+  data: 2 1
   assert: inv ("x >= y", x, y)
 
 #
@@ -32,7 +32,7 @@ ppt: foo.f():::EXIT35
   data: 1 1 1
   assert: inv ("x == y", x, y)
   assert: inv ("y == z", y, z)
-  assert: !inv ("y >= z", y, z) 
+  assert: !inv ("y >= z", y, z)
   assert: !inv ("x == (java.lang.Math.max(y, z))", x, y, z)
   data: 2 2 1
   assert: inv("y >= z", y, z)
@@ -44,7 +44,7 @@ ppt: foo.f():::EXIT35
 # Test non-instantiation of LinearTernary based on LinearBinary and a constant
 # value
 # use the equation z = 1x + 2y + 6, z == 20
-# the equation over x and y is thus 1x + 2y = 14.  
+# the equation over x and y is thus 1x + 2y = 14.
 # Daikon calculates the binary equation as y == - 0.5 * x + 7
 # Daikon represents the ternary equation as x + 2 * y - z + 6 == 0
 
@@ -125,7 +125,7 @@ ppt: foo.f():::EXIT35
   data: 1 2 3
   data: 1 2 3
   data: 2 2 3
-  assert: !inv("x == java.lang.Math.min(y, z)", x, y, z) 
+  assert: !inv("x == java.lang.Math.min(y, z)", x, y, z)
 
 # test suppression x == y && x == z => x = y & z
 # when both of the equalities are removed on the same sample
@@ -172,26 +172,26 @@ ppt: foo.f():::EXIT35
   vars: x y z
 
   # x,y,z are all constants, thus no invariant exists
-  data: 1 1 2  
+  data: 1 1 2
   assert: constant(x,y,z)
-  assert: !inv("x == (java.lang.Math.min(x, z))", x, x, z) 
+  assert: !inv("x == (java.lang.Math.min(x, z))", x, x, z)
 
   # min is suppressed by x=y && y<z
   # note that x and y are in the same equality set
-  data: 2 2 3  
+  data: 2 2 3
   assert: !constant(x)
   assert: !constant(y)
   assert: !constant(z)
-  assert: !inv("x == (java.lang.Math.min(x, z))", x ,x ,z) 
+  assert: !inv("x == (java.lang.Math.min(x, z))", x ,x ,z)
 
   # x and y are no longer in the same equality set
   data: 3 5 3
-  assert: inv("x == (java.lang.Math.min(y, z))", x, y, z)  
+  assert: inv("x == (java.lang.Math.min(y, z))", x, y, z)
 
   data: 2 2 5
   data: 2 5 2
   data: 20 20 50
-  assert: inv("x == (java.lang.Math.min(y, z))", x, y, z)  
+  assert: inv("x == (java.lang.Math.min(y, z))", x, y, z)
 
   data:  5 6 7
-  assert: !inv("x == (java.lang.Math.min(y, z))", x, y, z)  
+  assert: !inv("x == (java.lang.Math.min(y, z))", x, y, z)

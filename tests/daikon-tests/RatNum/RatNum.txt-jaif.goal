@@ -7,54 +7,54 @@ class RatNum : // 185420/- obj/class samples
   field numer :  // int
   field denom :  // int
   method gcd(II)I : // 11298 samples
-    return: 
+    return:
     parameter #0 :  // _a
     parameter #1 :  // _b
   method parse(Ljava/lang/String;)LPolyCalc/RatNum; : // 171 samples
-    return: 
+    return:
     parameter #0 :  // ratStr
   method <init>(I)V : // 16856 samples
-    return: 
+    return:
     parameter #0 :  // n
   method <init>(II)V : // 16356 samples
-    return: 
+    return:
     parameter #0 :  // n
     parameter #1 :  // d
   method add(LPolyCalc/RatNum;)LPolyCalc/RatNum; : // 5192 samples
-    return: 
+    return:
     parameter #0 :  // arg
   method approx()D : // 1719 samples
-    return: 
+    return:
   method compareTo(LPolyCalc/RatNum;)I : // 1887 samples
-    return: 
+    return:
     parameter #0 :  // rn
   method debugPrint()Ljava/lang/String; : // 94 samples
-    return: 
+    return:
   method div(LPolyCalc/RatNum;)LPolyCalc/RatNum; : // 2083 samples
-    return: 
+    return:
     parameter #0 :  // arg
   method equals(Ljava/lang/Object;)Z : // 15102 samples
-    return: 
+    return:
     parameter #0 :  // obj
   method hashCode()I : // 0 samples
-    return: 
+    return:
   method isNaN()Z : // 31457 samples
-    return: 
+    return:
   method isNegative()Z : // 2527 samples
-    return: 
+    return:
   method isPositive()Z : // 1697 samples
-    return: 
+    return:
   method mul(LPolyCalc/RatNum;)LPolyCalc/RatNum; : // 2611 samples
-    return: 
+    return:
     parameter #0 :  // arg
   method negate()LPolyCalc/RatNum; : // 5007 samples
-    return: 
+    return:
   method sub(LPolyCalc/RatNum;)LPolyCalc/RatNum; : // 3226 samples
-    return: 
+    return:
     parameter #0 :  // arg
   method toString()Ljava/lang/String; : // 94 samples
-    return: 
+    return:
   method unparse()Ljava/lang/String; : // 3408 samples
-    return: 
+    return:
 
 
