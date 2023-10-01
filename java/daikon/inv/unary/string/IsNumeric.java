@@ -86,7 +86,21 @@ public class IsNumeric extends SingleString {
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied IsNumeric this, OutputFormat format) {
-    return var().name() + " is Numeric";
+    switch (format) {
+      case CSHARPCONTRACT:
+        throw new Error("not implemented");
+      case DAIKON:
+        return var().name() + " is Numeric";
+      case DBCJAVA:
+      case ESCJAVA:
+      case JAVA:
+      case JML:
+        return "daikon.inv.unary.string.IsNumeric.PATTERN.matcher(" + var().name() + ").matches()";
+      case SIMPLIFY:
+        return "(isNumeric " + var().simplify_name() + ")";
+      default:
+        throw new Error("non-exhaustive switch: " + format);
+    }
   }
 
   @Override

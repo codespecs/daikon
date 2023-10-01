@@ -242,7 +242,7 @@ PolyCalc.RatNum.parse(java.lang.String):::EXIT264
 (EQ (hash |__orig__ratStr|) (hashcode 1001))
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT267
-ratStr.toString is Numeric
+(isNumeric (select |toString| |ratStr|))
 (EQ (select |denom| |return|) 1)
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT273
@@ -290,7 +290,7 @@ PolyCalc.RatNum.unparse():::EXIT135
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137
 (EQ (select |denom| |this|) 1)
-return.toString is Numeric
+(isNumeric (select |toString| |return|))
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT
 (EQ (select |numer| |this|) (select |numer| |__orig__this|))
@@ -937,7 +937,7 @@ PolyCalc.RatPoly.unparse():::EXIT165
 (EQ (arrayLength (select |wrapped| (select |terms| |this|))) 0)
 (EQ (hash |return|) (hashcode 1002))
 (EQ (select |toString| |return|) |_string_0|)
-return.toString is Numeric
+(isNumeric (select |toString| |return|))
 ===========================================================================
 PolyCalc.RatPoly.unparse():::EXIT196
 (>= (arrayLength (select |wrapped| (select |terms| |this|))) 1)
@@ -948,7 +948,7 @@ PolyCalc.RatPoly.unparse():::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |wrapped| (select |terms| |this|))) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |wrapped| (select |terms| |__orig__this|))) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |wrapped| (select |terms| |this|))) |i|) (select (select elems (select |wrapped| (select |terms| |__orig__this|))) |j|))))
 (IMPLIES (EQ (arrayLength (select |wrapped| (select |terms| |this|))) 0) (EQ (hash |return|) (hashcode 1002)))
 (IMPLIES (EQ (arrayLength (select |wrapped| (select |terms| |this|))) 0) (EQ (select |toString| |return|) |_string_0|))
-(IMPLIES (EQ (arrayLength (select |wrapped| (select |terms| |this|))) 0) return.toString is Numeric)
+(IMPLIES (EQ (arrayLength (select |wrapped| (select |terms| |this|))) 0) (isNumeric (select |toString| |return|)))
 (IMPLIES (EQ (arrayLength (select |wrapped| (select |terms| |this|))) 0) (AND))
 (IMPLIES (EQ (arrayLength (select |wrapped| (select |terms| |this|))) 0) (AND (EQ (arrayLength (select |wrapped| (select |terms| |this|))) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |wrapped| (select |terms| |this|))) 1))) (NEQ (select (select elems (select |wrapped| (select |terms| |this|))) |i|)  null)))))
 (IMPLIES (EQ (arrayLength (select |wrapped| (select |terms| |this|))) 0) (EQ (arrayLength (select |wrapped| (select |terms| |this|))) 0))
