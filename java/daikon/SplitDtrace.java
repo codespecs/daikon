@@ -88,7 +88,9 @@ public final class SplitDtrace {
       ArrayList<String> rec = new ArrayList<>();
       while (true) {
         readRec(reader, rec);
-        if (isDeclare(rec)) writer.newLine();
+        if (isDeclare(rec)) {
+          writer.newLine();
+        }
         writeRec(writer, rec);
         if (isDeclare(rec)) {
           break;
@@ -116,9 +118,13 @@ public final class SplitDtrace {
               nonceSet.remove(nonce);
             }
           }
-          if (shouldWrite) writeRec(writer, rec);
+          if (shouldWrite) {
+            writeRec(writer, rec);
+          }
         }
-        if (!isDecl) currRecCount++;
+        if (!isDecl) {
+          currRecCount++;
+        }
       }
     }
   }
@@ -192,9 +198,13 @@ public final class SplitDtrace {
       if (filename.endsWith(".dtrace.zip")) {
         zipfile = new ZipFile(filename);
         Enumeration<? extends ZipEntry> e = zipfile.entries();
-        if (!e.hasMoreElements()) throw new RuntimeException("No entries in the gz");
+        if (!e.hasMoreElements()) {
+          throw new RuntimeException("No entries in the gz");
+        }
         ZipEntry entry = e.nextElement();
-        if (e.hasMoreElements()) throw new RuntimeException("More than one entry in the gz");
+        if (e.hasMoreElements()) {
+          throw new RuntimeException("More than one entry in the gz");
+        }
         stream = zipfile.getInputStream(entry);
         assert stream != null : "@AssumeAssertion(nullness): just tested that one entry exists";
       } else {

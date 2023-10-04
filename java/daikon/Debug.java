@@ -147,10 +147,10 @@ public final class Debug {
   // Note that throughout this file, inv_class is not necessarily a
   // subclass of Invariant -- for instance, it might be a subclass of
   // BinaryDerivationFactory.
-  /** cached class: class to use by default when calling variants of log() with few arguments */
+  /** cached class: class to use by default when calling variants of log() with few arguments. */
   public @Nullable Class<?> cache_class;
 
-  /** cached ppt: ppt to use by default when calling variants of log() with few arguments */
+  /** Cached ppt: ppt to use by default when calling variants of log() with few arguments. */
   public @Nullable Ppt cache_ppt;
 
   /**
@@ -271,7 +271,9 @@ public final class Debug {
       System.out.println("vis = null");
     } else {
       for (int i = 0; i < vis.length; i++) {
-        if (vis[i] == null) System.out.println("vis[" + i + "] == null");
+        if (vis[i] == null) {
+          System.out.println("vis[" + i + "] == null");
+        }
       }
     }
     cache_match = class_match(c) && ppt_match(ppt) && var_match(vis);
@@ -326,7 +328,9 @@ public final class Debug {
    * described in {@link #log(Logger, Class, Ppt, VarInfo[], String)}.
    */
   public void log(Logger debug, String msg) {
-    if (cache_match) log(debug, cache_class, cache_ppt, cache_vis, msg);
+    if (cache_match) {
+      log(debug, cache_class, cache_ppt, cache_vis, msg);
+    }
   }
 
   /**
@@ -620,17 +624,25 @@ public final class Debug {
                 this_match = true;
                 if (!cv[j].equals(vis[j].name())) {
                   ourvars[j] = v.name();
-                  if (j != k) ourvars[j] += " (" + j + "/" + k + ")";
-                  if (v.isCanonical()) ourvars[j] += " (Leader)";
+                  if (j != k) {
+                    ourvars[j] += " (" + j + "/" + k + ")";
+                  }
+                  if (v.isCanonical()) {
+                    ourvars[j] += " (Leader)";
+                  }
                 }
                 break eachvis;
               }
             }
           } else { // sometimes, no equality set
-            if (cv[j].equals("*") || cv[j].equals(vis[k].name())) this_match = true;
+            if (cv[j].equals("*") || cv[j].equals(vis[k].name())) {
+              this_match = true;
+            }
           }
         }
-        if (!this_match) continue outer;
+        if (!this_match) {
+          continue outer;
+        }
       }
       match = true;
       break outer;
@@ -659,15 +671,21 @@ public final class Debug {
     boolean found = false;
 
     for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
-      if (ppt_match(ppt)) debugTrack.fine("Matched ppt '" + ppt.name() + "' at " + msg);
+      if (ppt_match(ppt)) {
+        debugTrack.fine("Matched ppt '" + ppt.name() + "' at " + msg);
+      }
       for (PptSlice slice : ppt.views_iterable()) {
         for (int k = 0; k < slice.invs.size(); k++) {
           Invariant inv = slice.invs.get(k);
-          if (inv.log("%s: found #%s=%s in slice %s", msg, k, inv.format(), slice)) found = true;
+          if (inv.log("%s: found #%s=%s in slice %s", msg, k, inv.format(), slice)) {
+            found = true;
+          }
         }
       }
     }
-    if (!found) debugTrack.fine("Found no points at '" + msg + "'");
+    if (!found) {
+      debugTrack.fine("Found no points at '" + msg + "'");
+    }
   }
 
   /** Returns a string containing the integer variables and their values. */
@@ -706,9 +724,13 @@ public final class Debug {
             if ((mod == ValueTuple.MISSING_FLOW) || (mod == ValueTuple.MISSING_NONSENSICAL)) {
               out += " (missing)";
             }
-            if (v.missingOutOfBounds()) out += " (out of bounds)";
+            if (v.missingOutOfBounds()) {
+              out += " (out of bounds)";
+            }
             if (v.equalitySet != null) {
-              if (!v.isCanonical()) out += " (leader=" + v.canonicalRep().name() + ")";
+              if (!v.isCanonical()) {
+                out += " (leader=" + v.canonicalRep().name() + ")";
+              }
             }
             // out += " mod=" + mod;
             out += ": ";
@@ -776,10 +798,16 @@ public final class Debug {
       out.append(v.name());
       out.append("=");
       out.append(toString(val));
-      if (v.isMissing(vt)) out.append(" (missing)");
-      if (v.missingOutOfBounds()) out.append(" (out of bounds)");
+      if (v.isMissing(vt)) {
+        out.append(" (missing)");
+      }
+      if (v.missingOutOfBounds()) {
+        out.append(" (out of bounds)");
+      }
       if (v.equalitySet != null) {
-        if (!v.isCanonical()) out.append(" (leader=" + v.canonicalRep().name() + ")");
+        if (!v.isCanonical()) {
+          out.append(" (leader=" + v.canonicalRep().name() + ")");
+        }
       }
       out.append(": ");
     }
@@ -794,7 +822,7 @@ public final class Debug {
    * <pre>{@code class|class|...<var,var,var>@ppt}</pre>
    *
    * As shown, multiple class arguments can be specified separated by pipe symbols (|). The
-   * variables are specified in angle brackets (&lt;&gt;) and the program point is preceeded by an
+   * variables are specified in angle brackets ({@code <>}) and the program point is preceeded by an
    * at sign (@). Each is optional and can be left out. The add_track routine can be called multiple
    * times. An invariant that matches any of the specifications will be tracked.
    */
@@ -810,7 +838,9 @@ public final class Debug {
     if ((var_start == -1) && (ppt_start == -1)) {
       classes = def;
     } else if (var_start != -1) {
-      if (var_start > 0) classes = def.substring(0, var_start);
+      if (var_start > 0) {
+        classes = def.substring(0, var_start);
+      }
       if (ppt_start == -1) {
         vars = def.substring(var_start + 1, def.length() - 1);
       } else {
@@ -818,7 +848,9 @@ public final class Debug {
         ppt = def.substring(ppt_start + 1, def.length());
       }
     } else {
-      if (ppt_start > 0) classes = def.substring(0, ppt_start);
+      if (ppt_start > 0) {
+        classes = def.substring(0, ppt_start);
+      }
       ppt = def.substring(ppt_start + 1, def.length());
     }
 

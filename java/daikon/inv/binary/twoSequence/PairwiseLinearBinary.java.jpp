@@ -75,18 +75,16 @@ public class CLASSNAME extends SUPERCLASS {
 
   private static @Prototype CLASSNAME proto = new @Prototype CLASSNAME();
 
-  /** Returns the prototype invariant for CLASSNAME */
+  /** Returns the prototype invariant for CLASSNAME. */
   public static @Prototype CLASSNAME get_proto() {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled. */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Instantiates the invariant on the specified slice. */
   @Override
   protected CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);

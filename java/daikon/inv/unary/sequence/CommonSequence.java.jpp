@@ -84,7 +84,6 @@ public class CLASSNAME extends SUPERCLASS {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
@@ -101,7 +100,6 @@ public class CLASSNAME extends SUPERCLASS {
     return dkconfig_hashcode_seqs || vis[0].file_rep_type.BASE_IS_INTEGRAL;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   protected CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);

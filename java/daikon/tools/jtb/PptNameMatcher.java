@@ -126,7 +126,9 @@ public class PptNameMatcher {
       }
     }
 
-    if (debug_getMatches) System.out.println("getMatchesInternal => " + result);
+    if (debug_getMatches) {
+      System.out.println("getMatchesInternal => " + result);
+    }
     return result;
   }
 
@@ -157,7 +159,9 @@ public class PptNameMatcher {
               + methodOrConstructorDeclaration);
     }
 
-    if (debug_getMatches) System.out.printf("getMatches(%s, %s, ...)%n", classname, methodname);
+    if (debug_getMatches) {
+      System.out.printf("getMatches(%s, %s, ...)%n", classname, methodname);
+    }
     if (methodname.equals("<init>")) {
       methodname = simpleName(classname);
       if (debug_getMatches) {
@@ -271,7 +275,9 @@ public class PptNameMatcher {
 
   public boolean typeMatch(String pptTypeString, FormalParameter astFormalParameter) {
 
-    if (debug_getMatches) System.out.println(Ast.formatEntireTree(astFormalParameter));
+    if (debug_getMatches) {
+      System.out.println(Ast.formatEntireTree(astFormalParameter));
+    }
 
     String astTypeString = getUngenerifiedType(astFormalParameter);
 
@@ -280,12 +286,16 @@ public class PptNameMatcher {
     }
 
     if (Ast.typeMatch(pptTypeString, astTypeString)) {
-      if (debug_getMatches) System.out.println("Match arg: " + pptTypeString + " " + astTypeString);
+      if (debug_getMatches) {
+        System.out.println("Match arg: " + pptTypeString + " " + astTypeString);
+      }
       return true;
     }
 
     if ((pptTypeString != null) && Ast.typeMatch(pptTypeString, astTypeString)) {
-      if (debug_getMatches) System.out.println("Match arg: " + pptTypeString + " " + astTypeString);
+      if (debug_getMatches) {
+        System.out.println("Match arg: " + pptTypeString + " " + astTypeString);
+      }
       return true;
     }
 

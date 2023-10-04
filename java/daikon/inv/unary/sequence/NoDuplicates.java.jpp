@@ -84,13 +84,11 @@ public class CLASSNAME extends SUPERCLASS {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   public CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);

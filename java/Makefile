@@ -21,9 +21,21 @@ JAVAC ?= javac
 JAVADOC ?= javadoc
 JAR ?= jar
 
+JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
+ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
+  JAVA8 := 1
+else
+  JAVA8 := 0
+  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
+endif
+
+ifeq (${JAVA_RELEASE_NUMBER}, 21)
+  LINT_THIS_ESCAPE=-Xlint:-this-escape
+endif
+
 # Add flags like "-source 8" or "-target 8" to JAVAC_TARGET_FLAGS.
 # That variable appears last and overrides the values we provide here.
-JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -source 8 -target 8 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${JAVAC_TARGET_FLAGS}
+JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -source 8 -target 8 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${LINT_THIS_ESCAPE} ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
@@ -85,16 +97,9 @@ DOCLETPATH := $(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAI
 
 DOCLET_FLAGS :=
 LINKOFFLINE := https://docs.oracle.com/javase/8/docs/api/
-JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
-ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
-  JAVA8 := 1
-else
-  JAVA8 := 0
-  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
-  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 11),1)
-	DOCLET_FLAGS := --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
-	LINKOFFLINE := https://docs.oracle.com/en/java/javase/17/docs/api/
-  endif
+ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 11),1)
+  DOCLET_FLAGS := --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+  LINKOFFLINE := https://docs.oracle.com/en/java/javase/17/docs/api/
 endif
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or

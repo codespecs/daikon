@@ -58,7 +58,6 @@ public class NonModulus extends SingleScalar {
     return proto;
   }
 
-  /** NonModulus is only valid on integral types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -69,13 +68,11 @@ public class NonModulus extends SingleScalar {
     return vis[0].file_rep_type.baseIsIntegral();
   }
 
-  /** Returns whether or not this invariant is enabled. */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   protected NonModulus instantiate_dyn(@Prototype NonModulus this, PptSlice slice) {
     return new NonModulus(slice);

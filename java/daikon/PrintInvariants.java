@@ -484,7 +484,9 @@ public final class PrintInvariants {
     if (debug.isLoggable(FINE)) {
       debug.fine("Printing PPT Hierarchy");
       for (PptTopLevel my_ppt : ppts.pptIterable()) {
-        if (my_ppt.parents.size() == 0) my_ppt.debug_print_tree(debug, 0, null);
+        if (my_ppt.parents.size() == 0) {
+          my_ppt.debug_print_tree(debug, 0, null);
+        }
       }
     }
 
@@ -526,7 +528,9 @@ public final class PrintInvariants {
           System.out.print(toPrint);
         } else {
           String matching = "";
-          if (discVars != null || discClass != null) matching = " matching ";
+          if (discVars != null || discClass != null) {
+            matching = " matching ";
+          }
           System.out.println("No" + matching + "discarded Invariants found in " + ppt.name());
         }
       }
@@ -677,9 +681,11 @@ public final class PrintInvariants {
           && (arg.indexOf('@') != -1)
           && (arg.indexOf('@') < arg.indexOf('<')))
         temp = arg.substring(arg.indexOf('@')); // in case the pptname has a < in it
-      else if (arg.indexOf('<') != -1) temp = arg.substring(arg.indexOf('<'));
-      else if (arg.indexOf('@') != -1) temp = arg.substring(arg.indexOf('@'));
-      else {
+      else if (arg.indexOf('<') != -1) {
+        temp = arg.substring(arg.indexOf('<'));
+      } else if (arg.indexOf('@') != -1) {
+        temp = arg.substring(arg.indexOf('@'));
+      } else {
         return;
       }
     }
@@ -687,7 +693,9 @@ public final class PrintInvariants {
 
     // User wants to specify the variable names of interest
     if (firstChar == '<') {
-      if (temp.length() < 2) throw new IllegalArgumentException("Missing '>'" + lineSep + usage);
+      if (temp.length() < 2) {
+        throw new IllegalArgumentException("Missing '>'" + lineSep + usage);
+      }
       if (temp.indexOf('>', 1) == -1) {
         throw new IllegalArgumentException("Missing '>'" + lineSep + usage);
       }
@@ -1407,7 +1415,9 @@ public final class PrintInvariants {
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
 
-      if (Invariant.logOn()) inv.log("Considering Printing");
+      if (Invariant.logOn()) {
+        inv.log("Considering Printing");
+      }
       assert !(inv instanceof Equality);
       for (int j = 0; j < inv.ppt.var_infos.length; j++) {
         assert !inv.ppt.var_infos[j].missingOutOfBounds()
@@ -1665,7 +1675,9 @@ public final class PrintInvariants {
       }
       inv_map.put(inv.getClass(), cnt);
 
-      if (print_invs) log.fine(" : " + filter_class + " : " + inv.format());
+      if (print_invs) {
+        log.fine(" : " + filter_class + " : " + inv.format());
+      }
     }
 
     log.fine(ppt.name() + ": " + invs_array.length);
@@ -1702,7 +1714,9 @@ public final class PrintInvariants {
     for (PptTopLevel ppt : ppts.pptIterable()) {
       for (Invariant inv : ppt.getInvariants()) {
         InvariantFilters fi = InvariantFilters.defaultFilters();
-        if (fi.shouldKeep(inv) == null) inv_cnt++;
+        if (fi.shouldKeep(inv) == null) {
+          inv_cnt++;
+        }
       }
     }
     System.out.printf("%d printable invariants%n", inv_cnt);

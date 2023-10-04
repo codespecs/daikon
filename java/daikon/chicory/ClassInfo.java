@@ -18,19 +18,19 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  */
 public class ClassInfo {
 
-  /** binary name of the class */
+  /** binary name of the class. */
   public @BinaryName String class_name;
 
   // set by initViaReflection()
-  /** reflection object for this class */
+  /** reflection object for this class. */
   public @MonotonicNonNull Class<?> clazz;
 
   // Does not include class initializers, so each element's .member field
   // is non-null.
-  /** list of methods in the class */
+  /** list of methods in the class. */
   public List<MethodInfo> method_infos = new ArrayList<>();
 
-  /** this class's classloader */
+  /** This class's classloader. */
   private ClassLoader loader;
 
   // traversalClass and traversalObject are set by init_traversal().

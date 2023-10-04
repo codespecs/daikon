@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.StringJoiner;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -65,19 +66,15 @@ public abstract class Ppt implements Serializable {
   @SuppressWarnings("all:purity") // Impure side effects do not escape (string creation)
   @SideEffectFree
   public static String varNames(VarInfo[] infos) {
-    StringBuilder sb = new StringBuilder();
-    sb.append("(");
+    StringJoiner sj = new StringJoiner(", ", "(", ")");
     if (infos.length == 0) {
-      sb.append("<implication slice>");
+      sj.add("<implication slice>");
     } else {
-      sb.append(infos[0].name());
-      for (int i = 1; i < infos.length; i++) {
-        sb.append(", ");
-        sb.append(infos[i].name());
+      for (VarInfo vi : infos) {
+        sj.add(vi.name());
       }
     }
-    sb.append(")");
-    return sb.toString();
+    return sj.toString();
   }
 
   /** Return a string representation of the variable names. */

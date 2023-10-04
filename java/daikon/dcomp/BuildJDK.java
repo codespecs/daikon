@@ -359,7 +359,9 @@ public class BuildJDK {
         // For JDK 9+ we do not copy as these items will be loaded from the original module file.
         if (!classFileName.endsWith(".class") || classFileName.equals("java/lang/Object.class")) {
           if (BcelUtil.javaVersion > 8) {
-            if (verbose) System.out.printf("Skipping file %s%n", classFileName);
+            if (verbose) {
+              System.out.printf("Skipping file %s%n", classFileName);
+            }
             continue;
           }
           // This File constructor ignores dest_dir if classFileName is absolute.
@@ -368,7 +370,9 @@ public class BuildJDK {
             throw new Error("This can't happen: " + classFile);
           }
           classFile.getParentFile().mkdirs();
-          if (verbose) System.out.println("Copying Object.class or non-classfile: " + classFile);
+          if (verbose) {
+            System.out.println("Copying Object.class or non-classfile: " + classFile);
+          }
           try (InputStream in = class_stream_map.get(classFileName)) {
             Files.copy(in, classFile.toPath());
           }
@@ -476,7 +480,9 @@ public class BuildJDK {
   private void instrumentClassFile(
       JavaClass jc, File outputDir, String classFileName, int classTotal)
       throws java.io.IOException {
-    if (verbose) System.out.printf("processing target %s%n", classFileName);
+    if (verbose) {
+      System.out.printf("processing target %s%n", classFileName);
+    }
     DCInstrument dci = new DCInstrument(jc, true, null);
     JavaClass inst_jc;
     inst_jc = dci.instrument_jdk();
@@ -490,7 +496,9 @@ public class BuildJDK {
     }
     dir.mkdirs();
     File classpath = new File(dir, classfile.getName());
-    if (verbose) System.out.printf("writing to file %s%n", classpath);
+    if (verbose) {
+      System.out.printf("writing to file %s%n", classpath);
+    }
     inst_jc.dump(classpath);
     _numFilesProcessed++;
     if (((_numFilesProcessed % 100) == 0) && (System.console() != null)) {

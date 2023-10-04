@@ -6,21 +6,21 @@ package six170:
 class FixedSizeSet : // 23458/- obj/class samples
   field bits :  // boolean[]
   method <init>()V : // 102 samples
-    return: 
+    return:
   method add(I)V : // 1186 samples
-    return: 
+    return:
     parameter #0 :  // n
   method contains(I)Z : // 10040 samples
-    return: 
+    return:
     parameter #0 :  // n
   method intersect(Lsix170/FixedSizeSet;)V : // 31 samples
-    return: 
+    return:
     parameter #0 :  // other
   method remove(I)V : // 402 samples
-    return: 
+    return:
     parameter #0 :  // n
   method union(Lsix170/FixedSizeSet;)V : // 19 samples
-    return: 
+    return:
     parameter #0 :  // other
 
 

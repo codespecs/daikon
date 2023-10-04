@@ -22,15 +22,13 @@ public class StaticObjInfo extends DaikonVariableInfo {
     this.type = type;
   }
 
-  /* (non-Javadoc)
-   * @see daikon.chicory.DaikonVariableInfo#getChildValue(java.lang.Object)
-   */
+  // See daikon.chicory.DaikonVariableInfo#getChildValue(java.lang.Object)
   @Override
   public @Nullable Object getMyValFromParentVal(Object val) {
     return null;
   }
 
-  /** 'this' is a top level variable */
+  /** {@code this} is a top level variable. */
   @Override
   public VarKind get_var_kind() {
     return VarKind.VARIABLE;

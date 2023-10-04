@@ -19,7 +19,6 @@ public abstract class SingleFloatSequence extends SingleSequence {
     super();
   }
 
-  /** Returns whether or not the specified types are valid. */
   @Override
   public final boolean valid_types(VarInfo[] vis) {
     return ((vis.length == 1)

@@ -214,7 +214,9 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       result.append(var.name());
       result.append("[" + var.varinfo_index + "]");
       // result.append("[" + var.comparability + "]");
-      if (var == leader()) result.append("L");
+      if (var == leader()) {
+        result.append("L");
+      }
     }
     return result.toString();
   }
@@ -482,7 +484,10 @@ public final /*(at)Interned*/ class Equality extends Invariant {
    * invariant as well since that invariant is used in suppressions and obvious tests.
    */
   public void postProcess() {
-    if (this.numSamples() == 0) return; // All were missing or not present
+    if (this.numSamples() == 0) {
+      // All were missing or not present
+      return;
+    }
     PptTopLevel parent = this.ppt.parent;
     VarInfo[] varArray = this.vars.toArray(new VarInfo[0]);
     if (debugPostProcess.isLoggable(Level.FINE)) {
