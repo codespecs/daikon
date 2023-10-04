@@ -21,13 +21,11 @@ daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(lst), new String[] {  })
 agora.AgoraTest.emptyString(java.lang.String):::ENTER
     Variables: this s s.toString
 s.toString().equals("")
-LENGTH(s.toString)==0
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::EXIT
     Variables: this s s.toString orig(this) orig(s) orig(s.toString)
 s.toString().equals(\old(s.toString()))
 s.toString().equals("")
-LENGTH(s.toString)==0
 ===========================================================================
 agora.AgoraTest.main(java.lang.String[]):::ENTER
     Variables: args args.getClass().getName() args[] args[].toString size(args[]) size(args[])-1

@@ -16,12 +16,10 @@ agora.AgoraTest.emptySequence(java.util.List):::EXIT
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::ENTER
 (EQ (select |toString| |s|) |_string_|)
-LENGTH(s.toString)==0
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::EXIT
 (EQ (select |toString| |s|) (select |toString| |__orig__s|))
 (EQ (select |toString| |s|) |_string_|)
-LENGTH(s.toString)==0
 ===========================================================================
 agora.AgoraTest.main(java.lang.String[]):::ENTER
 (EQ (hash |args|) (hashcode 1002))
