@@ -22,9 +22,12 @@ import daikon.simplify.LemmaStack;
 import daikon.simplify.SimpUtil;
 import daikon.suppress.NISuppressionSet;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -459,11 +462,13 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // The "ppt" argument can be null if this is a prototype invariant.
   protected Invariant(PptSlice ppt) {
     this.ppt = ppt;
+    checkMergeOverridden();
   }
 
   @SuppressWarnings("nullness") // weakness in @Unused checking
   protected @Prototype Invariant() {
     this.ppt = null;
+    checkMergeOverridden();
   }
 
   @SuppressWarnings("unused")
@@ -2156,6 +2161,29 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     // very partial initial implementation
     for (VarInfo vi : ppt.var_infos) {
       vi.checkRep();
+    }
+  }
+
+  /** Classes for which {@link #checkMergeOverridden} has been called. */
+  public static IdentityHashMap<Class<?>, Boolean> checkedMergeOverridden = new IdentityHashMap<>();
+
+  /**
+   * Throws an exception if the class directly defines fields but does not override {@link #merge}.
+   */
+  private void checkMergeOverridden() {
+    Class<?> thisClass = getClass();
+    if (checkedMergeOverridden.put(thisClass, true) == null) {
+      // TODO: Could look at all fields and compare them to the fields of Invariant.class.
+      Field[] declaredFields = thisClass.getDeclaredFields();
+      if (declaredFields.length == 0) {
+        return;
+      }
+      try {
+        Method mergeMethod = thisClass.getDeclaredMethod("merge", List.class, PptSlice.class);
+      } catch (NoSuchMethodException e) {
+        throw new Error(
+            thisClass + ": no merge method, but fields " + Arrays.toString(declaredFields));
+      }
     }
   }
 }
