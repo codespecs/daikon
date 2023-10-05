@@ -52,6 +52,17 @@ TS_InputEventHandlerTests.inv.gz: $(DAIKON) TS_InputEventHandlerTests.dtrace.gz
 	java -cp $(DAIKON_CLASSPATH) -ea -Xmx3600m daikon.Daikon $(DAIKON_ARGS) \
 	  TS_InputEventHandlerTests.dtrace.gz
 
+# For debugging:
+#   make TS_AllDrawletUnitTests.txt TS_AllDrawletUnitTests.txt-all \
+#     TS_DrawletFunctionalTest.txt TS_DrawletFunctionalTest.txt-all \
+#     TS_InputEventHandlerTests.txt TS_InputEventHandlerTests.txt-all
+
+%.txt: %.inv.gz
+	java -cp $d/daikon.jar daikon.PrintInvariants $< > $@
+
+%.txt-all: %.inv.gz
+	java -cp $d/daikon.jar daikon.PrintInvariants --config_option daikon.PrintInvariants.print_all=true $< > $@
+
 #
 # Test targets
 #
