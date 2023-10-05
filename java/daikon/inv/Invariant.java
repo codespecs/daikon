@@ -2174,7 +2174,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   private void checkMergeOverridden() {
     Class<?> thisClass = getClass();
     if (!checkedMergeOverridden.containsKey(thisClass)) {
-      checkedMergeOverridden.pu(thisClass, true);
+      checkedMergeOverridden.put(thisClass, true);
 
       // TODO: Could look at all fields and compare them to the fields of Invariant.class.
       Field[] declaredFields = thisClass.getDeclaredFields();
