@@ -2177,14 +2177,38 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
 
       // TODO: Could look at all fields and compare them to the fields of Invariant.class.
       Field[] declaredFields = thisClass.getDeclaredFields();
-      if (declaredFields.length == 0) {
+      List<Field> statefulFields = new ArrayList<>(4);
+      for (Field declaredField : declaredFields) {
+        String fieldName = declaredField.getName();
+        if (fieldName.equals("serialVersionUID")) {
+          continue;
+        }
+        if (fieldName.startsWith("$")) {
+          continue;
+        }
+        if (fieldName.startsWith("dkconfig_")) {
+          continue;
+        }
+        if (fieldName.startsWith("debug")) {
+          continue;
+        }
+        if (fieldName.endsWith("Cache")) {
+          continue;
+        }
+        statefulFields.add(declaredField);
+      }
+
+      if (statefulFields.isEmpty()) {
         return;
       }
+
       try {
         Method mergeMethod = thisClass.getDeclaredMethod("merge", List.class, PptSlice.class);
       } catch (NoSuchMethodException e) {
         throw new Error(
-            thisClass + ": no merge method, but fields " + Arrays.toString(declaredFields));
+            thisClass
+                + ": no merge method is defined, but these fields might store state: "
+                + statefulFields);
       }
     }
   }
