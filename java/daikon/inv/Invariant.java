@@ -676,6 +676,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     // Make sure that each invariant was really of the same type
     boolean assert_enabled = false;
     assert (assert_enabled = true);
+    // Now, assert_enabled is true if the JVM was started with the "-ea" command-line argument.
     if (assert_enabled) {
       Match m = new Match(result);
       for (int i = 1; i < invs.size(); i++) {
