@@ -31,6 +31,7 @@ public class CommonStringSequence extends SingleStringSequence {
   /** Boolean. True iff CommonStringSequence invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
+  /** The number of samples observed. */
   private int count = 0;
 
   /** Null means no samples have been seen yet. Empty array means intersection is empty. */
