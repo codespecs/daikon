@@ -33,7 +33,7 @@ public final class CompleteOneOfString extends SingleString {
   /** Information about each value encountered. */
   public static class Info implements Serializable {
     static final long serialVersionUID = 20091210L;
-    public String val;
+    public @Interned String val;
     public int cnt;
 
     public Info(String val, int cnt) {
