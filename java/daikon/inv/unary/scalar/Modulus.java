@@ -305,8 +305,6 @@ public class Modulus extends SingleScalar {
   public @Nullable @NonPrototype Modulus merge(
       @Prototype Modulus this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
 
-    Modulus first = (Modulus) invs.get(0);
-
     long new_modulus = 0;
     boolean some_value_set = false;
     long some_value = 0;
