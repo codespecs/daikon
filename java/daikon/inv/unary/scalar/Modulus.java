@@ -313,7 +313,7 @@ public class Modulus extends SingleScalar {
     for (Invariant inv : invs) {
       Modulus m = (Modulus) inv;
 
-      if ((!some_value_set) && (!m.no_samples_seen)) {
+      if (!some_value_set && !m.no_samples_seen) {
         some_value = m.value1;
       }
 
