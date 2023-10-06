@@ -161,7 +161,7 @@ public class CommonStringSequence extends SingleStringSequence {
       }
       intersect = Intern.intern(ArraysPlume.subarray(tmp, 0, size));
     }
-    count++;
+    this.count += count;
     return InvariantStatus.NO_CHANGE;
   }
 

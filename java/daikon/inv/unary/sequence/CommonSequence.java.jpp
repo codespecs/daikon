@@ -255,7 +255,7 @@ public class CLASSNAME extends SUPERCLASS {
     intersect = ArraysPlume.subarray(tmp, 0, size);
 
     intersect = Intern.intern(intersect);
-    count += count;
+    this.count += count;
     return InvariantStatus.NO_CHANGE;
   }
 

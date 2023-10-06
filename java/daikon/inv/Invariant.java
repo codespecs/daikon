@@ -2210,7 +2210,12 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       }
 
       try {
+        @SuppressWarnings(
+            "UnusedVariable" // Method is called for side effect, ignore return value, but give the
+        // unused variable a name for documentation purposes.
+        )
         Method mergeMethod = thisClass.getDeclaredMethod("merge", List.class, PptSlice.class);
+        // `mergeMethod` is non-null, or else `NoSuchMethodException` was thrown.
       } catch (NoSuchMethodException e) {
         StringJoiner fields = new StringJoiner(", ");
         for (Field f : statefulFields) {

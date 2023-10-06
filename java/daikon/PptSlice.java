@@ -297,7 +297,10 @@ public abstract class PptSlice extends Ppt {
 
     for (Invariant inv : invs) {
       inv.repCheck();
-      assert inv.ppt == this;
+      if (inv.ppt != this) {
+        throw new Error(
+            String.format("inv.ppt=%s, this=%s, for inv=%s in invs=%s", inv.ppt, this, inv, invs));
+      }
     }
   }
 
