@@ -281,7 +281,7 @@ public class CLASSNAME extends SUPERCLASS {
       CLASSNAME inv = (CLASSNAME) invs.get(i);
       PRIMITIVE @MonotonicNonNull @Interned [] invIntersect = inv.intersect;
       if (invIntersect != null) {
-        InvariantStatus status = result.add_modified(inv.intersect, inv.count);
+        InvariantStatus status = result.add_modified(invIntersect, inv.count);
         if (status == InvariantStatus.FALSIFIED) {
           return null;
         }
