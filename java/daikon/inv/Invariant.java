@@ -24,11 +24,13 @@ import daikon.suppress.NISuppressionSet;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -2179,6 +2181,10 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       Field[] declaredFields = thisClass.getDeclaredFields();
       List<Field> statefulFields = new ArrayList<>(4);
       for (Field declaredField : declaredFields) {
+        if (Modifier.isStatic(declaredField.getModifiers())) {
+          continue;
+        }
+
         String fieldName = declaredField.getName();
         if (fieldName.equals("serialVersionUID")) {
           continue;
@@ -2195,6 +2201,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
         if (fieldName.endsWith("Cache")) {
           continue;
         }
+
         statefulFields.add(declaredField);
       }
 
@@ -2205,10 +2212,14 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       try {
         Method mergeMethod = thisClass.getDeclaredMethod("merge", List.class, PptSlice.class);
       } catch (NoSuchMethodException e) {
+        StringJoiner fields = new StringJoiner(", ");
+        for (Field f : statefulFields) {
+          fields.add(f.getName());
+        }
         throw new Error(
-            thisClass
-                + ": no merge method is defined, but these fields might store state: "
-                + statefulFields);
+            thisClass.getName()
+                + " defines no merge method, but these fields might store state: "
+                + fields);
       }
     }
   }

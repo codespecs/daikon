@@ -5,6 +5,8 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import java.util.List;
+import java.util.StringJoiner;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -13,8 +15,10 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
+import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
+// TODO: Why isn't this generated from CommonSequence.java.jpp?
 /**
  * Represents string sequences that contain a common subset. Prints as {@code {s1, s2, s3, ...}
  * subset of x[]}.
@@ -27,7 +31,7 @@ public class CommonStringSequence extends SingleStringSequence {
   /** Boolean. True iff CommonStringSequence invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  private int elts = 0;
+  private int count = 0;
 
   /** Null means no samples have been seen yet. Empty array means intersection is empty. */
   private String @MonotonicNonNull [] intersect = null;
@@ -58,12 +62,12 @@ public class CommonStringSequence extends SingleStringSequence {
     return new CommonStringSequence(slice);
   }
 
-  // Don't write clone, because this.intersect is read-only
+  // Don't define clone (use the Object version instead), because this.intersect is read-only.
   // protected Object clone();
 
   @Override
   public String repr(@GuardSatisfied CommonStringSequence this) {
-    return "CommonStringSequence " + varNames() + ": elts=\"" + elts;
+    return "CommonStringSequence " + varNames() + ": count=\"" + count;
   }
 
   private String printIntersect(@GuardSatisfied CommonStringSequence this) {
@@ -71,15 +75,11 @@ public class CommonStringSequence extends SingleStringSequence {
       return "{}";
     }
 
-    String result = "{";
+    StringJoiner result = new StringJoiner(", ", "{", "}");
     for (int i = 0; i < intersect.length; i++) {
-      result += intersect[i];
-      if (i != intersect.length - 1) {
-        result += ", ";
-      }
+      result.add(intersect[i]);
     }
-    result += "}";
-    return result;
+    return result.toString();
   }
 
   @SideEffectFree
@@ -108,14 +108,11 @@ public class CommonStringSequence extends SingleStringSequence {
       return var().csharp_name() + ".Contains(" + intersect[0] + ")";
     }
 
-    String exp = "{";
-    for (int i = 0; i < intersect.length; i++) {
-      exp += " " + intersect[i] + " ";
-      if (i != intersect.length - 1) {
-        exp += ",";
-      }
+    StringJoiner exp = new StringJoiner(", ", "{", "}");
+    for (String i : intersect) {
+      exp.add(i);
     }
-    exp += "}";
+
     return "Contract.ForAll(new[] " + exp + " , x => " + var().csharp_name() + ".Contains(x))";
   }
 
@@ -164,7 +161,7 @@ public class CommonStringSequence extends SingleStringSequence {
       }
       intersect = Intern.intern(ArraysPlume.subarray(tmp, 0, size));
     }
-    elts++;
+    count++;
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -183,5 +180,21 @@ public class CommonStringSequence extends SingleStringSequence {
   public boolean isSameFormula(Invariant other) {
     assert other instanceof CommonStringSequence;
     return true;
+  }
+
+  @Override
+  public @Nullable @NonPrototype CommonStringSequence merge(
+      @Prototype CommonStringSequence this,
+      List<@NonPrototype Invariant> invs,
+      PptSlice parent_ppt) {
+    CommonStringSequence result = (CommonStringSequence) super.merge(invs, parent_ppt);
+    for (int i = 1; i < invs.size(); i++) {
+      CommonStringSequence inv = (CommonStringSequence) invs.get(i);
+      InvariantStatus status = result.add_modified(inv.intersect, inv.count);
+      if (status == InvariantStatus.FALSIFIED) {
+        return null;
+      }
+    }
+    return result;
   }
 }

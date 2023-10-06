@@ -547,7 +547,8 @@ public class InvariantAddAndCheckTester {
       try {
         return (InvariantStatus) addModified.invoke(invariantToTest, params);
       } catch (Exception e) {
-        throw new RuntimeException(" error in " + invariantToTest.getClass() + ": " + e);
+        throw new RuntimeException(
+            "getAddStatus: error invoking addModified on " + invariantToTest.getClass(), e);
       }
     }
 

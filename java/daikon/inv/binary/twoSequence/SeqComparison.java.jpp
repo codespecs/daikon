@@ -290,14 +290,14 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
 
   boolean orderMatters;
 
-  protected SEQSEQINTEQUAL(PptSlice ppt, boolean order) {
+  protected SEQSEQINTEQUAL(PptSlice ppt, boolean orderMatters) {
     super(ppt);
-    orderMatters = order;
+    this.orderMatters = orderMatters;
   }
 
-  protected @Prototype SEQSEQINTEQUAL(boolean order) {
+  protected @Prototype SEQSEQINTEQUAL(boolean orderMatters) {
     super();
-    orderMatters = order;
+    this.orderMatters = orderMatters;
   }
 
   #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
@@ -779,4 +779,12 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
   #else
     private static @Nullable NISuppressionSet suppressions = null;
   #endif
+
+
+  @Override
+  public @Nullable @NonPrototype SEQSEQINTEQUAL merge(
+      @Prototype SEQSEQINTEQUAL this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
+    // Ignore the orderMatters field, because it is always the same (and is always true).
+    return (SEQSEQINTEQUAL) super.merge(invs, parent_ppt);
+  }
 }

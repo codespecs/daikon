@@ -8,11 +8,16 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Predicate;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.MathPlume;
+import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -32,7 +37,7 @@ public class Modulus extends SingleScalar {
 
   // An arbitrarily-chosen value used for computing the differences among
   // all the values.  Arbitrary initial value 2222 will be replaced by the
-  // first actual value seen.
+  // first actual value seen.  Once `remainder` is set, this is of no interest.
   long value1 = 2222;
   // used for initializing value1
   boolean no_samples_seen = true;
@@ -162,7 +167,8 @@ public class Modulus extends SingleScalar {
     if (modulus == 1) {
       // We shouldn't ever get to this case; the invariant should have been
       // destroyed instead.
-      throw new Error("Modulus = 1");
+      throw new Error(
+          String.format("Modulus = 1 for %s in add_modified(%d, %d)", this, value, count));
       // assert falsified;
       // // We already know this confidence fails
       // return;
@@ -192,11 +198,11 @@ public class Modulus extends SingleScalar {
         assert new_modulus > 0;
       }
       if (new_modulus != modulus) {
+        modulus = new_modulus;
         if (new_modulus == 1) {
           return InvariantStatus.FALSIFIED;
         } else {
           remainder = remainder % new_modulus;
-          modulus = new_modulus;
         }
       }
     }
@@ -293,5 +299,75 @@ public class Modulus extends SingleScalar {
               + " without the offset");
     }
     return null;
+  }
+
+  @Override
+  public @Nullable @NonPrototype Modulus merge(
+      @Prototype Modulus this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
+
+    Modulus first = (Modulus) invs.get(0);
+
+    long new_modulus = 0;
+    boolean some_value_set = false;
+    long some_value = 0;
+    for (Invariant inv : invs) {
+      Modulus m = (Modulus) inv;
+
+      if ((!some_value_set) && (!m.no_samples_seen)) {
+        some_value = m.value1;
+      }
+
+      if (m.modulus == 0) {
+        continue;
+      } else if (new_modulus == 0) {
+        new_modulus = m.modulus;
+      } else {
+        new_modulus = MathPlume.gcd(new_modulus, m.modulus);
+      }
+    }
+    if (new_modulus == 0 || new_modulus == 1) {
+      return null;
+    }
+
+    Modulus result = (Modulus) first.clone();
+    result.modulus = new_modulus;
+    result.remainder = some_value % result.modulus;
+
+    for (Invariant inv : invs) {
+      Modulus m = (Modulus) inv;
+      if (!m.no_samples_seen) {
+        InvariantStatus status = result.add_modified(m.remainder, 1);
+        if (status == InvariantStatus.FALSIFIED) {
+          return null;
+        }
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Returns a new list containing only the elements for which the filter returns true. To modify
+   * the collection in place, use {@code Collection#removeIf}.
+   *
+   * <p>Using streams gives an equivalent list but is less efficient and more verbose:
+   *
+   * <pre>{@code
+   * coll.stream().filter(filter).collect(Collectors.toList());
+   * }</pre>
+   *
+   * @param <T> the type of elements
+   * @param coll a collection
+   * @param filter a predicate
+   * @return a new list with the elements for which the filter returns true
+   */
+  public static <T> List<T> listFilter(Collection<T> coll, Predicate<? super T> filter) {
+    List<T> result = new ArrayList<>();
+    for (T elt : coll) {
+      if (filter.test(elt)) {
+        result.add(elt);
+      }
+    }
+    return result;
   }
 }

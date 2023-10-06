@@ -5,13 +5,16 @@ import daikon.VarInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import java.util.List;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
 import org.plumelib.util.MathPlume;
+import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
 /**
@@ -229,5 +232,21 @@ public class NonModulus extends SingleScalar {
     }
 
     return false;
+  }
+
+  // these fields might store state: elements, modulus, remainder, no_result_yet, results_accurate
+  public @Nullable @NonPrototype NonModulus merge(
+      @Prototype NonModulus this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
+    NonModulus result = (NonModulus) super.merge(invs, parent_ppt);
+    for (Invariant inv : invs) {
+      NonModulus r = (NonModulus) inv;
+      if (result.modulus != r.modulus
+          || result.remainder != r.remainder
+          || result.no_result_yet != r.no_result_yet
+          || result.results_accurate != r.results_accurate) {
+        return null;
+      }
+    }
+    return result;
   }
 }

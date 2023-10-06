@@ -8,6 +8,7 @@ import daikon.PptTopLevel;
 import daikon.VarInfo;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -327,5 +328,11 @@ public class DummyInvariant extends Invariant {
   protected @NonPrototype DummyInvariant instantiate_dyn(
       @Prototype DummyInvariant this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
+  }
+
+  @Override
+  public @Nullable @NonPrototype DummyInvariant merge(
+      @Prototype DummyInvariant this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
+    throw new Error("Don't merge DummyInvariant invariants");
   }
 }
