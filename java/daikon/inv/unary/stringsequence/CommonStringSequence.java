@@ -35,7 +35,7 @@ public class CommonStringSequence extends SingleStringSequence {
   private int count = 0;
 
   /** Null means no samples have been seen yet. Empty array means intersection is empty. */
-  private String @MonotonicNonNull @Interned [] intersect = null;
+  private @Interned String @MonotonicNonNull @Interned [] intersect = null;
 
   protected CommonStringSequence(PptSlice ppt) {
     super(ppt);
