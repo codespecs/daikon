@@ -9,6 +9,9 @@ add: -50; no_change; a >= -100
 add: -8; no_change; a >= -100
 end
 
+# Note: "add" is permitted to fail for any invariant that has been falsified.
+# Modulus actually does so, so don't have multipile "falsified" lines for Modulus.
+
 daikon.inv.unary.scalar.Modulus
 int
 add: 6; no_change; a == 0  (mod 0)
@@ -22,6 +25,20 @@ add: 18; no_change; a == 0  (mod 6)
 add: 21; no_change; a == 0  (mod 3)
 add: 9; no_change; a == 0  (mod 3)
 add: 1; falsified; a == 0  (mod 3)
+end
+
+daikon.inv.unary.scalar.Modulus
+int
+add: 6; no_change; a == 0  (mod 0)
+add: 12; no_change; a == 0  (mod 6)
+add: 30; no_change; a == 0  (mod 6)
+add: 36; no_change; a == 0  (mod 6)
+add: 72; no_change; a == 0  (mod 6)
+add: 66; no_change; a == 0  (mod 6)
+add: 12; no_change; a == 0  (mod 6)
+add: 18; no_change; a == 0  (mod 6)
+add: 21; no_change; a == 0  (mod 3)
+add: 9; no_change; a == 0  (mod 3)
 add: 11; falsified; a == 0  (mod 3)
 end
 
