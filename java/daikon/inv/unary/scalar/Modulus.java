@@ -329,7 +329,7 @@ public class Modulus extends SingleScalar {
       return null;
     }
 
-    Modulus result = (Modulus) first.clone();
+    Modulus result = (Modulus) super.merge(invs, parent_ppt);
     result.modulus = new_modulus;
     result.remainder = some_value % result.modulus;
 
@@ -346,6 +346,7 @@ public class Modulus extends SingleScalar {
     return result;
   }
 
+  // TODO: Move this to plume-util.
   /**
    * Returns a new list containing only the elements for which the filter returns true. To modify
    * the collection in place, use {@code Collection#removeIf}.

@@ -299,7 +299,9 @@ public abstract class PptSlice extends Ppt {
       inv.repCheck();
       if (inv.ppt != this) {
         throw new Error(
-            String.format("inv.ppt=%s, this=%s, for inv=%s in invs=%s", inv.ppt, this, inv, invs));
+            String.format(
+                "inv.ppt != this.  inv.ppt=%s;  this=%s;  for inv=%s [%s]  in invs=%s",
+                inv.ppt, this, inv, inv.getClass(), invs));
       }
     }
   }
