@@ -1855,9 +1855,16 @@ public final class Daikon {
     // Process each ppt that doesn't have a parent
     // (mergeInvs is called on a root, and recursively processes children)
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      // System.out.printf("considering ppt %s parents: %s, children: %s%n",
-      //                     ppt.name, ppt.parents, ppt.children);
       if (ppt.parents.size() == 0) {
+        boolean debug =
+            ppt.name()
+                .startsWith(
+                    "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
+        if (debug) {
+          System.out.printf(
+              "createUpperPpts: %s%n  parents: %s%n  children: %s%n",
+              ppt.name, ppt.parents, ppt.children);
+        }
         ppt.mergeInvs();
       }
     }

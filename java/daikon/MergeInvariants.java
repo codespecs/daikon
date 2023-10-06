@@ -67,6 +67,8 @@ public final class MergeInvariants {
           OptionalDataException,
           IOException,
           ClassNotFoundException {
+    LogHelper.setLevel("daikon.MergeInvariants", FINE);
+    LogHelper.setLevel("daikon.MergeInvariants.progress", FINE);
     try {
       mainHelper(args);
     } catch (Daikon.DaikonTerminationException e) {
@@ -237,12 +239,21 @@ public final class MergeInvariants {
         } else {
           PptMap pmap = FileIO.read_serialized_pptmap(file, true);
           for (PptTopLevel ppt : pmap.pptIterable()) {
+            boolean debug =
+                ppt.name()
+                    .startsWith(
+                        "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
+
             if (merge_ppts.containsName(ppt.name())) {
-              // System.out.printf("Not adding ppt %s from %s%n", ppt, file);
+              if (debug) {
+                System.out.printf("Not adding ppt %s from %s%n", ppt, file);
+              }
               continue;
             }
+            if (debug) {
+              System.out.printf("Adding ppt %s from %s%n", ppt, file);
+            }
             merge_ppts.add(ppt);
-            // System.out.printf("Adding ppt %s from %s%n", ppt, file);
 
             // Make sure that the parents of this ppt are already in
             // the map.  This will be true if all possible children of
@@ -285,6 +296,14 @@ public final class MergeInvariants {
     debugProgress.fine("Building hierarchy between leaves of the maps");
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
 
+      boolean debug =
+          ppt.name()
+              .startsWith(
+                  "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
+      if (debug) {
+        System.out.printf("MergeInvariants processing ppt " + ppt);
+      }
+
       // Skip everything that is not a final exit point
       if (!ppt.ppt_name.isExitPoint()) {
         assert ppt.children.size() > 0 : ppt;
@@ -295,8 +314,9 @@ public final class MergeInvariants {
         continue;
       }
 
-      // System.out.printf("Including ppt %s, %d children%n", ppt,
-      //                   ppt.children.size());
+      if (debug) {
+        System.out.printf("Including ppt %s, %d children%n", ppt, ppt.children.size());
+      }
 
       // Splitters should not have any children to begin with
       if (ppt.has_splitters()) {
@@ -312,7 +332,9 @@ public final class MergeInvariants {
       for (int j = 0; j < pptmaps.size(); j++) {
         PptMap pmap = pptmaps.get(j);
         PptTopLevel child = pmap.get(ppt.name());
-        // System.out.printf("found child %s from pmap %d%n", child, j);
+        if (debug) {
+          System.out.printf("found child %s from pmap %d%n", child, j);
+        }
         if (child == null) {
           continue;
         }
@@ -350,8 +372,13 @@ public final class MergeInvariants {
           assert ppt.splitters != null; // because ppt.has_splitters() = true
           setup_conditional_merge(ppt, child);
         } else {
+          // The returned value is ignored, but it is already stored in the parent and child.
           PptRelation.newMergeChildRel(ppt, child);
         }
+      }
+
+      if (debug) {
+        System.out.println("children of " + ppt + " = " + ppt.children);
       }
 
       // Make sure at least one child was found
@@ -378,9 +405,23 @@ public final class MergeInvariants {
         }
       }
     }
+    System.out.println("PPT Hierarchy");
+    for (PptTopLevel ppt : merge_ppts.pptIterable()) {
+      boolean debug =
+          ppt.name()
+              .startsWith(
+                  "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
+
+      if (ppt.parents.size() == 0) {
+        System.out.println("  TODO: " + ppt);
+        // TODO:
+        // ppt.debug_print_tree(debug, 0, null);
+      }
+    }
 
     // Merge the invariants
     debugProgress.fine("Merging invariants");
+    System.out.printf("Merging invariants; about to call Daikon.createUpperPpts");
     Daikon.createUpperPpts(merge_ppts);
 
     // Equality post processing
