@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -327,7 +328,8 @@ public class Modulus extends SingleScalar {
       return null;
     }
 
-    Modulus result = (Modulus) super.merge(invs, parent_ppt);
+    @SuppressWarnings("nullness") // super.merge does not return null
+    @NonNull Modulus result = (Modulus) super.merge(invs, parent_ppt);
     result.modulus = new_modulus;
     result.remainder = some_value % result.modulus;
 

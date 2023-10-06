@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -237,7 +238,8 @@ public class NonModulus extends SingleScalar {
   @Override
   public @Nullable @NonPrototype NonModulus merge(
       @Prototype NonModulus this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
-    NonModulus result = (NonModulus) super.merge(invs, parent_ppt);
+    @SuppressWarnings("nullness") // super.merge does not return null
+    @NonNull NonModulus result = (NonModulus) super.merge(invs, parent_ppt);
     for (Invariant inv : invs) {
       NonModulus r = (NonModulus) inv;
       if (result.modulus != r.modulus

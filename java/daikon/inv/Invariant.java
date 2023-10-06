@@ -35,6 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.formatter.qual.FormatMethod;
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -2172,7 +2173,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Throws an exception if the class directly defines fields but does not override {@link #merge}.
    */
-  private void checkMergeOverridden() {
+  private void checkMergeOverridden(
+      @UnderInitialization(daikon.inv.Invariant.class) Invariant this) {
     Class<?> thisClass = getClass();
     if (!checkedMergeOverridden.containsKey(thisClass)) {
       checkedMergeOverridden.put(thisClass, true);

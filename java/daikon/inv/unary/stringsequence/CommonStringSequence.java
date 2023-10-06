@@ -10,6 +10,7 @@ import java.util.StringJoiner;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -191,12 +192,16 @@ public class CommonStringSequence extends SingleStringSequence {
       @Prototype CommonStringSequence this,
       List<@NonPrototype Invariant> invs,
       PptSlice parent_ppt) {
-    CommonStringSequence result = (CommonStringSequence) super.merge(invs, parent_ppt);
+    @SuppressWarnings("nullness") // super.merge does not return null
+    @NonNull CommonStringSequence result = (CommonStringSequence) super.merge(invs, parent_ppt);
     for (int i = 1; i < invs.size(); i++) {
       CommonStringSequence inv = (CommonStringSequence) invs.get(i);
-      InvariantStatus status = result.add_modified(inv.intersect, inv.count);
-      if (status == InvariantStatus.FALSIFIED) {
-        return null;
+      @Interned String @MonotonicNonNull @Interned [] invIntersect = inv.intersect;
+      if (invIntersect != null) {
+        InvariantStatus status = result.add_modified(invIntersect, inv.count);
+        if (status == InvariantStatus.FALSIFIED) {
+          return null;
+        }
       }
     }
     return result;

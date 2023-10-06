@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.StringJoiner;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -154,7 +155,8 @@ public final class CompleteOneOfString extends SingleString {
       @Prototype CompleteOneOfString this,
       List<@NonPrototype Invariant> invs,
       PptSlice parent_ppt) {
-    CompleteOneOfString result = (CompleteOneOfString) super.merge(invs, parent_ppt);
+    @SuppressWarnings("nullness") // super.merge does not return null
+    @NonNull CompleteOneOfString result = (CompleteOneOfString) super.merge(invs, parent_ppt);
     for (int i = 1; i < invs.size(); i++) {
       for (Info info : ((CompleteOneOfString) invs.get(i)).vals) {
         InvariantStatus status = result.add_modified(info.val, info.cnt);
