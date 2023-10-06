@@ -234,7 +234,7 @@ public class NonModulus extends SingleScalar {
     return false;
   }
 
-  // these fields might store state: elements, modulus, remainder, no_result_yet, results_accurate
+  @Override
   public @Nullable @NonPrototype NonModulus merge(
       @Prototype NonModulus this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
     NonModulus result = (NonModulus) super.merge(invs, parent_ppt);
