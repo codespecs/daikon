@@ -140,6 +140,9 @@ import typequals.prototype.qual.Prototype;
 public class PptTopLevel extends Ppt {
   static final long serialVersionUID = 20071129L;
 
+  /** If true, print diagnostic information to standard out. */
+  private static final boolean debugStdout = false;
+
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   /**
@@ -1125,7 +1128,7 @@ public class PptTopLevel extends Ppt {
                   + ": "
                   + slice.var_infos[0].equalitySet.shortString());
         }
-        if (false) {
+        if (debugStdout) {
           for (Invariant inv : slice.invs) {
             debugInstantiate.fine("-- invariant " + inv.format());
           }
@@ -2113,7 +2116,7 @@ public class PptTopLevel extends Ppt {
 
     @SuppressWarnings("nullness") // dependent: if inv is non-null, then slice is non-null
     boolean found = (inv != null) && slice.is_inv_true(inv);
-    if (false) {
+    if (debugStdout) {
       System.out.printf(
           "Looking for %s [%d] <= %s [%d] in ppt %s%n",
           v1.name(), v1_shift, v2.name(), v2_shift, this.name());
@@ -3510,7 +3513,7 @@ public class PptTopLevel extends Ppt {
             "%s %s: %s: %d: %s", indent_str, ppt_name, rel_type, num_samples(), var_rel));
 
     // Put out each slice.
-    if (false) {
+    if (debugStdout) {
       for (Iterator<PptSlice> i = views_iterator(); i.hasNext(); ) {
         PptSlice cslice = i.next();
         l.fine(indent_str + "++ " + cslice);
@@ -3647,12 +3650,13 @@ public class PptTopLevel extends Ppt {
     // Merge the ModBitTracker.
     // We'll reuse one dummy ValueTuple throughout, side-effecting its mods
     // array.
-    boolean debug =
-        name()
-            .startsWith(
-                "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
+    boolean debugLocal =
+        debugStdout
+            && name()
+                .startsWith(
+                    "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
 
-    if (debug) {
+    if (debugLocal) {
       System.out.printf("mergeInvs in ppt %s%n", name());
       System.out.printf("  num_tracevars = %d%n", num_tracevars);
       System.out.printf("  mbtracker.num_vars() = %d%n", mbtracker.num_vars());
@@ -3669,7 +3673,7 @@ public class PptTopLevel extends Ppt {
     for (PptRelation rel : children) {
       ModBitTracker child_mbtracker = rel.child.mbtracker;
       int child_mbsize = child_mbtracker.num_samples();
-      if (debug) {
+      if (debugLocal) {
         System.out.println(
             "mergeInvs child #"
                 + children.indexOf(rel)
@@ -3871,13 +3875,14 @@ public class PptTopLevel extends Ppt {
   @RequiresNonNull("equality_view")
   public void merge_invs_multiple_children() {
 
-    boolean debug =
-        name()
-            .startsWith(
-                "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
+    boolean debugLocal =
+        debugStdout
+            && name()
+                .startsWith(
+                    "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
 
     // Debug print ppt and children
-    if (debug) {
+    if (debugLocal) {
       System.out.printf("Merging invariants for ppt %s%n", this);
       for (PptRelation rel : children) {
         System.out.printf("  child: %s%n", rel);
@@ -3895,7 +3900,7 @@ public class PptTopLevel extends Ppt {
         continue;
       }
       if (constants != null && constants.is_missing(l)) {
-        if (debug) {
+        if (debugLocal) {
           System.out.printf("skipping leader %s in ppt %s, always missing%n", l, name());
         }
         continue;
@@ -3919,7 +3924,7 @@ public class PptTopLevel extends Ppt {
       }
       suppressed_invs.put(child, NIS.create_suppressed_invs(child));
     }
-    if (debug) {
+    if (debugLocal) {
       System.out.println("suppressed_invs = " + suppressed_invs);
     }
 
@@ -4003,10 +4008,14 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Merges one child. Since there is only one child, the merge is trivial (each invariant can be
-   * just copied to the parent).
+   * Merges one child. Since there is only one child, the merge is trivial. Just copy each invariant
+   * to the parent.
    */
   public void merge_invs_one_child() {
+
+    if (debugStdout) {
+      System.out.printf("merge_invs_one_child " + this);
+    }
 
     assert views.size() == 0;
     assert children.size() == 1;
