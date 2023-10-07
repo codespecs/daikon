@@ -33,9 +33,13 @@ package daikon.inv.unary.sequence;
 import daikon.*;
 import daikon.inv.*;
 import java.util.Arrays;
+import java.util.List;
+import java.util.StringJoiner;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.ArraysPlume;
@@ -59,15 +63,11 @@ public class CLASSNAME extends SUPERCLASS {
   /** Boolean. Set to true to consider common sequences over hashcodes (pointers). */
   public static boolean dkconfig_hashcode_seqs = false;
 
-  static final boolean debugCommonSequence = false;
+  /** The number of samples observed. */
+  private int count = 0;
 
-  private int elts = 0;
-
-  /**
-   * Null means no samples have been seen yet.
-   * Empty array means intersection is empty.
-   */
-  private PRIMITIVE @MonotonicNonNull [] intersect = null;
+  /** Null means no samples have been seen yet. Empty array means intersection is empty. */
+  private PRIMITIVE @MonotonicNonNull @Interned [] intersect = null;
 
   protected CLASSNAME(PptSlice ppt) {
     super(ppt);
@@ -105,12 +105,12 @@ public class CLASSNAME extends SUPERCLASS {
     return new CLASSNAME(slice);
   }
 
-  // this.intersect is read-only, so don't clone it
+  // Don't define clone (use the Object version instead), because this.intersect is read-only.
   // public Object clone();
 
   @Override
   public String repr(@GuardSatisfied CLASSNAME this) {
-    return CLASSSTRING + " " + varNames() + ": elts=\"" + elts;
+    return CLASSSTRING + " " + varNames() + ": count=\"" + count;
   }
 
   private String printIntersect(@GuardSatisfied CLASSNAME this) {
@@ -118,15 +118,11 @@ public class CLASSNAME extends SUPERCLASS {
       return "{}";
     }
 
-    String result = "{";
+    StringJoiner result = new StringJoiner(", ", "{", "}");
     for (int i = 0; i < intersect.length; i++) {
-      result += intersect[i];
-      if (i != intersect.length - 1) {
-        result += ", ";
-      }
+      result.add("" + intersect[i]);
     }
-    result += "}";
-    return result;
+    return result.toString();
   }
 
   @SideEffectFree
@@ -159,14 +155,10 @@ public class CLASSNAME extends SUPERCLASS {
       return collection + ".Contains(" + intersect[0] + ")";
     }
 
-    String exp = "(";
-    for (int i = 0; i < intersect.length; i++) {
-      exp += " " + intersect[i] + " ";
-      if (i != intersect.length - 1) {
-        exp += ",";
-      }
+    StringJoiner exp = new StringJoiner(", ", "(", ")");
+    for (PRIMITIVE i : intersect) {
+      exp.add("" + i);
     }
-    exp += ")";
 
     String[] split = var().csharp_array_split();
     return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + ".OneOf" + exp + ")";
@@ -260,16 +252,17 @@ public class CLASSNAME extends SUPERCLASS {
       return InvariantStatus.FALSIFIED;
     }
 
-    intersect = ArraysPlume.subarray(tmp, 0, size);
+    intersect = Intern.intern(ArraysPlume.subarray(tmp, 0, size));
 
-    intersect = Intern.intern(intersect);
-    elts++;
+    /// Use a lesser count, because this invariant is frequently a false positive.
+    // this.count += count;
+    this.count++;
     return InvariantStatus.NO_CHANGE;
   }
 
   @Override
   protected double computeConfidence() {
-    return 1 - Math.pow(.9, elts);
+    return 1 - Math.pow(.9, count);
   }
 
   @Pure
@@ -277,5 +270,23 @@ public class CLASSNAME extends SUPERCLASS {
   public boolean isSameFormula(Invariant other) {
     assert other instanceof CLASSNAME;
     return true;
+  }
+
+  @Override
+  public @Nullable @NonPrototype CLASSNAME merge(
+    @Prototype CLASSNAME this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
+    @SuppressWarnings("nullness") // super.merge does not return null
+    @NonNull CLASSNAME result = (CLASSNAME) super.merge(invs, parent_ppt);
+    for (int i=1; i<invs.size(); i++) {
+      CLASSNAME inv = (CLASSNAME) invs.get(i);
+      PRIMITIVE @MonotonicNonNull @Interned [] invIntersect = inv.intersect;
+      if (invIntersect != null) {
+        InvariantStatus status = result.add_modified(invIntersect, inv.count);
+        if (status == InvariantStatus.FALSIFIED) {
+          return null;
+        }
+      }
+    }
+    return result;
   }
 }

@@ -22,14 +22,20 @@ import daikon.simplify.LemmaStack;
 import daikon.simplify.SimpUtil;
 import daikon.suppress.NISuppressionSet;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.formatter.qual.FormatMethod;
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -459,11 +465,13 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   // The "ppt" argument can be null if this is a prototype invariant.
   protected Invariant(PptSlice ppt) {
     this.ppt = ppt;
+    checkMergeOverridden();
   }
 
   @SuppressWarnings("nullness") // weakness in @Unused checking
   protected @Prototype Invariant() {
     this.ppt = null;
+    checkMergeOverridden();
   }
 
   @SuppressWarnings("unused")
@@ -2156,6 +2164,70 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     // very partial initial implementation
     for (VarInfo vi : ppt.var_infos) {
       vi.checkRep();
+    }
+  }
+
+  /** Classes for which {@link #checkMergeOverridden} has been called. */
+  public static IdentityHashMap<Class<?>, Boolean> checkedMergeOverridden = new IdentityHashMap<>();
+
+  /**
+   * Throws an exception if the class directly defines fields but does not override {@link #merge}.
+   */
+  private void checkMergeOverridden(
+      @UnderInitialization(daikon.inv.Invariant.class) Invariant this) {
+    Class<?> thisClass = getClass();
+    if (!checkedMergeOverridden.containsKey(thisClass)) {
+      checkedMergeOverridden.put(thisClass, true);
+
+      // TODO: Could look at all fields and compare them to the fields of Invariant.class.
+      Field[] declaredFields = thisClass.getDeclaredFields();
+      List<Field> statefulFields = new ArrayList<>(4);
+      for (Field declaredField : declaredFields) {
+        if (Modifier.isStatic(declaredField.getModifiers())) {
+          continue;
+        }
+
+        String fieldName = declaredField.getName();
+        if (fieldName.equals("serialVersionUID")) {
+          continue;
+        }
+        if (fieldName.startsWith("$")) {
+          continue;
+        }
+        if (fieldName.startsWith("dkconfig_")) {
+          continue;
+        }
+        if (fieldName.startsWith("debug")) {
+          continue;
+        }
+        if (fieldName.endsWith("Cache")) {
+          continue;
+        }
+
+        statefulFields.add(declaredField);
+      }
+
+      if (statefulFields.isEmpty()) {
+        return;
+      }
+
+      try {
+        @SuppressWarnings(
+            "UnusedVariable" // Method is called for side effect, ignore return value, but give the
+        // unused variable a name for documentation purposes.
+        )
+        Method mergeMethod = thisClass.getDeclaredMethod("merge", List.class, PptSlice.class);
+        // `mergeMethod` is non-null, or else `NoSuchMethodException` was thrown.
+      } catch (NoSuchMethodException e) {
+        StringJoiner fields = new StringJoiner(", ");
+        for (Field f : statefulFields) {
+          fields.add(f.getName());
+        }
+        throw new Error(
+            thisClass.getName()
+                + " defines no merge method, but these fields might store state: "
+                + fields);
+      }
     }
   }
 }
