@@ -15,6 +15,7 @@ import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
 import typequals.prototype.qual.Prototype;
 
+// TODO: Why isn't this generated from CommonSequence.java.jpp?
 /**
  * Represents string sequences that contain a common subset. Prints as {@code {s1, s2, s3, ...}
  * subset of x[]}.
@@ -27,7 +28,8 @@ public class CommonStringSequence extends SingleStringSequence {
   /** Boolean. True iff CommonStringSequence invariants should be considered. */
   public static boolean dkconfig_enabled = false;
 
-  private int elts = 0;
+  /** The number of samples observed. */
+  private int count = 0;
 
   /** Null means no samples have been seen yet. Empty array means intersection is empty. */
   private String @MonotonicNonNull [] intersect = null;
@@ -58,12 +60,12 @@ public class CommonStringSequence extends SingleStringSequence {
     return new CommonStringSequence(slice);
   }
 
-  // Don't write clone, because this.intersect is read-only
+  // Don't define clone (use the Object version instead), because this.intersect is read-only.
   // protected Object clone();
 
   @Override
   public String repr(@GuardSatisfied CommonStringSequence this) {
-    return "CommonStringSequence " + varNames() + ": elts=\"" + elts;
+    return "CommonStringSequence " + varNames() + ": count=\"" + count;
   }
 
   private String printIntersect(@GuardSatisfied CommonStringSequence this) {
@@ -164,7 +166,10 @@ public class CommonStringSequence extends SingleStringSequence {
       }
       intersect = Intern.intern(ArraysPlume.subarray(tmp, 0, size));
     }
-    elts++;
+
+    /// Use a lesser count, because this invariant is frequently a false positive.
+    // this.count += count;
+    this.count++;
     return InvariantStatus.NO_CHANGE;
   }
 
