@@ -727,7 +727,6 @@ std.quantum_expire()void:::EXIT
 std.schedule()void:::ENTER
 ::num_processes >= 0
 ::cur_proc.next.prev != null
-::cur_proc.next.val != 1  (mod 4)
 ::cur_proc.prev.next != null
 ::cur_proc.prev.val >= 0
 ::cur_proc.val >= 0
@@ -741,6 +740,7 @@ std.schedule()void:::ENTER
 std.schedule()void:::EXIT11
 ::num_processes >= 1
 ::cur_proc != null
+orig(::cur_proc.next.val) != 1  (mod 4)
 ===========================================================================
 std.schedule()void:::EXIT12
 ::cur_proc == null
