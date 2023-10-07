@@ -54,7 +54,6 @@ public class Positive extends SingleScalar {
     return new Positive(slice);
   }
 
-  // A printed representation for user output
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied Positive this, OutputFormat format) {
