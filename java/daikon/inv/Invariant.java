@@ -2225,7 +2225,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
         }
         throw new Error(
             thisClass.getSimpleName()
-                + " defines no `merge(List, PptTopLevel)` method,"
+                + " does not override `merge(List, PptTopLevel)`,"
                 + " but these fields might store state: "
                 + fields);
       }
