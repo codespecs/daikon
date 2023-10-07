@@ -82,7 +82,7 @@ public class NONZERO extends SINGLESCALAR {
   public static final Logger debug = Logger.getLogger("daikon.inv.unary.scalar." + NONZEROSTRING);
 
   /** Maximum value ever used for max-min in confidence calculation. */
-  static long range_max = 50;
+  private static final long range_max = 50;
 
   private NONZERO(PptSlice ppt) {
     super(ppt);

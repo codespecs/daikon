@@ -5,6 +5,7 @@ import daikon.PptTopLevel;
 import daikon.VarInfo;
 import daikon.split.PptSplitter;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.formatter.qual.FormatMethod;
@@ -335,5 +336,11 @@ public class Implication extends Joiner {
   @Override
   protected @NonPrototype Invariant instantiate_dyn(@Prototype Implication this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
+  }
+
+  @Override
+  public @Nullable @NonPrototype Implication merge(
+      @Prototype Implication this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
+    throw new Error("do not merge implications");
   }
 }

@@ -2053,7 +2053,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
    * @param parent_ppt slice that will contain the new invariant
    */
   @Override
-  public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
+  public @Nullable ONEOFSCALAR merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create the initial parent invariant from the first child
     ONEOFSCALAR  first = (ONEOFSCALAR) invs.get(0);
