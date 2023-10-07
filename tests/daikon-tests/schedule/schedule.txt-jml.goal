@@ -776,7 +776,6 @@ std.schedule()void:::ENTER
     Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
 ::num_processes >= 0
 ((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
-((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.val % 4 != 1)
 ((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
 ((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
 (::cur_proc != null)  ==>  (::cur_proc.val >= 0)
@@ -796,6 +795,7 @@ assignable ::cur_proc, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.pr
 (::cur_proc.next != null)  ==>  (::cur_proc.next.val >= 0)
 ::cur_proc.prev == null
 ::cur_proc.val >= 0
+((\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (\old(::cur_proc.next.val) % 4 != 1)
 ===========================================================================
 std.schedule()void:::EXIT12
     Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
