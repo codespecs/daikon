@@ -140,8 +140,8 @@ import typequals.prototype.qual.Prototype;
 public class PptTopLevel extends Ppt {
   static final long serialVersionUID = 20071129L;
 
-  /** If true, print diagnostic information. */
-  private static final boolean debug = false;
+  /** If true, print diagnostic information to standard out. */
+  private static final boolean debugStdout = false;
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -1128,7 +1128,7 @@ public class PptTopLevel extends Ppt {
                   + ": "
                   + slice.var_infos[0].equalitySet.shortString());
         }
-        if (debug) {
+        if (debugStdout) {
           for (Invariant inv : slice.invs) {
             debugInstantiate.fine("-- invariant " + inv.format());
           }
@@ -2116,7 +2116,7 @@ public class PptTopLevel extends Ppt {
 
     @SuppressWarnings("nullness") // dependent: if inv is non-null, then slice is non-null
     boolean found = (inv != null) && slice.is_inv_true(inv);
-    if (debug) {
+    if (debugStdout) {
       System.out.printf(
           "Looking for %s [%d] <= %s [%d] in ppt %s%n",
           v1.name(), v1_shift, v2.name(), v2_shift, this.name());
@@ -3513,7 +3513,7 @@ public class PptTopLevel extends Ppt {
             "%s %s: %s: %d: %s", indent_str, ppt_name, rel_type, num_samples(), var_rel));
 
     // Put out each slice.
-    if (debug) {
+    if (debugStdout) {
       for (Iterator<PptSlice> i = views_iterator(); i.hasNext(); ) {
         PptSlice cslice = i.next();
         l.fine(indent_str + "++ " + cslice);
@@ -3650,7 +3650,7 @@ public class PptTopLevel extends Ppt {
     // Merge the ModBitTracker.
     // We'll reuse one dummy ValueTuple throughout, side-effecting its mods
     // array.
-    if (debug) {
+    if (debugStdout) {
       System.out.printf("in ppt %s%n", name());
       System.out.printf("  num_tracevars = %d%n", num_tracevars);
       System.out.printf("  mbtracker.num_vars() = %d%n", mbtracker.num_vars());
@@ -3859,7 +3859,7 @@ public class PptTopLevel extends Ppt {
   public void merge_invs_multiple_children() {
 
     // Debug print ppt and children
-    if (debug) {
+    if (debugStdout) {
       System.out.printf("Merging invariants for ppt %s%n", this);
       for (PptRelation rel : children) {
         System.out.printf("child: %s%n", rel);
@@ -3986,7 +3986,7 @@ public class PptTopLevel extends Ppt {
    */
   public void merge_invs_one_child() {
 
-    if (debug) {
+    if (debugStdout) {
       System.out.printf("merge_invs_one_child " + this);
     }
 
