@@ -413,10 +413,12 @@ public final class MergeInvariants {
               .startsWith(
                   "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
 
-      if (ppt.parents.size() == 0) {
-        System.out.println("  TODO: " + ppt);
-        // TODO:
-        // ppt.debug_print_tree(debug, 0, null);
+      if (debug) {
+        if (ppt.parents.size() == 0) {
+          System.out.println("  TODO: " + ppt);
+          // TODO:
+          // ppt.debug_print_tree(debug, 0, null);
+        }
       }
     }
 
