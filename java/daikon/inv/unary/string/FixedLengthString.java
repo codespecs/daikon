@@ -209,9 +209,7 @@ public class FixedLengthString extends SingleString {
         result.length = fls.length;
 
         // If result.length and fls.length are both not null and they have different values
-      } else if (result.length != null
-          && fls.length != null
-          && (!result.length.equals(fls.length))) {
+      } else if (result.length != null && fls.length != null && !result.length.equals(fls.length)) {
         // Invariant falsified
         result.log("%s", "Child value with length " + fls.length + " destroyed FixedLengthString");
         return null;

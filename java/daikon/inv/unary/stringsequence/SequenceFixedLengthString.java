@@ -250,7 +250,7 @@ public class SequenceFixedLengthString extends SingleStringSequence {
         result.elements_length = sfls.elements_length;
       } else if (result.elements_length != null
           && sfls.elements_length != null
-          && (!result.elements_length.equals(sfls.elements_length))) {
+          && !result.elements_length.equals(sfls.elements_length)) {
         // Invariant falsified
         result.log(
             "%s",
