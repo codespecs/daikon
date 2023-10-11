@@ -242,7 +242,7 @@ PolyCalc.RatNum.parse(java.lang.String):::EXIT264
 (EQ (hash |__orig__ratStr|) (hashcode 1001))
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT267
-ratStr.toString is Numeric
+(isNumeric (select |toString| |ratStr|))
 (EQ (select |denom| |return|) 1)
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT273
@@ -290,7 +290,7 @@ PolyCalc.RatNum.unparse():::EXIT135
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137
 (EQ (select |denom| |this|) 1)
-return.toString is Numeric
+(isNumeric (select |toString| |return|))
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT
 (EQ (select |numer| |this|) (select |numer| |__orig__this|))

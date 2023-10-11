@@ -286,7 +286,7 @@ warning: method daikon.inv.unary.string.OneOfString.format(OutputFormat:ESC/Java
 PolyCalc.RatNum.parse(java.lang.String):::EXIT267
     Variables: ratStr ratStr.toString return return.numer return.denom orig(ratStr) orig(ratStr.toString)
       Unmodified variables: ratStr ratStr.toString
-ratStr.toString is Numeric
+daikon.inv.unary.string.IsNumeric.PATTERN.matcher(ratStr.toString).matches()
 \result.denom == 1
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT273
@@ -344,7 +344,7 @@ PolyCalc.RatNum.unparse():::EXIT137
     Variables: this this.numer this.denom return return.toString orig(this) orig(this.numer) orig(this.denom)
       Unmodified variables: this this.numer this.denom
 this.denom == 1
-return.toString is Numeric
+daikon.inv.unary.string.IsNumeric.PATTERN.matcher(return.toString).matches()
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT
     Variables: this this.numer this.denom return return.toString orig(this) orig(this.numer) orig(this.denom)
@@ -1050,7 +1050,7 @@ warning: method daikon.inv.unary.sequence.OneOfSequence.format(OutputFormat:ESC/
 warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.terms.wrapped[].getClass().getName() == []
 \result != null
 warning: method daikon.inv.unary.string.OneOfString.format(OutputFormat:ESC/Java) needs to be implemented: return.toString == "0"
-return.toString is Numeric
+daikon.inv.unary.string.IsNumeric.PATTERN.matcher(return.toString).matches()
 ===========================================================================
 PolyCalc.RatPoly.unparse():::EXIT196
     Variables: this this.terms this.terms.wrapped this.terms.wrapped[] this.terms.wrapped[].getClass().getName() return return.toString orig(this) orig(this.terms) orig(this.terms.wrapped) orig(this.terms.wrapped[]) orig(this.terms.wrapped[].getClass().getName()) size(this.terms.wrapped[]) size(this.terms.wrapped[])-1 orig(size(this.terms.wrapped[])) orig(size(this.terms.wrapped[]))-1
