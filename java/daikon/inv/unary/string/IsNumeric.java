@@ -132,7 +132,6 @@ public class IsNumeric extends SingleString {
   @Override
   public IsNumeric clone(@GuardSatisfied IsNumeric this) {
     IsNumeric result = (IsNumeric) super.clone();
-    result.alwaysEmpty = alwaysEmpty;
     return result;
   }
 
@@ -152,21 +151,6 @@ public class IsNumeric extends SingleString {
     IsNumeric first = (IsNumeric) invs.get(0);
     IsNumeric result = first.clone();
     result.ppt = parent_ppt;
-
-    // Return result if the value of alwaysEmpty is false
-    if (!result.alwaysEmpty) {
-      return result;
-    }
-
-    // Loop through the rest of the child invariants
-    for (int i = 1; i < invs.size(); i++) {
-      IsNumeric in = (IsNumeric) invs.get(i);
-      // If in.alwaysEmpty is false, set the value of result.isEmpty to false and return it
-      if (!in.alwaysEmpty) {
-        result.alwaysEmpty = false;
-        break;
-      }
-    }
 
     return result;
   }

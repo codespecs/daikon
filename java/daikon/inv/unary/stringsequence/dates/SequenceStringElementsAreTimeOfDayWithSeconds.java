@@ -146,7 +146,6 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
       @GuardSatisfied SequenceStringElementsAreTimeOfDayWithSeconds this) {
     SequenceStringElementsAreTimeOfDayWithSeconds result =
         (SequenceStringElementsAreTimeOfDayWithSeconds) super.clone();
-    result.alwaysEmpty = alwaysEmpty;
     result.allElementsAreNull = allElementsAreNull;
     return result;
   }
@@ -171,7 +170,7 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
     result.ppt = parent_ppt;
 
     // Return result if both alwaysEmpty and allElementsAreNull are false
-    if (!result.alwaysEmpty && !result.allElementsAreNull) {
+    if (!result.allElementsAreNull) {
       return result;
     }
 
@@ -179,16 +178,12 @@ public class SequenceStringElementsAreTimeOfDayWithSeconds extends SingleStringS
     for (int i = 1; i < invs.size(); i++) {
       SequenceStringElementsAreTimeOfDayWithSeconds ssead =
           (SequenceStringElementsAreTimeOfDayWithSeconds) invs.get(i);
-      // If ssead.alwaysEmpty is false, set the value of result.alwaysEmpty to false
-      if (!ssead.alwaysEmpty) {
-        result.alwaysEmpty = false;
-      }
       // If ssead.allElementsAreNull is false, set the value of result.allElementsAreNull to false
       if (!ssead.allElementsAreNull) {
         result.allElementsAreNull = false;
       }
       // If both result.alwaysEmpty and result.allElementsAreNull are false, return result
-      if (!result.alwaysEmpty && !result.allElementsAreNull) {
+      if (!result.allElementsAreNull) {
         break;
       }
     }

@@ -142,8 +142,6 @@ public class SequenceStringElementsAreUrl extends SingleStringSequence {
   @Override
   public SequenceStringElementsAreUrl clone(@GuardSatisfied SequenceStringElementsAreUrl this) {
     SequenceStringElementsAreUrl result = (SequenceStringElementsAreUrl) super.clone();
-    result.alwaysEmpty = alwaysEmpty;
-    result.allElementsAreNull = allElementsAreNull;
     return result;
   }
 
@@ -165,23 +163,19 @@ public class SequenceStringElementsAreUrl extends SingleStringSequence {
     result.ppt = parent_ppt;
 
     // Return result if both alwaysEmpty and allElementsAreNull are false
-    if (!result.alwaysEmpty && !result.allElementsAreNull) {
+    if (!result.allElementsAreNull) {
       return result;
     }
 
     // Loop through the rest of the child invariants
     for (int i = 1; i < invs.size(); i++) {
       SequenceStringElementsAreUrl sseau = (SequenceStringElementsAreUrl) invs.get(i);
-      // If sseau.alwaysEmpty is false, set the value of result.alwaysEmpty to false
-      if (!sseau.alwaysEmpty) {
-        result.alwaysEmpty = false;
-      }
       // If sseau.allElementsAreNull is false, set the value of result.allElementsAreNull to false
       if (!sseau.allElementsAreNull) {
         result.allElementsAreNull = false;
       }
       // If both result.alwaysEmpty and result.allElementsAreNull are false, return result
-      if (!result.alwaysEmpty && !result.allElementsAreNull) {
+      if (!result.allElementsAreNull) {
         break;
       }
     }
