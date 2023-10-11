@@ -6,6 +6,7 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.inv.unary.string.IsUrl;
+import java.util.List;
 import java.util.regex.Matcher;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -145,5 +146,55 @@ public class SequenceStringElementsAreUrl extends SingleStringSequence {
   public boolean isSameFormula(Invariant other) {
     assert other instanceof SequenceStringElementsAreUrl;
     return true;
+  }
+
+  @SideEffectFree
+  @Override
+  public SequenceStringElementsAreUrl clone(@GuardSatisfied SequenceStringElementsAreUrl this) {
+    SequenceStringElementsAreUrl result = (SequenceStringElementsAreUrl) super.clone();
+    result.alwaysEmpty = alwaysEmpty;
+    result.allElementsAreNull = allElementsAreNull;
+    return result;
+  }
+
+  /**
+   * Merge the invariants in invs to form a new invariant. Each must be a
+   * SequenceStringElementsAreUrl invariant. This code finds all of the SequenceStringElementsAreUrl
+   * values from each of the invariants and returns the merged invariant (if any).
+   *
+   * @param invs list of invariants to merge. The invariants must all be of the same type and should
+   *     come from the children of parent_ppt.
+   * @param parent_ppt slice that will contain the new invariant
+   */
+  @Override
+  public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
+
+    // Create the initial parent invariant from the first child
+    SequenceStringElementsAreUrl first = (SequenceStringElementsAreUrl) invs.get(0);
+    SequenceStringElementsAreUrl result = first.clone();
+    result.ppt = parent_ppt;
+
+    // Return result if both alwaysEmpty and allElementsAreNull are false
+    if (!result.alwaysEmpty && !result.allElementsAreNull) {
+      return result;
+    }
+
+    // Loop through the rest of the child invariants
+    for (int i = 1; i < invs.size(); i++) {
+      SequenceStringElementsAreUrl sseau = (SequenceStringElementsAreUrl) invs.get(i);
+      // If sseau.alwaysEmpty is false, set the value of result.alwaysEmpty to false
+      if (!sseau.alwaysEmpty) {
+        result.alwaysEmpty = false;
+      }
+      // If sseau.allElementsAreNull is false, set the value of result.allElementsAreNull to false
+      if (!sseau.allElementsAreNull) {
+        result.allElementsAreNull = false;
+      }
+      // If both result.alwaysEmpty and result.allElementsAreNull are false, return result
+      if (!result.alwaysEmpty && !result.allElementsAreNull) {
+        break;
+      }
+    }
+    return result;
   }
 }
