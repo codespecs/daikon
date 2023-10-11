@@ -7,6 +7,7 @@ import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.inv.unary.string.dates.IsTimeOfDay;
 import daikon.inv.unary.stringsequence.SingleStringSequence;
+import java.util.List;
 import java.util.regex.Matcher;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -148,5 +149,57 @@ public class SequenceStringElementsAreTimeOfDay extends SingleStringSequence {
   public boolean isSameFormula(Invariant other) {
     assert other instanceof SequenceStringElementsAreTimeOfDay;
     return true;
+  }
+
+  @SideEffectFree
+  @Override
+  public SequenceStringElementsAreTimeOfDay clone(
+      @GuardSatisfied SequenceStringElementsAreTimeOfDay this) {
+    SequenceStringElementsAreTimeOfDay result = (SequenceStringElementsAreTimeOfDay) super.clone();
+    result.alwaysEmpty = alwaysEmpty;
+    result.allElementsAreNull = allElementsAreNull;
+    return result;
+  }
+
+  /**
+   * Merge the invariants in invs to form a new invariant. Each must be a
+   * SequenceStringElementsAreTimeOfDay invariant. This code finds all of the
+   * SequenceStringElementsAreTimeOfDay values from each of the invariants and returns the merged
+   * invariant (if any).
+   *
+   * @param invs list of invariants to merge. The invariants must all be of the same type and should
+   *     come from the children of parent_ppt.
+   * @param parent_ppt slice that will contain the new invariant
+   */
+  @Override
+  public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
+
+    // Create the initial parent invariant from the first child
+    SequenceStringElementsAreTimeOfDay first = (SequenceStringElementsAreTimeOfDay) invs.get(0);
+    SequenceStringElementsAreTimeOfDay result = first.clone();
+    result.ppt = parent_ppt;
+
+    // Return result if both alwaysEmpty and allElementsAreNull are false
+    if (!result.alwaysEmpty && !result.allElementsAreNull) {
+      return result;
+    }
+
+    // Loop through the rest of the child invariants
+    for (int i = 1; i < invs.size(); i++) {
+      SequenceStringElementsAreTimeOfDay ssead = (SequenceStringElementsAreTimeOfDay) invs.get(i);
+      // If ssead.alwaysEmpty is false, set the value of result.alwaysEmpty to false
+      if (!ssead.alwaysEmpty) {
+        result.alwaysEmpty = false;
+      }
+      // If ssead.allElementsAreNull is false, set the value of result.allElementsAreNull to false
+      if (!ssead.allElementsAreNull) {
+        result.allElementsAreNull = false;
+      }
+      // If both result.alwaysEmpty and result.allElementsAreNull are false, return result
+      if (!result.alwaysEmpty && !result.allElementsAreNull) {
+        break;
+      }
+    }
+    return result;
   }
 }

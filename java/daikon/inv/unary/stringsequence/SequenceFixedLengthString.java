@@ -10,6 +10,7 @@ import daikon.suppress.NISuppressee;
 import daikon.suppress.NISuppression;
 import daikon.suppress.NISuppressionSet;
 import daikon.suppress.NISuppressor;
+import java.util.List;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -221,5 +222,44 @@ public class SequenceFixedLengthString extends SingleStringSequence {
     }
 
     return null;
+  }
+
+  @SideEffectFree
+  @Override
+  public SequenceFixedLengthString clone(@GuardSatisfied SequenceFixedLengthString this) {
+    SequenceFixedLengthString result = (SequenceFixedLengthString) super.clone();
+    result.elements_length = elements_length;
+    return result;
+  }
+
+  // TODO: Document
+  @Override
+  public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
+    // Create the initial parent invariant from the first child
+    SequenceFixedLengthString first = (SequenceFixedLengthString) invs.get(0);
+    SequenceFixedLengthString result = first.clone();
+    result.ppt = parent_ppt;
+
+    // Loop through the rest of the child invariants
+    for (int i = 1; i < invs.size(); i++) {
+      SequenceFixedLengthString sfls = (SequenceFixedLengthString) invs.get(i);
+
+      // If result.elements_length is null and sfls.elements_length is not null
+      if (result.elements_length == null && sfls.elements_length != null) {
+        // Set the elements_length to the value of sfls.elements_length
+        result.elements_length = sfls.elements_length;
+      } else if (result.elements_length != null
+          && sfls.elements_length != null
+          && (!result.elements_length.equals(sfls.elements_length))) {
+        // Invariant falsified
+        result.log(
+            "%s",
+            "Child value with elements_length "
+                + sfls.elements_length
+                + " destroyed SequenceFixedLengthString");
+        return null;
+      }
+    }
+    return result;
   }
 }
