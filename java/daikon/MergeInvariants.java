@@ -200,8 +200,9 @@ public final class MergeInvariants {
     // Make sure at least two files were specified
     if (inv_files.size() < 2) {
       throw new Daikon.UserError(
-          "Must specify at least two inv files; only specified "
-              + StringsPlume.nplural(inv_files.size(), "file"));
+          "Provided "
+              + StringsPlume.nplural(inv_files.size(), "inv file")
+              + " but needs at least two");
     }
 
     // Setup the default for guarding

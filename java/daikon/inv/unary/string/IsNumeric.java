@@ -4,9 +4,11 @@ import daikon.PptSlice;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import typequals.prototype.qual.Prototype;
@@ -124,5 +126,48 @@ public class IsNumeric extends SingleString {
   public boolean isSameFormula(Invariant other) {
     assert other instanceof IsNumeric;
     return true;
+  }
+
+  @SideEffectFree
+  @Override
+  public IsNumeric clone(@GuardSatisfied IsNumeric this) {
+    IsNumeric result = (IsNumeric) super.clone();
+    result.alwaysEmpty = alwaysEmpty;
+    return result;
+  }
+
+  /**
+   * Merge the invariants in invs to form a new invariant. Each must be a IsNumeric invariant. This
+   * code finds all of the IsNumeric values from each of the invariants and returns the merged
+   * invariant (if any).
+   *
+   * @param invs list of invariants to merge. The invariants must all be of the same type and should
+   *     come from the children of parent_ppt.
+   * @param parent_ppt slice that will contain the new invariant
+   */
+  @Override
+  public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
+
+    // Create the initial parent invariant from the first child
+    IsNumeric first = (IsNumeric) invs.get(0);
+    IsNumeric result = first.clone();
+    result.ppt = parent_ppt;
+
+    // Return result if the value of alwaysEmpty is false
+    if (!result.alwaysEmpty) {
+      return result;
+    }
+
+    // Loop through the rest of the child invariants
+    for (int i = 1; i < invs.size(); i++) {
+      IsNumeric in = (IsNumeric) invs.get(i);
+      // If in.alwaysEmpty is false, set the value of result.isEmpty to false and return it
+      if (!in.alwaysEmpty) {
+        result.alwaysEmpty = false;
+        break;
+      }
+    }
+
+    return result;
   }
 }
