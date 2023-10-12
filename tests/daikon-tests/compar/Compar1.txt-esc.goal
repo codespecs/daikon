@@ -2,6 +2,10 @@
 misc.Compar1.bar(int, int, int, int):::ENTER
     Variables: i j k l
 i - j + 1 == 0
+i - k + 2 == 0
+i - l + 3 == 0
+j - k + 1 == 0
+j - l + 2 == 0
 k - l + 1 == 0
 ===========================================================================
 misc.Compar1.bar(int, int, int, int):::EXIT
