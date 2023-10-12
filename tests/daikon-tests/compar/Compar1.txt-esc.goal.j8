@@ -1,0 +1,26 @@
+===========================================================================
+misc.Compar1.bar(int, int, int, int):::ENTER
+    Variables: i j k l
+i - j + 1 == 0
+i - k + 2 == 0
+i - l + 3 == 0
+j - k + 1 == 0
+j - l + 2 == 0
+k - l + 1 == 0
+===========================================================================
+misc.Compar1.bar(int, int, int, int):::EXIT
+    Variables: i j k l orig(i) orig(j) orig(k) orig(l)
+      Unmodified variables: i j k l
+===========================================================================
+misc.Compar1.main(java.lang.String[]):::ENTER
+    Variables: args args.getClass().getName() args[] args[].toString size(args[]) size(args[])-1
+args != null
+\typeof(args) == \type(java.lang.String[])
+(args.length == 0) && ((\forall int i; (0 <= i && i <= args.length-1) ==> (args[i] != null)))
+warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: args[].toString == []
+===========================================================================
+misc.Compar1.main(java.lang.String[]):::EXIT
+    Variables: args args.getClass().getName() args[] args[].toString orig(args) orig(args.getClass().getName()) orig(args[]) orig(args[].toString) size(args[]) size(args[])-1 orig(size(args[])) orig(size(args[]))-1
+      Unmodified variables: args args.getClass().getName() args[] args[].toString size(args[])
+(args.length == 0) && ((\forall int i; (0 <= i && i <= args.length-1) ==> (args[i] != null)))
+warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: args[].toString == []
