@@ -81,25 +81,6 @@ public class PptRelation implements Serializable {
   /**
    * Create a relation between the specified parent and child. The actual variable relations are
    * filled in by the caller. Note that this creates the connection between this relation and the
-   * parent/child.
-   */
-  /*
-  private PptRelation(PptTopLevel parent, PptTopLevel child, String rel_type) {
-
-    this.parent = parent;
-    this.child = child;
-    parent_to_child_map = new LinkedHashMap<>();
-    child_to_parent_map = new LinkedHashMap<>();
-    // rel_type is one of the above relationship types because this is a
-    // private constructor, called only within this file.
-    relationship = rel_type;
-    connect();
-  }
-  */
-
-  /**
-   * Create a relation between the specified parent and child. The actual variable relations are
-   * filled in by the caller. Note that this creates the connection between this relation and the
    * parent/child. As a side effect, the constructed PptRelation is stored in both the parent and
    * the child.
    */
