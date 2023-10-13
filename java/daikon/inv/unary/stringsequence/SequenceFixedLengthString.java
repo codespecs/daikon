@@ -224,6 +224,7 @@ public class SequenceFixedLengthString extends SingleStringSequence {
     return null;
   }
 
+  @SuppressWarnings("nullness:monotonic") // assigning @MNN to @MNN should be legal in clone()
   @SideEffectFree
   @Override
   public SequenceFixedLengthString clone(@GuardSatisfied SequenceFixedLengthString this) {

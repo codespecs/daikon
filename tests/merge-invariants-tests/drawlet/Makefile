@@ -20,8 +20,7 @@ diffs: daikon.txt.diff
 daikon.txt.diff: drawlet.inv.gz merge.inv.gz
 	java -cp $(DAIKON_CLASSPATH) -ea -Xmx3600m daikon.PrintInvariants drawlet.inv.gz > drawlet.txt
 	java -cp $(DAIKON_CLASSPATH) -ea -Xmx3600m daikon.PrintInvariants merge.inv.gz > merge.txt
-	diff -u drawlet.txt merge.txt > daikon.txt.diff
-	@cat daikon.txt.diff
+	diff -u drawlet.txt merge.txt > daikon.txt.diff || (cat daikon.txt.diff && false)
 
 # Build the merged version of the invariant file from the individual inv files
 merge: merge.inv.gz
@@ -52,6 +51,17 @@ TS_DrawletFunctionalTest.inv.gz: $(DAIKON) TS_DrawletFunctionalTest.dtrace.gz
 TS_InputEventHandlerTests.inv.gz: $(DAIKON) TS_InputEventHandlerTests.dtrace.gz
 	java -cp $(DAIKON_CLASSPATH) -ea -Xmx3600m daikon.Daikon $(DAIKON_ARGS) \
 	  TS_InputEventHandlerTests.dtrace.gz
+
+# For debugging:
+#   make TS_AllDrawletUnitTests.txt TS_AllDrawletUnitTests.txt-all \
+#     TS_DrawletFunctionalTest.txt TS_DrawletFunctionalTest.txt-all \
+#     TS_InputEventHandlerTests.txt TS_InputEventHandlerTests.txt-all
+
+%.txt: %.inv.gz
+	java -cp $d/daikon.jar daikon.PrintInvariants $< > $@
+
+%.txt-all: %.inv.gz
+	java -cp $d/daikon.jar daikon.PrintInvariants --config_option daikon.PrintInvariants.print_all=true $< > $@
 
 #
 # Test targets
