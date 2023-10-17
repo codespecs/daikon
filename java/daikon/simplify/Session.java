@@ -87,6 +87,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
    * this Session.
    */
   public Session() {
+    PrintStream trace_file = null;
     try {
       List<String> newEnv = new ArrayList<>();
       if (dkconfig_simplify_max_iterations != 0) {
@@ -113,9 +114,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
           trace_count++;
         }
         trace_file = new PrintStream(new FileOutputStream(f));
-      } else {
-        trace_file = null;
       }
+      this.trace_file = trace_file;
 
       // set up command stream
       PrintStream tmp_input = new PrintStream(process.getOutputStream());
@@ -138,7 +138,14 @@ import org.checkerframework.checker.nullness.qual.Nullable;
       assert expect.equals(actual) : "Prompt expected, got '" + actual + "'";
 
     } catch (IOException e) {
-      throw new SimplifyError(e.toString());
+      if (trace_file != null) {
+        try {
+          trace_file.close();
+        } catch (Exception closeException) {
+          e.addSuppressed(closeException);
+        }
+      }
+      throw new SimplifyError(e);
     }
   }
 
