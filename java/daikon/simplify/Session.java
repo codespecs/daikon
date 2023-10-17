@@ -137,7 +137,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
       String actual = new String(buf, 0, pos, UTF_8);
       assert expect.equals(actual) : "Prompt expected, got '" + actual + "'";
 
-    } catch (IOException e) {
+    } catch (Exception | AssertionError e) {
       if (trace_file != null) {
         try {
           trace_file.close();
