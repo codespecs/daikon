@@ -87,6 +87,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
    * this Session.
    */
   public Session() {
+    // Note that this local variable shadows `this.trace_file`.
     PrintStream trace_file = null;
     try {
       List<String> newEnv = new ArrayList<>();
