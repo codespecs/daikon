@@ -596,4 +596,10 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   protected @NonPrototype Equality instantiate_dyn(@Prototype Equality this, PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
   }
+
+  @Override
+  public @Nullable @NonPrototype Equality merge(
+      @Prototype Equality this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
+    throw new Error("Don't merge Equality invariants");
+  }
 }

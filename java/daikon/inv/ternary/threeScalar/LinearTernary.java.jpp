@@ -444,7 +444,7 @@ public class CLASSNAME extends SUPERCLASS {
    * @param parent_ppt slice that will contain the new invariant
    */
   @Override
-  public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
+  public @Nullable CLASSNAME merge(List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create a matching list of cores
     List<CORECLASS> cores = new ArrayList<>();

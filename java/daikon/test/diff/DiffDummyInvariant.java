@@ -4,9 +4,13 @@ package daikon.test.diff;
 
 import daikon.*;
 import daikon.inv.*;
+import java.util.List;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
+import typequals.prototype.qual.NonPrototype;
+import typequals.prototype.qual.Prototype;
 
 /** A dummy invariant used for testing purposes. */
 public class DiffDummyInvariant extends Invariant {
@@ -113,5 +117,11 @@ public class DiffDummyInvariant extends Invariant {
   @Override
   protected DiffDummyInvariant instantiate_dyn(PptSlice slice) {
     throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
+  }
+
+  @Override
+  public @Nullable @NonPrototype DiffDummyInvariant merge(
+      @Prototype DiffDummyInvariant this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
+    throw new Error("do not merge DiffDummyInvariant");
   }
 }

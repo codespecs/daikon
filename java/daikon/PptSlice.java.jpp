@@ -603,7 +603,7 @@ public final class PPTSLICE1 extends PptSlice {
   public void merge_invariants() {
 
     if (debugMerge.isLoggable(Level.FINE)) {
-      debugMerge.fine("merging invs for " + name());
+      debugMerge.fine("entering merge_invariants for " + name());
     }
 
     // List of all invariants found over all of the children
