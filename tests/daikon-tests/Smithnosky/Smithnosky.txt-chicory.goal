@@ -1,96 +1,96 @@
 // Declarations for misc.Smithnosky
-// Declarations written Thu Jun 04 13:35:23 PDT 2015
+// Declarations written by Chicory 2023-12-13T17:25:47.833
 
 decl-version 2.0
-var-comparability none
+var-comparability implicit
 
 ppt misc.Smithnosky.Smithnosky(int,\_int,\_int):::ENTER
 ppt-type enter
 variable a
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable b
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable c
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt misc.Smithnosky.Smithnosky(int,\_int,\_int):::EXIT24
 ppt-type subexit
 parent parent misc.Smithnosky:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type misc.Smithnosky
   rep-type hashcode
-  flags is_param
-  comparability 22
+  flags is_param non_null
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.a
   var-kind field a
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 2
   parent misc.Smithnosky:::OBJECT 1
 variable this.b
   var-kind field b
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 2
   parent misc.Smithnosky:::OBJECT 1
 variable this.c
   var-kind field c
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 2
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXb
   var-kind field aXb
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 2
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXc
   var-kind field aXc
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 2
   parent misc.Smithnosky:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent misc.Smithnosky:::OBJECT 1
 variable this.s
   var-kind field s
   enclosing-var this
   dec-type java.util.Vector
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type java.util.Vector
   rep-type hashcode[]
-  comparability 22
+  comparability 5[7]
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..].getClass().getName()
   var-kind function getClass().getName()
@@ -99,94 +99,94 @@ variable this.s[..].getClass().getName()
   dec-type java.lang.Class[]
   rep-type java.lang.String[]
   function-args this.s[]
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1[8]
   parent misc.Smithnosky:::OBJECT 1
 variable a
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable b
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable c
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt misc.Smithnosky.incA():::ENTER
 ppt-type enter
 parent parent misc.Smithnosky:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type misc.Smithnosky
   rep-type hashcode
-  flags is_param
-  comparability 22
+  flags is_param non_null
+  comparability 2
   parent misc.Smithnosky:::OBJECT 1
 variable this.a
   var-kind field a
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.b
   var-kind field b
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.c
   var-kind field c
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXb
   var-kind field aXb
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXc
   var-kind field aXc
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent misc.Smithnosky:::OBJECT 1
 variable this.s
   var-kind field s
   enclosing-var this
   dec-type java.util.Vector
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type java.util.Vector
   rep-type hashcode[]
-  comparability 22
+  comparability 5[7]
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..].getClass().getName()
   var-kind function getClass().getName()
@@ -195,76 +195,76 @@ variable this.s[..].getClass().getName()
   dec-type java.lang.Class[]
   rep-type java.lang.String[]
   function-args this.s[]
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1[8]
   parent misc.Smithnosky:::OBJECT 1
 
 ppt misc.Smithnosky.incA():::EXIT29
 ppt-type subexit
 parent parent misc.Smithnosky:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type misc.Smithnosky
   rep-type hashcode
-  flags is_param
-  comparability 22
+  flags is_param non_null
+  comparability 2
   parent misc.Smithnosky:::OBJECT 1
 variable this.a
   var-kind field a
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.b
   var-kind field b
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.c
   var-kind field c
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXb
   var-kind field aXb
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXc
   var-kind field aXc
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent misc.Smithnosky:::OBJECT 1
 variable this.s
   var-kind field s
   enclosing-var this
   dec-type java.util.Vector
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type java.util.Vector
   rep-type hashcode[]
-  comparability 22
+  comparability 5[7]
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..].getClass().getName()
   var-kind function getClass().getName()
@@ -273,76 +273,76 @@ variable this.s[..].getClass().getName()
   dec-type java.lang.Class[]
   rep-type java.lang.String[]
   function-args this.s[]
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1[8]
   parent misc.Smithnosky:::OBJECT 1
 
 ppt misc.Smithnosky.incB():::ENTER
 ppt-type enter
 parent parent misc.Smithnosky:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type misc.Smithnosky
   rep-type hashcode
-  flags is_param
-  comparability 22
+  flags is_param non_null
+  comparability 2
   parent misc.Smithnosky:::OBJECT 1
 variable this.a
   var-kind field a
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.b
   var-kind field b
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.c
   var-kind field c
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXb
   var-kind field aXb
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXc
   var-kind field aXc
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent misc.Smithnosky:::OBJECT 1
 variable this.s
   var-kind field s
   enclosing-var this
   dec-type java.util.Vector
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type java.util.Vector
   rep-type hashcode[]
-  comparability 22
+  comparability 5[7]
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..].getClass().getName()
   var-kind function getClass().getName()
@@ -351,76 +351,76 @@ variable this.s[..].getClass().getName()
   dec-type java.lang.Class[]
   rep-type java.lang.String[]
   function-args this.s[]
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1[8]
   parent misc.Smithnosky:::OBJECT 1
 
 ppt misc.Smithnosky.incB():::EXIT34
 ppt-type subexit
 parent parent misc.Smithnosky:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type misc.Smithnosky
   rep-type hashcode
-  flags is_param
-  comparability 22
+  flags is_param non_null
+  comparability 2
   parent misc.Smithnosky:::OBJECT 1
 variable this.a
   var-kind field a
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.b
   var-kind field b
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.c
   var-kind field c
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXb
   var-kind field aXb
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXc
   var-kind field aXc
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent misc.Smithnosky:::OBJECT 1
 variable this.s
   var-kind field s
   enclosing-var this
   dec-type java.util.Vector
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type java.util.Vector
   rep-type hashcode[]
-  comparability 22
+  comparability 5[7]
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..].getClass().getName()
   var-kind function getClass().getName()
@@ -429,76 +429,76 @@ variable this.s[..].getClass().getName()
   dec-type java.lang.Class[]
   rep-type java.lang.String[]
   function-args this.s[]
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1[8]
   parent misc.Smithnosky:::OBJECT 1
 
 ppt misc.Smithnosky.incC():::ENTER
 ppt-type enter
 parent parent misc.Smithnosky:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type misc.Smithnosky
   rep-type hashcode
-  flags is_param
-  comparability 22
+  flags is_param non_null
+  comparability 2
   parent misc.Smithnosky:::OBJECT 1
 variable this.a
   var-kind field a
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.b
   var-kind field b
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.c
   var-kind field c
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXb
   var-kind field aXb
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXc
   var-kind field aXc
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent misc.Smithnosky:::OBJECT 1
 variable this.s
   var-kind field s
   enclosing-var this
   dec-type java.util.Vector
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type java.util.Vector
   rep-type hashcode[]
-  comparability 22
+  comparability 5[7]
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..].getClass().getName()
   var-kind function getClass().getName()
@@ -507,76 +507,76 @@ variable this.s[..].getClass().getName()
   dec-type java.lang.Class[]
   rep-type java.lang.String[]
   function-args this.s[]
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1[8]
   parent misc.Smithnosky:::OBJECT 1
 
 ppt misc.Smithnosky.incC():::EXIT39
 ppt-type subexit
 parent parent misc.Smithnosky:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type misc.Smithnosky
   rep-type hashcode
-  flags is_param
-  comparability 22
+  flags is_param non_null
+  comparability 2
   parent misc.Smithnosky:::OBJECT 1
 variable this.a
   var-kind field a
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.b
   var-kind field b
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.c
   var-kind field c
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXb
   var-kind field aXb
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXc
   var-kind field aXc
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent misc.Smithnosky:::OBJECT 1
 variable this.s
   var-kind field s
   enclosing-var this
   dec-type java.util.Vector
   rep-type hashcode
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type java.util.Vector
   rep-type hashcode[]
-  comparability 22
+  comparability 5[7]
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..].getClass().getName()
   var-kind function getClass().getName()
@@ -585,76 +585,76 @@ variable this.s[..].getClass().getName()
   dec-type java.lang.Class[]
   rep-type java.lang.String[]
   function-args this.s[]
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1[8]
   parent misc.Smithnosky:::OBJECT 1
 
 ppt misc.Smithnosky.add(java.lang.Object):::ENTER
 ppt-type enter
 parent parent misc.Smithnosky:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type misc.Smithnosky
   rep-type hashcode
-  flags is_param
-  comparability 22
+  flags is_param non_null
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.a
   var-kind field a
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.b
   var-kind field b
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.c
   var-kind field c
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXb
   var-kind field aXb
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXc
   var-kind field aXc
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent misc.Smithnosky:::OBJECT 1
 variable this.s
   var-kind field s
   enclosing-var this
   dec-type java.util.Vector
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type java.util.Vector
   rep-type hashcode[]
-  comparability 22
+  comparability 2[7]
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..].getClass().getName()
   var-kind function getClass().getName()
@@ -663,90 +663,90 @@ variable this.s[..].getClass().getName()
   dec-type java.lang.Class[]
   rep-type java.lang.String[]
   function-args this.s[]
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1[8]
   parent misc.Smithnosky:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
   dec-type java.lang.Class
   rep-type java.lang.String
   function-args o
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1
 
 ppt misc.Smithnosky.add(java.lang.Object):::EXIT44
 ppt-type subexit
 parent parent misc.Smithnosky:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type misc.Smithnosky
   rep-type hashcode
-  flags is_param
-  comparability 22
+  flags is_param non_null
+  comparability 3
   parent misc.Smithnosky:::OBJECT 1
 variable this.a
   var-kind field a
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.b
   var-kind field b
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.c
   var-kind field c
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXb
   var-kind field aXb
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.aXc
   var-kind field aXc
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 4
   parent misc.Smithnosky:::OBJECT 1
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
   parent misc.Smithnosky:::OBJECT 1
 variable this.s
   var-kind field s
   enclosing-var this
   dec-type java.util.Vector
   rep-type hashcode
-  comparability 22
+  comparability 5
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type java.util.Vector
   rep-type hashcode[]
-  comparability 22
+  comparability 2[7]
   parent misc.Smithnosky:::OBJECT 1
 variable this.s[..].getClass().getName()
   var-kind function getClass().getName()
@@ -755,47 +755,47 @@ variable this.s[..].getClass().getName()
   dec-type java.lang.Class[]
   rep-type java.lang.String[]
   function-args this.s[]
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1[8]
   parent misc.Smithnosky:::OBJECT 1
 variable o
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.Object
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable o.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var o
   dec-type java.lang.Class
   rep-type java.lang.String
   function-args o
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1
 
 ppt misc.Smithnosky.main(java.lang.String[]):::ENTER
 ppt-type enter
 variable args
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.String[]
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable args.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var args
   dec-type java.lang.Class
   rep-type java.lang.String
   function-args args
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1
 variable args[..]
-  var-kind array 
+  var-kind array
   enclosing-var args
   array 1
   dec-type java.lang.String[]
   rep-type hashcode[]
-  comparability 22
+  comparability 3[5]
 variable args[..].toString
   var-kind function toString()
   enclosing-var args[..]
@@ -804,31 +804,31 @@ variable args[..].toString
   rep-type java.lang.String[]
   function-args args[]
   flags synthetic to_string
-  comparability 22
+  comparability 4[6]
 
 ppt misc.Smithnosky.main(java.lang.String[]):::EXIT59
 ppt-type subexit
 variable args
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.String[]
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable args.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var args
   dec-type java.lang.Class
   rep-type java.lang.String
   function-args args
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1
 variable args[..]
-  var-kind array 
+  var-kind array
   enclosing-var args
   array 1
   dec-type java.lang.String[]
   rep-type hashcode[]
-  comparability 22
+  comparability 3[5]
 variable args[..].toString
   var-kind function toString()
   enclosing-var args[..]
@@ -837,65 +837,65 @@ variable args[..].toString
   rep-type java.lang.String[]
   function-args args[]
   flags synthetic to_string
-  comparability 22
+  comparability 4[6]
 
 ppt misc.Smithnosky:::OBJECT
 ppt-type object
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type misc.Smithnosky
   rep-type hashcode
-  flags is_param
-  comparability 22
+  flags is_param non_null
+  comparability 2
 variable this.a
   var-kind field a
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 variable this.b
   var-kind field b
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 variable this.c
   var-kind field c
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 variable this.aXb
   var-kind field aXb
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 variable this.aXc
   var-kind field aXc
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 3
 variable this.size
   var-kind field size
   enclosing-var this
   dec-type int
   rep-type int
-  comparability 22
+  comparability 6
 variable this.s
   var-kind field s
   enclosing-var this
   dec-type java.util.Vector
   rep-type hashcode
-  comparability 22
+  comparability 4
 variable this.s[..]
-  var-kind array 
+  var-kind array
   enclosing-var this.s
   array 1
   dec-type java.util.Vector
   rep-type hashcode[]
-  comparability 22
+  comparability 5[7]
 variable this.s[..].getClass().getName()
   var-kind function getClass().getName()
   enclosing-var this.s[..]
@@ -903,14 +903,14 @@ variable this.s[..].getClass().getName()
   dec-type java.lang.Class[]
   rep-type java.lang.String[]
   function-args this.s[]
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1[8]
 
 misc.Smithnosky.main(java.lang.String[]):::ENTER
 this_invocation_nonce
 0
 args
-1084110807
+1681595665
 1
 args.getClass().getName()
 "java.lang.String[]"
@@ -939,7 +939,7 @@ misc.Smithnosky.Smithnosky(int, int, int):::EXIT24
 this_invocation_nonce
 1
 this
-1406350504
+787867107
 1
 this.a
 0
@@ -960,7 +960,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -982,7 +982,7 @@ misc.Smithnosky.incA():::ENTER
 this_invocation_nonce
 2
 this
-1406350504
+787867107
 1
 this.a
 0
@@ -1003,7 +1003,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1016,7 +1016,7 @@ misc.Smithnosky.incA():::EXIT29
 this_invocation_nonce
 2
 this
-1406350504
+787867107
 1
 this.a
 1
@@ -1037,7 +1037,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1050,7 +1050,7 @@ misc.Smithnosky.incB():::ENTER
 this_invocation_nonce
 3
 this
-1406350504
+787867107
 1
 this.a
 1
@@ -1071,7 +1071,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1084,7 +1084,7 @@ misc.Smithnosky.incB():::EXIT34
 this_invocation_nonce
 3
 this
-1406350504
+787867107
 1
 this.a
 1
@@ -1105,7 +1105,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1118,7 +1118,7 @@ misc.Smithnosky.incC():::ENTER
 this_invocation_nonce
 4
 this
-1406350504
+787867107
 1
 this.a
 1
@@ -1139,7 +1139,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1152,7 +1152,7 @@ misc.Smithnosky.incC():::EXIT39
 this_invocation_nonce
 4
 this
-1406350504
+787867107
 1
 this.a
 1
@@ -1173,7 +1173,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1186,7 +1186,7 @@ misc.Smithnosky.incA():::ENTER
 this_invocation_nonce
 5
 this
-1406350504
+787867107
 1
 this.a
 1
@@ -1207,7 +1207,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1220,7 +1220,7 @@ misc.Smithnosky.incA():::EXIT29
 this_invocation_nonce
 5
 this
-1406350504
+787867107
 1
 this.a
 2
@@ -1241,7 +1241,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1254,7 +1254,7 @@ misc.Smithnosky.incB():::ENTER
 this_invocation_nonce
 6
 this
-1406350504
+787867107
 1
 this.a
 2
@@ -1275,7 +1275,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1288,7 +1288,7 @@ misc.Smithnosky.incB():::EXIT34
 this_invocation_nonce
 6
 this
-1406350504
+787867107
 1
 this.a
 2
@@ -1309,7 +1309,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1322,7 +1322,7 @@ misc.Smithnosky.incC():::ENTER
 this_invocation_nonce
 7
 this
-1406350504
+787867107
 1
 this.a
 2
@@ -1343,7 +1343,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1356,7 +1356,7 @@ misc.Smithnosky.incC():::EXIT39
 this_invocation_nonce
 7
 this
-1406350504
+787867107
 1
 this.a
 2
@@ -1377,7 +1377,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1390,7 +1390,7 @@ misc.Smithnosky.incA():::ENTER
 this_invocation_nonce
 8
 this
-1406350504
+787867107
 1
 this.a
 2
@@ -1411,7 +1411,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1424,7 +1424,7 @@ misc.Smithnosky.incA():::EXIT29
 this_invocation_nonce
 8
 this
-1406350504
+787867107
 1
 this.a
 3
@@ -1445,7 +1445,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1458,7 +1458,7 @@ misc.Smithnosky.incB():::ENTER
 this_invocation_nonce
 9
 this
-1406350504
+787867107
 1
 this.a
 3
@@ -1479,7 +1479,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1492,7 +1492,7 @@ misc.Smithnosky.incB():::EXIT34
 this_invocation_nonce
 9
 this
-1406350504
+787867107
 1
 this.a
 3
@@ -1513,7 +1513,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1526,7 +1526,7 @@ misc.Smithnosky.incC():::ENTER
 this_invocation_nonce
 10
 this
-1406350504
+787867107
 1
 this.a
 3
@@ -1547,7 +1547,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1560,7 +1560,7 @@ misc.Smithnosky.incC():::EXIT39
 this_invocation_nonce
 10
 this
-1406350504
+787867107
 1
 this.a
 3
@@ -1581,7 +1581,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1594,7 +1594,7 @@ misc.Smithnosky.add(java.lang.Object):::ENTER
 this_invocation_nonce
 11
 this
-1406350504
+787867107
 1
 this.a
 3
@@ -1615,7 +1615,7 @@ this.size
 0
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
 []
@@ -1624,7 +1624,7 @@ this.s[..].getClass().getName()
 []
 1
 o
-626211561
+1345636186
 1
 o.getClass().getName()
 "java.lang.String"
@@ -1634,7 +1634,7 @@ misc.Smithnosky.add(java.lang.Object):::EXIT44
 this_invocation_nonce
 11
 this
-1406350504
+787867107
 1
 this.a
 3
@@ -1655,16 +1655,16 @@ this.size
 1
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
-[626211561]
+[1345636186]
 1
 this.s[..].getClass().getName()
 ["java.lang.String"]
 1
 o
-626211561
+1345636186
 1
 o.getClass().getName()
 "java.lang.String"
@@ -1674,7 +1674,7 @@ misc.Smithnosky.add(java.lang.Object):::ENTER
 this_invocation_nonce
 12
 this
-1406350504
+787867107
 1
 this.a
 3
@@ -1695,16 +1695,16 @@ this.size
 1
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
-[626211561]
+[1345636186]
 1
 this.s[..].getClass().getName()
 ["java.lang.String"]
 1
 o
-626211561
+1345636186
 1
 o.getClass().getName()
 "java.lang.String"
@@ -1714,7 +1714,7 @@ misc.Smithnosky.add(java.lang.Object):::EXIT44
 this_invocation_nonce
 12
 this
-1406350504
+787867107
 1
 this.a
 3
@@ -1735,16 +1735,16 @@ this.size
 2
 1
 this.s
-1823840336
+57494364
 1
 this.s[..]
-[626211561 626211561]
+[1345636186 1345636186]
 1
 this.s[..].getClass().getName()
 ["java.lang.String" "java.lang.String"]
 1
 o
-626211561
+1345636186
 1
 o.getClass().getName()
 "java.lang.String"
@@ -1754,7 +1754,7 @@ misc.Smithnosky.main(java.lang.String[]):::EXIT59
 this_invocation_nonce
 0
 args
-1084110807
+1681595665
 1
 args.getClass().getName()
 "java.lang.String[]"
