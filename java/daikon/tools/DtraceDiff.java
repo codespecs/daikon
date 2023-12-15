@@ -60,6 +60,8 @@ public class DtraceDiff {
           "      Specify a configuration option ",
           "See the Daikon manual for more information.");
 
+  private static boolean debug = false;
+
   public static void main(String[] args) {
     try {
       mainHelper(args);
@@ -369,11 +371,13 @@ public class DtraceDiff {
               // check to see that the decls match
               for (int i = 0; i < ppt1.num_declvars; i++) {
                 if (!compare_varinfos(vis1[i], vis2[i])) {
-                  ppt_var_decl_error(vis1[i], state1, dtracefile1, vis2[i], state2, dtracefile2);
-                  // Debug code; comment out above line, uncomment 3 lines below.
-                  // System.out.printf("ERROR: dtrace decl mismatch within: %s%n", ppt1.name);
-                  // print_varinfo(vis1[i]);
-                  // print_varinfo(vis2[i]);
+                  if (!debug) {
+                    ppt_var_decl_error(vis1[i], state1, dtracefile1, vis2[i], state2, dtracefile2);
+                  } else {
+                    System.out.printf("ERROR: dtrace decl mismatch within: %s%n", ppt1.name);
+                    print_varinfo(vis1[i]);
+                    print_varinfo(vis2[i]);
+                  }
                 }
               }
             } else {
