@@ -6,6 +6,8 @@ MAIN_CLASS:=MapQuick1.PS4TestDriver
 
 ESC_ON:=1
 
+SKIP_DTRACE := 1
+
 # This is unnecessary when we have instrument-files-revise
 # USER_DAIKON_OPTIONS:=--ppt-select-pattern="^MapQuick1\.Graph[:\.]"
 
