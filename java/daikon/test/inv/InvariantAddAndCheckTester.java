@@ -26,6 +26,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 import junit.framework.*;
@@ -341,7 +342,7 @@ public class InvariantAddAndCheckTester {
         } else if (isTestTerminator(commandLine)) {
           break;
         } else if (isAddCommand(commandLine) || isCheckCommand(commandLine)) {
-          exicuteCheckOrAddCommand(commandLine, lineNumber);
+          executeCheckOrAddCommand(commandLine, lineNumber);
         } else if (isCompareCommand(commandLine)) {
         } else {
           throw new RuntimeException("unrecognized command");
@@ -440,11 +441,11 @@ public class InvariantAddAndCheckTester {
     }
 
     /**
-     * Given a line from a command file, generates executes the appropriate check or add command and
-     * checks the results against the goal. If the results and goal do not match, a message is added
-     * to the results string buffer.
+     * Given a line from a command file, generates and executes the appropriate check or add
+     * command, and checks the results against the goal. If the results and goal do not match, a
+     * message is added to the results string buffer.
      */
-    private static void exicuteCheckOrAddCommand(String command, int lineNumber) {
+    private static void executeCheckOrAddCommand(String command, int lineNumber) {
 
       // remove the command
       String args = command.substring(command.indexOf(":") + 1);
@@ -464,10 +465,17 @@ public class InvariantAddAndCheckTester {
       tokens.nextToken(); // executed for side effect
       assertFalse(tokens.hasMoreTokens());
       InvariantStatus resultStatus;
-      if (isCheckCommand(command)) {
-        resultStatus = getCheckStatus(params);
-      } else {
-        resultStatus = getAddStatus(params);
+      try {
+        if (isCheckCommand(command)) {
+          resultStatus = getCheckStatus(params);
+        } else {
+          resultStatus = getAddStatus(params);
+        }
+      } catch (Exception e) {
+        throw new Error(
+            String.format(
+                "Problem with \"%s\" on line %d of %s", command, lineNumber, commandsFileName),
+            e);
       }
       if (resultStatus != goalStatus) {
         results.append(
@@ -547,7 +555,14 @@ public class InvariantAddAndCheckTester {
       try {
         return (InvariantStatus) addModified.invoke(invariantToTest, params);
       } catch (Exception e) {
-        throw new RuntimeException(" error in " + invariantToTest.getClass() + ": " + e);
+        throw new RuntimeException(
+            "getAddStatus: error invoking addModified("
+                + Arrays.toString(params)
+                + ") on "
+                + invariantToTest.getClass()
+                + "; commandsFileName="
+                + commandsFileName,
+            e);
       }
     }
 

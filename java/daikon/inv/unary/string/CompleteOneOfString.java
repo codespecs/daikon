@@ -12,17 +12,21 @@ import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.framework.qual.Unused;
+import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
 /**
  * Tracks every unique value and how many times it occurs. Prints as either {@code x has no values}
- * or as {@code x has values: "v1" "v2" "v3" ...}.
+ * or as {@code x has values: "v1" "v2" "v3" ...}. The set has no maximum size; it may be
+ * arbitrarily large.
  */
 public final class CompleteOneOfString extends SingleString {
   static final long serialVersionUID = 20091210L;
@@ -30,7 +34,7 @@ public final class CompleteOneOfString extends SingleString {
   /** Information about each value encountered. */
   public static class Info implements Serializable {
     static final long serialVersionUID = 20091210L;
-    public String val;
+    public @Interned String val;
     public int cnt;
 
     public Info(String val, int cnt) {
@@ -40,11 +44,14 @@ public final class CompleteOneOfString extends SingleString {
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
       in.defaultReadObject();
-      if (val != null) val = val.intern();
+      if (val != null) {
+        val = val.intern();
+      }
     }
   }
 
   /** List of values seen. */
+  // When the set of values seen is large, this representation is inefficient.
   @Unused(when = Prototype.class)
   @SuppressWarnings("serial")
   public List<Info> vals;
@@ -68,13 +75,11 @@ public final class CompleteOneOfString extends SingleString {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   public CompleteOneOfString instantiate_dyn(@Prototype CompleteOneOfString this, PptSlice slice) {
     return new CompleteOneOfString(slice);
@@ -88,10 +93,9 @@ public final class CompleteOneOfString extends SingleString {
       if (vals.size() == 0) {
         return var().name() + "has no values";
       }
-      StringBuilder out = new StringBuilder(vals.get(0).val.length() * vals.size());
-      out.append(var().name() + " has values: ");
+      StringJoiner out = new StringJoiner(" ", var().name() + " has values: ", "");
       for (Info val : vals) {
-        out.append(String.format(" %s[%d]", val.val, val.cnt));
+        out.add(String.format("%s[%d]", val.val, val.cnt));
       }
       return out.toString();
     } else {
@@ -99,17 +103,15 @@ public final class CompleteOneOfString extends SingleString {
     }
   }
 
-  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus add_modified(@Interned String a, int count) {
     return check_modified(a, count);
   }
 
-  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus check_modified(@Interned String a, int count) {
     for (Info val : vals) {
-      if (val.val.equals(a)) {
+      if (val.val == a) { // interned
         val.cnt += count;
         return InvariantStatus.NO_CHANGE;
       }
@@ -146,5 +148,23 @@ public final class CompleteOneOfString extends SingleString {
   @Override
   public boolean isSameFormula(Invariant o) {
     return false;
+  }
+
+  @Override
+  public @Nullable @NonPrototype CompleteOneOfString merge(
+      @Prototype CompleteOneOfString this,
+      List<@NonPrototype Invariant> invs,
+      PptSlice parent_ppt) {
+    @SuppressWarnings("nullness") // super.merge does not return null
+    @NonNull CompleteOneOfString result = (CompleteOneOfString) super.merge(invs, parent_ppt);
+    for (int i = 1; i < invs.size(); i++) {
+      for (Info info : ((CompleteOneOfString) invs.get(i)).vals) {
+        InvariantStatus status = result.add_modified(info.val, info.cnt);
+        if (status == InvariantStatus.FALSIFIED) {
+          return null;
+        }
+      }
+    }
+    return result;
   }
 }

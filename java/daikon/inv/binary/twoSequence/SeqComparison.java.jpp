@@ -290,14 +290,14 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
 
   boolean orderMatters;
 
-  protected SEQSEQINTEQUAL(PptSlice ppt, boolean order) {
+  protected SEQSEQINTEQUAL(PptSlice ppt, boolean orderMatters) {
     super(ppt);
-    orderMatters = order;
+    this.orderMatters = orderMatters;
   }
 
-  protected @Prototype SEQSEQINTEQUAL(boolean order) {
+  protected @Prototype SEQSEQINTEQUAL(boolean orderMatters) {
     super();
-    orderMatters = order;
+    this.orderMatters = orderMatters;
   }
 
   #if !(defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
@@ -315,13 +315,11 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled. */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Non-Equal SeqComparison is only valid on integral types. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -355,7 +353,6 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
     return true;
   }
 
-  /** Instantiates the invariant on the specified slice. */
   @Override
   protected SEQSEQINTEQUAL instantiate_dyn(@Prototype SEQSEQINTEQUAL this, PptSlice slice) {
     boolean has_order = slice.var_infos[0].aux.hasOrder() && slice.var_infos[1].aux.hasOrder();
@@ -782,4 +779,12 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
   #else
     private static @Nullable NISuppressionSet suppressions = null;
   #endif
+
+
+  @Override
+  public @Nullable @NonPrototype SEQSEQINTEQUAL merge(
+      @Prototype SEQSEQINTEQUAL this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
+    // Ignore the orderMatters field, because it is always the same (and is always true).
+    return (SEQSEQINTEQUAL) super.merge(invs, parent_ppt);
+  }
 }

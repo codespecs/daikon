@@ -530,14 +530,22 @@ public class PptName implements Serializable {
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     try {
       in.defaultReadObject();
-      if (fullname != null) fullname = fullname.intern();
-      if (fn_name != null) fn_name = fn_name.intern();
-      if (cls != null) cls = cls.intern();
+      if (fullname != null) {
+        fullname = fullname.intern();
+      }
+      if (fn_name != null) {
+        fn_name = fn_name.intern();
+      }
+      if (cls != null) {
+        cls = cls.intern();
+      }
       if (method != null) {
         // method = method.intern();
         ReflectionPlume.setFinalField(this, "method", method.intern());
       }
-      if (point != null) point = point.intern();
+      if (point != null) {
+        point = point.intern();
+      }
     } catch (NoSuchFieldException e) {
       throw new Error(e);
     }

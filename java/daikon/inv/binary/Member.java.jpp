@@ -108,18 +108,16 @@ public final class CLASSNAME extends SEQUENCESCALAR {
 
   private static @Prototype CLASSNAME proto = new @Prototype CLASSNAME();
 
-  /** Returns the prototype invariant for CLASSNAME */
+  /** Returns the prototype invariant for CLASSNAME. */
   public static @Prototype CLASSNAME get_proto() {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled. */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiates the invariant on the specified slice */
   @Override
   protected CLASSNAME instantiate_dyn(@Prototype PptSlice slice) {
     return new CLASSNAME(slice);
@@ -227,13 +225,17 @@ public final class CLASSNAME extends SEQUENCESCALAR {
           left_included = true;
         }
         if (seq_left_index == scl_index) {
-          if (seq_left_shift <= scl_shift) left_included = true;
+          if (seq_left_shift <= scl_shift) {
+            left_included = true;
+          }
         }
         if (seq_right_index == null) {
           right_included = true;
         }
         if (seq_right_index == scl_index) {
-          if (seq_right_shift >= scl_shift) right_included = true;
+          if (seq_right_shift >= scl_shift) {
+            right_included = true;
+          }
         }
         if (left_included && right_included) {
           return true;

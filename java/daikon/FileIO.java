@@ -395,7 +395,9 @@ public final class FileIO {
             // There is no need to check "varmap.containsKey(vardef.name)"
             // because this is the first variable.
             assert varmap.isEmpty();
-            if (var_included(vardef.name)) varmap.put(vardef.name, vardef);
+            if (var_included(vardef.name)) {
+              varmap.put(vardef.name, vardef);
+            }
           } else if (record == "ppt-type") { // interned
             ppt_type = parse_ppt_type(state, scanner);
           } else {
@@ -436,7 +438,9 @@ public final class FileIO {
             if (varmap.containsKey(vardef.name)) {
               decl_error(state, "var %s declared twice", vardef.name);
             }
-            if (var_included(vardef.name)) varmap.put(vardef.name, vardef);
+            if (var_included(vardef.name)) {
+              varmap.put(vardef.name, vardef);
+            }
           } else if (record == "min-value") { // interned
             vardef.parse_min_value(scanner);
           } else if (record == "max-value") { // interned
@@ -839,11 +843,11 @@ public final class FileIO {
     @Interned String version = need(state, scanner, "declaration version number");
     need_eol(state, scanner);
     boolean new_df;
-    if (version == "2.0") // interned
-    new_df = true;
-    else if (version == "1.0") // interned
-    new_df = false;
-    else {
+    if (version == "2.0") { // interned
+      new_df = true;
+    } else if (version == "1.0") { // interned
+      new_df = false;
+    } else {
       decl_error(state, "'%s' found where 1.0 or 2.0 expected", version);
       throw new Error("Can't get here"); // help out definite assignment analysis
     }
@@ -937,9 +941,11 @@ public final class FileIO {
             val)) // succeeds only for canonicalized Invocations.  Can be an == test, but there is
           // little point.  val can be null, so it cannot be the receiver.
           pw.print("<hashcode>");
-        else if (val instanceof int[]) pw.print(Arrays.toString((int[]) val));
-        else if (val instanceof String) pw.print(StringsPlume.escapeNonASCII((String) val));
-        else {
+        else if (val instanceof int[]) {
+          pw.print(Arrays.toString((int[]) val));
+        } else if (val instanceof String) {
+          pw.print(StringsPlume.escapeNonASCII((String) val));
+        } else {
           pw.print(val);
         }
       }
@@ -1696,7 +1702,10 @@ public final class FileIO {
         return;
       }
       String ppt_name = line;
-      if (new_decl_format) ppt_name = unescape_decl(line); // interning bugfix: no need to intern
+      if (new_decl_format) {
+        // interning bugfix: no need to intern
+        ppt_name = unescape_decl(line);
+      }
       ppt_name = user_mod_ppt_name(ppt_name);
       if (!ppt_included(ppt_name)) {
         // System.out.printf("skipping ppt %s%n", line);

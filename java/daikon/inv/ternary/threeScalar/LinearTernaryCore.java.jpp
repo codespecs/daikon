@@ -856,9 +856,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
       if (coef[2] < min_c) min_c = coef[2];
       if (coef[2] > max_c) max_c = coef[2];
       if (coef[3] < min_d) min_d = coef[3];
-      if (coef[3] > max_d) {
-        max_d = coef[3];
-      }
+      if (coef[3] > max_d) max_d = coef[3];
 
       // Pick a new a, b, and c as the average of their endpoints
       a = (min_a + max_a) / 2;
@@ -1124,10 +1122,9 @@ public final class CLASSNAME implements Serializable, Cloneable {
   }
 
   public String cache_repr() {
-    StringBuilder result = new StringBuilder();
+    StringJoiner result = new StringJoiner("; ");
     for (int i = 0; i < MINTRIPLES; i++) {
-      if (i != 0) result.append("; ");
-      result.append(point_repr(def_points[i]));
+      result.add(point_repr(def_points[i]));
     }
     return result.toString();
   }

@@ -12,18 +12,18 @@ class GeoPoint : // 475142/475142 obj/class samples
     parameter #0 :  // latitude
     parameter #1 :  // longitude
   method distanceTo(LMapQuick1/GeoPoint;)D : // 3132 samples
-    return: 
+    return:
     parameter #0 :  // gp
   method equals(Ljava/lang/Object;)Z : // 5871 samples
-    return: 
+    return:
     parameter #0 :  // o
   method hashCode()I : // 228190 samples
-    return: 
+    return:
   method headingTo(LMapQuick1/GeoPoint;)D : // 296 samples
-    return: 
+    return:
     parameter #0 :  // gp
   method toString()Ljava/lang/String; : // 0 samples
-    return: 
+    return:
 
 
 package MapQuick1:
@@ -38,23 +38,23 @@ class GeoSegment : // 260252/- obj/class samples
     parameter #1 :  // p1
     parameter #2 :  // p2
   method equals(Ljava/lang/Object;)Z : // 611 samples
-    return: 
+    return:
     parameter #0 :  // o
   method hashCode()I : // 114095 samples
-    return: 
+    return:
   method heading()D : // 296 samples
-    return: 
+    return:
   method length()D : // 1553 samples
-    return: 
+    return:
   method name()Ljava/lang/String; : // 608 samples
-    return: 
+    return:
   method p1()LMapQuick1/GeoPoint; : // 4882 samples
-    return: 
+    return:
   method p2()LMapQuick1/GeoPoint; : // 8040 samples
-    return: 
+    return:
   method reverse()LMapQuick1/GeoSegment; : // 0 samples
-    return: 
+    return:
   method toString()Ljava/lang/String; : // 0 samples
-    return: 
+    return:
 
 

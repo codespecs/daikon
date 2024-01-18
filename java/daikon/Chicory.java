@@ -168,14 +168,14 @@ public class Chicory {
   /** starting time (msecs) */
   public static long start = System.currentTimeMillis();
 
-  /** daikon process for {@code --daikon} command-line option */
+  /** daikon process for {@code --daikon} command-line option. */
   // non-null if either daikon==true or daikon_online==true
   public static @MonotonicNonNull Process daikon_proc;
 
   private static final String traceLimTermString = "DTRACELIMITTERMINATE";
   private static final String traceLimString = "DTRACELIMIT";
 
-  /** flag to use if we want to turn on the static initialization checks */
+  /** Flag to use if we want to turn on the static initialization checks. */
   public static final boolean checkStaticInit = true;
 
   private static final boolean RemoteDebug = false;

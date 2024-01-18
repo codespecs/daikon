@@ -129,13 +129,11 @@ public class CLASSNAME extends SUPERCLASS {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiates the invariant on the specified slice */
   @Override
   protected CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);
@@ -462,13 +460,17 @@ public class CLASSNAME extends SUPERCLASS {
           left_included = true;
         }
         if (super_left_var == sub_left_var) {
-          if (super_left_shift < sub_left_shift) left_included = true;
+          if (super_left_shift < sub_left_shift) {
+            left_included = true;
+          }
         }
         if (super_right_var == null) {
           right_included = true;
         }
         if (super_right_var == sub_right_var) {
-          if (super_right_shift > sub_right_shift) right_included = true;
+          if (super_right_shift > sub_right_shift) {
+            right_included = true;
+          }
         }
         if (left_included && right_included) {
           discardCode = DiscardCode.obvious;

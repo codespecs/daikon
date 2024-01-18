@@ -412,18 +412,17 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
   private static @Prototype INTEQUAL proto = new @Prototype INTEQUAL();
 
-  /** Returns the prototype invariant for INTEQUAL */
+  /** Returns the prototype invariant for INTEQUAL. */
   public static @Prototype INTEQUAL get_proto() {
     return proto;
   }
 
-  /** Returns whether or not this invariant is enabled. */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** Returns whether or not the specified var types are valid for INTEQUAL */
+  /** Returns whether or not the specified var types are valid for INTEQUAL. */
   @Override
   public boolean instantiate_ok(VarInfo[] vis) {
 
@@ -571,7 +570,6 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
   }
 
-  /** Instantiate an invariant on the specified slice. */
   @Override
   protected INTEQUAL instantiate_dyn(@Prototype INTEQUAL this, PptSlice slice) {
     #if defined (NONEQUAL)
@@ -723,7 +721,6 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
         return var1name + ".compareTo(" + var2name +") >= 0";
       #else
         if ((var1name.indexOf("daikon.Quant.collectObject") != -1)
-
             || (var2name.indexOf("daikon.Quant.collectObject") != -1)) {
           return "(warning: it is meaningless to compare hashcodes for values obtained through daikon.Quant.collect... methods:"
             + var1name + " " + EQUALSstring + " " + var2name + ")";

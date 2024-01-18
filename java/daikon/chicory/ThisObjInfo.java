@@ -36,7 +36,7 @@ public class ThisObjInfo extends DaikonVariableInfo {
     throw new Error("shouldn't be called");
   }
 
-  /** 'this' is a top level variable */
+  /** {@code this} is a top-level variable. */
   @Override
   public VarKind get_var_kind() {
     return VarKind.VARIABLE;

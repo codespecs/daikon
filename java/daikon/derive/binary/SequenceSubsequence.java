@@ -62,7 +62,6 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     return vi;
   }
 
-  /** Returns the lower bound of the slice. */
   @Override
   public Quantify.Term get_lower_bound() {
     if (from_start) {
@@ -72,7 +71,6 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     }
   }
 
-  /** Returns the upper bound of the slice. */
   @Override
   public Quantify.Term get_upper_bound() {
     if (from_start) {
@@ -82,7 +80,6 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     }
   }
 
-  /** Returns the array variable for this slice. */
   @Override
   public VarInfo get_array_var() {
     return seqvar();
@@ -98,7 +95,6 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
     return "\"SequenceSubsequence.java.jpp unimplemented\" != null"; // "interned"
   }
 
-  /** Returns the ESC name. */
   @SideEffectFree
   @Override
   public String esc_name(String index) {
@@ -107,7 +103,6 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
         seqvar().esc_name(), get_lower_bound().esc_name(), get_upper_bound().esc_name());
   }
 
-  /** returns the JML name for the slice */
   @Override
   @SuppressWarnings("nullness")
   public String jml_name(String index) {

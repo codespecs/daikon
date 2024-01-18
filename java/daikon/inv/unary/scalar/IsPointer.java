@@ -33,9 +33,9 @@ public class IsPointer extends SingleScalar {
 
   // pointers values in ff_prepare.dtrace were starting from 65536,
   // in other dtrace files, the pointer values were even larger
-  private long largestNonPointerValue = 100000;
+  private static long largestNonPointerValue = 100000;
 
-  private long smallestNonPointerValue = -100000;
+  private static long smallestNonPointerValue = -100000;
 
   protected IsPointer(PptSlice ppt) {
     super(ppt);
@@ -98,8 +98,10 @@ public class IsPointer extends SingleScalar {
   @SideEffectFree
   public String format_using(@GuardSatisfied IsPointer this, OutputFormat format) {
     String varname = var().name_using(format);
-    if (format == OutputFormat.SIMPLIFY) return "(AND)"; // trivially true
-    if (format == OutputFormat.JAVA) {
+    if (format == OutputFormat.SIMPLIFY) {
+      // trivially true
+      return "(AND)";
+    } else if (format == OutputFormat.JAVA) {
       return "daikon.tools.runtimechecker.Runtime.isWithinPointerRange(" + varname + ")";
     } else {
       return varname + " is a pointer";

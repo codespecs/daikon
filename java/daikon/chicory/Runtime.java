@@ -51,7 +51,7 @@ public class Runtime {
   /** Unique id for method entry/exit (so they can be matched up) */
   public static AtomicInteger nonce = new AtomicInteger();
 
-  /** debug flag */
+  /** debug flag. */
   public static boolean debug = false;
 
   /**
@@ -135,10 +135,10 @@ public class Runtime {
 
   /** Class of information about each active call. */
   private static class CallInfo {
-    /** nonce of call */
+    /** nonce of call. */
     int nonce;
 
-    /** whether or not the call was captured on enter */
+    /** whether or not the call was captured on enter. */
     boolean captured;
 
     @Holding("Runtime.class")
@@ -438,7 +438,9 @@ public class Runtime {
         break;
       }
 
-      if (debug) System.out.println("processing class " + class_info.class_name);
+      if (debug) {
+        System.out.println("processing class " + class_info.class_name);
+      }
       if (first_class) {
         decl_writer.printHeaderInfo(class_info.class_name);
         first_class = false;
@@ -574,7 +576,9 @@ public class Runtime {
     }
     File file = new File(filename);
     File parent = file.getParentFile();
-    if (parent != null) parent.mkdirs();
+    if (parent != null) {
+      parent.mkdirs();
+    }
     OutputStream os = null; // dummy initialization for compiler's definite assignment check
     try {
       os = new FileOutputStream(filename, append);
@@ -729,7 +733,7 @@ public class Runtime {
     public Class<?> primitiveClass();
   }
 
-  /** wrapper used for boolean arguments */
+  /** wrapper used for boolean arguments. */
   public static class BooleanWrap implements PrimitiveWrapper {
     boolean val;
 
@@ -754,7 +758,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for int arguments */
+  /** wrapper used for int arguments. */
   public static class ByteWrap implements PrimitiveWrapper {
     byte val;
 
@@ -779,7 +783,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for int arguments */
+  /** wrapper used for int arguments. */
   public static class CharWrap implements PrimitiveWrapper {
     char val;
 
@@ -805,7 +809,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for int arguments */
+  /** wrapper used for int arguments. */
   public static class FloatWrap implements PrimitiveWrapper {
     float val;
 
@@ -830,7 +834,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for int arguments */
+  /** wrapper used for int arguments. */
   public static class IntWrap implements PrimitiveWrapper {
     int val;
 
@@ -855,7 +859,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for int arguments */
+  /** wrapper used for int arguments. */
   public static class LongWrap implements PrimitiveWrapper {
     long val;
 
@@ -880,7 +884,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for int arguments */
+  /** wrapper used for int arguments. */
   public static class ShortWrap implements PrimitiveWrapper {
     short val;
 
@@ -905,7 +909,7 @@ public class Runtime {
     }
   }
 
-  /** wrapper used for double arguments */
+  /** Wrapper used for double arguments. */
   public static class DoubleWrap implements PrimitiveWrapper {
     double val;
 
@@ -1017,9 +1021,9 @@ public class Runtime {
       result = classname.substring(1, classname.length() - 1);
       result = result.replace('/', '.');
     } else {
-      if (dims > 0) // array of primitives
-      result = primitiveClassesFromJvm.get(classname);
-      else {
+      if (dims > 0) { // array of primitives
+        result = primitiveClassesFromJvm.get(classname);
+      } else {
         // just a primitive
         result = classname;
       }

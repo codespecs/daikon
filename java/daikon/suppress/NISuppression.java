@@ -179,7 +179,9 @@ public class NISuppression {
     VarInfo vis[] = new VarInfo[suppressee.var_count];
     find_suppressed_invs(suppressed_invs, antecedents, vis, 0);
 
-    if (debug) System.out.println("  suppressed invariants: " + suppressed_invs);
+    if (debug) {
+      System.out.println("  suppressed invariants: " + suppressed_invs);
+    }
   }
 
   /**
@@ -207,7 +209,9 @@ public class NISuppression {
       List<Invariant> a = antecedents[i];
       int false_cnt = 0;
       for (Invariant inv : a) {
-        if (inv.is_false()) false_cnt++;
+        if (inv.is_false()) {
+          false_cnt++;
+        }
       }
 
       total_false_cnt += false_cnt;
@@ -223,7 +227,9 @@ public class NISuppression {
     // int old_size = unsuppressed_invs.size();
     Invariant[] cinvs = new Invariant[antecedents.length];
     find_unsuppressed_invs(unsuppressed_invs, antecedents, vis, 0, false, cinvs);
-    if (debug) System.out.println("  unsuppressed invariants: " + unsuppressed_invs);
+    if (debug) {
+      System.out.println("  unsuppressed invariants: " + unsuppressed_invs);
+    }
   }
 
   /**
@@ -356,7 +362,9 @@ public class NISuppression {
 
         // Create descriptions of the suppressed invariants
         List<NIS.SupInv> new_invs = suppressee.find_all(cvis, ppt, cinvs);
-        if (debug) System.out.printf("created %s new invariants", new_invs);
+        if (debug) {
+          System.out.printf("created %s new invariants", new_invs);
+        }
         unsuppressed_invs.addAll(new_invs);
 
         // Check to insure that none of the invariants already exists
@@ -442,7 +450,9 @@ public class NISuppression {
     // Make sure the resulting variables are in the proper order and are
     // compatible
     if (!vis_order_ok(cvis) || !vis_compatible(cvis)) {
-      if (debug) System.out.println("Skipping, cvis has bad order or is incompatible");
+      if (debug) {
+        System.out.println("Skipping, cvis has bad order or is incompatible");
+      }
       return null;
     }
 
@@ -495,7 +505,9 @@ public class NISuppression {
           return false;
         }
       }
-      if (vis[i] != null) prev = vis[i];
+      if (vis[i] != null) {
+        prev = vis[i];
+      }
     }
     return true;
   }

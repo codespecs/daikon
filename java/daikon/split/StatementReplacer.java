@@ -41,7 +41,7 @@ class StatementReplacer extends DepthFirstVisitor {
   private ReplaceStatementMap statementMap;
 
   /**
-   * true iff a match between the method name in the PrimaryExpression currently being visited and
+   * True iff a match between the method name in the PrimaryExpression currently being visited and
    * one of the members of methodNames is found.
    */
   private boolean matchFound = false;
@@ -100,8 +100,8 @@ class StatementReplacer extends DepthFirstVisitor {
 
   /**
    * This method should not be used directly by users of this class; however, it must be public to
-   * full-fill the visitor interface. If n is a method call with a replacement, then the variables
-   * of the replacement statement are replaced by the arguments to the method call and then the
+   * fulfill the visitor interface. If n is a method call with a replacement, then the variables of
+   * the replacement statement are replaced by the arguments to the method call and then the
    * replacement statement is substituted for the method call. The first token of n is set to the
    * replace statement. All the other tokens are set to the empty string by visit(NodeToken n).
    *
@@ -162,8 +162,8 @@ class StatementReplacer extends DepthFirstVisitor {
 
   /**
    * This method should not be used directly by users of this class; however, it must be public to
-   * full-fill the visitor interface. Sets all tokens except the first in a Primary expression to
-   * the empty string. All begin columns and endColumns are set to -1, to ensure that Ast printing
+   * fulfill the visitor interface. Sets all tokens except the first in a Primary expression to the
+   * empty string. All begin columns and endColumns are set to -1, to ensure that Ast printing
    * exceptions are not thrown.
    */
   @Override

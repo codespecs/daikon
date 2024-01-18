@@ -10,16 +10,20 @@ import daikon.inv.ValueSet;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.framework.qual.Unused;
+import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
 /**
- * Tracks every unique value and how many times it occurs. Prints as {@code x has values: v1 v2 v3
- * ...}.
+ * Tracks every unique value and how many times it occurs. Prints as either {@code x has no values}
+ * or as {@code x has values: v1 v2 v3 ...}. The set has no maximum size; it may be arbitrarily
+ * large.
  */
 public final class CompleteOneOfScalar extends SingleScalar {
   static final long serialVersionUID = 20091210L;
@@ -37,6 +41,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
   }
 
   /** List of values seen. */
+  // When the set of values seen is large, this representation is inefficient.
   @Unused(when = Prototype.class)
   @SuppressWarnings("serial")
   public List<Info> vals;
@@ -60,13 +65,11 @@ public final class CompleteOneOfScalar extends SingleScalar {
     return proto;
   }
 
-  /** returns whether or not this invariant is enabled */
   @Override
   public boolean enabled() {
     return dkconfig_enabled;
   }
 
-  /** instantiate an invariant on the specified slice */
   @Override
   public CompleteOneOfScalar instantiate_dyn(@Prototype CompleteOneOfScalar this, PptSlice slice) {
     return new CompleteOneOfScalar(slice);
@@ -77,23 +80,24 @@ public final class CompleteOneOfScalar extends SingleScalar {
   @Override
   public String format_using(@GuardSatisfied CompleteOneOfScalar this, OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
-      String out = var().name() + " has values: ";
-      for (Info val : vals) {
-        out += String.format(" %s[%d]", val.val, val.cnt);
+      if (vals.size() == 0) {
+        return var().name() + "has no values";
       }
-      return out;
+      StringJoiner out = new StringJoiner(" ", var().name() + " has values: ", "");
+      for (Info val : vals) {
+        out.add(String.format("%s[%d]", val.val, val.cnt));
+      }
+      return out.toString();
     } else {
       return format_unimplemented(format);
     }
   }
 
-  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus add_modified(long a, int count) {
     return check_modified(a, count);
   }
 
-  /** Check to see if a only contains printable ascii characters. */
   @Override
   public InvariantStatus check_modified(long a, int count) {
     for (Info val : vals) {
@@ -103,14 +107,12 @@ public final class CompleteOneOfScalar extends SingleScalar {
       }
     }
     vals.add(new Info(a, count));
-    // System.out.printf("check_modified %s%n", format());
     return InvariantStatus.NO_CHANGE;
   }
 
   @Override
   protected double computeConfidence() {
     ValueSet vs = ppt.var_infos[0].get_value_set();
-    // System.out.printf("%s value set = %s%n", ppt.var_infos[0].name(), vs);
     if (vs.size() > 0) {
       return Invariant.CONFIDENCE_JUSTIFIED;
     } else {
@@ -136,5 +138,23 @@ public final class CompleteOneOfScalar extends SingleScalar {
   @Override
   public boolean isSameFormula(Invariant o) {
     return false;
+  }
+
+  @Override
+  public @Nullable @NonPrototype CompleteOneOfScalar merge(
+      @Prototype CompleteOneOfScalar this,
+      List<@NonPrototype Invariant> invs,
+      PptSlice parent_ppt) {
+    @SuppressWarnings("nullness") // super.merge does not return null
+    @NonNull CompleteOneOfScalar result = (CompleteOneOfScalar) super.merge(invs, parent_ppt);
+    for (int i = 1; i < invs.size(); i++) {
+      for (Info info : ((CompleteOneOfScalar) invs.get(i)).vals) {
+        InvariantStatus status = result.add_modified(info.val, info.cnt);
+        if (status == InvariantStatus.FALSIFIED) {
+          return null;
+        }
+      }
+    }
+    return result;
   }
 }

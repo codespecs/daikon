@@ -11,7 +11,7 @@
 
 ################################################################################
 # The basic of approach of testing LinearTernary was the following:
-# 1. Add points that form a line to make sure a line is calculated when enough 
+# 1. Add points that form a line to make sure a line is calculated when enough
 # points are seen.
 # 2. Add an additional point to make sure the line is maintained
 # 3. Add an additional point to make sure the line is broken and a plane forms.
@@ -56,7 +56,7 @@ ppt: foo.f():::EXIT35
 # should break the line and form a plane
   assert: show_invs(x,y,z)
 ###################
-# the following does not work as planned because of zero coefficients 
+# the following does not work as planned because of zero coefficients
 ###################
 # assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, y, z);
 # data: 6 4 15
@@ -90,7 +90,7 @@ assert: show_invs(x,x,z)
 # should break the line and form a plane
 assert: show_invs(x,y,z)
 ###################
-# the following does not work as planned because of zero coefficients 
+# the following does not work as planned because of zero coefficients
 ###################
 # assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, y, z);
 # data: 6 6 15
@@ -108,7 +108,7 @@ assert: show_invs(x,y,z)
 
 
 
-# Test LinearTernary based on one constant value and two 
+# Test LinearTernary based on one constant value and two
 # vars (same)
 
 decl: daikon/test/SampleTester.decls
@@ -143,7 +143,7 @@ ppt: foo.f():::EXIT35
 
 
 
-# Test LinearTernary based on one constant value and two 
+# Test LinearTernary based on one constant value and two
 # vars (different)
 
 decl: daikon/test/SampleTester.decls
@@ -204,10 +204,3 @@ ppt: foo.f():::EXIT35
 # should break the plane
   data: 2 3 2
   assert: !inv(daikon.inv.ternary.threeScalar.LinearTernary, x, y, z);
-
-
-
-
-
-
-

@@ -124,8 +124,13 @@ public final class Configuration implements Serializable {
     assert input != null;
     for (String line : new EntryReader(input)) {
       line = line.trim();
-      if (line.length() == 0) continue; // skip blank lines
-      if (line.charAt(0) == '#') continue; // skip # comment lines
+      // Skip blank and comment lines
+      if (line.length() == 0) {
+        continue;
+      }
+      if (line.charAt(0) == '#') {
+        continue;
+      }
       apply(line);
     }
   }
@@ -354,7 +359,7 @@ public final class Configuration implements Serializable {
    * @param field a field; must be static
    * @param value the value to set the field to
    * @throws IllegalAccessException if {@code field} is enforcing Java language access control and
-   *     the underlying field is either inaccessible or final.
+   *     the underlying field is either inaccessible or final
    */
   // This method exists to reduce the scope of the warning suppression.
   @SuppressWarnings({

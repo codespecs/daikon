@@ -227,7 +227,9 @@ public class DynamicConstants implements Serializable {
       } else {
         out.append(" (val=" + val + ")");
       }
-      if (vi.isCanonical()) out.append(" (leader) ");
+      if (vi.isCanonical()) {
+        out.append(" (leader) ");
+      }
       out.append(
           " [always_missing="
               + always_missing
@@ -471,7 +473,9 @@ public class DynamicConstants implements Serializable {
 
     int con_cnt = 0;
     for (Constant con : con_list) {
-      if (con.vi.isCanonical()) con_cnt++;
+      if (con.vi.isCanonical()) {
+        con_cnt++;
+      }
     }
 
     return con_cnt;
@@ -532,7 +536,9 @@ public class DynamicConstants implements Serializable {
     // Create any ternary invariants that are suppressed when one
     // of the variables is a constant.  Currently, only LinearTernary
     // falls into this list (It is suppressed by (x = C) && (Ay + Bz = D))
-    if (NIS.dkconfig_enabled) instantiate_constant_suppressions(noncons, all_list);
+    if (NIS.dkconfig_enabled) {
+      instantiate_constant_suppressions(noncons, all_list);
+    }
   }
 
   /**
@@ -552,13 +558,17 @@ public class DynamicConstants implements Serializable {
     // Get list1 leaders
     Set<Constant> leaders1 = new LinkedHashSet<>();
     for (Constant con : list1) {
-      if (con.vi.isCanonical()) leaders1.add(con);
+      if (con.vi.isCanonical()) {
+        leaders1.add(con);
+      }
     }
 
     // Get list2 leaders
     Set<Constant> leaders2 = new LinkedHashSet<>();
     for (Constant con : list2) {
-      if (con.vi.isCanonical()) leaders2.add(con);
+      if (con.vi.isCanonical()) {
+        leaders2.add(con);
+      }
     }
 
     if (debug.isLoggable(Level.FINE)) {
@@ -573,13 +583,17 @@ public class DynamicConstants implements Serializable {
 
     // Unary slices/invariants
     for (Constant con : leaders1) {
-      if (Debug.logOn()) Debug.log(getClass(), ppt, Debug.vis(con.vi), "Considering slice");
+      if (Debug.logOn()) {
+        Debug.log(getClass(), ppt, Debug.vis(con.vi), "Considering slice");
+      }
       if (!ppt.is_slice_ok(con.vi)) {
         continue;
       }
       PptSlice1 slice1 = new PptSlice1(ppt, con.vi);
       slice1.instantiate_invariants();
-      if (Debug.logOn()) Debug.log(getClass(), ppt, Debug.vis(con.vi), "Instantiated invs");
+      if (Debug.logOn()) {
+        Debug.log(getClass(), ppt, Debug.vis(con.vi), "Instantiated invs");
+      }
       if (con.count > 0) {
         assert con.val != null : "@AssumeAssertion(nullness): dependent: val != null when count>0";
         slice1.add_val_bu(con.val, mod, con.count);
@@ -685,7 +699,9 @@ public class DynamicConstants implements Serializable {
             inv.log("Invariant %s destroyed by constant values %s", inv.format(), vals);
           }
         }
-        if (slice.invs.size() > 0) slice_cnt[slice.arity()]++;
+        if (slice.invs.size() > 0) {
+          slice_cnt[slice.arity()]++;
+        }
         inv_cnt[slice.arity()] += slice.invs.size();
         if (Debug.logDetail()) {
           StringBuilder sb = new StringBuilder();
@@ -1080,7 +1096,9 @@ public class DynamicConstants implements Serializable {
         assert con.val != null : "@AssumeAssertion(nullness): dependent: val when count>0";
         slice1.add_val_bu(con.val, mod, con.count);
       }
-      if (slice1.invs.size() > 0) new_views.add(slice1);
+      if (slice1.invs.size() > 0) {
+        new_views.add(slice1);
+      }
     }
 
     // Binary slices/invariants
@@ -1106,7 +1124,9 @@ public class DynamicConstants implements Serializable {
               : "@AssumeAssertion(nullness): dependent: val != null when count>0";
           slice2.add_val_bu(con1.val, con2.val, mod, mod, con1.count);
         }
-        if (slice2.invs.size() > 0) new_views.add(slice2);
+        if (slice2.invs.size() > 0) {
+          new_views.add(slice2);
+        }
       }
     }
 
@@ -1162,7 +1182,9 @@ public class DynamicConstants implements Serializable {
       c.checkRep();
       c.always_missing = missing;
       c.checkRep();
-      if (missing) missing_list.add(c);
+      if (missing) {
+        missing_list.add(c);
+      }
     }
   }
 

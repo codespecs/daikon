@@ -416,26 +416,26 @@ public final class Daikon {
   // These variables are public so other programs can reuse the same
   // command-line options.
 
-  /** option help */
+  /** option help. */
   public static final String help_SWITCH = "help";
 
   // "-o" switch: file to which serialized output is written
-  /** option no-text-output */
+  /** option no-text-output. */
   public static final String no_text_output_SWITCH = "no_text_output";
 
-  /** option format */
+  /** option format. */
   public static final String format_SWITCH = "format";
 
-  /** option show-progress */
+  /** option show-progress. */
   public static final String show_progress_SWITCH = "show_progress";
 
-  /** option show-detail-progress */
+  /** option show-detail-progress. */
   public static final String show_detail_progress_SWITCH = "show_detail_progress";
 
-  /** option no-show-progress */
+  /** option no-show-progress. */
   public static final String no_show_progress_SWITCH = "no_show_progress";
 
-  /** option noversion */
+  /** option noversion. */
   public static final String noversion_SWITCH = "noversion";
 
   public static final String output_num_samples_SWITCH = "output_num_samples";
@@ -758,7 +758,9 @@ public final class Daikon {
     LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
 
     if (!noversion_output) {
-      if (!Daikon.dkconfig_quiet) System.out.println(release_string);
+      if (!Daikon.dkconfig_quiet) {
+        System.out.println(release_string);
+      }
     }
 
     // figure out which algorithm to use in NIS to process suppressions
@@ -1464,7 +1466,7 @@ public final class Daikon {
    * @param field a field; must be static
    * @param value the value to set the field to
    * @throws IllegalAccessException if {@code field} is enforcing Java language access control and
-   *     the underlying field is either inaccessible or final.
+   *     the underlying field is either inaccessible or final
    */
   // This method exists to reduce the scope of the warning suppression.
   @SuppressWarnings({
@@ -1790,7 +1792,9 @@ public final class Daikon {
     for (Iterator<@Prototype Invariant> i = proto_invs.iterator(); i.hasNext(); ) {
       @Prototype Invariant inv = i.next();
       assert inv != null;
-      if (!inv.enabled()) i.remove();
+      if (!inv.enabled()) {
+        i.remove();
+      }
     }
   }
 
@@ -2410,7 +2414,9 @@ public final class Daikon {
       debugProgress.fine("Constant Post Processing ... ");
       startTime = System.nanoTime();
       for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
-        if (ppt.constants != null) ppt.constants.post_process();
+        if (ppt.constants != null) {
+          ppt.constants.post_process();
+        }
       }
       duration = System.nanoTime() - startTime;
       debugProgress.fine(
@@ -2638,7 +2644,9 @@ public final class Daikon {
 
   /** Removed invariants as specified in omit_types. */
   private static void processOmissions(PptMap allPpts) {
-    if (omit_types['0']) allPpts.removeUnsampled();
+    if (omit_types['0']) {
+      allPpts.removeUnsampled();
+    }
     for (PptTopLevel ppt : allPpts.asCollection()) {
       ppt.processOmissions(omit_types);
     }
