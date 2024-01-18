@@ -586,7 +586,8 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	cd java && find . \( -name "dcomp-rt*" \) -prune -o -name '*.class' -print \
 		| sort | xargs '-I{}' ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar
 
-	for filename in $(JAR_DIR)/java/lib/*.jar ; do cd ${TMPDIR}/daikon-jar; jar xf $$filename ; done
+	# make hamcrest and junit4 overwrite junit5 to get our special versions
+	for filename in $(JAR_DIR)/java/lib/*.jar $(JAR_DIR)/java/lib/hamcrest*.jar $(JAR_DIR)/java/lib/junit-4*.jar; do cd ${TMPDIR}/daikon-jar; jar xf $$filename ; done
 	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
 	(cd java; ${RSYNC_AR} daikon/tools/runtimechecker/Main.doc daikon/tools/runtimechecker/InstrumentHandler.doc ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
