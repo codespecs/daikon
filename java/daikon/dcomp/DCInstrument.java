@@ -3711,6 +3711,9 @@ public class DCInstrument extends InstructionListUtils {
     // If there is a return value, return it
     il.append(InstructionFactory.createReturn(mg.getReturnType()));
 
+    // We've created new il; we need to set the instruction handle positions.
+    il.setPositions();
+
     // Add the instructions to the method
     mg.setInstructionList(il);
     mg.setMaxStack();
