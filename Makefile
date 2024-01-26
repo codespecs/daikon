@@ -719,9 +719,12 @@ showvars:
 	@echo "NEW_RELEASE_NAME =" $(NEW_RELEASE_NAME)
 	${MAKE} -C java showvars
 
-# If .git does not exist, then directory was created from a daikon archive file.
+# If .git does not exist, then the directory was created from a Daikon archive file.
 update-libs: update-bibtex2web update-checklink update-html-tools update-plume-scripts update-run-google-java-format
 .PHONY: update-libs update-bibtex2web update-checklink update-html-tools update-plume-scripts update-run-google-java-format
+
+# Unfortunately, I don't see a way for the below not to output lots of "remote:" lines to the log.
+# But, I can avoid doing local output.
 
 update-bibtex2web:
 ifndef NONETWORK
@@ -755,7 +758,7 @@ ifndef NONETWORK
 	if test -d utils/plume-scripts/.git ; then \
 	  (cd utils/plume-scripts && (git pull -q || (sleep 1m && (git pull || true)))) \
 	elif ! test -d utils/plume-scripts ; then \
-	  mkdir -p utils && (git clone -q --no-progress --filter=blob:none --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts || (sleep 1m && git clone -q --no-progress --filter=blob:none --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts)) \
+	  mkdir -p utils && (git clone -q --filter=blob:none --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts || (sleep 1m && git clone -q --filter=blob:none --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts)) \
 	fi
 endif
 
