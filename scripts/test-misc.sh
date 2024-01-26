@@ -8,6 +8,7 @@ set -o verbose
 set -o xtrace
 export SHELLOPTS
 
+# Leave unset for no debugging output
 DEBUG=1
 
 make compile daikon.jar
@@ -20,7 +21,7 @@ else
     echo "cloning into /tmp/$USER"
     echo "TERM=$TERM"
   fi
-  (cd "/tmp/$USER" && (git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git || (sleep 1m && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)))
+  (cd "/tmp/$USER" && (git clone --filter=blob:none --depth 1 -q https://github.com/plume-lib/plume-scripts.git || (sleep 1m && git clone --filter=blob:none --depth 1 -q https://github.com/plume-lib/plume-scripts.git)))
   if [ -n "$DEBUG" ] ; then
     echo "cloned into /tmp/$USER"
   fi
