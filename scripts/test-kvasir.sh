@@ -18,7 +18,7 @@ export SHELLOPTS
 
 make showvars compile daikon.jar
 
-echo ".travis-build.sh is running kvasir and DynComp tests"
+echo "test-kvasir.sh is running kvasir and DynComp tests"
 
 # Running Kvasir tests here may seem redundant with the fjalar project's Travis
 # build; however, it means that they are run on each branch and pull request.
