@@ -18,6 +18,7 @@ else
   mkdir -p "/tmp/$USER"
   if [ -n "$DEBUG" ] ; then
     echo "cloning into /tmp/$USER"
+    echo "TERM=$TERM"
   fi
   (cd "/tmp/$USER" && (git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git || (sleep 1m && git clone --depth 1 -q https://github.com/plume-lib/plume-scripts.git)))
   if [ -n "$DEBUG" ] ; then
