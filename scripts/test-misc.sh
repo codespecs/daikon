@@ -62,7 +62,7 @@ target 'api-private' failed"
       reason="$reason
 target 'requireJavadoc' failed"
     fi
-    if $status ; then
+    if [ $status -ne 0 ] ; then
       echo "$reason"
       echo "See output above"
       exit 1
