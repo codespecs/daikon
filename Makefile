@@ -626,6 +626,7 @@ daikon.tar daikon.zip: kvasir $(README_PATHS) $(DAIKON_JAVA_FILES) java/Makefile
 
 	# Utility libraries
 	mkdir ${TMPDIR}/daikon/utils
+	(cd utils/git-scripts; git archive --prefix=git-scripts/ HEAD | (cd ${TMPDIR}/daikon/utils/ && tar xf -))
 	(cd utils/plume-scripts; git archive --prefix=plume-scripts/ HEAD | (cd ${TMPDIR}/daikon/utils/ && tar xf -))
 
 	# Auxiliary programs
@@ -720,7 +721,7 @@ showvars:
 	${MAKE} -C java showvars
 
 # If .git does not exist, then directory was created from a daikon archive file.
-update-libs: update-bibtex2web update-checklink update-html-tools update-plume-scripts update-run-google-java-format
+update-libs: update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-run-google-java-format
 .PHONY: update-libs update-bibtex2web update-checklink update-html-tools update-plume-scripts update-run-google-java-format
 
 update-bibtex2web:
@@ -738,6 +739,15 @@ ifndef NONETWORK
 	  (cd utils/checklink && (git pull -q || (sleep 1m && (git pull || true)))) \
 	elif ! test -d utils/checklink ; then \
 	  (mkdir -p utils && (git clone -q --filter=blob:none https://github.com/plume-lib/checklink.git utils/checklink || (sleep 1m && git clone -q --filter=blob:none https://github.com/plume-lib/checklink.git utils/checklink))) \
+	fi
+endif
+
+update-git-scripts:
+ifndef NONETWORK
+	if test -d utils/git-scripts/.git ; then \
+	  (cd utils/git-scripts && (git pull -q || (sleep 1m && (git pull || true)))) \
+	elif ! test -d utils/git-scripts ; then \
+	  (mkdir -p utils && (git clone -q --filter=blob:none https://github.com/plume-lib/git-scripts.git utils/git-scripts || (sleep 1m && git clone -q --filter=blob:none https://github.com/plume-lib/git-scripts.git utils/git-scripts))) \
 	fi
 endif
 
