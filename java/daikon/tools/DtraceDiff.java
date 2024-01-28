@@ -268,7 +268,7 @@ public class DtraceDiff {
 
         while (true) {
           // *** should do some kind of progress bar here?
-          // read from dtracefile1 until we get a sample record or a decl record or an EOF
+          // Read from dtracefile1 until we get a sample record or a decl record or an EOF.
           while (true) {
             FileIO.read_data_trace_record_setstate(state1);
             if ((state1.rtype == FileIO.RecordType.SAMPLE)
@@ -279,7 +279,7 @@ public class DtraceDiff {
               break;
             }
           }
-          // read from dtracefile2 until we get a sample record or a decl record or an EOF
+          // Read from dtracefile2 until we get a sample record or a decl record or an EOF.
           while (true) {
             FileIO.read_data_trace_record_setstate(state2);
             if ((state2.rtype == FileIO.RecordType.SAMPLE)
