@@ -12,9 +12,15 @@ export SHELLOPTS
 make showvars
 make compile daikon.jar
 
+if test -d utils/git-scripts/.git ; then \
+  (cd utils/git-scripts && (git pull -q || (sleep 1m && (git pull || true)))) \
+elif ! test -d utils/git-scripts ; then \
+  (mkdir -p utils && (git clone -q --depth 1 https://github.com/plume-lib/git-scripts.git utils/git-scripts || (sleep 1m && git clone -q --depth 1 https://github.com/plume-lib/git-scripts.git utils/git-scripts))) \
+fi
+
 # Use a version of the Checker Framework cloned from a GitHub
 # repository, NOT the version checked in at java/lib/checker-framework/.
-utils/plume-scripts/git-clone-related typetools checker-framework
+utils/git-scripts/git-clone-related typetools checker-framework
 (cd ../checker-framework && ./gradlew assembleForJavac --console=plain -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.http.connectionTimeout=60000)
 CHECKERFRAMEWORK=$(realpath ../checker-framework)
 export CHECKERFRAMEWORK
