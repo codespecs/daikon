@@ -375,8 +375,8 @@ public class DtraceDiff {
                     ppt_var_decl_error(vis1[i], state1, dtracefile1, vis2[i], state2, dtracefile2);
                   } else {
                     System.out.printf("ERROR: dtrace decl mismatch within: %s%n", ppt1.name);
-                    print_varinfo(vis1[i]);
-                    print_varinfo(vis2[i]);
+                    printVarinfo(vis1[i]);
+                    printVarinfo(vis2[i]);
                   }
                 }
               }
@@ -444,20 +444,20 @@ public class DtraceDiff {
   }
 
   /**
-   * Used for debugging - prints some of a VarInfo fields. Note there are many fields not printed:
+   * Used for debugging -- prints some of a VarInfo fields. Note there are many fields not printed:
    * comparability, constant, exclosing-var and parent, for example.
    *
    * @param vi the VarInfo to print
    */
-  private static void print_varinfo(VarInfo vi) {
+  private static void printVarinfo(VarInfo vi) {
     System.out.printf("variable %s%n", vi.str_name());
     System.out.printf("  var-kind %s%n", vi.var_kind);
     System.out.printf("  dec-type %s%n", vi.type);
     System.out.printf("  rep-type %s%n", vi.file_rep_type);
     if (!vi.var_flags.isEmpty()) {
-      System.out.printf("  flags ");
+      System.out.printf("  flags");
       for (VarFlags flag : vi.var_flags) {
-        System.out.printf("%s ", flag.name().toLowerCase());
+        System.out.printf(" %s", flag.name().toLowerCase());
       }
       System.out.printf("%n");
     }
