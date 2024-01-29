@@ -63,7 +63,11 @@ public class DtraceDiff {
   /** Set this flag true for debugging output. */
   private static boolean debug = false;
 
-  /** DtraceDiff program entry point. */
+  /**
+   * Entry point for DtraceDiff program.
+   *
+   * @param args command-line arguments, like those of {@link #mainHelper} and {@link #main}
+   */
   public static void main(String[] args) {
     try {
       mainHelper(args);
