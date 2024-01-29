@@ -60,8 +60,10 @@ public class DtraceDiff {
           "      Specify a configuration option ",
           "See the Daikon manual for more information.");
 
+  /** Set this flag true for debugging output. */
   private static boolean debug = false;
 
+  /** DtraceDiff program entry point. */
   public static void main(String[] args) {
     try {
       mainHelper(args);
@@ -463,6 +465,14 @@ public class DtraceDiff {
     }
   }
 
+  /**
+   * Compare two VarInfo fields for equality.
+   *
+   * @param vi a VarInfo that holds val1
+   * @param val1 a VarInfo field to compare
+   * @param val2 a VarInfo field to compare
+   * @return true if the fields match
+   */
   private static boolean values_are_equal(VarInfo vi, Object val1, Object val2) {
     ProglangType type = vi.file_rep_type;
     // System.out.printf("values_are_equal type = %s%n", type);
