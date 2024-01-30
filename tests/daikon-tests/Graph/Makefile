@@ -6,6 +6,10 @@ MAIN_CLASS:=MapQuick1.PS4TestDriver
 
 ESC_ON:=1
 
+# For some unknown reason the JVM may load two classes in a different order
+# on different runs.  Thus, we skip the DtraceDiff comparison.
+SKIP_DTRACE_DIFF := 1
+
 # This is unnecessary when we have instrument-files-revise
 # USER_DAIKON_OPTIONS:=--ppt-select-pattern="^MapQuick1\.Graph[:\.]"
 

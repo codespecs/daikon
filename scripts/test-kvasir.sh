@@ -18,7 +18,7 @@ export SHELLOPTS
 
 make showvars compile daikon.jar
 
-echo ".travis-build.sh is running kvasir and DynComp tests"
+echo "test-kvasir.sh is running kvasir and DynComp tests"
 
 # Running Kvasir tests here may seem redundant with the fjalar project's Travis
 # build; however, it means that they are run on each branch and pull request.
@@ -28,7 +28,8 @@ if [ ! -d ../fjalar ] ; then
   if [ -d "/tmp/$USER/git-scripts" ] ; then
     (cd "/tmp/$USER/git-scripts" && git pull -q) > /dev/null 2>&1
   else
-    mkdir -p "/tmp/$USER" && (cd "/tmp/$USER" && (git clone --depth 1 -q https://github.com/plume-lib/git-scripts.git || (sleep 1m && git clone --depth 1 -q https://github.com/plume-lib/git-scripts.git)))
+    mkdir -p "/tmp/$USER"
+    (cd "/tmp/$USER" && (git clone --depth 1 -q https://github.com/plume-lib/git-scripts.git || (sleep 1m && git clone --depth 1 -q https://github.com/plume-lib/git-scripts.git)))
   fi
   "/tmp/$USER/git-scripts/git-clone-related" codespecs fjalar
 fi

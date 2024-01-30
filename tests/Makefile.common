@@ -726,11 +726,15 @@ ${PROJECT_FILE}.txt-chicory.diff: $(call goal_name,${PROJECT_FILE}.txt-chicory) 
 	@echo
 	@echo "### dtrace diff (${PROJECT_FILE})"
 	@echo
+ifeq ($(SKIP_DTRACE_DIFF),)
 	-rm -f $@
 	-java -cp "${DAIKON_TESTS_CLASSPATH}" -ea daikon.tools.DtraceDiff \
 		$(call goal_name,${PROJECT_FILE}.txt-chicory) \
 	    ${PROJECT_FILE}.txt-chicory.dtrace > $@ 2>&1
 	cat $@
+else
+	@echo skipping DtraceDiff
+endif
 else
 txt-chicory:
 	@echo "Can't run chicory, trace file is stored, not generated"
