@@ -7,6 +7,7 @@ import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
 import daikon.plumelib.util.RegexUtil;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -97,6 +98,25 @@ public class DynComp {
   @Option("Path to the DynComp agent jar file (usually dcomp_premain.jar)")
   public static @MonotonicNonNull File premain = null;
 
+  /** Holds the path to "daikon.jar" or to "daikon/java:daikon/java/lib*". */
+  // Set by start_target()
+  public static @MonotonicNonNull String daikonPath = null;
+
+  /** The current class path. */
+  String cp;
+
+  /** The current path separator. */
+  String path_separator;
+
+  /** The current file separator. */
+  String file_separator;
+
+  /** Contains the expansion of java/lib/* if it is on the classpath. */
+  String java_lib_path;
+
+  /** The contents of DAIKONDIR environment setting. */
+  String daikon_dir;
+
   // The following are internal debugging options primarily for use by the DynComp maintainers.
   // They are not documented in the Daikon User Manual.
 
@@ -121,6 +141,35 @@ public class DynComp {
 
   /** Synopsis for the DynComp command line. */
   public static final String synopsis = "daikon.DynComp [options] target [target-args]";
+
+  /**
+   * Locate where a class was loaded from.
+   *
+   * @param c class to look up
+   * @return path to class or null if not found
+   */
+  public static String whereFrom(Class<?> c) {
+    if (c == null) {
+      return null;
+    }
+    ClassLoader loader = c.getClassLoader();
+    if (loader == null) {
+      // Try the bootstrap classloader - obtained from the ultimate parent of the System Class
+      // Loader.
+      loader = ClassLoader.getSystemClassLoader();
+      while (loader != null && loader.getParent() != null) {
+        loader = loader.getParent();
+      }
+    }
+    if (loader != null) {
+      String name = c.getCanonicalName();
+      URL resource = loader.getResource(name.replace(".", "/") + ".class");
+      if (resource != null) {
+        return resource.toString();
+      }
+    }
+    return null;
+  }
 
   /**
    * Entry point of DynComp.
@@ -198,14 +247,17 @@ public class DynComp {
     }
 
     // Get the current classpath
-    String cp = System.getProperty("java.class.path");
+    cp = System.getProperty("java.class.path");
     basic.log("classpath = '%s'%n", cp);
     if (cp == null) {
       cp = ".";
     }
 
+    // Get location of DAIKONDIR, may be empty
+    daikon_dir = System.getenv("DAIKONDIR");
+
     // The separator for items in the class path
-    String path_separator = System.getProperty("path.separator");
+    path_separator = System.getProperty("path.separator");
     basic.log("path_separator = %s%n", path_separator);
     if (!RegexUtil.isRegex(path_separator)) {
       throw new Daikon.UserError(
@@ -215,33 +267,46 @@ public class DynComp {
               + RegexUtil.regexError(path_separator));
     }
 
-    // Look for dcomp_premain.jar along the classpath
-    if (premain == null) {
-      String[] cpath = cp.split(path_separator);
-      for (String path : cpath) {
-        File poss_premain;
-        if (path.endsWith("dcomp_premain.jar")) {
-          poss_premain = new File(path);
-        } else {
-          poss_premain = new File(path, "dcomp_premain.jar");
+    file_separator = System.getProperty("file.separator");
+    // Find where DynComp was loaded from.
+    String wheresDynComp = whereFrom(DynComp.class);
+    if (wheresDynComp != null) {
+      if (wheresDynComp.startsWith("file:")) {
+        wheresDynComp = wheresDynComp.substring(5);
+        int end = wheresDynComp.indexOf("daikon" + file_separator + "DynComp.class");
+        if (end != -1) {
+          // We found DynComp on the classpath, not in daikon.jar. This occurs, for example,
+          // when a developer is testing daikon changes prior to building a new daikon.jar.
+          // In this case, we need to add either "java/lib/*" or "daikon.jar" to the classpath
+          // as well. locateFile has a special case for "java/lib/*".
+          File daikonPathFile = locateFile("daikon.jar");
+          if (daikonPathFile != null) {
+            // Empty file name is flag to use java_lib_path instead.
+            if (daikonPathFile.getPath().length() == 0) {
+              daikonPath = wheresDynComp.substring(0, end - 1) + java_lib_path;
+            } else {
+              daikonPath =
+                  wheresDynComp.substring(0, end - 1) + path_separator + daikonPathFile.getPath();
+            }
+          }
         }
-        // System.out.printf("looking for file %s%n", poss_premain);
-        if (poss_premain.canRead()) {
-          premain = poss_premain;
-          break;
+      } else if (wheresDynComp.startsWith("jar:file:")) {
+        int end = wheresDynComp.indexOf('!');
+        if (end != -1) {
+          daikonPath = wheresDynComp.substring(9, end);
         }
       }
     }
+    if (daikonPath == null) {
+      System.err.printf("Cannot locate Daikon directory or daikon.jar.%n");
+      System.exit(1);
+    }
+    // debuging
+    System.out.println("daikonPath: " + daikonPath);
 
-    // If not on the classpath look in ${DAIKONDIR}/java
-    String daikon_dir = System.getenv("DAIKONDIR");
+    // Look for location of dcomp_premain.jar
     if (premain == null) {
-      if (daikon_dir != null) {
-        File poss_premain = new File(new File(daikon_dir, "java"), "dcomp_premain.jar");
-        if (poss_premain.canRead()) {
-          premain = poss_premain;
-        }
-      }
+      premain = locateFile("dcomp_premain.jar");
     }
 
     // If we didn't find a premain, give up
@@ -258,33 +323,11 @@ public class DynComp {
       System.exit(1);
     }
 
-    // Look for rt-file
+    // Do we need rt-file?
     if (!no_jdk) {
-      // Look for dcomp_rt.jar along the classpath
+      // Look for location of dcomp_rt.jar
       if (rt_file == null) {
-        String[] cpath = cp.split(path_separator);
-        for (String path : cpath) {
-          File poss_rt;
-          if (path.endsWith("dcomp_rt.jar")) {
-            poss_rt = new File(path);
-          } else {
-            poss_rt = new File(path, "dcomp_rt.jar");
-          }
-          if (poss_rt.canRead()) {
-            rt_file = poss_rt;
-            break;
-          }
-        }
-      }
-
-      // If not on the classpath look in ${DAIKONDIR}/java
-      if (rt_file == null) {
-        if (daikon_dir != null) {
-          File poss_rt = new File(new File(daikon_dir, "java"), "dcomp_rt.jar");
-          if (poss_rt.canRead()) {
-            rt_file = poss_rt;
-          }
-        }
+        rt_file = locateFile("dcomp_rt.jar");
       }
 
       // If we didn't find a rt-file, give up
@@ -302,21 +345,6 @@ public class DynComp {
       }
     }
 
-    // For some unknown reason, groovy cannot be on the boot classpath.
-    String[] cpaths = cp.split(path_separator);
-    for (int i = 0; i < cpaths.length; i++) {
-      if (cpaths[i].contains("groovy")) {
-        @SuppressWarnings("regex:argument")
-        String[] path_elements = cpaths[i].split(File.separator);
-        if (path_elements[path_elements.length - 1].matches("^groovy.*\\.jar$")) {
-          cpaths[i] = "";
-        }
-      }
-    }
-    String boot_path =
-        String.join(path_separator, cpaths)
-            .replaceAll(path_separator + path_separator, path_separator);
-
     // Build the command line to execute the target with the javaagent
     List<String> cmdlist = new ArrayList<>();
     cmdlist.add("java");
@@ -333,7 +361,7 @@ public class DynComp {
     if (BcelUtil.javaVersion <= 8) {
       if (!no_jdk) {
         // prepend to rather than replace bootclasspath
-        cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + boot_path);
+        cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + daikonPath);
       }
     } else {
       // allow DCRuntime to make reflective access to java.land.Object.clone() without a warning
@@ -342,7 +370,7 @@ public class DynComp {
       if (!no_jdk) {
         // If we are processing JDK classes, then we need our code on the bootclasspath as well.
         // Otherwise, references to DCRuntime from the JDK would fail.
-        cmdlist.add("-Xbootclasspath/a:" + rt_file + path_separator + boot_path);
+        cmdlist.add("-Xbootclasspath/a:" + rt_file + path_separator + daikonPath);
         // allow java.base to access daikon.jar (for instrumentation runtime)
         cmdlist.add("--add-reads");
         cmdlist.add("java.base=ALL-UNNAMED");
@@ -453,5 +481,68 @@ public class DynComp {
       str += arg + " ";
     }
     return str.trim();
+  }
+
+  /**
+   * Search the current classpath for fileName. Return the path if found. If not found, try
+   * ${DAIKONDIR}/java, then ${DAIKONDIR}. Return the path if found. Return null if not found.
+   *
+   * @param fileName name of file to look for
+   * @return path to fileName or null
+   */
+  public File locateFile(String fileName) {
+    String[] cpath = cp.split(path_separator);
+    File poss_file;
+    String java_lib = "java" + file_separator + "lib" + file_separator;
+    java_lib_path = "";
+    int java_lib_count = 0;
+    for (String path : cpath) {
+      int index = path.indexOf(java_lib);
+      if (index != -1) {
+        // If the path contains "java/lib/" it is from the expansion of
+        // "java/lib/*". However, this short hand is not allowed on the
+        // bootclasspath so we must save the entire list.
+        java_lib_count++;
+        java_lib_path = java_lib_path + path_separator + path;
+      }
+      if (path.endsWith(fileName)) {
+        poss_file = new File(path);
+      } else {
+        poss_file = new File(path, fileName);
+      }
+      if (poss_file.canRead()) {
+        // We need to do a special case:
+        // If "java/lib/*" appears on the classpath
+        // before daikon.jar, use that instead.
+        if (java_lib_count > 10 && fileName.equals("daikon.jar")) {
+          // Return empty file name as flag to use java_lib_path instead.
+          return new File("");
+        }
+        return poss_file;
+      }
+    }
+
+    // Not on the class path - do special case:
+    // If looking for daikon.jar and java/lib/* is on
+    // classpath, then use that. 10 is arbitary value,
+    // currently there are 14 jar files in java/lib.
+    if (java_lib_count > 10 && fileName.equals("daikon.jar")) {
+      // Return empty file name as flag to use java_lib_path instead.
+      return new File("");
+    }
+
+    // If not on the classpath look in ${DAIKONDIR}/java, then ${DAIKONDIR}.
+    if (daikon_dir != null) {
+      poss_file = new File(new File(daikon_dir, "java"), fileName);
+      if (poss_file.canRead()) {
+        return poss_file;
+      }
+      poss_file = new File(daikon_dir, fileName);
+      if (poss_file.canRead()) {
+        return poss_file;
+      }
+    }
+    // Couldn't find fileName
+    return null;
   }
 }
