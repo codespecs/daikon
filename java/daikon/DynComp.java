@@ -96,26 +96,26 @@ public class DynComp {
    */
   // Set by start_target()
   @Option("Path to the DynComp agent jar file (usually dcomp_premain.jar)")
-  public static @MonotonicNonNull File premain = null;
+  public static @Nullable File premain = null;
 
   /** Holds the path to "daikon.jar" or to "daikon/java:daikon/java/lib*". */
   // Set by start_target()
   public static @MonotonicNonNull String daikonPath = null;
 
   /** The current class path. */
-  String cp;
+  static @MonotonicNonNull String cp = null;
 
   /** The current path separator. */
-  String path_separator;
+  static @MonotonicNonNull String path_separator = null;
 
   /** The current file separator. */
-  String file_separator;
+  static @MonotonicNonNull String file_separator = null;
 
   /** Contains the expansion of java/lib/* if it is on the classpath. */
-  String java_lib_path;
+  static @Nullable String java_lib_path = null;
 
   /** The contents of DAIKONDIR environment setting. */
-  String daikon_dir;
+  static @Nullable String daikon_dir = null;
 
   // The following are internal debugging options primarily for use by the DynComp maintainers.
   // They are not documented in the Daikon User Manual.
@@ -148,7 +148,7 @@ public class DynComp {
    * @param c class to look up
    * @return path to class or null if not found
    */
-  public static String whereFrom(Class<?> c) {
+  public static @Nullable String whereFrom(Class<?> c) {
     if (c == null) {
       return null;
     }
@@ -163,9 +163,11 @@ public class DynComp {
     }
     if (loader != null) {
       String name = c.getCanonicalName();
-      URL resource = loader.getResource(name.replace(".", "/") + ".class");
-      if (resource != null) {
-        return resource.toString();
+      if (name != null) {
+        URL resource = loader.getResource(name.replace(".", "/") + ".class");
+        if (resource != null) {
+          return resource.toString();
+        }
       }
     }
     return null;
@@ -490,7 +492,8 @@ public class DynComp {
    * @param fileName name of file to look for
    * @return path to fileName or null
    */
-  public File locateFile(String fileName) {
+  public @Nullable File locateFile(String fileName) {
+    @SuppressWarnings("nullness") // start_target ensures cp and path_separator are non-null
     String[] cpath = cp.split(path_separator);
     File poss_file;
     String java_lib = "java" + file_separator + "lib" + file_separator;
