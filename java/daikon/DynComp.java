@@ -112,7 +112,7 @@ public class DynComp {
   static @MonotonicNonNull String file_separator = null;
 
   /** Contains the expansion of java/lib/* if it is on the classpath. */
-  static @Nullable String java_lib_path = null;
+  static @Nullable String java_lib_classpath = null;
 
   /** The contents of DAIKONDIR environment setting. */
   static @Nullable String daikon_dir = null;
@@ -283,9 +283,9 @@ public class DynComp {
           // as well. locateFile has a special case for "java/lib/*".
           File daikonPathFile = locateFile("daikon.jar");
           if (daikonPathFile != null) {
-            // Empty file name is flag to use java_lib_path instead.
+            // Empty file name is flag to use java_lib_classpath instead.
             if (daikonPathFile.getPath().length() == 0) {
-              daikonPath = wheresDynComp.substring(0, end - 1) + java_lib_path;
+              daikonPath = wheresDynComp.substring(0, end - 1) + java_lib_classpath;
             } else {
               daikonPath =
                   wheresDynComp.substring(0, end - 1) + path_separator + daikonPathFile.getPath();
@@ -486,8 +486,11 @@ public class DynComp {
   }
 
   /**
-   * Search the current classpath for fileName. Return the path if found. If not found, try
-   * ${DAIKONDIR}/java, then ${DAIKONDIR}. Return the path if found. Return null if not found.
+   * Search for a file on the current classpath, then in ${DAIKONDIR}/java, then in ${DAIKONDIR}.
+   * Returns an empty file name to mean use the expansion of {@code java/lib/*}. Returns null if not
+   * found.
+   *
+   * <p>This method also sets {@link #java_lib_classpath} to the expansion of {@code java/lib/*}.
    *
    * @param fileName name of file to look for
    * @return path to fileName or null
@@ -497,19 +500,18 @@ public class DynComp {
       "nullness", // start_target ensures cp and path_separator are non-null
       "regex:argument" // the path.separator property is a valid Regex
     })
-    String[] cpath = cp.split(path_separator);
     File poss_file;
     String java_lib = "java" + file_separator + "lib" + file_separator;
-    java_lib_path = "";
+    java_lib_classpath = "";
     int java_lib_count = 0;
-    for (String path : cpath) {
+    for (String path : cp.split(path_separator)) {
       int index = path.indexOf(java_lib);
       if (index != -1) {
         // If the path contains "java/lib/" it is from the expansion of
-        // "java/lib/*". However, this short hand is not allowed on the
+        // "java/lib/*". However, this shorthand is not allowed on the
         // bootclasspath so we must save the entire list.
         java_lib_count++;
-        java_lib_path = java_lib_path + path_separator + path;
+        java_lib_classpath = java_lib_classpath + path_separator + path;
       }
       if (path.endsWith(fileName)) {
         poss_file = new File(path);
@@ -521,7 +523,7 @@ public class DynComp {
         // If "java/lib/*" appears on the classpath
         // before daikon.jar, use that instead.
         if (java_lib_count > 10 && fileName.equals("daikon.jar")) {
-          // Return empty file name as flag to use java_lib_path instead.
+          // Return empty file name as flag to use java_lib_classpath instead.
           return new File("");
         }
         return poss_file;
@@ -533,7 +535,7 @@ public class DynComp {
     // classpath, then use that. 10 is arbitary value,
     // currently there are 14 jar files in java/lib.
     if (java_lib_count > 10 && fileName.equals("daikon.jar")) {
-      // Return empty file name as flag to use java_lib_path instead.
+      // Return empty file name as flag to use java_lib_classpath instead.
       return new File("");
     }
 
