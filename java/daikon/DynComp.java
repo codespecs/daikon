@@ -282,14 +282,14 @@ public class DynComp {
           // when a developer is testing daikon changes prior to building a new daikon.jar.
           // In this case, we need to add either "java/lib/*" or "daikon.jar" to the classpath
           // as well. locateFile has a special case for "java/lib/*".
-          File daikonPathFile = locateFile("daikon.jar");
-          if (daikonPathFile != null) {
-            // Empty file name is flag to use java_lib_classpath instead.
-            if (daikonPathFile.getPath().length() == 0) {
+          File daikonJarFile = locateFile("daikon.jar");
+          if (daikonJarFile != null) {
+            // Empty file name returned from `locateFile()` means to use java_lib_classpath instead.
+            if (daikonJarFile.getPath().length() == 0) {
               daikonPath = wheresDynComp.substring(0, end - 1) + java_lib_classpath;
             } else {
               daikonPath =
-                  wheresDynComp.substring(0, end - 1) + path_separator + daikonPathFile.getPath();
+                  wheresDynComp.substring(0, end - 1) + path_separator + daikonJarFile.getPath();
             }
           }
         }
