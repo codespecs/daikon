@@ -205,19 +205,19 @@ public class DynComp {
     }
 
     // The separator for items in the class path
-    String path_separator = System.getProperty("path.separator");
-    basic.log("path_separator = %s%n", path_separator);
-    if (!RegexUtil.isRegex(path_separator)) {
+    basic.log("File.pathSeparator = %s%n", File.pathSeparator);
+    if (!RegexUtil.isRegex(File.pathSeparator)) {
+      // This can't happen, at least on Unix & Windows.
       throw new Daikon.UserError(
           "Bad regexp "
-              + path_separator
+              + File.pathSeparator
               + " for path.separator: "
-              + RegexUtil.regexError(path_separator));
+              + RegexUtil.regexError(File.pathSeparator));
     }
 
     // Look for dcomp_premain.jar along the classpath
     if (premain == null) {
-      String[] cpath = cp.split(path_separator);
+      String[] cpath = cp.split(File.pathSeparator);
       for (String path : cpath) {
         File poss_premain;
         if (path.endsWith("dcomp_premain.jar")) {
@@ -262,7 +262,7 @@ public class DynComp {
     if (!no_jdk) {
       // Look for dcomp_rt.jar along the classpath
       if (rt_file == null) {
-        String[] cpath = cp.split(path_separator);
+        String[] cpath = cp.split(File.pathSeparator);
         for (String path : cpath) {
           File poss_rt;
           if (path.endsWith("dcomp_rt.jar")) {
@@ -303,19 +303,18 @@ public class DynComp {
     }
 
     // For some unknown reason, groovy cannot be on the boot classpath.
-    String[] cpaths = cp.split(path_separator);
+    String[] cpaths = cp.split(File.pathSeparator);
     for (int i = 0; i < cpaths.length; i++) {
       if (cpaths[i].contains("groovy")) {
-        @SuppressWarnings("regex:argument")
-        String[] path_elements = cpaths[i].split(File.separator);
+        String[] path_elements = cpaths[i].split(Pattern.quote(File.separator));
         if (path_elements[path_elements.length - 1].matches("^groovy.*\\.jar$")) {
           cpaths[i] = "";
         }
       }
     }
     String boot_path =
-        String.join(path_separator, cpaths)
-            .replaceAll(path_separator + path_separator, path_separator);
+        String.join(File.pathSeparator, cpaths)
+            .replaceAll(File.pathSeparator + File.pathSeparator, File.pathSeparator);
 
     // Build the command line to execute the target with the javaagent
     List<String> cmdlist = new ArrayList<>();
@@ -333,7 +332,7 @@ public class DynComp {
     if (BcelUtil.javaVersion <= 8) {
       if (!no_jdk) {
         // prepend to rather than replace bootclasspath
-        cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + boot_path);
+        cmdlist.add("-Xbootclasspath/p:" + rt_file + File.pathSeparator + boot_path);
       }
     } else {
       // allow DCRuntime to make reflective access to java.land.Object.clone() without a warning
@@ -342,7 +341,7 @@ public class DynComp {
       if (!no_jdk) {
         // If we are processing JDK classes, then we need our code on the bootclasspath as well.
         // Otherwise, references to DCRuntime from the JDK would fail.
-        cmdlist.add("-Xbootclasspath/a:" + rt_file + path_separator + boot_path);
+        cmdlist.add("-Xbootclasspath/a:" + rt_file + File.pathSeparator + boot_path);
         // allow java.base to access daikon.jar (for instrumentation runtime)
         cmdlist.add("--add-reads");
         cmdlist.add("java.base=ALL-UNNAMED");
