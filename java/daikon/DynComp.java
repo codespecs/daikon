@@ -260,14 +260,14 @@ public class DynComp {
     daikon_dir = System.getenv("DAIKONDIR");
 
     // The separator for items in the class path
-    path_separator = System.getProperty("path.separator");
-    basic.log("path_separator = %s%n", path_separator);
-    if (!RegexUtil.isRegex(path_separator)) {
+    basic.log("File.pathSeparator = %s%n", File.pathSeparator);
+    if (!RegexUtil.isRegex(File.pathSeparator)) {
+      // This can't happen, at least on Unix & Windows.
       throw new Daikon.UserError(
           "Bad regexp "
-              + path_separator
+              + File.pathSeparator
               + " for path.separator: "
-              + RegexUtil.regexError(path_separator));
+              + RegexUtil.regexError(File.pathSeparator));
     }
 
     file_separator = System.getProperty("file.separator");
@@ -289,7 +289,9 @@ public class DynComp {
               daikonPath = wheresDynComp.substring(0, end - 1) + java_lib_classpath;
             } else {
               daikonPath =
-                  wheresDynComp.substring(0, end - 1) + path_separator + daikonJarFile.getPath();
+                  wheresDynComp.substring(0, end - 1)
+                      + File.pathSeparator
+                      + daikonJarFile.getPath();
             }
           }
         }
@@ -364,7 +366,7 @@ public class DynComp {
     if (BcelUtil.javaVersion <= 8) {
       if (!no_jdk) {
         // prepend to rather than replace bootclasspath
-        cmdlist.add("-Xbootclasspath/p:" + rt_file + path_separator + daikonPath);
+        cmdlist.add("-Xbootclasspath/p:" + rt_file + File.pathSeparator + daikonPath);
       }
     } else {
       // allow DCRuntime to make reflective access to java.land.Object.clone() without a warning
@@ -373,7 +375,7 @@ public class DynComp {
       if (!no_jdk) {
         // If we are processing JDK classes, then we need our code on the bootclasspath as well.
         // Otherwise, references to DCRuntime from the JDK would fail.
-        cmdlist.add("-Xbootclasspath/a:" + rt_file + path_separator + daikonPath);
+        cmdlist.add("-Xbootclasspath/a:" + rt_file + File.pathSeparator + daikonPath);
         // allow java.base to access daikon.jar (for instrumentation runtime)
         cmdlist.add("--add-reads");
         cmdlist.add("java.base=ALL-UNNAMED");
@@ -498,21 +500,21 @@ public class DynComp {
    */
   public @Nullable File locateFile(String fileName) {
     @SuppressWarnings({
-      "nullness", // start_target ensures cp and path_separator are non-null
+      "nullness", // start_target ensures cp and File.pathSeparator are non-null
       "regex:argument" // the path.separator property is a valid Regex
     })
     File poss_file;
     String java_lib = "java" + file_separator + "lib" + file_separator;
     java_lib_classpath = "";
     int java_lib_count = 0;
-    for (String path : cp.split(path_separator)) {
+    for (String path : cp.split(File.pathSeparator)) {
       int index = path.indexOf(java_lib);
       if (index != -1) {
         // If the path contains "java/lib/" it is from the expansion of
         // "java/lib/*". However, this shorthand is not allowed on the
         // bootclasspath so we must save the entire list.
         java_lib_count++;
-        java_lib_classpath = java_lib_classpath + path_separator + path;
+        java_lib_classpath = java_lib_classpath + File.pathSeparator + path;
       }
       if (path.endsWith(fileName)) {
         poss_file = new File(path);
