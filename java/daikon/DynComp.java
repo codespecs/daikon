@@ -155,7 +155,7 @@ public class DynComp {
     }
     ClassLoader loader = c.getClassLoader();
     if (loader == null) {
-      // Try the bootstrap classloader - obtained from the ultimate parent of the System Class
+      // Try the bootstrap classloader -- obtained from the ultimate parent of the System Class
       // Loader.
       loader = ClassLoader.getSystemClassLoader();
       while (loader != null && loader.getParent() != null) {
