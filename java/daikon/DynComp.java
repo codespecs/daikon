@@ -143,12 +143,13 @@ public class DynComp {
   public static final String synopsis = "daikon.DynComp [options] target [target-args]";
 
   /**
-   * Locate where a class was loaded from.
+   * Locate the classfile file that a class was loaded from. The result is a URL for the file
+   * (starting with "file:" or "jar:file:").
    *
    * @param c class to look up
-   * @return path to class or null if not found
+   * @return URL to the classfile, or null if not found
    */
-  public static @Nullable String whereFrom(Class<?> c) {
+  public static @Nullable String whereLoadedFrom(Class<?> c) {
     if (c == null) {
       return null;
     }
@@ -271,7 +272,7 @@ public class DynComp {
 
     file_separator = System.getProperty("file.separator");
     // Find where DynComp was loaded from.
-    String wheresDynComp = whereFrom(DynComp.class);
+    String wheresDynComp = whereLoadedFrom(DynComp.class);
     if (wheresDynComp != null) {
       if (wheresDynComp.startsWith("file:")) {
         wheresDynComp = wheresDynComp.substring(5);
