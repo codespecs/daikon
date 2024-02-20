@@ -493,7 +493,10 @@ public class DynComp {
    * @return path to fileName or null
    */
   public @Nullable File locateFile(String fileName) {
-    @SuppressWarnings("nullness") // start_target ensures cp and path_separator are non-null
+    @SuppressWarnings({
+      "nullness", // start_target ensures cp and path_separator are non-null
+      "regex:argument" // the path.separator property is a valid Regex
+    })
     String[] cpath = cp.split(path_separator);
     File poss_file;
     String java_lib = "java" + file_separator + "lib" + file_separator;
