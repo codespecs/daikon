@@ -498,17 +498,17 @@ public class DynComp {
    * Returns null if not found.
    *
    * <p>However, there is a special case: if fileName == "daikon.jar" and we see several paths of
-   * the form "<something>/java/lib/<something>" we assume the original classpath (before JVM
-   * expansion) was <something>/java/lib/*". If dakon.jar does not appear on the class path or
-   * "java/lib/*" occurs before a path to daikon.jar then we return an empty file name to mean use
-   * the expansion of {@code java/lib/*}. This situation might occur because someone is testing a
-   * new jar file in daikon/java/lib and this file should be used instead of the one contained in
-   * daikon.jar.
+   * the form "&lt;something&gt;/java/lib/&lt;something&gt;" we assume the original classpath
+   * (before JVM expansion) was &lt;something&gt;/java/lib/*". If dakon.jar does not appear on the
+   * class path or "java/lib/*" occurs before a path to daikon.jar then we return an empty file name
+   * to mean use the expansion of {@code java/lib/*}. This situation might occur because someone is
+   * testing a new jar file in daikon/java/lib and this file should be used instead of the one
+   * contained in daikon.jar.
    *
    * <p>This method also sets {@link #java_lib_classpath} to the expansion of {@code java/lib/*}.
    *
-   * <p>Note that <file>.canRead() is true if and only <file> exists and can be read by the
-   * application; false otherwise.
+   * <p>Note that &lt;file&gt;.canRead() is true if and only &lt;file&gt; exists and can be read by
+   * the application; false otherwise.
    *
    * @param fileName name of file to look for
    * @return path to fileName or null
