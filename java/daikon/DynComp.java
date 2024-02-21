@@ -12,8 +12,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 /**
  * This is the main class for DynComp. It uses the -javaagent switch to Java (which allows classes
@@ -105,12 +107,6 @@ public class DynComp {
   /** The current class path. */
   static @MonotonicNonNull String cp = null;
 
-  /** The current path separator. */
-  static @MonotonicNonNull String path_separator = null;
-
-  /** The current file separator. */
-  static @MonotonicNonNull String file_separator = null;
-
   /** Contains the expansion of java/lib/* if it is on the classpath. */
   static @Nullable String java_lib_classpath = null;
 
@@ -146,13 +142,14 @@ public class DynComp {
    * Locate the classfile file that a class was loaded from. The result is a URL for the file
    * (starting with "file:" or "jar:file:").
    *
-   * @param c class to look up
+   * <p>(The method is a slightly modified version of the one found at:
+   * https://stackoverflow.com/questions/227486/find-where-java-class-is-loaded-from/19494116#19494116.)
+   *
+   * @param c class to look up; must not be null
    * @return URL to the classfile, or null if not found
+   * @throws ClassNotFoundException if class c cannot be located
    */
-  public static @Nullable String whereLoadedFrom(Class<?> c) {
-    if (c == null) {
-      return null;
-    }
+  public static String locateClassFile(Class<?> c) throws ClassNotFoundException {
     ClassLoader loader = c.getClassLoader();
     if (loader == null) {
       // Try the bootstrap classloader -- obtained from the ultimate parent of the System Class
@@ -171,7 +168,7 @@ public class DynComp {
         }
       }
     }
-    return null;
+    throw new ClassNotFoundException();
   }
 
   /**
@@ -240,6 +237,7 @@ public class DynComp {
    * @param target_args the test program name and its argument list
    */
   /*TO DO: @PostNonNull("premain")*/
+  @EnsuresNonNull("cp")
   void start_target(String premain_args, String[] target_args) {
 
     // Default the decls file name to <target-program-name>.decls-DynComp
@@ -270,18 +268,20 @@ public class DynComp {
               + RegexUtil.regexError(File.pathSeparator));
     }
 
-    file_separator = System.getProperty("file.separator");
     // Find where DynComp was loaded from.
-    String wheresDynComp = whereLoadedFrom(DynComp.class);
-    if (wheresDynComp != null) {
+    String wheresDynComp;
+    try {
+      wheresDynComp = locateClassFile(DynComp.class);
       if (wheresDynComp.startsWith("file:")) {
         wheresDynComp = wheresDynComp.substring(5);
-        int end = wheresDynComp.indexOf("daikon" + file_separator + "DynComp.class");
+        int end = wheresDynComp.indexOf("daikon" + File.separator + "DynComp.class");
         if (end != -1) {
           // We found DynComp on the classpath, not in daikon.jar. This occurs, for example,
           // when a developer is testing daikon changes prior to building a new daikon.jar.
           // In this case, we need to add either "java/lib/*" or "daikon.jar" to the classpath
-          // as well. locateFile has a special case for "java/lib/*".
+          // as well. This because methods in daikon may reference methods located in the jar
+          // files found in java/lib/*.
+          // locateFile has a special case for "java/lib/*".
           File daikonJarFile = locateFile("daikon.jar");
           if (daikonJarFile != null) {
             // Empty file name returned from `locateFile()` means to use java_lib_classpath instead.
@@ -297,13 +297,18 @@ public class DynComp {
         }
       } else if (wheresDynComp.startsWith("jar:file:")) {
         int end = wheresDynComp.indexOf('!');
-        if (end != -1) {
-          daikonPath = wheresDynComp.substring(9, end);
-        }
+        daikonPath = wheresDynComp.substring(9, end);
       }
+    } catch (Exception e) {
+      // daikonPath will be null, so just fall into error test.
     }
     if (daikonPath == null) {
-      System.err.printf("Cannot locate Daikon directory or daikon.jar.%n");
+      System.err.printf("Cannot locate Daikon directory or daikon.jar on the classpath");
+      if (daikon_dir == null) {
+        System.err.printf(" and $DAIKONDIR is not set.%n");
+      } else {
+        System.err.printf(" or in $DAIKONDIR.%n");
+      }
       System.exit(1);
     }
     // debuging
@@ -490,39 +495,59 @@ public class DynComp {
 
   /**
    * Search for a file on the current classpath, then in ${DAIKONDIR}/java, then in ${DAIKONDIR}.
-   * Returns an empty file name to mean use the expansion of {@code java/lib/*}. Returns null if not
-   * found.
+   * Returns null if not found.
+   *
+   * <p>However, there is a special case: if fileName == "daikon.jar" and we see several paths of
+   * the form "<something>/java/lib/<something>" we assume the original classpath (before JVM
+   * expansion) was <something>/java/lib/*". If dakon.jar does not appear on the class path or
+   * "java/lib/*" occurs before a path to daikon.jar then we return an empty file name to mean use
+   * the expansion of {@code java/lib/*}. This situation might occur because someone is testing a
+   * new jar file in daikon/java/lib and this file should be used instead of the one contained in
+   * daikon.jar.
    *
    * <p>This method also sets {@link #java_lib_classpath} to the expansion of {@code java/lib/*}.
+   *
+   * <p>Note that <file>.canRead() is true if and only <file> exists and can be read by the
+   * application; false otherwise.
    *
    * @param fileName name of file to look for
    * @return path to fileName or null
    */
+  @RequiresNonNull("cp")
+  @SuppressWarnings("regex:argument") // the path.separator property is a valid Regex
   public @Nullable File locateFile(String fileName) {
-    @SuppressWarnings({
-      "nullness", // start_target ensures cp and File.pathSeparator are non-null
-      "regex:argument" // the path.separator property is a valid Regex
-    })
-    File poss_file;
-    String java_lib = "java" + file_separator + "lib" + file_separator;
+    String java_lib = "java" + File.separator + "lib" + File.separator;
     java_lib_classpath = "";
     int java_lib_count = 0;
     for (String path : cp.split(File.pathSeparator)) {
+      File poss_file;
       int index = path.indexOf(java_lib);
       if (index != -1) {
-        // If the path contains "java/lib/" it is from the expansion of
-        // "java/lib/*". However, this shorthand is not allowed on the
-        // bootclasspath so we must save the entire list.
+        // If the path contains "java/lib/" it is most likely from the JVM's expansion
+        // of "java/lib/*". We assume that if we see more than 10 items on the classpath
+        // containing "java/lib/" that was definitely the case. However, this shorthand
+        // is not allowed on the bootclasspath so we must save the entire list.
+        // (10 is arbitary value, currently there are 14 jar files in java/lib.)
         java_lib_count++;
         java_lib_classpath = java_lib_classpath + File.pathSeparator + path;
       }
       if (path.endsWith(fileName)) {
-        poss_file = new File(path);
+        int start = path.indexOf(fileName);
+        // There are three cases:
+        //   path == fileName (start == 0)
+        //   path == <something>/fileName (charAt(start-1) == separator)
+        //   path == <something>/<something>fileName (otherwise)
+        // The first two are good, the last is not what we are looking for.
+        if (start == 0 || path.charAt(start - 1) == File.separatorChar) {
+          poss_file = new File(path);
+        } else {
+          poss_file = new File(path, fileName);
+        }
       } else {
         poss_file = new File(path, fileName);
       }
       if (poss_file.canRead()) {
-        // We need to do a special case:
+        // We need to check a special case:
         // If "java/lib/*" appears on the classpath
         // before daikon.jar, use that instead.
         if (java_lib_count > 10 && fileName.equals("daikon.jar")) {
@@ -533,10 +558,10 @@ public class DynComp {
       }
     }
 
-    // Not on the class path - do special case:
+    // Not on the class path - check for a special case:
     // If looking for daikon.jar and java/lib/* is on
-    // classpath, then use that. 10 is arbitary value,
-    // currently there are 14 jar files in java/lib.
+    // classpath, then use that. (See comment above about
+    // how we detect this special case.)
     if (java_lib_count > 10 && fileName.equals("daikon.jar")) {
       // Return empty file name as flag to use java_lib_classpath instead.
       return new File("");
@@ -544,6 +569,7 @@ public class DynComp {
 
     // If not on the classpath look in ${DAIKONDIR}/java, then ${DAIKONDIR}.
     if (daikon_dir != null) {
+      File poss_file;
       poss_file = new File(new File(daikon_dir, "java"), fileName);
       if (poss_file.canRead()) {
         return poss_file;
