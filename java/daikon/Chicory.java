@@ -286,19 +286,19 @@ public class Chicory {
     }
 
     // The separator for items in the class path
-    String path_separator = System.getProperty("path.separator");
-    basic.log("path_separator = %s%n", path_separator);
-    if (!RegexUtil.isRegex(path_separator)) {
+    basic.log("File.pathSeparator = %s%n", File.pathSeparator);
+    if (!RegexUtil.isRegex(File.pathSeparator)) {
+      // This can't happen, at least on Unix & Windows.
       throw new Daikon.UserError(
           "Bad regexp "
-              + path_separator
+              + File.pathSeparator
               + " for path.separator: "
-              + RegexUtil.regexError(path_separator));
+              + RegexUtil.regexError(File.pathSeparator));
     }
 
     // Look for ChicoryPremain.jar along the classpath
     if (premain == null) {
-      String[] cpath = cp.split(path_separator);
+      String[] cpath = cp.split(File.pathSeparator);
       for (String path : cpath) {
         File poss_premain = new File(path, "ChicoryPremain.jar");
         if (poss_premain.canRead()) {
@@ -321,7 +321,7 @@ public class Chicory {
 
     // If not found, try the daikon.jar file itself
     if (premain == null) {
-      for (String path : cp.split(path_separator)) {
+      for (String path : cp.split(File.pathSeparator)) {
         File poss_premain = new File(path);
         if (poss_premain.getName().equals("daikon.jar")) {
           if (poss_premain.canRead()) {
