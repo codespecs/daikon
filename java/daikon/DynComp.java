@@ -463,6 +463,7 @@ public class DynComp {
       try {
         JarFile jar = new JarFile(path);
         JarEntry entry = jar.getJarEntry("daikon" + File.separator + "DynComp.class");
+        jar.close();
         if (entry != null) {
           return true;
         }
