@@ -438,7 +438,7 @@ public class DynComp {
    *
    * <ul>
    *   <li>a jar file that contains "DynComp.class"
-   *   <li>a path that ends in "java/lib/<something>.jar"
+   *   <li>a path that ends in "java/lib/&lt;something&gt;.jar"
    *   <li>a path that leads to "daikon/DynComp.class"
    * </ul>
    *
@@ -449,6 +449,7 @@ public class DynComp {
    * @return true if found
    */
   boolean isDaikonOnPath(String path) {
+    @SuppressWarnings("regex:argument") // the File.separator property is a valid Regex
     String pathElements[] = path.split(File.separator);
     int numElem = pathElements.length;
     File poss_file;
