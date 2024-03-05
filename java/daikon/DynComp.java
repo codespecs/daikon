@@ -500,7 +500,6 @@ public class DynComp {
    * @return path to fileName or null
    */
   @RequiresNonNull("cp")
-  @SuppressWarnings("regex:argument") // the path.separator property is a valid Regex
   public @Nullable File locateFile(String fileName) {
     for (String path : cp.split(File.pathSeparator)) {
       File poss_file;

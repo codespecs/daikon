@@ -17,7 +17,7 @@ checker-framework/ and checker-qual.jar : https://github.com/typetools/checker-f
   mv -f checker-framework-$VER/checker/dist/checker.jar checker-framework-$VER/checker/dist/javac.jar checker-framework/
   mv -f checker-framework-$VER/checker/dist/checker-qual.jar .
   rm -rf checker-framework-$VER.zip checker-framework-$VER
-To install a snapshot of the current Checker Framework:
+To install a snapshot of the current Checker Framework, run from this directory:
   (cd $CHECKERFRAMEWORK && ./gradlew assembleForJavac) && \
   cp -pf $CHECKERFRAMEWORK/checker/dist/checker.jar $CHECKERFRAMEWORK/checker/dist/javac.jar checker-framework/ && \
   cp -pf $CHECKERFRAMEWORK/checker/dist/checker-qual.jar .
