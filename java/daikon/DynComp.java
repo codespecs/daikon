@@ -33,7 +33,7 @@ public class DynComp {
   @Option("-v Print progress information")
   public static boolean verbose = false;
 
-  /** Dump the instrumented classes to disk. */
+  /** Dump the instrumented classes to disk, for diagnostic purposes. */
   @Option("Dump the instrumented classes to disk")
   public static boolean dump = false;
 
@@ -45,13 +45,13 @@ public class DynComp {
   @Option("Directory in which to create debug files")
   public static File debug_dir = new File("debug");
 
-  /** The directory in which to create output files. */
+  /** The directory in which to create output files (i.e., Daikon input files). */
   @Option("Directory in which to create output files")
   public static File output_dir = new File(".");
 
   /** Output filename for .decls file suitable for input to Daikon. */
   @Option("-f Output filename for Daikon decl file")
-  public static @Nullable String decl_file = null;
+  public static @MonotonicNonNull String decl_file = null;
 
   /** Output filename for a more easily human-readable file summarizing comparability sets. */
   @Option("Output file for comparability sets")
@@ -101,7 +101,7 @@ public class DynComp {
   @Option("Path to the DynComp agent jar file (usually dcomp_premain.jar)")
   public static @Nullable File premain = null;
 
-  /** Holds the path to "daikon.jar" or to "daikon/java:daikon/java/lib*". */
+  /** Holds the path to "daikon.jar" or to "daikon/java:daikon/java/lib/*". */
   // Set by start_target()
   public static String daikonPath = "";
 
