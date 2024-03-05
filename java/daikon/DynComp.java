@@ -91,11 +91,11 @@ public class DynComp {
   public static @Nullable File rt_file = null;
 
   /** Causes DynComp to traverse exactly those fields visible from a given program point. */
-  @Option("use standard visibility")
+  @Option("Use standard visibility")
   public static boolean std_visibility = false;
 
   /** Depth to which to examine structure components. */
-  @Option("variable nesting depth")
+  @Option("Variable nesting depth")
   public static int nesting_depth = 2;
 
   /**
@@ -205,13 +205,13 @@ public class DynComp {
   }
 
   /**
-   * Starts the target program with the Java agent setup to do the transforms. All Java agent
+   * Starts the target program with the Java agent set up to do the transforms. All Java agent
    * arguments are passed to it. Our classpath is passed to the new JVM.
    *
    * @param premain_args the Java agent argument list
    * @param target_args the test program name and its argument list
    */
-  /*TO DO: @PostNonNull("premain")*/
+  /*TO DO: @EnsuresNonNull("premain")*/
   @EnsuresNonNull("cp")
   void start_target(String premain_args, String[] target_args) {
 
