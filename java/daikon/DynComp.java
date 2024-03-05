@@ -1,6 +1,7 @@
 package daikon;
 
 import daikon.chicory.StreamRedirectThread;
+import daikon.dcomp.TagEntry;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
@@ -33,7 +34,10 @@ public class DynComp {
   @Option("-v Print progress information")
   public static boolean verbose = false;
 
-  /** Dump the instrumented classes to disk, for diagnostic purposes. */
+  /**
+   * Dump the instrumented classes to disk, for diagnostic purposes. The directory is specified by
+   * {@code --debug-dir} (default {@code debug}).
+   */
   @Option("Dump the instrumented classes to disk")
   public static boolean dump = false;
 
@@ -63,7 +67,10 @@ public class DynComp {
   // Null if shouldn't do output
   public static @MonotonicNonNull File trace_file = null;
 
-  /** Controls size of the stack displayed in tracing the interactions that occurred. */
+  /**
+   * Controls size of the stack displayed in tracing the interactions that occurred. Used in {@link
+   * TagEntry}.
+   */
   @Option("Depth of call hierarchy for line tracing")
   public static int trace_line_depth = 1;
 
