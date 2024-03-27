@@ -204,7 +204,7 @@ public class DynComp {
 
   /**
    * Starts the target program with the Java agent set up to do the transforms. All Java agent
-   * arguments are passed to it. Our classpath is passed to the new JVM.
+   * arguments are passed to it. The current classpath is passed to the new JVM.
    *
    * @param premain_args the Java agent argument list
    * @param targetArgs the test program name and its argument list
@@ -278,8 +278,7 @@ public class DynComp {
           daikonPath = daikonPath + File.pathSeparator + path;
         }
       }
-      // debuging
-      System.out.println("daikonPath: " + daikonPath);
+      basic.log("daikonPath = '%s'%n", daikonPath);
     }
 
     // Build the command line to execute the target with the javaagent.
@@ -483,6 +482,30 @@ public class DynComp {
    */
   @RequiresNonNull("cp")
   public @Nullable File locateFile(String fileName) {
+    File poss_file = findOnClasspath(fileName);
+    if (poss_file != null) {
+      return poss_file;
+    }
+
+    // If not on the classpath look in ${DAIKONDIR}/java.
+    if (daikon_dir != null) {
+      poss_file = new File(new File(daikon_dir, "java"), fileName);
+      if (poss_file.canRead()) {
+        return poss_file;
+      }
+    }
+    // Couldn't find fileName
+    return null;
+  }
+
+  /**
+   * Search for a file on the current classpath. Returns null if not found.
+   *
+   * @param fileName the relative name of a file to look for
+   * @return path to fileName or null
+   */
+  @RequiresNonNull("cp")
+  public @Nullable File findOnClasspath(String fileName) {
     for (String path : cp.split(File.pathSeparator)) {
       File poss_file;
       if (path.endsWith(fileName)) {
@@ -504,16 +527,6 @@ public class DynComp {
         return poss_file;
       }
     }
-
-    // If not on the classpath look in ${DAIKONDIR}/java.
-    if (daikon_dir != null) {
-      File poss_file;
-      poss_file = new File(new File(daikon_dir, "java"), fileName);
-      if (poss_file.canRead()) {
-        return poss_file;
-      }
-    }
-    // Couldn't find fileName
     return null;
   }
 }
