@@ -40,7 +40,7 @@ public class NISuppression {
 
   public NISuppression(List<NISuppressor> suppressor_set, NISuppressee suppressee) {
 
-    suppressors = suppressor_set.toArray(new NISuppressor[suppressor_set.size()]);
+    suppressors = suppressor_set.toArray(new NISuppressor[0]);
     this.suppressee = suppressee;
   }
 
