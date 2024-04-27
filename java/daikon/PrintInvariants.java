@@ -1345,16 +1345,13 @@ public final class PrintInvariants {
   /**
    * Takes a list of Invariants and returns a list of Invariants that is sorted according to
    * PptTopLevel.icfp.
+   *
+   * @param a list of Invariants
+   * @return a sorted list of the Invariants
    */
   public static List<Invariant> sort_invariant_list(List<Invariant> invs) {
-    Invariant[] invs_array = invs.toArray(new Invariant[0]);
-    Arrays.sort(invs_array, PptTopLevel.icfp);
-
-    List<Invariant> result = new ArrayList<>(invs_array.length);
-
-    for (int i = 0; i < invs_array.length; i++) {
-      result.add(invs_array[i]);
-    }
+    List<Invariant> result = new ArrayList<>(invs);
+    result.sort(PptTopLevel.icfp);
     return result;
   }
 

@@ -38,6 +38,12 @@ public class NISuppression {
     this.suppressee = suppressee;
   }
 
+  /**
+   * Creates a NISuppression.
+   *
+   * @param suppressor_set the suppressor set
+   * @param suppressee the suppressee
+   */
   public NISuppression(List<NISuppressor> suppressor_set, NISuppressee suppressee) {
 
     suppressors = suppressor_set.toArray(new NISuppressor[0]);
