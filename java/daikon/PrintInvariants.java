@@ -1346,7 +1346,7 @@ public final class PrintInvariants {
    * Takes a list of Invariants and returns a list of Invariants that is sorted according to
    * PptTopLevel.icfp.
    *
-   * @param a list of Invariants
+   * @param invs a list of Invariants
    * @return a sorted list of the Invariants
    */
   public static List<Invariant> sort_invariant_list(List<Invariant> invs) {
