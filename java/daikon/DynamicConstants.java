@@ -278,7 +278,7 @@ public class DynamicConstants implements Serializable {
       all_list.add(c);
       missing_list.add(c);
     }
-    all_vars = all_list.toArray(new Constant[all_list.size()]);
+    all_vars = all_list.toArray(new Constant[0]);
   }
 
   /**

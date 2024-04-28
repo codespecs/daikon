@@ -556,7 +556,7 @@ public class Quantify {
         avi_list.add(arr_var_indexed);
         // result[i + 1] = qret.root_primes[i].simplify_name();
       }
-      arr_vars_indexed = avi_list.toArray(new String[avi_list.size()]);
+      arr_vars_indexed = avi_list.toArray(new String[0]);
 
       // stringify the indices,
       // note that the index should be relative to the slice, not relative
