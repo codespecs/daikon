@@ -1,6 +1,7 @@
 // TraceSelect.java
 package daikon.tools;
 
+import daikon.Global;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;

@@ -1,5 +1,6 @@
 package daikon.split;
 
+import daikon.Global;
 import daikon.split.misc.CallerContextSplitter;
 import java.io.File;
 import java.io.IOException;

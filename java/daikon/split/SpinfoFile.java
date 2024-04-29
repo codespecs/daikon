@@ -1,5 +1,6 @@
 package daikon.split;
 
+import daikon.Global;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

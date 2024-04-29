@@ -5,6 +5,10 @@ package daikon;
 import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
+import daikon.inv.Invariant;
+import daikon.simplify.Lemma;
+import daikon.split.Splitter;
+import daikon.split.SplitterObject;
 import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -47,9 +51,6 @@ public final class Global {
   /** An empty Lemma array, useful for passing to calls to List.toArray(). */
   public static final Lemma[] emptyLemmaArray = new Lemma[0];
 
-  /** An empty NodeToken array, useful for passing to calls to List.toArray(). */
-  public static final NodeToken[] emptyNodeTokenArray = new NodeToken[0];
-
   /** An empty PptSlice array, useful for passing to calls to List.toArray(). */
   public static final PptSlice[] emptyPptSliceArray = new PptSlice[0];
 
@@ -59,11 +60,11 @@ public final class Global {
   /** An empty SplitterObject array, useful for passing to calls to List.toArray(). */
   public static final SplitterObject[] emptySplitterObjectArray = new SplitterObject[0];
 
+  /** An empty String array, useful for passing to calls to List.toArray(). */
+  public static final String[] emptyStringArray = new String[0];
+
   /** An empty VarInfo array, useful for passing to calls to List.toArray(). */
   public static final VarInfo[] emptyVarInfoArray = new VarInfo[0];
-
-  /** An empty string array, useful for passing to calls to List.toArray(). */
-  public static final String[] emptyStringArray = new String[0];
 
   ///////////////////////////////////////////////////////////////////////////
   /// Variables

@@ -1,5 +1,6 @@
 package daikon.simplify;
 
+import daikon.Global;
 import daikon.inv.Invariant;
 import java.io.Closeable;
 import java.util.ArrayList;
