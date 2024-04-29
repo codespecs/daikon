@@ -256,7 +256,7 @@ public class PptRelation implements Serializable {
       Equality e = (Equality) inv;
       debug.fine("-- processing equality set " + e);
       Set<VarInfo> eqset = e.getVars();
-      VarInfo[] varr = eqset.toArray(new VarInfo[0]);
+      VarInfo[] varr = eqset.toArray(Global.emptyVarInfoArray);
 
       // Build each combination of variables in the equality set and produce
       // a pair for each.  Skip any variables that do not have corresponding

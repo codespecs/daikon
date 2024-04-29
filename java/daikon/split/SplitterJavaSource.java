@@ -369,7 +369,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
         Global.debugSplit.fine("filterNonVars removed " + vi.name());
       }
     }
-    return filteredList.toArray(new VarInfo[0]);
+    return filteredList.toArray(Global.emptyVarInfoArray);
   }
 
   /**

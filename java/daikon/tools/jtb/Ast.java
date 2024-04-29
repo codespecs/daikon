@@ -1213,7 +1213,7 @@ public class Ast {
     // probably not a bottleneck anyway.
     List<Invariant> invs_vector = new ArrayList<>(ppt.getInvariants());
 
-    Invariant[] invs_array = invs_vector.toArray(new Invariant[0]);
+    Invariant[] invs_array = invs_vector.toArray(Global.emptyInvariantArray);
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
     Global.non_falsified_invariants += invs_array.length;

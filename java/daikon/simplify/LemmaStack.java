@@ -325,7 +325,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
     boolean holds = checkString(result) == 'T';
     popToMark(mark);
     if (holds) {
-      List<Lemma> mini = minimizeAssumptions(filtered.toArray(new Lemma[0]), result);
+      List<Lemma> mini = minimizeAssumptions(filtered.toArray(Global.emptyLemmaArray), result);
       Set<Class<? extends Invariant>> used = new HashSet<Class<? extends Invariant>>();
       for (Lemma mlem : mini) {
         Class<? extends Invariant> c = mlem.invClass();
@@ -387,7 +387,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
     unAssumeAll(lemmas);
     List<Lemma> result;
     try {
-      Lemma[] lemmaAry = lemmas.toArray(new Lemma[0]);
+      Lemma[] lemmaAry = lemmas.toArray(Global.emptyLemmaArray);
       // shuffle(lemmaAry, new Random());
       result = minimizeAssumptions(lemmaAry, str);
       assumeAll(lemmas);

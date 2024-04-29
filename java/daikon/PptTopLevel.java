@@ -1523,7 +1523,7 @@ public class PptTopLevel extends Ppt {
       for (Derivation der : ders) {
         vis_list.add(der.getVarInfo());
       }
-      VarInfo[] vis = vis_list.toArray(new VarInfo[0]);
+      VarInfo[] vis = vis_list.toArray(Global.emptyVarInfoArray);
       if (Global.debugDerive.isLoggable(Level.FINE)) {
         for (int i = 0; i < ders.length; i++) {
           Global.debugDerive.fine("Derived " + vis[i].name());
@@ -2882,7 +2882,7 @@ public class PptTopLevel extends Ppt {
       for (VarInfo vi : slice.var_infos) {
         newVis_list.add(vi.canonicalRep());
       }
-      VarInfo[] newVis = newVis_list.toArray(new VarInfo[0]);
+      VarInfo[] newVis = newVis_list.toArray(Global.emptyVarInfoArray);
       PptSlice newSlice = slice.cloneAndPivot(newVis);
       if (slice != newSlice) {
         pivoted.add(newSlice);
@@ -2990,7 +2990,7 @@ public class PptTopLevel extends Ppt {
           }
         }
       }
-      invs = printing.toArray(new Invariant[0]);
+      invs = printing.toArray(Global.emptyInvariantArray);
     }
 
     // For efficiency, bail if we don't have any invariants to mark as implied
@@ -3422,7 +3422,7 @@ public class PptTopLevel extends Ppt {
   public void processOmissions(boolean[] omitTypes) {
     // Avoid concurrent modification exceptions using arrays
     Collection<PptSlice> viewsAsCollection = viewsAsCollection();
-    PptSlice[] viewArray = viewsAsCollection.toArray(new PptSlice[0]);
+    PptSlice[] viewArray = viewsAsCollection.toArray(Global.emptyPptSliceArray);
     for (PptSlice currentView : viewArray) {
       currentView.processOmissions(omitTypes);
     }
@@ -3883,7 +3883,7 @@ public class PptTopLevel extends Ppt {
       }
       non_missing_leaders.add(l);
     }
-    VarInfo[] leaders = non_missing_leaders.toArray(new VarInfo[0]);
+    VarInfo[] leaders = non_missing_leaders.toArray(Global.emptyVarInfoArray);
 
     // Create any invariants in the children which are NI-suppressed and
     // remember the list for each child.  The same ppt can be a child

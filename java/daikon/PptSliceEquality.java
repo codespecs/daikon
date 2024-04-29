@@ -669,6 +669,6 @@ public class PptSliceEquality extends PptSlice {
       leaders.add(leader);
     }
     Collections.sort(leaders, VarInfo.IndexComparator.getInstance());
-    return leaders.toArray(new VarInfo[0]);
+    return leaders.toArray(Global.emptyVarInfoArray);
   }
 }

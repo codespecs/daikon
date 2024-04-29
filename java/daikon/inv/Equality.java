@@ -489,7 +489,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       return;
     }
     PptTopLevel parent = this.ppt.parent;
-    VarInfo[] varArray = this.vars.toArray(new VarInfo[0]);
+    VarInfo[] varArray = this.vars.toArray(Global.emptyVarInfoArray);
     if (debugPostProcess.isLoggable(Level.FINE)) {
       debugPostProcess.fine("Doing postProcess: " + this.format_daikon());
       debugPostProcess.fine("  at: " + this.ppt.parent.name());

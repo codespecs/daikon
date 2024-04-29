@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.plumelib.util.FuzzyFloat;
@@ -33,21 +32,38 @@ public final class Global {
   /// Constants
   ///
 
+  /** The system-specific line separator. */
   public static final String lineSep = System.lineSeparator();
 
-  // Regular expressions
-  public static final java.util.regex.Pattern ws_regexp;
+  /** Matches white space. */
+  public static final java.util.regex.Pattern ws_regexp = Pattern.compile("\\s+");
 
-  static {
-    try {
-      ws_regexp = Pattern.compile("[ \\t]+");
-    } catch (PatternSyntaxException e) {
-      // this can't happen
-      throw new Error(e);
-    }
-  }
-
+  /** The source of randomness. */
   public static final Random random = new Random();
+
+  /** An empty Invariant array, useful for passing to calls to List.toArray(). */
+  public static final Invariant[] emptyInvariantArray = new Invariant[0];
+
+  /** An empty Lemma array, useful for passing to calls to List.toArray(). */
+  public static final Lemma[] emptyLemmaArray = new Lemma[0];
+
+  /** An empty NodeToken array, useful for passing to calls to List.toArray(). */
+  public static final NodeToken[] emptyNodeTokenArray = new NodeToken[0];
+
+  /** An empty PptSlice array, useful for passing to calls to List.toArray(). */
+  public static final PptSlice[] emptyPptSliceArray = new PptSlice[0];
+
+  /** An empty Splitter array, useful for passing to calls to List.toArray(). */
+  public static final Splitter[] emptySplitterArray = new Splitter[0];
+
+  /** An empty SplitterObject array, useful for passing to calls to List.toArray(). */
+  public static final SplitterObject[] emptySplitterObjectArray = new SplitterObject[0];
+
+  /** An empty VarInfo array, useful for passing to calls to List.toArray(). */
+  public static final VarInfo[] emptyVarInfoArray = new VarInfo[0];
+
+  /** An empty string array, useful for passing to calls to List.toArray(). */
+  public static final String[] emptyStringArray = new String[0];
 
   ///////////////////////////////////////////////////////////////////////////
   /// Variables

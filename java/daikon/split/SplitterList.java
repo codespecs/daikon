@@ -150,7 +150,7 @@ public abstract class SplitterList {
   //       Global.debugSplit.fine("SplitterList.get found " + counter + " splitters for " +
   //                              pptName);
   //     }
-  //     return (Splitter[])splitters.toArray(new Splitter[0]);
+  //     return (Splitter[])splitters.toArray(Global.emptySplitterArray);
   //   }
   //////////////////////
 
@@ -190,7 +190,7 @@ public abstract class SplitterList {
       }
       Global.debugSplit.fine(
           "SplitterList.get found " + splitters.size() + " splitters for " + pptName);
-      return splitters.toArray(new Splitter[0]);
+      return splitters.toArray(Global.emptySplitterArray);
     }
   }
 
@@ -221,6 +221,6 @@ public abstract class SplitterList {
         }
       }
     }
-    return splitters.toArray(new Splitter[0]);
+    return splitters.toArray(Global.emptySplitterArray);
   }
 }

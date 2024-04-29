@@ -90,7 +90,7 @@ public final class FileCompiler {
    */
   @SuppressWarnings("value") // no index checker list support
   public FileCompiler(/*(at)MinLen(1)*/ ArrayList<String> compiler, @Positive long timeLimit) {
-    this(compiler.toArray(new String[0]), timeLimit);
+    this(compiler.toArray(Global.emptyStringArray), timeLimit);
   }
 
   /**
@@ -159,7 +159,7 @@ public final class FileCompiler {
     @NonNull String[] args = Arrays.copyOfRange(compiler, 1, compiler.length);
     cmdLine.addArguments(args);
     // add file name arguments
-    cmdLine.addArguments(filenames.toArray(new String[0]));
+    cmdLine.addArguments(filenames.toArray(Global.emptyStringArray));
 
     resultHandler = new DefaultExecuteResultHandler();
     executor = new DefaultExecutor();

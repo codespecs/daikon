@@ -259,7 +259,7 @@ public class SpinfoFile {
           }
         }
       }
-      splittersForAllPpts.add(splittersForThisPpt.toArray(new SplitterObject[0]));
+      splittersForAllPpts.add(splittersForThisPpt.toArray(Global.emptySplitterObjectArray));
     }
     return splittersForAllPpts.toArray(new SplitterObject[0][0]);
   }

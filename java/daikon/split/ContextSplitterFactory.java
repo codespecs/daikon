@@ -275,7 +275,7 @@ public class ContextSplitterFactory {
       }
 
       // Collect all splitters for one callee_ppt_name
-      Splitter[] splitters_array = splitters.toArray(new Splitter[0]);
+      Splitter[] splitters_array = splitters.toArray(Global.emptySplitterArray);
       result.add(new PptNameAndSplitters(callee_ppt_name, splitters_array));
     }
 

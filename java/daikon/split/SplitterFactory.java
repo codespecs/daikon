@@ -131,7 +131,7 @@ public class SplitterFactory {
             System.out.printf(
                 "%s: %d of %d splitters successful%n", ppt_name, numGood, numsplitters);
             if (sp.size() >= 1) {
-              SplitterList.put(ppt_name, sp.toArray(new Splitter[0]));
+              SplitterList.put(ppt_name, sp.toArray(Global.emptySplitterArray));
             }
             // delete this entry in the splitter array to prevent it from
             // matching any other Ppts, since the documented behavior is that

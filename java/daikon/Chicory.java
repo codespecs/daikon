@@ -442,7 +442,7 @@ public class Chicory {
     if (verbose) {
       System.out.printf("%nExecuting target program: %s%n", args_to_string(cmdlist));
     }
-    String[] cmdline = cmdlist.toArray(new String[0]);
+    String[] cmdline = cmdlist.toArray(Global.emptyStringArray);
 
     // Execute the command, sending all output to our streams
     java.lang.Runtime rt = java.lang.Runtime.getRuntime();
@@ -549,7 +549,7 @@ public class Chicory {
     }
 
     try {
-      daikon_proc = rt.exec(cmd.toArray(new String[0]));
+      daikon_proc = rt.exec(cmd.toArray(Global.emptyStringArray));
     } catch (Exception e) {
       System.out.printf("Exception '%s' while executing '%s'%n", e, cmd);
       System.exit(1);

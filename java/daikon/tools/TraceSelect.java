@@ -264,7 +264,7 @@ public class TraceSelect {
     }
 
     // create an array to store the Strings in daikonArgsList
-    String[] daikonArgs = daikonArgsList.toArray(new String[0]);
+    String[] daikonArgs = daikonArgsList.toArray(Global.emptyStringArray);
 
     // initializes daikon again or else an exception is thrown
     reinitializeDaikon();

@@ -73,7 +73,7 @@ public class VarInfoNameDriver {
 
       // call the handler
       String method = list.removeFirst();
-      String[] args = list.toArray(new String[0]);
+      String[] args = list.toArray(Global.emptyStringArray);
       Handler handler = handlers.get(method);
       if (handler == null) {
         throw new UnsupportedOperationException("Unknown method: " + method);

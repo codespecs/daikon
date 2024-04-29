@@ -1402,7 +1402,7 @@ public final class PrintInvariants {
       ppt.debug_unary_info(debugBound);
     }
 
-    Invariant[] invs_array = invs_vector.toArray(new Invariant[0]);
+    Invariant[] invs_array = invs_vector.toArray(Global.emptyInvariantArray);
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
     Global.non_falsified_invariants += invs_array.length;
@@ -1640,7 +1640,7 @@ public final class PrintInvariants {
     boolean print_invs = false;
 
     List<Invariant> invs_vector = new ArrayList<>(ppt.getInvariants());
-    Invariant[] invs_array = invs_vector.toArray(new Invariant[0]);
+    Invariant[] invs_array = invs_vector.toArray(Global.emptyInvariantArray);
 
     // Not Map, because keys are nullable
     HashMap<@Nullable Class<? extends InvariantFilter>, Map<Class<? extends Invariant>, Integer>>
