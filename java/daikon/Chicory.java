@@ -442,7 +442,7 @@ public class Chicory {
     if (verbose) {
       System.out.printf("%nExecuting target program: %s%n", args_to_string(cmdlist));
     }
-    String[] cmdline = cmdlist.toArray(new String[cmdlist.size()]);
+    String[] cmdline = cmdlist.toArray(new String[0]);
 
     // Execute the command, sending all output to our streams
     java.lang.Runtime rt = java.lang.Runtime.getRuntime();

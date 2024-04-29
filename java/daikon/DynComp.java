@@ -329,7 +329,7 @@ public class DynComp {
     if (verbose) {
       System.out.printf("%nExecuting target program: %s%n", argsToString(cmdlist));
     }
-    String[] cmdline = cmdlist.toArray(new String[cmdlist.size()]);
+    String[] cmdline = cmdlist.toArray(new String[0]);
 
     // Execute the command, sending all output to our streams.
     java.lang.Runtime rt = java.lang.Runtime.getRuntime();

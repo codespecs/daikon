@@ -54,7 +54,6 @@ import daikon.inv.binary.twoScalar.*; // for IntComparison
 import daikon.inv.unary.scalar.*; // for LowerBound
 import java.util.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 // This controls derivations which use the scalar as an index into the
 // sequence, such as getting the element at that index or a subsequence up
@@ -200,7 +199,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
           if (debug != null) {
             debug.log("Found derivations: " + result);
           }
-          return result.toArray(new BinaryDerivation[result.size()]);
+          return result.toArray(new BinaryDerivation[0]);
         }
       }
     }
@@ -280,7 +279,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
             result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, false)); // a[..i]
             result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, true)); // a[..i-1]
           }
-          return result.toArray(new BinaryDerivation[result.size()]);
+          return result.toArray(new BinaryDerivation[0]);
         }
       }
     }

@@ -481,7 +481,7 @@ public final class FileIO {
       @Interned VarInfo vi = new VarInfo(vd);
       vi_list.add(vi);
     }
-    VarInfo[] vi_array = vi_list.toArray(new VarInfo[vi_list.size()]);
+    VarInfo[] vi_array = vi_list.toArray(new VarInfo[0]);
 
     // Check to see if the program point is new
     if (state.all_ppts.containsName(ppt_name)) {
@@ -627,7 +627,7 @@ public final class FileIO {
       var_infos.add(vi);
     }
 
-    VarInfo[] result = var_infos.toArray(new VarInfo[var_infos.size()]);
+    VarInfo[] result = var_infos.toArray(new VarInfo[0]);
     return result;
   }
 
