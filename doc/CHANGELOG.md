@@ -19,6 +19,17 @@ Further documentation can be found in:
    It is also available at http://plse.cs.washington.edu/daikon/download/api/ .
 
 
+Version 5.8.20 (May 7, 2024)
+==============================
+
+Improved DtraceDiff tool.
+
+Bug fixes and implementation details:
+ * BCEL update to 6.8.1.
+ * CheckerFramework update to 3.42.
+ * fixed a problem with DynComp (#532)
+
+
 Version 5.8.18 (June 23, 2023)
 ==============================
 
