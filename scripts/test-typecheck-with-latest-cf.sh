@@ -25,4 +25,4 @@ utils/git-scripts/git-clone-related typetools checker-framework
 CHECKERFRAMEWORK=$(realpath ../checker-framework)
 export CHECKERFRAMEWORK
 
-make -C java typecheck
+make -C java --jobs="$(getconf _NPROCESSORS_ONLN)" typecheck
