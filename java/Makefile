@@ -810,7 +810,7 @@ endif
 # Note about CHECKER_ARGS: if this contains any -Alint option, it will
 # override (not augment) any other use of -Alint in this Makefile.
 # "-proc:only" prevents generation of .class files (so generated classfiles are
-# version 8 rather than version 9, and typecheck jobs can be run in parallel).
+# version 8 rather than version 9, and so typecheck jobs can be run in parallel).
 # JAVACHECK_EXTRA_ARGS is set only by the user (and is currently used by Travis).
 CHECKER_ARGS_ALL_JDK_VERSIONS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -Aversion -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -AwarnRedundantAnnotations -XDignore.symbol.file -Xlint:deprecation -proc:only -processorpath ${CHECKERFRAMEWORK_JAR} ${JAVACHECK_EXTRA_ARGS}
 ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
