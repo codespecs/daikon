@@ -16,8 +16,10 @@ make compile daikon.jar
 unset CHECKERFRAMEWORK
 
 if [ -z ${CIRCLECI+x} ] ; then
-  num_jobs=2
-else
+  # $CIRCLECI is unset
   num_jobs="$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1)"
+else
+  # $CIRCLECI is set
+  num_jobs=2
 fi
 make -C java --jobs="$num_jobs" typecheck
