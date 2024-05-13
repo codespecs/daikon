@@ -722,7 +722,7 @@ showvars:
 
 # If .git does not exist, then the directory was created from a Daikon archive file.
 update-libs: update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-run-google-java-format
-.PHONY: update-libs update-bibtex2web update-checklink update-html-tools update-plume-scripts update-run-google-java-format
+.PHONY: update-libs update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-run-google-java-format
 
 # Unfortunately, I don't see a way for the below not to output lots of "remote:" lines to the log.
 # But, I can avoid doing local output.
