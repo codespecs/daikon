@@ -19,7 +19,7 @@ Further documentation can be found in:
    It is also available at http://plse.cs.washington.edu/daikon/download/api/ .
 
 
-Version 5.8.20 (May 8, 2024)
+Version 5.8.20 (May 14, 2024)
 ==============================
 
 Improved DtraceDiff tool.

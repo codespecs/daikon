@@ -626,7 +626,6 @@ daikon.tar daikon.zip: kvasir $(README_PATHS) $(DAIKON_JAVA_FILES) java/Makefile
 
 	# Utility libraries
 	mkdir ${TMPDIR}/daikon/utils
-	(cd utils/git-scripts; git archive --prefix=git-scripts/ HEAD | (cd ${TMPDIR}/daikon/utils/ && tar xf -))
 	(cd utils/plume-scripts; git archive --prefix=plume-scripts/ HEAD | (cd ${TMPDIR}/daikon/utils/ && tar xf -))
 
 	# Auxiliary programs
