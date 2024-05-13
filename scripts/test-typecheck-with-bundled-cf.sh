@@ -14,4 +14,4 @@ make compile daikon.jar
 
 unset CHECKERFRAMEWORK
 
-make -C java typecheck
+make -C java --jobs="$(getconf _NPROCESSORS_ONLN)" typecheck
