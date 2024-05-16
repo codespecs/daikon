@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This ant buildfile deletes, then recreates, daikon-plumelib.jar. -->
+
+<project name="NameChanger">
+    <path id="classpath">
+        <pathelement location="jarjar-1.4.jar"/>
+    </path>
+    <taskdef name="jarjar" 
+            classname="com.tonicsystems.jarjar.JarJarTask" classpathref="classpath"/>
+
+    <property name="jarfile" value="daikon-plumelib.jar"/>
+    <delete file="${jarfile}"/>
+    <jarjar destfile="${jarfile}">
+        <zipfileset src="bcel-util-1.2.2.jar"/>
+        <zipfileset src="hashmap-util-0.0.1.jar"/>
+        <zipfileset src="options-1.0.6.jar"/>
+        <zipfileset src="plume-util-1.8.1.jar"/>
+        <zipfileset src="reflection-util-1.0.6.jar"/>
+        <rule pattern="org.plumelib.**" result="daikon.plumelib.@1"/>
+    </jarjar>
+</project>
