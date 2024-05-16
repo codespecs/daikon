@@ -5,11 +5,13 @@ set -e
 # Echo commands before executing them
 set -x
 
-java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt bcel-util-*.jar daikon-bcel-util.jar
-java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt hashmap-util-*.jar daikon-hashmap-util.jar
-java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt options-*.jar daikon-options.jar
-java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt plume-util-*.jar daikon-plume-util.jar
-java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt reflection-util-*.jar daikon-reflection-util.jar
+JARJAR_JAR_FILE="$HOME"/java/jarjar-fork-shevek/jarjar-command/build/libs/jarjar-command-1.1.1.jar
+
+java -jar "$JARJAR_JAR_FILE" --mode process --rules daikon-plumelib-rules.txt --output daikon-bcel-util.jar bcel-util-*.jar
+java -jar "$JARJAR_JAR_FILE" --mode process --rules daikon-plumelib-rules.txt --output daikon-hashmap-util.jar hashmap-util-*.jar
+java -jar "$JARJAR_JAR_FILE" --mode process --rules daikon-plumelib-rules.txt --output daikon-options.jar options-*.jar
+java -jar "$JARJAR_JAR_FILE" --mode process --rules daikon-plumelib-rules.txt --output daikon-plume-util.jar plume-util-*.jar
+java -jar "$JARJAR_JAR_FILE" --mode process --rules daikon-plumelib-rules.txt --output daikon-reflection-util.jar reflection-util-*.jar
 mkdir -p daikonplume
 cd daikonplume
 jar -xf ../daikon-bcel-util.jar
