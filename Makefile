@@ -48,6 +48,9 @@ DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
 # Why not just include all of them?  (Maybe to avoid problems with
 # accidentally including things in the user's checkout that are not needed
 # by most users, but why not include everything that's in repository?)
+# Need to include the Dockerfiles as they are referenced from 'Requirements for
+# compiling Daikon' in the Daikon Developer manual; which is in turn referenced
+# from the 'Installation' section of the Daikon manual.
 SCRIPT_FILES := Makefile \
 	daikon.bashrc \
 	dfepl dtrace-perl dtype-perl \
@@ -57,7 +60,7 @@ SCRIPT_FILES := Makefile \
 	trace-untruncate trace-untruncate-fast.c trace-purge-fns.pl trace-purge-vars.pl \
 	trace-add-nonces.pl \
 	util_daikon.pm \
-	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
+	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl Dockerfile*
 
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 
