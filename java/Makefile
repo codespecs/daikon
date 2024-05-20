@@ -417,7 +417,8 @@ all_stop_on_error:
 ifneq ($(shell ls ../.git 2>/dev/null),)
 	$(MAKE) -C .. git-hooks
 endif
-	$(MAKE) --stop all_directly junit
+	$(MAKE) --stop all_directly
+	$(MAKE) junit
 
 ## In general, don't use this; it misses some files
 all_via_daikon: chicory daikon/Daikon.class daikon/diff/Diff.class
