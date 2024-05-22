@@ -6,12 +6,11 @@
 # by Philip Guo
 
 import re
-
-pptNameRE = re.compile(':::')
-
 import sys
 
-f = open(sys.argv[1], 'r')
+pptNameRE = re.compile(":::")
+
+f = open(sys.argv[1], "r")
 allLines = [line.strip() for line in f.readlines()]
 
 # Key: program point name
@@ -31,7 +30,6 @@ for line in allLines:
     # We hit a program point name, so calculate stuff
     # for the previous program point
     if pptNameRE.search(line):
-
         # Special case for the first program point reached
         if not curPpt:
             curPpt = line
@@ -43,7 +41,6 @@ for line in allLines:
             curPpt = line
 
         curPptSetSizes = []
-
 
     # (Ignore blank lines) ... we hit a space-delimited list of
     # comparable variables
@@ -58,7 +55,7 @@ for line in allLines:
 sumOfAvgs = 0
 numPpts = len(list(pptInfoDict.keys()))
 
-totalSquareVars = 0;
+totalSquareVars = 0
 totalVars = 0
 
 totalSquareVarsNoComp = 0
@@ -66,7 +63,7 @@ totalSquareVarsNoComp = 0
 for ppt in pptInfoDict:
     compSetSizesAtPpt = pptInfoDict[ppt]
     totalVarsAtPpt = sum(compSetSizesAtPpt)
-    squareVarsAtPpt = sum([(i*i) for i in compSetSizesAtPpt])
+    squareVarsAtPpt = sum([(i * i) for i in compSetSizesAtPpt])
 
     if totalVarsAtPpt > 0:
         avgForPpt = float(squareVarsAtPpt) / float(totalVarsAtPpt)
@@ -78,14 +75,14 @@ for ppt in pptInfoDict:
     totalSquareVars += squareVarsAtPpt
     totalVars += totalVarsAtPpt
 
-    totalSquareVarsNoComp += (totalVarsAtPpt * totalVarsAtPpt)
+    totalSquareVarsNoComp += totalVarsAtPpt * totalVarsAtPpt
 
 #    print ppt
 #    print "Total # vars:     ", totalVarsAtPpt
 #    print "Average set size: ", avgForPpt
 
 
-#print
-#print "Unweighted average:", ((sumOfAvgs) / float(numPpts))
+# print
+# print "Unweighted average:", ((sumOfAvgs) / float(numPpts))
 print("Weighted average:", (float(totalSquareVars) / float(totalVars)))
 print("Avg. (No comparability):", (float(totalSquareVarsNoComp) / float(totalVars)))

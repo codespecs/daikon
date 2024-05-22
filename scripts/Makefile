@@ -14,8 +14,8 @@ showvars:
 
 PYTHON_FILES=$(wildcard *.py)
 python-style:
-	yapf -i --style='{column_limit: 100}' ${PYTHON_FILES}
-	pylint -f parseable --disable=W,invalid-name ${PYTHON_FILES}
+	ruff format ${PYTHON_FILES}
+	ruff check ${PYTHON_FILES} --fix
 
 clean:
 	rm -f difftbl cluster clgroup kmeans trace-untruncate-fast
