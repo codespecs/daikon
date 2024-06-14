@@ -265,7 +265,7 @@ clean-everything-but-kvasir:
 	${MAKE} -C ${DAIKONDIR}/doc very-clean
 
 clean-kvasir:
-	-${MAKE} -C ${DAIKONDIR}/fjalar/valgrind uninstall distclean
+	-${MAKE} -i -C ${DAIKONDIR}/fjalar very-clean
 
 
 ### Testing the code
