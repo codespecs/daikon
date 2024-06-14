@@ -135,11 +135,22 @@ public class DCInstrument extends InstructionListUtils {
   protected LocalVariableGen tag_frame_local;
 
   // Argument descriptors
+  /** Type array with two objects. */
   protected static Type[] two_objects = new Type[] {Type.OBJECT, Type.OBJECT};
+
+  /** Type array with an object and an int. */
   protected static Type[] object_int = new Type[] {Type.OBJECT, Type.INT};
+
+  /** Type array with a string. */
   protected static Type[] string_arg = new Type[] {Type.STRING};
+
+  /** Type array with an int. */
   protected static Type[] integer_arg = new Type[] {Type.INT};
+
+  /** Type array with an object. */
   protected static Type[] object_arg = new Type[] {Type.OBJECT};
+
+  /** ObjectType for "java.lang.Class". */
   protected static Type javalangClass = new ObjectType("java.lang.Class");
 
   // Type descriptors
