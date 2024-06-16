@@ -206,20 +206,6 @@ public class DCInstrument extends InstructionListUtils {
   /** Set of JUnit test classes. */
   protected static Set<String> junitTestClasses = new HashSet<>();
 
-  /** Possible states of JUnit test discovery. */
-  protected enum JUnitState {
-    NOT_SEEN,
-    STARTING,
-    TEST_DISCOVERY,
-    RUNNING
-  };
-
-  /** Current state of JUnit test discovery. */
-  protected static JUnitState junit_state = JUnitState.NOT_SEEN;
-
-  /** Have we seen 'JUnitCommandLineParseResult.parse'? */
-  protected static boolean junit_parse_seen = false;
-
   /**
    * Map from each static field name to its unique integer id. Note that while it's intuitive to
    * think that each static should show up exactly once, that is not the case. A static defined in a
@@ -396,154 +382,79 @@ public class DCInstrument extends InstructionListUtils {
       add_dcomp_interface(gen);
     }
 
-    // A very tricky special case: If JUnit is running and the current
-    // class has been passed to JUnit on the command line, then this
-    // is a JUnit test class and our normal instrumentation will
-    // cause JUnit to complain about multiple constructors and
-    // methods that should have no arguments. To work around these
-    // restrictions, we replace rather than duplicate each method
+    // A special case: If this is a JUnit test class
+    // we replace rather than duplicate each method
     // we instrument and we do not add the dcomp marker argument.
     // We must also remember the class name so if we see a subsequent
     // call to one of its methods we do not add the dcomp argument.
 
-    Instrument.debug_transform.log("junit_state: %s%n", junit_state);
-
-    StackTraceElement[] stack_trace;
-
-    switch (junit_state) {
-      case NOT_SEEN:
-        if (classname.startsWith("org.junit")) {
-          junit_state = JUnitState.STARTING;
+    // We check for a JUnit test class via two methods.
+    // Either the class is a subclass of
+    // junit.framework.TestCase or one of its methods has a
+    // RuntimeVisibleAnnotation of org/junit/Test.
+    boolean junit_test_class = false;
+    Deque<String> classnameStack = new ArrayDeque<>();
+    String super_class;
+    String this_class = classname;
+    while (true) {
+      super_class = getSuperclassName(this_class);
+      if (super_class == null) {
+        // something has gone wrong
+        break;
+      }
+      if (debugJUnitAnalysis) {
+        System.out.printf("this_class: %s%n", this_class);
+        System.out.printf("super_class: %s%n", super_class);
+      }
+      if (super_class.equals("junit.framework.TestCase")) {
+        // This is a junit test class and so are the
+        // elements of classnameStack.
+        junit_test_class = true;
+        junitTestClasses.add(this_class);
+        while (!classnameStack.isEmpty()) {
+          junitTestClasses.add(classnameStack.pop());
         }
         break;
-
-      case STARTING:
-        // Now check to see if JUnit is looking for test class(es).
-        stack_trace = Thread.currentThread().getStackTrace();
-        // [0] is getStackTrace
-        for (int i = 1; i < stack_trace.length; i++) {
-          if (debugJUnitAnalysis) {
-            System.out.printf(
-                "%s : %s%n", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
-          }
-          if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
-            junit_parse_seen = true;
-            junit_state = JUnitState.TEST_DISCOVERY;
-            break;
-          }
-        }
+      } else if (super_class.equals("java.lang.Object")) {
+        // We're done; not a junit test class.
+        // Ignore items on classnameStack.
         break;
-
-      case TEST_DISCOVERY:
-        // Now check to see if JUnit is done looking for test class(es).
-        boolean local_junit_parse_seen = false;
-        stack_trace = Thread.currentThread().getStackTrace();
-        // [0] is getStackTrace
-        for (int i = 1; i < stack_trace.length; i++) {
-          if (debugJUnitAnalysis) {
-            System.out.printf(
-                "%s : %s%n", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
-          }
-          if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
-            local_junit_parse_seen = true;
-            break;
-          }
-        }
-        if (junit_parse_seen && !local_junit_parse_seen) {
-          junit_parse_seen = false;
-          junit_state = JUnitState.RUNNING;
-        } else if (!junit_parse_seen && local_junit_parse_seen) {
-          junit_parse_seen = true;
-        }
-        break;
-
-      case RUNNING:
-        if (debugJUnitAnalysis) {
-          stack_trace = Thread.currentThread().getStackTrace();
-          // [0] is getStackTrace
-          for (int i = 1; i < stack_trace.length; i++) {
-            System.out.printf(
-                "%s : %s%n", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
-          }
-        }
-        // nothing to do
-        break;
-
-      default:
-        throw new Error("invalid junit_state");
+      }
+      // Recurse and check the super_class.
+      classnameStack.push(this_class);
+      this_class = super_class;
     }
 
-    Instrument.debug_transform.log("junit_state: %s%n", junit_state);
-
-    boolean junit_test_class = false;
-    if (junit_state == JUnitState.TEST_DISCOVERY) {
-      // We have a possible JUnit test class.  We need to verify by
-      // one of two methods.  Either the class is a subclass of
-      // junit.framework.TestCase or one of its methods has a
-      // RuntimeVisibleAnnotation of org/junit/Test.
-      Deque<String> classnameStack = new ArrayDeque<>();
-      String super_class;
-      String this_class = classname;
-      while (true) {
-        super_class = getSuperclassName(this_class);
-        if (super_class == null) {
-          // something has gone wrong
-          break;
-        }
-        if (debugJUnitAnalysis) {
-          System.out.printf("this_class: %s%n", this_class);
-          System.out.printf("super_class: %s%n", super_class);
-        }
-        if (super_class.equals("junit.framework.TestCase")) {
-          // This is a junit test class and so are the
-          // elements of classnameStack.
-          junit_test_class = true;
-          junitTestClasses.add(this_class);
-          while (!classnameStack.isEmpty()) {
-            junitTestClasses.add(classnameStack.pop());
-          }
-          break;
-        } else if (super_class.equals("java.lang.Object")) {
-          // We're done; not a junit test class.
-          // Ignore items on classnameStack.
-          break;
-        }
-        // Recurse and check the super_class.
-        classnameStack.push(this_class);
-        this_class = super_class;
-      }
-
-      if (!junit_test_class) {
-        // need to check for junit Test annotation on a method
-        searchloop:
-        for (Method m : gen.getMethods()) {
-          for (final Attribute attribute : m.getAttributes()) {
-            if (attribute instanceof RuntimeVisibleAnnotations) {
+    if (!junit_test_class) {
+      // need to check for junit Test annotation on a method
+      searchloop:
+      for (Method m : gen.getMethods()) {
+        for (final Attribute attribute : m.getAttributes()) {
+          if (attribute instanceof RuntimeVisibleAnnotations) {
+            if (debugJUnitAnalysis) {
+              System.out.printf("attribute: %s%n", attribute.toString());
+            }
+            for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
               if (debugJUnitAnalysis) {
-                System.out.printf("attribute: %s%n", attribute.toString());
+                System.out.printf("item: %s%n", item.toString());
               }
-              for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
-                if (debugJUnitAnalysis) {
-                  System.out.printf("item: %s%n", item.toString());
-                }
-                if (item.toString().endsWith("org/junit/Test;") // JUnit 4
-                    || item.toString().endsWith("org/junit/jupiter/api/Test;") // JUnit 5
-                ) {
-                  junit_test_class = true;
-                  junitTestClasses.add(this_class);
-                  break searchloop;
-                }
+              if (item.toString().endsWith("org/junit/Test;") // JUnit 4
+                  || item.toString().endsWith("org/junit/jupiter/api/Test;") // JUnit 5
+              ) {
+                junit_test_class = true;
+                junitTestClasses.add(this_class);
+                break searchloop;
               }
             }
           }
         }
       }
+    }
 
-      if (junit_test_class) {
-        Instrument.debug_transform.log("JUnit test class: %s%n", classname);
-      } else {
-        Instrument.debug_transform.log("Not a JUnit test class: %s%n", classname);
-      }
+    if (junit_test_class) {
+      Instrument.debug_transform.log("JUnit test class: %s%n", classname);
+    } else {
+      Instrument.debug_transform.log("Not a JUnit test class: %s%n", classname);
     }
 
     // Process each method
@@ -740,24 +651,6 @@ public class DCInstrument extends InstructionListUtils {
     Instrument.debug_transform.log("Instrumentation complete: %s%n", classname);
 
     return gen.getJavaClass().copy();
-  }
-
-  /**
-   * Returns true if the specified classname.method_name is the root of JUnit startup code.
-   *
-   * @param classname class to be checked
-   * @param method_name method to be checked
-   * @return true if the given method is a JUnit trigger
-   */
-  boolean isJunitTrigger(String classname, String method_name) {
-    if ((classname.contains("JUnitCommandLineParseResult")
-            && method_name.equals("parse")) // JUnit 4
-        || (classname.contains("EngineDiscoveryRequestResolution")
-            && method_name.equals("resolve")) // JUnit 5
-    ) {
-      return true;
-    }
-    return false;
   }
 
   /**
