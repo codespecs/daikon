@@ -512,38 +512,42 @@ public class DCInstrument extends InstructionListUtils {
         classnameStack.push(this_class);
         this_class = super_class;
       }
+    }
 
-      if (!junit_test_class) {
-        // need to check for junit Test annotation on a method
-        searchloop:
-        for (Method m : gen.getMethods()) {
-          for (final Attribute attribute : m.getAttributes()) {
-            if (attribute instanceof RuntimeVisibleAnnotations) {
+    // Even if we have not detected that JUnit is active, any class that
+    // contains a method with a RuntimeVisibleAnnotation of org/junit/Test
+    // needs to be marked as a JUnit test class. (Daikon issue #536)
+
+    if (!junit_test_class) {
+      // need to check for junit Test annotation on a method
+      searchloop:
+      for (Method m : gen.getMethods()) {
+        for (final Attribute attribute : m.getAttributes()) {
+          if (attribute instanceof RuntimeVisibleAnnotations) {
+            if (debugJUnitAnalysis) {
+              System.out.printf("attribute: %s%n", attribute.toString());
+            }
+            for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
               if (debugJUnitAnalysis) {
-                System.out.printf("attribute: %s%n", attribute.toString());
+                System.out.printf("item: %s%n", item.toString());
               }
-              for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
-                if (debugJUnitAnalysis) {
-                  System.out.printf("item: %s%n", item.toString());
-                }
-                if (item.toString().endsWith("org/junit/Test;") // JUnit 4
-                    || item.toString().endsWith("org/junit/jupiter/api/Test;") // JUnit 5
-                ) {
-                  junit_test_class = true;
-                  junitTestClasses.add(this_class);
-                  break searchloop;
-                }
+              if (item.toString().endsWith("org/junit/Test;") // JUnit 4
+                  || item.toString().endsWith("org/junit/jupiter/api/Test;") // JUnit 5
+              ) {
+                junit_test_class = true;
+                junitTestClasses.add(classname);
+                break searchloop;
               }
             }
           }
         }
       }
+    }
 
-      if (junit_test_class) {
-        Instrument.debug_transform.log("JUnit test class: %s%n", classname);
-      } else {
-        Instrument.debug_transform.log("Not a JUnit test class: %s%n", classname);
-      }
+    if (junit_test_class) {
+      Instrument.debug_transform.log("JUnit test class: %s%n", classname);
+    } else {
+      Instrument.debug_transform.log("Not a JUnit test class: %s%n", classname);
     }
 
     // Process each method
