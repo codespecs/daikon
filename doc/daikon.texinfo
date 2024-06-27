@@ -6414,10 +6414,6 @@ but it should always be safe to use this option.
 
 Before running @command{convertcsv.pl}, you may need to install
 @command{Text::CSV}, a Perl package that @command{convertcsv.pl} uses.
-You also need the
-@uref{https://raw.githubusercontent.com/plume-lib/html-tools/master/checkargs.pm,
-@file{checkargs.pm}} file, which is part of the html-tools library
-(@url{https://github.com/plume-lib/html-tools}).
 
 
 @node    Other front ends

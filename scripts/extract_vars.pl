@@ -17,6 +17,12 @@ $WARNING = 1;			# "-w" flag
 
 use Carp;
 use List::Util 'shuffle';
+
+# Put the script directory on the @INC path.
+use File::Basename;
+use lib dirname (__FILE__);
+
+# The file `util_daikon.pm` appears in the same directory as this script.
 use util_daikon;
 
 sub usage () {

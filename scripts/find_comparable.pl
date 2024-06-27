@@ -12,9 +12,8 @@ use English;
 use strict;
 $WARNING = 1;                   # "-w" flag
 my $debug = 0;
-my $verbose = 1;
-my @vars;
-my @new_types;
+# my $verbose = 1;
+# my @new_types;
 my $line;
 my @dfile;
 my $global_prefix = "::";
@@ -39,12 +38,12 @@ while ($line = <STDIN>) {
 }
 
 # indexed by varname, value is number of occurrences
-my %globals;
-my %info;
-my %mismatch_cnt;
+# my %globals;
+# my %info;
+# my %mismatch_cnt;
 my $exit_cnt = 0;
-my @keys;
-my $global_name = "";
+# my @keys;
+# my $global_name = "";
 
 #loop through the decls looking for numbered exit points
 for (my $i = 0; $i <= $#dfile; $i++) {
@@ -88,30 +87,31 @@ for (my $i = 0; $i <= $#dfile; $i++) {
         # print out any comparable variables
         if ($out_file) {
             my $open = 0;
+	    my $fp;
             foreach my $key (sort (keys (%compar))) {
                 my @vars = split (/ /, $compar{$key});
                 if ($#vars > 1) {
                     if (!$open) {
                         my $ppt_file = $ppt;
                         $ppt_file =~ s/\(.*:::/_/;
-                        open (fp, "|sort > $ppt_file");
+                        open ($fp, "|sort > $ppt_file");
                         $open = 1;
                     }
-                    print fp "    ";
+                    print $fp "    ";
                     foreach my $var (@vars) {
-                        print fp "$var ";
+                        print $fp "$var ";
                     }
-                    print fp "\n";
+                    print $fp "\n";
                 }
             }
             if ($open) {
                 foreach my $key (sort (keys (%compar))) {
                     my @vars = split (/ /, $compar{$key});
                     if ($#vars == 1) {
-                        print fp "    $vars[0]\n";
+                        print $fp "    $vars[0]\n";
                     }
                 }
-                close fp;
+                close $fp;
             }
         } else {
             print "\n$ppt\n";

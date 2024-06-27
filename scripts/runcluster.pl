@@ -8,6 +8,11 @@ use English;
 use strict;
 $WARNING = 1;                    # -w flag
 
+# Put the script directory on the @INC path.
+use File::Basename;
+use lib dirname (__FILE__);
+
+# The file `util_daikon.pm` appears in the same directory as this script.
 use util_daikon;
 
 sub usage() {
@@ -39,6 +44,8 @@ my $keep_tempfiles = 0;
 my $verbose = 0;
 my @trace_files; # the dtrace files to be clustered
 my @decls_files ; # the decls files
+
+my $SCRIPTDIR = dirname (__FILE__);
 
 ###########################################################################
 ### Process command-line arguments
@@ -88,7 +95,7 @@ my $decls_files = join(' ', @decls_files);
 
 #extract the variables from the dtrace file
 if ($verbose) { print "\n# Extracting variables from dtrace file ...\n"; }
-my $command = "extract_vars.pl --algorithm $algorithm $decls_files $dtrace_files";
+my $command = "$SCRIPTDIR/extract_vars.pl --algorithm $algorithm $decls_files $dtrace_files";
 system_or_die($command, $verbose);
 
 ###
@@ -153,11 +160,11 @@ foreach my $filename (@to_cluster) {
 # Rewrite the dtrace file to include the cluster information.
 if ($verbose) { print "\n# Rewriting dtrace file ...\n"; }
 my @clustered_files = glob("*\\.cluster");
-$command = "dtrace-add-cluster.pl --algorithm $algorithm -log dtrace-add-cluster.log $dtrace_files " . join(' ', @clustered_files);
+$command = "$SCRIPTDIR/dtrace-add-cluster.pl --algorithm $algorithm -log dtrace-add-cluster.log $dtrace_files " . join(' ', @clustered_files);
 system_or_die($command, $verbose);
 
 # Rewrite the decls file to include the cluster information.
-$command = "decls-add-cluster.pl $decls_files";
+$command = "$SCRIPTDIR/decls-add-cluster.pl $decls_files";
 if ($verbose) { print "\n# Rewriting .decls files to include cluster variable...\n"; }
 my $decls_new = backticks_or_die("$command 2> output-decls-add-cluster-runcluster_temp", $verbose);
 if ($decls_new eq "") {
@@ -202,7 +209,7 @@ foreach my $dtrace_file (@trace_files) {
 }
 
 my $invfile = "runcluster_temp_$algorithm-$ncluster.inv";
-$command = "java -Xmx3600m daikon.Daikon -o $invfile --config_option daikon.PptTopLevel.pairwise_implications=true --var_omit_pattern=\"class\" --no_text_output --no_show_progress $spinfo_file $decls_new " . join(' ', @new_dtraces) . " 2>&1 > runcluster_temp_Daikon_output.txt";
+$command = "java -cp $SCRIPTDIR/../daikon.jar -Xmx3600m daikon.Daikon -o $invfile --config_option daikon.PptTopLevel.pairwise_implications=true --var_omit_pattern=\"class\" --no_text_output --no_show_progress $spinfo_file $decls_new " . join(' ', @new_dtraces) . " 2>&1 > runcluster_temp_Daikon_output.txt";
 system_or_die($command, $verbose);
 
 $invfile =~ /(.*)\.inv/;

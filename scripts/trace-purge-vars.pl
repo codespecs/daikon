@@ -18,12 +18,18 @@
 # There is no corresponding script for .decls files, so you would need to
 # edit the .decls file by hand.
 
+my $debug;
+my $discard;
+my $regexp;
+my $ppt;
+
 BEGIN {
   $debug = 0;
   # $debug = 1;
 
   $discard = 1;
   $regexp = shift(@ARGV);
+  if (! defined $regexp) { die "Not enough arguments"; }
   if ($regexp eq "-v") {
     $discard = 0;
     $regexp = shift(@ARGV);
