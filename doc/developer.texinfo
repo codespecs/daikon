@@ -2005,7 +2005,7 @@ Optionally, set environment variable @env{BIBDIR} to a clone of
 Get a fresh copy of your Bash shell (e.g., log out and log back in), then
 run the following bash commands.  Note that your system may no longer have
 JDK 8 installed at @file{/usr/lib/jvm-1.8.0}. If you do not have a local
-copy, one can be found at @file{/homes/gws/markro/jdk1.8.0_351}.
+copy, one can be found at @file{/homes/gws/markro/jdk1.8.0_401}.
 In any case, adjust environment variables below as necessary.
 @c DAIKONDIR is necessary only for the instructions in this file.
 @c Maybe use a different environment variable?

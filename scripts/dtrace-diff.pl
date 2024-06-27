@@ -21,21 +21,8 @@ if (scalar(@ARGV) != 3) {
 }
 my ($declsname, $dtaname, $dtbname) = @ARGV;
 
-# load decls file
-my $gdeclshash = load_decls($declsname);
-
-# dump it
-# dump_decls($gdeclshash);
-
-
-# compare the dtraces
 my $differences_found = 0;
 my $errors_found = 0;
-cmp_dtracen($gdeclshash, $dtaname, $dtbname);
-
-# Exit status is same as for "diff" program:  0 if no differences, 1 if
-# differences, 2 if error.
-exit($errors_found ? 2 : $differences_found ? 1 : 0);
 
 
 ###########################################################################
@@ -372,3 +359,20 @@ sub dump_decls ( $ ) {
 	}
     }
 }
+
+###########################################################################
+### Main code
+###
+
+# load decls file
+my $gdeclshash = load_decls($declsname);
+
+# dump it
+# dump_decls($gdeclshash);
+
+# compare the dtraces
+cmp_dtracen($gdeclshash, $dtaname, $dtbname);
+
+# Exit status is same as for "diff" program:  0 if no differences, 1 if
+# differences, 2 if error.
+exit($errors_found ? 2 : $differences_found ? 1 : 0);

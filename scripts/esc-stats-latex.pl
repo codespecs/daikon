@@ -96,6 +96,14 @@ if ($ARGV[0] eq '-s') {
   shift @ARGV;
 }
 
+my %ver;
+my %unver;
+my %inexp;
+my %redun;
+my %miss;
+my %classdata;
+
+
 for my $file (@ARGV) {
   # print "# $file\n";
   open(SOURCE, $file) or die("Cannot open $file!");
@@ -206,7 +214,7 @@ my $total_missing = 0;
 my $total_precision = 0;
 my $total_recall = 0;		# not a movie
 
-$num_samples = 1.0 * scalar(keys %classdata);
+my $num_samples = 1.0 * scalar(keys %classdata);
 # print "\# $num_samples samples\n";
 sub avg ( $ ) {
   my ($x) = @_;

@@ -14,6 +14,12 @@ $WARNING=1;
 
 use Text::CSV;
 use Getopt::Long;
+
+# Put the script directory on the @INC path.
+use File::Basename;
+use lib dirname (__FILE__);
+
+# The file `checkargs.pm` appears in the same directory as this script.
 use checkargs;
 
 # TODO:
@@ -53,6 +59,52 @@ my $USAGE =
           appending \".decls\" and \".dtrace\" to <inputfilename>.
 
 ";
+
+
+###########################################################################
+###
+### Subroutines that don't use global variables
+###
+
+# Parses the provided declaration file.
+# Assumes the declaration file contains no blank lines or comments,
+# and that it contains only one program point.
+# Returns an array containing the program point name and the names of
+# variables.
+sub parseDecl ( $ ) {
+  my ($inputfile) = check_args(1, @_);
+  open(DECLHANDLE, $inputfile) ||
+    die("Cannot open declarations file $inputfile");
+  my $declare = <DECLHANDLE>;
+  if ($declare ne "DECLARE\n") {
+    die "Didn't see \"DECLARE\" as first line of declaration file $inputfile";
+  }
+  my $ppt = <DECLHANDLE>;
+  chomp($ppt);
+  my $i = 0;
+  my @varnames;
+  my @varDecType;
+  my @varActType;
+  my @varComparable;
+
+  while (<DECLHANDLE>) {
+    chomp($_);
+    $varnames[$i] = $_;
+    $varDecType[$i] = <DECLHANDLE>;
+    $varActType[$i] = <DECLHANDLE>;
+    $varComparable[$i] = <DECLHANDLE>;
+    $i++;
+  }
+  close(DECLHANDLE);
+  return ($ppt, @varnames);
+
+}
+
+
+
+###########################################################################
+### Variables and file reading
+###
 
 # by default insert the last value seen for missing values
 my $missingaction = "old";
@@ -149,6 +201,27 @@ my %variableArray;
 # Now parse the input file and create the declartions and dtrace files.
 my $csv = Text::CSV->new();
 
+# Captures the variable names in the global variable @csv_varnames.
+sub getVariableNames ( $ ) {
+  my ($line) = check_args(1, @_);
+  chomp ($line);                # remove end of line character.
+  $line =~ s/,$//;     # remove commas at the end of each line in csv file.
+
+  my $csvstatus = $csv->parse($line); # parse a CSV string into fields
+  if (!$csvstatus) {
+    die("Corrupted csv file; cannot parse variable names: $line");
+  }
+
+  @csv_varnames = $csv->fields(); # get the parsed fields
+  my $i = 0;
+  foreach my $var (@csv_varnames) {
+    # Remove spaces, double quotes, slashes from the names of variables.
+    $csv_varnames[$i] = formatVarName($csv_varnames[$i]);
+    $i++;
+  }
+
+}
+
 my $varnames_input = <CSVHANDLE>;
 # capture the variable names in the global
 # variable @csv_varnames.
@@ -166,105 +239,6 @@ if (defined($decls_file)) {
 my $num_decl_vars = scalar(@decl_varnames);
 
 
-while (<CSVHANDLE>) {
-  chomp ($_);                   # remove the end of line.
-
-  # If there is an extra comma at the end of the line, remove it.
-  # (But how do we know that it is an extra?)
-  $_ =~ s/,$//g;
-  # Skip blank lines
-  if ($_ eq "") {
-    next;
-  }
-
-  my $csvstatus = $csv->parse($_); # parse a CSV string into fields
-  if (!$csvstatus) {
-    die("Unparseable line in csv file $inputfilename: $_");
-  }
-  my @sample = $csv->fields();  # get the parsed fields
-
-  {
-    # Check the number of columns in the csv file.
-    my $sample_length = scalar(@sample);
-    if ($sample_length > $num_decl_vars) {
-      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, was declared to have $num_decl_vars";
-    }
-    if ($sample_length < $num_decl_vars) {
-      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, was declared to have $num_decl_vars";
-      for (my $z = $sample_length; $z < $num_decl_vars; $z++) {
-        $sample[$z] = "";
-      }
-    }
-  }
-
-  print DTRACEHANDLE "$programpointname\n";
-  for (my $j = 0; $j<$num_decl_vars; $j++) {
-    my $csvindex = $varNameCsvIndex{$decl_varnames[$j]};
-    my $value = $sample[$csvindex];
-    my $modbit = 1;
-
-    if ($value =~ /^ *$/) {
-      # The value is missing (or consists only of spaces)
-      my $prevvalue = $prevvalues[$csvindex];
-      if ($missingaction eq "old") {
-        $value = $prevvalue;
-      } elsif($missingaction eq "zero") {
-        if (isnumber($prevvalue)) {
-          $value = "0";
-        } else {
-          $value = "\"\"";
-        }
-      } elsif ($missingaction eq "nonsensical") {
-        $value = "nonsensical";
-        $modbit = 2;
-      } elsif ($missingaction eq "interpolate") {
-        $variableArray{$csvindex}[$num_samples] = $value;
-      }
-    } else {
-      if (!isnumber($value)) {
-        $value = "\"$value\"";
-        $isNumber[$csvindex] = 0;
-      }
-      $prevvalues[$csvindex] = $value;
-      if ($missingaction eq "interpolate") {
-        # capture required values for interpolation.
-        $variableArray{$csvindex}[$num_samples] = $value;
-      }
-    }
-    print DTRACEHANDLE "$csv_varnames[$csvindex]\n";
-    print DTRACEHANDLE "$value\n";
-    print DTRACEHANDLE "$modbit\n";
-  }
-
-  print DTRACEHANDLE "\n";
-  $num_samples++;
-}
-
-if (defined($decls_file)) {
-  print DECLSHANDLE "DECLARE\n$programpointname\n";
-  for (my $j = 0; $j<$num_decl_vars; $j++) {
-    my $csvindex = $varNameCsvIndex{$decl_varnames[$j]};
-    print DECLSHANDLE "$csv_varnames[$csvindex]\n";
-    if ($isNumber[$csvindex]) {
-      print DECLSHANDLE "double\ndouble\n";
-    } else {
-      print DECLSHANDLE "java.lang.String\njava.lang.String\n";
-    }
-    print DECLSHANDLE "1\n";
-  }
-}
-
-close(DECLSHANDLE);
-close(CSVHANDLE);
-close(DTRACEHANDLE);
-
-# Interpolation requires extra work, as we first need to find new values
-# for missing values, then write them into the file.
-if ($missingaction =~ /interpolate/) {
-  interpolate();
-}
-
-exit();
 
 
 ###########################################################################
@@ -369,58 +343,112 @@ sub formatVarName ( $ ) {
 }
 
 
-# Captures the variable names in the global variable @csv_varnames.
-sub getVariableNames ( $ ) {
-  my ($line) = check_args(1, @_);
-  chomp ($line);                # remove end of line character.
-  $line =~ s/,$//;     # remove commas at the end of each line in csv file.
 
-  my $csvstatus = $csv->parse($line); # parse a CSV string into fields
+
+
+###########################################################################
+### Main loop
+###
+
+
+while (<CSVHANDLE>) {
+  chomp ($_);                   # remove the end of line.
+
+  # If there is an extra comma at the end of the line, remove it.
+  # (But how do we know that it is an extra?)
+  $_ =~ s/,$//g;
+  # Skip blank lines
+  if ($_ eq "") {
+    next;
+  }
+
+  my $csvstatus = $csv->parse($_); # parse a CSV string into fields
   if (!$csvstatus) {
-    die("Corrupted csv file; cannot parse variable names: $line");
+    die("Unparseable line in csv file $inputfilename: $_");
+  }
+  my @sample = $csv->fields();  # get the parsed fields
+
+  {
+    # Check the number of columns in the csv file.
+    my $sample_length = scalar(@sample);
+    if ($sample_length > $num_decl_vars) {
+      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, was declared to have $num_decl_vars";
+    }
+    if ($sample_length < $num_decl_vars) {
+      die "csv file $inputfilename line " . ($num_samples+1) . " contains $sample_length values, was declared to have $num_decl_vars";
+      for (my $z = $sample_length; $z < $num_decl_vars; $z++) {
+        $sample[$z] = "";
+      }
+    }
   }
 
-  @csv_varnames = $csv->fields(); # get the parsed fields
-  my $i = 0;
-  foreach my $var (@csv_varnames) {
-    # Remove spaces, double quotes, slashes from the names of variables.
-    $csv_varnames[$i] = formatVarName($csv_varnames[$i]);
-    $i++;
+  print DTRACEHANDLE "$programpointname\n";
+  for (my $j = 0; $j<$num_decl_vars; $j++) {
+    my $csvindex = $varNameCsvIndex{$decl_varnames[$j]};
+    my $value = $sample[$csvindex];
+    my $modbit = 1;
+
+    if ($value =~ /^ *$/) {
+      # The value is missing (or consists only of spaces)
+      my $prevvalue = $prevvalues[$csvindex];
+      if ($missingaction eq "old") {
+        $value = $prevvalue;
+      } elsif($missingaction eq "zero") {
+        if (isnumber($prevvalue)) {
+          $value = "0";
+        } else {
+          $value = "\"\"";
+        }
+      } elsif ($missingaction eq "nonsensical") {
+        $value = "nonsensical";
+        $modbit = 2;
+      } elsif ($missingaction eq "interpolate") {
+        $variableArray{$csvindex}[$num_samples] = $value;
+      }
+    } else {
+      if (!isnumber($value)) {
+        $value = "\"$value\"";
+        $isNumber[$csvindex] = 0;
+      }
+      $prevvalues[$csvindex] = $value;
+      if ($missingaction eq "interpolate") {
+        # capture required values for interpolation.
+        $variableArray{$csvindex}[$num_samples] = $value;
+      }
+    }
+    print DTRACEHANDLE "$csv_varnames[$csvindex]\n";
+    print DTRACEHANDLE "$value\n";
+    print DTRACEHANDLE "$modbit\n";
   }
 
+  print DTRACEHANDLE "\n";
+  $num_samples++;
 }
 
-
-# Parses the provided declaration file.
-# Assumes the declaration file contains no blank lines or comments,
-# and that it contains only one program point.
-# Returns an array containing the program point name and the names of
-# variables.
-sub parseDecl ( $ ) {
-  my ($inputfile) = check_args(1, @_);
-  open(DECLHANDLE, $inputfile) ||
-    die("Cannot open declarations file $inputfile");
-  my $declare = <DECLHANDLE>;
-  if ($declare ne "DECLARE\n") {
-    die "Didn't see \"DECLARE\" as first line of declaration file $inputfile";
+if (defined($decls_file)) {
+  print DECLSHANDLE "DECLARE\n$programpointname\n";
+  for (my $j = 0; $j<$num_decl_vars; $j++) {
+    my $csvindex = $varNameCsvIndex{$decl_varnames[$j]};
+    print DECLSHANDLE "$csv_varnames[$csvindex]\n";
+    if ($isNumber[$csvindex]) {
+      print DECLSHANDLE "double\ndouble\n";
+    } else {
+      print DECLSHANDLE "java.lang.String\njava.lang.String\n";
+    }
+    print DECLSHANDLE "1\n";
   }
-  my $ppt = <DECLHANDLE>;
-  chomp($ppt);
-  my $i = 0;
-  my @varnames;
-  my @varDecType;
-  my @varActType;
-  my @varComparable;
-
-  while (<DECLHANDLE>) {
-    chomp($_);
-    $varnames[$i] = $_;
-    $varDecType[$i] = <DECLHANDLE>;
-    $varActType[$i] = <DECLHANDLE>;
-    $varComparable[$i] = <DECLHANDLE>;
-    $i++;
-  }
-  close(DECLHANDLE);
-  return ($ppt, @varnames);
-
 }
+
+close(DECLSHANDLE);
+close(CSVHANDLE);
+close(DTRACEHANDLE);
+
+# Interpolation requires extra work, as we first need to find new values
+# for missing values, then write them into the file.
+if ($missingaction =~ /interpolate/) {
+  interpolate();
+}
+
+exit();
+
+

@@ -16,8 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -60,7 +58,6 @@ import org.apache.bcel.generic.CodeExceptionGen;
 import org.apache.bcel.generic.DUP;
 import org.apache.bcel.generic.DUP2;
 import org.apache.bcel.generic.DUP_X2;
-import org.apache.bcel.generic.FieldGen;
 import org.apache.bcel.generic.FieldInstruction;
 import org.apache.bcel.generic.GETFIELD;
 import org.apache.bcel.generic.GETSTATIC;
@@ -92,7 +89,6 @@ import org.apache.bcel.generic.ReturnInstruction;
 import org.apache.bcel.generic.SWAP;
 import org.apache.bcel.generic.StoreInstruction;
 import org.apache.bcel.generic.Type;
-import org.apache.bcel.generic.TypedInstruction;
 import org.apache.bcel.verifier.structurals.OperandStack;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
@@ -102,7 +98,6 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 import org.checkerframework.dataflow.qual.Pure;
-import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /** Instruments a class file to perform Dynamic Comparability. */
 @SuppressWarnings({"nullness"}) //
@@ -140,21 +135,23 @@ public class DCInstrument extends InstructionListUtils {
   protected LocalVariableGen tag_frame_local;
 
   // Argument descriptors
+  /** Type array with two objects. */
   protected static Type[] two_objects = new Type[] {Type.OBJECT, Type.OBJECT};
-  protected static Type[] object_string = new Type[] {Type.OBJECT, Type.STRING};
-  protected static Type[] two_ints = new Type[] {Type.INT, Type.INT};
+
+  /** Type array with an object and an int. */
   protected static Type[] object_int = new Type[] {Type.OBJECT, Type.INT};
+
+  /** Type array with a string. */
   protected static Type[] string_arg = new Type[] {Type.STRING};
+
+  /** Type array with an int. */
   protected static Type[] integer_arg = new Type[] {Type.INT};
-  protected static Type[] float_arg = new Type[] {Type.FLOAT};
-  protected static Type[] double_arg = new Type[] {Type.DOUBLE};
-  protected static Type[] boolean_arg = new Type[] {Type.BOOLEAN};
-  protected static Type[] long_arg = new Type[] {Type.LONG};
-  protected static Type[] short_arg = new Type[] {Type.SHORT};
+
+  /** Type array with an object. */
   protected static Type[] object_arg = new Type[] {Type.OBJECT};
-  protected static Type[] CharSequence_arg = new Type[] {new ObjectType("java.lang.CharSequence")};
+
+  /** ObjectType for "java.lang.Class". */
   protected static Type javalangClass = new ObjectType("java.lang.Class");
-  protected static Type[] class_str = new Type[] {javalangClass, Type.STRING};
 
   // Type descriptors
   protected static Type object_arr = new ArrayType(Type.OBJECT, 1);
@@ -322,27 +319,6 @@ public class DCInstrument extends InstructionListUtils {
         code += arg.hashCode();
       }
       return code;
-    }
-  }
-
-  /** Class that defines a range of byte code within a method. */
-  static class CodeRange {
-    int start_pc;
-    int len;
-
-    CodeRange(int start_pc, int len) {
-      this.start_pc = start_pc;
-      this.len = len;
-    }
-
-    public boolean contains(int offset) {
-      return (offset >= start_pc) && (offset < (start_pc + len));
-    }
-
-    @SideEffectFree
-    @Override
-    public String toString(@GuardSatisfied CodeRange this) {
-      return String.format("Code range: %d..%d", start_pc, start_pc + len - 1);
     }
   }
 
@@ -536,38 +512,42 @@ public class DCInstrument extends InstructionListUtils {
         classnameStack.push(this_class);
         this_class = super_class;
       }
+    }
 
-      if (!junit_test_class) {
-        // need to check for junit Test annotation on a method
-        searchloop:
-        for (Method m : gen.getMethods()) {
-          for (final Attribute attribute : m.getAttributes()) {
-            if (attribute instanceof RuntimeVisibleAnnotations) {
+    // Even if we have not detected that JUnit is active, any class that
+    // contains a method with a RuntimeVisibleAnnotation of org/junit/Test
+    // needs to be marked as a JUnit test class. (Daikon issue #536)
+
+    if (!junit_test_class) {
+      // need to check for junit Test annotation on a method
+      searchloop:
+      for (Method m : gen.getMethods()) {
+        for (final Attribute attribute : m.getAttributes()) {
+          if (attribute instanceof RuntimeVisibleAnnotations) {
+            if (debugJUnitAnalysis) {
+              System.out.printf("attribute: %s%n", attribute.toString());
+            }
+            for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
               if (debugJUnitAnalysis) {
-                System.out.printf("attribute: %s%n", attribute.toString());
+                System.out.printf("item: %s%n", item.toString());
               }
-              for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
-                if (debugJUnitAnalysis) {
-                  System.out.printf("item: %s%n", item.toString());
-                }
-                if (item.toString().endsWith("org/junit/Test;") // JUnit 4
-                    || item.toString().endsWith("org/junit/jupiter/api/Test;") // JUnit 5
-                ) {
-                  junit_test_class = true;
-                  junitTestClasses.add(this_class);
-                  break searchloop;
-                }
+              if (item.toString().endsWith("org/junit/Test;") // JUnit 4
+                  || item.toString().endsWith("org/junit/jupiter/api/Test;") // JUnit 5
+              ) {
+                junit_test_class = true;
+                junitTestClasses.add(classname);
+                break searchloop;
               }
             }
           }
         }
       }
+    }
 
-      if (junit_test_class) {
-        Instrument.debug_transform.log("JUnit test class: %s%n", classname);
-      } else {
-        Instrument.debug_transform.log("Not a JUnit test class: %s%n", classname);
-      }
+    if (junit_test_class) {
+      Instrument.debug_transform.log("JUnit test class: %s%n", classname);
+    } else {
+      Instrument.debug_transform.log("Not a JUnit test class: %s%n", classname);
     }
 
     // Process each method
@@ -3058,36 +3038,6 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns true if this method is the method identified by method_id. The method is encoded as
-   * 'classname:method'. The classname is the fully qualified class name. The method is this simple
-   * method name (no signature).
-   *
-   * @param method_id classname:method to check
-   * @param classname class to check for
-   * @param m method to check for
-   * @return true if they match
-   */
-  boolean has_specified_method(String method_id, String classname, Method m) {
-
-    // Get the classname and method name
-    String[] sa = method_id.split(":");
-    String m_classname = sa[0];
-    String m_name = sa[1];
-    // System.out.printf("has_specified_method: %s:%s - %s.%s%n", m_classname,
-    //                    m_name, classname, m.getName());
-
-    if (!m_classname.equals(classname)) {
-      return false;
-    }
-
-    if (!m_name.equals(m.getName())) {
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
    * Returns whether or not this ppt should be included. A ppt is included if it matches ones of the
    * select patterns and doesn't match any of the omit patterns.
    *
@@ -3494,92 +3444,6 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns the type of the last instruction that modified the top of stack. A gross attempt to
-   * figure out what is on the top of stack.
-   *
-   * @param ih search backward from this instruction
-   * @return type of last instruction that modified the top of the stack
-   */
-  @Nullable Type find_last_push(InstructionHandle ih) {
-
-    for (ih = ih.getPrev(); ih != null; ih = ih.getPrev()) {
-      Instruction inst = ih.getInstruction();
-      if (inst instanceof InvokeInstruction) {
-        return ((InvokeInstruction) inst).getReturnType(pool);
-      }
-      if (inst instanceof TypedInstruction) {
-        return ((TypedInstruction) inst).getType(pool);
-      }
-    }
-    throw new Error("couldn't find any typed instructions");
-  }
-
-  /**
-   * Returns whether or not the invoke specified invokes a native method. This requires that the
-   * class that contains the method to be loaded.
-   *
-   * @param invoke instruction to check
-   * @return true if the invoke calls a native method
-   */
-  @Pure
-  boolean is_native(InvokeInstruction invoke) {
-
-    // Get the class of the method
-    ClassLoader loader = getClass().getClassLoader();
-    Class<?> clazz;
-    try {
-      clazz = Class.forName(invoke.getClassName(pool), false, loader);
-    } catch (Exception e) {
-      throw new Error("can't get class " + invoke.getClassName(pool), e);
-    }
-
-    // Get the arguments to the method
-    Type[] argTypes = invoke.getArgumentTypes(pool);
-    Class<?>[] arg_classes = new Class<?>[argTypes.length];
-    for (int ii = 0; ii < argTypes.length; ii++) {
-      arg_classes[ii] = type_to_class(argTypes[ii], loader);
-    }
-
-    // Find the method and determine if its native
-    int modifiers = 0;
-    String methodName = invoke.getMethodName(pool);
-    String classes = clazz.getName();
-    try {
-      if (methodName.equals("<init>")) {
-        Constructor<?> c = clazz.getDeclaredConstructor(arg_classes);
-        modifiers = c.getModifiers();
-      } else if (clazz.isInterface()) {
-        return false; // presume interfaces aren't native...
-      } else {
-
-        java.lang.reflect.Method m = null;
-        while (m == null) {
-          try {
-            m = clazz.getDeclaredMethod(methodName, arg_classes);
-            modifiers = m.getModifiers();
-          } catch (NoSuchMethodException e) {
-            clazz = clazz.getSuperclass();
-            classes += ", " + clazz.getName();
-          }
-        }
-      }
-    } catch (Exception e) {
-      throw new Error(
-          "can't find method "
-              + methodName
-              + " "
-              + Arrays.toString(arg_classes)
-              + " "
-              + classes
-              + " "
-              + invoke.toString(pool.getConstantPool()),
-          e);
-    }
-
-    return Modifier.isNative(modifiers);
-  }
-
-  /**
    * Converts a BCEL type to a Class. The class referenced will be loaded but not initialized. The
    * specified loader must be able to find it. If load is null, the default loader will be used.
    *
@@ -3757,26 +3621,6 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     return true;
-  }
-
-  /**
-   * Adds a tag field that parallels each primitive field in the class. The tag field is of type
-   * object and holds the tag associated with that primitive.
-   */
-  void add_tag_fields() {
-
-    // Add fields for tag storage for each primitive field
-    for (Field field : gen.getFields()) {
-      if (is_primitive(field.getType()) && !field.isStatic()) {
-        FieldGen tag_field =
-            new FieldGen(
-                field.getAccessFlags() | Const.ACC_SYNTHETIC,
-                Type.OBJECT,
-                DCRuntime.tag_field_name(field.getName()),
-                pool);
-        gen.addField(tag_field.getField());
-      }
-    }
   }
 
   /**
