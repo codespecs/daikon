@@ -59,7 +59,7 @@ SCRIPT_FILES := Makefile \
 	convertcsv.pl \
 	trace-untruncate trace-untruncate-fast.c trace-purge-fns.pl trace-purge-vars.pl \
 	trace-add-nonces.pl \
-	util_daikon.pm \
+	checkargs.pm util_daikon.pm \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl Dockerfile*
 
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))

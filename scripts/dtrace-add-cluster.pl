@@ -15,6 +15,11 @@ use English;
 use strict;
 $WARNING = 1;			# "-w" flag
 
+# Put the script directory on the @INC path.
+use File::Basename;
+use lib dirname (__FILE__);
+
+# The file `util_daikon.pm` appears in the same directory as this script.
 use util_daikon;
 
 sub usage() {
@@ -28,6 +33,8 @@ sub usage() {
     " -log  FILE               write log messages to the file FILE\n",
     ;
 }				# usage
+
+my $SCRIPTDIR = dirname (__FILE__);
 
 # An invocation nonce is globally unique.
 # A per-ppt invocation order number runs from 1 (or is it 0?) to the total
@@ -97,7 +104,7 @@ foreach my $dtrace_file (@dtrace_files) {
 
   # need to run the DtraceNonceDoctor in order in order for
   # xmeans and possibly other clustering methods to work
-  system_or_die ("java daikon.tools.DtraceNonceFixer $dtrace_file");
+  system_or_die ("java -cp $SCRIPTDIR/../daikon.jar daikon.tools.DtraceNonceFixer $dtrace_file");
   if (-e ("$dtrace_file" . "_all_fixed")) {
     system_or_die ("mv $dtrace_file" . "_all_fixed $dtrace_file");
   }
