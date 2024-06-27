@@ -1,5 +1,5 @@
 // Declarations for misc.Smithnosky
-// Declarations written by Chicory 2023-09-29T09:24:08.091331977
+// Declarations written by Chicory 2023-12-13T17:25:47.833
 
 decl-version 2.0
 var-comparability implicit
@@ -910,7 +910,7 @@ misc.Smithnosky.main(java.lang.String[]):::ENTER
 this_invocation_nonce
 0
 args
-238157928
+1681595665
 1
 args.getClass().getName()
 "java.lang.String[]"
@@ -939,7 +939,7 @@ misc.Smithnosky.Smithnosky(int, int, int):::EXIT24
 this_invocation_nonce
 1
 this
-1883919084
+787867107
 1
 this.a
 0
@@ -960,7 +960,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -982,7 +982,7 @@ misc.Smithnosky.incA():::ENTER
 this_invocation_nonce
 2
 this
-1883919084
+787867107
 1
 this.a
 0
@@ -1003,7 +1003,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1016,7 +1016,7 @@ misc.Smithnosky.incA():::EXIT29
 this_invocation_nonce
 2
 this
-1883919084
+787867107
 1
 this.a
 1
@@ -1037,7 +1037,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1050,7 +1050,7 @@ misc.Smithnosky.incB():::ENTER
 this_invocation_nonce
 3
 this
-1883919084
+787867107
 1
 this.a
 1
@@ -1071,7 +1071,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1084,7 +1084,7 @@ misc.Smithnosky.incB():::EXIT34
 this_invocation_nonce
 3
 this
-1883919084
+787867107
 1
 this.a
 1
@@ -1105,7 +1105,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1118,7 +1118,7 @@ misc.Smithnosky.incC():::ENTER
 this_invocation_nonce
 4
 this
-1883919084
+787867107
 1
 this.a
 1
@@ -1139,7 +1139,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1152,7 +1152,7 @@ misc.Smithnosky.incC():::EXIT39
 this_invocation_nonce
 4
 this
-1883919084
+787867107
 1
 this.a
 1
@@ -1173,7 +1173,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1186,7 +1186,7 @@ misc.Smithnosky.incA():::ENTER
 this_invocation_nonce
 5
 this
-1883919084
+787867107
 1
 this.a
 1
@@ -1207,7 +1207,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1220,7 +1220,7 @@ misc.Smithnosky.incA():::EXIT29
 this_invocation_nonce
 5
 this
-1883919084
+787867107
 1
 this.a
 2
@@ -1241,7 +1241,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1254,7 +1254,7 @@ misc.Smithnosky.incB():::ENTER
 this_invocation_nonce
 6
 this
-1883919084
+787867107
 1
 this.a
 2
@@ -1275,7 +1275,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1288,7 +1288,7 @@ misc.Smithnosky.incB():::EXIT34
 this_invocation_nonce
 6
 this
-1883919084
+787867107
 1
 this.a
 2
@@ -1309,7 +1309,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1322,7 +1322,7 @@ misc.Smithnosky.incC():::ENTER
 this_invocation_nonce
 7
 this
-1883919084
+787867107
 1
 this.a
 2
@@ -1343,7 +1343,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1356,7 +1356,7 @@ misc.Smithnosky.incC():::EXIT39
 this_invocation_nonce
 7
 this
-1883919084
+787867107
 1
 this.a
 2
@@ -1377,7 +1377,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1390,7 +1390,7 @@ misc.Smithnosky.incA():::ENTER
 this_invocation_nonce
 8
 this
-1883919084
+787867107
 1
 this.a
 2
@@ -1411,7 +1411,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1424,7 +1424,7 @@ misc.Smithnosky.incA():::EXIT29
 this_invocation_nonce
 8
 this
-1883919084
+787867107
 1
 this.a
 3
@@ -1445,7 +1445,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1458,7 +1458,7 @@ misc.Smithnosky.incB():::ENTER
 this_invocation_nonce
 9
 this
-1883919084
+787867107
 1
 this.a
 3
@@ -1479,7 +1479,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1492,7 +1492,7 @@ misc.Smithnosky.incB():::EXIT34
 this_invocation_nonce
 9
 this
-1883919084
+787867107
 1
 this.a
 3
@@ -1513,7 +1513,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1526,7 +1526,7 @@ misc.Smithnosky.incC():::ENTER
 this_invocation_nonce
 10
 this
-1883919084
+787867107
 1
 this.a
 3
@@ -1547,7 +1547,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1560,7 +1560,7 @@ misc.Smithnosky.incC():::EXIT39
 this_invocation_nonce
 10
 this
-1883919084
+787867107
 1
 this.a
 3
@@ -1581,7 +1581,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1594,7 +1594,7 @@ misc.Smithnosky.add(java.lang.Object):::ENTER
 this_invocation_nonce
 11
 this
-1883919084
+787867107
 1
 this.a
 3
@@ -1615,7 +1615,7 @@ this.size
 0
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
 []
@@ -1624,7 +1624,7 @@ this.s[..].getClass().getName()
 []
 1
 o
-410495873
+1345636186
 1
 o.getClass().getName()
 "java.lang.String"
@@ -1634,7 +1634,7 @@ misc.Smithnosky.add(java.lang.Object):::EXIT44
 this_invocation_nonce
 11
 this
-1883919084
+787867107
 1
 this.a
 3
@@ -1655,16 +1655,16 @@ this.size
 1
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
-[410495873]
+[1345636186]
 1
 this.s[..].getClass().getName()
 ["java.lang.String"]
 1
 o
-410495873
+1345636186
 1
 o.getClass().getName()
 "java.lang.String"
@@ -1674,7 +1674,7 @@ misc.Smithnosky.add(java.lang.Object):::ENTER
 this_invocation_nonce
 12
 this
-1883919084
+787867107
 1
 this.a
 3
@@ -1695,16 +1695,16 @@ this.size
 1
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
-[410495873]
+[1345636186]
 1
 this.s[..].getClass().getName()
 ["java.lang.String"]
 1
 o
-410495873
+1345636186
 1
 o.getClass().getName()
 "java.lang.String"
@@ -1714,7 +1714,7 @@ misc.Smithnosky.add(java.lang.Object):::EXIT44
 this_invocation_nonce
 12
 this
-1883919084
+787867107
 1
 this.a
 3
@@ -1735,16 +1735,16 @@ this.size
 2
 1
 this.s
-662822946
+57494364
 1
 this.s[..]
-[410495873 410495873]
+[1345636186 1345636186]
 1
 this.s[..].getClass().getName()
 ["java.lang.String" "java.lang.String"]
 1
 o
-410495873
+1345636186
 1
 o.getClass().getName()
 "java.lang.String"
@@ -1754,7 +1754,7 @@ misc.Smithnosky.main(java.lang.String[]):::EXIT59
 this_invocation_nonce
 0
 args
-238157928
+1681595665
 1
 args.getClass().getName()
 "java.lang.String[]"

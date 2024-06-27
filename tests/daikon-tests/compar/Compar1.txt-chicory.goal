@@ -1,5 +1,5 @@
 // Declarations for misc.Compar1
-// Declarations written by Chicory 2023-09-29T09:22:54.573530031
+// Declarations written by Chicory 2023-12-13T14:11:21.409
 
 decl-version 2.0
 var-comparability implicit
@@ -103,13 +103,13 @@ variable k
   dec-type int
   rep-type int
   flags is_param
-  comparability 3
+  comparability 2
 variable l
   var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 3
+  comparability 2
 
 ppt misc.Compar1.bar(int,\_int,\_int,\_int):::EXIT29
 ppt-type subexit
@@ -130,13 +130,13 @@ variable k
   dec-type int
   rep-type int
   flags is_param
-  comparability 3
+  comparability 2
 variable l
   var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 3
+  comparability 2
 
 ppt misc.Compar1:::OBJECT
 ppt-type object
@@ -151,7 +151,7 @@ misc.Compar1.main(java.lang.String[]):::ENTER
 this_invocation_nonce
 0
 args
-1684890795
+1418428263
 1
 args.getClass().getName()
 "java.lang.String[]"
@@ -3367,7 +3367,7 @@ misc.Compar1.main(java.lang.String[]):::EXIT19
 this_invocation_nonce
 0
 args
-1684890795
+1418428263
 1
 args.getClass().getName()
 "java.lang.String[]"

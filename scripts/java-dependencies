@@ -56,7 +56,7 @@ for file in $files; do
 done
 cd ..
 
-if [ $debug ]; then
+if [ "$debug" ]; then
   echo "scratch = $scratch"
 else
   # remove the temporary directory

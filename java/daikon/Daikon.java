@@ -245,10 +245,10 @@ public final class Daikon {
   public static int dkconfig_progress_delay = 1000;
 
   /** The current version of Daikon. */
-  public static final String release_version = "5.8.19";
+  public static final String release_version = "5.8.21";
 
   /** The date for the current version of Daikon. */
-  public static final String release_date = "June 24, 2023";
+  public static final String release_date = "May 14, 2024";
 
   /** A description of the Daikon release (version number, date, and URL). */
   public static final String release_string =
@@ -1488,7 +1488,7 @@ public final class Daikon {
    * @param field a field; must be static
    * @param value the value to set the field to
    * @throws IllegalAccessException if {@code field} is enforcing Java language access control and
-   *     the underlying field is either inaccessible or final.
+   *     the underlying field is either inaccessible or final
    */
   // This method exists to reduce the scope of the warning suppression.
   @SuppressWarnings({

@@ -176,7 +176,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends TernaryDerivationFacto
     //           result.add(new SUBSEQUENCE(seqvar, sclvar, true, true)); // a[..i-1]
     //           result.add(new SUBSEQUENCE(seqvar, sclvar, false, false)); // a[i..]
     //         };
-    //         return result.toArray(new BinaryDerivation[result.size()]);
+    //         return result.toArray(new BinaryDerivation[0]);
     //       }
     //     }
 
