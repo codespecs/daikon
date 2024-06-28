@@ -5,10 +5,17 @@
 # group samples by class (for Java) or method (for C) they were taken
 # from, writing new trace files with grouped data.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2010-10-01 23:50:20 mernst>
+# Time-stamp: <2024-06-26 19:15:26 mernst>
 
 use FileHandle;
 use Compress::Zlib;
+
+my $compress;
+my $per_method;
+my %files;
+my $paragraph;
+my $tmp;
+my $bucket_name;
 
 BEGIN {
   # Write .dtrace.gz files (instead of .dtrace)

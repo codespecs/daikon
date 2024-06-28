@@ -28,6 +28,9 @@ my $merge_unexpressible;	# whether to merge unexpressible invariants;
 my $recursive;			# whether to look recursively for files.
 my $slashslash;                 # whether to use // or /* comments.
 
+my $methodname;
+my %raw;
+my $javafile;
 
 BEGIN {
   $java_modifier_re = '\b(?:abstract|final|private|protected|public|static|strictfp|synchronized|transient)\b';
@@ -42,11 +45,11 @@ BEGIN {
   $recursive = 0;
   $slashslash = 0;
 
-  if ($ARGV[0] eq '-r') {
+  if (defined $ARGV[0] && $ARGV[0] eq '-r') {
     $recursive = 1;
     shift @ARGV;
   }
-  if ($ARGV[0] eq '-s') {
+  if (defined $ARGV[0] && $ARGV[0] eq '-s') {
     $slashslash = 1;
     shift @ARGV;
   }
@@ -120,7 +123,7 @@ sub args_to_list( $ ) {
   $args =~ s/\s*\)\s*$//;
   $args =~ s/\s+([\[\]])/$1/g;	# remove space before array brackets
   # remove "final" and such
-  @args = split(/\s*,\s*/, $args);
+  my @args = split(/\s*,\s*/, $args);
   return @args;
 }
 
@@ -135,7 +138,7 @@ sub simplify_args( $ ) {
     # print "after: $arg\n";
     push @newargs, $arg;
   }
-  $newargs = "(" . join(", ", @newargs) . ")";
+  my $newargs = "(" . join(", ", @newargs) . ")";
   return $newargs;
 }
 
@@ -201,17 +204,17 @@ sub is_non_supported_invariant( $ ) {
 sub ppt_to_meth( $ ) {
   my ($ppt) = @_;
 
-  my $methodname = $ppt;
+  my $methodname2 = $ppt;
   # Change "Foo.<init>" to "Foo.Foo".
-  $methodname =~ s/^(\w+)\.<init>\($/$1.$1\(/;
+  $methodname2 =~ s/^(\w+)\.<init>\($/$1.$1\(/;
 
   # Replace arglist by canonicalized version
-  if (($methodname !~ /:::(OBJECT|CLASS)/)
-      && ($methodname !~ s/\(([^\(\)]*)\).*$/&simplify_args($1)/)) {
-    die "Can't parse methodname: $methodname";
+  if (($methodname2 !~ /:::(OBJECT|CLASS)/)
+      && ($methodname2 !~ s/\(([^\(\)]*)\).*$/&simplify_args($1)/)) {
+    die "Can't parse methodname: $methodname2";
   }
 
-  return $methodname;
+  return $methodname2;
 }
 
 
@@ -277,9 +280,9 @@ END {
   # maps from method name to canonical program point name
   my %meth_ppt = ();
   for my $ppt (keys %raw) {
-    my $methodname = ppt_to_meth($ppt);
-    $meth_ppt{$methodname} = $ppt;
-    # print "method: $methodname\n";
+    my $methodname2 = ppt_to_meth($ppt);
+    $meth_ppt{$methodname2} = $ppt;
+    # print "method: $methodname2\n";
     # print "ppt: $ppt\n";
     # print $raw{$ppt};
   }
@@ -291,7 +294,6 @@ END {
     $File::Find::prune = (-d && $nodeep && ($_ ne '.'));
   }, ".");
 
-  local $javafile;
   for $javafile (@javafiles) {
     my @fields = ();		# only non-primitive fields
     my @owned_fields = ();
@@ -301,7 +303,7 @@ END {
     # A more sophisticated algorithm would count braces to avoid getting
     # fields of inner classes.
     open(GETFIELDS, "$javafile") or die "Cannot open $javafile: $!";
-    while (defined($line = <GETFIELDS>)) {
+    while (defined(my $line = <GETFIELDS>)) {
       if ($line =~ /$field_decl_re/o) {
 	my $fieldname = $4;
 	if (($line =~ /\[\s*\]/)
@@ -333,15 +335,15 @@ END {
     open(IN, "$javafile") or die "Cannot open $javafile: $!";
     open(OUT, ">$javafile-escannotated") or die "Cannot open $javafile-escannotated: $!";
 
-    while (defined($line = <IN>)) {
+    while (defined(my $line = <IN>)) {
       if (($line !~ m|;\s*(//.*)?$|)
 	  && ($line =~ /\b(?:public|private|protected)\b/)
 	  && ($line =~ /\b(\w+)\s*(\([^\)]*\))/)) {
-	# This looks like a declaration of method $methodname.
+	# This looks like a declaration of method $methodname2.
 	# (Requires public or private or protected to avoid false alarms.)
-	my $methodname = $1;
+	my $methodname2 = $1;
 	my $args = $2;
-	my $fullmethname = "$classname.$methodname";
+	my $fullmethname = "$classname.$methodname2";
 	# print "Found $fullmethname in $line";
 	my $simple_args = simplify_args($args);
 	my $fullmeth = $fullmethname . $simple_args;
@@ -358,9 +360,9 @@ END {
 	  # print "Checking $fullmeth against $ppt\n";
 	  my $ppt_fullmeth = $ppt;
 	  $ppt_fullmeth =~ s/:::.*$//;
-	  $ppt_methname = $ppt_fullmeth;
+	  my $ppt_methname = $ppt_fullmeth;
 	  $ppt_methname =~ s/\(.*$//;
-	  $ppt_args = $ppt_fullmeth;
+	  my $ppt_args = $ppt_fullmeth;
 	  $ppt_args =~ s/^.*\(/\(/;
 	  if (($fullmeth eq $ppt_fullmeth)
 	      || (($fullmethname eq $ppt_methname)
@@ -453,7 +455,7 @@ END {
 	}
 
 	# Take special action if this is a constructor.
-	if (($methodname ne $classname) || (scalar(@owned_fields) == 0)) {
+	if (($methodname2 ne $classname) || (scalar(@owned_fields) == 0)) {
 	  print OUT $postbrace;
 	} elsif ($postbrace =~ /^(.*)(\}.*\n?)$/) {
 	  print OUT "$1\n";

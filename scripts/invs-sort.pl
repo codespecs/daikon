@@ -10,6 +10,7 @@
 # or as a filter:
 #   cat foo.invs | invs-sort.pl | ...
 
+my $parasep;
 
 BEGIN {
   # Read a paragraph at a time

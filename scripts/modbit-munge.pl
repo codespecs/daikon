@@ -37,6 +37,14 @@ sub dos_chomp( $ ) {
 }
 
 
+my $debug;
+my $ppt;
+my $allmod;
+my $changed;
+my $addchange;
+my $random;
+my $random_frac;
+
 BEGIN {
   $debug = 0;
   # $debug = 1;
@@ -46,7 +54,7 @@ BEGIN {
   }
 
   $ppt = undef;
-  $action = shift(@ARGV);
+  my $action = shift(@ARGV);
 
   # These are numbers instead of strings to make comparisons faster.
   $allmod = 0;

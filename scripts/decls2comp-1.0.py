@@ -66,20 +66,20 @@ import sys
 # following format: '9[10]' - we are going to ignore what is between
 # the brackets so we will treat it as '9'
 import re
-LWArrayRExp = re.compile('\[.\]')
+
+LWArrayRExp = re.compile("\[.\]")
 
 ignoreHashcodes = False
 
-if ((len(sys.argv) == 3) and
-    sys.argv[2] == "no-hashcodes"):
+if (len(sys.argv) == 3) and sys.argv[2] == "no-hashcodes":
     ignoreHashcodes = True
 
 # If 'no-hashcodes' option is on, then ignore all variables whose
 # rep. type is hashcode
-hashcodeRE = re.compile('hashcode.*')
+hashcodeRE = re.compile("hashcode.*")
 
 
-f = open(sys.argv[1], 'r')
+f = open(sys.argv[1], "r")
 
 # Break each program point declaration up into separate lists.
 # Program points are separated by "DECLARE" statements
@@ -87,7 +87,7 @@ f = open(sys.argv[1], 'r')
 # Value: list of all strings following program point
 allPpts = {}
 
-tempAllPpts = [] # Temporary before placing in allPpts
+tempAllPpts = []  # Temporary before placing in allPpts
 
 isIntermediate = 0
 
@@ -95,14 +95,14 @@ for line in f.readlines():
     line = line.strip()
 
     if line == "DECLARE":
-        tempAllPpts.append([]) # Start a new list
+        tempAllPpts.append([])  # Start a new list
         isIntermediate = 0
     elif line == "INTERMEDIATE DECLARE":
-        tempAllPpts.append([]) # Start a new list
+        tempAllPpts.append([])  # Start a new list
         isIntermediate = 1
-    elif line != "" and line[0] != "#": # Don't add blank lines & comments
+    elif line != "" and line[0] != "#":  # Don't add blank lines & comments
         if len(tempAllPpts) > 0:
-            tempAllPpts[-1].append(line) # Append line to the latest entry
+            tempAllPpts[-1].append(line)  # Append line to the latest entry
 
 
 # Init allPpts from tempAllPpts
@@ -118,8 +118,8 @@ for pptList in tempAllPpts:
         # Try appending numbers until there isn't an entry
         found = 1
         while found:
-            pptName = pptList[0] + ' (' + str(index) + ')'
-            if not (pptName in allPpts):
+            pptName = pptList[0] + " (" + str(index) + ")"
+            if pptName not in allPpts:
                 break
             index += 1
 
@@ -132,7 +132,7 @@ sortedPptKeys = sorted(list(allPpts.keys()))
 for pptName in sortedPptKeys:
     v = allPpts[pptName]
     i = 0
-    var2comp = {} # Key: variable name, Value: comparability number
+    var2comp = {}  # Key: variable name, Value: comparability number
 
     # All info. about variables at a program point come in sets of 4
     # lines. e.g.
@@ -142,14 +142,13 @@ for pptName in sortedPptKeys:
     # int
     # 1
     while i < len(v):
-        curRepType = v[i+2]
-        curComp = v[i+3]
+        curRepType = v[i + 2]
+        curComp = v[i + 3]
 
-        if ((not ignoreHashcodes) or
-            (not hashcodeRE.match(curRepType))):
+        if (not ignoreHashcodes) or (not hashcodeRE.match(curRepType)):
             isArrayMatch = LWArrayRExp.search(curComp)
             if isArrayMatch:
-                var2comp[v[i]] = curComp[:isArrayMatch.start()]
+                var2comp[v[i]] = curComp[: isArrayMatch.start()]
             else:
                 var2comp[v[i]] = curComp
 
@@ -164,10 +163,10 @@ for pptName in sortedPptKeys:
     while len(sortedVars) > 0:
         varName = sortedVars[0]
 
-#        if var2comp[varName] == '-1': # Remember that everything is a string
-#            print '-1:', varName,
-#        else:
-        print(varName, end=' ')
+        #        if var2comp[varName] == '-1': # Remember that everything is a string
+        #            print '-1:', varName,
+        #        else:
+        print(varName, end=" ")
 
         compNum = var2comp[varName]
 
@@ -178,7 +177,7 @@ for pptName in sortedPptKeys:
 
             for otherVar in sortedVars:
                 if var2comp[otherVar] == compNum:
-                    print(otherVar, end=' ')
+                    print(otherVar, end=" ")
                     del var2comp[otherVar]
         print()
 

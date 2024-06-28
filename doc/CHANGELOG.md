@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 
 Version 5.8.20 (May 14, 2024)
-==============================
+=============================
 
 Improved DtraceDiff tool.
 
