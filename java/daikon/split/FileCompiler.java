@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -162,8 +163,10 @@ public final class FileCompiler {
     cmdLine.addArguments(filenames.toArray(new String[0]));
 
     resultHandler = new DefaultExecuteResultHandler();
-    executor = new DefaultExecutor();
-    watchdog = new ExecuteWatchdog(timeLimit);
+    executor = DefaultExecutor.builder().get();
+    ExecuteWatchdog.Builder watchdogBuilder = ExecuteWatchdog.builder();
+    watchdogBuilder.setTimeout(Duration.ofMillis(timeLimit));
+    watchdog = watchdogBuilder.get();
     executor.setWatchdog(watchdog);
     outStream = new ByteArrayOutputStream();
     errStream = new ByteArrayOutputStream();
