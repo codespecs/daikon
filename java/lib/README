@@ -84,7 +84,6 @@ reflection-util-1.0.6.jar : https://repo.maven.apache.org/maven2/org/plumelib/re
 require-javadoc-1.0.9-all.jar : https://github.com/plume-lib/require-javadoc/releases
   wget https://github.com/plume-lib/require-javadoc/releases/download/v1.0.9/require-javadoc-1.0.9-all.jar
 
-
 ---------------------------------------------------------------------------
 
 Motivation for daikon-plumelib.jar:
