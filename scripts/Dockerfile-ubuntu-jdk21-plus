@@ -1,0 +1,70 @@
+# Create a Docker image that is ready to run the full Daikon tests,
+# including building the manual and Javadoc.
+# But it's used primarily for running miscellaneous tests such as the manual
+# and Javadoc.
+
+# "ubuntu" is the latest LTS release.  "ubuntu:rolling" is the latest release.
+# As of 2023-11-15, "ubuntu:rolling" is still 23.04.
+FROM ubuntu:23.10
+MAINTAINER Michael Ernst <mernst@cs.washington.edu>
+
+# According to
+# https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
+#  * Put "apt-get update" and "apt-get install" in the same RUN command.
+#  * Do not run "apt-get upgrade"; instead get upstream to update.
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
+  apt-utils
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
+  autoconf \
+  automake \
+  bc \
+  binutils-dev \
+  gcc \
+  git \
+  graphviz \
+  jq \
+  lsb-release \
+  m4 \
+  make \
+  rsync \
+  unzip
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
+  openjdk-21-jdk
+
+# These are needed to build the Checker Framework, used by the "typecheck" job in CI.
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
+  ant \
+  maven \
+  python3
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
+  curl \
+  g++ \
+  graphviz \
+  libc6-dbg \
+  netpbm \
+  python3-distutils \
+  texinfo \
+  texlive \
+  texlive-latex-extra \
+  universal-ctags \
+  wget \
+  zlib1g-dev
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get autoremove \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/*
