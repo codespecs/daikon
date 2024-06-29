@@ -1,3 +1,7 @@
+# This Makefile installs Pants then builds Jar Jar Links.
+# It is no longer used because I have committed jarjar.jar
+# to this repository, to avoid having to rebuild it.
+
 # This target creates daikon-plumelib.jar, whether or not it already exists.
 all:
 	$(MAKE) build-jarjar
