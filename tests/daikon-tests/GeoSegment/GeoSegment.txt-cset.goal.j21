@@ -1,0 +1,199 @@
+
+Variable sets for MapQuick1.GeoPoint.<init>(int latitude, int longitude) enter
+  [2] [Parameter latitude, Parameter longitude]
+Variable sets for MapQuick1.GeoPoint.<init>(int latitude, int longitude) exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [4] [Parameter latitude, Parameter longitude, Field latitude, Field longitude]
+  [1] [this]
+
+Variable sets for MapQuick1.GeoPoint.equals(java.lang.Object o) enter
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [2] [Parameter o, this]
+  [1] [Class of o]
+  [2] [Field latitude, Field longitude]
+Variable sets for MapQuick1.GeoPoint.equals(java.lang.Object o) exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [2] [Parameter o, this]
+  [1] [Class of o]
+  [1] [return]
+  [2] [Field latitude, Field longitude]
+
+Variable sets for MapQuick1.GeoPoint.hashCode() enter
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [this]
+  [2] [Field latitude, Field longitude]
+Variable sets for MapQuick1.GeoPoint.hashCode() exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [return]
+  [1] [this]
+  [2] [Field latitude, Field longitude]
+
+Variable sets for MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint gp) enter
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [2] [Parameter gp, this]
+  [4] [Field gp.latitude, Field gp.longitude, Field latitude, Field longitude]
+Variable sets for MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint gp) exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [2] [Parameter gp, this]
+  [5] [Field gp.latitude, Field gp.longitude, return, Field latitude, Field longitude]
+
+Variable sets for MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint gp) enter
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [2] [Parameter gp, this]
+  [4] [Field gp.latitude, Field gp.longitude, Field latitude, Field longitude]
+Variable sets for MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint gp) exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [2] [Parameter gp, this]
+  [4] [Field gp.latitude, Field gp.longitude, Field latitude, Field longitude]
+  [1] [return]
+
+Variable sets for MapQuick1.GeoSegment.<init>(java.lang.String name, MapQuick1.GeoPoint p1, MapQuick1.GeoPoint p2) enter
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [Parameter name]
+  [1] [String name.toString]
+  [2] [Parameter p1, Parameter p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+Variable sets for MapQuick1.GeoSegment.<init>(java.lang.String name, MapQuick1.GeoPoint p1, MapQuick1.GeoPoint p2) exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [2] [Parameter name, Field name]
+  [1] [String name.toString]
+  [4] [Parameter p1, Parameter p2, Field p1, Field p2]
+  [8] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude, Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+  [1] [this]
+  [1] [String Field name.toString]
+
+Variable sets for MapQuick1.GeoSegment.reverse() enter
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+Variable sets for MapQuick1.GeoSegment.reverse() exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [return]
+  [1] [Field return.name]
+  [1] [String return.name.toString]
+  [1] [Field return.p1]
+  [1] [Field return.p1.latitude]
+  [1] [Field return.p1.longitude]
+  [1] [Field return.p2]
+  [1] [Field return.p2.latitude]
+  [1] [Field return.p2.longitude]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+
+Variable sets for MapQuick1.GeoSegment.name() enter
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+Variable sets for MapQuick1.GeoSegment.name() exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [2] [return, Field name]
+  [1] [String return.toString]
+  [1] [this]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+
+Variable sets for MapQuick1.GeoSegment.p1() enter
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+Variable sets for MapQuick1.GeoSegment.p1() exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [3] [return, Field p1, Field p2]
+  [6] [Field return.latitude, Field return.longitude, Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+
+Variable sets for MapQuick1.GeoSegment.p2() enter
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+Variable sets for MapQuick1.GeoSegment.p2() exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [3] [return, Field p1, Field p2]
+  [6] [Field return.latitude, Field return.longitude, Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+
+Variable sets for MapQuick1.GeoSegment.length() enter
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+Variable sets for MapQuick1.GeoSegment.length() exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [return]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+
+Variable sets for MapQuick1.GeoSegment.heading() enter
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+Variable sets for MapQuick1.GeoSegment.heading() exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [return]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+
+Variable sets for MapQuick1.GeoSegment.equals(java.lang.Object o) enter
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [2] [Parameter o, this]
+  [1] [Class of o]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+Variable sets for MapQuick1.GeoSegment.equals(java.lang.Object o) exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [2] [Parameter o, this]
+  [1] [Class of o]
+  [1] [return]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+
+Variable sets for MapQuick1.GeoSegment.hashCode() enter
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
+Variable sets for MapQuick1.GeoSegment.hashCode() exit
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [return]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]

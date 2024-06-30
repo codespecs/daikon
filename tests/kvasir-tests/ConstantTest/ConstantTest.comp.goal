@@ -1,12 +1,4 @@
 ..main():::ENTER
-::__numeric_traits_integer<char>::__max
-::__numeric_traits_integer<int>::__max
-::__numeric_traits_integer<int>::__min
-::__numeric_traits_integer<long>::__max
-::__numeric_traits_integer<long>::__min
-::__numeric_traits_integer<short>::__max
-::__numeric_traits_integer<short>::__min
-::__numeric_traits_integer<unsigned\_long>::__digits
 ::global_const
 ::static_const
 argc
@@ -14,14 +6,6 @@ argv
 argv[..]
 
 ..main():::EXIT0
-::__numeric_traits_integer<char>::__max
-::__numeric_traits_integer<int>::__max
-::__numeric_traits_integer<int>::__min
-::__numeric_traits_integer<long>::__max
-::__numeric_traits_integer<long>::__min
-::__numeric_traits_integer<short>::__max
-::__numeric_traits_integer<short>::__min
-::__numeric_traits_integer<unsigned\_long>::__digits
 ::global_const
 ::static_const
 argc
@@ -30,56 +14,24 @@ argv[..]
 return
 
 A.A():::ENTER
-::__numeric_traits_integer<char>::__max
-::__numeric_traits_integer<int>::__max
-::__numeric_traits_integer<int>::__min
-::__numeric_traits_integer<long>::__max
-::__numeric_traits_integer<long>::__min
-::__numeric_traits_integer<short>::__max
-::__numeric_traits_integer<short>::__min
-::__numeric_traits_integer<unsigned\_long>::__digits
 ::global_const
 ::static_const
 this
 this[0]
 
 A.A():::EXIT0
-::__numeric_traits_integer<char>::__max
-::__numeric_traits_integer<int>::__max
-::__numeric_traits_integer<int>::__min
-::__numeric_traits_integer<long>::__max
-::__numeric_traits_integer<long>::__min
-::__numeric_traits_integer<short>::__max
-::__numeric_traits_integer<short>::__min
-::__numeric_traits_integer<unsigned\_long>::__digits
 ::global_const
 ::static_const
 this
 this[0]
 
 A.getInt():::ENTER
-::__numeric_traits_integer<char>::__max
-::__numeric_traits_integer<int>::__max
-::__numeric_traits_integer<int>::__min
-::__numeric_traits_integer<long>::__max
-::__numeric_traits_integer<long>::__min
-::__numeric_traits_integer<short>::__max
-::__numeric_traits_integer<short>::__min
-::__numeric_traits_integer<unsigned\_long>::__digits
 ::global_const
 ::static_const
 this
 this[0]
 
 A.getInt():::EXIT0
-::__numeric_traits_integer<char>::__max
-::__numeric_traits_integer<int>::__max
-::__numeric_traits_integer<int>::__min
-::__numeric_traits_integer<long>::__max
-::__numeric_traits_integer<long>::__min
-::__numeric_traits_integer<short>::__max
-::__numeric_traits_integer<short>::__min
-::__numeric_traits_integer<unsigned\_long>::__digits
 ::global_const
 ::static_const
 return

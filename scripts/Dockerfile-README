@@ -73,6 +73,16 @@ export JDKVER=jdk20-plus
 export PROJECT=daikon
 create_upload_docker_image
 
+export OS=ubuntu
+export JDKVER=jdk21
+export PROJECT=daikon
+create_upload_docker_image
+
+export OS=ubuntu
+export JDKVER=jdk21-plus
+export PROJECT=daikon
+create_upload_docker_image
+
 export OS=rockylinux
 export JDKVER=jdk8
 export PROJECT=daikon
@@ -100,6 +110,16 @@ create_upload_docker_image
 
 export OS=rockylinux
 export JDKVER=jdk17-plus
+export PROJECT=daikon
+create_upload_docker_image
+
+export OS=rockylinux
+export JDKVER=jdk21
+export PROJECT=daikon
+create_upload_docker_image
+
+export OS=rockylinux
+export JDKVER=jdk21-plus
 export PROJECT=daikon
 create_upload_docker_image
 

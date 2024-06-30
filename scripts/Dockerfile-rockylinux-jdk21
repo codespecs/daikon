@@ -1,0 +1,39 @@
+# Create a Docker image that is ready to run the Daikon tests.
+
+FROM rockylinux:9
+MAINTAINER Michael Ernst <mernst@cs.washington.edu>
+
+# According to
+# https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
+#  * Put "apt-get update" and "apt-get install" in the same RUN command.
+#  * Do not run "apt-get upgrade"; instead get upstream to update.
+RUN dnf -q -y upgrade && dnf -q -y install \
+  autoconf \
+  automake \
+  bc \
+  binutils-devel \
+  diffutils \
+  findutils \
+  gcc \
+  git \
+  m4 \
+  make \
+  perl-English \
+  perl-filetest \
+  rsync \
+  tar \
+  unzip \
+  which
+
+RUN dnf -q -y install \
+  java-21-openjdk \
+  java-21-openjdk-devel
+
+# This enables the repository that contains jq
+RUN dnf -q -y install \
+  epel-release
+
+RUN dnf -q -y install \
+  jq
+
+RUN dnf -q clean all
