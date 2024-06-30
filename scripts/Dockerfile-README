@@ -1,4 +1,4 @@
-	This directory contains Dockerfiles to create new Docker images for
+This directory contains Dockerfiles to create new Docker images for
 running Daikon tests reproducibly.
 
 The rest of this file explains how to build new Docker images:
