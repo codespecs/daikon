@@ -772,3 +772,18 @@ jobs:
   - bash: echo "No JDK 21 on Rocky Linux yet"
     displayName: test-kvasir.sh
 
+## Enable this job to prioritize typechecking a single file, without waiting for other tests.
+# - job: typecheck_onefile_jdk21
+#   pool:
+#     vmImage: 'ubuntu-latest'
+#   container: mdernst/daikon-ubuntu-jdk21-plus:latest
+#   timeoutInMinutes: 70
+#   steps:
+#   - checkout: self
+#     fetchDepth: 1
+#   - bash: |
+#       java -version
+#       javac -version
+#     displayName: show Java version
+#   - bash: ./scripts/test-typecheck-onefile.sh
+#     displayName: test-typecheck-onefile.sh
