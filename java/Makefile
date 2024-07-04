@@ -31,11 +31,8 @@ else
   JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
 endif
 
-# Problem: Release 21-ea does not contain the "this-escape" lint flag.
 ifeq (${JAVA_RELEASE_NUMBER}, 21)
-  ifneq (${JAVA_VERSION_STRING_WITH_EA}, 21-ea)
-    LINT_THIS_ESCAPE=-Xlint:-this-escape
-  endif
+  LINT_THIS_ESCAPE=-Xlint:-this-escape
 endif
 
 # Add flags like "-source 8" or "-target 8" to JAVAC_TARGET_FLAGS.
