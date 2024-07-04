@@ -1,0 +1,2009 @@
+// Declarations for MapQuick1.GeoPoint
+// Declarations written 2024-06-27T15:24:08.468109691 by daikon.DynComp
+
+decl-version 2.0
+var-comparability implicit
+
+ppt MapQuick1.GeoPoint:::CLASS
+ppt-type class
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+
+ppt MapQuick1.GeoPoint:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+
+ppt MapQuick1.GeoPoint.GeoPoint(int, int):::ENTER
+ppt-type enter
+variable latitude
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable longitude
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt MapQuick1.GeoPoint.GeoPoint(int, int):::EXIT47
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 3
+variable latitude
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+variable longitude
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 3
+
+ppt MapQuick1.GeoPoint.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+
+ppt MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT66
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
+
+ppt MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT69
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
+
+ppt MapQuick1.GeoPoint.hashCode():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+
+ppt MapQuick1.GeoPoint.hashCode():::EXIT77
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable gp.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+
+ppt MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::EXIT91
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable gp.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type double
+  rep-type double
+  comparability 4
+
+ppt MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable gp.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+
+ppt MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::EXIT113
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable gp.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable gp.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type double
+  rep-type double
+  comparability 5
+
+ppt MapQuick1.GeoPoint.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 5
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt MapQuick1.GeoPoint.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
+
+ppt MapQuick1.GeoSegment:::CLASS
+ppt-type class
+
+ppt MapQuick1.GeoSegment:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+
+ppt MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::ENTER
+ppt-type enter
+variable name
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args name
+  flags synthetic to_string
+  comparability 4
+variable p1
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 5
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable p2
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 5
+variable p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
+
+ppt MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::EXIT67
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 7
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 3
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 8
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 5
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 5
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable name
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args name
+  flags synthetic to_string
+  comparability 4
+variable p1
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 5
+variable p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable p2
+  var-kind variable
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  flags is_param
+  comparability 5
+variable p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 6
+variable p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 6
+
+ppt MapQuick1.GeoSegment.reverse():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+
+ppt MapQuick1.GeoSegment.reverse():::EXIT80
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 12
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 13
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 14
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 15
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 16
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 16
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 15
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 16
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 16
+variable return
+  var-kind return
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  comparability 3
+variable return.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable return.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args return.name
+  flags synthetic to_string
+  comparability 5
+variable return.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable return.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable return.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable return.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 9
+variable return.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 10
+variable return.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 11
+
+ppt MapQuick1.GeoSegment.name():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+
+ppt MapQuick1.GeoSegment.name():::EXIT88
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 3
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable return
+  var-kind return
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 3
+variable return.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args return
+  flags synthetic to_string
+  comparability 4
+
+ppt MapQuick1.GeoSegment.p1():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+
+ppt MapQuick1.GeoSegment.p1():::EXIT94
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 6
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 7
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 3
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 3
+variable return.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable return.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+
+ppt MapQuick1.GeoSegment.p2():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+
+ppt MapQuick1.GeoSegment.p2():::EXIT100
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 6
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 7
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 3
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 3
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable return
+  var-kind return
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 3
+variable return.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 4
+variable return.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 4
+
+ppt MapQuick1.GeoSegment.length():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+
+ppt MapQuick1.GeoSegment.length():::EXIT106
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable return
+  var-kind return
+  dec-type double
+  rep-type double
+  comparability 3
+
+ppt MapQuick1.GeoSegment.heading():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+
+ppt MapQuick1.GeoSegment.heading():::EXIT116
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable return
+  var-kind return
+  dec-type double
+  rep-type double
+  comparability 3
+
+ppt MapQuick1.GeoSegment.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+
+ppt MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT132
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
+
+ppt MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT135
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable o
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable o.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args o
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
+
+ppt MapQuick1.GeoSegment.hashCode():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 3
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 4
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 5
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 6
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 7
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 7
+
+ppt MapQuick1.GeoSegment.hashCode():::EXIT141
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt MapQuick1.GeoSegment.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 5
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 6
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 7
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 8
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt MapQuick1.GeoSegment.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type MapQuick1.GeoSegment
+  rep-type hashcode
+  flags is_param non_null
+  comparability 5
+variable this.name
+  var-kind field name
+  dec-type java.lang.String
+  rep-type hashcode
+  comparability 6
+variable this.name.toString
+  var-kind function toString()
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args this.name
+  flags synthetic to_string
+  comparability 7
+variable this.p1
+  var-kind field p1
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 8
+variable MapQuick1.GeoPoint.REP_SCALE_FACTOR
+  var-kind variable
+  dec-type double
+  rep-type double
+  flags nomod
+  comparability 2
+variable this.p1.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.p1.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.p2
+  var-kind field p2
+  dec-type MapQuick1.GeoPoint
+  rep-type hashcode
+  comparability 8
+variable this.p2.latitude
+  var-kind field latitude
+  dec-type int
+  rep-type int
+  comparability 9
+variable this.p2.longitude
+  var-kind field longitude
+  dec-type int
+  rep-type int
+  comparability 9
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 4
+

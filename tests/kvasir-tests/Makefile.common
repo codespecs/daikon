@@ -121,6 +121,9 @@ endif
 endif
 
 ifeq ($(OS_ID),Ubuntu)
+ifeq ($(OS_REL),23.10)
+	GOAL := goal-Ubuntu2310
+endif
 ifeq ($(OS_REL),23.04)
 	GOAL := goal-Ubuntu2304
 endif
