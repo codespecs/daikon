@@ -42,11 +42,13 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.8.19
+@center Daikon version 5.8.21
 
 @sp 1
 
-@center July 22, 2020
+@c The following comment is needed to help perl edit the release date.
+@c Print out the Daikon version 5.8.21 release date
+@center May 14, 2024
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -83,7 +85,7 @@ Copyright @copyright{} 1998-2020
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.19, released June 24, 2023.
+It describes Daikon version 5.8.21, released May 14, 2024.
 
 @menu
 * Introduction::
@@ -2001,7 +2003,10 @@ Optionally, set environment variable @env{BIBDIR} to a clone of
 
 @need 1000
 Get a fresh copy of your Bash shell (e.g., log out and log back in), then
-run the following (adjust environment variables as necessary):
+run the following bash commands.  Note that your system may no longer have
+JDK 8 installed at @file{/usr/lib/jvm-1.8.0}. If you do not have a local
+copy, one can be found at @file{/homes/gws/markro/jdk1.8.0_401}.
+In any case, adjust environment variables below as necessary.
 @c DAIKONDIR is necessary only for the instructions in this file.
 @c Maybe use a different environment variable?
 @example
@@ -2305,7 +2310,7 @@ build everything to be distributed and copy it to the temporary staging area
 rm -rf /tmp/$USER/stage-daikon
 mkdir -p /tmp/$USER/stage-daikon
 cd /tmp/$USER/stage-daikon
-git clone --depth 3 https://github.com/codespecs/daikon
+git clone --filter=blob:none https://github.com/codespecs/daikon
 cd daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0

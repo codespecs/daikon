@@ -82,7 +82,7 @@ update-goals:
 	$(foreach x, $(TESTS), rm -f $x.daikon.diff; )
 
 clean:
-	/bin/rm -rf *.inv.txt *.inv.gz *.diff *.dtrace.gz \
+	/bin/rm -rf *.inv.txt *.inv.gz *.diff *.dtrace *.dtrace.gz \
 	$(CLASS_FILES) $(SRC_FILES)
 
 show-vars:

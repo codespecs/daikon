@@ -1,5 +1,5 @@
 // Declarations for misc.Precedence
-// Declarations written by Chicory 2023-09-29T09:23:12.483027348
+// Declarations written by Chicory 2023-12-13T14:41:06.680
 
 decl-version 2.0
 var-comparability implicit
@@ -163,7 +163,7 @@ misc.Precedence.main(java.lang.String[]):::ENTER
 this_invocation_nonce
 0
 args
-1511785794
+1725097945
 1
 args.getClass().getName()
 "java.lang.String[]"
@@ -183,7 +183,7 @@ misc.Precedence.Precedence():::EXIT3
 this_invocation_nonce
 1
 this
-963601816
+519821334
 1
 this.i
 0
@@ -193,7 +193,7 @@ misc.Precedence.lets_calculate(int):::ENTER
 this_invocation_nonce
 2
 this
-963601816
+519821334
 1
 this.i
 10
@@ -206,7 +206,7 @@ misc.Precedence.lets_calculate(int):::EXIT18
 this_invocation_nonce
 2
 this
-963601816
+519821334
 1
 this.i
 2
@@ -222,7 +222,7 @@ misc.Precedence.main(java.lang.String[]):::EXIT10
 this_invocation_nonce
 0
 args
-1511785794
+1725097945
 1
 args.getClass().getName()
 "java.lang.String[]"

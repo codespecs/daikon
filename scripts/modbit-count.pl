@@ -5,6 +5,11 @@
 
 # (This does not properly deal with "this_invocation_nonce".  -MDE 9/2003)
 
+my $debug;
+my @counts;
+my $ppt;
+my $var;
+my $val;
 
 BEGIN {
   $debug = 0;
@@ -31,7 +36,7 @@ if (/^$/) {
   $val = $_;
   if ($debug) {  print STDERR "val = $val\n"; }
 } else {
-  $mod = $_;
+  my $mod = $_;
   if ($debug) {  print STDERR "mod = $mod\n"; }
   if (! (($mod eq "0\n") || ($mod eq "1\n") || ($mod eq "2\n"))) {
     die "Bad modbit $mod for variable $var with value $val in $ppt";
@@ -40,7 +45,6 @@ if (/^$/) {
 
   undef($var);
   undef($val);
-  undef($mod);
 }
 
 END {

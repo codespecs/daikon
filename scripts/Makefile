@@ -1,7 +1,12 @@
 HIERDIR = ../tools/hierarchical
 KMDIR = ../tools/kmeans
 
-all: difftbl cluster clgroup kmeans trace-untruncate-fast
+.PHONY: all
+all: difftbl cluster clgroup kmeans trace-untruncate-fast checkargs.pm
+
+
+.PHONY: style shell-script-style python-style perl-style
+style: shell-script-style python-style perl-style
 
 SH_SCRIPTS = $(shell grep -r -l '^\#! \?\(/bin/\|/usr/bin/env \)sh' * | grep -v .git | grep -v "~" | grep -v addrfilter | grep -v mail-stackoverflow.sh)
 BASH_SCRIPTS = $(shell grep -r -l '^\#! \?\(/bin/\|/usr/bin/env \)bash' * | grep -v .git | grep -v "~")
@@ -14,8 +19,11 @@ showvars:
 
 PYTHON_FILES=$(wildcard *.py)
 python-style:
-	yapf -i --style='{column_limit: 100}' ${PYTHON_FILES}
-	pylint -f parseable --disable=W,invalid-name ${PYTHON_FILES}
+	ruff format ${PYTHON_FILES}
+	ruff check ${PYTHON_FILES} --fix
+
+perl-style:
+	@for perlfile in $(shell ls *.pm *.pl); do perl -Mstrict -cw $${perlfile}; done
 
 clean:
 	rm -f difftbl cluster clgroup kmeans trace-untruncate-fast
@@ -57,3 +65,6 @@ $(HIERDIR)/clgroup: $(HIERDIR)/clgroup.c
 # what is already in that Makefile.
 $(KMDIR)/kmeans:
 	$(MAKE) -C $(KMDIR) kmeans
+
+checkargs.pm:
+	wget https://raw.githubusercontent.com/plume-lib/html-tools/master/checkargs.pm

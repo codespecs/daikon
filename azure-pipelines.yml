@@ -2,20 +2,20 @@ jobs:
 
 # The dependsOn clauses (in this file and in .circleci/config.yml) are:
 #  * Everything not *_ubuntu_jdk17 or typecheck_*_jdk17 depends on jdk17_jobs.
-#  * Anything *_jdk8 or *_jdk11 or _jdk20 depends on *_jdk17.
+#  * Anything *_jdk8 or *_jdk11 or *_jdk17 or _jdk20 depends on *_jdk21.
 #  * Anything *_rockylinux_* depends on *_ubuntu_*.
+# (Later, _jdk20 will be changed to _jdk22.  _jdk20 is left here to ease that renaming later.)
 
-# The remainder of jobs are run only if the jdk17_jobs pass.
-- job: jdk17_jobs
+# The remainder of jobs are run only if the jdk21_jobs pass.
+- job: jdk21_jobs
   dependsOn:
-    - quick_txt_diff_ubuntu_jdk17
-    - nonquick_txt_diff_ubuntu_jdk17
-    - non_txt_diff_ubuntu_jdk17
-    - misc_ubuntu_jdk17
-    - misc_ubuntu_jdk20
-    - kvasir_ubuntu_jdk17
-    - typecheck_latest_jdk17
-    - typecheck_bundled_jdk17
+    - quick_txt_diff_ubuntu_jdk21
+    - nonquick_txt_diff_ubuntu_jdk21
+    - non_txt_diff_ubuntu_jdk21
+    - misc_ubuntu_jdk21
+    - kvasir_ubuntu_jdk21
+    - typecheck_latest_jdk21
+    - typecheck_bundled_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   steps:
@@ -24,8 +24,8 @@ jobs:
 
 - job: quick_txt_diff_ubuntu_jdk8
   dependsOn:
-    - jdk17_jobs
-    - quick_txt_diff_ubuntu_jdk17
+    - jdk21_jobs
+    - quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8:latest
@@ -37,8 +37,8 @@ jobs:
 
 - job: quick_txt_diff_ubuntu_jdk11
   dependsOn:
-    - jdk17_jobs
-    - quick_txt_diff_ubuntu_jdk17
+    - jdk21_jobs
+    - quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11:latest
@@ -49,6 +49,9 @@ jobs:
     displayName: test-quick-txt-diff.sh
 
 - job: quick_txt_diff_ubuntu_jdk17
+  dependsOn:
+    - jdk21_jobs
+    - quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17:latest
@@ -58,10 +61,20 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
+- job: quick_txt_diff_ubuntu_jdk21
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-ubuntu-jdk21:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-quick-txt-diff.sh
+    displayName: test-quick-txt-diff.sh
+
 - job: quick_txt_diff_ubuntu_jdk20
   dependsOn:
-    - jdk17_jobs
-    - quick_txt_diff_ubuntu_jdk17
+    - jdk21_jobs
+    - quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk20:latest
@@ -73,8 +86,8 @@ jobs:
 
 - job: nonquick_txt_diff_ubuntu_jdk8
   dependsOn:
-    - jdk17_jobs
-    - nonquick_txt_diff_ubuntu_jdk17
+    - jdk21_jobs
+    - nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8:latest
@@ -86,8 +99,8 @@ jobs:
 
 - job: nonquick_txt_diff_ubuntu_jdk11
   dependsOn:
-    - jdk17_jobs
-    - nonquick_txt_diff_ubuntu_jdk17
+    - jdk21_jobs
+    - nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11:latest
@@ -98,6 +111,9 @@ jobs:
     displayName: test-nonquick-txt-diff.sh
 
 - job: nonquick_txt_diff_ubuntu_jdk17
+  dependsOn:
+    - jdk21_jobs
+    - nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17:latest
@@ -107,10 +123,20 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
+- job: nonquick_txt_diff_ubuntu_jdk21
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-ubuntu-jdk21:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-nonquick-txt-diff.sh
+    displayName: test-nonquick-txt-diff.sh
+
 - job: nonquick_txt_diff_ubuntu_jdk20
   dependsOn:
-    - jdk17_jobs
-    - nonquick_txt_diff_ubuntu_jdk17
+    - jdk21_jobs
+    - nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk20:latest
@@ -122,8 +148,8 @@ jobs:
 
 - job: non_txt_diff_ubuntu_jdk8
   dependsOn:
-    - jdk17_jobs
-    - non_txt_diff_ubuntu_jdk17
+    - jdk21_jobs
+    - non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8:latest
@@ -135,8 +161,8 @@ jobs:
 
 - job: non_txt_diff_ubuntu_jdk11
   dependsOn:
-    - jdk17_jobs
-    - non_txt_diff_ubuntu_jdk17
+    - jdk21_jobs
+    - non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11:latest
@@ -147,6 +173,9 @@ jobs:
     displayName: test-non-txt-diff.sh
 
 - job: non_txt_diff_ubuntu_jdk17
+  dependsOn:
+    - jdk21_jobs
+    - non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17:latest
@@ -156,10 +185,20 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
+- job: non_txt_diff_ubuntu_jdk21
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-ubuntu-jdk21:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-non-txt-diff.sh
+    displayName: test-non-txt-diff.sh
+
 - job: non_txt_diff_ubuntu_jdk20
   dependsOn:
-    - jdk17_jobs
-    - non_txt_diff_ubuntu_jdk17
+    - jdk21_jobs
+    - non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk20:latest
@@ -171,8 +210,8 @@ jobs:
 
 - job: misc_ubuntu_jdk8
   dependsOn:
-    - jdk17_jobs
-    - misc_ubuntu_jdk17
+    - jdk21_jobs
+    - misc_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8-plus:latest
@@ -186,8 +225,8 @@ jobs:
 
 - job: misc_ubuntu_jdk11
   dependsOn:
-    - jdk17_jobs
-    - misc_ubuntu_jdk17
+    - jdk21_jobs
+    - misc_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11-plus:latest
@@ -200,6 +239,9 @@ jobs:
     displayName: test-misc.sh
 
 - job: misc_ubuntu_jdk17
+  dependsOn:
+    - jdk21_jobs
+    - misc_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17-plus:latest
@@ -211,13 +253,10 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
-- job: misc_ubuntu_jdk20
-  dependsOn:
-#   - jdk17_jobs
-    - misc_ubuntu_jdk17
+- job: misc_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk20-plus:latest
+  container: mdernst/daikon-ubuntu-jdk21-plus:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -228,8 +267,8 @@ jobs:
 
 - job: kvasir_ubuntu_jdk8
   dependsOn:
-    - jdk17_jobs
-    - kvasir_ubuntu_jdk17
+    - jdk21_jobs
+    - kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8-plus:latest
@@ -241,8 +280,8 @@ jobs:
 
 - job: kvasir_ubuntu_jdk11
   dependsOn:
-    - jdk17_jobs
-    - kvasir_ubuntu_jdk17
+    - jdk21_jobs
+    - kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11-plus:latest
@@ -253,6 +292,9 @@ jobs:
     displayName: test-kvasir.sh
 
 - job: kvasir_ubuntu_jdk17
+  dependsOn:
+    - jdk21_jobs
+    - kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17-plus:latest
@@ -262,10 +304,20 @@ jobs:
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
+- job: kvasir_ubuntu_jdk21
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-ubuntu-jdk21-plus:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: ./scripts/test-kvasir.sh
+    displayName: test-kvasir.sh
+
 - job: kvasir_ubuntu_jdk20
   dependsOn:
-    - jdk17_jobs
-    - kvasir_ubuntu_jdk17
+    - jdk21_jobs
+    - kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk20-plus:latest
@@ -278,8 +330,8 @@ jobs:
 ## The Checker Framework cannot be built under Java 8.
 # - job: typecheck_jdk8
 #   dependsOn:
-#     - jdk17_jobs
-#     - typecheck_jdk17
+#     - jdk21_jobs
+#     - typecheck_jdk21
 #   pool:
 #     vmImage: 'ubuntu-latest'
 #   container: mdernst/daikon-ubuntu-jdk8-plus:latest
@@ -296,11 +348,29 @@ jobs:
 
 - job: typecheck_latest_jdk11
   dependsOn:
-    - jdk17_jobs
-    - typecheck_latest_jdk17
+    - jdk21_jobs
+    - typecheck_latest_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11-plus:latest
+  timeoutInMinutes: 80
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: |
+      java -version
+      javac -version
+    displayName: show Java version
+  - bash: ./scripts/test-typecheck-with-latest-cf.sh
+    displayName: test-typecheck-with-latest-cf.sh
+
+- job: typecheck_latest_jdk17
+  dependsOn:
+    - jdk21_jobs
+    - typecheck_latest_jdk21
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-ubuntu-jdk17-plus:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -314,8 +384,8 @@ jobs:
 
 - job: typecheck_bundled_jdk11
   dependsOn:
-    - jdk17_jobs
-    - typecheck_bundled_jdk17
+    - jdk21_jobs
+    - typecheck_bundled_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11-plus:latest
@@ -330,22 +400,10 @@ jobs:
   - bash: ./scripts/test-typecheck-with-bundled-cf.sh
     displayName: test-typecheck-with-bundled-cf.sh
 
-- job: typecheck_latest_jdk17
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17-plus:latest
-  timeoutInMinutes: 80
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: |
-      java -version
-      javac -version
-    displayName: show Java version
-  - bash: ./scripts/test-typecheck-with-latest-cf.sh
-    displayName: test-typecheck-with-latest-cf.sh
-
 - job: typecheck_bundled_jdk17
+  dependsOn:
+    - jdk21_jobs
+    - typecheck_bundled_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17-plus:latest
@@ -360,10 +418,40 @@ jobs:
   - bash: ./scripts/test-typecheck-with-bundled-cf.sh
     displayName: test-typecheck-with-bundled-cf.sh
 
+- job: typecheck_latest_jdk21
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-ubuntu-jdk21-plus:latest
+  timeoutInMinutes: 80
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: |
+      java -version
+      javac -version
+    displayName: show Java version
+  - bash: ./scripts/test-typecheck-with-latest-cf.sh
+    displayName: test-typecheck-with-latest-cf.sh
+
+- job: typecheck_bundled_jdk21
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-ubuntu-jdk21-plus:latest
+  timeoutInMinutes: 80
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: |
+      java -version
+      javac -version
+    displayName: show Java version
+  - bash: ./scripts/test-typecheck-with-bundled-cf.sh
+    displayName: test-typecheck-with-bundled-cf.sh
+
 - job: typecheck_latest_jdk20
   dependsOn:
-    - jdk17_jobs
-    - typecheck_latest_jdk17
+    - jdk21_jobs
+    - typecheck_latest_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk20-plus:latest
@@ -380,8 +468,8 @@ jobs:
 
 - job: typecheck_bundled_jdk20
   dependsOn:
-    - jdk17_jobs
-    - typecheck_bundled_jdk17
+    - jdk21_jobs
+    - typecheck_bundled_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk20-plus:latest
@@ -398,8 +486,8 @@ jobs:
 
 - job: quick_txt_diff_rockylinux_jdk8
   dependsOn:
-    - jdk17_jobs
-    - quick_txt_diff_rockylinux_jdk17
+    - jdk21_jobs
+    - quick_txt_diff_rockylinux_jdk21
     - quick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -412,8 +500,8 @@ jobs:
 
 - job: quick_txt_diff_rockylinux_jdk11
   dependsOn:
-    - jdk17_jobs
-    - quick_txt_diff_rockylinux_jdk17
+    - jdk21_jobs
+    - quick_txt_diff_rockylinux_jdk21
     - quick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -426,7 +514,8 @@ jobs:
 
 - job: quick_txt_diff_rockylinux_jdk17
   dependsOn:
-    - jdk17_jobs
+    - jdk21_jobs
+    - quick_txt_diff_rockylinux_jdk21
     - quick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
@@ -437,10 +526,24 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
+- job: quick_txt_diff_rockylinux_jdk21
+  dependsOn:
+    - jdk21_jobs
+    - quick_txt_diff_ubuntu_jdk21
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-rockylinux-jdk21:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  # - bash: ./scripts/test-quick-txt-diff.sh
+  - bash: echo "No JDK 21 on Rocky Linux yet"
+    displayName: test-quick-txt-diff.sh
+
 - job: nonquick_txt_diff_rockylinux_jdk8
   dependsOn:
-    - jdk17_jobs
-    - nonquick_txt_diff_rockylinux_jdk17
+    - jdk21_jobs
+    - nonquick_txt_diff_rockylinux_jdk21
     - nonquick_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -453,8 +556,8 @@ jobs:
 
 - job: nonquick_txt_diff_rockylinux_jdk11
   dependsOn:
-    - jdk17_jobs
-    - nonquick_txt_diff_rockylinux_jdk17
+    - jdk21_jobs
+    - nonquick_txt_diff_rockylinux_jdk21
     - nonquick_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -467,7 +570,8 @@ jobs:
 
 - job: nonquick_txt_diff_rockylinux_jdk17
   dependsOn:
-    - jdk17_jobs
+    - jdk21_jobs
+    - nonquick_txt_diff_rockylinux_jdk21
     - nonquick_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
@@ -478,10 +582,24 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
+- job: nonquick_txt_diff_rockylinux_jdk21
+  dependsOn:
+    - jdk21_jobs
+    - nonquick_txt_diff_ubuntu_jdk21
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-rockylinux-jdk21:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  # - bash: ./scripts/test-nonquick-txt-diff.sh
+  - bash: echo "No JDK 21 on Rocky Linux yet"
+    displayName: test-nonquick-txt-diff.sh
+
 - job: non_txt_diff_rockylinux_jdk8
   dependsOn:
-    - jdk17_jobs
-    - non_txt_diff_rockylinux_jdk17
+    - jdk21_jobs
+    - non_txt_diff_rockylinux_jdk21
     - non_txt_diff_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -494,8 +612,8 @@ jobs:
 
 - job: non_txt_diff_rockylinux_jdk11
   dependsOn:
-    - jdk17_jobs
-    - non_txt_diff_rockylinux_jdk17
+    - jdk21_jobs
+    - non_txt_diff_rockylinux_jdk21
     - non_txt_diff_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -508,7 +626,8 @@ jobs:
 
 - job: non_txt_diff_rockylinux_jdk17
   dependsOn:
-    - jdk17_jobs
+    - jdk21_jobs
+    - non_txt_diff_rockylinux_jdk21
     - non_txt_diff_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
@@ -519,10 +638,24 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
+- job: non_txt_diff_rockylinux_jdk21
+  dependsOn:
+    - jdk21_jobs
+    - non_txt_diff_ubuntu_jdk21
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-rockylinux-jdk21:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  # - bash: ./scripts/test-non-txt-diff.sh
+  - bash: echo "No JDK 21 on Rocky Linux yet"
+    displayName: test-non-txt-diff.sh
+
 - job: misc_rockylinux_jdk8
   dependsOn:
-    - jdk17_jobs
-    - misc_rockylinux_jdk17
+    - jdk21_jobs
+    - misc_rockylinux_jdk21
     - misc_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -537,8 +670,8 @@ jobs:
 
 - job: misc_rockylinux_jdk11
   dependsOn:
-    - jdk17_jobs
-    - misc_rockylinux_jdk17
+    - jdk21_jobs
+    - misc_rockylinux_jdk21
     - misc_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -553,7 +686,8 @@ jobs:
 
 - job: misc_rockylinux_jdk17
   dependsOn:
-    - jdk17_jobs
+    - jdk21_jobs
+    - misc_rockylinux_jdk21
     - misc_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
@@ -566,10 +700,26 @@ jobs:
   - bash: ./scripts/test-misc.sh
     displayName: test-misc.sh
 
+- job: misc_rockylinux_jdk21
+  dependsOn:
+    - jdk21_jobs
+    - misc_ubuntu_jdk21
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-rockylinux-jdk21-plus:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  - bash: make showvars
+    displayName: make showvars
+  # - bash: ./scripts/test-misc.sh
+  - bash: echo "No JDK 21 on Rocky Linux yet"
+    displayName: test-misc.sh
+
 - job: kvasir_rockylinux_jdk8
   dependsOn:
-    - jdk17_jobs
-    - kvasir_rockylinux_jdk17
+    - jdk21_jobs
+    - kvasir_rockylinux_jdk21
     - kvasir_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
@@ -582,8 +732,8 @@ jobs:
 
 - job: kvasir_rockylinux_jdk11
   dependsOn:
-    - jdk17_jobs
-    - kvasir_rockylinux_jdk17
+    - jdk21_jobs
+    - kvasir_rockylinux_jdk21
     - kvasir_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
@@ -596,7 +746,8 @@ jobs:
 
 - job: kvasir_rockylinux_jdk17
   dependsOn:
-    - jdk17_jobs
+    - jdk21_jobs
+    - kvasir_rockylinux_jdk21
     - kvasir_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
@@ -607,3 +758,32 @@ jobs:
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
+- job: kvasir_rockylinux_jdk21
+  dependsOn:
+    - jdk21_jobs
+    - kvasir_ubuntu_jdk21
+  pool:
+    vmImage: 'ubuntu-latest'
+  container: mdernst/daikon-rockylinux-jdk21-plus:latest
+  steps:
+  - checkout: self
+    fetchDepth: 25
+  # - bash: ./scripts/test-kvasir.sh
+  - bash: echo "No JDK 21 on Rocky Linux yet"
+    displayName: test-kvasir.sh
+
+## Enable this job to prioritize typechecking a single file, without waiting for other tests.
+# - job: typecheck_onefile_jdk21
+#   pool:
+#     vmImage: 'ubuntu-latest'
+#   container: mdernst/daikon-ubuntu-jdk21-plus:latest
+#   timeoutInMinutes: 70
+#   steps:
+#   - checkout: self
+#     fetchDepth: 1
+#   - bash: |
+#       java -version
+#       javac -version
+#     displayName: show Java version
+#   - bash: ./scripts/test-typecheck-onefile.sh
+#     displayName: test-typecheck-onefile.sh

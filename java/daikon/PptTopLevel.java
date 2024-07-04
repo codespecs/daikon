@@ -995,7 +995,7 @@ public class PptTopLevel extends Ppt {
       }
       Global.debugDerive.fine(derived_vars);
     }
-    Derivation[] result_array = result.toArray(new Derivation[result.size()]);
+    Derivation[] result_array = result.toArray(new Derivation[0]);
     return result_array;
   }
 
@@ -1203,7 +1203,7 @@ public class PptTopLevel extends Ppt {
       // Remove any falsified invariants.  Make a copy of the original slices
       // since NISuppressions will add new slices/invariants as others are
       // falsified.
-      PptSlice[] slices = views.values().toArray(new @Nullable PptSlice[views.values().size()]);
+      PptSlice[] slices = views.values().toArray(new @Nullable PptSlice[0]);
       for (int i = 0; i < slices.length; i++) {
         slices[i].remove_falsified();
       }
@@ -1523,7 +1523,7 @@ public class PptTopLevel extends Ppt {
       for (Derivation der : ders) {
         vis_list.add(der.getVarInfo());
       }
-      VarInfo[] vis = vis_list.toArray(new VarInfo[vis_list.size()]);
+      VarInfo[] vis = vis_list.toArray(new VarInfo[0]);
       if (Global.debugDerive.isLoggable(Level.FINE)) {
         for (int i = 0; i < ders.length; i++) {
           Global.debugDerive.fine("Derived " + vis[i].name());
@@ -2882,7 +2882,7 @@ public class PptTopLevel extends Ppt {
       for (VarInfo vi : slice.var_infos) {
         newVis_list.add(vi.canonicalRep());
       }
-      VarInfo[] newVis = newVis_list.toArray(new VarInfo[newVis_list.size()]);
+      VarInfo[] newVis = newVis_list.toArray(new VarInfo[0]);
       PptSlice newSlice = slice.cloneAndPivot(newVis);
       if (slice != newSlice) {
         pivoted.add(newSlice);
@@ -2990,7 +2990,7 @@ public class PptTopLevel extends Ppt {
           }
         }
       }
-      invs = printing.toArray(new Invariant[printing.size()]);
+      invs = printing.toArray(new Invariant[0]);
     }
 
     // For efficiency, bail if we don't have any invariants to mark as implied
@@ -3422,7 +3422,7 @@ public class PptTopLevel extends Ppt {
   public void processOmissions(boolean[] omitTypes) {
     // Avoid concurrent modification exceptions using arrays
     Collection<PptSlice> viewsAsCollection = viewsAsCollection();
-    PptSlice[] viewArray = viewsAsCollection.toArray(new PptSlice[viewsAsCollection.size()]);
+    PptSlice[] viewArray = viewsAsCollection.toArray(new PptSlice[0]);
     for (PptSlice currentView : viewArray) {
       currentView.processOmissions(omitTypes);
     }
@@ -3907,7 +3907,7 @@ public class PptTopLevel extends Ppt {
       }
       non_missing_leaders.add(l);
     }
-    VarInfo[] leaders = non_missing_leaders.toArray(new VarInfo[non_missing_leaders.size()]);
+    VarInfo[] leaders = non_missing_leaders.toArray(new VarInfo[0]);
 
     // Create any invariants in the children which are NI-suppressed and
     // remember the list for each child.  The same ppt can be a child
