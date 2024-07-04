@@ -179,6 +179,7 @@ very-clean:
 	-rm -rf examples/java-examples/StackAr/DataStructures/*.class
 	-rm -rf tests/sources/DataStructures/*.class
 	-rm -rf daikon-*.tar daikon-*.zip
+	-rm -rf utils
 
 clean-java:
 	cd java && $(MAKE) clean
