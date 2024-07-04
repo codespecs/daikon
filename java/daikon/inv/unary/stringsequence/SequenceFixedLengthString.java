@@ -233,7 +233,15 @@ public class SequenceFixedLengthString extends SingleStringSequence {
     return result;
   }
 
-  // TODO: Document
+  /**
+   * Merge the invariants in invs to form a new invariant. Each must be a SequenceFixedLengthString
+   * invariant. This code finds all of the SequenceFixedLengthString values from each of the
+   * invariants and returns the merged invariant (if any).
+   *
+   * @param invs list of invariants to merge. The invariants must all be of the same type and should
+   *     come from the children of parent_ppt.
+   * @param parent_ppt slice that will contain the new invariant
+   */
   @Override
   public @Nullable Invariant merge(List<Invariant> invs, PptSlice parent_ppt) {
     // Create the initial parent invariant from the first child
