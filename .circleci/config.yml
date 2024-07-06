@@ -73,7 +73,7 @@ jobs:
 
   quick-txt-diff-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21
+      - image: mdernst/daikon-ubuntu-jdk21-testing
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -149,7 +149,7 @@ jobs:
 
   nonquick-txt-diff-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21
+      - image: mdernst/daikon-ubuntu-jdk21-testing
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -301,7 +301,7 @@ jobs:
 
   misc-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21-plus
+      - image: mdernst/daikon-ubuntu-jdk21-plus-testing
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -386,7 +386,7 @@ jobs:
 
   kvasir-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21-plus
+      - image: mdernst/daikon-ubuntu-jdk21-plus-testing
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
