@@ -7,6 +7,15 @@ this.wrapped[].getClass().getName() elements == PolyCalc.RatTerm.class
 PolyCalc.RatTermVec.RatTermVec():::EXIT
 this.wrapped[] == []
 this.wrapped[].getClass().getName() == []
+All the elements of this.wrapped[].getClass().getName() are Numeric
+All the elements of this.wrapped[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.wrapped[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.wrapped[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.wrapped[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.wrapped[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.wrapped[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.wrapped[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.wrapped[].getClass().getName() are emails
 ===========================================================================
 PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::ENTER
 this.wrapped[] contains no duplicates

@@ -7,19 +7,39 @@ agora.AgoraTest.AgoraTest():::EXIT
 agora.AgoraTest.emptySequence(java.util.List):::ENTER
 (AND (EQ (arrayLength |lst|) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |lst|) 1))) (NEQ (select (select elems |lst|) |i|)  null))))
 (EQ (arrayLength |lst|) 0)
+All the elements of lst[].getClass().getName() are Numeric
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of lst[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of lst[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of lst[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of lst[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of lst[].getClass().getName() are emails
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: lst.getClass().getName() is printable
 ===========================================================================
 agora.AgoraTest.emptySequence(java.util.List):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |lst|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |__orig__lst|) 1)) (EQ |i| |j|)) (EQ (select (select elems |lst|) |i|) (select (select elems |__orig__lst|) |j|))))
 (AND (EQ (arrayLength |lst|) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |lst|) 1))) (NEQ (select (select elems |lst|) |i|)  null))))
 (EQ (arrayLength |lst|) 0)
+All the elements of lst[].getClass().getName() are Numeric
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of lst[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of lst[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of lst[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of lst[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of lst[].getClass().getName() are emails
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::ENTER
 (EQ (select |toString| |s|) |_string_|)
+(isNumeric (select |toString| |s|))
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::EXIT
 (EQ (select |toString| |s|) (select |toString| |__orig__s|))
 (EQ (select |toString| |s|) |_string_|)
+(isNumeric (select |toString| |s|))
 ===========================================================================
 agora.AgoraTest.main(java.lang.String[]):::ENTER
 (EQ (hash |args|) (hashcode 1002))

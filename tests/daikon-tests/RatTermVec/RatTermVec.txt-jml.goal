@@ -9,6 +9,15 @@ PolyCalc.RatTermVec.RatTermVec():::EXIT
     Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[]) size(this.wrapped[])-1
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.wrapped), new String[] {  })
+All the elements of this.wrapped[].getClass().getName() are Numeric
+All the elements of this.wrapped[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.wrapped[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.wrapped[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.wrapped[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.wrapped[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.wrapped[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.wrapped[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.wrapped[].getClass().getName() are emails
 ===========================================================================
 PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::ENTER
     Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t size(this.wrapped[]) size(this.wrapped[])-1

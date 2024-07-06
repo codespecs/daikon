@@ -59,6 +59,8 @@ public class AgoraTest {
 
   void emptySequence(List<String> lst) {}
 
+  /*@ requires daikon.inv.unary.string.IsNumeric.PATTERN.matcher(s.toString).matches(); */
+  /*@ ensures daikon.inv.unary.string.IsNumeric.PATTERN.matcher(s.toString).matches(); */
   void emptyString(String s) {}
 
   /*@ requires s != null; */

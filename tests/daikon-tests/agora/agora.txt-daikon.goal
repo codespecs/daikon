@@ -7,19 +7,39 @@ agora.AgoraTest.AgoraTest():::EXIT
 agora.AgoraTest.emptySequence(java.util.List):::ENTER
 lst[] == []
 lst[].getClass().getName() == []
+All the elements of lst[].getClass().getName() are Numeric
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of lst[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of lst[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of lst[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of lst[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of lst[].getClass().getName() are emails
 lst.getClass().getName() is printable
 ===========================================================================
 agora.AgoraTest.emptySequence(java.util.List):::EXIT
 lst[] == orig(lst[])
 lst[] == []
 lst[].getClass().getName() == []
+All the elements of lst[].getClass().getName() are Numeric
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of lst[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of lst[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of lst[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of lst[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of lst[].getClass().getName() are emails
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::ENTER
 s.toString == ""
+s.toString is Numeric
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::EXIT
 s.toString == orig(s.toString)
 s.toString == ""
+s.toString is Numeric
 ===========================================================================
 agora.AgoraTest.main(java.lang.String[]):::ENTER
 args has only one value

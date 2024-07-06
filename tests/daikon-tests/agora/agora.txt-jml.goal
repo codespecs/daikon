@@ -10,6 +10,15 @@ agora.AgoraTest.emptySequence(java.util.List):::ENTER
     Variables: this lst lst[] lst[].getClass().getName() lst.getClass().getName() size(lst[]) size(lst[])-1
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(lst), new String[] {  })
+All the elements of lst[].getClass().getName() are Numeric
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of lst[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of lst[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of lst[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of lst[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of lst[].getClass().getName() are emails
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: lst.getClass().getName() is printable
 ===========================================================================
 agora.AgoraTest.emptySequence(java.util.List):::EXIT
@@ -17,15 +26,26 @@ agora.AgoraTest.emptySequence(java.util.List):::EXIT
 daikon.Quant.pairwiseEqual(lst, \old(lst))
 ("oneOf.java.jpp: SEQUENCE unimplemented" != null)
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(lst), new String[] {  })
+All the elements of lst[].getClass().getName() are Numeric
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of lst[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of lst[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of lst[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of lst[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of lst[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of lst[].getClass().getName() are emails
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::ENTER
     Variables: this s s.toString
 s.toString().equals("")
+daikon.inv.unary.string.IsNumeric.PATTERN.matcher(s.toString).matches()
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::EXIT
     Variables: this s s.toString orig(this) orig(s) orig(s.toString)
 s.toString().equals(\old(s.toString()))
 s.toString().equals("")
+daikon.inv.unary.string.IsNumeric.PATTERN.matcher(s.toString).matches()
 ===========================================================================
 agora.AgoraTest.main(java.lang.String[]):::ENTER
     Variables: args args.getClass().getName() args[] args[].toString size(args[]) size(args[])-1
