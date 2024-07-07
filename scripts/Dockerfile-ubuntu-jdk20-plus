@@ -55,7 +55,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   graphviz \
   libc6-dbg \
   netpbm \
-  python3-distutils \
+  python3-setuptools \
   texinfo \
   texlive \
   texlive-latex-extra \
