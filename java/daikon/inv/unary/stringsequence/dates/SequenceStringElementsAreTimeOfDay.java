@@ -5,6 +5,7 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
+import daikon.inv.ValueSet.ValueSetStringArray;
 import daikon.inv.unary.string.dates.IsTimeOfDay;
 import daikon.inv.unary.stringsequence.SingleStringSequence;
 import java.util.List;
@@ -116,6 +117,17 @@ public class SequenceStringElementsAreTimeOfDay extends SingleStringSequence {
 
   @Override
   protected double computeConfidence() {
+    // If there are no samples over our variables, its unjustified
+    if (ppt.num_samples() == 0) {
+      return CONFIDENCE_UNJUSTIFIED;
+    }
+
+    // If the array never has any elements, its unjustified
+    ValueSetStringArray vs = (ValueSetStringArray) var().get_value_set();
+    if (vs.elem_cnt() == 0) {
+      return CONFIDENCE_UNJUSTIFIED;
+    }
+
     return 1 - Math.pow(.1, ppt.num_samples());
   }
 

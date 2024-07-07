@@ -9,15 +9,6 @@ PolyCalc.RatTermVec.RatTermVec():::EXIT
     Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() size(this.wrapped[]) size(this.wrapped[])-1
 warning: method daikon.inv.unary.sequence.OneOfSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[] == []
 warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.wrapped[].getClass().getName() == []
-warning: method daikon.inv.unary.stringsequence.SequenceStringElementsAreNumeric.format(OutputFormat:ESC/Java) needs to be implemented: All the elements of this.wrapped[].getClass().getName() are Numeric
-warning: method daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreTimeOfDayAMPM.format(OutputFormat:ESC/Java) needs to be implemented: All the elements of this.wrapped[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
-warning: method daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreTimeOfDay.format(OutputFormat:ESC/Java) needs to be implemented: All the elements of this.wrapped[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
-warning: method daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreTimeOfDayWithSeconds.format(OutputFormat:ESC/Java) needs to be implemented: All the elements of this.wrapped[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
-warning: method daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm.format(OutputFormat:ESC/Java) needs to be implemented: All the elements of this.wrapped[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
-warning: method daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateDDMMYYYY.format(OutputFormat:ESC/Java) needs to be implemented: All the elements of this.wrapped[].getClass().getName() are dates. Format: DD/MM/YYYY
-warning: method daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateMMDDYYYY.format(OutputFormat:ESC/Java) needs to be implemented: All the elements of this.wrapped[].getClass().getName() are dates. Format: MM/DD/YYYY
-warning: method daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateYYYYMMDD.format(OutputFormat:ESC/Java) needs to be implemented: All the elements of this.wrapped[].getClass().getName() are dates. Format: YYYY-MM-DD
-warning: method daikon.inv.unary.stringsequence.SequenceStringElementsAreEmail.format(OutputFormat:ESC/Java) needs to be implemented: All the elements of this.wrapped[].getClass().getName() are emails
 ===========================================================================
 PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::ENTER
     Variables: this this.wrapped this.wrapped[] this.wrapped[].getClass().getName() t size(this.wrapped[]) size(this.wrapped[])-1

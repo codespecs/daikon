@@ -3,6 +3,7 @@ package daikon.inv.unary.stringsequence;
 import daikon.PptSlice;
 import daikon.VarInfo;
 import daikon.inv.*;
+import daikon.inv.ValueSet.ValueSetStringArray;
 import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateDDMMYYYY;
 import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateMMDDYYYY;
 import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateYYYYMMDD;
@@ -144,6 +145,17 @@ public class SequenceFixedLengthString extends SingleStringSequence {
 
   @Override
   protected double computeConfidence() {
+    // If there are no samples over our variables, its unjustified
+    if (ppt.num_samples() == 0) {
+      return CONFIDENCE_UNJUSTIFIED;
+    }
+
+    // If the array never has any elements, its unjustified
+    ValueSetStringArray vs = (ValueSetStringArray) var().get_value_set();
+    if (vs.elem_cnt() == 0) {
+      return CONFIDENCE_UNJUSTIFIED;
+    }
+
     if (elements_length == null) {
       return Invariant.CONFIDENCE_UNJUSTIFIED;
     }

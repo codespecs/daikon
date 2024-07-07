@@ -7,15 +7,6 @@ PolyCalc.RatTermVec:::OBJECT
 PolyCalc.RatTermVec.RatTermVec():::EXIT
 (AND (EQ (arrayLength (select |wrapped| |this|)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |wrapped| |this|)) 1))) (NEQ (select (select elems (select |wrapped| |this|)) |i|)  null))))
 (EQ (arrayLength (select |wrapped| |this|)) 0)
-All the elements of this.wrapped[].getClass().getName() are Numeric
-All the elements of this.wrapped[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
-All the elements of this.wrapped[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
-All the elements of this.wrapped[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
-All the elements of this.wrapped[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
-All the elements of this.wrapped[].getClass().getName() are dates. Format: DD/MM/YYYY
-All the elements of this.wrapped[].getClass().getName() are dates. Format: MM/DD/YYYY
-All the elements of this.wrapped[].getClass().getName() are dates. Format: YYYY-MM-DD
-All the elements of this.wrapped[].getClass().getName() are emails
 ===========================================================================
 PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::ENTER
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |wrapped| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |wrapped| |this|)) 1)) (NEQ |i| |j|)) (NEQ (select (select elems (select |wrapped| |this|)) |i|) (select (select elems (select |wrapped| |this|)) |j|))))
