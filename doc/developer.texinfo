@@ -2310,7 +2310,7 @@ build everything to be distributed and copy it to the temporary staging area
 rm -rf /tmp/$USER/stage-daikon
 mkdir -p /tmp/$USER/stage-daikon
 cd /tmp/$USER/stage-daikon
-git clone --filter=blob:none https://github.com/codespecs/daikon
+git clone --depth=1 https://github.com/codespecs/daikon
 cd daikon
 export DAIKONDIR=`pwd`
 export JAVA_HOME=/usr/lib/jvm/java-1.8.0
