@@ -21,13 +21,11 @@ daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(lst), new String[] {  })
 agora.AgoraTest.emptyString(java.lang.String):::ENTER
     Variables: this s s.toString
 s.toString().equals("")
-daikon.inv.unary.string.IsNumeric.PATTERN.matcher(s.toString).matches()
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::EXIT
     Variables: this s s.toString orig(this) orig(s) orig(s.toString)
 s.toString().equals(\old(s.toString()))
 s.toString().equals("")
-daikon.inv.unary.string.IsNumeric.PATTERN.matcher(s.toString).matches()
 ===========================================================================
 agora.AgoraTest.main(java.lang.String[]):::ENTER
     Variables: args args.getClass().getName() args[] args[].toString size(args[]) size(args[])-1
@@ -45,11 +43,9 @@ daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(args, "toString()"), new S
 agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
     Variables: this s s.toString
 s != null
-daikon.inv.unary.string.IsNumeric.PATTERN.matcher(s.toString).matches()
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: s.toString is printable
 ===========================================================================
 agora.AgoraTest.stringParameter1(java.lang.String):::EXIT
     Variables: this s s.toString orig(this) orig(s) orig(s.toString)
 s.toString().equals(\old(s.toString()))
-daikon.inv.unary.string.IsNumeric.PATTERN.matcher(s.toString).matches()
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: s.toString is printable

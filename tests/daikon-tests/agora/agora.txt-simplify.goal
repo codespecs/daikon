@@ -16,12 +16,10 @@ agora.AgoraTest.emptySequence(java.util.List):::EXIT
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::ENTER
 (EQ (select |toString| |s|) |_string_|)
-(isNumeric (select |toString| |s|))
 ===========================================================================
 agora.AgoraTest.emptyString(java.lang.String):::EXIT
 (EQ (select |toString| |s|) (select |toString| |__orig__s|))
 (EQ (select |toString| |s|) |_string_|)
-(isNumeric (select |toString| |s|))
 ===========================================================================
 agora.AgoraTest.main(java.lang.String[]):::ENTER
 (EQ (hash |args|) (hashcode 1002))
@@ -36,10 +34,8 @@ agora.AgoraTest.main(java.lang.String[]):::EXIT
 ===========================================================================
 agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
 (NEQ (hash |s|) null)
-(isNumeric (select |toString| |s|))
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: s.toString is printable
 ===========================================================================
 agora.AgoraTest.stringParameter1(java.lang.String):::EXIT
 (EQ (select |toString| |s|) (select |toString| |__orig__s|))
-(isNumeric (select |toString| |s|))
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: s.toString is printable
