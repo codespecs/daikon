@@ -22,8 +22,9 @@ public class IsNumeric extends SingleString {
 
   /**
    * Regular expression that match positive and negative decimal numbers with optional fractional
-   * part (decimal places). Permits "," every three digits. Forbids leading zero. Forbids trailing
-   * "." without any fractional digits. Forbids leading "." without any whole-number digits.
+   * part (decimal places). Permits "," every three digits. Forbids leading zero except before a
+   * decimal point. Forbids trailing "." without any fractional digits. Forbids leading "." without
+   * any whole-number digits.
    */
   public static Pattern PATTERN =
       Pattern.compile(
@@ -31,7 +32,7 @@ public class IsNumeric extends SingleString {
               // Optional plus or minus sign
               + "[-+]?"
               // Whole part of the number
-              + "(0|([1-9](\\d*|\\d{0,2}(,\\d{3})*)))?"
+              + "(0|([1-9](\\d*|\\d{0,2}(,\\d{3})*)))"
               // Fractional part of the number
               + "(\\.\\d+)?"
               + "$");
