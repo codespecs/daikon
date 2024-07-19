@@ -370,6 +370,21 @@ public class DCInstrument extends InstructionListUtils {
       return gen.getJavaClass().copy();
     }
 
+    // If a class has an EvoSuite annotation it may be instrumented by Evosuite;
+    // thus, we should not instrument it before Evosuite does.
+    for (final Attribute attribute : orig_class.getAttributes()) {
+      if (attribute instanceof RuntimeVisibleAnnotations) {
+        for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
+          if (item.toString().startsWith("@Lorg/evosuite/runtime")) {
+            Instrument.debug_transform.log(
+                "Not instrumenting possible Evosuite target: %s%n", classname);
+            // WHY NOT RETURN NULL?
+            return gen.getJavaClass().copy();
+          }
+        }
+      }
+    }
+
     Instrument.debug_transform.log("Instrumenting class %s%n", classname);
     Instrument.debug_transform.indent();
 
@@ -3597,6 +3612,13 @@ public class DCInstrument extends InstructionListUtils {
    */
   boolean tag_fields_ok(MethodGen mg, @ClassGetName String classname) {
 
+    // Prior to Java 8 an interface could not contain any implementations.
+    if (gen.isInterface()) {
+      if (gen.getMajor() < Const.MAJOR_1_8) {
+        return false;
+      }
+    }
+
     if (BcelUtil.isConstructor(mg)) {
       if (!this.constructor_is_initialized) {
         return false;
@@ -3665,6 +3687,9 @@ public class DCInstrument extends InstructionListUtils {
   void create_tag_accessors(ClassGen gen) {
 
     String classname = gen.getClassName();
+
+    // If this class doesn't support tag fields, don't create them
+    if (!tag_fields_ok(mgen, classname)) return;
 
     Set<String> field_set = new HashSet<>();
     Map<Field, Integer> field_map = build_field_map(gen.getJavaClass());
@@ -3838,6 +3863,12 @@ public class DCInstrument extends InstructionListUtils {
     if (gen.isInterface()) {
       // method in interface cannot be final
       access_flags &= ~Const.ACC_FINAL;
+      if (gen.getMajor() < Const.MAJOR_1_8) {
+        // If class file version is prior to 8 then a method in an interface
+        // cannot be static (it's implicit) and must be abstract.
+        access_flags &= ~Const.ACC_STATIC;
+        access_flags |= Const.ACC_ABSTRACT;
+      }
     } else {
       access_flags |= Const.ACC_FINAL;
     }
@@ -3907,6 +3938,12 @@ public class DCInstrument extends InstructionListUtils {
     if (gen.isInterface()) {
       // method in interface cannot be final
       access_flags &= ~Const.ACC_FINAL;
+      if (gen.getMajor() < Const.MAJOR_1_8) {
+        // If class file version is prior to 8 then a method in an interface
+        // cannot be static (it's implicit) and must be abstract.
+        access_flags &= ~Const.ACC_STATIC;
+        access_flags |= Const.ACC_ABSTRACT;
+      }
     } else {
       access_flags |= Const.ACC_FINAL;
     }
