@@ -34,10 +34,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.junit.Test;
+import org.plumelib.util.IPair;
 import org.plumelib.util.StringsPlume;
 
 /**
@@ -133,17 +137,8 @@ public class SampleTester {
 
     daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
 
-    try (InputStream commands = SampleTester.class.getResourceAsStream("SampleTester.commands")) {
-      if (commands == null) {
-        fail(
-            "Input file SampleTester.commands missing."
-                + " (Should be in daikon.test and it must be within the classpath)");
-      }
-
-      SampleTester ts = new SampleTester();
-      ts.proc_sample_file(commands, "SampleTester.commands");
-      System.out.println("Test Passes");
-    }
+    new SampleTester().test_samples();
+    System.out.println("Test Passes");
   }
 
   private static @Nullable String find_file(String fname) {
@@ -164,18 +159,29 @@ public class SampleTester {
    */
   @Test
   public void test_samples() throws IOException {
+    test_samples("SampleTester.commands");
+    test_samples("SampleTester.commands_linear_ternary");
+  }
+
+  /**
+   * This function is the actual function performed when this class is run through JUnit.
+   *
+   * @throws IOException if there in a problem with I/O
+   */
+  public void test_samples(String commandFile) throws IOException {
 
     FileIO.new_decl_format = null;
 
-    try (InputStream commands = getClass().getResourceAsStream("SampleTester.commands")) {
+    try (InputStream commands = getClass().getResourceAsStream(commandFile)) {
       if (commands == null) {
         fail(
-            "Input file SampleTester.commands missing."
+            "Missing input file: "
+                + commandFile
                 + " (Should be in daikon.test and it must be within the classpath)");
       }
 
       SampleTester ts = new SampleTester();
-      ts.proc_sample_file(commands, "SampleTester.commands");
+      ts.proc_sample_file(commands, commandFile);
     }
   }
 
@@ -303,8 +309,9 @@ public class SampleTester {
   private void proc_data(String data, LineNumberReader reader, String filename) {
 
     if (vars == null) parse_error("vars must be specified before data");
-    String[] da = data.split("  *");
-    if (da.length != vars.length) parse_error("number of data elements doesn't match var elements");
+    List<String> da = splitData(data);
+    if (da.size() != vars.length)
+      parse_error(String.format("%d vars but %d data elements: %s", vars.length, da.size(), data));
     debug_progress.fine("data: " + Debug.toString(da));
 
     VarInfo[] vis = ppt.var_infos;
@@ -320,11 +327,12 @@ public class SampleTester {
 
     // Parse and enter the specified variables, - indicates a missing value
     for (int i = 0; i < vars.length; i++) {
-      if (da[i].equals("-")) {
+      String val = da.get(i);
+      if (val.equals("-")) {
         continue;
       }
       VarInfo vi = vars[i];
-      vals[vi.value_index] = vi.rep_type.parse_value(da[i], reader, filename);
+      vals[vi.value_index] = vi.rep_type.parse_value(val, reader, filename);
       mods[vi.value_index] = ValueTuple.parseModified("1");
     }
 
@@ -344,6 +352,64 @@ public class SampleTester {
 
     ppt.add_bottom_up(vt, 1);
   }
+
+  /**
+   * Splits a "data:" line of a SampleTester input file.
+   *
+   * @return the components of a "data:" line of a SampleTester input file
+   */
+  private List<String> splitData(String s) {
+    s = s.trim();
+    List<String> result = new ArrayList<>();
+    while (!s.isEmpty()) {
+      IPair<String, String> p = readValueFromBeginning(s);
+      result.add(p.first);
+      s = p.second;
+    }
+    return result;
+  }
+
+  /**
+   * Reads a value from the beginning of a string.
+   *
+   * @return the value and the remaining string
+   */
+  private IPair<String, String> readValueFromBeginning(String s) {
+    s = s.trim();
+    if (s.isEmpty()) {
+      throw new Error("Cannot read a value from an empty string");
+    }
+    switch (s.charAt(0)) {
+      case '"':
+        for (int i = 1; i < s.length(); i++) {
+          switch (s.charAt(i)) {
+            case '"':
+              return IPair.of(s.substring(0, i + i), s.substring(i).trim());
+            case '\\':
+              i++;
+              break;
+            default:
+              break;
+          }
+        }
+        throw new Error("Unterminated string: " + s);
+      case '[':
+        StringJoiner sj = new StringJoiner(" ", "[", "]");
+        s = s.substring(1);
+        while (!s.startsWith("]")) {
+          IPair<String, String> p = readValueFromBeginning(s);
+          sj.add(p.first);
+          s = p.second;
+        }
+        return IPair.of(sj.toString(), s.substring(1).trim());
+      default:
+        Matcher m = spaceOrCloseBracket.matcher(s);
+        int pos = m.find() ? m.start() : s.length();
+        return IPair.of(s.substring(0, pos), s.substring(pos).trim());
+    }
+  }
+
+  Pattern spaceOrCloseBracket = Pattern.compile("[] ]");
 
   /** Requires that the StreamTokenizer has just read a word. Returns that word. */
   private String readString(StreamTokenizer stok) {
@@ -373,50 +439,62 @@ public class SampleTester {
       assert_string = assert_string.substring(1);
     }
 
-    // Create a tokenizer over the assertion string
-    StreamTokenizer stok = new StreamTokenizer(new StringReader(assert_string));
-    stok.commentChar('#');
-    stok.quoteChar('"');
-
-    int ttype;
-
-    // Get the assertion name
-    ttype = stok.nextToken();
-    assertEquals(TT_WORD, ttype);
-    String name = stok.sval;
-
-    // Get the arguments (enclosed in parens, separated by commas)
-    String delimiter = readString(stok);
-    assertEquals("(", delimiter);
-
-    List<String> args = new ArrayList<>(10);
-    do {
-      String arg = readString(stok);
-      args.add(arg);
-      delimiter = readString(stok);
-    } while (delimiter.equals(","));
-    if (!delimiter.equals(")")) {
-      parse_error(String.format("%s found where ')' expected", delimiter));
-    }
-
-    // process the specific assertion
     boolean result = false;
-    if (name.equals("inv")) {
-      result = proc_inv_assert(args);
-      if (!result && !negate) {
-        daikon.LogHelper.setLevel(debug, FINE);
-        proc_inv_assert(args);
-      }
-    } else if (name.equals("show_invs")) {
-      result = proc_show_invs_assert(args);
-    } else if (name.equals("constant")) {
-      result = proc_constant_assert(args);
-    } else {
-      parse_error("unknown assertion: " + name);
-    }
 
-    if (negate) {
-      result = !result;
+    try {
+
+      // Create a tokenizer over the assertion string
+      StreamTokenizer stok = new StreamTokenizer(new StringReader(assert_string));
+      stok.wordChars('_', '_');
+      stok.commentChar('#');
+      stok.quoteChar('"');
+
+      int ttype;
+
+      // Get the assertion name
+      ttype = stok.nextToken();
+      assertEquals(TT_WORD, ttype);
+      String name = stok.sval;
+
+      // Get the arguments (enclosed in parens, separated by commas)
+      String delimiter = readString(stok);
+      if (!"(".equals(delimiter)) {
+        throw new Error("Expected \"(\", got: " + delimiter);
+      }
+
+      List<String> args = new ArrayList<>(10);
+      do {
+        String arg = readString(stok);
+        args.add(arg);
+        delimiter = readString(stok);
+      } while (delimiter.equals(","));
+      if (!delimiter.equals(")")) {
+        parse_error(String.format("%s found where ')' expected", delimiter));
+      }
+
+      // process the specific assertion
+      if (name.equals("inv")) {
+        result = proc_inv_assert(args);
+        if (!result && !negate) {
+          daikon.LogHelper.setLevel(debug, FINE);
+          proc_inv_assert(args);
+        }
+      } else if (name.equals("show_invs")) {
+        result = proc_show_invs_assert(args);
+      } else if (name.equals("constant")) {
+        result = proc_constant_assert(args);
+      } else {
+        parse_error("unknown assertion: " + name);
+      }
+
+      if (negate) {
+        result = !result;
+      }
+    } catch (Throwable t) {
+      throw new Error(
+          String.format(
+              "Problem in file %s, line %d, assertion: " + assertion, fname, fp.getLineNumber()),
+          t);
     }
 
     if (!result) {
@@ -504,8 +582,9 @@ public class SampleTester {
     }
 
     // Look for a matching invariant in the slices invariant list
+    System.out.printf("SampleTester show_invs: %d invariants%n", slice.invs.size());
     for (Invariant inv : slice.invs) {
-      System.out.printf("found %s: %s%n", inv.getClass(), inv.format());
+      System.out.printf("  %s: %s%n", inv.getClass(), inv.format());
     }
     return true;
   }
