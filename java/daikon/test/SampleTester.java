@@ -34,10 +34,14 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.junit.Test;
+import org.plumelib.util.IPair;
 import org.plumelib.util.StringsPlume;
 
 /**
@@ -305,9 +309,9 @@ public class SampleTester {
   private void proc_data(String data, LineNumberReader reader, String filename) {
 
     if (vars == null) parse_error("vars must be specified before data");
-    // TODO: This does not work for arrays.
-    String[] da = data.split("  *");
-    if (da.length != vars.length) parse_error("number of data elements doesn't match var elements");
+    List<String> da = splitData(data);
+    if (da.size() != vars.length)
+      parse_error(String.format("%d vars but %d data elements: %s", vars.length, da.size(), data));
     debug_progress.fine("data: " + Debug.toString(da));
 
     VarInfo[] vis = ppt.var_infos;
@@ -323,11 +327,12 @@ public class SampleTester {
 
     // Parse and enter the specified variables, - indicates a missing value
     for (int i = 0; i < vars.length; i++) {
-      if (da[i].equals("-")) {
+      String val = da.get(i);
+      if (val.equals("-")) {
         continue;
       }
       VarInfo vi = vars[i];
-      vals[vi.value_index] = vi.rep_type.parse_value(da[i], reader, filename);
+      vals[vi.value_index] = vi.rep_type.parse_value(val, reader, filename);
       mods[vi.value_index] = ValueTuple.parseModified("1");
     }
 
@@ -347,6 +352,64 @@ public class SampleTester {
 
     ppt.add_bottom_up(vt, 1);
   }
+
+  /**
+   * Splits a "data:" line of a SampleTester input file.
+   *
+   * @return the components of a "data:" line of a SampleTester input file
+   */
+  private List<String> splitData(String s) {
+    s = s.trim();
+    List<String> result = new ArrayList<>();
+    while (!s.isEmpty()) {
+      IPair<String, String> p = readValueFromBeginning(s);
+      result.add(p.first);
+      s = p.second;
+    }
+    return result;
+  }
+
+  /**
+   * Reads a value from the beginning of a string.
+   *
+   * @return the value and the remaining string
+   */
+  private IPair<String, String> readValueFromBeginning(String s) {
+    s = s.trim();
+    if (s.isEmpty()) {
+      throw new Error("Cannot read a value from an empty string");
+    }
+    switch (s.charAt(0)) {
+      case '"':
+        for (int i = 1; i < s.length(); i++) {
+          switch (s.charAt(i)) {
+            case '"':
+              return IPair.of(s.substring(0, i + i), s.substring(i).trim());
+            case '\\':
+              i++;
+              break;
+            default:
+              break;
+          }
+        }
+        throw new Error("Unterminated string: " + s);
+      case '[':
+        StringJoiner sj = new StringJoiner(" ", "[", "]");
+        s = s.substring(1);
+        while (!s.startsWith("]")) {
+          IPair<String, String> p = readValueFromBeginning(s);
+          sj.add(p.first);
+          s = p.second;
+        }
+        return IPair.of(sj.toString(), s.substring(1).trim());
+      default:
+        Matcher m = spaceOrCloseBracket.matcher(s);
+        int pos = m.find() ? m.start() : s.length();
+        return IPair.of(s.substring(0, pos), s.substring(pos).trim());
+    }
+  }
+
+  Pattern spaceOrCloseBracket = Pattern.compile("[] ]");
 
   /** Requires that the StreamTokenizer has just read a word. Returns that word. */
   private String readString(StreamTokenizer stok) {
