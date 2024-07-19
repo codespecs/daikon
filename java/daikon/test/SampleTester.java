@@ -152,6 +152,16 @@ public class SampleTester {
     }
   }
 
+  @Test
+  public void test_splitData() {
+    assertEquals(2, splitData("\"foo@bar.com\" [\"foo@bar.com\"]").size());
+    assertEquals(2, splitData("\"baz@a.b.edu\" [\"baz@a.b.edu\" \"baz@a.b.edu\"]").size());
+    assertEquals(2, splitData("\"a@b.c.biz\" []").size());
+    assertEquals(2, splitData("\"b@b.c.biz\" [\"a@b.c.biz\"]").size());
+    assertEquals(2, splitData("\"c@b.c.biz\" [\"c@b.c.biz\" \"c@b.c.biz\" \"c@b.c.biz\"]").size());
+    assertEquals(2, splitData("- []").size());
+  }
+
   /**
    * This function is the actual function performed when this class is run through JUnit.
    *
@@ -384,7 +394,7 @@ public class SampleTester {
         for (int i = 1; i < s.length(); i++) {
           switch (s.charAt(i)) {
             case '"':
-              return IPair.of(s.substring(0, i + i), s.substring(i).trim());
+              return IPair.of(s.substring(0, i + 1), s.substring(i + 1).trim());
             case '\\':
               i++;
               break;
