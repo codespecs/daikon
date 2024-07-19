@@ -419,6 +419,7 @@ public class SampleTester {
     }
   }
 
+  /** A regular expression that matches a space or a close square bracket. */
   Pattern spaceOrCloseBracket = Pattern.compile("[] ]");
 
   /** Requires that the StreamTokenizer has just read a word. Returns that word. */
@@ -475,8 +476,12 @@ public class SampleTester {
       List<String> args = new ArrayList<>(10);
       do {
         String arg = readString(stok);
-        args.add(arg);
         delimiter = readString(stok);
+        while (delimiter.equals("[") || delimiter.equals("]")) {
+          arg += delimiter;
+          delimiter = readString(stok);
+        }
+        args.add(arg);
       } while (delimiter.equals(","));
       if (!delimiter.equals(")")) {
         parse_error(String.format("%s found where ')' expected", delimiter));
