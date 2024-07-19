@@ -23,6 +23,7 @@ import org.plumelib.util.StringsPlume;
 
 /**
  * Class that defines a set of non-instantiating suppressions for a single invariant (suppressee).
+ * Each of the suppressors individually implies the suppressee.
  *
  * <p>Not immutable: see recurse_definitions().
  */
