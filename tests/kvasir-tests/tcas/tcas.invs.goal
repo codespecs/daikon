@@ -8,13 +8,7 @@
 ::Positive_RA_Alt_Thresh has only one value
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value != ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit <= ::High_Confidence
@@ -25,37 +19,22 @@
 ::Climb_Inhibit < ::Up_Separation
 ::Cur_Vertical_Sep != ::Down_Separation
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
 ::Down_Separation > ::Two_of_Three_Reports_Valid
-::High_Confidence >= ::Other_Capability
-::High_Confidence >= ::Other_RAC
 ::High_Confidence < ::Other_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::High_Confidence >= ::Two_of_Three_Reports_Valid
 ::High_Confidence < ::Up_Separation
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability <= ::Two_of_Three_Reports_Valid
-::Other_Capability < ::Up_Separation
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
@@ -91,15 +70,7 @@
 ::Positive_RA_Alt_Thresh has only one value
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value != ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
-(::Alt_Layer_Value & return) == 0
-::Alt_Layer_Value < return
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit <= ::High_Confidence
@@ -112,43 +83,24 @@
 ::Climb_Inhibit < return
 ::Cur_Vertical_Sep != ::Down_Separation
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Cur_Vertical_Sep != return
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
 ::Down_Separation > ::Two_of_Three_Reports_Valid
-::High_Confidence >= ::Other_Capability
-::High_Confidence >= ::Other_RAC
 ::High_Confidence < ::Other_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::High_Confidence >= ::Two_of_Three_Reports_Valid
 ::High_Confidence < ::Up_Separation
 ::High_Confidence < return
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability <= ::Two_of_Three_Reports_Valid
-::Other_Capability < ::Up_Separation
-(::Other_Capability & return) == 0
-::Other_Capability < return
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
-(::Other_RAC & return) == 0
-::Other_RAC < return
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
@@ -176,13 +128,7 @@ return in ::Positive_RA_Alt_Thresh[]
 ::Positive_RA_Alt_Thresh has only one value
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value != ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit <= ::High_Confidence
@@ -192,37 +138,22 @@ return in ::Positive_RA_Alt_Thresh[]
 ::Positive_RA_Alt_Thresh[] elements > ::Climb_Inhibit
 ::Climb_Inhibit < ::Up_Separation
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
 ::Down_Separation > ::Two_of_Three_Reports_Valid
-::High_Confidence >= ::Other_Capability
-::High_Confidence >= ::Other_RAC
 ::High_Confidence < ::Other_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::High_Confidence >= ::Two_of_Three_Reports_Valid
 ::High_Confidence < ::Up_Separation
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability <= ::Two_of_Three_Reports_Valid
-::Other_Capability < ::Up_Separation
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
@@ -257,14 +188,7 @@ return in ::Positive_RA_Alt_Thresh[]
 ::Positive_RA_Alt_Thresh has only one value
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value != ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
-::Alt_Layer_Value < return
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit <= ::High_Confidence
@@ -275,40 +199,23 @@ return in ::Positive_RA_Alt_Thresh[]
 ::Climb_Inhibit < ::Up_Separation
 ::Climb_Inhibit < return
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
 ::Down_Separation > ::Two_of_Three_Reports_Valid
-::High_Confidence >= ::Other_Capability
-::High_Confidence >= ::Other_RAC
 ::High_Confidence < ::Other_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::High_Confidence >= ::Two_of_Three_Reports_Valid
 ::High_Confidence < ::Up_Separation
 ::High_Confidence < return
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability <= ::Two_of_Three_Reports_Valid
-::Other_Capability < ::Up_Separation
-::Other_Capability < return
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
-::Other_RAC < return
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
@@ -335,13 +242,7 @@ return in ::Positive_RA_Alt_Thresh[]
 ::Positive_RA_Alt_Thresh has only one value
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value != ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit <= ::High_Confidence
@@ -351,37 +252,22 @@ return in ::Positive_RA_Alt_Thresh[]
 ::Positive_RA_Alt_Thresh[] elements > ::Climb_Inhibit
 ::Climb_Inhibit < ::Up_Separation
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
 ::Down_Separation > ::Two_of_Three_Reports_Valid
-::High_Confidence >= ::Other_Capability
-::High_Confidence >= ::Other_RAC
 ::High_Confidence < ::Other_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::High_Confidence >= ::Two_of_Three_Reports_Valid
 ::High_Confidence < ::Up_Separation
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability <= ::Two_of_Three_Reports_Valid
-::Other_Capability < ::Up_Separation
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
@@ -417,13 +303,7 @@ return in ::Positive_RA_Alt_Thresh[]
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
 return one of { 0, 1 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value != ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit <= ::High_Confidence
@@ -433,37 +313,22 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh[] elements > ::Climb_Inhibit
 ::Climb_Inhibit < ::Up_Separation
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
 ::Down_Separation > ::Two_of_Three_Reports_Valid
-::High_Confidence >= ::Other_Capability
-::High_Confidence >= ::Other_RAC
 ::High_Confidence < ::Other_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::High_Confidence >= ::Two_of_Three_Reports_Valid
 ::High_Confidence < ::Up_Separation
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability <= ::Two_of_Three_Reports_Valid
-::Other_Capability < ::Up_Separation
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
@@ -485,13 +350,7 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh has only one value
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value != ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit <= ::High_Confidence
@@ -501,37 +360,22 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh[] elements > ::Climb_Inhibit
 ::Climb_Inhibit < ::Up_Separation
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
 ::Down_Separation > ::Two_of_Three_Reports_Valid
-::High_Confidence >= ::Other_Capability
-::High_Confidence >= ::Other_RAC
 ::High_Confidence < ::Other_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::High_Confidence >= ::Two_of_Three_Reports_Valid
 ::High_Confidence < ::Up_Separation
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability <= ::Two_of_Three_Reports_Valid
-::Other_Capability < ::Up_Separation
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
@@ -567,13 +411,7 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
 return one of { 0, 1 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value != ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit <= ::High_Confidence
@@ -583,37 +421,22 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh[] elements > ::Climb_Inhibit
 ::Climb_Inhibit < ::Up_Separation
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
 ::Down_Separation > ::Two_of_Three_Reports_Valid
-::High_Confidence >= ::Other_Capability
-::High_Confidence >= ::Other_RAC
 ::High_Confidence < ::Other_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::High_Confidence >= ::Two_of_Three_Reports_Valid
 ::High_Confidence < ::Up_Separation
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability <= ::Two_of_Three_Reports_Valid
-::Other_Capability < ::Up_Separation
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
@@ -635,13 +458,7 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh has only one value
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit <= ::High_Confidence
@@ -651,38 +468,23 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh[] elements > ::Climb_Inhibit
 ::Climb_Inhibit < ::Up_Separation
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Cur_Vertical_Sep != ::Up_Separation
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
 ::Down_Separation > ::Two_of_Three_Reports_Valid
-::High_Confidence >= ::Other_Capability
-::High_Confidence >= ::Other_RAC
 ::High_Confidence < ::Other_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::High_Confidence >= ::Two_of_Three_Reports_Valid
 ::High_Confidence < ::Up_Separation
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability <= ::Two_of_Three_Reports_Valid
-::Other_Capability < ::Up_Separation
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
@@ -719,13 +521,7 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
 return one of { 0, 1 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit <= ::High_Confidence
@@ -735,38 +531,23 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh[] elements > ::Climb_Inhibit
 ::Climb_Inhibit < ::Up_Separation
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Cur_Vertical_Sep != ::Up_Separation
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
 ::Down_Separation > ::Two_of_Three_Reports_Valid
-::High_Confidence >= ::Other_Capability
-::High_Confidence >= ::Other_RAC
 ::High_Confidence < ::Other_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::High_Confidence >= ::Two_of_Three_Reports_Valid
 ::High_Confidence < ::Up_Separation
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability <= ::Two_of_Three_Reports_Valid
-::Other_Capability < ::Up_Separation
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
@@ -790,13 +571,7 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh has only one value
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value != ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit <= ::High_Confidence
@@ -807,37 +582,22 @@ return one of { 0, 1 }
 ::Climb_Inhibit < ::Up_Separation
 ::Cur_Vertical_Sep != ::Down_Separation
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
 ::Down_Separation > ::Two_of_Three_Reports_Valid
-::High_Confidence >= ::Other_Capability
-::High_Confidence >= ::Other_RAC
 ::High_Confidence < ::Other_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::High_Confidence >= ::Two_of_Three_Reports_Valid
 ::High_Confidence < ::Up_Separation
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability <= ::Two_of_Three_Reports_Valid
-::Other_Capability < ::Up_Separation
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
@@ -874,13 +634,7 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
 return one of { 0, 1 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value != ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit <= ::High_Confidence
@@ -891,37 +645,22 @@ return one of { 0, 1 }
 ::Climb_Inhibit < ::Up_Separation
 ::Cur_Vertical_Sep != ::Down_Separation
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
 ::Down_Separation > ::Two_of_Three_Reports_Valid
-::High_Confidence >= ::Other_Capability
-::High_Confidence >= ::Other_RAC
 ::High_Confidence < ::Other_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::High_Confidence >= ::Two_of_Three_Reports_Valid
 ::High_Confidence < ::Up_Separation
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability <= ::Two_of_Three_Reports_Valid
-::Other_Capability < ::Up_Separation
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
@@ -943,13 +682,7 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh has only one value
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value != ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit < ::Other_Tracked_Alt
@@ -958,15 +691,11 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh[] elements > ::Climb_Inhibit
 ::Climb_Inhibit < ::Up_Separation
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
@@ -976,16 +705,8 @@ return one of { 0, 1 }
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::High_Confidence
 ::High_Confidence < ::Up_Separation
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability < ::Up_Separation
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
@@ -1021,13 +742,7 @@ return one of { 0, 1 }
 ::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
 ::Two_of_Three_Reports_Valid one of { 0, 1 }
 return one of { 0, 1, 2 }
-::Alt_Layer_Value < ::Cur_Vertical_Sep
-::Alt_Layer_Value < ::Down_Separation
-::Alt_Layer_Value < ::Other_Tracked_Alt
-::Alt_Layer_Value < ::Own_Tracked_Alt
-::Alt_Layer_Value != ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Alt_Layer_Value
-::Alt_Layer_Value < ::Up_Separation
 ::Climb_Inhibit < ::Cur_Vertical_Sep
 ::Climb_Inhibit < ::Down_Separation
 ::Climb_Inhibit < ::Other_Tracked_Alt
@@ -1036,15 +751,11 @@ return one of { 0, 1, 2 }
 ::Positive_RA_Alt_Thresh[] elements > ::Climb_Inhibit
 ::Climb_Inhibit < ::Up_Separation
 ::Cur_Vertical_Sep > ::High_Confidence
-::Cur_Vertical_Sep > ::Other_Capability
-::Cur_Vertical_Sep > ::Other_RAC
 ::Cur_Vertical_Sep != ::Other_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt
 ::Cur_Vertical_Sep != ::Own_Tracked_Alt_Rate
 ::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
 ::Down_Separation > ::High_Confidence
-::Down_Separation > ::Other_Capability
-::Down_Separation > ::Other_RAC
 ::Down_Separation != ::Other_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt
 ::Down_Separation != ::Own_Tracked_Alt_Rate
@@ -1054,16 +765,8 @@ return one of { 0, 1, 2 }
 ::High_Confidence < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::High_Confidence
 ::High_Confidence < ::Up_Separation
-::Other_Capability < ::Other_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt
-::Other_Capability < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_Capability
-::Other_Capability < ::Up_Separation
-::Other_RAC < ::Other_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt
-::Other_RAC < ::Own_Tracked_Alt_Rate
 ::Positive_RA_Alt_Thresh[] elements > ::Other_RAC
-::Other_RAC < ::Up_Separation
 ::Other_Tracked_Alt != ::Own_Tracked_Alt
 ::Other_Tracked_Alt != ::Own_Tracked_Alt_Rate
 ::Other_Tracked_Alt > ::Two_of_Three_Reports_Valid
