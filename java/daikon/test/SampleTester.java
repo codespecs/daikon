@@ -152,6 +152,7 @@ public class SampleTester {
     }
   }
 
+  /** Test {@link #splitData}. */
   @Test
   public void test_splitData() {
     assertEquals(2, splitData("\"foo@bar.com\" [\"foo@bar.com\"]").size());
@@ -176,6 +177,7 @@ public class SampleTester {
   /**
    * This function is the actual function performed when this class is run through JUnit.
    *
+   * @param commandFile the file containing the commands
    * @throws IOException if there in a problem with I/O
    */
   public void test_samples(String commandFile) throws IOException {
@@ -366,6 +368,7 @@ public class SampleTester {
   /**
    * Splits a "data:" line of a SampleTester input file.
    *
+   * @param s the "data:" line of a SampleTester input file
    * @return the components of a "data:" line of a SampleTester input file
    */
   private List<String> splitData(String s) {
@@ -382,7 +385,8 @@ public class SampleTester {
   /**
    * Reads a value from the beginning of a string.
    *
-   * @return the value and the remaining string
+   * @param s a string containing a sequence of Daikon dtrace values, separated by spaces
+   * @return the first value and the remaining string
    */
   private IPair<String, String> readValueFromBeginning(String s) {
     s = s.trim();
@@ -422,7 +426,12 @@ public class SampleTester {
   /** A regular expression that matches a space or a close square bracket. */
   Pattern spaceOrCloseBracket = Pattern.compile("[] ]");
 
-  /** Requires that the StreamTokenizer has just read a word. Returns that word. */
+  /**
+   * Requires that the StreamTokenizer has just read a word. Returns that word.
+   *
+   * @param stok a StreamTokenizer that has just read a word
+   * @return the word that the StreamTokenizer just read
+   */
   private String readString(StreamTokenizer stok) {
     int ttype;
     try {
@@ -508,7 +517,7 @@ public class SampleTester {
     } catch (Throwable t) {
       throw new Error(
           String.format(
-              "Problem in file %s, line %d, assertion: " + assertion, fname, fp.getLineNumber()),
+              "Problem in file %s, line %d, assertion: %s", fname, fp.getLineNumber(), assertion),
           t);
     }
 
