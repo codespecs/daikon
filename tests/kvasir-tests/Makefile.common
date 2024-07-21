@@ -87,6 +87,12 @@ endif
 ifeq ($(OS_REL),23.04)
 	GOAL := goal-Ubuntu2304
 endif
+ifeq ($(OS_REL),22.04)
+	GOAL := goal-Ubuntu2204
+endif
+ifeq ($(OS_REL),20.04)
+	GOAL := goal-Ubuntu2004
+endif
 # other versions of Ubuntu will use goal-Ubuntu if it exists
 # otherwise the default goal file
 endif
