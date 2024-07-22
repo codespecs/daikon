@@ -154,7 +154,7 @@ a[..][0]
 
 ..blockDecrypt():::ENTER
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher[..].IV[0] input[..] key[..].keyMaterial key[..].keySched[0] outBuffer[..]
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher cipher[..].IV[0] cipher[..].blockLen input inputLen input[..] key[..].blockLen key[..].keyLen key[..].keyMaterial key[..].keySched[0] outBuffer outBuffer[..]
 ::Logtable
 ::Logtable[..]
 ::S
@@ -162,7 +162,6 @@ a[..][0]
 ::iG
 ::iG[..]
 ::rcon
-cipher cipher[..].blockLen input inputLen key[..].blockLen key[..].keyLen outBuffer
 cipher[..]
 cipher[..].IV
 cipher[..].mode
@@ -173,7 +172,7 @@ key[..].keySched
 
 ..blockDecrypt():::EXIT0
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher[..].IV[0] input[..] key[..].keyMaterial key[..].keySched[0] outBuffer[..]
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher cipher[..].IV[0] cipher[..].blockLen input inputLen input[..] key[..].blockLen key[..].keyLen key[..].keyMaterial key[..].keySched[0] outBuffer outBuffer[..] return
 ::Logtable
 ::Logtable[..]
 ::S
@@ -181,7 +180,6 @@ key[..].keySched
 ::iG
 ::iG[..]
 ::rcon
-cipher cipher[..].blockLen input inputLen key[..].blockLen key[..].keyLen outBuffer return
 cipher[..]
 cipher[..].IV
 cipher[..].mode
@@ -192,7 +190,7 @@ key[..].keySched
 
 ..blockEncrypt():::ENTER
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher[..].IV[0] input[..] key[..].keyMaterial key[..].keySched[0] outBuffer[..]
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher cipher[..].IV[0] cipher[..].blockLen input inputLen input[..] key[..].blockLen key[..].keyLen key[..].keyMaterial key[..].keySched[0] outBuffer outBuffer[..]
 ::Logtable
 ::Logtable[..]
 ::S
@@ -200,7 +198,6 @@ key[..].keySched
 ::iG
 ::iG[..]
 ::rcon
-cipher cipher[..].blockLen input inputLen key[..].blockLen key[..].keyLen outBuffer
 cipher[..]
 cipher[..].IV
 cipher[..].mode
@@ -211,7 +208,7 @@ key[..].keySched
 
 ..blockEncrypt():::EXIT0
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher[..].IV[0] input[..] key[..].keyMaterial key[..].keySched[0] outBuffer[..]
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher cipher[..].IV[0] cipher[..].blockLen input inputLen input[..] key[..].blockLen key[..].keyLen key[..].keyMaterial key[..].keySched[0] outBuffer outBuffer[..] return
 ::Logtable
 ::Logtable[..]
 ::S
@@ -219,7 +216,6 @@ key[..].keySched
 ::iG
 ::iG[..]
 ::rcon
-cipher cipher[..].blockLen input inputLen key[..].blockLen key[..].keyLen outBuffer return
 cipher[..]
 cipher[..].IV
 cipher[..].mode
@@ -352,7 +348,7 @@ return
 
 ..rijndaelDecrypt():::ENTER
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockBits keyBits
 ::Logtable
 ::Logtable[..]
 ::S
@@ -364,13 +360,12 @@ return
 ::shifts[..] a rk
 a[..]
 a[..][0]
-blockBits keyBits
 rk[..]
 rk[..][0]
 
 ..rijndaelDecrypt():::EXIT0
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockBits keyBits
 ::Logtable
 ::Logtable[..]
 ::S
@@ -382,7 +377,6 @@ rk[..][0]
 ::shifts[..] a rk
 a[..]
 a[..][0]
-blockBits keyBits
 return
 rk[..]
 rk[..][0]
@@ -424,7 +418,7 @@ rk[..][0]
 
 ..rijndaelEncrypt():::ENTER
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockBits keyBits
 ::Logtable
 ::Logtable[..]
 ::S
@@ -436,13 +430,12 @@ rk[..][0]
 ::shifts[..] a rk
 a[..]
 a[..][0]
-blockBits keyBits
 rk[..]
 rk[..][0]
 
 ..rijndaelEncrypt():::EXIT0
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockBits keyBits
 ::Logtable
 ::Logtable[..]
 ::S
@@ -454,7 +447,6 @@ rk[..][0]
 ::shifts[..] a rk
 a[..]
 a[..][0]
-blockBits keyBits
 return
 rk[..]
 rk[..][0]
@@ -529,7 +521,7 @@ return
 
 rijndaeltest_ref.c.HexToBin():::ENTER
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] binBlock[..] hexBlock[..]
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] binBlock[..] blockLen hexBlock[..]
 ::Logtable
 ::Logtable[..]
 ::S
@@ -538,12 +530,11 @@ rijndaeltest_ref.c.HexToBin():::ENTER
 ::iG[..]
 ::rcon
 binBlock
-blockLen
 hexBlock
 
 rijndaeltest_ref.c.HexToBin():::EXIT0
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] binBlock[..] hexBlock[..]
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] binBlock[..] blockLen hexBlock[..]
 ::Logtable
 ::Logtable[..]
 ::S
@@ -552,7 +543,6 @@ rijndaeltest_ref.c.HexToBin():::EXIT0
 ::iG[..]
 ::rcon
 binBlock
-blockLen
 hexBlock
 
 rijndaeltest_ref.c.blockPrint():::ENTER
@@ -643,7 +633,7 @@ ecbEncryptionFile
 
 rijndaeltest_ref.c.rijndaelCBC_MCT():::ENTER
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] initBlock initIV initKey
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockLength initBlock initIV initKey keyLength
 ::Logtable
 ::Logtable[..]
 ::S
@@ -651,14 +641,13 @@ rijndaeltest_ref.c.rijndaelCBC_MCT():::ENTER
 ::iG
 ::iG[..]
 ::rcon
-blockLength keyLength
 direction
 fp
 fp[..]
 
 rijndaeltest_ref.c.rijndaelCBC_MCT():::EXIT0
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] initBlock initIV initKey
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockLength initBlock initIV initKey keyLength
 ::Logtable
 ::Logtable[..]
 ::S
@@ -666,14 +655,13 @@ rijndaeltest_ref.c.rijndaelCBC_MCT():::EXIT0
 ::iG
 ::iG[..]
 ::rcon
-blockLength keyLength
 direction
 fp
 fp[..]
 
 rijndaeltest_ref.c.rijndaelECB_MCT():::ENTER
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] initBlock initKey
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockLength initBlock initKey keyLength
 ::Logtable
 ::Logtable[..]
 ::S
@@ -681,14 +669,13 @@ rijndaeltest_ref.c.rijndaelECB_MCT():::ENTER
 ::iG
 ::iG[..]
 ::rcon
-blockLength keyLength
 direction
 fp
 fp[..]
 
 rijndaeltest_ref.c.rijndaelECB_MCT():::EXIT0
 ::Alogtable
-::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] initBlock initKey
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockLength initBlock initKey keyLength
 ::Logtable
 ::Logtable[..]
 ::S
@@ -696,7 +683,6 @@ rijndaeltest_ref.c.rijndaelECB_MCT():::EXIT0
 ::iG
 ::iG[..]
 ::rcon
-blockLength keyLength
 direction
 fp
 fp[..]
