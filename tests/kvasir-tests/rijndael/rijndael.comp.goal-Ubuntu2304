@@ -1,0 +1,815 @@
+..AddRoundKey():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] BC a rk
+a[..]
+a[..][0]
+rk[..]
+rk[..][0]
+
+..AddRoundKey():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] BC a rk
+a[..]
+a[..][0]
+rk[..]
+rk[..][0]
+
+..InvMixColumns():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] BC a
+a[..]
+a[..][0]
+
+..InvMixColumns():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] BC a
+a[..]
+a[..][0]
+
+..MixColumns():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] BC a
+a[..]
+a[..][0]
+
+..MixColumns():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] BC a
+a[..]
+a[..][0]
+
+..ShiftRows():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] BC a d
+a[..]
+a[..][0]
+
+..ShiftRows():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] BC a d
+a[..]
+a[..][0]
+
+..Substitution():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] box box[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] BC a
+a[..]
+a[..][0]
+
+..Substitution():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] box box[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] BC a
+a[..]
+a[..][0]
+
+..blockDecrypt():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher[..].IV[0] input[..] key[..].keyMaterial key[..].keySched[0] outBuffer[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+cipher cipher[..].blockLen input inputLen key[..].blockLen key[..].keyLen outBuffer
+cipher[..]
+cipher[..].IV
+cipher[..].mode
+key
+key[..]
+key[..].direction
+key[..].keySched
+
+..blockDecrypt():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher[..].IV[0] input[..] key[..].keyMaterial key[..].keySched[0] outBuffer[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+cipher cipher[..].blockLen input inputLen key[..].blockLen key[..].keyLen outBuffer return
+cipher[..]
+cipher[..].IV
+cipher[..].mode
+key
+key[..]
+key[..].direction
+key[..].keySched
+
+..blockEncrypt():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher[..].IV[0] input[..] key[..].keyMaterial key[..].keySched[0] outBuffer[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+cipher cipher[..].blockLen input inputLen key[..].blockLen key[..].keyLen outBuffer
+cipher[..]
+cipher[..].IV
+cipher[..].mode
+key
+key[..]
+key[..].direction
+key[..].keySched
+
+..blockEncrypt():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher[..].IV[0] input[..] key[..].keyMaterial key[..].keySched[0] outBuffer[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+cipher cipher[..].blockLen input inputLen key[..].blockLen key[..].keyLen outBuffer return
+cipher[..]
+cipher[..].IV
+cipher[..].mode
+key
+key[..]
+key[..].direction
+key[..].keySched
+
+..cipherInit():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] IV cipher cipher[..].IV[0] cipher[..].blockLen
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+cipher[..]
+cipher[..].IV
+cipher[..].mode mode
+
+..cipherInit():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] IV cipher cipher[..].IV[0] cipher[..].blockLen
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+cipher[..]
+cipher[..].IV
+cipher[..].mode mode
+return
+
+..cipherUpdateRounds():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher[..].blockLen input inputLen input[..] key[..].blockLen key[..].keyLen key[..].keyMaterial key[..].keySched[0] outBuffer outBuffer[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+cipher
+cipher[..]
+cipher[..].IV
+cipher[..].IV[0]
+cipher[..].mode
+key rounds
+key[..]
+key[..].direction
+key[..].keySched
+
+..cipherUpdateRounds():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] cipher[..].blockLen input inputLen input[..] key[..].blockLen key[..].keyLen key[..].keyMaterial key[..].keySched[0] outBuffer outBuffer[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+cipher
+cipher[..]
+cipher[..].IV
+cipher[..].IV[0]
+cipher[..].mode
+key rounds
+key[..]
+key[..].direction
+key[..].keySched
+return
+
+..main():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+
+..main():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+return
+
+..makeKey():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] key keyLen keyMaterial key[..].blockLen key[..].keyLen key[..].keyMaterial key[..].keySched[0]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+direction key[..].direction
+key[..]
+key[..].keySched
+
+..makeKey():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] key keyLen keyMaterial key[..].blockLen key[..].keyLen key[..].keyMaterial key[..].keySched[0]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+direction key[..].direction
+key[..]
+key[..].keySched
+return
+
+..rijndaelDecrypt():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] a rk
+a[..]
+a[..][0]
+blockBits keyBits
+rk[..]
+rk[..][0]
+
+..rijndaelDecrypt():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] a rk
+a[..]
+a[..][0]
+blockBits keyBits
+return
+rk[..]
+rk[..][0]
+
+..rijndaelDecryptRound():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockBits keyBits
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] a rk rounds
+a[..]
+a[..][0]
+rk[..]
+rk[..][0]
+
+..rijndaelDecryptRound():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockBits keyBits
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] a rk rounds
+a[..]
+a[..][0]
+return
+rk[..]
+rk[..][0]
+
+..rijndaelEncrypt():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] a rk
+a[..]
+a[..][0]
+blockBits keyBits
+rk[..]
+rk[..][0]
+
+..rijndaelEncrypt():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] a rk
+a[..]
+a[..][0]
+blockBits keyBits
+return
+rk[..]
+rk[..][0]
+
+..rijndaelEncryptRound():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockBits keyBits
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] a rk rounds
+a[..]
+a[..][0]
+rk[..]
+rk[..][0]
+
+..rijndaelEncryptRound():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockBits keyBits
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..] a rk rounds
+a[..]
+a[..][0]
+return
+rk[..]
+rk[..][0]
+
+..rijndaelKeySched():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] W blockBits k k[..] keyBits
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..]
+W[..]
+W[..][0]
+k[..][0]
+
+..rijndaelKeySched():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] W blockBits k k[..] keyBits
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+::shifts
+::shifts[..]
+W[..]
+W[..][0]
+k[..][0]
+return
+
+rijndaeltest_ref.c.HexToBin():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] binBlock[..] hexBlock[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+binBlock
+blockLen
+hexBlock
+
+rijndaeltest_ref.c.HexToBin():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] binBlock[..] hexBlock[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+binBlock
+blockLen
+hexBlock
+
+rijndaeltest_ref.c.blockPrint():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] block blockBits block[..] tag
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+fp
+fp[..]
+
+rijndaeltest_ref.c.blockPrint():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] block blockBits block[..] tag
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+fp
+fp[..]
+
+rijndaeltest_ref.c.makeKATs():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+ivFile
+tblFile
+vkFile
+vtFile
+
+rijndaeltest_ref.c.makeKATs():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+ivFile
+tblFile
+vkFile
+vtFile
+
+rijndaeltest_ref.c.makeMCTs():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+cbcDecryptionFile
+cbcEncryptionFile
+ecbDecryptionFile
+ecbEncryptionFile
+
+rijndaeltest_ref.c.makeMCTs():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+cbcDecryptionFile
+cbcEncryptionFile
+ecbDecryptionFile
+ecbEncryptionFile
+
+rijndaeltest_ref.c.rijndaelCBC_MCT():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] initBlock initIV initKey
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+blockLength keyLength
+direction
+fp
+fp[..]
+
+rijndaeltest_ref.c.rijndaelCBC_MCT():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] initBlock initIV initKey
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+blockLength keyLength
+direction
+fp
+fp[..]
+
+rijndaeltest_ref.c.rijndaelECB_MCT():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] initBlock initKey
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+blockLength keyLength
+direction
+fp
+fp[..]
+
+rijndaeltest_ref.c.rijndaelECB_MCT():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] initBlock initKey
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+blockLength keyLength
+direction
+fp
+fp[..]
+
+rijndaeltest_ref.c.rijndaelIVKAT():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockLength keyLength
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+fp
+fp[..]
+
+rijndaeltest_ref.c.rijndaelIVKAT():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..] blockLength keyLength
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+fp
+fp[..]
+
+rijndaeltest_ref.c.rijndaelTKAT():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+blockLength keyLength
+fp in
+fp[..]
+in[..]
+
+rijndaeltest_ref.c.rijndaelTKAT():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+blockLength keyLength
+fp in
+fp[..]
+in[..]
+
+rijndaeltest_ref.c.rijndaelVKKAT():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+blockLength keyLength
+fp
+fp[..]
+
+rijndaeltest_ref.c.rijndaelVKKAT():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+blockLength keyLength
+fp
+fp[..]
+
+rijndaeltest_ref.c.rijndaelVTKAT():::ENTER
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+blockLength keyLength
+fp
+fp[..]
+
+rijndaeltest_ref.c.rijndaelVTKAT():::EXIT0
+::Alogtable
+::Alogtable[..] ::S[..] ::Si[..] ::rcon[..]
+::Logtable
+::Logtable[..]
+::S
+::Si
+::iG
+::iG[..]
+::rcon
+blockLength keyLength
+fp
+fp[..]
+
