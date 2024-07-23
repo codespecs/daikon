@@ -435,11 +435,10 @@ all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
 	rm -f `find daikon -name "*.class" -print`
-	echo "CLASSPATH = ${CLASSPATH}"
-	echo "DAIKON_CLASSPATH = ${DAIKON_CLASSPATH}"
-	echo "JAVA_RELEASE_NUMBER = ${JAVA_RELEASE_NUMBER}"
-	echo "JAVA_VERSION_STRING_WITH_EA = ${JAVA_VERSION_STRING_WITH_EA}"
-	${JAVAC} -version
+	@echo "CLASSPATH = ${CLASSPATH}"
+	@echo "DAIKON_CLASSPATH = ${DAIKON_CLASSPATH}"
+	@echo "JAVA_RELEASE_NUMBER = ${JAVA_RELEASE_NUMBER}"
+	@echo "JAVA_VERSION_STRING_WITH_EA = ${JAVA_VERSION_STRING_WITH_EA}"
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
 # on some systems chmod with symbolic arguments pays attention to umask.  so use 444 instead of -w
