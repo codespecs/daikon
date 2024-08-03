@@ -1282,7 +1282,8 @@ public final class DCRuntime implements ComparabilityProvider {
         System.out.printf("'%s' ", obj_str(arg));
       }
       System.out.println();
-      System.out.printf("ret_val = %s%nexit_line_number= %d%n%n", ret_val, exit_line_number);
+      System.out.printf(
+          "ret_val = %s%nexit_line_number= %d%n%n", obj_str(ret_val), exit_line_number);
     }
 
     MethodInfo mi = methods.get(mi_index);
@@ -1305,7 +1306,8 @@ public final class DCRuntime implements ComparabilityProvider {
 
     debug_timing.log("process_all_vars for %s%n", mi);
 
-    merge_dv.log("this: %s%n", obj);
+    merge_dv.log("this: %s%n", obj_str(obj));
+
     // For some reason the following line causes DynComp to behave incorrectly.
     // I have not take the time to investigate.
     // merge_dv.log("arguments: %s%n", Arrays.toString(args));
