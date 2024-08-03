@@ -193,8 +193,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     try (ByteArrayInputStream bais = new ByteArrayInputStream(classfileBuffer)) {
       ClassParser parser = new ClassParser(bais, className);
       c = parser.parse();
-    } catch (Exception e) {
-      throw new RuntimeException("Unexpected error", e);
+    } catch (Throwable t) {
+      System.out.printf("Unexpected error %s in transform of %s%n", t, fullClassName);
+      t.printStackTrace();
+      // No changes to the bytecodes
+      return null;
     }
 
     try {
@@ -266,7 +269,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       }
 
     } catch (Throwable e) {
-      System.out.printf("Unexpected error %s in transform of %s", e, fullClassName);
+      System.out.printf("Unexpected error %s in transform of %s%n", e, fullClassName);
       e.printStackTrace();
       // No changes to the bytecodes
       return null;
