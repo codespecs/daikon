@@ -1440,7 +1440,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   public @Nullable DiscardInfo isObviousDynamically(@NonPrototype Invariant this, VarInfo[] vis) {
     assert !Daikon.isInferencing;
     assert vis.length <= 3 : "Unexpected more-than-ternary invariant";
-    if (!ArraysPlume.noDuplicates(vis)) {
+    if (!ArraysPlume.hasNoDuplicates(vis)) {
       log("Two or more variables are equal %s", format());
       return new DiscardInfo(this, DiscardCode.obvious, "Two or more variables are equal");
     }
@@ -1459,7 +1459,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    */
   @Pure
   public boolean isReflexive(@NonPrototype Invariant this) {
-    return !ArraysPlume.noDuplicates(ppt.var_infos);
+    return !ArraysPlume.hasNoDuplicates(ppt.var_infos);
   }
 
   /**
