@@ -10,6 +10,11 @@ import org.plumelib.reflection.Signatures;
 /** Temporary utility about class name formats. */
 public class SignaturesUtil {
 
+  /** Do not instantiate. */
+  private SignaturesUtil() {
+    throw new Error("Do not instantiate");
+  }
+
   /**
    * Convert a field descriptor to a binary name. For example, convert "[Ljava/util/Map$Entry;" to
    * "java.lang.Map$Entry[]" or "I" to "int".
