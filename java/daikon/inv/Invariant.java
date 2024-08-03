@@ -1456,6 +1456,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * <p>Actually, this isn't strictly true: we don't have an invariant "a[] is a palindrome"
    * corresponding to "a[] is the reverse of a[]", for instance.
+   *
+   * @return true if more than one of the variables in the invariant are the same variable
    */
   @Pure
   public boolean isReflexive(@NonPrototype Invariant this) {
