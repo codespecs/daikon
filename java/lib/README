@@ -26,7 +26,7 @@ these .jar files in this directory.
 
 commons-exec-1.3.jar : https://commons.apache.org/proper/commons-exec/
 
-commons-lang3-3..15.0.jar : https://commons.apache.org/proper/commons-lang/
+commons-lang3-3.15.0.jar : https://commons.apache.org/proper/commons-lang/
 
 daikon-plumelib.jar : Contains bcel-util, options, hashmap-util,
   plume-util, and reflection-util, but in package "daikon.plumelib".
