@@ -6,9 +6,10 @@ so that Daikon will run under Java 8.
 bcel-6.5.0.jar : https://repo.maven.apache.org/maven2/org/checkerframework/annotatedlib/bcel
   wget https://repo.maven.apache.org/maven2/org/checkerframework/annotatedlib/bcel/6.5.0/bcel-6.5.0.jar
 
-bcel-util-1.2.2.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/
+bcel-util-1.2.1.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/
+# Version 1.2.2 causes JarJar to crash. :(
   rm -f bcel-util-*.jar
-  VER=1.2.2
+  VER=1.2.1
   wget https://repo.maven.apache.org/maven2/org/plumelib/bcel-util/$VER/bcel-util-$VER.jar
   rm -f daikon-plumelib.jar
   When you update this, remove the old daikon-plumelib.jar then remake it.
