@@ -602,6 +602,10 @@ public final class PPTSLICE1 extends PptSlice {
    */
   public void merge_invariants() {
 
+    boolean debug = parent.name()
+                .startsWith(
+                    "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
+
     if (debugMerge.isLoggable(Level.FINE)) {
       debugMerge.fine("entering merge_invariants for " + name());
     }
@@ -734,6 +738,10 @@ public final class PPTSLICE1 extends PptSlice {
       }
     }
 
+    if (debug) {
+      System.out.println("Found " + all_invs.size() + " invariants to merge");
+      System.out.println(all_invs);
+    }
     log("Found " + all_invs.size() + " invariants to merge");
     if (debugMerge.isLoggable(Level.FINE) && (valid_child_count == 0)) {
       debugMerge.fine("-- No valid children found");
@@ -757,6 +765,10 @@ public final class PPTSLICE1 extends PptSlice {
         inv_map.put(imatch, invs);
       }
       invs.add(inv);
+    }
+
+    if (debug) {
+      System.out.println("inv_map = " + inv_map);
     }
 
     // Attempt to create a parent invariant for each invariant that
@@ -783,12 +795,18 @@ public final class PPTSLICE1 extends PptSlice {
       }
       if (child_invs.size() == valid_child_count) {
         Invariant first = child_invs.get(0);
+        if (debug) {
+          System.out.printf("Attempting merge of %s invariants into ppt %s%n", child_invs.size(), name());
+        }
         if (Debug.logOn()) {
           first.log("Attempting merge of %s invariants into ppt %s", child_invs.size(), name());
         }
         Invariant parent_inv = first.merge(child_invs, this);
         if (parent_inv != null) {
           invs.add(parent_inv);
+          if (debug) {
+            System.out.printf("Merge successful of %s into %s%n", parent_inv.format(), name());
+          }
           if (Debug.logOn()) {
             parent_inv.log("Merge successful of %s into %s", parent_inv.format(), name());
           }
@@ -796,6 +814,11 @@ public final class PPTSLICE1 extends PptSlice {
       } else {
         if (Debug.logOn()) {
           Invariant inv = child_invs.get(0);
+          if (debug) {
+            System.out.printf(
+              "Not merging invariant into %s, Found %s child invariants in %s children%n",
+              name(), child_invs.size(), valid_child_count);
+          }
           inv.log(
               "Not merging invariant into %s, Found %s child invariants in %s children",
               name(), child_invs.size(), valid_child_count);
