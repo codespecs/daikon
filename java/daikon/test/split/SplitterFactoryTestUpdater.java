@@ -156,7 +156,7 @@ public class SplitterFactoryTestUpdater {
     // file.renameTo(to) fails if the two files are on different file systems
     // (e.g., /tmp and /scratch may be different).
     // So read and write the file directly rather than using renameTo().
-    FilesPlume.writeFile(to, FilesPlume.readFile(from));
+    FilesPlume.writeString(to, FilesPlume.readString(from.toPath()));
   }
 
   /** Writes the new code for "SplitterFactoryTest.java". */
