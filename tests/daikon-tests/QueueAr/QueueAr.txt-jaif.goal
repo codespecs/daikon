@@ -12,7 +12,7 @@ class QueueAr : // 14931/- obj/class samples
     return:
     parameter #0 :  // capacity
   method dequeue()Ljava/lang/Object; : // 536 samples
-    return:
+    return: 
   method dequeueAll()V : // 4 samples
     return:
   method enqueue(Ljava/lang/Object;)V : // 673 samples
@@ -21,9 +21,9 @@ class QueueAr : // 14931/- obj/class samples
   method getFront()Ljava/lang/Object; : // 1231 samples
     return: @Nullable
   method isEmpty()Z : // 3070 samples
-    return:
+    return: 
   method isFull()Z : // 1904 samples
-    return:
+    return: 
   method makeEmpty()V : // 29 samples
     return:
 
