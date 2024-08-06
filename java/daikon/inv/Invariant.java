@@ -1440,7 +1440,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   public @Nullable DiscardInfo isObviousDynamically(@NonPrototype Invariant this, VarInfo[] vis) {
     assert !Daikon.isInferencing;
     assert vis.length <= 3 : "Unexpected more-than-ternary invariant";
-    if (!ArraysPlume.noDuplicates(vis)) {
+    if (!ArraysPlume.hasNoDuplicates(vis)) {
       log("Two or more variables are equal %s", format());
       return new DiscardInfo(this, DiscardCode.obvious, "Two or more variables are equal");
     }
@@ -1456,10 +1456,12 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * <p>Actually, this isn't strictly true: we don't have an invariant "a[] is a palindrome"
    * corresponding to "a[] is the reverse of a[]", for instance.
+   *
+   * @return true if more than one of the variables in the invariant are the same variable
    */
   @Pure
   public boolean isReflexive(@NonPrototype Invariant this) {
-    return !ArraysPlume.noDuplicates(ppt.var_infos);
+    return !ArraysPlume.hasNoDuplicates(ppt.var_infos);
   }
 
   /**

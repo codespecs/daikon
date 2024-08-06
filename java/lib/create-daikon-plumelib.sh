@@ -5,11 +5,16 @@ set -e
 # Echo commands before executing them
 set -x
 
-java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt bcel-util-*.jar daikon-bcel-util.jar
-java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt hashmap-util-*.jar daikon-hashmap-util.jar
-java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt options-*.jar daikon-options.jar
-java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt plume-util-*.jar daikon-plume-util.jar
-java -cp "$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar org.pantsbuild.jarjar.Main process daikon-plumelib-rules.txt reflection-util-*.jar daikon-reflection-util.jar
+# JARJAR_JARFILE="$HOME"/java/jarjar-pantsbuild/dist/jarjar.jar
+# JARJAR_MAINCLASS=org.pantsbuild.jarjar.Main
+JARJAR_JARFILE="$HOME"/java/jarjar-shevek/jarjar-command-all.jar
+JARJAR_MAINCLASS=com.tonicsystems.jarjar.Main
+
+java -cp "$JARJAR_JARFILE" "$JARJAR_MAINCLASS" --mode process --rules daikon-plumelib-rules.txt bcel-util-*.jar --output daikon-bcel-util.jar
+java -cp "$JARJAR_JARFILE" "$JARJAR_MAINCLASS" --mode process --rules daikon-plumelib-rules.txt hashmap-util-*.jar --output daikon-hashmap-util.jar
+java -cp "$JARJAR_JARFILE" "$JARJAR_MAINCLASS" --mode process --rules daikon-plumelib-rules.txt options-*.jar --output daikon-options.jar
+java -cp "$JARJAR_JARFILE" "$JARJAR_MAINCLASS" --mode process --rules daikon-plumelib-rules.txt plume-util-*.jar --output daikon-plume-util.jar
+java -cp "$JARJAR_JARFILE" "$JARJAR_MAINCLASS" --mode process --rules daikon-plumelib-rules.txt reflection-util-*.jar --output daikon-reflection-util.jar
 mkdir -p daikonplume
 cd daikonplume
 jar -xf ../daikon-bcel-util.jar

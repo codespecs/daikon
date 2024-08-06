@@ -226,6 +226,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.framework.qual.Unused;
+import daikon.SignaturesUtil;
 import org.plumelib.reflection.Signatures;
 import org.plumelib.util.ArraysPlume;
 import org.plumelib.util.Intern;
@@ -664,7 +665,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
             return varname + " == null";
           } else {
             if (str.startsWith("[")) {
-              str = Signatures.fieldDescriptorToBinaryName(str);
+              @SuppressWarnings("signature")
+              String tempStr = Signatures.fieldDescriptorToBinaryName(str);
+              str = tempStr;
             }
             if (PrintInvariants.dkconfig_static_const_infer) {
               PptTopLevel pptt = ppt.parent;
@@ -726,7 +729,9 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     }
     String type_str;
     if (str.startsWith("[")) {
-      type_str = Signatures.fieldDescriptorToBinaryName(str);
+      @SuppressWarnings("signature")
+      String temp_type_str = Signatures.fieldDescriptorToBinaryName(str);
+      type_str = temp_type_str;
     } else {
       type_str = str;
       if (type_str.startsWith("\"") && type_str.endsWith("\"")) {
@@ -1163,7 +1168,9 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
           result += varname + " == null";
         } else {
           if (str.startsWith("[")) {
-            str = Signatures.fieldDescriptorToBinaryName(str);
+            @SuppressWarnings("signature")
+            String tempStr = Signatures.fieldDescriptorToBinaryName(str);
+            str = tempStr;
           }
           // ".class" (which is a suffix for a type name) and not
           // getClassSuffix (which is a suffix for an expression).
@@ -1232,7 +1239,9 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
         if (value == null) {
           // do nothing
         } else if (value.startsWith("[")) {
-          value = Signatures.fieldDescriptorToBinaryName(value);
+          @SuppressWarnings("signature")
+          String tempValue = Signatures.fieldDescriptorToBinaryName(value);
+          value = tempValue;
         } else if (value.startsWith("\"") && value.endsWith("\"")) {
           value = value.substring(1, value.length()-1);
         }

@@ -1,6 +1,7 @@
 package daikon.tools.jtb;
 
 import daikon.*;
+import daikon.SignaturesUtil;
 import daikon.inv.Equality;
 import daikon.inv.Invariant;
 import daikon.inv.filter.*;
@@ -26,7 +27,6 @@ import jtb.visitor.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
-import org.plumelib.reflection.Signatures;
 import org.plumelib.util.StringsPlume;
 
 /** Static methods for manipulating the AST. */
@@ -1389,7 +1389,7 @@ public class Ast {
     if (c.isPrimitive()) {
       return c.getName();
     } else if (c.isArray()) {
-      return Signatures.fieldDescriptorToBinaryName(c.getName());
+      return SignaturesUtil.classGetNameToBinaryName(c.getName());
     } else {
       return c.getName();
     }

@@ -986,7 +986,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
     if (seq == null) {
       return false;
     }
-    return ArraysPlume.noDuplicates(seq);
+    return ArraysPlume.hasNoDuplicates(seq);
   }
 
  /** Returns true iff elt is in array arr. */
