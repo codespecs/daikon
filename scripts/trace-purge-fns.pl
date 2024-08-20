@@ -10,12 +10,20 @@
 # This script does not operate by paragraphs, because the regexp
 # should only apply to the first line.
 
+my $debug;
+my $discard;
+my $regexp;
+my $discarding;
+my $ppt;
+my $firstppt;
+
 BEGIN {
   $debug = 0;
   # $debug = 1;
 
   $discard = 1;
   $regexp = shift(@ARGV);
+  if (! defined $regexp) { die "Not enough arguments"; }
   if ($regexp eq "-v") {
     $discard = 0;
     $regexp = shift(@ARGV);

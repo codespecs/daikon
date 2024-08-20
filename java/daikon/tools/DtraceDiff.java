@@ -2,6 +2,7 @@
 
 package daikon.tools;
 
+import static daikon.VarInfo.VarFlags;
 import static daikon.tools.nullness.NullnessUtil.*;
 
 import daikon.Daikon;
@@ -59,6 +60,14 @@ public class DtraceDiff {
           "      Specify a configuration option ",
           "See the Daikon manual for more information.");
 
+  /** Set this flag true for debugging output. */
+  private static boolean debug = false;
+
+  /**
+   * Entry point for DtraceDiff program.
+   *
+   * @param args command-line arguments, like those of {@link #mainHelper} and {@link #main}
+   */
   public static void main(String[] args) {
     try {
       mainHelper(args);
@@ -265,20 +274,22 @@ public class DtraceDiff {
 
         while (true) {
           // *** should do some kind of progress bar here?
-          // read from dtracefile1 until we get a data trace record or EOF
+          // Read from dtracefile1 until we get a sample record or a decl record or an EOF.
           while (true) {
             FileIO.read_data_trace_record_setstate(state1);
-            if (state1.rtype == FileIO.RecordType.SAMPLE) {
+            if ((state1.rtype == FileIO.RecordType.SAMPLE)
+                || (state1.rtype == FileIO.RecordType.DECL)) {
               break;
             } else if ((state1.rtype == FileIO.RecordType.EOF)
                 || (state1.rtype == FileIO.RecordType.TRUNCATED)) {
               break;
             }
           }
-          // read from dtracefile2 until we get a data trace record or EOF
+          // Read from dtracefile2 until we get a sample record or a decl record or an EOF.
           while (true) {
             FileIO.read_data_trace_record_setstate(state2);
-            if (state2.rtype == FileIO.RecordType.SAMPLE) {
+            if ((state2.rtype == FileIO.RecordType.SAMPLE)
+                || (state2.rtype == FileIO.RecordType.DECL)) {
               break;
             } else if ((state2.rtype == FileIO.RecordType.EOF)
                 || (state2.rtype == FileIO.RecordType.TRUNCATED)) {
@@ -288,11 +299,16 @@ public class DtraceDiff {
 
           // things had better be the same
           if (state1.rtype == state2.rtype) {
+            @SuppressWarnings("nullness") // dependent:  state1 is ParseState
+            @NonNull PptTopLevel ppt1 = state1.ppt;
+            if (ppt1 == null) {
+              // Null means the ppt should be excluded because it matches
+              // the omit_regexp or doesn't match the ppt_regexp.
+              continue;
+            }
+            @SuppressWarnings("nullness") // dependent:  state2 is ParseState
+            @NonNull PptTopLevel ppt2 = state2.ppt;
             if (state1.rtype == FileIO.RecordType.SAMPLE) {
-              @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
-              @NonNull PptTopLevel ppt1 = state1.ppt;
-              @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
-              @NonNull PptTopLevel ppt2 = state2.ppt;
               @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
               @NonNull ValueTuple vt1 = state1.vt;
               @SuppressWarnings("nullness") // dependent:  state2 is SAMPLE
@@ -348,9 +364,32 @@ public class DtraceDiff {
                 ppt_var_value_error(
                       vis1[i], val1, state1, dtracefile1, vis2[i], val2, state2, dtracefile2);
               }
+            } else if (state1.rtype == FileIO.RecordType.DECL) {
+              // compare decls
+              VarInfo[] vis1 = ppt1.var_infos;
+              VarInfo[] vis2 = ppt2.var_infos;
+              if (!ppt1.name.equals(ppt2.name)) {
+                ppt_mismatch_error(state1, dtracefile1, state2, dtracefile2);
+              }
+              if (ppt1.num_declvars != ppt2.num_declvars) {
+                ppt_decl_error(state1, dtracefile1, state2, dtracefile2);
+              }
+              // check to see that the decls match
+              for (int i = 0; i < ppt1.num_declvars; i++) {
+                if (!compare_varinfos(vis1[i], vis2[i])) {
+                  if (!debug) {
+                    ppt_var_decl_error(vis1[i], state1, dtracefile1, vis2[i], state2, dtracefile2);
+                  } else {
+                    System.out.printf("ERROR: dtrace decl mismatch within: %s%n", ppt1.name);
+                    printVarinfo(vis1[i]);
+                    printVarinfo(vis2[i]);
+                  }
+                }
+              }
             } else {
               return; // EOF on both files ==> normal return
             }
+            // state1.rtype != state2.rtype
           } else if ((state1.rtype == FileIO.RecordType.TRUNCATED)
               || (state2.rtype == FileIO.RecordType.TRUNCATED))
             return; // either file reached truncation limit, return quietly
@@ -380,6 +419,64 @@ public class DtraceDiff {
     }
   }
 
+  /**
+   * Compare two VarInfos for equality. Note there are many fields not compared: comparability,
+   * constant, exclosing-var and parent, for example.
+   *
+   * @param vi1 a VarInfo to compare
+   * @param vi2 a VarInfo to compare
+   * @return true if the VarInfos match
+   */
+  private static boolean compare_varinfos(VarInfo vi1, VarInfo vi2) {
+    if (!vi1.name().equals(vi2.name())) {
+      return false;
+    }
+    if (!vi1.str_name().equals(vi2.str_name())) {
+      return false;
+    }
+    if (!(vi1.var_kind == vi2.var_kind)) {
+      return false;
+    }
+    if (!vi1.type.equals(vi2.type)) {
+      return false;
+    }
+    if (!vi1.file_rep_type.equals(vi2.file_rep_type)) {
+      return false;
+    }
+    if (!vi1.var_flags.equals(vi2.var_flags)) {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Used for debugging -- prints some of a VarInfo fields. Note there are many fields not printed:
+   * comparability, constant, exclosing-var and parent, for example.
+   *
+   * @param vi the VarInfo to print
+   */
+  private static void printVarinfo(VarInfo vi) {
+    System.out.printf("variable %s%n", vi.str_name());
+    System.out.printf("  var-kind %s%n", vi.var_kind);
+    System.out.printf("  dec-type %s%n", vi.type);
+    System.out.printf("  rep-type %s%n", vi.file_rep_type);
+    if (!vi.var_flags.isEmpty()) {
+      System.out.printf("  flags");
+      for (VarFlags flag : vi.var_flags) {
+        System.out.printf(" %s", flag.name().toLowerCase());
+      }
+      System.out.printf("%n");
+    }
+  }
+
+  /**
+   * Compare two VarInfo fields for equality.
+   *
+   * @param vi a VarInfo that holds val1
+   * @param val1 a VarInfo field to compare
+   * @param val2 a VarInfo field to compare
+   * @return true if the fields match
+   */
   private static boolean values_are_equal(VarInfo vi, Object val1, Object val2) {
     ProglangType type = vi.file_rep_type;
     // System.out.printf("values_are_equal type = %s%n", type);

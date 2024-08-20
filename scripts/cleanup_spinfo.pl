@@ -22,15 +22,15 @@ nextline:
 	} else {
 	    # we don't want splitting conditions comparing a variable against a
 	    # number, except if the number is -2, -1 , 0, 1, 2,
-	    $afterString = $_;
+	    my $afterString = $_;
 	    while ($afterString =~ /^.*?(\d+)/) {
 		$afterString = $';
-		$number = $1;
+		my $number = $1;
 		if ($number !~ /^\s*-?(0|1|2)\s*$/) {
 		    next nextline;
 		}
 	    }
-	    $hashkey = $_;
+	    my $hashkey = $_;
 	    $hashkey =~ s/\s*//;
 
 	    if ( ! exists $all_conditions{$hashkey} ) {

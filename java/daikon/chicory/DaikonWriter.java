@@ -1,7 +1,7 @@
 package daikon.chicory;
 
 import daikon.Chicory;
-import daikon.plumelib.reflection.Signatures;
+import daikon.SignaturesUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -137,10 +137,11 @@ public abstract class DaikonWriter {
   }
 
   /**
-   * Constructs the program point name (which includes the point string at the end)
+   * Constructs the program point name. It includes {@code point} at the end, after ":::".
    *
    * @param member reflection object for the method/constructor
    * @param point usually "ENTER" or "EXIT"
+   * @return the program point name
    */
   private static String methodName(Member member, String point) {
     String fullname;
@@ -161,7 +162,7 @@ public abstract class DaikonWriter {
         arg_str += ", ";
       }
       if (arg.isArray()) {
-        arg_str += Signatures.fieldDescriptorToBinaryName(arg.getName());
+        arg_str += SignaturesUtil.classGetNameToBinaryName(arg.getName());
       } else {
         arg_str += arg.getName();
       }

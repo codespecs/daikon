@@ -7,17 +7,17 @@
 
 # Cannibalized from dfec-to-kvasir.py so most of these comments
 # will make absolutely no sense!!!
+
+import re
 import sys
 
 # Process command-line args:
-kvasirDeclsF = open(sys.argv[1], 'r')
+kvasirDeclsF = open(sys.argv[1], "r")
 kvasirDeclsAllLines = [line.strip() for line in kvasirDeclsF.readlines()]
 kvasirDeclsF.close()
 
 
-
-import re
-DfecGlobalRE = re.compile('^::')
+DfecGlobalRE = re.compile("^::")
 
 # Dfec and Kvasir variable differences:
 
@@ -38,32 +38,36 @@ DfecGlobalRE = re.compile('^::')
 # Kvasir uses the bracket notation (unless disambiguation
 # information is provided)
 
+
 # Converts variable var's name from Dfec conventions
 # to Kvasir conventions and returns it as the result
 def ConvertDfecVarName(var):
-    globalConverted = DfecGlobalRE.sub('/', var)
-    return globalConverted.replace('->', '[].')
+    globalConverted = DfecGlobalRE.sub("/", var)
+    return globalConverted.replace("->", "[].")
+
 
 # Ok, we are going to just strip off everything before
 # the '/', if there is one, because Dfec does not print
 # out the function name for function-static variables
 # e.g. 'flex_c@epsclosure/did_stk_init' becomes '/did_stk_init'
 def ConvertKvasirVarName(var):
-    if var[0] == '/':
+    if var[0] == "/":
         return var
-    elif '/' in var:
-        return '/' + var.split('/')[1]
+    elif "/" in var:
+        return "/" + var.split("/")[1]
     else:
         return var
+
 
 # Kvasir does not support comparability for array indices
 # so strip those off.
 # e.g. '104[105]' becomes '104'
 def StripCompNumber(comp_num):
-    if '[' in comp_num:
-        return comp_num[:comp_num.find('[')]
+    if "[" in comp_num:
+        return comp_num[: comp_num.find("[")]
     else:
         return comp_num
+
 
 # Dfec and Kvasir program point name differences:
 
@@ -91,46 +95,47 @@ def StripCompNumber(comp_num):
 # Input:  'std.ccladd(int;int;)void:::ENTER'
 # Output: ('ccladd', 'ENTER')
 
+
 def StripDfecPptName(ppt):
-    fnname, enterOrExit = ppt.split(':::')
-    if fnname[:4] == 'std.':
+    fnname, enterOrExit = ppt.split(":::")
+    if fnname[:4] == "std.":
         fnname = fnname[4:]
     # Find the first '(' and end the function name there
-    fnname = fnname[:fnname.index('(')]
+    fnname = fnname[: fnname.index("(")]
 
     # Just return 'ENTER' or 'EXIT' with no numbers
     # (This means that we can only keep one exit ppt)
-    if enterOrExit[1] == 'N':
-        enterOrExit = 'ENTER'
+    if enterOrExit[1] == "N":
+        enterOrExit = "ENTER"
     else:
-        enterOrExit = 'EXIT'
+        enterOrExit = "EXIT"
 
     # Return a pair of the function name and 'ENTER' or 'EXITxxx'
     return (fnname, enterOrExit)
 
 
 def StripKvasirPptName(ppt):
-    fnname, enterOrExit = ppt.split(':::')
+    fnname, enterOrExit = ppt.split(":::")
 
     # For globals, grab everything from '..' to '('
     # e.g. for '..main():::ENTER'
     # we want 'main'
-    if fnname[:2] == '..':
-        fnname = fnname[2:fnname.find('(')]
+    if fnname[:2] == "..":
+        fnname = fnname[2 : fnname.find("(")]
 
     # For file-static names, we need to take everything between
     # the LAST period ('.') and the '('
     # e.g. for 'flex.c.yy_push_state():::EXIT0',
     # we want 'yy_push_state'
     else:
-        fnname = fnname[fnname.rfind('.')+1:fnname.find('(')]
+        fnname = fnname[fnname.rfind(".") + 1 : fnname.find("(")]
 
     # Just return 'ENTER' or 'EXIT' with no numbers
     # (This means that we can only keep one exit ppt)
-    if enterOrExit[1] == 'N':
-        enterOrExit = 'ENTER'
+    if enterOrExit[1] == "N":
+        enterOrExit = "ENTER"
     else:
-        enterOrExit = 'EXIT'
+        enterOrExit = "EXIT"
 
     # Return a pair of the function name and 'ENTER' or 'EXITxxx'
     return (fnname, enterOrExit)
@@ -147,7 +152,8 @@ def StripKvasirPptName(ppt):
 class DeclsState:
     Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
 
-curVarMap = 0 # The current variable map
+
+curVarMap = 0  # The current variable map
 curVarName = ""
 
 # Key: program point name (stripped using StripKvasirPptName)
@@ -159,9 +165,7 @@ KvasirPptMap = {}
 myState = DeclsState.Uninit
 
 for line in kvasirDeclsAllLines:
-
     if myState == DeclsState.Uninit:
-
         # The program point name always follows the
         # line called "DECLARE"
         if line == "DECLARE":
@@ -183,7 +187,7 @@ for line in kvasirDeclsAllLines:
             myState = DeclsState.DecType
 
     elif myState == DeclsState.DecType:
-#        curVarList[-1].append(line)
+        #        curVarList[-1].append(line)
         myState = DeclsState.RepType
 
     elif myState == DeclsState.RepType:
@@ -191,7 +195,7 @@ for line in kvasirDeclsAllLines:
         myState = DeclsState.CompNum
 
     elif myState == DeclsState.CompNum:
-#        curVarList[-1].append(line)
+        #        curVarList[-1].append(line)
 
         # Assume we are gonna read another variable.
         # When we actually read the subsequent line,
@@ -226,7 +230,7 @@ def processPpt(pptName, varInfo):
             # and content of strings
             varToLookup = varName
             if "java.lang.String" in repType:
-                varToLookup += '[]'
+                varToLookup += "[]"
 
             varToLookup = ConvertKvasirVarName(varToLookup)
 
@@ -234,8 +238,13 @@ def processPpt(pptName, varInfo):
                 stuff = varInfo[varToLookup]
                 print(varName)
 
-                if repType[-2:] == '[]' and stuff[0][0] != '[' and stuff[0] != "uninit" and stuff[0] != "nonsensical":
-                    print('[', stuff[0], ']')
+                if (
+                    repType[-2:] == "[]"
+                    and stuff[0][0] != "["
+                    and stuff[0] != "uninit"
+                    and stuff[0] != "nonsensical"
+                ):
+                    print("[", stuff[0], "]")
                 else:
                     print(stuff[0])
 
@@ -251,6 +260,7 @@ def processPpt(pptName, varInfo):
         # Blank line ends this ppt
         print()
 
+
 # .dtrace States:
 # About to read in ...
 # 0 = program point name or junk (uninit)
@@ -260,6 +270,7 @@ def processPpt(pptName, varInfo):
 # 4 = Ignore nonce
 class DtraceState:
     Uninit, VarName, Value, Modbit, IgnoreNonce = list(range(5))
+
 
 dState = DtraceState.Uninit
 
@@ -274,12 +285,12 @@ curVarInfo = None
 
 # This is shorthand for xreadlines so that it doesn't have to read the
 # entire file in at once, which is crucial for huge examples:
-for line in open(sys.argv[2], 'r'):
+for line in open(sys.argv[2], "r"):
     line = line.strip()
 
     if dState == DtraceState.Uninit:
         # Match program point name with ':::ENTER' or ':::EXIT'
-        if ':::ENTER' in line or ':::EXIT' in line:
+        if ":::ENTER" in line or ":::EXIT" in line:
             curPptName = line
             dState = DtraceState.VarName
 
@@ -488,7 +499,6 @@ for line in open(sys.argv[2], 'r'):
 ###print '# Dfec ppts:', len(DfecPptMap.keys())
 ###print '# Kvasir ppts:', len(KvasirPptMap.keys())
 ###print '# Common ppts:', len(ResultMap.keys())
-
 
 
 ##for f in allDeclsFiles:

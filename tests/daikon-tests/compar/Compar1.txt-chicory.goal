@@ -1,8 +1,8 @@
 // Declarations for misc.Compar1
-// Declarations written Thu Jun 04 13:31:10 PDT 2015
+// Declarations written by Chicory 2023-12-13T14:11:21.409
 
 decl-version 2.0
-var-comparability none
+var-comparability implicit
 
 ppt misc.Compar1.Compar1():::ENTER
 ppt-type enter
@@ -11,36 +11,36 @@ ppt misc.Compar1.Compar1():::EXIT4
 ppt-type subexit
 parent parent misc.Compar1:::OBJECT 1
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type misc.Compar1
   rep-type hashcode
-  flags is_param
-  comparability 22
+  flags is_param non_null
+  comparability 2
   parent misc.Compar1:::OBJECT 1
 
 ppt misc.Compar1.main(java.lang.String[]):::ENTER
 ppt-type enter
 variable args
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.String[]
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable args.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var args
   dec-type java.lang.Class
   rep-type java.lang.String
   function-args args
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1
 variable args[..]
-  var-kind array 
+  var-kind array
   enclosing-var args
   array 1
   dec-type java.lang.String[]
   rep-type hashcode[]
-  comparability 22
+  comparability 3[5]
 variable args[..].toString
   var-kind function toString()
   enclosing-var args[..]
@@ -49,31 +49,31 @@ variable args[..].toString
   rep-type java.lang.String[]
   function-args args[]
   flags synthetic to_string
-  comparability 22
+  comparability 4[6]
 
 ppt misc.Compar1.main(java.lang.String[]):::EXIT19
 ppt-type subexit
 variable args
-  var-kind variable 
+  var-kind variable
   dec-type java.lang.String[]
   rep-type hashcode
   flags is_param
-  comparability 22
+  comparability 2
 variable args.getClass().getName()
   var-kind function getClass().getName()
   enclosing-var args
   dec-type java.lang.Class
   rep-type java.lang.String
   function-args args
-  flags synthetic classname
-  comparability 22
+  flags synthetic classname non_null
+  comparability 1
 variable args[..]
-  var-kind array 
+  var-kind array
   enclosing-var args
   array 1
   dec-type java.lang.String[]
   rep-type hashcode[]
-  comparability 22
+  comparability 3[5]
 variable args[..].toString
   var-kind function toString()
   enclosing-var args[..]
@@ -82,76 +82,76 @@ variable args[..].toString
   rep-type java.lang.String[]
   function-args args[]
   flags synthetic to_string
-  comparability 22
+  comparability 4[6]
 
 ppt misc.Compar1.bar(int,\_int,\_int,\_int):::ENTER
 ppt-type enter
 variable i
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable j
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable k
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable l
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt misc.Compar1.bar(int,\_int,\_int,\_int):::EXIT29
 ppt-type subexit
 variable i
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable j
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable k
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable l
-  var-kind variable 
+  var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt misc.Compar1:::OBJECT
 ppt-type object
 variable this
-  var-kind variable 
+  var-kind variable
   dec-type misc.Compar1
   rep-type hashcode
-  flags is_param
-  comparability 22
+  flags is_param non_null
+  comparability 2
 
 misc.Compar1.main(java.lang.String[]):::ENTER
 this_invocation_nonce
 0
 args
-1221210767
+1418428263
 1
 args.getClass().getName()
 "java.lang.String[]"
@@ -3367,7 +3367,7 @@ misc.Compar1.main(java.lang.String[]):::EXIT19
 this_invocation_nonce
 0
 args
-1221210767
+1418428263
 1
 args.getClass().getName()
 "java.lang.String[]"

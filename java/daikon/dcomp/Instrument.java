@@ -132,6 +132,11 @@ public class Instrument implements ClassFileTransformer {
         }
       }
 
+      if (className.contains("/$Proxy")) {
+        debug_transform.log("Skipping proxy class %s%n", className);
+        return null;
+      }
+
       if (className.equals("java/lang/DCRuntime")) {
         debug_transform.log("Skipping special DynComp runtime class %s%n", className);
         return null;

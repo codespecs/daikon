@@ -21,6 +21,7 @@ JAVAC ?= javac
 JAVADOC ?= javadoc
 JAR ?= jar
 
+JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
 ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
   JAVA8 := 1
@@ -30,7 +31,7 @@ else
   JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
 endif
 
-ifeq (${JAVA_RELEASE_NUMBER}, 21)
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
   LINT_THIS_ESCAPE=-Xlint:-this-escape
 endif
 
@@ -417,7 +418,8 @@ all_stop_on_error:
 ifneq ($(shell ls ../.git 2>/dev/null),)
 	$(MAKE) -C .. git-hooks
 endif
-	$(MAKE) --stop all_directly junit
+	$(MAKE) --stop all_directly
+	$(MAKE) junit
 
 ## In general, don't use this; it misses some files
 all_via_daikon: chicory daikon/Daikon.class daikon/diff/Diff.class
@@ -433,8 +435,10 @@ all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
 	rm -f `find daikon -name "*.class" -print`
-	echo "CLASSPATH = ${CLASSPATH}"
-	echo "DAIKON_CLASSPATH = ${DAIKON_CLASSPATH}"
+	@echo "CLASSPATH = ${CLASSPATH}"
+	@echo "DAIKON_CLASSPATH = ${DAIKON_CLASSPATH}"
+	@echo "JAVA_RELEASE_NUMBER = ${JAVA_RELEASE_NUMBER}"
+	@echo "JAVA_VERSION_STRING_WITH_EA = ${JAVA_VERSION_STRING_WITH_EA}"
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
 # on some systems chmod with symbolic arguments pays attention to umask.  so use 444 instead of -w
@@ -810,7 +814,7 @@ endif
 # Note about CHECKER_ARGS: if this contains any -Alint option, it will
 # override (not augment) any other use of -Alint in this Makefile.
 # "-proc:only" prevents generation of .class files (so generated classfiles are
-# version 8 rather than version 9).
+# version 8 rather than version 9, and so typecheck jobs can be run in parallel).
 # JAVACHECK_EXTRA_ARGS is set only by the user (and is currently used by Travis).
 CHECKER_ARGS_ALL_JDK_VERSIONS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -Aversion -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -AwarnRedundantAnnotations -XDignore.symbol.file -Xlint:deprecation -proc:only -processorpath ${CHECKERFRAMEWORK_JAR} ${JAVACHECK_EXTRA_ARGS}
 ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
@@ -871,22 +875,35 @@ show_nullness_java_files:
 ## TODO: Reinstate these dependencies later:  typecheck-prototype typecheck-vindex
 # Check is in two parts because Travis won't run jobs longer than 50 minutes.
 # Index Checker takes much longer than any other checker.
-typecheck-part1: typecheck-formatter typecheck-index typecheck-interning typecheck-nullness
-typecheck-part2: typecheck-lock typecheck-regex typecheck-resourceleak typecheck-signature typecheck-signedness
-typecheck-all: typecheck-part1 typecheck-part2
+# It is essential that "compile" completes before any typechecking commences.
+typecheck-part1: ${ALL_GENERATED_FILES} compile compile-typequals
+	$(MAKE) typecheck-part1-nocompile
+typecheck-part1-nocompile: typecheck-formatter-nocompile typecheck-index-nocompile typecheck-interning-nocompile typecheck-nullness
+typecheck-part2: ${ALL_GENERATED_FILES} compile
+	$(MAKE) typecheck-part2-nocompile
+typecheck-part2-nocompile: typecheck-lock-nocompile typecheck-regex-nocompile typecheck-resourceleak-nocompile typecheck-signature-nocompile typecheck-signedness-nocompile
+typecheck-all: ${ALL_GENERATED_FILES} compile
+	$(MAKE) typecheck-all-nocompile
+typecheck-all-nocompile: typecheck-part1 typecheck-part2
 typecheck: typecheck-all
 
 typecheck-formatter: ${ALL_GENERATED_FILES} compile
+	$(MAKE) typecheck-formatter-nocompile
+typecheck-formatter-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 typecheck-index: ${INDEX_JAVA_FILES} compile
+	$(MAKE) typecheck-index-nocompile
+typecheck-index-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_JAVA_FILES}
 
 # Run the index checker on all Java files, not just those in the daikon package.
 # For instance, this includes jtb, which is not annotated with @Interned.
 typecheck-index-all: ${ALL_GENERATED_FILES} compile
+	$(MAKE) typecheck-index-all-nocompile
+typecheck-index-all-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
@@ -898,12 +915,16 @@ typecheck-index-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_ONEFILE}
 
 typecheck-interning: ${INTERNING_JAVA_FILES} compile
+	$(MAKE) typecheck-interning-nocompile
+typecheck-interning-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_JAVA_FILES}
 
 # Run the interning checker on all Java files, not just those in the daikon package.
 # For instance, this includes jtb, which is not annotated with @Interned.
 typecheck-interning-all: ${ALL_GENERATED_FILES} compile
+	$(MAKE) typecheck-interning-all-nocompile
+typecheck-interning-all-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
@@ -915,10 +936,14 @@ typecheck-interning-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_ONEFILE}
 
 typecheck-lock: ${ALL_GENERATED_FILES} compile
+	$(MAKE) typecheck-lock-nocompile
+typecheck-lock-nocompile:
 	@echo ${JAVAC_COMMAND} ${CHECKER_ARGS} ${JAVAC_LOCK_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_LOCK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 typecheck-nullness: compile compile-typequals
+	$(MAKE) typecheck-nullness-nocompile
+typecheck-nullness-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
@@ -935,22 +960,32 @@ typecheck-nullness-onefile-norecompile:
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_ONEFILE}
 
 typecheck-prototype: compile compile-typequals
+	$(MAKE) typecheck-prototype-nocompile
+typecheck-prototype-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 typecheck-regex: ${ALL_GENERATED_FILES} compile
+	$(MAKE) typecheck-regex-nocompile
+typecheck-regex-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 typecheck-regex-qual: ${ALL_GENERATED_FILES} compile
+	$(MAKE) typecheck-regex-qual-nocompile
+typecheck-regex-qual-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 typecheck-resourceleak: ${ALL_GENERATED_FILES} compile
+	$(MAKE) typecheck-resourceleak-nocompile
+typecheck-resourceleak-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 typecheck-signature: ${ALL_GENERATED_FILES} compile
+	$(MAKE) typecheck-signature-nocompile
+typecheck-signature-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
@@ -963,10 +998,14 @@ typecheck-signature-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
 
 typecheck-signedness: ${ALL_GENERATED_FILES} compile
+	$(MAKE) typecheck-signedness-nocompile
+typecheck-signedness-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 typecheck-vindex: compile compile-typequals
+	$(MAKE) typecheck-vindex-nocompile
+typecheck-vindex-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
@@ -1168,7 +1207,7 @@ requireJavadoc: $(JAVA_FILES)
 # For refactorings that touch a lot of code that you don't understand, create
 # top-level file SKIP-REQUIRE-JAVADOC.  Delete it after the pull request is merged.
 	if [ ! -f SKIP-REQUIRE-JAVADOC ]; then \
-	  ${JAVA} -jar $(wildcard ${DAIKONDIR}/java/lib/require-javadoc-*-all.jar) --exclude="dcomp-transfer" ${DAIKONDIR}/java \
+	  ${JAVA} -jar $(wildcard ${DAIKONDIR}/java/lib/require-javadoc/require-javadoc-*-all.jar) --exclude="dcomp-transfer" ${DAIKONDIR}/java \
 	fi
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class

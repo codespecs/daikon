@@ -19,10 +19,11 @@ Create the Docker image:
 
 # Alias to create the Docker image, in an empty directory, and upload to Docker Hub.
 # Takes about 12 minutes for jdk8, about 1 hour for jdk8-plus.
+# Run from a terminal, NOT from Emacs, because it produces vast amounts of output.
 DOCKERTESTING=""
 # DOCKERTESTING="-testing"
 alias create_upload_docker_image=' \
-  DOCKERIMAGE="mdernst/$PROJECT-$OS-$JDKVER$DOCKERTESTING" && \
+  DOCKERIMAGE="mdernst/$DPROJECT-$OS-$JDKVER$DOCKERTESTING" && \
   (rm -rf dockerdir && \
   mkdir -p dockerdir && \
   (cd dockerdir && \
@@ -35,72 +36,92 @@ alias create_upload_docker_image=' \
 
 export OS=ubuntu
 export JDKVER=jdk8
-export PROJECT=daikon
+export DPROJECT=daikon
 create_upload_docker_image
 
 export OS=ubuntu
 export JDKVER=jdk8-plus
-export PROJECT=daikon
+export DPROJECT=daikon
 create_upload_docker_image
 
 export OS=ubuntu
 export JDKVER=jdk11
-export PROJECT=daikon
+export DPROJECT=daikon
 create_upload_docker_image
 
 export OS=ubuntu
 export JDKVER=jdk11-plus
-export PROJECT=daikon
+export DPROJECT=daikon
 create_upload_docker_image
 
 export OS=ubuntu
 export JDKVER=jdk17
-export PROJECT=daikon
+export DPROJECT=daikon
 create_upload_docker_image
 
 export OS=ubuntu
 export JDKVER=jdk17-plus
-export PROJECT=daikon
+export DPROJECT=daikon
 create_upload_docker_image
 
 export OS=ubuntu
 export JDKVER=jdk20
-export PROJECT=daikon
+export DPROJECT=daikon
 create_upload_docker_image
 
 export OS=ubuntu
 export JDKVER=jdk20-plus
-export PROJECT=daikon
+export DPROJECT=daikon
+create_upload_docker_image
+
+export OS=ubuntu
+export JDKVER=jdk21
+export DPROJECT=daikon
+create_upload_docker_image
+
+export OS=ubuntu
+export JDKVER=jdk21-plus
+export DPROJECT=daikon
 create_upload_docker_image
 
 export OS=rockylinux
 export JDKVER=jdk8
-export PROJECT=daikon
+export DPROJECT=daikon
 create_upload_docker_image
 
 export OS=rockylinux
 export JDKVER=jdk8-plus
-export PROJECT=daikon
+export DPROJECT=daikon
 create_upload_docker_image
 
 export OS=rockylinux
 export JDKVER=jdk11
-export PROJECT=daikon
+export DPROJECT=daikon
 create_upload_docker_image
 
 export OS=rockylinux
 export JDKVER=jdk11-plus
-export PROJECT=daikon
+export DPROJECT=daikon
 create_upload_docker_image
 
 export OS=rockylinux
 export JDKVER=jdk17
-export PROJECT=daikon
+export DPROJECT=daikon
 create_upload_docker_image
 
 export OS=rockylinux
 export JDKVER=jdk17-plus
-export PROJECT=daikon
+export DPROJECT=daikon
+create_upload_docker_image
+
+export OS=rockylinux
+export JDKVER=jdk21
+export DPROJECT=daikon
+create_upload_docker_image
+
+export OS=rockylinux
+export JDKVER=jdk21-plus
+export DPROJECT=daikon
 create_upload_docker_image
 
 Cleanup:

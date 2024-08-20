@@ -188,7 +188,7 @@ public class ContextSplitterFactory {
       throw (IOException) new IOException("Malformed number").initCause(e);
     }
 
-    return result.toArray(new MapfileEntry[result.size()]);
+    return result.toArray(new MapfileEntry[0]);
   }
 
   /**
@@ -275,11 +275,11 @@ public class ContextSplitterFactory {
       }
 
       // Collect all splitters for one callee_ppt_name
-      Splitter[] splitters_array = splitters.toArray(new Splitter[splitters.size()]);
+      Splitter[] splitters_array = splitters.toArray(new Splitter[0]);
       result.add(new PptNameAndSplitters(callee_ppt_name, splitters_array));
     }
 
-    return result.toArray(new PptNameAndSplitters[result.size()]);
+    return result.toArray(new PptNameAndSplitters[0]);
   }
 
   /** Simple record type to store a PptName and Splitter array. */

@@ -5,15 +5,21 @@
 package util_daikon;
 require 5.003;			# uses prototypes
 require Exporter;
-@ISA = qw(Exporter);
-@EXPORT = qw( cleanup_pptname system_or_die backticks_or_die );
+our @ISA = qw(Exporter);
+our @EXPORT = qw( cleanup_pptname system_or_die backticks_or_die );
 
 use English;
 use strict;
 $WARNING = 1;			# "-w" flag
 
-use checkargs;
 use Carp;
+
+# Put the script directory on the @INC path.
+use File::Basename;
+use lib dirname (__FILE__);
+
+# The file `checkargs.pm` appears in the same directory as this script.
+use checkargs;
 
 # Execute the command; die if its execution is erroneous.
 # If optional second argument is non-zero, print the command to standard out,

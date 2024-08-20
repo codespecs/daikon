@@ -4,73 +4,9 @@ var-comparability none
 
 ppt ..main():::ENTER
   ppt-type enter
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
 
 ppt ..main():::EXIT0
   ppt-type subexit
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable return
     var-kind variable
     rep-type int
@@ -80,38 +16,6 @@ ppt Link.initialize(char*,\_Stack::Link*):::ENTER
   ppt-type enter
   parent parent Link:::OBJECT 1
   parent user Link:::OBJECT 1
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -302,38 +206,6 @@ ppt Link.initialize(char*,\_Stack::Link*):::EXIT0
   ppt-type subexit
   parent parent Link:::OBJECT 1
   parent user Link:::OBJECT 1
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -602,38 +474,6 @@ ppt Stack.Stack(char*):::ENTER
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -748,38 +588,6 @@ ppt Stack.Stack(char*):::EXIT0
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -894,38 +702,6 @@ ppt Stack.getName():::ENTER
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -1035,38 +811,6 @@ ppt Stack.getName():::EXIT0
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -1179,38 +923,6 @@ ppt Stack.getNumStacksCreated():::ENTER
   ppt-type enter
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -1224,38 +936,6 @@ ppt Stack.getNumStacksCreated():::EXIT0
   ppt-type subexit
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -1274,38 +954,6 @@ ppt Stack.peek():::ENTER
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -1415,38 +1063,6 @@ ppt Stack.peek():::EXIT0
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -1560,38 +1176,6 @@ ppt Stack.pop():::ENTER
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -1701,38 +1285,6 @@ ppt Stack.pop():::EXIT0
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -1846,38 +1398,6 @@ ppt Stack.privateStuff():::ENTER
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -1987,38 +1507,6 @@ ppt Stack.privateStuff():::EXIT0
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -2132,38 +1620,6 @@ ppt Stack.push(char*):::ENTER
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -2278,38 +1734,6 @@ ppt Stack.push(char*):::EXIT0
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -2424,38 +1848,6 @@ ppt Stack.~Stack():::ENTER
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
@@ -2565,38 +1957,6 @@ ppt Stack.~Stack():::EXIT0
   parent parent Stack:::OBJECT 1
   parent user Stack:::OBJECT 1
   parent user Link:::OBJECT 2
-  variable ::__numeric_traits_integer<char>::__max
-    var-kind variable
-    rep-type int
-    dec-type char
-  variable ::__numeric_traits_integer<int>::__max
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<int>::__min
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::__numeric_traits_integer<long>::__max
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<long>::__min
-    var-kind variable
-    rep-type int
-    dec-type long
-  variable ::__numeric_traits_integer<short>::__max
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<short>::__min
-    var-kind variable
-    rep-type int
-    dec-type short
-  variable ::__numeric_traits_integer<unsigned\_long>::__digits
-    var-kind variable
-    rep-type int
-    dec-type int
   variable Stack::numStacksCreated
     var-kind variable
     rep-type int
