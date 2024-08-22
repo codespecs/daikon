@@ -29,23 +29,35 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 class ConditionExtractor extends DepthFirstVisitor {
 
+  /** The package name. */
   private @Nullable String packageName;
-  private String className = "classname field is uninitialized"; // The class name.
-  private @Nullable String curMethodName; // Name of current method being parsed
+
+  /** The class name. */
+  private String className = "classname field is uninitialized";
+
+  /** Name of current method being parsed. */
+  private @Nullable String curMethodName;
+
+  /** Declaration of current method being parsed. */
   private @Nullable String curMethodDeclaration;
-  boolean enterMethod = false; // true if the current Node is a Method
-  // declaration ie. we just entered a method.
 
-  // Contains the resultType of the current method.  If the current method is a
-  // constructor then the string "constructor" is stored. These is later used
-  // to decide whether the return statement should be included as a conditional.
-  // Return statements are included as conditionals iff the return type is "boolean"
-  // Must be a stack rather than a single variable for the case of helper classes.
-  private Deque<Object> resultTypes = new ArrayDeque<Object>(); // elements are ResultType or String
+  /** true if the current Node is a Method declaration ie. we just entered a method. */
+  boolean enterMethod = false;
 
-  // key = methodname (as String); value = conditional expressions (as Strings)
+  /**
+   * Contains the resultType of the current method. Elements are ResultType or String.
+   *
+   * <p>If the current method is a constructor then the string "constructor" is stored. This is
+   * later used to decide whether the return statement should be included as a conditional. Return
+   * statements are included as conditionals iff the return type is "boolean" Must be a stack rather
+   * than a single variable for the case of helper classes.
+   */
+  private Deque<Object> resultTypes = new ArrayDeque<Object>();
+
+  /** key = methodname (as String); value = conditional expressions (as Strings) */
   HashMap<String, List<String>> conditions = new HashMap<>();
-  // key = method declaration (String); value = method bodies (String)
+
+  /** key = method declaration (String); value = method bodies (String) */
   HashMap<String, String> replaceStatements = new HashMap<>();
 
   // DepthFirstVisitor Methods overridden by ConditionExtractor

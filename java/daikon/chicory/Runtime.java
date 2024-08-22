@@ -726,6 +726,7 @@ public class Runtime {
   // Used to distinguish wrappers created by user code
   // from wrappers created by Chicory.
 
+  /** A wrapper for a pritive class. */
   public static interface PrimitiveWrapper {
     // returns corresponding java.lang wrapper
     public Object getJavaWrapper();

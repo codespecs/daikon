@@ -33,6 +33,7 @@ import org.plumelib.util.StringsPlume;
 @SuppressWarnings({"rawtypes", "nullness"}) // not generics-correct
 public class Ast {
 
+  /** The line separator. */
   private static final String lineSep = System.lineSeparator();
 
   // ///////////////////////////////////////////////////////////////////////////
@@ -175,6 +176,12 @@ public class Ast {
   // Names (fully qualified and otherwise)
   //
 
+  /**
+   * Returns true if the string is an access modifier: "public, "protected", or "private".
+   *
+   * @param s a string
+   * @return true if the string is an access modifier
+   */
   public static boolean isAccessModifier(String s) {
     return s.equals("public") || s.equals("protected") || s.equals("private");
   }
@@ -710,6 +717,12 @@ public class Ast {
   // Reflection
   //
 
+  /**
+   * Returns the class corresponding to the given node
+   *
+   * @param n a node
+   * @return the class corresponding to the given node
+   */
   public static Class<?> getClass(Node n) {
     String ast_classname = getClassName(n);
     if (ast_classname.indexOf("$inner") != -1) {

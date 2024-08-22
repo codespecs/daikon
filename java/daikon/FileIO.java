@@ -82,6 +82,7 @@ public final class FileIO {
 
   // Constants
 
+  /** Introduces a declaration in a declaration file. */
   static final String declaration_header = "DECLARE";
 
   // Program point name tags
@@ -122,6 +123,7 @@ public final class FileIO {
   /** String used to identify global ppt names. */
   public static final String global_suffix = "GLOBAL";
 
+  /** The line separator. */
   private static final String lineSep = Global.lineSep;
 
   // Settings
@@ -884,10 +886,15 @@ public final class FileIO {
   // invocation tracking for dtrace files entry/exit grouping
   //
 
+  /** Represents an instance/invocation of a program point. */
   static final class Invocation implements Comparable<Invocation> {
-    PptTopLevel ppt; // used in printing and in suppressing duplicates
-    // Rather than a valuetuple, place its elements here.
+    /** The program point; used in printing and in suppressing duplicates. */
+    PptTopLevel ppt;
+
+    /** The values. This array is used rather than a valuetuple. */
     @Nullable Object[] vals;
+
+    /** The modbits. */
     int[] mods;
 
     static Object canonical_hashcode = new Object();

@@ -26,8 +26,10 @@ public final class Global {
     daikon.config.Configuration.getInstance();
   }
 
-  // Don't permit this class to be instantiated
-  private Global() {}
+  /** Do not instantiate. */
+  private Global() {
+    throw new Error("Do not instantiate.");
+  }
 
   // ///////////////////////////////////////////////////////////////////////////
   // Constants

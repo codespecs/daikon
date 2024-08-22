@@ -248,6 +248,11 @@ public abstract class PptSlice extends Ppt {
   // ///////////////////////////////////////////////////////////////////////////
   // Invariant guarding
 
+  /**
+   * Returns true if every invariant is a guarding predicate.
+   *
+   * @return true if every invariant is a guarding predicate
+   */
   public boolean containsOnlyGuardingPredicates() {
     for (Invariant inv : invs) {
       if (!inv.isGuardingPredicate) {

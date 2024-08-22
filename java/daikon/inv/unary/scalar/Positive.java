@@ -29,6 +29,11 @@ public class Positive extends SingleScalar {
   // Required methods
   //
 
+  /**
+   * Creates a Positive invariant.
+   *
+   * @param ppt the program point
+   */
   private Positive(PptSlice ppt) {
     super(ppt);
   }

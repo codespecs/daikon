@@ -639,6 +639,7 @@ public final class Daikon {
 
     // Constructors that do not take a Throwable
 
+    /** Creates a UserError with no details. */
     public UserError() {
       super("");
     }

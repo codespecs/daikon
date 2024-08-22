@@ -548,6 +548,13 @@ public class DiffTester {
   // Helper functions
   //
 
+  /**
+   * Creates a PptTopLevel for the given name and variables.
+   *
+   * @param pptname the program point name
+   * @param vars the variables
+   * @return a PptTopLevel for the given name and variables
+   */
   static PptTopLevel newPptTopLevel(String pptname, VarInfo[] vars) {
     return Common.makePptTopLevel(pptname, vars);
   }
