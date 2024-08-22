@@ -1800,9 +1800,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return simplifyFixup(simplify_name());
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Utility functions
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Utility functions
+  //
 
   // Where do these really belong?
 

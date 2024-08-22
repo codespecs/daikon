@@ -473,8 +473,8 @@ public class SEQSEQINTEQUAL extends SUPERCLASS
   @Override
   public InvariantStatus check_modified(
       PRIMITIVE @Interned [] v1, PRIMITIVE @Interned [] v2, int count) {
-    /// This does not do the right thing; I really want to avoid comparisons
-    /// if one is missing, but not if one is zero-length.
+    // // This does not do the right thing; I really want to avoid comparisons
+    // // if one is missing, but not if one is zero-length.
     // // Don't make comparisons with empty arrays.
     // if ((v1.length == 0) || (v2.length == 0)) {
     //   return;
