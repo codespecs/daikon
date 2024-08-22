@@ -228,9 +228,9 @@ public class InvariantDoclet implements Doclet {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Doclet-specific methods
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Doclet-specific methods
+  //
 
   @Override
   public void init(Locale locale, Reporter reporter) {
@@ -568,9 +568,9 @@ public class InvariantDoclet implements Doclet {
     return list;
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Helper methods
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Helper methods
+  //
 
   /**
    * Fetch the comment string from a DocCommentTree node.
@@ -600,9 +600,9 @@ public class InvariantDoclet implements Doclet {
     return elementKind.isClass() || elementKind.isInterface();
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Javadoc command-line options
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Javadoc command-line options
+  //
 
   // The doclet cannot use the Options class itself because  Javadoc specifies its own way of
   // handling command-line arguments.

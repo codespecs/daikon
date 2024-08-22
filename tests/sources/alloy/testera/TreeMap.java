@@ -1,5 +1,5 @@
-//// This is java.util.TreeMap from the Java Standard Library, //TESTERA
-//// with small changes that allow checking with TestEra. //TESTERA
+// This is java.util.TreeMap from the Java Standard Library, //TESTERA
+// with small changes that allow checking with TestEra. //TESTERA
 /*
  * @(#)TreeMap.java	1.43 00/02/02
  *
@@ -1298,8 +1298,8 @@ public class TreeMap extends AbstractMap
     public void deleteEntry(Entry p) { //TESTERA
         decrementSize();
 
-	//// if (p==null) //TESTERA
-	//// System.out.println("null entry!!!"); //TESTERA
+	// if (p==null) //TESTERA
+	// System.out.println("null entry!!!"); //TESTERA
 	// If strictly internal, first swap position with successor.
 	if (p.left != null && p.right != null) {
 	    Entry s = successor(p);
@@ -1329,7 +1329,7 @@ public class TreeMap extends AbstractMap
 	    root = null;
 	} else { //  No children. Use self as phantom replacement and unlink.
 	    if (p.color == BLACK)
-		//// if (p.color == RED) // demo error //TESTERA
+		// if (p.color == RED) // demo error //TESTERA
 		fixAfterDeletion(p);
 
 	    if (p.parent != null) {

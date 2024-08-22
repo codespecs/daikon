@@ -164,7 +164,7 @@ public class CommonStringSequence extends SingleStringSequence {
       intersect = Intern.intern(ArraysPlume.subarray(tmp, 0, size));
     }
 
-    /// Use a lesser count, because this invariant is frequently a false positive.
+    // Use a lesser count, because this invariant is frequently a false positive.
     // this.count += count;
     this.count++;
     return InvariantStatus.NO_CHANGE;

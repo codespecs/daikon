@@ -80,7 +80,7 @@ public final class FileIO {
     throw new Error();
   }
 
-  /// Constants
+  // Constants
 
   static final String declaration_header = "DECLARE";
 
@@ -124,7 +124,7 @@ public final class FileIO {
 
   private static final String lineSep = Global.lineSep;
 
-  /// Settings
+  // Settings
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -202,7 +202,7 @@ public final class FileIO {
    */
   public static boolean dkconfig_rm_stack_dups = false;
 
-  /// Variables
+  // Variables
 
   // This hashmap maps every program point to an array, which contains the
   // old values of all variables in scope the last time the program point
@@ -310,9 +310,9 @@ public final class FileIO {
     return result;
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Declaration files
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Declaration files
+  //
 
   /**
    * Returns a new PptMap containing declarations read from the files listed in the argument;
@@ -703,7 +703,7 @@ public final class FileIO {
           file,
           filename);
     }
-    /// XXX
+    // XXX
 
     int hash_position = proglang_type_string_and_aux.indexOf('#');
     String aux_string = "";
@@ -880,9 +880,9 @@ public final class FileIO {
     return result.toString();
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// invocation tracking for dtrace files entry/exit grouping
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // invocation tracking for dtrace files entry/exit grouping
+  //
 
   static final class Invocation implements Comparable<Invocation> {
     PptTopLevel ppt; // used in printing and in suppressing duplicates
@@ -2441,9 +2441,9 @@ public final class FileIO {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Serialized PptMap files
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Serialized PptMap files
+  //
 
   /**
    * Use a special record type. Saving as one object allows for reference-sharing, easier saves and

@@ -125,7 +125,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     }
   }
 
-  ////////////////////////
+  // ////////////////////////
   // Accessors
 
   private @Nullable VarInfo leaderCache = null;
@@ -157,7 +157,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return Invariant.CONFIDENCE_JUSTIFIED;
   }
 
-  ////////////////////////
+  // ////////////////////////
   // Printing
 
   // The format methods aren't called, because for output, we
@@ -378,8 +378,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     return repr();
   }
 
-  //////////////////////////////////////////////////////////////////////
-  /// Processing of data
+  // //////////////////////////////////////////////////////////////////////
+  // Processing of data
 
   /**
    * Return a List of VarInfos that do not fit into this set anymore.

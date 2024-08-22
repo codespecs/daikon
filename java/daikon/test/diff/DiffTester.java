@@ -544,9 +544,9 @@ public class DiffTester {
     return result;
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Helper functions
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Helper functions
+  //
 
   static PptTopLevel newPptTopLevel(String pptname, VarInfo[] vars) {
     return Common.makePptTopLevel(pptname, vars);

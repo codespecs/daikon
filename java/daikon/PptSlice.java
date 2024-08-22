@@ -245,8 +245,8 @@ public abstract class PptSlice extends Ppt {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Invariant guarding
+  // ///////////////////////////////////////////////////////////////////////////
+  // Invariant guarding
 
   public boolean containsOnlyGuardingPredicates() {
     for (Invariant inv : invs) {
@@ -257,8 +257,8 @@ public abstract class PptSlice extends Ppt {
     return true;
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Miscellaneous
+  // ///////////////////////////////////////////////////////////////////////////
+  // Miscellaneous
 
   /** Remove the invariants noted in omitTypes. */
   public void processOmissions(boolean[] omitTypes) {

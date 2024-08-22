@@ -48,8 +48,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   // key = method declaration (String); value = method bodies (String)
   HashMap<String, String> replaceStatements = new HashMap<>();
 
-  //// DepthFirstVisitor Methods overridden by ConditionExtractor //////////////
-  /////
+  // DepthFirstVisitor Methods overridden by ConditionExtractor
 
   // f0 -> Modifiers()
   // f1 -> "package"
@@ -307,7 +306,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     super.visit(n);
   }
 
-  //////// Private methods specific to ConditionExtractor ////
+  // //////// Private methods specific to ConditionExtractor ////
   /**
    * Keep track of the method we are currently in, and create an entry for it, so that the
    * conditions can be associated with the right methods.

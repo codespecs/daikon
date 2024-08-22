@@ -635,9 +635,9 @@ public class PptTopLevel extends Ppt {
     return views.size();
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Adding variables
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Adding variables
+  //
 
   /**
    * Appends the elements of vis to the var_infos array of this ppt. Method is not private so that
@@ -678,9 +678,9 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Derived variables
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Derived variables
+  //
 
   // This is here because I think it doesn't make sense to derive except
   // from a PptTopLevel (and possibly a PptConditional?).  Perhaps move it
@@ -1542,9 +1542,9 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Creating invariants
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Creating invariants
+  //
 
   // I can't decide which loop it's more efficient to make the inner loop:
   // the loop over samples or the loop over slices.
@@ -2729,9 +2729,9 @@ public class PptTopLevel extends Ppt {
     return result;
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Creating conditioned views
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Creating conditioned views
+  //
 
   // This static region can't appear in PptConditional, lest it never get
   // called.  PptConditional isn't instantiated unless it needs to be, but
@@ -2829,9 +2829,9 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Post processing after data trace files are read (but before printing)
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Post processing after data trace files are read (but before printing)
+  //
 
   /**
    * Two things: a) convert Equality invariants into normal IntEqual type for filtering, printing,
@@ -2905,9 +2905,9 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Locating implied (same) invariants via the Simplify theorem-prover
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Locating implied (same) invariants via the Simplify theorem-prover
+  //
 
   /**
    * Created upon first use, then saved. Do not eagerly initialize, because doing so runs Simplify
@@ -3254,9 +3254,9 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Parameter VarInfo processing
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Parameter VarInfo processing
+  //
 
   /** Cached VarInfos that are parameter variables. */
   @SuppressWarnings("serial")
@@ -3278,9 +3278,9 @@ public class PptTopLevel extends Ppt {
     return paramVars;
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Printing invariants
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Printing invariants
+  //
 
   /**
    * Return a List of all the invariants for the program point. Also consider using views_iterator()
@@ -3388,8 +3388,8 @@ public class PptTopLevel extends Ppt {
 
   static Comparator<PptSlice> arityVarnameComparator = new PptSlice.ArityVarnameComparator();
 
-  /////////////////////////////////////////////////////////////////////////////
-  ///// Invariant guarding
+  // /////////////////////////////////////////////////////////////////////////////
+  // Invariant guarding
 
   //   /** This function guards all of the invariants in a PptTopLevel */
   //   public void guardInvariants() {

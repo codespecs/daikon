@@ -721,10 +721,10 @@ public class Runtime {
     return null;
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Wrappers for the various primitive types.
-  /// Used to distinguish wrappers created by user code
-  /// from wrappers created by Chicory.
+  // ///////////////////////////////////////////////////////////////////////////
+  // Wrappers for the various primitive types.
+  // Used to distinguish wrappers created by user code
+  // from wrappers created by Chicory.
 
   public static interface PrimitiveWrapper {
     // returns corresponding java.lang wrapper
@@ -934,9 +934,9 @@ public class Runtime {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Copied code
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Copied code
+  //
 
   // Lifted directly from plume/UtilPlume.java, where it is called
   // escapeJava(), but repeated here to make this class self-contained.
@@ -1050,8 +1050,8 @@ public class Runtime {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// end of copied code
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // end of copied code
+  //
 
 }
