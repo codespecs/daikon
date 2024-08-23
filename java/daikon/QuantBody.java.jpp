@@ -155,9 +155,9 @@ The correct way to build the system is to run 'make'.
   #define NUMERIC
 #endif
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Methods for #_TYPE (from QuantBody.java.jpp)
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Methods for #_TYPE (from QuantBody.java.jpp)
+  //
 
   /**
    * Returns the ith element of the array or collection argument. If the argument is null or not an
@@ -2114,7 +2114,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 #endif
 
-  /// Deferencing (accessing) fields
+  // Deferencing (accessing) fields
 
   /**
    * COLLECT_TYPE accepts an object and a list of fields (one of which is of array type, and the
@@ -2168,14 +2168,14 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return retval;
   }
 
-#if defined(OBJECT) || defined(STRING)
-  @SuppressWarnings("interning") // reflection
-#endif
+  // @PolyNull does not work for return type, because null is returned on error.
   /** Helper method for COLLECT_TYPE(Object, String).
    * Operates on a subset of the fields: those in fields[fieldsStartIdx..].
    * @see COLLECT_TYPE(Object, String)
    */
-  // @PolyNull does not work for return type, because null is returned on error.
+#if defined(OBJECT) || defined(STRING)
+  @SuppressWarnings("interning") // reflection
+#endif
   @SideEffectFree
   private static _TYPE_NAME @Nullable [] COLLECT_TYPE(@Nullable Object object,
                                                    String[] fields, int fieldsStartIdx) {

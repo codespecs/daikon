@@ -181,9 +181,9 @@ class TagEntry extends WeakReference<Object> {
     return root_ref;
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Tracers
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Tracers
+  //
 
   /**
    * Return information about where the given object interacted with some other object in its set.
@@ -323,9 +323,9 @@ class TagEntry extends WeakReference<Object> {
     return className + ":" + ste.getMethodName() + "(), " + ste.getLineNumber();
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Debugging output
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Debugging output
+  //
 
   /**
    * Returns each of the sets with elements in each set on a separate line.

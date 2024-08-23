@@ -610,7 +610,7 @@ public final class Daikon {
       return "Error at line " + reader.getLineNumber() + " in file " + filename + ": " + msg;
     }
 
-    /// Constructors that take a Throwable
+    // Constructors that take a Throwable
 
     // Requires that e.getMessage() != null.
     public UserError(Throwable e) {
@@ -637,8 +637,9 @@ public final class Daikon {
       this(e, error_at_line_file(reader, filename, msg));
     }
 
-    /// Constructors that do not take a Throwable
+    // Constructors that do not take a Throwable
 
+    /** Creates a UserError with no details. */
     public UserError() {
       super("");
     }
@@ -997,7 +998,7 @@ public final class Daikon {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
   // Read in the command line options
   // Return {decls, dtrace, spinfo, map} files.
   static FileOptions read_options(String[] args, String usage) {
@@ -2056,7 +2057,7 @@ public final class Daikon {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
   // Read decls, dtrace, etc. files
 
   /**
@@ -2172,7 +2173,7 @@ public final class Daikon {
     Global.debugSplit.fine("<<exit>>  setup_splitters");
   }
 
-  ///////////////////////////////////////////////////////////////////////////
+  // ///////////////////////////////////////////////////////////////////////////
   // Infer invariants over the trace data
 
   /**

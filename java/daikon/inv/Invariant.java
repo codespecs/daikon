@@ -1268,9 +1268,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return suppressed;
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Tests about the invariant (for printing)
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Tests about the invariant (for printing)
+  //
 
   // DO NOT OVERRIDE.  Should be declared "final", but the "final" is
   // omitted to allow for easier testing.
@@ -1279,7 +1279,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     return InvariantFilters.defaultFilters().shouldKeep(this) == null;
   }
 
-  ////////////////////////////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////////////////////////////
   // Static and dynamic checks for obviousness
 
   /**

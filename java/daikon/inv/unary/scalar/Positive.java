@@ -25,10 +25,15 @@ public class Positive extends SingleScalar {
   /** Boolean. True iff Positive invariants should be considered. */
   public static boolean dkconfig_enabled = Invariant.invariantEnabledDefault;
 
-  ///
-  /// Required methods
-  ///
+  //
+  // Required methods
+  //
 
+  /**
+   * Creates a Positive invariant.
+   *
+   * @param ppt the program point
+   */
   private Positive(PptSlice ppt) {
     super(ppt);
   }

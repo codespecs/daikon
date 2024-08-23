@@ -190,7 +190,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   private static void build_func_list() {
 
     // Reflection seems to confuse clover
-    ///CLOVER:OFF
+    // CLOVER:OFF
 
     // Build the map of functions to array of instances for that function
     debug.fine("Processing " + #CLASSNAME);
@@ -230,7 +230,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       debug.fine("Adding " + function + " " + fb.getClass().getName()
                   + " " + fb.get_var_order() + " " + fb.get_function_id());
     }
-    ///CLOVER:ON
+    // CLOVER:ON
   }
 
 #if 0

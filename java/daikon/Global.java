@@ -26,12 +26,14 @@ public final class Global {
     daikon.config.Configuration.getInstance();
   }
 
-  // Don't permit this class to be instantiated
-  private Global() {}
+  /** Do not instantiate. */
+  private Global() {
+    throw new Error("Do not instantiate.");
+  }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Constants
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Constants
+  //
 
   public static final String lineSep = System.lineSeparator();
 
@@ -49,16 +51,16 @@ public final class Global {
 
   public static final Random random = new Random();
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Variables
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Variables
+  //
 
   // Perhaps I shouldn't have anything in this category (i.e., no global
   // variables)?
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Statistics-gathering
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Statistics-gathering
+  //
 
   // All these different variables is a little out of control, true.
   // Maybe turn it into a structure or an array of integers (which is
@@ -66,20 +68,20 @@ public final class Global {
 
   public static final boolean output_statistics = true;
 
-  /// Invariant inference or variable derivation
+  // Invariant inference or variable derivation
   // These I will compute from a final postpass over each Ppt.
   public static int non_canonical_variables = 0;
   public static int can_be_missing_variables = 0;
   public static int canonical_variables = 0;
 
-  /// Variable derivation
+  // Variable derivation
   public static int nonsensical_suppressed_derived_variables = 0;
   public static int tautological_suppressed_derived_variables = 0;
   // Can be set by a postpass.  (Might be instructive to compute on the
   // fly, too, to see what I missed.)
   public static int derived_variables = 0;
 
-  /// Invariant inference
+  // Invariant inference
   public static int implied_noninstantiated_invariants = 0;
   public static int implied_false_noninstantiated_invariants = 0;
   public static int subexact_noninstantiated_invariants = 0;
@@ -165,10 +167,10 @@ public final class Global {
     System.out.println("    reported_invariants = " + reported_invariants);
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Debugging
-  /// Anything that's commented in the false section is now implemented
-  /// via the logger.
+  // ///////////////////////////////////////////////////////////////////////////
+  // Debugging
+  // Anything that's commented in the false section is now implemented
+  // via the logger.
 
   public static boolean debugAll = false;
 

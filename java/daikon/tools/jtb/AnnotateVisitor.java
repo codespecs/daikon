@@ -799,9 +799,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Subroutines
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Subroutines
+  //
 
   /** The argument should already contain "@" or any other leading characters. */
   String javaLineComment(String comment) {
