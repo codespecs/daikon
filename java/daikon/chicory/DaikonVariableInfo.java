@@ -265,9 +265,9 @@ public abstract class DaikonVariableInfo
    */
   public abstract @Nullable Object getMyValFromParentVal(Object parentVal);
 
-  ///
-  /// Printing
-  ///
+  //
+  // Printing
+  //
 
   /**
    * Returns a String representation of this object suitable for a {@code .dtrace} file.
@@ -394,9 +394,9 @@ public abstract class DaikonVariableInfo
     return buf.toString();
   }
 
-  ///
-  /// Building the tre
-  ///
+  //
+  // Building the tre
+  //
 
   /**
    * Add the parameters of the given method to this node.

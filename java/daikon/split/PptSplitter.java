@@ -161,7 +161,7 @@ public class PptSplitter implements Serializable {
       return;
     }
 
-    /// ??? MDE
+    // ??? MDE
     // If any parent variables were missing out of bounds on this
     // sample, apply that to this conditional as well.  A more
     // efficient way to do this would be better.
@@ -296,7 +296,7 @@ public class PptSplitter implements Serializable {
     List<@Nullable @KeyFor("orig_invs") Invariant[]> different_invs_vec =
         new ArrayList<@Nullable @KeyFor("orig_invs") Invariant[]>();
 
-    /// ??? MDE
+    // ??? MDE
     // Loop through each possible parent slice
     List<VarInfo[]> slices = possible_slices();
 
@@ -623,8 +623,8 @@ public class PptSplitter implements Serializable {
       }
     }
 
-    /// Expensive!
-    /// ??? MDE
+    // Expensive!
+    // ??? MDE
     // Create ternary views
     for (int i = 0; i < leaders.length; i++) {
       for (int j = i; j < leaders.length; j++) {

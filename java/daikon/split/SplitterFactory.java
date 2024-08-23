@@ -67,7 +67,7 @@ public class SplitterFactory {
    */
   private static int guid = 0;
 
-  /// Methods
+  // Methods
 
   /**
    * Parses the Splitter info.

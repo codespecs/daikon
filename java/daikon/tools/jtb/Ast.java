@@ -33,11 +33,12 @@ import org.plumelib.util.StringsPlume;
 @SuppressWarnings({"rawtypes", "nullness"}) // not generics-correct
 public class Ast {
 
+  /** The line separator. */
   private static final String lineSep = System.lineSeparator();
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Visitors
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Visitors
+  //
 
   // Reads an AST from the input stream, applies the visitor to the AST,
   // reformats only to insert comments, and writes the resulting AST to the
@@ -75,9 +76,9 @@ public class Ast {
     root.accept(new TreeDumper(output));
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Printing and parsing
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Printing and parsing
+  //
 
   // Formats an AST as a String.
   // This version does not reformat the tree (which blows away formatting
@@ -171,10 +172,16 @@ public class Ast {
     return n;
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Names (fully qualified and otherwise)
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Names (fully qualified and otherwise)
+  //
 
+  /**
+   * Returns true if the string is an access modifier: "public, "protected", or "private".
+   *
+   * @param s a string
+   * @return true if the string is an access modifier
+   */
   public static boolean isAccessModifier(String s) {
     return s.equals("public") || s.equals("protected") || s.equals("private");
   }
@@ -443,9 +450,9 @@ public class Ast {
     }
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Comments
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Comments
+  //
 
   // Add the comment to the first regular token in the tree, after all
   // other special tokens (comments) associated with that token.
@@ -682,9 +689,9 @@ public class Ast {
     m.accept(new RemoveAnnotationsVisitor());
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Whitespace
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Whitespace
+  //
 
   /**
    * Removes whitespace around punctuation: ., (, ), [, ].
@@ -702,14 +709,20 @@ public class Ast {
     return arg;
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// PptMap manipulation
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // PptMap manipulation
+  //
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Reflection
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Reflection
+  //
 
+  /**
+   * Returns the class corresponding to the given node
+   *
+   * @param n a node
+   * @return the class corresponding to the given node
+   */
   public static Class<?> getClass(Node n) {
     String ast_classname = getClassName(n);
     if (ast_classname.indexOf("$inner") != -1) {
@@ -906,9 +919,9 @@ public class Ast {
     return false;
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Etc.
-  ///
+  // ///////////////////////////////////////////////////////////////////////////
+  // Etc.
+  //
 
   // Following the chain of parent pointers from the child, returns
   // the first node of the specified type or a subtype.  Returns null
