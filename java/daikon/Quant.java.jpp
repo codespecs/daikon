@@ -166,8 +166,8 @@ public final class Quant {
 #include "daikon/QuantBody.java.jpp"
 #undef STRING
 
-  ///////////////////////////////////////////////////////////////////////////
-  /// Collection methods (dispatch to array methods)
+  // ///////////////////////////////////////////////////////////////////////////
+  // Collection methods (dispatch to array methods)
   //
 
   // These methods handle calls to quant methods that instead of passing an

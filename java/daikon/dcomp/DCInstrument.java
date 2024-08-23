@@ -779,36 +779,34 @@ public class DCInstrument extends InstructionListUtils {
     return false;
   }
 
-  /**
-   * General Java Runtime instrumentation strategy:
-   *
-   * <p>It is a bit of a misnomer, but the Daikon code and documentation uses the term JDK to refer
-   * to the Java Runtime Environment class libraries. In Java 8 and earlier, they were usually found
-   * in {@code <your java installation>/jre/lib/rt.jar}. For these versions of Java, we
-   * pre-instrumented the entire rt.jar.
-   *
-   * <p>In Java 9 and later, the Java Runtime classes have been divided into modules that are
-   * usually found in: {@code <your java installation>/jmods/*.jmod}.
-   *
-   * <p>With the conversion to modules for Java 9 and beyond, we have elected to pre-instrument only
-   * java.base.jmod and instrument all other Java Runtime (aka JDK) classes dynamically as they are
-   * loaded.
-   *
-   * <p>Post Java 8 there are increased security checks when loading JDK classes. In particular, the
-   * core classes contained in the java.base module may not reference anything outside of java.base.
-   * This means we cannot pre-instrument classes in the same manner as was done for Java 8 as this
-   * would introduce external references to the DynComp runtime (DCRuntime.java).
-   *
-   * <p>However, we can get around this restriction in the following manner: We create a shadow
-   * DynComp runtime called java.lang.DCRuntime that contains all the public methods of
-   * daikon.dcomp.DCRuntime, but with method bodies that contain only a return statement. We
-   * pre-instrument java.base the same as we would for JDK 8, but change all references to
-   * daikon.dcomp.DCRuntime to refer to java.lang.DCRuntime instead, and thus pass the security load
-   * test. During DynComp initialization (in Premain) we use java.lang.instrument.redefineClasses to
-   * replace the dummy java.lang.DCRuntime with a version where each method calls the corresponding
-   * method in daikon.dcomp.DCRuntime. The Java runtime does not enforce the security check in this
-   * case.
-   */
+  // General Java Runtime instrumentation strategy:
+  //
+  // <p>It is a bit of a misnomer, but the Daikon code and documentation uses the term JDK to refer
+  // to the Java Runtime Environment class libraries. In Java 8 and earlier, they were usually found
+  // in {@code <your java installation>/jre/lib/rt.jar}. For these versions of Java, we
+  // pre-instrumented the entire rt.jar.
+  //
+  // <p>In Java 9 and later, the Java Runtime classes have been divided into modules that are
+  // usually found in: {@code <your java installation>/jmods/*.jmod}.
+  //
+  // <p>With the conversion to modules for Java 9 and beyond, we have elected to pre-instrument only
+  // java.base.jmod and instrument all other Java Runtime (aka JDK) classes dynamically as they are
+  // loaded.
+  //
+  // <p>Post Java 8 there are increased security checks when loading JDK classes. In particular, the
+  // core classes contained in the java.base module may not reference anything outside of java.base.
+  // This means we cannot pre-instrument classes in the same manner as was done for Java 8 as this
+  // would introduce external references to the DynComp runtime (DCRuntime.java).
+  //
+  // <p>However, we can get around this restriction in the following manner: We create a shadow
+  // DynComp runtime called java.lang.DCRuntime that contains all the public methods of
+  // daikon.dcomp.DCRuntime, but with method bodies that contain only a return statement. We
+  // pre-instrument java.base the same as we would for JDK 8, but change all references to
+  // daikon.dcomp.DCRuntime to refer to java.lang.DCRuntime instead, and thus pass the security load
+  // test. During DynComp initialization (in Premain) we use java.lang.instrument.redefineClasses to
+  // replace the dummy java.lang.DCRuntime with a version where each method calls the corresponding
+  // method in daikon.dcomp.DCRuntime. The Java runtime does not enforce the security check in this
+  // case.
 
   /**
    * Instruments a JDK class to perform dynamic comparability and returns the new class definition.
