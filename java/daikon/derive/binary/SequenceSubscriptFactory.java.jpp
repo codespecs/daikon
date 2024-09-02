@@ -128,14 +128,14 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     // For now, do nothing if the sequence is itself derived.
     if (seqvar.derived != null) {
       if (debug != null) {
-        debug.log("Sequence variable derived");
+        debug.log("Sequence variable is derived, no further derivation");
       }
       return null;
     }
     // For now, do nothing if the scalar is itself derived.
     if (sclvar.derived != null) {
       if (debug != null) {
-        debug.log("Scalar variable derived");
+        debug.log("Scalar variable is derived, no further derivation");
       }
       return null;
     }
