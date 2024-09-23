@@ -5,8 +5,8 @@ version: 2.1
 
 jobs:
 
-  # Only proceed to other jobs if ubuntu-jdk17-jobs passes.
-  jdk17-jobs:
+  # Only proceed to other jobs if ubuntu-jdk21-jobs passes.
+  jdk21-jobs:
     docker:
       - image: cimg/base:2022.06
     environment:
@@ -463,6 +463,25 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
+  quick-txt-diff-rockylinux-jdk21:
+    docker:
+      - image: mdernst/daikon-rockylinux-jdk21
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-quick-txt-diff.sh
+
   nonquick-txt-diff-rockylinux-jdk8:
     docker:
       - image: mdernst/daikon-rockylinux-jdk8
@@ -520,6 +539,25 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
+  nonquick-txt-diff-rockylinux-jdk21:
+    docker:
+      - image: mdernst/daikon-rockylinux-jdk21
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
   non-txt-diff-rockylinux-jdk8:
     docker:
       - image: mdernst/daikon-rockylinux-jdk8
@@ -561,6 +599,25 @@ jobs:
   non-txt-diff-rockylinux-jdk17:
     docker:
       - image: mdernst/daikon-rockylinux-jdk17
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-non-txt-diff.sh
+
+  non-txt-diff-rockylinux-jdk21:
+    docker:
+      - image: mdernst/daikon-rockylinux-jdk21
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -643,6 +700,28 @@ jobs:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
 
+  misc-rockylinux-jdk21:
+    docker:
+      - image: mdernst/daikon-rockylinux-jdk21-plus
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+
+      - run:
+          command: ./scripts/test-misc.sh
+          no_output_timeout: 20m
+
   kvasir-rockylinux-jdk8:
     docker:
       - image: mdernst/daikon-rockylinux-jdk8-plus
@@ -700,12 +779,31 @@ jobs:
             - ".git"
       - run: ./scripts/test-kvasir.sh
 
+  kvasir-rockylinux-jdk21:
+    docker:
+      - image: mdernst/daikon-rockylinux-jdk21-plus
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-kvasir.sh
+
   # This task typechecks Daikon using the Checker Framework that is bundled with Daikon.
   # If this task fails but task `typecheck-with-latest-CF-jdk*` succeeds, then update the
   # Checker Framework jar files in java/lib/ .
-  typecheck-with-bundled-CF-jdk17:
+  typecheck-with-bundled-CF-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk8
+      - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -793,6 +891,28 @@ jobs:
           command: scripts/test-typecheck-with-latest-cf.sh
           no_output_timeout: 30m
 
+  typecheck-with-latest-CF-jdk21:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk21
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: env
+      - run:
+          command: scripts/test-typecheck-with-latest-cf.sh
+          no_output_timeout: 30m
+
 
 # For dependence logic, see ../azure-pipelines.yml .
 
@@ -800,150 +920,175 @@ workflows:
   version: 2
   build:
     jobs:
-      - jdk17-jobs:
+      - jdk21-jobs:
           requires:
-            - quick-txt-diff-ubuntu-jdk17
-            - nonquick-txt-diff-ubuntu-jdk17
-            - non-txt-diff-ubuntu-jdk17
-            - misc-ubuntu-jdk17
-            - kvasir-ubuntu-jdk17
-            - typecheck-with-bundled-CF-jdk17
+            - quick-txt-diff-ubuntu-jdk21
+            - nonquick-txt-diff-ubuntu-jdk21
+            - non-txt-diff-ubuntu-jdk21
+            - misc-ubuntu-jdk21
+            - kvasir-ubuntu-jdk21
+            - typecheck-with-bundled-CF-jdk21
       - quick-txt-diff-ubuntu-jdk8:
           requires:
-            - jdk17-jobs
-            - quick-txt-diff-ubuntu-jdk17
+            - jdk21-jobs
+            - quick-txt-diff-ubuntu-jdk21
       - quick-txt-diff-ubuntu-jdk11:
           requires:
-            - jdk17-jobs
-            - quick-txt-diff-ubuntu-jdk17
-      - quick-txt-diff-ubuntu-jdk17
-      - quick-txt-diff-ubuntu-jdk21:
+            - jdk21-jobs
+            - quick-txt-diff-ubuntu-jdk21
+      - quick-txt-diff-ubuntu-jdk17:
           requires:
-            - jdk17-jobs
-            - quick-txt-diff-ubuntu-jdk17
+            - jdk21-jobs
+            - quick-txt-diff-ubuntu-jdk21
+      - quick-txt-diff-ubuntu-jdk21
       - nonquick-txt-diff-ubuntu-jdk8:
           requires:
-            - jdk17-jobs
-            - nonquick-txt-diff-ubuntu-jdk17
+            - jdk21-jobs
+            - nonquick-txt-diff-ubuntu-jdk21
       - nonquick-txt-diff-ubuntu-jdk11:
           requires:
-            - jdk17-jobs
-            - nonquick-txt-diff-ubuntu-jdk17
-      - nonquick-txt-diff-ubuntu-jdk17
-      - nonquick-txt-diff-ubuntu-jdk21:
+            - jdk21-jobs
+            - nonquick-txt-diff-ubuntu-jdk21
+      - nonquick-txt-diff-ubuntu-jdk17:
           requires:
-            - jdk17-jobs
-            - nonquick-txt-diff-ubuntu-jdk17
+            - jdk21-jobs
+            - nonquick-txt-diff-ubuntu-jdk21
+      - nonquick-txt-diff-ubuntu-jdk21
       - non-txt-diff-ubuntu-jdk8:
           requires:
-            - jdk17-jobs
-            - non-txt-diff-ubuntu-jdk17
+            - jdk21-jobs
+            - non-txt-diff-ubuntu-jdk21
       - non-txt-diff-ubuntu-jdk11:
           requires:
-            - jdk17-jobs
-            - non-txt-diff-ubuntu-jdk17
-      - non-txt-diff-ubuntu-jdk17
-      - non-txt-diff-ubuntu-jdk21:
+            - jdk21-jobs
+            - non-txt-diff-ubuntu-jdk21
+      - non-txt-diff-ubuntu-jdk17:
           requires:
-            - jdk17-jobs
-            - non-txt-diff-ubuntu-jdk17
+            - jdk21-jobs
+            - non-txt-diff-ubuntu-jdk21
+      - non-txt-diff-ubuntu-jdk21
       - misc-ubuntu-jdk8:
           requires:
-            - jdk17-jobs
-            - misc-ubuntu-jdk17
+            - jdk21-jobs
+            - misc-ubuntu-jdk21
       - misc-ubuntu-jdk11:
           requires:
-            - jdk17-jobs
-            - misc-ubuntu-jdk17
-      - misc-ubuntu-jdk17
-      - misc-ubuntu-jdk21:
+            - jdk21-jobs
+            - misc-ubuntu-jdk21
+      - misc-ubuntu-jdk17:
           requires:
-            - jdk17-jobs
-            - misc-ubuntu-jdk17
+            - jdk21-jobs
+            - misc-ubuntu-jdk21
+      - misc-ubuntu-jdk21
       - kvasir-ubuntu-jdk8:
           requires:
-            - jdk17-jobs
-            - kvasir-ubuntu-jdk17
+            - jdk21-jobs
+            - kvasir-ubuntu-jdk21
       - kvasir-ubuntu-jdk11:
           requires:
-            - jdk17-jobs
-            - kvasir-ubuntu-jdk17
-      - kvasir-ubuntu-jdk17
-      - kvasir-ubuntu-jdk21:
+            - jdk21-jobs
+            - kvasir-ubuntu-jdk21
+      - kvasir-ubuntu-jdk17:
           requires:
-            - jdk17-jobs
-            - kvasir-ubuntu-jdk17
+            - jdk21-jobs
+            - kvasir-ubuntu-jdk21
+      - kvasir-ubuntu-jdk21
       - kvasir-rockylinux-jdk8:
           requires:
-            - jdk17-jobs
-            - kvasir-rockylinux-jdk17
+            - jdk21-jobs
+            - kvasir-rockylinux-jdk21
             - kvasir-ubuntu-jdk8
       - kvasir-rockylinux-jdk11:
           requires:
-            - jdk17-jobs
-            - kvasir-rockylinux-jdk17
+            - jdk21-jobs
+            - kvasir-rockylinux-jdk21
             - kvasir-ubuntu-jdk11
       - kvasir-rockylinux-jdk17:
           requires:
-            - jdk17-jobs
+            - jdk21-jobs
+            - kvasir-rockylinux-jdk21
             - kvasir-ubuntu-jdk17
+      - kvasir-rockylinux-jdk21:
+          requires:
+            - jdk21-jobs
+            - kvasir-ubuntu-jdk21
       - quick-txt-diff-rockylinux-jdk8:
           requires:
-            - jdk17-jobs
-            - quick-txt-diff-rockylinux-jdk17
+            - jdk21-jobs
+            - quick-txt-diff-rockylinux-jdk21
             - quick-txt-diff-ubuntu-jdk8
       - quick-txt-diff-rockylinux-jdk11:
           requires:
-            - jdk17-jobs
-            - quick-txt-diff-rockylinux-jdk17
+            - jdk21-jobs
+            - quick-txt-diff-rockylinux-jdk21
             - quick-txt-diff-ubuntu-jdk11
       - quick-txt-diff-rockylinux-jdk17:
           requires:
-            - jdk17-jobs
+            - jdk21-jobs
+            - quick-txt-diff-rockylinux-jdk21
             - quick-txt-diff-ubuntu-jdk17
+      - quick-txt-diff-rockylinux-jdk21:
+          requires:
+            - jdk21-jobs
+            - quick-txt-diff-ubuntu-jdk21
       - nonquick-txt-diff-rockylinux-jdk8:
           requires:
-            - jdk17-jobs
-            - nonquick-txt-diff-rockylinux-jdk17
+            - jdk21-jobs
+            - nonquick-txt-diff-rockylinux-jdk21
             - nonquick-txt-diff-ubuntu-jdk8
       - nonquick-txt-diff-rockylinux-jdk11:
           requires:
-            - jdk17-jobs
-            - nonquick-txt-diff-rockylinux-jdk17
+            - jdk21-jobs
+            - nonquick-txt-diff-rockylinux-jdk21
             - nonquick-txt-diff-ubuntu-jdk11
       - nonquick-txt-diff-rockylinux-jdk17:
           requires:
-            - jdk17-jobs
+            - jdk21-jobs
+            - nonquick-txt-diff-rockylinux-jdk21
             - nonquick-txt-diff-ubuntu-jdk17
+      - nonquick-txt-diff-rockylinux-jdk21:
+          requires:
+            - jdk21-jobs
+            - nonquick-txt-diff-ubuntu-jdk21
       - non-txt-diff-rockylinux-jdk8:
           requires:
-            - jdk17-jobs
-            - non-txt-diff-rockylinux-jdk17
+            - jdk21-jobs
+            - non-txt-diff-rockylinux-jdk21
             - non-txt-diff-ubuntu-jdk8
       - non-txt-diff-rockylinux-jdk11:
           requires:
-            - jdk17-jobs
-            - non-txt-diff-rockylinux-jdk17
+            - jdk21-jobs
+            - non-txt-diff-rockylinux-jdk21
             - non-txt-diff-ubuntu-jdk11
       - non-txt-diff-rockylinux-jdk17:
           requires:
-            - jdk17-jobs
+            - jdk21-jobs
+            - non-txt-diff-rockylinux-jdk21
             - non-txt-diff-ubuntu-jdk17
+      - non-txt-diff-rockylinux-jdk21:
+          requires:
+            - jdk21-jobs
+            - non-txt-diff-ubuntu-jdk21
       - misc-rockylinux-jdk8:
           requires:
-            - jdk17-jobs
-            - misc-rockylinux-jdk17
+            - jdk21-jobs
+            - misc-rockylinux-jdk21
             - misc-ubuntu-jdk8
       - misc-rockylinux-jdk11:
           requires:
-            - jdk17-jobs
-            - misc-rockylinux-jdk17
+            - jdk21-jobs
+            - misc-rockylinux-jdk21
             - misc-ubuntu-jdk11
       - misc-rockylinux-jdk17:
           requires:
-            - jdk17-jobs
+            - jdk21-jobs
+            - misc-rockylinux-jdk21
             - misc-ubuntu-jdk17
-      - typecheck-with-bundled-CF-jdk17
+      - misc-rockylinux-jdk21:
+          requires:
+            - jdk21-jobs
+            - misc-ubuntu-jdk21
+      - typecheck-with-bundled-CF-jdk21
 # Seems to run out of memory on CircleCI.  It's being checked on Azure Pipelines.
 #      -  typecheck-with-latest-CF-jdk8:
 #      -  typecheck-with-latest-CF-jdk11:
