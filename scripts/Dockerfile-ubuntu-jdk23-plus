@@ -3,8 +3,9 @@
 # But it's used primarily for running miscellaneous tests such as the manual
 # and Javadoc.
 
-# "ubuntu" is the latest LTS release.  "ubuntu:rolling" is the latest release.
-FROM ubuntu:rolling
+# "ubuntu" is the latest LTS release.  "ubuntu:rolling" is the latest release,
+# but it might lag behind; as of 2024-11-16, it was still 24.04 rather than 24.10.
+FROM ubuntu:oracular
 MAINTAINER Michael Ernst <mernst@cs.washington.edu>
 
 # According to
@@ -37,7 +38,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
-  openjdk-20-jdk
+  openjdk-23-jdk
 
 # These are needed to build the Checker Framework, used by the "typecheck" job in CI.
 RUN export DEBIAN_FRONTEND=noninteractive \
