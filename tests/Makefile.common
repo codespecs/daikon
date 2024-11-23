@@ -298,9 +298,9 @@ endif
 
 goal_name = $(if $(findstring 0, $(JAVA11_OR_NEWER)), \
 				$(1).goal, \
-				$(if $(findstring 1, $(JAVA24_OR_NEWER)), \
-					$(if $(shell if [ -f $(1).goal.j24 ] ; then echo true; fi), \
-						$(1).goal.j24, \
+				$(if $(findstring 1, $(JAVA23_OR_NEWER)), \
+					$(if $(shell if [ -f $(1).goal.j23 ] ; then echo true; fi), \
+						$(1).goal.j23, \
 					    $(if $(shell if [ -f $(1).goal.j21 ] ; then echo true; fi), \
 						    $(1).goal.j21, \
 					        $(if $(shell if [ -f $(1).goal.j19 ] ; then echo true; fi), \
