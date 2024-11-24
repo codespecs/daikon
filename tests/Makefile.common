@@ -229,48 +229,23 @@ default: help
 # to make the old vs. new test work properly.
 
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
-startJVS := $(shell echo start$(JAVA_VERSION_STRING))
+startJVS := $(shell echo start${JAVA_VERSION_STRING})
 ifneq (,$(findstring start1.8,$(startJVS)))
   JAVA_RELEASE_NUMBER := 8
-  JAVA11_OR_NEWER := 0
 else
   # Old Java releases (e.g. 1.7) will set JAVA_RELEASE_NUMBER to 1.
   # This will cause the JAVA8_OR_NEWER test to fail as desired.
-  JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
-  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 24),1)
-    JAVA24_OR_NEWER := 1
-  else
-    JAVA24_OR_NEWER := 0
-  endif
-  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 21),1)
-    JAVA21_OR_NEWER := 1
-  else
-    JAVA21_OR_NEWER := 0
-  endif
-  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 19),1)
-    JAVA19_OR_NEWER := 1
-  else
-    JAVA19_OR_NEWER := 0
-  endif
-  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 17),1)
-    JAVA17_OR_NEWER := 1
-  else
-    JAVA17_OR_NEWER := 0
-  endif
-  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 11),1)
-    JAVA11_OR_NEWER := 1
-  else
-    JAVA11_OR_NEWER := 0
-  endif
+  JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
 endif
 
-ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 8),1)
-  JAVA8_OR_NEWER := 1
-else
-  JAVA8_OR_NEWER := 0
-endif
+JAVA24_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 24)
+JAVA21_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 21)
+JAVA19_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 19)
+JAVA17_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 17)
+JAVA11_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 11)
+JAVA8_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 8)
 
-ifneq ($(JAVA8_OR_NEWER), 1)
+ifneq (${JAVA8_OR_NEWER}, 1)
     $(error Must use Java version 8 or later; found ${JAVA_RELEASE_NUMBER} in ${JAVA_VERSION_STRING})
 endif
 
@@ -475,7 +450,7 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
 create-scratch: ${SCRATCH_FOR_DAIKON}/.exists
 ${SCRATCH_FOR_DAIKON}/.exists:
 #	@echo
-#	@echo JAVA_RELEASE_NUMBER = $(JAVA_RELEASE_NUMBER)
+#	@echo JAVA_RELEASE_NUMBER = ${JAVA_RELEASE_NUMBER}
 	@echo
 	@echo "### create-scratch (${PROJECT_FILE})"
 	@echo
