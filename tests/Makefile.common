@@ -237,10 +237,10 @@ else
   # Old Java releases (e.g. 1.7) will set JAVA_RELEASE_NUMBER to 1.
   # This will cause the JAVA8_OR_NEWER test to fail as desired.
   JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
-  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 24),1)
-    JAVA24_OR_NEWER := 1
+  ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 23),1)
+    JAVA23_OR_NEWER := 1
   else
-    JAVA24_OR_NEWER := 0
+    JAVA23_OR_NEWER := 0
   endif
   ifeq ($(shell expr $(JAVA_RELEASE_NUMBER) \>= 21),1)
     JAVA21_OR_NEWER := 1
