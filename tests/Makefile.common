@@ -249,7 +249,8 @@ ifneq (${JAVA8_OR_NEWER}, 1)
     $(error Must use Java version 8 or later; found ${JAVA_RELEASE_NUMBER} in ${JAVA_VERSION_STRING})
 endif
 
-# Function to compute goal filename extension.  Java 8 is the default.
+# goal_name is a function that will be called like "$(call goal_name, FILENAME)"
+# to compute goal filename extension.  Java 8 is the default.
 # If we are running Java 19:
 #    if filename.test.goal.j19 exists, use it;
 #    otherwise, if filename.test.goal.j17 exists, use it;
@@ -266,11 +267,10 @@ endif
 # - string concatenation of variables sometimes caused the varaibles to be
 #   associated in Java 8 but not in Java 11. (This is an improvement.)
 #
-# The argument ($(1)) is '<filename>.<test>'
+# The argument ($(1)) is '<filename>.<test>', which is passed to "$(call goal_name, ...)".
 #
 # This goal_name does not apply to kvasir-tests which
 # have their own goal_name calculation.
-
 goal_name = $(if $(findstring 0, $(JAVA11_OR_NEWER)), \
 				$(1).goal, \
 				$(if $(findstring 1, $(JAVA24_OR_NEWER)), \
