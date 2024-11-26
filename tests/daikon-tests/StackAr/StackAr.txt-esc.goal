@@ -22,6 +22,15 @@ DataStructures.StackAr.StackAr(int):::EXIT
 \old(capacity) == this.theArray.length
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.topOfStack == -1
 (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null))
 (\old(capacity) >> \typeof(this.theArray).length() == 0)
@@ -36,6 +45,15 @@ DataStructures.StackAr.isEmpty():::EXIT
       Unmodified variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack]
 modifies this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
 (this.topOfStack == -1)  ==  (\result == true)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are Numeric)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are emails)
 (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null)))
 (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)))
 (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null))))
@@ -79,6 +97,15 @@ modifies this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.topOfStack == -1
 (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null))
 this.topOfStack <= \old(this.topOfStack)
@@ -168,6 +195,15 @@ DataStructures.StackAr.top():::EXIT74
 modifies this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.topOfStack == -1
 \result == null
 (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null))
@@ -204,6 +240,15 @@ DataStructures.StackAr.top():::EXIT
       Unmodified variables: this this.theArray this.theArray.getClass().getName() this.theArray[] this.theArray[].getClass().getName() this.topOfStack size(this.theArray[]) this.theArray[this.topOfStack+1..] this.theArray[0..this.topOfStack]
 modifies this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
 (this.topOfStack == -1)  ==  (\result == null)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are Numeric)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(this.topOfStack == -1)  ==>  (All the elements of this.theArray[].getClass().getName() are emails)
 (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null)))
 (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)))
 (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == \result)))
@@ -255,6 +300,15 @@ DataStructures.StackAr.topAndPop():::EXIT108
 modifies this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.topOfStack == -1
 \result == null
 (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null))
@@ -322,6 +376,24 @@ warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat
 (\result == null)  ==  (\old(this.topOfStack) == -1)
 (\result == null)  ==  ((\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] != null)))
 (\result == null)  ==  (this.topOfStack == \old(this.topOfStack))
+(\result == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are Numeric)
+(\result == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(\result == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(\result == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(\result == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(\result == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are dates. Format: DD/MM/YYYY)
+(\result == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are dates. Format: MM/DD/YYYY)
+(\result == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are dates. Format: YYYY-MM-DD)
+(\result == null)  ==>  (All the elements of orig(this.theArray[].getClass().getName()) are emails)
+(\result == null)  ==>  (All the elements of this.theArray[].getClass().getName() are Numeric)
+(\result == null)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(\result == null)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(\result == null)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(\result == null)  ==>  (All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(\result == null)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(\result == null)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(\result == null)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(\result == null)  ==>  (All the elements of this.theArray[].getClass().getName() are emails)
 (\result == null)  ==>  ((\forall int i; (0 <= i && i <= \old(this.topOfStack)) ==> (\old(this.theArray[i]) != null)))
 (\result == null)  ==>  ((\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(this.theArray[i]) == null)))
 (\result == null)  ==>  ((\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) == \typeof(null))))
