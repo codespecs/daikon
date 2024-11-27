@@ -20,30 +20,30 @@ env:
   global:
     - THIS_REPO=daikon
   matrix:
-    - OS=ubuntu JDKVER=jdk8 GROUP=quick-txt-diff
-    - OS=ubuntu JDKVER=jdk11 GROUP=quick-txt-diff
-    - OS=ubuntu JDKVER=jdk17 GROUP=quick-txt-diff
-    - OS=ubuntu JDKVER=jdk8 GROUP=nonquick-txt-diff
-    - OS=ubuntu JDKVER=jdk11 GROUP=nonquick-txt-diff
-    - OS=ubuntu JDKVER=jdk17 GROUP=nonquick-txt-diff
-    - OS=ubuntu JDKVER=jdk8 GROUP=non-txt-diff
-    - OS=ubuntu JDKVER=jdk11 GROUP=non-txt-diff
-    - OS=ubuntu JDKVER=jdk17 GROUP=non-txt-diff
-    - OS=ubuntu JDKVER=jdk8-plus GROUP=misc
-    - OS=ubuntu JDKVER=jdk11-plus GROUP=misc
-    - OS=ubuntu JDKVER=jdk17-plus GROUP=misc
-    - OS=ubuntu JDKVER=jdk8-plus GROUP=kvasir
-    - OS=ubuntu JDKVER=jdk11-plus GROUP=kvasir
-    - OS=ubuntu JDKVER=jdk17-plus GROUP=kvasir
-    - OS=rockylinux JDKVER=jdk8 GROUP=nonquick-txt-diff
-    - OS=rockylinux JDKVER=jdk11 GROUP=nonquick-txt-diff
-    - OS=rockylinux JDKVER=jdk17 GROUP=nonquick-txt-diff
-    - OS=rockylinux JDKVER=jdk8-plus GROUP=misc
-    - OS=rockylinux JDKVER=jdk11-plus GROUP=misc
-    - OS=rockylinux JDKVER=jdk17-plus GROUP=misc
-    - OS=rockylinux JDKVER=jdk8-plus GROUP=kvasir
-    - OS=rockylinux JDKVER=jdk11-plus GROUP=kvasir
-    - OS=rockylinux JDKVER=jdk17-plus GROUP=kvasir
+    - OS=ubuntu JDKVER=jdk8 GROUP=quick-txt-diff DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk11 GROUP=quick-txt-diff DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk17 GROUP=quick-txt-diff DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk8 GROUP=nonquick-txt-diff DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk11 GROUP=nonquick-txt-diff DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk17 GROUP=nonquick-txt-diff DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk8 GROUP=non-txt-diff DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk11 GROUP=non-txt-diff DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk17 GROUP=non-txt-diff DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk8-plus GROUP=misc DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk11-plus GROUP=misc DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk17-plus GROUP=misc DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk8-plus GROUP=kvasir DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk11-plus GROUP=kvasir DOCKERTESTING=-testing
+    - OS=ubuntu JDKVER=jdk17-plus GROUP=kvasir DOCKERTESTING=-testing
+    - OS=rockylinux JDKVER=jdk8 GROUP=nonquick-txt-diff DOCKERTESTING=-testing
+    - OS=rockylinux JDKVER=jdk11 GROUP=nonquick-txt-diff DOCKERTESTING=-testing
+    - OS=rockylinux JDKVER=jdk17 GROUP=nonquick-txt-diff DOCKERTESTING=-testing
+    - OS=rockylinux JDKVER=jdk8-plus GROUP=misc DOCKERTESTING=-testing
+    - OS=rockylinux JDKVER=jdk11-plus GROUP=misc DOCKERTESTING=-testing
+    - OS=rockylinux JDKVER=jdk17-plus GROUP=misc DOCKERTESTING=-testing
+    - OS=rockylinux JDKVER=jdk8-plus GROUP=kvasir DOCKERTESTING=-testing
+    - OS=rockylinux JDKVER=jdk11-plus GROUP=kvasir DOCKERTESTING=-testing
+    - OS=rockylinux JDKVER=jdk17-plus GROUP=kvasir DOCKERTESTING=-testing
 
 # Currently-failing jobs
 # This section is temporary and should be commented out when no jobs are failing.
@@ -56,7 +56,7 @@ env:
 # Running this first gives two tries in case of network lossage.
 before_script:
 - python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)"
-- (timeout 5m docker --debug=true pull mdernst/daikon-$OS-$JDKVER || [ $? -eq 124 ] && echo "docker pull timed out") || true
+- (timeout 5m docker --debug=true pull mdernst/daikon-$OS-$JDKVER$DOCKERTESTING || [ $? -eq 124 ] && echo "docker pull timed out") || true
 
 # The git commands are tried twice, in case of temporary network failure.
 # The fcntl line works around a bug where Travis truncates logs and fails.
@@ -76,7 +76,7 @@ script:
 - echo "TRAVIS_PULL_REQUEST_SHA=${TRAVIS_PULL_REQUEST_SHA}"
 - echo "TRAVIS_REPO_SLUG=${TRAVIS_REPO_SLUG}"
 - >-
-  docker --debug=true run -v $HOME/.gradle:/root/.gradle mdernst/daikon-$OS-$JDKVER /bin/bash -c "true &&
+  docker --debug=true run -v $HOME/.gradle:/root/.gradle mdernst/daikon-$OS-$JDKVER$DOCKERTESTING /bin/bash -c "true &&
      if [ $TRAVIS_EVENT_TYPE = pull_request ] ; then
        git clone --quiet $REMOTE_ORIGIN_URL $THIS_REPO || (sleep 1m && git clone --quiet $REMOTE_ORIGIN_URL $THIS_REPO)
        cd $THIS_REPO
