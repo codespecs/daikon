@@ -44,7 +44,7 @@ program like jarjar.
 NOTE: you may need to install package libpython<version>-dev for jarjar to compile.
 To create, run from this directory, using JDK 8:
 JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//') && \
-[ "$JAVA_VER" == "8" ] && make || echo "Use Java 8"
+[ "$JAVA_VER" == "8" ] && make || echo "Use Java 8 (or, maybe the build failed)"
 
 error-prone/ : https://repo1.maven.org/maven2/com/google/errorprone/error_prone_core/
 I tried to update to 2.19.1, but it required:
