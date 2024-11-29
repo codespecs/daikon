@@ -1,7 +1,7 @@
 # Create a Docker image that is ready to run the Daikon tests.
 
 FROM rockylinux:9
-MAINTAINER Michael Ernst <mernst@cs.washington.edu>
+LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
 
 # According to
 # https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
