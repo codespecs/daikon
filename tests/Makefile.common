@@ -238,7 +238,7 @@ else
   JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
 endif
 
-JAVA24_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 24)
+JAVA23_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 23)
 JAVA21_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 21)
 JAVA19_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 19)
 JAVA17_OR_NEWER := $(shell expr ${JAVA_RELEASE_NUMBER} \>= 17)
@@ -265,7 +265,7 @@ endif
 # This goal_name does not apply to kvasir-tests which
 # have their own goal_name calculation.
 goal_name = \
-  $(if $(and $(findstring 1, $(JAVA24_OR_NEWER)), $(wildcard $(1).goal.j24)), \
+  $(if $(and $(findstring 1, $(JAVA23_OR_NEWER)), $(wildcard $(1).goal.j23)), \
        $(1).goal.j24, \
     $(if $(and $(findstring 1, $(JAVA21_OR_NEWER)), $(wildcard $(1).goal.j21)), \
          $(1).goal.j21, \
@@ -1370,7 +1370,7 @@ showvars:
 	@echo "RUN_JAVA            =" ${RUN_JAVA}
 	@echo "java version:"
 	@${RUN_JAVA} -version
-	@echo "JAVA24_OR_NEWER     =" ${JAVA24_OR_NEWER}
+	@echo "JAVA23_OR_NEWER     =" ${JAVA23_OR_NEWER}
 	@echo "JAVA21_OR_NEWER     =" ${JAVA21_OR_NEWER}
 	@echo "JAVA19_OR_NEWER     =" ${JAVA19_OR_NEWER}
 	@echo "JAVA17_OR_NEWER     =" ${JAVA17_OR_NEWER}
