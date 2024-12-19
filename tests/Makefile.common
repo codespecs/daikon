@@ -266,7 +266,7 @@ endif
 # have their own goal_name calculation.
 goal_name = \
   $(if $(and $(findstring 1, $(JAVA23_OR_NEWER)), $(wildcard $(1).goal.j23)), \
-       $(1).goal.j24, \
+       $(1).goal.j23, \
     $(if $(and $(findstring 1, $(JAVA21_OR_NEWER)), $(wildcard $(1).goal.j21)), \
          $(1).goal.j21, \
       $(if $(and $(findstring 1, $(JAVA19_OR_NEWER)), $(wildcard $(1).goal.j19)), \
