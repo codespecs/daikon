@@ -1370,6 +1370,13 @@ showvars:
 	@echo "RUN_JAVA            =" ${RUN_JAVA}
 	@echo "java version:"
 	@${RUN_JAVA} -version
+	@echo "JAVA24_OR_NEWER     =" ${JAVA24_OR_NEWER}
+	@echo "JAVA21_OR_NEWER     =" ${JAVA21_OR_NEWER}
+	@echo "JAVA19_OR_NEWER     =" ${JAVA19_OR_NEWER}
+	@echo "JAVA17_OR_NEWER     =" ${JAVA17_OR_NEWER}
+	@echo "JAVA11_OR_NEWER     =" ${JAVA11_OR_NEWER}
+	@echo "JAVA8_OR_NEWER     =" ${JAVA8_OR_NEWER}
+
 	@echo "CLASSPATH           =" ${CLASSPATH}
 	@echo "DAIKON_TESTS_CLASSPATH =" ${DAIKON_TESTS_CLASSPATH}
 	@echo "SHELL               =" ${SHELL}
