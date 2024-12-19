@@ -5,6 +5,9 @@
 DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 SCRIPTS=$(DAIKONDIR)/scripts
 
+JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
+JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
+
 # Help system
 default help: help-recurse
 
@@ -69,7 +72,12 @@ javautil-%: do-Vector-% do-ArrayList13-% do-ArrayList17-%
 	@echo ${HR}
 large-%: # do-Flex-% do-JML-%
 	@echo ${HR}
+# the "junit" test crashes with "An exception has occurred in the compiler (23)".
+ifeq ($(shell test ${JAVA_VERSION_STRING} -eq 23; echo $$?),0)
+new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-baseline-% do-junit5-%
+else
 new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-baseline-% do-junit-% do-junit5-%
+endif
 	@echo ${HR}
 
 # Extra groupings
