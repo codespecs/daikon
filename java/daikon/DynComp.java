@@ -285,6 +285,7 @@ public class DynComp {
     List<String> cmdlist = new ArrayList<>();
     cmdlist.add("java");
     // cmdlist.add ("-verbose:class");
+    cmdlist.add("--enable-preview");
     cmdlist.add("-cp");
     cmdlist.add(cp);
     cmdlist.add("-ea");
