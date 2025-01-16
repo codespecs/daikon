@@ -18,17 +18,10 @@ jobs:
       with:
         fetch-depth: 1
         show-progress: false
-    - name: Cache JDK
-      uses: actions/cache@v4
-      id: cache-jdk
-      with:
-        path: ~/.java
-        key: jdk-${{ env.JDK_OS }}-${{ env.JDK_ARCH }}-${{ env.JDK_VERSION }}
     - name: Install JDK
-      if: steps.cache-jdk.outputs.cache-hit != 'true'
       run: |
         export JDK_FILE="jdk-$JDK_VERSION-$JDK_OS-$JDK_ARCH.tar.gz"
-        export JDK_URL="https://defects4j.org/downloads/$JDK_FILE"
+        export JDK_URL="https://plse.cs.washington.edu/daikon/downloads/$JDK_FILE"
         if [ ! -f "$JDK_FILE" ]; then mkdir -p ~/.java && (timeout 400 curl -O -s -S -L --retry 3 "$JDK_URL" || curl -O -L --retry 3 "$JDK_URL") && tar -xzf "$JDK_FILE" -C ~/.java; fi
     - name: Setup JDK
       run: |
