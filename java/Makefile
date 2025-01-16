@@ -753,7 +753,7 @@ endif
 
 # Create an `error-prone.patch` file.
 errorprone-replacements:
-	javac -cp ${DAIKON_CLASSPATH} \
+	javac -cp ${DAIKON_CLASSPATH} -source 24 -target 24 --enable-preview  \
 	  --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
 	  --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
