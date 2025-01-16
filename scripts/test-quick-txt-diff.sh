@@ -6,6 +6,9 @@ set -o verbose
 set -o xtrace
 export SHELLOPTS
 
+env
+ls -l $JAVA_HOME/bin
+
 make showvars compile daikon.jar
 
 make dyncomp-jdk
