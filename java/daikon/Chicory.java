@@ -39,9 +39,20 @@ public class Chicory {
   @Option("-v Print progress information")
   public static boolean verbose = false;
 
-  /** Print debug information and save instrumented classes. */
-  @Option("-d Print debug information and save instrumented classes")
+  /**
+   * Dump the instrumented classes to disk, for diagnostic purposes. The directory is specified by
+   * {@code --debug-dir} (default {@code debug}).
+   */
+  @Option("Dump the instrumented classes to disk")
+  public static boolean dump = false;
+
+  /** Output debugging information. */
+  @Option("-d Output debugging information (implies --dump)")
   public static boolean debug = false;
+
+  /** The directory in which to dump instrumented class files. */
+  @Option("Directory in which to create debug files")
+  public static File debug_dir = new File("debug");
 
   /** File in which to put dtrace output. */
   @Option("File in which to put dtrace output")
@@ -414,6 +425,7 @@ public class Chicory {
       // cmdlist.add("-Djava.compiler=NONE");
     }
 
+    cmdlist.add("--enable-preview");
     cmdlist.add("-cp");
     cmdlist.add(cp);
     cmdlist.add("-ea");

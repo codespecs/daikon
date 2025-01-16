@@ -37,7 +37,7 @@ endif
 
 # Add flags like "-source 8" or "-target 8" to JAVAC_TARGET_FLAGS.
 # That variable appears last and overrides the values we provide here.
-JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -source 8 -target 8 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${LINT_THIS_ESCAPE} ${JAVAC_TARGET_FLAGS}
+JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -source 24 -target 24 --enable-preview -Xlint:-path -Xlint:-options -Xlint:-classfile ${LINT_THIS_ESCAPE} ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
@@ -434,13 +434,20 @@ xlint: chicory ${ALL_GENERATED_FILES}
 all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
-	rm -f `find daikon -name "*.class" -print`
+	rm -f `find daikon -path "./debug" -prune -name "*.class" -print`
 	@echo "CLASSPATH = ${CLASSPATH}"
 	@echo "DAIKON_CLASSPATH = ${DAIKON_CLASSPATH}"
 	@echo "JAVA_RELEASE_NUMBER = ${JAVA_RELEASE_NUMBER}"
 	@echo "JAVA_VERSION_STRING_WITH_EA = ${JAVA_VERSION_STRING_WITH_EA}"
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
+	@if test -e ${DAIKONDIR}/java/daikon/dcomp-transfer/DCRuntime.class; then \
+	  echo sed -e's/jaxa/java/g' -i -b ${DAIKONDIR}/java/daikon/dcomp-transfer/DCRuntime.class; \
+	  sed -e's/jaxa/java/g' -i -b ${DAIKONDIR}/java/daikon/dcomp-transfer/DCRuntime.class; \
+	else \
+	  echo sed -e's/jaxa/java/g' -i -b ${DAIKONDIR}/java/daikon/dcomp-dummy/DCRuntime.class; \
+	  sed -e's/jaxa/java/g' -i -b ${DAIKONDIR}/java/daikon/dcomp-dummy/DCRuntime.class; \
+	fi;
 # on some systems chmod with symbolic arguments pays attention to umask.  so use 444 instead of -w
 	@chmod 444 ${AUTO_GENERATED_FILES}
 # This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
@@ -469,6 +476,7 @@ CHICORY_JAVA_FILES := daikon/Chicory.java daikon/chicory/*.java
 # This actually requires Daikon to already be compiled.
 # It would be good to make that an explicit prerequisite.
 .PHONY: chicory
+.PRECIOUS: ChicoryPremain.jar
 chicory : ChicoryPremain.jar
 ChicoryPremain.jar : $(wildcard $(CHICORY_JAVA_FILES)) \
 					 daikon/chicory/manifest.txt
@@ -481,7 +489,7 @@ ChicoryPremain.jar : $(wildcard $(CHICORY_JAVA_FILES)) \
 chicory-test : daikon/chicory/inv_out.diff
 daikon/chicory/inv_out.diff : ChicoryPremain.jar
 	cd daikon/chicory && rm -f ChicoryTest.log ChicoryTest.dtrace.gz ChicoryTest.inv.gz ChicoryTest.inv.out
-	cd daikon/chicory && $(JAVA_COMMAND) daikon.Chicory --verbose --debug daikon.chicory.ChicoryTest > ChicoryTest.log
+	cd daikon/chicory && $(JAVA_COMMAND) --enable-preview daikon.Chicory --verbose --debug daikon.chicory.ChicoryTest > ChicoryTest.log 2>&1
 	cd daikon/chicory && $(JAVA_COMMAND) daikon.Daikon --no_text_output --no_show_progress ChicoryTest.dtrace.gz
 	cd daikon/chicory && $(JAVA_COMMAND) daikon.PrintInvariants ChicoryTest.inv.gz > ChicoryTest.inv.out
 	-diff -uw daikon/chicory/ChicoryTest.inv.out.goal daikon/chicory/ChicoryTest.inv.out \
@@ -511,7 +519,7 @@ dcomp_premain.jar : $(wildcard $(INSTRUMENTATION_JAVA_FILES)) daikon/dcomp/manif
 dcomp-test : daikon/dcomp/std_dcomp_out.diff
 daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
-	$(JAVA_COMMAND) \
+	$(JAVA_COMMAND) --enable-preview \
 	  daikon.DynComp $(DCOMP_ARGS) \
 	  --comparability-file=daikon/dcomp/std_dcomp_out.txt --rt-file=NONE \
 	  daikon/dcomp/DcompTest
@@ -523,7 +531,7 @@ daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 
 dyncomp-test-jdk dcomp-test-jdk : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
-	$(JAVA_COMMAND) \
+	$(JAVA_COMMAND) --enable-preview \
 	   daikon.DynComp $(DCOMP_ARGS) \
 	   --comparability-file=daikon/dcomp/jdk_dcomp_out.txt daikon/dcomp/DcompTest
 	-diff -u daikon/dcomp/jdk_dcomp_out.goal daikon/dcomp/jdk_dcomp_out.txt \
@@ -543,7 +551,7 @@ dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 $(DCOMP_RT) dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	$(INSTALL) -d $(DCOMP_RT)
-	$(JAVA_COMMAND) -Xmx3600m daikon.dcomp.BuildJDK $(DCOMP_RT)
+	$(JAVA_COMMAND) --enable-preview -Xmx3600m daikon.dcomp.BuildJDK $(DCOMP_RT)
 # "then" clause is Java 8, "else" clause is Java 9+.
 # For Java 9+, there appears to be a bug in the Java reflection invoke code that it
 # does not check that the arg list matches.  Hence, it tries to invoke
@@ -1176,7 +1184,7 @@ ifeq ($(SKIP_JAVADOC),1)
 else
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} --enable-preview -source 24 -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all ${DOCLET_FLAGS} \
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
@@ -1212,7 +1220,7 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS}\
+	${JAVADOC_COMMAND} --enable-preview -source 24 -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS}\
 		--texinfo tmpfile \
 		@javadoc-files.txt
 	mv -f tmpfile $@
@@ -1223,7 +1231,7 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS}\
+	${JAVADOC_COMMAND} --enable-preview -source 24 -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS}\
 		--texinfo tmpfile \
 		@javadoc-files.txt
 	perl -pi -e 's/&#64;cindex/\@cindex/g' tmpfile

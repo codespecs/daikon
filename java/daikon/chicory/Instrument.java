@@ -1,47 +1,39 @@
 package daikon.chicory;
 
+import static java.lang.classfile.constantpool.PoolEntry.*;
+import static java.lang.constant.ConstantDescs.*;
+
 import daikon.Chicory;
-import daikon.plumelib.bcelutil.InstructionListUtils;
 import daikon.plumelib.bcelutil.SimpleLog;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.lang.classfile.*;
+import java.lang.classfile.Attributes;
+import java.lang.classfile.Opcode.*;
+import java.lang.classfile.attribute.*;
+import java.lang.classfile.components.ClassPrinter;
+import java.lang.classfile.constantpool.*;
+import java.lang.classfile.instruction.*;
+import java.lang.constant.*;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.AccessFlag;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.bcel.Const;
-import org.apache.bcel.classfile.Attribute;
-import org.apache.bcel.classfile.ClassParser;
-import org.apache.bcel.classfile.Constant;
-import org.apache.bcel.classfile.ConstantUtf8;
-import org.apache.bcel.classfile.ConstantValue;
-import org.apache.bcel.classfile.Field;
-import org.apache.bcel.classfile.JavaClass;
-import org.apache.bcel.classfile.Method;
-import org.apache.bcel.classfile.StackMapEntry;
-import org.apache.bcel.classfile.StackMapType;
-import org.apache.bcel.generic.ACONST_NULL;
-import org.apache.bcel.generic.ArrayType;
-import org.apache.bcel.generic.BasicType;
-import org.apache.bcel.generic.ClassGen;
-import org.apache.bcel.generic.ConstantPoolGen;
-import org.apache.bcel.generic.Instruction;
-import org.apache.bcel.generic.InstructionFactory;
-import org.apache.bcel.generic.InstructionHandle;
-import org.apache.bcel.generic.InstructionList;
-import org.apache.bcel.generic.InstructionTargeter;
-import org.apache.bcel.generic.LineNumberGen;
-import org.apache.bcel.generic.LocalVariableGen;
-import org.apache.bcel.generic.MethodGen;
-import org.apache.bcel.generic.ObjectType;
-import org.apache.bcel.generic.PUSH;
-import org.apache.bcel.generic.Type;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
@@ -54,22 +46,75 @@ import org.checkerframework.dataflow.qual.Pure;
  * purposes.
  */
 @SuppressWarnings("nullness")
-public class Instrument extends InstructionListUtils implements ClassFileTransformer {
+public class Instrument implements ClassFileTransformer {
+
+  /** A log to which to print debugging information about program instrumentation. */
+  protected SimpleLog debugInstrument = new SimpleLog(false);
+
+  /** Directory for debug output. */
+  File debug_dir;
+
+  /** Directory for debug instrumented class output. */
+  File debug_bin_dir;
+
+  /** Directory for debug original class output. */
+  File debug_orig_dir;
 
   /** The index of this method in SharedData.methods. */
   int cur_method_info_index = 0;
 
+  MethodInfo curMethodInfo;
+
   /** The location of the runtime support class. */
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
+  private static final ClassDesc runtimeCD = ClassDesc.of(runtime_classname);
+  private static final ClassDesc objectCD = ClassDesc.of("java.lang.Object");
+
   /** Debug information about which classes are transformed and why. */
   public static SimpleLog debug_transform = new SimpleLog(false);
+
+  // variables used for the entire class
+  @BinaryName String binaryClassName;
+  private boolean hasClinit;
+  private ClassModel classModel;
+
+  /** Stores useful information about a class. */
+  private ClassInfo classInfo;
+
+  /** ConstantPool builder for entire class. */
+  private ConstantPoolBuilder poolBuilder;
+
+  // Variables used for the entire method.
+  // They are initialized in modifyCode().
+
+  /** next available slot in localsTable currently always = max locals */
+  private int nextLocalIndex;
+
+  /** local variable table (stored as an ArrayList) */
+  List<LocalVariable> localsTable;
+
+  /** labels for first and last byte code of method used to give new locals method scope */
+  private Label startLabel, endLabel;
+
+  LocalVariable nonceLocal, returnLocal;
+
+  // End of method variables.
 
   /** Create a new Instrument. Sets up debug logging. */
   public Instrument() {
     super();
     debug_transform.enabled = Chicory.debug_transform;
     debugInstrument.enabled = Chicory.debug;
+
+    debug_dir = Chicory.debug_dir;
+    debug_bin_dir = new File(debug_dir, "bin");
+    debug_orig_dir = new File(debug_dir, "orig");
+
+    if (Chicory.dump) {
+      debug_bin_dir.mkdirs();
+      debug_orig_dir.mkdirs();
+    }
   }
 
   /**
@@ -127,7 +172,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /**
    * Given a class, return a transformed version of the class that contains "hooks" at method
    * entries and exits. Because Chicory is invoked as a javaagent, the transform method is called by
-   * the Java runtime each time a new class is loaded.
+   * the Java runtime each time a new class is loaded. A return value of null leaves the byte codes
+   * unchanged.
    */
   @Override
   public byte @Nullable [] transform(
@@ -138,9 +184,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    @BinaryName String fullClassName = className.replace("/", ".");
-    // String fullClassName = className;
+    // convert internal form to binary name
+    binaryClassName = className.replace("/", ".");
 
+    // for debugging
     // new Throwable().printStackTrace();
 
     debug_transform.log("In chicory.Instrument.transform(): class = %s%n", className);
@@ -156,32 +203,31 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // to catch all of these.  A more consistent mechanism to determine
     // boot classes would be preferrable.
     if (Chicory.boot_classes != null) {
-      Matcher matcher = Chicory.boot_classes.matcher(fullClassName);
+      Matcher matcher = Chicory.boot_classes.matcher(binaryClassName);
       if (matcher.find()) {
-        debug_transform.log("ignoring boot class %s, matches boot_classes regex%n", fullClassName);
+        debug_transform.log(
+            "ignoring boot class %s, matches boot_classes regex%n", binaryClassName);
         return null;
       }
     } else if (loader == null) {
-      debug_transform.log("ignoring system class %s, class loader == null%n", fullClassName);
+      debug_transform.log("ignoring system class %s, class loader == null%n", binaryClassName);
       return null;
     } else if (loader.getParent() == null) {
-      debug_transform.log("ignoring system class %s, parent loader == null%n", fullClassName);
+      debug_transform.log("ignoring system class %s, parent loader == null%n", binaryClassName);
       return null;
-    } else if (fullClassName.startsWith("sun.reflect")) {
-      debug_transform.log("ignoring system class %s, in sun.reflect package%n", fullClassName);
+    } else if (binaryClassName.startsWith("sun.reflect")) {
+      debug_transform.log("ignoring system class %s, in sun.reflect package%n", binaryClassName);
       return null;
-    } else if (fullClassName.startsWith("jdk.internal.reflect")) {
+    } else if (binaryClassName.startsWith("jdk.internal.reflect")) {
       // Starting with Java 9 sun.reflect => jdk.internal.reflect.
       debug_transform.log(
-          "ignoring system class %s, in jdk.internal.reflect package", fullClassName);
+          "ignoring system class %s, in jdk.internal.reflect package", binaryClassName);
       return null;
-    } else if (fullClassName.startsWith("com.sun")) {
-      debug_transform.log("Class from com.sun package %s with nonnull loaders%n", fullClassName);
     }
 
-    // Don't intrument our code
+    // Don't instrument our own code
     if (is_chicory(className)) {
-      debug_transform.log("Not considering chicory class %s%n", fullClassName);
+      debug_transform.log("Not considering chicory class %s%n", binaryClassName);
       return null;
     }
 
@@ -189,417 +235,468 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         "transforming class %s, loader %s - %s%n", className, loader, loader.getParent());
 
     // Parse the bytes of the classfile, die on any errors
-    JavaClass c;
-    try (ByteArrayInputStream bais = new ByteArrayInputStream(classfileBuffer)) {
-      ClassParser parser = new ClassParser(bais, className);
-      c = parser.parse();
+    ClassFile classFile =
+        ClassFile.of(
+            ClassFile.ClassHierarchyResolverOption.of(
+                ClassHierarchyResolver.ofResourceParsing(loader)));
+    try {
+      classModel = classFile.parse(classfileBuffer);
     } catch (Throwable t) {
-      System.out.printf("Unexpected error %s in transform of %s%n", t, fullClassName);
+      System.err.printf("Unexpected error %s reading in %s%n", t, binaryClassName);
       t.printStackTrace();
       // No changes to the bytecodes
       return null;
     }
 
+    if (Chicory.dump) {
+      try {
+        debugInstrument.log("Dumping %s to %s%n", binaryClassName, debug_orig_dir);
+        // Define the output file
+        Path outputFile = Paths.get(debug_orig_dir.toString(), binaryClassName + ".class");
+        // Write the byte array to a .class file
+        Files.write(outputFile, classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL));
+        // write a bcel like file with an extension of .javap
+        Consumer<String> cs = fileConsumer(new File(debug_orig_dir, binaryClassName + ".javap"));
+        ClassPrinter.toJson(classModel, ClassPrinter.Verbosity.TRACE_ALL, cs);
+      } catch (Throwable t) {
+        System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
+        t.printStackTrace();
+        // proceed with instrumentation
+      }
+    }
+
+    hasClinit = false;
+    byte[] newBytes = {};
+    debugInstrument.log("\nClass: " + binaryClassName);
+    // Modify the classfile, die on any errors
     try {
-      // Get the class information
-      ClassGen cg = new ClassGen(c);
 
-      // Convert reach non-void method to save its result in a local
-      // before returning
-      ClassInfo c_info = instrument_all_methods(cg, fullClassName, loader);
+      newBytes =
+          classFile.build(
+              classModel.thisClass().asSymbol(),
+              classBuilder -> modifyClass(classBuilder, classModel, loader));
 
-      // get constant static fields!
-      Field[] fields = cg.getFields();
-      for (Field field : fields) {
-        if (field.isFinal() && field.isStatic() && (field.getType() instanceof BasicType)) {
-          ConstantValue value = field.getConstantValue();
-          String valString;
+    } catch (Throwable t) {
+      System.err.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
+      t.printStackTrace();
+      // No changes to the bytecodes
+      return null;
+    }
 
-          if (value == null) {
-            // System.out.println("WARNING FROM " + field.getName());
-            // valString = "WARNING!!!";
-            valString = null;
-          } else {
-            valString = value.toString();
-            // System.out.println("GOOD FROM " + field.getName() +
-            //                    " --- " + valString);
-          }
-
-          if (valString != null) {
-            c_info.staticMap.put(field.getName(), valString);
-          }
-        }
+    if (Chicory.dump) {
+      try {
+        debugInstrument.log("Dumping %s to %s%n", binaryClassName, debug_bin_dir);
+        // Define the output file
+        Path outputFile = Paths.get(debug_bin_dir.toString(), binaryClassName + ".class");
+        // Write the byte array to a .class file
+        Files.write(outputFile, newBytes);
+        // write a bcel like file with an extension of .javap
+        ClassModel newClassModel = classFile.parse(newBytes);
+        Consumer<String> cs = fileConsumer(new File(debug_bin_dir, binaryClassName + ".javap"));
+        ClassPrinter.toJson(newClassModel, ClassPrinter.Verbosity.TRACE_ALL, cs);
+      } catch (Throwable t) {
+        System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
+        t.printStackTrace();
+        // proceed with instrumentation
       }
+    }
 
-      if (Chicory.checkStaticInit) {
-        // check for static initializer
-        boolean hasInit = false;
-        for (Method meth : cg.getMethods()) {
-          if (meth.getName().equals("<clinit>")) {
-            hasInit = true;
-          }
-        }
-
-        // if not found, add our own!
-        if (!hasInit) {
-          cg.addMethod(createClinit(cg, fullClassName));
-        }
-      }
-
-      JavaClass njc = cg.getJavaClass();
-      if (Chicory.debug) {
-        Path dir = Files.createTempDirectory("chicory-debug");
-        Path file = dir.resolve(njc.getClassName() + ".class");
-        debugInstrument.log("Dumping %s to %s%n", njc.getClassName(), file);
-        Files.createDirectories(dir);
-        njc.dump(file.toFile());
-      }
-
-      if (c_info.shouldInclude) {
-        // System.out.println ("Instrumented class " + className);
-        // String filename = "/homes/gws/mernst/tmp/" + className +
-        //                   "Transformed.class";
-        // System.out.println ("About to dump class " + className +
-        //                     " to " + filename);
-        // njc.dump(filename);
-        return njc.getBytes();
-      } else {
-        // No changes to the bytecodes
-        return null;
-      }
-
-    } catch (Throwable e) {
-      System.out.printf("Unexpected error %s in transform of %s%n", e, fullClassName);
-      e.printStackTrace();
+    if (classInfo.shouldInclude) {
+      return newBytes;
+    } else {
       // No changes to the bytecodes
       return null;
     }
   }
 
-  // used to add a "hook" into the <clinit> static initializer
-  private Method addInvokeToClinit(ClassGen cg, MethodGen mg, String fullClassName) {
+  private void modifyClass(ClassBuilder classBuilder, ClassModel classModel, ClassLoader loader) {
 
-    try {
-      InstructionList il = mg.getInstructionList();
-      setCurrentStackMapTable(mg, cg.getMajor());
-      MethodContext context = new MethodContext(cg, mg);
+    // Save constant pool builder for later use
+    poolBuilder = classBuilder.constantPool();
+    classInfo = new ClassInfo(binaryClassName, loader);
 
-      for (InstructionHandle ih = il.getStart(); ih != null; ) {
-        Instruction inst = ih.getInstruction();
-
-        // Get the translation for this instruction (if any)
-        InstructionList new_il = xform_clinit(cg.getConstantPool(), fullClassName, inst, context);
-
-        // Remember the next instruction to process
-        InstructionHandle next_ih = ih.getNext();
-
-        // will do nothing if new_il == null
-        insertBeforeHandle(mg, ih, new_il, false);
-
-        // Go on to the next instruction in the list
-        ih = next_ih;
-      }
-
-      remove_local_variable_type_table(mg);
-      createNewStackMapAttribute(mg);
-
-      // Update the max stack and Max Locals
-      mg.setMaxLocals();
-      mg.setMaxStack();
-      mg.update();
-    } catch (Exception e) {
-      System.out.printf("Unexpected exception encountered: %s", e);
-      e.printStackTrace();
+    debugInstrument.log("Class Attributes:");
+    for (java.lang.classfile.Attribute<?> a : classModel.attributes()) {
+      debugInstrument.log("  " + a);
     }
 
-    return mg.getMethod();
+    // Have each non-void method save its result in a local before returning.
+    instrument_all_methods(classModel, classBuilder);
+
+    // remember any constant static fields
+    List<FieldModel> fields = classModel.fields();
+    for (FieldModel fm : fields) {
+      Optional<ConstantValueAttribute> cva = fm.findAttribute(Attributes.constantValue());
+      if (cva.isPresent()) {
+        String name = fm.fieldName().stringValue();
+        String value = formatConstantDesc(cva.get().constant().constantValue());
+        // debug
+        debugInstrument.log("  Constant field: %s, value: %s%n", name, value);
+        classInfo.staticMap.put(name, value);
+      }
+    }
+
+    if (Chicory.checkStaticInit && !hasClinit) {
+      // If no clinit method need to add our own
+      classBuilder.withMethod(
+          "<clinit>",
+          MethodTypeDesc.of(CD_void),
+          ClassFile.ACC_STATIC,
+          methodBuilder ->
+              methodBuilder.withCode(
+                  codeBuilder -> {
+                    codeBuilder
+                        .ldc(binaryClassName)
+                        .invokestatic(
+                            runtimeCD, "initNotify", MethodTypeDesc.of(CD_void, CD_String))
+                        .return_();
+                  }));
+    }
+  }
+
+  // used to add a "hook" into the <clinit> static initializer
+  private void addInvokeToClinit(MethodGen mgen) {
+
+    try {
+      List<CodeElement> il = mgen.getInstructionList();
+      ListIterator<CodeElement> li = il.listIterator();
+      while (li.hasNext()) {
+
+        CodeElement inst = li.next();
+
+        // back up iterator to point to 'inst'
+        li.previous();
+
+        // Get the translation for this instruction (if any)
+        List<CodeElement> new_il = xform_clinit(inst);
+
+        // insert code prior to 'inst'
+        for (CodeElement ce : new_il) {
+          li.add(ce);
+        }
+
+        // skip over 'inst' we just inserted new_il in front of
+        li.next();
+      }
+    } catch (Exception e) {
+      System.err.printf("Unexpected exception encountered: %s", e);
+      e.printStackTrace();
+    }
   }
 
   // called by addInvokeToClinit to add in a hook at return opcodes
-  private @Nullable InstructionList xform_clinit(
-      ConstantPoolGen cp, String fullClassName, Instruction inst, MethodContext context) {
+  private @Nullable List<CodeElement> xform_clinit(CodeElement inst) {
 
-    switch (inst.getOpcode()) {
-      case Const.ARETURN:
-      case Const.DRETURN:
-      case Const.FRETURN:
-      case Const.IRETURN:
-      case Const.LRETURN:
-      case Const.RETURN:
-        return call_initNotify(cp, fullClassName, context.ifact);
-
-      default:
-        return null;
+    if (inst instanceof ReturnInstruction) {
+      return call_initNotify();
+    } else {
+      // return empty list
+      return new ArrayList<>();
     }
   }
 
-  // create a <clinit> method, if none exists; guarantees we have this hook
-  private Method createClinit(ClassGen cg, @BinaryName String fullClassName) {
-    InstructionFactory factory = new InstructionFactory(cg);
+  // created the List<CodeElement> to insert for adding the <clinit> hook
+  private List<CodeElement> call_initNotify() {
 
-    InstructionList il = new InstructionList();
-    il.append(call_initNotify(cg.getConstantPool(), fullClassName, factory));
-    il.append(InstructionFactory.createReturn(Type.VOID)); // need to return!
+    List<CodeElement> codeList = new ArrayList<>();
 
-    MethodGen newMethGen =
-        new MethodGen(
-            8,
-            Type.VOID,
-            new Type[0],
-            new String[0],
-            "<clinit>",
-            fullClassName,
-            il,
-            cg.getConstantPool());
-    newMethGen.update();
+    MethodRefEntry mre =
+        poolBuilder.methodRefEntry(runtimeCD, "initNotify", MethodTypeDesc.of(CD_void, CD_String));
+    codeList.add(ConstantInstruction.ofLoad(Opcode.LDC, poolBuilder.stringEntry(binaryClassName)));
+    codeList.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
 
-    // Update the max stack and Max Locals
-    newMethGen.setMaxLocals();
-    newMethGen.setMaxStack();
-    newMethGen.update();
-
-    return newMethGen.getMethod();
+    return codeList;
   }
-
-  // created the InstructionList to insert for adding the <clinit> hook
-  private InstructionList call_initNotify(
-      ConstantPoolGen cp, String fullClassName, InstructionFactory factory) {
-
-    InstructionList invokeList = new InstructionList();
-
-    invokeList.append(new PUSH(cp, fullClassName));
-    invokeList.append(
-        factory.createInvoke(
-            runtime_classname,
-            "initNotify",
-            Type.VOID,
-            new Type[] {Type.STRING},
-            Const.INVOKESTATIC));
-
-    // System.out.println(fullClassName + " --- " + invokeList.size());
-    return invokeList;
-  }
-
-  // Map<Integer, InstructionHandle> offset_map = new HashMap<>();
-  InstructionHandle[] offset_map;
 
   /**
    * Instrument all the methods in a class. For each method, add instrumentation code at the entry
    * and at each return from the method. In addition, changes each return statement to first place
    * the value being returned into a local and then return. This allows us to work around the JDI
    * deficiency of not being able to query return values.
-   *
-   * @param fullClassName must be fully qualified: packageName.className
    */
-  private ClassInfo instrument_all_methods(ClassGen cg, String fullClassName, ClassLoader loader) {
+  private void instrument_all_methods(ClassModel classModel, ClassBuilder classBuilder) {
 
-    ClassInfo class_info = new ClassInfo(cg.getClassName(), loader);
     List<MethodInfo> method_infos = new ArrayList<>();
 
-    if (cg.getMajor() < Const.MAJOR_1_6) {
+    if (classModel.majorVersion() < ClassFile.JAVA_6_VERSION) {
       System.out.printf(
           "Chicory warning: ClassFile: %s - classfile version (%d) is out of date and may not be"
               + " processed correctly.%n",
-          cg.getClassName(), cg.getMajor());
+          binaryClassName, classModel.majorVersion());
     }
 
     boolean shouldInclude = false;
 
     try {
       // Loop through each method in the class
-      Method[] methods = cg.getMethods();
-      for (int i = 0; i < methods.length; i++) {
+      for (MethodModel mm : classModel.methods()) {
 
+        // NOT SURE THIS APPLIES ANYMORE
+        // don't plan to use StackMapUtils
         // The class data in StackMapUtils is not thread safe,
         // allow only one method at a time to be instrumented.
         // DynComp does this by creating a new instrumentation object
         // for each class - probably a cleaner solution.
         synchronized (this) {
-          pool = cg.getConstantPool();
-          MethodGen mg = new MethodGen(methods[i], cg.getClassName(), pool);
-          MethodContext context = new MethodContext(cg, mg);
+          MethodGen mgen = new MethodGen(mm, binaryClassName, this);
 
           // check for the class static initializer method
-          if (mg.getName().equals("<clinit>")) {
+          if (mgen.getName().equals("<clinit>")) {
+            hasClinit = true;
             if (Chicory.checkStaticInit) {
-              cg.replaceMethod(methods[i], addInvokeToClinit(cg, mg, fullClassName));
-              cg.update();
+              addInvokeToClinit(mgen);
             }
             if (!Chicory.instrument_clinit) {
+              // If we are not going to instrument this method,
+              // we need to copy it to the output class now.
+              classBuilder.withMethod(
+                  mm.methodName().stringValue(),
+                  mm.methodTypeSymbol(),
+                  mm.flags().flagsMask(),
+                  methodBuilder -> outputMethod(methodBuilder, mm, mgen));
               continue;
             }
           }
 
           // If method is synthetic... (default constructors and <clinit> are not synthetic)
-          if ((Const.ACC_SYNTHETIC & mg.getAccessFlags()) > 0) {
+          if (mgen.getAccessFlags().has(AccessFlag.SYNTHETIC)) {
+            // If we are not going to instrument this method,
+            // we need to copy it to the output class now.
+            classBuilder.withMethod(
+                mm.methodName().stringValue(),
+                mm.methodTypeSymbol(),
+                mm.flags().flagsMask(),
+                methodBuilder -> outputMethod(methodBuilder, mm, mgen));
             continue;
           }
 
           // Get the instruction list and skip methods with no instructions
-          InstructionList il = mg.getInstructionList();
-          if (il == null) {
+          List<CodeElement> il = mgen.getInstructionList();
+          if (il.size() == 0) {
+            // If we are not going to instrument this method,
+            // we need to copy it to the output class now.
+            classBuilder.withMethod(
+                mm.methodName().stringValue(),
+                mm.methodTypeSymbol(),
+                mm.flags().flagsMask(),
+                methodBuilder -> outputMethod(methodBuilder, mm, mgen));
             continue;
           }
 
           if (debugInstrument.enabled) {
-            Type[] arg_types = mg.getArgumentTypes();
-            String[] arg_names = mg.getArgumentNames();
-            LocalVariableGen[] local_vars = mg.getLocalVariables();
+            ClassDesc[] arg_types = mgen.getArgumentTypes();
+            String[] arg_names = mgen.getArgumentNames();
+            LocalVariable[] local_vars = mgen.getLocalVariables();
             String types = "", names = "", locals = "";
 
             for (int j = 0; j < arg_types.length; j++) {
-              types = types + arg_types[j] + " ";
+              types = types + convertDescriptorToString(arg_types[j].descriptorString()) + " ";
             }
             for (int j = 0; j < arg_names.length; j++) {
               names = names + arg_names[j] + " ";
             }
             for (int j = 0; j < local_vars.length; j++) {
-              locals = locals + local_vars[j].getName() + " ";
+              locals = locals + local_vars[j].name().stringValue() + " ";
             }
-            debugInstrument.log("%nMethod = %s%n", mg);
+            debugInstrument.log("%nMethod = %s%n", mgen);
             debugInstrument.log("arg_types(%d): %s%n", arg_types.length, types);
             debugInstrument.log("arg_names(%d): %s%n", arg_names.length, names);
             debugInstrument.log("localvars(%d): %s%n", local_vars.length, locals);
-            debugInstrument.log("Original code: %s%n", mg.getMethod().getCode());
-            debugInstrument.log("%n");
+            //         debugInstrument.log("Original code: %s%n", mgen.getMethod().getCode());
+            debugInstrument.log("Method Attributes:");
+            for (java.lang.classfile.Attribute<?> a : mm.attributes()) {
+              debugInstrument.log("  " + a);
+            }
+            debugInstrument.log("mgen.getSignature: %s%n", mgen.getSignature());
+            MethodTypeDesc mtd = mm.methodTypeSymbol();
+            debugInstrument.log("mtd.descriptorString: %s%n", mtd.descriptorString());
+            debugInstrument.log("mtd.displayDescriptor: %s%n", mtd.displayDescriptor());
           }
-
-          // Get existing StackMapTable (if present)
-          setCurrentStackMapTable(mg, cg.getMajor());
-
-          fixLocalVariableTable(mg);
 
           // Create a MethodInfo that describes this methods arguments
           // and exit line numbers (information not available via reflection)
           // and add it to the list for this class.
-          MethodInfo mi = create_method_info(class_info, mg);
+          curMethodInfo = create_method_info(classInfo, mgen);
 
-          printStackMapTable("After create_method_info");
-
-          if (mi == null) { // method filtered out!
+          if (curMethodInfo == null) { // method filtered out!
+            // If we are not going to instrument this method,
+            // we need to copy it to the output class now.
+            classBuilder.withMethod(
+                mm.methodName().stringValue(),
+                mm.methodTypeSymbol(),
+                mm.flags().flagsMask(),
+                methodBuilder -> outputMethod(methodBuilder, mm, mgen));
             continue;
           }
 
           shouldInclude = true; // at least one method not filtered out
 
-          // Create a map of Uninitialized_variable_info offsets to
-          // InstructionHandles.  We will use this map after we
-          // complete instrumentation to update the offsets due
-          // to code modification and expansion.
-          // The offsets point to 'new' instructions; since we do
-          // not modify these, their Instruction Handles will remain
-          // unchanged throught the instrumentaion process.
-          buildUninitializedNewMap(il);
-
-          method_infos.add(mi);
+          method_infos.add(curMethodInfo);
 
           synchronized (SharedData.methods) {
             cur_method_info_index = SharedData.methods.size();
-            SharedData.methods.add(mi);
+            SharedData.methods.add(curMethodInfo);
           }
 
-          // Add nonce local to matchup enter/exits
-          add_entry_instrumentation(il, context);
-
-          printStackMapTable("After add_entry_instrumentation");
-
-          debugInstrument.log("Modified code: %s%n", mg.getMethod().getCode());
-
-          // Need to see if there are any switches after this location.
-          // If so, we may need to update the corresponding stackmap if
-          // the amount of the switch padding changed.
-          modifyStackMapsForSwitches(il.getStart(), il);
-
-          Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
-          Iterator<Integer> exitIter = mi.exit_locations.iterator();
-
-          // Loop through each instruction looking for the return(s)
-          for (InstructionHandle ih = il.getStart(); ih != null; ) {
-            Instruction inst = ih.getInstruction();
-
-            // If this is a return instruction, insert method exit instrumentation
-            InstructionList new_il =
-                generate_return_instrumentation(inst, context, shouldIncIter, exitIter);
-
-            // Remember the next instruction to process
-            InstructionHandle next_ih = ih.getNext();
-
-            // If this instruction was modified, replace it with the new
-            // instruction list. If this instruction was the target of any
-            // jumps, replace it with the first instruction in the new list
-            insertBeforeHandle(mg, ih, new_il, true);
-
-            // Go on to the next instruction in the list
-            ih = next_ih;
-          }
-
-          // Update the Uninitialized_variable_info offsets before
-          // we write out the new StackMapTable.
-          updateUninitializedNewOffsets(il);
-
-          createNewStackMapAttribute(mg);
-
-          remove_local_variable_type_table(mg);
-
-          // Update the instruction list
-          mg.setInstructionList(il);
-          mg.update();
-
-          // Update the max stack
-          mg.setMaxStack();
-          mg.update();
-
-          // Update the method in the class
-          try {
-            cg.replaceMethod(methods[i], mg.getMethod());
-          } catch (Exception e) {
-            if (e.getMessage().startsWith("Branch target offset too large")) {
-              System.out.printf(
-                  "Chicory warning: ClassFile: %s - method %s is too large to instrument and is"
-                      + " being skipped.%n",
-                  cg.getClassName(), mg.getName());
-              continue;
-            } else {
-              throw e;
-            }
-          }
-
-          if (debugInstrument.enabled) {
-            debugInstrument.log("Modified code: %s%n", mg.getMethod().getCode());
-            dump_code_attributes(mg);
-          }
-          cg.update();
+          // add entry instrumentation
+          // instrument return instructions
+          classBuilder.withMethod(
+              mm.methodName().stringValue(),
+              mm.methodTypeSymbol(),
+              mm.flags().flagsMask(),
+              methodBuilder -> modifyMethod(methodBuilder, mm, mgen));
         }
       }
     } catch (Exception e) {
-      System.out.printf("Unexpected exception encountered: %s", e);
+      System.err.printf("Unexpected exception encountered: %s", e);
       e.printStackTrace();
+    }
+
+    // copy all other ClassElements to output class (unchanged)
+    for (ClassElement ce : classModel) {
+      debugInstrument.log("ClassElement: " + ce);
+      switch (ce) {
+        case MethodModel mm -> {}
+          // copy all other ClassElements to output class (unchanged)
+        default -> classBuilder.with(ce);
+      }
     }
 
     // Add the class and method information to runtime so it is available
     // as enter/exit ppts are processed.
-    class_info.set_method_infos(method_infos);
+    classInfo.set_method_infos(method_infos);
 
     if (shouldInclude) {
-      debug_transform.log("Added trace info to class %s%n", class_info);
+      debug_transform.log("Added trace info to class %s%n", classInfo);
       synchronized (SharedData.new_classes) {
-        SharedData.new_classes.add(class_info);
+        SharedData.new_classes.add(classInfo);
       }
       synchronized (SharedData.all_classes) {
-        SharedData.all_classes.add(class_info);
+        SharedData.all_classes.add(classInfo);
       }
     } else { // not included
-      debug_transform.log("Trace info not added to class %s%n", class_info);
+      debug_transform.log("Trace info not added to class %s%n", classInfo);
     }
-
-    class_info.shouldInclude = shouldInclude;
-    return class_info;
+    classInfo.shouldInclude = shouldInclude;
   }
 
-  // This method exists only to suppress interning warnings
-  @Pure
-  private static boolean isVoid(Type t) {
-    return t == Type.VOID;
+  private void outputMethod(MethodBuilder methodBuilder, MethodModel methodModel, MethodGen mgen) {
+
+    for (MethodElement me : methodModel) {
+      debugInstrument.log("MethodElement: " + me);
+      switch (me) {
+        case CodeModel codeModel ->
+            methodBuilder.withCode(codeBuilder -> outputCode(codeBuilder, codeModel, mgen));
+
+          // copy all other MethodElements to output class (unchanged)
+        default -> methodBuilder.with(me);
+      }
+    }
+  }
+
+  private void outputCode(CodeBuilder codeBuilder, CodeModel codeModel, MethodGen mgen) {
+
+    // Copy the modified instruction list to the output class.
+    for (CodeElement ce : mgen.getInstructionList()) {
+      debugInstrument.log("CodeElement: " + ce);
+      codeBuilder.with(ce);
+    }
+  }
+
+  private void modifyMethod(MethodBuilder methodBuilder, MethodModel methodModel, MethodGen mgen) {
+
+    for (MethodElement me : methodModel) {
+      debugInstrument.log("MethodElement: " + me);
+      switch (me) {
+        case CodeModel codeModel ->
+            methodBuilder.withCode(codeBuilder -> modifyCode(codeBuilder, codeModel, mgen));
+
+          // copy all other MethodElements to output class (unchanged)
+        default -> methodBuilder.with(me);
+      }
+    }
+  }
+
+  private void modifyCode(CodeBuilder codeBuilder, CodeModel codeModel, MethodGen mgen) {
+
+    // ititialize all the items associated with the local variables
+    nextLocalIndex = mgen.getMaxLocals();
+    startLabel = codeBuilder.startLabel();
+    endLabel = codeBuilder.endLabel();
+    // debugInstrument.log("startLabel: %s, endLabel: %s%n", startLabel, endLabel);
+    nonceLocal = null;
+    returnLocal = null;
+
+    List<CodeElement> codeList = new LinkedList<>();
+
+    debugInstrument.log("Code Attributes:");
+    for (java.lang.classfile.Attribute<?> a : codeModel.attributes()) {
+      debugInstrument.log("  " + a);
+    }
+
+    /*
+     * The localsTable was initialized in the MethodGen constructor.
+     * Here we initialize the codeList. We also remove the local variable
+     * type records. Some instrumentation changes require these to be
+     * updated, but it should be safe to just delete them since the
+     * LocalVariableTypeTable is optional and really only of use to a debugger.
+     */
+    for (CodeElement ce : mgen.getInstructionList()) {
+      debugInstrument.log("CodeElement: " + ce);
+      switch (ce) {
+        case LocalVariable lv -> {} // we have alreay processed these
+        case LocalVariableType lvt -> {} // we can discard local variable types
+        default -> codeList.add(ce); // save all other elements
+      }
+    }
+
+    // START modify codeList
+
+    // Add nonce local to matchup enter/exits
+    add_entry_instrumentation(codeList, mgen);
+
+    // debugInstrument.log("Modified code: %s%n", mgen.getMethod().getCode());
+
+    Iterator<Boolean> shouldIncIter = curMethodInfo.is_included.iterator();
+    Iterator<Integer> exitIter = curMethodInfo.exit_locations.iterator();
+
+    // instrument return instructions
+    ListIterator<CodeElement> li = codeList.listIterator();
+    while (li.hasNext()) {
+
+      CodeElement inst = li.next();
+
+      // back up iterator to point to 'inst'
+      li.previous();
+
+      // If this is a return instruction, insert method exit instrumentation
+      List<CodeElement> new_il =
+          generate_return_instrumentation(inst, mgen, shouldIncIter, exitIter);
+
+      // insert code prior to 'inst'
+      for (CodeElement ce : new_il) {
+        li.add(ce);
+      }
+
+      // skip over 'inst' we just inserted new_il in front of
+      li.next();
+    }
+
+    // END modify codeList
+
+    // Copy the modified local variable table to the output class.
+    debugInstrument.log("LocalVariableTable:");
+    for (LocalVariable lv : localsTable) {
+      codeBuilder.localVariable(
+          lv.slot(), lv.name().stringValue(), lv.typeSymbol(), lv.startScope(), lv.endScope());
+      debugInstrument.log(
+          "  " + lv + " : " + convertDescriptorToString(lv.typeSymbol().descriptorString()));
+    }
+
+    // Copy the modified instruction list to the output class.
+    for (CodeElement ce : codeList) {
+      codeBuilder.with(ce);
+    }
   }
 
   /**
@@ -607,23 +704,15 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * (return__$trace2_val) and then call daikon.chicory.Runtime.exit(). This il wil be inserted
    * immediately before the return.
    */
-  private @Nullable InstructionList generate_return_instrumentation(
-      Instruction inst,
-      MethodContext c,
+  private @Nullable List<CodeElement> generate_return_instrumentation(
+      CodeElement inst,
+      MethodGen mgen,
       Iterator<Boolean> shouldIncIter,
       Iterator<Integer> exitIter) {
 
-    switch (inst.getOpcode()) {
-      case Const.ARETURN:
-      case Const.DRETURN:
-      case Const.FRETURN:
-      case Const.IRETURN:
-      case Const.LRETURN:
-      case Const.RETURN:
-        break;
-
-      default:
-        return null;
+    List<CodeElement> newCode = new ArrayList<>();
+    if (!(inst instanceof ReturnInstruction)) {
+      return newCode;
     }
 
     if (!shouldIncIter.hasNext()) {
@@ -633,67 +722,49 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     boolean shouldInclude = shouldIncIter.next();
 
     if (!shouldInclude) {
-      return null;
+      return newCode;
     }
 
-    Type type = c.mgen.getReturnType();
-    InstructionList il = new InstructionList();
-    if (!isVoid(type)) {
-      LocalVariableGen return_loc = get_return_local(c.mgen, type);
-      il.append(InstructionFactory.createDup(type.getSize()));
-      il.append(InstructionFactory.createStore(type, return_loc.getIndex()));
+    ClassDesc type = mgen.getReturnType();
+    if (type != CD_void) {
+      TypeKind typeKind = TypeKind.from(type);
+      LocalVariable returnLocal = getReturnLocal(type);
+      if (typeKind.slotSize() == 1) {
+        newCode.add(StackInstruction.of(Opcode.DUP));
+      } else {
+        newCode.add(StackInstruction.of(Opcode.DUP2));
+      }
+      newCode.add(StoreInstruction.of(typeKind, returnLocal.slot()));
     }
 
     if (!exitIter.hasNext()) {
       throw new RuntimeException("Not enough exit locations in the exitIter");
     }
 
-    il.append(call_enter_exit(c, "exit", exitIter.next()));
-    return il;
+    call_enter_exit(newCode, mgen, "exit", exitIter.next());
+    return newCode;
   }
 
   /**
    * Returns the local variable used to store the return result. If it is not present, creates it
    * with the specified type. If the variable is known to already exist, the type can be null.
    */
-  private LocalVariableGen get_return_local(MethodGen mg, @Nullable Type return_type) {
-
-    // Find the local used for the return value
-    LocalVariableGen return_local = null;
-    for (LocalVariableGen lv : mg.getLocalVariables()) {
-      if (lv.getName().equals("return__$trace2_val")) {
-        return_local = lv;
-        break;
-      }
-    }
+  private LocalVariable getReturnLocal(@Nullable ClassDesc returnType) {
 
     // If a type was specified and the variable was found, they must match
-    if (return_local == null) {
-      assert return_type != null : " return__$trace2_val doesn't exist";
+    if (returnLocal == null) {
+      assert returnType != null : " return__$trace2_val doesn't exist";
     } else {
-      assert return_type.equals(return_local.getType())
-          : " return_type = " + return_type + "current type = " + return_local.getType();
+      assert returnType.equals(returnLocal.typeSymbol())
+          : " returnType = " + returnType + "current type = " + returnLocal.typeSymbol();
     }
 
-    if (return_local == null) {
-      debugInstrument.log("Adding return local of type %s%n", return_type);
-      return_local = mg.addLocalVariable("return__$trace2_val", return_type, null, null);
+    if (returnLocal == null) {
+      debugInstrument.log("Adding return local of type %s%n", returnType);
+      returnLocal = createMethodScopeLocal("return__$trace2_val", returnType);
     }
 
-    return return_local;
-  }
-
-  /** Finds the nonce local variable. Returns null if not present. */
-  private @Nullable LocalVariableGen get_nonce_local(MethodGen mg) {
-
-    // Find the local used for the nonce value
-    for (LocalVariableGen lv : mg.getLocalVariables()) {
-      if (lv.getName().equals("this_invocation_nonce")) {
-        return lv;
-      }
-    }
-
-    return null;
+    return returnLocal;
   }
 
   /**
@@ -703,128 +774,69 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * call daikon.chicory.Runtime.enter().
    *
    * @param il instruction list for method
-   * @param c MethodContext for method
-   * @throws IOException if there is trouble with I/O
+   * @param mgen MethodGen for method
    */
-  private void add_entry_instrumentation(InstructionList il, MethodContext c) throws IOException {
+  private void add_entry_instrumentation(List<CodeElement> codeList, MethodGen mgen) {
 
     String atomic_int_classname = "java.util.concurrent.atomic.AtomicInteger";
-    Type atomic_int_type = new ObjectType(atomic_int_classname);
+    ClassDesc atomic_intClassDesc = ClassDesc.of(atomic_int_classname);
 
-    InstructionList nl = new InstructionList();
+    List<CodeElement> newCode = new ArrayList<>();
 
-    // create the local variable
-    LocalVariableGen nonce_lv =
-        create_method_scope_local(c.mgen, "this_invocation_nonce", Type.INT);
-
-    printStackMapTable("After cln");
-
-    if (debugInstrument.enabled) {
-      debugInstrument.log("Modified code: %s%n", c.mgen.getMethod().getCode());
-    }
+    // create the nonce local variable
+    nonceLocal = createMethodScopeLocal("this_invocation_nonce", CD_int);
 
     // The following implements:
     //     this_invocation_nonce = Runtime.nonce++;
 
     // getstatic Runtime.nonce (load reference to AtomicInteger daikon.chicory.Runtime.nonce)
-    nl.append(c.ifact.createGetStatic(runtime_classname, "nonce", atomic_int_type));
+    newCode.add(
+        FieldInstruction.of(
+            Opcode.GETSTATIC, poolBuilder.fieldRefEntry(runtimeCD, "nonce", atomic_intClassDesc)));
 
     // do an atomic get and increment of nonce value
     // this is multi-thread safe and leaves int value of nonce on stack
-    nl.append(
-        c.ifact.createInvoke(
-            atomic_int_classname, "getAndIncrement", Type.INT, new Type[] {}, Const.INVOKEVIRTUAL));
+    MethodRefEntry mre =
+        poolBuilder.methodRefEntry(
+            atomic_intClassDesc, "getAndIncrement", MethodTypeDesc.of(CD_int));
+    newCode.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
 
-    // istore <lv> (pop original value of nonce into this_invocation_nonce)
-    nl.append(InstructionFactory.createStore(Type.INT, nonce_lv.getIndex()));
+    // store original value of nonce into this_invocation_nonce)
+    newCode.add(StoreInstruction.of(TypeKind.INT, nonceLocal.slot()));
 
-    nl.setPositions();
-    InstructionHandle end = nl.getEnd();
-    int len_part1 = end.getPosition() + end.getInstruction().getLength();
+    call_enter_exit(newCode, mgen, "enter", -1);
 
-    // call Runtime.enter()
-    nl.append(call_enter_exit(c, "enter", -1));
+    // The start of the list of CodeElements looks as follows:
+    //   LocalVariable declarations (if any)
+    //   Label for start of code (if present)
+    //   LineNumber for start of code (if present)
+    //   <the actual code for the method>
+    //
+    // We want to insert our instrumentation code after the LocalVariables
+    // (if any) and before any Label, LineNumber or Instruction.
+    try {
+      ListIterator<CodeElement> li = codeList.listIterator();
+      while (li.hasNext()) {
 
-    nl.setPositions();
-    end = nl.getEnd();
-    int len_part2 = end.getPosition() + end.getInstruction().getLength() - len_part1;
+        CodeElement inst = li.next();
+        if (!(inst instanceof Label)
+            && !(inst instanceof LineNumber)
+            && !(inst instanceof Instruction)) {
+          continue;
+        }
 
-    // Add the new instructions at the start and move any LineNumbers
-    // and Local variables to point to them.  Other targeters
-    // (branches, exceptions) should still point to the old start
-    // NOTE: Don't use insert_at_method_start as it tries to update StackMaps
-    // and that will be done with special code below.
-    InstructionHandle old_start = il.getStart();
-    InstructionHandle new_start = il.insert(nl);
-    for (InstructionTargeter it : old_start.getTargeters()) {
-      if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen)) {
-        it.updateTarget(old_start, new_start);
+        // insert code before this Label, LineNumber or Instruction
+        // back up iterator to point to 'inst'
+        li.previous();
+        for (CodeElement ce : newCode) {
+          li.add(ce);
+        }
+        break;
       }
+    } catch (Exception e) {
+      System.err.printf("Unexpected exception encountered: %s", e);
+      e.printStackTrace();
     }
-
-    // For Java 7 and beyond the StackMapTable is part of the
-    // verification process.  We need to create and or update it to
-    // account for instrumentation code we have inserted as well as
-    // adjustments for the new 'nonce' local.
-
-    boolean skipFirst = false;
-
-    // Modify existing StackMapTable (if present)
-    if (stackMapTable.length > 0) {
-      // Each stack map frame specifies (explicity or implicitly) an
-      // offset_delta that is used to calculate the actual bytecode
-      // offset at which the frame applies.  This is caluclated by
-      // by adding offset_delta + 1 to the bytecode offset of the
-      // previous frame, unless the previous frame is the initial
-      // frame of the method, in which case the bytecode offset is
-      // offset_delta. (From the Java Virual Machine Specification,
-      // Java SE 7 Edition, section 4.7.4)
-
-      // Since we are inserting (1 or 2) new stack map frames at the
-      // beginning of the stack map table, we need to adjust the
-      // offset_delta of the original first stack map frame due to
-      // the fact that it will no longer be the first entry.  We must
-      // subtract 1. BUT, if the original first entry has an offset
-      // of 0 (because bytecode address 0 is a branch target) then
-      // we must delete it as it will be replaced by the new frames
-      // we are adding.  (did you get all of that? - markro)
-
-      if (stackMapTable[0].getByteCodeOffset() == 0) {
-        skipFirst = true;
-      } else {
-        stackMapTable[0].updateByteCodeOffset(-1);
-      }
-    }
-
-    // Create new StackMap entries for our instrumentation code.
-    int new_table_length = stackMapTable.length + ((len_part2 > 0) ? 2 : 1) - (skipFirst ? 1 : 0);
-    StackMapEntry[] new_map = new StackMapEntry[new_table_length];
-    StackMapType nonce_type = new StackMapType(Const.ITEM_Integer, -1, pool.getConstantPool());
-    StackMapType[] old_nonce_type = {nonce_type};
-    new_map[0] =
-        new StackMapEntry(
-            Const.APPEND_FRAME, len_part1, old_nonce_type, null, pool.getConstantPool());
-
-    int new_index = 1;
-    if (len_part2 > 0) {
-      new_map[1] =
-          new StackMapEntry(
-              ((len_part2 - 1) > Const.SAME_FRAME_MAX
-                  ? Const.SAME_FRAME_EXTENDED
-                  : Const.SAME_FRAME + len_part2 - 1),
-              len_part2 - 1,
-              null,
-              null,
-              pool.getConstantPool());
-      new_index++;
-    }
-
-    // We can just copy the rest of the stack frames over as the FULL_FRAME
-    // ones were already updated when the nonce variable was allocated.
-    for (int i = (skipFirst ? 1 : 0); i < stackMapTable.length; i++) {
-      new_map[new_index++] = stackMapTable[i];
-    }
-    stackMapTable = new_map;
   }
 
   /**
@@ -833,143 +845,144 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * array of objects. Any primitive values are wrapped in the appropriate daikon.chicory.Runtime
    * wrapper (IntWrap, FloatWrap, etc).
    */
-  private InstructionList call_enter_exit(MethodContext c, String method_name, int line) {
+  private void call_enter_exit(
+      List<CodeElement> newCode, MethodGen mgen, String callMethod, int line) {
 
-    InstructionList il = new InstructionList();
-    InstructionFactory ifact = c.ifact;
-    MethodGen mg = c.mgen;
-    Type[] arg_types = mg.getArgumentTypes();
+    ClassDesc[] arg_types = mgen.getArgumentTypes();
 
     // aload
     // Push the object.  Null if this is a static method or a constructor
-    if (mg.isStatic() || (method_name.equals("enter") && is_constructor(mg))) {
-      il.append(new ACONST_NULL());
+    if (mgen.isStatic() || (callMethod.equals("enter") && is_constructor(mgen))) {
+      newCode.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
     } else { // must be an instance method
-      il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
+      newCode.add(LoadInstruction.of(TypeKind.REFERENCE, 0));
     }
 
     // Determine the offset of the first parameter
     int param_offset = 1;
-    if (mg.isStatic()) {
+    if (mgen.isStatic()) {
       param_offset = 0;
     }
 
+    // Assumes add_entry_instrumentation has been called which sets nonceLocal.
     // iload
     // Push the nonce
-    LocalVariableGen nonce_lv = get_nonce_local(mg);
-    il.append(InstructionFactory.createLoad(Type.INT, nonce_lv.getIndex()));
+    newCode.add(LoadInstruction.of(TypeKind.INT, nonceLocal.slot()));
 
     // iconst
     // Push the MethodInfo index
-    il.append(ifact.createConstant(cur_method_info_index));
+    newCode.add(loadIntegerConstant(cur_method_info_index));
 
     // iconst
     // anewarray
     // Create an array of objects with elements for each parameter
-    il.append(ifact.createConstant(arg_types.length));
-    Type object_arr_typ = new ArrayType("java.lang.Object", 1);
-    il.append(ifact.createNewArray(Type.OBJECT, (short) 1));
+    newCode.add(loadIntegerConstant(arg_types.length));
+    ClassDesc objectArrayCD = objectCD.arrayType(1);
+    newCode.add(NewReferenceArrayInstruction.of(poolBuilder.classEntry(objectCD)));
 
     // Put each argument into the array
     int param_index = param_offset;
     for (int ii = 0; ii < arg_types.length; ii++) {
-      il.append(InstructionFactory.createDup(object_arr_typ.getSize()));
-      il.append(ifact.createConstant(ii));
-      Type at = arg_types[ii];
-      if (at instanceof BasicType) {
-        il.append(create_wrapper(c, at, param_index));
+      newCode.add(StackInstruction.of(Opcode.DUP));
+      newCode.add(loadIntegerConstant(ii));
+      ClassDesc at = arg_types[ii];
+      if (at.isPrimitive()) {
+        create_wrapper(newCode, at, param_index);
       } else { // must be reference of some sort
-        il.append(InstructionFactory.createLoad(Type.OBJECT, param_index));
+        newCode.add(LoadInstruction.of(TypeKind.REFERENCE, param_index));
       }
-      il.append(InstructionFactory.createArrayStore(Type.OBJECT));
-      param_index += at.getSize();
+      newCode.add(ArrayStoreInstruction.of(Opcode.AASTORE));
+      param_index += TypeKind.from(at).slotSize();
     }
 
     // If this is an exit, push the return value and line number.
     // The return value is stored in the local "return__$trace2_val".
     // If the return value is a primitive, wrap it in the appropriate wrapper.
-    if (method_name.equals("exit")) {
-      Type ret_type = mg.getReturnType();
-      if (isVoid(ret_type)) {
-        il.append(new ACONST_NULL());
+    if (callMethod.equals("exit")) {
+      ClassDesc ret_type = mgen.getReturnType();
+      if (ret_type == CD_void) {
+        newCode.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
       } else {
-        LocalVariableGen return_local = get_return_local(mg, ret_type);
-        if (ret_type instanceof BasicType) {
-          il.append(create_wrapper(c, ret_type, return_local.getIndex()));
+        LocalVariable return_local = getReturnLocal(ret_type);
+        if (ret_type.isPrimitive()) {
+          create_wrapper(newCode, ret_type, return_local.slot());
         } else {
-          il.append(InstructionFactory.createLoad(Type.OBJECT, return_local.getIndex()));
+          newCode.add(LoadInstruction.of(TypeKind.REFERENCE, return_local.slot()));
         }
       }
 
       // push line number
-      // System.out.println(mg.getName() + " --> " + line);
-      il.append(ifact.createConstant(line));
+      // debugInstrument.log(mgen.getName() + " --> " + line);
+      newCode.add(loadIntegerConstant(line));
     }
 
+    MethodTypeDesc methodArgs;
     // Call the specified method
-    Type[] method_args;
-    if (method_name.equals("exit")) {
-      method_args =
-          new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ, Type.OBJECT, Type.INT};
+    if (callMethod.equals("exit")) {
+      methodArgs =
+          MethodTypeDesc.of(CD_void, CD_Object, CD_int, CD_int, objectArrayCD, CD_Object, CD_int);
     } else {
-      method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ};
+      methodArgs = MethodTypeDesc.of(CD_void, CD_Object, CD_int, CD_int, objectArrayCD);
     }
-    il.append(
-        c.ifact.createInvoke(
-            runtime_classname, method_name, Type.VOID, method_args, Const.INVOKESTATIC));
-
-    return il;
+    MethodRefEntry mre = poolBuilder.methodRefEntry(runtimeCD, callMethod, methodArgs);
+    newCode.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
   }
 
   /**
    * Creates code to put the local var/param at the specified var_index into a wrapper appropriate
-   * for prim_type. prim_type should be one of the basic types (eg, Type.INT, Type.FLOAT, etc). The
-   * wrappers are those defined in daikon.chicory.Runtime.
+   * for prim_type. prim_type should be one of the basic types (eg, ClassDesc.INT, ClassDesc.FLOAT,
+   * etc). The wrappers are those defined in daikon.chicory.Runtime.
    *
    * <p>The stack is left with a pointer to the newly created wrapper at the top.
    */
-  private InstructionList create_wrapper(MethodContext c, Type prim_type, int var_index) {
+  private void create_wrapper(List<CodeElement> newCode, ClassDesc prim_type, int var_index) {
 
     String wrapper;
-    switch (prim_type.getType()) {
-      case Const.T_BOOLEAN:
+    TypeKind typeKind;
+    switch (prim_type.displayName()) {
+      case "boolean":
+        typeKind = TypeKind.BOOLEAN;
         wrapper = "BooleanWrap";
         break;
-      case Const.T_BYTE:
+      case "byte":
+        typeKind = TypeKind.BYTE;
         wrapper = "ByteWrap";
         break;
-      case Const.T_CHAR:
+      case "char":
+        typeKind = TypeKind.CHAR;
         wrapper = "CharWrap";
         break;
-      case Const.T_DOUBLE:
+      case "double":
+        typeKind = TypeKind.DOUBLE;
         wrapper = "DoubleWrap";
         break;
-      case Const.T_FLOAT:
+      case "float":
+        typeKind = TypeKind.FLOAT;
         wrapper = "FloatWrap";
         break;
-      case Const.T_INT:
+      case "int":
+        typeKind = TypeKind.INT;
         wrapper = "IntWrap";
         break;
-      case Const.T_LONG:
+      case "long":
+        typeKind = TypeKind.LONG;
         wrapper = "LongWrap";
         break;
-      case Const.T_SHORT:
+      case "short":
+        typeKind = TypeKind.SHORT;
         wrapper = "ShortWrap";
         break;
       default:
         throw new Error("unexpected type " + prim_type);
     }
 
-    InstructionList il = new InstructionList();
-    String classname = runtime_classname + "$" + wrapper;
-    il.append(c.ifact.createNew(classname));
-    il.append(InstructionFactory.createDup(Type.OBJECT.getSize()));
-    il.append(InstructionFactory.createLoad(prim_type, var_index));
-    il.append(
-        c.ifact.createInvoke(
-            classname, "<init>", Type.VOID, new Type[] {prim_type}, Const.INVOKESPECIAL));
-
-    return il;
+    ClassDesc wrapperCD = ClassDesc.of(runtime_classname + "$" + wrapper);
+    newCode.add(NewObjectInstruction.of(poolBuilder.classEntry(wrapperCD)));
+    newCode.add(StackInstruction.of(Opcode.DUP));
+    newCode.add(LoadInstruction.of(typeKind, var_index));
+    MethodRefEntry mre =
+        poolBuilder.methodRefEntry(wrapperCD, "<init>", MethodTypeDesc.of(CD_void, prim_type));
+    newCode.add(InvokeInstruction.of(Opcode.INVOKESPECIAL, mre));
   }
 
   /**
@@ -989,36 +1002,48 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Return an array of strings, each corresponding to mgen's argument types.
+   * Get the ClassGetName form of a ClassDesc. For a non-array type, the binary name; for an array
+   * type, a format like the FieldDescriptor field descriptor, but using "." where the field
+   * descriptor uses "/".
+   *
+   * @param t type whose name is to be converted
+   * @return a String containing the class name
+   */
+  private static @ClassGetName String typeToClassGetName(ClassDesc t) {
+
+    String s = t.descriptorString();
+    if (s.startsWith("[")) {
+      return s.replace('/', '.');
+    } else {
+      return convertDescriptorToString(s);
+    }
+  }
+
+  /**
+   * Return an array of strings, each corresponding to mgen's argument types as a fully qualified
+   * name: how a type is represented in Java source code.
    *
    * @return an array of strings, each corresponding to mgen's argument types
    */
-  private @BinaryName String[] getArgTypes(MethodGen mgen) {
+  private @BinaryName String[] getFullyQualifiedArgTypeNames(MethodGen mgen) {
 
-    Type[] arg_types = mgen.getArgumentTypes();
+    ClassDesc[] arg_types = mgen.getArgumentTypes();
     @BinaryName String[] arg_type_strings = new @BinaryName String[arg_types.length];
 
     for (int ii = 0; ii < arg_types.length; ii++) {
-      Type t = arg_types[ii];
-      /*if (t instanceof ObjectType)
-        arg_type_strings[ii] = ((ObjectType) t).getClassName();
-        else {
-        arg_type_strings[ii] = t.getSignature().replace('/', '.');
-        }
-      */
-      arg_type_strings[ii] = t.toString();
+      String s = convertDescriptorToString(arg_types[ii].descriptorString());
+      arg_type_strings[ii] = s;
     }
-
     return arg_type_strings;
   }
 
   // creates a MethodInfo struct corresponding to mgen
   @SuppressWarnings("unchecked")
-  private @Nullable MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen) {
+  private @Nullable MethodInfo create_method_info(ClassInfo classInfo, MethodGen mgen) {
 
     // Get the argument names for this method
     String[] arg_names = mgen.getArgumentNames();
-    LocalVariableGen[] lvs = mgen.getLocalVariables();
+    LocalVariable[] lvs = mgen.getLocalVariables();
     int param_offset = 1;
     if (mgen.isStatic()) {
       param_offset = 0;
@@ -1036,10 +1061,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // parameter names appropriately.  This check is ugly.
     if (mgen.getName().equals("<init>") && mgen.getArgumentTypes().length > 0) {
       int dollarPos = mgen.getClassName().lastIndexOf("$");
+      String arg0Name = convertDescriptorToString(mgen.getArgumentType(0).descriptorString());
       if (dollarPos >= 0
           &&
           // type of first parameter is classname up to the "$"
-          mgen.getClassName().substring(0, dollarPos).equals(mgen.getArgumentType(0).toString())) {
+          mgen.getClassName().substring(0, dollarPos).equals(arg0Name)) {
         // As a further check, for javac-generated classfiles, the
         // constant pool index #1 is "this$0", and the first 5 bytes of
         // the bytecode are:
@@ -1048,14 +1074,14 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         //   2: putfield      #1
 
         lv_start++;
-        arg_names[0] = mgen.getArgumentType(0).toString() + ".this";
+        arg_names[0] = arg0Name + ".this";
       }
     }
 
     if (lvs != null) {
       for (int ii = lv_start; ii < arg_names.length; ii++) {
         if ((ii + param_offset) < lvs.length) {
-          arg_names[ii] = lvs[ii + param_offset].getName();
+          arg_names[ii] = lvs[ii + param_offset].name().stringValue();
         }
       }
     }
@@ -1069,16 +1095,20 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     boolean shouldInclude = false;
 
+    // It lloks like DaikonWriter.methodEntryName does not use the mgen.toString argument.
     // see if we should track the entry point
     if (!shouldIgnore(
-        class_info.class_name,
+        classInfo.class_name,
         mgen.getName(),
         DaikonWriter.methodEntryName(
-            class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName()))) {
+            classInfo.class_name,
+            getFullyQualifiedArgTypeNames(mgen),
+            mgen.toString(),
+            mgen.getName()))) {
       shouldInclude = true;
     }
     // Get the argument types for this method
-    Type[] arg_types = mgen.getArgumentTypes();
+    ClassDesc[] arg_types = mgen.getArgumentTypes();
     @ClassGetName String[] arg_type_strings = new @ClassGetName String[arg_types.length];
     for (int ii = 0; ii < arg_types.length; ii++) {
       arg_type_strings[ii] = typeToClassGetName(arg_types[ii]);
@@ -1092,94 +1122,56 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     List<Boolean> isIncluded = new ArrayList<>();
 
     debugInstrument.log("Looking for exit points in %s%n", mgen.getName());
-    InstructionList il = mgen.getInstructionList();
+    List<CodeElement> il = mgen.getInstructionList();
     int line_number = 0;
     int last_line_number = 0;
     boolean foundLine;
 
-    for (InstructionHandle ih : il) {
+    ListIterator<CodeElement> li = il.listIterator();
+    while (li.hasNext()) {
+      CodeElement inst = li.next();
       foundLine = false;
 
-      if (ih.hasTargeters()) {
-        for (InstructionTargeter it : ih.getTargeters()) {
-          if (it instanceof LineNumberGen) {
-            LineNumberGen lng = (LineNumberGen) it;
-            // debugInstrument.log("  line number at %s: %d%n", ih, lng.getSourceLine());
-            line_number = lng.getSourceLine();
-            foundLine = true;
-          }
-        }
+      if (inst instanceof LineNumber ln) {
+        line_number = ln.line();
+        foundLine = true;
       }
 
-      switch (ih.getInstruction().getOpcode()) {
-        case Const.ARETURN:
-        case Const.DRETURN:
-        case Const.FRETURN:
-        case Const.IRETURN:
-        case Const.LRETURN:
-        case Const.RETURN:
-          debugInstrument.log("Exit at line %d%n", line_number);
+      if (inst instanceof ReturnInstruction) {
+        debugInstrument.log("Exit at line %d%n", line_number);
 
-          // only do incremental lines if we don't have the line generator
-          if (line_number == last_line_number && foundLine == false) {
-            debugInstrument.log("Could not find line... at %d%n", line_number);
-            line_number++;
-          }
+        // only do incremental lines if we don't have the line generator
+        if (line_number == last_line_number && foundLine == false) {
+          debugInstrument.log("Could not find line... at %d%n", line_number);
+          line_number++;
+        }
 
-          last_line_number = line_number;
+        last_line_number = line_number;
 
-          if (!shouldIgnore(
-              class_info.class_name,
-              mgen.getName(),
-              DaikonWriter.methodExitName(
-                  class_info.class_name,
-                  getArgTypes(mgen),
-                  mgen.toString(),
-                  mgen.getName(),
-                  line_number))) {
-            shouldInclude = true;
-            exit_locs.add(line_number);
+        if (!shouldIgnore(
+            classInfo.class_name,
+            mgen.getName(),
+            DaikonWriter.methodExitName(
+                classInfo.class_name,
+                getFullyQualifiedArgTypeNames(mgen),
+                mgen.toString(),
+                mgen.getName(),
+                line_number))) {
+          shouldInclude = true;
+          exit_locs.add(line_number);
 
-            isIncluded.add(true);
-          } else {
-            isIncluded.add(false);
-          }
-
-          break;
-
-        default:
-          break;
+          isIncluded.add(true);
+        } else {
+          isIncluded.add(false);
+        }
       }
     }
 
     if (shouldInclude) {
       return new MethodInfo(
-          class_info, mgen.getName(), arg_names, arg_type_strings, exit_locs, isIncluded);
+          classInfo, mgen.getName(), arg_names, arg_type_strings, exit_locs, isIncluded);
     } else {
       return null;
-    }
-  }
-
-  public void dump_code_attributes(MethodGen mg) {
-    // mg.getMethod().getCode().getAttributes() forces attributes
-    // to be instantiated; mg.getCodeAttributes() does not
-    for (Attribute a : mg.getMethod().getCode().getAttributes()) {
-      int con_index = a.getNameIndex();
-      Constant c = pool.getConstant(con_index);
-      String att_name = ((ConstantUtf8) c).getBytes();
-      debugInstrument.log("Attribute Index: %s Name: %s%n", con_index, att_name);
-    }
-  }
-
-  /** Any information needed by InstTransform routines about the method and class. */
-  private static class MethodContext {
-
-    public InstructionFactory ifact;
-    public MethodGen mgen;
-
-    public MethodContext(ClassGen cg, MethodGen mgen) {
-      ifact = new InstructionFactory(cg);
-      this.mgen = mgen;
     }
   }
 
@@ -1203,5 +1195,188 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       return true;
     }
     return false;
+  }
+
+  // UNFINISHED and maybe unneeded
+  //  // converts a method descriptor to a Java language string
+  //  public static String convertDescriptorToString(String descriptor) {
+  //    StringBuilder args = new StringBuilder("(");
+  //    if (descriptor.charAt(0) != '(') {
+  //        throw new IllegalArgumentException("Invalid method descriptor: " + descriptor);
+  //    }
+  //    int paren = descriptor.indexOf(')');
+  //    if (paren < 0) {
+  //        throw new IllegalArgumentException("Invalid method descriptor: " + descriptor);
+  //    }
+  //    int end;
+  //    int comma = descriptor.indexOf(',');
+  //    if (comma < 0) {
+  //        end = paren;
+  //    } else {
+  //        end = min(comma, paren);
+  //    }
+
+  // The main difference between a descriptor and a signature is that the
+  // later may contain type arguments. This routine was orginaly written
+  // for descriptors, but some support for type arguments has been added.
+  // converts a field descriptor to a fully qualified name
+  public static String convertDescriptorToString(String descriptor) {
+    StringBuilder result = new StringBuilder();
+
+    int arrayDimensions = 0;
+    while (descriptor.charAt(0) == '[') {
+      arrayDimensions++;
+      descriptor = descriptor.substring(1);
+    }
+
+    // Convert primitive types
+    switch (descriptor.charAt(0)) {
+      case 'B':
+        result.append("byte");
+        break;
+      case 'C':
+        result.append("char");
+        break;
+      case 'D':
+        result.append("double");
+        break;
+      case 'F':
+        result.append("float");
+        break;
+      case 'I':
+        result.append("int");
+        break;
+      case 'J':
+        result.append("long");
+        break;
+      case 'S':
+        result.append("short");
+        break;
+      case 'Z':
+        result.append("boolean");
+        break;
+      case 'V':
+        result.append("void");
+        break;
+      case 'L': // Object type, starts with 'L' and ends with ';'
+        result.append(parseObjectType(descriptor));
+        break;
+      default:
+        throw new IllegalArgumentException("Invalid descriptor: " + descriptor);
+    }
+
+    // Append array brackets if applicable
+    while (arrayDimensions-- > 0) {
+      result.append("[]");
+    }
+
+    return result.toString();
+  }
+
+  private static String parseObjectType(String descriptor) {
+    StringBuilder result = new StringBuilder();
+    int genericStart = descriptor.indexOf('<');
+    int genericEnd = descriptor.lastIndexOf('>');
+    int endOfBaseType = descriptor.indexOf(';');
+
+    if (genericStart > 0 && genericEnd > genericStart) {
+      // Base type with generics
+      String baseType = descriptor.substring(1, genericStart).replace('/', '.');
+      result.append(baseType).append('<');
+      String genericPart = descriptor.substring(genericStart + 1, genericEnd);
+      result.append(parseGenericParameters(genericPart));
+      result.append('>');
+    } else if (endOfBaseType > 0) {
+      // Regular object type
+      result.append(descriptor.substring(1, endOfBaseType).replace('/', '.'));
+    } else {
+      throw new IllegalArgumentException("Malformed object type descriptor: " + descriptor);
+    }
+
+    return result.toString();
+  }
+
+  private static String parseGenericParameters(String genericPart) {
+    StringBuilder result = new StringBuilder();
+    int depth = 0;
+    StringBuilder current = new StringBuilder();
+    List<String> params = new ArrayList<>();
+
+    for (char c : genericPart.toCharArray()) {
+      if (c == '<') {
+        depth++;
+        current.append(c);
+      } else if (c == '>') {
+        depth--;
+        current.append(c);
+      } else if (c == ';' && depth == 0) {
+        params.add(convertDescriptorToString(current.toString()));
+        current.setLength(0); // Clear the buffer
+      } else {
+        current.append(c);
+      }
+    }
+
+    if (current.length() > 0) {
+      params.add(convertDescriptorToString(current.toString()));
+    }
+
+    result.append(String.join(", ", params));
+    return result.toString();
+  }
+
+  private Consumer<String> fileConsumer(File file) throws FileNotFoundException {
+    PrintStream stream = new PrintStream((new FileOutputStream(file)), false);
+    return line -> {
+      stream.print(line);
+    };
+  }
+
+  private final String formatConstantDesc(ConstantDesc item) {
+    String result = "";
+    try {
+      result = item.resolveConstantDesc(MethodHandles.lookup()).toString();
+    } catch (Exception e) {
+      System.err.printf("Unexpected error %s getting constant value for: %s%n", e, item);
+    }
+    return result;
+  }
+
+  /**
+   * Create a new local with a scope of the full method.
+   *
+   * @param localName name of new local
+   * @param localType type of new local
+   * @return a LocalVariable for the new local
+   */
+  protected LocalVariable createMethodScopeLocal(String localName, ClassDesc localType) {
+    LocalVariable newVar =
+        LocalVariable.of(nextLocalIndex, localName, localType, startLabel, endLabel);
+    localsTable.add(newVar);
+    nextLocalIndex += TypeKind.from(localType).slotSize();
+    return newVar;
+  }
+
+  /**
+   * Build a load constant instruction for values of type int, short, char, byte
+   *
+   * @param value to be pushed
+   */
+  protected CodeElement loadIntegerConstant(final int value) {
+    return switch (value) {
+      case -1 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_M1);
+      case 0 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_0);
+      case 1 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_1);
+      case 2 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_2);
+      case 3 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_3);
+      case 4 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_4);
+      case 5 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_5);
+      default ->
+          (value >= Byte.MIN_VALUE && value <= Byte.MAX_VALUE)
+              ? ConstantInstruction.ofArgument(Opcode.BIPUSH, value)
+              : (value >= Short.MIN_VALUE && value <= Short.MAX_VALUE)
+                  ? ConstantInstruction.ofArgument(Opcode.SIPUSH, value)
+                  : ConstantInstruction.ofLoad(Opcode.LDC, poolBuilder.intEntry(value));
+    };
   }
 }
