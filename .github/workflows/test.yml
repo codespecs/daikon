@@ -31,3 +31,18 @@ jobs:
 
     - name: quick_txt_diff_ubuntu_jdk24
       run: bash ./scripts/test-quick-txt-diff.sh
+
+    - name: nonquick_txt_diff_ubuntu_jdk24
+      run: bash ./scripts/test-nonquick-txt-diff.sh
+
+    - name: non_txt_diff_ubuntu_jdk24
+      run: bash ./scripts/test-non-txt-diff.sh
+
+    - name: misc_ubuntu_jdk24
+      run: bash ./scripts/test-misc.sh
+
+    - name: kvasir_ubuntu_jdk24
+      run: bash ./scripts/test-kvasir.sh
+
+    - name: typecheck_ubuntu_jdk24
+      run: bash ./scripts/test-typecheck-with-latest.sh
