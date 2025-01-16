@@ -743,7 +743,7 @@ ifeq ($(JAVA8), 1)
 	echo "Error Prone is not run under Java 8"
 else
 ## MutablePublicArray is off because it suggests a dependency on Google Guava.
-	javac -cp ${DAIKON_CLASSPATH} \
+	javac -cp ${DAIKON_CLASSPATH} -source 24 -target 24 --enable-preview \
 	  ${JAVAC_ANNOTATION_PROCESSOR_ARGS} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:ExtendsObject:OFF' \
