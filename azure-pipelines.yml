@@ -38,7 +38,7 @@ jobs:
     - quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk8:latest
+  container: mdernst/daikon-ubuntu-jdk8-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -51,7 +51,7 @@ jobs:
     - quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11:latest
+  container: mdernst/daikon-ubuntu-jdk11-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -64,7 +64,7 @@ jobs:
     - quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17:latest
+  container: mdernst/daikon-ubuntu-jdk17-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -74,7 +74,7 @@ jobs:
 - job: quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21:latest
+  container: mdernst/daikon-ubuntu-jdk21-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -87,7 +87,7 @@ jobs:
     - quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk20:latest
+  container: mdernst/daikon-ubuntu-jdk20-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -100,7 +100,7 @@ jobs:
     - nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk8:latest
+  container: mdernst/daikon-ubuntu-jdk8-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -113,7 +113,7 @@ jobs:
     - nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11:latest
+  container: mdernst/daikon-ubuntu-jdk11-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -126,7 +126,7 @@ jobs:
     - nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17:latest
+  container: mdernst/daikon-ubuntu-jdk17-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -136,7 +136,7 @@ jobs:
 - job: nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21:latest
+  container: mdernst/daikon-ubuntu-jdk21-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -149,7 +149,7 @@ jobs:
     - nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk20:latest
+  container: mdernst/daikon-ubuntu-jdk20-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -162,7 +162,7 @@ jobs:
     - non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk8:latest
+  container: mdernst/daikon-ubuntu-jdk8-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -175,7 +175,7 @@ jobs:
     - non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11:latest
+  container: mdernst/daikon-ubuntu-jdk11-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -188,7 +188,7 @@ jobs:
     - non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17:latest
+  container: mdernst/daikon-ubuntu-jdk17-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -198,7 +198,7 @@ jobs:
 - job: non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21:latest
+  container: mdernst/daikon-ubuntu-jdk21-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -211,7 +211,7 @@ jobs:
     - non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk20:latest
+  container: mdernst/daikon-ubuntu-jdk20-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -224,7 +224,7 @@ jobs:
     - misc_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk8-plus:latest
+  container: mdernst/daikon-ubuntu-jdk8-plus-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -239,7 +239,7 @@ jobs:
     - misc_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11-plus:latest
+  container: mdernst/daikon-ubuntu-jdk11-plus-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -254,7 +254,7 @@ jobs:
     - misc_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17-plus:latest
+  container: mdernst/daikon-ubuntu-jdk17-plus-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -266,7 +266,7 @@ jobs:
 - job: misc_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21-plus:latest
+  container: mdernst/daikon-ubuntu-jdk21-plus-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -281,7 +281,7 @@ jobs:
     - kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk8-plus:latest
+  container: mdernst/daikon-ubuntu-jdk8-plus-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -294,7 +294,7 @@ jobs:
     - kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11-plus:latest
+  container: mdernst/daikon-ubuntu-jdk11-plus-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -307,7 +307,7 @@ jobs:
     - kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17-plus:latest
+  container: mdernst/daikon-ubuntu-jdk17-plus-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -317,7 +317,7 @@ jobs:
 - job: kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21-plus:latest
+  container: mdernst/daikon-ubuntu-jdk21-plus-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -330,7 +330,7 @@ jobs:
     - kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk20-plus:latest
+  container: mdernst/daikon-ubuntu-jdk20-plus-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -344,7 +344,7 @@ jobs:
 #     - typecheck_jdk21
 #   pool:
 #     vmImage: 'ubuntu-latest'
-#   container: mdernst/daikon-ubuntu-jdk8-plus:latest
+#   container: mdernst/daikon-ubuntu-jdk8-plus-testing:latest
 #   timeoutInMinutes: 70
 #   steps:
 #   - checkout: self
@@ -362,7 +362,7 @@ jobs:
     - typecheck_latest_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11-plus:latest
+  container: mdernst/daikon-ubuntu-jdk11-plus-testing:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -380,7 +380,7 @@ jobs:
     - typecheck_latest_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17-plus:latest
+  container: mdernst/daikon-ubuntu-jdk17-plus-testing:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -398,7 +398,7 @@ jobs:
     - typecheck_bundled_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11-plus:latest
+  container: mdernst/daikon-ubuntu-jdk11-plus-testing:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -416,7 +416,7 @@ jobs:
     - typecheck_bundled_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17-plus:latest
+  container: mdernst/daikon-ubuntu-jdk17-plus-testing:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -431,7 +431,7 @@ jobs:
 - job: typecheck_latest_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21-plus:latest
+  container: mdernst/daikon-ubuntu-jdk21-plus-testing:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -446,7 +446,7 @@ jobs:
 - job: typecheck_bundled_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21-plus:latest
+  container: mdernst/daikon-ubuntu-jdk21-plus-testing:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -464,7 +464,7 @@ jobs:
     - typecheck_latest_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk20-plus:latest
+  container: mdernst/daikon-ubuntu-jdk20-plus-testing:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -482,7 +482,7 @@ jobs:
     - typecheck_bundled_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk20-plus:latest
+  container: mdernst/daikon-ubuntu-jdk20-plus-testing:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -786,7 +786,7 @@ jobs:
 # - job: typecheck_onefile_jdk21
 #   pool:
 #     vmImage: 'ubuntu-latest'
-#   container: mdernst/daikon-ubuntu-jdk21-plus:latest
+#   container: mdernst/daikon-ubuntu-jdk21-plus-testing:latest
 #   timeoutInMinutes: 70
 #   steps:
 #   - checkout: self
