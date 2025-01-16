@@ -22,7 +22,7 @@ jobs:
       run: |
         export JDK_FILE="jdk-$JDK_VERSION-$JDK_OS-$JDK_ARCH.tar.gz"
         export JDK_URL="https://plse.cs.washington.edu/daikon/downloads/$JDK_FILE"
-        mkdir -p ~/.java && (timeout 400 curl -O -s -S -L --retry 3 "$JDK_URL" || curl -O -L --retry 3 "$JDK_URL") && tar -xzf "$JDK_FILE" -C ~/.java; fi
+        mkdir -p ~/.java && (timeout 400 curl -O -s -S -L --retry 3 "$JDK_URL" || curl -O -L --retry 3 "$JDK_URL") && tar -xzf "$JDK_FILE" -C ~/.java
     - name: Setup JDK
       run: |
         export JAVA_HOME=$HOME/.java/$JDK_DIR
