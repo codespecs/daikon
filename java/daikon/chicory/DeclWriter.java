@@ -168,6 +168,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
    * @param ppt_type the type of the program point (enter, exit, etc)
    * @param comp_info comparability information
    */
+  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   private void print_method(
       MethodInfo mi, RootInfo root, String name, PptType ppt_type, @Nullable DeclReader comp_info) {
 
@@ -499,6 +500,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
    * Returns the string to write to the output file for the specified enum. Currently this is just
    * the name of the enum in lower case.
    */
+  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   private String out_name(Enum<?> e) {
     return e.name().toLowerCase();
   }

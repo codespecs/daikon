@@ -15,6 +15,10 @@ public class Main extends CommandHandler {
     }
   }
 
+  @SuppressWarnings({
+    "NonApiType", // https://errorprone.info/bugpattern/NonApiType
+    "StringCaseLocaleUsage" // https://errorprone.info/bugpattern/StringCaseLocaleUsage
+  })
   public void nonStaticMain(String[] args) {
 
     List<CommandHandler> handlers =

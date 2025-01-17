@@ -713,7 +713,7 @@ endif
 
 # See version numbers at https://github.com/google/error-prone/releases
 # and https://errorprone.info/docs/installation .
-ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.15.0-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.15.0.jar
+ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.31.0-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.42.0-eisop5.jar
 
 JAVAC_ANNOTATION_PROCESSOR_ARGS ?= \
 	-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
@@ -739,7 +739,7 @@ else
 	  ${JAVAC_ANNOTATION_PROCESSOR_ARGS} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:ExtendsObject:OFF' \
-	  -Xmaxwarns 100000 -Werror \
+	  -Xmaxwarns 100000 -Werror --should-stop=ifError=FLOW \
 	  ${JAVA_FILES_FOR_STYLE}
 endif
 

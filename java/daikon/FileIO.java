@@ -368,9 +368,9 @@ public final class FileIO {
     String ppt_name = need(state, scanner, "ppt name");
     ppt_name = user_mod_ppt_name(ppt_name);
 
-    /** Information that will populate the new program point. */
+    /* Information that will populate the new program point. */
     Map<String, VarDefinition> varmap = new LinkedHashMap<>();
-    /** The VarDefinition we are in the middle of reading, or null if we are not. */
+    /* The VarDefinition we are in the middle of reading, or null if we are not. */
     VarDefinition vardef = null;
     List<ParentRelation> ppt_parents = new ArrayList<>();
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf(PptFlags.class);
@@ -1844,7 +1844,6 @@ public final class FileIO {
     }
 
     state.rtype = RecordType.EOF;
-    return;
   }
 
   /**
@@ -3077,6 +3076,7 @@ public final class FileIO {
    * Looks up the next token as a member of enum_class. Throws Daikon.UserError if there is no token
    * or if it is not valid member of the class. Enums are presumed to be in in upper case.
    */
+  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   public static <E extends Enum<E>> E parse_enum_val(
       ParseState state, Scanner scanner, Class<E> enum_class, String descr) {
 

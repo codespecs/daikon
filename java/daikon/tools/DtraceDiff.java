@@ -455,6 +455,7 @@ public class DtraceDiff {
    *
    * @param vi the VarInfo to print
    */
+  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   private static void printVarinfo(VarInfo vi) {
     System.out.printf("variable %s%n", vi.str_name());
     System.out.printf("  var-kind %s%n", vi.var_kind);

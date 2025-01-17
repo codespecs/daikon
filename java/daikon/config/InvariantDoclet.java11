@@ -109,6 +109,7 @@ public class InvariantDoclet implements Doclet {
   }
 
   /** Compare TypeElements by their simple name. */
+  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   static class sortBySimpleName implements Comparator<TypeElement> {
     @Override
     public int compare(TypeElement te1, TypeElement te2) {
@@ -129,6 +130,7 @@ public class InvariantDoclet implements Doclet {
   }
 
   /** Compare TypeElements by their binary name. */
+  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   static class sortByBinaryName implements Comparator<TypeElement> {
     @Override
     public int compare(TypeElement te1, TypeElement te2) {
@@ -146,6 +148,7 @@ public class InvariantDoclet implements Doclet {
   }
 
   /** Compare TypeElements by their fully qualified name. */
+  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   static class sortByQualifiedName implements Comparator<TypeElement> {
     @Override
     public int compare(TypeElement te1, TypeElement te2) {
@@ -493,7 +496,7 @@ public class InvariantDoclet implements Doclet {
    * @param cd the base class from which to start the search
    * @param set the set to add classes to. Should start out empty.
    */
-  public void gather_derived_classes(@KeyFor("this.cmap") ClassInfo cd, TreeSet<TypeElement> set) {
+  public void gather_derived_classes(@KeyFor("this.cmap") ClassInfo cd, java.util.Set<TypeElement> set) {
     assert cmap.containsKey(cd.classInfo().toString());
 
     // System.out.println("Processing " + cd.classInfo());

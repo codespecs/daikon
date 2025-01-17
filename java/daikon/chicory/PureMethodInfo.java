@@ -128,6 +128,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
     return params;
   }
 
+  @SuppressWarnings("LockOnNonEnclosingClassLiteral") // https://errorprone.info/bugpattern/LockOnNonEnclosingClassLiteral
   private static @Nullable Object executePureMethod(
       Method meth, Object receiverVal, @Nullable Object[] argVals) {
     // Between startPure() and endPure(), no output is done to the trace file.

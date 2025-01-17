@@ -503,6 +503,7 @@ public class NISuppressor {
    * Returns a string representation of the suppressor. Rather than show var indices as numbers, the
    * variables x, y, and z are shown instead with indices 0, 1, and 2 respectively.
    */
+  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied NISuppressor this) {

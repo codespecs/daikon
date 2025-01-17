@@ -95,7 +95,7 @@ public class Violation implements Serializable {
   /**
    * Creates the violation represented by {@code vioString}.
    *
-   * @param vioString: a the string is of the form: {@code <INVINFO> property time</INVINFO>} where
+   * @param vioString a string of the form: {@code <INVINFO> property time</INVINFO>} where
    *     {@code property} is valid XML representation of a {@code Property}, and time is {@code
    *     <ON_ENTRY>} or {@code <ON_EXIT>}.
    * @return the violation represented by {@code vioString}

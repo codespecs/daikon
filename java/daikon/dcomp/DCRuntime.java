@@ -2172,6 +2172,7 @@ public final class DCRuntime implements ComparabilityProvider {
    *
    * <p>"daikon.chicory.FieldInfo:this.foo" becomes "Field foo"
    */
+  @SuppressWarnings("NonApiType") // https://errorprone.info/bugpattern/NonApiType
   private static ArrayList<String> skinyOutput(DVSet l, boolean on) {
     ArrayList<String> o = new ArrayList<>();
     for (DaikonVariableInfo dvi : l) {

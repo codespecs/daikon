@@ -76,6 +76,7 @@ public class TraceSelect {
    *
    * @param args command-line arguments, like those of {@link #main}
    */
+  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   public static void mainHelper(final String[] args) {
     argles = args;
     if (args.length == 0) {
@@ -278,8 +279,6 @@ public class TraceSelect {
     } catch (InterruptedException e) {
       // do nothing
     }
-
-    return;
   }
 
   private static void reinitializeDaikon() {

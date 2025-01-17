@@ -2359,7 +2359,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    */
   public List<VarInfo> getGuardingList() {
 
-    /**
+    /*
      * The list returned by this visitor always includes the argument itself (if it is testable
      * against null; for example, derived variables are not). If the caller does not want the
      * argument to be in the list, the caller must must remove the argument.

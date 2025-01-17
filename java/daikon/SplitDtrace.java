@@ -129,7 +129,7 @@ public final class SplitDtrace {
     }
   }
 
-  static int getNonce(ArrayList<String> res) {
+  static int getNonce(java.util.List<String> res) {
     for (int i = 0; i < res.size(); i++) {
       if (res.get(i).equals("this_invocation_nonce")) {
         return Integer.parseInt(res.get(i + 1));
@@ -139,21 +139,21 @@ public final class SplitDtrace {
   }
 
   @Pure
-  static boolean isEnter(ArrayList<String> res) {
+  static boolean isEnter(java.util.List<String> res) {
     return res.get(0).contains(":::ENTER");
   }
 
   @Pure
-  static boolean isExit(ArrayList<String> res) {
+  static boolean isExit(java.util.List<String> res) {
     return res.get(0).contains(":::EXIT");
   }
 
   @Pure
-  static boolean isDeclare(ArrayList<String> res) {
+  static boolean isDeclare(java.util.List<String> res) {
     return res.get(0).equals("DECLARE");
   }
 
-  static void writeRec(BufferedWriter writer, ArrayList<String> res) throws IOException {
+  static void writeRec(BufferedWriter writer, java.util.List<String> res) throws IOException {
     for (String s : res) {
       writer.write(s);
       writer.newLine();
@@ -169,7 +169,7 @@ public final class SplitDtrace {
     return l.trim().equals("") || l.startsWith("#");
   }
 
-  static void readRec(BufferedReader reader, ArrayList<String> res) throws IOException {
+  static void readRec(BufferedReader reader, java.util.List<String> res) throws IOException {
     res.clear();
     String line;
     while ((line = reader.readLine()) != null) {
