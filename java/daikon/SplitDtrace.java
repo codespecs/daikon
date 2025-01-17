@@ -14,6 +14,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
@@ -129,7 +130,7 @@ public final class SplitDtrace {
     }
   }
 
-  static int getNonce(java.util.List<String> res) {
+  static int getNonce(List<String> res) {
     for (int i = 0; i < res.size(); i++) {
       if (res.get(i).equals("this_invocation_nonce")) {
         return Integer.parseInt(res.get(i + 1));
@@ -139,21 +140,21 @@ public final class SplitDtrace {
   }
 
   @Pure
-  static boolean isEnter(java.util.List<String> res) {
+  static boolean isEnter(List<String> res) {
     return res.get(0).contains(":::ENTER");
   }
 
   @Pure
-  static boolean isExit(java.util.List<String> res) {
+  static boolean isExit(List<String> res) {
     return res.get(0).contains(":::EXIT");
   }
 
   @Pure
-  static boolean isDeclare(java.util.List<String> res) {
+  static boolean isDeclare(List<String> res) {
     return res.get(0).equals("DECLARE");
   }
 
-  static void writeRec(BufferedWriter writer, java.util.List<String> res) throws IOException {
+  static void writeRec(BufferedWriter writer, List<String> res) throws IOException {
     for (String s : res) {
       writer.write(s);
       writer.newLine();
@@ -169,7 +170,7 @@ public final class SplitDtrace {
     return l.trim().equals("") || l.startsWith("#");
   }
 
-  static void readRec(BufferedReader reader, java.util.List<String> res) throws IOException {
+  static void readRec(BufferedReader reader, List<String> res) throws IOException {
     res.clear();
     String line;
     while ((line = reader.readLine()) != null) {
