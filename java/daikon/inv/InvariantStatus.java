@@ -1,5 +1,6 @@
 package daikon.inv;
 
+import java.util.Locale;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 

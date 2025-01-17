@@ -161,7 +161,7 @@ public class InvariantDoclet implements Doclet {
       return te1.getQualifiedName()
           .toString()
           .toLowerCase()
-          .compareTo(te2.getQualifiedName().toString(Locale.ROOT).toLowerCase());
+          .compareTo(te2.getQualifiedName().toString().toLowerCase(Locale.ROOT));
     }
   }
 

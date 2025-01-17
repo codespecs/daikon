@@ -2,6 +2,7 @@ package daikon.tools.runtimechecker;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Main entrypoint for the instrumenter. Passes control to whichever handler can handle the
@@ -15,8 +16,7 @@ public class Main extends CommandHandler {
     }
   }
 
-  @SuppressWarnings(
-    "NonApiType") // https://errorprone.info/bugpattern/NonApiType
+  @SuppressWarnings("NonApiType") // https://errorprone.info/bugpattern/NonApiType
   public void nonStaticMain(String[] args) {
 
     List<CommandHandler> handlers =

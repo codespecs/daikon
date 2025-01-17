@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -463,7 +464,7 @@ public class DtraceDiff {
     if (!vi.var_flags.isEmpty()) {
       System.out.printf("  flags");
       for (VarFlags flag : vi.var_flags) {
-        System.out.printf(" %s", flag.name().toLowerCase(Locale.English));
+        System.out.printf(" %s", flag.name().toLowerCase(Locale.ENGLISH));
       }
       System.out.printf("%n");
     }
