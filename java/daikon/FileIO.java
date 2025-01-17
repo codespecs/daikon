@@ -3076,13 +3076,12 @@ public final class FileIO {
    * Looks up the next token as a member of enum_class. Throws Daikon.UserError if there is no token
    * or if it is not valid member of the class. Enums are presumed to be in in upper case.
    */
-  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   public static <E extends Enum<E>> E parse_enum_val(
       ParseState state, Scanner scanner, Class<E> enum_class, String descr) {
 
     @Interned String str = need(state, scanner, descr);
     try {
-      E e = Enum.valueOf(enum_class, str.toUpperCase());
+      E e = Enum.valueOf(enum_class, str.toUpperCase(Locale.English);
       return e;
     } catch (Exception exception) {
       @SuppressWarnings(
@@ -3090,7 +3089,7 @@ public final class FileIO {
       E @NonNull [] all = enum_class.getEnumConstants();
       StringJoiner msg = new StringJoiner(", ");
       for (E e : all) {
-        msg.add(String.format("'%s'", e.name().toLowerCase()));
+        msg.add(String.format("'%s'", e.name().toLowerCase(Locale.English)));
       }
       decl_error(state, "'%s' found where %s expected", str, msg);
       throw new Error("execution cannot get to here, previous line threw an error");

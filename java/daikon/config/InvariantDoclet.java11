@@ -109,7 +109,6 @@ public class InvariantDoclet implements Doclet {
   }
 
   /** Compare TypeElements by their simple name. */
-  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   static class sortBySimpleName implements Comparator<TypeElement> {
     @Override
     public int compare(TypeElement te1, TypeElement te2) {
@@ -125,12 +124,11 @@ public class InvariantDoclet implements Doclet {
       return te1.getSimpleName()
           .toString()
           .toLowerCase()
-          .compareTo(te2.getSimpleName().toString().toLowerCase());
+          .compareTo(te2.getSimpleName().toString().toLowerCase(Locale.ROOT));
     }
   }
 
   /** Compare TypeElements by their binary name. */
-  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   static class sortByBinaryName implements Comparator<TypeElement> {
     @Override
     public int compare(TypeElement te1, TypeElement te2) {
@@ -143,12 +141,11 @@ public class InvariantDoclet implements Doclet {
       if (te2 == null) {
         return 1;
       }
-      return getBinaryName(te1).toLowerCase().compareTo(getBinaryName(te2).toLowerCase());
+      return getBinaryName(te1).toLowerCase(Locale.ROOT).compareTo(getBinaryName(te2).toLowerCase());
     }
   }
 
   /** Compare TypeElements by their fully qualified name. */
-  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   static class sortByQualifiedName implements Comparator<TypeElement> {
     @Override
     public int compare(TypeElement te1, TypeElement te2) {
@@ -164,7 +161,7 @@ public class InvariantDoclet implements Doclet {
       return te1.getQualifiedName()
           .toString()
           .toLowerCase()
-          .compareTo(te2.getQualifiedName().toString().toLowerCase());
+          .compareTo(te2.getQualifiedName().toString(Locale.ROOT).toLowerCase());
     }
   }
 

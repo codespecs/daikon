@@ -15,10 +15,8 @@ public class Main extends CommandHandler {
     }
   }
 
-  @SuppressWarnings({
-    "NonApiType", // https://errorprone.info/bugpattern/NonApiType
-    "StringCaseLocaleUsage" // https://errorprone.info/bugpattern/StringCaseLocaleUsage
-  })
+  @SuppressWarnings(
+    "NonApiType") // https://errorprone.info/bugpattern/NonApiType
   public void nonStaticMain(String[] args) {
 
     List<CommandHandler> handlers =
@@ -30,7 +28,7 @@ public class Main extends CommandHandler {
           "For more help, invoke the instrumenter with \"help\" as its sole argument.");
       System.exit(1);
     }
-    if (args[0].toUpperCase().equals("HELP") || args[0].equals("?")) {
+    if (args[0].toUpperCase(Locale.ENGLISH).equals("HELP") || args[0].equals("?")) {
       usageMessage();
       usageMessage(handlers);
       System.exit(0);

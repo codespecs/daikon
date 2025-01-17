@@ -18,10 +18,9 @@ public enum InvariantStatus {
   /** The invariant's condition being weakened. For example OneOf{1,3} became OneOf{1,3,10}. */
   WEAKENED;
 
-  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied InvariantStatus this) {
-    return name().toLowerCase();
+    return name().toLowerCase(Locale.ENGLISH);
   }
 }

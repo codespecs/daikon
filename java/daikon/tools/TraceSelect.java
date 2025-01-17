@@ -76,7 +76,6 @@ public class TraceSelect {
    *
    * @param args command-line arguments, like those of {@link #main}
    */
-  @SuppressWarnings("StringCaseLocaleUsage") // https://errorprone.info/bugpattern/StringCaseLocaleUsage
   public static void mainHelper(final String[] args) {
     argles = args;
     if (args.length == 0) {
@@ -91,7 +90,7 @@ public class TraceSelect {
     boolean knowArgStart = false;
     for (int i = 2; i < args.length; i++) {
       // allows seed setting
-      if (args[i].toUpperCase().equals("-SEED")) {
+      if (args[i].toUpperCase(.English).equals("-SEED")) {
         if (i + 1 >= args.length) {
           throw new daikon.Daikon.UserError("-SEED options requires argument");
         }
@@ -101,7 +100,7 @@ public class TraceSelect {
 
       // NOCLEAN argument will leave the trace samples even after
       // the invariants from these samples have been generated
-      else if (args[i].toUpperCase().equals("-NOCLEAN")) {
+      else if (args[i].toUpperCase(Locale.English).equals("-NOCLEAN")) {
         CLEAN = false;
         daikonArgStart = i + 1;
       }
@@ -109,7 +108,7 @@ public class TraceSelect {
       // INCLUDE_UNRETURNED option will allow selecting method invocations
       // that entered the method successfully but did not exit normally;
       // either from a thrown Exception or abnormal termination.
-      else if (args[i].toUpperCase().equals("-INCLUDE_UNRETURNED")) {
+      else if (args[i].toUpperCase(Locale.English).equals("-INCLUDE_UNRETURNED")) {
         INCLUDE_UNRETURNED = true;
         daikonArgStart = i + 1;
       }
@@ -119,7 +118,7 @@ public class TraceSelect {
       // daikon.diff.Diff over each of the samples and finding
       // properties that appear in some but not all of the
       // samples.
-      else if (args[i].toUpperCase().equals("-DO_DIFFS")) {
+      else if (args[i].toUpperCase(Locale.English).equals("-DO_DIFFS")) {
         DO_DIFFS = true;
         daikonArgStart = i + 1;
       }
