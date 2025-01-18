@@ -1631,6 +1631,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns a name for a the prestate value of this object; form is like "orig(this)" or
    * "\old(this)".
+   *
+   * @return a name for a the prestate value of this object
    */
   @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public VarInfoName applyPrestate(@Interned VarInfoName this) {
@@ -2053,6 +2055,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Caller is subscripting an orig(a[]) array. Take the requested index and make it useful in that
    * context.
+   *
+   * @param index into an orig array
+   * @return a name for the indexed orig item
    */
   @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   static VarInfoName indexToPrestate(VarInfoName index) {
@@ -2278,6 +2283,12 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       return slice_helper(OutputFormat.JML, v);
     }
 
+    /**
+     * ???
+     *
+     * @param v ???
+     * @return ???
+     */
     @Override
     protected String dbc_name_impl(VarInfo v) {
       return slice_helper(OutputFormat.DBCJAVA, v);
@@ -3780,6 +3791,12 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     // //////////////////////////
 
+    /**
+     * ???
+     *
+     * @param name ???
+     * @return ???
+     */
     @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
     public static String[] simplifyNameAndBounds(VarInfoName name) {
       String[] results = new String[3];

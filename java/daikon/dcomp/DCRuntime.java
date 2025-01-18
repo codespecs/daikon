@@ -1300,6 +1300,13 @@ public final class DCRuntime implements ComparabilityProvider {
   /**
    * Process all of the daikon variables in the tree starting at root. If the values referenced by
    * those variables are comparable mark the variables as comparable.
+   *
+   * @param mi the current MethodInfo
+   * @param root the daikon variables
+   * @param tag_frame tag_frame containing the tags for the primitive arguments of this method
+   * @param obj value of 'this', or null if the method is static
+   * @param args array of the arguments to the method
+   * @param ret_val value returned by the method, or null if the method is a constructor or void
    */
   @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static void process_all_vars(
@@ -2172,6 +2179,10 @@ public final class DCRuntime implements ComparabilityProvider {
    * <p>e.g. "daikon.chicory.ParameterInfo:foo" becomes "Parameter foo"
    *
    * <p>"daikon.chicory.FieldInfo:this.foo" becomes "Field foo"
+   *
+   * @param l a DVSet
+   * @param on value of daikon.Daikon.abridger_vars
+   * @return an ArrayList for Strings for l
    */
   @SuppressWarnings("NonApiType") // https://errorprone.info/bugpattern/NonApiType
   private static ArrayList<String> skinyOutput(DVSet l, boolean on) {

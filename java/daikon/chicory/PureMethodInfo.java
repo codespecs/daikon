@@ -110,6 +110,9 @@ public class PureMethodInfo extends DaikonVariableInfo {
   /**
    * Returns an array corresponding to the current values of this pure method's arguments based on
    * the given parentVal.
+   *
+   * @param parentVal object reresenting the parent of the method
+   * @return an Object array with the current values of this method's arguments
    */
   @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   private @Nullable Object[] getArgVals(Object parentVal) {
@@ -129,6 +132,14 @@ public class PureMethodInfo extends DaikonVariableInfo {
     return params;
   }
 
+  /**
+   * Returns the result of invoking the method.
+   *
+   * @param meth the current Method
+   * @param receiverVal the receiver Object
+   * @param argVals and Object array of argument values
+   * @return an Object containing the result of invoking the method
+   */
   @SuppressWarnings(
       "LockOnNonEnclosingClassLiteral") // https://errorprone.info/bugpattern/LockOnNonEnclosingClassLiteral
   private static @Nullable Object executePureMethod(

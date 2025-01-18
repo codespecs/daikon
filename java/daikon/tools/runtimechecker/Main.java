@@ -16,6 +16,12 @@ public class Main extends CommandHandler {
     }
   }
 
+  /**
+   * Working entrypoint for the instrumenter. Passes control to whichever handler can handle the
+   * user-specified command.
+   *
+   * @param args the arguments to the program
+   */
   @SuppressWarnings("NonApiType") // https://errorprone.info/bugpattern/NonApiType
   public void nonStaticMain(String[] args) {
 

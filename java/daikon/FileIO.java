@@ -2490,6 +2490,11 @@ public final class FileIO {
   /**
    * Read either a serialized PptMap or a InvMap and return a PptMap. If an InvMap is specified, it
    * is converted to a PptMap.
+   *
+   * @param file the input file
+   * @param use_saved_config flag
+   * @return a serialized PptMap
+   * @throws IOException if there is trouble reading the file
    */
   @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @EnsuresNonNull("FileIO.new_decl_format")
@@ -3077,6 +3082,13 @@ public final class FileIO {
   /**
    * Looks up the next token as a member of enum_class. Throws Daikon.UserError if there is no token
    * or if it is not valid member of the class. Enums are presumed to be in in upper case.
+   *
+   * @param state the ParseState
+   * @param scanner ???
+   * @param <E> ???
+   * @param enum_class ???
+   * @param descr ???
+   * @return ???
    */
   public static <E extends Enum<E>> E parse_enum_val(
       ParseState state, Scanner scanner, Class<E> enum_class, String descr) {
@@ -3138,6 +3150,9 @@ public final class FileIO {
    * Handle any possible modifications to the ppt name. For now, just support the Applications
    * Communities specific modification to remove duplicate stack entries. But a more generic
    * technique could be implemented in the future.
+   *
+   * @param ppt_name the ppt to analyze
+   * @return modified ppt name
    */
   public static String user_mod_ppt_name(String ppt_name) {
 

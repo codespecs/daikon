@@ -1012,7 +1012,13 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     return arg_type_strings;
   }
 
-  // creates a MethodInfo struct corresponding to mgen
+  /**
+   * Creates a MethodInfo struct corresponding to mgen.
+   *
+   * @param class_info the ClassInfo for current class
+   * @param mgen the MethodGen for the current method
+   * @return a new MethodInfo or null if this method should not be instrumented
+   */
   @SuppressWarnings({
     "unchecked",
     "PatternMatchingInstanceof" // must suppress as feature added in Java 14.

@@ -303,7 +303,13 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
   }
 
-  // Node n is a MethodDeclaration or a ConstructorDeclaration
+  /**
+   * ???
+   *
+   * @param ppts a PptMap
+   * @param n a MethodDeclaration or a ConstructorDeclaration
+   * @return and array of InvariantsAndModifiedVars for the ppts
+   */
   @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Nullable InvariantsAndModifiedVars[] get_requires_and_ensures(PptMap ppts, Node n) {
     InvariantsAndModifiedVars requires_invs = null;

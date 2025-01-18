@@ -130,6 +130,12 @@ public final class SplitDtrace {
     }
   }
 
+  /**
+   * ???
+   *
+   * @param res ???
+   * @return the Nonce value
+   */
   static int getNonce(List<String> res) {
     for (int i = 0; i < res.size(); i++) {
       if (res.get(i).equals("this_invocation_nonce")) {
@@ -139,21 +145,47 @@ public final class SplitDtrace {
     throw new RuntimeException("no nonce: " + res);
   }
 
+  /**
+   * ???
+   *
+   * @param res ???
+   * @return true if res contains ":::ENTER"
+   */
   @Pure
   static boolean isEnter(List<String> res) {
     return res.get(0).contains(":::ENTER");
   }
 
+  /**
+   * ???
+   *
+   * @param res ???
+   * @return true if res contains ":::EXIT"
+   */
   @Pure
   static boolean isExit(List<String> res) {
     return res.get(0).contains(":::EXIT");
   }
 
+  /**
+   * ???
+   *
+   * @param res ???
+   * @return true if res contains "DECLARE"
+   */
   @Pure
   static boolean isDeclare(List<String> res) {
     return res.get(0).equals("DECLARE");
   }
 
+  /**
+   * ???
+   *
+   * @param writer the BufferedWriter to use for output
+   * @param res ???
+   * @return true if res contains "DECLARE"
+   * @throws IOException if there is a problem writing
+   */
   static void writeRec(BufferedWriter writer, List<String> res) throws IOException {
     for (String s : res) {
       writer.write(s);

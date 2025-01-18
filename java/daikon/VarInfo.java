@@ -1590,6 +1590,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /**
    * Returns the VarInfo for the sequence from which this was derived, or null if this wasn't
    * derived from a sequence. Only works for scalars.
+   *
+   * @return the VarInfo for the sequence from which this was derived
    */
   @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public @Nullable VarInfo isDerivedSequenceMember() {
@@ -1625,6 +1627,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /**
    * Return the original sequence variable from which this derived sequence was derived. Only works
    * for sequences.
+   *
+   * @return the VarInfo for the original sequence from which this sequence was derived
    */
   @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public @Nullable VarInfo isDerivedSubSequenceOf() {
@@ -2360,6 +2364,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    *
    * <p>For example, if this VarInfo is "a.b.c", then the guarding list consists of the variables
    * "a" and "a.b". If "a" is null or "a.b" is null, then "a.b.c" is missing (does not exist).
+   *
+   * @return a list of VarInfos that must be guarded
    */
   public List<VarInfo> getGuardingList() {
 

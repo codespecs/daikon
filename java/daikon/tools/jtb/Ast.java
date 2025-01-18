@@ -944,7 +944,12 @@ public class Ast {
     c.f1.addNode(d);
   }
 
-  // The "access" argument should be one of "public", "protected", or "private".
+  /**
+   * ???
+   *
+   * @param m MethodDeclaration to be inspected
+   * @param access string containing "public", "protected", or "private".
+   */
   @SuppressWarnings({
     "JdkObsolete",
     "PatternMatchingInstanceof" // must suppress as feature added in Java 14.
@@ -976,6 +981,11 @@ public class Ast {
     options.addNode(c);
   }
 
+  /**
+   * ???
+   *
+   * @param method ???
+   */
   @SuppressWarnings({
     "JdkObsolete",
     "PatternMatchingInstanceof" // must suppress as feature added in Java 14.
@@ -1309,6 +1319,13 @@ public class Ast {
     }
   }
 
+  /**
+   * ???
+   *
+   * @param modifiers ???
+   * @param modifierString ???
+   * @return true if modifier is present
+   */
   @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static boolean modifierPresent(Modifiers modifiers, String modifierString) {
     // Grammar production:
