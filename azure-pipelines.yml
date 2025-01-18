@@ -81,13 +81,13 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: quick_txt_diff_ubuntu_jdk20
+- job: quick_txt_diff_ubuntu_jdk22
   dependsOn:
     - jdk21_jobs
     - quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk20-testing:latest
+  container: mdernst/daikon-ubuntu-jdk22-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -143,13 +143,13 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: nonquick_txt_diff_ubuntu_jdk20
+- job: nonquick_txt_diff_ubuntu_jdk22
   dependsOn:
     - jdk21_jobs
     - nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk20-testing:latest
+  container: mdernst/daikon-ubuntu-jdk22-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -205,13 +205,13 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: non_txt_diff_ubuntu_jdk20
+- job: non_txt_diff_ubuntu_jdk22
   dependsOn:
     - jdk21_jobs
     - non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk20-testing:latest
+  container: mdernst/daikon-ubuntu-jdk22-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -324,13 +324,13 @@ jobs:
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
-- job: kvasir_ubuntu_jdk20
+- job: kvasir_ubuntu_jdk22
   dependsOn:
     - jdk21_jobs
     - kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk20-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk22-plus-testing:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -458,13 +458,13 @@ jobs:
   - bash: ./scripts/test-typecheck-with-bundled-cf.sh
     displayName: test-typecheck-with-bundled-cf.sh
 
-- job: typecheck_latest_jdk20
+- job: typecheck_latest_jdk22
   dependsOn:
     - jdk21_jobs
     - typecheck_latest_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk20-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk22-plus-testing:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -476,13 +476,13 @@ jobs:
   - bash: ./scripts/test-typecheck-with-latest-cf.sh
     displayName: test-typecheck-with-latest-cf.sh
 
-- job: typecheck_bundled_jdk20
+- job: typecheck_bundled_jdk22
   dependsOn:
     - jdk21_jobs
     - typecheck_bundled_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk20-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk22-plus-testing:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
