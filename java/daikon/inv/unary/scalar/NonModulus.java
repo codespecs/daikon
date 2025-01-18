@@ -213,6 +213,7 @@ public class NonModulus extends SingleScalar {
     return (modulus == this.modulus) && (remainder == this.remainder);
   }
 
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public boolean isExclusiveFormula(Invariant o) {

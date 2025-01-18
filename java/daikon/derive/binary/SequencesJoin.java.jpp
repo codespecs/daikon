@@ -77,6 +77,7 @@ public final class CLASSNAME extends BinaryDerivation {
    *
    * @param full_vt the value tuple of a program point to compute the derived value from
    */
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple full_vt) {
     Object val1 = var1().getValue(full_vt);

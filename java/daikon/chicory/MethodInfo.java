@@ -245,6 +245,7 @@ public class MethodInfo {
   }
 
   /** Returns the turn type of the method, or Void.TYPE for a constructor. */
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public Class<?> return_type() {
     if (member instanceof Method) {
       Method m = (Method) member;

@@ -945,7 +945,10 @@ public class Ast {
   }
 
   // The "access" argument should be one of "public", "protected", or "private".
-  @SuppressWarnings("JdkObsolete") // JTB uses Enumeration
+  @SuppressWarnings({
+    "JdkObsolete",
+    "PatternMatchingInstanceof" // must suppress as feature added in Java 14.
+  })
   public static void setAccess(MethodDeclaration m, String access) {
     // The following four confusing lines are a following of the
     // syntax tree to get to the modifiers.
@@ -973,7 +976,10 @@ public class Ast {
     options.addNode(c);
   }
 
-  @SuppressWarnings("JdkObsolete") // JTB uses Enumeration
+  @SuppressWarnings({
+    "JdkObsolete",
+    "PatternMatchingInstanceof" // must suppress as feature added in Java 14.
+  })
   public static void removeMethodDeclAnnotations(MethodDeclaration method) {
     // The following four confusing lines are a following of the
     // syntax tree to get to the modifiers.
@@ -1303,6 +1309,7 @@ public class Ast {
     }
   }
 
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static boolean modifierPresent(Modifiers modifiers, String modifierString) {
     // Grammar production:
     // f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" |

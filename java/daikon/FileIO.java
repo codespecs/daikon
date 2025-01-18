@@ -2491,6 +2491,7 @@ public final class FileIO {
    * Read either a serialized PptMap or a InvMap and return a PptMap. If an InvMap is specified, it
    * is converted to a PptMap.
    */
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @EnsuresNonNull("FileIO.new_decl_format")
   public static PptMap read_serialized_pptmap(File file, boolean use_saved_config)
       throws IOException {

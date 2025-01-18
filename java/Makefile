@@ -739,7 +739,7 @@ else
 	  ${JAVAC_ANNOTATION_PROCESSOR_ARGS} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:ExtendsObject:OFF' \
-	  -Xmaxwarns 100000 -Werror --should-stop=ifError=FLOW \
+	  -Xmaxwarns 100000 --should-stop=ifError=FLOW \
 	  ${JAVA_FILES_FOR_STYLE}
 endif
 

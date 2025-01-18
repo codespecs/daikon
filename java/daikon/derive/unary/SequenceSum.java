@@ -19,6 +19,7 @@ public final class SequenceSum extends UnaryDerivation {
     super(vi);
   }
 
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Override
   public ValueAndModified computeValueAndModifiedImpl(ValueTuple vt) {
     int source_mod = base.getModified(vt);

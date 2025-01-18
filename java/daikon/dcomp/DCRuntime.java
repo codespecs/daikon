@@ -1301,6 +1301,7 @@ public final class DCRuntime implements ComparabilityProvider {
    * Process all of the daikon variables in the tree starting at root. If the values referenced by
    * those variables are comparable mark the variables as comparable.
    */
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static void process_all_vars(
       MethodInfo mi, RootInfo root, Object[] tag_frame, Object obj, Object[] args, Object ret_val) {
 

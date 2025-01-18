@@ -143,6 +143,7 @@ public abstract class DaikonWriter {
    * @param point usually "ENTER" or "EXIT"
    * @return the program point name
    */
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   private static String methodName(Member member, String point) {
     String fullname;
     Class<?>[] args;

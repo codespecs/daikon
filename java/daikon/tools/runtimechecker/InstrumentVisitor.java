@@ -784,6 +784,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
    * Return a subset of the argument list, removing invariants that do not have a properly
    * implemented Java format.
    */
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   private static List<Invariant> filterInvariants(List<Invariant> invariants) {
     List<Invariant> survivors = new ArrayList<>();
     for (Invariant inv : invariants) {

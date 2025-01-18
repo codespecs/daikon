@@ -68,6 +68,7 @@ public class DiffDummyInvariant extends Invariant {
     return this.isSameFormula(other);
   }
 
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public boolean isSameFormula(Invariant other) {

@@ -304,6 +304,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   // Node n is a MethodDeclaration or a ConstructorDeclaration
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Nullable InvariantsAndModifiedVars[] get_requires_and_ensures(PptMap ppts, Node n) {
     InvariantsAndModifiedVars requires_invs = null;
     InvariantsAndModifiedVars ensures_invs = null;
@@ -701,6 +702,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // f0 -> PreIncrementExpression()
   //       | PreDecrementExpression()
   //       | PrimaryExpression() [ "++" | "--" | AssignmentOperator() Expression() ]
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Override
   public void visit(StatementExpression n) {
     super.visit(n); // call "accept(this)" on each field

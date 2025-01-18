@@ -594,6 +594,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    *
    * There are two cases that are not handled: x[..n] with an index shift and x[n..].
    */
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public @Nullable VarInfo get_array_size(VarInfo v) {
 
     assert v.rep_type.isArray();
@@ -819,6 +820,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
      *
      * @return non-null value iff this invariant is obvious from other invariants in the same slice
      */
+    @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
     @Pure
     @Override
     public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {

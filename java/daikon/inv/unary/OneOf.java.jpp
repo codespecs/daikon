@@ -1592,6 +1592,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
   }
 
 #if defined(IS_NUMERIC)
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
@@ -1746,6 +1747,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     return null;
   }
 #elif defined(IS_ELT_NUMERIC)
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
@@ -1922,6 +1924,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     return true;
   }
 
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public boolean isExclusiveFormula(Invariant o) {
@@ -2024,6 +2027,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
   }
 
   // Look up a previously instantiated invariant.
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static @Nullable ONEOFSCALAR find(PptSlice ppt) {
     assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
@@ -2120,6 +2124,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
    * Returns true if every element in this invariant is contained in the specified state. For
    * example if x = 1 and the state contains 1 and 2, true will be returned.
    */
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Override
   public boolean state_match(Object state) {
 

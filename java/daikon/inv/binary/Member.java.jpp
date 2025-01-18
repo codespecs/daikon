@@ -137,6 +137,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
   }
 
   /** Check whether sclvar is a member of seqvar can be determined statically. */
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   public static boolean isObviousMember(VarInfo sclvar, VarInfo seqvar) {
 

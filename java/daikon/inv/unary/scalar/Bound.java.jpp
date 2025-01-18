@@ -623,6 +623,7 @@ public class LOWERBOUND extends SINGLESCALAR {
     return false;
   }
 
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
@@ -645,6 +646,7 @@ public class LOWERBOUND extends SINGLESCALAR {
     return super.isObviousStatically(vis);
   }
 
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
@@ -767,6 +769,7 @@ public class LOWERBOUND extends SINGLESCALAR {
     return null;
   }
 
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public boolean isExclusiveFormula(Invariant other) {

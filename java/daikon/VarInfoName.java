@@ -1632,6 +1632,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    * Returns a name for a the prestate value of this object; form is like "orig(this)" or
    * "\old(this)".
    */
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public VarInfoName applyPrestate(@Interned VarInfoName this) {
     if (this instanceof Poststate) {
       return ((Poststate) this).term;
@@ -2053,6 +2054,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    * Caller is subscripting an orig(a[]) array. Take the requested index and make it useful in that
    * context.
    */
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   static VarInfoName indexToPrestate(VarInfoName index) {
     // 1 orig(a[]) . orig(index) -> orig(a[index])
     // 2 orig(a[]) . index       -> orig(a[post(index)])
@@ -2282,6 +2284,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     // Helper for JML, Java and DBC formats
+    @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
     protected String slice_helper(OutputFormat format, VarInfo v) {
 
       // See declaration of testCall for explanation of this flag.
@@ -3370,6 +3373,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
      * @return a 3-element array consisting of the new root, the lower bound for the index
      *     (inclusive), and the upper bound for the index (inclusive), in that order
      */
+    @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
     public static VarInfoName[] replace(VarInfoName root, VarInfoName needy, VarInfoName index) {
       assert root != null;
       assert needy != null;
@@ -3776,6 +3780,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     // //////////////////////////
 
+    @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
     public static String[] simplifyNameAndBounds(VarInfoName name) {
       String[] results = new String[3];
       boolean preState = false;

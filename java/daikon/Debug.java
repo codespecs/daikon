@@ -375,6 +375,7 @@ public final class Debug {
    * @see #log(Logger, String)
    * @see #log(String)
    */
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static void log(
       Logger debug,
       @Nullable Class<?> inv_class,
@@ -474,6 +475,7 @@ public final class Debug {
    * @return whether or not it logged anything
    */
   // 4-argument form
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static boolean log(
       @Nullable Class<?> inv_class,
       @Nullable @UnknownInitialization(PptTopLevel.class) Ppt ppt,

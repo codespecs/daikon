@@ -193,6 +193,7 @@ public class CLASSNAME extends SUPERCLASS {
     return true;
   }
 
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
@@ -260,6 +261,7 @@ public class CLASSNAME extends SUPERCLASS {
     return core.isSameFormula(((CLASSNAME) other).core);
   }
 
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public boolean isExclusiveFormula(Invariant other) {
@@ -270,6 +272,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   // Look up a previously instantiated invariant.
+  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static @Nullable CLASSNAME find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
