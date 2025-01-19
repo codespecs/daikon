@@ -2294,7 +2294,13 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       return slice_helper(OutputFormat.DBCJAVA, v);
     }
 
-    // Helper for JML, Java and DBC formats
+    /**
+     * Helper for JML, Java and DBC formats.
+     *
+     * @param format ???
+     * @param v ???
+     * @return ???
+     */
     @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
     protected String slice_helper(OutputFormat format, VarInfo v) {
 

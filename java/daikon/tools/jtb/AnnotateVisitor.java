@@ -883,9 +883,14 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return result;
   }
 
-  // Returns a HashMap for fields with ".elementType == \type(...)" invariants,
-  // mapping the field to the type.
-  // ppt is an :::OBJECT or :::CLASS program point.
+  /**
+   * Returns a HashMap for fields with ".elementType == \type(...)" invariants, mapping the field to
+   * the type.
+   *
+   * @param ppt is an :::OBJECT or :::CLASS program point.
+   * @param allFieldNames is a list of all field names
+   * @return HashMap ???
+   */
   @SuppressWarnings("NonApiType") // https://errorprone.info/bugpattern/NonApiType
   HashMap<String, String> element_type_fields(PptTopLevel ppt, List<String> allFieldNames) {
     // System.out.println("element_type_fields(" + ppt + ")");

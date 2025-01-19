@@ -183,7 +183,6 @@ public final class SplitDtrace {
    *
    * @param writer the BufferedWriter to use for output
    * @param res ???
-   * @return true if res contains "DECLARE"
    * @throws IOException if there is a problem writing
    */
   static void writeRec(BufferedWriter writer, List<String> res) throws IOException {
@@ -194,6 +193,12 @@ public final class SplitDtrace {
     writer.newLine();
   }
 
+  /**
+   * ???
+   *
+   * @param l ???
+   * @return ???
+   */
   @SuppressWarnings(
       "all:purity") // non-deterministic call to trim is used only for equals(), does not affect
   // result
@@ -202,6 +207,13 @@ public final class SplitDtrace {
     return l.trim().equals("") || l.startsWith("#");
   }
 
+  /**
+   * ???
+   *
+   * @param reader the BufferedReader to use for input
+   * @param res ???
+   * @throws IOException if there is a problem reading
+   */
   static void readRec(BufferedReader reader, List<String> res) throws IOException {
     res.clear();
     String line;
