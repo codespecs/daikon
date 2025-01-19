@@ -303,13 +303,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
   }
 
-  /**
-   * ???
-   *
-   * @param ppts a PptMap
-   * @param n a MethodDeclaration or a ConstructorDeclaration
-   * @return and array of InvariantsAndModifiedVars for the ppts
-   */
+  // Node n is a MethodDeclaration or a ConstructorDeclaration
   @Nullable InvariantsAndModifiedVars[] get_requires_and_ensures(PptMap ppts, Node n) {
     InvariantsAndModifiedVars requires_invs = null;
     InvariantsAndModifiedVars ensures_invs = null;

@@ -784,8 +784,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
    * Return a subset of the argument list, removing invariants that do not have a properly
    * implemented Java format.
    *
-   * @param invariants list of Invariants from argument list
-   * @return the modified list
+   * @param invariants a list of invariants
+   * @return a new list that is a subset of the argument list
    */
   private static List<Invariant> filterInvariants(List<Invariant> invariants) {
     List<Invariant> survivors = new ArrayList<>();

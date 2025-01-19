@@ -398,12 +398,6 @@ public class ExtractConsequent {
     }
   }
 
-  /**
-   * ???
-   *
-   * @param inv the Invariant to be analyzed
-   * @return ???
-   */
   private static boolean contains_constant_non_012(Invariant inv) {
     if (inv instanceof daikon.inv.unary.scalar.OneOfScalar) {
       daikon.inv.unary.scalar.OneOfScalar oneof = (daikon.inv.unary.scalar.OneOfScalar) inv;

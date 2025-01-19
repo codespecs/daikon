@@ -108,11 +108,10 @@ public class PureMethodInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Returns an array corresponding to the current values of this pure method's arguments based on
-   * the given parentVal.
+   * Returns the current values of this pure method's arguments based on the given parentVal.
    *
-   * @param parentVal object reresenting the parent of the method
-   * @return an Object array with the current values of this method's arguments
+   * @param parentVal the parent of the current method
+   * @return an Object the values of this method's arguments
    */
   private @Nullable Object[] getArgVals(Object parentVal) {
     @Nullable Object[] params = new @Nullable Object[args.length];
@@ -134,10 +133,10 @@ public class PureMethodInfo extends DaikonVariableInfo {
   /**
    * Returns the result of invoking the method.
    *
-   * @param meth the current Method
-   * @param receiverVal the receiver Object
-   * @param argVals and Object array of argument values
-   * @return an Object containing the result of invoking the method
+   * @param meth a method
+   * @param receiverVal the receiver
+   * @param argVals the argument values
+   * @return the result of invoking the method
    */
   @SuppressWarnings(
       "LockOnNonEnclosingClassLiteral") // https://errorprone.info/bugpattern/LockOnNonEnclosingClassLiteral

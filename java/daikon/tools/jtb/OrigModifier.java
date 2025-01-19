@@ -44,8 +44,8 @@ public class OrigModifier extends DepthFirstVisitor {
    */
   // f0 -> PrimaryPrefix()
   // f1 -> ( PrimarySuffix() )*
-  @SuppressWarnings("JdkObsolete")
   @Override
+  @SuppressWarnings("JdkObsolete") // JTB Enumeration
   public void visit(PrimaryExpression n) {
     // let simple variables be variables with out "."'s in their names
     // such as x or myList

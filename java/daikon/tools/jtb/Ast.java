@@ -944,13 +944,8 @@ public class Ast {
     c.f1.addNode(d);
   }
 
-  /**
-   * ???
-   *
-   * @param m MethodDeclaration to be inspected
-   * @param access string containing "public", "protected", or "private".
-   */
-  @SuppressWarnings("JdkObsolete")
+  // The "access" argument should be one of "public", "protected", or "private".
+  @SuppressWarnings("JdkObsolete") // JTB uses Enumeration
   public static void setAccess(MethodDeclaration m, String access) {
     // The following four confusing lines are a following of the
     // syntax tree to get to the modifiers.
@@ -978,12 +973,7 @@ public class Ast {
     options.addNode(c);
   }
 
-  /**
-   * ???
-   *
-   * @param method ???
-   */
-  @SuppressWarnings("JdkObsolete")
+  @SuppressWarnings("JdkObsolete") // JTB uses Enumeration
   public static void removeMethodDeclAnnotations(MethodDeclaration method) {
     // The following four confusing lines are a following of the
     // syntax tree to get to the modifiers.
@@ -1313,13 +1303,6 @@ public class Ast {
     }
   }
 
-  /**
-   * ???
-   *
-   * @param modifiers ???
-   * @param modifierString ???
-   * @return true if modifier is present
-   */
   public static boolean modifierPresent(Modifiers modifiers, String modifierString) {
     // Grammar production:
     // f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" |

@@ -2281,24 +2281,12 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       return slice_helper(OutputFormat.JML, v);
     }
 
-    /**
-     * ???
-     *
-     * @param v ???
-     * @return ???
-     */
     @Override
     protected String dbc_name_impl(VarInfo v) {
       return slice_helper(OutputFormat.DBCJAVA, v);
     }
 
-    /**
-     * Helper for JML, Java and DBC formats.
-     *
-     * @param format ???
-     * @param v ???
-     * @return ???
-     */
+    // Helper for JML, Java and DBC formats
     protected String slice_helper(OutputFormat format, VarInfo v) {
 
       // See declaration of testCall for explanation of this flag.
@@ -3793,12 +3781,6 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     // //////////////////////////
 
-    /**
-     * ???
-     *
-     * @param name ???
-     * @return ???
-     */
     public static String[] simplifyNameAndBounds(VarInfoName name) {
       String[] results = new String[3];
       boolean preState = false;

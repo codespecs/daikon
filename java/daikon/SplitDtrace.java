@@ -162,10 +162,10 @@ public final class SplitDtrace {
   }
 
   /**
-   * Returns true if the given line starts a
+   * Returns true if the given line starts a program point declaration
    *
-   * @param res ???
-   * @return true if res contains "DECLARE"
+   * @param res a line from a .decls or .dtrace file
+   * @return true if the given line starts a program point declaration
    */
   @Pure
   static boolean isDeclare(List<String> res) {
@@ -173,10 +173,10 @@ public final class SplitDtrace {
   }
 
   /**
-   * ???
+   * Writes a .dtrace record to a file.
    *
    * @param writer the BufferedWriter to use for output
-   * @param res ???
+   * @param res the lines of a .dtrace record
    * @throws IOException if there is a problem writing
    */
   static void writeRec(BufferedWriter writer, List<String> res) throws IOException {
@@ -187,12 +187,6 @@ public final class SplitDtrace {
     writer.newLine();
   }
 
-  /**
-   * ???
-   *
-   * @param l ???
-   * @return ???
-   */
   @SuppressWarnings(
       "all:purity") // non-deterministic call to trim is used only for equals(), does not affect
   // result
@@ -202,10 +196,12 @@ public final class SplitDtrace {
   }
 
   /**
-   * ???
+   * Reads a record from a .dtrace file.
+   *
+   * <p>This method modifies a list argument rather than returning a new list, for efficiency.
    *
    * @param reader the BufferedReader to use for input
-   * @param res ???
+   * @param res a list that will be filled with the lines of a .dtrace record
    * @throws IOException if there is a problem reading
    */
   static void readRec(BufferedReader reader, List<String> res) throws IOException {

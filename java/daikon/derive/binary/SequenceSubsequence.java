@@ -103,8 +103,8 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
         seqvar().esc_name(), get_lower_bound().esc_name(), get_upper_bound().esc_name());
   }
 
-  @SuppressWarnings("nullness")
   @Override
+  @SuppressWarnings("nullness")
   public String jml_name(String index) {
 
     // The slice routine needs the actual length as opposed to the

@@ -1013,11 +1013,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Creates a MethodInfo struct corresponding to mgen.
+   * Creates a MethodInfo struct corresponding to {@code mgen}.
    *
-   * @param class_info the ClassInfo for current class
-   * @param mgen the MethodGen for the current method
-   * @return a new MethodInfo or null if this method should not be instrumented
+   * @param class_info a class
+   * @param mgen a method
+   * @return a new MethodInfo, or null if this method should not be instrumented
    */
   @SuppressWarnings("unchecked")
   private @Nullable MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen) {
