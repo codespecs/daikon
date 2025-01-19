@@ -104,7 +104,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
   }
 
   @SuppressWarnings({
-    "cwnullnessunchecked",
+    "nullness",
     "PatternMatchingInstanceof" // must suppress as feature added in Java 14.
   })
   @Override
