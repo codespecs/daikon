@@ -23,7 +23,6 @@ public class OnlyConstantVariablesFilter extends InvariantFilter {
     isOn = dkconfig_enabled;
   }
 
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Override
   boolean shouldDiscardInvariant(Invariant invariant) {
     // System.out.println("OnlyConstantVariablesFilter: " + invariant.format());

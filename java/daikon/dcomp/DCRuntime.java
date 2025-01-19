@@ -1308,7 +1308,6 @@ public final class DCRuntime implements ComparabilityProvider {
    * @param args array of the arguments to the method
    * @param ret_val value returned by the method, or null if the method is a constructor or void
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static void process_all_vars(
       MethodInfo mi, RootInfo root, Object[] tag_frame, Object obj, Object[] args, Object ret_val) {
 

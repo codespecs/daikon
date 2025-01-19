@@ -329,7 +329,6 @@ public class CLASSNAME extends SUPERCLASS {
    * @return a IPair of a DiscardCode and a discardReason string, or null if the Invariant is not an
    *   obvious subsequence
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   public static @Nullable IPair<DiscardCode,String> isObviousSubSequence(VarInfo subvar, VarInfo supervar) {
     // Must typecheck since this could be called with non-sequence variables in
@@ -516,7 +515,6 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   // Look up a previously instantiated SubSequence relationship.
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static @Nullable CLASSNAME find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
@@ -608,7 +606,6 @@ public class CLASSNAME extends SUPERCLASS {
    * Returns true if the two original variables are related in a way that makes subsequence or
    * subset detection not informative.
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static boolean isObviousSubSequenceDynamically(Invariant inv,
                             VarInfo subvar, VarInfo supervar) {
 

@@ -46,7 +46,6 @@ public class OrigModifier extends DepthFirstVisitor {
   // f1 -> ( PrimarySuffix() )*
   @SuppressWarnings({
     "JdkObsolete",
-    "PatternMatchingInstanceof" // must suppress as feature added in Java 14.
   })
   @Override
   public void visit(PrimaryExpression n) {

@@ -404,7 +404,6 @@ public class ExtractConsequent {
    * @param inv the Invariant to be analyzed
    * @return ???
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   private static boolean contains_constant_non_012(Invariant inv) {
     if (inv instanceof daikon.inv.unary.scalar.OneOfScalar) {
       daikon.inv.unary.scalar.OneOfScalar oneof = (daikon.inv.unary.scalar.OneOfScalar) inv;

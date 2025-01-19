@@ -1021,7 +1021,6 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    */
   @SuppressWarnings({
     "unchecked",
-    "PatternMatchingInstanceof" // must suppress as feature added in Java 14.
   })
   private @Nullable MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen) {
 

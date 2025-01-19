@@ -56,7 +56,6 @@ public class InvariantLemma extends Lemma {
    * @return a InvariantLemma for the invariant
    */
   // The argument is an invariant at the entry point, where no orig(...) variables exist.
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static InvariantLemma makeLemmaAddOrig(Invariant inv) {
     // XXX Side-effecting the invariant to change its ppt (and then
     // to change it back afterward) isn't such a hot thing to do, but

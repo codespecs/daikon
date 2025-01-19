@@ -294,7 +294,6 @@ public final class CLASSNAME extends SUPERCLASS {
     return true;
   }
 
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public boolean isExclusiveFormula(Invariant other) {
@@ -376,7 +375,6 @@ public final class CLASSNAME extends SUPERCLASS {
   }
 
   // Look up a previously instantiated invariant.
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static @Nullable CLASSNAME find(PptSlice ppt) {
     assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {

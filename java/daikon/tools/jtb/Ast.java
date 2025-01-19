@@ -952,7 +952,6 @@ public class Ast {
    */
   @SuppressWarnings({
     "JdkObsolete",
-    "PatternMatchingInstanceof" // must suppress as feature added in Java 14.
   })
   public static void setAccess(MethodDeclaration m, String access) {
     // The following four confusing lines are a following of the
@@ -988,7 +987,6 @@ public class Ast {
    */
   @SuppressWarnings({
     "JdkObsolete",
-    "PatternMatchingInstanceof" // must suppress as feature added in Java 14.
   })
   public static void removeMethodDeclAnnotations(MethodDeclaration method) {
     // The following four confusing lines are a following of the
@@ -1326,7 +1324,6 @@ public class Ast {
    * @param modifierString ???
    * @return true if modifier is present
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static boolean modifierPresent(Modifiers modifiers, String modifierString) {
     // Grammar production:
     // f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" |

@@ -1593,7 +1593,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    *
    * @return the VarInfo for the sequence from which this was derived
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public @Nullable VarInfo isDerivedSequenceMember() {
     if (derived == null) {
       return null;
@@ -1630,7 +1629,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    *
    * @return the VarInfo for the original sequence from which this sequence was derived
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public @Nullable VarInfo isDerivedSubSequenceOf() {
 
     if (derived == null) {
@@ -1728,7 +1726,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * @return false if this variable expression is not legal ESC syntax, except for any necessary
    *     quantifications (subscripting)
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   public boolean isValidEscExpression() {
     // "myList.length" is invalid
@@ -2030,7 +2027,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * read on display. Don't call this during processing, as I think the system assumes that names
    * don't change over time (?).
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public void simplify_expression() {
     if (debugSimplifyExpression.isLoggable(Level.FINE)) {
       debugSimplifyExpression.fine("** Simplify: " + name());

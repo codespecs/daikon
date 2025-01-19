@@ -118,7 +118,6 @@ public class DotNetStringFilter extends InvariantFilter {
    * @param invariant an invariant
    * @return true iff {@code invariant} encodes {@code x != null} and is implied
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   boolean shouldDiscardNonNullInvariant(Invariant invariant) {
     if (invariant instanceof NonZero) {
 
@@ -149,7 +148,6 @@ public class DotNetStringFilter extends InvariantFilter {
    * @param invariant an invariant
    * @return true iff {@code invariant} encodes {@code x != null} and is implied
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   boolean shouldDiscardNullOrEmptyInvariant(Invariant invariant) {
     if (invariant instanceof OneOfScalar) {
       OneOfScalar i = (OneOfScalar) invariant;
@@ -182,7 +180,6 @@ public class DotNetStringFilter extends InvariantFilter {
    * @param invariant an invariant
    * @return true iff {@code invariant} encodes {@code x != null} and is implied
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   boolean shouldDiscardNullOrWhitespaceInvariant(Invariant invariant) {
     if (invariant instanceof OneOfScalar) {
       OneOfScalar i = (OneOfScalar) invariant;

@@ -1299,7 +1299,6 @@ public final class PrintInvariants {
    * @param variables the set to store the parsed variables
    * @param group true to parse group variables, false to parse filtering variables
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static void get_csharp_invariant_variables(
       Invariant invariant, Set<String> variables, boolean group) {
 

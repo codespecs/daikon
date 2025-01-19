@@ -249,7 +249,6 @@ public class MethodInfo {
    *
    * @return the return type of the current method
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public Class<?> return_type() {
     if (member instanceof Method) {
       Method m = (Method) member;

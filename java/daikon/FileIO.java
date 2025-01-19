@@ -2496,7 +2496,6 @@ public final class FileIO {
    * @return a serialized PptMap
    * @throws IOException if there is trouble reading the file
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @EnsuresNonNull("FileIO.new_decl_format")
   public static PptMap read_serialized_pptmap(File file, boolean use_saved_config)
       throws IOException {

@@ -114,7 +114,6 @@ public class PureMethodInfo extends DaikonVariableInfo {
    * @param parentVal object reresenting the parent of the method
    * @return an Object array with the current values of this method's arguments
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   private @Nullable Object[] getArgVals(Object parentVal) {
     @Nullable Object[] params = new @Nullable Object[args.length];
 

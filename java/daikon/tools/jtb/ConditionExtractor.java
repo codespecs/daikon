@@ -289,7 +289,6 @@ class ConditionExtractor extends DepthFirstVisitor {
    * If this statement is a return statement of boolean type, then
    * it is included as a condition.
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Override
   public void visit(Statement n) {
     // if we just entered the function and this is a return statement,

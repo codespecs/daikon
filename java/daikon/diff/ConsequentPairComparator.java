@@ -22,7 +22,6 @@ public class ConsequentPairComparator implements Comparator<Invariant> {
     this.c = c;
   }
 
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public int compare(Invariant inv1, Invariant inv2) {

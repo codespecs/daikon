@@ -2771,7 +2771,6 @@ public class DCInstrument extends InstructionListUtils {
    * @param mg method to inspect
    * @return MethodInfo for the method
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Nullable MethodInfo create_method_info(ClassInfo class_info, MethodGen mg) {
 
     // if (mg.getName().equals("<clinit>")) {

@@ -232,7 +232,6 @@ public final class SEQINTEQUAL extends SUPERCLASS {
    * JHP: Note that these are not strict implications, these are merely uninteresting comparisons
    * (except when op is GreaterEqual for max and LessEqual for min).
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public @Nullable DiscardInfo isObviousStatically(VarInfo[] vis) {
@@ -392,7 +391,6 @@ public final class SEQINTEQUAL extends SUPERCLASS {
   }
 
   // Look up a previously instantiated invariant.
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   public static @Nullable SEQINTEQUAL find(PptSlice ppt) {
     assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
@@ -411,7 +409,6 @@ public final class SEQINTEQUAL extends SUPERCLASS {
    *  (A[] == [])                        &rArr; (x op A[])
    * </pre>
    */
-  @SuppressWarnings("PatternMatchingInstanceof") // must suppress as feature added in Java 14.
   @Pure
   @Override
   public @Nullable DiscardInfo isObviousDynamically(VarInfo[] vis) {
