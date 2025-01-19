@@ -1204,7 +1204,7 @@ api-test-each: ../utils/plume-scripts ../utils/html-tools
 ## It is generated in the standard location, directory api/
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	mkdir -p $(JAVADOC_DEST)
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} --enable-preview -source 24 -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all ${DOCLET_FLAGS} \
 	  daikon -subpackages $(DAIKON_PACKAGES)
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 

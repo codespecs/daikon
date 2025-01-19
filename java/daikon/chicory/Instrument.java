@@ -63,20 +63,29 @@ public class Instrument implements ClassFileTransformer {
   /** The index of this method in SharedData.methods. */
   int cur_method_info_index = 0;
 
+  /** The MethodInfo for the current method. */
   MethodInfo curMethodInfo;
 
   /** The location of the runtime support class. */
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
+  /** The ClassDesc for the runtime support class. */
   private static final ClassDesc runtimeCD = ClassDesc.of(runtime_classname);
+
+  /** The ClassDesc for the Java Object class. */
   private static final ClassDesc objectCD = ClassDesc.of("java.lang.Object");
 
   /** Debug information about which classes are transformed and why. */
   public static SimpleLog debug_transform = new SimpleLog(false);
 
   // variables used for the entire class
+  /** Current class name in binary format. */
   @BinaryName String binaryClassName;
+
+  /** Wheter or not the class has a class initializer. */
   private boolean hasClinit;
+
+  /** The current ClassModel. */
   private ClassModel classModel;
 
   /** Stores useful information about a class. */
@@ -88,15 +97,16 @@ public class Instrument implements ClassFileTransformer {
   // Variables used for the entire method.
   // They are initialized in modifyCode().
 
-  /** next available slot in localsTable currently always = max locals */
+  /** Next available slot in localsTable currently always = max locals. */
   private int nextLocalIndex;
 
-  /** local variable table (stored as an ArrayList) */
+  /** Local variable table (stored as an ArrayList). */
   List<LocalVariable> localsTable;
 
-  /** labels for first and last byte code of method used to give new locals method scope */
+  /** Labels for first and last byte code of method used to give new locals method scope. */
   private Label startLabel, endLabel;
 
+  /** Variables used for instrumentation. */
   LocalVariable nonceLocal, returnLocal;
 
   // End of method variables.
@@ -270,7 +280,6 @@ public class Instrument implements ClassFileTransformer {
     debugInstrument.log("\nClass: " + binaryClassName);
     // Modify the classfile, die on any errors
     try {
-
       newBytes =
           classFile.build(
               classModel.thisClass().asSymbol(),
@@ -309,6 +318,13 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
+  /**
+   * Instrument the current class.
+   *
+   * @param classBuilder for the current method
+   * @param classModel for the current method
+   * @param loader the class loader for this class
+   */
   private void modifyClass(ClassBuilder classBuilder, ClassModel classModel, ClassLoader loader) {
 
     // Save constant pool builder for later use
@@ -354,7 +370,11 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
-  // used to add a "hook" into the <clinit> static initializer
+  /**
+   * Used to add a call to "initNotify" in the class static initializer.
+   *
+   * @param mgen MethodGen for the current method
+   */
   private void addInvokeToClinit(MethodGen mgen) {
 
     try {
@@ -384,7 +404,12 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
-  // called by addInvokeToClinit to add in a hook at return opcodes
+  /**
+   * Called by addInvokeToClinit to add in a hook at each return opcode.
+   *
+   * @param inst the instruction to check for a return
+   * @return the instrumentation instruction list
+   */
   private @Nullable List<CodeElement> xform_clinit(CodeElement inst) {
 
     if (inst instanceof ReturnInstruction) {
@@ -395,7 +420,11 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
-  // created the List<CodeElement> to insert for adding the <clinit> hook
+  /**
+   * Create the List of CodeElements to insert for adding a call to "initNotify".
+   *
+   * @return the instruction list
+   */
   private List<CodeElement> call_initNotify() {
 
     List<CodeElement> codeList = new ArrayList<>();
@@ -413,6 +442,9 @@ public class Instrument implements ClassFileTransformer {
    * and at each return from the method. In addition, changes each return statement to first place
    * the value being returned into a local and then return. This allows us to work around the JDI
    * deficiency of not being able to query return values.
+   *
+   * @param classModel for the current class
+   * @param classBuilder for the current class
    */
   private void instrument_all_methods(ClassModel classModel, ClassBuilder classBuilder) {
 
@@ -580,6 +612,13 @@ public class Instrument implements ClassFileTransformer {
     classInfo.shouldInclude = shouldInclude;
   }
 
+  /**
+   * Output current method with no changes.
+   *
+   * @param methodBuilder for the current method
+   * @param methodModel for the current method
+   * @param mgen MethodGen for the current method
+   */
   private void outputMethod(MethodBuilder methodBuilder, MethodModel methodModel, MethodGen mgen) {
 
     for (MethodElement me : methodModel) {
@@ -594,6 +633,13 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
+  /**
+   * Output code for current method with no changes.
+   *
+   * @param codeBuilder for the current method's code
+   * @param codeModel for the current method's code
+   * @param mgen MethodGen for the current method
+   */
   private void outputCode(CodeBuilder codeBuilder, CodeModel codeModel, MethodGen mgen) {
 
     // Copy the modified instruction list to the output class.
@@ -603,6 +649,13 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
+  /**
+   * Instrument the current method.
+   *
+   * @param methodBuilder for the current method
+   * @param methodModel for the current method
+   * @param mgen MethodGen for the current method
+   */
   private void modifyMethod(MethodBuilder methodBuilder, MethodModel methodModel, MethodGen mgen) {
 
     for (MethodElement me : methodModel) {
@@ -617,6 +670,13 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
+  /**
+   * Generate instrumentation code for the current method.
+   *
+   * @param codeBuilder for the current method's code
+   * @param codeModel for the current method's code
+   * @param mgen MethodGen for the current method
+   */
   private void modifyCode(CodeBuilder codeBuilder, CodeModel codeModel, MethodGen mgen) {
 
     // ititialize all the items associated with the local variables
@@ -703,6 +763,12 @@ public class Instrument implements ClassFileTransformer {
    * If this is a return instruction, generate new il to assign the result to a local variable
    * (return__$trace2_val) and then call daikon.chicory.Runtime.exit(). This il wil be inserted
    * immediately before the return.
+   *
+   * @param inst the instruction to inspect
+   * @param mgen MethodGen for method
+   * @param shouldIncIter whether or not to instrument this return
+   * @param exitIter list of exit line numbers
+   * @return instruction list for instrumenting the return
    */
   private @Nullable List<CodeElement> generate_return_instrumentation(
       CodeElement inst,
@@ -748,6 +814,9 @@ public class Instrument implements ClassFileTransformer {
   /**
    * Returns the local variable used to store the return result. If it is not present, creates it
    * with the specified type. If the variable is known to already exist, the type can be null.
+   *
+   * @param returnType the type of the return
+   * @return a local variable to save the return value
    */
   private LocalVariable getReturnLocal(@Nullable ClassDesc returnType) {
 
@@ -773,7 +842,7 @@ public class Instrument implements ClassFileTransformer {
    * each method entry/exit that allows them to be matched up from the dtrace file. Inserts code to
    * call daikon.chicory.Runtime.enter().
    *
-   * @param il instruction list for method
+   * @param codeList instruction list for method
    * @param mgen MethodGen for method
    */
   private void add_entry_instrumentation(List<CodeElement> codeList, MethodGen mgen) {
@@ -844,6 +913,11 @@ public class Instrument implements ClassFileTransformer {
    * Method (normally enter or exit) in daikon.chicory.Runtime. The parameters are passed as an
    * array of objects. Any primitive values are wrapped in the appropriate daikon.chicory.Runtime
    * wrapper (IntWrap, FloatWrap, etc).
+   *
+   * @param newCode an instruction list to append the enter/exit code to
+   * @param mgen describes the current method
+   * @param callMethod either "enter" or "exit"
+   * @param line source line number if this is an exit
    */
   private void call_enter_exit(
       List<CodeElement> newCode, MethodGen mgen, String callMethod, int line) {
@@ -934,6 +1008,10 @@ public class Instrument implements ClassFileTransformer {
    * etc). The wrappers are those defined in daikon.chicory.Runtime.
    *
    * <p>The stack is left with a pointer to the newly created wrapper at the top.
+   *
+   * @param newCode an instruction list to append the wrapper code to
+   * @param prim_type the primitive type of the local variable or parameter
+   * @param var_index the offset into the local stack of the variable or parameter
    */
   private void create_wrapper(List<CodeElement> newCode, ClassDesc prim_type, int var_index) {
 
@@ -1023,6 +1101,7 @@ public class Instrument implements ClassFileTransformer {
    * Return an array of strings, each corresponding to mgen's argument types as a fully qualified
    * name: how a type is represented in Java source code.
    *
+   * @param mgen describes the current method
    * @return an array of strings, each corresponding to mgen's argument types
    */
   private @BinaryName String[] getFullyQualifiedArgTypeNames(MethodGen mgen) {
@@ -1037,7 +1116,14 @@ public class Instrument implements ClassFileTransformer {
     return arg_type_strings;
   }
 
-  // creates a MethodInfo struct corresponding to mgen
+  /**
+   * Creates a MethodInfo struct correspondig to the MethodGen argument. name: how a type is
+   * represented in Java source code.
+   *
+   * @param classInfo describes the current class
+   * @param mgen describes the current method
+   * @return the generated MethodInfo
+   */
   @SuppressWarnings("unchecked")
   private @Nullable MethodInfo create_method_info(ClassInfo classInfo, MethodGen mgen) {
 
@@ -1216,10 +1302,14 @@ public class Instrument implements ClassFileTransformer {
   //        end = min(comma, paren);
   //    }
 
-  // The main difference between a descriptor and a signature is that the
-  // later may contain type arguments. This routine was orginaly written
-  // for descriptors, but some support for type arguments has been added.
-  // converts a field descriptor to a fully qualified name
+  /**
+   * Format a field descriptor for output. The main difference between a descriptor and a signature
+   * is that the later may contain type arguments. This routine was orginaly written for
+   * descriptors, but some support for type arguments has been added.
+   *
+   * @param descriptor the object to format
+   * @return a formatted string
+   */
   public static String convertDescriptorToString(String descriptor) {
     StringBuilder result = new StringBuilder();
 
@@ -1273,6 +1363,12 @@ public class Instrument implements ClassFileTransformer {
     return result.toString();
   }
 
+  /**
+   * Format an object that may contain generics for output.
+   *
+   * @param descriptor the object to format
+   * @return a formatted string
+   */
   private static String parseObjectType(String descriptor) {
     StringBuilder result = new StringBuilder();
     int genericStart = descriptor.indexOf('<');
@@ -1296,6 +1392,12 @@ public class Instrument implements ClassFileTransformer {
     return result.toString();
   }
 
+  /**
+   * Format a generic parameter for output.
+   *
+   * @param genericPart the parameter(s) to format
+   * @return a formatted string
+   */
   private static String parseGenericParameters(String genericPart) {
     StringBuilder result = new StringBuilder();
     int depth = 0;
@@ -1325,6 +1427,12 @@ public class Instrument implements ClassFileTransformer {
     return result.toString();
   }
 
+  /**
+   * Create a Consumer that outputs strings to a file.
+   *
+   * @param file the output file
+   * @return the Consumer object
+   */
   private Consumer<String> fileConsumer(File file) throws FileNotFoundException {
     PrintStream stream = new PrintStream((new FileOutputStream(file)), false);
     return line -> {
@@ -1332,6 +1440,12 @@ public class Instrument implements ClassFileTransformer {
     };
   }
 
+  /**
+   * Format a constant value for printing.
+   *
+   * @param item the constant to format
+   * @return a string containing the constant's value
+   */
   private final String formatConstantDesc(ConstantDesc item) {
     String result = "";
     try {
@@ -1361,6 +1475,7 @@ public class Instrument implements ClassFileTransformer {
    * Build a load constant instruction for values of type int, short, char, byte
    *
    * @param value to be pushed
+   * @return a push instruction
    */
   protected CodeElement loadIntegerConstant(final int value) {
     return switch (value) {

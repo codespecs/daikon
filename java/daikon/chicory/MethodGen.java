@@ -14,6 +14,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The MethodGen class is a simplfied replacement for the BCEL MethodGen class. It collects and
+ * stores all the relevant information about a method.
+ */
 public class MethodGen {
   /*
    * Corresponds to the fields found in a MethodModel object.
@@ -25,31 +29,64 @@ public class MethodGen {
   // default MethodTypeDesc methodTypeSymbol() Returns the method descriptor of this method, as a
   // symbolic descriptor.
   // Optional<ClassModel> parent() Returns the class model this method is a member of, if known.
+
+  /** The method's code model or null if no code. */
   private CodeModel code;
+
+  /** The method's access flags. */
   protected AccessFlags accessFlags;
+
+  /** The method's name. */
   private String methodName;
+
+  /** The method's type descriptor. */
   private MethodTypeDesc mtd;
 
+  /** Whether of not the method is static. */
   private boolean isStatic;
 
   // fields of the code attribute
+  /** The method's maximum number of locals. */
   private int maxLocals;
+
+  /** The method's maximum stack size. */
   private int maxStack;
 
+  /** The name of the method's enclosing class. */
   private String className;
+
+  /** The method's instruction list. */
   private List<CodeElement> codeList;
+
+  /** The method's descriptor. */
   private String descriptor;
+
+  /** The method's signature. */
   private String signature;
 
   // fields of the MethodTypeDescriptor
+  /** The method's argument types. */
   private ClassDesc[] argTypes;
+
+  /** The method's return type. */
   private ClassDesc returnType;
 
+  /** The method's argument names. */
   private String[] argNames;
+
+  /** The method's local variable table. */
   private LocalVariable[] localVariables;
 
+  /** The daikon.chicory.Instrument instance. */
   private daikon.chicory.Instrument inst_obj;
 
+  /**
+   * Constructor for the MethodGen object.
+   *
+   * @param methodModel for the method
+   * @param className for the containing class
+   * @param inst_obj the daikon.chicory.Instrument instance
+   */
   public MethodGen(
       final MethodModel methodModel, final String className, daikon.chicory.Instrument inst_obj) {
     this.inst_obj = inst_obj;
@@ -122,65 +159,139 @@ public class MethodGen {
     }
   }
 
+  /**
+   * Return the method's access flags.
+   *
+   * @return the access flags
+   */
   public AccessFlags getAccessFlags() {
     return accessFlags;
   }
 
+  /**
+   * Return wheter or not the method is static.
+   *
+   * @return static flag
+   */
   public final boolean isStatic() {
     return isStatic;
   }
 
+  /**
+   * Return the methods name.
+   *
+   * @return the methods name
+   */
   public String getName() {
     return methodName;
   }
 
+  /**
+   * Return the method's return type.
+   *
+   * @return the method's return type
+   */
   public ClassDesc getReturnType() {
     return returnType;
   }
 
+  /**
+   * Return the ith argument name for the method.
+   *
+   * @param i which argument name is requested
+   * @return the indicated argument name
+   */
   public String getArgumentName(final int i) {
     return argNames[i];
   }
 
+  /**
+   * Return the argument names.
+   *
+   * @return the argument names
+   */
   public String[] getArgumentNames() {
     return argNames.clone();
   }
 
+  /**
+   * Return the ith argument type for the method.
+   *
+   * @param i which argument type is requested
+   * @return the indicated argument type
+   */
   public ClassDesc getArgumentType(final int i) {
     return argTypes[i];
   }
 
+  /**
+   * Return the argument types for the method.
+   *
+   * @return the argument types for the method
+   */
   public ClassDesc[] getArgumentTypes() {
     return argTypes.clone();
   }
 
+  /**
+   * Return the local variable table.
+   *
+   * @return the local variable table
+   */
   public LocalVariable[] getLocalVariables() {
     return localVariables.clone();
   }
 
   /**
+   * Return the name of the containing class.
+   *
    * @return class that contains this method
    */
   public String getClassName() {
     return className;
   }
 
+  /**
+   * Return the maximum number of locals.
+   *
+   * @return the maximum number of locals
+   */
   public int getMaxLocals() {
     return maxLocals;
   }
 
+  /**
+   * Return the maximum stack size.
+   *
+   * @return the maximum stack size
+   */
   public int getMaxStack() {
     return maxStack;
   }
 
+  /**
+   * Return the descriptor for the current method.
+   *
+   * @return descriptor for the current method
+   */
   public String getDescriptor() {
     return descriptor;
   }
 
+  /**
+   * Return the signature for the current method.
+   *
+   * @return signature for the current method
+   */
   public String getSignature() {
     return signature;
   }
 
+  /**
+   * Return the name of the containing class.
+   *
+   * @return class that contains this method
+   */
   public List<CodeElement> getInstructionList() {
     return codeList;
   }
