@@ -130,6 +130,12 @@ public final class SplitDtrace {
     }
   }
 
+  /**
+   * Returns value of nonce variable in the ppt.
+   *
+   * @param res a list of ppt records
+   * @return value of nonce variable
+   */
   static int getNonce(List<String> res) {
     for (int i = 0; i < res.size(); i++) {
       if (res.get(i).equals("this_invocation_nonce")) {
