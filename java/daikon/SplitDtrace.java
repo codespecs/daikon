@@ -130,12 +130,6 @@ public final class SplitDtrace {
     }
   }
 
-  /**
-   * ???
-   *
-   * @param res ???
-   * @return the Nonce value
-   */
   static int getNonce(List<String> res) {
     for (int i = 0; i < res.size(); i++) {
       if (res.get(i).equals("this_invocation_nonce")) {
@@ -146,10 +140,10 @@ public final class SplitDtrace {
   }
 
   /**
-   * ???
+   * Returns true if the given string is an entry program point name.
    *
-   * @param res ???
-   * @return true if res contains ":::ENTER"
+   * @param res a program point name
+   * @return true if the argument is an entry program point name
    */
   @Pure
   static boolean isEnter(List<String> res) {
@@ -157,10 +151,10 @@ public final class SplitDtrace {
   }
 
   /**
-   * ???
+   * Returns true if the given string is an exit program point name.
    *
-   * @param res ???
-   * @return true if res contains ":::EXIT"
+   * @param res a program point name
+   * @return true if the argument is an exit program point name
    */
   @Pure
   static boolean isExit(List<String> res) {
@@ -168,7 +162,7 @@ public final class SplitDtrace {
   }
 
   /**
-   * ???
+   * Returns true if the given line starts a
    *
    * @param res ???
    * @return true if res contains "DECLARE"

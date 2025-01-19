@@ -1019,9 +1019,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * @param mgen the MethodGen for the current method
    * @return a new MethodInfo or null if this method should not be instrumented
    */
-  @SuppressWarnings({
-    "unchecked",
-  })
+  @SuppressWarnings("unchecked")
   private @Nullable MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen) {
 
     // Get the argument names for this method

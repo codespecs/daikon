@@ -950,9 +950,7 @@ public class Ast {
    * @param m MethodDeclaration to be inspected
    * @param access string containing "public", "protected", or "private".
    */
-  @SuppressWarnings({
-    "JdkObsolete",
-  })
+  @SuppressWarnings("JdkObsolete")
   public static void setAccess(MethodDeclaration m, String access) {
     // The following four confusing lines are a following of the
     // syntax tree to get to the modifiers.
@@ -985,9 +983,7 @@ public class Ast {
    *
    * @param method ???
    */
-  @SuppressWarnings({
-    "JdkObsolete",
-  })
+  @SuppressWarnings("JdkObsolete")
   public static void removeMethodDeclAnnotations(MethodDeclaration method) {
     // The following four confusing lines are a following of the
     // syntax tree to get to the modifiers.

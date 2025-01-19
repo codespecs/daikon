@@ -501,7 +501,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
    * the name of the enum in lower case.
    *
    * @param e enum to get name of
-   * @return String containing the name of the enum
+   * @return the name of the enum
    */
   private String out_name(Enum<?> e) {
     return e.name().toLowerCase(Locale.ENGLISH);

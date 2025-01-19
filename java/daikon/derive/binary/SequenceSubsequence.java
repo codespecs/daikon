@@ -103,9 +103,7 @@ public abstract class SequenceSubsequence extends BinaryDerivation {
         seqvar().esc_name(), get_lower_bound().esc_name(), get_upper_bound().esc_name());
   }
 
-  @SuppressWarnings({
-    "nullness",
-  })
+  @SuppressWarnings("nullness")
   @Override
   public String jml_name(String index) {
 

@@ -3081,13 +3081,6 @@ public final class FileIO {
   /**
    * Looks up the next token as a member of enum_class. Throws Daikon.UserError if there is no token
    * or if it is not valid member of the class. Enums are presumed to be in in upper case.
-   *
-   * @param state the ParseState
-   * @param scanner ???
-   * @param <E> ???
-   * @param enum_class ???
-   * @param descr ???
-   * @return ???
    */
   public static <E extends Enum<E>> E parse_enum_val(
       ParseState state, Scanner scanner, Class<E> enum_class, String descr) {
