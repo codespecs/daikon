@@ -278,8 +278,6 @@ public class TraceSelect {
     } catch (InterruptedException e) {
       // do nothing
     }
-
-    return;
   }
 
   private static void reinitializeDaikon() {
