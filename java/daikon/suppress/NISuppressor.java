@@ -13,6 +13,7 @@ import daikon.inv.binary.BinaryInvariant;
 import daikon.inv.unary.UnaryInvariant;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -513,7 +514,7 @@ public class NISuppressor {
     if (state == NIS.SuppressState.NONE) {
       status = "";
     } else {
-      status = state.toString().toLowerCase();
+      status = state.toString().toLowerCase(Locale.ENGLISH);
     }
 
     if (current_state_str != null) {
