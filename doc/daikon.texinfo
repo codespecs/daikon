@@ -72,7 +72,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2020
+Copyright @copyright{} 1998-2025
 @end titlepage
 
 @c set document heading/footing style
@@ -8761,13 +8761,13 @@ Groups.
 
 @cindex license
 
-@c Copyright @copyright{} 1998-2000 Michael Ernst
+@c Copyright @copyright{} 1998-2025 Michael Ernst
 
 @c Copyright @copyright{} 1998-2008 Massachusetts Institute of Technology
 
 @c Copyright @copyright{} 2008-2020 University of Washington
 
-Copyright @copyright{} 1998-2022
+Copyright @copyright{} 1998-2025
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
@@ -8911,7 +8911,7 @@ if not, write to the
 @node    Celeriac license
 @subsubsection Celeriac license
 
-The Daikon .NET front end Celeriac is Copyright (c) 2012 by
+The Daikon .NET front end Celeriac is Copyright @copyright{} 2012 by
 @nospellcheck{Kellen Donohue}.
 Portions of Celeriac are covered by the Microsoft Public License,
 this is at the top of every such file. Otherwise the following license
