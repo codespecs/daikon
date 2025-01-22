@@ -72,12 +72,7 @@ javautil-%: do-Vector-% do-ArrayList13-% do-ArrayList17-%
 	@echo ${HR}
 large-%: # do-Flex-% do-JML-%
 	@echo ${HR}
-# the "junit" test crashes with "An exception has occurred in the compiler (23)".
-ifeq ($(shell test ${JAVA_VERSION_STRING} -eq 23; echo $$?),0)
-new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-baseline-% do-junit5-%
-else
 new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-baseline-% do-junit-% do-junit5-%
-endif
 	@echo ${HR}
 
 # Extra groupings
