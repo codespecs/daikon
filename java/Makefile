@@ -730,6 +730,7 @@ JAVAC_ANNOTATION_PROCESSOR_ARGS ?= \
 error-prone: errorprone
 errorprone: compile errorprone-nocompile
 # Some of the -Xep are temporary
+#   -Xep:PatternMatchingInstanceof:OFF  requires Java 17
 errorprone-nocompile:
 ifeq ($(JAVA8), 1)
 	echo "Error Prone is not run under Java 8"
