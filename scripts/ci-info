@@ -284,7 +284,7 @@ if [ -z "$CI_COMMIT_RANGE" ]; then
       CI_COMMIT_RANGE_START=$(head1)
     fi
     CI_COMMIT_RANGE_END=$(git rev-parse HEAD)
-  else      
+  else
     if git rev-parse --verify --quiet "origin/$DEFAULT_BRANCH_NAME" > /dev/null 2>&1 ; then
       CI_COMMIT_RANGE_START=$(git rev-parse "origin/$DEFAULT_BRANCH_NAME")
     else

@@ -95,7 +95,7 @@ if [ -n "$CI_LINT_DIFF_ERROR" ] ; then
   echo "*****"
   echo "$CI_LINT_DIFF_ERROR"
   echo "*****"
-  echo 
+  echo
   echo "This command will print diagnostic information, then exit."
   echo
 
