@@ -3143,7 +3143,7 @@ public final class FileIO {
    * Communities specific modification to remove duplicate stack entries. But a more generic
    * technique could be implemented in the future.
    *
-   * @param ppt_name the ppt to analyze
+   * @param ppt_name a program point
    * @return modified ppt name
    */
   public static String user_mod_ppt_name(String ppt_name) {
