@@ -1,4 +1,7 @@
-# Create a Docker image that is ready to run the Daikon tests.
+# Create a Docker image that is ready to run the full Daikon tests,
+# including building the manual and Javadoc.
+# But it's used primarily for running miscellaneous tests such as the manual
+# and Javadoc.
 
 # "ubuntu" is the latest LTS release.  "ubuntu:rolling" is the latest release.
 # Either might lag behind; as of 2024-11-16, ubuntu:rolling was still 24.04 rather than 24.10.
@@ -44,8 +47,39 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
+<<<<<<<< HEAD:scripts/Dockerfile-ubuntu-jdk22-plus
   openjdk-22-jdk \
 && update-java-alternatives --set java-1.22.0-openjdk-amd64
+|||||||| bf8a8249:scripts/Dockerfile-ubuntu-jdk20-plus
+  openjdk-20-jdk
+========
+  openjdk-23-jdk \
+&& update-java-alternatives --set java-1.23.0-openjdk-amd64
+>>>>>>>> cf8f54b4a2a06e7c5e80edeaaa274fb9fe6fae0b:scripts/Dockerfile-ubuntu-jdk23-plus
+
+# These are needed to build the Checker Framework, used by the "typecheck" job in CI.
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
+  ant \
+  maven \
+  python3
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
+  curl \
+  g++ \
+  graphviz \
+  libc6-dbg \
+  netpbm \
+  python3-setuptools \
+  texinfo \
+  texlive \
+  texlive-latex-extra \
+  universal-ctags \
+  wget \
+  zlib1g-dev
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get autoremove \

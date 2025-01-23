@@ -19,6 +19,7 @@ services:
 env:
   global:
     - THIS_REPO=daikon
+    - DOCKERTESTING=
   matrix:
     - OS=ubuntu JDKVER=jdk8 GROUP=quick-txt-diff DOCKERTESTING=-testing
     - OS=ubuntu JDKVER=jdk11 GROUP=quick-txt-diff DOCKERTESTING=-testing

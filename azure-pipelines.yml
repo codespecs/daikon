@@ -7,14 +7,19 @@ pr:
     include:
     - '*'
 
+# variables:
+# - name: testingSuffix
+#   value: -testing
+variables:
+- name: testingSuffix
+  value:
 
 jobs:
 
 # The dependsOn clauses (in this file and in .circleci/config.yml) are:
 #  * Everything not *_ubuntu_jdk17 or typecheck_*_jdk17 depends on jdk17_jobs.
-#  * Anything *_jdk8 or *_jdk11 or *_jdk17 or _jdk20 depends on *_jdk21.
+#  * Anything *_jdk8 or *_jdk11 or *_jdk17 or _jdk23 depends on *_jdk21.
 #  * Anything *_rockylinux_* depends on *_ubuntu_*.
-# (Later, _jdk20 will be changed to _jdk22.  _jdk20 is left here to ease that renaming later.)
 
 # The remainder of jobs are run only if the jdk21_jobs pass.
 - job: jdk21_jobs
@@ -38,7 +43,7 @@ jobs:
     - quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk8-testing:latest
+  container: mdernst/daikon-ubuntu-jdk8${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -51,7 +56,7 @@ jobs:
     - quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11-testing:latest
+  container: mdernst/daikon-ubuntu-jdk11${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -64,7 +69,7 @@ jobs:
     - quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17-testing:latest
+  container: mdernst/daikon-ubuntu-jdk17${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -74,20 +79,20 @@ jobs:
 - job: quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21-testing:latest
+  container: mdernst/daikon-ubuntu-jdk21${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: quick_txt_diff_ubuntu_jdk22
+- job: quick_txt_diff_ubuntu_jdk23
   dependsOn:
     - jdk21_jobs
     - quick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk22-testing:latest
+  container: mdernst/daikon-ubuntu-jdk23${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -100,7 +105,7 @@ jobs:
     - nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk8-testing:latest
+  container: mdernst/daikon-ubuntu-jdk8${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -113,7 +118,7 @@ jobs:
     - nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11-testing:latest
+  container: mdernst/daikon-ubuntu-jdk11${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -126,7 +131,7 @@ jobs:
     - nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17-testing:latest
+  container: mdernst/daikon-ubuntu-jdk17${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -136,20 +141,20 @@ jobs:
 - job: nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21-testing:latest
+  container: mdernst/daikon-ubuntu-jdk21${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: nonquick_txt_diff_ubuntu_jdk22
+- job: nonquick_txt_diff_ubuntu_jdk23
   dependsOn:
     - jdk21_jobs
     - nonquick_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk22-testing:latest
+  container: mdernst/daikon-ubuntu-jdk23${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -162,7 +167,7 @@ jobs:
     - non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk8-testing:latest
+  container: mdernst/daikon-ubuntu-jdk8${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -175,7 +180,7 @@ jobs:
     - non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11-testing:latest
+  container: mdernst/daikon-ubuntu-jdk11${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -188,7 +193,7 @@ jobs:
     - non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17-testing:latest
+  container: mdernst/daikon-ubuntu-jdk17${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -198,20 +203,20 @@ jobs:
 - job: non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21-testing:latest
+  container: mdernst/daikon-ubuntu-jdk21${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: non_txt_diff_ubuntu_jdk22
+- job: non_txt_diff_ubuntu_jdk23
   dependsOn:
     - jdk21_jobs
     - non_txt_diff_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk22-testing:latest
+  container: mdernst/daikon-ubuntu-jdk23${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -224,7 +229,7 @@ jobs:
     - misc_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk8-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk8-plus${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -239,7 +244,7 @@ jobs:
     - misc_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk11-plus${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -254,7 +259,7 @@ jobs:
     - misc_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk17-plus${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -266,7 +271,7 @@ jobs:
 - job: misc_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk21-plus${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -281,7 +286,7 @@ jobs:
     - kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk8-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk8-plus${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -294,7 +299,7 @@ jobs:
     - kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk11-plus${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -307,7 +312,7 @@ jobs:
     - kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk17-plus${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -317,20 +322,20 @@ jobs:
 - job: kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk21-plus${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
   - bash: ./scripts/test-kvasir.sh
     displayName: test-kvasir.sh
 
-- job: kvasir_ubuntu_jdk22
+- job: kvasir_ubuntu_jdk23
   dependsOn:
     - jdk21_jobs
     - kvasir_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk22-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk23-plus${{ variables.testingSuffix }}:latest
   steps:
   - checkout: self
     fetchDepth: 25
@@ -344,7 +349,7 @@ jobs:
 #     - typecheck_jdk21
 #   pool:
 #     vmImage: 'ubuntu-latest'
-#   container: mdernst/daikon-ubuntu-jdk8-plus-testing:latest
+#   container: mdernst/daikon-ubuntu-jdk8-plus${{ variables.testingSuffix }}:latest
 #   timeoutInMinutes: 70
 #   steps:
 #   - checkout: self
@@ -362,7 +367,7 @@ jobs:
     - typecheck_latest_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk11-plus${{ variables.testingSuffix }}:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -380,7 +385,7 @@ jobs:
     - typecheck_latest_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk17-plus${{ variables.testingSuffix }}:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -398,7 +403,7 @@ jobs:
     - typecheck_bundled_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk11-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk11-plus${{ variables.testingSuffix }}:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -416,7 +421,7 @@ jobs:
     - typecheck_bundled_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk17-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk17-plus${{ variables.testingSuffix }}:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -431,7 +436,7 @@ jobs:
 - job: typecheck_latest_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk21-plus${{ variables.testingSuffix }}:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -446,7 +451,7 @@ jobs:
 - job: typecheck_bundled_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk21-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk21-plus${{ variables.testingSuffix }}:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -458,13 +463,13 @@ jobs:
   - bash: ./scripts/test-typecheck-with-bundled-cf.sh
     displayName: test-typecheck-with-bundled-cf.sh
 
-- job: typecheck_latest_jdk22
+- job: typecheck_latest_jdk23
   dependsOn:
     - jdk21_jobs
     - typecheck_latest_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk22-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk23-plus${{ variables.testingSuffix }}:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -476,13 +481,13 @@ jobs:
   - bash: ./scripts/test-typecheck-with-latest-cf.sh
     displayName: test-typecheck-with-latest-cf.sh
 
-- job: typecheck_bundled_jdk22
+- job: typecheck_bundled_jdk23
   dependsOn:
     - jdk21_jobs
     - typecheck_bundled_jdk21
   pool:
     vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk22-plus-testing:latest
+  container: mdernst/daikon-ubuntu-jdk23-plus${{ variables.testingSuffix }}:latest
   timeoutInMinutes: 80
   steps:
   - checkout: self
@@ -786,7 +791,7 @@ jobs:
 # - job: typecheck_onefile_jdk21
 #   pool:
 #     vmImage: 'ubuntu-latest'
-#   container: mdernst/daikon-ubuntu-jdk21-plus-testing:latest
+#   container: mdernst/daikon-ubuntu-jdk21-plus${{ variables.testingSuffix }}:latest
 #   timeoutInMinutes: 70
 #   steps:
 #   - checkout: self
