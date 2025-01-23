@@ -2356,6 +2356,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    *
    * <p>For example, if this VarInfo is "a.b.c", then the guarding list consists of the variables
    * "a" and "a.b". If "a" is null or "a.b" is null, then "a.b.c" is missing (does not exist).
+   *
+   * @return a list of varables that must be guarded
    */
   public List<VarInfo> getGuardingList() {
 
