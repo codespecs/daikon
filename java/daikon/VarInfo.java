@@ -1590,6 +1590,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /**
    * Returns the VarInfo for the sequence from which this was derived, or null if this wasn't
    * derived from a sequence. Only works for scalars.
+   *
+   * @return the VarInfo for the sequence from which this was derived, or null
    */
   public @Nullable VarInfo isDerivedSequenceMember() {
     if (derived == null) {
@@ -1624,6 +1626,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /**
    * Return the original sequence variable from which this derived sequence was derived. Only works
    * for sequences.
+   *
+   * @return the VarInfo for the original sequence from which this sequence was derived, or null
    */
   public @Nullable VarInfo isDerivedSubSequenceOf() {
 

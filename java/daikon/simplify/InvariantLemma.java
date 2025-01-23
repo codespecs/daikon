@@ -51,6 +51,9 @@ public class InvariantLemma extends Lemma {
   /**
    * Make a lemma corresponding to the given invariant, except referring to the prestate versions of
    * all the variables that inv referred to.
+   *
+   * @param inv the Invariant to be analyzed
+   * @return a InvariantLemma for the invariant
    */
   // The argument is an invariant at the entry point, where no orig(...) variables exist.
   public static InvariantLemma makeLemmaAddOrig(Invariant inv) {

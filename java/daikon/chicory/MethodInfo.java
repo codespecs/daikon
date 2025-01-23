@@ -244,7 +244,11 @@ public class MethodInfo {
     return isPure;
   }
 
-  /** Returns the turn type of the method, or Void.TYPE for a constructor. */
+  /**
+   * Returns the return type of the method, or Void.TYPE for a constructor.
+   *
+   * @return the return type of the current method
+   */
   public Class<?> return_type() {
     if (member instanceof Method) {
       Method m = (Method) member;
