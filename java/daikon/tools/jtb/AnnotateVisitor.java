@@ -2,7 +2,12 @@
 
 package daikon.tools.jtb;
 
-import daikon.*;
+import daikon.Daikon;
+import daikon.PptMap;
+import daikon.PptSlice1;
+import daikon.PptTopLevel;
+import daikon.PrintInvariants;
+import daikon.VarInfo;
 import daikon.chicory.DaikonVariableInfo;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
@@ -877,13 +882,13 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   /**
    * Returns a HashMap for fields with ".elementType == \type(...)" invariants, mapping the field to
-   * the type.
+   * the type of its array elements.
    *
-   * @param ppt is an :::OBJECT or :::CLASS program point.
-   * @param allFieldNames is a list of all field names
-   * @return HashMap ???
+   * @param ppt an :::OBJECT or :::CLASS program point
+   * @param allFieldNames all field names
+   * @return a map from field names whose types are arrays, to the element type of those arrays
    */
-  @SuppressWarnings("NonApiType") // https://errorprone.info/bugpattern/NonApiType
+  @SuppressWarnings("NonApiType") // JTB uses HashMap, so this JTB utility does too
   HashMap<String, String> element_type_fields(PptTopLevel ppt, List<String> allFieldNames) {
     // System.out.println("element_type_fields(" + ppt + ")");
     HashMap<String, String> result = new HashMap<>();

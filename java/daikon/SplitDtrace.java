@@ -131,10 +131,10 @@ public final class SplitDtrace {
   }
 
   /**
-   * Returns value of nonce variable in the ppt.
+   * Returns the value of the nonce variable in the ppt.
    *
    * @param res a list of ppt records
-   * @return value of nonce variable
+   * @return the value of the nonce variable
    */
   static int getNonce(List<String> res) {
     for (int i = 0; i < res.size(); i++) {

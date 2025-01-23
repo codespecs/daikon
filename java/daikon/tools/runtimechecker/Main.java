@@ -22,7 +22,6 @@ public class Main extends CommandHandler {
    *
    * @param args the arguments to the program
    */
-  @SuppressWarnings("NonApiType") // https://errorprone.info/bugpattern/NonApiType
   public void nonStaticMain(String[] args) {
 
     List<CommandHandler> handlers =

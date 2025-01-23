@@ -2062,7 +2062,7 @@ public final class DCRuntime implements ComparabilityProvider {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
+        List<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         pw.printf("  [%d] %s%n", stuff.size(), stuff);
       }
@@ -2077,7 +2077,7 @@ public final class DCRuntime implements ComparabilityProvider {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
+        List<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         pw.printf("  [%d] %s%n", stuff.size(), stuff);
       }
@@ -2181,11 +2181,10 @@ public final class DCRuntime implements ComparabilityProvider {
    *
    * @param l a DVSet
    * @param on value of daikon.Daikon.abridger_vars
-   * @return an ArrayList for Strings for l
+   * @return a readable version of {@code l}
    */
-  @SuppressWarnings("NonApiType") // https://errorprone.info/bugpattern/NonApiType
-  private static ArrayList<String> skinyOutput(DVSet l, boolean on) {
-    ArrayList<String> o = new ArrayList<>();
+  private static List<String> skinyOutput(DVSet l, boolean on) {
+    List<String> o = new ArrayList<>();
     for (DaikonVariableInfo dvi : l) {
       o.add(skinyOutput(dvi, on));
     }
