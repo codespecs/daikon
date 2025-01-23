@@ -1304,8 +1304,8 @@ public final class DCRuntime implements ComparabilityProvider {
    * @param mi a MethodInfo
    * @param root the daikon variables
    * @param tag_frame the tags for the primitive arguments of this method
-   * @param obj value of {@code this}, or null if the method is static
-   * @param args array of the arguments to the method
+   * @param obj the value of {@code this}, or null if the method is static
+   * @param args the arguments to the method
    * @param ret_val value returned by the method, or null if the method is a constructor or void
    */
   public static void process_all_vars(

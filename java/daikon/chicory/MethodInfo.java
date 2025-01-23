@@ -245,9 +245,9 @@ public class MethodInfo {
   }
 
   /**
-   * Returns the return type of the method, or Void.TYPE for a constructor.
+   * Returns the return type of this method, or Void.TYPE for a constructor.
    *
-   * @return the return type of the current method
+   * @return the return type of this method
    */
   public Class<?> return_type() {
     if (member instanceof Method) {
