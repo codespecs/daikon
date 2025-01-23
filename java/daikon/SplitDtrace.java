@@ -14,6 +14,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
@@ -129,7 +130,13 @@ public final class SplitDtrace {
     }
   }
 
-  static int getNonce(ArrayList<String> res) {
+  /**
+   * Returns the value of the nonce variable in the ppt.
+   *
+   * @param res a list of ppt records
+   * @return the value of the nonce variable
+   */
+  static int getNonce(List<String> res) {
     for (int i = 0; i < res.size(); i++) {
       if (res.get(i).equals("this_invocation_nonce")) {
         return Integer.parseInt(res.get(i + 1));
@@ -138,22 +145,47 @@ public final class SplitDtrace {
     throw new RuntimeException("no nonce: " + res);
   }
 
+  /**
+   * Returns true if the given string is an entry program point name.
+   *
+   * @param res a program point name
+   * @return true if the argument is an entry program point name
+   */
   @Pure
-  static boolean isEnter(ArrayList<String> res) {
+  static boolean isEnter(List<String> res) {
     return res.get(0).contains(":::ENTER");
   }
 
+  /**
+   * Returns true if the given string is an exit program point name.
+   *
+   * @param res a program point name
+   * @return true if the argument is an exit program point name
+   */
   @Pure
-  static boolean isExit(ArrayList<String> res) {
+  static boolean isExit(List<String> res) {
     return res.get(0).contains(":::EXIT");
   }
 
+  /**
+   * Returns true if the given line starts a program point declaration
+   *
+   * @param res a line from a .decls or .dtrace file
+   * @return true if the given line starts a program point declaration
+   */
   @Pure
-  static boolean isDeclare(ArrayList<String> res) {
+  static boolean isDeclare(List<String> res) {
     return res.get(0).equals("DECLARE");
   }
 
-  static void writeRec(BufferedWriter writer, ArrayList<String> res) throws IOException {
+  /**
+   * Writes a .dtrace record to a file.
+   *
+   * @param writer the BufferedWriter to use for output
+   * @param res the lines of a .dtrace record
+   * @throws IOException if there is a problem writing
+   */
+  static void writeRec(BufferedWriter writer, List<String> res) throws IOException {
     for (String s : res) {
       writer.write(s);
       writer.newLine();
@@ -169,7 +201,16 @@ public final class SplitDtrace {
     return l.trim().equals("") || l.startsWith("#");
   }
 
-  static void readRec(BufferedReader reader, ArrayList<String> res) throws IOException {
+  /**
+   * Reads a record from a .dtrace file.
+   *
+   * <p>This method modifies a list argument rather than returning a new list, for efficiency.
+   *
+   * @param reader the BufferedReader to use for input
+   * @param res a list that will be filled with the lines of a .dtrace record
+   * @throws IOException if there is a problem reading
+   */
+  static void readRec(BufferedReader reader, List<String> res) throws IOException {
     res.clear();
     String line;
     while ((line = reader.readLine()) != null) {
