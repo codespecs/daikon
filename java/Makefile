@@ -713,7 +713,7 @@ endif
 
 # See version numbers at https://github.com/google/error-prone/releases
 # and https://errorprone.info/docs/installation .
-ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.31.0-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.42.0-eisop5.jar
+ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.31.0-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.48.4.jar
 
 JAVAC_ANNOTATION_PROCESSOR_ARGS ?= \
 	-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
