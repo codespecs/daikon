@@ -1844,7 +1844,6 @@ public final class FileIO {
     }
 
     state.rtype = RecordType.EOF;
-    return;
   }
 
   /**
