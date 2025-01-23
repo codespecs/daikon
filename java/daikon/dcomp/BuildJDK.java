@@ -123,15 +123,13 @@ public class BuildJDK {
 
     File dest_dir = new File(cl_args[0]);
 
-    /**
-     * Key is a class file name, value is a stream that opens that file name.
-     *
-     * <p>We want to share code to read and instrument the Java class file members of a jar file
-     * (JDK 8) or a module file (JDK 9+). However, jar files and module files are located in two
-     * completely different file systems. So we open an InputStream for each class file we wish to
-     * instrument and save it in the class_stream_map with the file name as the key. From that point
-     * the code to instrument a class file can be shared.
-     */
+    // Key is a class file name, value is a stream that opens that file name.
+    //
+    // <p>We want to share code to read and instrument the Java class file members of a jar file
+    // (JDK 8) or a module file (JDK 9+). However, jar files and module files are located in two
+    // completely different file systems. So we open an InputStream for each class file we wish to
+    // instrument and save it in the class_stream_map with the file name as the key. From that point
+    // the code to instrument a class file can be shared.
     Map<String, InputStream> class_stream_map;
 
     if (cl_args.length > 1) {
