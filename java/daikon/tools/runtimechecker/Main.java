@@ -16,6 +16,12 @@ public class Main extends CommandHandler {
     }
   }
 
+  /**
+   * Entry point for the instrumenter. Passes control to whichever handler can handle the
+   * user-specified command.
+   *
+   * @param args the arguments to the program
+   */
   public void nonStaticMain(String[] args) {
 
     List<CommandHandler> handlers =
