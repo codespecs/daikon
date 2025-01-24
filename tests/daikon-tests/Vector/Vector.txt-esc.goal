@@ -17,6 +17,15 @@ this.elementCount == this.capacityIncrement
 (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null))
 \elemtype(this.elementData) == \typeof(null)
 (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) == \typeof(null)))
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 this.elementCount == 0
 this.elementData.length == 10
 (\forall int i; (this.elementCount+1 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null))
@@ -35,6 +44,15 @@ this.elementCount == this.capacityIncrement
 \old(initialCapacity) == this.elementData.length
 (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null))
 (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) == \typeof(null)))
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 this.elementCount == 0
 (\forall int i; (\old(initialCapacity) <= i && i <= this.elementData.length-1) ==> (this.elementData[i] != null))
 this.elementCount <= \old(initialCapacity)
@@ -51,6 +69,15 @@ this.capacityIncrement == \old(capacityIncrement)
 \old(initialCapacity) == this.elementData.length
 (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null))
 (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) == \typeof(null)))
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 this.elementCount == 0
 (\forall int i; (\old(initialCapacity) <= i && i <= this.elementData.length-1) ==> (this.elementData[i] != null))
 this.elementCount <= this.capacityIncrement
@@ -110,6 +137,7 @@ javautil.Vector13.contains(java.lang.Object):::EXIT
       Modified variables: this.elementData[this.elementCount] this.elementData[this.elementCount-1] this.elementData[this.elementCount+1..] this.elementData[0..this.elementCount] this.elementData[this.capacityIncrement] this.elementData[this.capacityIncrement-1] this.elementData[this.capacityIncrement..] this.elementData[this.capacityIncrement+1..] this.elementData[0..this.capacityIncrement] this.elementData[0..this.capacityIncrement-1]
       Unmodified variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.elementCount this.capacityIncrement elem elem.getClass().getName() size(this.elementData[]) this.elementData[this.elementCount..] this.elementData[0..this.elementCount-1]
 modifies this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]
+(\result == false)  ==>  (All the elements of this.elementData[].getClass().getName() have LENGTH=16)
 (\result == true)  ==>  (!(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) != \old(\typeof(elem)))))
 (\result == true)  ==>  (this.elementCount >= 1)
 \typeof(this.elementData) != \old(\typeof(elem))
@@ -386,6 +414,15 @@ javautil.Vector13.isEmpty():::EXIT
       Unmodified variables: this this.elementData this.elementData.getClass().getName() this.elementData[] this.elementData[].getClass().getName() this.elementCount this.capacityIncrement size(this.elementData[]) this.elementData[this.elementCount..] this.elementData[0..this.elementCount-1]
 modifies this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]
 (this.elementCount == 0)  ==  (\result == true)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are Numeric)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(this.elementCount == 0)  ==>  (All the elements of this.elementData[].getClass().getName() are emails)
 (this.elementCount == 0)  ==>  (this.elementCount <= this.capacityIncrement)
 (this.elementCount == 0)  ==>  (this.elementCount is a pointer)
 (this.elementCount == 0)  ==>  ((\forall int i; (0 <= i && i <= this.elementCount-1) ==> (this.elementData[i] != null)))
@@ -506,6 +543,15 @@ modifies this.elementData[*], this.elementCount, this.elementData[this.elementCo
 warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.elementData[orig(this.elementCount)..] == orig(this.elementData[this.elementCount..])
 (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (this.elementData[i] == null))
 (\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) == \typeof(null)))
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 this.elementCount == 0
 (\forall int i; (0 <= i && i <= this.elementCount-1) ==> (this.elementData[i] != null))
 this.elementCount <= this.capacityIncrement

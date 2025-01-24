@@ -25,6 +25,15 @@ this.theArray[this.currentSize] == this.theArray[this.back]
 this.theArray[this.currentSize] == this.theArray[\old(capacity)-1]
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.currentSize == 0
 (\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null))
 (\forall int i; (\old(capacity) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != null))
@@ -89,6 +98,15 @@ this.theArray[this.currentSize] == this.theArray[\old(this.currentSize)-1]
 this.theArray[this.currentSize] == this.theArray[\old(this.back)]
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.currentSize == 0
 (\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.currentSize-1) ==> (this.theArray[i] != null))
@@ -146,6 +164,15 @@ modifies this.theArray[this.currentSize-1], this.theArray[this.front-1], this.th
 \result == \old(this.theArray[this.back])
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.currentSize == 0
 \result == null
 (\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null))
@@ -182,6 +209,15 @@ modifies this.theArray[this.currentSize], this.theArray[this.currentSize-1], thi
 (this.currentSize == 0)  ==  (this.theArray[this.back] == null)
 (this.currentSize == 0)  ==>  ((this.back == 0) ==> (this.theArray.length-1 == 0))
 (this.currentSize == 0)  ==>  ((this.back == 0) ==> (this.front == 0))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are Numeric)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are emails)
 (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= this.currentSize) ==> (\old(this.theArray[i]) == null)))
 (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= \old(this.currentSize)) ==> (\old(this.theArray[i]) == null)))
 (this.currentSize == 0)  ==>  (\old(this.theArray[\new(this.currentSize)]) == null)
@@ -230,6 +266,15 @@ modifies this.theArray[this.currentSize], this.theArray[this.currentSize-1], thi
 (this.currentSize == 0)  ==  (\result == true)
 (this.currentSize == 0)  ==>  ((this.back == 0) ==> (this.theArray.length-1 == 0))
 (this.currentSize == 0)  ==>  ((this.back == 0) ==> (this.front == 0))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are Numeric)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(this.currentSize == 0)  ==>  (All the elements of this.theArray[].getClass().getName() are emails)
 (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= this.currentSize) ==> (\old(this.theArray[i]) == null)))
 (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= \old(this.currentSize)) ==> (\old(this.theArray[i]) == null)))
 (this.currentSize == 0)  ==>  (this.currentSize <= this.theArray.length-1)
@@ -293,6 +338,15 @@ this.theArray[this.currentSize] == this.theArray[\old(this.front)]
 this.theArray[this.currentSize] == this.theArray[\old(this.back)]
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))
+All the elements of this.theArray[].getClass().getName() are Numeric
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.theArray[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.theArray[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.theArray[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.theArray[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.theArray[].getClass().getName() are emails
 this.currentSize == 0
 (\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null))
 (\forall int i; (0 <= i && i <= this.currentSize-1) ==> (this.theArray[i] != null))
