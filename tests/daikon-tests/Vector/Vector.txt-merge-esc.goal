@@ -364,6 +364,7 @@ class Vector13 implements Cloneable, java.io.Serializable {
     /*@ requires (this.elementData.length == 0) ==> (this.elementCount == 0); */
     /*@ requires this.elementCount <= this.elementData.length; */
     /*@ modifies this.elementData[this.elementCount], this.elementData[this.elementCount-1], this.elementData[this.elementCount+1..], this.elementData[0..this.elementCount], this.elementData[this.capacityIncrement], this.elementData[this.capacityIncrement-1], this.elementData[this.capacityIncrement..], this.elementData[this.capacityIncrement+1..], this.elementData[0..this.capacityIncrement], this.elementData[0..this.capacityIncrement-1]; */
+    /*@ ensures (\result == false)  ==>  (All the elements of this.elementData[..].getClass().getName() have LENGTH=16); */
     /*@ ensures (\result == true)  ==>  (!(\forall int i; (0 <= i && i <= this.elementData.length-1) ==> (\typeof(this.elementData[i]) != \old(\typeof(elem))))); */
     /*@ ensures (\result == true)  ==>  (this.elementCount >= 1); */
     /*@ ensures \typeof(this.elementData) != \old(\typeof(elem)); */
