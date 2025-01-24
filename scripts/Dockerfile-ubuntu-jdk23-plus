@@ -47,15 +47,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
-<<<<<<<< HEAD:scripts/Dockerfile-ubuntu-jdk22-plus
-  openjdk-22-jdk \
-&& update-java-alternatives --set java-1.22.0-openjdk-amd64
-|||||||| bf8a8249:scripts/Dockerfile-ubuntu-jdk20-plus
-  openjdk-20-jdk
-========
   openjdk-23-jdk \
 && update-java-alternatives --set java-1.23.0-openjdk-amd64
->>>>>>>> cf8f54b4a2a06e7c5e80edeaaa274fb9fe6fae0b:scripts/Dockerfile-ubuntu-jdk23-plus
 
 # These are needed to build the Checker Framework, used by the "typecheck" job in CI.
 RUN export DEBIAN_FRONTEND=noninteractive \
