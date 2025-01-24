@@ -1300,6 +1300,13 @@ public final class DCRuntime implements ComparabilityProvider {
   /**
    * Process all of the daikon variables in the tree starting at root. If the values referenced by
    * those variables are comparable mark the variables as comparable.
+   *
+   * @param mi a MethodInfo
+   * @param root the daikon variables
+   * @param tag_frame the tags for the primitive arguments of this method
+   * @param obj the value of {@code this}, or null if the method is static
+   * @param args the arguments to the method
+   * @param ret_val value returned by the method, or null if the method is a constructor or void
    */
   public static void process_all_vars(
       MethodInfo mi, RootInfo root, Object[] tag_frame, Object obj, Object[] args, Object ret_val) {
@@ -2055,7 +2062,7 @@ public final class DCRuntime implements ComparabilityProvider {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
+        List<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         pw.printf("  [%d] %s%n", stuff.size(), stuff);
       }
@@ -2070,7 +2077,7 @@ public final class DCRuntime implements ComparabilityProvider {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
+        List<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         pw.printf("  [%d] %s%n", stuff.size(), stuff);
       }
@@ -2171,9 +2178,13 @@ public final class DCRuntime implements ComparabilityProvider {
    * <p>e.g. "daikon.chicory.ParameterInfo:foo" becomes "Parameter foo"
    *
    * <p>"daikon.chicory.FieldInfo:this.foo" becomes "Field foo"
+   *
+   * @param l a DVSet
+   * @param on value of daikon.Daikon.abridger_vars
+   * @return a readable version of {@code l}
    */
-  private static ArrayList<String> skinyOutput(DVSet l, boolean on) {
-    ArrayList<String> o = new ArrayList<>();
+  private static List<String> skinyOutput(DVSet l, boolean on) {
+    List<String> o = new ArrayList<>();
     for (DaikonVariableInfo dvi : l) {
       o.add(skinyOutput(dvi, on));
     }
