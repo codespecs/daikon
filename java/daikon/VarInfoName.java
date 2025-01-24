@@ -1631,6 +1631,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns a name for a the prestate value of this object; form is like "orig(this)" or
    * "\old(this)".
+   *
+   * @return a name for the prestate value of this object
    */
   public VarInfoName applyPrestate(@Interned VarInfoName this) {
     if (this instanceof Poststate) {
@@ -2052,6 +2054,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Caller is subscripting an orig(a[]) array. Take the requested index and make it useful in that
    * context.
+   *
+   * @param index an index into an orig array
+   * @return a name for the indexed orig item
    */
   static VarInfoName indexToPrestate(VarInfoName index) {
     // 1 orig(a[]) . orig(index) -> orig(a[index])
