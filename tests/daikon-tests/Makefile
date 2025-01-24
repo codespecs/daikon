@@ -5,9 +5,6 @@
 DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 SCRIPTS=$(DAIKONDIR)/scripts
 
-JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
-JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
-
 # Help system
 default help: help-recurse
 
