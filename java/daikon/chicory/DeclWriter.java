@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -180,7 +181,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
 
     outFile.println("ppt " + escape(name));
 
-    outFile.println("ppt-type " + ppt_type.name().toLowerCase());
+    outFile.println("ppt-type " + ppt_type.name().toLowerCase(Locale.ENGLISH));
 
     // Look for and print any hierarchy relations
     List<VarRelation> relations = new ArrayList<>();
@@ -498,9 +499,12 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
   /**
    * Returns the string to write to the output file for the specified enum. Currently this is just
    * the name of the enum in lower case.
+   *
+   * @param e enum to get name of
+   * @return the name of the enum
    */
   private String out_name(Enum<?> e) {
-    return e.name().toLowerCase();
+    return e.name().toLowerCase(Locale.ENGLISH);
   }
 
   /**

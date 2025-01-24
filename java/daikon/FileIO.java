@@ -47,6 +47,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.StringJoiner;
@@ -368,9 +369,9 @@ public final class FileIO {
     String ppt_name = need(state, scanner, "ppt name");
     ppt_name = user_mod_ppt_name(ppt_name);
 
-    /** Information that will populate the new program point. */
+    // Information that will populate the new program point.
     Map<String, VarDefinition> varmap = new LinkedHashMap<>();
-    /** The VarDefinition we are in the middle of reading, or null if we are not. */
+    // The VarDefinition we are in the middle of reading, or null if we are not.
     VarDefinition vardef = null;
     List<ParentRelation> ppt_parents = new ArrayList<>();
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf(PptFlags.class);
@@ -1844,7 +1845,6 @@ public final class FileIO {
     }
 
     state.rtype = RecordType.EOF;
-    return;
   }
 
   /**
@@ -2490,6 +2490,11 @@ public final class FileIO {
   /**
    * Read either a serialized PptMap or a InvMap and return a PptMap. If an InvMap is specified, it
    * is converted to a PptMap.
+   *
+   * @param file the input file
+   * @param use_saved_config flag
+   * @return a serialized PptMap
+   * @throws IOException if there is trouble reading the file
    */
   @EnsuresNonNull("FileIO.new_decl_format")
   public static PptMap read_serialized_pptmap(File file, boolean use_saved_config)
@@ -3082,7 +3087,7 @@ public final class FileIO {
 
     @Interned String str = need(state, scanner, descr);
     try {
-      E e = Enum.valueOf(enum_class, str.toUpperCase());
+      E e = Enum.valueOf(enum_class, str.toUpperCase(Locale.ENGLISH));
       return e;
     } catch (Exception exception) {
       @SuppressWarnings(
@@ -3090,7 +3095,7 @@ public final class FileIO {
       E @NonNull [] all = enum_class.getEnumConstants();
       StringJoiner msg = new StringJoiner(", ");
       for (E e : all) {
-        msg.add(String.format("'%s'", e.name().toLowerCase()));
+        msg.add(String.format("'%s'", e.name().toLowerCase(Locale.ENGLISH)));
       }
       decl_error(state, "'%s' found where %s expected", str, msg);
       throw new Error("execution cannot get to here, previous line threw an error");
@@ -3137,6 +3142,9 @@ public final class FileIO {
    * Handle any possible modifications to the ppt name. For now, just support the Applications
    * Communities specific modification to remove duplicate stack entries. But a more generic
    * technique could be implemented in the future.
+   *
+   * @param ppt_name a program point
+   * @return modified ppt name
    */
   public static String user_mod_ppt_name(String ppt_name) {
 

@@ -471,7 +471,11 @@ public final class Debug {
    * described in {@link #log(Logger, Class, Ppt, String)}. Accepts vis because sometimes the
    * variables are different from those in the ppt.
    *
-   * @return whether or not it logged anything
+   * @param inv_class the class to be logged
+   * @param ppt the program point to be logged
+   * @param vis the VarInfos for the ppt
+   * @param msg the message to be logged
+   * @return true if it logged something
    */
   // 4-argument form
   public static boolean log(
