@@ -1117,12 +1117,11 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Creates a MethodInfo struct correspondig to the MethodGen argument. name: how a type is
-   * represented in Java source code.
+   * Creates a MethodInfo struct corresponding to {@code mgen}.
    *
-   * @param classInfo describes the current class
-   * @param mgen describes the current method
-   * @return the generated MethodInfo
+   * @param classinfo a class
+   * @param mgen a method in the given class
+   * @return a new MethodInfo for the method, or null if the method should not be instrumented
    */
   @SuppressWarnings("unchecked")
   private @Nullable MethodInfo create_method_info(ClassInfo classInfo, MethodGen mgen) {
@@ -1432,6 +1431,7 @@ public class Instrument implements ClassFileTransformer {
    *
    * @param file the output file
    * @return the Consumer object
+   * @throws FileNotFoundException if 'file' cannot be found
    */
   private Consumer<String> fileConsumer(File file) throws FileNotFoundException {
     PrintStream stream = new PrintStream((new FileOutputStream(file)), false);

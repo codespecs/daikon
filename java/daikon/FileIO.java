@@ -2490,6 +2490,11 @@ public final class FileIO {
   /**
    * Read either a serialized PptMap or a InvMap and return a PptMap. If an InvMap is specified, it
    * is converted to a PptMap.
+   *
+   * @param file the input file
+   * @param use_saved_config flag
+   * @return a serialized PptMap
+   * @throws IOException if there is trouble reading the file
    */
   @EnsuresNonNull("FileIO.new_decl_format")
   public static PptMap read_serialized_pptmap(File file, boolean use_saved_config)
@@ -3137,6 +3142,9 @@ public final class FileIO {
    * Handle any possible modifications to the ppt name. For now, just support the Applications
    * Communities specific modification to remove duplicate stack entries. But a more generic
    * technique could be implemented in the future.
+   *
+   * @param ppt_name a program point
+   * @return modified ppt name
    */
   public static String user_mod_ppt_name(String ppt_name) {
 

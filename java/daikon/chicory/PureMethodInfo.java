@@ -108,8 +108,10 @@ public class PureMethodInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Returns an array corresponding to the current values of this pure method's arguments based on
-   * the given parentVal.
+   * Returns the current values of this pure method's arguments based on {@code parentVal}.
+   *
+   * @param parentVal the parent of the current method
+   * @return an Object the values of this method's arguments
    */
   private @Nullable Object[] getArgVals(Object parentVal) {
     @Nullable Object[] params = new @Nullable Object[args.length];

@@ -59,6 +59,8 @@ public class SplitterObject implements Comparable<SplitterObject> {
   }
 
   /**
+   * Return a Java Class corresponding to the {@code .class} file, or null.
+   *
    * @param fileName the pathname of a {@code .class} file
    * @return a Java Class corresponding to the {@code .class} file, or null
    */
