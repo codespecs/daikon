@@ -475,6 +475,7 @@ public class BuildJDK {
    * @param classTotal total number of classes to be processed; used for progress display
    * @throws IOException if unable to write out instrumented class
    */
+  @SuppressWarnings("SystemConsoleNull") // https://errorprone.info/bugpattern/SystemConsoleNull
   private void instrumentClassFile(
       JavaClass jc, File outputDir, String classFileName, int classTotal)
       throws java.io.IOException {
