@@ -1119,7 +1119,7 @@ public class Instrument implements ClassFileTransformer {
   /**
    * Creates a MethodInfo struct corresponding to {@code mgen}.
    *
-   * @param classinfo a class
+   * @param classInfo a class
    * @param mgen a method in the given class
    * @return a new MethodInfo for the method, or null if the method should not be instrumented
    */
