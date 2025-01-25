@@ -721,7 +721,7 @@ endif
 
 # See version numbers at https://github.com/google/error-prone/releases
 # and https://errorprone.info/docs/installation .
-ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.36.0-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.42.0-eisop5.jar
+ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-2.36.0-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.48.4.jar
 
 JAVAC_ANNOTATION_PROCESSOR_ARGS ?= \
 	-J--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
@@ -738,6 +738,7 @@ JAVAC_ANNOTATION_PROCESSOR_ARGS ?= \
 error-prone: errorprone
 errorprone: compile errorprone-nocompile
 # Some of the -Xep are temporary
+#   -Xep:PatternMatchingInstanceof:OFF  requires Java 17
 errorprone-nocompile:
 ifeq ($(JAVA8), 1)
 	echo "Error Prone is not run under Java 8"
@@ -746,7 +747,8 @@ else
 	javac -cp ${DAIKON_CLASSPATH} -source 24 -target 24 --enable-preview \
 	  ${JAVAC_ANNOTATION_PROCESSOR_ARGS} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
-	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:ExtendsObject:OFF -XepAllErrorsAsWarnings' -Xmaxwarns 100000 --should-stop=ifError=FLOW \
+	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:ExtendsObject:OFF -Xep:PatternMatchingInstanceop:OFF' \
+	  -Xmaxwarns 100000 --should-stop=ifError=FLOW -XepAllErrorsAsWarnings' \
 	  ${JAVA_FILES_FOR_STYLE}
 endif
 

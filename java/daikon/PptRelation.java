@@ -816,7 +816,7 @@ public class PptRelation implements Serializable {
       //                    ppt.ppt_name.isNumberedExitPoint());
 
       // Loop over each splitter
-      splitter_loop:
+      // splitter_loop:
       for (Iterator<PptSplitter> ii = ppt.splitters.iterator(); ii.hasNext(); ) {
         PptSplitter ppt_split = ii.next();
 
@@ -975,7 +975,7 @@ public class PptRelation implements Serializable {
       // System.out.printf("processing splitter %s%n", ppt.name());
 
       // Loop over each splitter
-      splitter_loop:
+      // splitter_loop:
       for (Iterator<PptSplitter> ii = ppt.splitters.iterator(); ii.hasNext(); ) {
         PptSplitter ppt_split = ii.next();
 

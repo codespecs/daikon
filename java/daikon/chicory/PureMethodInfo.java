@@ -130,6 +130,15 @@ public class PureMethodInfo extends DaikonVariableInfo {
     return params;
   }
 
+  /**
+   * Returns the result of invoking the method.
+   *
+   * @param meth a method
+   * @param receiverVal the receiver value
+   * @param argVals the argument values
+   * @return the result of invoking the method
+   */
+  @SuppressWarnings("LockOnNonEnclosingClassLiteral") // `synchronize on Runtime.class`
   private static @Nullable Object executePureMethod(
       Method meth, Object receiverVal, @Nullable Object[] argVals) {
     // Between startPure() and endPure(), no output is done to the trace file.
