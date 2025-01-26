@@ -715,10 +715,10 @@ endif
 # and https://errorprone.info/docs/installation .
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -lt 17; echo $$?),0)
   error-prone-version = 2.31.0
-  extra-error-prone-args = ""
+  extra-error-prone-args =
 else
   error-prone-version = 2.36.0
-  extra-error-prone-args = "--should-stop=ifError=FLOW"
+  extra-error-prone-args = --should-stop=ifError=FLOW
 endif
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-${error-prone-version}-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.48.4.jar
 
