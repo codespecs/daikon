@@ -31,6 +31,9 @@ jobs:
     - name: Install tools needed to build docs
       run: sudo apt-get -y install graphviz netpbm texinfo texlive texlive-latex-extra
 
+    - name: Install tools needed to build fjalar
+      run: sudo apt-get -y install binutils.dev
+
     - name: quick_txt_diff_ubuntu_jdk24
       run: bash ./scripts/test-quick-txt-diff.sh
 
