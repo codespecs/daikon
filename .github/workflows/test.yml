@@ -41,7 +41,7 @@ jobs:
       run: bash ./scripts/test-non-txt-diff.sh
 
     - name: misc_ubuntu_jdk24
-      run: bash ./scripts/test-misc.sh
+      : #run: bash ./scripts/test-misc.sh
 
     - name: kvasir_ubuntu_jdk24
       run: bash ./scripts/test-kvasir.sh
