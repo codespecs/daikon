@@ -317,7 +317,7 @@ public class Modulus extends SingleScalar {
       }
 
       if (m.modulus == 0) {
-        continue;
+        // continue;
       } else if (new_modulus == 0) {
         new_modulus = m.modulus;
       } else {

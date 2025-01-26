@@ -271,7 +271,7 @@ public class PptName implements Serializable {
             result = Integer.parseInt(point.substring(i));
             break;
           } catch (NumberFormatException e) {
-            continue;
+            // continue;
           }
         }
       }

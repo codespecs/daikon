@@ -587,7 +587,7 @@ public class LogicalCompare {
       while ((line = reader.readLine()) != null) {
         line = line.trim();
         if (line.equals("") || line.startsWith("#")) {
-          continue;
+          // continue;
         } else if (line.startsWith("PPT_NAME")) {
           ppt_name = line.substring("PPT_NAME".length()).trim();
           if (!extra_assumptions.containsKey(ppt_name)) {

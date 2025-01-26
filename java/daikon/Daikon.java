@@ -708,11 +708,11 @@ public final class Daikon {
       System.err.println("Bug in Daikon.  Please report.");
       System.exit(2);
     } else {
-      // This caes should never be executed.
+      // This case should never be executed.
       System.err.println();
-      System.err.println("Bug in Daikon.  Please report.");
+      System.err.println("Unknown problem in Daikon.  Please report.");
       e.printStackTrace(System.err);
-      System.err.println("Bug in Daikon.  Please report.");
+      System.err.println("Unknown problem in Daikon.  Please report.");
       System.exit(2);
     }
   }
