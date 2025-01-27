@@ -50,4 +50,4 @@ jobs:
       run: bash ./scripts/test-kvasir.sh
 
     - name: typecheck_ubuntu_jdk24
-      run: bash ./scripts/test-typecheck-with-latest-cf.sh
+      run: bash ./scripts/test-typecheck-with-bundled-cf.sh
