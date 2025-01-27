@@ -1,4 +1,4 @@
-xxxxstrigger:
+trigger:
   branches:
     include:
     - '*'
