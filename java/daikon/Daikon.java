@@ -708,11 +708,11 @@ public final class Daikon {
       System.err.println("Bug in Daikon.  Please report.");
       System.exit(2);
     } else {
-      // This caes should never be executed.
+      // This case should never be executed.
       System.err.println();
-      System.err.println("Bug in Daikon.  Please report.");
+      System.err.println("Unknown problem in Daikon.  Please report.");
       e.printStackTrace(System.err);
-      System.err.println("Bug in Daikon.  Please report.");
+      System.err.println("Unknown problem in Daikon.  Please report.");
       System.exit(2);
     }
   }
@@ -723,7 +723,10 @@ public final class Daikon {
    *
    * @param args the command-line arguments
    */
-  @SuppressWarnings("nullness:contracts.precondition") // private field
+  @SuppressWarnings({
+    "nullness:contracts.precondition", // private field
+    "SystemConsoleNull" // https://errorprone.info/bugpattern/SystemConsoleNull
+  })
   public static void mainHelper(final String[] args) {
     long startTime = System.nanoTime();
     long duration;

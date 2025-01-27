@@ -266,7 +266,7 @@ public class PptNameMatcher {
       if (!typeMatch(pptTypeString, astType)) {
         return false;
       } else {
-        continue;
+        // continue;
       }
     }
 

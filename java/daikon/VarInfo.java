@@ -1590,6 +1590,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /**
    * Returns the VarInfo for the sequence from which this was derived, or null if this wasn't
    * derived from a sequence. Only works for scalars.
+   *
+   * @return the VarInfo for the sequence from which this was derived, or null
    */
   public @Nullable VarInfo isDerivedSequenceMember() {
     if (derived == null) {
@@ -1624,6 +1626,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /**
    * Return the original sequence variable from which this derived sequence was derived. Only works
    * for sequences.
+   *
+   * @return the VarInfo for the original sequence from which this sequence was derived, or null
    */
   public @Nullable VarInfo isDerivedSubSequenceOf() {
 
@@ -2356,14 +2360,15 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    *
    * <p>For example, if this VarInfo is "a.b.c", then the guarding list consists of the variables
    * "a" and "a.b". If "a" is null or "a.b" is null, then "a.b.c" is missing (does not exist).
+   *
+   * @return a list of varables that must be guarded
    */
   public List<VarInfo> getGuardingList() {
 
-    /**
-     * The list returned by this visitor always includes the argument itself (if it is testable
-     * against null; for example, derived variables are not). If the caller does not want the
-     * argument to be in the list, the caller must must remove the argument.
-     */
+    // The list returned by this visitor always includes the argument itself (if it is testable
+    // against null; for example, derived variables are not). If the caller does not want the
+    // argument to be in the list, the caller must must remove the argument.
+
     // Inner class because it uses the "ppt" variable.
     // Basic structure of each visitor:
     //   If the argument should be guarded, recurse.

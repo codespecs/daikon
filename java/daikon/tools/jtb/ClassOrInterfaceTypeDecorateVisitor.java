@@ -260,8 +260,13 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     }
   }
 
-  // Makes a copy of the stacks and of the map. The
-  // ClassOrInterfaceType objects are not copied.
+  /**
+   * Makes a copy of the stacks and of the map. The ClassOrInterfaceType objects are not copied.
+   *
+   * @param m a map
+   * @return a copy of the map
+   */
+  @SuppressWarnings("NonApiType") // https://errorprone.info/bugpattern/NonApiType
   private static HashMap<String, Deque<ClassOrInterfaceType>> copy(
       HashMap<String, Deque<ClassOrInterfaceType>> m) {
 

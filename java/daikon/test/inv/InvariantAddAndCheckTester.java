@@ -338,7 +338,7 @@ public class InvariantAddAndCheckTester {
         String commandLine = getNextRealLine(commands);
         int lineNumber = commands.getLineNumber();
         if (InvariantAddAndCheckTester.isComment(commandLine)) {
-          continue;
+          // continue;
         } else if (isTestTerminator(commandLine)) {
           break;
         } else if (isAddCommand(commandLine) || isCheckCommand(commandLine)) {
