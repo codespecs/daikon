@@ -102,8 +102,6 @@ COMP_START = "comparability "
 # following format: '9[10]' - we are going to ignore what is between
 # the brackets so we will treat it as '9'
 
-LWArrayRExp = re.compile("\[.\]")
-
 ignoreHashcodes = False
 
 if len(sys.argv) < 2:
