@@ -24,9 +24,9 @@ jobs:
 # The remainder of jobs are run only if the jdk21_jobs pass.
 - job: jdk21_jobs
   dependsOn:
-    - quick_txt_diff_ubuntu_jdk21
-    - nonquick_txt_diff_ubuntu_jdk21
-    - non_txt_diff_ubuntu_jdk21
+    - quick_ubuntu_jdk21
+    - nonquick_ubuntu_jdk21
+    - nontxt_ubuntu_jdk21
     - misc_ubuntu_jdk21
     - kvasir_ubuntu_jdk21
     - typecheck_latest_jdk21
@@ -37,10 +37,10 @@ jobs:
   - checkout: none
   - bash: true
 
-- job: quick_txt_diff_ubuntu_jdk8
+- job: quick_ubuntu_jdk8
   dependsOn:
     - jdk21_jobs
-    - quick_txt_diff_ubuntu_jdk21
+    - quick_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8${{ variables.testingSuffix }}:latest
@@ -50,10 +50,10 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: quick_txt_diff_ubuntu_jdk11
+- job: quick_ubuntu_jdk11
   dependsOn:
     - jdk21_jobs
-    - quick_txt_diff_ubuntu_jdk21
+    - quick_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11${{ variables.testingSuffix }}:latest
@@ -63,10 +63,10 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: quick_txt_diff_ubuntu_jdk17
+- job: quick_ubuntu_jdk17
   dependsOn:
     - jdk21_jobs
-    - quick_txt_diff_ubuntu_jdk21
+    - quick_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17${{ variables.testingSuffix }}:latest
@@ -76,7 +76,7 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: quick_txt_diff_ubuntu_jdk21
+- job: quick_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk21${{ variables.testingSuffix }}:latest
@@ -86,10 +86,10 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: quick_txt_diff_ubuntu_jdk23
+- job: quick_ubuntu_jdk23
   dependsOn:
     - jdk21_jobs
-    - quick_txt_diff_ubuntu_jdk21
+    - quick_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk23${{ variables.testingSuffix }}:latest
@@ -99,10 +99,10 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: nonquick_txt_diff_ubuntu_jdk8
+- job: nonquick_ubuntu_jdk8
   dependsOn:
     - jdk21_jobs
-    - nonquick_txt_diff_ubuntu_jdk21
+    - nonquick_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8${{ variables.testingSuffix }}:latest
@@ -112,10 +112,10 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: nonquick_txt_diff_ubuntu_jdk11
+- job: nonquick_ubuntu_jdk11
   dependsOn:
     - jdk21_jobs
-    - nonquick_txt_diff_ubuntu_jdk21
+    - nonquick_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11${{ variables.testingSuffix }}:latest
@@ -125,10 +125,10 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: nonquick_txt_diff_ubuntu_jdk17
+- job: nonquick_ubuntu_jdk17
   dependsOn:
     - jdk21_jobs
-    - nonquick_txt_diff_ubuntu_jdk21
+    - nonquick_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17${{ variables.testingSuffix }}:latest
@@ -138,7 +138,7 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: nonquick_txt_diff_ubuntu_jdk21
+- job: nonquick_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk21${{ variables.testingSuffix }}:latest
@@ -148,10 +148,10 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: nonquick_txt_diff_ubuntu_jdk23
+- job: nonquick_ubuntu_jdk23
   dependsOn:
     - jdk21_jobs
-    - nonquick_txt_diff_ubuntu_jdk21
+    - nonquick_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk23${{ variables.testingSuffix }}:latest
@@ -161,10 +161,10 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: non_txt_diff_ubuntu_jdk8
+- job: nontxt_ubuntu_jdk8
   dependsOn:
     - jdk21_jobs
-    - non_txt_diff_ubuntu_jdk21
+    - nontxt_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk8${{ variables.testingSuffix }}:latest
@@ -174,10 +174,10 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: non_txt_diff_ubuntu_jdk11
+- job: nontxt_ubuntu_jdk11
   dependsOn:
     - jdk21_jobs
-    - non_txt_diff_ubuntu_jdk21
+    - nontxt_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk11${{ variables.testingSuffix }}:latest
@@ -187,10 +187,10 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: non_txt_diff_ubuntu_jdk17
+- job: nontxt_ubuntu_jdk17
   dependsOn:
     - jdk21_jobs
-    - non_txt_diff_ubuntu_jdk21
+    - nontxt_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk17${{ variables.testingSuffix }}:latest
@@ -200,7 +200,7 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: non_txt_diff_ubuntu_jdk21
+- job: nontxt_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk21${{ variables.testingSuffix }}:latest
@@ -210,10 +210,10 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: non_txt_diff_ubuntu_jdk23
+- job: nontxt_ubuntu_jdk23
   dependsOn:
     - jdk21_jobs
-    - non_txt_diff_ubuntu_jdk21
+    - nontxt_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-ubuntu-jdk23${{ variables.testingSuffix }}:latest
@@ -499,11 +499,11 @@ jobs:
   - bash: ./scripts/test-typecheck-with-bundled-cf.sh
     displayName: test-typecheck-with-bundled-cf.sh
 
-- job: quick_txt_diff_rockylinux_jdk8
+- job: quick_rockylinux_jdk8
   dependsOn:
     - jdk21_jobs
-    - quick_txt_diff_rockylinux_jdk21
-    - quick_txt_diff_ubuntu_jdk8
+    - quick_rockylinux_jdk21
+    - quick_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-rockylinux-jdk8:latest
@@ -513,11 +513,11 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: quick_txt_diff_rockylinux_jdk11
+- job: quick_rockylinux_jdk11
   dependsOn:
     - jdk21_jobs
-    - quick_txt_diff_rockylinux_jdk21
-    - quick_txt_diff_ubuntu_jdk11
+    - quick_rockylinux_jdk21
+    - quick_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-rockylinux-jdk11:latest
@@ -527,11 +527,11 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: quick_txt_diff_rockylinux_jdk17
+- job: quick_rockylinux_jdk17
   dependsOn:
     - jdk21_jobs
-    - quick_txt_diff_rockylinux_jdk21
-    - quick_txt_diff_ubuntu_jdk17
+    - quick_rockylinux_jdk21
+    - quick_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-rockylinux-jdk17:latest
@@ -541,10 +541,10 @@ jobs:
   - bash: ./scripts/test-quick-txt-diff.sh
     displayName: test-quick-txt-diff.sh
 
-- job: quick_txt_diff_rockylinux_jdk21
+- job: quick_rockylinux_jdk21
   dependsOn:
     - jdk21_jobs
-    - quick_txt_diff_ubuntu_jdk21
+    - quick_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-rockylinux-jdk21:latest
@@ -555,11 +555,11 @@ jobs:
   - bash: echo "No JDK 21 on Rocky Linux yet"
     displayName: test-quick-txt-diff.sh
 
-- job: nonquick_txt_diff_rockylinux_jdk8
+- job: nonquick_rockylinux_jdk8
   dependsOn:
     - jdk21_jobs
-    - nonquick_txt_diff_rockylinux_jdk21
-    - nonquick_txt_diff_ubuntu_jdk8
+    - nonquick_rockylinux_jdk21
+    - nonquick_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-rockylinux-jdk8:latest
@@ -569,11 +569,11 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: nonquick_txt_diff_rockylinux_jdk11
+- job: nonquick_rockylinux_jdk11
   dependsOn:
     - jdk21_jobs
-    - nonquick_txt_diff_rockylinux_jdk21
-    - nonquick_txt_diff_ubuntu_jdk11
+    - nonquick_rockylinux_jdk21
+    - nonquick_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-rockylinux-jdk11:latest
@@ -583,11 +583,11 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: nonquick_txt_diff_rockylinux_jdk17
+- job: nonquick_rockylinux_jdk17
   dependsOn:
     - jdk21_jobs
-    - nonquick_txt_diff_rockylinux_jdk21
-    - nonquick_txt_diff_ubuntu_jdk17
+    - nonquick_rockylinux_jdk21
+    - nonquick_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-rockylinux-jdk17:latest
@@ -597,10 +597,10 @@ jobs:
   - bash: ./scripts/test-nonquick-txt-diff.sh
     displayName: test-nonquick-txt-diff.sh
 
-- job: nonquick_txt_diff_rockylinux_jdk21
+- job: nonquick_rockylinux_jdk21
   dependsOn:
     - jdk21_jobs
-    - nonquick_txt_diff_ubuntu_jdk21
+    - nonquick_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-rockylinux-jdk21:latest
@@ -611,11 +611,11 @@ jobs:
   - bash: echo "No JDK 21 on Rocky Linux yet"
     displayName: test-nonquick-txt-diff.sh
 
-- job: non_txt_diff_rockylinux_jdk8
+- job: nontxt_rockylinux_jdk8
   dependsOn:
     - jdk21_jobs
-    - non_txt_diff_rockylinux_jdk21
-    - non_txt_diff_ubuntu_jdk8
+    - nontxt_rockylinux_jdk21
+    - nontxt_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-rockylinux-jdk8:latest
@@ -625,11 +625,11 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: non_txt_diff_rockylinux_jdk11
+- job: nontxt_rockylinux_jdk11
   dependsOn:
     - jdk21_jobs
-    - non_txt_diff_rockylinux_jdk21
-    - non_txt_diff_ubuntu_jdk11
+    - nontxt_rockylinux_jdk21
+    - nontxt_ubuntu_jdk11
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-rockylinux-jdk11:latest
@@ -639,11 +639,11 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: non_txt_diff_rockylinux_jdk17
+- job: nontxt_rockylinux_jdk17
   dependsOn:
     - jdk21_jobs
-    - non_txt_diff_rockylinux_jdk21
-    - non_txt_diff_ubuntu_jdk17
+    - nontxt_rockylinux_jdk21
+    - nontxt_ubuntu_jdk17
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-rockylinux-jdk17:latest
@@ -653,10 +653,10 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: non_txt_diff_rockylinux_jdk21
+- job: nontxt_rockylinux_jdk21
   dependsOn:
     - jdk21_jobs
-    - non_txt_diff_ubuntu_jdk21
+    - nontxt_ubuntu_jdk21
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-rockylinux-jdk21:latest
