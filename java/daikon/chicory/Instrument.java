@@ -277,7 +277,7 @@ public class Instrument implements ClassFileTransformer {
 
     hasClinit = false;
     byte[] newBytes = {};
-    debugInstrument.log("\nClass: " + binaryClassName);
+    debugInstrument.log("%nClass: %s%n", binaryClassName);
     // Modify the classfile, die on any errors
     try {
       newBytes =
@@ -331,9 +331,9 @@ public class Instrument implements ClassFileTransformer {
     poolBuilder = classBuilder.constantPool();
     classInfo = new ClassInfo(binaryClassName, loader);
 
-    debugInstrument.log("Class Attributes:");
+    debugInstrument.log("Class Attributes:%n");
     for (java.lang.classfile.Attribute<?> a : classModel.attributes()) {
-      debugInstrument.log("  " + a);
+      debugInstrument.log("  %s%n", a);
     }
 
     // Have each non-void method save its result in a local before returning.
@@ -535,9 +535,9 @@ public class Instrument implements ClassFileTransformer {
             debugInstrument.log("arg_names(%d): %s%n", arg_names.length, names);
             debugInstrument.log("localvars(%d): %s%n", local_vars.length, locals);
             //         debugInstrument.log("Original code: %s%n", mgen.getMethod().getCode());
-            debugInstrument.log("Method Attributes:");
+            debugInstrument.log("Method Attributes:%n");
             for (java.lang.classfile.Attribute<?> a : mm.attributes()) {
-              debugInstrument.log("  " + a);
+              debugInstrument.log("  %s%n", a);
             }
             debugInstrument.log("mgen.getSignature: %s%n", mgen.getSignature());
             MethodTypeDesc mtd = mm.methodTypeSymbol();
@@ -586,7 +586,7 @@ public class Instrument implements ClassFileTransformer {
 
     // copy all other ClassElements to output class (unchanged)
     for (ClassElement ce : classModel) {
-      debugInstrument.log("ClassElement: " + ce);
+      debugInstrument.log("ClassElement: %s%n", ce);
       switch (ce) {
         case MethodModel mm -> {}
           // copy all other ClassElements to output class (unchanged)
@@ -622,7 +622,7 @@ public class Instrument implements ClassFileTransformer {
   private void outputMethod(MethodBuilder methodBuilder, MethodModel methodModel, MethodGen mgen) {
 
     for (MethodElement me : methodModel) {
-      debugInstrument.log("MethodElement: " + me);
+      debugInstrument.log("MethodElement: %s%n", me);
       switch (me) {
         case CodeModel codeModel ->
             methodBuilder.withCode(codeBuilder -> outputCode(codeBuilder, codeModel, mgen));
@@ -644,7 +644,7 @@ public class Instrument implements ClassFileTransformer {
 
     // Copy the modified instruction list to the output class.
     for (CodeElement ce : mgen.getInstructionList()) {
-      debugInstrument.log("CodeElement: " + ce);
+      debugInstrument.log("CodeElement: %s%n", ce);
       codeBuilder.with(ce);
     }
   }
@@ -659,7 +659,7 @@ public class Instrument implements ClassFileTransformer {
   private void modifyMethod(MethodBuilder methodBuilder, MethodModel methodModel, MethodGen mgen) {
 
     for (MethodElement me : methodModel) {
-      debugInstrument.log("MethodElement: " + me);
+      debugInstrument.log("MethodElement: %s%n", me);
       switch (me) {
         case CodeModel codeModel ->
             methodBuilder.withCode(codeBuilder -> modifyCode(codeBuilder, codeModel, mgen));
@@ -689,9 +689,9 @@ public class Instrument implements ClassFileTransformer {
 
     List<CodeElement> codeList = new LinkedList<>();
 
-    debugInstrument.log("Code Attributes:");
+    debugInstrument.log("Code Attributes:%n");
     for (java.lang.classfile.Attribute<?> a : codeModel.attributes()) {
-      debugInstrument.log("  " + a);
+      debugInstrument.log("  %s%n", a);
     }
 
     /*
@@ -702,7 +702,7 @@ public class Instrument implements ClassFileTransformer {
      * LocalVariableTypeTable is optional and really only of use to a debugger.
      */
     for (CodeElement ce : mgen.getInstructionList()) {
-      debugInstrument.log("CodeElement: " + ce);
+      debugInstrument.log("CodeElement: %s%n", ce);
       switch (ce) {
         case LocalVariable lv -> {} // we have alreay processed these
         case LocalVariableType lvt -> {} // we can discard local variable types
@@ -745,12 +745,12 @@ public class Instrument implements ClassFileTransformer {
     // END modify codeList
 
     // Copy the modified local variable table to the output class.
-    debugInstrument.log("LocalVariableTable:");
+    debugInstrument.log("LocalVariableTable:%n");
     for (LocalVariable lv : localsTable) {
       codeBuilder.localVariable(
           lv.slot(), lv.name().stringValue(), lv.typeSymbol(), lv.startScope(), lv.endScope());
       debugInstrument.log(
-          "  " + lv + " : " + convertDescriptorToString(lv.typeSymbol().descriptorString()));
+          "  %s : %s%n", lv, convertDescriptorToString(lv.typeSymbol().descriptorString()));
     }
 
     // Copy the modified instruction list to the output class.
@@ -792,7 +792,7 @@ public class Instrument implements ClassFileTransformer {
     }
 
     ClassDesc type = mgen.getReturnType();
-    if (type != CD_void) {
+    if (!type.equals(CD_void)) {
       TypeKind typeKind = TypeKind.from(type);
       LocalVariable returnLocal = getReturnLocal(type);
       if (typeKind.slotSize() == 1) {
@@ -882,19 +882,18 @@ public class Instrument implements ClassFileTransformer {
     //   <the actual code for the method>
     //
     // We want to insert our instrumentation code after the LocalVariables
-    // (if any) and before any Label, LineNumber or Instruction.
+    // (if any) and after the inital label (if present), but before any
+    // LineNumber or Instruction.
     try {
       ListIterator<CodeElement> li = codeList.listIterator();
       while (li.hasNext()) {
 
         CodeElement inst = li.next();
-        if (!(inst instanceof Label)
-            && !(inst instanceof LineNumber)
-            && !(inst instanceof Instruction)) {
+        if (!(inst instanceof LineNumber) && !(inst instanceof Instruction)) {
           continue;
         }
 
-        // insert code before this Label, LineNumber or Instruction
+        // insert code before this LineNumber or Instruction
         // back up iterator to point to 'inst'
         li.previous();
         for (CodeElement ce : newCode) {
@@ -974,7 +973,7 @@ public class Instrument implements ClassFileTransformer {
     // If the return value is a primitive, wrap it in the appropriate wrapper.
     if (callMethod.equals("exit")) {
       ClassDesc ret_type = mgen.getReturnType();
-      if (ret_type == CD_void) {
+      if (ret_type.equals(CD_void)) {
         newCode.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
       } else {
         LocalVariable return_local = getReturnLocal(ret_type);
@@ -986,7 +985,6 @@ public class Instrument implements ClassFileTransformer {
       }
 
       // push line number
-      // debugInstrument.log(mgen.getName() + " --> " + line);
       newCode.add(loadIntegerConstant(line));
     }
 
@@ -1087,6 +1085,7 @@ public class Instrument implements ClassFileTransformer {
    * @param t type whose name is to be converted
    * @return a String containing the class name
    */
+  @SuppressWarnings("signature") // conversion method
   private static @ClassGetName String typeToClassGetName(ClassDesc t) {
 
     String s = t.descriptorString();
@@ -1104,6 +1103,7 @@ public class Instrument implements ClassFileTransformer {
    * @param mgen describes the current method
    * @return an array of strings, each corresponding to mgen's argument types
    */
+  @SuppressWarnings("signature") // conversion method
   private @BinaryName String[] getFullyQualifiedArgTypeNames(MethodGen mgen) {
 
     ClassDesc[] arg_types = mgen.getArgumentTypes();
@@ -1433,10 +1433,22 @@ public class Instrument implements ClassFileTransformer {
    * @return the Consumer object
    * @throws FileNotFoundException if 'file' cannot be found
    */
+  @SuppressWarnings("builder:required.method.not.called") // finalize method closes stream
   private Consumer<String> fileConsumer(File file) throws FileNotFoundException {
     PrintStream stream = new PrintStream((new FileOutputStream(file)), false);
-    return line -> {
-      stream.print(line);
+
+    // Wrap the Consumer to ensure the stream is closed properly
+    return new Consumer<>() {
+      @Override
+      public void accept(String line) {
+        stream.print(line);
+      }
+
+      @Override
+      protected void finalize() throws Throwable {
+        super.finalize();
+        stream.close(); // Ensure the stream is closed when the Consumer is garbage collected
+      }
     };
   }
 
