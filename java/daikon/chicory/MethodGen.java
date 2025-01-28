@@ -13,6 +13,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * The MethodGen class is a simplfied replacement for the BCEL MethodGen class. It collects and
@@ -31,7 +33,7 @@ public class MethodGen {
   // Optional<ClassModel> parent() Returns the class model this method is a member of, if known.
 
   /** The method's code model or null if no code. */
-  private CodeModel code;
+  private @Nullable CodeModel code;
 
   /** The method's access flags. */
   protected AccessFlags accessFlags;
@@ -102,7 +104,7 @@ public class MethodGen {
     if (code.isPresent()) {
       this.code = code.get();
       // the original elementList is immutable, so we need to make a copy
-      this.codeList = new LinkedList(this.code.elementList());
+      this.codeList = new LinkedList<CodeElement>(this.code.elementList());
     } else {
       this.code = null;
       this.codeList = new ArrayList<>();
@@ -303,7 +305,7 @@ public class MethodGen {
 
   // need to fancy up!
   @Override
-  public final String toString() {
+  public final String toString(@GuardSatisfied MethodGen this) {
     return methodName;
   }
 
