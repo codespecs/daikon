@@ -85,6 +85,16 @@ export JDKVER=jdk23-plus
 export DPROJECT=daikon
 create_upload_docker_image
 
+export OS=ubuntu
+export JDKVER=jdk24
+export DPROJECT=daikon
+create_upload_docker_image
+
+export OS=ubuntu
+export JDKVER=jdk24-plus
+export DPROJECT=daikon
+create_upload_docker_image
+
 export OS=rockylinux
 export JDKVER=jdk8
 export DPROJECT=daikon
