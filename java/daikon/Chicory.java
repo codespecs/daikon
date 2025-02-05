@@ -3,6 +3,7 @@ package daikon;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.chicory.StreamRedirectThread;
+import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
@@ -425,7 +426,10 @@ public class Chicory {
       // cmdlist.add("-Djava.compiler=NONE");
     }
 
-    cmdlist.add("--enable-preview");
+    // Temporary until JDK 24 is offically released.
+    if (BcelUtil.javaVersion == 24) {
+      cmdlist.add("--enable-preview");
+    }
     cmdlist.add("-cp");
     cmdlist.add(cp);
     cmdlist.add("-ea");

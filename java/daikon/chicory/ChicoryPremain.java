@@ -5,6 +5,7 @@ package daikon.chicory;
 import static daikon.tools.nullness.NullnessUtil.castNonNull;
 
 import daikon.Chicory;
+import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
@@ -142,6 +143,11 @@ public class ChicoryPremain {
 
     initializeDeclAndDTraceWriters();
 
+    String instrumenter = "daikon.chicory.Instrument";
+    if (BcelUtil.javaVersion >= 24) {
+      instrumenter = "daikon.chicory.Instrument24";
+    }
+
     // Setup the transformer
     ClassFileTransformer transformer;
     // use a special classloader to ensure correct version of BCEL is used
@@ -149,7 +155,7 @@ public class ChicoryPremain {
     try {
       transformer =
           (ClassFileTransformer)
-              loader.loadClass("daikon.chicory.Instrument").getDeclaredConstructor().newInstance();
+              loader.loadClass(instrumenter).getDeclaredConstructor().newInstance();
     } catch (Exception e) {
       throw new RuntimeException("Unexpected error loading Instrument", e);
     }
