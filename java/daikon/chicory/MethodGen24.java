@@ -17,10 +17,10 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * The MethodGen class is a simplfied replacement for the BCEL MethodGen class. It collects and
+ * The MethodGen24 class is a simplfied replacement for the BCEL MethodGen class. It collects and
  * stores all the relevant information about a method.
  */
-public class MethodGen {
+public class MethodGen24 {
   /*
    * Corresponds to the fields found in a MethodModel object.
    */
@@ -46,6 +46,9 @@ public class MethodGen {
 
   /** Whether of not the method is static. */
   private boolean isStatic;
+
+  /** The method's CodeAttribute. */
+  private @Nullable CodeAttribute codeAttribute;
 
   // fields of the code attribute
   /** The method's maximum number of locals. */
@@ -79,19 +82,15 @@ public class MethodGen {
   /** The method's local variable table. */
   private LocalVariable[] localVariables;
 
-  /** The daikon.chicory.Instrument instance. */
-  private daikon.chicory.Instrument inst_obj;
-
   /**
-   * Constructor for the MethodGen object.
+   * Constructor for the MethodGen24 object.
    *
    * @param methodModel for the method
    * @param className for the containing class
    * @param inst_obj the daikon.chicory.Instrument instance
    */
-  public MethodGen(
-      final MethodModel methodModel, final String className, daikon.chicory.Instrument inst_obj) {
-    this.inst_obj = inst_obj;
+  public MethodGen24(
+      final MethodModel methodModel, final String className, daikon.chicory.Instrument24 inst_obj) {
 
     accessFlags = methodModel.flags();
     methodName = methodModel.methodName().stringValue();
@@ -110,10 +109,13 @@ public class MethodGen {
       this.codeList = new ArrayList<>();
     }
 
-    CodeAttribute ca = methodModel.findAttribute(Attributes.code()).orElse(null);
-    if (ca != null) {
-      maxLocals = ca.maxLocals();
-      maxStack = ca.maxStack();
+    codeAttribute = methodModel.findAttribute(Attributes.code()).orElse(null);
+    if (codeAttribute != null) {
+      maxLocals = codeAttribute.maxLocals();
+      // It seems like a checker bug that this assert is needed.
+      assert codeAttribute != null
+          : "@AssumeAssertion(nullness): just tested";
+      maxStack = codeAttribute.maxStack();
     } else {
       maxLocals = 0;
       maxStack = 0;
@@ -139,12 +141,14 @@ public class MethodGen {
       if (ce instanceof LocalVariable lv) {
         inst_obj.localsTable.add(lv);
       } else {
-        // WRONG // we assume all LocalVariable elements come first
+        // IS THIS WRONG?
+        // we assume all LocalVariable elements come first
         if (ce instanceof Instruction) {
           break;
         }
       }
     }
+
     // Not presented in sorted order so sort to make searching/insertion easier.
     inst_obj.localsTable.sort(Comparator.comparing(LocalVariable::slot));
     localVariables = inst_obj.localsTable.toArray(new LocalVariable[0]);
@@ -254,6 +258,15 @@ public class MethodGen {
   }
 
   /**
+   * Return the CodeAttribute for the method.
+   *
+   * @return the CodeAttribute for the method
+   */
+  public @Nullable CodeAttribute getCodeAttribute() {
+    return codeAttribute;
+  }
+
+  /**
    * Return the maximum number of locals.
    *
    * @return the maximum number of locals
@@ -305,7 +318,7 @@ public class MethodGen {
 
   // need to fancy up!
   @Override
-  public final String toString(@GuardSatisfied MethodGen this) {
+  public final String toString(@GuardSatisfied MethodGen24 this) {
     return methodName;
   }
 
