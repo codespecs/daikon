@@ -811,6 +811,7 @@ else
 	  ${JAVA_FILES_FOR_STYLE}
 endif
 
+# THIS IS BROKEN - IS IT EVER USED?
 # Create an `error-prone.patch` file.
 errorprone-replacements:
 	javac -cp ${DAIKON_CLASSPATH} \
@@ -1286,6 +1287,13 @@ ifeq ($(JAVA8), 1)
   SKIP_JAVADOC=1
 endif
 
+# When JDK 24 is offically released, remove '--enable-preview'
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+  extra-javadoc-args = -source 24 --enable-preview
+else
+  extra-javadoc-args =
+endif
+
 # Build javadoc using the daikon package and all subpackages of daikon.
 javadoc: api
 .PHONY: api
@@ -1297,7 +1305,7 @@ ifeq ($(SKIP_JAVADOC),1)
 else
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} --enable-preview -source 24 -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} $(extra-javadoc-args) -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all ${DOCLET_FLAGS} \
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
@@ -1318,7 +1326,7 @@ api-test-each: ../utils/plume-scripts ../utils/html-tools
 ## It is generated in the standard location, directory api/
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	mkdir -p $(JAVADOC_DEST)
-	${JAVADOC_COMMAND} --enable-preview -source 24 -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} $(extra-javadoc-args) -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all ${DOCLET_FLAGS} \
 	  daikon -subpackages $(DAIKON_PACKAGES)
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 
@@ -1333,7 +1341,7 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} --enable-preview -source 24 -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS}\
+	${JAVADOC_COMMAND} $(extra-javadoc-args) -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS}\
 		--texinfo tmpfile \
 		@javadoc-files.txt
 	mv -f tmpfile $@
@@ -1344,7 +1352,7 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} --enable-preview -source 24 -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS}\
+	${JAVADOC_COMMAND} $(extra-javadoc-args) -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS}\
 		--texinfo tmpfile \
 		@javadoc-files.txt
 	perl -pi -e 's/&#64;cindex/\@cindex/g' tmpfile
