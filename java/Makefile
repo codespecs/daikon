@@ -1278,9 +1278,9 @@ DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' | egrep -v 'd
 .PHONY: javadoc-files.txt
 javadoc-files.txt:
 	$(MAKE) ${AUTO_GENERATED_FILES}
-	find * \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -path 'daikon/dcomp-transfer' \) -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
+	find * \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -path 'daikon/dcomp-transfer' \) -prune -o -name "*24.java" -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
 	@echo javadoc-files.txt:
-	@echo $(shell cat @javadoc-files.txt)
+	@echo $(shell cat javadoc-files.txt)
 
 # If Java 8, don't run javadoc; a bug in javadoc causes it to crash.
 ifeq ($(JAVA8), 1)
