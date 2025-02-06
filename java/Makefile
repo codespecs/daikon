@@ -1259,12 +1259,13 @@ clover: all_directly
 JAVADOC_DEST = api
 # ${DAIKONDIR}/java should not be in classpath, to avoid Javadoc error
 # "Multiple sources of package comments found for package"
+# also keeps javadoc from finding "*24.java"
 # Removed "-source 8" because it causes a crash under JDK 11:  https://bugzilla.redhat.com/show_bug.cgi?id=1874672
 JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
                 -Xmaxerrs 100000 -Xmaxwarns 100000 \
                 -d $(JAVADOC_DEST) \
                 -linkoffline $(LINKOFFLINE) $(LINKOFFLINE) \
-                -classpath "$(subst ${DAIKONDIR}/java:,,${DAIKON_CLASSPATH})"
+                -classpath "$(subst *:${DAIKONDIR}/java,*,${DAIKON_CLASSPATH})"
 JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
                 -docletpath "${DOCLETPATH}"
 
@@ -1279,8 +1280,6 @@ DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' | egrep -v 'd
 javadoc-files.txt:
 	$(MAKE) ${AUTO_GENERATED_FILES}
 	find * \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -path 'daikon/dcomp-transfer' \) -prune -o -name "*24.java" -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
-	@echo javadoc-files.txt:
-	@echo $(shell cat javadoc-files.txt)
 
 # If Java 8, don't run javadoc; a bug in javadoc causes it to crash.
 ifeq ($(JAVA8), 1)
