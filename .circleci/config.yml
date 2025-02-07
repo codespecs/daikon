@@ -5,7 +5,7 @@ version: 2.1
 
 jobs:
 
-  # Only proceed to other jobs if ubuntu-jdk21-jobs passes.
+  # Only proceed to other jobs if jdk21-jobs passes.
   jdk21-jobs:
     docker:
       - image: cimg/base:2022.06
