@@ -223,20 +223,21 @@ jobs:
   - bash: ./scripts/test-non-txt-diff.sh
     displayName: test-non-txt-diff.sh
 
-- job: misc_ubuntu_jdk8
-  dependsOn:
-    - jdk21_jobs
-    - misc_ubuntu_jdk21
-  pool:
-    vmImage: 'ubuntu-latest'
-  container: mdernst/daikon-ubuntu-jdk8-plus${{ variables.testingSuffix }}:latest
-  steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: make showvars
-    displayName: make showvars
-  - bash: ./scripts/test-misc.sh
-    displayName: test-misc.sh
+# javadoc classpath package issues with *24.java
+#- job: misc_ubuntu_jdk8
+#  dependsOn:
+#    - jdk21_jobs
+#    - misc_ubuntu_jdk21
+#  pool:
+#    vmImage: 'ubuntu-latest'
+#  container: mdernst/daikon-ubuntu-jdk8-plus${{ variables.testingSuffix }}:latest
+#  steps:
+#  - checkout: self
+#    fetchDepth: 25
+#  - bash: make showvars
+#    displayName: make showvars
+#  - bash: ./scripts/test-misc.sh
+#    displayName: test-misc.sh
 
 - job: misc_ubuntu_jdk11
   dependsOn:
@@ -671,7 +672,7 @@ jobs:
   dependsOn:
     - jdk21_jobs
     - misc_rockylinux_jdk21
-    - misc_ubuntu_jdk8
+#    - misc_ubuntu_jdk8
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-rockylinux-jdk8-plus:latest
