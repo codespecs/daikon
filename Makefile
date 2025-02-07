@@ -72,7 +72,7 @@ SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 
 # This is so troublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print | ${SORT_DIRECTORY_ORDER})
-# If were building on JDK 23 or less, remove the java24 files.
+# If we're building on JDK 23 or less, remove the java24 files.
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -lt 24; echo $$?),0)
   DAIKON_JAVA_FILES := $(filter-out %24.java, $(DAIKON_JAVA_FILES))
 endif
