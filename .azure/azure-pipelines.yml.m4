@@ -78,7 +78,8 @@ typecheck_latest_job(ubuntu, 17)
 typecheck_bundled_job(ubuntu, 17)
 typecheck_latest_job(ubuntu, 21)
 typecheck_bundled_job(ubuntu, 21)
-typecheck_latest_job(ubuntu, 24)
+## The Checker Framework does not yet build under Java 24.
+# typecheck_latest_job(ubuntu, 24)
 typecheck_bundled_job(ubuntu, 24)
 
 quick_job(rockylinux, 8)
