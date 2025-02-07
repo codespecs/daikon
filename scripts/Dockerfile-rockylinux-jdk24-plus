@@ -28,9 +28,13 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   unzip \
   which
 
-RUN dnf -q -y install \
-  java-21-openjdk \
-  java-21-openjdk-devel
+# RUN dnf -q -y install \
+#   java-21-openjdk \
+#   java-21-openjdk-devel
+
+RUN curl --silent -o openjdk-24_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk24/1f9ff9062db4449d8ca828c504ffae90/36/GPL/openjdk-24_linux-x64_bin.tar.gz && \
+tar xzf openjdk-24_linux-x64_bin.tar.gz
+ENV PATH="$HOME/jdk-24/bin:$PATH"
 
 # This enables the repository that contains jq
 RUN dnf -q -y install \
