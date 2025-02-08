@@ -1324,10 +1324,14 @@ api-test-each: ../utils/plume-scripts ../utils/html-tools
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
 api-private: ../utils/plume-scripts $(AUTO_GENERATED_FILES)
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 8; echo $$?),0)
+	@echo "Skipping api-private target under Java 8"
+else
 	mkdir -p $(JAVADOC_DEST)
 	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all ${DOCLET_FLAGS} \
 	  daikon -subpackages $(DAIKON_PACKAGES)
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
+endif
 
 ## Test that Javadoc exists.
 ## You should regenerate api/ after running this.
