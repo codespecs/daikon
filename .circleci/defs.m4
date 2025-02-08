@@ -134,7 +134,7 @@ define([typecheck_latest_job], [dnl
             - ".git"
       - run: env
       - run:
-          command: scripts/test-typecheck-latest-cf.sh
+          command: scripts/test-typecheck-with-latest-cf.sh
           no_output_timeout: 30m])dnl
 define([typecheck_bundled_job], [dnl
   typecheck-bundled-$1-jdk$2:
@@ -158,7 +158,7 @@ define([typecheck_bundled_job], [dnl
           make showvars
           make compile daikon.jar
       - run:
-          command: scripts/test-typecheck-bundled-cf.sh
+          command: scripts/test-typecheck-with-bundled-cf.sh
           no_output_timeout: 30m
 ])dnl
 dnl
@@ -169,7 +169,7 @@ ifelse($1$2,canary_test,,[:
             - canary-jobs
 ifelse($2,canary_version,,[            - $3-$1-jdk[]canary_version
 ])dnl
-ifelse($1,canary_os,,[            - $3-$canary_os[]-jdk$2
+ifelse($1,canary_os,,[            - $3-canary_os[]-jdk$2
 ])dnl
 ])dnl
 ])dnl
@@ -280,7 +280,7 @@ define([typecheck_latest_job_dependences], [dnl
             - ".git"
       - run: env
       - run:
-          command: scripts/test-typecheck-latest-cf.sh
+          command: scripts/test-typecheck-with-latest-cf.sh
           no_output_timeout: 30m])dnl
 define([typecheck_bundled_job_dependences], [dnl
   typecheck-bundled-$1-jdk$2:
@@ -304,7 +304,7 @@ define([typecheck_bundled_job_dependences], [dnl
           make showvars
           make compile daikon.jar
       - run:
-          command: scripts/test-typecheck-bundled-cf.sh
+          command: scripts/test-typecheck-with-bundled-cf.sh
           no_output_timeout: 30m
 ])dnl
 ifelse([
