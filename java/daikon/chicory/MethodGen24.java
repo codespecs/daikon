@@ -202,7 +202,7 @@ public class MethodGen24 {
   /**
    * Return the name of the ith parameter.
    *
-   * @param i which parameter name is requested
+   * @param i which parameter's name is requested
    * @return the parameter name
    */
   public String getParameterName(final int i) {
@@ -221,7 +221,7 @@ public class MethodGen24 {
   /**
    * Return the type of the ith parameter.
    *
-   * @param i which parameter type is requested
+   * @param i which parameter's type is requested
    * @return the indicated parameter type
    */
   public ClassDesc getParameterType(final int i) {
@@ -249,7 +249,7 @@ public class MethodGen24 {
   /**
    * Return the name of the containing class.
    *
-   * @return class that contains this method
+   * @return the class that contains this method
    */
   public String getClassName() {
     return className;
@@ -311,7 +311,7 @@ public class MethodGen24 {
 
   // Not sure we need this
   //  public void setInstructionList(List<CodeElement> il) {
-  //     codeList = il;;
+  //     codeList = il;
   //  }
 
   // need to fancy up!
