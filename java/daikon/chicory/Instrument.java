@@ -349,7 +349,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Create a class initializer method, if none exists; guarantees we have this hook
+   * Create a class initializer method, if none exists; guarantees we have this hook.
    *
    * @param cg ClassGen for current class
    * @param fullClassName must be fully qualified: packageName.className
@@ -1227,9 +1227,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Logs the current method's attributes.
+   * Logs a method's attributes.
    *
-   * @param mg describes the current method
+   * @param mg a method
    */
   public void dump_code_attributes(MethodGen mg) {
     // mg.getMethod().getCode().getAttributes() forces attributes

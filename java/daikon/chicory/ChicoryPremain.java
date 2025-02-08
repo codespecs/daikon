@@ -143,9 +143,11 @@ public class ChicoryPremain {
 
     initializeDeclAndDTraceWriters();
 
-    String instrumenter = "daikon.chicory.Instrument";
+    String instrumenter;
     if (BcelUtil.javaVersion >= 24) {
       instrumenter = "daikon.chicory.Instrument24";
+    } else {
+      instrumenter = "daikon.chicory.Instrument";
     }
 
     // Setup the transformer

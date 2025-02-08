@@ -63,14 +63,14 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 ### end of user customizations
 
 # Not := because DAIKON_CLASSPATH is set later in this file.
+JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
 JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx3600m ${JAVAC_ARGS}
 JAVAC24_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx3600m ${JAVAC24_ARGS}
-JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
-JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
-
-# When JDK 24 is offically released, delete these lines
+# When JDK 24 is offically released, delete this test and the then branch.
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
   JAVA_COMMAND = ${JAVA} --enable-preview -cp ${DAIKON_CLASSPATH}
+else
+  JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
 endif
 
 
@@ -507,7 +507,7 @@ CHICORY_JAVA_FILES := $(filter-out %24.java, $(CHICORY_JAVA_FILES))
 .PRECIOUS: ChicoryPremain.jar
 chicory : ChicoryPremain.jar
 
-# Note that this compiles all of chicory even though all we need for
+# Note that this compiles all of Chicory even though all we need for
 # this step is chicory/ChicoryPremain.java.
 ChicoryPremain.jar : $(CHICORY_JAVA_FILES) daikon/chicory/manifest.txt
 	$(JAVAC_COMMAND) $(CHICORY_JAVA_FILES)
@@ -542,7 +542,7 @@ DCOMP_DIR := daikon/dcomp
 .PHONY: dyncomp dcomp
 dyncomp dcomp : plume-import-check dcomp_premain.jar
 
-# Note that this compiles all of dcomp chicory even though all we need for
+# Note that this compiles all of dcomp even though all we need for
 # this step is dcomp/Premain.java.
 dcomp_premain.jar : $(INSTRUMENTATION_JAVA_FILES) daikon/dcomp/manifest.txt
 	$(JAVAC_COMMAND) $(INSTRUMENTATION_JAVA_FILES)
@@ -766,16 +766,16 @@ endif
 # and https://errorprone.info/docs/installation .
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -lt 17; echo $$?),0)
   error-prone-version = 2.31.0
-  extra-error-prone-arg-1 =
+  extra-error-prone-args-1 =
 else
   error-prone-version = 2.36.0
-  extra-error-prone-arg-1 = --should-stop=ifError=FLOW
+  extra-error-prone-args-1 = --should-stop=ifError=FLOW
 endif
 # When JDK 24 is offically released, replace '--enable-preview' with '-Werror'.
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
-  extra-error-prone-arg-2 = -source 24 -target 24 --enable-preview
+  extra-error-prone-args-2 = -source 24 -target 24 --enable-preview
 else
-  extra-error-prone-arg-2 = -Werror
+  extra-error-prone-args-2 = -Werror
 endif
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-${error-prone-version}-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.48.4.jar
 
@@ -802,12 +802,12 @@ else
 	@echo "Using Error Prone version ${error-prone-version}"
 ## MutablePublicArray is off because it suggests a dependency on Google Guava.
 	javac -cp ${DAIKON_CLASSPATH} \
-	$(extra-error-prone-arg-2) \
+	$(extra-error-prone-args-2) \
 	  ${JAVAC_ANNOTATION_PROCESSOR_ARGS} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:ExtendsObject:OFF -Xep:PatternMatchingInstanceof:OFF' \
 	  -Xmaxwarns 100000 \
-	  ${extra-error-prone-arg-1} \
+	  ${extra-error-prone-args-1} \
 	  ${JAVA_FILES_FOR_STYLE}
 endif
 
@@ -1258,13 +1258,14 @@ clover: all_directly
 
 JAVADOC_DEST = api
 # ${DAIKONDIR}/java should not be in classpath, to avoid Javadoc error
-# "Multiple sources of package comments found for package"
+# "Multiple sources of package comments found for package".
+# It also keeps javadoc from finding "*24.java"
 # Removed "-source 8" because it causes a crash under JDK 11:  https://bugzilla.redhat.com/show_bug.cgi?id=1874672
 JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
                 -Xmaxerrs 100000 -Xmaxwarns 100000 \
                 -d $(JAVADOC_DEST) \
                 -linkoffline $(LINKOFFLINE) $(LINKOFFLINE) \
-                -classpath "$(subst ${DAIKONDIR}/java:,,${DAIKON_CLASSPATH})"
+                -classpath "$(subst *:${DAIKONDIR}/java,*,${DAIKON_CLASSPATH})"
 JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
                 -docletpath "${DOCLETPATH}"
 
@@ -1279,8 +1280,6 @@ DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' | egrep -v 'd
 javadoc-files.txt:
 	$(MAKE) ${AUTO_GENERATED_FILES}
 	find * \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -path 'daikon/dcomp-transfer' \) -prune -o -name "*24.java" -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
-	@echo javadoc-files.txt:
-	@echo $(shell cat javadoc-files.txt)
 
 # If Java 8, don't run javadoc; a bug in javadoc causes it to crash.
 ifeq ($(JAVA8), 1)
@@ -1305,7 +1304,7 @@ ifeq ($(SKIP_JAVADOC),1)
 else
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} $(extra-javadoc-args) -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all ${DOCLET_FLAGS} \
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
@@ -1329,7 +1328,7 @@ ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 8; echo $$?),0)
 	@echo "Skipping api-private target under Java 8"
 else
 	mkdir -p $(JAVADOC_DEST)
-	${JAVADOC_COMMAND} $(extra-javadoc-args) -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -private -Xdoclint:all ${DOCLET_FLAGS} \
 	  daikon -subpackages $(DAIKON_PACKAGES)
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 endif
@@ -1345,7 +1344,7 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} $(extra-javadoc-args) -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS}\
+	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS}\
 		--texinfo tmpfile \
 		@javadoc-files.txt
 	mv -f tmpfile $@
@@ -1356,7 +1355,7 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} $(extra-javadoc-args) -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS}\
+	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS}\
 		--texinfo tmpfile \
 		@javadoc-files.txt
 	perl -pi -e 's/&#64;cindex/\@cindex/g' tmpfile
