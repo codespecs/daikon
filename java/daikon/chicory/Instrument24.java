@@ -85,7 +85,7 @@ public class Instrument24 implements ClassFileTransformer {
   /** Current class name in binary format. */
   @BinaryName String binaryClassName;
 
-  /** Wheter or not the class has a class initializer. */
+  /** True if the class has a class initializer. */
   private boolean hasClinit;
 
   /** The current ClassModel. */
@@ -1386,7 +1386,7 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Returns whether or not the specified class is part of Chicory itself (and thus should not be
+   * Returns true if the specified class is part of Chicory itself (and thus should not be
    * instrumented). Some Daikon classes that are used by Chicory are included here as well.
    *
    * @param classname the name of the class to test, in internal form

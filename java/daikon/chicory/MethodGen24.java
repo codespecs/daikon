@@ -44,7 +44,7 @@ public class MethodGen24 {
   /** The method's type descriptor. */
   private MethodTypeDesc mtd;
 
-  /** Whether of not the method is static. */
+  /** True if the method is static. */
   private boolean isStatic;
 
   /** The method's CodeAttribute. */
@@ -83,10 +83,10 @@ public class MethodGen24 {
   private LocalVariable[] localVariables;
 
   /**
-   * Constructor for the MethodGen24 object.
+   * Creates a MethodGen24 object.
    *
-   * @param methodModel for the method
-   * @param className for the containing class
+   * @param methodModel the method
+   * @param className the containing class
    * @param inst_obj the daikon.chicory.Instrument instance
    */
   public MethodGen24(
@@ -94,7 +94,6 @@ public class MethodGen24 {
 
     accessFlags = methodModel.flags();
     methodName = methodModel.methodName().stringValue();
-    // System.out.println("methodName: " + methodName);
     descriptor = methodModel.methodType().stringValue();
     this.className = className;
     isStatic = accessFlags.has(AccessFlag.STATIC);
@@ -113,8 +112,7 @@ public class MethodGen24 {
     if (codeAttribute != null) {
       maxLocals = codeAttribute.maxLocals();
       // It seems like a checker bug that this assert is needed.
-      assert codeAttribute != null
-          : "@AssumeAssertion(nullness): just tested";
+      assert codeAttribute != null : "@AssumeAssertion(nullness): just tested";
       maxStack = codeAttribute.maxStack();
     } else {
       maxLocals = 0;
@@ -175,7 +173,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return wheter or not the method is static.
+   * Return true if the method is static.
    *
    * @return static flag
    */
