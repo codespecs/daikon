@@ -524,7 +524,7 @@ jobs:
             - ".git"
       - run: env
       - run:
-          command: scripts/test-typecheck-latest-cf.sh
+          command: scripts/test-typecheck-with-latest-cf.sh
           no_output_timeout: 30m
   typecheck-bundled-ubuntu-jdk11:
     docker:
@@ -547,7 +547,7 @@ jobs:
           make showvars
           make compile daikon.jar
       - run:
-          command: scripts/test-typecheck-bundled-cf.sh
+          command: scripts/test-typecheck-with-bundled-cf.sh
           no_output_timeout: 30m
 
   typecheck-latest-ubuntu-jdk17:
@@ -569,7 +569,7 @@ jobs:
             - ".git"
       - run: env
       - run:
-          command: scripts/test-typecheck-latest-cf.sh
+          command: scripts/test-typecheck-with-latest-cf.sh
           no_output_timeout: 30m
   typecheck-bundled-ubuntu-jdk17:
     docker:
@@ -592,7 +592,7 @@ jobs:
           make showvars
           make compile daikon.jar
       - run:
-          command: scripts/test-typecheck-bundled-cf.sh
+          command: scripts/test-typecheck-with-bundled-cf.sh
           no_output_timeout: 30m
 
   typecheck-latest-ubuntu-jdk21:
@@ -614,7 +614,7 @@ jobs:
             - ".git"
       - run: env
       - run:
-          command: scripts/test-typecheck-latest-cf.sh
+          command: scripts/test-typecheck-with-latest-cf.sh
           no_output_timeout: 30m
   typecheck-bundled-ubuntu-jdk21:
     docker:
@@ -637,7 +637,7 @@ jobs:
           make showvars
           make compile daikon.jar
       - run:
-          command: scripts/test-typecheck-bundled-cf.sh
+          command: scripts/test-typecheck-with-bundled-cf.sh
           no_output_timeout: 30m
 
 ## The Checker Framework does not yet build under Java 24.
@@ -663,7 +663,7 @@ jobs:
           make showvars
           make compile daikon.jar
       - run:
-          command: scripts/test-typecheck-bundled-cf.sh
+          command: scripts/test-typecheck-with-bundled-cf.sh
           no_output_timeout: 30m
 
 
