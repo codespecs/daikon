@@ -70,14 +70,14 @@ public class MethodGen24 {
   private String signature;
 
   // fields of the MethodTypeDescriptor
-  /** The method's argument types. */
-  private ClassDesc[] argTypes;
+  /** The method's parameter types. */
+  private ClassDesc[] paramTypes;
 
   /** The method's return type. */
   private ClassDesc returnType;
 
-  /** The method's argument names. */
-  private String[] argNames;
+  /** The method's parameter names. */
+  private String[] paramNames;
 
   /** The method's local variable table. */
   private LocalVariable[] localVariables;
@@ -128,12 +128,11 @@ public class MethodGen24 {
     }
 
     mtd = methodModel.methodTypeSymbol();
-    argTypes = mtd.parameterArray();
+    paramTypes = mtd.parameterArray();
     returnType = mtd.returnType();
 
     // set up the localsTable
     inst_obj.localsTable = new ArrayList<>();
-    argNames = new String[argTypes.length];
 
     for (CodeElement ce : codeList) {
       if (ce instanceof LocalVariable lv) {
@@ -147,18 +146,19 @@ public class MethodGen24 {
       }
     }
 
-    // Not presented in sorted order so sort to make searching/insertion easier.
+    // Not necessarily sorted, so sort to make searching/insertion easier.
     inst_obj.localsTable.sort(Comparator.comparing(LocalVariable::slot));
-    localVariables = inst_obj.localsTable.toArray(new LocalVariable[0]);
-    int offset = isStatic ? 0 : 1;
+    localVariables = inst_obj.localsTable.toArray(new LocalVariable[inst_obj.localsTable.length]);
 
     // System.out.println("locals:" + Arrays.toString(localVariables));
-    // System.out.println("types:" + Arrays.toString(argTypes));
-    // System.out.println("length: " + argTypes.length + ", offset: " + offset);
+    // System.out.println("types:" + Arrays.toString(paramTypes));
+    // System.out.println("length: " + paramTypes.length + ", offset: " + offset);
 
-    for (int i = 0; i < argTypes.length; i++) {
+    paramNames = new String[paramTypes.length];
+    int offset = isStatic ? 0 : 1;
+    for (int i = 0; i < paramTypes.length; i++) {
       if ((offset + i) < localVariables.length) {
-        argNames[i] = localVariables[offset + i].name().stringValue();
+        paramNames[i] = localVariables[offset + i].name().stringValue();
       }
     }
   }
@@ -182,9 +182,9 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the methods name.
+   * Return the method's name.
    *
-   * @return the methods name
+   * @return the method's name
    */
   public String getName() {
     return methodName;
@@ -200,41 +200,41 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the ith argument name for the method.
+   * Return the name of the ith parameter.
    *
-   * @param i which argument name is requested
-   * @return the indicated argument name
+   * @param i which parameter name is requested
+   * @return the parameter name
    */
-  public String getArgumentName(final int i) {
-    return argNames[i];
+  public String getParameterName(final int i) {
+    return paramNames[i];
   }
 
   /**
-   * Return the argument names.
+   * Return the parameter names.
    *
-   * @return the argument names
+   * @return the parameter names
    */
-  public String[] getArgumentNames() {
-    return argNames.clone();
+  public String[] getParameterNames() {
+    return paramNames.clone();
   }
 
   /**
-   * Return the ith argument type for the method.
+   * Return the type of the ith parameter.
    *
-   * @param i which argument type is requested
-   * @return the indicated argument type
+   * @param i which parameter type is requested
+   * @return the indicated parameter type
    */
-  public ClassDesc getArgumentType(final int i) {
-    return argTypes[i];
+  public ClassDesc getParameterType(final int i) {
+    return paramTypes[i];
   }
 
   /**
-   * Return the argument types for the method.
+   * Return the parameter types for the method.
    *
-   * @return the argument types for the method
+   * @return the parameter types for the method
    */
-  public ClassDesc[] getArgumentTypes() {
-    return argTypes.clone();
+  public ClassDesc[] getParameterTypes() {
+    return paramTypes.clone();
   }
 
   /**
@@ -324,7 +324,7 @@ public class MethodGen24 {
      @Override
      public final String toString() {
          final String access = Utility.accessToString(super.getAccessFlags());
-         String signature = Type.getMethodSignature(super.getType(), argTypes);
+         String signature = Type.getMethodSignature(super.getType(), paramTypes);
          signature = Utility.methodSignatureToString(signature, super.getName(), access, true, getLocalVariableTable(super.getConstantPool()));
          final StringBuilder buf = new StringBuilder(signature);
          for (final Attribute a : getAttributes()) {
