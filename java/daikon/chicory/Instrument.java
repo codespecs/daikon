@@ -49,9 +49,9 @@ import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
- * The Instrument class is responsible for modifying another class' bytecode. Specifically, its main
- * task is to add "hooks" into the other class at method entries and exits for instrumentation
- * purposes.
+ * The Instrument class is responsible for modifying another class's bytecodes. Specifically, its
+ * main task is to add calls into the Chicory Runtime at method entries and exits for
+ * instrumentation purposes. These added calls are sometimes referred to as "hooks".
  */
 @SuppressWarnings("nullness")
 public class Instrument extends InstructionListUtils implements ClassFileTransformer {
@@ -277,7 +277,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Used to add a "hook" into the class static initializer.
+   * Used to add a call (or calls) to the Chicory Runtime 'initNotify' method into the class static
+   * initializer.
    *
    * @param cg ClassGen for current class
    * @param mg describes the current method
@@ -323,7 +324,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Called by addInvokeToClinit to add in a hook at each return opcode.
+   * Called by addInvokeToClinit to add a call to the Chicory Runtime 'initNotify' method prior to
+   * each return opcode.
    *
    * @param cp ConstantPoolGen for current class
    * @param fullClassName must be fully qualified: packageName.className
@@ -349,7 +351,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Create a class initializer method, if none exists; guarantees we have this hook.
+   * Create a class initializer method, if none exists. We need a class initializer to have a place
+   * to insert a call to the Chicory Runtime "initNotifiy" method so that the Runtime knows when a
+   * class has been initialized.
    *
    * @param cg ClassGen for current class
    * @param fullClassName must be fully qualified: packageName.className
@@ -625,17 +629,6 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * This method exists only to suppress interning warnings.
-   *
-   * @param t a Type
-   * @return true if t is VOID
-   */
-  @Pure
-  private static boolean isVoid(Type t) {
-    return t == Type.VOID;
-  }
-
-  /**
    * If this is a return instruction, generate new il to assign the result to a local variable
    * (return__$trace2_val) and then call daikon.chicory.Runtime.exit(). This il wil be inserted
    * immediately before the return.
@@ -677,7 +670,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     Type type = c.mgen.getReturnType();
     InstructionList il = new InstructionList();
-    if (!isVoid(type)) {
+    if (type != Type.VOID) {
       LocalVariableGen return_loc = get_return_local(c.mgen, type);
       il.append(InstructionFactory.createDup(type.getSize()));
       il.append(InstructionFactory.createStore(type, return_loc.getIndex()));
@@ -943,7 +936,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // If the return value is a primitive, wrap it in the appropriate wrapper.
     if (method_name.equals("exit")) {
       Type ret_type = mg.getReturnType();
-      if (isVoid(ret_type)) {
+      if (ret_type == Type.VOID) {
         il.append(new ACONST_NULL());
       } else {
         LocalVariableGen return_local = get_return_local(mg, ret_type);
