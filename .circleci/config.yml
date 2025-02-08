@@ -967,11 +967,10 @@ workflows:
             - jdk21-jobs
             - non-txt-diff-ubuntu-jdk21
       - non-txt-diff-ubuntu-jdk21
-# javadoc classpath package issues with *24.java
-#      - misc-ubuntu-jdk8:
-#          requires:
-#            - jdk21-jobs
-#            - misc-ubuntu-jdk21
+      - misc-ubuntu-jdk8:
+          requires:
+            - jdk21-jobs
+            - misc-ubuntu-jdk21
       - misc-ubuntu-jdk11:
           requires:
             - jdk21-jobs
@@ -1074,7 +1073,7 @@ workflows:
           requires:
             - jdk21-jobs
             - misc-rockylinux-jdk21
-#            - misc-ubuntu-jdk8
+            - misc-ubuntu-jdk8
       - misc-rockylinux-jdk11:
           requires:
             - jdk21-jobs
