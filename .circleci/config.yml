@@ -1321,11 +1321,11 @@ workflows:
             - canary-jobs
             - misc-ubuntu-jdk21
 
-      - -rockylinux-jdk24:
+      - misc-rockylinux-jdk24:
           requires:
             - canary-jobs
-            - -rockylinux-jdk21
-            - -ubuntu-jdk24
+            - misc-rockylinux-jdk21
+            - misc-ubuntu-jdk24
 
       - kvasir-rockylinux-jdk8:
           requires:
@@ -1356,7 +1356,3 @@ workflows:
             - kvasir-rockylinux-jdk21
             - kvasir-ubuntu-jdk24
 
-# Seems to run out of memory on CircleCI.  It's being checked on Azure Pipelines.
-#      -  typecheck-latest-rockylinux-jdk8:
-#      -  typecheck-latest-rockylinux-jdk11:
-#      -  typecheck-latest-rockylinux-jdk17:

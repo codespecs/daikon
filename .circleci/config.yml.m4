@@ -151,13 +151,9 @@ job_dependences(rockylinux, 8, misc)
 job_dependences(rockylinux, 11, misc)
 job_dependences(rockylinux, 17, misc)
 job_dependences(rockylinux, 21, misc)
-job_dependences(rockylinux, 24)
+job_dependences(rockylinux, 24, misc)
 job_dependences(rockylinux, 8, kvasir)
 job_dependences(rockylinux, 11, kvasir)
 job_dependences(rockylinux, 17, kvasir)
 job_dependences(rockylinux, 21, kvasir)
 job_dependences(rockylinux, 24, kvasir)
-# Seems to run out of memory on CircleCI.  It's being checked on Azure Pipelines.
-#      -  typecheck-latest-rockylinux-jdk8:
-#      -  typecheck-latest-rockylinux-jdk11:
-#      -  typecheck-latest-rockylinux-jdk17:
