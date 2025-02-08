@@ -1,12 +1,11 @@
-## This CircleCI configuration file is provided for the convenience of people who wish to run CircleCI.
-## CircleCI does not run in the codespecs organization (home of the main Daikon repository).
+
 
 version: 2.1
 
 jobs:
 
-  # Only proceed to other jobs if jdk21-jobs passes.
-  jdk21-jobs:
+  # Only proceed to other jobs if canary-jobs passes.
+  canary-jobs:
     docker:
       - image: cimg/base:2022.06
     environment:
@@ -90,6 +89,26 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
+  quick-txt-diff-ubuntu-jdk24:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk24
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-quick-txt-diff.sh
+
+
   nonquick-txt-diff-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
@@ -166,6 +185,26 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
+  nonquick-txt-diff-ubuntu-jdk24:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk24
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
+
   non-txt-diff-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
@@ -184,7 +223,6 @@ jobs:
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
-
   non-txt-diff-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11
@@ -203,7 +241,6 @@ jobs:
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
-
   non-txt-diff-ubuntu-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk17
@@ -222,10 +259,27 @@ jobs:
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
-
   non-txt-diff-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-non-txt-diff.sh
+  non-txt-diff-ubuntu-jdk24:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk24
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -259,8 +313,9 @@ jobs:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
-      - run: ./scripts/test-misc.sh
-
+      - run:
+          command: ./scripts/test-misc.sh
+          no_output_timeout: 20m
   misc-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11-plus
@@ -278,8 +333,9 @@ jobs:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
-      - run: ./scripts/test-misc.sh
-
+      - run:
+          command: ./scripts/test-misc.sh
+          no_output_timeout: 20m
   misc-ubuntu-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk17-plus
@@ -297,8 +353,9 @@ jobs:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
-      - run: ./scripts/test-misc.sh
-
+      - run:
+          command: ./scripts/test-misc.sh
+          no_output_timeout: 20m
   misc-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21-plus
@@ -316,7 +373,29 @@ jobs:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
-      - run: ./scripts/test-misc.sh
+      - run:
+          command: ./scripts/test-misc.sh
+          no_output_timeout: 20m
+  misc-ubuntu-jdk24:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk24-plus
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run:
+          command: ./scripts/test-misc.sh
+          no_output_timeout: 20m
 
   kvasir-ubuntu-jdk8:
     docker:
@@ -339,7 +418,6 @@ jobs:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
-
   kvasir-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11-plus
@@ -361,7 +439,6 @@ jobs:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
-
   kvasir-ubuntu-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk17-plus
@@ -383,7 +460,6 @@ jobs:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
-
   kvasir-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21-plus
@@ -405,6 +481,191 @@ jobs:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
+  kvasir-ubuntu-jdk24:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk24-plus
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run:
+          name: Test Kvasir
+          command: ./scripts/test-kvasir.sh
+          no_output_timeout: 20m
+
+## The Checker Framework cannot be built, or run, under Java 8.
+## Thus, there is no typecheck_*_ubuntu_jdk8 job.
+  typecheck-latest-ubuntu-jdk11:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk11
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: env
+      - run:
+          command: scripts/test-typecheck-with-latest-cf.sh
+          no_output_timeout: 30m
+  typecheck-bundled-ubuntu-jdk11:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk11
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: |
+          make showvars
+          make compile daikon.jar
+      - run:
+          command: scripts/test-typecheck-with-bundled-cf.sh
+          no_output_timeout: 30m
+
+  typecheck-latest-ubuntu-jdk17:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk17
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: env
+      - run:
+          command: scripts/test-typecheck-with-latest-cf.sh
+          no_output_timeout: 30m
+  typecheck-bundled-ubuntu-jdk17:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk17
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: |
+          make showvars
+          make compile daikon.jar
+      - run:
+          command: scripts/test-typecheck-with-bundled-cf.sh
+          no_output_timeout: 30m
+
+  typecheck-latest-ubuntu-jdk21:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk21
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: env
+      - run:
+          command: scripts/test-typecheck-with-latest-cf.sh
+          no_output_timeout: 30m
+  typecheck-bundled-ubuntu-jdk21:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk21
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: |
+          make showvars
+          make compile daikon.jar
+      - run:
+          command: scripts/test-typecheck-with-bundled-cf.sh
+          no_output_timeout: 30m
+
+## The Checker Framework does not yet build under Java 24.
+# typecheck_latest_job(ubuntu, 24)
+  typecheck-bundled-ubuntu-jdk24:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk24
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: |
+          make showvars
+          make compile daikon.jar
+      - run:
+          command: scripts/test-typecheck-with-bundled-cf.sh
+          no_output_timeout: 30m
+
 
   quick-txt-diff-rockylinux-jdk8:
     docker:
@@ -482,6 +743,7 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
+
   nonquick-txt-diff-rockylinux-jdk8:
     docker:
       - image: mdernst/daikon-rockylinux-jdk8
@@ -558,6 +820,7 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
+
   non-txt-diff-rockylinux-jdk8:
     docker:
       - image: mdernst/daikon-rockylinux-jdk8
@@ -576,7 +839,6 @@ jobs:
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
-
   non-txt-diff-rockylinux-jdk11:
     docker:
       - image: mdernst/daikon-rockylinux-jdk11
@@ -595,7 +857,6 @@ jobs:
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
-
   non-txt-diff-rockylinux-jdk17:
     docker:
       - image: mdernst/daikon-rockylinux-jdk17
@@ -614,7 +875,6 @@ jobs:
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
-
   non-txt-diff-rockylinux-jdk21:
     docker:
       - image: mdernst/daikon-rockylinux-jdk21
@@ -651,11 +911,9 @@ jobs:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
-
       - run:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
-
   misc-rockylinux-jdk11:
     docker:
       - image: mdernst/daikon-rockylinux-jdk11-plus
@@ -673,11 +931,9 @@ jobs:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
-
       - run:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
-
   misc-rockylinux-jdk17:
     docker:
       - image: mdernst/daikon-rockylinux-jdk17-plus
@@ -695,11 +951,9 @@ jobs:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
-
       - run:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
-
   misc-rockylinux-jdk21:
     docker:
       - image: mdernst/daikon-rockylinux-jdk21-plus
@@ -717,7 +971,6 @@ jobs:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
-
       - run:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
@@ -739,8 +992,10 @@ jobs:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
-      - run: ./scripts/test-kvasir.sh
-
+      - run:
+          name: Test Kvasir
+          command: ./scripts/test-kvasir.sh
+          no_output_timeout: 20m
   kvasir-rockylinux-jdk11:
     docker:
       - image: mdernst/daikon-rockylinux-jdk11-plus
@@ -758,8 +1013,10 @@ jobs:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
-      - run: ./scripts/test-kvasir.sh
-
+      - run:
+          name: Test Kvasir
+          command: ./scripts/test-kvasir.sh
+          no_output_timeout: 20m
   kvasir-rockylinux-jdk17:
     docker:
       - image: mdernst/daikon-rockylinux-jdk17-plus
@@ -777,8 +1034,10 @@ jobs:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
-      - run: ./scripts/test-kvasir.sh
-
+      - run:
+          name: Test Kvasir
+          command: ./scripts/test-kvasir.sh
+          no_output_timeout: 20m
   kvasir-rockylinux-jdk21:
     docker:
       - image: mdernst/daikon-rockylinux-jdk21-plus
@@ -796,301 +1055,304 @@ jobs:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
-      - run: ./scripts/test-kvasir.sh
-
-  # This task typechecks Daikon using the Checker Framework that is bundled with Daikon.
-  # If this task fails but task `typecheck-with-latest-CF-jdk*` succeeds, then update the
-  # Checker Framework jar files in java/lib/ .
-  typecheck-with-bundled-CF-jdk21:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk21
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: |
-          make showvars
-          make compile daikon.jar
       - run:
-          command: scripts/test-typecheck-with-bundled-cf.sh
-          no_output_timeout: 30m
-
-  typecheck-with-latest-CF-jdk8:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk8
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: env
-      - run:
-          command: scripts/test-typecheck-with-latest-cf.sh
-          no_output_timeout: 30m
-
-  typecheck-with-latest-CF-jdk11:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk11
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: env
-      - run:
-          command: scripts/test-typecheck-with-latest-cf.sh
-          no_output_timeout: 30m
-
-  typecheck-with-latest-CF-jdk17:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk17
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: env
-      - run:
-          command: scripts/test-typecheck-with-latest-cf.sh
-          no_output_timeout: 30m
-
-  typecheck-with-latest-CF-jdk21:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk21
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: env
-      - run:
-          command: scripts/test-typecheck-with-latest-cf.sh
-          no_output_timeout: 30m
+          name: Test Kvasir
+          command: ./scripts/test-kvasir.sh
+          no_output_timeout: 20m
 
 
-# For dependence logic, see ../azure-pipelines.yml .
+# For an explanation of the dependence logic, see ../.azure/azure-pipelines.yml .
 
 workflows:
   version: 2
   build:
     jobs:
-      - jdk21-jobs:
+      - canary-jobs:
           requires:
             - quick-txt-diff-ubuntu-jdk21
             - nonquick-txt-diff-ubuntu-jdk21
             - non-txt-diff-ubuntu-jdk21
             - misc-ubuntu-jdk21
             - kvasir-ubuntu-jdk21
-            - typecheck-with-bundled-CF-jdk21
+            - typecheck-bundled-ubuntu-jdk21
       - quick-txt-diff-ubuntu-jdk8:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - quick-txt-diff-ubuntu-jdk21
+
       - quick-txt-diff-ubuntu-jdk11:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - quick-txt-diff-ubuntu-jdk21
+
       - quick-txt-diff-ubuntu-jdk17:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - quick-txt-diff-ubuntu-jdk21
+
       - quick-txt-diff-ubuntu-jdk21
+      - quick-txt-diff-ubuntu-jdk24:
+          requires:
+            - canary-jobs
+            - quick-txt-diff-ubuntu-jdk21
+
       - nonquick-txt-diff-ubuntu-jdk8:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - nonquick-txt-diff-ubuntu-jdk21
+
       - nonquick-txt-diff-ubuntu-jdk11:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - nonquick-txt-diff-ubuntu-jdk21
+
       - nonquick-txt-diff-ubuntu-jdk17:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - nonquick-txt-diff-ubuntu-jdk21
+
       - nonquick-txt-diff-ubuntu-jdk21
+      - nonquick-txt-diff-ubuntu-jdk24:
+          requires:
+            - canary-jobs
+            - nonquick-txt-diff-ubuntu-jdk21
+
       - non-txt-diff-ubuntu-jdk8:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - non-txt-diff-ubuntu-jdk21
+
       - non-txt-diff-ubuntu-jdk11:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - non-txt-diff-ubuntu-jdk21
+
       - non-txt-diff-ubuntu-jdk17:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - non-txt-diff-ubuntu-jdk21
+
       - non-txt-diff-ubuntu-jdk21
-# javadoc classpath package issues with *24.java
-#      - misc-ubuntu-jdk8:
-#          requires:
-#            - jdk21-jobs
-#            - misc-ubuntu-jdk21
+      - non-txt-diff-ubuntu-jdk24:
+          requires:
+            - canary-jobs
+            - non-txt-diff-ubuntu-jdk21
+
+      - misc-ubuntu-jdk8:
+          requires:
+            - canary-jobs
+            - misc-ubuntu-jdk21
+
       - misc-ubuntu-jdk11:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - misc-ubuntu-jdk21
+
       - misc-ubuntu-jdk17:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - misc-ubuntu-jdk21
+
       - misc-ubuntu-jdk21
+      - -ubuntu-jdk24:
+          requires:
+            - canary-jobs
+            - -ubuntu-jdk21
+
       - kvasir-ubuntu-jdk8:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - kvasir-ubuntu-jdk21
+
       - kvasir-ubuntu-jdk11:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - kvasir-ubuntu-jdk21
+
       - kvasir-ubuntu-jdk17:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - kvasir-ubuntu-jdk21
+
       - kvasir-ubuntu-jdk21
-      - kvasir-rockylinux-jdk8:
+      - kvasir-ubuntu-jdk24:
           requires:
-            - jdk21-jobs
-            - kvasir-rockylinux-jdk21
-            - kvasir-ubuntu-jdk8
-      - kvasir-rockylinux-jdk11:
-          requires:
-            - jdk21-jobs
-            - kvasir-rockylinux-jdk21
-            - kvasir-ubuntu-jdk11
-      - kvasir-rockylinux-jdk17:
-          requires:
-            - jdk21-jobs
-            - kvasir-rockylinux-jdk21
-            - kvasir-ubuntu-jdk17
-      - kvasir-rockylinux-jdk21:
-          requires:
-            - jdk21-jobs
+            - canary-jobs
             - kvasir-ubuntu-jdk21
+
+## The Checker Framework cannot be built, or run, under Java 8.
+## Thus, there is no typecheck_*_ubuntu_jdk8 job.
+      - typecheck-latest-ubuntu-jdk11:
+          requires:
+            - canary-jobs
+            - typecheck-latest-ubuntu-jdk21
+
+      - typecheck-bundled-ubuntu-jdk11:
+          requires:
+            - canary-jobs
+            - typecheck-bundled-ubuntu-jdk21
+
+      - typecheck-latest-ubuntu-jdk17:
+          requires:
+            - canary-jobs
+            - typecheck-latest-ubuntu-jdk21
+
+      - typecheck-bundled-ubuntu-jdk17:
+          requires:
+            - canary-jobs
+            - typecheck-bundled-ubuntu-jdk21
+
+      - typecheck-latest-ubuntu-jdk21
+      - typecheck-bundled-ubuntu-jdk21
+## The Checker Framework does not yet build under Java 24.
+# job_dependences(ubuntu, 24, typecheck-latest)
+      - typecheck-bundled-ubuntu-jdk24:
+          requires:
+            - canary-jobs
+            - typecheck-bundled-ubuntu-jdk21
+
       - quick-txt-diff-rockylinux-jdk8:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - quick-txt-diff-rockylinux-jdk21
             - quick-txt-diff-ubuntu-jdk8
+
       - quick-txt-diff-rockylinux-jdk11:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - quick-txt-diff-rockylinux-jdk21
             - quick-txt-diff-ubuntu-jdk11
+
       - quick-txt-diff-rockylinux-jdk17:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - quick-txt-diff-rockylinux-jdk21
             - quick-txt-diff-ubuntu-jdk17
+
       - quick-txt-diff-rockylinux-jdk21:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - quick-txt-diff-ubuntu-jdk21
+
+      - quick-txt-diff-rockylinux-jdk24:
+          requires:
+            - canary-jobs
+            - quick-txt-diff-rockylinux-jdk21
+            - quick-txt-diff-ubuntu-jdk24
+
       - nonquick-txt-diff-rockylinux-jdk8:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - nonquick-txt-diff-rockylinux-jdk21
             - nonquick-txt-diff-ubuntu-jdk8
+
       - nonquick-txt-diff-rockylinux-jdk11:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - nonquick-txt-diff-rockylinux-jdk21
             - nonquick-txt-diff-ubuntu-jdk11
+
       - nonquick-txt-diff-rockylinux-jdk17:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - nonquick-txt-diff-rockylinux-jdk21
             - nonquick-txt-diff-ubuntu-jdk17
+
       - nonquick-txt-diff-rockylinux-jdk21:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - nonquick-txt-diff-ubuntu-jdk21
+
+      - nonquick-txt-diff-rockylinux-jdk24:
+          requires:
+            - canary-jobs
+            - nonquick-txt-diff-rockylinux-jdk21
+            - nonquick-txt-diff-ubuntu-jdk24
+
       - non-txt-diff-rockylinux-jdk8:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - non-txt-diff-rockylinux-jdk21
             - non-txt-diff-ubuntu-jdk8
+
       - non-txt-diff-rockylinux-jdk11:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - non-txt-diff-rockylinux-jdk21
             - non-txt-diff-ubuntu-jdk11
+
       - non-txt-diff-rockylinux-jdk17:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - non-txt-diff-rockylinux-jdk21
             - non-txt-diff-ubuntu-jdk17
+
       - non-txt-diff-rockylinux-jdk21:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - non-txt-diff-ubuntu-jdk21
+
+      - non-txt-diff-rockylinux-jdk24:
+          requires:
+            - canary-jobs
+            - non-txt-diff-rockylinux-jdk21
+            - non-txt-diff-ubuntu-jdk24
+
       - misc-rockylinux-jdk8:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - misc-rockylinux-jdk21
-#            - misc-ubuntu-jdk8
+            - misc-ubuntu-jdk8
+
       - misc-rockylinux-jdk11:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - misc-rockylinux-jdk21
             - misc-ubuntu-jdk11
+
       - misc-rockylinux-jdk17:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - misc-rockylinux-jdk21
             - misc-ubuntu-jdk17
+
       - misc-rockylinux-jdk21:
           requires:
-            - jdk21-jobs
+            - canary-jobs
             - misc-ubuntu-jdk21
-      - typecheck-with-bundled-CF-jdk21
-# Seems to run out of memory on CircleCI.  It's being checked on Azure Pipelines.
-#      -  typecheck-with-latest-CF-jdk8:
-#      -  typecheck-with-latest-CF-jdk11:
-#      -  typecheck-with-latest-CF-jdk17:
+
+      - misc-rockylinux-jdk24:
+          requires:
+            - canary-jobs
+            - misc-rockylinux-jdk21
+            - misc-ubuntu-jdk24
+
+      - kvasir-rockylinux-jdk8:
+          requires:
+            - canary-jobs
+            - kvasir-rockylinux-jdk21
+            - kvasir-ubuntu-jdk8
+
+      - kvasir-rockylinux-jdk11:
+          requires:
+            - canary-jobs
+            - kvasir-rockylinux-jdk21
+            - kvasir-ubuntu-jdk11
+
+      - kvasir-rockylinux-jdk17:
+          requires:
+            - canary-jobs
+            - kvasir-rockylinux-jdk21
+            - kvasir-ubuntu-jdk17
+
+      - kvasir-rockylinux-jdk21:
+          requires:
+            - canary-jobs
+            - kvasir-ubuntu-jdk21
+
+      - kvasir-rockylinux-jdk24:
+          requires:
+            - canary-jobs
+            - kvasir-rockylinux-jdk21
+            - kvasir-ubuntu-jdk24
+
