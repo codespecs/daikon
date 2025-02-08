@@ -537,8 +537,8 @@ public class Instrument24 implements ClassFileTransformer {
           }
 
           if (debugInstrument.enabled) {
-            ClassDesc[] arg_types = mgen.getArgumentTypes();
-            String[] arg_names = mgen.getArgumentNames();
+            ClassDesc[] arg_types = mgen.getParameterTypes();
+            String[] arg_names = mgen.getParameterNames();
             LocalVariable[] local_vars = mgen.getLocalVariables();
             String types = "", names = "", locals = "";
 
@@ -973,7 +973,7 @@ public class Instrument24 implements ClassFileTransformer {
   private void call_enter_exit(
       List<CodeElement> newCode, MethodGen24 mgen, String callMethod, int line) {
 
-    ClassDesc[] arg_types = mgen.getArgumentTypes();
+    ClassDesc[] arg_types = mgen.getParameterTypes();
 
     // aload
     // Push the object.  Null if this is a static method or a constructor
@@ -1231,7 +1231,7 @@ public class Instrument24 implements ClassFileTransformer {
   @SuppressWarnings("signature") // conversion method
   private @BinaryName String[] getFullyQualifiedArgTypeNames(MethodGen24 mgen) {
 
-    ClassDesc[] arg_types = mgen.getArgumentTypes();
+    ClassDesc[] arg_types = mgen.getParameterTypes();
     @BinaryName String[] arg_type_strings = new @BinaryName String[arg_types.length];
 
     for (int ii = 0; ii < arg_types.length; ii++) {
@@ -1252,7 +1252,7 @@ public class Instrument24 implements ClassFileTransformer {
   private @Nullable MethodInfo create_method_info(ClassInfo classInfo, MethodGen24 mgen) {
 
     // Get the argument names for this method
-    String[] arg_names = mgen.getArgumentNames();
+    String[] arg_names = mgen.getParameterNames();
     LocalVariable[] lvs = mgen.getLocalVariables();
     int param_offset = 1;
     if (mgen.isStatic()) {
@@ -1269,9 +1269,9 @@ public class Instrument24 implements ClassFileTransformer {
     // If this is an inner class constructor, then its first parameter is
     // the outer class constructor.  I need to detect this and adjust the
     // parameter names appropriately.  This check is ugly.
-    if (mgen.getName().equals("<init>") && mgen.getArgumentTypes().length > 0) {
+    if (mgen.getName().equals("<init>") && mgen.getParameterTypes().length > 0) {
       int dollarPos = mgen.getClassName().lastIndexOf("$");
-      String arg0Name = convertDescriptorToString(mgen.getArgumentType(0).descriptorString());
+      String arg0Name = convertDescriptorToString(mgen.getParameterType(0).descriptorString());
       if (dollarPos >= 0
           &&
           // type of first parameter is classname up to the "$"
@@ -1318,7 +1318,7 @@ public class Instrument24 implements ClassFileTransformer {
       shouldInclude = true;
     }
     // Get the argument types for this method
-    ClassDesc[] arg_types = mgen.getArgumentTypes();
+    ClassDesc[] arg_types = mgen.getParameterTypes();
     @ClassGetName String[] arg_type_strings = new @ClassGetName String[arg_types.length];
     for (int ii = 0; ii < arg_types.length; ii++) {
       arg_type_strings[ii] = typeToClassGetName(arg_types[ii]);
