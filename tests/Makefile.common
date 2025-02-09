@@ -188,14 +188,19 @@ CP_PARENTS := rsync -aR
 ifeq ($(shell uname), Darwin)
   JAVA_HOME ?= $(/usr/libexec/java_home)
 else
-  JAVA_HOME ?= $(shell readlink -f $(which javac) | sed "s:/bin/javac::")
+ifeq ($(shell which javac > /dev/null 2>&1" && echo found || echo nonexistent), found)
+  JAVA_HOME ?= $(shell dirname $(dirname $(readlink -f $(which javac))))
+else
+  WHICH_JAVAC_OUTPUT := $(shell which javac > /dev/null 2>&1)
+  $(error `which javac` had exit status 1 with output: ${WHICH_JAVAC_OUTPUT})
 endif
-JAVA  := $(JAVA_HOME)/bin/java
-JAVAC ?= $(JAVA_HOME)/bin/javac
+endif
+JAVA  := ${JAVA_HOME}/bin/java
+JAVAC ?= ${JAVA_HOME}/bin/javac
 
 JUNIT_CLASSPATH ?=
 
-JAVALIB_CLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
+JAVALIB_CLASSPATH := ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
