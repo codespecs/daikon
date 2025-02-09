@@ -188,7 +188,7 @@ CP_PARENTS := rsync -aR
 ifeq ($(shell uname), Darwin)
   JAVA_HOME ?= $(/usr/libexec/java_home)
 else
-ifeq ($(shell which javac > /dev/null 2>&1" && echo found || echo nonexistent), found)
+ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
   JAVA_HOME ?= $(shell dirname $(dirname $(readlink -f $(which javac))))
 else
   $(info Here is the output of: which javac)
