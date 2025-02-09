@@ -188,7 +188,7 @@ CP_PARENTS := rsync -aR
 ifeq ($(shell uname), Darwin)
   JAVA_HOME ?= $(/usr/libexec/java_home)
 else
-  JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
+  JAVA_HOME ?= $(shell readlink -f $(which javac) | sed "s:bin/javac::")
 endif
 JAVA  := $(JAVA_HOME)/bin/java
 JAVAC ?= $(JAVA_HOME)/bin/javac
