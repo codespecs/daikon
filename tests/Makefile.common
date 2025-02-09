@@ -189,9 +189,11 @@ ifeq ($(shell uname), Darwin)
   JAVA_HOME ?= $(/usr/libexec/java_home)
 else
 ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
+  $(info Success: Here is the output of: which javac)
+  $(info $(shell which javac))
   JAVA_HOME ?= $(shell dirname $(dirname $(readlink -f $(which javac))))
 else
-  $(info Here is the output of: which javac)
+  $(info Failure: Here is the output of: which javac)
   $(info $(shell which javac))
   $(error 'which javac' had exit status 1)
 endif
