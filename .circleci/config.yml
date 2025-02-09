@@ -1154,10 +1154,10 @@ workflows:
             - misc-ubuntu-jdk21
 
       - misc-ubuntu-jdk21
-      - -ubuntu-jdk24:
+      - misc-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - -ubuntu-jdk21
+            - misc-ubuntu-jdk21
 
       - kvasir-ubuntu-jdk8:
           requires:
