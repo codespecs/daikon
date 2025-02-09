@@ -192,7 +192,7 @@ ifeq ($(shell which javac > /dev/null 2>&1" && echo found || echo nonexistent), 
   JAVA_HOME ?= $(shell dirname $(dirname $(readlink -f $(which javac))))
 else
   WHICH_JAVAC_OUTPUT := $(shell which javac > /dev/null 2>&1)
-  $(error `which javac` had exit status 1 with output: ${WHICH_JAVAC_OUTPUT})
+  $(error 'which javac' had exit status 1 with output: ${WHICH_JAVAC_OUTPUT})
 endif
 endif
 JAVA  := ${JAVA_HOME}/bin/java
