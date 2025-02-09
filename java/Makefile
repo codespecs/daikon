@@ -25,10 +25,15 @@ JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d "
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
 ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
   JAVA8 := 1
+  JAVA24 := 0
   JAVA_RELEASE_NUMBER := 8
 else
   JAVA8 := 0
+  JAVA24 := 0
   JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
+endif
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+  JAVA24 := 1
 endif
 
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
@@ -66,8 +71,8 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
 JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx3600m ${JAVAC_ARGS}
 JAVAC24_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx3600m ${JAVAC24_ARGS}
-# When JDK 24 is offically released, delete this test and the then branch.
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+# When JDK 24 is offically released, delete this test and keep only the else branch.
+ifeq ($(JAVA24), 1)
   JAVA_COMMAND = ${JAVA} --enable-preview -cp ${DAIKON_CLASSPATH}
 else
   JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
@@ -137,8 +142,8 @@ JAVA_FILES_FOR_FORMAT = $(shell grep -r --include '*.java' --exclude-dir '*daiko
 # the file lists and then, if we are running on Java 24, add a second javac command for these files.
 # Currently, there are only two: chicory/Instrument24.java chicory/MethodGen24.java.
 # NOTE: This changes the file lists from late bound to early bound. IS THIS A PROBLEM?
-DAIKON_JAVA_FILES := $(filter-out %24.java, $(DAIKON_JAVA_FILES))
-JAVA_FILES := $(filter-out %24.java, $(JAVA_FILES))
+DAIKON_JAVA_FILES_NO_24 := $(filter-out %24.java, $(DAIKON_JAVA_FILES))
+JAVA_FILES_NO_24 := $(filter-out %24.java, $(JAVA_FILES))
 JAVA_FILES_FOR_STYLE := $(filter-out %24.java, $(JAVA_FILES_FOR_STYLE))
 JAVA_FILES_FOR_FORMAT := $(filter-out %24.java, $(JAVA_FILES_FOR_FORMAT))
 
@@ -444,8 +449,8 @@ all_via_daikon: chicory daikon/Daikon.class daikon/diff/Diff.class
 	$(MAKE) all_pass2
 
 xlint: chicory ${ALL_GENERATED_FILES}
-	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES_NO_24} 2>&1
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} -Xlint -Xmaxwarns 1000 daikon/chicory/*24.java 2>&1
 endif
 
@@ -455,13 +460,13 @@ endif
 all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
-	rm -f `find daikon -path "./debug*/bin" -prune -o "./debug*/orig" -prune -o -name "*.class" -print`
+	rm -f `find daikon -path "*/debug*/bin" -prune -o -path "*/debug*/orig" -prune -o -name "*.class" -print`
 	@echo "CLASSPATH = ${CLASSPATH}"
 	@echo "DAIKON_CLASSPATH = ${DAIKON_CLASSPATH}"
 	@echo "JAVA_RELEASE_NUMBER = ${JAVA_RELEASE_NUMBER}"
 	@echo "JAVA_VERSION_STRING_WITH_EA = ${JAVA_VERSION_STRING_WITH_EA}"
 	${JAVAC_COMMAND} @java_files.txt
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+ifeq ($(JAVA24), 1)
 	${JAVAC24_COMMAND} daikon/chicory/*24.java
 endif
 	rm -f java_files.txt
@@ -482,14 +487,14 @@ endif
 
 .PHONY: java_files.txt
 java_files.txt: ${JAVA_FILES}
-	@echo ${JAVA_FILES} > java_files.txt
+	@echo ${JAVA_FILES_NO_24} > java_files.txt
 
 .PHONY : daikon compile_daikon
 daikon: compile_daikon junit
 compile_daikon : ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	@echo $(JAVAC_COMMAND) 'daikon/*.java ...'
-	@$(JAVAC_COMMAND) $(DAIKON_JAVA_FILES)
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@$(JAVAC_COMMAND) $(DAIKON_JAVA_FILES_NO_24)
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} daikon/chicory/*24.java
 endif
 	@chmod 444 ${AUTO_GENERATED_FILES}
@@ -499,7 +504,7 @@ endif
 # Chicory java front end for Daikon
 #
 CHICORY_JAVA_FILES := daikon/Chicory.java $(wildcard daikon/chicory/*.java)
-CHICORY_JAVA_FILES := $(filter-out %24.java, $(CHICORY_JAVA_FILES))
+CHICORY_JAVA_FILES_NO_24 := $(filter-out %24.java, $(CHICORY_JAVA_FILES))
 
 # This actually requires Daikon to already be compiled.
 # It would be good to make that an explicit prerequisite.
@@ -510,8 +515,8 @@ chicory : ChicoryPremain.jar
 # Note that this compiles all of Chicory even though all we need for
 # this step is chicory/ChicoryPremain.java.
 ChicoryPremain.jar : $(CHICORY_JAVA_FILES) daikon/chicory/manifest.txt
-	$(JAVAC_COMMAND) $(CHICORY_JAVA_FILES)
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	$(JAVAC_COMMAND) $(CHICORY_JAVA_FILES_NO_24)
+ifeq ($(JAVA24), 1)
 	${JAVAC24_COMMAND} daikon/chicory/*24.java
 endif
 	$(JAR) cfm ChicoryPremain.jar daikon/chicory/manifest.txt \
@@ -534,7 +539,7 @@ daikon/chicory/inv_out.diff : ChicoryPremain.jar
 # Dynamic Comparability (DynComp/Java; also Chicory)
 #
 INSTRUMENTATION_JAVA_FILES := daikon/DynComp.java $(wildcard daikon/dcomp/*.java daikon/chicory/*.java)
-INSTRUMENTATION_JAVA_FILES := $(filter-out %24.java, $(INSTRUMENTATION_JAVA_FILES))
+INSTRUMENTATION_JAVA_FILES_NO_24 := $(filter-out %24.java, $(INSTRUMENTATION_JAVA_FILES))
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.DcompTest
 DCOMP_DIR := daikon/dcomp
 
@@ -545,8 +550,8 @@ dyncomp dcomp : plume-import-check dcomp_premain.jar
 # Note that this compiles all of dcomp even though all we need for
 # this step is dcomp/Premain.java.
 dcomp_premain.jar : $(INSTRUMENTATION_JAVA_FILES) daikon/dcomp/manifest.txt
-	$(JAVAC_COMMAND) $(INSTRUMENTATION_JAVA_FILES)
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	$(JAVAC_COMMAND) $(INSTRUMENTATION_JAVA_FILES_NO_24)
+ifeq ($(JAVA24), 1)
 	${JAVAC24_COMMAND} daikon/chicory/*24.java
 endif
 	$(JAR) cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
@@ -651,11 +656,11 @@ plume-import-check :
 	fi
 
 ## Use this when you don't want $inv/tests makefiles to restart
-JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
+JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES_NO_24})
 all_except_daikon: ../utils/plume-scripts ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} daikon/chicory/*24.java
 endif
 	@chmod a-w ${AUTO_GENERATED_FILES}
@@ -772,7 +777,7 @@ else
   extra-error-prone-args-1 = --should-stop=ifError=FLOW
 endif
 # When JDK 24 is offically released, replace '--enable-preview' with '-Werror'.
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+ifeq ($(JAVA24), 1)
   extra-error-prone-args-2 = -source 24 -target 24 --enable-preview
 else
   extra-error-prone-args-2 = -Werror
@@ -815,13 +820,12 @@ endif
 # Create an `error-prone.patch` file.
 errorprone-replacements:
 	javac -cp ${DAIKON_CLASSPATH} \
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
-	  -source 24 -target 24 --enable-preview \
-endif
+	$(extra-error-prone-args-2) \
 	  --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
 	  --add-exports jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
 	  '-Xplugin:ErrorProne -XepPatchChecks:UnnecessaryParentheses,ArrayToString -XepPatchLocation:${DAIKONDIR}/java' \
+	  ${extra-error-prone-args-1} \
 	  -Xmaxwarns 100000 ${JAVA_FILES_FOR_STYLE}
 
 findbugs: .findbugs-output
@@ -926,14 +930,17 @@ INDEX_SKIPDEFS = ^daikon\.dcomp\|^jtb\.
 INTERNING_SKIPDEFS = ^daikon\.dcomp\|^jtb\.
 ALLSYSTEMS_SKIPDEFS=^jtb\.
 INDEX_JAVA_FILES = ${DAIKON_JAVA_FILES}
+INDEX_JAVA_FILES_NO_24 = ${DAIKON_JAVA_FILES_NO_24}
 # Intern.java implements interning and so has very many annotations.  VarInfoName
 # is obsolescent, retained for backward compatibility only; it is of flawed design
 # and has 60 @Interned annotations and quite a few SuppressWarnings.
 INTERNING_JAVA_FILES_SKIP_COUNTS = Intern.java\|VarInfoName.java\|daikon/dcomp
 ## Which files to check.
 INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES}
+INTERNING_JAVA_FILES_NO_24 = ${DAIKON_JAVA_FILES_NO_24}
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | ${SORT_DIRECTORY_ORDER})
 NULLNESS_JAVA_FILES = ${DAIKON_JAVA_FILES}
+NULLNESS_JAVA_FILES_NO_24 = $(DAIKON_JAVA_FILES_NO_24)
 
 #  $(shell find daikon -name '*.java' -a -exec grep -L "^@SuppressWarnings.*nullness" {} \; | sort)
 #   $(shell find typequals/ -name '*.java')
@@ -963,8 +970,8 @@ typecheck-formatter: ${ALL_GENERATED_FILES} compile
 	$(MAKE) typecheck-formatter-nocompile
 typecheck-formatter-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ${JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -972,8 +979,8 @@ typecheck-index: ${INDEX_JAVA_FILES} compile
 	$(MAKE) typecheck-index-nocompile
 typecheck-index-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -983,8 +990,8 @@ typecheck-index-all: ${ALL_GENERATED_FILES} compile
 	$(MAKE) typecheck-index-all-nocompile
 typecheck-index-all-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -999,8 +1006,8 @@ typecheck-interning: ${INTERNING_JAVA_FILES} compile
 	$(MAKE) typecheck-interning-nocompile
 typecheck-interning-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -1010,8 +1017,8 @@ typecheck-interning-all: ${ALL_GENERATED_FILES} compile
 	$(MAKE) typecheck-interning-all-nocompile
 typecheck-interning-all-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -1026,8 +1033,8 @@ typecheck-lock: ${ALL_GENERATED_FILES} compile
 	$(MAKE) typecheck-lock-nocompile
 typecheck-lock-nocompile:
 	@echo ${JAVAC_COMMAND} ${CHECKER_ARGS} ${JAVAC_LOCK_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_LOCK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_LOCK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_LOCK_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -1035,8 +1042,8 @@ typecheck-nullness: compile compile-typequals
 	$(MAKE) typecheck-nullness-nocompile
 typecheck-nullness-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -1056,8 +1063,8 @@ typecheck-prototype: compile compile-typequals
 	$(MAKE) typecheck-prototype-nocompile
 typecheck-prototype-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -1065,8 +1072,8 @@ typecheck-regex: ${ALL_GENERATED_FILES} compile
 	$(MAKE) typecheck-regex-nocompile
 typecheck-regex-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -1074,8 +1081,8 @@ typecheck-regex-qual: ${ALL_GENERATED_FILES} compile
 	$(MAKE) typecheck-regex-qual-nocompile
 typecheck-regex-qual-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ${JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -1083,8 +1090,8 @@ typecheck-resourceleak: ${ALL_GENERATED_FILES} compile
 	$(MAKE) typecheck-resourceleak-nocompile
 typecheck-resourceleak-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -1092,8 +1099,8 @@ typecheck-signature: ${ALL_GENERATED_FILES} compile
 	$(MAKE) typecheck-signature-nocompile
 typecheck-signature-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -1109,8 +1116,8 @@ typecheck-signedness: ${ALL_GENERATED_FILES} compile
 	$(MAKE) typecheck-signedness-nocompile
 typecheck-signedness-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} ${JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -1118,8 +1125,8 @@ typecheck-vindex: compile compile-typequals
 	$(MAKE) typecheck-vindex-nocompile
 typecheck-vindex-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -1129,7 +1136,7 @@ TYPEQUALS_CLASSES = $(subst .java,.class,${TYPEQUALS_JAVA_FILES})
 compile-typequals: ${TYPEQUALS_CLASSES}
 ${TYPEQUALS_CLASSES}: ${TYPEQUALS_JAVA_FILES}
 	${JAVAC_COMMAND} ${JAVAC_ARGS} ${TYPEQUALS_JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_ARGS} daikon/chicory/*24.java
 endif
 
@@ -1186,8 +1193,8 @@ nullness-counts:
 JAVAC_COUNT_ARGS = -processor org.checkerframework.common.util.count.Locations -implicit:class -Xlint:-processing
 possible-annos: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+	@${JAVAC_COMMAND} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES_NO_24}
+ifeq ($(JAVA24), 1)
 	@${JAVAC24_COMMAND} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
@@ -1287,7 +1294,7 @@ ifeq ($(JAVA8), 1)
 endif
 
 # When JDK 24 is offically released, remove '--enable-preview'
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+ifeq ($(JAVA24), 1)
   extra-javadoc-args = -source 24 --enable-preview
 else
   extra-javadoc-args =
