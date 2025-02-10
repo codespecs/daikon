@@ -277,12 +277,12 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Used to add a call (or calls) to the Chicory Runtime 'initNotify' method into the class static
-   * initializer.
+   * Adds a call (or calls) to the Chicory Runtime {@code initNotify} method into a given method.
+   * Clients pass the class static initializer as the method.
    *
-   * @param cg ClassGen for current class
-   * @param mg describes the current method
-   * @param fullClassName must be fully qualified: packageName.className
+   * @param cg a class
+   * @param mg the method to modify, typically the class static initializer
+   * @param fullClassName fully-qualified class name
    * @return the modified method
    */
   private Method addInvokeToClinit(ClassGen cg, MethodGen mg, String fullClassName) {
@@ -324,14 +324,16 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Called by addInvokeToClinit to add a call to the Chicory Runtime 'initNotify' method prior to
-   * each return opcode.
+   * Called by addInvokeToClinit to obtain the instructions that represent a call to the Chicory
+   * Runtime {@code initNotify} method prior to a return opcode. Returns null if the given
+   * instruction is not a return.
    *
    * @param cp ConstantPoolGen for current class
-   * @param fullClassName must be fully qualified: packageName.className
-   * @param inst the instruction to check for a return
+   * @param fullClassName the fully-qualified class name
+   * @param inst the instruction that might be a return
    * @param context MethodContext for current method
-   * @return the instrumentation instruction list
+   * @return the list of instructions that call {@code initNotify}, or null if {@code inst} is not a
+   *     return instruction
    */
   private @Nullable InstructionList xform_clinit(
       ConstantPoolGen cp, String fullClassName, Instruction inst, MethodContext context) {
@@ -352,11 +354,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
   /**
    * Create a class initializer method, if none exists. We need a class initializer to have a place
-   * to insert a call to the Chicory Runtime "initNotifiy" method so that the Runtime knows when a
-   * class has been initialized.
+   * to insert a call to the Chicory Runtime {@code initNotifiy()} method.
    *
-   * @param cg ClassGen for current class
-   * @param fullClassName must be fully qualified: packageName.className
+   * @param cg a class
+   * @param fullClassName the fully-qualified name of {@code cg}
    * @return the modified method
    */
   private Method createClinit(ClassGen cg, @BinaryName String fullClassName) {
@@ -387,11 +388,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Create the InstructionList to insert for adding a call to "initNotify".
+   * Create the InstructionList for a call to {@code initNotify}.
    *
    * @param cp ConstantPoolGen for current class
-   * @param fullClassName must be fully qualified: packageName.className
-   * @param factory InstrctionFactory for current class
+   * @param fullClassName the fully-qualified class name
+   * @param factory InstructionFactory for current class
    * @return the instruction list
    */
   private InstructionList call_initNotify(
@@ -419,7 +420,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * deficiency of not being able to query return values.
    *
    * @param cg ClassGen for current class
-   * @param fullClassName must be fully qualified: packageName.className
+   * @param fullClassName the fully qualified class name
    * @param loader ClassLoader for current class
    * @return ClassInfo for current class
    */
@@ -629,15 +630,15 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * If this is a return instruction, generate new il to assign the result to a local variable
-   * (return__$trace2_val) and then call daikon.chicory.Runtime.exit(). This il wil be inserted
-   * immediately before the return.
+   * If this is a return instruction, generate new instruction list to assign the result to a local
+   * variable (return__$trace2_val) and then call daikon.chicory.Runtime.exit(). This instruction
+   * list wil be inserted immediately before the return.
    *
-   * @param inst the instruction to inspect
+   * @param inst the instruction to inspect, which might be a return instruction
    * @param c MethodContext for current method
    * @param shouldIncIter whether or not to instrument this return
    * @param exitIter list of exit line numbers
-   * @return instruction list for instrumenting the return
+   * @return instruction list for instrumenting the return, or null if {@code inst} is not a return
    */
   private @Nullable InstructionList generate_return_instrumentation(
       Instruction inst,
@@ -689,7 +690,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * with the specified type. If the variable is known to already exist, the type can be null.
    *
    * @param mg describes the current method
-   * @param return_type the type of the return
+   * @param return_type the type of the return; may be null if the variable is known to already
+   *     exist
    * @return a local variable to save the return value
    */
   private LocalVariableGen get_return_local(MethodGen mg, @Nullable Type return_type) {
@@ -874,7 +876,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * array of objects. Any primitive values are wrapped in the appropriate daikon.chicory.Runtime
    * wrapper (IntWrap, FloatWrap, etc).
    *
-   * @param c MethodContext for method
+   * @param c MethodContext for a method
    * @param method_name either "enter" or "exit"
    * @param line source line number if this is an exit
    * @return instruction list for instrumenting the enter or exit of the method
@@ -969,15 +971,15 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
   /**
    * Creates code to put the local var/param at the specified var_index into a wrapper appropriate
-   * for prim_type. prim_type should be one of the basic types (eg, Type.INT, Type.FLOAT, etc). The
-   * wrappers are those defined in daikon.chicory.Runtime.
+   * for prim_type. prim_type must be a primitive type (Type.INT, Type.FLOAT, etc.). The wrappers
+   * are those defined in daikon.chicory.Runtime.
    *
    * <p>The stack is left with a pointer to the newly created wrapper at the top.
    *
    * @param c MethodContext for curent method
    * @param prim_type the primitive type of the local variable or parameter
    * @param var_index the offset into the local stack of the variable or parameter
-   * @return instruction list for the wrapper
+   * @return instruction list for putting the primitive in a wrapper
    */
   private InstructionList create_wrapper(MethodContext c, Type prim_type, int var_index) {
 
@@ -1235,7 +1237,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
   }
 
-  /** Any information needed by InstTransform routines about the method and class. */
+  /** Information needed by InstTransform routines about the method and class. */
   private static class MethodContext {
 
     /** InstructionFactory for a class. */
@@ -1248,7 +1250,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
      * Create a new MethodContext.
      *
      * @param cg ClassGen for a class
-     * @param mgen describes a method of the class
+     * @param mgen a method of the class
      */
     public MethodContext(ClassGen cg, MethodGen mgen) {
       ifact = new InstructionFactory(cg);
