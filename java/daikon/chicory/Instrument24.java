@@ -13,7 +13,6 @@ import java.lang.classfile.*;
 import java.lang.classfile.Attributes;
 import java.lang.classfile.Opcode.*;
 import java.lang.classfile.attribute.*;
-import java.lang.classfile.components.ClassPrinter;
 import java.lang.classfile.constantpool.*;
 import java.lang.classfile.instruction.*;
 import java.lang.constant.*;
@@ -43,9 +42,9 @@ import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
- * The Instrument class is responsible for modifying another class' bytecode. Specifically, its main
- * task is to add "hooks" into the other class at method entries and exits for instrumentation
- * purposes.
+ * The Instrument class is responsible for modifying another class's bytecodes. Specifically, its
+ * main task is to add calls into the Chicory Runtime at method entries and exits for
+ * instrumentation purposes. These added calls are sometimes referred to as "hooks".
  */
 @SuppressWarnings("nullness")
 public class Instrument24 implements ClassFileTransformer {
@@ -287,8 +286,8 @@ public class Instrument24 implements ClassFileTransformer {
         // Write the byte array to a .class file
         Files.write(outputFile, classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL));
         // write a bcel like file with an extension of .javap
-        Consumer<String> cs = fileConsumer(new File(debug_orig_dir, binaryClassName + ".javap"));
-        ClassPrinter.toJson(classModel, ClassPrinter.Verbosity.TRACE_ALL, cs);
+        // Consumer<String> cs = fileConsumer(new File(debug_orig_dir, binaryClassName + ".javap"));
+        // ClassPrinter.toJson(classModel, ClassPrinter.Verbosity.TRACE_ALL, cs);
       } catch (Throwable t) {
         System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
         t.printStackTrace();
@@ -321,9 +320,9 @@ public class Instrument24 implements ClassFileTransformer {
         // Write the byte array to a .class file
         Files.write(outputFile, newBytes);
         // write a bcel like file with an extension of .javap
-        ClassModel newClassModel = classFile.parse(newBytes);
-        Consumer<String> cs = fileConsumer(new File(debug_bin_dir, binaryClassName + ".javap"));
-        ClassPrinter.toJson(newClassModel, ClassPrinter.Verbosity.TRACE_ALL, cs);
+        // ClassModel newClassModel = classFile.parse(newBytes);
+        // Consumer<String> cs = fileConsumer(new File(debug_bin_dir, binaryClassName + ".javap"));
+        // ClassPrinter.toJson(newClassModel, ClassPrinter.Verbosity.TRACE_ALL, cs);
       } catch (Throwable t) {
         System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
         t.printStackTrace();
@@ -392,9 +391,10 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Used to add a call to "initNotify" in the class static initializer.
+   * Adds a call (or calls) to the Chicory Runtime {@code initNotify} method into a given method.
+   * Clients pass the class static initializer as the method.
    *
-   * @param mgen MethodGen24 for the current method
+   * @param mgen the method to modify, typically the class static initializer
    */
   private void addInvokeToClinit(MethodGen24 mgen) {
 
@@ -426,10 +426,13 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Called by addInvokeToClinit to add in a hook at each return opcode.
+   * Called by addInvokeToClinit to obtain the instructions that represent a call to the Chicory
+   * Runtime {@code initNotify} method prior to a return opcode. Returns null if the given
+   * instruction is not a return.
    *
-   * @param inst the instruction to check for a return
-   * @return the instrumentation instruction list
+   * @param inst the instruction that might be a return
+   * @return the list of instructions that call {@code initNotify}, or null if {@code inst} is not a
+   *     return instruction
    */
   private @Nullable List<CodeElement> xform_clinit(CodeElement inst) {
 
@@ -442,7 +445,7 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Create the List of CodeElements to insert for adding a call to "initNotify".
+   * Create the List of CodeElements for a call to {@code initNotify}.
    *
    * @return the instruction list
    */
@@ -452,7 +455,13 @@ public class Instrument24 implements ClassFileTransformer {
 
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(runtimeCD, "initNotify", MethodTypeDesc.of(CD_void, CD_String));
-    codeList.add(ConstantInstruction.ofLoad(Opcode.LDC, poolBuilder.stringEntry(binaryClassName)));
+    StringEntry se = poolBuilder.stringEntry(binaryClassName);
+    System.out.println("offset: " + se.index());
+    if (se.index() > 255) {
+      codeList.add(ConstantInstruction.ofLoad(Opcode.LDC_W, se));
+    } else {
+      codeList.add(ConstantInstruction.ofLoad(Opcode.LDC, se));
+    }
     codeList.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
 
     return codeList;
@@ -464,8 +473,8 @@ public class Instrument24 implements ClassFileTransformer {
    * the value being returned into a local and then return. This allows us to work around the JDI
    * deficiency of not being able to query return values.
    *
-   * @param classModel for the current class
-   * @param classBuilder for the current class
+   * @param classModel for current class
+   * @param classBuilder for current class
    */
   private void instrument_all_methods(ClassModel classModel, ClassBuilder classBuilder) {
 
@@ -862,7 +871,8 @@ public class Instrument24 implements ClassFileTransformer {
    * Returns the local variable used to store the return result. If it is not present, creates it
    * with the specified type. If the variable is known to already exist, the type can be null.
    *
-   * @param returnType the type of the return
+   * @param returnType the type of the return; may be null if the variable is known to already
+   *     exist.
    * @return a local variable to save the return value
    */
   private LocalVariable getReturnLocal(@Nullable ClassDesc returnType) {
@@ -1126,8 +1136,8 @@ public class Instrument24 implements ClassFileTransformer {
 
   /**
    * Creates code to put the local var/param at the specified var_index into a wrapper appropriate
-   * for prim_type. prim_type should be one of the basic types (eg, ClassDesc.INT, ClassDesc.FLOAT,
-   * etc). The wrappers are those defined in daikon.chicory.Runtime.
+   * for prim_type. prim_type must be a primitive type (Type.INT, Type.FLOAT, etc.). The wrappers
+   * are those defined in daikon.chicory.Runtime.
    *
    * <p>The stack is left with a pointer to the newly created wrapper at the top.
    *
@@ -1607,6 +1617,16 @@ public class Instrument24 implements ClassFileTransformer {
     nextLocalIndex += TypeKind.from(localType).slotSize();
     return newVar;
   }
+
+  /**
+   * Build a load constant instruction (LDC). Checks the offset of the constant pool element to be
+   * loaded and generates a LDC or LDC_W, if needed.
+   *
+   * @param descript describes the constant pool element to be loaded
+   * @return a LDC instruction
+   */
+  // protected CodeElement buildLDCInstruction(final int value) {
+  // }
 
   /**
    * Build a load constant instruction for values of type int, short, char, byte
