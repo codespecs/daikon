@@ -49,9 +49,9 @@ import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
- * The Instrument class is responsible for modifying another class' bytecode. Specifically, its main
- * task is to add "hooks" into the other class at method entries and exits for instrumentation
- * purposes.
+ * The Instrument class is responsible for modifying another class's bytecodes. Specifically, its
+ * main task is to add calls into the Chicory Runtime at method entries and exits for
+ * instrumentation purposes. These added calls are sometimes referred to as "hooks".
  */
 @SuppressWarnings("nullness")
 public class Instrument extends InstructionListUtils implements ClassFileTransformer {
@@ -276,7 +276,15 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
   }
 
-  // used to add a "hook" into the <clinit> static initializer
+  /**
+   * Adds a call (or calls) to the Chicory Runtime {@code initNotify} method into a given method.
+   * Clients pass the class static initializer as the method.
+   *
+   * @param cg a class
+   * @param mg the method to modify, typically the class static initializer
+   * @param fullClassName fully-qualified class name
+   * @return the modified method
+   */
   private Method addInvokeToClinit(ClassGen cg, MethodGen mg, String fullClassName) {
 
     try {
@@ -315,7 +323,18 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     return mg.getMethod();
   }
 
-  // called by addInvokeToClinit to add in a hook at return opcodes
+  /**
+   * Called by addInvokeToClinit to obtain the instructions that represent a call to the Chicory
+   * Runtime {@code initNotify} method prior to a return opcode. Returns null if the given
+   * instruction is not a return.
+   *
+   * @param cp ConstantPoolGen for current class
+   * @param fullClassName the fully-qualified class name
+   * @param inst the instruction that might be a return
+   * @param context MethodContext for current method
+   * @return the list of instructions that call {@code initNotify}, or null if {@code inst} is not a
+   *     return instruction
+   */
   private @Nullable InstructionList xform_clinit(
       ConstantPoolGen cp, String fullClassName, Instruction inst, MethodContext context) {
 
@@ -333,7 +352,14 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
   }
 
-  // create a <clinit> method, if none exists; guarantees we have this hook
+  /**
+   * Create a class initializer method, if none exists. We need a class initializer to have a place
+   * to insert a call to the Chicory Runtime {@code initNotifiy()} method.
+   *
+   * @param cg a class
+   * @param fullClassName the fully-qualified name of {@code cg}
+   * @return the modified method
+   */
   private Method createClinit(ClassGen cg, @BinaryName String fullClassName) {
     InstructionFactory factory = new InstructionFactory(cg);
 
@@ -361,7 +387,14 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     return newMethGen.getMethod();
   }
 
-  // created the InstructionList to insert for adding the <clinit> hook
+  /**
+   * Create the InstructionList for a call to {@code initNotify}.
+   *
+   * @param cp ConstantPoolGen for current class
+   * @param fullClassName the fully-qualified class name
+   * @param factory InstructionFactory for current class
+   * @return the instruction list
+   */
   private InstructionList call_initNotify(
       ConstantPoolGen cp, String fullClassName, InstructionFactory factory) {
 
@@ -389,7 +422,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * the value being returned into a local and then return. This allows us to work around the JDI
    * deficiency of not being able to query return values.
    *
-   * @param fullClassName must be fully qualified: packageName.className
+   * @param cg ClassGen for current class
+   * @param fullClassName the fully qualified class name
+   * @param loader ClassLoader for current class
+   * @return ClassInfo for current class
    */
   private ClassInfo instrument_all_methods(ClassGen cg, String fullClassName, ClassLoader loader) {
 
@@ -603,9 +639,15 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * If this is a return instruction, generate new il to assign the result to a local variable
-   * (return__$trace2_val) and then call daikon.chicory.Runtime.exit(). This il wil be inserted
-   * immediately before the return.
+   * If this is a return instruction, generate new instruction list to assign the result to a local
+   * variable (return__$trace2_val) and then call daikon.chicory.Runtime.exit(). This instruction
+   * list wil be inserted immediately before the return.
+   *
+   * @param inst the instruction to inspect, which might be a return instruction
+   * @param c MethodContext for current method
+   * @param shouldIncIter whether or not to instrument this return
+   * @param exitIter list of exit line numbers
+   * @return instruction list for instrumenting the return, or null if {@code inst} is not a return
    */
   private @Nullable InstructionList generate_return_instrumentation(
       Instruction inst,
@@ -655,6 +697,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /**
    * Returns the local variable used to store the return result. If it is not present, creates it
    * with the specified type. If the variable is known to already exist, the type can be null.
+   *
+   * @param mg describes the current method
+   * @param return_type the type of the return; may be null if the variable is known to already
+   *     exist
+   * @return a local variable to save the return value
    */
   private LocalVariableGen get_return_local(MethodGen mg, @Nullable Type return_type) {
 
@@ -683,7 +730,12 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     return return_local;
   }
 
-  /** Finds the nonce local variable. Returns null if not present. */
+  /**
+   * Finds the nonce local variable. Returns null if not present.
+   *
+   * @param mg describes the current method
+   * @return a local variable to save the nonce value, or null
+   */
   private @Nullable LocalVariableGen get_nonce_local(MethodGen mg) {
 
     // Find the local used for the nonce value
@@ -832,6 +884,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * Method (normally enter or exit) in daikon.chicory.Runtime. The parameters are passed as an
    * array of objects. Any primitive values are wrapped in the appropriate daikon.chicory.Runtime
    * wrapper (IntWrap, FloatWrap, etc).
+   *
+   * @param c MethodContext for a method
+   * @param method_name either "enter" or "exit"
+   * @param line source line number if this is an exit
+   * @return instruction list for instrumenting the enter or exit of the method
    */
   private InstructionList call_enter_exit(MethodContext c, String method_name, int line) {
 
@@ -923,10 +980,15 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
   /**
    * Creates code to put the local var/param at the specified var_index into a wrapper appropriate
-   * for prim_type. prim_type should be one of the basic types (eg, Type.INT, Type.FLOAT, etc). The
-   * wrappers are those defined in daikon.chicory.Runtime.
+   * for prim_type. prim_type must be a primitive type (Type.INT, Type.FLOAT, etc.). The wrappers
+   * are those defined in daikon.chicory.Runtime.
    *
    * <p>The stack is left with a pointer to the newly created wrapper at the top.
+   *
+   * @param c MethodContext for curent method
+   * @param prim_type the primitive type of the local variable or parameter
+   * @param var_index the offset into the local stack of the variable or parameter
+   * @return instruction list for putting the primitive in a wrapper
    */
   private InstructionList create_wrapper(MethodContext c, Type prim_type, int var_index) {
 
@@ -975,6 +1037,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /**
    * Returns true iff mgen is a constructor.
    *
+   * @param mgen describes the current method
    * @return true iff mgen is a constructor
    */
   @Pure
@@ -991,6 +1054,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /**
    * Return an array of strings, each corresponding to mgen's argument types.
    *
+   * @param mgen describes the current method
    * @return an array of strings, each corresponding to mgen's argument types
    */
   private @BinaryName String[] getArgTypes(MethodGen mgen) {
@@ -1166,6 +1230,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
   }
 
+  /**
+   * Logs a method's attributes.
+   *
+   * @param mg a method
+   */
   public void dump_code_attributes(MethodGen mg) {
     // mg.getMethod().getCode().getAttributes() forces attributes
     // to be instantiated; mg.getCodeAttributes() does not
@@ -1177,12 +1246,21 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
   }
 
-  /** Any information needed by InstTransform routines about the method and class. */
+  /** Information needed by InstTransform routines about the method and class. */
   private static class MethodContext {
 
+    /** InstructionFactory for a class. */
     public InstructionFactory ifact;
+
+    /** MethodGen for a method of the class. */
     public MethodGen mgen;
 
+    /**
+     * Create a new MethodContext.
+     *
+     * @param cg ClassGen for a class
+     * @param mgen a method of the class
+     */
     public MethodContext(ClassGen cg, MethodGen mgen) {
       ifact = new InstructionFactory(cg);
       this.mgen = mgen;
