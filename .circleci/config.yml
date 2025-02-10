@@ -744,6 +744,7 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
+
   nonquick-txt-diff-rockylinux-jdk8:
     docker:
       - image: mdernst/daikon-rockylinux-jdk8
@@ -820,29 +821,7 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
-<<<<<<< HEAD
-  nonquick-txt-diff-rockylinux-jdk24:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk24
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
-||||||| c3ec7ddc8
-=======
 # nonquick_job(rockylinux, 24)
->>>>>>> a40debc154e63afd98ddbe6085512d1b0860d414
 
   non-txt-diff-rockylinux-jdk8:
     docker:
@@ -901,23 +880,6 @@ jobs:
   non-txt-diff-rockylinux-jdk21:
     docker:
       - image: mdernst/daikon-rockylinux-jdk21
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
-  non-txt-diff-rockylinux-jdk24:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk24
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
