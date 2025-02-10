@@ -81,6 +81,11 @@ public class ChicoryPremain {
       System.exit(1);
     }
 
+    // Turn on dumping of instrumented classes if debug was selected
+    if (Chicory.debug) {
+      Chicory.dump = true;
+    }
+
     verbose = Chicory.verbose || Chicory.debug;
     if (debug_runtime) {
       Runtime.debug = true;
