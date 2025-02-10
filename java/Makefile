@@ -705,11 +705,11 @@ daikon/Diff.class: Diff.java ../utils/plume-scripts ${AUTO_GENERATED_FILES}
 # The (slight) downside is that the regenerated .class files might cause some
 # Make rules to unnecessarily re-run, if the code hasn't actually changed.
 clean_class_files:
-	-rm -f `find . -name "*.class" -print`
+	-rm -f `find . -path "*/debug*/bin" -prune -o -path "*/debug*/orig" -prune -o -name "*.class" -print`
 	# java/daikon might be a symbolic link; the alternative is to pass
 	# "-follow" to the above find command, but I don't necessarily
 	# want to remove everything reachable through symbolic links.
-	-rm -f `find daikon -follow -name "*.class" -print`
+	-rm -f `find daikon -follow -path "*/debug*/bin" -prune -o -path "*/debug*/orig" -prune -o -name "*.class" -print`
 	-rm -f ${OLD_AUTO_GENERATED_FILES}
 
 clean:
