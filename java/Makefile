@@ -44,8 +44,7 @@ endif
 # That variable appears last and overrides the values we provide here.
 JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -source 8 -target 8 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${LINT_THIS_ESCAPE} ${JAVAC_TARGET_FLAGS}
 
-# When JDK 24 is offically released, remove '--enable-preview' and add '-Werror'.
-JAVAC24_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -source 24 -target 24 --enable-preview -Xlint:-path -Xlint:-options -Xlint:-classfile ${LINT_THIS_ESCAPE} ${JAVAC_TARGET_FLAGS}
+JAVAC24_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -source 24 -target 24 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${LINT_THIS_ESCAPE} ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
@@ -71,12 +70,7 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
 JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx3600m ${JAVAC_ARGS}
 JAVAC24_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx3600m ${JAVAC24_ARGS}
-# When JDK 24 is offically released, delete this test and keep only the else branch.
-ifeq ($(JAVA24), 1)
-  JAVA_COMMAND = ${JAVA} --enable-preview -cp ${DAIKON_CLASSPATH}
-else
-  JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
-endif
+JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
 
 
 ###########################################################################
@@ -782,9 +776,8 @@ else
   error-prone-version = 2.36.0
   extra-error-prone-args-1 = --should-stop=ifError=FLOW
 endif
-# When JDK 24 is offically released, replace '--enable-preview' with '-Werror'.
 ifeq ($(JAVA24), 1)
-  extra-error-prone-args-2 = -source 24 -target 24 --enable-preview
+  extra-error-prone-args-2 = -source 24 -target 24 -Werror
 else
   extra-error-prone-args-2 = -Werror
 endif
@@ -1299,9 +1292,8 @@ ifeq ($(JAVA8), 1)
   SKIP_JAVADOC=1
 endif
 
-# When JDK 24 is offically released, remove '--enable-preview'
 ifeq ($(JAVA24), 1)
-  extra-javadoc-args = -source 24 --enable-preview
+  extra-javadoc-args = -source 24
 else
   extra-javadoc-args =
 endif
