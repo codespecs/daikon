@@ -10,6 +10,7 @@ else
   $(info $(shell which javac))
   $(error 'which javac' had exit status 1)
 endif
+endif
 
 # need junit.jar on classpath to compile all junit references
 JUNIT_CLASSPATH := ${DAIKONDIR}/java/lib/*
