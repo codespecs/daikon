@@ -1209,7 +1209,11 @@ workflows:
             - nonquick-txt-diff-ubuntu-jdk21
 
       - nonquick-txt-diff-ubuntu-jdk21
-# job_dependences(ubuntu, 24, nonquick-txt-diff)
+      - nonquick-txt-diff-ubuntu-jdk24:
+          requires:
+            - canary-jobs
+            - nonquick-txt-diff-ubuntu-jdk21
+
       - non-txt-diff-ubuntu-jdk8:
           requires:
             - canary-jobs
