@@ -5,10 +5,9 @@ import static java.lang.constant.ConstantDescs.*;
 
 import daikon.Chicory;
 import daikon.plumelib.bcelutil.SimpleLog;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.FileWriter;
 import java.lang.classfile.*;
 import java.lang.classfile.Attributes;
 import java.lang.classfile.Opcode.*;
@@ -32,7 +31,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -286,10 +284,14 @@ public class Instrument24 implements ClassFileTransformer {
         // Write the byte array to a .class file
         Files.write(outputFile, classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL));
         // write a bcel like file with an extension of .javap
-        // Consumer<String> cs = fileConsumer(new File(debug_orig_dir, binaryClassName + ".javap"));
-        // ClassPrinter.toJson(classModel, ClassPrinter.Verbosity.TRACE_ALL, cs);
+        try (BufferedWriter writer =
+            new BufferedWriter(
+                new FileWriter(new File(debug_orig_dir, binaryClassName + ".javap")))) {
+          writer.write(classModel.toDebugString());
+        }
       } catch (Throwable t) {
-        System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
+        System.err.printf(
+            "Unexpected error %s dumping out debug files for: %s%n", t, binaryClassName);
         t.printStackTrace();
         // proceed with instrumentation
       }
@@ -312,25 +314,27 @@ public class Instrument24 implements ClassFileTransformer {
       return null;
     }
 
-    if (Chicory.dump) {
-      try {
-        debugInstrument.log("Dumping %s to %s%n", binaryClassName, debug_bin_dir);
-        // Define the output file
-        Path outputFile = Paths.get(debug_bin_dir.toString(), binaryClassName + ".class");
-        // Write the byte array to a .class file
-        Files.write(outputFile, newBytes);
-        // write a bcel like file with an extension of .javap
-        // ClassModel newClassModel = classFile.parse(newBytes);
-        // Consumer<String> cs = fileConsumer(new File(debug_bin_dir, binaryClassName + ".javap"));
-        // ClassPrinter.toJson(newClassModel, ClassPrinter.Verbosity.TRACE_ALL, cs);
-      } catch (Throwable t) {
-        System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
-        t.printStackTrace();
-        // proceed with instrumentation
-      }
-    }
-
     if (classInfo.shouldInclude) {
+      if (Chicory.dump) {
+        try {
+          debugInstrument.log("Dumping %s to %s%n", binaryClassName, debug_bin_dir);
+          // Define the output file
+          Path outputFile = Paths.get(debug_bin_dir.toString(), binaryClassName + ".class");
+          // Write the byte array to a .class file
+          Files.write(outputFile, newBytes);
+          // write a bcel like file with an extension of .javap
+          ClassModel newClassModel = classFile.parse(newBytes);
+          try (BufferedWriter writer =
+              new BufferedWriter(
+                  new FileWriter(new File(debug_bin_dir, binaryClassName + ".javap")))) {
+            writer.write(newClassModel.toDebugString());
+          }
+        } catch (Throwable t) {
+          System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
+          t.printStackTrace();
+          // proceed with instrumentation
+        }
+      }
       return newBytes;
     } else {
       // No changes to the bytecodes
@@ -455,13 +459,7 @@ public class Instrument24 implements ClassFileTransformer {
 
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(runtimeCD, "initNotify", MethodTypeDesc.of(CD_void, CD_String));
-    StringEntry se = poolBuilder.stringEntry(binaryClassName);
-    System.out.println("offset: " + se.index());
-    if (se.index() > 255) {
-      codeList.add(ConstantInstruction.ofLoad(Opcode.LDC_W, se));
-    } else {
-      codeList.add(ConstantInstruction.ofLoad(Opcode.LDC, se));
-    }
+    codeList.add(buildLDCInstruction(poolBuilder.stringEntry(binaryClassName)));
     codeList.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
 
     return codeList;
@@ -1315,7 +1313,7 @@ public class Instrument24 implements ClassFileTransformer {
 
     boolean shouldInclude = false;
 
-    // It lloks like DaikonWriter.methodEntryName does not use the mgen.toString argument.
+    // It looks like DaikonWriter.methodEntryName does not use the mgen.toString argument.
     // see if we should track the entry point
     if (!shouldIgnore(
         classInfo.class_name,
@@ -1562,32 +1560,6 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Create a Consumer that outputs strings to a file.
-   *
-   * @param file the output file
-   * @return the Consumer object
-   * @throws FileNotFoundException if 'file' cannot be found
-   */
-  @SuppressWarnings("builder:required.method.not.called") // finalize method closes stream
-  private Consumer<String> fileConsumer(File file) throws FileNotFoundException {
-    PrintStream stream = new PrintStream(new FileOutputStream(file), false);
-
-    // Wrap the Consumer to ensure the stream is closed properly
-    return new Consumer<>() {
-      @Override
-      public void accept(String line) {
-        stream.print(line);
-      }
-
-      @Override
-      protected void finalize() throws Throwable {
-        super.finalize();
-        stream.close(); // Ensure the stream is closed when the Consumer is garbage collected
-      }
-    };
-  }
-
-  /**
    * Format a constant value for printing.
    *
    * @param item the constant to format
@@ -1620,13 +1592,18 @@ public class Instrument24 implements ClassFileTransformer {
 
   /**
    * Build a load constant instruction (LDC). Checks the offset of the constant pool element to be
-   * loaded and generates a LDC or LDC_W, if needed.
+   * loaded and generates a LDC or LDC_W, as needed.
    *
-   * @param descript describes the constant pool element to be loaded
+   * @param entry describes the constant pool element to be loaded
    * @return a LDC instruction
    */
-  // protected CodeElement buildLDCInstruction(final int value) {
-  // }
+  protected CodeElement buildLDCInstruction(ConstantValueEntry entry) {
+    if (entry.index() > 255) {
+      return ConstantInstruction.ofLoad(Opcode.LDC_W, entry);
+    } else {
+      return ConstantInstruction.ofLoad(Opcode.LDC, entry);
+    }
+  }
 
   /**
    * Build a load constant instruction for values of type int, short, char, byte
@@ -1648,7 +1625,7 @@ public class Instrument24 implements ClassFileTransformer {
               ? ConstantInstruction.ofArgument(Opcode.BIPUSH, value)
               : (value >= Short.MIN_VALUE && value <= Short.MAX_VALUE)
                   ? ConstantInstruction.ofArgument(Opcode.SIPUSH, value)
-                  : ConstantInstruction.ofLoad(Opcode.LDC, poolBuilder.intEntry(value));
+                  : buildLDCInstruction(poolBuilder.intEntry(value));
     };
   }
 }
