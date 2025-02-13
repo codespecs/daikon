@@ -1,14 +1,14 @@
 package daikon.chicory;
 
 import daikon.Chicory;
+import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.InstructionListUtils;
 import daikon.plumelib.bcelutil.SimpleLog;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -56,6 +56,18 @@ import org.checkerframework.dataflow.qual.Pure;
 @SuppressWarnings("nullness")
 public class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
+  /** A log to which to print debugging information about program instrumentation. */
+  protected SimpleLog debugInstrument = new SimpleLog(false);
+
+  /** Directory for debug output. */
+  File debug_dir;
+
+  /** Directory for debug instrumented class output. */
+  File debug_bin_dir;
+
+  /** Directory for debug original class output. */
+  File debug_orig_dir;
+
   /** The index of this method in SharedData.methods. */
   int cur_method_info_index = 0;
 
@@ -73,6 +85,15 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     super();
     debug_transform.enabled = Chicory.debug_transform;
     debugInstrument.enabled = Chicory.debug;
+
+    debug_dir = Chicory.debug_dir;
+    debug_bin_dir = new File(debug_dir, "bin");
+    debug_orig_dir = new File(debug_dir, "orig");
+
+    if (Chicory.dump) {
+      debug_bin_dir.mkdirs();
+      debug_orig_dir.mkdirs();
+    }
   }
 
   /**
@@ -206,6 +227,21 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       return null;
     }
 
+    if (Chicory.dump) {
+      try {
+        debugInstrument.log("Dumping %s to %s%n", binaryClassName, debug_orig_dir);
+        // write .class file
+        c.dump(new File(debug_orig_dir, c.getClassName() + ".class"));
+        // write .bcel file
+        BcelUtil.dump(c, debug_orig_dir);
+      } catch (Throwable t) {
+        System.err.printf(
+            "Unexpected error %s dumping out debug files for: %s%n", t, binaryClassName);
+        t.printStackTrace();
+        // proceed with instrumentation
+      }
+    }
+
     try {
       // Get the class information
       ClassGen cg = new ClassGen(c);
@@ -253,21 +289,22 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       }
 
       JavaClass njc = cg.getJavaClass();
-      if (Chicory.debug) {
-        Path dir = Files.createTempDirectory("chicory-debug");
-        Path file = dir.resolve(njc.getClassName() + ".class");
-        debugInstrument.log("Dumping %s to %s%n", njc.getClassName(), file);
-        Files.createDirectories(dir);
-        njc.dump(file.toFile());
-      }
 
       if (c_info.shouldInclude) {
-        // System.out.println ("Instrumented class " + className);
-        // String filename = "/homes/gws/mernst/tmp/" + className +
-        //                   "Transformed.class";
-        // System.out.println ("About to dump class " + className +
-        //                     " to " + filename);
-        // njc.dump(filename);
+        if (Chicory.dump) {
+          try {
+            debugInstrument.log("Dumping %s to %s%n", binaryClassName, debug_bin_dir);
+            // write .class file
+            njc.dump(new File(debug_bin_dir, c.getClassName() + ".class"));
+            // write .bcel file
+            BcelUtil.dump(njc, debug_bin_dir);
+          } catch (Throwable t) {
+            System.err.printf(
+                "Unexpected error %s dumping out debug files for: %s%n", t, className);
+            t.printStackTrace();
+            // proceed with instrumentation
+          }
+        }
         return njc.getBytes();
       } else {
         // No changes to the bytecodes
@@ -762,7 +799,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     InstructionList nl = new InstructionList();
 
-    // create the local variable
+    // create the nonce local variable
     LocalVariableGen nonce_lv =
         create_method_scope_local(c.mgen, "this_invocation_nonce", Type.INT);
 
