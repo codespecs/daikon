@@ -28,8 +28,12 @@ sources="$1"
 main="$2"
 javac="$3"
 
+case $javac in
+  "/"*) if [ ! -f $3 ] ; then echo "java-dependencies: file does not exist: $javac"; exit 1; fi ;;
+esac
+
 # Determine if we have GNU find.  GNU find requires -noleaf on AFS filesystems.
-# Don't quote find_args when it is used.
+# Note about `find_args` variable:  don't quote it when it is used.
 find_args=""
 if find . --version 2>&1 | grep -q GNU ; then
   find_args="-noleaf"
