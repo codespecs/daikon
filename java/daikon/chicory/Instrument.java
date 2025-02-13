@@ -56,9 +56,6 @@ import org.checkerframework.dataflow.qual.Pure;
 @SuppressWarnings("nullness")
 public class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
-  /** A log to which to print debugging information about program instrumentation. */
-  protected SimpleLog debugInstrument = new SimpleLog(false);
-
   /** Directory for debug output. */
   File debug_dir;
 
