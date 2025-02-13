@@ -3,6 +3,7 @@ package daikon.chicory;
 import daikon.Chicory;
 import daikon.plumelib.bcelutil.InstructionListUtils;
 import daikon.plumelib.bcelutil.SimpleLog;
+import daikon.plumelib.reflection.Signatures;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
@@ -64,6 +65,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
   /** Debug information about which classes are transformed and why. */
   public static SimpleLog debug_transform = new SimpleLog(false);
+
+  /** Binary name for the current class. */
+  @BinaryName String binaryClassName;
 
   /** Create a new Instrument. Sets up debug logging. */
   public Instrument() {
@@ -127,7 +131,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /**
    * Given a class, return a transformed version of the class that contains "hooks" at method
    * entries and exits. Because Chicory is invoked as a javaagent, the transform method is called by
-   * the Java runtime each time a new class is loaded.
+   * the Java runtime each time a new class is loaded. A return value of null leaves the byte codes
+   * unchanged.
    */
   @Override
   public byte @Nullable [] transform(
@@ -138,9 +143,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    @BinaryName String fullClassName = className.replace("/", ".");
-    // String fullClassName = className;
+    // convert internal form to binary name
+    binaryClassName = Signatures.internalFormToBinaryName(className);
 
+    // for debugging
     // new Throwable().printStackTrace();
 
     debug_transform.log("In chicory.Instrument.transform(): class = %s%n", className);
@@ -156,32 +162,33 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // to catch all of these.  A more consistent mechanism to determine
     // boot classes would be preferrable.
     if (Chicory.boot_classes != null) {
-      Matcher matcher = Chicory.boot_classes.matcher(fullClassName);
+      Matcher matcher = Chicory.boot_classes.matcher(binaryClassName);
       if (matcher.find()) {
-        debug_transform.log("ignoring boot class %s, matches boot_classes regex%n", fullClassName);
+        debug_transform.log(
+            "ignoring boot class %s, matches boot_classes regex%n", binaryClassName);
         return null;
       }
     } else if (loader == null) {
-      debug_transform.log("ignoring system class %s, class loader == null%n", fullClassName);
+      debug_transform.log("ignoring system class %s, class loader == null%n", binaryClassName);
       return null;
     } else if (loader.getParent() == null) {
-      debug_transform.log("ignoring system class %s, parent loader == null%n", fullClassName);
+      debug_transform.log("ignoring system class %s, parent loader == null%n", binaryClassName);
       return null;
-    } else if (fullClassName.startsWith("sun.reflect")) {
-      debug_transform.log("ignoring system class %s, in sun.reflect package%n", fullClassName);
+    } else if (binaryClassName.startsWith("sun.reflect")) {
+      debug_transform.log("ignoring system class %s, in sun.reflect package%n", binaryClassName);
       return null;
-    } else if (fullClassName.startsWith("jdk.internal.reflect")) {
+    } else if (binaryClassName.startsWith("jdk.internal.reflect")) {
       // Starting with Java 9 sun.reflect => jdk.internal.reflect.
       debug_transform.log(
-          "ignoring system class %s, in jdk.internal.reflect package", fullClassName);
+          "ignoring system class %s, in jdk.internal.reflect package", binaryClassName);
       return null;
-    } else if (fullClassName.startsWith("com.sun")) {
-      debug_transform.log("Class from com.sun package %s with nonnull loaders%n", fullClassName);
+    } else if (binaryClassName.startsWith("com.sun")) {
+      debug_transform.log("Class from com.sun package %s with nonnull loaders%n", binaryClassName);
     }
 
-    // Don't intrument our code
+    // Don't instrument our own code
     if (is_chicory(className)) {
-      debug_transform.log("Not considering chicory class %s%n", fullClassName);
+      debug_transform.log("Not considering chicory class %s%n", binaryClassName);
       return null;
     }
 
@@ -194,7 +201,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       ClassParser parser = new ClassParser(bais, className);
       c = parser.parse();
     } catch (Throwable t) {
-      System.out.printf("Unexpected error %s in transform of %s%n", t, fullClassName);
+      System.out.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
       t.printStackTrace();
       // No changes to the bytecodes
       return null;
@@ -206,7 +213,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
       // Convert reach non-void method to save its result in a local
       // before returning
-      ClassInfo c_info = instrument_all_methods(cg, fullClassName, loader);
+      ClassInfo c_info = instrument_all_methods(cg, binaryClassName, loader);
 
       // get constant static fields!
       Field[] fields = cg.getFields();
@@ -242,7 +249,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
         // if not found, add our own!
         if (!hasInit) {
-          cg.addMethod(createClinit(cg, fullClassName));
+          cg.addMethod(createClinit(cg, binaryClassName));
         }
       }
 
@@ -269,7 +276,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       }
 
     } catch (Throwable e) {
-      System.out.printf("Unexpected error %s in transform of %s%n", e, fullClassName);
+      System.out.printf("Unexpected error %s in transform of %s%n", e, binaryClassName);
       e.printStackTrace();
       // No changes to the bytecodes
       return null;
@@ -759,7 +766,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     InstructionList nl = new InstructionList();
 
-    // create the local variable
+    // create the nonce local variable
     LocalVariableGen nonce_lv =
         create_method_scope_local(c.mgen, "this_invocation_nonce", Type.INT);
 
