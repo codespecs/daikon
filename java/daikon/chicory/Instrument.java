@@ -74,7 +74,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /** Debug information about which classes are transformed and why. */
   public static SimpleLog debug_transform = new SimpleLog(false);
 
-  /** Current class name in binary format. */
+  /** Binary name for the current class. */
   @BinaryName String binaryClassName;
 
   /** Create a new Instrument. Sets up debug logging. */
@@ -161,7 +161,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       throws IllegalClassFormatException {
 
     // convert internal form to binary name
-    binaryClassName = className.replace("/", ".");
+    binaryClassName = Signatures.internalFormToBinaryName(className);
 
     // for debugging
     // new Throwable().printStackTrace();
