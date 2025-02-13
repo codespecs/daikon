@@ -161,7 +161,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       throws IllegalClassFormatException {
 
     // convert internal form to binary name
-    binaryClassName = Signatures.internalFormToBinaryName(className);
+    // TODO: replace by Signatures.internalFormToBinaryName(className);
+    binaryClassName = className.replace("/", ".");
 
     // for debugging
     // new Throwable().printStackTrace();
