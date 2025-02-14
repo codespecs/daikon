@@ -197,7 +197,7 @@ else
 endif
 endif
 JAVA  := ${JAVA_HOME}/bin/java
-JAVAC := ${JAVA_HOME}/bin/javac
+JAVAC ?= ${JAVA_HOME}/bin/javac
 
 JUNIT_CLASSPATH ?=
 
