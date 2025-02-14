@@ -28,8 +28,9 @@ sources="$1"
 main="$2"
 javac="$3"
 
+first_token=${javac%% *}
 case $javac in
-  "/"*) if [ ! -f $3 ] ; then echo "java-dependencies: file does not exist: $javac"; exit 1; fi ;;
+  "/"*) if [ ! -f $first_token ] ; then echo "java-dependencies: file does not exist: $javac"; exit 1; fi ;;
 esac
 
 # Determine if we have GNU find.  GNU find requires -noleaf on AFS filesystems.
