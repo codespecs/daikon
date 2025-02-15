@@ -17,22 +17,32 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * The MethodGen24 class is a simplfied replacement for the BCEL MethodGen class. It collects and
- * stores all the relevant information about a method.
+ * Starting with JDK 24, Java has added a set of APIs for reading and modifying .class files ({@code
+ * java.lang.classfile}).
+ *
+ * <p>We are migrating from BCEL to this new set of APIs for two main reasons:
+ *
+ * <ol>
+ *   <li>The new APIs are more complete and robust - no more fiddling with StackMaps.
+ *   <li>Since the new APIs are part of the official JDK release, they will always be up to date
+ *       with any .class file changes.
+ * </ol>
+ *
+ * <p>The files Instrument24.java and MethodGen24.java were added to Chicory to use this new set of
+ * APIs instead of BCEL. (We will need to continue to support Instrument.java using BCEL, as we do
+ * not anticipate our clients moving from JDK 8, 11, 17 or 21 to JDK 24 for quite some time.)
+ *
+ * <p>The MethodGen24 class is a simplfied replacement for the BCEL MethodGen class. This was done
+ * to make it easier to create Instrument24.java from Instrument.java. MethodGen24 collects and
+ * stores all the relevant information about a method that Instrument24 might need.
  */
 public class MethodGen24 {
-  /*
-   * Corresponds to the fields found in a MethodModel object.
-   */
-  // Optional<CodeModel> code() Returns the body of this method, if there is one.
-  // AccessFlags flags() Returns the access flags.
-  // Utf8Entry methodName() Returns the name of this method.
-  // Utf8Entry methodType() Returns the method descriptor of this method.
-  // default MethodTypeDesc methodTypeSymbol() Returns the method descriptor of this method, as a
-  // symbolic descriptor.
-  // Optional<ClassModel> parent() Returns the class model this method is a member of, if known.
 
-  /** The method's code model or null if no code. */
+  /**
+   * Models the body of the method (the Code attribute). A Code attribute is viewed as a composition
+   * of CodeElements, which is the only way to access Instructions; the order of elements of a code
+   * model is significant. May be null if the method has no code.
+   */
   private @Nullable CodeModel code;
 
   /** The method's access flags. */
@@ -41,13 +51,19 @@ public class MethodGen24 {
   /** The method's name. */
   private String methodName;
 
-  /** The method's type descriptor. */
+  /**
+   * The method's type descriptor. This contains information about the parameters and return type of
+   * the method.
+   */
   private MethodTypeDesc mtd;
 
   /** True if the method is static. */
   private boolean isStatic;
 
-  /** The method's CodeAttribute. */
+  /**
+   * The method's CodeAttribute. This contains information about the bytecodes (instructions) of
+   * this method. May be null if the method has no code.
+   */
   private @Nullable CodeAttribute codeAttribute;
 
   // fields of the code attribute
@@ -57,19 +73,32 @@ public class MethodGen24 {
   /** The method's maximum stack size. */
   private int maxStack;
 
-  /** The name of the method's enclosing class. */
+  /** The name of the method's enclosing class, in binary name format. */
   private String className;
 
-  /** The method's instruction list. */
+  /**
+   * The method's instruction list. Code elements can be categorized into Instructions (models the
+   * bytecodes) and PseudoInstructions (information about local variables, line numbers and labels).
+   */
   private List<CodeElement> codeList;
 
-  /** The method's descriptor. */
+  /**
+   * The method's descriptor. This is a String that encodes type information about the parameters
+   * that the method takes (if any) and the method's return type (if any). Note that it does not
+   * contain the method name or any parameter names.
+   */
   private String descriptor;
 
-  /** The method's signature. */
+  /**
+   * The method's signature. This is a String that encodes type information about a (possibly
+   * generic) method declaration. It describes any type parameters of the method; the (possibly
+   * parameterized) types of any formal parameters; the (possibly parameterized) return type, if
+   * any; and the types of any exceptions declared in the method's throws clause. Note that it does
+   * not contain the method name or any parameter names.
+   */
   private String signature;
 
-  // fields of the MethodTypeDescriptor
+  // Informatation extracted from {@code mtd}, the MethodTypeDescriptor.
   /** The method's parameter types. */
   private ClassDesc[] paramTypes;
 
@@ -102,7 +131,12 @@ public class MethodGen24 {
     if (code.isPresent()) {
       this.code = code.get();
       // the original elementList is immutable, so we need to make a copy
-      this.codeList = new LinkedList<CodeElement>(this.code.elementList());
+      // As the list can be quite long and we do not need random access (we make one linear pass
+      // over the list) and almost all the changes we make are insertions, this is one of the few
+      // cases where a LinkedList out performs an ArrayList.
+      @SuppressWarnings("JdkObsolete")
+      List<CodeElement> cl = new LinkedList<CodeElement>(this.code.elementList());
+      this.codeList = cl;
     } else {
       this.code = null;
       this.codeList = new ArrayList<>();
@@ -138,8 +172,7 @@ public class MethodGen24 {
       if (ce instanceof LocalVariable lv) {
         inst_obj.localsTable.add(lv);
       } else {
-        // IS THIS WRONG?
-        // we assume all LocalVariable elements come first
+        // we assume all LocalVariable elements come before any instructions
         if (ce instanceof Instruction) {
           break;
         }
@@ -249,16 +282,17 @@ public class MethodGen24 {
   /**
    * Return the name of the containing class.
    *
-   * @return the class that contains this method
+   * @return the binary name if the class that contains this method
    */
   public String getClassName() {
     return className;
   }
 
   /**
-   * Return the CodeAttribute for the method.
+   * Return the CodeAttribute for the method. This contains information about the bytecodes
+   * (instructions) of the method. May be null if the method has no code.
    *
-   * @return the CodeAttribute for the method
+   * @return the CodeAttribute for the method, or null
    */
   public @Nullable CodeAttribute getCodeAttribute() {
     return codeAttribute;
@@ -283,7 +317,8 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the descriptor for the current method.
+   * Return the descriptor for the current method. This is a String that encodes type information
+   * about the parameters that the method takes (if any) and the method's return type (if any).
    *
    * @return descriptor for the current method
    */
@@ -292,7 +327,10 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the signature for the current method.
+   * Return the signature for the current method. This is a String that encodes type information
+   * about a (possibly generic) method declaration. It describes any type parameters of the method;
+   * the (possibly parameterized) types of any formal parameters; the (possibly parameterized)
+   * return type, if any; and the types of any exceptions declared in the method's throws clause.
    *
    * @return signature for the current method
    */
