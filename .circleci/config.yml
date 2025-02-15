@@ -185,7 +185,25 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
-# nonquick_job(ubuntu, 24)
+  nonquick-txt-diff-ubuntu-jdk24:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk24
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
 
   non-txt-diff-ubuntu-jdk8:
     docker:
@@ -821,7 +839,25 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
-# nonquick_job(rockylinux, 24)
+  nonquick-txt-diff-rockylinux-jdk24:
+    docker:
+      - image: mdernst/daikon-rockylinux-jdk24
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: ./scripts/test-nonquick-txt-diff.sh
+
 
   non-txt-diff-rockylinux-jdk8:
     docker:
@@ -1173,7 +1209,11 @@ workflows:
             - nonquick-txt-diff-ubuntu-jdk21
 
       - nonquick-txt-diff-ubuntu-jdk21
-# job_dependences(ubuntu, 24, nonquick-txt-diff)
+      - nonquick-txt-diff-ubuntu-jdk24:
+          requires:
+            - canary-jobs
+            - nonquick-txt-diff-ubuntu-jdk21
+
       - non-txt-diff-ubuntu-jdk8:
           requires:
             - canary-jobs
