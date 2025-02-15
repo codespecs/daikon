@@ -7,7 +7,6 @@ import daikon.Chicory;
 import daikon.plumelib.bcelutil.SimpleLog;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.lang.classfile.*;
 import java.lang.classfile.Attributes;
 import java.lang.classfile.Opcode.*;
@@ -19,6 +18,7 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AccessFlag;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,8 +40,23 @@ import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
- * The Instrument class is responsible for modifying another class's bytecodes. Specifically, its
- * main task is to add calls into the Chicory Runtime at method entries and exits for
+ * Starting with JDK 24, Java has added a set of APIs for reading and modifying .class files ({@code
+ * java.lang.classfile}).
+ *
+ * <p>We are migrating from BCEL to this new set of APIs for two main reasons:
+ *
+ * <ol>
+ *   <li>The new APIs are more complete and robust - no more fiddling with StackMaps.
+ *   <li>Since the new APIs are part of the official JDK release, they will always be up to date
+ *       with any .class file changes.
+ * </ol>
+ *
+ * <p>The files Instrument24.java and MethodGen24.java were added to Chicory to use this new set of
+ * APIs instead of BCEL. (We will need to continue to support Instrument.java using BCEL, as we do
+ * not anticipate our clients moving from JDK 8, 11, 17 or 21 to JDK 24 for quite some time.)
+ *
+ * <p>The Instrument24 class is responsible for modifying another class's bytecodes. Specifically,
+ * its main task is to add calls into the Chicory Runtime at method entries and exits for
  * instrumentation purposes. These added calls are sometimes referred to as "hooks".
  */
 @SuppressWarnings("nullness")
@@ -284,9 +299,11 @@ public class Instrument24 implements ClassFileTransformer {
         // Write the byte array to a .class file
         Files.write(outputFile, classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL));
         // write a bcel like file with an extension of .javap
+
         try (BufferedWriter writer =
-            new BufferedWriter(
-                new FileWriter(new File(debug_orig_dir, binaryClassName + ".javap")))) {
+            Files.newBufferedWriter(
+                new File(debug_orig_dir, binaryClassName + ".javap").toPath(),
+                StandardCharsets.UTF_8)) {
           writer.write(classModel.toDebugString());
         }
       } catch (Throwable t) {
@@ -325,8 +342,9 @@ public class Instrument24 implements ClassFileTransformer {
           // write a bcel like file with an extension of .javap
           ClassModel newClassModel = classFile.parse(newBytes);
           try (BufferedWriter writer =
-              new BufferedWriter(
-                  new FileWriter(new File(debug_bin_dir, binaryClassName + ".javap")))) {
+              Files.newBufferedWriter(
+                  new File(debug_bin_dir, binaryClassName + ".javap").toPath(),
+                  StandardCharsets.UTF_8)) {
             writer.write(newClassModel.toDebugString());
           }
         } catch (Throwable t) {
@@ -719,6 +737,7 @@ public class Instrument24 implements ClassFileTransformer {
     oldStartLabel = null;
     labelMap.clear();
 
+    @SuppressWarnings("JdkObsolete")
     List<CodeElement> codeList = new LinkedList<>();
 
     debugInstrument.log("Code Attributes:%n");
@@ -1536,7 +1555,8 @@ public class Instrument24 implements ClassFileTransformer {
     StringBuilder current = new StringBuilder();
     List<String> params = new ArrayList<>();
 
-    for (char c : genericPart.toCharArray()) {
+    for (int i = 0; i < genericPart.length(); i++) {
+      char c = genericPart.charAt(i);
       if (c == '<') {
         depth++;
         current.append(c);
