@@ -757,7 +757,7 @@ else
 	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:ExtendsObject:OFF -Xep:PatternMatchingInstanceof:OFF' \
 	  -Xmaxwarns 100000 \
 	  -Werror \
-	  ${extra-error-prone-args-1 \
+	  ${extra-error-prone-args-1} \
 	  ${JAVA_FILES_FOR_STYLE}
 endif
 
