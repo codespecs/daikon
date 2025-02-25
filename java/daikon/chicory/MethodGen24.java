@@ -1,12 +1,16 @@
 package daikon.chicory;
 
-import static java.lang.constant.ConstantDescs.*;
-
-import java.lang.classfile.*;
+import java.lang.classfile.AccessFlags;
 import java.lang.classfile.Attributes;
-import java.lang.classfile.attribute.*;
-import java.lang.classfile.instruction.*;
-import java.lang.constant.*;
+import java.lang.classfile.CodeElement;
+import java.lang.classfile.CodeModel;
+import java.lang.classfile.Instruction;
+import java.lang.classfile.MethodModel;
+import java.lang.classfile.attribute.CodeAttribute;
+import java.lang.classfile.attribute.SignatureAttribute;
+import java.lang.classfile.instruction.LocalVariable;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
 import java.lang.reflect.AccessFlag;
 import java.util.ArrayList;
 import java.util.Comparator;
