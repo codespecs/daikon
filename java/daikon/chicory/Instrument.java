@@ -1,14 +1,14 @@
 package daikon.chicory;
 
 import daikon.Chicory;
+import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.InstructionListUtils;
 import daikon.plumelib.bcelutil.SimpleLog;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -56,6 +56,15 @@ import org.checkerframework.dataflow.qual.Pure;
 @SuppressWarnings("nullness")
 public class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
+  /** Directory for debug output. */
+  File debug_dir;
+
+  /** Directory for debug instrumented class output. */
+  File debug_bin_dir;
+
+  /** Directory for debug original class output. */
+  File debug_orig_dir;
+
   /** The index of this method in SharedData.methods. */
   int cur_method_info_index = 0;
 
@@ -65,11 +74,23 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /** Debug information about which classes are transformed and why. */
   public static SimpleLog debug_transform = new SimpleLog(false);
 
+  /** Binary name for the current class. */
+  @BinaryName String binaryClassName;
+
   /** Create a new Instrument. Sets up debug logging. */
   public Instrument() {
     super();
     debug_transform.enabled = Chicory.debug_transform;
     debugInstrument.enabled = Chicory.debug;
+
+    debug_dir = Chicory.debug_dir;
+    debug_bin_dir = new File(debug_dir, "bin");
+    debug_orig_dir = new File(debug_dir, "orig");
+
+    if (Chicory.dump) {
+      debug_bin_dir.mkdirs();
+      debug_orig_dir.mkdirs();
+    }
   }
 
   /**
@@ -127,7 +148,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /**
    * Given a class, return a transformed version of the class that contains "hooks" at method
    * entries and exits. Because Chicory is invoked as a javaagent, the transform method is called by
-   * the Java runtime each time a new class is loaded.
+   * the Java runtime each time a new class is loaded. A return value of null leaves the byte codes
+   * unchanged.
    */
   @Override
   public byte @Nullable [] transform(
@@ -138,9 +160,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    @BinaryName String fullClassName = className.replace("/", ".");
-    // String fullClassName = className;
+    // convert internal form to binary name
+    // TODO: replace by Signatures.internalFormToBinaryName(className);
+    binaryClassName = className.replace("/", ".");
 
+    // for debugging
     // new Throwable().printStackTrace();
 
     debug_transform.log("In chicory.Instrument.transform(): class = %s%n", className);
@@ -156,32 +180,33 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // to catch all of these.  A more consistent mechanism to determine
     // boot classes would be preferrable.
     if (Chicory.boot_classes != null) {
-      Matcher matcher = Chicory.boot_classes.matcher(fullClassName);
+      Matcher matcher = Chicory.boot_classes.matcher(binaryClassName);
       if (matcher.find()) {
-        debug_transform.log("ignoring boot class %s, matches boot_classes regex%n", fullClassName);
+        debug_transform.log(
+            "ignoring boot class %s, matches boot_classes regex%n", binaryClassName);
         return null;
       }
     } else if (loader == null) {
-      debug_transform.log("ignoring system class %s, class loader == null%n", fullClassName);
+      debug_transform.log("ignoring system class %s, class loader == null%n", binaryClassName);
       return null;
     } else if (loader.getParent() == null) {
-      debug_transform.log("ignoring system class %s, parent loader == null%n", fullClassName);
+      debug_transform.log("ignoring system class %s, parent loader == null%n", binaryClassName);
       return null;
-    } else if (fullClassName.startsWith("sun.reflect")) {
-      debug_transform.log("ignoring system class %s, in sun.reflect package%n", fullClassName);
+    } else if (binaryClassName.startsWith("sun.reflect")) {
+      debug_transform.log("ignoring system class %s, in sun.reflect package%n", binaryClassName);
       return null;
-    } else if (fullClassName.startsWith("jdk.internal.reflect")) {
+    } else if (binaryClassName.startsWith("jdk.internal.reflect")) {
       // Starting with Java 9 sun.reflect => jdk.internal.reflect.
       debug_transform.log(
-          "ignoring system class %s, in jdk.internal.reflect package", fullClassName);
+          "ignoring system class %s, in jdk.internal.reflect package", binaryClassName);
       return null;
-    } else if (fullClassName.startsWith("com.sun")) {
-      debug_transform.log("Class from com.sun package %s with nonnull loaders%n", fullClassName);
+    } else if (binaryClassName.startsWith("com.sun")) {
+      debug_transform.log("Class from com.sun package %s with nonnull loaders%n", binaryClassName);
     }
 
-    // Don't intrument our code
+    // Don't instrument our own code
     if (is_chicory(className)) {
-      debug_transform.log("Not considering chicory class %s%n", fullClassName);
+      debug_transform.log("Not considering chicory class %s%n", binaryClassName);
       return null;
     }
 
@@ -194,10 +219,25 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       ClassParser parser = new ClassParser(bais, className);
       c = parser.parse();
     } catch (Throwable t) {
-      System.out.printf("Unexpected error %s in transform of %s%n", t, fullClassName);
+      System.err.printf("Unexpected error %s reading in %s%n", t, binaryClassName);
       t.printStackTrace();
       // No changes to the bytecodes
       return null;
+    }
+
+    if (Chicory.dump) {
+      try {
+        debugInstrument.log("Dumping %s to %s%n", binaryClassName, debug_orig_dir);
+        // write .class file
+        c.dump(new File(debug_orig_dir, c.getClassName() + ".class"));
+        // write .bcel file
+        BcelUtil.dump(c, debug_orig_dir);
+      } catch (Throwable t) {
+        System.err.printf(
+            "Unexpected error %s dumping out debug files for: %s%n", t, binaryClassName);
+        t.printStackTrace();
+        // proceed with instrumentation
+      }
     }
 
     try {
@@ -206,7 +246,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
       // Convert reach non-void method to save its result in a local
       // before returning
-      ClassInfo c_info = instrument_all_methods(cg, fullClassName, loader);
+      ClassInfo c_info = instrument_all_methods(cg, binaryClassName, loader);
 
       // get constant static fields!
       Field[] fields = cg.getFields();
@@ -242,26 +282,27 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
         // if not found, add our own!
         if (!hasInit) {
-          cg.addMethod(createClinit(cg, fullClassName));
+          cg.addMethod(createClinit(cg, binaryClassName));
         }
       }
 
       JavaClass njc = cg.getJavaClass();
-      if (Chicory.debug) {
-        Path dir = Files.createTempDirectory("chicory-debug");
-        Path file = dir.resolve(njc.getClassName() + ".class");
-        debugInstrument.log("Dumping %s to %s%n", njc.getClassName(), file);
-        Files.createDirectories(dir);
-        njc.dump(file.toFile());
-      }
 
       if (c_info.shouldInclude) {
-        // System.out.println ("Instrumented class " + className);
-        // String filename = "/homes/gws/mernst/tmp/" + className +
-        //                   "Transformed.class";
-        // System.out.println ("About to dump class " + className +
-        //                     " to " + filename);
-        // njc.dump(filename);
+        if (Chicory.dump) {
+          try {
+            debugInstrument.log("Dumping %s to %s%n", binaryClassName, debug_bin_dir);
+            // write .class file
+            njc.dump(new File(debug_bin_dir, c.getClassName() + ".class"));
+            // write .bcel file
+            BcelUtil.dump(njc, debug_bin_dir);
+          } catch (Throwable t) {
+            System.err.printf(
+                "Unexpected error %s dumping out debug files for: %s%n", t, className);
+            t.printStackTrace();
+            // proceed with instrumentation
+          }
+        }
         return njc.getBytes();
       } else {
         // No changes to the bytecodes
@@ -269,7 +310,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       }
 
     } catch (Throwable e) {
-      System.out.printf("Unexpected error %s in transform of %s%n", e, fullClassName);
+      System.out.printf("Unexpected error %s in transform of %s%n", e, binaryClassName);
       e.printStackTrace();
       // No changes to the bytecodes
       return null;
@@ -412,9 +453,6 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // System.out.println(fullClassName + " --- " + invokeList.size());
     return invokeList;
   }
-
-  // Map<Integer, InstructionHandle> offset_map = new HashMap<>();
-  InstructionHandle[] offset_map;
 
   /**
    * Instrument all the methods in a class. For each method, add instrumentation code at the entry
@@ -759,7 +797,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     InstructionList nl = new InstructionList();
 
-    // create the local variable
+    // create the nonce local variable
     LocalVariableGen nonce_lv =
         create_method_scope_local(c.mgen, "this_invocation_nonce", Type.INT);
 
