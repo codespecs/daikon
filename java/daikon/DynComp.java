@@ -314,6 +314,10 @@ public class DynComp {
         // allow DCRuntime to make reflective access to sun.util.locale (equals_dcomp_instrumented)
         cmdlist.add("--add-exports");
         cmdlist.add("java.base/sun.util.locale=ALL-UNNAMED");
+        if (BcelUtil.javaVersion >= 24) {
+          cmdlist.add("--add-opens");
+          cmdlist.add("java.base/sun.util.resources=ALL-UNNAMED");
+        }
         // replace default java.base with our instrumented version
         cmdlist.add("--patch-module");
         cmdlist.add("java.base=" + rt_file);
