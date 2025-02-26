@@ -21,8 +21,12 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * Starting with JDK 24, Java has added a set of APIs for reading and modifying .class files ({@code
- * java.lang.classfile}).
+ * MethodGen24 collects and stores all the relevant information about a method that Instrument24
+ * might need. MethodGen24 is analogous to the BCEL MethodGen class. The similarity makes it easier
+ * to create Instrument24.java from Instrument.java.
+ *
+ * <p>MethodGen24 uses Java's ({@code java.lang.classfile}) APIs for reading and modifying .class
+ * files, which were added in JDK 24.
  *
  * <p>We are migrating from BCEL to this new set of APIs for two main reasons:
  *
@@ -33,12 +37,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * </ol>
  *
  * <p>The files Instrument24.java and MethodGen24.java were added to Chicory to use this new set of
- * APIs instead of BCEL. (We will need to continue to support Instrument.java using BCEL, as we do
- * not anticipate our clients moving from JDK 8, 11, 17 or 21 to JDK 24 for quite some time.)
- *
- * <p>The MethodGen24 class is a simplfied replacement for the BCEL MethodGen class. This was done
- * to make it easier to create Instrument24.java from Instrument.java. MethodGen24 collects and
- * stores all the relevant information about a method that Instrument24 might need.
+ * APIs instead of BCEL. (We will need to continue to support Instrument.java using BCEL, as we
+ * anticipate our clients using JDK 17 or less for quite some time.)
  */
 public class MethodGen24 {
 
