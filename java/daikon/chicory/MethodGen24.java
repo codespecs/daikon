@@ -45,7 +45,10 @@ public class MethodGen24 {
   /**
    * Models the body of the method (the Code attribute). A Code attribute is viewed as a composition
    * of CodeElements, which is the only way to access Instructions; the order of elements of a code
-   * model is significant. May be null if the method has no code.
+   * model is significant. May be null if the method has no code. Several fields of CodeModel are
+   * are declared as fields of MedthodGen24 to better model BCEL's version of MethodGen and to
+   * reduce re-computation. Note that we set these fields in the constructor, but they could be
+   * calculated lazily on first reference.
    */
   private @Nullable CodeModel code;
 
@@ -66,11 +69,13 @@ public class MethodGen24 {
 
   /**
    * The method's CodeAttribute. This contains information about the bytecodes (instructions) of
-   * this method. May be null if the method has no code.
+   * this method. May be null if the method has no code. Several fields of CodeAttribute are are
+   * declared as fields of MedthodGen24 to better model BCEL's version of MethodGen and to reduce
+   * re-computation. Note that we set these fields in the constructor, but they could be calculated
+   * lazily on first reference.
    */
   private @Nullable CodeAttribute codeAttribute;
 
-  // fields of the code attribute
   /** The method's maximum number of locals. */
   private int maxLocals;
 
@@ -146,19 +151,22 @@ public class MethodGen24 {
       this.codeList = new ArrayList<>();
     }
 
-    codeAttribute = methodModel.findAttribute(Attributes.code()).orElse(null);
-    if (codeAttribute != null) {
+    Optional<CodeAttribute> ca = methodModel.findAttribute(Attributes.code());
+    if (ca.isPresent()) {
+      codeAttribute = ca;
       maxLocals = codeAttribute.maxLocals();
-      // It seems like a checker bug that this assert is needed.
-      assert codeAttribute != null : "@AssumeAssertion(nullness): just tested";
-      maxStack = codeAttribute.maxStack();
+      // We need an annotated version of JDK 24 to avoid this. (maxLocals() is @SideEffectFree)
+      if (codeAttribute != null) {
+        maxStack = codeAttribute.maxStack();
+      }
     } else {
+      codeAttribute = null;
       maxLocals = 0;
       maxStack = 0;
     }
 
-    SignatureAttribute sa = methodModel.findAttribute(Attributes.signature()).orElse(null);
-    if (sa != null) {
+    Optional<SignatureAttribute> sa = methodModel.findAttribute(Attributes.signature());
+    if (sa.isPresent()) {
       signature = sa.signature().stringValue();
     } else {
       // if no signature then probably no type arguments so descriptor will do
