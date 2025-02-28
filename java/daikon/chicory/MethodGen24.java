@@ -153,7 +153,7 @@ public class MethodGen24 {
 
     Optional<CodeAttribute> ca = methodModel.findAttribute(Attributes.code());
     if (ca.isPresent()) {
-      codeAttribute = ca;
+      codeAttribute = ca.get();
       maxLocals = codeAttribute.maxLocals();
       // We need an annotated version of JDK 24 to avoid this. (maxLocals() is @SideEffectFree)
       if (codeAttribute != null) {
@@ -167,7 +167,7 @@ public class MethodGen24 {
 
     Optional<SignatureAttribute> sa = methodModel.findAttribute(Attributes.signature());
     if (sa.isPresent()) {
-      signature = sa.signature().stringValue();
+      signature = sa.get().signature().stringValue();
     } else {
       // if no signature then probably no type arguments so descriptor will do
       signature = descriptor;
