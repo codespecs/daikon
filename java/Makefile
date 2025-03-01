@@ -447,6 +447,19 @@ all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
 	@echo "JAVA_VERSION_STRING_WITH_EA = ${JAVA_VERSION_STRING_WITH_EA}"
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
+# Post JDK 21, additional restrictions have been introduced that prevent developers
+# from explicitly creating or modifying classes in the java.lang package (or any
+# package in java.base) at compile time. However, runtime class redefinition with
+# Instrumentation.redefineClasses() still works, so we declare the package to be
+# "jaxa.lang" instead of "java.lang" and then use sed to edit the classfile after
+# compilation back to "java.lang".
+	@if test -e ${DAIKONDIR}/java/daikon/dcomp-transfer/DCRuntime.class; then \
+	  echo sed -e's/jaxa/java/g' -i -b ${DAIKONDIR}/java/daikon/dcomp-transfer/DCRuntime.class; \
+	  sed -e's/jaxa/java/g' -i -b ${DAIKONDIR}/java/daikon/dcomp-transfer/DCRuntime.class; \
+	else \
+	  echo sed -e's/jaxa/java/g' -i -b ${DAIKONDIR}/java/daikon/dcomp-dummy/DCRuntime.class; \
+	  sed -e's/jaxa/java/g' -i -b ${DAIKONDIR}/java/daikon/dcomp-dummy/DCRuntime.class; \
+	fi;
 # on some systems chmod with symbolic arguments pays attention to umask.  so use 444 instead of -w
 	@chmod 444 ${AUTO_GENERATED_FILES}
 # This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
