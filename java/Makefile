@@ -440,7 +440,7 @@ xlint: chicory ${ALL_GENERATED_FILES}
 all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
-	rm -f `find daikon -name "*.class" -print`
+	rm -f `find daikon -path "*/debug*/bin" -prune -o -path "*/debug*/orig" -prune -o -name "*.class" -print`
 	@echo "CLASSPATH = ${CLASSPATH}"
 	@echo "DAIKON_CLASSPATH = ${DAIKON_CLASSPATH}"
 	@echo "JAVA_RELEASE_NUMBER = ${JAVA_RELEASE_NUMBER}"
@@ -537,7 +537,6 @@ dyncomp-test-jdk dcomp-test-jdk : dcomp_premain.jar
 	  > daikon/dcomp/jdk_dcomp_out.diff
 	@if test ! -s daikon/dcomp/jdk_dcomp_out.diff ; then echo No Errors; \
 	else echo Errors: more daikon/dcomp/jdk_dcomp_out.diff for details; fi
-	@rm -f DcompTest.decls-DynComp
 
 dyncomp-update-goals dcomp-update-goals:
 	cp daikon/dcomp/std_dcomp_out.txt daikon/dcomp/std_dcomp_out.goal
@@ -650,11 +649,11 @@ daikon/Diff.class: Diff.java ../utils/plume-scripts ${AUTO_GENERATED_FILES}
 # The (slight) downside is that the regenerated .class files might cause some
 # Make rules to unnecessarily re-run, if the code hasn't actually changed.
 clean_class_files:
-	-rm -f `find . -name "*.class" -print`
+	-rm -f `find . -path "*/debug*/bin" -prune -o -path "*/debug*/orig" -prune -o -name "*.class" -print`
 	# java/daikon might be a symbolic link; the alternative is to pass
 	# "-follow" to the above find command, but I don't necessarily
 	# want to remove everything reachable through symbolic links.
-	-rm -f `find daikon -follow -name "*.class" -print`
+	-rm -f `find daikon -follow -path "*/debug*/bin" -prune -o -path "*/debug*/orig" -prune -o -name "*.class" -print`
 	-rm -f ${OLD_AUTO_GENERATED_FILES}
 
 clean:
