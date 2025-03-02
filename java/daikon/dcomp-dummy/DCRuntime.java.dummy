@@ -1,4 +1,16 @@
-package java.lang;
+// Post JDK 21, restrictions have been introduced that prevent developers from
+// explicitly creating or modifying classes in the java.lang package (or any
+// package in java.base) at compile time. This change enforces stricter modular
+// integrity and is part of ongoing efforts to enhance the security of the JDK.
+// However, runtime class redefinition with Instrumentation.redefineClasses()
+// still works, so with a small change to the build process we can continue to
+// use the method described in daikon/java/daikon/dcomp/README to instrument
+// the classes contained in java.base.
+
+// We declare the package to be "jaxa.lang" instead of "java.lang" and then
+// use sed to edit the classfile after compilation back to "java.lang".
+
+package jaxa.lang;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

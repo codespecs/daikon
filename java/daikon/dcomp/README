@@ -18,6 +18,14 @@ security test when a class from java.base is loaded. Then, during DynComp startu
 dummy version is replaced with the version in dcomp-transfer where each method calls the
 corresponding method in daikon.dcomp.DCRuntime.
 
+Post JDK 21, additional restrictions have been introduced that prevent developers
+from explicitly creating or modifying classes in the java.lang package (or any
+package in java.base) at compile time. However, runtime class redefinition with
+Instrumentation.redefineClasses() still works, so with a small change to the build
+process we can continue to use the transfer method. We declare the package to be
+"jaxa.lang" instead of "java.lang" and then use sed to edit the classfile after
+compilation back to "java.lang".
+
 We do not anticipate that the two derivative versions will ever need to be modified.  This
 would only happen if it was decided to add an additional public method to DCRuntime that
 was to be called from instrumented code. This would require changes to DCInstrument to
