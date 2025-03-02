@@ -1,4 +1,4 @@
-// Post JDK 8, restrictions have been introduced that prevent developers from
+// Post JDK 21, restrictions have been introduced that prevent developers from
 // explicitly creating or modifying classes in the java.lang package (or any
 // package in java.base) at compile time. This change enforces stricter modular
 // integrity and is part of ongoing efforts to enhance the security of the JDK.
@@ -7,7 +7,7 @@
 // use the method described in daikon/java/daikon/dcomp/README to instrument
 // the classes contained in java.base.
 
-// We declare the pacakge to be "jaxa.lang" instead of "java.lang" and then
+// We declare the package to be "jaxa.lang" instead of "java.lang" and then
 // use sed to edit the classfile after compilation back to "java.lang".
 
 package jaxa.lang;
