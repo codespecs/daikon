@@ -317,7 +317,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
   /**
    * Adds a call (or calls) to the Chicory Runtime {@code initNotify} method into a given method.
-   * Clients pass the class static initializer as the method.
+   * Clients pass the class static initializer {@code <clinit>} as the method.
    *
    * @param cg a class
    * @param mg the method to modify, typically the class static initializer
