@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.checker.signature.qual.Identifier;
 
 /**
  * MethodGen24 collects and stores all the relevant information about a method that Instrument24
@@ -26,7 +28,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * to create Instrument24.java from Instrument.java.
  *
  * <p>MethodGen24 uses Java's ({@code java.lang.classfile}) APIs for reading and modifying .class
- * files, which were added in JDK 24.
+ * files. Those APIs were added in JDK 24.
  *
  * <p>We are migrating from BCEL to this new set of APIs for two main reasons:
  *
@@ -45,10 +47,11 @@ public class MethodGen24 {
   /**
    * Models the body of the method (the Code attribute). A Code attribute is viewed as a composition
    * of CodeElements, which is the only way to access Instructions; the order of elements of a code
-   * model is significant. May be null if the method has no code. Several fields of CodeModel are
-   * are declared as fields of MedthodGen24 to better model BCEL's version of MethodGen and to
-   * reduce re-computation. Note that we set these fields in the constructor, but they could be
-   * calculated lazily on first reference.
+   * model is significant. May be null if the method has no code.
+   *
+   * <p>Several fields of CodeModel are declared as fields of MethodGen24 to better correspond to
+   * BCEL's version of MethodGen and to reduce re-computation. Note that we set these fields in the
+   * constructor, but they could be calculated lazily on first reference.
    */
   private @Nullable CodeModel code;
 
@@ -69,10 +72,11 @@ public class MethodGen24 {
 
   /**
    * The method's CodeAttribute. This contains information about the bytecodes (instructions) of
-   * this method. May be null if the method has no code. Several fields of CodeAttribute are are
-   * declared as fields of MedthodGen24 to better model BCEL's version of MethodGen and to reduce
-   * re-computation. Note that we set these fields in the constructor, but they could be calculated
-   * lazily on first reference.
+   * this method. May be null if the method has no code.
+   *
+   * <p>Several fields of CodeAttribute are declared as fields of MedthodGen24 to better model
+   * BCEL's version of MethodGen and to reduce re-computation. Note that we set these fields in the
+   * constructor, but they could be calculated lazily on first reference.
    */
   private @Nullable CodeAttribute codeAttribute;
 
@@ -83,18 +87,19 @@ public class MethodGen24 {
   private int maxStack;
 
   /** The name of the method's enclosing class, in binary name format. */
-  private String className;
+  private @BinaryName String className;
 
   /**
    * The method's instruction list. Code elements can be categorized into Instructions (models the
-   * bytecodes) and PseudoInstructions (information about local variables, line numbers and labels).
+   * bytecodes) and PseudoInstructions (information about local variables, line numbers, and
+   * labels).
    */
   private List<CodeElement> codeList;
 
   /**
    * The method's descriptor. This is a String that encodes type information about the parameters
-   * that the method takes (if any) and the method's return type (if any). Note that it does not
-   * contain the method name or any parameter names.
+   * that the method takes (if any) and the method's return type (if any). It does not contain the
+   * method name or any parameter names.
    */
   private String descriptor;
 
@@ -102,8 +107,8 @@ public class MethodGen24 {
    * The method's signature. This is a String that encodes type information about a (possibly
    * generic) method declaration. It describes any type parameters of the method; the (possibly
    * parameterized) types of any formal parameters; the (possibly parameterized) return type, if
-   * any; and the types of any exceptions declared in the method's throws clause. Note that it does
-   * not contain the method name or any parameter names.
+   * any; and the types of any exceptions declared in the method's throws clause. It does not
+   * contain the method name or any parameter names.
    */
   private String signature;
 
@@ -115,7 +120,7 @@ public class MethodGen24 {
   private ClassDesc returnType;
 
   /** The method's parameter names. */
-  private String[] paramNames;
+  private @Identifier String[] paramNames;
 
   /** The method's local variable table. */
   private LocalVariable[] localVariables;
@@ -128,7 +133,9 @@ public class MethodGen24 {
    * @param inst_obj the daikon.chicory.Instrument instance
    */
   public MethodGen24(
-      final MethodModel methodModel, final String className, daikon.chicory.Instrument24 inst_obj) {
+      final MethodModel methodModel,
+      final @BinaryName String className,
+      daikon.chicory.Instrument24 inst_obj) {
 
     accessFlags = methodModel.flags();
     methodName = methodModel.methodName().stringValue();
@@ -139,10 +146,10 @@ public class MethodGen24 {
     Optional<CodeModel> code = methodModel.code();
     if (code.isPresent()) {
       this.code = code.get();
-      // the original elementList is immutable, so we need to make a copy
+      // The original elementList is immutable, so we need to make a copy.
       // As the list can be quite long and we do not need random access (we make one linear pass
       // over the list) and almost all the changes we make are insertions, this is one of the few
-      // cases where a LinkedList out performs an ArrayList.
+      // cases where a LinkedList outperforms an ArrayList.
       @SuppressWarnings("JdkObsolete")
       List<CodeElement> cl = new LinkedList<CodeElement>(this.code.elementList());
       this.codeList = cl;
@@ -169,7 +176,7 @@ public class MethodGen24 {
     if (sa.isPresent()) {
       signature = sa.get().signature().stringValue();
     } else {
-      // if no signature then probably no type arguments so descriptor will do
+      // If no signature then probably no type arguments, so descriptor will do.
       signature = descriptor;
     }
 
@@ -177,14 +184,14 @@ public class MethodGen24 {
     paramTypes = mtd.parameterArray();
     returnType = mtd.returnType();
 
-    // set up the localsTable
+    // Set up the localsTable in the instrumentation object.
     inst_obj.localsTable = new ArrayList<>();
 
     for (CodeElement ce : codeList) {
       if (ce instanceof LocalVariable lv) {
         inst_obj.localsTable.add(lv);
       } else {
-        // we assume all LocalVariable elements come before any instructions
+        // We assume all LocalVariable elements come before any instructions.
         if (ce instanceof Instruction) {
           break;
         }
@@ -203,7 +210,9 @@ public class MethodGen24 {
     int offset = isStatic ? 0 : 1;
     for (int i = 0; i < paramTypes.length; i++) {
       if ((offset + i) < localVariables.length) {
-        paramNames[i] = localVariables[offset + i].name().stringValue();
+        @SuppressWarnings("signature:assignment") // need JDK annotations
+        @Identifier String paramName = localVariables[offset + i].name().stringValue();
+        paramNames[i] = paramName;
       }
     }
   }
