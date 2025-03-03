@@ -4,6 +4,7 @@ import daikon.Chicory;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.InstructionListUtils;
 import daikon.plumelib.bcelutil.SimpleLog;
+import daikon.plumelib.reflection.Signatures;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -160,9 +161,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    // convert internal form to binary name
-    // TODO: replace by Signatures.internalFormToBinaryName(className);
-    binaryClassName = className.replace("/", ".");
+    binaryClassName = Signatures.internalFormToBinaryName(className);
 
     // for debugging
     // new Throwable().printStackTrace();
