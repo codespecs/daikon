@@ -149,7 +149,7 @@ public class MethodInfo {
       if (is_class_initializer()) {
         member = null;
         // This case DOES occur at run time.  -MDE 1/22/2010
-      } else if (is_constructor()) {
+      } else if (isConstructor()) {
         member = class_info.clazz.getDeclaredConstructor(arg_types);
       } else {
         member = class_info.clazz.getDeclaredMethod(method_name, arg_types);
@@ -180,7 +180,7 @@ public class MethodInfo {
    * @return true iff this method is a constructor
    */
   @Pure
-  public boolean is_constructor() {
+  public boolean isConstructor() {
     return method_name.equals("<init>") || method_name.equals("");
   }
 

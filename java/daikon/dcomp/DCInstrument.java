@@ -1311,7 +1311,7 @@ public class DCInstrument extends InstructionListUtils {
   public void add_enter(MethodGen mg, MethodInfo mi, int method_info_index) {
     InstructionList il = mg.getInstructionList();
     replaceInstructions(
-        mg, il, insertion_placeholder, call_enter_exit(mg, method_info_index, "enter", -1));
+        mg, il, insertion_placeholder, callEnterOrExit(mg, method_info_index, "enter", -1));
   }
 
   /**
@@ -1385,7 +1385,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param line source line number if type is exit
    * @return InstructionList for the enter or exit code
    */
-  InstructionList call_enter_exit(
+  InstructionList callEnterOrExit(
       MethodGen mg, int method_info_index, String method_name, int line) {
 
     InstructionList il = new InstructionList();
@@ -1915,7 +1915,7 @@ public class DCInstrument extends InstructionListUtils {
           new_il.append(InstructionFactory.createDup(type.getSize()));
           new_il.append(InstructionFactory.createStore(type, return_loc.getIndex()));
         }
-        new_il.append(call_enter_exit(mg, method_info_index, "exit", exit_iter.next()));
+        new_il.append(callEnterOrExit(mg, method_info_index, "exit", exit_iter.next()));
         new_il.append(inst);
         replaceInstructions(mg, il, ih, new_il);
       }
