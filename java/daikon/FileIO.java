@@ -1157,6 +1157,8 @@ public final class FileIO {
    */
   private static @Owning InputStream connectToChicory() {
 
+    Socket chicSocket = null;
+
     // bind to any free port
     try (ServerSocket daikonServer = new ServerSocket(0)) {
 
@@ -1165,7 +1167,6 @@ public final class FileIO {
 
       daikonServer.setReceiveBufferSize(64000);
 
-      Socket chicSocket;
       try {
         daikonServer.setSoTimeout(5000);
 
@@ -1179,9 +1180,13 @@ public final class FileIO {
       try {
         return chicSocket.getInputStream();
       } catch (IOException e) {
+        chicSocket.close();
         throw new RuntimeException("Unable to get Chicory's input stream", e);
       }
     } catch (IOException e) {
+      if (chicSocket != null) {
+        chicSocket.close();
+      }
       throw new RuntimeException("Unable to create server", e);
     }
   }
