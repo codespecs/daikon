@@ -463,7 +463,7 @@ all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
 	@echo "JAVA_VERSION_STRING_WITH_EA = ${JAVA_VERSION_STRING_WITH_EA}"
 	${JAVAC_COMMAND} @java_files.txt
 ifeq ($(JAVA24), 1)
-	${JAVAC24_COMMAND} daikon/chicory/*24.java daikon/dcomp/*24.java
+	${JAVAC24_COMMAND} daikon/chicory/*24.java
 endif
 	rm -f java_files.txt
 # Post JDK 21, additional restrictions have been introduced that prevent developers
@@ -497,7 +497,7 @@ compile_daikon : ../utils/plume-scripts $(AUTO_GENERATED_FILES)
 	@echo $(JAVAC_COMMAND) 'daikon/*.java ...'
 	@$(JAVAC_COMMAND) $(DAIKON_JAVA_FILES)
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} daikon/chicory/*24.java
 endif
 	@chmod 444 ${AUTO_GENERATED_FILES}
 	# $(MAKE) all_pass2
@@ -553,7 +553,7 @@ dyncomp dcomp : plume-import-check dcomp_premain.jar dcomp-test
 dcomp_premain.jar : $(INSTRUMENTATION_JAVA_FILES) daikon/dcomp/manifest.txt
 	$(JAVAC_COMMAND) $(INSTRUMENTATION_JAVA_FILES_NO_24)
 ifeq ($(JAVA24), 1)
-	${JAVAC24_COMMAND} daikon/chicory/*24.java daikon/dcomp/*24.java
+	${JAVAC24_COMMAND} daikon/chicory/*24.java
 endif
 	$(JAR) cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
 	  daikon/dcomp/Premain.class
@@ -660,7 +660,7 @@ all_except_daikon: ../utils/plume-scripts ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} daikon/chicory/*24.java
 endif
 	@chmod a-w ${AUTO_GENERATED_FILES}
 	$(MAKE) all_pass2
@@ -776,7 +776,7 @@ else
   extra-error-prone-args-1 = --should-stop=ifError=FLOW
 endif
 ifeq ($(JAVA24), 1)
-  extra-error-prone-args-2 = -source 24 -target 24 daikon/chicory/*24.java daikon/dcomp/*24.java
+  extra-error-prone-args-2 = -source 24 -target 24 daikon/chicory/*24.java
 endif
 
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-${error-prone-version}-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.48.4.jar
@@ -864,7 +864,7 @@ audit:
 .PHONY: reformat check-format
 
 ifeq ($(JAVA24), 1)
-  extra-format-arg = ./daikon/chicory/*24.java ./daikon/dcomp/*24.java
+  extra-format-arg = ./daikon/chicory/*24.java
 endif
 
 reformat:
@@ -974,7 +974,7 @@ typecheck-formatter-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 typecheck-index: ${ALL_GENERATED_FILES} compile
@@ -983,7 +983,7 @@ typecheck-index-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${INDEX_JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 # Run the index checker on all Java files, not just those in the daikon package.
@@ -994,7 +994,7 @@ typecheck-index-all-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_INDEX_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 # This target runs the Index checker on just one file.
@@ -1010,7 +1010,7 @@ typecheck-interning-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${INTERNING_JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 # Run the interning checker on all Java files, not just those in the daikon package.
@@ -1021,7 +1021,7 @@ typecheck-interning-all-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 # This target runs the Interning checker on just one file.
@@ -1037,7 +1037,7 @@ typecheck-lock-nocompile:
 	@echo ${JAVAC_COMMAND} ${CHECKER_ARGS} ${JAVAC_LOCK_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_LOCK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_LOCK_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_LOCK_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 typecheck-nullness: compile compile-typequals
@@ -1046,7 +1046,7 @@ typecheck-nullness-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 # These targets run the Nullness checker on just one file.
@@ -1067,7 +1067,7 @@ typecheck-prototype-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 typecheck-regex: ${ALL_GENERATED_FILES} compile
@@ -1076,7 +1076,7 @@ typecheck-regex-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 typecheck-regex-qual: ${ALL_GENERATED_FILES} compile
@@ -1085,7 +1085,7 @@ typecheck-regex-qual-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 typecheck-resourceleak: ${ALL_GENERATED_FILES} compile
@@ -1094,7 +1094,7 @@ typecheck-resourceleak-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_RESOURCELEAK_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 typecheck-signature: ${ALL_GENERATED_FILES} compile
@@ -1103,7 +1103,7 @@ typecheck-signature-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 # This target runs the Signature checker on just one file.
@@ -1120,7 +1120,7 @@ typecheck-signedness-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_SIGNEDNESS_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 typecheck-vindex: compile compile-typequals
@@ -1129,7 +1129,7 @@ typecheck-vindex-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 TYPEQUALS_JAVA_FILES = $(wildcard typequals/*.java)
@@ -1194,7 +1194,7 @@ possible-annos: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 ifeq ($(JAVA24), 1)
-	@${JAVAC24_COMMAND} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java daikon/dcomp/*24.java
+	@${JAVAC24_COMMAND} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} daikon/chicory/*24.java
 endif
 
 
@@ -1288,7 +1288,6 @@ javadoc-files.txt:
 	find * \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -path 'daikon/dcomp-transfer' \) -prune -o -name "*24.java" -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
 ifeq ($(JAVA24), 1)
 	echo daikon/chicory/*24.java >> javadoc-files.txt
-	echo daikon/dcomp/*24.java >> javadoc-files.txt
 endif
 
 # If Java 8, don't run javadoc; a bug in javadoc causes it to crash.
