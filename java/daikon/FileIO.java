@@ -1180,12 +1180,20 @@ public final class FileIO {
       try {
         return chicSocket.getInputStream();
       } catch (IOException e) {
-        chicSocket.close();
+        try {
+          chicSocket.close();
+        } catch (IOException closeException) {
+          // do nothing
+        }
         throw new RuntimeException("Unable to get Chicory's input stream", e);
       }
     } catch (IOException e) {
       if (chicSocket != null) {
-        chicSocket.close();
+        try {
+          chicSocket.close();
+        } catch (IOException closeException) {
+          // do nothing
+        }
       }
       throw new RuntimeException("Unable to create server", e);
     }
