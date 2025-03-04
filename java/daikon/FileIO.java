@@ -1182,7 +1182,7 @@ public final class FileIO {
       } catch (IOException e) {
         try {
           chicSocket.close();
-        } catch (IOException closeException) {
+        } catch (Exception closeException) {
           // do nothing
         }
         throw new RuntimeException("Unable to get Chicory's input stream", e);
@@ -1191,7 +1191,7 @@ public final class FileIO {
       if (chicSocket != null) {
         try {
           chicSocket.close();
-        } catch (IOException closeException) {
+        } catch (Exception closeException) {
           // do nothing
         }
       }
