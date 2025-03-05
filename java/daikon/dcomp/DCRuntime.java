@@ -45,6 +45,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.mustcall.qual.MustCall;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;
+import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
@@ -81,6 +82,9 @@ public final class DCRuntime implements ComparabilityProvider {
 
   /** Storage for each static tag. */
   public static List<@Nullable Object> static_tags = new ArrayList<>();
+
+  /** Either "java.lang.DCompInstrumented" or "daikon.dcomp.DCompInstrumented". */
+  static @BinaryName String instrumentation_interface;
 
   /**
    * Object used to mark procedure entries in the tag stack. It is pushed on the stack at entry and
@@ -218,7 +222,7 @@ public final class DCRuntime implements ComparabilityProvider {
     }
 
     try {
-      if (!DCInstrument.jdk_instrumented) {
+      if (!Premain.jdk_instrumented) {
         dcomp_marker_class = Class.forName("daikon.dcomp.DCompMarker");
       } else {
         dcomp_marker_class = Class.forName("java.lang.DCompMarker");
@@ -353,7 +357,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     boolean instrumented = false;
     for (Class<?> c : o1superifaces) {
-      if (c.getName().equals(DCInstrument.instrumentation_interface)) {
+      if (c.getName().equals(instrumentation_interface)) {
         instrumented = true;
         break;
       }
@@ -1228,8 +1232,6 @@ public final class DCRuntime implements ComparabilityProvider {
         System.out.printf("DCRuntime.enter adding %s to all class list%n", ci);
       }
       all_classes.add(ci);
-      // Moved to DCInstrument.instrument()
-      // daikon.chicory.Runtime.all_classes.add (ci);
       merge_dv.log("initializing traversal for %s%n", ci);
       ci.init_traversal(depth);
     }
@@ -2961,7 +2963,7 @@ public final class DCRuntime implements ComparabilityProvider {
   /** Removes DCompMarker from the signature. */
   public static String clean_decl_name(String decl_name) {
 
-    if (DCInstrument.jdk_instrumented) {
+    if (Premain.jdk_instrumented) {
       jdk_decl_matcher.reset(decl_name);
       return jdk_decl_matcher.replaceFirst("");
     } else {
@@ -3001,8 +3003,7 @@ public final class DCRuntime implements ComparabilityProvider {
       assert fi.isPrimitive();
       Field field = fi.getField();
       Class<?> clazz = field.getDeclaringClass();
-      String name =
-          DCInstrument.tag_method_name(DCInstrument.GET_TAG, clazz.getName(), field.getName());
+      String name = Premain.tag_method_name(Premain.GET_TAG, clazz.getName(), field.getName());
       try {
         get_tag = clazz.getMethod(name);
       } catch (Exception e) {

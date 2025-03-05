@@ -56,7 +56,7 @@ public class MethodGen24 {
   private @Nullable CodeModel code;
 
   /** The method's access flags. */
-  protected AccessFlags accessFlags;
+  private AccessFlags accessFlags;
 
   /** The method's name. */
   private String methodName;
@@ -122,20 +122,22 @@ public class MethodGen24 {
   /** The method's parameter names. */
   private @Identifier String[] paramNames;
 
-  /** The method's local variable table. */
-  private LocalVariable[] localVariables;
+  /** The method's original local variables. After initialization, this array is never modified. */
+  private LocalVariable[] origLocalVariables;
+
+  /**
+   * The method's local variable table. Often modified by clients, normally to add additional local
+   * variables needed for instrumentation.
+   */
+  protected List<LocalVariable> localsTable;
 
   /**
    * Creates a MethodGen24 object.
    *
    * @param methodModel the method
    * @param className the containing class
-   * @param inst_obj the daikon.chicory.Instrument instance
    */
-  public MethodGen24(
-      final MethodModel methodModel,
-      final @BinaryName String className,
-      daikon.chicory.Instrument24 inst_obj) {
+  public MethodGen24(final MethodModel methodModel, final @BinaryName String className) {
 
     accessFlags = methodModel.flags();
     methodName = methodModel.methodName().stringValue();
@@ -184,12 +186,12 @@ public class MethodGen24 {
     paramTypes = mtd.parameterArray();
     returnType = mtd.returnType();
 
-    // Set up the localsTable in the instrumentation object.
-    inst_obj.localsTable = new ArrayList<>();
+    // Set up the localsTable.
+    localsTable = new ArrayList<>();
 
     for (CodeElement ce : codeList) {
       if (ce instanceof LocalVariable lv) {
-        inst_obj.localsTable.add(lv);
+        localsTable.add(lv);
       } else {
         // We assume all LocalVariable elements come before any instructions.
         if (ce instanceof Instruction) {
@@ -199,19 +201,19 @@ public class MethodGen24 {
     }
 
     // Not necessarily sorted, so sort to make searching/insertion easier.
-    inst_obj.localsTable.sort(Comparator.comparing(LocalVariable::slot));
-    localVariables = inst_obj.localsTable.toArray(new LocalVariable[inst_obj.localsTable.size()]);
+    localsTable.sort(Comparator.comparing(LocalVariable::slot));
+    origLocalVariables = localsTable.toArray(new LocalVariable[localsTable.size()]);
 
-    // System.out.println("locals:" + Arrays.toString(localVariables));
+    // System.out.println("locals:" + Arrays.toString(origLocalVariables));
     // System.out.println("types:" + Arrays.toString(paramTypes));
     // System.out.println("length: " + paramTypes.length + ", offset: " + offset);
 
     paramNames = new String[paramTypes.length];
     int offset = isStatic ? 0 : 1;
     for (int i = 0; i < paramTypes.length; i++) {
-      if ((offset + i) < localVariables.length) {
+      if ((offset + i) < origLocalVariables.length) {
         @SuppressWarnings("signature:assignment") // need JDK annotations
-        @Identifier String paramName = localVariables[offset + i].name().stringValue();
+        @Identifier String paramName = origLocalVariables[offset + i].name().stringValue();
         paramNames[i] = paramName;
       }
     }
@@ -297,7 +299,7 @@ public class MethodGen24 {
    * @return the local variable table
    */
   public LocalVariable[] getLocalVariables() {
-    return localVariables.clone();
+    return origLocalVariables.clone();
   }
 
   /**

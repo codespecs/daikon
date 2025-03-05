@@ -78,10 +78,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /** Current class name in binary format. */
   @BinaryName String binaryClassName;
 
-  /** Create a new Instrument. Sets up debug logging. */
+  /** Instrument class constructor. Setup debug directories, if needed. */
   public Instrument() {
     super();
-    debug_transform.enabled = Chicory.debug_transform;
+    debug_transform.enabled = Chicory.debug_transform || Chicory.verbose;
     debugInstrument.enabled = Chicory.debug;
 
     debug_dir = Chicory.debug_dir;
@@ -147,16 +147,15 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Given a class, return a transformed version of the class that contains "hooks" at method
-   * entries and exits. Because Chicory is invoked as a javaagent, the transform method is called by
-   * the Java runtime each time a new class is loaded. A return value of null leaves the byte codes
-   * unchanged.
+   * Given a class, return a transformed version of the class that contains instrumentation code.
+   * Because Chicory is invoked as a javaagent, the transform method is called by the Java runtime
+   * each time a new class is loaded. A return value of null leaves the byte codes unchanged.
    */
   @Override
   public byte @Nullable [] transform(
-      ClassLoader loader,
+      @Nullable ClassLoader loader,
       @InternalForm String className,
-      Class<?> classBeingRedefined,
+      @Nullable Class<?> classBeingRedefined,
       ProtectionDomain protectionDomain,
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
@@ -179,22 +178,22 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       Matcher matcher = Chicory.boot_classes.matcher(binaryClassName);
       if (matcher.find()) {
         debug_transform.log(
-            "ignoring boot class %s, matches boot_classes regex%n", binaryClassName);
+            "Ignoring boot class %s, matches boot_classes regex%n", binaryClassName);
         return null;
       }
     } else if (loader == null) {
-      debug_transform.log("ignoring system class %s, class loader == null%n", binaryClassName);
+      debug_transform.log("Ignoring system class %s, class loader == null%n", binaryClassName);
       return null;
     } else if (loader.getParent() == null) {
-      debug_transform.log("ignoring system class %s, parent loader == null%n", binaryClassName);
+      debug_transform.log("Ignoring system class %s, parent loader == null%n", binaryClassName);
       return null;
     } else if (binaryClassName.startsWith("sun.reflect")) {
-      debug_transform.log("ignoring system class %s, in sun.reflect package%n", binaryClassName);
+      debug_transform.log("Ignoring system class %s, in sun.reflect package%n", binaryClassName);
       return null;
     } else if (binaryClassName.startsWith("jdk.internal.reflect")) {
       // Starting with Java 9 sun.reflect => jdk.internal.reflect.
       debug_transform.log(
-          "ignoring system class %s, in jdk.internal.reflect package", binaryClassName);
+          "Ignoring system class %s, in jdk.internal.reflect package", binaryClassName);
       return null;
     } else if (binaryClassName.startsWith("com.sun")) {
       debug_transform.log("Class from com.sun package %s with nonnull loaders%n", binaryClassName);
@@ -206,8 +205,15 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       return null;
     }
 
-    debug_transform.log(
-        "transforming class %s, loader %s - %s%n", className, loader, loader.getParent());
+    ClassLoader cfLoader;
+    if (loader == null) {
+      cfLoader = ClassLoader.getSystemClassLoader();
+      debug_transform.log("Transforming class %s, loader %s - %s%n", className, loader, cfLoader);
+    } else {
+      cfLoader = loader;
+      debug_transform.log(
+          "Transforming class %s, loader %s - %s%n", className, loader, loader.getParent());
+    }
 
     // Parse the bytes of the classfile, die on any errors.
     JavaClass c;
@@ -223,11 +229,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     if (Chicory.dump) {
       try {
-        debugInstrument.log(
-            "Dumping .class and .javap for %s to %s%n", binaryClassName, debug_orig_dir);
+        debug_transform.log(
+            "Dumping .class and .bcel for %s to %s%n", binaryClassName, debug_orig_dir);
         // Write the byte array to a .class file.
         c.dump(new File(debug_orig_dir, c.getClassName() + ".class"));
-        // Write a BCEL-like file with an extension of .javap.
+        // write .bcel file
         BcelUtil.dump(c, debug_orig_dir);
       } catch (Throwable t) {
         System.err.printf(
@@ -237,6 +243,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       }
     }
 
+    // Instrument the classfile, die on any errors
     JavaClass njc;
     ClassInfo classInfo;
 
@@ -244,7 +251,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       // Get the class information
       ClassGen cg = new ClassGen(c);
 
-      // Convert reach non-void method to save its result in a local before returning.
+      // Modify each non-void method to save its result in a local before returning.
       classInfo = instrument_all_methods(cg, binaryClassName, loader);
 
       // get constant static fields!
@@ -288,28 +295,30 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       njc = cg.getJavaClass();
 
     } catch (Throwable t) {
-      System.out.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
+      System.err.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
       t.printStackTrace();
-      // No changes to the bytecodes
-      return null;
+      throw new RuntimeException("Unexpected error", t);
     }
 
     if (classInfo.shouldInclude) {
       if (Chicory.dump) {
         try {
-          debugInstrument.log("Dumping %s to %s%n", binaryClassName, debug_bin_dir);
-          // write .class file
-          njc.dump(new File(debug_bin_dir, c.getClassName() + ".class"));
+          debug_transform.log(
+              "Dumping .class and .bcel for %s to %s%n", binaryClassName, debug_bin_dir);
+          // Write the byte array to a .class file
+          njc.dump(new File(debug_bin_dir, binaryClassName + ".class"));
           // write .bcel file
           BcelUtil.dump(njc, debug_bin_dir);
         } catch (Throwable t) {
-          System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
+          System.err.printf(
+              "Unexpected error %s dumping out debug files for: %s%n", t, binaryClassName);
           t.printStackTrace();
           // proceed with instrumentation
         }
       }
       return njc.getBytes();
     } else {
+      debug_transform.log("Didn't instrument %s%n", binaryClassName);
       // No changes to the bytecodes
       return null;
     }
@@ -355,7 +364,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       mg.setMaxStack();
       mg.update();
     } catch (Exception e) {
-      System.out.printf("Unexpected exception encountered: %s", e);
+      System.err.printf("Unexpected exception encountered: %s", e);
       e.printStackTrace();
     }
 
@@ -448,7 +457,6 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             new Type[] {Type.STRING},
             Const.INVOKESTATIC));
 
-    // System.out.println(fullClassName + " --- " + instructions.size());
     return instructions;
   }
 
@@ -463,7 +471,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * @param loader ClassLoader for current class
    * @return ClassInfo for current class
    */
-  private ClassInfo instrument_all_methods(ClassGen cg, String fullClassName, ClassLoader loader) {
+  private ClassInfo instrument_all_methods(
+      ClassGen cg, String fullClassName, @Nullable ClassLoader loader) {
 
     ClassInfo classInfo = new ClassInfo(cg.getClassName(), loader);
     List<MethodInfo> method_infos = new ArrayList<>();
@@ -623,7 +632,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           try {
             cg.replaceMethod(m, mgen.getMethod());
           } catch (Exception e) {
-            if (e.getMessage().startsWith("Branch target offset too large")) {
+            if (e.getMessage() != null
+                && e.getMessage().startsWith("Branch target offset too large")) {
               System.out.printf(
                   "Chicory warning: ClassFile: %s - method %s is too large to instrument and is"
                       + " being skipped.%n",
@@ -745,12 +755,15 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     if (returnLocal == null) {
       assert returnType != null : " return__$trace2_val doesn't exist";
     } else {
-      assert returnType.equals(returnLocal.getType())
+      assert returnLocal.getType().equals(returnType)
           : " returnType = " + returnType + "current type = " + returnLocal.getType();
     }
 
     if (returnLocal == null) {
       debugInstrument.log("Adding return local of type %s%n", returnType);
+      assert returnType != null
+          : "@AssumeAssertion(nullness): if returnLocal doesn't exist, returnType must not be"
+              + " null";
       returnLocal = mgen.addLocalVariable("return__$trace2_val", returnType, null, null);
     }
 
