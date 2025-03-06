@@ -75,14 +75,18 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /** Debug information about which classes are transformed and why. */
   public static SimpleLog debug_transform = new SimpleLog(false);
 
+  /** Debug information about ppt-omit and ppt-select. */
+  public static SimpleLog debug_ppt = new SimpleLog(false);
+
   /** Current class name in binary format. */
   @BinaryName String binaryClassName;
 
   /** Instrument class constructor. Setup debug directories, if needed. */
   public Instrument() {
     super();
-    debug_transform.enabled = Chicory.debug_transform || Chicory.verbose;
+    debug_transform.enabled = Chicory.debug_transform || Chicory.debug || Chicory.verbose;
     debugInstrument.enabled = Chicory.debug;
+    debug_ppt.enabled = debugInstrument.enabled;
 
     debug_dir = Chicory.debug_dir;
     debug_bin_dir = new File(debug_dir, "bin");
@@ -114,7 +118,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       Matcher mMethod = pattern.matcher(methodName);
 
       if (mPpt.find() || mClass.find() || mMethod.find()) {
-        debug_transform.log("ignoring %s, it matches ppt_omit regex %s%n", pptName, pattern);
+        debug_ppt.log("ignoring %s, it matches ppt_omit regex %s%n", pptName, pattern);
         return true;
       }
     }
@@ -129,7 +133,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         Matcher mMethod = pattern.matcher(methodName);
 
         if (mPpt.find() || mClass.find() || mMethod.find()) {
-          debug_transform.log("including %s, it matches ppt_select regex %s%n", pptName, pattern);
+          debug_ppt.log("including %s, it matches ppt_select regex %s%n", pptName, pattern);
           return false;
         }
       }
@@ -138,10 +142,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // If we're here, this ppt is not explicitly included or excluded,
     // so keep unless there were items in the "include only" list.
     if (Runtime.ppt_select_pattern.size() > 0) {
-      debug_transform.log("ignoring %s, not included in ppt_select pattern(s)%n", pptName);
+      debug_ppt.log("ignoring %s, not included in ppt_select pattern(s)%n", pptName);
       return true;
     } else {
-      debug_transform.log("including %s, not included in ppt_omit pattern(s)%n", pptName);
+      debug_ppt.log("including %s, not included in ppt_omit pattern(s)%n", pptName);
       return false;
     }
   }

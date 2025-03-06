@@ -21,6 +21,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.Identifier;
+import org.checkerframework.checker.signature.qual.MethodDescriptor;
 
 /**
  * MethodGen24 collects and stores all the relevant information about a method that Instrument24
@@ -101,22 +102,22 @@ public class MethodGen24 {
    * that the method takes (if any) and the method's return type (if any). It does not contain the
    * method name or any parameter names.
    */
-  private String descriptor;
+  private @MethodDescriptor String descriptor;
 
   /**
    * The method's signature. This is a String that encodes type information about a (possibly
    * generic) method declaration. It describes any type parameters of the method; the (possibly
    * parameterized) types of any formal parameters; the (possibly parameterized) return type, if
-   * any; and the types of any exceptions declared in the method's throws clause. It does not
-   * contain the method name or any parameter names.
+   * any. It is not a true method signature as documented in the Java Vitural Machine Specification
+   * as it does not include the types of any exceptions declared in the method's throws clause.
    */
-  private String signature;
+  private @MethodDescriptor String signature;
 
   // Informatation extracted from {@code mtd}, the MethodTypeDescriptor.
   /** The method's parameter types. */
   private ClassDesc[] paramTypes;
 
-  /** The method's return type. */
+  /** The method's return type, not including the receiver. */
   private ClassDesc returnType;
 
   /** The method's parameter names. */
@@ -141,7 +142,9 @@ public class MethodGen24 {
 
     accessFlags = methodModel.flags();
     methodName = methodModel.methodName().stringValue();
-    descriptor = methodModel.methodType().stringValue();
+    @SuppressWarnings("signature") // JDK 24 is not annotated as yet
+    @MethodDescriptor String temp1 = methodModel.methodType().stringValue();
+    descriptor = temp1;
     this.className = className;
     isStatic = accessFlags.has(AccessFlag.STATIC);
 
@@ -165,9 +168,8 @@ public class MethodGen24 {
       codeAttribute = ca.get();
       maxLocals = codeAttribute.maxLocals();
       // We need an annotated version of JDK 24 to avoid this. (maxLocals() is @SideEffectFree)
-      if (codeAttribute != null) {
-        maxStack = codeAttribute.maxStack();
-      }
+      assert codeAttribute != null : "@AssumeAssertion(nullness): just check above";
+      maxStack = codeAttribute.maxStack();
     } else {
       codeAttribute = null;
       maxLocals = 0;
@@ -176,7 +178,9 @@ public class MethodGen24 {
 
     Optional<SignatureAttribute> sa = methodModel.findAttribute(Attributes.signature());
     if (sa.isPresent()) {
-      signature = sa.get().signature().stringValue();
+      @SuppressWarnings("signature") // JDK 24 is not annotated as yet
+      @MethodDescriptor String temp2 = sa.get().signature().stringValue();
+      signature = temp2;
     } else {
       // If no signature then probably no type arguments, so descriptor will do.
       signature = descriptor;
@@ -345,7 +349,7 @@ public class MethodGen24 {
    *
    * @return descriptor for the current method
    */
-  public String getDescriptor() {
+  public @MethodDescriptor String getDescriptor() {
     return descriptor;
   }
 
@@ -353,11 +357,11 @@ public class MethodGen24 {
    * Return the signature for the current method. This is a String that encodes type information
    * about a (possibly generic) method declaration. It describes any type parameters of the method;
    * the (possibly parameterized) types of any formal parameters; the (possibly parameterized)
-   * return type, if any; and the types of any exceptions declared in the method's throws clause.
+   * return type, if any.
    *
    * @return signature for the current method
    */
-  public String getSignature() {
+  public @MethodDescriptor String getSignature() {
     return signature;
   }
 

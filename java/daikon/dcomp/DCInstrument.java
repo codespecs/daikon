@@ -403,7 +403,7 @@ public class DCInstrument extends InstructionListUtils {
     // We must also remember the class name so if we see a subsequent
     // call to one of its methods we do not add the dcomp argument.
 
-    Instrument.debug_transform.log("junit_state: %s%n", junit_state);
+    debugInstrument.log("junit_state: %s%n", junit_state);
 
     StackTraceElement[] stack_trace;
 
@@ -470,7 +470,7 @@ public class DCInstrument extends InstructionListUtils {
         throw new Error("invalid junit_state");
     }
 
-    Instrument.debug_transform.log("junit_state: %s%n", junit_state);
+    debugInstrument.log("junit_state: %s%n", junit_state);
 
     boolean junit_test_class = false;
     if (junit_state == JUnitState.TEST_DISCOVERY) {
@@ -542,9 +542,9 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     if (junit_test_class) {
-      Instrument.debug_transform.log("JUnit test class: %s%n", classname);
+      debugInstrument.log("JUnit test class: %s%n", classname);
     } else {
-      Instrument.debug_transform.log("Not a JUnit test class: %s%n", classname);
+      debugInstrument.log("Not a JUnit test class: %s%n", classname);
     }
 
     // Process each method
@@ -3043,8 +3043,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   boolean should_track(@ClassGetName String className, String methodName, String pptName) {
 
-    Instrument.debug_transform.log(
-        "Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
+    debugInstrument.log("Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
 
     // Don't track any JDK classes
     if (BcelUtil.inJdk(className)) {

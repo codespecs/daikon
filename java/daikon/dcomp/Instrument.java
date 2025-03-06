@@ -45,6 +45,7 @@ public class Instrument implements ClassFileTransformer {
     debug_transform.enabled =
         DynComp.debug || DynComp.debug_transform || Premain.debug_dcinstrument || DynComp.verbose;
     daikon.chicory.Instrument.debug_transform.enabled = debug_transform.enabled;
+    daikon.chicory.Instrument.debug_ppt.enabled = DynComp.debug;
 
     debug_dir = DynComp.debug_dir;
     debug_bin_dir = new File(debug_dir, "bin");

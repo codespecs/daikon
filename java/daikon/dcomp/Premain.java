@@ -152,6 +152,10 @@ public class Premain {
     daikon.chicory.Runtime.ppt_omit_pattern = DynComp.ppt_omit_pattern;
     daikon.chicory.Runtime.ppt_select_pattern = DynComp.ppt_select_pattern;
 
+    // We need to load the BcelUtil class prior to turning on instrumentation.
+    @SuppressWarnings("UnusedVariable")
+    int junk = BcelUtil.javaVersion;
+
     jdk_instrumented = !DynComp.no_jdk;
 
     // Another 'trick' to force needed classes to be loaded prior to retransformation.
@@ -190,13 +194,14 @@ public class Premain {
     Thread shutdown_thread = new ShutdownThread();
     java.lang.Runtime.getRuntime().addShutdownHook(shutdown_thread);
 
-    String instrumenter;
-    if (BcelUtil.javaVersion >= 24) {
-      // UNDONE: change to Instrument24
-      instrumenter = "daikon.dcomp.Instrument";
-    } else {
-      instrumenter = "daikon.dcomp.Instrument";
-    }
+    // UNDONE: turn on Instrument24
+    String instrumenter = "daikon.dcomp.Instrument";
+    // String instrumenter;
+    // if (BcelUtil.javaVersion >= 24) {
+    //   instrumenter = "daikon.dcomp.Instrument24";
+    // } else {
+    //   instrumenter = "daikon.dcomp.Instrument";
+    // }
 
     // Setup the transformer
     ClassFileTransformer transformer;
