@@ -1009,27 +1009,26 @@ public class Instrument24 implements ClassFileTransformer {
     //
     // We want to insert our instrumentation code after the LocalVariables (if any) and after the
     // inital label (if present), but before any LineNumber or Instruction.
+    CodeElement inst = null;
     try {
       ListIterator<CodeElement> li = instructions.listIterator();
       while (li.hasNext()) {
-
-        CodeElement inst = li.next();
-        if (!(inst instanceof LineNumber) && !(inst instanceof Instruction)) {
-          continue;
+        inst = li.next();
+        if ((inst instanceof LineNumber) || (inst instanceof Instruction)) {
+          break;
         }
+      }
 
-        // Label for new location of start of original code.
-        entryLabel = currentCodeBuilder.newLabel();
-        debugInstrument.log("entryLabel: %s%n", entryLabel);
-        labelMap.put(inst, entryLabel);
+      // Label for new location of start of original code.
+      entryLabel = currentCodeBuilder.newLabel();
+      debugInstrument.log("entryLabel: %s%n", entryLabel);
+      labelMap.put(inst, entryLabel);
 
-        // Insert code before this LineNumber or Instruction.
-        // Back up iterator to point to 'inst'.
-        li.previous();
-        for (CodeElement ce : newCode) {
-          li.add(ce);
-        }
-        break;
+      // Insert code before this LineNumber or Instruction.
+      // Back up iterator to point to 'inst'.
+      li.previous();
+      for (CodeElement ce : newCode) {
+        li.add(ce);
       }
     } catch (Exception e) {
       System.err.printf("Unexpected exception encountered: %s", e);
@@ -1554,7 +1553,7 @@ public class Instrument24 implements ClassFileTransformer {
         result.append("void");
         break;
       case 'L': // Object type, starts with 'L' and ends with ';'
-        result.append(parseObjectType(descriptor));
+        result.append(parseSimpleTypeSignature(descriptor));
         break;
       default:
         throw new IllegalArgumentException("Invalid descriptor: " + descriptor);
@@ -1569,12 +1568,12 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Format an object that may contain generics for output.
+   * Format an class name that may contain type arguments for output.
    *
    * @param descriptor the object to format
    * @return a formatted string
    */
-  private static String parseObjectType(String descriptor) {
+  private static String parseSimpleTypeSignature(String descriptor) {
     StringBuilder result = new StringBuilder();
     int genericStart = descriptor.indexOf('<');
     int genericEnd = descriptor.lastIndexOf('>');
@@ -1585,7 +1584,7 @@ public class Instrument24 implements ClassFileTransformer {
       String baseType = descriptor.substring(1, genericStart).replace('/', '.');
       result.append(baseType).append('<');
       String genericPart = descriptor.substring(genericStart + 1, genericEnd);
-      result.append(parseGenericParameters(genericPart));
+      result.append(parseTypeArguments(genericPart));
       result.append('>');
     } else if (endOfBaseType > 0) {
       // Regular object type
@@ -1598,13 +1597,13 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Format a generic parameter for output.
+   * Format one or more type parameters for output.
    *
    * @param genericPart the type parameter(s) to format
    * @return a formatted string
    */
   @SuppressWarnings("signature") // string manipulation
-  private static String parseGenericParameters(String genericPart) {
+  private static String parseTypeArguments(String genericPart) {
     StringBuilder result = new StringBuilder();
     int depth = 0;
     StringBuilder current = new StringBuilder();
