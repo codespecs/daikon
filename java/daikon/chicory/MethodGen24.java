@@ -26,7 +26,7 @@ import org.checkerframework.checker.signature.qual.MethodDescriptor;
 /**
  * MethodGen24 collects and stores all the relevant information about a method that Instrument24
  * might need. MethodGen24 is analogous to the BCEL MethodGen class. The similarity makes it easier
- * to create Instrument24.java from Instrument.java.
+ * to keep Instrument.java and Instrument24.java in sync.
  *
  * <p>MethodGen24 uses Java's ({@code java.lang.classfile}) APIs for reading and modifying .class
  * files. Those APIs were added in JDK 24.
@@ -51,7 +51,7 @@ public class MethodGen24 {
    * model is significant. May be null if the method has no code.
    *
    * <p>Several fields of CodeModel are declared as fields of MethodGen24 to better correspond to
-   * BCEL's version of MethodGen and to reduce re-computation. Note that we set these fields in the
+   * BCEL's version of MethodGen and to reduce re-computation. Currently we set these fields in the
    * constructor, but they could be calculated lazily on first reference.
    */
   private @Nullable CodeModel code;
@@ -117,10 +117,10 @@ public class MethodGen24 {
   /** The method's parameter types. */
   private ClassDesc[] paramTypes;
 
-  /** The method's return type, not including the receiver. */
+  /** The method's return type. */
   private ClassDesc returnType;
 
-  /** The method's parameter names. */
+  /** The method's parameter names, not including the receiver. */
   private @Identifier String[] paramNames;
 
   /** The method's original local variables. After initialization, this array is never modified. */
@@ -143,8 +143,8 @@ public class MethodGen24 {
     accessFlags = methodModel.flags();
     methodName = methodModel.methodName().stringValue();
     @SuppressWarnings("signature") // JDK 24 is not annotated as yet
-    @MethodDescriptor String temp1 = methodModel.methodType().stringValue();
-    descriptor = temp1;
+    @MethodDescriptor String descriptor1 = methodModel.methodType().stringValue();
+    descriptor = descriptor1;
     this.className = className;
     isStatic = accessFlags.has(AccessFlag.STATIC);
 
@@ -167,8 +167,8 @@ public class MethodGen24 {
     if (ca.isPresent()) {
       codeAttribute = ca.get();
       maxLocals = codeAttribute.maxLocals();
-      // We need an annotated version of JDK 24 to avoid this. (maxLocals() is @SideEffectFree)
-      assert codeAttribute != null : "@AssumeAssertion(nullness): just check above";
+      // We need an annotated version of JDK 24 to prevent the need for this suppression.
+      assert codeAttribute != null : "@AssumeAssertion(nullness): maxLocals() is @SideEffectFree";
       maxStack = codeAttribute.maxStack();
     } else {
       codeAttribute = null;
@@ -179,8 +179,8 @@ public class MethodGen24 {
     Optional<SignatureAttribute> sa = methodModel.findAttribute(Attributes.signature());
     if (sa.isPresent()) {
       @SuppressWarnings("signature") // JDK 24 is not annotated as yet
-      @MethodDescriptor String temp2 = sa.get().signature().stringValue();
-      signature = temp2;
+      @MethodDescriptor String signature1 = sa.get().signature().stringValue();
+      signature = signature1;
     } else {
       // If no signature then probably no type arguments, so descriptor will do.
       signature = descriptor;
@@ -309,9 +309,9 @@ public class MethodGen24 {
   /**
    * Return the name of the containing class.
    *
-   * @return the binary name if the class that contains this method
+   * @return the binary name of the class that contains this method
    */
-  public String getClassName() {
+  public @BinaryName String getClassName() {
     return className;
   }
 
