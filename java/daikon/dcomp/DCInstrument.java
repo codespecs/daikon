@@ -94,7 +94,6 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 import org.checkerframework.dataflow.qual.Pure;
@@ -180,28 +179,11 @@ public class DCInstrument extends InstructionListUtils {
   /** Keeps track of the methods that were not successfully instrumented. */
   protected List<String> skipped_methods = new ArrayList<>();
 
-  /**
-   * Specifies if we are to use an instrumented version of the JDK. Calls into the JDK must be
-   * modified to remove the arguments from the tag stack if the JDK is not instrumented. This flag
-   * is set/reset in daikon.dcomp.Premain.
-   */
-  protected static boolean jdk_instrumented = true;
-
-  /** Either "java.lang.DCompInstrumented" or "daikon.dcomp.DCompInstrumented". */
-  // Static because used in DCRuntime
-  protected static @BinaryName String instrumentation_interface;
-
   /** Either "java.lang" or "daikon.dcomp". */
   protected @DotSeparatedIdentifiers String dcomp_prefix;
 
   /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
   protected @DotSeparatedIdentifiers String dcompRuntimeClassName = "daikon.dcomp.DCRuntime";
-
-  /** Name prefix for tag setter methods. */
-  protected static final String SET_TAG = "set_tag";
-
-  /** Name prefix for tag getter methods. */
-  protected static final String GET_TAG = "get_tag";
 
   /** Set of JUnit test classes. */
   protected static Set<String> junitTestClasses = new HashSet<>();
@@ -333,7 +315,7 @@ public class DCInstrument extends InstructionListUtils {
     pool = gen.getConstantPool();
     ifact = new InstructionFactory(gen);
     constructor_is_initialized = false;
-    if (jdk_instrumented) {
+    if (Premain.jdk_instrumented) {
       dcomp_prefix = "java.lang";
     } else {
       dcomp_prefix = "daikon.dcomp";
@@ -342,7 +324,7 @@ public class DCInstrument extends InstructionListUtils {
     if (BcelUtil.javaVersion == 8) {
       dcomp_prefix = "daikon.dcomp";
     }
-    instrumentation_interface = Signatures.addPackage(dcomp_prefix, "DCompInstrumented");
+    DCRuntime.instrumentation_interface = Signatures.addPackage(dcomp_prefix, "DCompInstrumented");
 
     // System.out.printf("DCInstrument %s%n", orig_class.getClassName());
     // Turn on some of the logging based on debug option.
@@ -421,7 +403,7 @@ public class DCInstrument extends InstructionListUtils {
     // We must also remember the class name so if we see a subsequent
     // call to one of its methods we do not add the dcomp argument.
 
-    Instrument.debug_transform.log("junit_state: %s%n", junit_state);
+    debugInstrument.log("junit_state: %s%n", junit_state);
 
     StackTraceElement[] stack_trace;
 
@@ -488,7 +470,7 @@ public class DCInstrument extends InstructionListUtils {
         throw new Error("invalid junit_state");
     }
 
-    Instrument.debug_transform.log("junit_state: %s%n", junit_state);
+    debugInstrument.log("junit_state: %s%n", junit_state);
 
     boolean junit_test_class = false;
     if (junit_state == JUnitState.TEST_DISCOVERY) {
@@ -560,9 +542,9 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     if (junit_test_class) {
-      Instrument.debug_transform.log("JUnit test class: %s%n", classname);
+      debugInstrument.log("JUnit test class: %s%n", classname);
     } else {
-      Instrument.debug_transform.log("Not a JUnit test class: %s%n", classname);
+      debugInstrument.log("Not a JUnit test class: %s%n", classname);
     }
 
     // Process each method
@@ -1311,7 +1293,7 @@ public class DCInstrument extends InstructionListUtils {
   public void add_enter(MethodGen mg, MethodInfo mi, int method_info_index) {
     InstructionList il = mg.getInstructionList();
     replaceInstructions(
-        mg, il, insertion_placeholder, call_enter_exit(mg, method_info_index, "enter", -1));
+        mg, il, insertion_placeholder, callEnterOrExit(mg, method_info_index, "enter", -1));
   }
 
   /**
@@ -1385,7 +1367,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param line source line number if type is exit
    * @return InstructionList for the enter or exit code
    */
-  InstructionList call_enter_exit(
+  InstructionList callEnterOrExit(
       MethodGen mg, int method_info_index, String method_name, int line) {
 
     InstructionList il = new InstructionList();
@@ -1915,7 +1897,7 @@ public class DCInstrument extends InstructionListUtils {
           new_il.append(InstructionFactory.createDup(type.getSize()));
           new_il.append(InstructionFactory.createStore(type, return_loc.getIndex()));
         }
-        new_il.append(call_enter_exit(mg, method_info_index, "exit", exit_iter.next()));
+        new_il.append(callEnterOrExit(mg, method_info_index, "exit", exit_iter.next()));
         new_il.append(inst);
         replaceInstructions(mg, il, ih, new_il);
       }
@@ -2199,7 +2181,7 @@ public class DCInstrument extends InstructionListUtils {
       // If we are not using the instrumented JDK, then we need to track down the
       // actual target of an INVOKEVIRTUAL to see if it has been instrumented or not.
       if (targetInstrumented == true && invoke instanceof INVOKEVIRTUAL) {
-        if (!jdk_instrumented && !mgen.getName().equals("equals_dcomp_instrumented")) {
+        if (!Premain.jdk_instrumented && !mgen.getName().equals("equals_dcomp_instrumented")) {
 
           if (debugHandleInvoke) {
             System.out.println("method: " + methodName);
@@ -2409,7 +2391,7 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     // If using the instrumented JDK, then everthing but object is instrumented
-    if (jdk_instrumented && !classname.equals("java.lang.Object")) {
+    if (Premain.jdk_instrumented && !classname.equals("java.lang.Object")) {
       return true;
     }
 
@@ -2588,7 +2570,7 @@ public class DCInstrument extends InstructionListUtils {
       il.append(
           ifact.createInvoke(
               classname,
-              tag_method_name(GET_TAG, classname, f.getFieldName(pool)),
+              Premain.tag_method_name(Premain.GET_TAG, classname, f.getFieldName(pool)),
               Type.VOID,
               Type.NO_ARGS,
               Const.INVOKESTATIC));
@@ -2596,7 +2578,7 @@ public class DCInstrument extends InstructionListUtils {
       il.append(
           ifact.createInvoke(
               classname,
-              tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
+              Premain.tag_method_name(Premain.SET_TAG, classname, f.getFieldName(pool)),
               Type.VOID,
               Type.NO_ARGS,
               Const.INVOKESTATIC));
@@ -2605,7 +2587,7 @@ public class DCInstrument extends InstructionListUtils {
       il.append(
           ifact.createInvoke(
               classname,
-              tag_method_name(GET_TAG, classname, f.getFieldName(pool)),
+              Premain.tag_method_name(Premain.GET_TAG, classname, f.getFieldName(pool)),
               Type.VOID,
               Type.NO_ARGS,
               Const.INVOKEVIRTUAL));
@@ -2617,7 +2599,7 @@ public class DCInstrument extends InstructionListUtils {
         il.append(
             ifact.createInvoke(
                 classname,
-                tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
+                Premain.tag_method_name(Premain.SET_TAG, classname, f.getFieldName(pool)),
                 Type.VOID,
                 Type.NO_ARGS,
                 Const.INVOKEVIRTUAL));
@@ -2628,7 +2610,7 @@ public class DCInstrument extends InstructionListUtils {
         il.append(
             ifact.createInvoke(
                 classname,
-                tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
+                Premain.tag_method_name(Premain.SET_TAG, classname, f.getFieldName(pool)),
                 Type.VOID,
                 Type.NO_ARGS,
                 Const.INVOKEVIRTUAL));
@@ -3061,8 +3043,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   boolean should_track(@ClassGetName String className, String methodName, String pptName) {
 
-    Instrument.debug_transform.log(
-        "Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
+    debugInstrument.log("Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
 
     // Don't track any JDK classes
     if (BcelUtil.inJdk(className)) {
@@ -3623,7 +3604,7 @@ public class DCInstrument extends InstructionListUtils {
       }
     }
 
-    if (!jdk_instrumented) {
+    if (!Premain.jdk_instrumented) {
       if (BcelUtil.inJdk(classname)) {
         return false;
       }
@@ -3846,7 +3827,7 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     String classname = gen.getClassName();
-    String accessor_name = tag_method_name(GET_TAG, classname, f.getName());
+    String accessor_name = Premain.tag_method_name(Premain.GET_TAG, classname, f.getName());
 
     InstructionList il = new InstructionList();
 
@@ -3921,7 +3902,7 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     String classname = gen.getClassName();
-    String setter_name = tag_method_name(SET_TAG, classname, f.getName());
+    String setter_name = Premain.tag_method_name(Premain.SET_TAG, classname, f.getName());
 
     InstructionList il = new InstructionList();
 
@@ -3980,7 +3961,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param gen class to add interface to
    */
   void add_dcomp_interface(ClassGen gen) {
-    gen.addInterface(instrumentation_interface);
+    gen.addInterface(DCRuntime.instrumentation_interface);
     debugInstrument.log("Added interface DCompInstrumented%n");
 
     InstructionList il = new InstructionList();
@@ -4081,18 +4062,6 @@ public class DCInstrument extends InstructionListUtils {
     if (ts != null) {
       gen.addInterface(Signatures.addPackage(dcomp_prefix, "DCompToString"));
     }
-  }
-
-  /**
-   * Returns a field tag accessor method name.
-   *
-   * @param type "get_tag" or "set_tag"
-   * @param classname name of class
-   * @param fname name of field
-   * @return name of tag accessor method
-   */
-  static String tag_method_name(String type, String classname, String fname) {
-    return fname + "_" + classname.replace('.', '_') + "__$" + type;
   }
 
   /**
