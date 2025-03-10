@@ -54,7 +54,6 @@ import org.checkerframework.dataflow.qual.Pure;
  * main task is to add calls into the Chicory Runtime at method entries and exits for
  * instrumentation purposes. These added calls are sometimes referred to as "hooks".
  */
-@SuppressWarnings("nullness")
 public class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
   /** Directory for debug output. */
@@ -82,6 +81,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   @BinaryName String binaryClassName;
 
   /** Instrument class constructor. Setup debug directories, if needed. */
+  @SuppressWarnings("nullness:initialization")
   public Instrument() {
     super();
     debug_transform.enabled = Chicory.debug_transform || Chicory.debug || Chicory.verbose;
@@ -802,6 +802,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * @param c MethodContext for method
    * @throws IOException if there is trouble with I/O
    */
+  @SuppressWarnings({
+    "nullness:argument", // null is ok for typesOfStackItems
+    "nullness:dereference" // pool will never be null
+  })
   private void add_entry_instrumentation(InstructionList instructions, MethodContext c)
       throws IOException {
 
@@ -956,6 +960,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // iload
     // Push the nonce.
     LocalVariableGen nonce_lv = get_nonce_local(mgen);
+    assert nonce_lv != null
+        : "@AssumeAssertion(nullness): get_nonce_local returned null in call_enter_exit";
     newCode.append(InstructionFactory.createLoad(Type.INT, nonce_lv.getIndex()));
 
     // iconst
@@ -1282,6 +1288,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    *
    * @param mgen a method
    */
+  @SuppressWarnings("nullness:dereference.of.nullable")
   public void dump_code_attributes(MethodGen mgen) {
     // mgen.getMethod().getCode().getAttributes() forces attributes
     // to be instantiated; mgen.getCodeAttributes() does not

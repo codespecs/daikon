@@ -80,6 +80,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.FieldDescriptor;
+import org.checkerframework.checker.signature.qual.FqBinaryName;
 import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
@@ -103,7 +104,6 @@ import org.checkerframework.dataflow.qual.Pure;
  * APIs instead of BCEL. (We will need to continue to support Instrument.java using BCEL, as we do
  * not anticipate our clients moving from JDK 8, 11, 17 or 21 to JDK 24 for quite some time.)
  */
-@SuppressWarnings("nullness")
 public class Instrument24 implements ClassFileTransformer {
 
   /** A log to which to print debugging information about program instrumentation. */
@@ -189,6 +189,7 @@ public class Instrument24 implements ClassFileTransformer {
   // End of method variables.
 
   /** Instrument24 class constructor. Setup debug directories, if needed. */
+  @SuppressWarnings("nullness:initialization")
   public Instrument24() {
     super();
     debug_transform.enabled = Chicory.debug_transform || Chicory.debug || Chicory.verbose;
@@ -808,6 +809,10 @@ public class Instrument24 implements ClassFileTransformer {
       switch (ce) {
         case LocalVariable lv -> {} // we have alreay processed these
         case LocalVariableType lvt -> {} // we can discard local variable types
+          // debuging code
+          // case LocalVariableType lvt -> {
+          // @FieldDescriptor String lvFD = lvt.signatureSymbol().signatureString();
+          // System.out.printf("  %s : %s%n", lvt, convertDescriptorToString(lvFD)); }
         case LabelTarget l -> {
           if (ca.labelToBci(l.label()) == 0) {
             oldStartLabel = l.label();
@@ -825,6 +830,7 @@ public class Instrument24 implements ClassFileTransformer {
 
     // debugInstrument.log("Modified code: %s%n", mgen.getMethod().getCode());
 
+    assert curMethodInfo != null : "@AssumeAssertion(nullness): can't get here if null";
     Iterator<Boolean> shouldIncludeIter = curMethodInfo.is_included.iterator();
     Iterator<Integer> exitLocationIter = curMethodInfo.exit_locations.iterator();
 
@@ -891,10 +897,10 @@ public class Instrument24 implements ClassFileTransformer {
    * @param shouldIncludeIter whether or not to instrument this return
    * @param exitLocationIter list of exit line numbers
    * @return instruction list for instrumenting the return, which is empty if {@code inst} is not a
-   *     return
+   *     return or the return should not be instrumented
    */
   @SuppressWarnings("MixedMutabilityReturnType")
-  private @Nullable List<CodeElement> generate_return_instrumentation(
+  private List<CodeElement> generate_return_instrumentation(
       CodeElement inst,
       MethodGen24 mgen,
       Iterator<Boolean> shouldIncludeIter,
@@ -943,13 +949,14 @@ public class Instrument24 implements ClassFileTransformer {
    * @param returnType the type of the return; may be null if the variable is known to already exist
    * @return a local variable to save the return value
    */
+  @SuppressWarnings("nullness")
   private LocalVariable getReturnLocal(MethodGen24 mgen, @Nullable ClassDesc returnType) {
 
     // If a type was specified and the variable was found, they must match.
     if (returnLocal == null) {
       assert returnType != null : " return__$trace2_val doesn't exist";
     } else {
-      assert returnLocal.typeSymbol().equals(returnType)
+      assert returnLocal.typeSymbol().equals((Object) returnType)
           : " returnType = " + returnType + "current type = " + returnLocal.typeSymbol();
     }
 
@@ -1022,6 +1029,7 @@ public class Instrument24 implements ClassFileTransformer {
       // Label for new location of start of original code.
       entryLabel = currentCodeBuilder.newLabel();
       debugInstrument.log("entryLabel: %s%n", entryLabel);
+      assert inst != null : "@AssumeAssertion(nullness): inst will always be set in loop above";
       labelMap.put(inst, entryLabel);
 
       // Insert code before this LineNumber or Instruction.
@@ -1066,6 +1074,7 @@ public class Instrument24 implements ClassFileTransformer {
     // Assumes add_entry_instrumentation has been called which sets nonceLocal.
     // iload
     // Push the nonce.
+    assert nonceLocal != null : "@AssumeAssertion(nullness): can't get here if null";
     newCode.add(LoadInstruction.of(TypeKind.INT, nonceLocal.slot()));
 
     // iconst
@@ -1325,7 +1334,6 @@ public class Instrument24 implements ClassFileTransformer {
    * @param mgen describes the current method
    * @return a new MethodInfo for the method, or null if the method should not be instrumented
    */
-  @SuppressWarnings("unchecked")
   private @Nullable MethodInfo create_method_info(ClassInfo classInfo, MethodGen24 mgen) {
 
     // Get the parameter names for this method
@@ -1509,10 +1517,15 @@ public class Instrument24 implements ClassFileTransformer {
    * is that the latter may contain type arguments. This routine was orginaly written for
    * descriptors, but some support for type arguments has been added.
    *
+   * <p>The output format is an extension of binary name format that includes primitives and arrays.
+   * It is almost identical to a fully qualified name, but using “$” instead of “.” to separate
+   * nested classes from their enclosing classes.
+   *
    * @param descriptor the object to format
-   * @return a formatted string
+   * @return a @FqBinaryName formatted string
    */
-  public static String convertDescriptorToString(@FieldDescriptor String descriptor) {
+  @SuppressWarnings("signature") // conversion method
+  public static @FqBinaryName String convertDescriptorToString(@FieldDescriptor String descriptor) {
     StringBuilder result = new StringBuilder();
 
     int arrayDimensions = 0;
@@ -1571,9 +1584,10 @@ public class Instrument24 implements ClassFileTransformer {
    * Format an class name that may contain type arguments for output.
    *
    * @param descriptor the object to format
-   * @return a formatted string
+   * @return a @FqBinaryName formatted string
    */
-  private static String parseSimpleTypeSignature(String descriptor) {
+  @SuppressWarnings("signature") // conversion method
+  private static @FqBinaryName String parseSimpleTypeSignature(String descriptor) {
     StringBuilder result = new StringBuilder();
     int genericStart = descriptor.indexOf('<');
     int genericEnd = descriptor.lastIndexOf('>');
@@ -1592,7 +1606,6 @@ public class Instrument24 implements ClassFileTransformer {
     } else {
       throw new IllegalArgumentException("Malformed object type descriptor: " + descriptor);
     }
-
     return result.toString();
   }
 
@@ -1600,7 +1613,7 @@ public class Instrument24 implements ClassFileTransformer {
    * Format one or more type parameters for output.
    *
    * @param genericPart the type parameter(s) to format
-   * @return a formatted string
+   * @return a string containing a list of types as binary names
    */
   @SuppressWarnings("signature") // string manipulation
   private static String parseTypeArguments(String genericPart) {
@@ -1618,6 +1631,7 @@ public class Instrument24 implements ClassFileTransformer {
         depth--;
         current.append(c);
       } else if (c == ';' && depth == 0) {
+        current.append(c);
         params.add(convertDescriptorToString(current.toString()));
         current.setLength(0); // Clear the buffer
       } else {

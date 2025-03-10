@@ -366,9 +366,9 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the name of the containing class.
+   * Return the instruction list for the current method.
    *
-   * @return class that contains this method
+   * @return instruction list as CodeElements
    */
   public List<CodeElement> getInstructionList() {
     return codeList;
