@@ -1155,43 +1155,17 @@ public final class FileIO {
    *
    * @return the stream that is connected to Chicory
    */
-  private static @Owning InputStream connectToChicory() {
-
-    // javac requires `catch (IOException ...)`.  This implementation uses `catch (Exception ...)`
-    // instead, in order to prevent resource leaks from unclosed `chicSocket`.
-
+  private static @Owning InputStream connectToChicory() throws IOException {
     Socket chicSocket = null;
 
     // bind to any free port
     try (ServerSocket daikonServer = new ServerSocket(0)) {
-
       // tell Chicory what port we have!
       System.out.println("DaikonChicoryOnlinePort=" + daikonServer.getLocalPort());
-
       daikonServer.setReceiveBufferSize(64000);
-
-      try {
-        daikonServer.setSoTimeout(5000);
-
-        // System.out.println("waiting for chicory connection on port " +
-        // daikonServer.getLocalPort());
-        chicSocket = daikonServer.accept();
-      } catch (Exception e) {
-        // Error rather than RuntimeException to avoid being caught by `catch (Exception e)` below.
-        throw new Error("Unable to connect to Chicory", e);
-      }
-
-      try {
-        return chicSocket.getInputStream();
-      } catch (Exception e) {
-        try {
-          chicSocket.close();
-        } catch (Exception closeException) {
-          // do nothing
-        }
-        // Error rather than RuntimeException to avoid being caught by `catch (Exception e)` below.
-        throw new Error("Unable to get Chicory's input stream", e);
-      }
+      daikonServer.setSoTimeout(5000);
+      chicSocket = daikonServer.accept();
+      return chicSocket.getInputStream();
     } catch (Exception e) {
       if (chicSocket != null) {
         try {
@@ -1200,7 +1174,7 @@ public final class FileIO {
           // do nothing
         }
       }
-      throw new RuntimeException("Unable to create server", e);
+      throw e;
     }
   }
 
