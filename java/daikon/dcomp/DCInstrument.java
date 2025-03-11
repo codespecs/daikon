@@ -94,6 +94,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 import org.checkerframework.dataflow.qual.Pure;
@@ -340,7 +341,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   public JavaClass instrument() {
 
-    String classname = gen.getClassName();
+    @BinaryName String classname = gen.getClassName();
 
     // Don't know where I got this idea.  They are executed.  Don't remember why
     // adding dcomp marker causes problems.
@@ -3041,7 +3042,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param pptName ppt to look for
    * @return true if this ppt should be included
    */
-  boolean should_track(@ClassGetName String className, String methodName, String pptName) {
+  boolean should_track(@BinaryName String className, String methodName, String pptName) {
 
     debugInstrument.log("Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
 

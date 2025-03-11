@@ -53,6 +53,9 @@ import org.checkerframework.dataflow.qual.Pure;
  * The Instrument class is responsible for modifying another class's bytecodes. Specifically, its
  * main task is to add calls into the Chicory Runtime at method entries and exits for
  * instrumentation purposes. These added calls are sometimes referred to as "hooks".
+ *
+ * <p>This class is loaded by ChicoryPremain at startup. It is a ClassFileTransformer which means
+ * that its {@code transform} method gets called each time the JVM loads a class.
  */
 public class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
@@ -108,7 +111,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * @param pptName ppt name to be checked
    * @return true if the item should be filtered out
    */
-  public static boolean shouldIgnore(String className, String methodName, String pptName) {
+  public static boolean shouldIgnore(
+      @BinaryName String className, String methodName, String pptName) {
 
     // Don't instrument the class if it matches an excluded regular expression.
     for (Pattern pattern : Runtime.ppt_omit_pattern) {
@@ -125,17 +129,15 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     // If any include regular expressions are specified, only instrument
     // classes that match them
-    if (Runtime.ppt_select_pattern.size() > 0) {
-      for (Pattern pattern : Runtime.ppt_select_pattern) {
+    for (Pattern pattern : Runtime.ppt_select_pattern) {
 
-        Matcher mPpt = pattern.matcher(pptName);
-        Matcher mClass = pattern.matcher(className);
-        Matcher mMethod = pattern.matcher(methodName);
+      Matcher mPpt = pattern.matcher(pptName);
+      Matcher mClass = pattern.matcher(className);
+      Matcher mMethod = pattern.matcher(methodName);
 
-        if (mPpt.find() || mClass.find() || mMethod.find()) {
-          debug_ppt.log("including %s, it matches ppt_select regex %s%n", pptName, pattern);
-          return false;
-        }
+      if (mPpt.find() || mClass.find() || mMethod.find()) {
+        debug_ppt.log("including %s, it matches ppt_select regex %s%n", pptName, pattern);
+        return false;
       }
     }
 
@@ -147,6 +149,65 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     } else {
       debug_ppt.log("including %s, not included in ppt_omit pattern(s)%n", pptName);
       return false;
+    }
+  }
+
+  /**
+   * Don't instrument boot classes. They are uninteresting and will not be able to access
+   * daikon.chicory.Runtime (because it is not on the boot classpath). Previously this code skipped
+   * classes that started with java, com, javax, or sun, but this is not correct in many cases. Most
+   * boot classes have the null loader, but some generated classes (such as those in sun.reflect)
+   * will have a non-null loader. Some of these have a null parent loader, but some do not. The
+   * check for the sun.reflect package is a hack to catch all of these. A more consistent mechanism
+   * to determine boot classes would be preferrable.
+   *
+   * @param className class name to be checked
+   * @param loader the class loader for the class
+   * @return true if this is a boot class
+   */
+  private boolean isBootClass(@BinaryName String className, @Nullable ClassLoader loader) {
+    if (Chicory.boot_classes != null) {
+      Matcher matcher = Chicory.boot_classes.matcher(className);
+      if (matcher.find()) {
+        debug_transform.log("Ignoring boot class %s, matches boot_classes regex%n", className);
+        return true;
+      }
+    } else if (loader == null) {
+      debug_transform.log("Ignoring system class %s, class loader == null%n", className);
+      return true;
+    } else if (loader.getParent() == null) {
+      debug_transform.log("Ignoring system class %s, parent loader == null%n", className);
+      return true;
+    } else if (className.startsWith("sun.reflect")) {
+      debug_transform.log("Ignoring system class %s, in sun.reflect package%n", className);
+      return true;
+    } else if (className.startsWith("jdk.internal.reflect")) {
+      // Starting with Java 9 sun.reflect => jdk.internal.reflect.
+      debug_transform.log(
+          "Ignoring system class %s, in jdk.internal.reflect package", binaryClassName);
+      return true;
+    }
+    return false;
+  }
+
+  /*
+   * Output a .class file and a .bcel version of the class file.
+   *
+   * @param c the Java class to output
+   * @param directory output location for the files
+   * @param className the current class
+   */
+  private void outputDebugFiles(JavaClass c, File directory, @BinaryName String className) {
+    try {
+      debug_transform.log("Dumping .class and .bcel for %s to %s%n", className, directory);
+      // Write the byte array to a .class file.
+      c.dump(new File(directory, c.getClassName() + ".class"));
+      // write .bcel file
+      BcelUtil.dump(c, directory);
+    } catch (Throwable t) {
+      System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
+      t.printStackTrace();
+      // ignore the error, it shouldn't affect the instrumentation
     }
   }
 
@@ -171,36 +232,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     debug_transform.log("In chicory.Instrument.transform(): class = %s%n", className);
 
-    // Don't instrument boot classes.  They are uninteresting and will not be able to access
-    // daikon.chicory.Runtime (because it is not on the boot classpath).  Previously this code
-    // skipped classes that started with java, com, javax, or sun, but this is not correct in many
-    // cases.  Most boot classes have the null loader, but some generated classes (such as those in
-    // sun.reflect) will have a non-null loader.  Some of these have a null parent loader, but some
-    // do not.  The check for the sun.reflect package is a hack to catch all of these.  A more
-    // consistent mechanism to determine boot classes would be preferrable.
-    if (Chicory.boot_classes != null) {
-      Matcher matcher = Chicory.boot_classes.matcher(binaryClassName);
-      if (matcher.find()) {
-        debug_transform.log(
-            "Ignoring boot class %s, matches boot_classes regex%n", binaryClassName);
-        return null;
-      }
-    } else if (loader == null) {
-      debug_transform.log("Ignoring system class %s, class loader == null%n", binaryClassName);
+    if (isBootClass(binaryClassName, loader)) {
       return null;
-    } else if (loader.getParent() == null) {
-      debug_transform.log("Ignoring system class %s, parent loader == null%n", binaryClassName);
-      return null;
-    } else if (binaryClassName.startsWith("sun.reflect")) {
-      debug_transform.log("Ignoring system class %s, in sun.reflect package%n", binaryClassName);
-      return null;
-    } else if (binaryClassName.startsWith("jdk.internal.reflect")) {
-      // Starting with Java 9 sun.reflect => jdk.internal.reflect.
-      debug_transform.log(
-          "Ignoring system class %s, in jdk.internal.reflect package", binaryClassName);
-      return null;
-    } else if (binaryClassName.startsWith("com.sun")) {
-      debug_transform.log("Class from com.sun package %s with nonnull loaders%n", binaryClassName);
     }
 
     // Don't instrument our own code.
@@ -232,19 +265,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
 
     if (Chicory.dump) {
-      try {
-        debug_transform.log(
-            "Dumping .class and .bcel for %s to %s%n", binaryClassName, debug_orig_dir);
-        // Write the byte array to a .class file.
-        c.dump(new File(debug_orig_dir, c.getClassName() + ".class"));
-        // write .bcel file
-        BcelUtil.dump(c, debug_orig_dir);
-      } catch (Throwable t) {
-        System.err.printf(
-            "Unexpected error %s dumping out debug files for: %s%n", t, binaryClassName);
-        t.printStackTrace();
-        // proceed with instrumentation
-      }
+      outputDebugFiles(c, debug_orig_dir, binaryClassName);
     }
 
     // Instrument the classfile, die on any errors
@@ -306,19 +327,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     if (classInfo.shouldInclude) {
       if (Chicory.dump) {
-        try {
-          debug_transform.log(
-              "Dumping .class and .bcel for %s to %s%n", binaryClassName, debug_bin_dir);
-          // Write the byte array to a .class file
-          njc.dump(new File(debug_bin_dir, binaryClassName + ".class"));
-          // write .bcel file
-          BcelUtil.dump(njc, debug_bin_dir);
-        } catch (Throwable t) {
-          System.err.printf(
-              "Unexpected error %s dumping out debug files for: %s%n", t, binaryClassName);
-          t.printStackTrace();
-          // proceed with instrumentation
-        }
+        outputDebugFiles(njc, debug_bin_dir, binaryClassName);
       }
       return njc.getBytes();
     } else {
