@@ -139,14 +139,6 @@ public class Instrument24 implements ClassFileTransformer {
   /** Debug information about ppt-omit and ppt-select. */
   public static SimpleLog debug_ppt = new SimpleLog(false);
 
-  // Variables used for the entire class.
-
-  /** Current class name in binary format. */
-  @BinaryName String binaryClassName;
-
-  /** True if the class has a class initializer. */
-  private boolean hasClinit;
-
   /**
    * Stores information about the current class that is useful for writing out decl and/or dtrace
    * information.
@@ -158,9 +150,6 @@ public class Instrument24 implements ClassFileTransformer {
 
   // Variables used for processing the current method.
   // They are initialized in instrumentCode().
-
-  /** CodeBuilder for the current method. */
-  private CodeBuilder currentCodeBuilder;
 
   /** Next available slot in localsTable, currently always = max locals. */
   private int nextLocalIndex;
@@ -290,8 +279,7 @@ public class Instrument24 implements ClassFileTransformer {
       return true;
     } else if (className.startsWith("jdk.internal.reflect")) {
       // Starting with Java 9 sun.reflect => jdk.internal.reflect.
-      debug_transform.log(
-          "Ignoring system class %s, in jdk.internal.reflect package", binaryClassName);
+      debug_transform.log("Ignoring system class %s, in jdk.internal.reflect package", className);
       return true;
     }
     return false;
@@ -340,7 +328,7 @@ public class Instrument24 implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    binaryClassName = Signatures.internalFormToBinaryName(className);
+    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
     // for debugging
     // new Throwable().printStackTrace();
@@ -391,7 +379,7 @@ public class Instrument24 implements ClassFileTransformer {
           binaryClassName);
     }
 
-    hasClinit = false;
+    classInfo = new ClassInfo(binaryClassName, loader);
     byte[] newBytes = {};
     debug_transform.log("%nClass: %s%n", binaryClassName);
     // Instrument the classfile, die on any errors
@@ -431,7 +419,6 @@ public class Instrument24 implements ClassFileTransformer {
 
     // Save constant pool builder for later use.
     poolBuilder = classBuilder.constantPool();
-    classInfo = new ClassInfo(binaryClassName, loader);
 
     debugInstrument.log("Class Attributes:%n");
     for (java.lang.classfile.Attribute<?> a : classModel.attributes()) {
@@ -453,7 +440,7 @@ public class Instrument24 implements ClassFileTransformer {
       }
     }
 
-    if (Chicory.checkStaticInit && !hasClinit) {
+    if (Chicory.checkStaticInit && !classInfo.hasClinit) {
       // If no clinit method, we need to add our own.
       classBuilder.withMethod(
           "<clinit>",
@@ -463,7 +450,7 @@ public class Instrument24 implements ClassFileTransformer {
               methodBuilder.withCode(
                   codeBuilder -> {
                     codeBuilder
-                        .ldc(binaryClassName)
+                        .ldc(classInfo.class_name)
                         .invokestatic(
                             runtimeCD, "initNotify", MethodTypeDesc.of(CD_void, CD_String))
                         .return_();
@@ -517,7 +504,7 @@ public class Instrument24 implements ClassFileTransformer {
 
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(runtimeCD, "initNotify", MethodTypeDesc.of(CD_void, CD_String));
-    instructions.add(buildLDCInstruction(poolBuilder.stringEntry(binaryClassName)));
+    instructions.add(buildLDCInstruction(poolBuilder.stringEntry(classInfo.class_name)));
     instructions.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
 
     return instructions;
@@ -538,7 +525,7 @@ public class Instrument24 implements ClassFileTransformer {
       System.out.printf(
           "Chicory warning: ClassFile: %s - classfile version (%d) is out of date and may not be"
               + " processed correctly.%n",
-          binaryClassName, classModel.majorVersion());
+          classInfo.class_name, classModel.majorVersion());
     }
 
     List<MethodInfo> method_infos = new ArrayList<>();
@@ -555,11 +542,11 @@ public class Instrument24 implements ClassFileTransformer {
         // DynComp does this by creating a new instrumentation object
         // for each class - probably a cleaner solution.
         synchronized (this) {
-          MethodGen24 mgen = new MethodGen24(mm, binaryClassName);
+          MethodGen24 mgen = new MethodGen24(mm, classInfo.class_name);
 
           // check for the class static initializer method
           if (mgen.getName().equals("<clinit>")) {
-            hasClinit = true;
+            classInfo.hasClinit = true;
             if (Chicory.checkStaticInit) {
               addInvokeToClinit(mgen);
             }
@@ -763,14 +750,18 @@ public class Instrument24 implements ClassFileTransformer {
    * Insert the our instrumentation code into the instruction list for the given method.
    *
    * @param instructions instruction list for method
+   * @param codeBuilder for the given method's code
    * @param mgen describes the given method
    * @param curMethodInfo provides additional information about the method
    */
   private void insertInstrumentation(
-      List<CodeElement> instructions, MethodGen24 mgen, MethodInfo curMethodInfo) {
+      List<CodeElement> instructions,
+      CodeBuilder codeBuilder,
+      MethodGen24 mgen,
+      MethodInfo curMethodInfo) {
 
     // Add nonce local to matchup enter/exits
-    add_entry_instrumentation(instructions, mgen);
+    add_entry_instrumentation(instructions, codeBuilder, mgen);
 
     // debugInstrument.log("Modified code: %s%n", mgen.getMethod().getCode());
 
@@ -821,7 +812,6 @@ public class Instrument24 implements ClassFileTransformer {
 
     nonceLocal = null;
     returnLocal = null;
-    currentCodeBuilder = codeBuilder;
     oldStartLabel = null;
     labelMap.clear();
 
@@ -862,7 +852,7 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     // Generate and insert our instrumentation code.
-    insertInstrumentation(codeList, mgen, curMethodInfo);
+    insertInstrumentation(codeList, codeBuilder, mgen, curMethodInfo);
 
     // Copy the modified local variable table to the output class.
     debugInstrument.log("LocalVariableTable:%n");
@@ -881,7 +871,7 @@ public class Instrument24 implements ClassFileTransformer {
       Label l = labelMap.get(ce);
       if (l != null) {
         debugInstrument.log("Label: %s%n", l);
-        currentCodeBuilder.labelBinding(l);
+        codeBuilder.labelBinding(l);
         // We've defined the label, remove it from the map.
         labelMap.remove(ce);
       }
@@ -1017,9 +1007,11 @@ public class Instrument24 implements ClassFileTransformer {
    * call daikon.chicory.Runtime.enter().
    *
    * @param instructions instruction list for method
+   * @param codeBuilder for the given method's code
    * @param mgen describes the given method
    */
-  private void add_entry_instrumentation(List<CodeElement> instructions, MethodGen24 mgen) {
+  private void add_entry_instrumentation(
+      List<CodeElement> instructions, CodeBuilder codeBuilder, MethodGen24 mgen) {
 
     List<CodeElement> newCode = generateIncrementNonce(mgen);
 
@@ -1044,7 +1036,7 @@ public class Instrument24 implements ClassFileTransformer {
       }
 
       // Label for new location of start of original code.
-      entryLabel = currentCodeBuilder.newLabel();
+      entryLabel = codeBuilder.newLabel();
       debugInstrument.log("entryLabel: %s%n", entryLabel);
       assert inst != null : "@AssumeAssertion(nullness): inst will always be set in loop above";
       labelMap.put(inst, entryLabel);
