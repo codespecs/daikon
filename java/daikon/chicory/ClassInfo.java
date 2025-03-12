@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -21,6 +22,10 @@ public class ClassInfo {
   /** binary name of the class. */
   public @BinaryName String class_name;
 
+  // This field is only used by Instrument24.
+  /** True if the class has a class initializer. */
+  public boolean hasClinit;
+
   // set by initViaReflection()
   /** reflection object for this class. */
   public @MonotonicNonNull Class<?> clazz;
@@ -31,7 +36,7 @@ public class ClassInfo {
   public List<MethodInfo> method_infos = new ArrayList<>();
 
   /** This class's classloader. */
-  private ClassLoader loader;
+  private @Nullable ClassLoader loader;
 
   // traversalClass and traversalObject are set by init_traversal().
   /** DaikonVariables for the object program point (instance and static variables). */
@@ -49,9 +54,10 @@ public class ClassInfo {
   public Map<String, String> staticMap = new HashMap<>();
 
   /** Create ClassInfo with specified name. */
-  public ClassInfo(@BinaryName String class_name, ClassLoader theLoader) {
+  public ClassInfo(@BinaryName String class_name, @Nullable ClassLoader theLoader) {
     this.class_name = class_name;
     loader = theLoader;
+    hasClinit = false;
   }
 
   /** Set the list of methods. */
