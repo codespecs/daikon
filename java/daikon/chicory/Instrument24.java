@@ -379,7 +379,7 @@ public class Instrument24 implements ClassFileTransformer {
           binaryClassName);
     }
 
-    classInfo = new ClassInfo(binaryClassName, loader);
+    classInfo = new ClassInfo(binaryClassName, cfLoader);
     byte[] newBytes = {};
     debug_transform.log("%nClass: %s%n", binaryClassName);
     // Instrument the classfile, die on any errors
@@ -387,7 +387,7 @@ public class Instrument24 implements ClassFileTransformer {
       newBytes =
           classFile.build(
               classModel.thisClass().asSymbol(),
-              classBuilder -> instrumentClass(classBuilder, classModel, cfLoader));
+              classBuilder -> instrumentClass(classBuilder, classModel));
 
     } catch (Throwable t) {
       System.err.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
@@ -412,10 +412,8 @@ public class Instrument24 implements ClassFileTransformer {
    *
    * @param classBuilder for the class
    * @param classModel for the class
-   * @param loader the class loader for the class
    */
-  private void instrumentClass(
-      ClassBuilder classBuilder, ClassModel classModel, ClassLoader loader) {
+  private void instrumentClass(ClassBuilder classBuilder, ClassModel classModel) {
 
     // Save constant pool builder for later use.
     poolBuilder = classBuilder.constantPool();
