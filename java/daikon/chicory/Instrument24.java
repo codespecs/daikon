@@ -96,6 +96,8 @@ import org.checkerframework.dataflow.qual.Pure;
  * (no more fiddling with StackMaps) and are always up to date with any .class file changes (since
  * they are part of the JDK). (We will need to continue to support Instrument.java using BCEL, as we
  * anticipate our clients using JDK 21 or less for quite some time.)
+ *
+ * <p>The entry point of {@link ClassFileTransformer} is {@link #transform}.
  */
 public class Instrument24 implements ClassFileTransformer {
 
@@ -126,9 +128,6 @@ public class Instrument24 implements ClassFileTransformer {
   /** Directory into which to dump original classes. */
   File debug_uninstrumented_dir;
 
-  /** The index of this method in SharedData.methods. */
-  int cur_method_info_index = 0;
-
   /**
    * Stores information about the current class that is useful for writing out decl and/or dtrace
    * information.
@@ -140,6 +139,9 @@ public class Instrument24 implements ClassFileTransformer {
 
   // Variables used for processing the current method.
   // They are initialized in instrumentCode().
+
+  /** The index of the current method in SharedData.methods. */
+  int cur_method_info_index = 0;
 
   /** Next available slot in localsTable, currently always = max locals. */
   private int nextLocalIndex;
