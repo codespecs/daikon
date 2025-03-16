@@ -56,6 +56,8 @@ import org.checkerframework.dataflow.qual.Pure;
  *
  * <p>This class is loaded by ChicoryPremain at startup. It is a ClassFileTransformer which means
  * that its {@code transform} method gets called each time the JVM loads a class.
+ *
+ * <p>The entry point of {@link ClassFileTransformer} is {@link #transform}.
  */
 public class Instrument extends InstructionListUtils implements ClassFileTransformer {
 

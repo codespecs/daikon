@@ -2,12 +2,14 @@ package daikon.chicory;
 
 import java.lang.classfile.AccessFlags;
 import java.lang.classfile.Attributes;
+import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.CodeElement;
 import java.lang.classfile.CodeModel;
 import java.lang.classfile.Instruction;
 import java.lang.classfile.MethodModel;
 import java.lang.classfile.attribute.CodeAttribute;
 import java.lang.classfile.attribute.SignatureAttribute;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.instruction.LocalVariable;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
@@ -123,13 +125,21 @@ public class MethodGen24 {
    */
   protected List<LocalVariable> localsTable;
 
+  /** ConstantPool builder for entire class. */
+  // TODO: Should uses of this be synchronized?
+  private ConstantPoolBuilder poolBuilder;
+
   /**
    * Creates a MethodGen24 object.
    *
    * @param methodModel the method
    * @param className the containing class, in binary name format
+   * @param classBuilder for the class
    */
-  public MethodGen24(final MethodModel methodModel, final @BinaryName String className) {
+  public MethodGen24(
+      final MethodModel methodModel,
+      final @BinaryName String className,
+      ClassBuilder classBuilder) {
 
     accessFlags = methodModel.flags();
     methodName = methodModel.methodName().stringValue();
@@ -212,6 +222,8 @@ public class MethodGen24 {
         paramNames[i] = paramName;
       }
     }
+
+    poolBuilder = classBuilder.constantPool();
   }
 
   /**
@@ -363,6 +375,15 @@ public class MethodGen24 {
    */
   public List<CodeElement> getInstructionList() {
     return codeList;
+  }
+
+  /**
+   * Return the constant pool builder.
+   *
+   * @return the constant pool builder
+   */
+  public ConstantPoolBuilder getPoolBuilder() {
+    return poolBuilder;
   }
 
   // Not sure we need this
