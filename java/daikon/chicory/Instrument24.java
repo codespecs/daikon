@@ -61,7 +61,6 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AccessFlag;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
@@ -85,44 +84,20 @@ import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
- * The Instrument24 class is responsible for modifying another class's bytecodes. Specifically, its
- * main task is to add calls into the Chicory Runtime at method entries and exits for
- * instrumentation purposes. These added calls are sometimes referred to as "hooks".
+ * This class is responsible for modifying another class's bytecodes. Specifically, its main task is
+ * to add calls into the Chicory Runtime at method entries and exits for instrumentation purposes.
+ * These added calls are sometimes referred to as "hooks".
  *
  * <p>This class is loaded by ChicoryPremain at startup. It is a ClassFileTransformer which means
  * that its {@code transform} method gets called each time the JVM loads a class.
  *
- * <p>Starting with JDK 24, Java has added a set of APIs for reading and modifying .class files
- * ({@code java.lang.classfile}).
- *
- * <p>We are migrating from BCEL to this new set of APIs for two main reasons:
- *
- * <ol>
- *   <li>The new APIs are more complete and robust - no more fiddling with StackMaps.
- *   <li>Since the new APIs are part of the official JDK release, they will always be up to date
- *       with any .class file changes.
- * </ol>
- *
- * <p>The files Instrument24.java and MethodGen24.java were added to Chicory to use this new set of
- * APIs instead of BCEL. (We will need to continue to support Instrument.java using BCEL, as we do
- * not anticipate our clients moving from JDK 8, 11, 17 or 21 to JDK 24 for quite some time.)
+ * <p>Instrument24 uses Java's ({@code java.lang.classfile}) APIs for reading and modifying .class
+ * files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more complete and robust
+ * (no more fiddling with StackMaps) and are always up to date with any .class file changes (since
+ * they are part of the JDK). (We will need to continue to support Instrument.java using BCEL, as we
+ * anticipate our clients using JDK 21 or less for quite some time.)
  */
 public class Instrument24 implements ClassFileTransformer {
-
-  /** A log to which to print debugging information about program instrumentation. */
-  protected SimpleLog debugInstrument = new SimpleLog(false);
-
-  /** Directory for debug output. */
-  File debug_dir;
-
-  /** Directory into which to dump debug-instrumented classes. */
-  File debug_bin_dir;
-
-  /** Directory into which to dump original classes. */
-  File debug_orig_dir;
-
-  /** The index of this method in SharedData.methods. */
-  int cur_method_info_index = 0;
 
   /** The location of the runtime support class. */
   private static final String runtime_classname = "daikon.chicory.Runtime";
@@ -138,6 +113,21 @@ public class Instrument24 implements ClassFileTransformer {
 
   /** Debug information about ppt-omit and ppt-select. */
   public static SimpleLog debug_ppt = new SimpleLog(false);
+
+  /** A log to which to print debugging information about program instrumentation. */
+  protected SimpleLog debugInstrument = new SimpleLog(false);
+
+  /** Directory for debug output. */
+  File debug_dir;
+
+  /** Directory into which to dump debug-instrumented classes. */
+  File debug_instrumented_dir;
+
+  /** Directory into which to dump original classes. */
+  File debug_uninstrumented_dir;
+
+  /** The index of this method in SharedData.methods. */
+  int cur_method_info_index = 0;
 
   /**
    * Stores information about the current class that is useful for writing out decl and/or dtrace
@@ -179,7 +169,7 @@ public class Instrument24 implements ClassFileTransformer {
 
   // End of method variables.
 
-  /** Instrument24 class constructor. Setup debug directories, if needed. */
+  /** Create an instrumenter. Setup debug directories, if needed. */
   @SuppressWarnings("nullness:initialization")
   public Instrument24() {
     super();
@@ -188,12 +178,12 @@ public class Instrument24 implements ClassFileTransformer {
     debug_ppt.enabled = debugInstrument.enabled;
 
     debug_dir = Chicory.debug_dir;
-    debug_bin_dir = new File(debug_dir, "bin");
-    debug_orig_dir = new File(debug_dir, "orig");
+    debug_instrumented_dir = new File(debug_dir, "instrumented");
+    debug_uninstrumented_dir = new File(debug_dir, "uninstrumented");
 
     if (Chicory.dump) {
-      debug_bin_dir.mkdirs();
-      debug_orig_dir.mkdirs();
+      debug_instrumented_dir.mkdirs();
+      debug_uninstrumented_dir.mkdirs();
     }
   }
 
@@ -297,10 +287,9 @@ public class Instrument24 implements ClassFileTransformer {
       ClassModel cm, byte[] classBytes, File directory, @BinaryName String className) {
     try {
       debug_transform.log("Dumping .class and .javap for %s to %s%n", className, directory);
-      // Define the output file
-      Path outputFile = Paths.get(directory.toString(), className + ".class");
       // Write the byte array to a .class file.
-      Files.write(outputFile, classBytes);
+      File outputFile = new File(directory, className + ".class");
+      Files.write(outputFile.toPath(), classBytes);
       // Write a BCEL-like file with an extension of .javap.
       try (BufferedWriter writer =
           Files.newBufferedWriter(
@@ -375,14 +364,14 @@ public class Instrument24 implements ClassFileTransformer {
       outputDebugFiles(
           classModel,
           classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL),
-          debug_orig_dir,
+          debug_uninstrumented_dir,
           binaryClassName);
     }
 
+    // Instrument the classfile, die on any errors
     classInfo = new ClassInfo(binaryClassName, cfLoader);
     byte[] newBytes = {};
     debug_transform.log("%nClass: %s%n", binaryClassName);
-    // Instrument the classfile, die on any errors
     try {
       newBytes =
           classFile.build(
@@ -397,7 +386,8 @@ public class Instrument24 implements ClassFileTransformer {
 
     if (classInfo.shouldInclude) {
       if (Chicory.dump) {
-        outputDebugFiles(classFile.parse(newBytes), newBytes, debug_bin_dir, binaryClassName);
+        outputDebugFiles(
+            classFile.parse(newBytes), newBytes, debug_instrumented_dir, binaryClassName);
       }
       return newBytes;
     } else {
@@ -458,7 +448,7 @@ public class Instrument24 implements ClassFileTransformer {
 
   /**
    * Adds a call (or calls) to the Chicory Runtime {@code initNotify} method prior to each return in
-   * the given method.
+   * the given method. Clients pass the class static initializer {@code <clinit>} as the method.
    *
    * @param mgen the method to modify, typically the class static initializer
    */
@@ -556,7 +546,7 @@ public class Instrument24 implements ClassFileTransformer {
             }
           }
 
-          // If method is synthetic... (default constructors and <clinit> are not synthetic)
+          // If method is synthetic... (default constructors and <clinit> are not synthetic).
           if (mgen.getAccessFlags().has(AccessFlag.SYNTHETIC)) {
             // If we are not going to instrument this method,
             // we need to copy it to the output class now.
@@ -1217,9 +1207,11 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Adds, to {@code newCode}, code to put the local var/param at the specified var_index into a
-   * wrapper appropriate for prim_type. prim_type must be a primitive type (Type.INT, Type.FLOAT,
-   * etc.). The wrappers are those defined in daikon.chicory.Runtime.
+   * Creates code to put the local var/param at the specified var_index into a wrapper appropriate
+   * for prim_type. prim_type must be a primitive type (Type.INT, Type.FLOAT, etc.). The wrappers
+   * are those defined in daikon.chicory.Runtime.
+   *
+   * <p>Adds the created code to {@code newCode}.
    *
    * <p>The stack is left with a pointer to the newly created wrapper at the top.
    *
@@ -1331,6 +1323,7 @@ public class Instrument24 implements ClassFileTransformer {
       String s = convertDescriptorToString(paramTypes[ii].descriptorString());
       arg_type_strings[ii] = s;
     }
+
     return arg_type_strings;
   }
 
@@ -1338,12 +1331,12 @@ public class Instrument24 implements ClassFileTransformer {
    * Creates a MethodInfo struct corresponding to {@code mgen}.
    *
    * @param classInfo a class
-   * @param mgen describes the given method
+   * @param mgen a method in the given class
    * @return a new MethodInfo for the method, or null if the method should not be instrumented
    */
   private @Nullable MethodInfo create_method_info(ClassInfo classInfo, MethodGen24 mgen) {
 
-    // Get the parameter names for this method
+    // Get the parameter names for this method.
     String[] paramNames = mgen.getParameterNames();
     LocalVariable[] lvs = mgen.getLocalVariables();
     int param_offset = 1;
@@ -1428,12 +1421,9 @@ public class Instrument24 implements ClassFileTransformer {
     List<CodeElement> il = mgen.getInstructionList();
     int line_number = 0;
     int last_line_number = 0;
-    boolean foundLine;
 
-    ListIterator<CodeElement> li = il.listIterator();
-    while (li.hasNext()) {
-      CodeElement inst = li.next();
-      foundLine = false;
+    for (CodeElement inst : il) {
+      boolean foundLine = false;
 
       if (inst instanceof LineNumber ln) {
         line_number = ln.line();

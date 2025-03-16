@@ -22,10 +22,10 @@ public class Instrument implements ClassFileTransformer {
   File debug_dir;
 
   /** Directory for debug instrumented class output. */
-  File debug_bin_dir;
+  File debug_instrumented_dir;
 
   /** Directory for debug original class output. */
-  File debug_orig_dir;
+  File debug_uninstrumented_dir;
 
   /** Have we seen a class member of a known transformer? */
   static boolean transformer_seen = false;
@@ -48,12 +48,12 @@ public class Instrument implements ClassFileTransformer {
     daikon.chicory.Instrument.debug_ppt.enabled = DynComp.debug;
 
     debug_dir = DynComp.debug_dir;
-    debug_bin_dir = new File(debug_dir, "bin");
-    debug_orig_dir = new File(debug_dir, "orig");
+    debug_instrumented_dir = new File(debug_dir, "instrumented");
+    debug_uninstrumented_dir = new File(debug_dir, "uninstrumented");
 
     if (DynComp.dump) {
-      debug_bin_dir.mkdirs();
-      debug_orig_dir.mkdirs();
+      debug_instrumented_dir.mkdirs();
+      debug_uninstrumented_dir.mkdirs();
     }
   }
 
@@ -209,11 +209,11 @@ public class Instrument implements ClassFileTransformer {
     if (DynComp.dump) {
       try {
         debug_transform.log(
-            "Dumping .class and .bcel for %s to %s%n", binaryClassName, debug_orig_dir);
+            "Dumping .class and .bcel for %s to %s%n", binaryClassName, debug_uninstrumented_dir);
         // Write the byte array to a .class file.
-        c.dump(new File(debug_orig_dir, c.getClassName() + ".class"));
+        c.dump(new File(debug_uninstrumented_dir, c.getClassName() + ".class"));
         // write .bcel file
-        BcelUtil.dump(c, debug_orig_dir);
+        BcelUtil.dump(c, debug_uninstrumented_dir);
       } catch (Throwable t) {
         System.err.printf(
             "Unexpected error %s dumping out debug files for: %s%n", t, binaryClassName);
@@ -237,11 +237,11 @@ public class Instrument implements ClassFileTransformer {
       if (DynComp.dump) {
         try {
           debug_transform.log(
-              "Dumping .class and .bcel for %s to %s%n", binaryClassName, debug_bin_dir);
+              "Dumping .class and .bcel for %s to %s%n", binaryClassName, debug_instrumented_dir);
           // Write the byte array to a .class file
-          njc.dump(new File(debug_bin_dir, binaryClassName + ".class"));
+          njc.dump(new File(debug_instrumented_dir, binaryClassName + ".class"));
           // write .bcel file
-          BcelUtil.dump(njc, debug_bin_dir);
+          BcelUtil.dump(njc, debug_instrumented_dir);
         } catch (Throwable t) {
           System.err.printf(
               "Unexpected error %s dumping out debug files for: %s%n", t, binaryClassName);

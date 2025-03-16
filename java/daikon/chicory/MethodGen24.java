@@ -29,25 +29,16 @@ import org.checkerframework.checker.signature.qual.MethodDescriptor;
  * to keep Instrument.java and Instrument24.java in sync.
  *
  * <p>MethodGen24 uses Java's ({@code java.lang.classfile}) APIs for reading and modifying .class
- * files. Those APIs were added in JDK 24.
- *
- * <p>We are migrating from BCEL to this new set of APIs for two main reasons:
- *
- * <ol>
- *   <li>The new APIs are more complete and robust - no more fiddling with StackMaps.
- *   <li>Since the new APIs are part of the official JDK release, they will always be up to date
- *       with any .class file changes.
- * </ol>
- *
- * <p>The files Instrument24.java and MethodGen24.java were added to Chicory to use this new set of
- * APIs instead of BCEL. (We will need to continue to support Instrument.java using BCEL, as we
- * anticipate our clients using JDK 17 or less for quite some time.)
+ * files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more complete and robust
+ * (no more fiddling with StackMaps) and are always up to date with any .class file changes (since
+ * they are part of the JDK). (We will need to continue to support Instrument.java using BCEL, as we
+ * anticipate our clients using JDK 21 or less for quite some time.)
  */
 public class MethodGen24 {
 
   /**
-   * Models the body of the method (the Code attribute). A Code attribute is viewed as a composition
-   * of CodeElements, which is the only way to access Instructions; the order of elements of a code
+   * Models the body of the method (the Code attribute). A Code attribute is viewed as a sequence of
+   * CodeElements, which is the only way to access Instructions; the order of elements of a code
    * model is significant. May be null if the method has no code.
    *
    * <p>Several fields of CodeModel are declared as fields of MethodGen24 to better correspond to
@@ -136,7 +127,7 @@ public class MethodGen24 {
    * Creates a MethodGen24 object.
    *
    * @param methodModel the method
-   * @param className the containing class
+   * @param className the containing class, in binary name format
    */
   public MethodGen24(final MethodModel methodModel, final @BinaryName String className) {
 
