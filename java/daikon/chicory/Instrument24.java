@@ -309,12 +309,12 @@ public class Instrument24 implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
-
     // for debugging
     // new Throwable().printStackTrace();
 
-    debug_transform.log("In chicory.Instrument.transform(): class = %s%n", className);
+    debug_transform.log("Entering chicory.Instrument.transform(): class = %s%n", className);
+
+    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
     if (isBootClass(binaryClassName, loader)) {
       return null;
