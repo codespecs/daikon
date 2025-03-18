@@ -22,6 +22,10 @@ public class ClassInfo {
   /** binary name of the class. */
   public @BinaryName String class_name;
 
+  // This field is only used by Instrument24.
+  /** True if the class has a class initializer. */
+  public boolean hasClinit;
+
   // set by initViaReflection()
   /** reflection object for this class. */
   public @MonotonicNonNull Class<?> clazz;
@@ -53,6 +57,7 @@ public class ClassInfo {
   public ClassInfo(@BinaryName String class_name, @Nullable ClassLoader theLoader) {
     this.class_name = class_name;
     loader = theLoader;
+    hasClinit = false;
   }
 
   /** Set the list of methods. */
