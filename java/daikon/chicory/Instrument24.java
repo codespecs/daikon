@@ -86,7 +86,7 @@ import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * The Instrument24 class is responsible for modifying another class's bytecodes. Specifically, its
- * main task is to add calls into the Chicory Runtime at method entries and exits for
+ * main task is to add calls into the Chicory runtime at method entries and exits for
  * instrumentation purposes. These added calls are sometimes referred to as "hooks".
  *
  * <p>Starting with JDK 24, Java has added a set of APIs for reading and modifying .class files
@@ -101,8 +101,8 @@ import org.checkerframework.dataflow.qual.Pure;
  * </ol>
  *
  * <p>The files Instrument24.java and MethodGen24.java were added to Chicory to use this new set of
- * APIs instead of BCEL. (We will need to continue to support Instrument.java using BCEL, as we do
- * not anticipate our clients moving from JDK 8, 11, 17 or 21 to JDK 24 for quite some time.)
+ * APIs instead of BCEL. (We will need to continue to support Instrument.java using BCEL, as we
+ * anticipate our clients using JDK 21 or earlier for quite some time.)
  */
 public class Instrument24 implements ClassFileTransformer {
 
@@ -113,21 +113,21 @@ public class Instrument24 implements ClassFileTransformer {
   File debug_dir;
 
   /** Directory into which to dump debug-instrumented classes. */
-  File debug_bin_dir;
+  File debug_instrumented_dir;
 
   /** Directory into which to dump original classes. */
   File debug_orig_dir;
 
-  /** The index of this method in SharedData.methods. */
+  /** The index of this method in {@link SharedData#methods}. */
   int cur_method_info_index = 0;
 
   /** The MethodInfo for the current method. */
   @Nullable MethodInfo curMethodInfo;
 
-  /** The location of the runtime support class. */
+  /** The name of the Chicory runtime support class. */
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
-  /** The ClassDesc for the runtime support class. */
+  /** The ClassDesc for the Chicory runtime support class. */
   private static final ClassDesc runtimeCD = ClassDesc.of(runtime_classname);
 
   /** The ClassDesc for the Java Object class. */
@@ -137,7 +137,7 @@ public class Instrument24 implements ClassFileTransformer {
   public static SimpleLog debug_transform = new SimpleLog(false);
 
   /** Debug information about ppt-omit and ppt-select. */
-  public static SimpleLog debug_ppt = new SimpleLog(false);
+  public static SimpleLog debug_ppt_omit = new SimpleLog(false);
 
   // Variables used for the entire class.
 
@@ -166,7 +166,7 @@ public class Instrument24 implements ClassFileTransformer {
   private int nextLocalIndex;
 
   /** Mapping from instructions to labels. */
-  // Used to associate a label with a location within the codelist
+  // Used to associate a label with a codelist location.
   public Map<CodeElement, Label> labelMap = new HashMap<>();
 
   // Note that the next three items are CodeBuilder Labels.
@@ -194,14 +194,14 @@ public class Instrument24 implements ClassFileTransformer {
     super();
     debug_transform.enabled = Chicory.debug_transform || Chicory.debug || Chicory.verbose;
     debugInstrument.enabled = Chicory.debug;
-    debug_ppt.enabled = debugInstrument.enabled;
+    debug_ppt_omit.enabled = debugInstrument.enabled;
 
     debug_dir = Chicory.debug_dir;
-    debug_bin_dir = new File(debug_dir, "bin");
+    debug_instrumented_dir = new File(debug_dir, "bin");
     debug_orig_dir = new File(debug_dir, "orig");
 
     if (Chicory.dump) {
-      debug_bin_dir.mkdirs();
+      debug_instrumented_dir.mkdirs();
       debug_orig_dir.mkdirs();
     }
   }
@@ -226,7 +226,7 @@ public class Instrument24 implements ClassFileTransformer {
       Matcher mMethod = pattern.matcher(methodName);
 
       if (mPpt.find() || mClass.find() || mMethod.find()) {
-        debug_ppt.log("ignoring %s, it matches ppt_omit regex %s%n", pptName, pattern);
+        debug_ppt_omit.log("ignoring %s, it matches ppt_omit regex %s%n", pptName, pattern);
         return true;
       }
     }
@@ -241,7 +241,7 @@ public class Instrument24 implements ClassFileTransformer {
         Matcher mMethod = pattern.matcher(methodName);
 
         if (mPpt.find() || mClass.find() || mMethod.find()) {
-          debug_ppt.log("including %s, it matches ppt_select regex %s%n", pptName, pattern);
+          debug_ppt_omit.log("including %s, it matches ppt_select regex %s%n", pptName, pattern);
           return false;
         }
       }
@@ -250,10 +250,10 @@ public class Instrument24 implements ClassFileTransformer {
     // If we're here, this ppt is not explicitly included or excluded,
     // so keep unless there were items in the "include only" list.
     if (Runtime.ppt_select_pattern.size() > 0) {
-      debug_ppt.log("ignoring %s, not included in ppt_select pattern(s)%n", pptName);
+      debug_ppt_omit.log("ignoring %s, not included in ppt_select patterns%n", pptName);
       return true;
     } else {
-      debug_ppt.log("including %s, not included in ppt_omit pattern(s)%n", pptName);
+      debug_ppt_omit.log("including %s, not included in ppt_omit patterns%n", pptName);
       return false;
     }
   }
@@ -333,7 +333,7 @@ public class Instrument24 implements ClassFileTransformer {
     try {
       classModel = classFile.parse(classfileBuffer);
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s reading in %s%n", t, binaryClassName);
+      System.err.printf("Unexpected error %s while reading %s%n", t, binaryClassName);
       t.printStackTrace();
       // No changes to the bytecodes
       return null;
@@ -343,12 +343,11 @@ public class Instrument24 implements ClassFileTransformer {
       try {
         debug_transform.log(
             "Dumping .class and .javap for %s to %s%n", binaryClassName, debug_orig_dir);
-        // Define the output file
-        Path outputFile = Paths.get(debug_orig_dir.toString(), binaryClassName + ".class");
-        // Write the byte array to a .class file.
-        Files.write(outputFile, classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL));
-        // Write a BCEL-like file with an extension of .javap.
 
+        Path outputFile = Paths.get(debug_orig_dir.toString(), binaryClassName + ".class");
+        Files.write(outputFile, classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL));
+
+        // Write a BCEL-like file with an extension of .javap.
         try (BufferedWriter writer =
             Files.newBufferedWriter(
                 new File(debug_orig_dir, binaryClassName + ".javap").toPath(),
@@ -365,7 +364,7 @@ public class Instrument24 implements ClassFileTransformer {
 
     hasClinit = false;
     byte[] newBytes = {};
-    debug_transform.log("%nClass: %s%n", binaryClassName);
+    debug_transform.log("%nTransforming: %s%n", binaryClassName);
     // Instrument the classfile, die on any errors
     try {
       newBytes =
@@ -374,25 +373,27 @@ public class Instrument24 implements ClassFileTransformer {
               classBuilder -> instrumentClass(classBuilder, classModel, cfLoader));
 
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
+      RuntimeException re =
+          new RuntimeException(
+              String.format("Unexpected error %s in transform of %s", t, binaryClassName), t);
       t.printStackTrace();
-      throw new RuntimeException("Unexpected error", t);
     }
 
     if (classInfo.shouldInclude) {
       if (Chicory.dump) {
         try {
           debug_transform.log(
-              "Dumping .class and .javap for %s to %s%n", binaryClassName, debug_bin_dir);
+              "Dumping .class and .javap for %s to %s%n", binaryClassName, debug_instrumented_dir);
           // Define the output file
-          Path outputFile = Paths.get(debug_bin_dir.toString(), binaryClassName + ".class");
+          Path outputFile =
+              Paths.get(debug_instrumented_dir.toString(), binaryClassName + ".class");
           // Write the byte array to a .class file.
           Files.write(outputFile, newBytes);
           // Write a BCEL like file with an extension of .javap.
           ClassModel newClassModel = classFile.parse(newBytes);
           try (BufferedWriter writer =
               Files.newBufferedWriter(
-                  new File(debug_bin_dir, binaryClassName + ".javap").toPath(),
+                  new File(debug_instrumented_dir, binaryClassName + ".javap").toPath(),
                   StandardCharsets.UTF_8)) {
             writer.write(newClassModel.toDebugString());
           }
@@ -446,7 +447,7 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     if (Chicory.checkStaticInit && !hasClinit) {
-      // If no clinit method, we need to add our own.
+      // If there is no clinit method, we need to add our own.
       classBuilder.withMethod(
           "<clinit>",
           MethodTypeDesc.of(CD_void),
@@ -465,9 +466,8 @@ public class Instrument24 implements ClassFileTransformer {
 
   /**
    * Adds a call (or calls) to the Chicory Runtime {@code initNotify} method into a given method.
-   * Clients pass the class static initializer {@code <clinit>} as the method.
    *
-   * @param mgen the method to modify, typically the class static initializer
+   * @param mgen the method to modify, typically the class static initializer {@code <clinit>}
    */
   private void addInvokeToClinit(MethodGen24 mgen) {
 
@@ -478,18 +478,18 @@ public class Instrument24 implements ClassFileTransformer {
 
         CodeElement inst = li.next();
 
-        // back up iterator to point to 'inst'
+        // Back up iterator to point to 'inst'.
         li.previous();
 
-        // Get the translation for this instruction (if any)
+        // Get the translation for this instruction (if any).
         List<CodeElement> new_il = xform_clinit(inst);
 
-        // insert code prior to 'inst'
+        // Insert code prior to 'inst'.
         for (CodeElement ce : new_il) {
           li.add(ce);
         }
 
-        // skip over 'inst' we just inserted new_il in front of
+        // Skip over 'inst' we just inserted new_il in front of.
         li.next();
       }
     } catch (Exception e) {

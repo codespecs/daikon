@@ -60,7 +60,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   File debug_dir;
 
   /** Directory into which to dump debug-instrumented classes. */
-  File debug_bin_dir;
+  File debug_instrumented_dir;
 
   /** Directory into which to dump original classes. */
   File debug_orig_dir;
@@ -75,7 +75,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   public static SimpleLog debug_transform = new SimpleLog(false);
 
   /** Debug information about ppt-omit and ppt-select. */
-  public static SimpleLog debug_ppt = new SimpleLog(false);
+  public static SimpleLog debug_ppt_omit = new SimpleLog(false);
 
   /** Current class name in binary format. */
   @BinaryName String binaryClassName;
@@ -86,14 +86,14 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     super();
     debug_transform.enabled = Chicory.debug_transform || Chicory.debug || Chicory.verbose;
     debugInstrument.enabled = Chicory.debug;
-    debug_ppt.enabled = debugInstrument.enabled;
+    debug_ppt_omit.enabled = debugInstrument.enabled;
 
     debug_dir = Chicory.debug_dir;
-    debug_bin_dir = new File(debug_dir, "bin");
+    debug_instrumented_dir = new File(debug_dir, "bin");
     debug_orig_dir = new File(debug_dir, "orig");
 
     if (Chicory.dump) {
-      debug_bin_dir.mkdirs();
+      debug_instrumented_dir.mkdirs();
       debug_orig_dir.mkdirs();
     }
   }
@@ -118,7 +118,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       Matcher mMethod = pattern.matcher(methodName);
 
       if (mPpt.find() || mClass.find() || mMethod.find()) {
-        debug_ppt.log("ignoring %s, it matches ppt_omit regex %s%n", pptName, pattern);
+        debug_ppt_omit.log("ignoring %s, it matches ppt_omit regex %s%n", pptName, pattern);
         return true;
       }
     }
@@ -133,7 +133,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         Matcher mMethod = pattern.matcher(methodName);
 
         if (mPpt.find() || mClass.find() || mMethod.find()) {
-          debug_ppt.log("including %s, it matches ppt_select regex %s%n", pptName, pattern);
+          debug_ppt_omit.log("including %s, it matches ppt_select regex %s%n", pptName, pattern);
           return false;
         }
       }
@@ -142,10 +142,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // If we're here, this ppt is not explicitly included or excluded,
     // so keep unless there were items in the "include only" list.
     if (Runtime.ppt_select_pattern.size() > 0) {
-      debug_ppt.log("ignoring %s, not included in ppt_select pattern(s)%n", pptName);
+      debug_ppt_omit.log("ignoring %s, not included in ppt_select pattern(s)%n", pptName);
       return true;
     } else {
-      debug_ppt.log("including %s, not included in ppt_omit pattern(s)%n", pptName);
+      debug_ppt_omit.log("including %s, not included in ppt_omit pattern(s)%n", pptName);
       return false;
     }
   }
@@ -308,11 +308,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       if (Chicory.dump) {
         try {
           debug_transform.log(
-              "Dumping .class and .bcel for %s to %s%n", binaryClassName, debug_bin_dir);
+              "Dumping .class and .bcel for %s to %s%n", binaryClassName, debug_instrumented_dir);
           // Write the byte array to a .class file
-          njc.dump(new File(debug_bin_dir, binaryClassName + ".class"));
+          njc.dump(new File(debug_instrumented_dir, binaryClassName + ".class"));
           // write .bcel file
-          BcelUtil.dump(njc, debug_bin_dir);
+          BcelUtil.dump(njc, debug_instrumented_dir);
         } catch (Throwable t) {
           System.err.printf(
               "Unexpected error %s dumping out debug files for: %s%n", t, binaryClassName);
