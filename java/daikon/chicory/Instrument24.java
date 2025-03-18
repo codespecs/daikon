@@ -85,7 +85,7 @@ import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * This class is responsible for modifying another class's bytecodes. Specifically, its main task is
- * to add calls into the Chicory Runtime at method entries and exits for instrumentation purposes.
+ * to add calls into the Chicory runtime at method entries and exits for instrumentation purposes.
  * These added calls are sometimes referred to as "hooks".
  *
  * <p>This class is loaded by ChicoryPremain at startup. It is a ClassFileTransformer which means
@@ -104,7 +104,7 @@ public class Instrument24 implements ClassFileTransformer {
   /** The location of the runtime support class. */
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
-  /** The ClassDesc for the runtime support class. */
+  /** The ClassDesc for the Chicory runtime support class. */
   private static final ClassDesc runtimeCD = ClassDesc.of(runtime_classname);
 
   /** The ClassDesc for the Java Object class. */
@@ -114,7 +114,7 @@ public class Instrument24 implements ClassFileTransformer {
   public static SimpleLog debug_transform = new SimpleLog(false);
 
   /** Debug information about ppt-omit and ppt-select. */
-  public static SimpleLog debug_ppt = new SimpleLog(false);
+  public static SimpleLog debug_ppt_omit = new SimpleLog(false);
 
   /** A log to which to print debugging information about program instrumentation. */
   protected SimpleLog debugInstrument = new SimpleLog(false);
@@ -188,7 +188,7 @@ public class Instrument24 implements ClassFileTransformer {
     super();
     debug_transform.enabled = Chicory.debug_transform || Chicory.debug || Chicory.verbose;
     debugInstrument.enabled = Chicory.debug;
-    debug_ppt.enabled = debugInstrument.enabled;
+    debug_ppt_omit.enabled = debugInstrument.enabled;
 
     debug_dir = Chicory.debug_dir;
     debug_instrumented_dir = new File(debug_dir, "instrumented");
@@ -221,7 +221,7 @@ public class Instrument24 implements ClassFileTransformer {
       Matcher mMethod = pattern.matcher(methodName);
 
       if (mPpt.find() || mClass.find() || mMethod.find()) {
-        debug_ppt.log("ignoring %s, it matches ppt_omit regex %s%n", pptName, pattern);
+        debug_ppt_omit.log("ignoring %s, it matches ppt_omit regex %s%n", pptName, pattern);
         return true;
       }
     }
@@ -235,7 +235,7 @@ public class Instrument24 implements ClassFileTransformer {
       Matcher mMethod = pattern.matcher(methodName);
 
       if (mPpt.find() || mClass.find() || mMethod.find()) {
-        debug_ppt.log("including %s, it matches ppt_select regex %s%n", pptName, pattern);
+        debug_ppt_omit.log("including %s, it matches ppt_select regex %s%n", pptName, pattern);
         return false;
       }
     }
@@ -243,10 +243,10 @@ public class Instrument24 implements ClassFileTransformer {
     // If we're here, this ppt is not explicitly included or excluded,
     // so keep unless there were items in the "include only" list.
     if (Runtime.ppt_select_pattern.size() > 0) {
-      debug_ppt.log("ignoring %s, not included in ppt_select pattern(s)%n", pptName);
+      debug_ppt_omit.log("ignoring %s, not included in ppt_select patterns%n", pptName);
       return true;
     } else {
-      debug_ppt.log("including %s, not included in ppt_omit pattern(s)%n", pptName);
+      debug_ppt_omit.log("including %s, not included in ppt_omit patterns%n", pptName);
       return false;
     }
   }
@@ -367,7 +367,7 @@ public class Instrument24 implements ClassFileTransformer {
     try {
       classModel = classFile.parse(classfileBuffer);
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s reading in %s%n", t, binaryClassName);
+      System.err.printf("Unexpected error %s while reading %s%n", t, binaryClassName);
       t.printStackTrace();
       // No changes to the bytecodes
       return null;
@@ -384,7 +384,7 @@ public class Instrument24 implements ClassFileTransformer {
     // Instrument the classfile, die on any errors
     ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
     byte[] newBytes = {};
-    debug_transform.log("%nClass: %s%n", binaryClassName);
+    debug_transform.log("%nTransforming: %s%n", binaryClassName);
     try {
       newBytes =
           classFile.build(
@@ -392,9 +392,11 @@ public class Instrument24 implements ClassFileTransformer {
               classBuilder -> instrumentClass(classBuilder, classModel, classInfo));
 
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
-      t.printStackTrace();
-      throw new RuntimeException("Unexpected error", t);
+      RuntimeException re =
+          new RuntimeException(
+              String.format("Unexpected error %s in transform of %s", t, binaryClassName), t);
+      re.printStackTrace();
+      throw re;
     }
 
     if (classInfo.shouldInclude) {
@@ -440,7 +442,7 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     if (Chicory.checkStaticInit && !classInfo.hasClinit) {
-      // If no clinit method, we need to add our own.
+      // If there is no clinit method, we need to add our own.
       classBuilder.withMethod(
           "<clinit>",
           MethodTypeDesc.of(CD_void),
@@ -461,7 +463,7 @@ public class Instrument24 implements ClassFileTransformer {
    * Adds a call (or calls) to the Chicory Runtime {@code initNotify} method prior to each return in
    * the given method. Clients pass the class static initializer {@code <clinit>} as the method.
    *
-   * @param mgen the method to modify, typically the class static initializer
+   * @param mgen the method to modify, typically the class static initializer {@code <clinit>}
    */
   private void addInvokeToClinit(MethodGen24 mgen, ClassInfo classInfo) {
 
@@ -472,18 +474,18 @@ public class Instrument24 implements ClassFileTransformer {
 
         CodeElement inst = li.next();
 
-        // back up iterator to point to 'inst'
+        // Back up iterator to point to 'inst'.
         li.previous();
 
-        // Get the translation for this instruction (if any)
+        // Get the translation for this instruction (if any).
         if (inst instanceof ReturnInstruction) {
-          // insert code prior to 'inst'
+          // Insert code prior to 'inst'.
           for (CodeElement ce : call_initNotify(mgen, classInfo)) {
             li.add(ce);
           }
         }
 
-        // skip over 'inst' we just inserted new_il in front of
+        // Skip over 'inst' we just inserted new_il in front of.
         li.next();
       }
     } catch (Exception e) {
