@@ -51,7 +51,7 @@ import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * This class is responsible for modifying another class's bytecodes. Specifically, its main task is
- * to add calls into the Chicory Runtime at method entries and exits for instrumentation purposes.
+ * to add calls into the Chicory runtime at method entries and exits for instrumentation purposes.
  * These added calls are sometimes referred to as "hooks".
  *
  * <p>This class is loaded by ChicoryPremain at startup. It is a ClassFileTransformer which means
@@ -200,7 +200,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       // Write the byte array to a .class file.
       File outputFile = new File(directory, c.getClassName() + ".class");
       c.dump(outputFile);
-      // write .bcel file
+      // Write a BCEL-like file.
       BcelUtil.dump(c, directory);
     } catch (Throwable t) {
       System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
@@ -223,12 +223,12 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
-
     // for debugging
     // new Throwable().printStackTrace();
 
-    debug_transform.log("In chicory.Instrument.transform(): class = %s%n", className);
+    debug_transform.log("Entering chicory.Instrument.transform(): class = %s%n", className);
+
+    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
     if (isBootClass(binaryClassName, loader)) {
       return null;
@@ -256,7 +256,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       ClassParser parser = new ClassParser(bais, className);
       c = parser.parse();
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s reading in %s%n", t, binaryClassName);
+      System.err.printf("Unexpected error %s while reading %s%n", t, binaryClassName);
       t.printStackTrace();
       // No changes to the bytecodes
       return null;
@@ -318,9 +318,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       njc = cg.getJavaClass();
 
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
-      t.printStackTrace();
-      throw new RuntimeException("Unexpected error", t);
+      RuntimeException re =
+          new RuntimeException(
+              String.format("Unexpected error %s in transform of %s", t, binaryClassName), t);
+      re.printStackTrace();
+      throw re;
     }
 
     if (classInfo.shouldInclude) {
@@ -516,6 +518,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
               cg.update();
             }
             if (!Chicory.instrument_clinit) {
+              // We are not going to instrument this method.
               continue;
             }
           }
@@ -528,6 +531,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           // Get the instruction list and skip methods with no instructions.
           InstructionList il = mgen.getInstructionList();
           if (il == null) {
+            // We are not going to instrument this method.
             continue;
           }
 

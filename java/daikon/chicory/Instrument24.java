@@ -131,7 +131,7 @@ public class Instrument24 implements ClassFileTransformer {
   /** Variables used for processing the current method. */
   private static class MInfo24 {
 
-    /** The index of the current method in SharedData.methods. */
+    /** The index of this method in SharedData.methods. */
     public final int method_info_index;
 
     /** Next available slot in localsTable, currently always = max locals. */
@@ -303,7 +303,7 @@ public class Instrument24 implements ClassFileTransformer {
       // Write the byte array to a .class file.
       File outputFile = new File(directory, className + ".class");
       Files.write(outputFile.toPath(), classBytes);
-      // Write a BCEL-like file with an extension of .javap.
+      // Write a BCEL-like file.
       try (BufferedWriter writer =
           Files.newBufferedWriter(
               Paths.get(directory.toString(), className + ".javap"), StandardCharsets.UTF_8)) {
@@ -497,6 +497,8 @@ public class Instrument24 implements ClassFileTransformer {
   /**
    * Create the list of instructions for a call to {@code initNotify}.
    *
+   * @param mgen the method generator
+   * @param classInfo the class
    * @return the instruction list
    */
   private List<CodeElement> call_initNotify(MethodGen24 mgen, ClassInfo classInfo) {
@@ -554,8 +556,8 @@ public class Instrument24 implements ClassFileTransformer {
               addInvokeToClinit(mgen, classInfo);
             }
             if (!Chicory.instrument_clinit) {
-              // If we are not going to instrument this method,
-              // we need to copy it to the output class now.
+              // We are not going to instrument this method.
+              // We need to copy it to the output class.
               outputMethodUnchanged(classBuilder, mm, mgen);
               continue;
             }
@@ -571,8 +573,8 @@ public class Instrument24 implements ClassFileTransformer {
 
           // Get the instruction list and skip methods with no instructions.
           if (mgen.getInstructionList().isEmpty()) {
-            // If we are not going to instrument this method,
-            // we need to copy it to the output class now.
+            // We are not going to instrument this method.
+            // We need to copy it to the output class.
             outputMethodUnchanged(classBuilder, mm, mgen);
             continue;
           }
