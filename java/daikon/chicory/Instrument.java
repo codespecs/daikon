@@ -200,7 +200,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       // Write the byte array to a .class file.
       File outputFile = new File(directory, c.getClassName() + ".class");
       c.dump(outputFile);
-      // write .bcel file
+      // Write a BCEL-like file.
       BcelUtil.dump(c, directory);
     } catch (Throwable t) {
       System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
@@ -318,9 +318,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       njc = cg.getJavaClass();
 
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
-      t.printStackTrace();
-      throw new RuntimeException("Unexpected error", t);
+      RuntimeException re =
+          new RuntimeException(
+              String.format("Unexpected error %s in transform of %s", t, binaryClassName), t);
+      re.printStackTrace();
+      throw re;
     }
 
     if (classInfo.shouldInclude) {
@@ -516,6 +518,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
               cg.update();
             }
             if (!Chicory.instrument_clinit) {
+              // We are not going to instrument this method.
               continue;
             }
           }
@@ -528,6 +531,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           // Get the instruction list and skip methods with no instructions.
           InstructionList il = mgen.getInstructionList();
           if (il == null) {
+            // We are not going to instrument this method.
             continue;
           }
 
