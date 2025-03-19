@@ -73,6 +73,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
@@ -127,39 +128,59 @@ public class Instrument24 implements ClassFileTransformer {
   /** Directory into which to dump original classes. */
   File debug_uninstrumented_dir;
 
-  // Variables used for processing the current method.
-  // They are initialized in instrumentCode().
+  /** Variables used for processing the current method. */
+  private static class MInfo24 {
 
-  /** The index of the current method in SharedData.methods. */
-  int cur_method_info_index = 0;
+    /** The index of the current method in SharedData.methods. */
+    public final int method_info_index;
 
-  /** Next available slot in localsTable, currently always = max locals. */
-  private int nextLocalIndex;
+    /** Next available slot in localsTable, currently always = max locals. */
+    public int nextLocalIndex;
 
-  /** Mapping from instructions to labels. */
-  // Used to associate a label with a codelist location.
-  public Map<CodeElement, Label> labelMap = new HashMap<>();
+    /**
+     * Mapping from instructions to labels. Used to associate a label with a location within the
+     * codelist.
+     */
+    public final Map<CodeElement, Label> labelMap = new HashMap<>();
 
-  // Note that the next three items are CodeBuilder Labels.
-  // These are different from CodeModel Labels.
-  /** Label for first byte code of method, used to give new locals method scope. */
-  private Label startLabel;
+    // Note that the next three items are CodeBuilder Labels.
+    // These are different from CodeModel Labels.
+    /** Label for first byte code of method, used to give new locals method scope. */
+    public final Label startLabel;
 
-  /** Label for last byte code of method, used to give new locals method scope. */
-  private Label endLabel;
+    /** Label for last byte code of method, used to give new locals method scope. */
+    public final Label endLabel;
 
-  /** Label for start of orignal code, post insertion of entry instrumentation. */
-  private Label entryLabel;
+    /** Label for start of orignal code, post insertion of entry instrumentation. */
+    public Label entryLabel;
 
-  /**
-   * Label for first byte code of the current method, prior to instrumenting, as a CodeModel Label.
-   */
-  private @Nullable Label oldStartLabel;
+    /**
+     * Label for first byte code of the current method, prior to instrumenting, as a CodeModel
+     * Label.
+     */
+    public @MonotonicNonNull Label oldStartLabel;
 
-  /** Variables used for instrumentation. */
-  @Nullable LocalVariable nonceLocal, returnLocal;
+    /** Used for instrumentation. */
+    public @MonotonicNonNull LocalVariable nonceLocal;
 
-  // End of method variables.
+    /** Used for instrumentation. */
+    public @MonotonicNonNull LocalVariable returnLocal;
+
+    /**
+     * Creates a MInfo24.
+     *
+     * @param method_info_index the index of the method in SharedData.methods
+     * @param nextLocalIndex next available slot in localsTable, currently always = max locals
+     * @param codeBuilder a CodeBuilder
+     */
+    public MInfo24(int method_info_index, int nextLocalIndex, CodeBuilder codeBuilder) {
+      this.method_info_index = method_info_index;
+      this.nextLocalIndex = nextLocalIndex;
+      this.startLabel = codeBuilder.startLabel();
+      this.endLabel = codeBuilder.endLabel();
+      this.entryLabel = codeBuilder.newLabel();
+    }
+  }
 
   /** Create an instrumenter. Setup debug directories, if needed. */
   @SuppressWarnings("nullness:initialization")
@@ -309,12 +330,12 @@ public class Instrument24 implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
-
     // for debugging
     // new Throwable().printStackTrace();
 
-    debug_transform.log("In chicory.Instrument.transform(): class = %s%n", className);
+    debug_transform.log("Entering chicory.Instrument.transform(): class = %s%n", className);
+
+    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
     if (isBootClass(binaryClassName, loader)) {
       return null;
@@ -374,7 +395,8 @@ public class Instrument24 implements ClassFileTransformer {
       RuntimeException re =
           new RuntimeException(
               String.format("Unexpected error %s in transform of %s", t, binaryClassName), t);
-      t.printStackTrace();
+      re.printStackTrace();
+      throw re;
     }
 
     if (classInfo.shouldInclude) {
@@ -603,8 +625,9 @@ public class Instrument24 implements ClassFileTransformer {
 
           method_infos.add(curMethodInfo);
 
+          int method_info_index;
           synchronized (SharedData.methods) {
-            cur_method_info_index = SharedData.methods.size();
+            method_info_index = SharedData.methods.size();
             assert curMethodInfo != null : "@AssumeAssertion(nullness): just checked above";
             SharedData.methods.add(curMethodInfo);
           }
@@ -614,7 +637,8 @@ public class Instrument24 implements ClassFileTransformer {
               mm.methodName().stringValue(),
               mm.methodTypeSymbol(),
               mm.flags().flagsMask(),
-              methodBuilder -> instrumentMethod(methodBuilder, mm, mgen, curMethodInfo));
+              methodBuilder ->
+                  instrumentMethod(methodBuilder, mm, mgen, curMethodInfo, method_info_index));
         }
       }
     } catch (Exception e) {
@@ -712,14 +736,16 @@ public class Instrument24 implements ClassFileTransformer {
       MethodBuilder methodBuilder,
       MethodModel methodModel,
       MethodGen24 mgen,
-      MethodInfo curMethodInfo) {
+      MethodInfo curMethodInfo,
+      int method_info_index) {
 
     for (MethodElement me : methodModel) {
       debugInstrument.log("MethodElement: %s%n", me);
       switch (me) {
         case CodeModel codeModel ->
             methodBuilder.withCode(
-                codeBuilder -> instrumentCode(codeBuilder, codeModel, mgen, curMethodInfo));
+                codeBuilder ->
+                    instrumentCode(codeBuilder, codeModel, mgen, curMethodInfo, method_info_index));
 
           // copy all other MethodElements to output class (unchanged)
         default -> methodBuilder.with(me);
@@ -731,18 +757,15 @@ public class Instrument24 implements ClassFileTransformer {
    * Insert the our instrumentation code into the instruction list for the given method.
    *
    * @param instructions instruction list for method
-   * @param codeBuilder for the given method's code
    * @param mgen describes the given method
    * @param curMethodInfo provides additional information about the method
+   * @param minfo for the given method's code
    */
   private void insertInstrumentation(
-      List<CodeElement> instructions,
-      CodeBuilder codeBuilder,
-      MethodGen24 mgen,
-      MethodInfo curMethodInfo) {
+      List<CodeElement> instructions, MethodGen24 mgen, MethodInfo curMethodInfo, MInfo24 minfo) {
 
     // Add nonce local to matchup enter/exits
-    add_entry_instrumentation(instructions, codeBuilder, mgen);
+    add_entry_instrumentation(instructions, mgen, minfo);
 
     // debugInstrument.log("Modified code: %s%n", mgen.getMethod().getCode());
 
@@ -761,7 +784,7 @@ public class Instrument24 implements ClassFileTransformer {
 
       // If this is a return instruction, insert method exit instrumentation
       List<CodeElement> new_il =
-          generate_return_instrumentation(inst, mgen, shouldIncludeIter, exitLocationIter);
+          generate_return_instrumentation(inst, mgen, minfo, shouldIncludeIter, exitLocationIter);
 
       // insert code prior to 'inst'
       for (CodeElement ce : new_il) {
@@ -784,17 +807,13 @@ public class Instrument24 implements ClassFileTransformer {
    * @param curMethodInfo provides additional information about the method
    */
   private void instrumentCode(
-      CodeBuilder codeBuilder, CodeModel codeModel, MethodGen24 mgen, MethodInfo curMethodInfo) {
+      CodeBuilder codeBuilder,
+      CodeModel codeModel,
+      MethodGen24 mgen,
+      MethodInfo curMethodInfo,
+      int method_info_index) {
 
-    // Initialize all the items associated with the local variables.
-    nextLocalIndex = mgen.getMaxLocals();
-    startLabel = codeBuilder.startLabel();
-    endLabel = codeBuilder.endLabel();
-
-    nonceLocal = null;
-    returnLocal = null;
-    oldStartLabel = null;
-    labelMap.clear();
+    MInfo24 minfo = new MInfo24(method_info_index, mgen.getMaxLocals(), codeBuilder);
 
     @SuppressWarnings("JdkObsolete")
     List<CodeElement> codeList = new LinkedList<>();
@@ -824,7 +843,7 @@ public class Instrument24 implements ClassFileTransformer {
           // System.out.printf("  %s : %s%n", lvt, convertDescriptorToString(lvFD)); }
         case LabelTarget l -> {
           if (ca.labelToBci(l.label()) == 0) {
-            oldStartLabel = l.label();
+            minfo.oldStartLabel = l.label();
           }
           codeList.add(ce);
         }
@@ -833,7 +852,7 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     // Generate and insert our instrumentation code.
-    insertInstrumentation(codeList, codeBuilder, mgen, curMethodInfo);
+    insertInstrumentation(codeList, mgen, curMethodInfo, minfo);
 
     // Copy the modified local variable table to the output class.
     debugInstrument.log("LocalVariableTable:%n");
@@ -849,16 +868,16 @@ public class Instrument24 implements ClassFileTransformer {
     for (CodeElement ce : codeList) {
       // If there is a new CodeBuilder label associated with this instruction, it needs to be
       // defined.
-      Label l = labelMap.get(ce);
+      Label l = minfo.labelMap.get(ce);
       if (l != null) {
         debugInstrument.log("Label: %s%n", l);
         codeBuilder.labelBinding(l);
         // We've defined the label, remove it from the map.
-        labelMap.remove(ce);
+        minfo.labelMap.remove(ce);
       }
       // If this instruction references a Label, we need to see if it is the oldStartLabel
       // and, if so, replace the target with our new entryLabel.
-      ce = checkTargetLabel(ce);
+      ce = checkTargetLabel(ce, minfo);
       debugInstrument.log("CodeElement: %s%n", ce);
       codeBuilder.with(ce);
     }
@@ -871,6 +890,7 @@ public class Instrument24 implements ClassFileTransformer {
    *
    * @param inst the instruction to inspect, which might be a return instruction
    * @param mgen describes the given method
+   * @param minfo for the given method's code
    * @param shouldIncludeIter whether or not to instrument this return
    * @param exitLocationIter list of exit line numbers
    * @return instruction list for instrumenting the return, which is empty if {@code inst} is not a
@@ -880,6 +900,7 @@ public class Instrument24 implements ClassFileTransformer {
   private List<CodeElement> generate_return_instrumentation(
       CodeElement inst,
       MethodGen24 mgen,
+      MInfo24 minfo,
       Iterator<Boolean> shouldIncludeIter,
       Iterator<Integer> exitLocationIter) {
 
@@ -901,7 +922,7 @@ public class Instrument24 implements ClassFileTransformer {
     ClassDesc type = mgen.getReturnType();
     if (!type.equals(CD_void)) {
       TypeKind typeKind = TypeKind.from(type);
-      LocalVariable returnLocal = getReturnLocal(mgen, type);
+      LocalVariable returnLocal = getReturnLocal(mgen, type, minfo);
       if (typeKind.slotSize() == 1) {
         newCode.add(StackInstruction.of(Opcode.DUP));
       } else {
@@ -914,7 +935,7 @@ public class Instrument24 implements ClassFileTransformer {
       throw new RuntimeException("Not enough exit locations in the exitLocationIter");
     }
 
-    callEnterOrExit(newCode, mgen, "exit", exitLocationIter.next());
+    callEnterOrExit(newCode, mgen, minfo, "exit", exitLocationIter.next());
     return newCode;
   }
 
@@ -924,40 +945,43 @@ public class Instrument24 implements ClassFileTransformer {
    *
    * @param mgen describes the given method
    * @param returnType the type of the return; may be null if the variable is known to already exist
+   * @param minfo for the given method's code
    * @return a local variable to save the return value
    */
   @SuppressWarnings("nullness")
-  private LocalVariable getReturnLocal(MethodGen24 mgen, @Nullable ClassDesc returnType) {
+  private LocalVariable getReturnLocal(
+      MethodGen24 mgen, @Nullable ClassDesc returnType, MInfo24 minfo) {
 
     // If a type was specified and the variable was found, they must match.
-    if (returnLocal == null) {
+    if (minfo.returnLocal == null) {
       assert returnType != null : " return__$trace2_val doesn't exist";
     } else {
-      assert returnLocal.typeSymbol().equals((Object) returnType)
-          : " returnType = " + returnType + "current type = " + returnLocal.typeSymbol();
+      assert minfo.returnLocal.typeSymbol().equals((Object) returnType)
+          : " returnType = " + returnType + "current type = " + minfo.returnLocal.typeSymbol();
     }
 
-    if (returnLocal == null) {
+    if (minfo.returnLocal == null) {
       debugInstrument.log("Adding return local of type %s%n", returnType);
-      returnLocal = createMethodScopeLocal(mgen, "return__$trace2_val", returnType);
+      minfo.returnLocal = createMethodScopeLocal(mgen, minfo, "return__$trace2_val", returnType);
     }
 
-    return returnLocal;
+    return minfo.returnLocal;
   }
 
   /**
    * Generates code to initialize a new local variable (this_invocation_nonce) to Runtime.nonce++.
    *
    * @param mgen describes the given method
+   * @param minfo for the given method's code
    */
-  private List<CodeElement> generateIncrementNonce(MethodGen24 mgen) {
+  private List<CodeElement> generateIncrementNonce(MethodGen24 mgen, MInfo24 minfo) {
     String atomic_int_classname = "java.util.concurrent.atomic.AtomicInteger";
     ClassDesc atomic_intClassDesc = ClassDesc.of(atomic_int_classname);
 
     List<CodeElement> newCode = new ArrayList<>();
 
     // create the nonce local variable
-    nonceLocal = createMethodScopeLocal(mgen, "this_invocation_nonce", CD_int);
+    minfo.nonceLocal = createMethodScopeLocal(mgen, minfo, "this_invocation_nonce", CD_int);
 
     // The following implements:
     //     this_invocation_nonce = Runtime.nonce++;
@@ -976,8 +1000,8 @@ public class Instrument24 implements ClassFileTransformer {
     newCode.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
 
     // store original value of nonce into this_invocation_nonce)
-    assert nonceLocal != null : "@AssumeAssertion(nullness): can't get here if null";
-    newCode.add(StoreInstruction.of(TypeKind.INT, nonceLocal.slot()));
+    assert minfo.nonceLocal != null : "@AssumeAssertion(nullness): can't get here if null";
+    newCode.add(StoreInstruction.of(TypeKind.INT, minfo.nonceLocal.slot()));
 
     return newCode;
   }
@@ -989,15 +1013,15 @@ public class Instrument24 implements ClassFileTransformer {
    * call daikon.chicory.Runtime.enter().
    *
    * @param instructions instruction list for method
-   * @param codeBuilder for the given method's code
    * @param mgen describes the given method
+   * @param minfo for the given method's code
    */
   private void add_entry_instrumentation(
-      List<CodeElement> instructions, CodeBuilder codeBuilder, MethodGen24 mgen) {
+      List<CodeElement> instructions, MethodGen24 mgen, MInfo24 minfo) {
 
-    List<CodeElement> newCode = generateIncrementNonce(mgen);
+    List<CodeElement> newCode = generateIncrementNonce(mgen, minfo);
 
-    callEnterOrExit(newCode, mgen, "enter", -1);
+    callEnterOrExit(newCode, mgen, minfo, "enter", -1);
 
     // The start of the list of CodeElements looks as follows:
     //   LocalVariable declarations (if any)
@@ -1018,10 +1042,9 @@ public class Instrument24 implements ClassFileTransformer {
       }
 
       // Label for new location of start of original code.
-      entryLabel = codeBuilder.newLabel();
-      debugInstrument.log("entryLabel: %s%n", entryLabel);
+      debugInstrument.log("entryLabel: %s%n", minfo.entryLabel);
       assert inst != null : "@AssumeAssertion(nullness): inst will always be set in loop above";
-      labelMap.put(inst, entryLabel);
+      minfo.labelMap.put(inst, minfo.entryLabel);
 
       // Insert code before this LineNumber or Instruction.
       // Back up iterator to point to 'inst'.
@@ -1043,11 +1066,12 @@ public class Instrument24 implements ClassFileTransformer {
    *
    * @param newCode an instruction list to append the enter/exit code to
    * @param mgen describes the given method
+   * @param minfo for the given method's code
    * @param callMethod either "enter" or "exit"
    * @param line source line number if this is an exit
    */
   private void callEnterOrExit(
-      List<CodeElement> newCode, MethodGen24 mgen, String callMethod, int line) {
+      List<CodeElement> newCode, MethodGen24 mgen, MInfo24 minfo, String callMethod, int line) {
 
     ClassDesc[] paramTypes = mgen.getParameterTypes();
 
@@ -1065,12 +1089,12 @@ public class Instrument24 implements ClassFileTransformer {
     // Assumes add_entry_instrumentation has been called which sets nonceLocal.
     // iload
     // Push the nonce.
-    assert nonceLocal != null : "@AssumeAssertion(nullness): can't get here if null";
-    newCode.add(LoadInstruction.of(TypeKind.INT, nonceLocal.slot()));
+    assert minfo.nonceLocal != null : "@AssumeAssertion(nullness): can't get here if null";
+    newCode.add(LoadInstruction.of(TypeKind.INT, minfo.nonceLocal.slot()));
 
     // iconst
     // Push the MethodInfo index.
-    newCode.add(loadIntegerConstant(cur_method_info_index, mgen));
+    newCode.add(loadIntegerConstant(minfo.method_info_index, mgen));
 
     // iconst
     // anewarray
@@ -1102,7 +1126,7 @@ public class Instrument24 implements ClassFileTransformer {
       if (ret_type.equals(CD_void)) {
         newCode.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
       } else {
-        LocalVariable return_local = getReturnLocal(mgen, ret_type);
+        LocalVariable return_local = getReturnLocal(mgen, ret_type, minfo);
         if (ret_type.isPrimitive()) {
           create_wrapper(newCode, ret_type, return_local.slot(), mgen);
         } else {
@@ -1140,27 +1164,28 @@ public class Instrument24 implements ClassFileTransformer {
    * will do nothing.
    *
    * @param inst the instruction to check
+   * @param minfo for the given method's code
    * @return the original instruction or it's replacement
    */
-  private CodeElement checkTargetLabel(CodeElement inst) {
+  private CodeElement checkTargetLabel(CodeElement inst, MInfo24 minfo) {
     switch (inst) {
       case BranchInstruction bi -> {
-        if (bi.target().equals(oldStartLabel)) {
-          return BranchInstruction.of(bi.opcode(), entryLabel);
+        if (bi.target().equals(minfo.oldStartLabel)) {
+          return BranchInstruction.of(bi.opcode(), minfo.entryLabel);
         }
       }
       case ExceptionCatch ec -> {
-        if (ec.tryStart().equals(oldStartLabel)) {
-          return ExceptionCatch.of(ec.handler(), entryLabel, ec.tryEnd(), ec.catchType());
+        if (ec.tryStart().equals(minfo.oldStartLabel)) {
+          return ExceptionCatch.of(ec.handler(), minfo.entryLabel, ec.tryEnd(), ec.catchType());
         }
       }
       case LookupSwitchInstruction ls -> {
-        if (checkSwitchTargets(ls.defaultTarget(), ls.cases())) {
+        if (checkSwitchTargets(ls.defaultTarget(), ls.cases(), minfo)) {
           return LookupSwitchInstruction.of(modifiedTarget, modifiedCaseList);
         }
       }
       case TableSwitchInstruction ts -> {
-        if (checkSwitchTargets(ts.defaultTarget(), ts.cases())) {
+        if (checkSwitchTargets(ts.defaultTarget(), ts.cases(), minfo)) {
           return TableSwitchInstruction.of(
               ts.lowValue(), ts.highValue(), modifiedTarget, modifiedCaseList);
         }
@@ -1171,26 +1196,28 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Checks to see if a switch instruction's default target or any of the case targets refers to the
-   * {@link #oldStartLabel}. If so, replace those targets with the entryLabel, store the result in
-   * modifiedTarget and modifiedCaseList, and return true. Otherwise, return false.
+   * Checks to see if a switch instruction's default target or any of the case targets refers to
+   * {@code minfo.oldStartLabel}. If so, replace those targets with the entryLabel, store the result
+   * in modifiedTarget and modifiedCaseList, and return true. Otherwise, return false.
    *
    * @param defaultTarget the default target for the switch instruction
    * @param caseList the case list for the switch instruction
+   * @param minfo for the given method's code
    * @return true if either the defaultTarget or the caseList has been modified
    */
-  private boolean checkSwitchTargets(Label defaultTarget, List<SwitchCase> caseList) {
+  private boolean checkSwitchTargets(
+      Label defaultTarget, List<SwitchCase> caseList, MInfo24 minfo) {
     boolean modified = false;
-    if (defaultTarget.equals(oldStartLabel)) {
-      modifiedTarget = entryLabel;
+    if (defaultTarget.equals(minfo.oldStartLabel)) {
+      modifiedTarget = minfo.entryLabel;
       modified = true;
     } else {
       modifiedTarget = defaultTarget;
     }
     List<SwitchCase> newCaseList = new ArrayList<SwitchCase>();
     for (SwitchCase item : caseList) {
-      if (item.target().equals(oldStartLabel)) {
-        newCaseList.add(SwitchCase.of(item.caseValue(), entryLabel));
+      if (item.target().equals(minfo.oldStartLabel)) {
+        newCaseList.add(SwitchCase.of(item.caseValue(), minfo.entryLabel));
         modified = true;
       } else {
         newCaseList.add(item);
@@ -1659,16 +1686,18 @@ public class Instrument24 implements ClassFileTransformer {
    * Create a new local variable with a scope of the full method.
    *
    * @param mgen describes the given method
+   * @param minfo for the given method's code
    * @param localName name of new local variable
    * @param localType type of new local variable
    * @return the new local variable
    */
   protected LocalVariable createMethodScopeLocal(
-      MethodGen24 mgen, String localName, ClassDesc localType) {
+      MethodGen24 mgen, MInfo24 minfo, String localName, ClassDesc localType) {
     LocalVariable newVar =
-        LocalVariable.of(nextLocalIndex, localName, localType, startLabel, endLabel);
+        LocalVariable.of(
+            minfo.nextLocalIndex, localName, localType, minfo.startLabel, minfo.endLabel);
     mgen.localsTable.add(newVar);
-    nextLocalIndex += TypeKind.from(localType).slotSize();
+    minfo.nextLocalIndex += TypeKind.from(localType).slotSize();
     return newVar;
   }
 
