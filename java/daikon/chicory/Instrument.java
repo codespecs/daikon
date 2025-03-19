@@ -142,10 +142,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // If we're here, this ppt is not explicitly included or excluded,
     // so keep unless there were items in the "include only" list.
     if (Runtime.ppt_select_pattern.size() > 0) {
-      debug_ppt_omit.log("ignoring %s, not included in ppt_select pattern(s)%n", pptName);
+      debug_ppt_omit.log("ignoring %s, not included in ppt_select patterns%n", pptName);
       return true;
     } else {
-      debug_ppt_omit.log("including %s, not included in ppt_omit pattern(s)%n", pptName);
+      debug_ppt_omit.log("including %s, not included in ppt_omit patterns%n", pptName);
       return false;
     }
   }
