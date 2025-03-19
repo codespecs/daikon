@@ -291,8 +291,8 @@ public class Instrument24 implements ClassFileTransformer {
   /*
    * Output a .class file and a .javap like version of the class file.
    *
-   * @param cm ClassModel of the class file
-   * @param classBytes a byte array of the class file
+   * @param cm ClassModel of the class file to output
+   * @param classBytes a byte array of the class file to output
    * @param directory output location for the files
    * @param className the current class
    */

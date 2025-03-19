@@ -51,7 +51,7 @@ import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * This class is responsible for modifying another class's bytecodes. Specifically, its main task is
- * to add calls into the Chicory Runtime at method entries and exits for instrumentation purposes.
+ * to add calls into the Chicory runtime at method entries and exits for instrumentation purposes.
  * These added calls are sometimes referred to as "hooks".
  *
  * <p>This class is loaded by ChicoryPremain at startup. It is a ClassFileTransformer which means
@@ -142,10 +142,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // If we're here, this ppt is not explicitly included or excluded,
     // so keep unless there were items in the "include only" list.
     if (Runtime.ppt_select_pattern.size() > 0) {
-      debug_ppt_omit.log("ignoring %s, not included in ppt_select pattern(s)%n", pptName);
+      debug_ppt_omit.log("ignoring %s, not included in ppt_select patterns%n", pptName);
       return true;
     } else {
-      debug_ppt_omit.log("including %s, not included in ppt_omit pattern(s)%n", pptName);
+      debug_ppt_omit.log("including %s, not included in ppt_omit patterns%n", pptName);
       return false;
     }
   }
@@ -223,12 +223,12 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
-
     // for debugging
     // new Throwable().printStackTrace();
 
-    debug_transform.log("In chicory.Instrument.transform(): class = %s%n", className);
+    debug_transform.log("Entering chicory.Instrument.transform(): class = %s%n", className);
+
+    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
     if (isBootClass(binaryClassName, loader)) {
       return null;
@@ -256,7 +256,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       ClassParser parser = new ClassParser(bais, className);
       c = parser.parse();
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s reading in %s%n", t, binaryClassName);
+      System.err.printf("Unexpected error %s while reading %s%n", t, binaryClassName);
       t.printStackTrace();
       // No changes to the bytecodes
       return null;
