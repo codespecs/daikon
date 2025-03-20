@@ -53,7 +53,6 @@ java/daikon/dcomp/jdk_dcomp_out.txt
 java/daikon/dcomp/std_dcomp_out.diff
 java/daikon/dcomp/std_dcomp_out.txt
 java/daikon/dcomp/debug/
-java/daikon/dcomp/DcompTest.decls-DynComp
 java/debug
 java/Test.decls-DynComp
 # Chicory testing

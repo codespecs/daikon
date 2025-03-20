@@ -82,12 +82,14 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /** The index of this method in SharedData.methods. */
   int cur_method_info_index = 0;
 
+  /** InstructionFactory for a class. */
+  public InstructionFactory instFactory;
+
   /** Create an instrumenter. Setup debug directories, if needed. */
   public Instrument() {
     super();
     debug_transform.enabled = Chicory.debug_transform || Chicory.debug || Chicory.verbose;
-    debugInstrument.enabled = Chicory.debug;
-    debug_ppt_omit.enabled = debugInstrument.enabled;
+    debug_ppt_omit.enabled = debugInstrument.enabled = Chicory.debug;
 
     debug_dir = Chicory.debug_dir;
     debug_instrumented_dir = new File(debug_dir, "instrumented");
@@ -267,56 +269,13 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
 
     // Instrument the classfile, die on any errors
+    ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
     JavaClass njc;
-    ClassInfo classInfo;
     try {
       // Get the class information
       ClassGen cg = new ClassGen(c);
-
-      // Modify each non-void method to save its result in a local before returning.
-      classInfo = instrument_all_methods(cg, binaryClassName, loader);
-
-      // get constant static fields!
-      Field[] fields = cg.getFields();
-      for (Field field : fields) {
-        if (field.isFinal() && field.isStatic() && (field.getType() instanceof BasicType)) {
-          ConstantValue value = field.getConstantValue();
-          String valString;
-
-          if (value == null) {
-            // System.out.println("WARNING FROM " + field.getName());
-            // valString = "WARNING!!!";
-            valString = null;
-          } else {
-            valString = value.toString();
-            // System.out.println("GOOD FROM " + field.getName() +
-            //                    " --- " + valString);
-          }
-
-          if (valString != null) {
-            classInfo.staticMap.put(field.getName(), valString);
-          }
-        }
-      }
-
-      // If no clinit method, we need to add our own.
-      if (Chicory.checkStaticInit) {
-        // check for static initializer
-        boolean hasInit = false;
-        for (Method meth : cg.getMethods()) {
-          if (meth.getName().equals("<clinit>")) {
-            hasInit = true;
-          }
-        }
-
-        // If no clinit method, we need to add our own.
-        if (!hasInit) {
-          cg.addMethod(createClinit(cg, binaryClassName));
-        }
-      }
-
+      instrumentClass(cg, classInfo);
       njc = cg.getJavaClass();
-
     } catch (Throwable t) {
       RuntimeException re =
           new RuntimeException(
@@ -338,50 +297,90 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
+   * Instrument the current class.
+   *
+   * @param cg contains the given class
+   * @param classInfo for the given class
+   */
+  private void instrumentClass(ClassGen cg, ClassInfo classInfo) {
+
+    instFactory = new InstructionFactory(cg);
+
+    // Modify each non-void method to save its result in a local variable before returning.
+    instrument_all_methods(cg, classInfo);
+
+    // get constant static fields!
+    Field[] fields = cg.getFields();
+    for (Field field : fields) {
+      if (field.isFinal() && field.isStatic() && (field.getType() instanceof BasicType)) {
+        ConstantValue value = field.getConstantValue();
+        String valString;
+
+        if (value == null) {
+          // System.out.println("WARNING FROM " + field.getName());
+          // valString = "WARNING!!!";
+          valString = null;
+        } else {
+          valString = value.toString();
+          // System.out.println("GOOD FROM " + field.getName() +
+          //                    " --- " + valString);
+        }
+        if (valString != null) {
+          classInfo.staticMap.put(field.getName(), valString);
+        }
+      }
+    }
+
+    // If no clinit method, we need to add our own.
+    if (Chicory.checkStaticInit && !classInfo.hasClinit) {
+      cg.addMethod(createClinit(cg, classInfo));
+    }
+  }
+
+  /**
    * Adds a call (or calls) to the Chicory Runtime {@code initNotify} method prior to each return in
    * the given method. Clients pass the class static initializer {@code <clinit>} as the method.
    *
    * @param cg a class
-   * @param mg the method to modify, typically the class static initializer
-   * @param fullClassName fully-qualified class name
+   * @param mgen the method to modify, typically the class static initializer {@code <clinit>}
+   * @param classInfo for the given class
    * @return the modified method
    */
-  private Method addInvokeToClinit(ClassGen cg, MethodGen mg, String fullClassName) {
+  private Method addInvokeToClinit(ClassGen cg, MethodGen mgen, ClassInfo classInfo) {
 
     try {
-      InstructionList il = mg.getInstructionList();
-      setCurrentStackMapTable(mg, cg.getMajor());
-      MethodContext context = new MethodContext(cg, mg);
+      InstructionList il = mgen.getInstructionList();
+      setCurrentStackMapTable(mgen, cg.getMajor());
 
       for (InstructionHandle ih = il.getStart(); ih != null; ) {
         Instruction inst = ih.getInstruction();
 
         // Get the translation for this instruction (if any)
-        InstructionList new_il = xform_clinit(cg.getConstantPool(), fullClassName, inst, context);
+        InstructionList new_il = xform_clinit(cg, classInfo, inst);
 
         // Remember the next instruction to process
         InstructionHandle next_ih = ih.getNext();
 
         // will do nothing if new_il == null
-        insertBeforeHandle(mg, ih, new_il, false);
+        insertBeforeHandle(mgen, ih, new_il, false);
 
         // Go on to the next instruction in the list
         ih = next_ih;
       }
 
-      remove_local_variable_type_table(mg);
-      createNewStackMapAttribute(mg);
+      remove_local_variable_type_table(mgen);
+      createNewStackMapAttribute(mgen);
 
       // Update the max stack and Max Locals
-      mg.setMaxLocals();
-      mg.setMaxStack();
-      mg.update();
+      mgen.setMaxLocals();
+      mgen.setMaxStack();
+      mgen.update();
     } catch (Exception e) {
       System.err.printf("Unexpected exception encountered: %s", e);
       e.printStackTrace();
     }
 
-    return mg.getMethod();
+    return mgen.getMethod();
   }
 
   /**
@@ -389,15 +388,14 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * Chicory Runtime {@code initNotify} method prior to a return opcode. Returns null if the given
    * instruction is not a return.
    *
-   * @param cp ConstantPoolGen for current class
-   * @param fullClassName the fully-qualified class name
+   * @param cg a class
+   * @param classInfo for the given class
    * @param inst the instruction that might be a return
-   * @param context MethodContext for current method
    * @return the list of instructions that call {@code initNotify}, or null if {@code inst} is not a
    *     return instruction
    */
   private @Nullable InstructionList xform_clinit(
-      ConstantPoolGen cp, String fullClassName, Instruction inst, MethodContext context) {
+      ClassGen cg, ClassInfo classInfo, Instruction inst) {
 
     switch (inst.getOpcode()) {
       case Const.ARETURN:
@@ -406,7 +404,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       case Const.IRETURN:
       case Const.LRETURN:
       case Const.RETURN:
-        return call_initNotify(cp, fullClassName, context.ifact);
+        return call_initNotify(cg, classInfo);
 
       default:
         return null;
@@ -418,14 +416,13 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * to insert a call to the Chicory Runtime {@code initNotifiy()} method.
    *
    * @param cg a class
-   * @param fullClassName the fully-qualified name of {@code cg}
-   * @return the modified method
+   * @param classInfo for the given class
+   * @return the new method
    */
-  private Method createClinit(ClassGen cg, @BinaryName String fullClassName) {
-    InstructionFactory factory = new InstructionFactory(cg);
+  private Method createClinit(ClassGen cg, ClassInfo classInfo) {
 
     InstructionList il = new InstructionList();
-    il.append(call_initNotify(cg.getConstantPool(), fullClassName, factory));
+    il.append(call_initNotify(cg, classInfo));
     il.append(InstructionFactory.createReturn(Type.VOID)); // need to return!
 
     MethodGen newMethGen =
@@ -435,7 +432,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             new Type[0],
             new String[0],
             "<clinit>",
-            fullClassName,
+            classInfo.class_name,
             il,
             cg.getConstantPool());
     newMethGen.update();
@@ -451,19 +448,18 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /**
    * Create the list of instructions for a call to {@code initNotify}.
    *
-   * @param cp ConstantPoolGen for current class
-   * @param fullClassName the fully-qualified class name
-   * @param factory InstructionFactory for current class
+   * @param cg a class
+   * @param classInfo for the given class
    * @return the instruction list
    */
-  private InstructionList call_initNotify(
-      ConstantPoolGen cp, String fullClassName, InstructionFactory factory) {
+  private InstructionList call_initNotify(ClassGen cg, ClassInfo classInfo) {
 
+    ConstantPoolGen cp = cg.getConstantPool();
     InstructionList instructions = new InstructionList();
 
-    instructions.append(new PUSH(cp, fullClassName));
+    instructions.append(new PUSH(cp, classInfo.class_name));
     instructions.append(
-        factory.createInvoke(
+        instFactory.createInvoke(
             runtime_classname,
             "initNotify",
             Type.VOID,
@@ -480,22 +476,18 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * deficiency of not being able to query return values.
    *
    * @param cg ClassGen for current class
-   * @param fullClassName the fully qualified class name
-   * @param loader ClassLoader for current class
-   * @return ClassInfo for current class
+   * @param classInfo for the given class
    */
-  private ClassInfo instrument_all_methods(
-      ClassGen cg, String fullClassName, @Nullable ClassLoader loader) {
-
-    ClassInfo classInfo = new ClassInfo(cg.getClassName(), loader);
-    List<MethodInfo> method_infos = new ArrayList<>();
+  private void instrument_all_methods(ClassGen cg, ClassInfo classInfo) {
 
     if (cg.getMajor() < Const.MAJOR_1_6) {
       System.out.printf(
           "Chicory warning: ClassFile: %s - classfile version (%d) is out of date and may not be"
               + " processed correctly.%n",
-          cg.getClassName(), cg.getMajor());
+          classInfo.class_name, cg.getMajor());
     }
+
+    List<MethodInfo> method_infos = new ArrayList<>();
 
     boolean shouldInclude = false;
 
@@ -509,12 +501,12 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         synchronized (this) {
           pool = cg.getConstantPool();
           MethodGen mgen = new MethodGen(m, cg.getClassName(), pool);
-          MethodContext context = new MethodContext(cg, mgen);
 
           // check for the class static initializer method
           if (mgen.getName().equals("<clinit>")) {
+            classInfo.hasClinit = true;
             if (Chicory.checkStaticInit) {
-              cg.replaceMethod(m, addInvokeToClinit(cg, mgen, fullClassName));
+              cg.replaceMethod(m, addInvokeToClinit(cg, mgen, classInfo));
               cg.update();
             }
             if (!Chicory.instrument_clinit) {
@@ -525,6 +517,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
           // If method is synthetic... (default constructors and <clinit> are not synthetic).
           if ((Const.ACC_SYNTHETIC & mgen.getAccessFlags()) > 0) {
+            // We are not going to instrument this method.
             continue;
           }
 
@@ -570,6 +563,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           printStackMapTable("After create_method_info");
 
           if (curMethodInfo == null) { // method filtered out!
+            // We are not going to instrument this method.
             continue;
           }
 
@@ -593,7 +587,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           }
 
           // Add nonce local to matchup enter/exits
-          add_entry_instrumentation(il, context);
+          add_entry_instrumentation(il, mgen);
 
           printStackMapTable("After add_entry_instrumentation");
 
@@ -613,7 +607,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
             // If this is a return instruction, insert method exit instrumentation
             InstructionList new_il =
-                generate_return_instrumentation(inst, context, shouldIncludeIter, exitLocationIter);
+                generate_return_instrumentation(inst, mgen, shouldIncludeIter, exitLocationIter);
 
             // Remember the next instruction to process
             InstructionHandle next_ih = ih.getNext();
@@ -688,7 +682,6 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
 
     classInfo.shouldInclude = shouldInclude;
-    return classInfo;
   }
 
   /**
@@ -697,7 +690,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * instruction list wil be inserted immediately before the return.
    *
    * @param inst the instruction to inspect, which might be a return instruction
-   * @param c describes the given method
+   * @param mgen describes the given method
    * @param shouldIncludeIter whether or not to instrument this return
    * @param exitLocationIter list of exit line numbers
    * @return instruction list for instrumenting the return, or null if {@code inst} is not a return
@@ -705,7 +698,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    */
   private @Nullable InstructionList generate_return_instrumentation(
       Instruction inst,
-      MethodContext c,
+      MethodGen mgen,
       Iterator<Boolean> shouldIncludeIter,
       Iterator<Integer> exitLocationIter) {
 
@@ -732,10 +725,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       return null;
     }
 
-    Type type = c.mgen.getReturnType();
+    Type type = mgen.getReturnType();
     InstructionList newCode = new InstructionList();
     if (type != Type.VOID) {
-      LocalVariableGen return_loc = getReturnLocal(c.mgen, type);
+      LocalVariableGen return_loc = getReturnLocal(mgen, type);
       newCode.append(InstructionFactory.createDup(type.getSize()));
       newCode.append(InstructionFactory.createStore(type, return_loc.getIndex()));
     }
@@ -744,7 +737,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       throw new RuntimeException("Not enough exit locations in the exitLocationIter");
     }
 
-    newCode.append(callEnterOrExit(c, "exit", exitLocationIter.next()));
+    newCode.append(callEnterOrExit(mgen, "exit", exitLocationIter.next()));
     return newCode;
   }
 
@@ -789,7 +782,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /**
    * Finds the nonce local variable. Returns null if not present.
    *
-   * @param mgen describes the current method
+   * @param mgen describes the given method
    * @return a local variable to save the nonce value, or null
    */
   private @Nullable LocalVariableGen get_nonce_local(MethodGen mgen) {
@@ -811,14 +804,14 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * call daikon.chicory.Runtime.enter().
    *
    * @param instructions instruction list for method
-   * @param c MethodContext for method
+   * @param mgen describes the given method
    * @throws IOException if there is trouble with I/O
    */
   @SuppressWarnings({
     "nullness:argument", // null is ok for typesOfStackItems
     "nullness:dereference" // pool will never be null
   })
-  private void add_entry_instrumentation(InstructionList instructions, MethodContext c)
+  private void add_entry_instrumentation(InstructionList instructions, MethodGen mgen)
       throws IOException {
 
     String atomic_int_classname = "java.util.concurrent.atomic.AtomicInteger";
@@ -827,25 +820,24 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     InstructionList newCode = new InstructionList();
 
     // create the nonce local variable
-    LocalVariableGen nonce_lv =
-        create_method_scope_local(c.mgen, "this_invocation_nonce", Type.INT);
+    LocalVariableGen nonce_lv = create_method_scope_local(mgen, "this_invocation_nonce", Type.INT);
 
     printStackMapTable("After cln");
 
     if (debugInstrument.enabled) {
-      debugInstrument.log("Modified code: %s%n", c.mgen.getMethod().getCode());
+      debugInstrument.log("Modified code: %s%n", mgen.getMethod().getCode());
     }
 
     // The following implements:
     //     this_invocation_nonce = Runtime.nonce++;
 
     // getstatic Runtime.nonce (load reference to AtomicInteger daikon.chicory.Runtime.nonce)
-    newCode.append(c.ifact.createGetStatic(runtime_classname, "nonce", atomic_int_type));
+    newCode.append(instFactory.createGetStatic(runtime_classname, "nonce", atomic_int_type));
 
     // Do an atomic get and increment of nonce value.
     // This is multi-thread safe and leaves int value of nonce on stack.
     newCode.append(
-        c.ifact.createInvoke(
+        instFactory.createInvoke(
             atomic_int_classname, "getAndIncrement", Type.INT, new Type[] {}, Const.INVOKEVIRTUAL));
 
     // istore <lv> (pop original value of nonce into this_invocation_nonce)
@@ -856,7 +848,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     int len_part1 = end.getPosition() + end.getInstruction().getLength();
 
     // call Runtime.enter()
-    newCode.append(callEnterOrExit(c, "enter", -1));
+    newCode.append(callEnterOrExit(mgen, "enter", -1));
 
     newCode.setPositions();
     end = newCode.getEnd();
@@ -946,16 +938,14 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * array of objects. Any primitive values are wrapped in the appropriate daikon.chicory.Runtime
    * wrapper (IntWrap, FloatWrap, etc).
    *
-   * @param c describes the given method
+   * @param mgen describes the given method
    * @param callMethod either "enter" or "exit"
    * @param line source line number if this is an exit
    * @return instruction list for instrumenting the enter or exit of the method
    */
-  private InstructionList callEnterOrExit(MethodContext c, String callMethod, int line) {
+  private InstructionList callEnterOrExit(MethodGen mgen, String callMethod, int line) {
 
     InstructionList newCode = new InstructionList();
-    InstructionFactory ifact = c.ifact;
-    MethodGen mgen = c.mgen;
     Type[] paramTypes = mgen.getArgumentTypes();
 
     // aload
@@ -978,23 +968,23 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     // iconst
     // Push the MethodInfo index.
-    newCode.append(ifact.createConstant(cur_method_info_index));
+    newCode.append(instFactory.createConstant(cur_method_info_index));
 
     // iconst
     // anewarray
     // Create an array of objects with elements for each parameter.
-    newCode.append(ifact.createConstant(paramTypes.length));
+    newCode.append(instFactory.createConstant(paramTypes.length));
     Type object_arr_typ = new ArrayType("java.lang.Object", 1);
-    newCode.append(ifact.createNewArray(Type.OBJECT, (short) 1));
+    newCode.append(instFactory.createNewArray(Type.OBJECT, (short) 1));
 
     // Put each parameter into the array.
     int param_index = param_offset;
     for (int ii = 0; ii < paramTypes.length; ii++) {
       newCode.append(InstructionFactory.createDup(object_arr_typ.getSize()));
-      newCode.append(ifact.createConstant(ii));
+      newCode.append(instFactory.createConstant(ii));
       Type at = paramTypes[ii];
       if (at instanceof BasicType) {
-        newCode.append(create_wrapper(c, at, param_index));
+        newCode.append(create_wrapper(at, param_index));
       } else { // must be reference of some sort
         newCode.append(InstructionFactory.createLoad(Type.OBJECT, param_index));
       }
@@ -1012,7 +1002,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       } else {
         LocalVariableGen returnLocal = getReturnLocal(mgen, ret_type);
         if (ret_type instanceof BasicType) {
-          newCode.append(create_wrapper(c, ret_type, returnLocal.getIndex()));
+          newCode.append(create_wrapper(ret_type, returnLocal.getIndex()));
         } else {
           newCode.append(InstructionFactory.createLoad(Type.OBJECT, returnLocal.getIndex()));
         }
@@ -1020,7 +1010,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
       // push line number
       // System.out.println(mgen.getName() + " --> " + line);
-      newCode.append(ifact.createConstant(line));
+      newCode.append(instFactory.createConstant(line));
     }
 
     // Call the specified method
@@ -1032,7 +1022,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       methodArgs = new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ};
     }
     newCode.append(
-        c.ifact.createInvoke(
+        instFactory.createInvoke(
             runtime_classname, callMethod, Type.VOID, methodArgs, Const.INVOKESTATIC));
 
     return newCode;
@@ -1045,12 +1035,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    *
    * <p>The stack is left with a pointer to the newly created wrapper at the top.
    *
-   * @param c MethodContext for curent method
    * @param prim_type the primitive type of the local variable or parameter
    * @param var_index the offset into the local stack of the variable or parameter
    * @return instruction list for putting the primitive in a wrapper
    */
-  private InstructionList create_wrapper(MethodContext c, Type prim_type, int var_index) {
+  private InstructionList create_wrapper(Type prim_type, int var_index) {
 
     String wrapperClassName;
     switch (prim_type.getType()) {
@@ -1084,11 +1073,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     InstructionList newCode = new InstructionList();
     String classname = runtime_classname + "$" + wrapperClassName;
-    newCode.append(c.ifact.createNew(classname));
+    newCode.append(instFactory.createNew(classname));
     newCode.append(InstructionFactory.createDup(Type.OBJECT.getSize()));
     newCode.append(InstructionFactory.createLoad(prim_type, var_index));
     newCode.append(
-        c.ifact.createInvoke(
+        instFactory.createInvoke(
             classname, "<init>", Type.VOID, new Type[] {prim_type}, Const.INVOKESPECIAL));
 
     return newCode;
@@ -1141,7 +1130,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * Creates a MethodInfo struct corresponding to {@code mgen}.
    *
    * @param classInfo a class
-   * @param mgen a method in the given class
+   * @param mgen describes the given method
    * @return a new MethodInfo for the method, or null if the method should not be instrumented
    */
   @SuppressWarnings("unchecked")
@@ -1297,7 +1286,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /**
    * Logs a method's attributes.
    *
-   * @param mgen a method
+   * @param mgen describes the given method
    */
   @SuppressWarnings("nullness:dereference.of.nullable")
   public void dump_code_attributes(MethodGen mgen) {
@@ -1308,27 +1297,6 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       Constant c = pool.getConstant(con_index);
       String att_name = ((ConstantUtf8) c).getBytes();
       debugInstrument.log("Attribute Index: %s Name: %s%n", con_index, att_name);
-    }
-  }
-
-  /** Information needed by InstTransform routines about the method and class. */
-  private static class MethodContext {
-
-    /** InstructionFactory for a class. */
-    public InstructionFactory ifact;
-
-    /** MethodGen for a method of the class. */
-    public MethodGen mgen;
-
-    /**
-     * Create a new MethodContext.
-     *
-     * @param cg ClassGen for a class
-     * @param mgen a method of the class
-     */
-    public MethodContext(ClassGen cg, MethodGen mgen) {
-      ifact = new InstructionFactory(cg);
-      this.mgen = mgen;
     }
   }
 

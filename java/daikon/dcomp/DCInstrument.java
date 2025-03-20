@@ -4235,6 +4235,6 @@ public class DCInstrument extends InstructionListUtils {
     // Remove exceptions from the full method name
     String full_name = m.toString().replaceFirst("\\s*throws.*", "");
     // Remove annotations from full method name
-    return full_name.replaceAll(" \\[.*\\]", "");
+    return full_name.replaceFirst("(?s) \\[.*", "");
   }
 }
