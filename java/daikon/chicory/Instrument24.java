@@ -492,7 +492,7 @@ public class Instrument24 implements ClassFileTransformer {
    * Create a class initializer method, if none exists. We need a class initializer to have a place
    * to insert a call to the Chicory Runtime {@code initNotifiy()} method.
    *
-   * @param classBuider for the given class
+   * @param classBuilder for the given class
    * @param classInfo for the given class
    */
   private void createClinit(ClassBuilder classBuilder, ClassInfo classInfo) {
