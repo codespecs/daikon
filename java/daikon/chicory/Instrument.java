@@ -86,6 +86,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   public InstructionFactory instFactory;
 
   /** Create an instrumenter. Setup debug directories, if needed. */
+  @SuppressWarnings("nullness:initialization")
   public Instrument() {
     super();
     debug_transform.enabled = Chicory.debug_transform || Chicory.debug || Chicory.verbose;
