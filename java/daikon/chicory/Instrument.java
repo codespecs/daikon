@@ -64,7 +64,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /** The location of the runtime support class. */
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
-  /** Debug information about which classes are transformed and why. */
+  /** Debug information about which classes and/or methods are transformed and why. */
   protected static SimpleLog debug_transform = new SimpleLog(false);
 
   // Public so can be enabled from daikon.dcomp.Instrument.
@@ -81,7 +81,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   File debug_uninstrumented_dir;
 
   /** The index of this method in SharedData.methods. */
-  int cur_method_info_index = 0;
+  int method_info_index = 0;
 
   /** InstructionFactory for a class. */
   public InstructionFactory instFactory;
@@ -202,7 +202,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     try {
       debug_transform.log("Dumping .class and .bcel for %s to %s%n", className, directory);
       // Write the byte array to a .class file.
-      File outputFile = new File(directory, c.getClassName() + ".class");
+      File outputFile = new File(directory, className + ".class");
       c.dump(outputFile);
       // Write a BCEL-like file.
       BcelUtil.dump(c, directory);
@@ -311,7 +311,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // Modify each non-void method to save its result in a local variable before returning.
     instrument_all_methods(cg, classInfo);
 
-    // get constant static fields!
+    // Remember any constant static fields.
     Field[] fields = cg.getFields();
     for (Field field : fields) {
       if (field.isFinal() && field.isStatic() && (field.getType() instanceof BasicType)) {
@@ -583,7 +583,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           method_infos.add(curMethodInfo);
 
           synchronized (SharedData.methods) {
-            cur_method_info_index = SharedData.methods.size();
+            method_info_index = SharedData.methods.size();
             SharedData.methods.add(curMethodInfo);
           }
 
@@ -969,7 +969,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     // iconst
     // Push the MethodInfo index.
-    newCode.append(instFactory.createConstant(cur_method_info_index));
+    newCode.append(instFactory.createConstant(method_info_index));
 
     // iconst
     // anewarray

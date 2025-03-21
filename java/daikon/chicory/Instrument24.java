@@ -112,7 +112,7 @@ public class Instrument24 implements ClassFileTransformer {
   /** The ClassDesc for the Java Object class. */
   private static final ClassDesc objectCD = ClassDesc.of("java.lang.Object");
 
-  /** Debug information about which classes are transformed and why. */
+  /** Debug information about which classes and/or methods are transformed and why. */
   protected static SimpleLog debug_transform = new SimpleLog(false);
 
   // Public so can be enabled from daikon.dcomp.Instrument24.
@@ -188,7 +188,6 @@ public class Instrument24 implements ClassFileTransformer {
   /** Create an instrumenter. Setup debug directories, if needed. */
   @SuppressWarnings("nullness:initialization")
   public Instrument24() {
-    super();
     debug_transform.enabled = Chicory.debug_transform || Chicory.debug || Chicory.verbose;
     debug_ppt_omit.enabled = debugInstrument.enabled = Chicory.debug;
 
@@ -291,7 +290,7 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /*
-   * Output a .class file and a .javap like version of the class file.
+   * Output a .class file and a .bcel version of the class file.
    *
    * @param classBytes a byte array of the class file to output
    * @param directory output location for the files

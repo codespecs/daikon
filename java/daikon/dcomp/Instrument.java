@@ -85,9 +85,9 @@ public class Instrument implements ClassFileTransformer {
     try {
       debug_transform.log("Dumping .class and .bcel for %s to %s%n", className, directory);
       // Write the byte array to a .class file.
-      File outputFile = new File(directory, c.getClassName() + ".class");
+      File outputFile = new File(directory, className + ".class");
       c.dump(outputFile);
-      // write .bcel file
+      // Write a BCEL-like file.
       BcelUtil.dump(c, directory);
     } catch (Throwable t) {
       System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
@@ -110,13 +110,12 @@ public class Instrument implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
-
     // for debugging
     // new Throwable().printStackTrace();
 
-    debug_transform.log(
-        "In dcomp.Instrument.transform(): class = %s, loader: %s%n", className, loader);
+    debug_transform.log("Entering dcomp.Instrument.transform(): class = %s%n", className);
+
+    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
     if (className == null) {
       /*
@@ -227,7 +226,7 @@ public class Instrument implements ClassFileTransformer {
       ClassParser parser = new ClassParser(bais, className);
       c = parser.parse();
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s reading in %s%n", t, binaryClassName);
+      System.err.printf("Unexpected error %s while reading %s%n", t, binaryClassName);
       t.printStackTrace();
       // No changes to the bytecodes
       return null;
@@ -243,9 +242,11 @@ public class Instrument implements ClassFileTransformer {
       DCInstrument dci = new DCInstrument(c, in_jdk, loader);
       njc = dci.instrument();
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
-      t.printStackTrace();
-      throw new RuntimeException("Unexpected error", t);
+      RuntimeException re =
+          new RuntimeException(
+              String.format("Unexpected error %s in transform of %s", t, binaryClassName), t);
+      re.printStackTrace();
+      throw re;
     }
 
     if (njc != null) {
