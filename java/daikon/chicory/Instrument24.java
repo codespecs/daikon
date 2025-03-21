@@ -113,8 +113,9 @@ public class Instrument24 implements ClassFileTransformer {
   private static final ClassDesc objectCD = ClassDesc.of("java.lang.Object");
 
   /** Debug information about which classes are transformed and why. */
-  public static SimpleLog debug_transform = new SimpleLog(false);
+  protected static SimpleLog debug_transform = new SimpleLog(false);
 
+  // Public so can be enabled from daikon.dcomp.Instrument24.
   /** Debug information about ppt-omit and ppt-select. */
   public static SimpleLog debug_ppt_omit = new SimpleLog(false);
 

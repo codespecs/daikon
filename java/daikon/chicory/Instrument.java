@@ -65,8 +65,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
   /** Debug information about which classes are transformed and why. */
-  public static SimpleLog debug_transform = new SimpleLog(false);
+  protected static SimpleLog debug_transform = new SimpleLog(false);
 
+  // Public so can be enabled from daikon.dcomp.Instrument.
   /** Debug information about ppt-omit and ppt-select. */
   public static SimpleLog debug_ppt_omit = new SimpleLog(false);
 
@@ -583,7 +584,6 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
           synchronized (SharedData.methods) {
             cur_method_info_index = SharedData.methods.size();
-            assert curMethodInfo != null : "@AssumeAssertion(nullness): just checked above";
             SharedData.methods.add(curMethodInfo);
           }
 
