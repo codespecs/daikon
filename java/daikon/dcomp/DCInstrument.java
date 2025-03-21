@@ -317,7 +317,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /** Initialize with the original class and whether or not the class is part of the JDK. */
-  @SuppressWarnings("nullness:initialization")
+  @SuppressWarnings("StaticAssignmentInConstructor") // instrumentation_interface
   public DCInstrument(JavaClass orig_class, boolean in_jdk, @Nullable ClassLoader loader) {
     super();
     this.orig_class = orig_class;
