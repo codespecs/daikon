@@ -184,7 +184,6 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /** Create an instrumenter. Setup debug directories, if needed. */
-  @SuppressWarnings("nullness:initialization")
   public Instrument24() {
     debug_transform.enabled = Chicory.debug_transform || Chicory.debug || Chicory.verbose;
     debug_ppt_omit.enabled = debugInstrument.enabled = Chicory.debug;
@@ -690,11 +689,12 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Output the given method with no changes.
+   * Copy the given method from the input class file to the output output class with no changes.
+   * Uses {@code copyMethod} to perform the actual copy.
    *
-   * @param classBuilder for the given method
-   * @param mm MethodModel for the given method
-   * @param mgen describes the given method
+   * @param classBuilder for the output class
+   * @param mm MethodModel describes the input method
+   * @param mgen describes the output method
    */
   private void outputMethodUnchanged(ClassBuilder classBuilder, MethodModel mm, MethodGen24 mgen) {
     classBuilder.withMethod(
@@ -705,11 +705,11 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Copy the given method with no changes.
+   * Copy the given method from the input class file to the output output class with no changes.
    *
-   * @param methodBuilder for the given method
-   * @param methodModel for the given method
-   * @param mgen describes the given method
+   * @param methodBuilder for the output class
+   * @param methodModel describes the input method
+   * @param mgen describes the output method
    */
   private void copyMethod(MethodBuilder methodBuilder, MethodModel methodModel, MethodGen24 mgen) {
 
@@ -726,10 +726,10 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Copy code for the given method with no changes.
+   * Copy an instruction list into the given method.
    *
    * @param codeBuilder for the given method's code
-   * @param instructions instruction list for method
+   * @param instructions instruction list to copy
    */
   private void copyCode(CodeBuilder codeBuilder, List<CodeElement> instructions) {
 
@@ -746,6 +746,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param methodModel for the given method
    * @param mgen describes the given method
    * @param curMethodInfo provides additional information about the method
+   * @param method_info_index the index of the method in SharedData.methods
    */
   private void instrumentMethod(
       MethodBuilder methodBuilder,
@@ -769,14 +770,17 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Insert the our instrumentation code into the instruction list for the given method.
+   * Insert the our instrumentation code into the instruction list for the given method. This
+   * includes adding instrumentation code at the entry and at each return from the method. In
+   * addition, it changes each return statement to first place the value being returned into a local
+   * and then return.
    *
    * @param instructions instruction list for method
    * @param mgen describes the given method
    * @param curMethodInfo provides additional information about the method
    * @param minfo for the given method's code
    */
-  private void insertInstrumentation(
+  private void insertInstrumentationCode(
       List<CodeElement> instructions, MethodGen24 mgen, MethodInfo curMethodInfo, MInfo24 minfo) {
 
     // Add nonce local to matchup enter/exits
@@ -812,14 +816,16 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Generate instrumentation code for the given method. This includes adding instrumentation code
-   * at the entry and at each return from the method. In addition, it changes each return statement
-   * to first place the value being returned into a local and then return.
+   * Generate instrumentation code for the given method. This includes reading in and processing the
+   * original instruction list, calling {@code insertInstrumentationCode} to add the instrumentation
+   * code, and then copying the modified instruction list to the output method while updating the
+   * code labels, if needed.
    *
    * @param codeBuilder for the given method's code
-   * @param codeModel for the given method's code
-   * @param mgen describes the given method
+   * @param codeModel for the input method's code
+   * @param mgen describes the output method
    * @param curMethodInfo provides additional information about the method
+   * @param method_info_index the index of the method in SharedData.methods
    */
   private void instrumentCode(
       CodeBuilder codeBuilder,
@@ -867,7 +873,7 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     // Generate and insert our instrumentation code.
-    insertInstrumentation(codeList, mgen, curMethodInfo, minfo);
+    insertInstrumentationCode(codeList, mgen, curMethodInfo, minfo);
 
     // Copy the modified local variable table to the output class.
     debugInstrument.log("LocalVariableTable:%n");
@@ -1166,11 +1172,26 @@ public class Instrument24 implements ClassFileTransformer {
     newCode.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
   }
 
-  /** Possibly modified default switch target. */
-  private Label modifiedTarget;
+  /** Variables used for processing a switch instruction. */
+  private static class ModifiedSwitchInfo {
 
-  /** Possibly modified switch case list. */
-  private List<SwitchCase> modifiedCaseList;
+    /** Possibly modified default switch target. */
+    public Label modifiedTarget;
+
+    /** Possibly modified switch case list. */
+    public List<SwitchCase> modifiedCaseList;
+
+    /**
+     * Creates a ModifiedSwitchInfo.
+     *
+     * @param modifiedTarget possibly modified default swith target
+     * @param modifiedCaseList possibly modified switch case list
+     */
+    public ModifiedSwitchInfo(Label modifiedTarget, List<SwitchCase> modifiedCaseList) {
+      this.modifiedTarget = modifiedTarget;
+      this.modifiedCaseList = modifiedCaseList;
+    }
+  }
 
   /**
    * Checks to see if the instruction targets the method's CodeModel startLabel (held in
@@ -1184,6 +1205,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @return the original instruction or its replacement
    */
   private CodeElement retargetStartLabel(CodeElement inst, MInfo24 minfo) {
+    ModifiedSwitchInfo info;
     switch (inst) {
       case BranchInstruction bi -> {
         if (bi.target().equals(minfo.oldStartLabel)) {
@@ -1196,14 +1218,16 @@ public class Instrument24 implements ClassFileTransformer {
         }
       }
       case LookupSwitchInstruction ls -> {
-        if (retargetStartLabel(ls.defaultTarget(), ls.cases(), minfo)) {
-          return LookupSwitchInstruction.of(modifiedTarget, modifiedCaseList);
+        info = retargetStartLabel(ls.defaultTarget(), ls.cases(), minfo);
+        if (info != null) {
+          return LookupSwitchInstruction.of(info.modifiedTarget, info.modifiedCaseList);
         }
       }
       case TableSwitchInstruction ts -> {
-        if (retargetStartLabel(ts.defaultTarget(), ts.cases(), minfo)) {
+        info = retargetStartLabel(ts.defaultTarget(), ts.cases(), minfo);
+        if (info != null) {
           return TableSwitchInstruction.of(
-              ts.lowValue(), ts.highValue(), modifiedTarget, modifiedCaseList);
+              ts.lowValue(), ts.highValue(), info.modifiedTarget, info.modifiedCaseList);
         }
       }
       default -> {}
@@ -1213,23 +1237,26 @@ public class Instrument24 implements ClassFileTransformer {
 
   /**
    * Checks to see if a switch instruction's default target or any of the case targets refers to
-   * {@code minfo.oldStartLabel}. If so, replace those targets with the entryLabel, store the result
-   * in modifiedTarget and modifiedCaseList, and return true. Otherwise, return false.
+   * {@code minfo.oldStartLabel}. If so, replace those targets with the entryLabel, and return the
+   * result in a ModifiedSwitchInfo. Otherwise, return null.
    *
    * @param defaultTarget the default target for the switch instruction
    * @param caseList the case list for the switch instruction
    * @param minfo for the given method's code
-   * @return true if either the defaultTarget or the caseList has been modified
+   * @return a ModifiedSwitchInfo with the changed values, or null if no changes
    */
-  private boolean retargetStartLabel(
+  private @Nullable ModifiedSwitchInfo retargetStartLabel(
       Label defaultTarget, List<SwitchCase> caseList, MInfo24 minfo) {
+    Label modifiedTarget;
     boolean modified = false;
+
     if (defaultTarget.equals(minfo.oldStartLabel)) {
       modifiedTarget = minfo.entryLabel;
       modified = true;
     } else {
       modifiedTarget = defaultTarget;
     }
+
     List<SwitchCase> newCaseList = new ArrayList<SwitchCase>();
     for (SwitchCase item : caseList) {
       if (item.target().equals(minfo.oldStartLabel)) {
@@ -1239,8 +1266,12 @@ public class Instrument24 implements ClassFileTransformer {
         newCaseList.add(item);
       }
     }
-    modifiedCaseList = newCaseList;
-    return modified;
+
+    if (modified) {
+      return new ModifiedSwitchInfo(modifiedTarget, newCaseList);
+    } else {
+      return null;
+    }
   }
 
   /**

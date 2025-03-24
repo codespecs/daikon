@@ -22,7 +22,6 @@ public class ClassInfo {
   /** binary name of the class. */
   public @BinaryName String class_name;
 
-  // This field is only used by Instrument24.
   /** True if the class has a class initializer. */
   public boolean hasClinit;
 
