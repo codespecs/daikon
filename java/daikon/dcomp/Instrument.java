@@ -90,7 +90,7 @@ public class Instrument implements ClassFileTransformer {
       // Write a BCEL-like file.
       BcelUtil.dump(c, directory);
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
+      System.err.printf("Unexpected error %s writing debug files for: %s%n", t, className);
       t.printStackTrace();
       // ignore the error, it shouldn't affect the instrumentation
     }
@@ -100,6 +100,8 @@ public class Instrument implements ClassFileTransformer {
    * Given a class, return a transformed version of the class that contains instrumentation code.
    * Because DynComp is invoked as a javaagent, the transform method is called by the Java runtime
    * each time a new class is loaded. A return value of null leaves the byte codes unchanged.
+   *
+   * <p>{@inheritDoc}
    */
   @Override
   public byte @Nullable [] transform(

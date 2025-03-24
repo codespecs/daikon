@@ -1415,7 +1415,7 @@ public class DCInstrument extends InstructionListUtils {
       Type at = arg_types[ii];
       if (at instanceof BasicType) {
         il.append(new ACONST_NULL());
-        // il.append (create_wrapper (c, at, param_index));
+        // il.append (createPrimitiveWrapper (c, at, param_index));
       } else { // must be reference of some sort
         il.append(InstructionFactory.createLoad(Type.OBJECT, param_index));
       }
@@ -1435,7 +1435,7 @@ public class DCInstrument extends InstructionListUtils {
         LocalVariableGen return_local = get_return_local(mg, returnType);
         if (returnType instanceof BasicType) {
           il.append(new ACONST_NULL());
-          // il.append (create_wrapper (c, returnType, return_local.getIndex()));
+          // il.append (createPrimitiveWrapper (c, returnType, return_local.getIndex()));
         } else {
           il.append(InstructionFactory.createLoad(Type.OBJECT, return_local.getIndex()));
         }
@@ -2745,7 +2745,7 @@ public class DCInstrument extends InstructionListUtils {
       assert (return_type != null) : " return__$trace2_val doesn't exist";
     } else {
       assert return_type.equals(return_local.getType())
-          : " return_type = " + return_type + "current type = " + return_local.getType();
+          : " return_type = " + return_type + "; current type = " + return_local.getType();
     }
 
     if (return_local == null) {
