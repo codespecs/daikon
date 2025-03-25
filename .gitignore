@@ -48,6 +48,8 @@ java/dcomp-rt
 java/dcomp_rt.jar
 dcomp-rt.jar
 # DynComp testing
+java/daikon/dcomp/DcompTest.decls-DynComp
+java/daikon/dcomp/debug/
 java/daikon/dcomp/jdk_dcomp_out.diff
 java/daikon/dcomp/jdk_dcomp_out.txt
 java/daikon/dcomp/std_dcomp_out.diff

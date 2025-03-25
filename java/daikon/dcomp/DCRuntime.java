@@ -1682,6 +1682,7 @@ public final class DCRuntime implements ComparabilityProvider {
   static int synthetic_cnt = 0;
   static int enum_cnt = 0;
 
+  // Only called if 'verbose' is true.
   /** Prints statistics about the number of decls to stdout. */
   public static void decl_stats() {
 

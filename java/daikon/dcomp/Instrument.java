@@ -16,35 +16,38 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
+/**
+ * This class is responsible for modifying another class's bytecodes. Specifically, its main task is
+ * to add calls into the DynComp Runtime for instrumentation purposes. These added calls are
+ * sometimes referred to as "hooks".
+ *
+ * <p>This class is loaded by Premain at startup. It is a ClassFileTransformer which means that its
+ * {@code transform} method gets called each time the JVM loads a class.
+ */
 public class Instrument implements ClassFileTransformer {
 
   /** Directory for debug output. */
-  File debug_dir;
+  final File debug_dir;
 
-  /** Directory for debug instrumented class output. */
-  File debug_instrumented_dir;
+  /** Directory into which to dump debug-instrumented classes. */
+  final File debug_instrumented_dir;
 
-  /** Directory for debug original class output. */
-  File debug_uninstrumented_dir;
+  /** Directory into which to dump original classes. */
+  final File debug_uninstrumented_dir;
 
   /** Have we seen a class member of a known transformer? */
-  static boolean transformer_seen = false;
+  private static boolean transformer_seen = false;
 
   /**
    * Debug information about which classes and/or methods are transformed and why. Use
    * debugInstrument for actual instrumentation details.
    */
-  protected static SimpleLog debug_transform = new SimpleLog(false);
+  protected static final SimpleLog debug_transform = new SimpleLog(false);
 
-  /** Current class name in binary format. */
-  @BinaryName String binaryClassName;
-
-  /** Instrument class constructor. Setup debug directories, if needed. */
-  @SuppressWarnings("nullness:initialization")
+  /** Create an instrumenter. Setup debug directories, if needed. */
   public Instrument() {
     debug_transform.enabled =
         DynComp.debug || DynComp.debug_transform || Premain.debug_dcinstrument || DynComp.verbose;
-    daikon.chicory.Instrument.debug_transform.enabled = debug_transform.enabled;
     daikon.chicory.Instrument.debug_ppt_omit.enabled = DynComp.debug;
 
     debug_dir = DynComp.debug_dir;
@@ -69,10 +72,34 @@ public class Instrument implements ClassFileTransformer {
     System.out.println();
   }
 
+  /*
+   * Output a .class file and a .bcel version of the class file.
+   *
+   * @param c the Java class to output
+   * @param directory output location for the files
+   * @param className the current class
+   */
+  private void outputDebugFiles(JavaClass c, File directory, @BinaryName String className) {
+    try {
+      debug_transform.log("Dumping .class and .bcel for %s to %s%n", className, directory);
+      // Write the byte array to a .class file.
+      File outputFile = new File(directory, className + ".class");
+      c.dump(outputFile);
+      // Write a BCEL-like file.
+      BcelUtil.dump(c, directory);
+    } catch (Throwable t) {
+      System.err.printf("Unexpected error %s writing debug files for: %s%n", t, className);
+      t.printStackTrace();
+      // ignore the error, it shouldn't affect the instrumentation
+    }
+  }
+
   /**
    * Given a class, return a transformed version of the class that contains instrumentation code.
    * Because DynComp is invoked as a javaagent, the transform method is called by the Java runtime
    * each time a new class is loaded. A return value of null leaves the byte codes unchanged.
+   *
+   * <p>{@inheritDoc}
    */
   @Override
   public byte @Nullable [] transform(
@@ -83,13 +110,12 @@ public class Instrument implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    binaryClassName = Signatures.internalFormToBinaryName(className);
-
     // for debugging
     // new Throwable().printStackTrace();
 
-    debug_transform.log(
-        "In dcomp.Instrument.transform(): class = %s, loader: %s%n", className, loader);
+    debug_transform.log("Entering dcomp.Instrument.transform(): class = %s%n", className);
+
+    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
     if (className == null) {
       /*
@@ -200,26 +226,14 @@ public class Instrument implements ClassFileTransformer {
       ClassParser parser = new ClassParser(bais, className);
       c = parser.parse();
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s reading in %s%n", t, binaryClassName);
+      System.err.printf("Unexpected error %s while reading %s%n", t, binaryClassName);
       t.printStackTrace();
       // No changes to the bytecodes
       return null;
     }
 
     if (DynComp.dump) {
-      try {
-        debug_transform.log(
-            "Dumping .class and .bcel for %s to %s%n", binaryClassName, debug_uninstrumented_dir);
-        // Write the byte array to a .class file.
-        c.dump(new File(debug_uninstrumented_dir, c.getClassName() + ".class"));
-        // write .bcel file
-        BcelUtil.dump(c, debug_uninstrumented_dir);
-      } catch (Throwable t) {
-        System.err.printf(
-            "Unexpected error %s dumping out debug files for: %s%n", t, binaryClassName);
-        t.printStackTrace();
-        // proceed with instrumentation
-      }
+      outputDebugFiles(c, debug_uninstrumented_dir, binaryClassName);
     }
 
     // Instrument the classfile, die on any errors
@@ -228,26 +242,16 @@ public class Instrument implements ClassFileTransformer {
       DCInstrument dci = new DCInstrument(c, in_jdk, loader);
       njc = dci.instrument();
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
-      t.printStackTrace();
-      throw new RuntimeException("Unexpected error", t);
+      RuntimeException re =
+          new RuntimeException(
+              String.format("Unexpected error %s in transform of %s", t, binaryClassName), t);
+      re.printStackTrace();
+      throw re;
     }
 
     if (njc != null) {
       if (DynComp.dump) {
-        try {
-          debug_transform.log(
-              "Dumping .class and .bcel for %s to %s%n", binaryClassName, debug_instrumented_dir);
-          // Write the byte array to a .class file
-          njc.dump(new File(debug_instrumented_dir, binaryClassName + ".class"));
-          // write .bcel file
-          BcelUtil.dump(njc, debug_instrumented_dir);
-        } catch (Throwable t) {
-          System.err.printf(
-              "Unexpected error %s dumping out debug files for: %s%n", t, binaryClassName);
-          t.printStackTrace();
-          // proceed with instrumentation
-        }
+        outputDebugFiles(njc, debug_instrumented_dir, binaryClassName);
       }
       return njc.getBytes();
     } else {

@@ -3,7 +3,6 @@ package daikon.dcomp;
 import daikon.DynComp;
 import daikon.chicory.ClassInfo;
 import daikon.chicory.DaikonWriter;
-import daikon.chicory.Instrument;
 import daikon.chicory.MethodInfo;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.InstructionListUtils;
@@ -99,8 +98,14 @@ import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 import org.checkerframework.dataflow.qual.Pure;
 
-/** Instruments a class file to perform Dynamic Comparability. */
-@SuppressWarnings({"nullness"}) //
+/**
+ * Instruments a class file to perform Dynamic Comparability.
+ *
+ * <p>The DCInstrument class is responsible for modifying another class's bytecodes. Specifically,
+ * its main task is to add calls into the DynComp Runtime to calculate comparability values. These
+ * added calls are sometimes referred to as "hooks".
+ */
+@SuppressWarnings("nullness")
 public class DCInstrument extends InstructionListUtils {
 
   /**
@@ -166,6 +171,12 @@ public class DCInstrument extends InstructionListUtils {
 
   /** Log file if debug_dup is enabled. */
   protected static SimpleLog debug_dup = new SimpleLog(false);
+
+  /**
+   * Debug information about which classes and/or methods are transformed and why. Use
+   * debugInstrument for actual instrumentation details.
+   */
+  protected static SimpleLog debug_transform = new SimpleLog(false);
 
   // Flags to enable additional console output for debugging
   /** If true, enable JUnit analysis debugging. */
@@ -253,8 +264,8 @@ public class DCInstrument extends InstructionListUtils {
         new MethodDef("wait", new Type[] {Type.LONG, Type.INT}),
       };
 
-  protected static InstructionList global_catch_il;
-  protected static CodeExceptionGen global_exception_handler;
+  protected static InstructionList global_catch_il = null;
+  protected static CodeExceptionGen global_exception_handler = null;
   private InstructionHandle insertion_placeholder;
 
   /** Class that defines a method (by its name and argument types) */
@@ -331,6 +342,7 @@ public class DCInstrument extends InstructionListUtils {
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
     debug_native.enabled = DynComp.debug;
+    debug_transform.enabled = daikon.dcomp.Instrument.debug_transform.enabled;
   }
 
   /**
@@ -348,7 +360,7 @@ public class DCInstrument extends InstructionListUtils {
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
-      Instrument.debug_transform.log("Not instrumenting annotation %s%n", classname);
+      debug_transform.log("Not instrumenting annotation %s%n", classname);
       // WHY NOT RETURN NULL?
       return gen.getJavaClass().copy();
     }
@@ -359,8 +371,7 @@ public class DCInstrument extends InstructionListUtils {
       if (attribute instanceof RuntimeVisibleAnnotations) {
         for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
           if (item.toString().startsWith("@Lorg/evosuite/runtime")) {
-            Instrument.debug_transform.log(
-                "Not instrumenting possible Evosuite target: %s%n", classname);
+            debug_transform.log("Not instrumenting possible Evosuite target: %s%n", classname);
             // WHY NOT RETURN NULL?
             return gen.getJavaClass().copy();
           }
@@ -368,8 +379,8 @@ public class DCInstrument extends InstructionListUtils {
       }
     }
 
-    Instrument.debug_transform.log("Instrumenting class %s%n", classname);
-    Instrument.debug_transform.indent();
+    debug_transform.log("Instrumenting class %s%n", classname);
+    debug_transform.indent();
 
     // Create the ClassInfo for this class and its list of methods
     ClassInfo class_info = new ClassInfo(classname, loader);
@@ -574,9 +585,8 @@ public class DCInstrument extends InstructionListUtils {
           gen.isPublic(true);
         }
 
-        Instrument.debug_transform.log(
-            "  Processing method %s, track=%b%n", simplify_method_name(m), track);
-        Instrument.debug_transform.indent();
+        debug_transform.log("  Processing method %s, track=%b%n", simplify_method_name(m), track);
+        debug_transform.indent();
 
         MethodGen mg = new MethodGen(m, classname, pool);
         mgen = mg; // copy to global
@@ -711,7 +721,7 @@ public class DCInstrument extends InstructionListUtils {
             throw e;
           }
         }
-        Instrument.debug_transform.exdent();
+        debug_transform.exdent();
       } catch (Throwable t) {
         // debug code
         // t.printStackTrace();
@@ -728,18 +738,18 @@ public class DCInstrument extends InstructionListUtils {
     // Keep track of when the class is initialized (so we don't look
     // for fields in uninitialized classes)
     track_class_init();
-    Instrument.debug_transform.exdent();
+    debug_transform.exdent();
 
     // The code that builds the list of daikon variables for each ppt
     // needs to know what classes are instrumented.  Its looks in the
     // Chicory runtime for this information.
     if (track_class) {
-      Instrument.debug_transform.log("DCInstrument adding %s to all class list%n", class_info);
+      debug_transform.log("DCInstrument adding %s to all class list%n", class_info);
       synchronized (daikon.chicory.SharedData.all_classes) {
         daikon.chicory.SharedData.all_classes.add(class_info);
       }
     }
-    Instrument.debug_transform.log("Instrumentation complete: %s%n", classname);
+    debug_transform.log("Instrumentation complete: %s%n", classname);
 
     return gen.getJavaClass().copy();
   }
@@ -805,7 +815,7 @@ public class DCInstrument extends InstructionListUtils {
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
-      Instrument.debug_transform.log("Not instrumenting annotation %s%n", classname);
+      debug_transform.log("Not instrumenting annotation %s%n", classname);
       // MUST NOT RETURN NULL
       return gen.getJavaClass().copy();
     }
@@ -816,7 +826,7 @@ public class DCInstrument extends InstructionListUtils {
       // See Premain.java for a list and explainations.
       String packageName = classname.substring(0, i);
       if (Premain.problem_packages.contains(packageName)) {
-        Instrument.debug_transform.log("Skipping problem package %s%n", packageName);
+        debug_transform.log("Skipping problem package %s%n", packageName);
         return gen.getJavaClass().copy();
       }
     }
@@ -825,14 +835,14 @@ public class DCInstrument extends InstructionListUtils {
       // Don't instrument problem classes.
       // See Premain.java for a list and explainations.
       if (Premain.problem_classes.contains(classname)) {
-        Instrument.debug_transform.log("Skipping problem class %s%n", classname);
+        debug_transform.log("Skipping problem class %s%n", classname);
         return gen.getJavaClass().copy();
       }
       dcompRuntimeClassName = "java.lang.DCRuntime";
     }
 
-    Instrument.debug_transform.log("Instrumenting class(JDK) %s%n", classname);
-    Instrument.debug_transform.indent();
+    debug_transform.log("Instrumenting class(JDK) %s%n", classname);
+    debug_transform.indent();
 
     // Handle object methods for this class
     handle_object(gen);
@@ -864,8 +874,8 @@ public class DCInstrument extends InstructionListUtils {
           continue;
         }
 
-        Instrument.debug_transform.log("  Processing method %s%n", simplify_method_name(m));
-        Instrument.debug_transform.indent();
+        debug_transform.log("  Processing method %s%n", simplify_method_name(m));
+        debug_transform.indent();
 
         MethodGen mg = new MethodGen(m, classname, pool);
         mgen = mg; // copy to global
@@ -969,7 +979,7 @@ public class DCInstrument extends InstructionListUtils {
           }
         }
 
-        Instrument.debug_transform.exdent();
+        debug_transform.exdent();
       } catch (Throwable t) {
         if (debugInstrument.enabled) {
           t.printStackTrace();
@@ -992,8 +1002,8 @@ public class DCInstrument extends InstructionListUtils {
     // for client classes
     // track_class_init();
 
-    Instrument.debug_transform.exdent();
-    Instrument.debug_transform.log("Instrumentation complete: %s%n", classname);
+    debug_transform.exdent();
+    debug_transform.log("Instrumentation complete: %s%n", classname);
 
     return gen.getJavaClass().copy();
   }
@@ -1405,7 +1415,7 @@ public class DCInstrument extends InstructionListUtils {
       Type at = arg_types[ii];
       if (at instanceof BasicType) {
         il.append(new ACONST_NULL());
-        // il.append (create_wrapper (c, at, param_index));
+        // il.append (createPrimitiveWrapper (c, at, param_index));
       } else { // must be reference of some sort
         il.append(InstructionFactory.createLoad(Type.OBJECT, param_index));
       }
@@ -1425,7 +1435,7 @@ public class DCInstrument extends InstructionListUtils {
         LocalVariableGen return_local = get_return_local(mg, returnType);
         if (returnType instanceof BasicType) {
           il.append(new ACONST_NULL());
-          // il.append (create_wrapper (c, returnType, return_local.getIndex()));
+          // il.append (createPrimitiveWrapper (c, returnType, return_local.getIndex()));
         } else {
           il.append(InstructionFactory.createLoad(Type.OBJECT, return_local.getIndex()));
         }
@@ -2735,7 +2745,7 @@ public class DCInstrument extends InstructionListUtils {
       assert (return_type != null) : " return__$trace2_val doesn't exist";
     } else {
       assert return_type.equals(return_local.getType())
-          : " return_type = " + return_type + "current type = " + return_local.getType();
+          : " return_type = " + return_type + "; current type = " + return_local.getType();
     }
 
     if (return_local == null) {
@@ -3048,14 +3058,14 @@ public class DCInstrument extends InstructionListUtils {
 
     // Don't track any JDK classes
     if (BcelUtil.inJdk(className)) {
-      Instrument.debug_transform.log("ignoring %s, is a JDK class%n", className);
+      debug_transform.log("ignoring %s, is a JDK class%n", className);
       return false;
     }
 
     // Don't track toString methods because we call them in
     // our debug statements.
     if (pptName.contains("toString")) {
-      Instrument.debug_transform.log("ignoring %s, is a toString method%n", pptName);
+      debug_transform.log("ignoring %s, is a toString method%n", pptName);
       return false;
     }
 
