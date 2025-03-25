@@ -45,7 +45,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
   curl \
-&& curl --silent -o openjdk-24_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk24/1f9ff9062db4449d8ca828c504ffae90/36/GPL/openjdk-24_linux-x64_bin.tar.gz && \
+&& curl --silent -o openjdk-24_linux-x64_bin.tar.gz https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.tar.gz && \
 tar xzf openjdk-24_linux-x64_bin.tar.gz
 ENV PATH="$HOME/jdk-24/bin:$PATH"
 
