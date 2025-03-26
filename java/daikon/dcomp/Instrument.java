@@ -23,19 +23,17 @@ import org.checkerframework.dataflow.qual.Pure;
  *
  * <p>This class is loaded by Premain at startup. It is a ClassFileTransformer which means that its
  * {@code transform} method gets called each time the JVM loads a class.
- *
- * <p>The entry point of {@link ClassFileTransformer} is {@link #transform}.
  */
 public class Instrument implements ClassFileTransformer {
 
   /** Directory for debug output. */
-  File debug_dir;
+  final File debug_dir;
 
   /** Directory into which to dump debug-instrumented classes. */
-  File debug_instrumented_dir;
+  final File debug_instrumented_dir;
 
   /** Directory into which to dump original classes. */
-  File debug_uninstrumented_dir;
+  final File debug_uninstrumented_dir;
 
   /** Have we seen a class member of a known transformer? */
   private static boolean transformer_seen = false;
@@ -44,7 +42,7 @@ public class Instrument implements ClassFileTransformer {
    * Debug information about which classes and/or methods are transformed and why. Use
    * debugInstrument for actual instrumentation details.
    */
-  protected static SimpleLog debug_transform = new SimpleLog(false);
+  protected static final SimpleLog debug_transform = new SimpleLog(false);
 
   /** Create an instrumenter. Setup debug directories, if needed. */
   public Instrument() {
