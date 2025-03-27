@@ -48,6 +48,8 @@ java/dcomp-rt
 java/dcomp_rt.jar
 dcomp-rt.jar
 # DynComp testing
+java/daikon/dcomp/DcompTest.decls-DynComp
+java/daikon/dcomp/debug/
 java/daikon/dcomp/jdk_dcomp_out.diff
 java/daikon/dcomp/jdk_dcomp_out.txt
 java/daikon/dcomp/std_dcomp_out.diff
@@ -60,6 +62,7 @@ java/daikon/chicory/ChicoryTest.inv.gz
 java/daikon/chicory/ChicoryTest.inv.out
 java/daikon/chicory/ChicoryTest.inv.out.diff
 java/daikon/chicory/ChicoryTest.log
+java/daikon/chicory/debug/
 
 # Obtained via Git
 utils
