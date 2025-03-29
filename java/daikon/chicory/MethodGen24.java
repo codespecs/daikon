@@ -3,9 +3,11 @@ package daikon.chicory;
 import java.lang.classfile.AccessFlags;
 import java.lang.classfile.Attributes;
 import java.lang.classfile.ClassBuilder;
+import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.CodeElement;
 import java.lang.classfile.CodeModel;
 import java.lang.classfile.Instruction;
+import java.lang.classfile.Label;
 import java.lang.classfile.MethodModel;
 import java.lang.classfile.attribute.CodeAttribute;
 import java.lang.classfile.attribute.SignatureAttribute;
@@ -16,10 +18,13 @@ import java.lang.constant.MethodTypeDesc;
 import java.lang.reflect.AccessFlag;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.Identifier;
@@ -128,6 +133,60 @@ public class MethodGen24 {
   /** ConstantPool builder for entire class. */
   // TODO: Should uses of this be synchronized?
   private ConstantPoolBuilder poolBuilder;
+
+  /** Variables used for processing the current method. */
+  protected static class MInfo24 {
+
+    /** The index of this method in SharedData.methods. */
+    public final int method_info_index;
+
+    /** Next available slot in localsTable, currently always = max locals. */
+    public int nextLocalIndex;
+
+    /**
+     * Mapping from instructions to labels. Used to associate a label with a location within the
+     * codelist.
+     */
+    public final Map<CodeElement, Label> labelMap = new HashMap<>();
+
+    // Note that the next three items are CodeBuilder Labels.
+    // These are different from CodeModel Labels.
+    /** Label for first byte code of method, used to give new locals method scope. */
+    public final Label startLabel;
+
+    /** Label for last byte code of method, used to give new locals method scope. */
+    public final Label endLabel;
+
+    /** Label for start of orignal code, post insertion of entry instrumentation. */
+    public Label entryLabel;
+
+    /**
+     * Label for first byte code of the current method, prior to instrumenting, as a CodeModel
+     * Label.
+     */
+    public @MonotonicNonNull Label oldStartLabel;
+
+    /** Used for instrumentation. */
+    public @MonotonicNonNull LocalVariable nonceLocal;
+
+    /** Used for instrumentation. */
+    public @MonotonicNonNull LocalVariable returnLocal;
+
+    /**
+     * Creates a MInfo24.
+     *
+     * @param method_info_index the index of the method in SharedData.methods
+     * @param nextLocalIndex next available slot in localsTable, currently always = max locals
+     * @param codeBuilder a CodeBuilder
+     */
+    public MInfo24(int method_info_index, int nextLocalIndex, CodeBuilder codeBuilder) {
+      this.method_info_index = method_info_index;
+      this.nextLocalIndex = nextLocalIndex;
+      this.startLabel = codeBuilder.startLabel();
+      this.endLabel = codeBuilder.endLabel();
+      this.entryLabel = codeBuilder.newLabel();
+    }
+  }
 
   /**
    * Creates a MethodGen24 object.
