@@ -64,18 +64,15 @@ import java.nio.file.Files;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
@@ -128,60 +125,6 @@ public class Instrument24 implements ClassFileTransformer {
 
   /** Directory into which to dump original classes. */
   final File debug_uninstrumented_dir;
-
-  /** Variables used for processing the current method. */
-  private static class MInfo24 {
-
-    /** The index of this method in SharedData.methods. */
-    public final int method_info_index;
-
-    /** Next available slot in localsTable, currently always = max locals. */
-    public int nextLocalIndex;
-
-    /**
-     * Mapping from instructions to labels. Used to associate a label with a location within the
-     * codelist.
-     */
-    public final Map<CodeElement, Label> labelMap = new HashMap<>();
-
-    // Note that the next three items are CodeBuilder Labels.
-    // These are different from CodeModel Labels.
-    /** Label for first byte code of method, used to give new locals method scope. */
-    public final Label startLabel;
-
-    /** Label for last byte code of method, used to give new locals method scope. */
-    public final Label endLabel;
-
-    /** Label for start of orignal code, post insertion of entry instrumentation. */
-    public Label entryLabel;
-
-    /**
-     * Label for first byte code of the current method, prior to instrumenting, as a CodeModel
-     * Label.
-     */
-    public @MonotonicNonNull Label oldStartLabel;
-
-    /** Used for instrumentation. */
-    public @MonotonicNonNull LocalVariable nonceLocal;
-
-    /** Used for instrumentation. */
-    public @MonotonicNonNull LocalVariable returnLocal;
-
-    /**
-     * Creates a MInfo24.
-     *
-     * @param method_info_index the index of the method in SharedData.methods
-     * @param nextLocalIndex next available slot in localsTable, currently always = max locals
-     * @param codeBuilder a CodeBuilder
-     */
-    public MInfo24(int method_info_index, int nextLocalIndex, CodeBuilder codeBuilder) {
-      this.method_info_index = method_info_index;
-      this.nextLocalIndex = nextLocalIndex;
-      this.startLabel = codeBuilder.startLabel();
-      this.endLabel = codeBuilder.endLabel();
-      this.entryLabel = codeBuilder.newLabel();
-    }
-  }
 
   /** Create an instrumenter. Setup debug directories, if needed. */
   public Instrument24() {
@@ -781,7 +724,10 @@ public class Instrument24 implements ClassFileTransformer {
    * @param minfo for the given method's code
    */
   private void insertInstrumentationCode(
-      List<CodeElement> instructions, MethodGen24 mgen, MethodInfo curMethodInfo, MInfo24 minfo) {
+      List<CodeElement> instructions,
+      MethodGen24 mgen,
+      MethodInfo curMethodInfo,
+      MethodGen24.MInfo24 minfo) {
 
     // Add nonce local to matchup enter/exits
     addInstrumentationAtEntry(instructions, mgen, minfo);
@@ -834,7 +780,8 @@ public class Instrument24 implements ClassFileTransformer {
       MethodInfo curMethodInfo,
       int method_info_index) {
 
-    MInfo24 minfo = new MInfo24(method_info_index, mgen.getMaxLocals(), codeBuilder);
+    MethodGen24.MInfo24 minfo =
+        new MethodGen24.MInfo24(method_info_index, mgen.getMaxLocals(), codeBuilder);
 
     @SuppressWarnings("JdkObsolete")
     List<CodeElement> codeList = new LinkedList<>();
@@ -921,7 +868,7 @@ public class Instrument24 implements ClassFileTransformer {
   private List<CodeElement> generate_return_instrumentation(
       CodeElement inst,
       MethodGen24 mgen,
-      MInfo24 minfo,
+      MethodGen24.MInfo24 minfo,
       Iterator<Boolean> shouldIncludeIter,
       Iterator<Integer> exitLocationIter) {
 
@@ -971,7 +918,7 @@ public class Instrument24 implements ClassFileTransformer {
    */
   @SuppressWarnings("nullness")
   private LocalVariable getReturnLocal(
-      MethodGen24 mgen, @Nullable ClassDesc returnType, MInfo24 minfo) {
+      MethodGen24 mgen, @Nullable ClassDesc returnType, MethodGen24.MInfo24 minfo) {
 
     // If a type was specified and the variable was found, they must match.
     if (minfo.returnLocal == null) {
@@ -996,7 +943,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param mgen describes the given method
    * @param minfo for the given method's code
    */
-  private List<CodeElement> generateIncrementNonce(MethodGen24 mgen, MInfo24 minfo) {
+  private List<CodeElement> generateIncrementNonce(MethodGen24 mgen, MethodGen24.MInfo24 minfo) {
     String atomic_int_classname = "java.util.concurrent.atomic.AtomicInteger";
     ClassDesc atomic_intClassDesc = ClassDesc.of(atomic_int_classname);
 
@@ -1039,7 +986,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param minfo for the given method's code
    */
   private void addInstrumentationAtEntry(
-      List<CodeElement> instructions, MethodGen24 mgen, MInfo24 minfo) {
+      List<CodeElement> instructions, MethodGen24 mgen, MethodGen24.MInfo24 minfo) {
 
     List<CodeElement> newCode = generateIncrementNonce(mgen, minfo);
 
@@ -1093,7 +1040,11 @@ public class Instrument24 implements ClassFileTransformer {
    * @param line source line number if this is an exit
    */
   private void callEnterOrExit(
-      List<CodeElement> newCode, MethodGen24 mgen, MInfo24 minfo, String methodToCall, int line) {
+      List<CodeElement> newCode,
+      MethodGen24 mgen,
+      MethodGen24.MInfo24 minfo,
+      String methodToCall,
+      int line) {
 
     ClassDesc[] paramTypes = mgen.getParameterTypes();
 
@@ -1204,7 +1155,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param minfo for the given method's code
    * @return the original instruction or its replacement
    */
-  private CodeElement retargetStartLabel(CodeElement inst, MInfo24 minfo) {
+  private CodeElement retargetStartLabel(CodeElement inst, MethodGen24.MInfo24 minfo) {
     ModifiedSwitchInfo info;
     switch (inst) {
       case BranchInstruction bi -> {
@@ -1246,7 +1197,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @return a ModifiedSwitchInfo with the changed values, or null if no changes
    */
   private @Nullable ModifiedSwitchInfo retargetStartLabel(
-      Label defaultTarget, List<SwitchCase> caseList, MInfo24 minfo) {
+      Label defaultTarget, List<SwitchCase> caseList, MethodGen24.MInfo24 minfo) {
     Label modifiedTarget;
     boolean modified = false;
 
@@ -1738,7 +1689,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @return the new local variable
    */
   protected LocalVariable createLocalWithMethodScope(
-      MethodGen24 mgen, MInfo24 minfo, String localName, ClassDesc localType) {
+      MethodGen24 mgen, MethodGen24.MInfo24 minfo, String localName, ClassDesc localType) {
     LocalVariable newVar =
         LocalVariable.of(
             minfo.nextLocalIndex, localName, localType, minfo.startLabel, minfo.endLabel);
