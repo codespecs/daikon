@@ -36,19 +36,17 @@ import org.checkerframework.dataflow.qual.Pure;
  * file changes (since they are part of the JDK). (We will need to continue to support
  * Instrument.java using BCEL, as we anticipate our clients using JDK 21 or less for quite some
  * time.)
- *
- * <p>The entry point of {@link ClassFileTransformer} is {@link #transform}.
  */
 public class Instrument24 implements ClassFileTransformer {
 
   /** Directory for debug output. */
-  File debug_dir;
+  final File debug_dir;
 
   /** Directory into which to dump debug-instrumented classes. */
-  File debug_instrumented_dir;
+  final File debug_instrumented_dir;
 
   /** Directory into which to dump original classes. */
-  File debug_uninstrumented_dir;
+  final File debug_uninstrumented_dir;
 
   /** Have we seen a class member of a known transformer? */
   private static boolean transformer_seen = false;
@@ -57,7 +55,7 @@ public class Instrument24 implements ClassFileTransformer {
    * Debug information about which classes and/or methods are transformed and why. Use
    * debugInstrument for actual instrumentation details.
    */
-  protected static SimpleLog debug_transform = new SimpleLog(false);
+  protected static final SimpleLog debug_transform = new SimpleLog(false);
 
   /** Create an instrumenter. Setup debug directories, if needed. */
   public Instrument24() {
@@ -115,7 +113,7 @@ public class Instrument24 implements ClassFileTransformer {
         // ignore the error, it shouldn't affect the instrumentation
       }
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
+      System.err.printf("Unexpected error %s writing debug files for: %s%n", t, className);
       t.printStackTrace();
       // ignore the error, it shouldn't affect the instrumentation
     }
@@ -157,7 +155,7 @@ public class Instrument24 implements ClassFileTransformer {
         // ignore the error, it shouldn't affect the instrumentation
       }
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s dumping out debug files for: %s%n", t, className);
+      System.err.printf("Unexpected error %s writing debug files for: %s%n", t, className);
       t.printStackTrace();
       // ignore the error, it shouldn't affect the instrumentation
     }
@@ -167,6 +165,8 @@ public class Instrument24 implements ClassFileTransformer {
    * Given a class, return a transformed version of the class that contains instrumentation code.
    * Because DynComp is invoked as a javaagent, the transform method is called by the Java runtime
    * each time a new class is loaded. A return value of null leaves the byte codes unchanged.
+   *
+   * <p>{@inheritDoc}
    */
   @Override
   public byte @Nullable [] transform(
@@ -337,6 +337,7 @@ public class Instrument24 implements ClassFileTransformer {
     ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
     DCInstrument24 dci = new DCInstrument24(classFile, classModel, in_jdk);
     byte @Nullable [] newBytes = null;
+    debug_transform.log("%nTransforming: %s%n", binaryClassName);
     try {
       newBytes = dci.instrument(classInfo);
     } catch (Throwable t) {
