@@ -128,14 +128,14 @@ public class MethodGen24 {
    * The method's local variable table. Often modified by clients, normally to add additional local
    * variables needed for instrumentation.
    */
-  protected List<LocalVariable> localsTable;
+  public List<LocalVariable> localsTable;
 
   /** ConstantPool builder for entire class. */
   // TODO: Should uses of this be synchronized?
   private ConstantPoolBuilder poolBuilder;
 
   /** Variables used for processing the current method. */
-  protected static class MInfo24 {
+  public static class MInfo24 {
 
     /** The index of this method in SharedData.methods. */
     public final int method_info_index;
