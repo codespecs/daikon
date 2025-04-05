@@ -14,6 +14,15 @@ javautil.Vector13.Vector13():::EXIT
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) null)))
 (AND (EQ (arrayLength (select |elementData| |this|)) 10) (AND  (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| 9)) (EQ (typeof (select (select elems (select |elementData| |this|)) |i|)) null)))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (typeof (select (select elems (select |elementData| |this|)) |i|)) |T_null|)))
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 (EQ (select |elementCount| |this|) 0)
 (EQ (arrayLength (select |elementData| |this|)) 10)
 (AND (EQ (+ 1 (- (- (arrayLength (select |elementData| |this|)) 1) (+ (select |elementCount| |this|) 1))) 9) (FORALL (|i|) (IMPLIES (AND (<= (+ (select |elementCount| |this|) 1) |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|)  null))))
@@ -29,6 +38,15 @@ javautil.Vector13.Vector13(int):::EXIT
 (EQ |__orig__initialCapacity| (arrayLength (select |elementData| |this|)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) null)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (typeof (select (select elems (select |elementData| |this|)) |i|)) |T_null|)))
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 (EQ (select |elementCount| |this|) 0)
 (AND (EQ (+ 1 (- (- (arrayLength (select |elementData| |this|)) 1) |__orig__initialCapacity|)) 0) (FORALL (|i|) (IMPLIES (AND (<= |__orig__initialCapacity| |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|)  null))))
 (<= (select |elementCount| |this|) |__orig__initialCapacity|)
@@ -42,6 +60,15 @@ javautil.Vector13.Vector13(int, int):::EXIT
 (EQ |__orig__initialCapacity| (arrayLength (select |elementData| |this|)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) null)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (typeof (select (select elems (select |elementData| |this|)) |i|)) |T_null|)))
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 (EQ (select |elementCount| |this|) 0)
 (AND (EQ (+ 1 (- (- (arrayLength (select |elementData| |this|)) 1) |__orig__initialCapacity|)) 0) (FORALL (|i|) (IMPLIES (AND (<= |__orig__initialCapacity| |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|)  null))))
 (<= (select |elementCount| |this|) (select |capacityIncrement| |this|))
@@ -98,6 +125,7 @@ javautil.Vector13.contains(java.lang.Object):::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
+(IMPLIES (EQ |return| |@false|) All the elements of this.elementData[].getClass().getName() have LENGTH=16)
 (IMPLIES (EQ |return| |@true|) warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: orig(elem.getClass().getName()) in this.elementData[].getClass().getName())
 (IMPLIES (EQ |return| |@true|) (>= (select |elementCount| |this|) 1))
 (NEQ (typeof (select |elementData| |this|)) (typeof |__orig__elem|))
@@ -355,6 +383,15 @@ javautil.Vector13.isEmpty():::EXIT
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (IFF (EQ (select |elementCount| |this|) 0) (EQ |return| |@true|))
+(IMPLIES (EQ (select |elementCount| |this|) 0) All the elements of this.elementData[].getClass().getName() are Numeric)
+(IMPLIES (EQ (select |elementCount| |this|) 0) All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM))
+(IMPLIES (EQ (select |elementCount| |this|) 0) All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0)
+(IMPLIES (EQ (select |elementCount| |this|) 0) All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0)
+(IMPLIES (EQ (select |elementCount| |this|) 0) All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional))
+(IMPLIES (EQ (select |elementCount| |this|) 0) All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY)
+(IMPLIES (EQ (select |elementCount| |this|) 0) All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY)
+(IMPLIES (EQ (select |elementCount| |this|) 0) All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD)
+(IMPLIES (EQ (select |elementCount| |this|) 0) All the elements of this.elementData[].getClass().getName() are emails)
 (IMPLIES (EQ (select |elementCount| |this|) 0) (<= (select |elementCount| |this|) (select |capacityIncrement| |this|)))
 (IMPLIES (EQ (select |elementCount| |this|) 0) (AND))
 (IMPLIES (EQ (select |elementCount| |this|) 0) (AND (EQ (+ 1 (- (- (select |elementCount| |this|) 1) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|)  null)))))
@@ -463,6 +500,15 @@ javautil.Vector13.removeAllElements():::EXIT
 (FORALL (|i| |j|) (IMPLIES (AND (<= (select |elementCount| |__orig__this|) |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1)) (<= (select |elementCount| |__orig__this|) |j|) (<= |j| (- (arrayLength (select |elementData| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |elementData| |this|)) |i|) (select (select elems (select |elementData| |__orig__this|)) |j|))))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (select (select elems (select |elementData| |this|)) |i|) null)))
 (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |elementData| |this|)) 1))) (EQ (typeof (select (select elems (select |elementData| |this|)) |i|)) |T_null|)))
+All the elements of this.elementData[].getClass().getName() are Numeric
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0
+All the elements of this.elementData[].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0
+All the elements of this.elementData[].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)
+All the elements of this.elementData[].getClass().getName() are dates. Format: DD/MM/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: MM/DD/YYYY
+All the elements of this.elementData[].getClass().getName() are dates. Format: YYYY-MM-DD
+All the elements of this.elementData[].getClass().getName() are emails
 (EQ (select |elementCount| |this|) 0)
 (AND (EQ (+ 1 (- (- (select |elementCount| |this|) 1) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |elementCount| |this|) 1))) (NEQ (select (select elems (select |elementData| |this|)) |i|)  null))))
 (<= (select |elementCount| |this|) (select |capacityIncrement| |this|))

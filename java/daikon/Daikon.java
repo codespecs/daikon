@@ -150,11 +150,33 @@ import daikon.inv.unary.sequence.SeqIndexIntLessEqual;
 import daikon.inv.unary.sequence.SeqIndexIntLessThan;
 import daikon.inv.unary.sequence.SeqIndexIntNonEqual;
 import daikon.inv.unary.string.CompleteOneOfString;
+import daikon.inv.unary.string.FixedLengthString;
+import daikon.inv.unary.string.IsEmail;
+import daikon.inv.unary.string.IsNumeric;
+import daikon.inv.unary.string.IsUrl;
 import daikon.inv.unary.string.OneOfString;
 import daikon.inv.unary.string.PrintableString;
+import daikon.inv.unary.string.dates.IsDateDDMMYYYY;
+import daikon.inv.unary.string.dates.IsDateMMDDYYYY;
+import daikon.inv.unary.string.dates.IsDateYYYYMMDD;
+import daikon.inv.unary.string.dates.IsTimeOfDay;
+import daikon.inv.unary.string.dates.IsTimeOfDayAMPM;
+import daikon.inv.unary.string.dates.IsTimeOfDayWithSeconds;
+import daikon.inv.unary.string.dates.IsTimestampYYYYMMHHThhmmssmm;
 import daikon.inv.unary.stringsequence.CommonStringSequence;
 import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.unary.stringsequence.OneOfStringSequence;
+import daikon.inv.unary.stringsequence.SequenceFixedLengthString;
+import daikon.inv.unary.stringsequence.SequenceStringElementsAreEmail;
+import daikon.inv.unary.stringsequence.SequenceStringElementsAreNumeric;
+import daikon.inv.unary.stringsequence.SequenceStringElementsAreUrl;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateDDMMYYYY;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateMMDDYYYY;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreDateYYYYMMDD;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreTimeOfDay;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreTimeOfDayAMPM;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreTimeOfDayWithSeconds;
+import daikon.inv.unary.stringsequence.dates.SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm;
 import daikon.simplify.LemmaStack;
 import daikon.split.ContextSplitterFactory;
 import daikon.split.PptSplitter;
@@ -1544,6 +1566,19 @@ public final class Daikon {
       proto_invs.add(CompleteOneOfString.get_proto());
       proto_invs.add(CompleteOneOfScalar.get_proto());
 
+      // String formats
+      proto_invs.add(IsUrl.get_proto());
+      proto_invs.add(FixedLengthString.get_proto());
+      proto_invs.add(IsNumeric.get_proto());
+      proto_invs.add(IsEmail.get_proto());
+      proto_invs.add(IsDateYYYYMMDD.get_proto());
+      proto_invs.add(IsDateDDMMYYYY.get_proto());
+      proto_invs.add(IsDateMMDDYYYY.get_proto());
+      proto_invs.add(IsTimeOfDay.get_proto());
+      proto_invs.add(IsTimeOfDayWithSeconds.get_proto());
+      proto_invs.add(IsTimeOfDayAMPM.get_proto());
+      proto_invs.add(IsTimestampYYYYMMHHThhmmssmm.get_proto());
+
       // Positive (x > 0) (Postive.java).  Positive is a sample invariant
       // that is only included as an example.
       // proto_invs.add (Postive.get_proto());
@@ -1609,6 +1644,19 @@ public final class Daikon {
 
       // CommonStringSequence (CommonStringSubsequence.java)
       proto_invs.add(CommonStringSequence.get_proto());
+
+      // String formats
+      proto_invs.add(SequenceFixedLengthString.get_proto());
+      proto_invs.add(SequenceStringElementsAreUrl.get_proto());
+      proto_invs.add(SequenceStringElementsAreNumeric.get_proto());
+      proto_invs.add(SequenceStringElementsAreEmail.get_proto());
+      proto_invs.add(SequenceStringElementsAreDateYYYYMMDD.get_proto());
+      proto_invs.add(SequenceStringElementsAreDateDDMMYYYY.get_proto());
+      proto_invs.add(SequenceStringElementsAreDateMMDDYYYY.get_proto());
+      proto_invs.add(SequenceStringElementsAreTimeOfDay.get_proto());
+      proto_invs.add(SequenceStringElementsAreTimeOfDayWithSeconds.get_proto());
+      proto_invs.add(SequenceStringElementsAreTimeOfDayAMPM.get_proto());
+      proto_invs.add(SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm.get_proto());
     }
 
     // Binary scalar-scalar invariants
@@ -1811,9 +1859,16 @@ public final class Daikon {
     // Process each ppt that doesn't have a parent
     // (mergeInvs is called on a root, and recursively processes children)
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      // System.out.printf("considering ppt %s parents: %s, children: %s%n",
-      //                     ppt.name, ppt.parents, ppt.children);
       if (ppt.parents.size() == 0) {
+        boolean debug =
+            ppt.name()
+                .startsWith(
+                    "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
+        if (debug) {
+          System.out.printf(
+              "createUpperPpts: %s%n  parents: %s%n  children: %s%n",
+              ppt.name, ppt.parents, ppt.children);
+        }
         ppt.mergeInvs();
       }
     }

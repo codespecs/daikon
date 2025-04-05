@@ -280,6 +280,7 @@ return.denom == 0
 orig(ratStr) has only one value
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT267
+ratStr.toString is Numeric
 return.denom == 1
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT273
@@ -327,6 +328,7 @@ this.numer != this.denom
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137
 this.denom == 1
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT
 this.numer == orig(this.numer)

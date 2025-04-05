@@ -280,6 +280,7 @@ return.denom == 0
 orig(ratStr) has only one value
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT267
+ratStr.toString is Numeric
 return.denom == 1
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT273
@@ -327,6 +328,7 @@ this.numer != this.denom
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT137
 this.denom == 1
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT
 this.numer == orig(this.numer)
@@ -985,6 +987,7 @@ this.terms.wrapped[] == []
 this.terms.wrapped[].getClass().getName() == []
 return has only one value
 return.toString == "0"
+return.toString is Numeric
 ===========================================================================
 PolyCalc.RatPoly.unparse():::EXIT196
 size(this.terms.wrapped[]) >= 1
@@ -995,6 +998,7 @@ this.terms.wrapped == orig(this.terms.wrapped)
 this.terms.wrapped[] == orig(this.terms.wrapped[])
 (size(this.terms.wrapped[]) == 0)  ==>  (return has only one value)
 (size(this.terms.wrapped[]) == 0)  ==>  (return.toString == "0")
+(size(this.terms.wrapped[]) == 0)  ==>  (return.toString is Numeric)
 (size(this.terms.wrapped[]) == 0)  ==>  (size(this.terms.wrapped[]) is a pointer)
 (size(this.terms.wrapped[]) == 0)  ==>  (this.terms.wrapped[] == [])
 (size(this.terms.wrapped[]) == 0)  ==>  (this.terms.wrapped[].getClass().getName() == [])

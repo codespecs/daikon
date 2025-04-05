@@ -42,6 +42,15 @@ public class QueueAr
   /*@ ensures this.theArray[this.currentSize] == this.theArray[\old(capacity)-1]; */
   /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)); */
   /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null))); */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are Numeric; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM); */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional); */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: DD/MM/YYYY; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: MM/DD/YYYY; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: YYYY-MM-DD; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are emails; */
   /*@ ensures this.currentSize == 0; */
   /*@ ensures (\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null)); */
   /*@ ensures (\forall int i; (\old(capacity) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != null)); */
@@ -63,6 +72,15 @@ public class QueueAr
   /*@ ensures (this.currentSize == 0)  ==  (\result == true); */
   /*@ ensures (this.currentSize == 0)  ==>  ((this.back == 0) ==> (this.theArray.length-1 == 0)); */
   /*@ ensures (this.currentSize == 0)  ==>  ((this.back == 0) ==> (this.front == 0)); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are Numeric); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: DD/MM/YYYY); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: MM/DD/YYYY); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: YYYY-MM-DD); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are emails); */
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= this.currentSize) ==> (\old(this.theArray[i]) == null))); */
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= \old(this.currentSize)) ==> (\old(this.theArray[i]) == null))); */
   /*@ ensures (this.currentSize == 0)  ==>  (this.currentSize <= this.theArray.length-1); */
@@ -124,6 +142,15 @@ public class QueueAr
   /*@ ensures this.theArray[this.currentSize] == this.theArray[\old(this.back)]; */
   /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)); */
   /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null))); */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are Numeric; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM); */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional); */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: DD/MM/YYYY; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: MM/DD/YYYY; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: YYYY-MM-DD; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are emails; */
   /*@ ensures this.currentSize == 0; */
   /*@ ensures (\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null)); */
   /*@ ensures (\forall int i; (0 <= i && i <= this.currentSize-1) ==> (this.theArray[i] != null)); */
@@ -157,6 +184,15 @@ public class QueueAr
   /*@ ensures (this.currentSize == 0)  ==  (this.theArray[this.back] == null); */
   /*@ ensures (this.currentSize == 0)  ==>  ((this.back == 0) ==> (this.theArray.length-1 == 0)); */
   /*@ ensures (this.currentSize == 0)  ==>  ((this.back == 0) ==> (this.front == 0)); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are Numeric); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: DD/MM/YYYY); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: MM/DD/YYYY); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: YYYY-MM-DD); */
+  /*@ ensures (this.currentSize == 0)  ==>  (All the elements of this.theArray[..].getClass().getName() are emails); */
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= this.currentSize) ==> (\old(this.theArray[i]) == null))); */
   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= \old(this.currentSize)) ==> (\old(this.theArray[i]) == null))); */
   /*@ ensures (this.currentSize == 0)  ==>  (\old(this.theArray[this.currentSize]) == null); */
@@ -283,6 +319,15 @@ public class QueueAr
   /*@ ensures this.theArray[this.currentSize] == this.theArray[\old(this.back)]; */
   /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)); */
   /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null))); */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are Numeric; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM); */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional); */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: DD/MM/YYYY; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: MM/DD/YYYY; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: YYYY-MM-DD; */
+  /*@ ensures All the elements of this.theArray[..].getClass().getName() are emails; */
   /*@ ensures this.currentSize == 0; */
   /*@ ensures (\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null)); */
   /*@ ensures (\forall int i; (0 <= i && i <= this.currentSize-1) ==> (this.theArray[i] != null)); */

@@ -36,6 +36,15 @@ public class StackAr
     /*@ ensures \old(capacity) == this.theArray.length; */
     /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)); */
     /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null))); */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are Numeric; */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM); */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0; */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0; */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional); */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: DD/MM/YYYY; */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: MM/DD/YYYY; */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: YYYY-MM-DD; */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are emails; */
     /*@ ensures this.topOfStack == -1; */
     /*@ ensures (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null)); */
     /*@ ensures \old(capacity) != \typeof(this.theArray).length(); */
@@ -52,6 +61,15 @@ public class StackAr
 
     /*@ modifies this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]; */
     /*@ ensures (this.topOfStack == -1)  ==  (\result == true); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are Numeric); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: DD/MM/YYYY); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: MM/DD/YYYY); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: YYYY-MM-DD); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are emails); */
     /*@ ensures (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null))); */
     /*@ ensures (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))); */
     /*@ ensures (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null)))); */
@@ -96,6 +114,15 @@ public class StackAr
     /*@ modifies this.theArray[*], this.topOfStack, this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack], this.theArray[0..this.topOfStack-1]; */
     /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)); */
     /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null))); */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are Numeric; */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM); */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0; */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0; */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional); */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: DD/MM/YYYY; */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: MM/DD/YYYY; */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are dates. Format: YYYY-MM-DD; */
+    /*@ ensures All the elements of this.theArray[..].getClass().getName() are emails; */
     /*@ ensures this.topOfStack == -1; */
     /*@ ensures (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null)); */
     /*@ ensures this.topOfStack <= \old(this.topOfStack); */
@@ -113,6 +140,15 @@ public class StackAr
 
     /*@ modifies this.theArray[this.topOfStack], this.theArray[this.topOfStack-1], this.theArray[this.topOfStack..], this.theArray[0..this.topOfStack-1]; */
     /*@ ensures (this.topOfStack == -1)  ==  (\result == null); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are Numeric); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: DD/MM/YYYY); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: MM/DD/YYYY); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: YYYY-MM-DD); */
+    /*@ ensures (this.topOfStack == -1)  ==>  (All the elements of this.theArray[..].getClass().getName() are emails); */
     /*@ ensures (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null))); */
     /*@ ensures (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))); */
     /*@ ensures (this.topOfStack == -1)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == \result))); */
@@ -230,6 +266,24 @@ public class StackAr
     /*@ ensures (\result == null)  ==  (\old(this.topOfStack) == -1); */
     /*@ ensures (\result == null)  ==  ((\forall int i; (this.topOfStack+1 <= i && i <= \old(this.topOfStack)) ==> (this.theArray[i] != null))); */
     /*@ ensures (\result == null)  ==  (this.topOfStack == \old(this.topOfStack)); */
+    /*@ ensures (\result == null)  ==>  (All the elements of orig(this.theArray[..].getClass().getName()) are Numeric); */
+    /*@ ensures (\result == null)  ==>  (All the elements of orig(this.theArray[..].getClass().getName()) are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)); */
+    /*@ ensures (\result == null)  ==>  (All the elements of orig(this.theArray[..].getClass().getName()) are TimeOfDays: HH:MM 24-hour format, optional leading 0); */
+    /*@ ensures (\result == null)  ==>  (All the elements of orig(this.theArray[..].getClass().getName()) are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0); */
+    /*@ ensures (\result == null)  ==>  (All the elements of orig(this.theArray[..].getClass().getName()) are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)); */
+    /*@ ensures (\result == null)  ==>  (All the elements of orig(this.theArray[..].getClass().getName()) are dates. Format: DD/MM/YYYY); */
+    /*@ ensures (\result == null)  ==>  (All the elements of orig(this.theArray[..].getClass().getName()) are dates. Format: MM/DD/YYYY); */
+    /*@ ensures (\result == null)  ==>  (All the elements of orig(this.theArray[..].getClass().getName()) are dates. Format: YYYY-MM-DD); */
+    /*@ ensures (\result == null)  ==>  (All the elements of orig(this.theArray[..].getClass().getName()) are emails); */
+    /*@ ensures (\result == null)  ==>  (All the elements of this.theArray[..].getClass().getName() are Numeric); */
+    /*@ ensures (\result == null)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 12-hour format, optional leading 0, mandatory meridiems (AM/PM)); */
+    /*@ ensures (\result == null)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM 24-hour format, optional leading 0); */
+    /*@ ensures (\result == null)  ==>  (All the elements of this.theArray[..].getClass().getName() are TimeOfDays: HH:MM:SS 24-hour format with optional leading 0); */
+    /*@ ensures (\result == null)  ==>  (All the elements of this.theArray[..].getClass().getName() are Timestamp. Format: YYYY-MM-DDTHH:MM:SS.mmZ (Miliseconds are optional)); */
+    /*@ ensures (\result == null)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: DD/MM/YYYY); */
+    /*@ ensures (\result == null)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: MM/DD/YYYY); */
+    /*@ ensures (\result == null)  ==>  (All the elements of this.theArray[..].getClass().getName() are dates. Format: YYYY-MM-DD); */
+    /*@ ensures (\result == null)  ==>  (All the elements of this.theArray[..].getClass().getName() are emails); */
     /*@ ensures (\result == null)  ==>  ((\forall int i; (0 <= i && i <= \old(this.topOfStack)) ==> (\old(this.theArray[i]) != null))); */
     /*@ ensures (\result == null)  ==>  ((\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(this.theArray[i]) == null))); */
     /*@ ensures (\result == null)  ==>  ((\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) == \typeof(null)))); */
