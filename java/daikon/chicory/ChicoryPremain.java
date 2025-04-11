@@ -5,6 +5,7 @@ package daikon.chicory;
 import static daikon.tools.nullness.NullnessUtil.castNonNull;
 
 import daikon.Chicory;
+import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
@@ -81,6 +82,11 @@ public class ChicoryPremain {
       System.exit(1);
     }
 
+    // Turn on dumping of instrumented classes if debug was selected
+    if (Chicory.debug) {
+      Chicory.dump = true;
+    }
+
     verbose = Chicory.verbose || Chicory.debug;
     if (debug_runtime) {
       Runtime.debug = true;
@@ -137,6 +143,13 @@ public class ChicoryPremain {
 
     initializeDeclAndDTraceWriters();
 
+    String instrumenter;
+    if (BcelUtil.javaVersion >= 24) {
+      instrumenter = "daikon.chicory.Instrument24";
+    } else {
+      instrumenter = "daikon.chicory.Instrument";
+    }
+
     // Setup the transformer
     ClassFileTransformer transformer;
     // use a special classloader to ensure correct version of BCEL is used
@@ -144,7 +157,7 @@ public class ChicoryPremain {
     try {
       transformer =
           (ClassFileTransformer)
-              loader.loadClass("daikon.chicory.Instrument").getDeclaredConstructor().newInstance();
+              loader.loadClass(instrumenter).getDeclaredConstructor().newInstance();
     } catch (Exception e) {
       throw new RuntimeException("Unexpected error loading Instrument", e);
     }
@@ -262,7 +275,6 @@ public class ChicoryPremain {
 
   /** Return true iff Chicory has run a purity analysis or read a {@code *.pure} file. */
   @SuppressWarnings("nullness") // dependent:  pureMethods is non-null if doPurity is true
-  // @EnsuresNonNullIf(result=true, expression="ChicoryPremain.pureMethods")
   @EnsuresNonNullIf(result = true, expression = "pureMethods")
   public static boolean shouldDoPurity() {
     return doPurity;

@@ -14,6 +14,8 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER = sort
 endif
 
+JAVA_RELEASE_NUMBER := $(shell java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//')
+
 
 ##########################################################################
 ### Variables
@@ -66,6 +68,11 @@ SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 
 # This is so troublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print | ${SORT_DIRECTORY_ORDER})
+# If we're building on JDK 23 or less, remove the java24 files from the list.
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -lt 24; echo $$?),0)
+  DAIKON_JAVA_FILES := $(filter-out %24.java, $(DAIKON_JAVA_FILES))
+endif
+
 DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/simplify/daikon-background.txt \
 	daikon/simplify/daikon-background-defined.txt \

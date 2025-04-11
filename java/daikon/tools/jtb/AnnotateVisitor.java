@@ -679,7 +679,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         if (insert_inexpressible) {
           addComment(n, javaLineComment("! " + inv + ";"), true);
         }
-        continue;
+        // continue;
       } else {
         String commentContents =
             (Daikon.output_format == OutputFormat.DBCJAVA ? "  " : "@ ")
