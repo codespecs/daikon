@@ -124,7 +124,7 @@ public class DtraceDiff {
     while ((c = g.getopt()) != -1) {
       switch (c) {
 
-          // long option
+        // long option
         case 0:
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
@@ -222,7 +222,7 @@ public class DtraceDiff {
             throw new RuntimeException("Unknown long option received: " + option_name);
           }
 
-          // short options
+        // short options
         case 'h':
           System.out.println(usage);
           throw new Daikon.NormalTermination();

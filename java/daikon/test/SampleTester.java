@@ -93,7 +93,7 @@ public class SampleTester {
     while ((c = g.getopt()) != -1) {
       switch (c) {
 
-          // long option
+        // long option
         case 0:
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
