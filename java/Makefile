@@ -876,6 +876,7 @@ ifeq ($(JAVA24), 1)
   extra-format-arg = ./daikon/chicory/*24.java
 endif
 
+format: reformat
 reformat:
 ifeq ($(JAVA17), 0)
 	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
