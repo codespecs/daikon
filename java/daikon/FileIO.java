@@ -3103,7 +3103,6 @@ public final class FileIO {
    */
   private static void decl_error(ParseState state, String format, @Nullable Object... args) {
     @SuppressWarnings({
-      "formatter:unneeded.suppression", // temporary?
       "formatter:format.string" // https://tinyurl.com/cfissue/2584
     })
     String msg = String.format(format, args) + state.line_file_message();
