@@ -21,18 +21,24 @@ JAVAC ?= javac
 JAVADOC ?= javadoc
 JAR ?= jar
 
+# The "JAVANN" variables mean "at least version NN".
 JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
 ifneq (,$(findstring start1.8,start$(JAVA_VERSION_STRING)))
   JAVA8 := 1
+  JAVA17 := 0
   JAVA24 := 0
   JAVA_RELEASE_NUMBER := 8
 else
   JAVA8 := 0
+  JAVA17 := 0
   JAVA24 := 0
   JAVA_RELEASE_NUMBER := $(shell echo $(JAVA_VERSION_STRING) | sed 's/\([0-9]*\)\..*/\1/')
 endif
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 23; echo $$?),0)
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 17; echo $$?),0)
+  JAVA17 := 1
+endif
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 24; echo $$?),0)
   JAVA24 := 1
 endif
 
@@ -870,9 +876,10 @@ ifeq ($(JAVA24), 1)
   extra-format-arg = ./daikon/chicory/*24.java ./daikon/dcomp/*24.java
 endif
 
+format: reformat
 reformat:
-ifeq ($(JAVA8), 1)
-	echo "Formatting is not run under Java 8"
+ifeq ($(JAVA17), 0)
+	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format
 	@../utils/run-google-java-format/run-google-java-format.py ${extra-format-arg} \
@@ -880,8 +887,8 @@ else
 endif
 
 check-format:
-ifeq ($(JAVA8), 1)
-	echo "Formatting is not checked under Java 8"
+ifeq ($(JAVA17), 0)
+	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format
 	@../utils/run-google-java-format/check-google-java-format.py ${extra-format-arg} \

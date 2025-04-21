@@ -80,7 +80,7 @@ DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/test/SampleTester.commands \
 	daikon/test/SampleTester.decls \
 	daikon/test/SampleTesterGlobal.decls \
-	daikon/test/SampleTester.test \
+	daikon/test/SampleTester.commands_linear_ternary \
 	daikon/test/varInfoNameTest.testEscForall \
 	daikon/test/varInfoNameTest.testEscForall.goal \
 	daikon/test/varInfoNameTest.testJML \
@@ -200,6 +200,7 @@ dyncomp-jdk:
 dcomp-jdk:
 	cd java && $(MAKE) dcomp-jdk
 
+format: reformat
 reformat:
 	cd java && $(MAKE) reformat
 

@@ -1474,17 +1474,17 @@ public class DCInstrument extends InstructionListUtils {
 
     switch (inst.getOpcode()) {
 
-        // Replace the object comparison instructions with a call to
-        // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
-        // return a boolean which is used in a ifeq/ifne instruction
+      // Replace the object comparison instructions with a call to
+      // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
+      // return a boolean which is used in a ifeq/ifne instruction
       case Const.IF_ACMPEQ:
         return object_comparison((BranchInstruction) inst, "object_eq", Const.IFNE);
       case Const.IF_ACMPNE:
         return object_comparison((BranchInstruction) inst, "object_ne", Const.IFNE);
 
-        // These instructions compare the integer on the top of the stack
-        // to zero.  Nothing is made comparable by this, so we need only
-        // discard the tag on the top of the stack.
+      // These instructions compare the integer on the top of the stack
+      // to zero.  Nothing is made comparable by this, so we need only
+      // discard the tag on the top of the stack.
       case Const.IFEQ:
       case Const.IFNE:
       case Const.IFLT:
@@ -1495,46 +1495,46 @@ public class DCInstrument extends InstructionListUtils {
           return discard_tag_code(inst, 1);
         }
 
-        // Instanceof pushes either 0 or 1 on the stack depending on whether
-        // the object on top of stack is of the specified type.  We push a
-        // tag for a constant, since nothing is made comparable by this.
+      // Instanceof pushes either 0 or 1 on the stack depending on whether
+      // the object on top of stack is of the specified type.  We push a
+      // tag for a constant, since nothing is made comparable by this.
       case Const.INSTANCEOF:
         return build_il(dcr_call("push_const", Type.VOID, Type.NO_ARGS), inst);
 
-        // Duplicates the item on the top of stack.  If the value on the
-        // top of the stack is a primitive, we need to do the same on the
-        // tag stack.  Otherwise, we need do nothing.
+      // Duplicates the item on the top of stack.  If the value on the
+      // top of the stack is a primitive, we need to do the same on the
+      // tag stack.  Otherwise, we need do nothing.
       case Const.DUP:
         {
           return dup_tag(inst, stack);
         }
 
-        // Duplicates the item on the top of the stack and inserts it 2
-        // values down in the stack.  If the value at the top of the stack
-        // is not a primitive, there is nothing to do here.  If the second
-        // value is not a primitive, then we need only to insert the duped
-        // value down 1 on the tag stack (which contains only primitives)
+      // Duplicates the item on the top of the stack and inserts it 2
+      // values down in the stack.  If the value at the top of the stack
+      // is not a primitive, there is nothing to do here.  If the second
+      // value is not a primitive, then we need only to insert the duped
+      // value down 1 on the tag stack (which contains only primitives)
       case Const.DUP_X1:
         {
           return dup_x1_tag(inst, stack);
         }
 
-        // Duplicates either the top 2 category 1 values or a single
-        // category 2 value and inserts it 2 or 3 values down on the
-        // stack.
+      // Duplicates either the top 2 category 1 values or a single
+      // category 2 value and inserts it 2 or 3 values down on the
+      // stack.
       case Const.DUP2_X1:
         {
           return dup2_x1_tag(inst, stack);
         }
 
-        // Duplicate either one category 2 value or two category 1 values.
+      // Duplicate either one category 2 value or two category 1 values.
       case Const.DUP2:
         {
           return dup2_tag(inst, stack);
         }
 
-        // Dup the category 1 value on the top of the stack and insert it either
-        // two or three values down on the stack.
+      // Dup the category 1 value on the top of the stack and insert it either
+      // two or three values down on the stack.
       case Const.DUP_X2:
         {
           return dup_x2(inst, stack);
@@ -1545,25 +1545,25 @@ public class DCInstrument extends InstructionListUtils {
           return dup2_x2(inst, stack);
         }
 
-        // Pop instructions discard the top of the stack.  We want to discard
-        // the top of the tag stack iff the item on the top of the stack is a
-        // primitive.
+      // Pop instructions discard the top of the stack.  We want to discard
+      // the top of the tag stack iff the item on the top of the stack is a
+      // primitive.
       case Const.POP:
         {
           return pop_tag(inst, stack);
         }
 
-        // Pops either the top 2 category 1 values or a single category 2 value
-        // from the top of the stack.  We must do the same to the tag stack
-        // if the values are primitives.
+      // Pops either the top 2 category 1 values or a single category 2 value
+      // from the top of the stack.  We must do the same to the tag stack
+      // if the values are primitives.
       case Const.POP2:
         {
           return pop2_tag(inst, stack);
         }
 
-        // Swaps the two category 1 types on the top of the stack.  We need
-        // to swap the top of the tag stack if the two top elements on the
-        // real stack are primitives.
+      // Swaps the two category 1 types on the top of the stack.  We need
+      // to swap the top of the tag stack if the two top elements on the
+      // real stack are primitives.
       case Const.SWAP:
         {
           return swap_tag(inst, stack);
@@ -1654,9 +1654,9 @@ public class DCInstrument extends InstructionListUtils {
           return ldc_tag(inst, stack);
         }
 
-        // Push the tag for the array onto the tag stack.  This causes
-        // anything comparable to the length to be comparable to the array
-        // as an index.
+      // Push the tag for the array onto the tag stack.  This causes
+      // anything comparable to the length to be comparable to the array
+      // as an index.
       case Const.ARRAYLENGTH:
         {
           return array_length(inst);
@@ -1682,9 +1682,9 @@ public class DCInstrument extends InstructionListUtils {
           return build_il(dcr_call("push_const", Type.VOID, Type.NO_ARGS), inst);
         }
 
-        // Primitive Binary operators.  Each is augmented with a call to
-        // DCRuntime.binary_tag_op that merges the tags and updates the tag
-        // Stack.
+      // Primitive Binary operators.  Each is augmented with a call to
+      // DCRuntime.binary_tag_op that merges the tags and updates the tag
+      // Stack.
       case Const.DADD:
       case Const.DCMPG:
       case Const.DCMPL:
@@ -1724,35 +1724,35 @@ public class DCInstrument extends InstructionListUtils {
       case Const.LXOR:
         return build_il(dcr_call("binary_tag_op", Type.VOID, Type.NO_ARGS), inst);
 
-        // Computed jump based on the int on the top of stack.  Since that int
-        // is not made comparable to anything, we just discard its tag.  One
-        // might argue that the key should be made comparable to each value in
-        // the jump table.  But the tags for those values are not available.
-        // And since they are all constants, its not clear how interesting it
-        // would be anyway.
+      // Computed jump based on the int on the top of stack.  Since that int
+      // is not made comparable to anything, we just discard its tag.  One
+      // might argue that the key should be made comparable to each value in
+      // the jump table.  But the tags for those values are not available.
+      // And since they are all constants, its not clear how interesting it
+      // would be anyway.
       case Const.LOOKUPSWITCH:
       case Const.TABLESWITCH:
         return discard_tag_code(inst, 1);
 
-        // Make the integer argument to ANEWARRAY comparable to the new
-        // array's index.
+      // Make the integer argument to ANEWARRAY comparable to the new
+      // array's index.
       case Const.ANEWARRAY:
       case Const.NEWARRAY:
         {
           return new_array(inst);
         }
 
-        // If the new array has 2 dimensions, make the integer arguments
-        // comparable to the corresponding indices of the new array.
-        // For any other number of dimensions, discard the tags for the
-        // arguments.
+      // If the new array has 2 dimensions, make the integer arguments
+      // comparable to the corresponding indices of the new array.
+      // For any other number of dimensions, discard the tags for the
+      // arguments.
       case Const.MULTIANEWARRAY:
         {
           return multi_newarray_dc(inst);
         }
 
-        // Mark the array and its index as comparable.  Also for primitives,
-        // push the tag of the array element on the tag stack
+      // Mark the array and its index as comparable.  Also for primitives,
+      // push the tag of the array element on the tag stack
       case Const.AALOAD:
       case Const.BALOAD:
       case Const.CALOAD:
@@ -1765,9 +1765,9 @@ public class DCInstrument extends InstructionListUtils {
           return array_load(inst);
         }
 
-        // Mark the array and its index as comparable.  For primitives, store
-        // the tag for the value on the top of the stack in the tag storage
-        // for the array.
+      // Mark the array and its index as comparable.  For primitives, store
+      // the tag for the value on the top of the stack in the tag storage
+      // for the array.
       case Const.AASTORE:
         return array_store(inst, "aastore", Type.OBJECT);
       case Const.BASTORE:
@@ -1792,8 +1792,8 @@ public class DCInstrument extends InstructionListUtils {
       case Const.SASTORE:
         return array_store(inst, "sastore", Type.SHORT);
 
-        // Prefix the return with a call to the correct normal_exit method
-        // to handle the tag stack
+      // Prefix the return with a call to the correct normal_exit method
+      // to handle the tag stack
       case Const.ARETURN:
       case Const.DRETURN:
       case Const.FRETURN:
@@ -1804,10 +1804,10 @@ public class DCInstrument extends InstructionListUtils {
           return return_tag(mg, inst);
         }
 
-        // Handle subroutine calls.  Calls to instrumented code are modified
-        // to call the instrumented version (with the DCompMarker argument).
-        // Calls to uninstrumented code (rare) discard primitive arguments
-        // from the tag stack and produce an arbitrary return tag.
+      // Handle subroutine calls.  Calls to instrumented code are modified
+      // to call the instrumented version (with the DCompMarker argument).
+      // Calls to uninstrumented code (rare) discard primitive arguments
+      // from the tag stack and produce an arbitrary return tag.
       case Const.INVOKESTATIC:
       case Const.INVOKEVIRTUAL:
       case Const.INVOKESPECIAL:
@@ -1815,12 +1815,12 @@ public class DCInstrument extends InstructionListUtils {
       case Const.INVOKEDYNAMIC:
         return handleInvoke((InvokeInstruction) inst);
 
-        // Throws an exception.  This clears the operand stack of the current
-        // frame.  We need to clear the tag stack as well.
+      // Throws an exception.  This clears the operand stack of the current
+      // frame.  We need to clear the tag stack as well.
       case Const.ATHROW:
         return build_il(dcr_call("throw_op", Type.VOID, Type.NO_ARGS), inst);
 
-        // Opcodes that don't need any modifications.  Here for reference
+      // Opcodes that don't need any modifications.  Here for reference
       case Const.ACONST_NULL:
       case Const.ALOAD:
       case Const.ALOAD_0:
@@ -1854,8 +1854,8 @@ public class DCInstrument extends InstructionListUtils {
       case Const.IINC: // increment local variable by a constant
       case Const.INEG: // negate integer on top of stack
       case Const.JSR: // pushes return address on the stack, but that
-        // is thought of as an object, so we don't need
-        // a tag for it.
+      // is thought of as an object, so we don't need
+      // a tag for it.
       case Const.JSR_W:
       case Const.L2D: // long to double
       case Const.L2F: // long to float
@@ -1868,7 +1868,7 @@ public class DCInstrument extends InstructionListUtils {
       case Const.RET: // this is the internal JSR return
         return null;
 
-        // Make sure we didn't miss anything
+      // Make sure we didn't miss anything
       default:
         throw new Error("instruction " + inst + " unsupported");
     }

@@ -1313,7 +1313,7 @@ public final class FileIO {
 
     /**
      * Current ppt. Used when status=DECL or SAMPLE. Can be null if this declaration was skipped
-     * because of --ppt-select-pattern or --ppt-omit-pattern.
+     * because of {@code --ppt-select-pattern} or {@code --ppt-omit-pattern}.
      */
     public @Nullable PptTopLevel ppt;
 
@@ -3103,7 +3103,6 @@ public final class FileIO {
    */
   private static void decl_error(ParseState state, String format, @Nullable Object... args) {
     @SuppressWarnings({
-      "formatter:unneeded.suppression", // temporary?
       "formatter:format.string" // https://tinyurl.com/cfissue/2584
     })
     String msg = String.format(format, args) + state.line_file_message();

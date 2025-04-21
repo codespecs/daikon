@@ -89,7 +89,7 @@ public final class UnionInvariants {
             throw new Daikon.UserError("Cannot write to serialization output file " + inv_file);
           }
           break;
-          //
+        //
         case '?':
           break; // getopt() already printed an error
         default:

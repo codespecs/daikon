@@ -608,7 +608,7 @@ public class Instrument24 implements ClassFileTransformer {
       debugInstrument.log("ClassElement: %s%n", ce);
       switch (ce) {
         case MethodModel mm -> {}
-          // Copy all other ClassElements to output class (unchanged).
+        // Copy all other ClassElements to output class (unchanged).
         default -> classBuilder.with(ce);
       }
     }
@@ -662,7 +662,7 @@ public class Instrument24 implements ClassFileTransformer {
         case CodeModel codeModel ->
             methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, mgen.getInstructionList()));
 
-          // copy all other MethodElements to output class (unchanged)
+        // copy all other MethodElements to output class (unchanged)
         default -> methodBuilder.with(me);
       }
     }
@@ -706,7 +706,7 @@ public class Instrument24 implements ClassFileTransformer {
                 codeBuilder ->
                     instrumentCode(codeBuilder, codeModel, mgen, curMethodInfo, method_info_index));
 
-          // copy all other MethodElements to output class (unchanged)
+        // copy all other MethodElements to output class (unchanged)
         default -> methodBuilder.with(me);
       }
     }
@@ -805,10 +805,10 @@ public class Instrument24 implements ClassFileTransformer {
       switch (ce) {
         case LocalVariable lv -> {} // we have alreay processed these
         case LocalVariableType lvt -> {} // we can discard local variable types
-          // debuging code
-          // case LocalVariableType lvt -> {
-          // @FieldDescriptor String lvFD = lvt.signatureSymbol().signatureString();
-          // System.out.printf("  %s : %s%n", lvt, convertDescriptorToFqBinaryName(lvFD)); }
+        // debuging code
+        // case LocalVariableType lvt -> {
+        // @FieldDescriptor String lvFD = lvt.signatureSymbol().signatureString();
+        // System.out.printf("  %s : %s%n", lvt, convertDescriptorToFqBinaryName(lvFD)); }
         case LabelTarget l -> {
           if (ca.labelToBci(l.label()) == 0) {
             minfo.oldStartLabel = l.label();

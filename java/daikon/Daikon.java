@@ -1390,12 +1390,12 @@ public final class Daikon {
             throw new Daikon.UserError("Cannot write to serialization output file " + inv_file);
           }
           break;
-          //
+        //
         case '?':
           // break; // getopt() already printed an error
           System.out.println(usage);
           throw new Daikon.NormalTermination();
-          //
+        //
         default:
           throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
