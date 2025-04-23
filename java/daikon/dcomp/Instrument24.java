@@ -67,10 +67,11 @@ public class Instrument24 implements ClassFileTransformer {
     debug_instrumented_dir = new File(debug_dir, "instrumented");
     debug_uninstrumented_dir = new File(debug_dir, "uninstrumented");
 
-    // temporary
+    // TEMPORARY
+    debug_transform.enabled = true;
     daikon.chicory.Instrument.debug_ppt_omit.enabled = DynComp.debug;
     // temporary to turn on DCInstrument.debug_transform
-    daikon.dcomp.Instrument.debug_transform.enabled = debug_transform.enabled;
+    daikon.dcomp.Instrument.debug_transform.enabled = true;
 
     if (DynComp.dump) {
       debug_instrumented_dir.mkdirs();
@@ -180,7 +181,7 @@ public class Instrument24 implements ClassFileTransformer {
     // for debugging
     // new Throwable().printStackTrace();
 
-    debug_transform.log("Entering dcomp.Instrument24.transform(): class = %s%n", className);
+    debug_transform.log("%nEntering dcomp.Instrument24.transform(): class = %s%n", className);
 
     @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
@@ -337,7 +338,7 @@ public class Instrument24 implements ClassFileTransformer {
     ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
     DCInstrument24 dci = new DCInstrument24(classFile, classModel, in_jdk);
     byte @Nullable [] newBytes = null;
-    debug_transform.log("%nTransforming: %s%n", binaryClassName);
+    // debug_transform.log("%nTransforming: %s%n", binaryClassName);
     try {
       newBytes = dci.instrument(classInfo);
     } catch (Throwable t) {
