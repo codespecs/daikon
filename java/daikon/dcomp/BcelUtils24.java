@@ -1,0 +1,223 @@
+package daikon.dcomp;
+
+import daikon.chicory.MethodGen24;
+import daikon.plumelib.bcelutil.SimpleLog;
+import java.lang.classfile.CodeElement;
+import java.lang.classfile.TypeKind;
+import java.lang.classfile.instruction.DiscontinuedInstruction;
+import java.lang.classfile.instruction.IncrementInstruction;
+import java.lang.classfile.instruction.LoadInstruction;
+import java.lang.classfile.instruction.LocalVariable;
+import java.lang.classfile.instruction.StoreInstruction;
+import java.lang.constant.ClassDesc;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ListIterator;
+
+/** This class provides utility methods to ...??? */
+@SuppressWarnings("nullness")
+public class BcelUtils24 {
+
+  /** Create a new BcelUtils24 object. */
+  public BcelUtils24() {
+    // Nothing to do.
+  }
+
+  /*
+   * NOMENCLATURE
+   *
+   * 'index' is an item's subscript into a data structure.
+   *
+   * 'offset' is used to describe two different address types:
+   *   * the offset of a byte code from the start of a method's byte codes
+   *   * the offset of a variable from the start of a method's stack frame
+   *
+   *     The Java Virtual Machine Specification uses
+   *     'index into the local variable array of the current frame'
+   *     or 'slot number' to describe this second case.
+   *
+   * Unfortunately, BCEL uses the method names getIndex and setIndex
+   * to refer to 'offset's into the local stack frame.
+   * It uses getPosition and setPosition to refer to 'offset's into
+   * the byte codes.
+   */
+
+  /** A log to which to print debugging information about program instrumentation. */
+  protected static SimpleLog debugInstrument = new SimpleLog(true);
+
+  /** The number of local variables in the current method prior to any modifications. */
+  protected static int initialLocalsCount;
+
+  /**
+   * The index of the first 'true' local in the local variable table. That is, after 'this' and any
+   * parameters.
+   */
+  protected static int firstLocalIndex;
+
+  /**
+   * Returns a copy of the given type array, with newType added to the end.
+   *
+   * @param types the array to extend
+   * @param newType the element to add to the end of the array
+   * @return a new array, with newType at the end
+   */
+  public static ClassDesc[] postpendToArray(ClassDesc[] types, ClassDesc newType) {
+    if (types.length == Integer.MAX_VALUE) {
+      throw new Error("array " + Arrays.toString(types) + " is too large to extend");
+    }
+    ClassDesc[] newTypes = new ClassDesc[types.length + 1];
+    System.arraycopy(types, 0, newTypes, 0, types.length);
+    newTypes[types.length] = newType;
+    return newTypes;
+  }
+
+  /**
+   * Returns a String array with newString added to the end of arr.
+   *
+   * @param arr original string array
+   * @param newString string to be added
+   * @return the new string array
+   */
+  protected static String[] addString(String[] arr, String newString) {
+    String[] newArr = new String[arr.length + 1];
+    for (int ii = 0; ii < arr.length; ii++) {
+      newArr[ii] = arr[ii];
+    }
+    newArr[arr.length] = newString;
+    return newArr;
+  }
+
+  /**
+   * Process the instruction list, adding size (1 or 2) to the index of each Instruction that
+   * references a local that is equal or higher in the local map than offsetFirstMovedlocal. Size
+   * should be the size of the new local that was just inserted at offsetFirstMovedlocal.
+   *
+   * @param mgen MethodGen to be modified
+   * @param offsetFirstMovedlocal original offset of first local moved "up"
+   * @param size size of new local added (1 or 2)
+   */
+  protected static void adjust_code_for_locals_change(
+      MethodGen24 mgen, int offsetFirstMovedLocal, int size) {
+
+    try {
+      List<CodeElement> il = mgen.getInstructionList();
+      ListIterator<CodeElement> iter = il.listIterator();
+      while (iter.hasNext()) {
+
+        CodeElement inst = iter.next();
+        switch (inst) {
+          case DiscontinuedInstruction.RetInstruction ret -> {
+            if (ret.slot() >= offsetFirstMovedLocal) {
+              iter.set(DiscontinuedInstruction.RetInstruction.of(ret.slot() + size));
+            }
+          }
+          case IncrementInstruction inc -> {
+            if (inc.slot() >= offsetFirstMovedLocal) {
+              iter.set(IncrementInstruction.of(inc.slot() + size, inc.constant()));
+            }
+          }
+          case LoadInstruction load -> {
+            if (load.slot() >= offsetFirstMovedLocal) {
+              iter.set(LoadInstruction.of(load.typeKind(), load.slot() + size));
+            }
+          }
+          case StoreInstruction store -> {
+            if (store.slot() >= offsetFirstMovedLocal) {
+              iter.set(StoreInstruction.of(store.typeKind(), store.slot() + size));
+            }
+          }
+          default -> {} // ignore all other instructions
+        }
+      }
+    } catch (Exception e) {
+      System.err.printf("Unexpected exception encountered: %s", e);
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Add a new parameter to the method. This will be added after last current parameter and before
+   * the first local variable. This might have the side effect of causing us to rewrite the method
+   * byte codes to adjust the offsets for the local variables - see below for details.
+   *
+   * <p>Must call fixLocalVariableTable (just once per method) before calling this routine.
+   *
+   * @param mgen MethodGen to be modified
+   * @param argName name of new parameter
+   * @param argType type of new parameter
+   * @param minfo for the given method's code
+   * @return a LocalVariableGen for the new parameter
+   */
+  public static final LocalVariable addNewParameter(
+      MethodGen24 mgen, String argName, ClassDesc argType, MethodGen24.MInfo24 minfo) {
+    // We add a new parameter, after any current ones, and then
+    // we need to make a pass over the byte codes to update the local
+    // offset values of all the locals we just shifted up.
+
+    LocalVariable argNew = null;
+    // get a copy of the locals before modification
+    ArrayList<LocalVariable> locals = mgen.localsTable;
+    ClassDesc[] argTypes = mgen.getParameterTypes();
+    int newIndex = 0;
+    int newOffset = 0;
+
+    boolean hasCode = !mgen.getInstructionList().isEmpty();
+
+    if (hasCode) {
+      if (!mgen.isStatic()) {
+        // Skip the 'this' pointer.
+        newIndex++;
+        newOffset++; // size of 'this' is 1
+      }
+
+      if (argTypes.length > 0) {
+        LocalVariable lastArg;
+        newIndex = newIndex + argTypes.length;
+        // newIndex is now positive, because argTypes.length is
+        lastArg = locals.get(newIndex - 1);
+        newOffset = lastArg.slot() + TypeKind.from(lastArg.typeSymbol()).slotSize();
+      }
+
+      // Insert our new local variable into existing table at 'newOffset'.
+      argNew = LocalVariable.of(newOffset, argName, argType, minfo.startLabel, minfo.endLabel);
+      mgen.localsTable.add(newIndex, argNew);
+
+      // Update the index of the first 'true' local in the local variable table.
+      // NOT USED?
+      firstLocalIndex++;
+    }
+    // NOT USED?
+    initialLocalsCount++;
+
+    // Update the method's parameter information.
+    argTypes = postpendToArray(argTypes, argType);
+    String[] argNames = addString(mgen.getParameterNames(), argName);
+    mgen.setParameterTypes(argTypes);
+    mgen.setParameterNames(argNames);
+
+    if (hasCode) {
+      int size = TypeKind.from(argType).slotSize();
+      // we need to adjust the offset of any locals after our insertion
+      for (int i = newIndex + 1; i < locals.size(); i++) {
+        LocalVariable lv = locals.get(i);
+        locals.set(
+            i,
+            LocalVariable.of(
+                lv.slot() + size, lv.name(), lv.type(), lv.startScope(), lv.endScope()));
+      }
+
+      debugInstrument.log(
+          "Added arg    %s%n", argNew.slot() + ": " + argNew.name() + ", " + argNew.type());
+
+      // Now process the instruction list, adding one to the offset
+      // within each LocalVariableInstruction that references a
+      // local that is 'higher' in the local map than new local
+      // we just inserted.
+      adjust_code_for_locals_change(mgen, newOffset, size);
+
+      // debugInstrument.log("New LocalVariableTable:%n%s%n", mgen.localsTable);
+    }
+    return argNew;
+  }
+}
