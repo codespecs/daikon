@@ -1,5 +1,8 @@
 package daikon.chicory;
 
+import static java.lang.constant.ConstantDescs.CD_String;
+import static java.lang.constant.ConstantDescs.CD_void;
+
 import java.lang.classfile.AccessFlags;
 import java.lang.classfile.Attributes;
 import java.lang.classfile.ClassBuilder;
@@ -128,7 +131,7 @@ public class MethodGen24 {
    * The method's local variable table. Often modified by clients, normally to add additional local
    * variables needed for instrumentation.
    */
-  public List<LocalVariable> localsTable;
+  public ArrayList<LocalVariable> localsTable;
 
   /** ConstantPool builder for entire class. */
   // TODO: Should uses of this be synchronized?
@@ -248,6 +251,10 @@ public class MethodGen24 {
 
     mtd = methodModel.methodTypeSymbol();
     paramTypes = mtd.parameterArray();
+    // We need a deep copy and ClassDesc does not have a clone() method
+    for (int i = 0; i < paramTypes.length; i++) {
+      paramTypes[i] = ClassDesc.ofDescriptor(paramTypes[i].descriptorString());
+    }
     returnType = mtd.returnType();
 
     // Set up the localsTable.
@@ -292,6 +299,38 @@ public class MethodGen24 {
    */
   public AccessFlags getAccessFlags() {
     return accessFlags;
+  }
+
+  /**
+   * Return whether or not the method is a constructor.
+   *
+   * @return true iff the method is a constructor
+   */
+  public final boolean isConstructor() {
+    return methodName.equals("<init>");
+  }
+
+  /**
+   * Return whether or not the method is a class initializer.
+   *
+   * @return true iff the method is a class initializer
+   */
+  public final boolean isClinit() {
+    return methodName.equals("<clinit>");
+  }
+
+  /**
+   * Returns whether or not this is a standard main method (static, void, name is 'main', and one
+   * formal parameter: a string array).
+   *
+   * @return true iff the method is a main method
+   */
+  public final boolean isMain() {
+    return isStatic
+        && returnType.equals(CD_void)
+        && methodName.equals("main")
+        && (paramTypes.length == 1)
+        && paramTypes[0].equals(CD_String.arrayType(1));
   }
 
   /**
@@ -341,6 +380,15 @@ public class MethodGen24 {
   }
 
   /**
+   * Set the parameter names.
+   *
+   * @param paramNames the new paramNames array
+   */
+  public void setParameterNames(final String[] paramNames) {
+    this.paramNames = paramNames;
+  }
+
+  /**
    * Return the type of the ith parameter.
    *
    * @param i which parameter's type is requested
@@ -357,6 +405,15 @@ public class MethodGen24 {
    */
   public ClassDesc[] getParameterTypes() {
     return paramTypes.clone();
+  }
+
+  /**
+   * Set the parameter types.
+   *
+   * @param paramTypes the new paramTypes array
+   */
+  public void setParameterTypes(final ClassDesc[] paramTypes) {
+    this.paramTypes = paramTypes;
   }
 
   /**
