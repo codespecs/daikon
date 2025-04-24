@@ -20,6 +20,7 @@ import daikon.plumelib.reflection.Signatures;
 import daikon.plumelib.util.EntryReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.classfile.Annotation;
 import java.lang.classfile.ClassBuilder;
@@ -61,7 +62,6 @@ import java.lang.constant.MethodTypeDesc;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AccessFlag;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -135,6 +135,7 @@ import org.apache.bcel.generic.SWAP;
 // import org.apache.bcel.generic.StoreInstruction;
 import org.apache.bcel.generic.Type;
 import org.apache.bcel.verifier.structurals.OperandStack;
+import org.apache.commons.io.IOUtils;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
@@ -3212,11 +3213,14 @@ public class DCInstrument24 {
 
     URL class_url = ClassLoader.getSystemResource(classname.replace('.', '/') + ".class");
     if (class_url != null) {
-      try {
-        ClassModel result = classFile.parse(Paths.get(class_url.toURI()));
-        classModelCache.put(classname, result);
-        return result;
+      try (InputStream inputStream = class_url.openStream()) {
+        if (inputStream != null) {
+          ClassModel result = classFile.parse(IOUtils.toByteArray(inputStream));
+          classModelCache.put(classname, result);
+          return result;
+        }
       } catch (Throwable t) {
+        t.printStackTrace();
         throw new Error(String.format("Unexpected error while reading %s%n", classname), t);
       }
     }
