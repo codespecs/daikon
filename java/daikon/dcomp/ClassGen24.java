@@ -61,8 +61,11 @@ public class ClassGen24 {
   /** The list of interfaces this class implements. */
   private List<ClassEntry> interfaceList;
 
-  /** ConstantPool builder for entire class. */
-  private static ConstantPoolBuilder poolBuilder;
+  /**
+   * ConstantPool builder for entire class. Initialized with unused value to keep the Checker
+   * Framework Nullness Checker happy.
+   */
+  private static ConstantPoolBuilder poolBuilder = ConstantPoolBuilder.of();
 
   /**
    * Creates a ClassGen24 object.
