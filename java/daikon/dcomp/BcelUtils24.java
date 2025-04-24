@@ -94,7 +94,7 @@ public class BcelUtils24 {
    * should be the size of the new local that was just inserted at offsetFirstMovedlocal.
    *
    * @param mgen MethodGen to be modified
-   * @param offsetFirstMovedlocal original offset of first local moved "up"
+   * @param offsetFirstMovedLocal original offset of first local moved "up"
    * @param size size of new local added (1 or 2)
    */
   protected static void adjust_code_for_locals_change(
