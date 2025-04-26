@@ -6,7 +6,6 @@ import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassModel;
 import java.lang.classfile.MethodModel;
 import java.lang.classfile.constantpool.ClassEntry;
-import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.ClassDesc;
 import java.lang.reflect.AccessFlag;
 import java.util.ArrayList;
@@ -62,12 +61,6 @@ public class ClassGen24 {
   private List<ClassEntry> interfaceList;
 
   /**
-   * ConstantPool builder for entire class. Initialized with unused value to keep the Checker
-   * Framework Nullness Checker happy.
-   */
-  private static ConstantPoolBuilder poolBuilder = ConstantPoolBuilder.of();
-
-  /**
    * Creates a ClassGen24 object.
    *
    * @param classModel the class
@@ -82,7 +75,6 @@ public class ClassGen24 {
     this.classModel = classModel;
     this.className = className;
     this.classBuilder = classBuilder;
-    poolBuilder = classBuilder.constantPool();
 
     accessFlags = classModel.flags();
     isInterface = accessFlags.has(AccessFlag.INTERFACE);
@@ -102,7 +94,7 @@ public class ClassGen24 {
    */
   public void addInterface(@BinaryName String name) {
     ClassDesc ue = ClassDesc.of(name);
-    ClassEntry ce = poolBuilder.classEntry(ue);
+    ClassEntry ce = classBuilder.constantPool().classEntry(ue);
     if (interfaceList.contains(ce)) {
       return;
     }
@@ -214,15 +206,6 @@ public class ClassGen24 {
    */
   public ClassBuilder getClassBuilder() {
     return classBuilder;
-  }
-
-  /**
-   * Return the constant pool builder.
-   *
-   * @return the constant pool builder
-   */
-  public static ConstantPoolBuilder getPoolBuilder() {
-    return poolBuilder;
   }
 
   // need to fancy up!

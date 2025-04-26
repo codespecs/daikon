@@ -200,6 +200,9 @@ public class DCInstrument24 {
   /** The current ClassModel. */
   protected ClassModel classModel;
 
+  /** ConstantPool builder for current class. */
+  private ConstantPoolBuilder poolBuilder;
+
   /** Stores useful information about a class. */
   private ClassInfo classInfo;
 
@@ -493,6 +496,7 @@ public class DCInstrument24 {
 
     ClassGen24 classGen = new ClassGen24(classModel, classInfo.class_name, classBuilder);
     runtimeCD = ClassDesc.of(dcompRuntimeClassname);
+    poolBuilder = classBuilder.constantPool();
 
     debug_transform.log("%nInstrumenting class: %s, Attributes:%n", classInfo.class_name);
     for (java.lang.classfile.Attribute<?> a : classModel.attributes()) {
@@ -577,7 +581,7 @@ public class DCInstrument24 {
       // point to start of list
       ListIterator<CodeElement> li = il.listIterator();
 
-      for (CodeElement ce : call_initNotify(mgen.getPoolBuilder(), classInfo)) {
+      for (CodeElement ce : call_initNotify(poolBuilder, classInfo)) {
         li.add(ce);
       }
     } catch (Exception e) {
@@ -595,7 +599,7 @@ public class DCInstrument24 {
    */
   private void createClinit(ClassBuilder classBuilder, ClassInfo classInfo) {
 
-    List<CodeElement> instructions = call_initNotify(classBuilder.constantPool(), classInfo);
+    List<CodeElement> instructions = call_initNotify(poolBuilder, classInfo);
     instructions.add(ReturnInstruction.of(TypeKind.VOID)); // need to return!
 
     classBuilder.withMethod(
@@ -3790,11 +3794,10 @@ public class DCInstrument24 {
    */
   InvokeInstruction dcr_call(String methodName, ClassDesc returnType, ClassDesc[] argTypes) {
     MethodRefEntry mre =
-        ClassGen24.getPoolBuilder()
-            .methodRefEntry(
-                ClassDesc.of(dcompRuntimeClassname),
-                methodName,
-                MethodTypeDesc.of(returnType, argTypes));
+        poolBuilder.methodRefEntry(
+            ClassDesc.of(dcompRuntimeClassname),
+            methodName,
+            MethodTypeDesc.of(returnType, argTypes));
     return InvokeInstruction.of(Opcode.INVOKESTATIC, mre);
   }
 
@@ -4682,11 +4685,10 @@ public class DCInstrument24 {
     instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 1)); // load obj
     instructions.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL)); // use null for marker
     MethodRefEntry mre =
-        ClassGen24.getPoolBuilder()
-            .methodRefEntry(
-                ClassDesc.of(classGen.getClassName()),
-                "equals",
-                MethodTypeDesc.of(CD_boolean, CD_Object, dcomp_marker));
+        poolBuilder.methodRefEntry(
+            ClassDesc.of(classGen.getClassName()),
+            "equals",
+            MethodTypeDesc.of(CD_boolean, CD_Object, dcomp_marker));
     instructions.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
     instructions.add(ReturnInstruction.of(TypeKind.BOOLEAN));
 
@@ -4725,11 +4727,10 @@ public class DCInstrument24 {
     instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 0)); // load this
     instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 1)); // load obj
     MethodRefEntry mre =
-        ClassGen24.getPoolBuilder()
-            .methodRefEntry(
-                ClassDesc.of(classGen.getSuperclassName()),
-                "equals",
-                MethodTypeDesc.of(CD_boolean, CD_Object));
+        poolBuilder.methodRefEntry(
+            ClassDesc.of(classGen.getSuperclassName()),
+            "equals",
+            MethodTypeDesc.of(CD_boolean, CD_Object));
     instructions.add(InvokeInstruction.of(Opcode.INVOKESPECIAL, mre));
     instructions.add(ReturnInstruction.of(TypeKind.BOOLEAN));
 
@@ -5247,7 +5248,7 @@ public class DCInstrument24 {
               ? ConstantInstruction.ofArgument(Opcode.BIPUSH, value)
               : (value >= Short.MIN_VALUE && value <= Short.MAX_VALUE)
                   ? ConstantInstruction.ofArgument(Opcode.SIPUSH, value)
-                  : buildLDCInstruction(ClassGen24.getPoolBuilder().intEntry(value));
+                  : buildLDCInstruction(poolBuilder.intEntry(value));
     };
   }
 }
