@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
+import org.checkerframework.checker.signature.qual.Identifier;
 
 /** This class provides utility methods to ...??? */
 @SuppressWarnings("nullness")
@@ -192,7 +193,8 @@ public class BcelUtils24 {
 
     // Update the method's parameter information.
     argTypes = postpendToArray(argTypes, argType);
-    String[] argNames = addString(mgen.getParameterNames(), argName);
+    @SuppressWarnings("signature:assignment") // string manipulation
+    @Identifier String[] argNames = addString(mgen.getParameterNames(), argName);
     mgen.setParameterTypes(argTypes);
     mgen.setParameterNames(argNames);
 
