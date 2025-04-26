@@ -20,6 +20,7 @@ import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.lang.reflect.AccessFlag;
 import java.util.ArrayList;
+// import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -30,6 +31,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.checker.signature.qual.FieldDescriptor;
 import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.checker.signature.qual.MethodDescriptor;
 
@@ -249,14 +251,6 @@ public class MethodGen24 {
       signature = descriptor;
     }
 
-    mtd = methodModel.methodTypeSymbol();
-    paramTypes = mtd.parameterArray();
-    // We need a deep copy and ClassDesc does not have a clone() method
-    for (int i = 0; i < paramTypes.length; i++) {
-      paramTypes[i] = ClassDesc.ofDescriptor(paramTypes[i].descriptorString());
-    }
-    returnType = mtd.returnType();
-
     // Set up the localsTable.
     localsTable = new ArrayList<>();
 
@@ -274,10 +268,42 @@ public class MethodGen24 {
     // Not necessarily sorted, so sort to make searching/insertion easier.
     localsTable.sort(Comparator.comparing(LocalVariable::slot));
     origLocalVariables = localsTable.toArray(new LocalVariable[localsTable.size()]);
+    // System.out.println("orig locals: " + Arrays.toString(origLocalVariables));
 
-    // System.out.println("locals:" + Arrays.toString(origLocalVariables));
-    // System.out.println("types:" + Arrays.toString(paramTypes));
-    // System.out.println("length: " + paramTypes.length + ", offset: " + offset);
+    // Set up the parameter types and names.
+    mtd = methodModel.methodTypeSymbol();
+    paramTypes = mtd.parameterArray();
+
+    // java.lang.classfile seems to be inconsistent with the parameter types
+    // of an inner class constructor. It may optimize away the hidden 'this$0'
+    // parameter, but it does not remove the corresponding entry from the
+    // parameterArray().  In order to correctly derive the names of the
+    // parameters I need to detect this special case and remove the
+    // incorrect entry from the parameterArray(). This check is ugly.
+    if (methodName.equals("<init>") && paramTypes.length > 0 && origLocalVariables.length > 1) {
+      int dollarPos = className.lastIndexOf("$");
+      @SuppressWarnings("signature:assignment") // need JDK annotations
+      @FieldDescriptor String arg0Fd = paramTypes[0].descriptorString();
+      String arg0Type = Instrument24.convertDescriptorToFqBinaryName(arg0Fd);
+      if (dollarPos >= 0
+          &&
+          // see if type of first parameter is classname up to the "$"
+          className.substring(0, dollarPos).equals(arg0Type)
+          &&
+          // don't change paramTypes if 'this$0' is present
+          !origLocalVariables[1].name().stringValue().equals("this$0")) {
+        // remove first param type so consistent with other methods
+        ClassDesc[] newArray = new ClassDesc[paramTypes.length - 1];
+        System.arraycopy(paramTypes, 1, newArray, 0, paramTypes.length - 1);
+        paramTypes = newArray;
+      }
+    }
+
+    // We need a deep copy and ClassDesc does not have a clone() method
+    for (int i = 0; i < paramTypes.length; i++) {
+      paramTypes[i] = ClassDesc.ofDescriptor(paramTypes[i].descriptorString());
+    }
+    returnType = mtd.returnType();
 
     paramNames = new String[paramTypes.length];
     int offset = isStatic ? 0 : 1;
@@ -375,7 +401,7 @@ public class MethodGen24 {
    *
    * @return the parameter names
    */
-  public String[] getParameterNames() {
+  public @Identifier String[] getParameterNames() {
     return paramNames.clone();
   }
 
@@ -384,7 +410,7 @@ public class MethodGen24 {
    *
    * @param paramNames the new paramNames array
    */
-  public void setParameterNames(final String[] paramNames) {
+  public void setParameterNames(final @Identifier String[] paramNames) {
     this.paramNames = paramNames;
   }
 
