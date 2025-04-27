@@ -57,9 +57,7 @@ import java.lang.classfile.instruction.ReturnInstruction;
 import java.lang.classfile.instruction.SwitchCase;
 import java.lang.classfile.instruction.TableSwitchInstruction;
 import java.lang.constant.ClassDesc;
-import java.lang.constant.ConstantDesc;
 import java.lang.constant.MethodTypeDesc;
-import java.lang.invoke.MethodHandles;
 import java.lang.reflect.AccessFlag;
 import java.net.URL;
 import java.util.ArrayDeque;
@@ -203,8 +201,8 @@ public class DCInstrument24 {
   /** ConstantPool builder for current class. */
   private ConstantPoolBuilder poolBuilder;
 
-  /** Stores useful information about a class. */
-  private ClassInfo classInfo;
+  //  /** Stores useful information about a class. */
+  //  private ClassInfo classInfo;
 
   /** True if we tracking any methods in the current class. */
   private boolean track_class = false;
@@ -274,8 +272,8 @@ public class DCInstrument24 {
   /** If true, enable JUnit analysis debugging. */
   protected static final boolean debugJUnitAnalysis = false;
 
-  /** If true, enable {@link #getDefiningInterface} debugging. */
-  protected static final boolean debugGetDefiningInterface = false;
+  //  /** If true, enable {@link #getDefiningInterface} debugging. */
+  // protected static final boolean debugGetDefiningInterface = false;
 
   /** If true, enable {@link #handleInvoke} debugging. */
   protected static final boolean debugHandleInvoke = false;
@@ -361,7 +359,8 @@ public class DCInstrument24 {
 
   protected static InstructionList global_catch_il = null;
   protected static CodeExceptionGen global_exception_handler = null;
-  private InstructionHandle insertion_placeholder;
+
+  //  private InstructionHandle insertion_placeholder;
 
   /** Class that defines a method (by its name and argument types) */
   static class MethodDef {
@@ -414,7 +413,8 @@ public class DCInstrument24 {
   /** Initialize with the original class and whether or not the class is part of the JDK. */
   @SuppressWarnings({
     "nullness:StaticAssignmentInConstructor", // instrumentation_interface
-    "nullness:initialization"
+    "nullness:initialization",
+    "StaticAssignmentInConstructor" // ErrorProne: instrumentation_interface
   })
   public DCInstrument24(ClassFile classFile, ClassModel classModel, boolean in_jdk) {
     this.classFile = classFile;
@@ -436,7 +436,8 @@ public class DCInstrument24 {
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
     // TEMPORARY
-    debugInstrument.enabled = true;
+    // debugInstrument.enabled = true;
+    debugInstrument.enabled = false;
     debug_native.enabled = DynComp.debug;
     debug_transform.enabled = daikon.dcomp.Instrument24.debug_transform.enabled;
   }
@@ -453,7 +454,7 @@ public class DCInstrument24 {
     // adding dcomp marker causes problems.
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
-    if ((classModel.flags().has(AccessFlag.ANNOTATION))) {
+    if (classModel.flags().has(AccessFlag.ANNOTATION)) {
       debug_transform.log("Not instrumenting annotation %s%n", classInfo.class_name);
       return null;
     }
@@ -868,54 +869,56 @@ public class DCInstrument24 {
     }
   }
 
-  /**
-   * Insert the our instrumentation code into the instruction list for the given method. This
-   * includes adding instrumentation code at the entry and at each return from the method. In
-   * addition, it changes each return statement to first place the value being returned into a local
-   * and then return.
-   *
-   * @param instructions instruction list for method
-   * @param mgen describes the given method
-   * @param curMethodInfo provides additional information about the method
-   * @param minfo for the given method's code
-   */
-  private void insertInstrumentationCode(
-      List<CodeElement> instructions,
-      MethodGen24 mgen,
-      MethodInfo curMethodInfo,
-      MethodGen24.MInfo24 minfo) {
-
-    // Add nonce local to matchup enter/exits
-    // addInstrumentationAtEntry(instructions, mgen, minfo);
-
-    // debugInstrument.log("Modified code: %s%n", mgen.getMethod().getCode());
-
-    assert curMethodInfo != null : "@AssumeAssertion(nullness): can't get here if null";
-    Iterator<Boolean> shouldIncludeIter = curMethodInfo.is_included.iterator();
-    Iterator<Integer> exitLocationIter = curMethodInfo.exit_locations.iterator();
-
-    // instrument return instructions
-    ListIterator<CodeElement> li = instructions.listIterator();
-    while (li.hasNext()) {
-
-      CodeElement inst = li.next();
-
-      // back up iterator to point to 'inst'
-      li.previous();
-
-      // If this is a return instruction, insert method exit instrumentation
-      // List<CodeElement> new_il =
-      // generate_return_instrumentation(inst, mgen, minfo, shouldIncludeIter, exitLocationIter);
-
-      // insert code prior to 'inst'
-      // for (CodeElement ce : new_il) {
-      // li.add(ce);
-      // }
-
-      // skip over 'inst' we just inserted new_il in front of
-      li.next();
-    }
-  }
+  //  /**
+  //   * Insert the our instrumentation code into the instruction list for the given method. This
+  //   * includes adding instrumentation code at the entry and at each return from the method. In
+  //   * addition, it changes each return statement to first place the value being returned into a
+  // local
+  //   * and then return.
+  //   *
+  //   * @param instructions instruction list for method
+  //   * @param mgen describes the given method
+  //   * @param curMethodInfo provides additional information about the method
+  //   * @param minfo for the given method's code
+  //   */
+  //  private void insertInstrumentationCode(
+  //      List<CodeElement> instructions,
+  //      MethodGen24 mgen,
+  //      MethodInfo curMethodInfo,
+  //      MethodGen24.MInfo24 minfo) {
+  //
+  //    // Add nonce local to matchup enter/exits
+  //    // addInstrumentationAtEntry(instructions, mgen, minfo);
+  //
+  //    // debugInstrument.log("Modified code: %s%n", mgen.getMethod().getCode());
+  //
+  //    assert curMethodInfo != null : "@AssumeAssertion(nullness): can't get here if null";
+  //    Iterator<Boolean> shouldIncludeIter = curMethodInfo.is_included.iterator();
+  //    Iterator<Integer> exitLocationIter = curMethodInfo.exit_locations.iterator();
+  //
+  //    // instrument return instructions
+  //    ListIterator<CodeElement> li = instructions.listIterator();
+  //    while (li.hasNext()) {
+  //
+  //      CodeElement inst = li.next();
+  //
+  //      // back up iterator to point to 'inst'
+  //      li.previous();
+  //
+  //      // If this is a return instruction, insert method exit instrumentation
+  //      // List<CodeElement> new_il =
+  //      // generate_return_instrumentation(inst, mgen, minfo, shouldIncludeIter,
+  // exitLocationIter);
+  //
+  //      // insert code prior to 'inst'
+  //      // for (CodeElement ce : new_il) {
+  //      // li.add(ce);
+  //      // }
+  //
+  //      // skip over 'inst' we just inserted new_il in front of
+  //      li.next();
+  //    }
+  //  }
 
   /**
    * Generate instrumentation code for the given method. This includes reading in and processing the
@@ -1249,7 +1252,7 @@ public class DCInstrument24 {
       String super_class;
       String this_class = classname;
       while (true) {
-        super_class = getSuperclassName(this_class);
+        super_class = getSuperclassName(); // (this_class)
         if (super_class == null) {
           // something has gone wrong
           break;
@@ -1786,8 +1789,8 @@ public class DCInstrument24 {
     //      return;
     //    }
 
-    InstructionList il = mg.getInstructionList();
-    OperandStack stack = null;
+    //    InstructionList il = mg.getInstructionList();
+    //    OperandStack stack = null;
 
     // Prior to adding support for Stack Maps, the position field
     // of each InstructionHandle was not updated until the modified
@@ -1821,7 +1824,7 @@ public class DCInstrument24 {
     // Loop through each instruction, making substitutions
     for (ih = orig_start; ih != null; ) {
       debugInstrument.log("instrumenting instruction %s%n", ih);
-      InstructionList new_il = null;
+      //      InstructionList new_il = null;
 
       // Remember the next instruction to process
       InstructionHandle next_ih = ih.getNext();
@@ -1830,7 +1833,7 @@ public class DCInstrument24 {
       //      stack = stack_types.get(handle_offsets[index++]);
 
       // Get the translation for this instruction (if any)
-      new_il = xform_inst(mg, ih, stack);
+      //      new_il = xform_inst(mg, ih, stack);
 
       // If this instruction was modified, replace it with the new
       // instruction list. If this instruction was the target of any
@@ -1984,16 +1987,17 @@ public class DCInstrument24 {
    */
   public void add_create_tag_frame(MethodGen mg) {
 
-    InstructionList nl = create_tag_frame(mg, tag_frame_local);
+    // InstructionList nl = create_tag_frame(mg, tag_frame_local);
+    create_tag_frame(mg, tag_frame_local);
 
     // We add a temporary NOP at the end of the create_tag_frame
     // code that we will replace with runtime initization code
     // later.  We do this so that any existing stack map at
     // instruction offset 0 is not replaced by the one we are
     // about to add for initializing the tag_frame variable.
-    insertion_placeholder = nl.append(new NOP());
+    //    insertion_placeholder = nl.append(new NOP());
 
-    byte[] code = nl.getByteCode();
+    //    byte[] code = nl.getByteCode();
     // -1 because of the NOP we inserted.
     // int len_code = code.length - 1;
 
@@ -2683,51 +2687,52 @@ public class DCInstrument24 {
     }
   }
 
-  /**
-   * Return the interface class containing the implementation of the given method. The interfaces of
-   * {@code startClass} are recursively searched.
-   *
-   * @param startClass the ClassModel whose interfaces are to be searched
-   * @param methodName the target method to search for
-   * @param argTypes the target method's argument types
-   * @return the name of the interface class containing target method, or null if not found
-   */
-  private @Nullable @ClassGetName String getDefiningInterface(
-      ClassModel startClass, String methodName, Type[] argTypes) {
-
-    if (debugGetDefiningInterface) {
-      System.out.println("searching interfaces of: " + ClassGen24.getClassName(startClass));
-    }
-    //    for (@ClassGetName String interfaceName : startClass.getInterfaceNames()) {
-    //      if (debugGetDefiningInterface) {
-    //        System.out.println("interface: " + interfaceName);
-    //      }
-    //      ClassModel cm;
-    //      try {
-    //        cm = getClassModel(interfaceName);
-    //      } catch (Throwable e) {
-    //        throw new Error(String.format("Unable to load class: %s", interfaceName), e);
-    //      }
-    //     for (Method jm : cm.getMethods()) {
-    //       if (debugGetDefiningInterface) {
-    //         System.out.println("  " + jm.getName() + Arrays.toString(jm.getArgumentTypes()));
-    //       }
-    //       if (jm.getName().equals(methodName) && Arrays.equals(jm.getArgumentTypes(), argTypes))
-    // {
-    //         // We have a match.
-    //         return interfaceName;
-    //       }
-    //     }
-    //     // no match found; does this interface extend other interfaces?
-    //     @ClassGetName String foundAbove = getDefiningInterface(cm, methodName, argTypes);
-    //     if (foundAbove != null) {
-    //       // We have a match.
-    //       return foundAbove;
-    //     }
-    //    }
-    // nothing found
-    return null;
-  }
+  //  /**
+  //   * Return the interface class containing the implementation of the given method. The
+  // interfaces of
+  //   * {@code startClass} are recursively searched.
+  //   *
+  //   * @param startClass the ClassModel whose interfaces are to be searched
+  //   * @param methodName the target method to search for
+  //   * @param argTypes the target method's argument types
+  //   * @return the name of the interface class containing target method, or null if not found
+  //   */
+  //  private @Nullable @ClassGetName String getDefiningInterface(
+  //      ClassModel startClass, String methodName, Type[] argTypes) {
+  //
+  //    if (debugGetDefiningInterface) {
+  //      System.out.println("searching interfaces of: " + ClassGen24.getClassName(startClass));
+  //    }
+  //    for (@ClassGetName String interfaceName : startClass.getInterfaceNames()) {
+  //      if (debugGetDefiningInterface) {
+  //        System.out.println("interface: " + interfaceName);
+  //      }
+  //      ClassModel cm;
+  //      try {
+  //        cm = getClassModel(interfaceName);
+  //      } catch (Throwable e) {
+  //        throw new Error(String.format("Unable to load class: %s", interfaceName), e);
+  //      }
+  //     for (Method jm : cm.getMethods()) {
+  //       if (debugGetDefiningInterface) {
+  //         System.out.println("  " + jm.getName() + Arrays.toString(jm.getArgumentTypes()));
+  //       }
+  //       if (jm.getName().equals(methodName) && Arrays.equals(jm.getArgumentTypes(), argTypes))
+  // {
+  //         // We have a match.
+  //         return interfaceName;
+  //       }
+  //     }
+  //     // no match found; does this interface extend other interfaces?
+  //     @ClassGetName String foundAbove = getDefiningInterface(cm, methodName, argTypes);
+  //     if (foundAbove != null) {
+  //       // We have a match.
+  //       return foundAbove;
+  //     }
+  //    }
+  // nothing found
+  //    return null;
+  //  }
 
   /**
    * Process an Invoke instruction. There are three cases:
@@ -3182,10 +3187,11 @@ public class DCInstrument24 {
    * Given a classname return it's superclass name. Note that BCEL reports that the superclass of
    * 'java.lang.Object' is 'java.lang.Object' rather than saying there is no superclass.
    *
-   * @param classname the fully qualified name of the class in binary form. E.g., "java.util.List"
    * @return superclass name of classname or null if there is an error
    */
-  private @ClassGetName String getSuperclassName(String classname) {
+  //   * @param classname the fully qualified name of the class in binary form. E.g.,
+  // "java.util.List"
+  private @ClassGetName String getSuperclassName() { // (String classname) {
     //    JavaClass jc ; // = getJavaClass(classname);
     //    if (jc != null) {
     //      return jc.getSuperclassName();
@@ -3194,7 +3200,7 @@ public class DCInstrument24 {
     //    }
   }
 
-  /** Cache for {@link #getJavaClass} method. */
+  /** Cache for {@link #getClassModel} method. */
   private static Map<String, ClassModel> classModelCache =
       new ConcurrentHashMap<String, ClassModel>();
 
@@ -3529,18 +3535,18 @@ public class DCInstrument24 {
    * Creates a MethodInfo corresponding to the specified method. The exit locations are filled in,
    * but the reflection information is not generated. Returns null if there are no instructions.
    *
-   * @param class_info class containing the method
-   * @param mg method to inspect
+   * @param classInfo class containing the method
+   * @param mgen method to inspect
    * @return MethodInfo for the method
    */
   private @Nullable MethodInfo create_method_info(ClassInfo classInfo, MethodGen24 mgen) {
 
     // Get the argument names for this method
     String[] paramNames = mgen.getParameterNames();
-    LocalVariable[] lvs = mgen.getLocalVariables();
-    int param_offset = 1;
+    //    LocalVariable[] lvs = mgen.getLocalVariables();
+    //    int param_offset = 1;
     if (mgen.isStatic()) {
-      param_offset = 0;
+      //      param_offset = 0;
     }
 
     if (debugInstrument.enabled) {
@@ -3860,9 +3866,9 @@ public class DCInstrument24 {
     if (!is_primitive(top)) {
       return null;
     }
-    String method = "dup_x1";
+    //    String method = "dup_x1";
     if (!is_primitive(stack.peek(1))) {
-      method = "dup";
+      //      method = "dup";
     }
     //    return build_il(dcr_call(method, Type.VOID, Type.NO_ARGS), inst);
     return null;
@@ -4416,12 +4422,12 @@ public class DCInstrument24 {
 
     // Build accessors for each field declared in a superclass that is
     // is not shadowed in a subclass
-    JavaClass[] super_classes;
-    try {
-      // super_classes = gen.getJavaClass().getSuperClasses();
-    } catch (Exception e) {
-      throw new Error(e);
-    }
+    //    JavaClass[] super_classes;
+    //    try {
+    //      // super_classes = gen.getJavaClass().getSuperClasses();
+    //    } catch (Exception e) {
+    //      throw new Error(e);
+    //    }
     //    for (JavaClass super_class : super_classes) {
     //      for (Field f : super_class.getFields()) {
     //        if (f.isPrivate()) {
@@ -4456,7 +4462,7 @@ public class DCInstrument24 {
    * offset can be used to index into a tag array for this class. Instance fields are placed in the
    * returned map and static fields are placed in static map (shared between all classes).
    *
-   * @param jc class to check for fields
+   * @param classModel class to check for fields
    * @return field offset map
    */
   Map<FieldModel, Integer> build_field_map(ClassModel classModel) {
@@ -4522,12 +4528,12 @@ public class DCInstrument24 {
    * }
    * }</pre>
    *
-   * @param gen class whose accessors are being built. Not necessarily the class declaring fm (if fm
-   *     is inherited).
+   * @param classGen class whose accessors are being built. Not necessarily the class declaring fm
+   *     (if fm is inherited).
    * @param fm field to build an accessor for
    * @param tag_offset offset of fm in the tag storage for this field
-   * @return the get tag method
    */
+  @SuppressWarnings("EnumOrdinal")
   void create_get_tag(ClassGen24 classGen, FieldModel fm, int tag_offset) {
 
     // Determine the method to call in DCRuntime.  Instance fields and static
@@ -4601,8 +4607,8 @@ public class DCInstrument24 {
    *     (if fm is inherited).
    * @param fm field to build an accessor for
    * @param tag_offset offset of fm in the tag storage for this field
-   * @return the set tag method
    */
+  @SuppressWarnings("EnumOrdinal")
   void create_set_tag(ClassGen24 classGen, FieldModel fm, int tag_offset) {
 
     String methodname = "pop_field_tag";
@@ -4747,7 +4753,7 @@ public class DCInstrument24 {
    * will call the instrumented version of the method if it exists, otherwise they will call the
    * uninstrumented version.
    *
-   * @param gen class to check
+   * @param classGen class to check
    */
   void handle_object(ClassGen24 classGen) {
 
@@ -5179,20 +5185,20 @@ public class DCInstrument24 {
     return result.toString();
   }
 
-  /**
-   * Format a constant value for printing.
-   *
-   * @param item the constant to format
-   * @return a string containing the constant's value
-   */
-  private final String formatConstantDesc(ConstantDesc item) {
-    try {
-      return item.resolveConstantDesc(MethodHandles.lookup()).toString();
-    } catch (Exception e) {
-      System.err.printf("Unexpected error %s getting constant value for: %s%n", e, item);
-      return "";
-    }
-  }
+  //  /**
+  //   * Format a constant value for printing.
+  //   *
+  //   * @param item the constant to format
+  //   * @return a string containing the constant's value
+  //   */
+  //  private final String formatConstantDesc(ConstantDesc item) {
+  //    try {
+  //      return item.resolveConstantDesc(MethodHandles.lookup()).toString();
+  //    } catch (Exception e) {
+  //      System.err.printf("Unexpected error %s getting constant value for: %s%n", e, item);
+  //      return "";
+  //    }
+  //  }
 
   /**
    * Create a new local variable whose scope is the full method.
