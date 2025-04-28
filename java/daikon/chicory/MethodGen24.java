@@ -12,6 +12,7 @@ import java.lang.classfile.CodeModel;
 import java.lang.classfile.Instruction;
 import java.lang.classfile.Label;
 import java.lang.classfile.MethodModel;
+import java.lang.classfile.TypeKind;
 import java.lang.classfile.attribute.CodeAttribute;
 import java.lang.classfile.attribute.SignatureAttribute;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
@@ -305,17 +306,52 @@ public class MethodGen24 {
     }
     returnType = mtd.returnType();
 
+    // These initial values for {@code paramNames} may be incorrect.  They could
+    // be altered in {@code fixLocals}.
     paramNames = new String[paramTypes.length];
-    int offset = isStatic ? 0 : 1;
+    int index = isStatic ? 0 : 1;
     for (int i = 0; i < paramTypes.length; i++) {
-      if ((offset + i) < origLocalVariables.length) {
+      if ((index + i) < origLocalVariables.length) {
         @SuppressWarnings("signature:assignment") // need JDK annotations
-        @Identifier String paramName = origLocalVariables[offset + i].name().stringValue();
+        @Identifier String paramName = origLocalVariables[index + i].name().stringValue();
         paramNames[i] = paramName;
+      } else {
+        paramNames[i] = "param" + i;
       }
     }
 
     poolBuilder = classBuilder.constantPool();
+  }
+
+  /**
+   * Due to a Java compiler optimization, unused parameters may not be included in the local
+   * variables. Some of DynComp's instrumentation requires their presence. This routine makes these
+   * changes, if neccesary.
+   *
+   * @param minfo MInfo24 object for current method
+   * @return true if modified localsTable, false otherwise
+   */
+  public boolean fixLocals(MInfo24 minfo) {
+    boolean modified = false;
+    int lBase = isStatic ? 0 : 1;
+    int slot = isStatic ? 0 : 1;
+    for (int pIndex = 0; pIndex < paramTypes.length; pIndex++) {
+      int lIndex = lBase + pIndex;
+      if ((lIndex >= origLocalVariables.length) || (slot != origLocalVariables[lIndex].slot())) {
+        // need to add a LocalVariable for this parameter
+        LocalVariable newVar =
+            LocalVariable.of(
+                slot, paramNames[pIndex], paramTypes[pIndex], minfo.startLabel, minfo.endLabel);
+        localsTable.add(newVar);
+        modified = true;
+      }
+      slot += TypeKind.from(paramTypes[pIndex]).slotSize();
+    }
+    // If we added params, then table is no longer sorted by slot
+    if (modified) {
+      localsTable.sort(Comparator.comparing(LocalVariable::slot));
+    }
+    return modified;
   }
 
   /**
@@ -443,11 +479,12 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the local variable table.
+   * Return the original local variable table. In most cases, instrumentation code should use the
+   * {@code localsTable} instead.
    *
-   * @return the local variable table
+   * @return the original local variable table
    */
-  public LocalVariable[] getLocalVariables() {
+  public LocalVariable[] getOriginalLocalVariables() {
     return origLocalVariables.clone();
   }
 

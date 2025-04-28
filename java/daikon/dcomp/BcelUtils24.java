@@ -47,15 +47,6 @@ public class BcelUtils24 {
   /** A log to which to print debugging information about program instrumentation. */
   protected static SimpleLog debugInstrument = new SimpleLog(true);
 
-  /** The number of local variables in the current method prior to any modifications. */
-  protected static int initialLocalsCount;
-
-  /**
-   * The index of the first 'true' local in the local variable table. That is, after 'this' and any
-   * parameters.
-   */
-  protected static int firstLocalIndex;
-
   /**
    * Returns a copy of the given type array, with newType added to the end.
    *
@@ -183,13 +174,7 @@ public class BcelUtils24 {
       // Insert our new local variable into existing table at 'newOffset'.
       argNew = LocalVariable.of(newOffset, argName, argType, minfo.startLabel, minfo.endLabel);
       mgen.localsTable.add(newIndex, argNew);
-
-      // Update the index of the first 'true' local in the local variable table.
-      // NOT USED?
-      firstLocalIndex++;
     }
-    // NOT USED?
-    initialLocalsCount++;
 
     // Update the method's parameter information.
     argTypes = postpendToArray(argTypes, argType);

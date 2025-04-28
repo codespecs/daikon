@@ -436,7 +436,7 @@ public class DCInstrument24 {
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
     // TEMPORARY
-    // debugInstrument.enabled = true;
+    debugInstrument.enabled = true;
     debugInstrument.enabled = false;
     debug_native.enabled = DynComp.debug;
     debug_transform.enabled = daikon.dcomp.Instrument24.debug_transform.enabled;
@@ -666,7 +666,7 @@ public class DCInstrument24 {
         if (debugInstrument.enabled) {
           ClassDesc[] paramTypes = mgen.getParameterTypes();
           String[] paramNames = mgen.getParameterNames();
-          LocalVariable[] local_vars = mgen.getLocalVariables();
+          LocalVariable[] local_vars = mgen.getOriginalLocalVariables();
           String types = "", names = "", locals = "";
 
           for (int j = 0; j < paramTypes.length; j++) {
@@ -941,6 +941,13 @@ public class DCInstrument24 {
 
     // method_info_index is not used at this point in DCInstrument
     MethodGen24.MInfo24 minfo = new MethodGen24.MInfo24(0, mgen.getMaxLocals(), codeBuilder);
+    if (mgen.fixLocals(minfo)) {
+      // localsTable was changed
+      debugInstrument.log("Revised LocalVariableTable:%n");
+      for (LocalVariable lv : mgen.localsTable) {
+        debugInstrument.log("  %s%n", lv);
+      }
+    }
 
     boolean has_code = !mgen.getInstructionList().isEmpty();
 
@@ -3489,7 +3496,7 @@ public class DCInstrument24 {
     // System.out.printf("local var name = %s%n", name);
 
     // See if the local has already been created
-    for (LocalVariableGen lv : mg.getLocalVariables()) {
+    for (LocalVariableGen lv : mg.getLocalVariables()) { // should be localsTable?
       if (lv.getName().equals(name)) {
         assert lv.getType().equals(typ) : lv + " " + typ;
         return lv;
@@ -3508,7 +3515,7 @@ public class DCInstrument24 {
 
     // Find the local used for the return value
     LocalVariableGen return_local = null;
-    for (LocalVariableGen lv : mg.getLocalVariables()) {
+    for (LocalVariableGen lv : mg.getLocalVariables()) { // should be localsTable?
       if (lv.getName().equals("return__$trace2_val")) {
         return_local = lv;
         break;
@@ -3543,7 +3550,7 @@ public class DCInstrument24 {
 
     // Get the argument names for this method
     String[] paramNames = mgen.getParameterNames();
-    //    LocalVariable[] lvs = mgen.getLocalVariables();
+    //    LocalVariable[] lvs = mgen.getLocalVariables();  //should be localsTable?
     //    int param_offset = 1;
     if (mgen.isStatic()) {
       //      param_offset = 0;
