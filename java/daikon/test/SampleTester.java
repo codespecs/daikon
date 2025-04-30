@@ -610,7 +610,8 @@ public class SampleTester {
     }
 
     // Look for a matching invariant in the slices invariant list
-    System.out.printf("SampleTester show_invs: %d invariants%n", slice.invs.size());
+    // System.out.printf(
+    //     "SampleTester %s show_invs: %d invariants%n", Arrays.toString(vis), slice.invs.size());
     for (Invariant inv : slice.invs) {
       System.out.printf("  %s: %s%n", inv.getClass(), inv.format());
     }
