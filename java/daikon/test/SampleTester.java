@@ -609,11 +609,13 @@ public class SampleTester {
       return true;
     }
 
-    // Look for a matching invariant in the slices invariant list
-    // System.out.printf(
-    //     "SampleTester %s show_invs: %d invariants%n", Arrays.toString(vis), slice.invs.size());
-    for (Invariant inv : slice.invs) {
-      System.out.printf("  %s: %s%n", inv.getClass(), inv.format());
+    // Diagnostics.
+    if (false) {
+      System.out.printf(
+          "SampleTester %s show_invs: %d invariants%n", Arrays.toString(vis), slice.invs.size());
+      for (Invariant inv : slice.invs) {
+        System.out.printf("  %s: %s%n", inv.getClass(), inv.format());
+      }
     }
 
     return true;
