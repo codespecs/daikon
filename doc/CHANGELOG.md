@@ -24,6 +24,35 @@ Version 5.8.22 (??? ??, 2024)
 All Daikon tools now work with Java 8-24.
 
 
+Version 5.9.0 (??)
+=============================
+
+Daikon supports the following new invariants, over strings and sequences of
+strings; all of them are enabled by default:
+ * IsUrl
+ * FixedLengthString
+ * IsNumeric
+ * IsEmail
+ * IsDateYYYYMMDD
+ * IsDateDDMMYYYY
+ * IsDateMMDDYYYY
+ * IsTimeOfDay
+ * IsTimeOfDayWithSeconds
+ * IsTimeOfDayAMPM
+ * IsTimestampYYYYMMHHThhmmssmm
+ * SequenceFixedLengthString
+ * SequenceStringElementsAreUrl
+ * SequenceStringElementsAreNumeric
+ * SequenceStringElementsAreEmail
+ * SequenceStringElementsAreDateYYYYMMDD
+ * SequenceStringElementsAreDateDDMMYYYY
+ * SequenceStringElementsAreDateMMDDYYYY
+ * SequenceStringElementsAreTimeOfDay
+ * SequenceStringElementsAreTimeOfDayWithSeconds
+ * SequenceStringElementsAreTimeOfDayAMPM
+ * SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm
+
+
 Version 5.8.20 (May 14, 2024)
 =============================
 
