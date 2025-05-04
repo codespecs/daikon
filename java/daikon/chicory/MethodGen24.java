@@ -1,11 +1,12 @@
 package daikon.chicory;
 
+import static java.lang.constant.ConstantDescs.CD_Object;
 import static java.lang.constant.ConstantDescs.CD_String;
 import static java.lang.constant.ConstantDescs.CD_void;
 
-import java.lang.classfile.AccessFlags;
 import java.lang.classfile.Attributes;
 import java.lang.classfile.ClassBuilder;
+import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.CodeElement;
 import java.lang.classfile.CodeModel;
@@ -19,7 +20,6 @@ import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.instruction.LocalVariable;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
-import java.lang.reflect.AccessFlag;
 import java.util.ArrayList;
 // import java.util.Arrays;
 import java.util.Comparator;
@@ -60,8 +60,8 @@ public class MethodGen24 {
    */
   private @Nullable CodeModel code;
 
-  /** The method's access flags. */
-  private AccessFlags accessFlags;
+  /** The method's access flags as a bit mask. */
+  private int accessFlagsMask;
 
   /** The method's name. */
   private String methodName;
@@ -74,6 +74,9 @@ public class MethodGen24 {
 
   /** True if the method is static. */
   private boolean isStatic;
+
+  /** True if the method was created in DCInstrument24. */
+  private boolean isNewMethod;
 
   /**
    * The method's CodeAttribute. This contains information about the bytecodes (instructions) of
@@ -201,18 +204,20 @@ public class MethodGen24 {
    * @param className the containing class, in binary name format
    * @param classBuilder for the class
    */
+  @SuppressWarnings({"nullness:initialization", "nullness:method.invocation"})
   public MethodGen24(
       final MethodModel methodModel,
       final @BinaryName String className,
       ClassBuilder classBuilder) {
 
-    accessFlags = methodModel.flags();
+    accessFlagsMask = methodModel.flags().flagsMask();
     methodName = methodModel.methodName().stringValue();
     @SuppressWarnings("signature") // JDK 24 is not annotated as yet
     @MethodDescriptor String descriptor1 = methodModel.methodType().stringValue();
     descriptor = descriptor1;
     this.className = className;
-    isStatic = accessFlags.has(AccessFlag.STATIC);
+    isStatic = (accessFlagsMask & ClassFile.ACC_STATIC) != 0;
+    isNewMethod = false;
 
     Optional<CodeModel> code = methodModel.code();
     if (code.isPresent()) {
@@ -271,9 +276,65 @@ public class MethodGen24 {
     origLocalVariables = localsTable.toArray(new LocalVariable[localsTable.size()]);
     // System.out.println("orig locals: " + Arrays.toString(origLocalVariables));
 
+    poolBuilder = classBuilder.constantPool();
+
     // Set up the parameter types and names.
     mtd = methodModel.methodTypeSymbol();
+    getParamInfo();
+  }
+
+  /**
+   * Creates a MethodGen24 object for a new method created by DCInstrument24.
+   *
+   * @param className the containing class, in binary name format
+   * @param classBuilder for the class
+   * @param methodName for the method
+   * @param accessFlagsMask for the method
+   * @param mtd MethodTypeDescriptor for the method
+   * @param maxStack for the method
+   * @param maxLocals for the method
+   */
+  @SuppressWarnings({"nullness:initialization", "nullness:method.invocation"})
+  public MethodGen24(
+      final @BinaryName String className,
+      ClassBuilder classBuilder,
+      final String methodName,
+      final int accessFlagsMask,
+      final MethodTypeDesc mtd,
+      List<CodeElement> instructions,
+      int maxStack,
+      int maxLocals) {
+
+    this.className = className;
+    this.accessFlagsMask = accessFlagsMask;
+    this.methodName = methodName;
+    this.mtd = mtd;
+    @SuppressWarnings("signature") // JDK 24 is not annotated as yet
+    @MethodDescriptor String descriptor1 = mtd.descriptorString();
+    descriptor = descriptor1;
+    signature = descriptor;
+    code = null;
+    codeList = instructions;
+    codeAttribute = null;
+    this.maxStack = maxStack;
+    this.maxLocals = maxLocals;
+    isStatic = (accessFlagsMask & ClassFile.ACC_STATIC) != 0;
+    isNewMethod = true;
+
+    // Create an empty localsTable. This will be filled in when InstrumentCode calls fixLocals.
+    localsTable = new ArrayList<>();
+    origLocalVariables = localsTable.toArray(new LocalVariable[localsTable.size()]);
+
+    poolBuilder = classBuilder.constantPool();
+
+    // Set up the parameter types and names.
+    getParamInfo();
+  }
+
+  /** Setup the paramTypes and paramNames arrays. */
+  private void getParamInfo() {
     paramTypes = mtd.parameterArray();
+    returnType = mtd.returnType();
 
     // java.lang.classfile seems to be inconsistent with the parameter types
     // of an inner class constructor. It may optimize away the hidden 'this$0'
@@ -300,12 +361,6 @@ public class MethodGen24 {
       }
     }
 
-    // We need a deep copy and ClassDesc does not have a clone() method
-    for (int i = 0; i < paramTypes.length; i++) {
-      paramTypes[i] = ClassDesc.ofDescriptor(paramTypes[i].descriptorString());
-    }
-    returnType = mtd.returnType();
-
     // These initial values for {@code paramNames} may be incorrect.  They could
     // be altered in {@code fixLocals}.
     paramNames = new String[paramTypes.length];
@@ -319,8 +374,6 @@ public class MethodGen24 {
         paramNames[i] = "param" + i;
       }
     }
-
-    poolBuilder = classBuilder.constantPool();
   }
 
   /**
@@ -333,6 +386,15 @@ public class MethodGen24 {
    */
   public boolean fixLocals(MInfo24 minfo) {
     boolean modified = false;
+    // If this is a new method from DCInstrument24, the localsTable is
+    // completely empty.  We may need to add a 'this' pointer.
+    if (isNewMethod && !isStatic) {
+      LocalVariable newVar =
+          LocalVariable.of(0, "this", CD_Object, minfo.startLabel, minfo.endLabel);
+      localsTable.add(newVar);
+      modified = true;
+    }
+
     int lBase = isStatic ? 0 : 1;
     int slot = isStatic ? 0 : 1;
     for (int pIndex = 0; pIndex < paramTypes.length; pIndex++) {
@@ -359,8 +421,8 @@ public class MethodGen24 {
    *
    * @return the access flags
    */
-  public AccessFlags getAccessFlags() {
-    return accessFlags;
+  public int getAccessFlagsMask() {
+    return accessFlagsMask;
   }
 
   /**
