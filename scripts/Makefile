@@ -5,9 +5,42 @@ all: difftbl cluster clgroup kmeans trace-untruncate-fast checkargs.pm
 .PHONY: all
 
 
-style-fix: perl-style-fix python-style-fix shell-style-fix
-style-check: perl-style-check python-style-check shell-style-check
+style-fix: shell-style-fix python-style-fix perl-style-fix
+style-check: shell-style-check python-style-check perl-style-check
 .PHONY: style-fix shell-style-fix python-style-fix perl-style-fix style-check shell-style-check python-style-check perl-style-check
+
+PYTHON_FILES=$(wildcard **/*.py)
+install-ruff:
+	@if ! command -v ruff ; then pipx install ruff ; fi
+python-style-fix: install-ruff
+	ruff --version
+	ruff format ${PYTHON_FILES}
+	ruff check ${PYTHON_FILES} --fix
+python-style-check: install-ruff
+	ruff --version
+	ruff format --check ${PYTHON_FILES}
+	ruff check ${PYTHON_FILES}
+
+SH_SCRIPTS   = $(shell grep -r -l --exclude='*~' --exclude='*.tar' --exclude=gradlew --exclude=lsb_release --exclude-dir=.git '^\#! \?\(/bin/\|/usr/bin/env \)sh'   | grep -v addrfilter | grep -v cronic-orig | grep -v mail-stackoverflow.sh)
+BASH_SCRIPTS = $(shell grep -r -l --exclude='*~' --exclude='*.tar' --exclude=gradlew --exclude=lsb_release --exclude-dir=.git '^\#! \?\(/bin/\|/usr/bin/env \)bash' | grep -v addrfilter | grep -v cronic-orig | grep -v mail-stackoverflow.sh)
+shell-style-fix:
+ifneq ($(SH_SCRIPTS)$(BASH_SCRIPTS),)
+	shfmt -w -i 2 -ci -bn ${SH_SCRIPTS} ${BASH_SCRIPTS}
+	shellcheck -x -P SCRIPTDIR --format=diff ${SH_SCRIPTS} ${BASH_SCRIPTS} | patch -p1
+endif
+shell-style-check:
+ifneq ($(SH_SCRIPTS)$(BASH_SCRIPTS),)
+	shfmt -d -i 2 -ci -bn ${SH_SCRIPTS} ${BASH_SCRIPTS}
+	shellcheck -x -P SCRIPTDIR --format=gcc ${SH_SCRIPTS} ${BASH_SCRIPTS}
+endif
+ifneq ($(SH_SCRIPTS),)
+	${CHECKBASHISMS} -l ${SH_SCRIPTS}
+endif
+
+showvars:
+	@echo "PYTHON_FILES=${PYTHON_FILES}"
+	@echo "SH_SCRIPTS=${SH_SCRIPTS}"
+	@echo "BASH_SCRIPTS=${BASH_SCRIPTS}"
 
 perl-style:
 	@for perlfile in $(shell ls *.pm *.pl); do perl -Mstrict -cw $${perlfile}; done
