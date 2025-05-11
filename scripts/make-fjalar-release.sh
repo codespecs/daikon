@@ -51,7 +51,7 @@ find . -type d -name CVS -print0 | xargs -0 rm -rf
 # diff -ur valgrind-kvasir valgrind \
 #   >$DAIKONDIR/kvasir/fjalar/notes/fjalar-release.patch
 
-patch -p0 <"$DAIKONDIR/kvasir/fjalar/notes/fjalar-release.patch"
+patch -p0 < "$DAIKONDIR/kvasir/fjalar/notes/fjalar-release.patch"
 
 # It would actually be nice to just do the autogen.sh again, since
 # that's all that really affects the release. But this is more

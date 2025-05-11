@@ -2,7 +2,7 @@
 
 # Download the distribution and run "make distribution-check".
 
-SCRIPTDIR="$(cd "$(dirname "$0")" >/dev/null 2>&1 && pwd -P)"
+SCRIPTDIR="$(cd "$(dirname "$0")" > /dev/null 2>&1 && pwd -P)"
 
 # Fail the whole script if any command fails
 set -e

@@ -49,6 +49,7 @@ RUN dnf -q -y install \
   graphviz \
   netpbm \
   netpbm-progs \
+  pipx \
   python3 \
   python3-distutils-extra \
   texlive \
