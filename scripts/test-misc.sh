@@ -19,9 +19,8 @@ fi
 
 # Code style & quality
 make -C java error-prone
-
-# Code formatting
 make -C java check-format
+make -C scripts style-check
 
 # Documentation
 if java -version 2>&1 | grep -q '"1.8'; then
