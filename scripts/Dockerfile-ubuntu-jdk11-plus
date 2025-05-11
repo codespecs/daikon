@@ -69,7 +69,9 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   pipx \
   python3-setuptools \
   texinfo \
+  shfmt \
   texlive \
+  shfmt \
   texlive-latex-extra \
   universal-ctags \
   wget \

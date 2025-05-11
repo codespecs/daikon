@@ -24,13 +24,18 @@ python-style-check: install-ruff
 	ruff format --check ${PYTHON_FILES}
 	ruff check ${PYTHON_FILES}
 
-SH_SCRIPTS   = $(shell grep -r -l --exclude='*~' --exclude='*.tar' --exclude=gradlew --exclude=lsb_release --exclude-dir=.git '^\#! \?\(/bin/\|/usr/bin/env \)sh'   | grep -v addrfilter | grep -v cronic-orig | grep -v mail-stackoverflow.sh)
-BASH_SCRIPTS = $(shell grep -r -l --exclude='*~' --exclude='*.tar' --exclude=gradlew --exclude=lsb_release --exclude-dir=.git '^\#! \?\(/bin/\|/usr/bin/env \)bash' | grep -v addrfilter | grep -v cronic-orig | grep -v mail-stackoverflow.sh)
+SH_SCRIPTS   := $(shell grep -r -l --exclude='*~' --exclude='*.tar' --exclude=gradlew --exclude=lsb_release --exclude-dir=.git '^\#! \?\(/bin/\|/usr/bin/env \)sh'   | grep -v addrfilter | grep -v cronic-orig | grep -v mail-stackoverflow.sh)
+BASH_SCRIPTS := $(shell grep -r -l --exclude='*~' --exclude='*.tar' --exclude=gradlew --exclude=lsb_release --exclude-dir=.git '^\#! \?\(/bin/\|/usr/bin/env \)bash' | grep -v addrfilter | grep -v cronic-orig | grep -v mail-stackoverflow.sh)
+SHFMT_EXISTS := $(shell command -v shfmt 2> /dev/null)
 shell-style-fix:
+ifdef SHFMT_EXISTS
 	shfmt -w -i 2 -ci -bn -sr ${SH_SCRIPTS} ${BASH_SCRIPTS}
+endif
 	shellcheck -x -P SCRIPTDIR --format=diff ${SH_SCRIPTS} ${BASH_SCRIPTS} | patch -p1
 shell-style-check:
+ifdef SHFMT_EXISTS
 	shfmt -d -i 2 -ci -bn -sr ${SH_SCRIPTS} ${BASH_SCRIPTS}
+endif
 	shellcheck -x -P SCRIPTDIR --format=gcc ${SH_SCRIPTS} ${BASH_SCRIPTS}
 	checkbashisms -l ${SH_SCRIPTS}
 

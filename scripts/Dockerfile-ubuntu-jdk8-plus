@@ -69,6 +69,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   netpbm \
   pipx \
   python3-setuptools \
+  shfmt \
   texinfo \
   texlive \
   texlive-latex-extra \

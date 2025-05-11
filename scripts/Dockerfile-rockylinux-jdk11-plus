@@ -52,8 +52,8 @@ RUN dnf -q -y install \
   wget
 
 # Alternately, run: dnf --enablerepo=crb install PACKAGENAME
-RUN dnf -y install dnf-plugins-core \
-&& dnf config-manager --set-enabled crb \
+RUN dnf config-manager --set-enabled crb \
+&& dnf -y install dnf-plugins-core \
 && dnf -y install texinfo texinfo-tex
 
 RUN dnf -q clean all
