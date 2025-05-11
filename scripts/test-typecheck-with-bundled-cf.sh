@@ -15,7 +15,7 @@ make compile daikon.jar
 
 unset CHECKERFRAMEWORK
 
-if [ -z ${CIRCLECI+x} ] ; then
+if [ -z ${CIRCLECI+x} ]; then
   # $CIRCLECI is unset
   num_jobs="$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1)"
 else
