@@ -49,7 +49,7 @@ else
     status=0
     reason=""
     # The `grep -v` prevents the make target failure from throwing off prefix guessing.
-    (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" >"/tmp/$USER/ap-warnings.txt") || true
+    (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" > "/tmp/$USER/ap-warnings.txt") || true
     if ! "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/ap-warnings.txt"; then
       status=1
       reason="$reason
