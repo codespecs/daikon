@@ -9,9 +9,9 @@ set -e
 # check files that changed.
 CHANGED_JAVA_FILES=$(git diff --staged --name-only --diff-filter=ACM | grep '\.java$' | grep '^java/' | grep -v '^java/jtb/' || true)
 if [ -n "$CHANGED_JAVA_FILES" ]; then
-    make --silent update-run-google-java-format
-    # shellcheck disable=SC2086
-    ./utils/run-google-java-format/check-google-java-format.py ${CHANGED_JAVA_FILES} || (echo "Try running:  make reformat" && /bin/false)
+  make --silent update-run-google-java-format
+  # shellcheck disable=SC2086
+  ./utils/run-google-java-format/check-google-java-format.py ${CHANGED_JAVA_FILES} || (echo "Try running:  make reformat" && /bin/false)
 fi
 
 # This is to handle non-.java files, since the above already handled .java files.
@@ -19,10 +19,10 @@ fi
 # not text files.
 CHANGED_FILES=$(git diff --staged --name-only --diff-filter=ACM | grep -v '.class$' | grep -v '.gz$' | grep -v '.jar$' | grep -v '.png$' | grep -v '.txt-chicory.goal$' | grep -v '.txt-jaif.goal$' | grep -v '.txt-merge-esc.goal$' | grep -v '.txt-merge-jml.goal$' | grep -v '.xcf$' | grep -v '/api/' | grep -v '/.git/' | grep -v examples/c-examples | grep -v kvasir-tests | grep -v dyncomp-tests | grep -v 'java/jtb/' | grep -v 'DCRuntime.class.dummy') || true
 if [ -n "$CHANGED_FILES" ]; then
-    # echo "CHANGED_FILES: ${CHANGED_FILES}"
-    # shellcheck disable=SC2086
-    FILES_WITH_TRAILING_SPACES=$(grep -l -s '[[:blank:]]$' ${CHANGED_FILES} 2>&1) || true
-    if [ -n "$FILES_WITH_TRAILING_SPACES" ]; then
-        echo "Some files have trailing whitespace: ${FILES_WITH_TRAILING_SPACES}" && exit 1
-    fi
+  # echo "CHANGED_FILES: ${CHANGED_FILES}"
+  # shellcheck disable=SC2086
+  FILES_WITH_TRAILING_SPACES=$(grep -l -s '[[:blank:]]$' ${CHANGED_FILES} 2>&1) || true
+  if [ -n "$FILES_WITH_TRAILING_SPACES" ]; then
+    echo "Some files have trailing whitespace: ${FILES_WITH_TRAILING_SPACES}" && exit 1
+  fi
 fi

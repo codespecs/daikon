@@ -1,7 +1,11 @@
 #!/bin/bash
 
 # Get some system info for debugging.
-for file in /etc/*release; do echo "$file"; cat "$file"; echo; done
+for file in /etc/*release; do
+  echo "$file"
+  cat "$file"
+  echo
+done
 gcc --version
 make --version
 ldd --version
@@ -24,9 +28,9 @@ echo "test-kvasir.sh is running kvasir and DynComp tests"
 # build; however, it means that they are run on each branch and pull request.
 
 # Get correct version of Kvasir/fjalar
-if [ ! -d ../fjalar ] ; then
-  if [ -d "/tmp/$USER/git-scripts" ] ; then
-    (cd "/tmp/$USER/git-scripts" && git pull -q) > /dev/null 2>&1
+if [ ! -d ../fjalar ]; then
+  if [ -d "/tmp/$USER/git-scripts" ]; then
+    (cd "/tmp/$USER/git-scripts" && git pull -q) >/dev/null 2>&1
   else
     mkdir -p "/tmp/$USER"
     (cd "/tmp/$USER" && (git clone --depth 1 -q https://github.com/plume-lib/git-scripts.git || (sleep 1m && git clone --depth 1 -q https://github.com/plume-lib/git-scripts.git)))

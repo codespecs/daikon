@@ -10,8 +10,8 @@ export SHELLOPTS
 
 make compile daikon.jar
 
-if [ -d "/tmp/$USER/plume-scripts" ] ; then
-  (cd "/tmp/$USER/plume-scripts" && git pull -q) > /dev/null 2>&1
+if [ -d "/tmp/$USER/plume-scripts" ]; then
+  (cd "/tmp/$USER/plume-scripts" && git pull -q) >/dev/null 2>&1
 else
   mkdir -p "/tmp/$USER"
   (cd "/tmp/$USER" && (git clone --depth=1 --depth 1 -q https://github.com/plume-lib/plume-scripts.git || (sleep 1m && git clone --depth=1 --depth 1 -q https://github.com/plume-lib/plume-scripts.git)))
@@ -50,19 +50,19 @@ else
     status=0
     reason=""
     # The `grep -v` prevents the make target failure from throwing off prefix guessing.
-    (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" > "/tmp/$USER/ap-warnings.txt") || true
+    (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" >"/tmp/$USER/ap-warnings.txt") || true
     if ! "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/ap-warnings.txt"; then
       status=1
       reason="$reason
 target 'api-private' failed"
     fi
-    (make -C java requireJavadoc 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadoc' failed" > "/tmp/$USER/rj-warnings.txt") || true
-    if ! "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt" ; then
+    (make -C java requireJavadoc 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadoc' failed" >"/tmp/$USER/rj-warnings.txt") || true
+    if ! "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt"; then
       status=1
       reason="$reason
 target 'requireJavadoc' failed"
     fi
-    if [ $status -ne 0 ] ; then
+    if [ $status -ne 0 ]; then
       echo "$reason"
       echo "See output above"
       exit 1
