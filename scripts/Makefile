@@ -14,10 +14,14 @@ perl-style:
 
 PYTHON_FILES=$(wildcard **/*.py)
 python-style-fix:
+	whereis ruff
+	which ruff
 	ruff --version
 	ruff format ${PYTHON_FILES}
 	ruff check ${PYTHON_FILES} --fix
 python-style-check:
+	whereis ruff
+	which ruff
 	ruff --version
 	ruff format --check ${PYTHON_FILES}
 	ruff check ${PYTHON_FILES}
