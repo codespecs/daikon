@@ -13,13 +13,11 @@ perl-style:
 	@for perlfile in $(shell ls *.pm *.pl); do perl -Mstrict -cw $${perlfile}; done
 
 PYTHON_FILES=$(wildcard **/*.py)
-install-ruff:
-	@if ! command -v ruff ; then pipx install ruff ; pipx ensurepath ; . ~/.bashrc ; fi
-python-style-fix: install-ruff
+python-style-fix:
 	ruff --version
 	ruff format ${PYTHON_FILES}
 	ruff check ${PYTHON_FILES} --fix
-python-style-check: install-ruff
+python-style-check:
 	ruff --version
 	ruff format --check ${PYTHON_FILES}
 	ruff check ${PYTHON_FILES}
