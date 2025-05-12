@@ -88,9 +88,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   zlib1g-dev
 
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& pipx install ruff \
-&& pipx ensurepath \
-&& . ~/.bashrc
+&& pipx install ruff
+ENV PATH="${PATH}:/root/.local/bin"
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get autoremove \
