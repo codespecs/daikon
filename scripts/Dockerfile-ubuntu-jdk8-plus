@@ -81,7 +81,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && pipx install ruff \
-&& pipx ensurepath
+&& pipx ensurepath \
+&& . ~/.bashrc
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get autoremove \

@@ -14,7 +14,7 @@ perl-style:
 
 PYTHON_FILES=$(wildcard **/*.py)
 install-ruff:
-	@if ! command -v ruff ; then pipx install ruff ; fi
+	@if ! command -v ruff ; then pipx install ruff ; pipx ensurepath ; . ~/.bashrc ; fi
 python-style-fix: install-ruff
 	ruff --version
 	ruff format ${PYTHON_FILES}
