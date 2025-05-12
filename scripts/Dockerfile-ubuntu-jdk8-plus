@@ -80,6 +80,9 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   zlib1g-dev
 
 RUN export DEBIAN_FRONTEND=noninteractive \
+&& pipx install ruff
+
+RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get autoremove \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/*
