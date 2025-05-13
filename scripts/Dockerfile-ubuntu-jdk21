@@ -33,7 +33,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   binutils-dev \
   gcc \
   git \
-  graphviz \
   jq \
   lsb-release \
   m4 \

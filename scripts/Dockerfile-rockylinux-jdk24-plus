@@ -47,6 +47,7 @@ RUN dnf -q -y install \
 
 RUN dnf -q -y install \
   ctags \
+  devscripts-checkbashisms \
   gcc-c++ \
   graphviz \
   netpbm \
