@@ -31,6 +31,7 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.CodeElement;
 import java.lang.classfile.CodeModel;
 import java.lang.classfile.FieldModel;
+import java.lang.classfile.Instruction;
 import java.lang.classfile.Label;
 import java.lang.classfile.MethodBuilder;
 import java.lang.classfile.MethodElement;
@@ -43,6 +44,7 @@ import java.lang.classfile.constantpool.ClassEntry;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.ConstantValueEntry;
 import java.lang.classfile.constantpool.MethodRefEntry;
+import java.lang.classfile.instruction.ArrayStoreInstruction;
 import java.lang.classfile.instruction.BranchInstruction;
 import java.lang.classfile.instruction.ConstantInstruction;
 import java.lang.classfile.instruction.ExceptionCatch;
@@ -53,8 +55,11 @@ import java.lang.classfile.instruction.LoadInstruction;
 import java.lang.classfile.instruction.LocalVariable;
 import java.lang.classfile.instruction.LocalVariableType;
 import java.lang.classfile.instruction.LookupSwitchInstruction;
+import java.lang.classfile.instruction.NewReferenceArrayInstruction;
+import java.lang.classfile.instruction.NopInstruction;
 import java.lang.classfile.instruction.ReturnInstruction;
 import java.lang.classfile.instruction.StackInstruction;
+import java.lang.classfile.instruction.StoreInstruction;
 import java.lang.classfile.instruction.SwitchCase;
 import java.lang.classfile.instruction.TableSwitchInstruction;
 import java.lang.classfile.instruction.ThrowInstruction;
@@ -113,7 +118,6 @@ import org.apache.bcel.generic.INVOKEVIRTUAL;
 import org.apache.bcel.generic.InstructionFactory;
 import org.apache.bcel.generic.InstructionHandle;
 import org.apache.bcel.generic.InstructionList;
-import org.apache.bcel.generic.InstructionTargeter;
 // import org.apache.bcel.generic.InvokeInstruction;
 import org.apache.bcel.generic.LDC;
 import org.apache.bcel.generic.LDC2_W;
@@ -122,7 +126,6 @@ import org.apache.bcel.generic.LocalVariableGen;
 import org.apache.bcel.generic.LocalVariableInstruction;
 import org.apache.bcel.generic.MULTIANEWARRAY;
 import org.apache.bcel.generic.MethodGen;
-import org.apache.bcel.generic.NOP;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.PUTFIELD;
 import org.apache.bcel.generic.PUTSTATIC;
@@ -198,7 +201,7 @@ public class DCInstrument24 {
   //  private ClassInfo classInfo;
 
   /** True if we tracking any methods in the current class. */
-  private boolean track_class = false;
+  private boolean trackClass = false;
 
   /** ClassGen for the current class. */
   protected ClassGen gen;
@@ -232,7 +235,7 @@ public class DCInstrument24 {
   protected static Type[] string_arg = new Type[] {Type.STRING};
 
   /** Type array with an int. */
-  protected static Type[] integer_arg = new Type[] {Type.INT};
+  protected static ClassDesc[] integer_arg = new ClassDesc[] {CD_int};
 
   /** Type array with an object. */
   protected static Type[] object_arg = new Type[] {Type.OBJECT};
@@ -241,10 +244,10 @@ public class DCInstrument24 {
   protected static Type javalangClass = new ObjectType("java.lang.Class");
 
   // Type descriptors
-  protected static final ClassDesc throwable = ClassDesc.of("java.lang.Throwable");
+  protected static final ClassDesc throwableCD = ClassDesc.of("java.lang.Throwable");
   protected final ClassDesc dcomp_marker;
-  protected static final ClassDesc javalangObject = ClassDesc.of("java.lang.Object");
-  protected static final ClassDesc objectArray = javalangObject.arrayType(1);
+  protected static final ClassDesc javalangObjectCD = ClassDesc.of("java.lang.Object");
+  protected static final ClassDesc objectArrayCD = javalangObjectCD.arrayType(1);
 
   // Debug loggers
   /** Log file if debug_native is enabled. */
@@ -348,6 +351,12 @@ public class DCInstrument24 {
         new MethodDef("wait", new ClassDesc[] {CD_long, CD_int}),
       };
 
+  /**
+   * Index into current method's instruction list that points to where a call to the DynComp runtime
+   * enter routine should be inserted, if we are tracking the method.
+   */
+  private int entryInsertionIndex;
+
   /** Class that defines a method (by its name and argument types) */
   static class MethodDef {
     String name;
@@ -422,8 +431,8 @@ public class DCInstrument24 {
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
     // TEMPORARY
-    debugInstrument.enabled = false;
     debugInstrument.enabled = true;
+    debugInstrument.enabled = false;
     debug_native.enabled = DynComp.debug;
     debug_transform.enabled = daikon.dcomp.Instrument24.debug_transform.enabled;
   }
@@ -496,7 +505,7 @@ public class DCInstrument24 {
     }
 
     debug_transform.indent();
-    track_class = false;
+    trackClass = false;
 
     // Handle object methods for this class
     handle_object(classGen);
@@ -538,7 +547,7 @@ public class DCInstrument24 {
     // The code that builds the list of daikon variables for each ppt
     // needs to know what classes are instrumented.  Its looks in the
     // Chicory runtime for this information.
-    if (track_class) {
+    if (trackClass) {
       debug_transform.log("DCInstrument adding %s to all class list%n", classInfo.class_name);
       synchronized (daikon.chicory.SharedData.all_classes) {
         daikon.chicory.SharedData.all_classes.add(classInfo);
@@ -638,7 +647,6 @@ public class DCInstrument24 {
     // Process each method in the class
     for (MethodModel mm : classModel.methods()) {
 
-      tagFrameLocal = null;
       try {
 
         MethodGen24 mgen = new MethodGen24(mm, classname, classBuilder);
@@ -688,7 +696,7 @@ public class DCInstrument24 {
 
         // If any one method is tracked, then the class is tracked.
         if (track) {
-          track_class = true;
+          trackClass = true;
         }
 
         // If we are tracking variables, make sure the class is public
@@ -716,6 +724,7 @@ public class DCInstrument24 {
           continue;
         }
 
+        // local variables referenced from a lambda expression must be final or effectively final
         final boolean trackMethod = track;
         boolean addingDcompArg = true;
         if (mgen.isMain()) {
@@ -740,7 +749,6 @@ public class DCInstrument24 {
           paramList.add(dcomp_marker);
           mtd = MethodTypeDesc.of(mtd.returnType(), paramList);
         }
-
         classBuilder.withMethod(
             mm.methodName().stringValue(),
             mtd,
@@ -922,6 +930,7 @@ public class DCInstrument24 {
 
     // method_info_index is not used at this point in DCInstrument
     MethodGen24.MInfo24 minfo = new MethodGen24.MInfo24(0, mgen.getMaxLocals(), codeBuilder);
+    // Add back in any unused parameters that the Java compiler has optimized out.
     if (mgen.fixLocals(minfo)) {
       // localsTable was changed
       debugInstrument.log("Revised LocalVariableTable:%n");
@@ -930,14 +939,11 @@ public class DCInstrument24 {
       }
     }
 
-    boolean has_code = !mgen.getInstructionList().isEmpty();
-
     // If the method is native
     if ((mgen.getAccessFlagsMask() & ClassFile.ACC_NATIVE) != 0) {
 
       // Create Java code that cleans up the tag stack and calls the real native method.
       // fix_native(gen, mgen);
-      has_code = true;
 
       // Add the DCompMarker argument to distinguish our version
       // add_dcomp_arg(mgen);
@@ -953,26 +959,105 @@ public class DCInstrument24 {
       // and exit line numbers (information not available via reflection)
       // and add it to the list for this class.
       MethodInfo mi = null;
-      if (trackMethod && has_code) {
+      if (trackMethod) {
         mi = create_method_info(classInfo, mgen);
         classInfo.method_infos.add(mi);
         DCRuntime.methods.add(mi);
       }
 
-      // Instrument the method
-      if (has_code) {
-        // Create the local to store the tag frame for this method
-        tagFrameLocal = createTagFrameLocal(mgen, minfo);
-        // build_exception_handler(mgen);
-        // instrument_method(mgen);
-        if (trackMethod) {
-          // add_enter(mgen, mi, DCRuntime.methods.size() - 1);
-          // add_exit(mgen, mi, DCRuntime.methods.size() - 1);
+      @SuppressWarnings("JdkObsolete")
+      List<CodeElement> codeList = new LinkedList<>();
+
+      // no codeModel if DCInstrument24 generated the method
+      if (codeModel != null) {
+        debugInstrument.log("Code Attributes:%n");
+        for (java.lang.classfile.Attribute<?> a : codeModel.attributes()) {
+          debugInstrument.log("  %s%n", a);
         }
-        // install_exception_handler(mgen);
+      }
+
+      // The localsTable was initialized in the MethodGen24 constructor. Here we initialize the
+      // codeList. We also remove the local variable type records. Some instrumentation changes
+      // require these to be updated, but it should be safe to just delete them since the
+      // LocalVariableTypeTable is optional and really only of use to a debugger. We also save the
+      // CodeModel label at the start of the byte codes, if there is one. If there isn't, that is
+      // okay as it means the original code did not reference byte code offset 0 so inserting our
+      // instrumentation code at that point will not cause a problem.
+      @SuppressWarnings("nullness:assignment") // can't have gotten here if CodeAttribute is null
+      @NonNull CodeAttribute ca = mgen.getCodeAttribute();
+      for (CodeElement ce : mgen.getInstructionList()) {
+        debugInstrument.log("CodeElement: %s%n", ce);
+        switch (ce) {
+          case LocalVariable lv -> {} // we have alreay processed these
+          // debugging code
+          // case LocalVariable lv -> {
+          // System.out.printf("Local start: %s end: %s%n", lv.startScope(), lv.endScope()); }
+          case LocalVariableType lvt -> {} // we can discard local variable types
+          // debuging code
+          // case LocalVariableType lvt -> {
+          // @FieldDescriptor String lvFD = lvt.signatureSymbol().signatureString();
+          // System.out.printf("  %s : %s%n", lvt, convertDescriptorToFqBinaryName(lvFD)); }
+          case LabelTarget l -> {
+            if (ca.labelToBci(l.label()) == 0) {
+              minfo.oldStartLabel = l.label();
+            }
+            codeList.add(ce);
+          }
+          default -> codeList.add(ce); // save all other elements
+        }
+      }
+
+      // Create the local to store the tag frame for this method
+      tagFrameLocal = createTagFrameLocal(mgen, minfo);
+      // Instrument the method
+      instrumentCodeList(codeList, mgen, minfo);
+      if (trackMethod) {
+        add_enter(mgen, minfo, codeList, DCRuntime.methods.size() - 1);
+        add_exit(mgen, mi, minfo, codeList, DCRuntime.methods.size() - 1);
+      }
+
+      // Copy the modified local variable table to the output class.
+      debugInstrument.log("LocalVariableTable:%n");
+      for (LocalVariable lv : mgen.localsTable) {
+        codeBuilder.localVariable(
+            lv.slot(), lv.name().stringValue(), lv.typeSymbol(), lv.startScope(), lv.endScope());
+        @SuppressWarnings("signature:assignment") // need JDK annotations
+        @FieldDescriptor String lvFD = lv.typeSymbol().descriptorString();
+        debugInstrument.log("  %s : %s%n", lv, convertDescriptorToFqBinaryName(lvFD));
+      }
+
+      // Copy the modified instruction list to the output class.
+      for (CodeElement ce : codeList) {
+        // If there is a new CodeBuilder label associated with this instruction, it needs to be
+        // defined.
+        Label l = minfo.labelMap.get(ce);
+        if (l != null) {
+          debugInstrument.log("Label: %s%n", l);
+          codeBuilder.labelBinding(l);
+          // We've defined the label, remove it from the map.
+          minfo.labelMap.remove(ce);
+        }
+        // If this instruction references a Label, we need to see if it is the oldStartLabel
+        // and, if so, replace the target with our new entryLabel.
+        ce = retargetStartLabel(ce, minfo);
+        debugInstrument.log("CodeElement: %s%n", ce);
+        codeBuilder.with(ce);
+      }
+
+      // build_exception_handler returns null if there isn't one.
+      List<CodeElement> handlerCode = build_exception_handler(mgen);
+      if (handlerCode != null) {
+        Label handlerLabel = codeBuilder.newBoundLabel();
+        for (CodeElement ce : handlerCode) {
+          codeBuilder.with(ce);
+        }
+        // Using handlerLabel for the end of the try region is technically one instruction
+        // too many, but it shouldn't matter and is easily available.
+        codeBuilder.exceptionCatch(minfo.entryLabel, handlerLabel, handlerLabel, throwableCD);
       }
     }
 
+    // UNDONE needs to be moved?
     // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
     // the original method to our instrumented method as the signature will
     // not match anything in the JVM's list.  This won't cause an execution
@@ -987,127 +1072,16 @@ public class DCInstrument24 {
     // }
     // }
 
-    // NEED TO BE MOVED?
-    if (has_code) {
-      //    il = mg.getInstructionList();
-      //    InstructionHandle end = il.getEnd();
-      //    int length = end.getPosition() + end.getInstruction().getLength();
-      //    if (length >= Const.MAX_CODE_SIZE) {
-      //      throw new ClassGenException(
-      //          "Code array too big: must be smaller than " + Const.MAX_CODE_SIZE + " bytes.");
-      //    }
-    }
-
-    @SuppressWarnings("JdkObsolete")
-    List<CodeElement> codeList = new LinkedList<>();
-
-    // no codeModel if DCInstrument24 generated the method
-    if (codeModel != null) {
-      debugInstrument.log("Code Attributes:%n");
-      for (java.lang.classfile.Attribute<?> a : codeModel.attributes()) {
-        debugInstrument.log("  %s%n", a);
-      }
-    }
-
-    // The localsTable was initialized in the MethodGen24 constructor. Here we initialize the
-    // codeList. We also remove the local variable type records. Some instrumentation changes
-    // require these to be updated, but it should be safe to just delete them since the
-    // LocalVariableTypeTable is optional and really only of use to a debugger. We also save the
-    // CodeModel label at the start of the byte codes, if there is one. If there isn't, that is
-    // okay as it means the original code did not reference byte code offset 0 so inserting our
-    // instrumentation code at that point will not cause a problem.
-    @SuppressWarnings("nullness:assignment") // can't have gotten here if CodeAttribute is null
-    @NonNull CodeAttribute ca = mgen.getCodeAttribute();
-    for (CodeElement ce : mgen.getInstructionList()) {
-      debugInstrument.log("CodeElement: %s%n", ce);
-      switch (ce) {
-        case LocalVariable lv -> {} // we have alreay processed these
-        // debugging code
-        // case LocalVariable lv -> {
-        // System.out.printf("Local start: %s end: %s%n", lv.startScope(), lv.endScope()); }
-        case LocalVariableType lvt -> {} // we can discard local variable types
-        // debuging code
-        // case LocalVariableType lvt -> {
-        // @FieldDescriptor String lvFD = lvt.signatureSymbol().signatureString();
-        // System.out.printf("  %s : %s%n", lvt, convertDescriptorToFqBinaryName(lvFD)); }
-        case LabelTarget l -> {
-          if (ca.labelToBci(l.label()) == 0) {
-            minfo.oldStartLabel = l.label();
-          }
-          codeList.add(ce);
-        }
-        default -> codeList.add(ce); // save all other elements
-      }
-    }
-
-    // Generate and insert our instrumentation code.
-    // insertInstrumentationCode(codeList, mgen, curMethodInfo, minfo);
-    // TEMP CODE
-    // The start of the list of CodeElements looks as follows:
-    //   LocalVariable declarations (if any)
-    //   Label for start of code (if present)
-    //   LineNumber for start of code (if present)
-    //   <the actual code for the method>
-    //
-    // We want to insert our instrumentation code after the LocalVariables (if any) and after the
-    // inital label (if present), but before any LineNumber or Instruction.
-    CodeElement inst = null;
-    try {
-      ListIterator<CodeElement> li = codeList.listIterator();
-      while (li.hasNext()) {
-        inst = li.next();
-        if ((inst instanceof LineNumber) || (inst instanceof java.lang.classfile.Instruction)) {
-          break;
-        }
-      }
-
-      // Label for new location of start of original code.
-      debugInstrument.log("entryLabel: %s%n", minfo.entryLabel);
-      assert inst != null : "@AssumeAssertion(nullness): inst will always be set in loop above";
-      minfo.labelMap.put(inst, minfo.entryLabel);
-    } catch (Exception e) {
-      System.err.printf("Unexpected exception encountered: %s", e);
-      e.printStackTrace();
-    }
-
-    // Copy the modified local variable table to the output class.
-    debugInstrument.log("LocalVariableTable:%n");
-    for (LocalVariable lv : mgen.localsTable) {
-      codeBuilder.localVariable(
-          lv.slot(), lv.name().stringValue(), lv.typeSymbol(), lv.startScope(), lv.endScope());
-      @SuppressWarnings("signature:assignment") // need JDK annotations
-      @FieldDescriptor String lvFD = lv.typeSymbol().descriptorString();
-      debugInstrument.log("  %s : %s%n", lv, convertDescriptorToFqBinaryName(lvFD));
-    }
-
-    // Copy the modified instruction list to the output class.
-    for (CodeElement ce : codeList) {
-      // If there is a new CodeBuilder label associated with this instruction, it needs to be
-      // defined.
-      Label l = minfo.labelMap.get(ce);
-      if (l != null) {
-        debugInstrument.log("Label: %s%n", l);
-        codeBuilder.labelBinding(l);
-        // We've defined the label, remove it from the map.
-        minfo.labelMap.remove(ce);
-      }
-      // If this instruction references a Label, we need to see if it is the oldStartLabel
-      // and, if so, replace the target with our new entryLabel.
-      ce = retargetStartLabel(ce, minfo);
-      debugInstrument.log("CodeElement: %s%n", ce);
-      codeBuilder.with(ce);
-    }
-    // build_exception_handler returns null if there isn't one.
-    List<CodeElement> handlerCode = build_exception_handler(mgen);
-    if (handlerCode != null) {
-      Label handlerLabel = codeBuilder.newBoundLabel();
-      for (CodeElement ce : handlerCode) {
-        codeBuilder.with(ce);
-      }
-      // Using handlerLabel for the end of the try region is technically one instruction
-      // too many, but it shouldn't matter and is easily available.
-      codeBuilder.exceptionCatch(minfo.entryLabel, handlerLabel, handlerLabel, throwable);
-    }
+    // UNDONE
+    //   can we do this with java.lang.classfile?
+    //   needs to be moved?
+    //    il = mg.getInstructionList();
+    //    InstructionHandle end = il.getEnd();
+    //    int length = end.getPosition() + end.getInstruction().getLength();
+    //    if (length >= Const.MAX_CODE_SIZE) {
+    //      throw new ClassGenException(
+    //          "Code array too big: must be smaller than " + Const.MAX_CODE_SIZE + " bytes.");
+    //    }
   }
 
   public JavaClass old_instrument() {
@@ -1393,10 +1367,10 @@ public class DCInstrument24 {
             // Create the local to store the tag frame for this method
             // tag_frame_local = create_tag_frame_local(mg);
             // build_exception_handler(mg);
-            instrument_method(mg);
+            // instrument_method(mg);
             if (track) {
-              add_enter(mg, mi, DCRuntime.methods.size() - 1);
-              add_exit(mg, mi, DCRuntime.methods.size() - 1);
+              // add_enter(mg, mi, DCRuntime.methods.size() - 1);
+              // add_exit(mg, mi, DCRuntime.methods.size() - 1);
             }
             // install_exception_handler(mg);
           }
@@ -1670,7 +1644,7 @@ public class DCInstrument24 {
             // Create the local to store the tag frame for this method
             // tag_frame_local = create_tag_frame_local(mg);
             // build_exception_handler(mg);
-            instrument_method(mg);
+            // instrument_method(mg);
             // install_exception_handler(mg);
           }
         }
@@ -1771,19 +1745,57 @@ public class DCInstrument24 {
   /**
    * Instrument the specified method for dynamic comparability.
    *
-   * @param mg MethodGen for the method to be instrumented
+   * @param instructions instruction list for method
+   * @param mgen describes the given method
+   * @param minfo for the given method's code
    */
-  public void instrument_method(MethodGen mg) {
+  private void instrumentCodeList(
+      List<CodeElement> instructions, MethodGen24 mgen, MethodGen24.MInfo24 minfo) {
 
-    // Because the tag_frame_local is active for the entire method
-    // and its creation will change the state of the locals layout,
-    // we need to insert the code to initialize it now so that the
-    // stack anaylsis we are about to do is correct for potential
-    // code replacements we might make later.
-    InstructionHandle orig_start = mg.getInstructionList().getStart();
-    add_create_tag_frame(mg);
+    List<CodeElement> newCode = createTagFrame(mgen);
+
+    // The start of the list of CodeElements looks as follows:
+    //   LocalVariable declarations (if any)
+    //   Label for start of code (if present)
+    //   LineNumber for start of code (if present)
+    //   <the actual code for the method>
+    //
+    // We want to insert the tag_frame setup code after the LocalVariables (if any) and after the
+    // inital label (if present), but before any LineNumber or Instruction.
+    ListIterator<CodeElement> li = instructions.listIterator();
+    CodeElement inst = null;
+    try {
+      while (li.hasNext()) {
+        inst = li.next();
+        if ((inst instanceof LineNumber) || (inst instanceof Instruction)) {
+          break;
+        }
+      }
+
+      // Label for new location of start of original code.
+      debugInstrument.log("entryLabel: %s%n", minfo.entryLabel);
+      assert inst != null : "@AssumeAssertion(nullness): inst will always be set in loop above";
+      minfo.labelMap.put(inst, minfo.entryLabel);
+
+      // Insert code before this LineNumber or Instruction.
+
+      // Back up iterator to point to 'inst'.
+      li.previous();
+
+      // Insert newCode prior to 'inst'.
+      for (CodeElement ce : newCode) {
+        li.add(ce);
+      }
+
+      // Save index into instruction list that points to where a call to the
+      // DynComp runtime enter routine should be inserted, if we are tracking the method.
+      entryInsertionIndex = li.nextIndex();
+    } catch (Exception e) {
+      System.err.printf("Unexpected exception encountered: %s", e);
+      e.printStackTrace();
+    }
+
     // Calculate the operand stack value(s) for revised code.
-    mg.setMaxStack();
     // Calculate stack types information
     //    StackTypes stack_types = bcelCalcStackTypes(mg);
     //    if (stack_types == null) {
@@ -1794,63 +1806,29 @@ public class DCInstrument24 {
     //    InstructionList il = mg.getInstructionList();
     //    OperandStack stack = null;
 
-    // Prior to adding support for Stack Maps, the position field
-    // of each InstructionHandle was not updated until the modified
-    // method was written out.  Hence, it could be used as the
-    // index into stack_types.  To support StackMaps we need to
-    // update the position field as we modify the code bytes.  So
-    // we need a mapping from InstructionHandle to orignal offset.
-    // I beleive we always visit the InstructionHandle nodes of
-    // the method's InstructionList in order - hence, we will use
-    // a simple array for now.  If this turns out to not be the
-    // case we will need to use a hash map.
-
-    // int[] handle_offsets = new int[il.getLength()];
-    InstructionHandle ih = orig_start;
-    // int index = 0;
-    // Loop through each instruction, building up offset map.
-    while (ih != null) {
-      // handle_offsets[index++] = ih.getPosition();
-
-      if (debugInstrument.enabled) {
-        debugInstrument.log("inst: %s %n", ih);
-        for (InstructionTargeter it : ih.getTargeters()) {
-          debugInstrument.log("targeter: %s %n", it);
-        }
-      }
-
-      ih = ih.getNext();
-    }
-
-    // index = 0;
-    // Loop through each instruction, making substitutions
-    for (ih = orig_start; ih != null; ) {
-      debugInstrument.log("instrumenting instruction %s%n", ih);
-      //      InstructionList new_il = null;
-
-      // Remember the next instruction to process
-      InstructionHandle next_ih = ih.getNext();
+    while (li.hasNext()) {
+      inst = li.next();
 
       // Get the stack information
       //      stack = stack_types.get(handle_offsets[index++]);
 
-      // Get the translation for this instruction (if any)
       //      new_il = xform_inst(mg, ih, stack);
-
-      // If this instruction was modified, replace it with the new
-      // instruction list. If this instruction was the target of any
-      // jumps or line numbers, replace them with the first
-      // instruction in the new list.
-      //      replaceInstructions(mg, il, ih, new_il);
+      // Get the translation for this instruction (if any)
+      List<CodeElement> new_il = instrumentInstruction(mgen, minfo, inst);
+      if (new_il != null) {
+        li.remove(); // remove the instruction we instrumented
+        for (CodeElement ce : new_il) {
+          li.add(ce);
+        }
+      }
 
       // If the modified method is now too large, we quit instrumenting the method
       // and will rediscover the problem in the main instrumentation loop above
       // and deal with it there.
-      if (ih.getPosition() >= Const.MAX_CODE_SIZE) {
-        break;
-      }
+      // if (ih.getPosition() >= Const.MAX_CODE_SIZE) {
+      //   break;
+      // }
 
-      ih = next_ih;
     }
   }
 
@@ -1907,90 +1885,20 @@ public class DCInstrument24 {
   }
 
   /**
-   * Adds the code to create the tag frame to the beginning of the method. This needs to be before
-   * the call to DCRuntime.enter (since it passed to that method).
-   */
-  public void add_create_tag_frame(MethodGen mg) {
-
-    // InstructionList nl = create_tag_frame(mg, tag_frame_local);
-    // create_tag_frame(mg, tag_frame_local);
-
-    // We add a temporary NOP at the end of the create_tag_frame
-    // code that we will replace with runtime initization code
-    // later.  We do this so that any existing stack map at
-    // instruction offset 0 is not replaced by the one we are
-    // about to add for initializing the tag_frame variable.
-    //    insertion_placeholder = nl.append(new NOP());
-
-    //    byte[] code = nl.getByteCode();
-    // -1 because of the NOP we inserted.
-    // int len_code = code.length - 1;
-
-    //    insertAtMethodStart(mg, nl);
-    //
-    //    if (!needStackMap) {
-    //      return;
-    //    }
-
-    // For Java 7 and beyond the StackMapTable is part of the
-    // verification process.  We need to create and or update it to
-    // account for instrumentation code we have inserted as well as
-    // adjustments for the new 'tag_frame' local.
-
-    // Get existing StackMapTable (if present)
-    //    if (stackMapTable.length > 0) {
-    //      // Each stack map frame specifies (explicity or implicitly) an
-    //      // offset_delta that is used to calculate the actual bytecode
-    //      // offset at which the frame applies.  This is caluclated by
-    //      // by adding offset_delta + 1 to the bytecode offset of the
-    //      // previous frame, unless the previous frame is the initial
-    //      // frame of the method, in which case the bytecode offset is
-    //      // offset_delta. (From the Java Virual Machine Specification,
-    //      // Java SE 7 Edition, section 4.7.4)
-    //
-    //      // Since we are inserting a new stack map frame at the
-    //      // beginning of the stack map table, we need to adjust the
-    //      // offset_delta of the original first stack map frame due to
-    //      // the fact that it will no longer be the first entry.  We
-    //      // must subtract (len_code + 1).
-    //      // (We don't have to worry about the special case of the
-    //      // original first entry having an offset of 0 because of the
-    //      // NOP we inserted above.
-    //
-    //      stackMapTable[0].updateByteCodeOffset(-(len_code + 1));
-    //    }
-    //
-    //    int new_table_length = stackMapTable.length + 1;
-    //    StackMapEntry[] new_stack_map_table = new StackMapEntry[new_table_length];
-    //
-    //    // Insert a new StackMapEntry at the beginning of the table
-    //    // that adds the tag_frame variable.
-    //    StackMapType tag_frame_type = generateStackMapTypeFromType(object_arr);
-    //    StackMapType[] stack_map_type_arr = {tag_frame_type};
-    //    new_stack_map_table[0] =
-    //        new StackMapEntry(
-    //            Const.APPEND_FRAME, len_code, stack_map_type_arr, null, pool.getConstantPool());
-    //
-    //    // We can just copy the rest of the stack frames over as the FULL_FRAME
-    //    // ones were already updated when the tag_frame variable was allocated.
-    //    for (int i = 0; i < stackMapTable.length; i++) {
-    //      new_stack_map_table[i + 1] = stackMapTable[i];
-    //    }
-    //    stackMapTable = new_stack_map_table;
-    //    // print_stackMapTable ("add_create_tag_frame");
-  }
-
-  /**
    * Adds the call to DCRuntime.enter to the beginning of the method.
    *
-   * @param mg method to modify
-   * @param mi MethodInfo for method
+   * @param mgen method to modify
+   * @param minfo for the given method's code
+   * @param instructions instruction list for method
    * @param method_info_index index for MethodInfo
    */
-  public void add_enter(MethodGen mg, MethodInfo mi, int method_info_index) {
-    //    InstructionList il = mg.getInstructionList();
-    //    replaceInstructions(
-    //        mg, il, insertion_placeholder, call_enter_exit(mg, method_info_index, "enter", -1));
+  private void add_enter(
+      MethodGen24 mgen,
+      MethodGen24.MInfo24 minfo,
+      List<CodeElement> instructions,
+      int method_info_index) {
+    instructions.addAll(
+        entryInsertionIndex, callEnterOrExit(mgen, minfo, method_info_index, "enter", -1));
   }
 
   /**
@@ -2001,40 +1909,40 @@ public class DCInstrument24 {
    * @return LocalVariable for the tag_frame local
    */
   LocalVariable createTagFrameLocal(MethodGen24 mgen, MethodGen24.MInfo24 minfo) {
-    return createLocalWithMethodScope(mgen, minfo, "dcomp_tag_frame$5a", objectArray);
+    return createLocalWithMethodScope(mgen, minfo, "dcomp_tag_frame$5a", objectArrayCD);
   }
 
   /**
-   * Creates code to create the tag frame for this method and store it in tag_frame_local.
+   * Generates the code to create the tag frame for this method and store it in tag_frame_local.
+   * This needs to be before the call to DCRuntime.enter (since it passed to that method).
    *
-   * @param mg method to modify
-   * @param tag_frame_local LocalVariableGen for the tag_frame local
+   * @param mgen describes the given method
    * @return InstructionList for tag_frame setup code
    */
-  InstructionList create_tag_frame(MethodGen mg, LocalVariableGen tag_frame_local) {
+  private List<CodeElement> createTagFrame(MethodGen24 mgen) {
 
-    Type arg_types[] = mg.getArgumentTypes();
+    ClassDesc arg_types[] = mgen.getParameterTypes();
 
     // Determine the offset of the first argument in the frame
     int offset = 1;
-    if (mg.isStatic()) {
+    if (mgen.isStatic()) {
       offset = 0;
     }
 
     // allocate an extra slot to save the tag frame depth for debugging
-    int frame_size = mg.getMaxLocals() + 1;
+    int frame_size = mgen.getMaxLocals() + 1;
 
     // unsigned byte max = 255.  minus the character '0' (decimal 48)
     // Largest frame size noted so far is 123.
-    assert frame_size < 207 : frame_size + " " + mg.getClassName() + "." + mg.getName();
+    assert frame_size < 207 : frame_size + " " + mgen.getClassName() + "." + mgen.getName();
     String params = "" + (char) (frame_size + '0');
     // Character.forDigit (frame_size, Character.MAX_RADIX);
     List<Integer> plist = new ArrayList<>();
-    for (Type argType : arg_types) {
-      if (argType instanceof BasicType) {
+    for (ClassDesc argType : arg_types) {
+      if (argType.isPrimitive()) {
         plist.add(offset);
       }
-      offset += argType.getSize();
+      offset += TypeKind.from(argType).slotSize();
     }
     for (int ii = plist.size() - 1; ii >= 0; ii--) {
       char tmpChar = (char) (plist.get(ii) + '0');
@@ -2042,16 +1950,19 @@ public class DCInstrument24 {
       // Character.forDigit (plist.get(ii), Character.MAX_RADIX);
     }
 
-    // Create code to create/init the tag frame and store in tag_frame_local
-    InstructionList il = new InstructionList();
-    il.append(ifact.createConstant(params));
-    // il.append(
-    // ifact.createInvoke(
-    // dcompRuntimeClassname, "create_tag_frame", object_arr, string_arg, Const.INVOKESTATIC));
-    // il.append(InstructionFactory.createStore(object_arr, tag_frame_local.getIndex()));
-    debugInstrument.log("Store Tag frame local at index %d%n", tag_frame_local.getIndex());
+    // Create code to create and init the tag_frame and store the result in tag_frame_local
+    List<CodeElement> instructions = new ArrayList<>();
 
-    return il;
+    MethodRefEntry mre =
+        poolBuilder.methodRefEntry(
+            runtimeCD, "create_atg_frame", MethodTypeDesc.of(objectArrayCD, CD_String));
+    instructions.add(buildLDCInstruction(poolBuilder.stringEntry(params)));
+    instructions.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
+    instructions.add(StoreInstruction.of(TypeKind.REFERENCE, tagFrameLocal.slot()));
+
+    debugInstrument.log("Store Tag frame local at index %d%n", tagFrameLocal.slot());
+
+    return instructions;
   }
 
   /**
@@ -2059,92 +1970,149 @@ public class DCInstrument24 {
    * specified Method (normally enter or exit) in DCRuntime. The parameters are passed as an array
    * of objects.
    *
-   * @param mg method to modify
+   * @param mgen method to modify
+   * @param minfo for the given method's code
    * @param method_info_index index for MethodInfo
-   * @param method_name "enter" or "exit"
+   * @param methodToCall "enter" or "exit"
    * @param line source line number if type is exit
-   * @return InstructionList for the enter or exit code
+   * @return instruction list for the enter or exit code
    */
-  InstructionList callEnterOrExit(
-      MethodGen mg, int method_info_index, String method_name, int line) {
+  private List<CodeElement> callEnterOrExit(
+      MethodGen24 mgen,
+      MethodGen24.MInfo24 minfo,
+      int method_info_index,
+      String methodToCall,
+      int line) {
 
-    InstructionList il = new InstructionList();
-    Type[] arg_types = mg.getArgumentTypes();
+    List<CodeElement> instructions = new ArrayList<>();
+    ClassDesc paramTypes[] = mgen.getParameterTypes();
 
     // Push the tag frame
-    // il.append(InstructionFactory.createLoad(object_arr, tag_frame_local.getIndex()));
+    instructions.add(LoadInstruction.of(TypeKind.REFERENCE, tagFrameLocal.slot()));
 
-    // Push the object.  Null if this is a static method or a constructor
-    if (mg.isStatic() || (method_name.equals("enter") && BcelUtil.isConstructor(mg))) {
-      il.append(new ACONST_NULL());
+    // Push the object.  Push null if this is a static method or a constructor.
+    if (mgen.isStatic() || (methodToCall.equals("enter") && mgen.isConstructor())) {
+      instructions.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
     } else { // must be an instance method
-      il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
+      instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 0));
     }
 
-    // Determine the offset of the first parameter
-    int param_offset = 1;
-    if (mg.isStatic()) {
-      param_offset = 0;
-    }
+    // The offset of the first parameter.
+    int param_offset = mgen.isStatic() ? 0 : 1;
 
     // Push the MethodInfo index
-    il.append(ifact.createConstant(method_info_index));
+    instructions.add(loadIntegerConstant(method_info_index));
 
-    // Create an array of objects with elements for each parameter
-    il.append(ifact.createConstant(arg_types.length));
-    il.append(ifact.createNewArray(Type.OBJECT, (short) 1));
+    // Create an array of objects with elements for each parameter.
+    instructions.add(loadIntegerConstant(paramTypes.length));
+    instructions.add(NewReferenceArrayInstruction.of(poolBuilder.classEntry(CD_Object)));
 
-    // Put each argument into the array
+    // Put each parameter into the array.
     int param_index = param_offset;
-    for (int ii = 0; ii < arg_types.length; ii++) {
-      // il.append(InstructionFactory.createDup(object_arr.getSize()));
-      il.append(ifact.createConstant(ii));
-      Type at = arg_types[ii];
-      if (at instanceof BasicType) {
-        il.append(new ACONST_NULL());
-        // il.append (createPrimitiveWrapper (c, at, param_index));
-      } else { // must be reference of some sort
-        il.append(InstructionFactory.createLoad(Type.OBJECT, param_index));
+    for (int ii = 0; ii < paramTypes.length; ii++) {
+      instructions.add(StackInstruction.of(Opcode.DUP));
+      instructions.add(loadIntegerConstant(ii));
+      ClassDesc at = paramTypes[ii];
+      if (at.isPrimitive()) {
+        instructions.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
+      } else { // it's a reference of some sort
+        instructions.add(LoadInstruction.of(TypeKind.REFERENCE, param_index));
       }
-      il.append(InstructionFactory.createArrayStore(Type.OBJECT));
-      param_index += at.getSize();
+      instructions.add(ArrayStoreInstruction.of(Opcode.AASTORE));
+      param_index += TypeKind.from(at).slotSize();
     }
 
     // If this is an exit, push the return value and line number.
-    // The return value
-    // is stored in the local "return__$trace2_val"  If the return
-    // value is a primitive, wrap it in the appropriate run-time wrapper
-    if (method_name.equals("exit")) {
-      Type returnType = mg.getReturnType();
-      if (returnType == Type.VOID) {
-        il.append(new ACONST_NULL());
+    // The return value is stored in the local "return__$trace2_val".
+    // If the return value is a primitive, push a NULL.
+    if (methodToCall.equals("exit")) {
+      ClassDesc returnType = mgen.getReturnType();
+      if (returnType.equals(CD_void)) {
+        instructions.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
       } else {
-        LocalVariableGen return_local = get_return_local(mg, returnType);
-        if (returnType instanceof BasicType) {
-          il.append(new ACONST_NULL());
-          // il.append (createPrimitiveWrapper (c, returnType, return_local.getIndex()));
+        LocalVariable return_local = getReturnLocal(mgen, returnType, minfo);
+        if (returnType.isPrimitive()) {
+          instructions.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
         } else {
-          il.append(InstructionFactory.createLoad(Type.OBJECT, return_local.getIndex()));
+          instructions.add(LoadInstruction.of(TypeKind.REFERENCE, return_local.slot()));
         }
       }
-
       // push line number
-      il.append(ifact.createConstant(line));
+      instructions.add(loadIntegerConstant(line));
     }
 
-    // Call the specified method
-    // Type[] method_args;
-    // if (method_name.equals("exit")) {
-    // method_args =
-    // new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr, Type.OBJECT, Type.INT};
-    // } else {
-    // method_args = new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr};
-    // }
-    // il.append(
-    // ifact.createInvoke(
-    // dcompRuntimeClassname, method_name, Type.VOID, method_args, Const.INVOKESTATIC));
+    ClassDesc objectArrayCD = CD_Object.arrayType(1);
+    MethodTypeDesc methodArgs;
+    // Call the specified method.
+    if (methodToCall.equals("exit")) {
+      methodArgs =
+          MethodTypeDesc.of(
+              CD_void, objectArrayCD, CD_Object, CD_int, objectArrayCD, CD_Object, CD_int);
+    } else {
+      methodArgs = MethodTypeDesc.of(CD_void, objectArrayCD, CD_Object, CD_int, objectArrayCD);
+    }
+    MethodRefEntry mre = poolBuilder.methodRefEntry(runtimeCD, methodToCall, methodArgs);
+    instructions.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
 
-    return il;
+    return instructions;
+  }
+
+  // @param stack current contents of the stack
+  /**
+   * Transforms instructions to track comparability. Returns a list of instructions that replaces
+   * the specified instruction. Returns null if the instruction should not be replaced.
+   *
+   * @param mgen method to modify
+   * @param minfo for the given method's code
+   * @param ce instruction to be instrumented
+   * @return instrumentation for inst, or null is none
+   */
+  @Nullable List<CodeElement> instrumentInstruction(
+      MethodGen24 mgen, MethodGen24.MInfo24 minfo, CodeElement ce) {
+    if (ce instanceof Instruction inst) {
+      switch (inst.opcode()) {
+
+        // These instructions compare the integer on the top of the stack
+        // to zero.  Nothing is made comparable by this, so we need only
+        // discard the tag on the top of the stack.
+        case Opcode.IFEQ:
+        case Opcode.IFNE:
+        case Opcode.IFLT:
+        case Opcode.IFGE:
+        case Opcode.IFGT:
+        case Opcode.IFLE:
+          {
+            return discard_tag_code(inst, 1);
+          }
+
+        // Computed jump based on the int on the top of stack.  Since that int
+        // is not made comparable to anything, we just discard its tag.  One
+        // might argue that the key should be made comparable to each value in
+        // the jump table.  But the tags for those values are not available.
+        // And since they are all constants, its not clear how interesting it
+        // would be anyway.
+        case Opcode.LOOKUPSWITCH:
+        case Opcode.TABLESWITCH:
+          return discard_tag_code(inst, 1);
+
+        // case LocalVariable lv -> {} // we have alreay processed these
+        // debugging code
+        // case LocalVariable lv -> {
+        // System.out.printf("Local start: %s end: %s%n", lv.startScope(), lv.endScope()); }
+        // case LocalVariableType lvt -> {} // we can discard local variable types
+        // debuging code
+        // case LocalVariableType lvt -> {
+        // @FieldDescriptor String lvFD = lvt.signatureSymbol().signatureString();
+        // System.out.printf("  %s : %s%n", lvt, convertDescriptorToFqBinaryName(lvFD)); }
+        // case LabelTarget l -> {
+        // }
+        // default -> throw exception when done?
+        default:
+      }
+    }
+    // CodeElement is not an Instruction so just ignore it
+    // UNDONE: what about labels?
+    return null;
   }
 
   /**
@@ -2181,7 +2149,8 @@ public class DCInstrument24 {
       case Const.IFGT:
       case Const.IFLE:
         {
-          return discard_tag_code(inst, 1);
+          // return discard_tag_code(inst, 1);
+          return null;
         }
 
       // Instanceof pushes either 0 or 1 on the stack depending on whether
@@ -2428,7 +2397,8 @@ public class DCInstrument24 {
       // would be anyway.
       case Const.LOOKUPSWITCH:
       case Const.TABLESWITCH:
-        return discard_tag_code(inst, 1);
+        // return discard_tag_code(inst, 1);
+        return null;
 
       // Make the integer argument to ANEWARRAY comparable to the new
       // array's index.
@@ -2576,41 +2546,59 @@ public class DCInstrument24 {
    * comparability on the daikon variables. It is only necessary if we are tracking comparability
    * for the variables of this method.
    *
-   * @param mg method to modify
-   * @param mi MethodInfo for method
+   * @param mgen method to modify
+   * @param mi MethodInfo for the given method's code
+   * @param minfo MInfo24 for the given method's code
+   * @param instructions instruction list for method
    * @param method_info_index index for MethodInfo
    */
-  void add_exit(MethodGen mg, MethodInfo mi, int method_info_index) {
+  private void add_exit(
+      MethodGen24 mgen,
+      MethodInfo mi,
+      MethodGen24.MInfo24 minfo,
+      List<CodeElement> instructions,
+      int method_info_index) {
 
     // Iterator over all of the exit line numbers for this method, in order.
     // We will read one element from it each time that we encounter a
     // return instruction.
-    Iterator<Integer> exit_iter = mi.exit_locations.iterator();
+    Iterator<Integer> exitLocationIter = mi.exit_locations.iterator();
 
     // Loop through each instruction, looking for return instructions.
-    InstructionList il = mg.getInstructionList();
-    for (InstructionHandle ih = il.getStart(); ih != null; ) {
-
-      // Remember the next instruction to process
-      InstructionHandle next_ih = ih.getNext();
+    ListIterator<CodeElement> li = instructions.listIterator();
+    while (li.hasNext()) {
+      CodeElement inst = li.next();
 
       // If this is a return instruction, Call DCRuntime.exit to calculate
       // comparability on Daikon variables
-      org.apache.bcel.generic.Instruction inst = ih.getInstruction();
-      if (inst instanceof org.apache.bcel.generic.ReturnInstruction) {
-        Type type = mg.getReturnType();
-        InstructionList new_il = new InstructionList();
-        if (type != Type.VOID) {
-          LocalVariableGen return_loc = get_return_local(mg, type);
-          new_il.append(InstructionFactory.createDup(type.getSize()));
-          new_il.append(InstructionFactory.createStore(type, return_loc.getIndex()));
+      if (inst instanceof ReturnInstruction) {
+        List<CodeElement> newCode = new ArrayList<>();
+        ClassDesc type = mgen.getReturnType();
+        if (!type.equals(CD_void)) {
+          TypeKind typeKind = TypeKind.from(type);
+          LocalVariable returnLocal = getReturnLocal(mgen, type, minfo);
+          if (typeKind.slotSize() == 1) {
+            newCode.add(StackInstruction.of(Opcode.DUP));
+          } else {
+            newCode.add(StackInstruction.of(Opcode.DUP2));
+          }
+          newCode.add(StoreInstruction.of(typeKind, returnLocal.slot()));
         }
-        new_il.append(callEnterOrExit(mg, method_info_index, "exit", exit_iter.next()));
-        new_il.append(inst);
-        //        replaceInstructions(mg, il, ih, new_il);
-      }
+        if (!exitLocationIter.hasNext()) {
+          throw new RuntimeException("Not enough exit locations in the exitLocationIter");
+        }
+        newCode.addAll(
+            callEnterOrExit(mgen, minfo, method_info_index, "exit", exitLocationIter.next()));
 
-      ih = next_ih;
+        // back up iterator to point to 'inst', the return instruction, and insert the
+        // instrumentation
+        li.previous();
+        for (CodeElement ce : newCode) {
+          li.add(ce);
+        }
+        // skip over the return instruction
+        li.next();
+      }
     }
   }
 
@@ -2699,7 +2687,7 @@ public class DCInstrument24 {
       // Replace calls to Object's equals method with calls to our
       // replacement, a static method in DCRuntime.
 
-      //      Type[] new_arg_types = new Type[] {javalangObject, javalangObject};
+      //      Type[] new_arg_types = new Type[] {javalangObjectCD, javalangObjectCD};
 
       InstructionList il = new InstructionList();
       il.append(
@@ -2755,7 +2743,9 @@ public class DCInstrument24 {
       // they actually contain instrumentation code.  So we do not want to discard
       // the primitive tags prior to the call.
       if (!junitTestClasses.contains(classname)) {
-        il.append(discard_primitive_tags(argTypes));
+        // il.append(discard_primitive_tags(argTypes));
+        // dummy line for errorprone for now
+        discard_primitive_tags(integer_arg);
       }
 
       // Add a tag for the return type if it is primitive.
@@ -2778,17 +2768,17 @@ public class DCInstrument24 {
    * @return an instruction list that discards primitive tags from DCRuntime's per-thread
    *     comparability data stack
    */
-  private InstructionList discard_primitive_tags(Type[] argTypes) {
+  private List<CodeElement> discard_primitive_tags(ClassDesc[] argTypes) {
+    List<CodeElement> il = new ArrayList<>();
 
-    InstructionList il = new InstructionList();
     int primitive_cnt = 0;
-    for (Type argType : argTypes) {
-      if (argType instanceof BasicType) {
+    for (ClassDesc argType : argTypes) {
+      if (argType.isPrimitive()) {
         primitive_cnt++;
       }
     }
     if (primitive_cnt > 0) {
-      il.append(discard_tag_code(new NOP(), primitive_cnt));
+      il.addAll(discard_tag_code(NopInstruction.of(), primitive_cnt));
     }
     return il;
   }
@@ -3176,7 +3166,7 @@ public class DCInstrument24 {
   @Pure
   boolean is_object_equals(String methodName, Type returnType, Type[] args) {
     return (methodName.equals("equals") && returnType == Type.BOOLEAN && args.length == 1);
-    // && args[0].equals(javalangObject));
+    // && args[0].equals(javalangObjectCD));
   }
 
   /**
@@ -3190,7 +3180,7 @@ public class DCInstrument24 {
   @Pure
   boolean is_object_clone(String methodName, Type returnType, Type[] args) {
     return methodName.equals("clone")
-        // && returnType.equals(javalangObject)
+        // && returnType.equals(javalangObjectCD)
         && (args.length == 0);
   }
 
@@ -3271,7 +3261,7 @@ public class DCInstrument24 {
         il.append(dcr_call("push_const", Type.VOID, Type.NO_ARGS));
       } else {
         il.append(ifact.createConstant(1));
-        il.append(dcr_call("discard_tag", Type.VOID, integer_arg));
+        // il.append(dcr_call("discard_tag", Type.VOID, integer_arg));
       }
 
       // Perform the normal field command
@@ -3430,6 +3420,36 @@ public class DCInstrument24 {
   /**
    * Returns the local variable used to store the return result. If it is not present, creates it
    * with the specified type. If the variable is known to already exist, the type can be null.
+   *
+   * @param mgen describes the given method
+   * @param returnType the type of the return; may be null if the variable is known to already exist
+   * @param minfo for the given method's code
+   * @return a local variable to save the return value
+   */
+  @SuppressWarnings("nullness")
+  private LocalVariable getReturnLocal(
+      MethodGen24 mgen, @Nullable ClassDesc returnType, MethodGen24.MInfo24 minfo) {
+
+    // If a type was specified and the variable was found, they must match.
+    if (minfo.returnLocal == null) {
+      assert returnType != null : " return__$trace2_val doesn't exist";
+    } else {
+      assert minfo.returnLocal.typeSymbol().equals((Object) returnType)
+          : " returnType = " + returnType + "; current type = " + minfo.returnLocal.typeSymbol();
+    }
+
+    if (minfo.returnLocal == null) {
+      debugInstrument.log("Adding return local of type %s%n", returnType);
+      minfo.returnLocal =
+          createLocalWithMethodScope(mgen, minfo, "return__$trace2_val", returnType);
+    }
+
+    return minfo.returnLocal;
+  }
+
+  /**
+   * Returns the local variable used to store the return result. If it is not present, creates it
+   * with the specified type. If the variable is known to already exist, the type can be null.
    */
   LocalVariableGen get_return_local(MethodGen mg, @Nullable Type return_type) {
 
@@ -3470,11 +3490,6 @@ public class DCInstrument24 {
 
     // Get the argument names for this method
     String[] paramNames = mgen.getParameterNames();
-    //    LocalVariable[] lvs = mgen.getLocalVariables();  //should be localsTable?
-    //    int param_offset = 1;
-    if (mgen.isStatic()) {
-      //      param_offset = 0;
-    }
 
     if (debugInstrument.enabled) {
       debugInstrument.log("create_method_info: %s%n", paramNames.length);
@@ -3727,10 +3742,7 @@ public class DCInstrument24 {
    */
   InvokeInstruction dcr_call(String methodName, ClassDesc returnType, ClassDesc[] argTypes) {
     MethodRefEntry mre =
-        poolBuilder.methodRefEntry(
-            ClassDesc.of(dcompRuntimeClassname),
-            methodName,
-            MethodTypeDesc.of(returnType, argTypes));
+        poolBuilder.methodRefEntry(runtimeCD, methodName, MethodTypeDesc.of(returnType, argTypes));
     return InvokeInstruction.of(Opcode.INVOKESTATIC, mre);
   }
 
@@ -3754,13 +3766,13 @@ public class DCInstrument24 {
    *
    * @param inst instruction to be replaced
    * @param tag_count number of tags to discard
-   * @return InstructionList
+   * @return instruction list
    */
-  InstructionList discard_tag_code(org.apache.bcel.generic.Instruction inst, int tag_count) {
-    InstructionList il = new InstructionList();
-    il.append(ifact.createConstant(tag_count));
-    il.append(dcr_call("discard_tag", Type.VOID, integer_arg));
-    //    append_inst(il, inst);
+  List<CodeElement> discard_tag_code(CodeElement inst, int tag_count) {
+    List<CodeElement> il = new ArrayList<>();
+    il.add(loadIntegerConstant(tag_count));
+    il.add(dcr_call("discard_tag", CD_void, integer_arg));
+    il.add(inst);
     return il;
   }
 
@@ -3963,7 +3975,7 @@ public class DCInstrument24 {
   InstructionList pop_tag(org.apache.bcel.generic.Instruction inst, OperandStack stack) {
     Type top = stack.peek();
     if (is_primitive(top)) {
-      return discard_tag_code(inst, 1);
+      // return discard_tag_code(inst, 1);
     }
     return null;
   }
@@ -3975,7 +3987,7 @@ public class DCInstrument24 {
   InstructionList pop2_tag(org.apache.bcel.generic.Instruction inst, OperandStack stack) {
     Type top = stack.peek();
     if (is_category2(top)) {
-      return discard_tag_code(inst, 1);
+      // return discard_tag_code(inst, 1);
     } else {
       int cnt = 0;
       if (is_primitive(top)) {
@@ -3985,7 +3997,7 @@ public class DCInstrument24 {
         cnt++;
       }
       if (cnt > 0) {
-        return discard_tag_code(inst, cnt);
+        // return discard_tag_code(inst, cnt);
       }
     }
     return null;
@@ -4034,7 +4046,8 @@ public class DCInstrument24 {
     if (dims == 2) {
       return multiarray2(inst);
     } else {
-      return discard_tag_code(inst, dims);
+      // return discard_tag_code(inst, dims);
+      return null;
     }
   }
 
@@ -4163,7 +4176,7 @@ public class DCInstrument24 {
       }
     }
     if (primitive_cnt > 0) {
-      il.append(discard_tag_code(new NOP(), primitive_cnt));
+      // il.append(discard_tag_code(new NOP(), primitive_cnt));
     }
 
     // push a tag if there is a primitive return value
@@ -5136,6 +5149,8 @@ public class DCInstrument24 {
   //    }
   //  }
 
+  // UNDONE - this routine should probably be moved to MethodGen24.
+
   /**
    * Create a new local variable whose scope is the full method.
    *
@@ -5152,6 +5167,7 @@ public class DCInstrument24 {
             minfo.nextLocalIndex, localName, localType, minfo.startLabel, minfo.endLabel);
     mgen.localsTable.add(newVar);
     minfo.nextLocalIndex += TypeKind.from(localType).slotSize();
+    mgen.setMaxLocals(minfo.nextLocalIndex);
     return newVar;
   }
 
