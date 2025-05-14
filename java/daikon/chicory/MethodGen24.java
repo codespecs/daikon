@@ -88,7 +88,7 @@ public class MethodGen24 {
    */
   private @Nullable CodeAttribute codeAttribute;
 
-  /** The method's maximum number of locals. */
+  /** The method's maximum number of local slots. */
   private int maxLocals;
 
   /** The method's maximum stack size. */
@@ -149,7 +149,10 @@ public class MethodGen24 {
     /** The index of this method in SharedData.methods. */
     public final int method_info_index;
 
-    /** Next available slot in localsTable, currently always = max locals. */
+    /**
+     * Next available slot in localsTable, user is expected to maintain and update maxLocals as
+     * needed.
+     */
     public int nextLocalIndex;
 
     /**
@@ -185,7 +188,7 @@ public class MethodGen24 {
      * Creates a MInfo24.
      *
      * @param method_info_index the index of the method in SharedData.methods
-     * @param nextLocalIndex next available slot in localsTable, currently always = max locals
+     * @param nextLocalIndex next available slot in localsTable, user should set to maxLocals
      * @param codeBuilder a CodeBuilder
      */
     public MInfo24(int method_info_index, int nextLocalIndex, CodeBuilder codeBuilder) {
@@ -576,6 +579,15 @@ public class MethodGen24 {
    */
   public int getMaxLocals() {
     return maxLocals;
+  }
+
+  /**
+   * Set the current size of the locals table.
+   *
+   * @param size the current size of the locals table
+   */
+  public void setMaxLocals(int size) {
+    maxLocals = size;
   }
 
   /**
