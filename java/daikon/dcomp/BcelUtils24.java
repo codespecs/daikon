@@ -155,6 +155,7 @@ public class BcelUtils24 {
     int newOffset = 0;
 
     boolean hasCode = !mgen.getInstructionList().isEmpty();
+    int argSize = TypeKind.from(argType).slotSize();
 
     if (hasCode) {
       if (!mgen.isStatic()) {
@@ -174,6 +175,8 @@ public class BcelUtils24 {
       // Insert our new local variable into existing table at 'newOffset'.
       argNew = LocalVariable.of(newOffset, argName, argType, minfo.startLabel, minfo.endLabel);
       mgen.localsTable.add(newIndex, argNew);
+      minfo.nextLocalIndex += argSize;
+      mgen.setMaxLocals(minfo.nextLocalIndex);
     }
 
     // Update the method's parameter information.
@@ -184,14 +187,13 @@ public class BcelUtils24 {
     mgen.setParameterNames(argNames);
 
     if (hasCode) {
-      int size = TypeKind.from(argType).slotSize();
       // we need to adjust the offset of any locals after our insertion
       for (int i = newIndex + 1; i < locals.size(); i++) {
         LocalVariable lv = locals.get(i);
         locals.set(
             i,
             LocalVariable.of(
-                lv.slot() + size, lv.name(), lv.type(), lv.startScope(), lv.endScope()));
+                lv.slot() + argSize, lv.name(), lv.type(), lv.startScope(), lv.endScope()));
       }
 
       debugInstrument.log(
@@ -201,7 +203,7 @@ public class BcelUtils24 {
       // within each LocalVariableInstruction that references a
       // local that is 'higher' in the local map than new local
       // we just inserted.
-      adjust_code_for_locals_change(mgen, newOffset, size);
+      adjust_code_for_locals_change(mgen, newOffset, argSize);
 
       // debugInstrument.log("New LocalVariableTable:%n%s%n", mgen.localsTable);
     }

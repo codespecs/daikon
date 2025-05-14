@@ -67,12 +67,6 @@ public class Instrument24 implements ClassFileTransformer {
     debug_instrumented_dir = new File(debug_dir, "instrumented");
     debug_uninstrumented_dir = new File(debug_dir, "uninstrumented");
 
-    // TEMPORARY
-    debug_transform.enabled = true;
-    daikon.chicory.Instrument.debug_ppt_omit.enabled = DynComp.debug;
-    // temporary to turn on DCInstrument.debug_transform
-    daikon.dcomp.Instrument.debug_transform.enabled = true;
-
     if (DynComp.dump) {
       debug_instrumented_dir.mkdirs();
       debug_uninstrumented_dir.mkdirs();
@@ -362,6 +356,8 @@ public class Instrument24 implements ClassFileTransformer {
 
     // Do instrumentation both old and new way during development.
     // Following code is old way.
+    // TEMPORARY
+    DynComp.debug = false;
 
     // Instrument the classfile, die on any errors
     JavaClass njc;
