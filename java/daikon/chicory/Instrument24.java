@@ -825,6 +825,11 @@ public class Instrument24 implements ClassFileTransformer {
           }
           codeList.add(ce);
         }
+        // debug code
+        // case BranchInstruction bi -> {
+        // System.out.printf("  %s : %s%n", bi, bi.target());
+        // codeList.add(ce);
+        // }
         default -> codeList.add(ce); // save all other elements
       }
     }
@@ -1083,7 +1088,6 @@ public class Instrument24 implements ClassFileTransformer {
     // anewarray
     // Create an array of objects with elements for each parameter.
     newCode.add(loadIntegerConstant(paramTypes.length, mgen));
-    ClassDesc objectArrayCD = CD_Object.arrayType(1);
     newCode.add(NewReferenceArrayInstruction.of(mgen.getPoolBuilder().classEntry(CD_Object)));
 
     // Put each parameter into the array.
@@ -1121,6 +1125,7 @@ public class Instrument24 implements ClassFileTransformer {
       newCode.add(loadIntegerConstant(line, mgen));
     }
 
+    ClassDesc objectArrayCD = CD_Object.arrayType(1);
     MethodTypeDesc methodArgs;
     // Call the specified method.
     if (methodToCall.equals("exit")) {
@@ -1714,6 +1719,7 @@ public class Instrument24 implements ClassFileTransformer {
             minfo.nextLocalIndex, localName, localType, minfo.startLabel, minfo.endLabel);
     mgen.localsTable.add(newVar);
     minfo.nextLocalIndex += TypeKind.from(localType).slotSize();
+    mgen.setMaxLocals(minfo.nextLocalIndex);
     return newVar;
   }
 
