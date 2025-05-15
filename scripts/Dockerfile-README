@@ -1,7 +1,7 @@
 This directory contains Dockerfiles to create new Docker images for
 running Daikon tests reproducibly.
 
-The rest of this file explains how to build new Docker images:
+The rest of this file explains how to build new Docker images.
 
 
 Preliminaries:
@@ -15,6 +15,20 @@ Preliminaries:
   docker login
 
 
+Cleanup:
+
+After running any of the below, consider deleting the docker containers,
+which can take up a lot of disk space.
+
+To stop and remove/delete *all* docker containers:
+  docker stop $(docker ps -a -q)
+  docker rm -vf $(docker ps -aq)
+To remove all images:
+  docker rmi -f $(docker images -aq)
+To remove most everything, including build cache objects:
+  docker system prune -a -f
+
+
 Create the Docker image:
 
 # Alias to create the Docker image, in an empty directory, and upload to Docker Hub.
@@ -23,122 +37,44 @@ Create the Docker image:
 DOCKERTESTING=""
 # When DOCKERTESTING is enabled, also edit any file containing the string "mdernst/".
 # DOCKERTESTING="-testing"
-alias create_upload_docker_image=' \
-  DOCKERIMAGE="mdernst/$DPROJECT-$OS-$JDKVER$DOCKERTESTING" && \
+# Arguments: project, OS, JDK version
+function create_upload_docker_image {
+  DPROJECT=$1
+  OS=$2
+  JDKVER=$3
+  DOCKERIMAGE="mdernst/$DPROJECT-$OS-$JDKVER$DOCKERTESTING"
+  if [ -n "$INSIDE_EMACS" ]; then
+    echo "Do not run within Emacs"
+    return 1
+  fi
   (rm -rf dockerdir && \
   mkdir -p dockerdir && \
-  (cd dockerdir && \
+  cd dockerdir && \
   \cp -pf ../Dockerfile-$OS-$JDKVER Dockerfile && \
   docker build -t $DOCKERIMAGE . && \
-  docker push $DOCKERIMAGE) && \
+  docker push $DOCKERIMAGE && \
   rm -rf dockerdir) || \
-  (echo "*****"; echo "*****"; echo "FAILURE in $DOCKERIMAGE"; echo "*****"; echo "*****"; false) \
-'
+  (echo "*****"; echo "*****"; echo "FAILURE in $DOCKERIMAGE"; echo "*****"; echo "*****"; exit 1)
+}
 
-export OS=ubuntu
-export JDKVER=jdk8
-export DPROJECT=daikon
-create_upload_docker_image
 
-export OS=ubuntu
-export JDKVER=jdk8-plus
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=ubuntu
-export JDKVER=jdk11
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=ubuntu
-export JDKVER=jdk11-plus
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=ubuntu
-export JDKVER=jdk17
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=ubuntu
-export JDKVER=jdk17-plus
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=ubuntu
-export JDKVER=jdk21
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=ubuntu
-export JDKVER=jdk21-plus
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=ubuntu
-export JDKVER=jdk24
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=ubuntu
-export JDKVER=jdk24-plus
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=rockylinux
-export JDKVER=jdk8
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=rockylinux
-export JDKVER=jdk8-plus
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=rockylinux
-export JDKVER=jdk11
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=rockylinux
-export JDKVER=jdk11-plus
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=rockylinux
-export JDKVER=jdk17
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=rockylinux
-export JDKVER=jdk17-plus
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=rockylinux
-export JDKVER=jdk21
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=rockylinux
-export JDKVER=jdk21-plus
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=rockylinux
-export JDKVER=jdk24
-export DPROJECT=daikon
-create_upload_docker_image
-
-export OS=rockylinux
-export JDKVER=jdk24-plus
-export DPROJECT=daikon
-create_upload_docker_image
-
-Cleanup:
-
-docker image prune && docker images | grep none | awk '{ print $3; }' | xargs --no-run-if-empty docker rmi --force
-
-To stop and remove/delete *all* docker containers:
-  docker stop $(docker ps -a -q)
-  docker rm $(docker ps -a -q)
+create_upload_docker_image daikon ubuntu jdk8 && \
+create_upload_docker_image daikon ubuntu jdk8-plus && \
+create_upload_docker_image daikon ubuntu jdk11 && \
+create_upload_docker_image daikon ubuntu jdk11-plus && \
+create_upload_docker_image daikon ubuntu jdk17 && \
+create_upload_docker_image daikon ubuntu jdk17-plus && \
+create_upload_docker_image daikon ubuntu jdk21 && \
+create_upload_docker_image daikon ubuntu jdk21-plus && \
+create_upload_docker_image daikon ubuntu jdk24 && \
+create_upload_docker_image daikon ubuntu jdk24-plus && \
+create_upload_docker_image daikon rockylinux jdk8 && \
+create_upload_docker_image daikon rockylinux jdk8-plus && \
+create_upload_docker_image daikon rockylinux jdk11 && \
+create_upload_docker_image daikon rockylinux jdk11-plus && \
+create_upload_docker_image daikon rockylinux jdk17 && \
+create_upload_docker_image daikon rockylinux jdk17-plus && \
+create_upload_docker_image daikon rockylinux jdk21 && \
+create_upload_docker_image daikon rockylinux jdk21-plus && \
+create_upload_docker_image daikon rockylinux jdk24 && \
+create_upload_docker_idaikon rockylinux jdk24-plus

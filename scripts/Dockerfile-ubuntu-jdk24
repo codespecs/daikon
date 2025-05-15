@@ -50,11 +50,17 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
-  curl
-RUN export DEBIAN_FRONTEND=noninteractive \
-&& curl --silent -o openjdk-24_linux-x64_bin.tar.gz https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.tar.gz \
-&& tar xzf openjdk-24_linux-x64_bin.tar.gz
-ENV PATH="$HOME/jdk-24/bin:$PATH"
+  openjdk-24-jdk \
+&& update-java-alternatives --set java-1.24.0-openjdk-amd64
+
+# RUN export DEBIAN_FRONTEND=noninteractive \
+# && apt-get -qqy update \
+# && apt-get -qqy install \
+#   curl
+# RUN export DEBIAN_FRONTEND=noninteractive \
+# && curl --silent -o openjdk-24_linux-x64_bin.tar.gz https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.tar.gz \
+# && tar xzf openjdk-24_linux-x64_bin.tar.gz
+# ENV PATH="$HOME/jdk-24/bin:$PATH"
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get autoremove \
