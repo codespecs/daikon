@@ -1,0 +1,1554 @@
+// Declarations for agora.AgoraTest
+// Declarations written by Chicory 2023-10-04T13:54:13.386042310
+
+decl-version 2.0
+var-comparability implicit
+
+ppt agora.AgoraTest.AgoraTest():::ENTER
+ppt-type enter
+
+ppt agora.AgoraTest.AgoraTest():::EXIT7
+ppt-type subexit
+parent parent agora.AgoraTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+  parent agora.AgoraTest:::OBJECT 1
+
+ppt agora.AgoraTest.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
+
+ppt agora.AgoraTest.main(java.lang.String[]):::EXIT53
+ppt-type subexit
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[5]
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[6]
+
+ppt agora.AgoraTest.emptySequence(java.util.List):::ENTER
+ppt-type enter
+parent parent agora.AgoraTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+  parent agora.AgoraTest:::OBJECT 1
+variable lst
+  var-kind variable
+  dec-type java.util.List
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable lst[..]
+  var-kind array
+  enclosing-var lst
+  array 1
+  dec-type java.util.List
+  rep-type hashcode[]
+  comparability 3[5]
+variable lst[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var lst[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args lst[]
+  flags synthetic classname non_null
+  comparability 1[6]
+variable lst.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var lst
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args lst
+  flags synthetic classname non_null
+  comparability 1
+
+ppt agora.AgoraTest.emptySequence(java.util.List):::EXIT55
+ppt-type subexit
+parent parent agora.AgoraTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+  parent agora.AgoraTest:::OBJECT 1
+variable lst
+  var-kind variable
+  dec-type java.util.List
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable lst[..]
+  var-kind array
+  enclosing-var lst
+  array 1
+  dec-type java.util.List
+  rep-type hashcode[]
+  comparability 3[5]
+variable lst[..].getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var lst[..]
+  array 1
+  dec-type java.lang.Class[]
+  rep-type java.lang.String[]
+  function-args lst[]
+  flags synthetic classname non_null
+  comparability 1[6]
+variable lst.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var lst
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args lst
+  flags synthetic classname non_null
+  comparability 1
+
+ppt agora.AgoraTest.emptyString(java.lang.String):::ENTER
+ppt-type enter
+parent parent agora.AgoraTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+  parent agora.AgoraTest:::OBJECT 1
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.emptyString(java.lang.String):::EXIT57
+ppt-type subexit
+parent parent agora.AgoraTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+  parent agora.AgoraTest:::OBJECT 1
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+ppt-type enter
+parent parent agora.AgoraTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+  parent agora.AgoraTest:::OBJECT 1
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+ppt-type subexit
+parent parent agora.AgoraTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+  parent agora.AgoraTest:::OBJECT 1
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.stringParameter2(java.lang.String):::ENTER
+ppt-type enter
+parent parent agora.AgoraTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+  parent agora.AgoraTest:::OBJECT 1
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.stringParameter2(java.lang.String):::EXIT61
+ppt-type subexit
+parent parent agora.AgoraTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+  parent agora.AgoraTest:::OBJECT 1
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.stringParameter3(java.lang.String):::ENTER
+ppt-type enter
+parent parent agora.AgoraTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+  parent agora.AgoraTest:::OBJECT 1
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest.stringParameter3(java.lang.String):::EXIT63
+ppt-type subexit
+parent parent agora.AgoraTest:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 4
+  parent agora.AgoraTest:::OBJECT 1
+variable s
+  var-kind variable
+  dec-type java.lang.String
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable s.toString
+  var-kind function toString()
+  enclosing-var s
+  dec-type java.lang.String
+  rep-type java.lang.String
+  function-args s
+  flags synthetic to_string
+  comparability 3
+
+ppt agora.AgoraTest:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type agora.AgoraTest
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+
+agora.AgoraTest.main(java.lang.String[]):::ENTER
+this_invocation_nonce
+0
+args
+885851948
+1
+args.getClass().getName()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+
+agora.AgoraTest.AgoraTest():::ENTER
+this_invocation_nonce
+1
+
+agora.AgoraTest.AgoraTest():::EXIT7
+this_invocation_nonce
+1
+this
+2048834776
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+2
+this
+2048834776
+1
+lst
+1605283233
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::EXIT55
+this_invocation_nonce
+2
+this
+2048834776
+1
+lst
+1605283233
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+3
+this
+2048834776
+1
+lst
+1384722895
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::EXIT55
+this_invocation_nonce
+3
+this
+2048834776
+1
+lst
+1384722895
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+4
+this
+2048834776
+1
+lst
+245475541
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::EXIT55
+this_invocation_nonce
+4
+this
+2048834776
+1
+lst
+245475541
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+5
+this
+2048834776
+1
+lst
+22429093
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::EXIT55
+this_invocation_nonce
+5
+this
+2048834776
+1
+lst
+22429093
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+6
+this
+2048834776
+1
+lst
+733957003
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::EXIT55
+this_invocation_nonce
+6
+this
+2048834776
+1
+lst
+733957003
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+7
+this
+2048834776
+1
+lst
+815992954
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::EXIT55
+this_invocation_nonce
+7
+this
+2048834776
+1
+lst
+815992954
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+8
+this
+2048834776
+1
+lst
+868737467
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::EXIT55
+this_invocation_nonce
+8
+this
+2048834776
+1
+lst
+868737467
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+9
+this
+2048834776
+1
+lst
+55331187
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::EXIT55
+this_invocation_nonce
+9
+this
+2048834776
+1
+lst
+55331187
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+10
+this
+2048834776
+1
+lst
+1991294891
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::EXIT55
+this_invocation_nonce
+10
+this
+2048834776
+1
+lst
+1991294891
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.ArrayList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::ENTER
+this_invocation_nonce
+11
+this
+2048834776
+1
+lst
+399931359
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.AgoraTest.emptySequence(java.util.List):::EXIT55
+this_invocation_nonce
+11
+this
+2048834776
+1
+lst
+399931359
+1
+lst[..]
+[]
+1
+lst[..].getClass().getName()
+[]
+1
+lst.getClass().getName()
+"java.util.LinkedList"
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::ENTER
+this_invocation_nonce
+12
+this
+2048834776
+1
+s
+809762318
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::EXIT57
+this_invocation_nonce
+12
+this
+2048834776
+1
+s
+809762318
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::ENTER
+this_invocation_nonce
+13
+this
+2048834776
+1
+s
+2028371466
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::EXIT57
+this_invocation_nonce
+13
+this
+2048834776
+1
+s
+2028371466
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::ENTER
+this_invocation_nonce
+14
+this
+2048834776
+1
+s
+198761306
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::EXIT57
+this_invocation_nonce
+14
+this
+2048834776
+1
+s
+198761306
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::ENTER
+this_invocation_nonce
+15
+this
+2048834776
+1
+s
+798244209
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::EXIT57
+this_invocation_nonce
+15
+this
+2048834776
+1
+s
+798244209
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::ENTER
+this_invocation_nonce
+16
+this
+2048834776
+1
+s
+525571
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::EXIT57
+this_invocation_nonce
+16
+this
+2048834776
+1
+s
+525571
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::ENTER
+this_invocation_nonce
+17
+this
+2048834776
+1
+s
+1263877414
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::EXIT57
+this_invocation_nonce
+17
+this
+2048834776
+1
+s
+1263877414
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::ENTER
+this_invocation_nonce
+18
+this
+2048834776
+1
+s
+110771485
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::EXIT57
+this_invocation_nonce
+18
+this
+2048834776
+1
+s
+110771485
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::ENTER
+this_invocation_nonce
+19
+this
+2048834776
+1
+s
+141289226
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::EXIT57
+this_invocation_nonce
+19
+this
+2048834776
+1
+s
+141289226
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::ENTER
+this_invocation_nonce
+20
+this
+2048834776
+1
+s
+1208736537
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::EXIT57
+this_invocation_nonce
+20
+this
+2048834776
+1
+s
+1208736537
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::ENTER
+this_invocation_nonce
+21
+this
+2048834776
+1
+s
+710239027
+1
+s.toString
+""
+1
+
+agora.AgoraTest.emptyString(java.lang.String):::EXIT57
+this_invocation_nonce
+21
+this
+2048834776
+1
+s
+710239027
+1
+s.toString
+""
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+22
+this
+2048834776
+1
+s
+2104545713
+1
+s.toString
+"22"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+22
+this
+2048834776
+1
+s
+2104545713
+1
+s.toString
+"22"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+23
+this
+2048834776
+1
+s
+712256162
+1
+s.toString
+"122"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+23
+this
+2048834776
+1
+s
+712256162
+1
+s.toString
+"122"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+24
+this
+2048834776
+1
+s
+1018298342
+1
+s.toString
+"-322"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+24
+this
+2048834776
+1
+s
+1018298342
+1
+s.toString
+"-322"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+25
+this
+2048834776
+1
+s
+1039949752
+1
+s.toString
+"3.14159"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+25
+this
+2048834776
+1
+s
+1039949752
+1
+s.toString
+"3.14159"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+26
+this
+2048834776
+1
+s
+1182461167
+1
+s.toString
+"1.618"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+26
+this
+2048834776
+1
+s
+1182461167
+1
+s.toString
+"1.618"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+27
+this
+2048834776
+1
+s
+1297149880
+1
+s.toString
+"-333333333"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+27
+this
+2048834776
+1
+s
+1297149880
+1
+s.toString
+"-333333333"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+28
+this
+2048834776
+1
+s
+2116908859
+1
+s.toString
+"1234567890"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+28
+this
+2048834776
+1
+s
+2116908859
+1
+s.toString
+"1234567890"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+29
+this
+2048834776
+1
+s
+2104545713
+1
+s.toString
+"22"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+29
+this
+2048834776
+1
+s
+2104545713
+1
+s.toString
+"22"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+30
+this
+2048834776
+1
+s
+2104545713
+1
+s.toString
+"22"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+30
+this
+2048834776
+1
+s
+2104545713
+1
+s.toString
+"22"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+31
+this
+2048834776
+1
+s
+2104545713
+1
+s.toString
+"22"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+31
+this
+2048834776
+1
+s
+2104545713
+1
+s.toString
+"22"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+32
+this
+2048834776
+1
+s
+712256162
+1
+s.toString
+"122"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+32
+this
+2048834776
+1
+s
+712256162
+1
+s.toString
+"122"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+33
+this
+2048834776
+1
+s
+1018298342
+1
+s.toString
+"-322"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+33
+this
+2048834776
+1
+s
+1018298342
+1
+s.toString
+"-322"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+34
+this
+2048834776
+1
+s
+1039949752
+1
+s.toString
+"3.14159"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+34
+this
+2048834776
+1
+s
+1039949752
+1
+s.toString
+"3.14159"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+35
+this
+2048834776
+1
+s
+1182461167
+1
+s.toString
+"1.618"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+35
+this
+2048834776
+1
+s
+1182461167
+1
+s.toString
+"1.618"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+36
+this
+2048834776
+1
+s
+1297149880
+1
+s.toString
+"-333333333"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+36
+this
+2048834776
+1
+s
+1297149880
+1
+s.toString
+"-333333333"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+37
+this
+2048834776
+1
+s
+2116908859
+1
+s.toString
+"1234567890"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+37
+this
+2048834776
+1
+s
+2116908859
+1
+s.toString
+"1234567890"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+38
+this
+2048834776
+1
+s
+2104545713
+1
+s.toString
+"22"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+38
+this
+2048834776
+1
+s
+2104545713
+1
+s.toString
+"22"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+39
+this
+2048834776
+1
+s
+2104545713
+1
+s.toString
+"22"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+39
+this
+2048834776
+1
+s
+2104545713
+1
+s.toString
+"22"
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::ENTER
+this_invocation_nonce
+40
+this
+2048834776
+1
+s
+1641775939
+1
+s.toString
+""
+1
+
+agora.AgoraTest.stringParameter1(java.lang.String):::EXIT59
+this_invocation_nonce
+40
+this
+2048834776
+1
+s
+1641775939
+1
+s.toString
+""
+1
+
+agora.AgoraTest.main(java.lang.String[]):::EXIT53
+this_invocation_nonce
+0
+args
+885851948
+1
+args.getClass().getName()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+
