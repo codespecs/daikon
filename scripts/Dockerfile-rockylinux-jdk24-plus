@@ -35,8 +35,8 @@ RUN dnf -q -y upgrade && dnf -q -y install \
 #   java-24-openjdk-devel
 
 RUN curl --silent -o jdk-24_linux-x64_bin.tar.gz https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.tar.gz \
-&& tar xzf jdk-24_linux-x64_bin.tar.gz
-ENV PATH="$HOME/jdk-24/bin:$PATH"
+&& tar xzf jdk-24_linux-x64_bin.tar.gz \
+&& export PATH="$HOME/jdk-24/bin:$PATH"
 
 # This enables the repository that contains jq
 RUN dnf -q -y install \
