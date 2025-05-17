@@ -200,6 +200,7 @@ dyncomp-jdk:
 dcomp-jdk:
 	cd java && $(MAKE) dcomp-jdk
 
+format: reformat
 reformat:
 	cd java && $(MAKE) reformat
 
