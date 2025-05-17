@@ -10,7 +10,7 @@ export SHELLOPTS
 
 make compile daikon.jar
 
-if [ -d "/tmp/$USER/plume-scripts" ] ; then
+if [ -d "/tmp/$USER/plume-scripts" ]; then
   (cd "/tmp/$USER/plume-scripts" && git pull -q) > /dev/null 2>&1
 else
   mkdir -p "/tmp/$USER"
@@ -19,9 +19,8 @@ fi
 
 # Code style & quality
 make -C java error-prone
-
-# Code formatting
 make -C java check-format
+make -C scripts style-check
 
 # Documentation
 if java -version 2>&1 | grep -q '"1.8'; then
@@ -57,12 +56,12 @@ else
 target 'api-private' failed"
     fi
     (make -C java requireJavadoc 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadoc' failed" > "/tmp/$USER/rj-warnings.txt") || true
-    if ! "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt" ; then
+    if ! "/tmp/$USER/plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt"; then
       status=1
       reason="$reason
 target 'requireJavadoc' failed"
     fi
-    if [ $status -ne 0 ] ; then
+    if [ $status -ne 0 ]; then
       echo "$reason"
       echo "See output above"
       exit 1

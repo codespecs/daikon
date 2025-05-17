@@ -25,6 +25,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   unzip \
   which
 
+# Install the JDK.
 RUN dnf -q -y install \
   java-11-openjdk \
   java-11-openjdk-devel

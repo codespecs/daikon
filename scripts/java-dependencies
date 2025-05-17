@@ -21,8 +21,8 @@ debug=
 
 # get the arguments
 if [ $# -ne 3 ]; then
-    echo "$(basename "$0") takes 3 arguments, but $# were supplied"
-    exit 1
+  echo "$(basename "$0") takes 3 arguments, but $# were supplied"
+  exit 1
 fi
 sources="$1"
 main="$2"
@@ -30,13 +30,16 @@ javac="$3"
 
 first_token=${javac%% *}
 case $javac in
-  "/"*) if [ ! -f $first_token ] ; then echo "java-dependencies: file does not exist: $javac"; exit 1; fi ;;
+  "/"*) if [ ! -f "$first_token" ]; then
+    echo "java-dependencies: file does not exist: $javac"
+    exit 1
+  fi ;;
 esac
 
 # Determine if we have GNU find.  GNU find requires -noleaf on AFS filesystems.
 # Note about `find_args` variable:  don't quote it when it is used.
 find_args=""
-if find . --version 2>&1 | grep -q GNU ; then
+if find . --version 2>&1 | grep -q GNU; then
   find_args="-noleaf"
 fi
 
@@ -44,7 +47,7 @@ fi
 scratch=$(mktemp -d -t build_all_list_file.XXXXXX)
 # $main may be multiple files
 # shellcheck disable=SC2086
-if ! $javac -d "$scratch" -sourcepath "$sources" $main ; then
+if ! $javac -d "$scratch" -sourcepath "$sources" $main; then
   exit 1
 fi
 
@@ -55,7 +58,7 @@ fi
 cd "$scratch" || exit
 files=$(find . $find_args -name '*.class' | grep -v -F '$' | sed s/class/java/ | sed 's/\.\///' | sort)
 for file in $files; do
-  if [ -e "$sources/$file" ] ; then
+  if [ -e "$sources/$file" ]; then
     echo "$file"
   fi
 done

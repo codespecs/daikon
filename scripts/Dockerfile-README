@@ -77,4 +77,5 @@ create_upload_docker_image daikon rockylinux jdk17-plus && \
 create_upload_docker_image daikon rockylinux jdk21 && \
 create_upload_docker_image daikon rockylinux jdk21-plus && \
 create_upload_docker_image daikon rockylinux jdk24 && \
-create_upload_docker_idaikon rockylinux jdk24-plus
+create_upload_docker_image daikon rockylinux jdk24-plus && \
+git push

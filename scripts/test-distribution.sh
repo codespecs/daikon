@@ -2,6 +2,7 @@
 
 # Download the distribution and run "make distribution-check".
 
+SCRIPTDIR="$(cd "$(dirname "$0")" > /dev/null 2>&1 && pwd -P)"
 
 # Fail the whole script if any command fails
 set -e
@@ -10,11 +11,9 @@ set -e
 # Echo commands before executing them
 set -x
 
-
 # Use default URL if environment variable is not set by caller.
 # Caller might do: DAIKONBASEURL=http://plse.cs.washington.edu/staging-daikon
 DAIKONBASEURL=${DAIKONBASEURL:-http://plse.cs.washington.edu/daikon}
-
 
 # Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE
@@ -35,5 +34,5 @@ tar xzf "daikon-$DAIKONVERSION.tar.gz"
 cd "daikon-$DAIKONVERSION"
 DAIKONDIR=$(pwd)
 export DAIKONDIR
-. scripts/daikon.bashrc
+. "${SCRIPTDIR}"/daikon.bashrc
 make distribution-check
