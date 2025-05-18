@@ -36,13 +36,19 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   binutils-dev \
   gcc \
   git \
-  graphviz \
   jq \
   lsb-release \
   m4 \
   make \
   rsync \
   unzip
+
+# Install the JDK.
+# RUN export DEBIAN_FRONTEND=noninteractive \
+# && apt-get -qqy update \
+# && apt-get -qqy install \
+#   openjdk-24-jdk \
+# && update-java-alternatives --set java-1.24.0-openjdk-amd64
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
@@ -56,8 +62,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 #   curl
 # RUN export DEBIAN_FRONTEND=noninteractive \
 # && curl --silent -o openjdk-24_linux-x64_bin.tar.gz https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.tar.gz \
-# && tar xzf openjdk-24_linux-x64_bin.tar.gz
-# ENV PATH="$HOME/jdk-24/bin:$PATH"
+# && tar xzf openjdk-24_linux-x64_bin.tar.gz \
+# && export PATH="$HOME/jdk-24/bin:$PATH"
 
 # These are needed to build the Checker Framework, used by the "typecheck" job in CI.
 RUN export DEBIAN_FRONTEND=noninteractive \
@@ -71,17 +77,24 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
   curl \
+  devscripts \
   g++ \
   graphviz \
   libc6-dbg \
   netpbm \
+  pip \
   python3-setuptools \
+  shellcheck \
+  shfmt \
   texinfo \
   texlive \
   texlive-latex-extra \
   universal-ctags \
   wget \
   zlib1g-dev
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& pip install ruff --break-system-packages
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get autoremove \

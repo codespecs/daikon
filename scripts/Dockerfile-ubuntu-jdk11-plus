@@ -36,7 +36,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   binutils-dev \
   gcc \
   git \
-  graphviz \
   jq \
   lsb-release \
   m4 \
@@ -44,6 +43,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   rsync \
   unzip
 
+# Install the JDK.
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
@@ -62,17 +62,24 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
   curl \
+  devscripts \
   g++ \
   graphviz \
   libc6-dbg \
   netpbm \
+  pip \
   python3-setuptools \
+  shellcheck \
+  shfmt \
   texinfo \
   texlive \
   texlive-latex-extra \
   universal-ctags \
   wget \
   zlib1g-dev
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& pip install ruff --break-system-packages
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get autoremove \
