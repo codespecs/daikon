@@ -38,6 +38,9 @@ RUN curl --silent -o jdk-24_linux-x64_bin.tar.gz https://download.oracle.com/jav
 && tar xzf jdk-24_linux-x64_bin.tar.gz
 ENV PATH="/jdk-24.0.1/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
+RUN chmod og+rx /root \
+&& chmod og+r /root/*
+
 # This enables the repository that contains jq
 RUN dnf -q -y install \
   epel-release
