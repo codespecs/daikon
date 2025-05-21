@@ -2,6 +2,7 @@ package daikon.dcomp;
 
 import static java.lang.constant.ConstantDescs.CD_Object;
 import static java.lang.constant.ConstantDescs.CD_String;
+import static java.lang.constant.ConstantDescs.CD_Throwable;
 import static java.lang.constant.ConstantDescs.CD_boolean;
 import static java.lang.constant.ConstantDescs.CD_int;
 import static java.lang.constant.ConstantDescs.CD_long;
@@ -44,10 +45,12 @@ import java.lang.classfile.constantpool.ClassEntry;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.ConstantValueEntry;
 import java.lang.classfile.constantpool.MethodRefEntry;
+import java.lang.classfile.instruction.ArrayLoadInstruction;
 import java.lang.classfile.instruction.ArrayStoreInstruction;
 import java.lang.classfile.instruction.BranchInstruction;
 import java.lang.classfile.instruction.ConstantInstruction;
 import java.lang.classfile.instruction.ExceptionCatch;
+import java.lang.classfile.instruction.FieldInstruction;
 import java.lang.classfile.instruction.InvokeInstruction;
 import java.lang.classfile.instruction.LabelTarget;
 import java.lang.classfile.instruction.LineNumber;
@@ -55,6 +58,7 @@ import java.lang.classfile.instruction.LoadInstruction;
 import java.lang.classfile.instruction.LocalVariable;
 import java.lang.classfile.instruction.LocalVariableType;
 import java.lang.classfile.instruction.LookupSwitchInstruction;
+import java.lang.classfile.instruction.NewMultiArrayInstruction;
 import java.lang.classfile.instruction.NewReferenceArrayInstruction;
 import java.lang.classfile.instruction.NopInstruction;
 import java.lang.classfile.instruction.ReturnInstruction;
@@ -92,10 +96,7 @@ import org.apache.bcel.classfile.ConstantInterfaceMethodref;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.classfile.RuntimeVisibleAnnotations;
-import org.apache.bcel.generic.AALOAD;
 import org.apache.bcel.generic.ACONST_NULL;
-import org.apache.bcel.generic.ALOAD;
-import org.apache.bcel.generic.ASTORE;
 import org.apache.bcel.generic.AnnotationEntryGen;
 import org.apache.bcel.generic.ArrayType;
 import org.apache.bcel.generic.BasicType;
@@ -103,12 +104,7 @@ import org.apache.bcel.generic.BasicType;
 import org.apache.bcel.generic.ClassGen;
 import org.apache.bcel.generic.ClassGenException;
 import org.apache.bcel.generic.ConstantPoolGen;
-import org.apache.bcel.generic.DUP;
-import org.apache.bcel.generic.DUP2;
-import org.apache.bcel.generic.DUP_X2;
 // import org.apache.bcel.generic.FieldInstruction;
-import org.apache.bcel.generic.GETFIELD;
-import org.apache.bcel.generic.GETSTATIC;
 import org.apache.bcel.generic.IADD;
 import org.apache.bcel.generic.INVOKEDYNAMIC;
 import org.apache.bcel.generic.INVOKEINTERFACE;
@@ -120,18 +116,12 @@ import org.apache.bcel.generic.InstructionHandle;
 import org.apache.bcel.generic.InstructionList;
 // import org.apache.bcel.generic.InvokeInstruction;
 import org.apache.bcel.generic.LDC;
-import org.apache.bcel.generic.LDC2_W;
 // import org.apache.bcel.generic.LoadInstruction;
 import org.apache.bcel.generic.LocalVariableGen;
-import org.apache.bcel.generic.LocalVariableInstruction;
-import org.apache.bcel.generic.MULTIANEWARRAY;
 import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
-import org.apache.bcel.generic.PUTFIELD;
-import org.apache.bcel.generic.PUTSTATIC;
 import org.apache.bcel.generic.ReferenceType;
 // import org.apache.bcel.generic.ReturnInstruction;
-import org.apache.bcel.generic.SWAP;
 // import org.apache.bcel.generic.StoreInstruction;
 import org.apache.bcel.generic.Type;
 import org.apache.bcel.verifier.structurals.OperandStack;
@@ -197,14 +187,14 @@ public class DCInstrument24 {
   /** ConstantPool builder for current class. */
   private ConstantPoolBuilder poolBuilder;
 
-  //  /** Stores useful information about a class. */
-  //  private ClassInfo classInfo;
-
   /** True if we tracking any methods in the current class. */
   private boolean trackClass = false;
 
   /** ClassGen for the current class. */
   protected ClassGen gen;
+
+  /** ClassGen for the current class. */
+  protected ClassGen24 classGen;
 
   /** MethodGen for the current method. */
   protected MethodGen mgen;
@@ -226,28 +216,18 @@ public class DCInstrument24 {
 
   // Argument descriptors
   /** Type array with two objects. */
-  protected static Type[] two_objects = new Type[] {Type.OBJECT, Type.OBJECT};
-
-  /** Type array with an object and an int. */
-  protected static Type[] object_int = new Type[] {Type.OBJECT, Type.INT};
-
-  /** Type array with a string. */
-  protected static Type[] string_arg = new Type[] {Type.STRING};
+  protected static ClassDesc[] two_objects_arg = new ClassDesc[] {CD_Object, CD_Object};
 
   /** Type array with an int. */
   protected static ClassDesc[] integer_arg = new ClassDesc[] {CD_int};
 
   /** Type array with an object. */
-  protected static Type[] object_arg = new Type[] {Type.OBJECT};
-
-  /** ObjectType for "java.lang.Class". */
-  protected static Type javalangClass = new ObjectType("java.lang.Class");
+  protected static ClassDesc[] object_arg = new ClassDesc[] {CD_Object};
 
   // Type descriptors
-  protected static final ClassDesc throwableCD = ClassDesc.of("java.lang.Throwable");
   protected final ClassDesc dcomp_marker;
-  protected static final ClassDesc javalangObjectCD = ClassDesc.of("java.lang.Object");
-  protected static final ClassDesc objectArrayCD = javalangObjectCD.arrayType(1);
+  protected static final ClassDesc objectArrayCD = CD_Object.arrayType(1);
+  protected static final ClassDesc[] noArgsCD = new ClassDesc[0];
 
   // Debug loggers
   /** Log file if debug_native is enabled. */
@@ -490,7 +470,7 @@ public class DCInstrument24 {
   private void instrumentClass(
       ClassBuilder classBuilder, ClassModel classModel, ClassInfo classInfo) {
 
-    ClassGen24 classGen = new ClassGen24(classModel, classInfo.class_name, classBuilder);
+    classGen = new ClassGen24(classModel, classInfo.class_name, classBuilder);
     runtimeCD = ClassDesc.of(dcompRuntimeClassname);
     poolBuilder = classBuilder.constantPool();
 
@@ -1053,7 +1033,7 @@ public class DCInstrument24 {
         }
         // Using handlerLabel for the end of the try region is technically one instruction
         // too many, but it shouldn't matter and is easily available.
-        codeBuilder.exceptionCatch(minfo.entryLabel, handlerLabel, handlerLabel, throwableCD);
+        codeBuilder.exceptionCatch(minfo.entryLabel, handlerLabel, handlerLabel, CD_Throwable);
       }
     }
 
@@ -1296,7 +1276,6 @@ public class DCInstrument24 {
     // Process each method
     for (Method m : gen.getMethods()) {
 
-      // tag_frame_local = null;
       try {
         // Note whether we want to track the daikon variables in this method
         boolean track = should_track(classname, m.getName(), methodEntryName(classname, m));
@@ -1955,7 +1934,7 @@ public class DCInstrument24 {
 
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(
-            runtimeCD, "create_atg_frame", MethodTypeDesc.of(objectArrayCD, CD_String));
+            runtimeCD, "create_tag_frame", MethodTypeDesc.of(objectArrayCD, CD_String));
     instructions.add(buildLDCInstruction(poolBuilder.stringEntry(params)));
     instructions.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
     instructions.add(StoreInstruction.of(TypeKind.REFERENCE, tagFrameLocal.slot()));
@@ -2041,7 +2020,6 @@ public class DCInstrument24 {
       instructions.add(loadIntegerConstant(line));
     }
 
-    ClassDesc objectArrayCD = CD_Object.arrayType(1);
     MethodTypeDesc methodArgs;
     // Call the specified method.
     if (methodToCall.equals("exit")) {
@@ -2069,50 +2047,316 @@ public class DCInstrument24 {
    */
   @Nullable List<CodeElement> instrumentInstruction(
       MethodGen24 mgen, MethodGen24.MInfo24 minfo, CodeElement ce) {
-    if (ce instanceof Instruction inst) {
-      switch (inst.opcode()) {
+    switch (ce) {
+      case Instruction inst -> {
+        switch (inst.opcode()) {
 
-        // These instructions compare the integer on the top of the stack
-        // to zero.  Nothing is made comparable by this, so we need only
-        // discard the tag on the top of the stack.
-        case Opcode.IFEQ:
-        case Opcode.IFNE:
-        case Opcode.IFLT:
-        case Opcode.IFGE:
-        case Opcode.IFGT:
-        case Opcode.IFLE:
-          {
+          // Replace the object comparison instructions with a call to
+          // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
+          // return a boolean which is used in a ifeq/ifne instruction
+          case Opcode.IF_ACMPEQ:
+            return object_comparison((BranchInstruction) inst, "object_eq", Opcode.IFNE);
+          case Opcode.IF_ACMPNE:
+            return object_comparison((BranchInstruction) inst, "object_ne", Opcode.IFNE);
+
+          // These instructions compare the integer on the top of the stack
+          // to zero.  Nothing is made comparable by this, so we need only
+          // discard the tag on the top of the stack.
+          case Opcode.IFEQ:
+          case Opcode.IFNE:
+          case Opcode.IFLT:
+          case Opcode.IFGE:
+          case Opcode.IFGT:
+          case Opcode.IFLE:
+            {
+              return discard_tag_code(inst, 1);
+            }
+
+          // Instanceof pushes either 0 or 1 on the stack depending on whether
+          // the object on top of stack is of the specified type.  We push a
+          // tag for a constant, since nothing is made comparable by this.
+          case Opcode.INSTANCEOF:
+            return build_il(dcr_call("push_const", CD_void, noArgsCD), inst);
+
+          // all the DUP opcodes go here
+
+          case Opcode.IF_ICMPEQ:
+          case Opcode.IF_ICMPGE:
+          case Opcode.IF_ICMPGT:
+          case Opcode.IF_ICMPLE:
+          case Opcode.IF_ICMPLT:
+          case Opcode.IF_ICMPNE:
+            {
+              return build_il(dcr_call("cmp_op", CD_void, noArgsCD), inst);
+            }
+
+          case Opcode.GETFIELD:
+          case Opcode.PUTFIELD:
+          case Opcode.GETSTATIC:
+          case Opcode.PUTSTATIC:
+            {
+              return load_store_field(mgen, ((FieldInstruction) inst));
+            }
+
+          case Opcode.DLOAD:
+          case Opcode.DLOAD_0:
+          case Opcode.DLOAD_1:
+          case Opcode.DLOAD_2:
+          case Opcode.DLOAD_3:
+          case Opcode.FLOAD:
+          case Opcode.FLOAD_0:
+          case Opcode.FLOAD_1:
+          case Opcode.FLOAD_2:
+          case Opcode.FLOAD_3:
+          case Opcode.ILOAD:
+          case Opcode.ILOAD_0:
+          case Opcode.ILOAD_1:
+          case Opcode.ILOAD_2:
+          case Opcode.ILOAD_3:
+          case Opcode.LLOAD:
+          case Opcode.LLOAD_0:
+          case Opcode.LLOAD_1:
+          case Opcode.LLOAD_2:
+          case Opcode.LLOAD_3:
+            {
+              return load_local((LoadInstruction) inst, tagFrameLocal, "push_local_tag");
+            }
+
+          case Opcode.DSTORE:
+          case Opcode.DSTORE_0:
+          case Opcode.DSTORE_1:
+          case Opcode.DSTORE_2:
+          case Opcode.DSTORE_3:
+          case Opcode.FSTORE:
+          case Opcode.FSTORE_0:
+          case Opcode.FSTORE_1:
+          case Opcode.FSTORE_2:
+          case Opcode.FSTORE_3:
+          case Opcode.ISTORE:
+          case Opcode.ISTORE_0:
+          case Opcode.ISTORE_1:
+          case Opcode.ISTORE_2:
+          case Opcode.ISTORE_3:
+          case Opcode.LSTORE:
+          case Opcode.LSTORE_0:
+          case Opcode.LSTORE_1:
+          case Opcode.LSTORE_2:
+          case Opcode.LSTORE_3:
+            {
+              return store_local((StoreInstruction) inst, tagFrameLocal, "pop_local_tag");
+            }
+
+          // Adjusts the tag stack for load constant opcodes. If the constant is a primitive, pushes
+          // its tag
+          // on the tag stack. If the constant is a reference (string, class), does nothing.
+          case Opcode.LDC:
+          case Opcode.LDC_W:
+          case Opcode.LDC2_W:
+            {
+              if (((ConstantInstruction) inst).typeKind().equals(TypeKind.REFERENCE)) {
+                return null;
+              }
+              return build_il(dcr_call("push_const", CD_void, noArgsCD), inst);
+            }
+
+          // Push the tag for the array onto the tag stack.  This causes
+          // anything comparable to the length to be comparable to the array
+          // as an index.
+          case Opcode.ARRAYLENGTH:
+            {
+              return array_length(inst);
+            }
+
+          case Opcode.BIPUSH:
+          case Opcode.SIPUSH:
+          case Opcode.DCONST_0:
+          case Opcode.DCONST_1:
+          case Opcode.FCONST_0:
+          case Opcode.FCONST_1:
+          case Opcode.FCONST_2:
+          case Opcode.ICONST_0:
+          case Opcode.ICONST_1:
+          case Opcode.ICONST_2:
+          case Opcode.ICONST_3:
+          case Opcode.ICONST_4:
+          case Opcode.ICONST_5:
+          case Opcode.ICONST_M1:
+          case Opcode.LCONST_0:
+          case Opcode.LCONST_1:
+            {
+              return build_il(dcr_call("push_const", CD_void, noArgsCD), inst);
+            }
+
+          // Primitive Binary operators.  Each is augmented with a call to
+          // DCRuntime.binary_tag_op that merges the tags and updates the tag
+          // Stack.
+          case Opcode.DADD:
+          case Opcode.DCMPG:
+          case Opcode.DCMPL:
+          case Opcode.DDIV:
+          case Opcode.DMUL:
+          case Opcode.DREM:
+          case Opcode.DSUB:
+          case Opcode.FADD:
+          case Opcode.FCMPG:
+          case Opcode.FCMPL:
+          case Opcode.FDIV:
+          case Opcode.FMUL:
+          case Opcode.FREM:
+          case Opcode.FSUB:
+          case Opcode.IADD:
+          case Opcode.IAND:
+          case Opcode.IDIV:
+          case Opcode.IMUL:
+          case Opcode.IOR:
+          case Opcode.IREM:
+          case Opcode.ISHL:
+          case Opcode.ISHR:
+          case Opcode.ISUB:
+          case Opcode.IUSHR:
+          case Opcode.IXOR:
+          case Opcode.LADD:
+          case Opcode.LAND:
+          case Opcode.LCMP:
+          case Opcode.LDIV:
+          case Opcode.LMUL:
+          case Opcode.LOR:
+          case Opcode.LREM:
+          case Opcode.LSHL:
+          case Opcode.LSHR:
+          case Opcode.LSUB:
+          case Opcode.LUSHR:
+          case Opcode.LXOR:
+            return build_il(dcr_call("binary_tag_op", CD_void, noArgsCD), inst);
+
+          // Computed jump based on the int on the top of stack.  Since that int
+          // is not made comparable to anything, we just discard its tag.  One
+          // might argue that the key should be made comparable to each value in
+          // the jump table.  But the tags for those values are not available.
+          // And since they are all constants, its not clear how interesting it
+          // would be anyway.
+          case Opcode.LOOKUPSWITCH:
+          case Opcode.TABLESWITCH:
             return discard_tag_code(inst, 1);
-          }
 
-        // Computed jump based on the int on the top of stack.  Since that int
-        // is not made comparable to anything, we just discard its tag.  One
-        // might argue that the key should be made comparable to each value in
-        // the jump table.  But the tags for those values are not available.
-        // And since they are all constants, its not clear how interesting it
-        // would be anyway.
-        case Opcode.LOOKUPSWITCH:
-        case Opcode.TABLESWITCH:
-          return discard_tag_code(inst, 1);
+          // Make the integer argument to ANEWARRAY comparable to the new
+          // array's index.
+          case Opcode.ANEWARRAY:
+          case Opcode.NEWARRAY:
+            {
+              return new_array(inst);
+            }
 
-        // case LocalVariable lv -> {} // we have alreay processed these
-        // debugging code
-        // case LocalVariable lv -> {
-        // System.out.printf("Local start: %s end: %s%n", lv.startScope(), lv.endScope()); }
-        // case LocalVariableType lvt -> {} // we can discard local variable types
-        // debuging code
-        // case LocalVariableType lvt -> {
-        // @FieldDescriptor String lvFD = lvt.signatureSymbol().signatureString();
-        // System.out.printf("  %s : %s%n", lvt, convertDescriptorToFqBinaryName(lvFD)); }
-        // case LabelTarget l -> {
-        // }
-        // default -> throw exception when done?
-        default:
+          // If the new array has 2 dimensions, make the integer arguments
+          // comparable to the corresponding indices of the new array.
+          // For any other number of dimensions, discard the tags for the
+          // arguments.
+          case Opcode.MULTIANEWARRAY:
+            {
+              return multi_newarray_dc((NewMultiArrayInstruction) inst);
+            }
+
+          // Mark the array and its index as comparable.  Also for primitives,
+          // push the tag of the array element on the tag stack
+          case Opcode.AALOAD:
+          case Opcode.BALOAD:
+          case Opcode.CALOAD:
+          case Opcode.DALOAD:
+          case Opcode.FALOAD:
+          case Opcode.IALOAD:
+          case Opcode.LALOAD:
+          case Opcode.SALOAD:
+            {
+              return array_load(mgen, (ArrayLoadInstruction) inst);
+            }
+
+          // Prefix the return with a call to the correct normal_exit method
+          // to handle the tag stack
+          case Opcode.ARETURN:
+          case Opcode.DRETURN:
+          case Opcode.FRETURN:
+          case Opcode.IRETURN:
+          case Opcode.LRETURN:
+          case Opcode.RETURN:
+            {
+              return return_tag(mgen, inst);
+            }
+
+          // Throws an exception.  This clears the operand stack of the current
+          // frame.  We need to clear the tag stack as well.
+          case Opcode.ATHROW:
+            return build_il(dcr_call("throw_op", CD_void, noArgsCD), inst);
+
+          // Opcodes that don't need any modifications.  Here for reference
+          case Opcode.ACONST_NULL:
+          case Opcode.ALOAD:
+          case Opcode.ALOAD_0:
+          case Opcode.ALOAD_1:
+          case Opcode.ALOAD_2:
+          case Opcode.ALOAD_3:
+          case Opcode.ASTORE:
+          case Opcode.ASTORE_0:
+          case Opcode.ASTORE_1:
+          case Opcode.ASTORE_2:
+          case Opcode.ASTORE_3:
+          case Opcode.CHECKCAST:
+          case Opcode.D2F: // double to float
+          case Opcode.D2I: // double to integer
+          case Opcode.D2L: // double to long
+          case Opcode.DNEG: // Negate double on top of stack
+          case Opcode.F2D: // float to double
+          case Opcode.F2I: // float to integer
+          case Opcode.F2L: // float to long
+          case Opcode.FNEG: // Negate float on top of stack
+          case Opcode.GOTO:
+          case Opcode.GOTO_W:
+          case Opcode.I2B: // integer to byte
+          case Opcode.I2C: // integer to char
+          case Opcode.I2D: // integer to double
+          case Opcode.I2F: // integer to float
+          case Opcode.I2L: // integer to long
+          case Opcode.I2S: // integer to short
+          case Opcode.IFNONNULL:
+          case Opcode.IFNULL:
+          case Opcode.IINC: // increment local variable by a constant
+          case Opcode.INEG: // negate integer on top of stack
+          case Opcode.JSR: // pushes return address on the stack, but that
+          // is thought of as an object, so we don't need a tag for it.
+          case Opcode.JSR_W:
+          case Opcode.L2D: // long to double
+          case Opcode.L2F: // long to float
+          case Opcode.L2I: // long to int
+          case Opcode.LNEG: // negate long on top of stack
+          case Opcode.MONITORENTER:
+          case Opcode.MONITOREXIT:
+          case Opcode.NEW:
+          case Opcode.NOP:
+          case Opcode.RET: // this is the internal JSR return
+            return null;
+
+          // UNDONE default -> throw exception when done?
+          default:
+            //    System.out.println("Unexpected instruction opcode: " + ce);
+            return null;
+        }
+      }
+
+      case Label l -> {
+        // UNDONE do anything?
+        return null;
+      }
+
+      case LineNumber ln -> {
+        // UNDONE do anything?
+        return null;
+      }
+
+      // UNDONE default -> throw exception when done?
+      default -> {
+        System.out.println("Unexpected CodeElement: " + ce);
+        return null;
       }
     }
-    // CodeElement is not an Instruction so just ignore it
-    // UNDONE: what about labels?
-    return null;
   }
 
   /**
@@ -2128,36 +2372,6 @@ public class DCInstrument24 {
     org.apache.bcel.generic.Instruction inst = ih.getInstruction();
 
     switch (inst.getOpcode()) {
-
-      // Replace the object comparison instructions with a call to
-      // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
-      // return a boolean which is used in a ifeq/ifne instruction
-      case Const.IF_ACMPEQ:
-        // return object_comparison((BranchInstruction) inst, "object_eq", Const.IFNE);
-        return null;
-      case Const.IF_ACMPNE:
-        // return object_comparison((BranchInstruction) inst, "object_ne", Const.IFNE);
-        return null;
-
-      // These instructions compare the integer on the top of the stack
-      // to zero.  Nothing is made comparable by this, so we need only
-      // discard the tag on the top of the stack.
-      case Const.IFEQ:
-      case Const.IFNE:
-      case Const.IFLT:
-      case Const.IFGE:
-      case Const.IFGT:
-      case Const.IFLE:
-        {
-          // return discard_tag_code(inst, 1);
-          return null;
-        }
-
-      // Instanceof pushes either 0 or 1 on the stack depending on whether
-      // the object on top of stack is of the specified type.  We push a
-      // tag for a constant, since nothing is made comparable by this.
-      case Const.INSTANCEOF:
-      //        return build_il(dcr_call("push_const", Type.VOID, Type.NO_ARGS), inst);
 
       // Duplicates the item on the top of stack.  If the value on the
       // top of the stack is a primitive, we need to do the same on the
@@ -2227,209 +2441,7 @@ public class DCInstrument24 {
           return swap_tag(inst, stack);
         }
 
-      case Const.IF_ICMPEQ:
-      case Const.IF_ICMPGE:
-      case Const.IF_ICMPGT:
-      case Const.IF_ICMPLE:
-      case Const.IF_ICMPLT:
-      case Const.IF_ICMPNE:
-        {
-          //          return build_il(dcr_call("cmp_op", Type.VOID, Type.NO_ARGS), inst);
-          return null;
-        }
-
-      case Const.GETFIELD:
-        {
-          return load_store_field(mg, (GETFIELD) inst);
-        }
-
-      case Const.PUTFIELD:
-        {
-          return load_store_field(mg, (PUTFIELD) inst);
-        }
-
-      case Const.GETSTATIC:
-        {
-          return load_store_field(mg, ((GETSTATIC) inst));
-        }
-
-      case Const.PUTSTATIC:
-        {
-          return load_store_field(mg, ((PUTSTATIC) inst));
-        }
-
-      case Const.DLOAD:
-      case Const.DLOAD_0:
-      case Const.DLOAD_1:
-      case Const.DLOAD_2:
-      case Const.DLOAD_3:
-      case Const.FLOAD:
-      case Const.FLOAD_0:
-      case Const.FLOAD_1:
-      case Const.FLOAD_2:
-      case Const.FLOAD_3:
-      case Const.ILOAD:
-      case Const.ILOAD_0:
-      case Const.ILOAD_1:
-      case Const.ILOAD_2:
-      case Const.ILOAD_3:
-      case Const.LLOAD:
-      case Const.LLOAD_0:
-      case Const.LLOAD_1:
-      case Const.LLOAD_2:
-      case Const.LLOAD_3:
-        {
-          // return load_store_local(
-          // (org.apache.bcel.generic.LoadInstruction) inst, tag_frame_local, "push_local_tag");
-          return null;
-        }
-
-      case Const.DSTORE:
-      case Const.DSTORE_0:
-      case Const.DSTORE_1:
-      case Const.DSTORE_2:
-      case Const.DSTORE_3:
-      case Const.FSTORE:
-      case Const.FSTORE_0:
-      case Const.FSTORE_1:
-      case Const.FSTORE_2:
-      case Const.FSTORE_3:
-      case Const.ISTORE:
-      case Const.ISTORE_0:
-      case Const.ISTORE_1:
-      case Const.ISTORE_2:
-      case Const.ISTORE_3:
-      case Const.LSTORE:
-      case Const.LSTORE_0:
-      case Const.LSTORE_1:
-      case Const.LSTORE_2:
-      case Const.LSTORE_3:
-        {
-          // return load_store_local(
-          // (org.apache.bcel.generic.StoreInstruction) inst, tag_frame_local, "pop_local_tag");
-          return null;
-        }
-
-      case Const.LDC:
-      case Const.LDC_W:
-      case Const.LDC2_W:
-        {
-          return ldc_tag(inst, stack);
-        }
-
-      // Push the tag for the array onto the tag stack.  This causes
-      // anything comparable to the length to be comparable to the array
-      // as an index.
-      case Const.ARRAYLENGTH:
-        {
-          return array_length(inst);
-        }
-
-      case Const.BIPUSH:
-      case Const.SIPUSH:
-      case Const.DCONST_0:
-      case Const.DCONST_1:
-      case Const.FCONST_0:
-      case Const.FCONST_1:
-      case Const.FCONST_2:
-      case Const.ICONST_0:
-      case Const.ICONST_1:
-      case Const.ICONST_2:
-      case Const.ICONST_3:
-      case Const.ICONST_4:
-      case Const.ICONST_5:
-      case Const.ICONST_M1:
-      case Const.LCONST_0:
-      case Const.LCONST_1:
-        {
-          //          return build_il(dcr_call("push_const", Type.VOID, Type.NO_ARGS), inst);
-          return null;
-        }
-
-      // Primitive Binary operators.  Each is augmented with a call to
-      // DCRuntime.binary_tag_op that merges the tags and updates the tag
-      // Stack.
-      case Const.DADD:
-      case Const.DCMPG:
-      case Const.DCMPL:
-      case Const.DDIV:
-      case Const.DMUL:
-      case Const.DREM:
-      case Const.DSUB:
-      case Const.FADD:
-      case Const.FCMPG:
-      case Const.FCMPL:
-      case Const.FDIV:
-      case Const.FMUL:
-      case Const.FREM:
-      case Const.FSUB:
-      case Const.IADD:
-      case Const.IAND:
-      case Const.IDIV:
-      case Const.IMUL:
-      case Const.IOR:
-      case Const.IREM:
-      case Const.ISHL:
-      case Const.ISHR:
-      case Const.ISUB:
-      case Const.IUSHR:
-      case Const.IXOR:
-      case Const.LADD:
-      case Const.LAND:
-      case Const.LCMP:
-      case Const.LDIV:
-      case Const.LMUL:
-      case Const.LOR:
-      case Const.LREM:
-      case Const.LSHL:
-      case Const.LSHR:
-      case Const.LSUB:
-      case Const.LUSHR:
-      case Const.LXOR:
-        //        return build_il(dcr_call("binary_tag_op", Type.VOID, Type.NO_ARGS), inst);
-        return null;
-
-      // Computed jump based on the int on the top of stack.  Since that int
-      // is not made comparable to anything, we just discard its tag.  One
-      // might argue that the key should be made comparable to each value in
-      // the jump table.  But the tags for those values are not available.
-      // And since they are all constants, its not clear how interesting it
-      // would be anyway.
-      case Const.LOOKUPSWITCH:
-      case Const.TABLESWITCH:
-        // return discard_tag_code(inst, 1);
-        return null;
-
-      // Make the integer argument to ANEWARRAY comparable to the new
-      // array's index.
-      case Const.ANEWARRAY:
-      case Const.NEWARRAY:
-        {
-          return new_array(inst);
-        }
-
-      // If the new array has 2 dimensions, make the integer arguments
-      // comparable to the corresponding indices of the new array.
-      // For any other number of dimensions, discard the tags for the
-      // arguments.
-      case Const.MULTIANEWARRAY:
-        {
-          return multi_newarray_dc(inst);
-        }
-
-      // Mark the array and its index as comparable.  Also for primitives,
-      // push the tag of the array element on the tag stack
-      case Const.AALOAD:
-      case Const.BALOAD:
-      case Const.CALOAD:
-      case Const.DALOAD:
-      case Const.FALOAD:
-      case Const.IALOAD:
-      case Const.LALOAD:
-      case Const.SALOAD:
-        {
-          return array_load(inst);
-        }
+      // end of dup opcodes
 
       // Mark the array and its index as comparable.  For primitives, store
       // the tag for the value on the top of the stack in the tag storage
@@ -2458,18 +2470,6 @@ public class DCInstrument24 {
       case Const.SASTORE:
         return array_store(inst, "sastore", Type.SHORT);
 
-      // Prefix the return with a call to the correct normal_exit method
-      // to handle the tag stack
-      case Const.ARETURN:
-      case Const.DRETURN:
-      case Const.FRETURN:
-      case Const.IRETURN:
-      case Const.LRETURN:
-      case Const.RETURN:
-        {
-          return return_tag(mg, inst);
-        }
-
       // Handle subroutine calls.  Calls to instrumented code are modified
       // to call the instrumented version (with the DCompMarker argument).
       // Calls to uninstrumented code (rare) discard primitive arguments
@@ -2480,60 +2480,6 @@ public class DCInstrument24 {
       case Const.INVOKEINTERFACE:
       case Const.INVOKEDYNAMIC:
         return handleInvoke((org.apache.bcel.generic.InvokeInstruction) inst);
-
-      // Throws an exception.  This clears the operand stack of the current
-      // frame.  We need to clear the tag stack as well.
-      case Const.ATHROW:
-        //        return build_il(dcr_call("throw_op", Type.VOID, Type.NO_ARGS), inst);
-        return null;
-
-      // Opcodes that don't need any modifications.  Here for reference
-      case Const.ACONST_NULL:
-      case Const.ALOAD:
-      case Const.ALOAD_0:
-      case Const.ALOAD_1:
-      case Const.ALOAD_2:
-      case Const.ALOAD_3:
-      case Const.ASTORE:
-      case Const.ASTORE_0:
-      case Const.ASTORE_1:
-      case Const.ASTORE_2:
-      case Const.ASTORE_3:
-      case Const.CHECKCAST:
-      case Const.D2F: // double to float
-      case Const.D2I: // double to integer
-      case Const.D2L: // double to long
-      case Const.DNEG: // Negate double on top of stack
-      case Const.F2D: // float to double
-      case Const.F2I: // float to integer
-      case Const.F2L: // float to long
-      case Const.FNEG: // Negate float on top of stack
-      case Const.GOTO:
-      case Const.GOTO_W:
-      case Const.I2B: // integer to byte
-      case Const.I2C: // integer to char
-      case Const.I2D: // integer to double
-      case Const.I2F: // integer to float
-      case Const.I2L: // integer to long
-      case Const.I2S: // integer to short
-      case Const.IFNONNULL:
-      case Const.IFNULL:
-      case Const.IINC: // increment local variable by a constant
-      case Const.INEG: // negate integer on top of stack
-      case Const.JSR: // pushes return address on the stack, but that
-      // is thought of as an object, so we don't need
-      // a tag for it.
-      case Const.JSR_W:
-      case Const.L2D: // long to double
-      case Const.L2F: // long to float
-      case Const.L2I: // long to int
-      case Const.LNEG: // negate long on top of stack
-      case Const.MONITORENTER:
-      case Const.MONITOREXIT:
-      case Const.NEW:
-      case Const.NOP:
-      case Const.RET: // this is the internal JSR return
-        return null;
 
       // Make sure we didn't miss anything
       default:
@@ -3211,149 +3157,201 @@ public class DCInstrument24 {
 
       // Runtime will discover if the object's superclass has an instrumented clone method.
       // If so, call it; otherwise call the uninstrumented version.
-      il.append(dcr_call("dcomp_super_clone", returnType, new Type[] {Type.OBJECT, javalangClass}));
+      // use CD_Class
+      // il.append(dcr_call("dcomp_super_clone", returnType, new Type[] {Type.OBJECT,
+      // javalangClass}));
 
     } else { // a regular (non-super) clone() call
 
       // Runtime will discover if the object has an instrumented clone method.
       // If so, call it; otherwise call the uninstrumented version.
-      il.append(dcr_call("dcomp_clone", returnType, new Type[] {Type.OBJECT, javalangClass}));
+      // il.append(dcr_call("dcomp_clone", returnType, new Type[] {Type.OBJECT, javalangClass}));
     }
 
     return il;
   }
 
-  // * Create the instructions that replace the object eq or ne branch instruction. They are
-  // * replaced
-  // * by a call to the specified compare_method (which returns a boolean) followed by the specified
-  // * boolean ifeq or ifne instruction.
-  // InstructionList object_comparison(
-  // BranchInstruction branch, String compare_method, short boolean_if) {
-  //
-  // InstructionList il = new InstructionList();
-  // il.append(
-  // ifact.createInvoke(
-  // dcompRuntimeClassname, compare_method, Type.BOOLEAN, two_objects, Const.INVOKESTATIC));
-  // assert branch.getTarget() != null;
-  // il.append(InstructionFactory.createBranchInstruction(boolean_if, branch.getTarget()));
-  // return il;
-  // }
+  /**
+   * Create the instructions that replace the object eq or ne branch instruction. They are replaced
+   * by a call to the specified compare_method (which returns a boolean) followed by the specified
+   * boolean ifeq or ifne instruction.
+   *
+   * @param branch a branch instruction
+   * @param compare_method name of DCRuntime routine to call
+   * @param boolean_if branch instruction to gerate of the runtime call
+   * @return instruction list to do object comparison
+   */
+  private List<CodeElement> object_comparison(
+      BranchInstruction branch, String compare_method, Opcode boolean_if) {
+    List<CodeElement> il = new ArrayList<>();
+
+    MethodRefEntry mre =
+        poolBuilder.methodRefEntry(
+            runtimeCD, compare_method, MethodTypeDesc.of(CD_boolean, two_objects_arg));
+    il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
+    il.add(BranchInstruction.of(boolean_if, branch.target()));
+    return il;
+  }
 
   /**
    * Handles load and store field instructions. The instructions must be augmented to either push
    * (load) or pop (store) the tag on the tag stack. This is accomplished by calling the tag get/set
    * method for this field.
    */
-  InstructionList load_store_field(MethodGen mg, org.apache.bcel.generic.FieldInstruction f) {
+  private List<CodeElement> load_store_field(MethodGen24 mgen, FieldInstruction f) {
 
-    Type field_type = f.getFieldType(pool);
-    if (field_type instanceof ReferenceType) {
+    System.out.println();
+    System.out.println("mgen: " + mgen);
+    System.out.println("FieldInst: " + f);
+    System.out.println("field_name: " + f.name().stringValue());
+    System.out.println("owner: " + f.owner());
+    System.out.println("owner: " + f.owner().asInternalName().replace('/', '.'));
+    ClassDesc field_type = f.typeSymbol();
+    System.out.println("field_type: " + field_type);
+    int field_size = TypeKind.from(field_type).slotSize();
+    if (!field_type.isPrimitive()) {
       return null;
     }
-    ObjectType obj_type = (ObjectType) f.getReferenceType(pool);
-    InstructionList il = new InstructionList();
-    String classname = obj_type.getClassName();
+
+    List<CodeElement> il = new ArrayList<>();
+    Opcode op = f.opcode();
+    // ObjectType obj_type = (ObjectType) f.getReferenceType(pool);
+    @BinaryName String classname = classGen.getClassName();
+    String fieldName = f.name().stringValue();
+    String owner = f.owner().asInternalName().replace('/', '.');
+    ClassDesc ownerCD = f.owner().asSymbol();
 
     // If this class doesn't support tag fields, don't load/store them
-    //    if (!tag_fields_ok(mg, classname)) {
-    {
-      if ((f instanceof GETFIELD) || (f instanceof GETSTATIC)) {
-        il.append(dcr_call("push_const", Type.VOID, Type.NO_ARGS));
+    if (!tag_fields_ok(mgen, classname)) {
+      if (op.equals(Opcode.GETFIELD) || op.equals(Opcode.GETSTATIC)) {
+        il.add(dcr_call("push_const", CD_void, noArgsCD));
       } else {
-        il.append(ifact.createConstant(1));
-        // il.append(dcr_call("discard_tag", Type.VOID, integer_arg));
+        il.add(loadIntegerConstant(1));
+        il.add(dcr_call("discard_tag", CD_void, integer_arg));
       }
 
       // Perform the normal field command
-      il.append(f);
-      //      return il;
+      il.add(f);
+      return il;
     }
 
-    if (f instanceof GETSTATIC) {
-      il.append(
-          ifact.createInvoke(
-              classname,
-              Premain.tag_method_name(Premain.GET_TAG, classname, f.getFieldName(pool)),
-              Type.VOID,
-              Type.NO_ARGS,
-              Const.INVOKESTATIC));
-    } else if (f instanceof PUTSTATIC) {
-      il.append(
-          ifact.createInvoke(
-              classname,
-              Premain.tag_method_name(Premain.SET_TAG, classname, f.getFieldName(pool)),
-              Type.VOID,
-              Type.NO_ARGS,
-              Const.INVOKESTATIC));
-    } else if (f instanceof GETFIELD) {
-      il.append(InstructionFactory.createDup(obj_type.getSize()));
-      il.append(
-          ifact.createInvoke(
-              classname,
-              Premain.tag_method_name(Premain.GET_TAG, classname, f.getFieldName(pool)),
-              Type.VOID,
-              Type.NO_ARGS,
-              Const.INVOKEVIRTUAL));
-    } else { // must be put field
-      if (field_type.getSize() == 2) {
-        LocalVariableGen lv = get_tmp2_local(mg, field_type);
-        il.append(InstructionFactory.createStore(field_type, lv.getIndex()));
-        il.append(InstructionFactory.createDup(obj_type.getSize()));
-        il.append(
-            ifact.createInvoke(
-                classname,
-                Premain.tag_method_name(Premain.SET_TAG, classname, f.getFieldName(pool)),
-                Type.VOID,
-                Type.NO_ARGS,
-                Const.INVOKEVIRTUAL));
-        il.append(InstructionFactory.createLoad(field_type, lv.getIndex()));
+    if (op.equals(Opcode.GETSTATIC)) {
+      MethodRefEntry mre =
+          poolBuilder.methodRefEntry(
+              ownerCD,
+              Premain.tag_method_name(Premain.GET_TAG, owner, fieldName),
+              MethodTypeDesc.of(CD_void, noArgsCD));
+      il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
+    } else if (op.equals(Opcode.PUTSTATIC)) {
+      MethodRefEntry mre =
+          poolBuilder.methodRefEntry(
+              ownerCD,
+              Premain.tag_method_name(Premain.SET_TAG, owner, fieldName),
+              MethodTypeDesc.of(CD_void, noArgsCD));
+      il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
+    } else if (op.equals(Opcode.GETFIELD)) {
+      // il.add(InstructionFactory.createDup(obj_type.getSize()));
+      il.add(StackInstruction.of(Opcode.DUP));
+      MethodRefEntry mre =
+          poolBuilder.methodRefEntry(
+              ownerCD,
+              Premain.tag_method_name(Premain.GET_TAG, owner, fieldName),
+              MethodTypeDesc.of(CD_void, noArgsCD));
+      il.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
+    } else { // must be Opcode.PUTFIELD
+      if (field_size == 2) {
+        // LocalVariableGen lv = get_tmp2_local(mg, field_type);
+        // il.add(InstructionFactory.createStore(field_type, lv.getIndex()));
+        // il.add(InstructionFactory.createDup(obj_type.getSize()));
+        // MethodRefEntry mre =
+        // poolBuilder.methodRefEntry(
+        // ownerCD, Premain.tag_method_name(Premain.SET_TAG, owner, fieldName),
+        // MethodTypeDesc.of(CD_void, noArgsCD));
+        // il.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
+        // il.add(InstructionFactory.createLoad(field_type, lv.getIndex()));
       } else {
-        il.append(new SWAP());
-        il.append(InstructionFactory.createDup(obj_type.getSize()));
-        il.append(
-            ifact.createInvoke(
-                classname,
-                Premain.tag_method_name(Premain.SET_TAG, classname, f.getFieldName(pool)),
-                Type.VOID,
-                Type.NO_ARGS,
-                Const.INVOKEVIRTUAL));
-        il.append(new SWAP());
+        il.add(StackInstruction.of(Opcode.SWAP));
+        // il.add(StackInstruction.of(obj_type.getSize()));
+        il.add(StackInstruction.of(Opcode.DUP));
+        MethodRefEntry mre =
+            poolBuilder.methodRefEntry(
+                ownerCD,
+                Premain.tag_method_name(Premain.SET_TAG, owner, fieldName),
+                MethodTypeDesc.of(CD_void, noArgsCD));
+        il.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
+        il.add(StackInstruction.of(Opcode.SWAP));
       }
     }
 
     // Perform the normal field command
-    il.append(f);
+    il.add(f);
 
     return il;
   }
 
   /**
-   * Handles load and store local instructions. The instructions must be augmented to either push
-   * (load) or pop (store) the tag on the tag stack. This is accomplished by calling the specified
-   * method in DCRuntime and passing that method the tag frame and the offset of local/parameter.
+   * Handles load local instructions. The instructions must be augmented to push the tag on the tag
+   * stack. This is accomplished by calling the specified method in DCRuntime and passing that
+   * method the tag_frame frame and the offset of local/parameter.
+   *
+   * @param load a load instruction
+   * @param tagFrameLocal local variable for the tag_frame
+   * @param method name of DCRuntime routine to call
+   * @return instruction list to do object comparison
    */
-  InstructionList load_store_local(
-      LocalVariableInstruction lvi, LocalVariableGen tag_frame_local, String method) {
+  private List<CodeElement> load_local(
+      LoadInstruction load, LocalVariable tagFrameLocal, String method) {
+    List<CodeElement> il = new ArrayList<>();
 
-    // Don't need tags for objects
-    assert !(lvi instanceof ALOAD) && !(lvi instanceof ASTORE) : "lvi " + lvi;
+    debugInstrument.log("CreateLoad %s %d%n", load.opcode(), tagFrameLocal.slot());
 
-    InstructionList il = new InstructionList();
+    // Push the tag_frame frame
+    il.add(LoadInstruction.of(TypeKind.REFERENCE, tagFrameLocal.slot()));
 
-    // Push the tag frame and the index of this local
-    // il.append(InstructionFactory.createLoad(object_arr, tag_frame_local.getIndex()));
-    // debugInstrument.log("CreateLoad %s %d%n", object_arr, tag_frame_local.getIndex());
-    // il.append(ifact.createConstant(lvi.getIndex()));
+    // push index of local
+    il.add(loadIntegerConstant(load.slot()));
 
-    // Call the runtime method to handle loading/storing the local/parameter
-    // il.append(
-    // ifact.createInvoke(
-    // dcompRuntimeClassname,
-    // method,
-    // Type.VOID,
-    // new Type[] {object_arr, Type.INT},
-    // Const.INVOKESTATIC));
-    il.append(lvi);
+    // Call the runtime method to handle loading the local/parameter
+    MethodRefEntry mre =
+        poolBuilder.methodRefEntry(
+            runtimeCD, method, MethodTypeDesc.of(CD_void, objectArrayCD, CD_int));
+    il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
+
+    // the original load instruction
+    il.add(load);
+    return il;
+  }
+
+  /**
+   * Handles store local instructions. The instructions must be augmented to pop the tag off the tag
+   * stack. This is accomplished by calling the specified method in DCRuntime and passing that
+   * method the tag_frame frame and the offset of local/parameter.
+   *
+   * @param store a store instruction
+   * @param tagFrameLocal local variable for the tag_frame
+   * @param method name of DCRuntime routine to call
+   * @return instruction list to do object comparison
+   */
+  private List<CodeElement> store_local(
+      StoreInstruction store, LocalVariable tagFrameLocal, String method) {
+    List<CodeElement> il = new ArrayList<>();
+
+    debugInstrument.log("CreateStore %s %d%n", store.opcode(), tagFrameLocal.slot());
+
+    // Push the tag_frame frame
+    il.add(LoadInstruction.of(TypeKind.REFERENCE, tagFrameLocal.slot()));
+
+    // push index of local
+    il.add(loadIntegerConstant(store.slot()));
+
+    // Call the runtime method to handle storeing the local/parameter
+    MethodRefEntry mre =
+        poolBuilder.methodRefEntry(
+            runtimeCD, method, MethodTypeDesc.of(CD_void, objectArrayCD, CD_int));
+    il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
+
+    // the original store instruction
+    il.add(store);
     return il;
   }
 
@@ -3553,29 +3551,29 @@ public class DCInstrument24 {
    * appropriate array load method is called to mark them as comparable and update the tag stack.
    * Finally the original load instruction is performed.
    *
+   * @param mgen method to check
    * @param inst an array load instruction
    * @return instruction list that calls the runtime to handle the array load instruction
    */
-  InstructionList array_load(org.apache.bcel.generic.Instruction inst) {
-
-    InstructionList il = new InstructionList();
+  private List<CodeElement> array_load(MethodGen24 mgen, ArrayLoadInstruction inst) {
+    List<CodeElement> il = new ArrayList<>();
 
     // Duplicate the array ref and index and pass them to DCRuntime
     // which will make the index comparable with the array.  In the case
     // of primtives it will also get the tag for the primitive and push
     // it on the tag stack.
-    il.append(new DUP2());
+    il.add(StackInstruction.of(Opcode.DUP2));
     String method = "primitive_array_load";
-    if (inst instanceof AALOAD) {
+    if (inst.typeKind().equals(TypeKind.REFERENCE)) {
       method = "ref_array_load";
-    } else if (is_uninit_class(gen.getClassName())) {
+    } else if (is_uninit_class(mgen.getClassName())) {
       method = "primitive_array_load_null_ok";
     }
 
-    il.append(dcr_call(method, Type.VOID, new Type[] {Type.OBJECT, Type.INT}));
+    il.add(dcr_call(method, CD_void, new ClassDesc[] {CD_Object, CD_int}));
 
     // Perform the original instruction
-    il.append(inst);
+    il.add(inst);
 
     return il;
   }
@@ -3609,17 +3607,16 @@ public class DCInstrument24 {
    * @param inst an arraylength instruction
    * @return instruction list that calls the runtime to handle the arraylength instruction
    */
-  InstructionList array_length(org.apache.bcel.generic.Instruction inst) {
-
-    InstructionList il = new InstructionList();
+  private List<CodeElement> array_length(Instruction inst) {
+    List<CodeElement> il = new ArrayList<>();
 
     // Duplicate the array ref and pass it to DCRuntime which will push
     // it onto the tag stack.
-    il.append(new DUP());
-    il.append(dcr_call("push_array_tag", Type.VOID, new Type[] {Type.OBJECT}));
+    il.add(StackInstruction.of(Opcode.DUP));
+    il.add(dcr_call("push_array_tag", CD_void, object_arg));
 
     // Perform the original instruction
-    il.append(inst);
+    il.add(inst);
 
     return il;
   }
@@ -3630,20 +3627,20 @@ public class DCInstrument24 {
    * @param inst a anewarray or newarray instruction
    * @return instruction list that calls the runtime to handle the newarray instruction
    */
-  InstructionList new_array(org.apache.bcel.generic.Instruction inst) {
-    InstructionList il = new InstructionList();
+  private List<CodeElement> new_array(Instruction inst) {
+    List<CodeElement> il = new ArrayList<>();
 
     // Perform the original instruction
-    il.append(inst);
+    il.add(inst);
 
     // Duplicate the array ref from the top of the stack and pass it
     // to DCRuntime which will push it onto the tag stack.
-    il.append(new DUP());
-    il.append(dcr_call("push_array_tag", Type.VOID, new Type[] {Type.OBJECT}));
+    il.add(StackInstruction.of(Opcode.DUP));
+    il.add(dcr_call("push_array_tag", CD_void, object_arg));
 
     // Make the array and the count comparable. Also, pop the tags for
     // the array and the count off the tag stack.
-    il.append(dcr_call("cmp_op", Type.VOID, Type.NO_ARGS));
+    il.add(dcr_call("cmp_op", CD_void, noArgsCD));
 
     return il;
   }
@@ -3655,21 +3652,20 @@ public class DCInstrument24 {
    * @param inst a multianewarray instruction
    * @return instruction list that calls the runtime to handle the multianewarray instruction
    */
-  InstructionList multiarray2(org.apache.bcel.generic.Instruction inst) {
-    InstructionList il = new InstructionList();
+  private List<CodeElement> multiarray2(Instruction inst) {
+    List<CodeElement> il = new ArrayList<>();
 
     // Duplicate both count arguments
-    il.append(new DUP2());
+    il.add(StackInstruction.of(Opcode.DUP2));
 
     // Perform the original instruction
-    il.append(inst);
+    il.add(inst);
 
     // Duplicate the new arrayref and put it below the count arguments
     // Stack is now: ..., arrayref, count1, count2, arrayref
-    il.append(new DUP_X2());
+    il.add(StackInstruction.of(Opcode.DUP_X2));
 
-    Type objArray = new ArrayType(Type.OBJECT, 1);
-    il.append(dcr_call("multianewarray2", Type.VOID, new Type[] {Type.INT, Type.INT, objArray}));
+    il.add(dcr_call("multianewarray2", CD_void, new ClassDesc[] {CD_int, CD_int, objectArrayCD}));
 
     return il;
   }
@@ -3766,7 +3762,7 @@ public class DCInstrument24 {
    *
    * @param inst instruction to be replaced
    * @param tag_count number of tags to discard
-   * @return instruction list
+   * @return instruction list to discard tag(s)
    */
   List<CodeElement> discard_tag_code(CodeElement inst, int tag_count) {
     List<CodeElement> il = new ArrayList<>();
@@ -4017,37 +4013,18 @@ public class DCInstrument24 {
   }
 
   /**
-   * Adjusts the tag stack for load constant opcodes. If the constant is a primitive, pushes its tag
-   * on the tag stack. If the constant is a reference (string, class), does nothing.
-   */
-  @Nullable InstructionList ldc_tag(org.apache.bcel.generic.Instruction inst, OperandStack stack) {
-    Type type;
-    if (inst instanceof LDC) { // LDC_W extends LDC
-      type = ((LDC) inst).getType(pool);
-    } else {
-      type = ((LDC2_W) inst).getType(pool);
-    }
-    if (!(type instanceof BasicType)) {
-      return null;
-    }
-    //    return build_il(dcr_call("push_const", Type.VOID, Type.NO_ARGS), inst);
-    return null;
-  }
-
-  /**
    * Handle the instruction that allocates multi-dimensional arrays. If the new array has 2
    * dimensions, make the integer arguments comparable to the corresponding indices of the new
    * array. For any other number of dimensions, discard the tags for the arguments. Higher
    * dimensions should really be handled as well, but there are very few cases of this and the
    * resulting code would be quite complex (see multiarray2 for details).
    */
-  InstructionList multi_newarray_dc(org.apache.bcel.generic.Instruction inst) {
-    int dims = ((MULTIANEWARRAY) inst).getDimensions();
+  private List<CodeElement> multi_newarray_dc(NewMultiArrayInstruction inst) {
+    int dims = inst.dimensions();
     if (dims == 2) {
       return multiarray2(inst);
     } else {
-      // return discard_tag_code(inst, dims);
-      return null;
+      return discard_tag_code(inst, dims);
     }
   }
 
@@ -4055,23 +4032,25 @@ public class DCInstrument24 {
    * Create an instruction list that calls the runtime to handle returns for the tag stack follow by
    * the original return instruction.
    *
-   * @param mg method to modify
+   * @param mgen method to check
    * @param inst return instruction to be replaced
    * @return the instruction list
    */
-  InstructionList return_tag(MethodGen mg, org.apache.bcel.generic.Instruction inst) {
-    // Type type = mg.getReturnType();
-    InstructionList il = new InstructionList();
+  private List<CodeElement> return_tag(MethodGen24 mgen, Instruction inst) {
+    List<CodeElement> il = new ArrayList<>();
+
+    ClassDesc type = mgen.getReturnType();
 
     // Push the tag frame
-    // il.append(InstructionFactory.createLoad(object_arr, tag_frame_local.getIndex()));
+    il.add(LoadInstruction.of(TypeKind.REFERENCE, tagFrameLocal.slot()));
 
     // if ((type instanceof BasicType) && (type != Type.VOID)) {
-    // il.append(dcr_call("normal_exit_primitive", Type.VOID, new Type[] {object_arr}));
-    // } else {
-    // il.append(dcr_call("normal_exit", Type.VOID, new Type[] {object_arr}));
-    // }
-    il.append(inst);
+    if (type.isPrimitive()) {
+      il.add(dcr_call("normal_exit_primitive", CD_void, object_arg));
+    } else {
+      il.add(dcr_call("normal_exit", CD_void, object_arg));
+    }
+    il.add(inst);
     return il;
   }
 
@@ -4244,15 +4223,30 @@ public class DCInstrument24 {
   }
 
   /**
+   * Convenience function to build an instruction list.
+   *
+   * @param instructions a variable number of instructions
+   * @return an instruction list
+   */
+  private List<CodeElement> build_il(CodeElement... instructions) {
+    List<CodeElement> il = new ArrayList<>();
+
+    for (CodeElement inst : instructions) {
+      il.add(inst);
+    }
+    return il;
+  }
+
+  /**
    * Returns whether or not tag fields are used within the specified method of the specified class.
    * We can safely use class fields except in Object, String, and Class. If checking a class, mgen
    * is null.
    *
    * @param mgen method to check
-   * @param classGen class to check
+   * @param classname class to check
    * @return true if tag fields may be used in class for method
    */
-  boolean tag_fields_ok(@Nullable MethodGen24 mgen, ClassGen24 classGen) {
+  boolean tag_fields_ok(@Nullable MethodGen24 mgen, @BinaryName String classname) {
 
     // Prior to Java 8 an interface could not contain any implementations.
     if (classGen.isInterface()) {
@@ -4268,8 +4262,6 @@ public class DCInstrument24 {
         }
       }
     }
-
-    String classname = classGen.getClassName();
 
     if (!Premain.jdk_instrumented) {
       if (BcelUtil.inJdk(classname)) {
@@ -4332,7 +4324,7 @@ public class DCInstrument24 {
   void create_tag_accessors(ClassGen24 classGen) {
 
     // If this class doesn't support tag fields, don't create them
-    if (!tag_fields_ok(null, classGen)) return;
+    if (!tag_fields_ok(null, classGen.getClassName())) return;
 
     Set<String> field_set = new HashSet<>();
     Map<FieldModel, Integer> field_map = build_field_map(classModel);
