@@ -3140,7 +3140,7 @@ public class DCInstrument24 {
   InstructionList instrument_clone_call(org.apache.bcel.generic.InvokeInstruction invoke) {
 
     InstructionList il = new InstructionList();
-    Type returnType = invoke.getReturnType(pool);
+    // Type returnType = invoke.getReturnType(pool);
     String classname = invoke.getClassName(pool);
     ReferenceType ref_type = invoke.getReferenceType(pool);
     if (ref_type instanceof ArrayType) {
@@ -3153,20 +3153,20 @@ public class DCInstrument24 {
     il.append(new LDC(pool.addClass(classname)));
 
     // if this is a super call
-    if (invoke.getOpcode() == Const.INVOKESPECIAL) {
+    // if (invoke.getOpcode() == Const.INVOKESPECIAL) {
 
-      // Runtime will discover if the object's superclass has an instrumented clone method.
-      // If so, call it; otherwise call the uninstrumented version.
-      // use CD_Class
-      // il.append(dcr_call("dcomp_super_clone", returnType, new Type[] {Type.OBJECT,
-      // javalangClass}));
+    // Runtime will discover if the object's superclass has an instrumented clone method.
+    // If so, call it; otherwise call the uninstrumented version.
+    // use CD_Class
+    // il.append(dcr_call("dcomp_super_clone", returnType, new Type[] {Type.OBJECT,
+    // javalangClass}));
 
-    } else { // a regular (non-super) clone() call
+    // } else { // a regular (non-super) clone() call
 
-      // Runtime will discover if the object has an instrumented clone method.
-      // If so, call it; otherwise call the uninstrumented version.
-      // il.append(dcr_call("dcomp_clone", returnType, new Type[] {Type.OBJECT, javalangClass}));
-    }
+    // Runtime will discover if the object has an instrumented clone method.
+    // If so, call it; otherwise call the uninstrumented version.
+    // il.append(dcr_call("dcomp_clone", returnType, new Type[] {Type.OBJECT, javalangClass}));
+    // }
 
     return il;
   }
