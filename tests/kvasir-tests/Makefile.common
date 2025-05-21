@@ -54,6 +54,10 @@ endif
 
 default: summary-w-daikon
 
+ifeq (,$(wildcard ${DAIKONDIR}/scripts/lsb_release))
+$(shell cd ${DAIKONDIR}/scripts && wget https://raw.githubusercontent.com/OpenMandrivaSoftware/lsb-release/refs/heads/master/lsb_release && chmod +x lsb_release)
+endif
+
 # Set up potential OS_ID and OS_ID+OS_REL specific goal targets.
 OS_ID := $(shell ${DAIKONDIR}/scripts/lsb_release -si)
 OS_REL := $(shell ${DAIKONDIR}/scripts/lsb_release -sr)
