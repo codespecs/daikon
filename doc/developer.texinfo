@@ -42,13 +42,13 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.8.21
+@center Daikon version 5.8.22
 
 @sp 1
 
 @c The following comment is needed to help perl edit the release date.
-@c Print out the Daikon version 5.8.21 release date
-@center May 14, 2024
+@c Print out the Daikon version 5.8.22 release date
+@center June 3, 2025
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -85,7 +85,7 @@ Copyright @copyright{} 1998-2025
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.21, released May 14, 2024.
+It describes Daikon version 5.8.22, released June 3, 2025.
 
 @menu
 * Introduction::

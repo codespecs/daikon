@@ -223,10 +223,10 @@ public final class Daikon {
   public static int dkconfig_progress_delay = 1000;
 
   /** The current version of Daikon. */
-  public static final String release_version = "5.8.21";
+  public static final String release_version = "5.8.22";
 
   /** The date for the current version of Daikon. */
-  public static final String release_date = "May 14, 2024";
+  public static final String release_date = "June 3, 2025";
 
   /** A description of the Daikon release (version number, date, and URL). */
   public static final String release_string =
@@ -1390,12 +1390,12 @@ public final class Daikon {
             throw new Daikon.UserError("Cannot write to serialization output file " + inv_file);
           }
           break;
-        //
+          //
         case '?':
           // break; // getopt() already printed an error
           System.out.println(usage);
           throw new Daikon.NormalTermination();
-        //
+          //
         default:
           throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
