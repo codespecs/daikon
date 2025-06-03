@@ -34,5 +34,10 @@ tar xzf "daikon-$DAIKONVERSION.tar.gz"
 cd "daikon-$DAIKONVERSION"
 DAIKONDIR=$(pwd)
 export DAIKONDIR
+if [ ! -f "${SCRIPTDIR}"/daikon.bashrc ] ; then
+    echo "\$0=$0"
+    echo "SCRIPTDIR=${SCRIPTDIR}"
+    echo "DAIKONDIR=${DAIKONDIR}"
+fi
 . "${SCRIPTDIR}"/daikon.bashrc
 make distribution-check
