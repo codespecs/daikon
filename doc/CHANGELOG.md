@@ -18,10 +18,14 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at http://plse.cs.washington.edu/daikon/download/api/ .
 
-Version 5.8.22 (??? ??, 2024)
+Version 5.8.22 (June 3, 2025)
 =============================
 
 All Daikon tools now work with Java 8-24.
+
+Bug fixes:
+ * fixed Daikon issues 515, 532, 536 and 556
+ * fixed Fjalar issues 66 and 68
 
 
 Version 5.8.20 (May 14, 2024)
