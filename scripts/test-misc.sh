@@ -19,7 +19,7 @@ fi
 
 # Code style & quality
 make -C java error-prone
-make -C java check-format
+make -C java check-format || (make -C java reformat && git diff && /bin/false)
 make -C scripts style-check
 
 # Documentation
