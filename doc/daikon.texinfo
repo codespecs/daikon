@@ -56,13 +56,13 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.8.22
+@center Daikon version 5.8.23
 
 @sp 1
 
 @c The following comment is needed to help perl edit the release date.
-@c Print out the Daikon version 5.8.22 release date
-@center June 3, 2025
+@c Print out the Daikon version 5.8.23 release date
+@center June 4, 2025
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -99,7 +99,7 @@ Copyright @copyright{} 1998-2025
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.8.22, released June 3, 2025.
+It describes Daikon version 5.8.23, released June 4, 2025.
 
 @menu
 * Introduction::
@@ -249,12 +249,12 @@ unpack Daikon.
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.22.tar.gz
-tar zxf daikon-5.8.22.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.23.tar.gz
+tar zxf daikon-5.8.23.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-5.8.22/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.8.23/} subdirectory.
 
 @item
 Place two commands in your shell initialization file:
@@ -266,7 +266,7 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # "daikonparentpath" is the absolute path to the directory that contains Daikon.
-export DAIKONDIR=@var{daikonparentpath}/daikon-5.8.22
+export DAIKONDIR=@var{daikonparentpath}/daikon-5.8.23
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
@@ -332,10 +332,10 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 @c
 @c apt-get install -y wget
 @c
-@c wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.22.tar.gz
-@c tar zxf daikon-5.8.22.tar.gz
+@c wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.23.tar.gz
+@c tar zxf daikon-5.8.23.tar.gz
 @c
-@c export DAIKONDIR=$(cd daikon-5.8.22 && pwd)
+@c export DAIKONDIR=$(cd daikon-5.8.23 && pwd)
 @c source $DAIKONDIR/scripts/daikon.bashrc
 @c
 @c apt-get install -y openjdk-11-jdk gcc ctags git graphviz make netpbm \
@@ -3620,7 +3620,7 @@ itself (if a file named @file{daikon.jar} appears in the classpath).  If
 the Daikon jar file is not named @file{daikon.jar}, you can use this
 switch to specify its name.  For example:
 @example
---premain=C:\lib\daikon-5.8.22.jar
+--premain=C:\lib\daikon-5.8.23.jar
 @end example
 
 @end table
@@ -4136,7 +4136,7 @@ itself (if a file named @file{daikon.jar} appears in the classpath).  If
 the Daikon jar file is not named @file{daikon.jar}, you can use this
 switch to specify its name.  For example:
 @example
---premain=C:\lib\daikon-5.8.22.jar
+--premain=C:\lib\daikon-5.8.23.jar
 @end example
 
 @end table
@@ -8691,7 +8691,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.8.22, released June 3, 2025.
+This manual describes Daikon version 5.8.23, released June 4, 2025.
 A more detailed list of revisions since mid-2001 can be found in file
 @url{CHANGELOG.md,,@file{doc/CHANGELOG.md}}
 in the distribution; this section gives a
@@ -8706,7 +8706,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.8.22
+@cindex Daikon version 5.8.23
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited
