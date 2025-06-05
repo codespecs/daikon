@@ -2081,7 +2081,8 @@ the Texinfo source files in the @file{doc/} directory against the previous
 versions:
 
 @smallexample
-cd $DAIKONDIR/doc
+if [ -z "$DAIKONDIR" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
+cd $DAIKONDIR/doc && \
 diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
 @end smallexample
 
@@ -2090,9 +2091,10 @@ Another good source of information are the repository logs since the
 last release:
 
 @smallexample
-cd $DAIKONDIR
+if [ -z "$DAIKONDIR" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
 DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
+    -O - | xargs echo -n` && \
+cd $DAIKONDIR && \
 git log v$DAIKONVERSION..HEAD
 @end smallexample
 
@@ -2108,9 +2110,10 @@ git log v$DAIKONVERSION..HEAD
 In addition, you should run the same command in your Fjalar clone:
 
 @smallexample
-cd $DAIKONDIR/fjalar
+if [ -z "$DAIKONDIR" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
 DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
+    -O - | xargs echo -n` && \
+{ cd $DAIKONDIR/fjalar || cd $DAIKONDIR/../fjalar ; } && \
 git log v$DAIKONVERSION..HEAD
 @end smallexample
 
