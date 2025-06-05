@@ -2113,7 +2113,7 @@ In addition, you should run the same command in your Fjalar clone:
 if [ -z "$DAIKONDIR" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
 DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
     -O - | xargs echo -n` && \
-{ cd $DAIKONDIR/fjalar || cd $DAIKONDIR/../fjalar ; } && \
+@{ cd $DAIKONDIR/fjalar || cd $DAIKONDIR/../fjalar ; @} && \
 git log v$DAIKONVERSION..HEAD
 @end smallexample
 
