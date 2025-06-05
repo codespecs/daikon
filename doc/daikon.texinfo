@@ -328,9 +328,9 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 @c # If desired, you can use openjdk-8-jdk instead of openjdk-11-jdk.
 @c
 @c apt update
-@c apt-get install -y openjdk-11-jdk
+@c apt install -y openjdk-11-jdk
 @c
-@c apt-get install -y wget
+@c apt install -y wget
 @c
 @c wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.23.tar.gz
 @c tar zxf daikon-5.8.23.tar.gz
@@ -338,7 +338,7 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 @c export DAIKONDIR=$(cd daikon-5.8.23 && pwd)
 @c source $DAIKONDIR/scripts/daikon.bashrc
 @c
-@c apt-get install -y openjdk-11-jdk gcc ctags git graphviz make netpbm \
+@c apt install -y openjdk-11-jdk gcc ctags git graphviz make netpbm \
 @c   texlive texlive-generic-recommended texinfo \
 @c   autoconf automake binutils-dev m4 zlib1g-dev
 @c
