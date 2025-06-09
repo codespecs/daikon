@@ -78,4 +78,5 @@ create_upload_docker_image daikon rockylinux jdk21 && \
 create_upload_docker_image daikon rockylinux jdk21-plus && \
 create_upload_docker_image daikon rockylinux jdk24 && \
 create_upload_docker_image daikon rockylinux jdk24-plus && \
-git push
+git push && \
+echo "success"

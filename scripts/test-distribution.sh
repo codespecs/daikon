@@ -2,7 +2,7 @@
 
 # Download the distribution and run "make distribution-check".
 
-SCRIPTDIR="$(cd "$(dirname "$0")" > /dev/null 2>&1 && pwd -P)"
+SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd -P)"
 
 # Fail the whole script if any command fails
 set -e
@@ -34,5 +34,10 @@ tar xzf "daikon-$DAIKONVERSION.tar.gz"
 cd "daikon-$DAIKONVERSION"
 DAIKONDIR=$(pwd)
 export DAIKONDIR
-. "${SCRIPTDIR}"/daikon.bashrc
+if [ ! -f "${SCRIPT_DIR}"/daikon.bashrc ]; then
+  echo "\$0=$0"
+  echo "SCRIPT_DIR=${SCRIPT_DIR}"
+  echo "DAIKONDIR=${DAIKONDIR}"
+fi
+. "${SCRIPT_DIR}"/daikon.bashrc
 make distribution-check

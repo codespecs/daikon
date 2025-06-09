@@ -42,13 +42,13 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.8.22
+@center Daikon version 5.8.23
 
 @sp 1
 
 @c The following comment is needed to help perl edit the release date.
-@c Print out the Daikon version 5.8.22 release date
-@center June 3, 2025
+@c Print out the Daikon version 5.8.23 release date
+@center June 4, 2025
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -85,7 +85,7 @@ Copyright @copyright{} 1998-2025
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.22, released June 3, 2025.
+It describes Daikon version 5.8.23, released June 4, 2025.
 
 @menu
 * Introduction::
@@ -2081,7 +2081,8 @@ the Texinfo source files in the @file{doc/} directory against the previous
 versions:
 
 @smallexample
-cd $DAIKONDIR/doc
+if [ -z "$DAIKONDIR" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
+cd $DAIKONDIR/doc && \
 diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
 @end smallexample
 
@@ -2090,9 +2091,10 @@ Another good source of information are the repository logs since the
 last release:
 
 @smallexample
-cd $DAIKONDIR
+if [ -z "$DAIKONDIR" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
 DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
+    -O - | xargs echo -n` && \
+cd $DAIKONDIR && \
 git log v$DAIKONVERSION..HEAD
 @end smallexample
 
@@ -2108,9 +2110,10 @@ git log v$DAIKONVERSION..HEAD
 In addition, you should run the same command in your Fjalar clone:
 
 @smallexample
-cd $DAIKONDIR/fjalar
+if [ -z "$DAIKONDIR" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
 DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
+    -O - | xargs echo -n` && \
+@{ cd $DAIKONDIR/fjalar || cd $DAIKONDIR/../fjalar ; @} && \
 git log v$DAIKONVERSION..HEAD
 @end smallexample
 
