@@ -23,6 +23,7 @@ import java.lang.classfile.TypeKind;
 import java.lang.constant.ClassDesc;
 import java.util.ArrayList;
 import org.checkerframework.checker.index.qual.NonNegative;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 
@@ -56,7 +57,7 @@ public class OperandStack24 implements Cloneable {
    * ClassDesc objects on the stack are shared.
    */
   @Override
-  public Object clone() {
+  public Object clone(@GuardSatisfied OperandStack24 this) {
     final OperandStack24 newstack = new OperandStack24(this.maxStack);
     @SuppressWarnings("unchecked") // OK because this.stack is the same type
     final ArrayList<ClassDesc> clone = (ArrayList<ClassDesc>) this.stack.clone();
@@ -69,7 +70,7 @@ public class OperandStack24 implements Cloneable {
    * objects on the stacks.
    */
   @Override
-  public boolean equals(final @Nullable Object o) {
+  public boolean equals(@GuardSatisfied OperandStack24 this, @GuardSatisfied @Nullable Object o) {
     if (!(o instanceof OperandStack24)) {
       return false;
     }
@@ -90,7 +91,7 @@ public class OperandStack24 implements Cloneable {
    * @return a hash code value for the object.
    */
   @Override
-  public int hashCode() {
+  public int hashCode(@GuardSatisfied OperandStack24 this) {
     return stack.hashCode();
   }
 
@@ -140,7 +141,7 @@ public class OperandStack24 implements Cloneable {
    * element is returned. The element is not popped off the stack!
    */
   @Pure
-  public ClassDesc peek(final int i) {
+  public ClassDesc peek(@GuardSatisfied OperandStack24 this, final int i) {
     return stack.get(size() - i - 1);
   }
 
@@ -168,7 +169,7 @@ public class OperandStack24 implements Cloneable {
 
   /** Returns the size of this OperandStack; that means, how many ClassDesc objects there are. */
   @Pure
-  public @NonNegative int size() {
+  public @NonNegative int size(@GuardSatisfied OperandStack24 this) {
     return stack.size();
   }
 
@@ -177,7 +178,7 @@ public class OperandStack24 implements Cloneable {
    *
    * @see #maxStack()
    */
-  public @NonNegative int slotsUsed() {
+  public @NonNegative int slotsUsed(@GuardSatisfied OperandStack24 this) {
     /*
      * XXX change this to a better implementation using a variable that keeps track of the actual slotsUsed()-value
      * monitoring all push()es and pop()s.
@@ -191,7 +192,7 @@ public class OperandStack24 implements Cloneable {
 
   /** Returns a String representation of this OperandStack instance. */
   @Override
-  public String toString() {
+  public String toString(@GuardSatisfied OperandStack24 this) {
     final StringBuilder sb = new StringBuilder();
     sb.append("Slots used: ");
     sb.append(slotsUsed());

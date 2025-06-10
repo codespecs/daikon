@@ -84,12 +84,12 @@ public class CalcStack24 {
             {
               stack.pop(); // pop the index
               final ClassDesc t = stack.pop(); // pop the arrayref
-              if (t == nullCD) {
+              if (t.equals(nullCD)) {
                 stack.push(nullCD);
                 // Do nothing stackwise --- a NullPointerException is thrown at Run-Time
               } else {
                 final ClassDesc ct = t.componentType();
-                if (ct == nullCD) {
+                if (ct == null) {
                   throw new Error("stack item not an arrayref: " + inst);
                 }
                 stack.push(ct);
