@@ -46,12 +46,14 @@ ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
   LINT_THIS_ESCAPE=-Xlint:-this-escape
 endif
 
-# Add flags like "-source 8" or "-target 8" to JAVAC_TARGET_FLAGS.
-# That variable appears last and overrides the values we provide here.
-JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -source 8 -target 8 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${LINT_THIS_ESCAPE} ${JAVAC_TARGET_FLAGS}
+# Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
+ifeq ($(JAVA24), 0)
+JAVAC_TARGET_FLAGS ?= -source 8 -target 8
+else
+JAVAC_TARGET_FLAGS ?= -source 24 -target 24
+endif
 
-# TEMP REMOVE -Werror
-JAVAC24_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -source 24 -target 24 -Xlint:-path -Xlint:-options -Xlint:-classfile ${LINT_THIS_ESCAPE} ${JAVAC_TARGET_FLAGS}
+JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${LINT_THIS_ESCAPE} ${JAVAC_TARGET_ARGS} ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
@@ -76,7 +78,6 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 # Not := because DAIKON_CLASSPATH is set later in this file.
 JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
 JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx3600m ${JAVAC_ARGS}
-JAVAC24_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx3600m ${JAVAC24_ARGS}
 JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
 
 
@@ -1349,8 +1350,8 @@ daikon/config/HtmlToTexinfo.class: daikon/config/HtmlToTexinfo.java
 
 showvars:
 	@echo PWD = $(shell pwd)
-	@echo OSTYPE = $(OSTYPE)
-	@echo PATH = $(PATH)
+	@echo OSTYPE = $$(OSTYPE)
+	@echo PATH = $${PATH}
 
 	@echo JAVA_HOME = $(JAVA_HOME)
 	which java
@@ -1363,6 +1364,7 @@ showvars:
 	@echo JAVAC_ARGS = ${JAVAC_ARGS}
 	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
 	@echo SKIP_JAVADOC = ${SKIP_JAVADOC}
+	@echo JAVA24 = ${JAVA24}
 
 	@echo CLASSPATH = "${CLASSPATH}"
 	@echo DAIKON_CLASSPATH = "${DAIKON_CLASSPATH}"
