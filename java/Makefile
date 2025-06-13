@@ -520,7 +520,6 @@ CHICORY_JAVA_FILES := daikon/Chicory.java $(wildcard daikon/chicory/*.java)
 ifeq ($(JAVA24), 0)
 CHICORY_JAVA_FILES := $(filter-out %24.java, $(CHICORY_JAVA_FILES))
 endif
-CHICORY_CLASS_FILES := $(CHICORY_JAVA_FILES:.class=.java)
 
 # This actually requires Daikon to already be compiled.
 # It would be good to make that an explicit prerequisite.
@@ -535,7 +534,9 @@ chicory-compile:
 # Note that this compiles all of Chicory even though all we need for
 # this step is chicory/ChicoryPremain.java.
 # Also note that it always compiles all of Chicory, to handle changing
-# between different JDKs which doesn't otherwise trigger re-execution.
+# between different JDKs.  Changing JDKs changes which files are
+# compiled, but changing JDKs doesn't cause this Makefile to otherwise
+# trigger re-execution.
 ChicoryPremain.jar : chicory-compile daikon/chicory/manifest.txt
 	$(JAR) cfm ChicoryPremain.jar daikon/chicory/manifest.txt \
 	  daikon/chicory/ChicoryPremain.class
@@ -1042,7 +1043,6 @@ typecheck-nullness: compile compile-typequals
 typecheck-nullness-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
-	@echo Status of typecheck-nullness-nocompile: $$?
 
 # These targets run the Nullness checker on just one file.
 # Typical command:
@@ -1065,8 +1065,8 @@ typecheck-prototype-nocompile:
 typecheck-regex: ${ALL_GENERATED_FILES} compile
 	$(MAKE) typecheck-regex-nocompile
 typecheck-regex-nocompile:
-	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 typecheck-regex-qual: ${ALL_GENERATED_FILES} compile
 	$(MAKE) typecheck-regex-qual-nocompile
