@@ -1258,7 +1258,7 @@ javadoc-files.txt:
 	$(MAKE) ${AUTO_GENERATED_FILES}
 	find * \( -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -path 'daikon/dcomp-transfer' \) -prune -o -name "*24.java" -prune -o -name "*.java" -print | ${SORT_DIRECTORY_ORDER} > javadoc-files.txt
 ifeq ($(JAVA24), 1)
-	echo daikon/chicory/*24.java daikon/dcomp/*24.java >> javadoc-files.txt
+	echo daikon/chicory/*24.java >> javadoc-files.txt
 endif
 
 # If Java 8, don't run javadoc; a bug in javadoc causes it to crash.
