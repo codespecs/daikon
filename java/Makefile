@@ -1042,6 +1042,7 @@ typecheck-nullness: compile compile-typequals
 typecheck-nullness-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo Status of typecheck-nullness-nocompile: $$?
 
 # These targets run the Nullness checker on just one file.
 # Typical command:
@@ -1060,6 +1061,12 @@ typecheck-prototype: compile compile-typequals
 typecheck-prototype-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+
+typecheck-regex: ${ALL_GENERATED_FILES} compile
+	$(MAKE) typecheck-regex-nocompile
+typecheck-regex-nocompile:
+	@echo ${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 typecheck-regex-qual: ${ALL_GENERATED_FILES} compile
 	$(MAKE) typecheck-regex-qual-nocompile
