@@ -9244,4 +9244,4 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  Bourne accessors subparts MERCHANTABILITY merchantability
 @c  LocalWords:  uniq Cemal Akcaba Marinov McArthur Rayside Pickard Thaine
 @c  LocalWords:  Massimiliano Menarini Tatyana Nikolova Hellendoorn Xing
-@c  LocalWords:  Weitian Yoav Zibin
+@c  LocalWords:  Weitian Yoav Zibin daikonparentpath OpenAPI AGORA
