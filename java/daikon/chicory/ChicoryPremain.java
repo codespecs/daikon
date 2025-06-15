@@ -94,7 +94,7 @@ public class ChicoryPremain {
 
     if (verbose) {
       System.out.printf(
-          "In Chicory premain, agentargs ='%s', Instrumentation = '%s'", agentArgs, inst);
+          "In Chicory premain, agentargs ='%s', Instrumentation = '%s'%n", agentArgs, inst);
       System.out.printf("Options settings: %n%s%n", options.settings());
     }
 
@@ -159,7 +159,7 @@ public class ChicoryPremain {
           (ClassFileTransformer)
               loader.loadClass(instrumenter).getDeclaredConstructor().newInstance();
     } catch (Exception e) {
-      throw new RuntimeException("Unexpected error loading Instrument", e);
+      throw new RuntimeException("Unexpected error loading " + instrumenter, e);
     }
     if (Chicory.debug) {
       System.out.printf(
