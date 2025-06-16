@@ -101,8 +101,10 @@ reflection-util-1.1.3.jar : https://repo.maven.apache.org/maven2/org/plumelib/re
   rm -f daikon-plumelib.jar
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
-require-javadoc-1.0.8-all.jar : https://github.com/plume-lib/require-javadoc/releases
-  wget https://github.com/plume-lib/require-javadoc/releases/download/v1.0.8/require-javadoc-1.0.8-all.jar
+require-javadoc-2.0.0-all.jar : https://github.com/plume-lib/require-javadoc/releases
+  # This is in a subdirectory so that it is not on the run-time classpath.
+  cd require-javadoc
+  wget https://github.com/plume-lib/require-javadoc/releases/download/v2.0.0/require-javadoc-2.0.0-all.jar
 
 ---------------------------------------------------------------------------
 
