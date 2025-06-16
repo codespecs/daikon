@@ -7,6 +7,11 @@ LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>
 # https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
 #  * Put "apt update" and "apt install" in the same RUN command.
 #  * Do not run "apt upgrade"; instead get upstream to update.
+
+# The EPEL repository contains certain packages.
+RUN dnf -q -y upgrade && dnf -q -y install \
+  epel-release
+
 RUN dnf -q -y upgrade && dnf -q -y install \
   autoconf \
   automake \
@@ -16,6 +21,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   findutils \
   gcc \
   git \
+  jq \
   m4 \
   make \
   perl-English \
@@ -29,12 +35,5 @@ RUN dnf -q -y upgrade && dnf -q -y install \
 RUN dnf -q -y install \
   java-21-openjdk \
   java-21-openjdk-devel
-
-# This enables the repository that contains jq
-RUN dnf -q -y install \
-  epel-release
-
-RUN dnf -q -y install \
-  jq
 
 RUN dnf -q clean all

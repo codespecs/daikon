@@ -2,7 +2,7 @@
 
 # "ubuntu" is the latest LTS release.  "ubuntu:rolling" is the latest release.
 # Either might lag behind; as of 2024-11-16, ubuntu:rolling was still 24.04 rather than 24.10.
-FROM ubuntu:24.10
+FROM ubuntu:rolling
 LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
 
 # According to
@@ -41,26 +41,11 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   unzip
 
 # Install the JDK.
-# RUN export DEBIAN_FRONTEND=noninteractive \
-# && apt -qqy update \
-# && apt -qqy install \
-#   openjdk-24-jdk \
-# && update-java-alternatives --set java-1.24.0-openjdk-amd64
-
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt -qqy update \
 && apt -qqy install \
   openjdk-24-jdk \
 && update-java-alternatives --set java-1.24.0-openjdk-amd64
-
-# RUN export DEBIAN_FRONTEND=noninteractive \
-# && apt -qqy update \
-# && apt -qqy install \
-#   curl
-# RUN export DEBIAN_FRONTEND=noninteractive \
-# && curl --silent -o openjdk-24_linux-x64_bin.tar.gz https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.tar.gz \
-# && tar xzf openjdk-24_linux-x64_bin.tar.gz \
-# && export PATH="$HOME/jdk-24/bin:$PATH"
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt autoremove \

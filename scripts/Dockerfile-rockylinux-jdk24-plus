@@ -10,6 +10,11 @@ LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>
 # https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
 #  * Put "apt update" and "apt install" in the same RUN command.
 #  * Do not run "apt upgrade"; instead get upstream to update.
+
+# The EPEL repository contains certain packages.
+RUN dnf -q -y upgrade && dnf -q -y install \
+  epel-release
+
 RUN dnf -q -y upgrade && dnf -q -y install \
   autoconf \
   automake \
@@ -19,6 +24,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   findutils \
   gcc \
   git \
+  jq \
   m4 \
   make \
   perl-English \
@@ -27,26 +33,6 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   tar \
   unzip \
   which
-
-# Install the JDK.
-# Packages java-24-openjdk* don't yet exist as of 2025-04-28.
-# RUN dnf -q -y install \
-#   java-24-openjdk \
-#   java-24-openjdk-devel
-
-RUN curl --silent -o jdk-24_linux-x64_bin.tar.gz https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.tar.gz \
-&& tar xzf jdk-24_linux-x64_bin.tar.gz
-ENV PATH="/jdk-24.0.1/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
-RUN chmod og+rx /root \
-&& chmod og+r /root/*
-
-# This enables the repository that contains jq
-RUN dnf -q -y install \
-  epel-release
-
-RUN dnf -q -y install \
-  jq
 
 RUN dnf -q -y install \
   ctags \
@@ -68,5 +54,16 @@ RUN dnf config-manager --set-enabled crb \
 && dnf -y install texinfo texinfo-tex
 
 RUN pip install ruff
+
+# Install the JDK.
+# Packages java-24-openjdk* don't yet exist as of 2025-04-28.
+# RUN dnf -q -y install \
+#   java-24-openjdk \
+#   java-24-openjdk-devel
+RUN curl --silent -o jdk-24_linux-x64_bin.tar.gz https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.tar.gz \
+&& tar xzf jdk-24_linux-x64_bin.tar.gz
+ENV PATH="/jdk-24.0.1/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+RUN chmod og+rx /root \
+&& chmod og+r /root/*
 
 RUN dnf -q clean all
