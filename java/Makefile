@@ -1318,13 +1318,24 @@ else
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 endif
 
-## Test that Javadoc exists.
+## Test that each program component is documented with Javadoc.
 ## You should regenerate api/ after running this.
 requireJavadoc: $(JAVA_FILES)
 # For refactorings that touch a lot of code that you don't understand, create
 # top-level file SKIP-REQUIRE-JAVADOC.  Delete it after the pull request is merged.
 	if [ ! -f SKIP-REQUIRE-JAVADOC ]; then \
-	  ${JAVA} -jar $(wildcard ${DAIKONDIR}/java/lib/require-javadoc/require-javadoc-*-all.jar) --exclude="dcomp-transfer" ${DAIKON_JAVA_FILES} ; \
+	  ${JAVA} \
+	    --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
+	    --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
+	    --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
+	    --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
+	    --add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
+	    --add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
+	    --add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
+	    --add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
+	    -jar $(wildcard ${DAIKONDIR}/java/lib/require-javadoc/require-javadoc-*-all.jar) \
+	    --exclude="dcomp-transfer" \
+	    ${DAIKON_JAVA_FILES} ; \
 	fi
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
