@@ -51,15 +51,15 @@ public class CalcStack24 {
    * Calculates changes in contents of operand stack based on the symbolic execution of a Java
    * bytecode instruction.
    *
-   * @param mgen method containing the instruction
-   * @param minfo for the given method's code
+   * @param mgen method containing the instruction (currently unused)
+   * @param minfo for the given method's code (currently unused)
    * @param ce instruction to be interpreted
    * @param inst_index index of ce in code element list
    * @param stack current state of operand stack
    * @return true if should continue with next instruction, false otherwise
    */
   @SuppressWarnings("fallthrough")
-  boolean calcOperandStack(
+  protected static boolean calcOperandStack(
       MethodGen24 mgen,
       MethodGen24.MInfo24 minfo,
       CodeElement ce,
@@ -82,7 +82,7 @@ public class CalcStack24 {
           // ..., value
           case Opcode.AALOAD:
             {
-              stack.pop(); // pop the index
+              stack.pop(); // discard the index
               final ClassDesc t = stack.pop(); // pop the arrayref
               if (t.equals(nullCD)) {
                 stack.push(nullCD);
@@ -134,7 +134,7 @@ public class CalcStack24 {
           // ..., count
           // ..., arrayref
           case Opcode.ANEWARRAY:
-            stack.pop();
+            stack.pop(); // discard the count
             final NewReferenceArrayInstruction nrai = (NewReferenceArrayInstruction) inst;
             stack.push(nrai.componentType().asSymbol());
             return true;
@@ -155,7 +155,7 @@ public class CalcStack24 {
           // ..., arrayref
           // ..., length
           case Opcode.ARRAYLENGTH:
-            stack.pop();
+            stack.pop(); // discard the arrayref
             stack.push(CD_int);
             return true;
 
@@ -189,7 +189,7 @@ public class CalcStack24 {
           case Opcode.LSTORE_3:
           case Opcode.POP:
             StoreInstruction si = (StoreInstruction) inst;
-            // UNDONE check that si.typeKind() matches stack.pop()
+            // UNDONE check that si.typeKind() matches stack.pop()?
             DCInstrument24.locals[si.slot()] = stack.pop();
             return true;
 
@@ -239,7 +239,7 @@ public class CalcStack24 {
           case Opcode.D2F: // double to float
           case Opcode.I2F: // integer to float
           case Opcode.L2F: // long to float
-            stack.pop();
+            stack.pop(); // discard the value
             stack.push(CD_float);
             return true;
 
@@ -249,7 +249,7 @@ public class CalcStack24 {
           case Opcode.D2L: // double to long
           case Opcode.F2L: // float to long
           case Opcode.I2L: // integer to long
-            stack.pop();
+            stack.pop(); // discard the value
             stack.push(CD_long);
             return true;
 
@@ -261,7 +261,7 @@ public class CalcStack24 {
           case Opcode.DMUL:
           case Opcode.DREM:
           case Opcode.DSUB:
-            stack.pop(2);
+            stack.pop(2); // discard the values
             stack.push(CD_double);
             return true;
 
@@ -269,7 +269,7 @@ public class CalcStack24 {
           // ..., arrayref, index
           // ..., value
           case Opcode.DALOAD:
-            stack.pop(2);
+            stack.pop(2); // discard the arrayref and index
             stack.push(CD_double);
             return true;
 
@@ -280,7 +280,7 @@ public class CalcStack24 {
           case Opcode.DCMPL:
           case Opcode.FCMPG:
           case Opcode.FCMPL:
-            stack.pop(2);
+            stack.pop(2); // discard the values
             stack.push(CD_int);
             return true;
 
@@ -307,7 +307,7 @@ public class CalcStack24 {
           // ..., value
           // ..., result
           case Opcode.DNEG:
-            stack.pop();
+            stack.pop(); // discard the value
             stack.push(CD_double);
             return true;
 
@@ -467,7 +467,7 @@ public class CalcStack24 {
           case Opcode.F2D: // float to double
           case Opcode.I2D: // integer to double
           case Opcode.L2D: // long to double
-            stack.pop();
+            stack.pop(); // discard the value
             stack.push(CD_double);
             return true;
 
@@ -479,7 +479,7 @@ public class CalcStack24 {
           case Opcode.FMUL:
           case Opcode.FREM:
           case Opcode.FSUB:
-            stack.pop(2);
+            stack.pop(2); // discard the values
             stack.push(CD_float);
             return true;
 
@@ -487,7 +487,7 @@ public class CalcStack24 {
           // ..., arrayref, index
           // ..., value
           case Opcode.FALOAD:
-            stack.pop(2);
+            stack.pop(2); // discard the arrayref and index
             stack.push(CD_float);
             return true;
 
@@ -515,7 +515,7 @@ public class CalcStack24 {
           // ..., value
           // ..., result
           case Opcode.FNEG:
-            stack.pop();
+            stack.pop(); // discard the value
             stack.push(CD_float);
             return true;
 
@@ -524,7 +524,7 @@ public class CalcStack24 {
           // ..., value
           case Opcode.GETFIELD:
             {
-              stack.pop();
+              stack.pop(); // discard the value
               FieldInstruction fi = (FieldInstruction) inst;
               stack.push(fi.typeSymbol());
               return true;
@@ -546,7 +546,7 @@ public class CalcStack24 {
           case Opcode.GOTO_W:
             {
               BranchInstruction bi = (BranchInstruction) inst;
-              addLabelsToWorkList(bi.target(), null);
+              addLabelsToWorkList(bi.target(), null, stack);
               return false;
             }
 
@@ -559,7 +559,7 @@ public class CalcStack24 {
           case Opcode.F2I: // float to integer
           case Opcode.L2I: // long to int
           case Opcode.I2S: // integer to short
-            stack.pop();
+            stack.pop(); // discard the value
             stack.push(CD_int);
             return true;
 
@@ -578,7 +578,7 @@ public class CalcStack24 {
           case Opcode.IUSHR:
           case Opcode.IXOR:
           case Opcode.LCMP:
-            stack.pop(2);
+            stack.pop(2); // discard the values
             stack.push(CD_int);
             return true;
 
@@ -594,9 +594,9 @@ public class CalcStack24 {
           case Opcode.IF_ICMPLT:
           case Opcode.IF_ICMPNE:
             {
-              stack.pop(2);
+              stack.pop(2); // discard the values
               BranchInstruction bi = (BranchInstruction) inst;
-              addLabelsToWorkList(bi.target(), null);
+              addLabelsToWorkList(bi.target(), null, stack);
               return true;
             }
 
@@ -611,9 +611,9 @@ public class CalcStack24 {
           case Opcode.IFLE:
           case Opcode.IFNONNULL:
           case Opcode.IFNULL:
-            stack.pop();
+            stack.pop(); // discard the value
             BranchInstruction bi = (BranchInstruction) inst;
-            addLabelsToWorkList(bi.target(), null);
+            addLabelsToWorkList(bi.target(), null, stack);
             return true;
 
           // operand stack:
@@ -637,7 +637,7 @@ public class CalcStack24 {
           // ..., value
           // ..., result
           case Opcode.INEG:
-            stack.pop();
+            stack.pop(); // discard the value
             stack.push(CD_int);
             return true;
 
@@ -645,7 +645,7 @@ public class CalcStack24 {
           // ..., objectref
           // ..., result
           case Opcode.INSTANCEOF:
-            stack.pop();
+            stack.pop(); // discard the value
             stack.push(CD_int);
             return true;
 
@@ -661,7 +661,7 @@ public class CalcStack24 {
             stack.push(CD_Object); // there is no way to represent a return address, fake it
             DiscontinuedInstruction.JsrInstruction ji =
                 (DiscontinuedInstruction.JsrInstruction) inst;
-            addLabelsToWorkList(ji.target(), null);
+            addLabelsToWorkList(ji.target(), null, stack);
             return false;
 
           // operand stack:
@@ -678,7 +678,7 @@ public class CalcStack24 {
           case Opcode.LSUB:
           case Opcode.LUSHR:
           case Opcode.LXOR:
-            stack.pop(2);
+            stack.pop(2); // discard the values
             stack.push(CD_long);
             return true;
 
@@ -686,7 +686,7 @@ public class CalcStack24 {
           // ..., arrayref, index
           // ..., value
           case Opcode.LALOAD:
-            stack.pop(2);
+            stack.pop(2); // discard the arrayref and index
             stack.push(CD_long);
             return true;
 
@@ -737,7 +737,7 @@ public class CalcStack24 {
           // ..., value
           // ..., result
           case Opcode.LNEG:
-            stack.pop();
+            stack.pop(); // discard the value
             stack.push(CD_long);
             return true;
 
@@ -745,9 +745,9 @@ public class CalcStack24 {
           // ..., key
           // ...
           case Opcode.LOOKUPSWITCH:
-            stack.pop();
+            stack.pop(); // discard the value
             LookupSwitchInstruction lsi = (LookupSwitchInstruction) inst;
-            addLabelsToWorkList(lsi.defaultTarget(), lsi.cases());
+            addLabelsToWorkList(lsi.defaultTarget(), lsi.cases(), stack);
             return false;
 
           // operand stack:
@@ -755,7 +755,7 @@ public class CalcStack24 {
           // ...
           case Opcode.MONITORENTER:
           case Opcode.MONITOREXIT:
-            stack.pop();
+            stack.pop(); // discard the value
             return true;
 
           // operand stack:
@@ -763,8 +763,8 @@ public class CalcStack24 {
           // ..., arrayref
           case Opcode.MULTIANEWARRAY:
             final NewMultiArrayInstruction nmai = (NewMultiArrayInstruction) inst;
-            stack.pop(nmai.dimensions());
-            // UNDONE is the emement type or array type?
+            stack.pop(nmai.dimensions()); // discard all the counts
+            // UNDONE is the element type or array type?
             stack.push(nmai.arrayType().asSymbol());
             return true;
 
@@ -780,7 +780,7 @@ public class CalcStack24 {
           // ..., count
           // ..., arrayref
           case Opcode.NEWARRAY:
-            stack.pop();
+            stack.pop(); // discard the count
             final NewPrimitiveArrayInstruction npai = (NewPrimitiveArrayInstruction) inst;
             String descriptor;
             switch (npai.typeKind()) {
@@ -809,9 +809,7 @@ public class CalcStack24 {
                 descriptor = "[S";
               }
               default -> {
-                // UNDONE throw?
-                System.out.println("Unexpected CodeElement: " + ce);
-                return true;
+                throw new Error("unknow primitive array type: " + inst);
               }
             }
             stack.push(ClassDesc.ofDescriptor(descriptor));
@@ -845,7 +843,7 @@ public class CalcStack24 {
           // ..., value
           // ...
           case Opcode.PUTSTATIC:
-            stack.pop();
+            stack.pop(); // discard the value
             return true;
 
           // UNDONE should we just throw on jsr and ret? They are illegal post JDK 6.
@@ -874,9 +872,9 @@ public class CalcStack24 {
           // ..., index
           // ...
           case Opcode.TABLESWITCH:
-            stack.pop();
+            stack.pop(); // discard the index
             TableSwitchInstruction tsi = (TableSwitchInstruction) inst;
-            addLabelsToWorkList(tsi.defaultTarget(), tsi.cases());
+            addLabelsToWorkList(tsi.defaultTarget(), tsi.cases(), stack);
             return false;
 
           // operand stack:
@@ -885,7 +883,7 @@ public class CalcStack24 {
           case Opcode.INVOKEINTERFACE:
           case Opcode.INVOKESPECIAL:
           case Opcode.INVOKEVIRTUAL:
-            stack.pop(); // remove objectref
+            stack.pop(); // discard the objectref
           // may actually be removing an arg, but we'll
           // account for that when we remove args below
 
@@ -898,7 +896,7 @@ public class CalcStack24 {
             {
               final InvokeInstruction ii = (InvokeInstruction) inst;
               final MethodTypeDesc mtd = ii.typeSymbol();
-              stack.pop(mtd.parameterCount());
+              stack.pop(mtd.parameterCount()); // discard the arguments
               // We are sure the invoked method will xRETURN eventually.
               // We simulate xRETURNs functionality here because we don't
               // really "jump into" and simulate the invoked method.
@@ -916,7 +914,7 @@ public class CalcStack24 {
             {
               final InvokeDynamicInstruction idi = (InvokeDynamicInstruction) inst;
               final MethodTypeDesc mtd = idi.typeSymbol();
-              stack.pop(mtd.parameterCount());
+              stack.pop(mtd.parameterCount()); // discard the arguments
               // We are sure the invoked method will xRETURN eventually.
               // We simulate xRETURNs functionality here because we don't
               // really "jump into" and simulate the invoked method.
@@ -940,7 +938,7 @@ public class CalcStack24 {
             // stacks match; we're done with this worklist
             return false;
           } else {
-            throw new Error("operans stacks do not match:" + l);
+            throw new Error("operand stacks do not match:" + l);
           }
         } else {
           // have not seen this label before; remember state of operand stack
@@ -960,13 +958,14 @@ public class CalcStack24 {
     }
   }
 
-  void addLabelsToWorkList(Label target, @Nullable List<SwitchCase> cases) {
-    addLabelToWorkList(target);
+  protected static void addLabelsToWorkList(
+      Label target, @Nullable List<SwitchCase> cases, OperandStack24 stack) {
+    addLabelToWorkList(target, stack);
     if (cases == null) return;
     for (SwitchCase item : cases) {
-      addLabelToWorkList(item.target());
+      addLabelToWorkList(item.target(), stack);
     }
   }
 
-  void addLabelToWorkList(Label target) {}
+  protected static void addLabelToWorkList(Label target, OperandStack24 stack) {}
 }

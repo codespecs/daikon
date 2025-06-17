@@ -87,6 +87,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -123,6 +124,7 @@ import org.apache.commons.io.IOUtils;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
@@ -170,10 +172,27 @@ public class DCInstrument24 {
   /** The MethodInfo for the current method. */
   @Nullable MethodInfo curMethodInfo;
 
+  /** Start of user code for current method, prior to instrumenting, as a CodeModel Label. */
+  protected @MonotonicNonNull Label oldStartLabel;
+
+  /** Start of user code for current method, after instrumenting, as a CodeBuilder Label. */
+  protected @MonotonicNonNull Label newStartLabel;
+
+  /**
+   * Index into current method's instruction list that points to where a call to the DynComp runtime
+   * enter routine should be inserted (if needed) and where to define the newStartLabel.
+   */
+  protected int newStartIndex;
+
+  // Variables used for calculating the state of the operand stack.
+
   /** Mapping from a label to its index in the method's codeList. */
   protected Map<Label, Integer> labelIndexMap;
 
+  /** State of operand stack prior to each byte code instruction. */
   protected static OperandStack24[] stacks;
+
+  /** The type of each local variable. */
   protected static ClassDesc[] locals;
 
   // Variables used for the entire class.
@@ -332,12 +351,6 @@ public class DCInstrument24 {
         new MethodDef("wait", new ClassDesc[] {CD_long, CD_int}),
       };
 
-  /**
-   * Index into current method's instruction list that points to where a call to the DynComp runtime
-   * enter routine should be inserted, if we are tracking the method.
-   */
-  private int entryInsertionIndex;
-
   /** Class that defines a method (by its name and argument types) */
   static class MethodDef {
     String name;
@@ -412,8 +425,8 @@ public class DCInstrument24 {
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
     // TEMPORARY
-    debugInstrument.enabled = false;
     debugInstrument.enabled = true;
+    debugInstrument.enabled = false;
     debug_native.enabled = DynComp.debug;
     debug_transform.enabled = daikon.dcomp.Instrument24.debug_transform.enabled;
   }
@@ -914,10 +927,6 @@ public class DCInstrument24 {
     // Add back in any unused parameters that the Java compiler has optimized out.
     if (mgen.fixLocals(minfo)) {
       // localsTable was changed
-      debugInstrument.log("Revised LocalVariableTable:%n");
-      for (LocalVariable lv : mgen.localsTable) {
-        debugInstrument.log("  %s%n", lv);
-      }
     }
 
     // If the method is native
@@ -935,6 +944,13 @@ public class DCInstrument24 {
         // Add the DCompMarker argument to distinguish our version
         add_dcomp_arg(mgen, minfo);
       }
+
+      debugInstrument.log("Revised LocalVariableTable:%n");
+      for (LocalVariable lv : mgen.localsTable) {
+        debugInstrument.log("  %s%n", lv);
+      }
+      int paramCount = (mgen.isStatic() ? 0 : 1) + mgen.getParameterTypes().length;
+      debugInstrument.log("paramCount: %d%n", paramCount);
 
       // Create a MethodInfo that describes this method's arguments
       // and exit line numbers (information not available via reflection)
@@ -981,7 +997,7 @@ public class DCInstrument24 {
           // System.out.printf("  %s : %s%n", lvt, convertDescriptorToFqBinaryName(lvFD)); }
           case LabelTarget l -> {
             if (ca.labelToBci(l.label()) == 0) {
-              minfo.oldStartLabel = l.label();
+              oldStartLabel = l.label();
             }
             // remember where this label is located within the codeList
             labelIndexMap.put(l.label(), codeList.size());
@@ -995,7 +1011,7 @@ public class DCInstrument24 {
       tagFrameLocal = createTagFrameLocal(mgen, minfo);
 
       // Instrument the method
-      instrumentCodeList(codeList, mgen, minfo);
+      instrumentCodeList(codeModel, mgen, minfo, codeList);
 
       if (trackMethod) {
         add_enter(mgen, minfo, codeList, DCRuntime.methods.size() - 1);
@@ -1013,19 +1029,18 @@ public class DCInstrument24 {
       }
 
       // Copy the modified instruction list to the output class.
-      for (CodeElement ce : codeList) {
-        // If there is a new CodeBuilder label associated with this instruction, it needs to be
-        // defined.
-        Label l = minfo.labelMap.get(ce);
-        if (l != null) {
-          debugInstrument.log("Label: %s%n", l);
-          codeBuilder.labelBinding(l);
-          // We've defined the label, remove it from the map.
-          minfo.labelMap.remove(ce);
+      ListIterator<CodeElement> li = codeList.listIterator();
+      CodeElement ce = null;
+      newStartLabel = codeBuilder.newLabel();
+      while (li.hasNext()) {
+        if (li.nextIndex() == newStartIndex) {
+          codeBuilder.labelBinding(newStartLabel);
+          debugInstrument.log("Label: %s%n", newStartLabel);
         }
+        ce = li.next();
         // If this instruction references a Label, we need to see if it is the oldStartLabel
-        // and, if so, replace the target with our new entryLabel.
-        ce = retargetStartLabel(ce, minfo);
+        // and, if so, replace the target with the newStartLabel.
+        ce = retargetStartLabel(ce);
         debugInstrument.log("CodeElement: %s%n", ce);
         codeBuilder.with(ce);
       }
@@ -1034,12 +1049,12 @@ public class DCInstrument24 {
       List<CodeElement> handlerCode = build_exception_handler(mgen);
       if (handlerCode != null) {
         Label handlerLabel = codeBuilder.newBoundLabel();
-        for (CodeElement ce : handlerCode) {
-          codeBuilder.with(ce);
+        for (CodeElement ceh : handlerCode) {
+          codeBuilder.with(ceh);
         }
         // Using handlerLabel for the end of the try region is technically one instruction
         // too many, but it shouldn't matter and is easily available.
-        codeBuilder.exceptionCatch(minfo.entryLabel, handlerLabel, handlerLabel, CD_Throwable);
+        codeBuilder.exceptionCatch(newStartLabel, handlerLabel, handlerLabel, CD_Throwable);
       }
     }
 
@@ -1730,12 +1745,16 @@ public class DCInstrument24 {
   /**
    * Instrument the specified method for dynamic comparability.
    *
-   * @param instructions instruction list for method
+   * @param codeModel for the method's code
    * @param mgen describes the given method
    * @param minfo for the given method's code
+   * @param instructions instruction list for method
    */
   private void instrumentCodeList(
-      List<CodeElement> instructions, MethodGen24 mgen, MethodGen24.MInfo24 minfo) {
+      CodeModel codeModel,
+      MethodGen24 mgen,
+      MethodGen24.MInfo24 minfo,
+      List<CodeElement> instructions) {
 
     List<CodeElement> newCode = createTagFrame(mgen);
 
@@ -1757,55 +1776,93 @@ public class DCInstrument24 {
         }
       }
 
-      // Label for new location of start of original code.
-      debugInstrument.log("entryLabel: %s%n", minfo.entryLabel);
-      assert inst != null : "@AssumeAssertion(nullness): inst will always be set in loop above";
-      minfo.labelMap.put(inst, minfo.entryLabel);
-
-      // Insert code before this LineNumber or Instruction.
-
-      // Back up iterator to point to 'inst'.
+      // Insert the TagFrame code before the LineNumber or Instruction we just located.
+      // Back up the iterator to point to just before 'inst', then copy the newCode.
       li.previous();
-
-      // Insert newCode prior to 'inst'.
       for (CodeElement ce : newCode) {
         li.add(ce);
       }
 
-      // Save index into instruction list that points to where a call to the
-      // DynComp runtime enter routine should be inserted, if we are tracking the method.
-      // We will also return to this item for code instrumentation after calculating
+      // We want to remember the current location in the instruction list. It is where a call to the
+      // DynComp runtime enter routine should be inserted, if we are tracking this method.
+      // This will also be used to indicate where the newStartLabel should be defined.
+      // Finally, we will also return to this location for code instrumentation after calculating
       // the operand stack values.
-      entryInsertionIndex = li.nextIndex();
+      newStartIndex = li.nextIndex();
     } catch (Exception e) {
       System.err.printf("Unexpected exception encountered: %s", e);
       e.printStackTrace();
     }
 
-    // Calculate the operand stack value(s) for the current method.
+    // The next section of code calculates the operand stack value(s) for the current method.
 
-    // First, we create an array to hold the calculated operand stack
-    // prior to each instruction.
-    stacks = new OperandStack24[instructions.size()];
-    // Next, we create an array containing the type of each local variable.
-    // This will be indexed by the local variable's slot number.
-    // There will be a gap for the second slot of a variable of type long or double.
-    locals = new ClassDesc[mgen.getMaxLocals()];
-    int slot = 0;
-    for (final LocalVariable lv : mgen.localsTable) {
-      slot = lv.slot();
-      locals[slot] = lv.typeSymbol();
+    // Build a map of labels to instruction list offsets
+    li = instructions.listIterator();
+    while (li.hasNext()) {
+      inst = li.next();
+      if (inst instanceof LabelTarget lt) {
+        // remember where this label is located within the instruction list
+        labelIndexMap.put(lt.label(), li.previousIndex());
+      }
+    }
+    if (oldStartLabel != null) {
+      // change offset of oldStartLabel to where we will define newStartLabel
+      labelIndexMap.put(oldStartLabel, newStartIndex);
     }
 
-    // Calculate stack types information
-    //    StackTypes stack_types = bcelCalcStackTypes(mg);
-    //    if (stack_types == null) {
-    //      skip_method(mg);
-    //      return;
-    //    }
+    // Create an array to hold the calculated operand stack
+    // prior to each byte code instruction.
+    stacks = new OperandStack24[instructions.size()];
 
-    //    InstructionList il = mg.getInstructionList();
-    //    OperandStack stack = null;
+    // Create an array containing the type of each local variable.
+    // This will be indexed by the local variable's slot number.
+    // There may be a gap for the second slot of a variable of type long or double.
+    locals = new ClassDesc[mgen.getMaxLocals()];
+    for (final LocalVariable lv : mgen.localsTable) {
+      locals[lv.slot()] = lv.typeSymbol();
+    }
+
+    // Create a worklist of instruction locations and operand stacks.
+    record WorkItem(int instructionIndex, OperandStack24 stack) {}
+    Queue<WorkItem> worklist = new ArrayDeque<>();
+
+    // work item for start of users code
+    worklist.add(new WorkItem(newStartIndex, new OperandStack24(mgen.getMaxStack())));
+
+    if (codeModel != null) {
+      // create a work item for each exception handler
+      for (ExceptionCatch ec : codeModel.exceptionHandlers()) {
+        Label l = ec.tryStart();
+        Optional<ClassEntry> catchType = ec.catchType();
+        OperandStack24 temp = new OperandStack24(mgen.getMaxStack());
+        if (catchType.isPresent()) {
+          temp.push(catchType.get().asSymbol());
+        } else {
+          temp.push(CD_Throwable);
+        }
+        worklist.add(new WorkItem(labelIndexMap.get(l), temp));
+      }
+    }
+
+    WorkItem item;
+    OperandStack24 stack;
+    int inst_index;
+    while (!worklist.isEmpty()) {
+      item = worklist.remove();
+      li = instructions.listIterator(item.instructionIndex());
+      stack = item.stack();
+      // UNDONE turn it on
+      boolean proceed = false;
+      while (proceed) {
+        if (!li.hasNext()) throw new Error("error in instruction list");
+        inst_index = li.nextIndex();
+        inst = li.next();
+        proceed = CalcStack24.calcOperandStack(mgen, minfo, inst, inst_index, stack);
+      }
+    }
+
+    // set list iterator to start of the user instructions
+    li = instructions.listIterator(newStartIndex);
 
     // if we get index = li.nextIndex() here and increment each time through loop
     // it sould match stack index we calculate above
@@ -1902,8 +1959,10 @@ public class DCInstrument24 {
       MethodGen24.MInfo24 minfo,
       List<CodeElement> instructions,
       int method_info_index) {
-    instructions.addAll(
-        entryInsertionIndex, callEnterOrExit(mgen, minfo, method_info_index, "enter", -1));
+    List<CodeElement> newCode = callEnterOrExit(mgen, minfo, method_info_index, "enter", -1);
+    instructions.addAll(newStartIndex, newCode);
+    // Update the newStartIndex to account for the instrumentation code we just added.
+    newStartIndex += newCode.size();
   }
 
   /**
@@ -4969,6 +5028,8 @@ public class DCInstrument24 {
     return full_name.replaceFirst("(?s) \\[.*", "");
   }
 
+  // UNDONE consider making this a Java record
+
   /** Variables used for processing a switch instruction. */
   private static class ModifiedSwitchInfo {
 
@@ -4992,36 +5053,35 @@ public class DCInstrument24 {
 
   /**
    * Checks to see if the instruction targets the method's CodeModel startLabel (held in
-   * oldStartLabel). If so, it replaces the target with the entryLabel. Unfortunately, the classfile
-   * API does not allow us to simply replace the label, we have to replace the entire instruction.
-   * Note that oldStartLabel may be null, but that is okay as any comparison to it will fail and we
-   * will do nothing.
+   * oldStartLabel). If so, it replaces the target with the newStartLabel. Unfortunately, the
+   * classfile API does not allow us to simply replace the label, we have to replace the entire
+   * instruction. Note that oldStartLabel may be null, but that is okay as any comparison to it will
+   * fail and we will do nothing.
    *
    * @param inst the instruction to check
-   * @param minfo for the given method's code
    * @return the original instruction or its replacement
    */
-  private CodeElement retargetStartLabel(CodeElement inst, MethodGen24.MInfo24 minfo) {
+  private CodeElement retargetStartLabel(CodeElement inst) {
     ModifiedSwitchInfo info;
     switch (inst) {
       case BranchInstruction bi -> {
-        if (bi.target().equals(minfo.oldStartLabel)) {
-          return BranchInstruction.of(bi.opcode(), minfo.entryLabel);
+        if (bi.target().equals(oldStartLabel)) {
+          return BranchInstruction.of(bi.opcode(), newStartLabel);
         }
       }
       case ExceptionCatch ec -> {
-        if (ec.tryStart().equals(minfo.oldStartLabel)) {
-          return ExceptionCatch.of(ec.handler(), minfo.entryLabel, ec.tryEnd(), ec.catchType());
+        if (ec.tryStart().equals(oldStartLabel)) {
+          return ExceptionCatch.of(ec.handler(), newStartLabel, ec.tryEnd(), ec.catchType());
         }
       }
       case LookupSwitchInstruction ls -> {
-        info = retargetStartLabel(ls.defaultTarget(), ls.cases(), minfo);
+        info = retargetStartLabel(ls.defaultTarget(), ls.cases());
         if (info != null) {
           return LookupSwitchInstruction.of(info.modifiedTarget, info.modifiedCaseList);
         }
       }
       case TableSwitchInstruction ts -> {
-        info = retargetStartLabel(ts.defaultTarget(), ts.cases(), minfo);
+        info = retargetStartLabel(ts.defaultTarget(), ts.cases());
         if (info != null) {
           return TableSwitchInstruction.of(
               ts.lowValue(), ts.highValue(), info.modifiedTarget, info.modifiedCaseList);
@@ -5033,22 +5093,21 @@ public class DCInstrument24 {
   }
 
   /**
-   * Checks to see if a switch instruction's default target or any of the case targets refers to
-   * {@code minfo.oldStartLabel}. If so, replace those targets with the entryLabel, and return the
-   * result in a ModifiedSwitchInfo. Otherwise, return null.
+   * Checks to see if a switch instruction's default target or any of the case targets refer to
+   * oldStartLabel. If so, replace those targets with the newStartLabel, and return the result in a
+   * ModifiedSwitchInfo. Otherwise, return null.
    *
    * @param defaultTarget the default target for the switch instruction
    * @param caseList the case list for the switch instruction
-   * @param minfo for the given method's code
    * @return a ModifiedSwitchInfo with the changed values, or null if no changes
    */
   private @Nullable ModifiedSwitchInfo retargetStartLabel(
-      Label defaultTarget, List<SwitchCase> caseList, MethodGen24.MInfo24 minfo) {
+      Label defaultTarget, List<SwitchCase> caseList) {
     Label modifiedTarget;
     boolean modified = false;
 
-    if (defaultTarget.equals(minfo.oldStartLabel)) {
-      modifiedTarget = minfo.entryLabel;
+    if (defaultTarget.equals(oldStartLabel)) {
+      modifiedTarget = newStartLabel;
       modified = true;
     } else {
       modifiedTarget = defaultTarget;
@@ -5056,8 +5115,8 @@ public class DCInstrument24 {
 
     List<SwitchCase> newCaseList = new ArrayList<SwitchCase>();
     for (SwitchCase item : caseList) {
-      if (item.target().equals(minfo.oldStartLabel)) {
-        newCaseList.add(SwitchCase.of(item.caseValue(), minfo.entryLabel));
+      if (item.target().equals(oldStartLabel)) {
+        newCaseList.add(SwitchCase.of(item.caseValue(), newStartLabel));
         modified = true;
       } else {
         newCaseList.add(item);
