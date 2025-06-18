@@ -86,6 +86,7 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   // TEMPORARY - REMOVE when DCInstrument24 is working
+
   /*
    * Output a .oclass file and a .obcel version of the class file.
    *

@@ -42,9 +42,11 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/** This class calculates the state of the operand stack via simulation. */
 public class CalcStack24 {
 
-  @SuppressWarnings("nullness:assignment") // need special null ClassDesc
+  /** ClassDesc for 'null'. */
+  @SuppressWarnings("nullness:assignment")
   protected static final ClassDesc nullCD = null;
 
   /**
@@ -958,6 +960,13 @@ public class CalcStack24 {
     }
   }
 
+  /*
+   * Create a set of worklist items.
+   *
+   * @param target label where to start operand stack simulation
+   * @param cases a set of case statement labels; additional start points for simulation
+   * @param stack state of operand stack at target and case labels
+   */
   protected static void addLabelsToWorkList(
       Label target, @Nullable List<SwitchCase> cases, OperandStack24 stack) {
     addLabelToWorkList(target, stack);
@@ -967,5 +976,11 @@ public class CalcStack24 {
     }
   }
 
+  /*
+   * Create a worklist item.
+   *
+   * @param target label where to start operand stack simulation
+   * @param stack state of operand stack at target
+   */
   protected static void addLabelToWorkList(Label target, OperandStack24 stack) {}
 }

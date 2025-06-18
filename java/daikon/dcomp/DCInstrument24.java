@@ -152,8 +152,7 @@ import org.checkerframework.dataflow.qual.Pure;
 @SuppressWarnings("nullness")
 public class DCInstrument24 {
 
-  // bogus decls to compile old code
-  // protected @Nullable ConstantPoolGen pool = null;
+  /** UNDONE: bogus decl to compile old code. */
   protected ConstantPoolGen pool;
 
   /** A log to which to print debugging information about program instrumentation. */
@@ -243,10 +242,16 @@ public class DCInstrument24 {
   /** Type array with an object. */
   protected static ClassDesc[] object_arg = new ClassDesc[] {CD_Object};
 
-  // Type descriptors
+  /** ClassDesc for the special dcomp_marker argument. */
   protected final ClassDesc dcomp_marker;
+
+  /** ClassDesc for an Object array. */
   protected static final ClassDesc objectArrayCD = CD_Object.arrayType(1);
+
+  /** Type array with an Object array. */
   protected static final ClassDesc[] objectArrayCD_arg = new ClassDesc[] {objectArrayCD};
+
+  /** Type array with no arguments. */
   protected static final ClassDesc[] noArgsCD = new ClassDesc[0];
 
   // Debug loggers
@@ -356,11 +361,23 @@ public class DCInstrument24 {
     String name;
     ClassDesc[] arg_types;
 
+    /**
+     * Create a new MethodDef.
+     *
+     * @param name of method
+     * @param arg_types of method
+     */
     MethodDef(String name, ClassDesc[] arg_types) {
       this.name = name;
       this.arg_types = arg_types;
     }
 
+    /**
+     * Equality test for MethodDef.
+     *
+     * @param name of method
+     * @param arg_types of method
+     */
     @EnsuresNonNullIf(result = true, expression = "#1")
     boolean equals(@GuardSatisfied MethodDef this, String name, ClassDesc[] arg_types) {
       if (!name.equals(this.name)) {
@@ -1085,6 +1102,7 @@ public class DCInstrument24 {
     //    }
   }
 
+  /** old instrumenter - to be removed */
   public JavaClass old_instrument() {
 
     @BinaryName String classname = gen.getClassName();
