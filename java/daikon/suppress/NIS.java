@@ -113,15 +113,15 @@ public class NIS {
    * these states on each suppressor.
    */
   public enum SuppressState {
-    /** initial state -- suppressor has not been checked yet */
+    /** Initial state -- suppressor has not been checked yet. */
     NONE,
-    /** suppressor matches the falsified invariant */
+    /** Suppressor matches the falsified invariant. */
     MATCH,
-    /** suppressor is true */
+    /** Suppressor is true. */
     VALID,
-    /** suppressor is not true */
+    /** Suppressor is not true. */
     INVALID,
-    /** suppressor contains a variable that has always been nonsensical */
+    /** Suppressor contains a variable that has always been nonsensical. */
     NONSENSICAL
   }
 

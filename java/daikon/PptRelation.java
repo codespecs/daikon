@@ -54,7 +54,7 @@ public class PptRelation implements Serializable {
     MERGE_CHILD,
     /** Relation from a program point to its conditional ppts. */
     PPT_PPTCOND
-  };
+  }
 
   private static final Logger debug = Logger.getLogger("daikon.PptRelation");
 
