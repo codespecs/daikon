@@ -960,7 +960,7 @@ public class CalcStack24 {
     }
   }
 
-  /*
+  /**
    * Create a set of worklist items.
    *
    * @param target label where to start operand stack simulation
@@ -976,7 +976,7 @@ public class CalcStack24 {
     }
   }
 
-  /*
+  /**
    * Create a worklist item.
    *
    * @param target label where to start operand stack simulation

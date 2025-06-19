@@ -87,7 +87,7 @@ public class Instrument24 implements ClassFileTransformer {
 
   // TEMPORARY - REMOVE when DCInstrument24 is working
 
-  /*
+  /**
    * Output a .oclass file and a .obcel version of the class file.
    *
    * @param c the Java class to output
@@ -115,7 +115,7 @@ public class Instrument24 implements ClassFileTransformer {
     }
   }
 
-  /*
+  /**
    * Output a .class file and a .bcel version of the class file.
    *
    * @param classBytes a byte array of the class file to output
