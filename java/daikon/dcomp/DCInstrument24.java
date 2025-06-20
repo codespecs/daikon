@@ -294,9 +294,13 @@ public class DCInstrument24 {
 
   /** Possible states of JUnit test discovery. */
   protected enum JUnitState {
+    /** Have not seen a junit class file. */
     NOT_SEEN,
+    /** Have seen a junit class file. */
     STARTING,
+    /** Have seen a junit class file that loads junit test classes. */
     TEST_DISCOVERY,
+    /** Have completed identifing junit test classes. */
     RUNNING
   };
 
@@ -358,7 +362,10 @@ public class DCInstrument24 {
 
   /** Class that defines a method (by its name and argument types) */
   static class MethodDef {
+    /** Name of method. */
     String name;
+
+    /** Arument types for the method. */
     ClassDesc[] arg_types;
 
     /**
