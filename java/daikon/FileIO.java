@@ -1245,19 +1245,30 @@ public final class FileIO {
 
   /** The type of the record that was most recently read. */
   public enum RecordType {
-    SAMPLE, // got a sample
+    /** Got a sample. */
+    SAMPLE,
 
-    DECL, // got a ppt decl
-    DECL_VERSION, // got an indication of the ppt decl format
-    COMPARABILITY, // got a VarComparability declaration
-    LIST_IMPLEMENTORS, // got a ListImplementors declaration
-    INPUT_LANGUAGE, // got an input-language declaration
+    /** Got a ppt decl. */
+    DECL,
+    /** Got an indication of the ppt decl format. */
+    DECL_VERSION,
+    /** Got a VarComparability declaration. */
+    COMPARABILITY,
+    /** Got a ListImplementors declaration. */
+    LIST_IMPLEMENTORS,
+    /** Got an input-language declaration. */
+    INPUT_LANGUAGE,
 
-    NULL, // haven't read anything yet
-    COMMENT, // got a comment
-    EOF, // reached end of file
-    TRUNCATED, // dkconfig_max_line_number reached (without error)
-    ERROR, // continuable error; fatal errors thrown as exceptions
+    /** Haven't read anything yet. */
+    NULL,
+    /** Got a comment. */
+    COMMENT,
+    /** Reached end of file. */
+    EOF,
+    /** Dkconfig_max_line_number reached (without error). */
+    TRUNCATED,
+    /** Continuable error; fatal errors thrown as exceptions. */
+    ERROR,
   };
 
   /**
