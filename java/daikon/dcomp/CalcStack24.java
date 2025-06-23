@@ -37,6 +37,7 @@ import java.lang.classfile.instruction.NewReferenceArrayInstruction;
 import java.lang.classfile.instruction.StoreInstruction;
 import java.lang.classfile.instruction.SwitchCase;
 import java.lang.classfile.instruction.TableSwitchInstruction;
+import java.lang.classfile.instruction.TypeCheckInstruction;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.List;
@@ -68,6 +69,9 @@ public class CalcStack24 {
       int inst_index,
       OperandStack24 stack) {
 
+    if (DCInstrument24.debugOperandStack) {
+      System.out.println("code element: " + ce);
+    }
     switch (ce) {
       case Instruction inst -> {
         if (DCInstrument24.stacks[inst_index] != null) {
@@ -75,7 +79,11 @@ public class CalcStack24 {
         } else {
           DCInstrument24.stacks[inst_index] = stack.getClone();
         }
-
+        if (DCInstrument24.debugOperandStack) {
+          System.out.println(
+              "save stack state at: " + inst_index + ", " + DCInstrument24.stacks[inst_index]);
+          System.out.println("opcode: " + inst.opcode());
+        }
         // caculate stack changes
         switch (inst.opcode()) {
 
@@ -88,7 +96,7 @@ public class CalcStack24 {
               final ClassDesc t = stack.pop(); // pop the arrayref
               if (t.equals(nullCD)) {
                 stack.push(nullCD);
-                // Do nothing stackwise --- a NullPointerException is thrown at Run-Time
+                // Do nothing stackwise --- a NullPointerException will be thrown when executed
               } else {
                 final ClassDesc ct = t.componentType();
                 if (ct == null) {
@@ -189,7 +197,6 @@ public class CalcStack24 {
           case Opcode.LSTORE_1:
           case Opcode.LSTORE_2:
           case Opcode.LSTORE_3:
-          case Opcode.POP:
             StoreInstruction si = (StoreInstruction) inst;
             // UNDONE check that si.typeKind() matches stack.pop()?
             DCInstrument24.locals[si.slot()] = stack.pop();
@@ -232,8 +239,19 @@ public class CalcStack24 {
           // ..., objectref
           // ..., objectref
           case Opcode.CHECKCAST:
-            // just assume it will be ok, otherwise it will throw
-            return true;
+            {
+              final ClassDesc t = stack.pop(); // pop the objectref
+              if (t.equals(nullCD)) {
+                stack.push(nullCD);
+              } else {
+                TypeCheckInstruction tci = (TypeCheckInstruction) inst;
+                final ClassDesc ct = tci.type().asSymbol();
+                // We assume the type check will succeed
+                stack.push(ct);
+              }
+              // just assume it will be ok, otherwise it will throw when executed
+              return true;
+            }
 
           // operand stack:
           // ..., value
@@ -548,7 +566,7 @@ public class CalcStack24 {
           case Opcode.GOTO_W:
             {
               BranchInstruction bi = (BranchInstruction) inst;
-              addLabelsToWorkList(bi.target(), null, stack);
+              addLabelsToWorklist(bi.target(), null, stack);
               return false;
             }
 
@@ -598,7 +616,7 @@ public class CalcStack24 {
             {
               stack.pop(2); // discard the values
               BranchInstruction bi = (BranchInstruction) inst;
-              addLabelsToWorkList(bi.target(), null, stack);
+              addLabelsToWorklist(bi.target(), null, stack);
               return true;
             }
 
@@ -615,7 +633,7 @@ public class CalcStack24 {
           case Opcode.IFNULL:
             stack.pop(); // discard the value
             BranchInstruction bi = (BranchInstruction) inst;
-            addLabelsToWorkList(bi.target(), null, stack);
+            addLabelsToWorklist(bi.target(), null, stack);
             return true;
 
           // operand stack:
@@ -663,7 +681,7 @@ public class CalcStack24 {
             stack.push(CD_Object); // there is no way to represent a return address, fake it
             DiscontinuedInstruction.JsrInstruction ji =
                 (DiscontinuedInstruction.JsrInstruction) inst;
-            addLabelsToWorkList(ji.target(), null, stack);
+            addLabelsToWorklist(ji.target(), null, stack);
             return false;
 
           // operand stack:
@@ -749,7 +767,7 @@ public class CalcStack24 {
           case Opcode.LOOKUPSWITCH:
             stack.pop(); // discard the value
             LookupSwitchInstruction lsi = (LookupSwitchInstruction) inst;
-            addLabelsToWorkList(lsi.defaultTarget(), lsi.cases(), stack);
+            addLabelsToWorklist(lsi.defaultTarget(), lsi.cases(), stack);
             return false;
 
           // operand stack:
@@ -818,6 +836,13 @@ public class CalcStack24 {
             return true;
 
           // operand stack:
+          // ..., value
+          // ...
+          case Opcode.POP:
+            stack.pop(); // discard the value
+            return true;
+
+          // operand stack:
           // ..., value2, value1
           // ...
           // where each of value1 and value2 is a category 1 computational type
@@ -876,7 +901,7 @@ public class CalcStack24 {
           case Opcode.TABLESWITCH:
             stack.pop(); // discard the index
             TableSwitchInstruction tsi = (TableSwitchInstruction) inst;
-            addLabelsToWorkList(tsi.defaultTarget(), tsi.cases(), stack);
+            addLabelsToWorklist(tsi.defaultTarget(), tsi.cases(), stack);
             return false;
 
           // operand stack:
@@ -933,18 +958,19 @@ public class CalcStack24 {
       }
 
       case Label l -> {
-        // UNDONE do anything?
         if (DCInstrument24.stacks[inst_index] != null) {
           // we've seen this label before
-          if (DCInstrument24.stacks[inst_index].equals(stack)) {
-            // stacks match; we're done with this worklist
-            return false;
-          } else {
-            throw new Error("operand stacks do not match:" + l);
-          }
+          // will throw if stacks don't match
+          DCInstrument24.verifyOperandStackMatches(l, DCInstrument24.stacks[inst_index], stack);
+          // stacks match; we're done with this worklist
+          return false;
         } else {
           // have not seen this label before; remember state of operand stack
           DCInstrument24.stacks[inst_index] = stack.getClone();
+          if (DCInstrument24.debugOperandStack) {
+            System.out.println("save stack state at: " + l);
+            System.out.println("  " + inst_index + ", " + DCInstrument24.stacks[inst_index]);
+          }
           return true;
         }
       }
@@ -967,20 +993,12 @@ public class CalcStack24 {
    * @param cases a set of case statement labels; additional start points for simulation
    * @param stack state of operand stack at target and case labels
    */
-  protected static void addLabelsToWorkList(
+  protected static void addLabelsToWorklist(
       Label target, @Nullable List<SwitchCase> cases, OperandStack24 stack) {
-    addLabelToWorkList(target, stack);
+    DCInstrument24.addLabelToWorklist(target, stack);
     if (cases == null) return;
     for (SwitchCase item : cases) {
-      addLabelToWorkList(item.target(), stack);
+      DCInstrument24.addLabelToWorklist(item.target(), stack);
     }
   }
-
-  /**
-   * Create a worklist item.
-   *
-   * @param target label where to start operand stack simulation
-   * @param stack state of operand stack at target
-   */
-  protected static void addLabelToWorkList(Label target, OperandStack24 stack) {}
 }

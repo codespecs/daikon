@@ -59,23 +59,45 @@ public class OperandStack24 implements Cloneable {
   @Override
   public Object clone(@GuardSatisfied OperandStack24 this) {
     final OperandStack24 newstack = new OperandStack24(this.maxStack);
-    @SuppressWarnings("unchecked") // OK because this.stack is the same type
-    final ArrayList<ClassDesc> clone = (ArrayList<ClassDesc>) this.stack.clone();
-    newstack.stack = clone;
+    newstack.stack = new ArrayList<>(this.stack);
     return newstack;
   }
 
   /**
    * Returns true if and only if this OperandStack equals another, meaning equal lengths and equal
-   * objects on the stacks.
+   * objects on the stacks. Special case 'null' which matches anything but a primitive.
    */
   @Override
   public boolean equals(@GuardSatisfied OperandStack24 this, @GuardSatisfied @Nullable Object o) {
+    if (this == o) {
+      return true;
+    }
     if (!(o instanceof OperandStack24)) {
       return false;
     }
-    final OperandStack24 s = (OperandStack24) o;
-    return this.stack.equals(s.stack);
+    final OperandStack24 other = (OperandStack24) o;
+    if (this.stack.size() != other.stack.size()) {
+      return false;
+    }
+    for (int i = 0; i < this.stack.size(); i++) {
+      ClassDesc thisItem = this.stack.get(i);
+      ClassDesc otherItem = other.stack.get(i);
+      if (thisItem == null) {
+        if (otherItem != null) {
+          if (otherItem.isPrimitive()) {
+            return false;
+          }
+        }
+      } else if (otherItem == null) {
+        // we know thisItem != null
+        if (thisItem.isPrimitive()) {
+          return false;
+        }
+      } else if (!thisItem.equals(otherItem)) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
@@ -104,30 +126,6 @@ public class OperandStack24 implements Cloneable {
   @Pure
   public @NonNegative int maxStack() {
     return this.maxStack;
-  }
-
-  /**
-   * Merges another stack state into this instance's stack state. See the Java Virtual Machine
-   * Specification, Second Edition, page 146: 4.9.2 for details.
-   */
-  public void merge(final OperandStack24 s) {
-    if (slotsUsed() != s.slotsUsed() || size() != s.size()) {
-      throw new Error(
-          "Cannot merge stacks of different size:\nOperandStack A:\n"
-              + this
-              + "\nOperandStack B:\n"
-              + s);
-    }
-
-    for (int i = 0; i < size(); i++) {
-      if (!stack.get(i).equals(s.stack.get(i))) {
-        throw new Error(
-            "Cannot merge stack types don't match:\nOperandStack A:\n"
-                + this
-                + "\nOperandStack B:\n"
-                + s);
-      }
-    }
   }
 
   /** Returns the element on top of the stack. The element is not popped off the stack! */
@@ -179,13 +177,9 @@ public class OperandStack24 implements Cloneable {
    * @see #maxStack()
    */
   public @NonNegative int slotsUsed(@GuardSatisfied OperandStack24 this) {
-    /*
-     * XXX change this to a better implementation using a variable that keeps track of the actual slotsUsed()-value
-     * monitoring all push()es and pop()s.
-     */
     int slots = 0;
     for (int i = 0; i < stack.size(); i++) {
-      slots += TypeKind.from(peek(i)).slotSize();
+      slots += slotSize(peek(i));
     }
     return slots;
   }
@@ -202,9 +196,17 @@ public class OperandStack24 implements Cloneable {
     for (int i = 0; i < size(); i++) {
       sb.append(peek(i));
       sb.append(" (Size: ");
-      sb.append(String.valueOf(TypeKind.from(peek(i)).slotSize()));
+      sb.append(String.valueOf(slotSize(peek(i))));
       sb.append(")\n");
     }
     return sb.toString();
+  }
+
+  int slotSize(ClassDesc item) {
+    if (item == null) {
+      return 1;
+    } else {
+      return TypeKind.from(item).slotSize();
+    }
   }
 }

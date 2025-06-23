@@ -186,13 +186,21 @@ public class DCInstrument24 {
   // Variables used for calculating the state of the operand stack.
 
   /** Mapping from a label to its index in the method's codeList. */
-  protected Map<Label, Integer> labelIndexMap;
+  protected static Map<Label, Integer> labelIndexMap;
+
+  /** Mapping from a label to its operand stack. */
+  protected static Map<Label, OperandStack24> worklistHistory;
 
   /** State of operand stack prior to each byte code instruction. */
   protected static OperandStack24[] stacks;
 
   /** The type of each local variable. */
   protected static ClassDesc[] locals;
+
+  record WorkItem(int instructionIndex, OperandStack24 stack) {}
+
+  /** Queue of items for the operand stack calculation. */
+  protected static Queue<WorkItem> worklist = new ArrayDeque<>();
 
   // Variables used for the entire class.
 
@@ -276,6 +284,9 @@ public class DCInstrument24 {
 
   /** If true, enable {@link #handleInvoke} debugging. */
   protected static final boolean debugHandleInvoke = true;
+
+  /** If true, enable operand stack debugging. */
+  protected static final boolean debugOperandStack = false;
 
   /** Keeps track of the methods that were not successfully instrumented. */
   protected List<String> skipped_methods = new ArrayList<>();
@@ -453,6 +464,17 @@ public class DCInstrument24 {
     debugInstrument.enabled = false;
     debug_native.enabled = DynComp.debug;
     debug_transform.enabled = daikon.dcomp.Instrument24.debug_transform.enabled;
+
+    if (debugOperandStack) {
+      // Create a new PrintStream with autoflush enabled
+      PrintStream newOut = new PrintStream(System.out, true);
+      // Reassign System.out to the new PrintStream
+      System.setOut(newOut);
+      // Create a new PrintStream with autoflush enabled
+      PrintStream newErr = new PrintStream(System.err, true);
+      // Reassign System.err to the new PrintStream
+      System.setErr(newErr);
+    }
   }
 
   /**
@@ -988,7 +1010,6 @@ public class DCInstrument24 {
 
       @SuppressWarnings("JdkObsolete")
       List<CodeElement> codeList = new LinkedList<>();
-      labelIndexMap = new HashMap<>();
 
       // no codeModel if DCInstrument24 generated the method
       if (codeModel != null) {
@@ -1023,8 +1044,6 @@ public class DCInstrument24 {
             if (ca.labelToBci(l.label()) == 0) {
               oldStartLabel = l.label();
             }
-            // remember where this label is located within the codeList
-            labelIndexMap.put(l.label(), codeList.size());
             codeList.add(ce);
           }
           default -> codeList.add(ce); // save all other elements
@@ -1033,6 +1052,9 @@ public class DCInstrument24 {
 
       // Create the local to store the tag frame for this method
       tagFrameLocal = createTagFrameLocal(mgen, minfo);
+
+      // Create newStartLabel now so instrumentCodeList can use it.
+      newStartLabel = codeBuilder.newLabel();
 
       // Instrument the method
       instrumentCodeList(codeModel, mgen, minfo, codeList);
@@ -1055,7 +1077,6 @@ public class DCInstrument24 {
       // Copy the modified instruction list to the output class.
       ListIterator<CodeElement> li = codeList.listIterator();
       CodeElement ce = null;
-      newStartLabel = codeBuilder.newLabel();
       while (li.hasNext()) {
         if (li.nextIndex() == newStartIndex) {
           codeBuilder.labelBinding(newStartLabel);
@@ -1822,10 +1843,14 @@ public class DCInstrument24 {
     // The next section of code calculates the operand stack value(s) for the current method.
 
     // Build a map of labels to instruction list offsets
+    labelIndexMap = new HashMap<>();
     li = instructions.listIterator();
     while (li.hasNext()) {
       inst = li.next();
       if (inst instanceof LabelTarget lt) {
+        if (debugOperandStack) {
+          System.out.println("label target: " + lt.label() + ", index: " + li.previousIndex());
+        }
         // remember where this label is located within the instruction list
         labelIndexMap.put(lt.label(), li.previousIndex());
       }
@@ -1834,6 +1859,7 @@ public class DCInstrument24 {
       // change offset of oldStartLabel to where we will define newStartLabel
       labelIndexMap.put(oldStartLabel, newStartIndex);
     }
+    labelIndexMap.put(newStartLabel, newStartIndex);
 
     // Create an array to hold the calculated operand stack
     // prior to each byte code instruction.
@@ -1842,22 +1868,24 @@ public class DCInstrument24 {
     // Create an array containing the type of each local variable.
     // This will be indexed by the local variable's slot number.
     // There may be a gap for the second slot of a variable of type long or double.
+    // UNDONE: do we have to save state of locals like we do statck?
     locals = new ClassDesc[mgen.getMaxLocals()];
+    // UNDONE: init locals with 'this' and params only
     for (final LocalVariable lv : mgen.localsTable) {
       locals[lv.slot()] = lv.typeSymbol();
     }
 
-    // Create a worklist of instruction locations and operand stacks.
-    record WorkItem(int instructionIndex, OperandStack24 stack) {}
-    Queue<WorkItem> worklist = new ArrayDeque<>();
+    worklistHistory = new HashMap<>();
 
-    // work item for start of users code
-    worklist.add(new WorkItem(newStartIndex, new OperandStack24(mgen.getMaxStack())));
+    // Create a worklist of instruction locations and operand stacks.
+
+    // Create a work item for start of users code.
+    addLabelToWorklist(newStartLabel, new OperandStack24(mgen.getMaxStack()));
 
     if (codeModel != null) {
-      // create a work item for each exception handler
+      // Create a work item for each exception handler.
       for (ExceptionCatch ec : codeModel.exceptionHandlers()) {
-        Label l = ec.tryStart();
+        Label l = ec.handler();
         Optional<ClassEntry> catchType = ec.catchType();
         OperandStack24 temp = new OperandStack24(mgen.getMaxStack());
         if (catchType.isPresent()) {
@@ -1865,7 +1893,7 @@ public class DCInstrument24 {
         } else {
           temp.push(CD_Throwable);
         }
-        worklist.add(new WorkItem(labelIndexMap.get(l), temp));
+        addLabelToWorklist(l, temp);
       }
     }
 
@@ -1874,15 +1902,27 @@ public class DCInstrument24 {
     int inst_index;
     while (!worklist.isEmpty()) {
       item = worklist.remove();
+      if (debugOperandStack) {
+        System.out.println(
+            "pull from worklist: " + item.instructionIndex() + ", stack: " + item.stack());
+      }
       li = instructions.listIterator(item.instructionIndex());
       stack = item.stack();
       // UNDONE turn it on
-      boolean proceed = false;
+      boolean proceed = true;
       while (proceed) {
         if (!li.hasNext()) throw new Error("error in instruction list");
         inst_index = li.nextIndex();
         inst = li.next();
+        if (debugOperandStack) {
+          System.out.println("inst_index: " + inst_index);
+          System.out.println("Operand Stack in: " + stack);
+        }
         proceed = CalcStack24.calcOperandStack(mgen, minfo, inst, inst_index, stack);
+        if (debugOperandStack) {
+          System.out.println("Operand Stack out: " + stack);
+          System.out.println("proceed: " + proceed);
+        }
       }
     }
 
@@ -1917,6 +1957,54 @@ public class DCInstrument24 {
       // }
 
     }
+  }
+
+  /**
+   * Create a worklist item.
+   *
+   * @param target label where to start operand stack simulation
+   * @param stack state of operand stack at target
+   */
+  protected static void addLabelToWorklist(Label target, OperandStack24 stack) {
+    OperandStack24 existing = worklistHistory.get(target);
+    if (existing == null) {
+      if (debugOperandStack) {
+        System.out.println(
+            "push to worklist: " + target + ", " + labelIndexMap.get(target) + ", stack: " + stack);
+      }
+      worklistHistory.put(target, stack.getClone());
+      worklist.add(new WorkItem(labelIndexMap.get(target), stack.getClone()));
+    } else {
+      // will throw if stacks don't match
+      verifyOperandStackMatches(target, existing, stack);
+      // stacks match, don't add duplicate to worklist
+      if (debugOperandStack) {
+        System.out.println(
+            "duplicate worklist item: "
+                + target
+                + ", "
+                + labelIndexMap.get(target)
+                + ", stack: "
+                + stack);
+      }
+    }
+  }
+
+  protected static void verifyOperandStackMatches(
+      Label target, OperandStack24 existing, OperandStack24 current) {
+    if (existing.equals(current)) {
+      return;
+    }
+    // stacks don't match
+    if (debugOperandStack) {
+      System.err.flush();
+      System.out.flush();
+      System.out.println("operand stacks do not match at label:" + target);
+      System.out.println("existing stack: " + existing);
+      System.out.println("current stack: " + current);
+      System.out.flush();
+    }
+    throw new Error("operand stacks do not match at label:" + target);
   }
 
   /**
