@@ -202,7 +202,13 @@ public class OperandStack24 implements Cloneable {
     return sb.toString();
   }
 
-  int slotSize(ClassDesc item) {
+  /**
+   * Calculate the size of an item on the operand stack.
+   *
+   * @param item type to get size of
+   * @return size of item
+   */
+  int slotSize(@GuardSatisfied OperandStack24 this, ClassDesc item) {
     if (item == null) {
       return 1;
     } else {

@@ -197,6 +197,7 @@ public class DCInstrument24 {
   /** The type of each local variable. */
   protected static ClassDesc[] locals;
 
+  /** Record containing a work item for the operand stack calculation. */
   record WorkItem(int instructionIndex, OperandStack24 stack) {}
 
   /** Queue of items for the operand stack calculation. */
@@ -283,7 +284,7 @@ public class DCInstrument24 {
   // protected static final boolean debugGetDefiningInterface = false;
 
   /** If true, enable {@link #handleInvoke} debugging. */
-  protected static final boolean debugHandleInvoke = true;
+  protected static final boolean debugHandleInvoke = false;
 
   /** If true, enable operand stack debugging. */
   protected static final boolean debugOperandStack = false;
@@ -1909,7 +1910,7 @@ public class DCInstrument24 {
       li = instructions.listIterator(item.instructionIndex());
       stack = item.stack();
       // UNDONE turn it on
-      boolean proceed = true;
+      boolean proceed = false;
       while (proceed) {
         if (!li.hasNext()) throw new Error("error in instruction list");
         inst_index = li.nextIndex();
@@ -1990,6 +1991,13 @@ public class DCInstrument24 {
     }
   }
 
+  /**
+   * Verify that the operand stacks match at a label.
+   *
+   * @param target label where control flow merges
+   * @param existing state of operand stack at target
+   * @param current state of operand stack at transfer to target
+   */
   protected static void verifyOperandStackMatches(
       Label target, OperandStack24 existing, OperandStack24 current) {
     if (existing.equals(current)) {
