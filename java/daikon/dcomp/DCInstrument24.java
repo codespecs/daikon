@@ -553,8 +553,6 @@ public class DCInstrument24 {
 
     classInfo.isJunitTestClass = false;
 
-    // UNDONE MISSING JUNIT CODE! need isJunitTestClass to be calculated
-
     // Have all top-level classes implement our interface
     if (classGen.getSuperclassName().equals("java.lang.Object")) {
       @SuppressWarnings("signature:assignment")
@@ -572,6 +570,8 @@ public class DCInstrument24 {
       // equals_dcomp_instrumented method.
       add_dcomp_interface(classBuilder, classGen, classInfo);
     }
+
+    // UNDONE MISSING JUNIT CODE! need isJunitTestClass to be calculated
 
     instrument_all_methods(classModel, classBuilder, classInfo);
 
@@ -798,12 +798,11 @@ public class DCInstrument24 {
 
         debug_transform.exdent();
       } catch (Throwable t) {
-        // debug code
-        // t.printStackTrace();
         if (debugInstrument.enabled) {
           t.printStackTrace();
         }
-        throw new Error("Unexpected error processing " + classname + "." + mgen.getName(), t);
+        throw new Error(
+            "Unexpected error processing " + classname + "." + mm.methodName().stringValue(), t);
       }
     }
 
@@ -1839,6 +1838,7 @@ public class DCInstrument24 {
     } catch (Exception e) {
       System.err.printf("Unexpected exception encountered: %s", e);
       e.printStackTrace();
+      // UNDONE: throw?
     }
 
     // The next section of code calculates the operand stack value(s) for the current method.
@@ -1881,7 +1881,11 @@ public class DCInstrument24 {
     // Create a worklist of instruction locations and operand stacks.
 
     // Create a work item for start of users code.
-    addLabelToWorklist(newStartLabel, new OperandStack24(mgen.getMaxStack()));
+    if (oldStartLabel != null) {
+      addLabelToWorklist(oldStartLabel, new OperandStack24(mgen.getMaxStack()));
+    } else {
+      addLabelToWorklist(newStartLabel, new OperandStack24(mgen.getMaxStack()));
+    }
 
     if (codeModel != null) {
       // Create a work item for each exception handler.
@@ -2001,6 +2005,9 @@ public class DCInstrument24 {
   protected static void verifyOperandStackMatches(
       Label target, OperandStack24 existing, OperandStack24 current) {
     if (existing.equals(current)) {
+      if (debugOperandStack) {
+        System.out.println("operand stacks match at: " + target);
+      }
       return;
     }
     // stacks don't match
@@ -3939,7 +3946,8 @@ public class DCInstrument24 {
    */
   boolean should_track(@BinaryName String className, String methodName, String pptName) {
 
-    debugInstrument.log("Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
+    debugInstrument.log(
+        "Considering tracking (24) ppt: %s, %s, %s%n", className, methodName, pptName);
 
     // Don't track any JDK classes
     if (BcelUtil.inJdk(className)) {

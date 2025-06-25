@@ -13,7 +13,6 @@ import java.lang.classfile.CodeElement;
 import java.lang.classfile.Instruction;
 import java.lang.classfile.Label;
 import java.lang.classfile.Opcode;
-import java.lang.classfile.TypeKind;
 import java.lang.classfile.constantpool.ClassEntry;
 import java.lang.classfile.constantpool.DoubleEntry;
 import java.lang.classfile.constantpool.FloatEntry;
@@ -94,7 +93,7 @@ public class CalcStack24 {
             {
               stack.pop(); // discard the index
               final ClassDesc t = stack.pop(); // pop the arrayref
-              if (t.equals(nullCD)) {
+              if (t == null) {
                 stack.push(nullCD);
                 // Do nothing stackwise --- a NullPointerException will be thrown when executed
               } else {
@@ -146,7 +145,8 @@ public class CalcStack24 {
           case Opcode.ANEWARRAY:
             stack.pop(); // discard the count
             final NewReferenceArrayInstruction nrai = (NewReferenceArrayInstruction) inst;
-            stack.push(nrai.componentType().asSymbol());
+            // make an array type from the component type
+            stack.push(nrai.componentType().asSymbol().arrayType(1));
             return true;
 
           // operand stack:
@@ -241,7 +241,7 @@ public class CalcStack24 {
           case Opcode.CHECKCAST:
             {
               final ClassDesc t = stack.pop(); // pop the objectref
-              if (t.equals(nullCD)) {
+              if (t == null) {
                 stack.push(nullCD);
               } else {
                 TypeCheckInstruction tci = (TypeCheckInstruction) inst;
@@ -368,7 +368,7 @@ public class CalcStack24 {
             {
               final ClassDesc v1 = stack.pop();
               final ClassDesc v2 = stack.pop();
-              if (TypeKind.from(v2).slotSize() == 2) {
+              if (stack.slotSize(v2) == 2) {
                 stack.push(v1);
               } else {
                 final ClassDesc v3 = stack.pop();
@@ -391,9 +391,9 @@ public class CalcStack24 {
           case Opcode.DUP2:
             {
               final ClassDesc v1 = stack.pop();
-              if (TypeKind.from(v1).slotSize() == 2) {
+              if (stack.slotSize(v1) == 2) {
                 stack.push(v1);
-              } else { // TypeKind.from(t).slotSize() == 1
+              } else { // slotSize(v1) == 1
                 final ClassDesc v2 = stack.pop();
                 stack.push(v2);
                 stack.push(v1);
@@ -415,11 +415,11 @@ public class CalcStack24 {
           case Opcode.DUP2_X1:
             {
               final ClassDesc v1 = stack.pop();
-              if (TypeKind.from(v1).slotSize() == 2) {
+              if (stack.slotSize(v1) == 2) {
                 final ClassDesc v2 = stack.pop();
                 stack.push(v1);
                 stack.push(v2);
-              } else { // TypeKind.from(v1).slotSize() == 1
+              } else { // slotSize(v1) == 1
                 final ClassDesc v2 = stack.pop();
                 final ClassDesc v3 = stack.pop();
                 stack.push(v2);
@@ -451,9 +451,9 @@ public class CalcStack24 {
           case Opcode.DUP2_X2:
             {
               final ClassDesc v1 = stack.pop();
-              if (TypeKind.from(v1).slotSize() == 2) {
+              if (stack.slotSize(v1) == 2) {
                 final ClassDesc v2 = stack.pop();
-                if (TypeKind.from(v2).slotSize() == 2) {
+                if (stack.slotSize(v2) == 2) {
                   stack.push(v1);
                 } else {
                   final ClassDesc v3 = stack.pop();
@@ -462,10 +462,10 @@ public class CalcStack24 {
                 }
                 stack.push(v2);
                 stack.push(v1);
-              } else { // TypeKind.from(v1).slotSize() is 1
+              } else { // slotSize(v1) is 1
                 final ClassDesc v2 = stack.pop();
                 final ClassDesc v3 = stack.pop();
-                if (TypeKind.from(v3).slotSize() == 2) {
+                if (stack.slotSize(v3) == 2) {
                   stack.push(v2);
                   stack.push(v1);
                 } else {
@@ -785,6 +785,8 @@ public class CalcStack24 {
             final NewMultiArrayInstruction nmai = (NewMultiArrayInstruction) inst;
             stack.pop(nmai.dimensions()); // discard all the counts
             // UNDONE is the element type or array type?
+            // stack.push(nmai.componentType().asSymbol().arrayType(nmai.dimensions()));
+            System.out.println("multianewarry: " + nmai.arrayType().asSymbol());
             stack.push(nmai.arrayType().asSymbol());
             return true;
 
@@ -853,7 +855,7 @@ public class CalcStack24 {
           case Opcode.POP2:
             {
               final ClassDesc v1 = stack.pop();
-              if (TypeKind.from(v1).slotSize() == 1) {
+              if (stack.slotSize(v1) == 1) {
                 stack.pop();
               }
               return true;

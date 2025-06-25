@@ -93,8 +93,14 @@ public class OperandStack24 implements Cloneable {
         if (thisItem.isPrimitive()) {
           return false;
         }
-      } else if (!thisItem.equals(otherItem)) {
-        return false;
+        // We should check if they are equal or have a common superclass, but we
+        // assume the class file is valid and take the easy way out.
+      } else if (thisItem.isClassOrInterface()) {
+        return otherItem.isClassOrInterface();
+      } else if (thisItem.isPrimitive()) {
+        return otherItem.isPrimitive();
+      } else if (thisItem.isArray()) {
+        return otherItem.isArray();
       }
     }
     return true;
