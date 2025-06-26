@@ -135,6 +135,7 @@ public class CalcStack24 {
           case Opcode.ALOAD_1:
           case Opcode.ALOAD_2:
           case Opcode.ALOAD_3:
+          case Opcode.ALOAD_W:
             LoadInstruction li = (LoadInstruction) inst;
             stack.push(DCInstrument24.locals[li.slot()]);
             return true;
@@ -177,26 +178,31 @@ public class CalcStack24 {
           case Opcode.ASTORE_1:
           case Opcode.ASTORE_2:
           case Opcode.ASTORE_3:
+          case Opcode.ASTORE_W:
           case Opcode.DSTORE:
           case Opcode.DSTORE_0:
           case Opcode.DSTORE_1:
           case Opcode.DSTORE_2:
           case Opcode.DSTORE_3:
+          case Opcode.DSTORE_W:
           case Opcode.FSTORE:
           case Opcode.FSTORE_0:
           case Opcode.FSTORE_1:
           case Opcode.FSTORE_2:
           case Opcode.FSTORE_3:
+          case Opcode.FSTORE_W:
           case Opcode.ISTORE:
           case Opcode.ISTORE_0:
           case Opcode.ISTORE_1:
           case Opcode.ISTORE_2:
           case Opcode.ISTORE_3:
+          case Opcode.ISTORE_W:
           case Opcode.LSTORE:
           case Opcode.LSTORE_0:
           case Opcode.LSTORE_1:
           case Opcode.LSTORE_2:
           case Opcode.LSTORE_3:
+          case Opcode.LSTORE_W:
             StoreInstruction si = (StoreInstruction) inst;
             // UNDONE check that si.typeKind() matches stack.pop()?
             DCInstrument24.locals[si.slot()] = stack.pop();
@@ -320,6 +326,7 @@ public class CalcStack24 {
           case Opcode.DLOAD_1:
           case Opcode.DLOAD_2:
           case Opcode.DLOAD_3:
+          case Opcode.DLOAD_W:
             stack.push(CD_double);
             return true;
 
@@ -528,6 +535,7 @@ public class CalcStack24 {
           case Opcode.FLOAD_1:
           case Opcode.FLOAD_2:
           case Opcode.FLOAD_3:
+          case Opcode.FLOAD_W:
             stack.push(CD_float);
             return true;
 
@@ -639,6 +647,7 @@ public class CalcStack24 {
           // operand stack:
           // [no change]
           case Opcode.IINC:
+          case Opcode.IINC_W:
           case Opcode.NOP:
             return true;
 
@@ -650,6 +659,7 @@ public class CalcStack24 {
           case Opcode.ILOAD_1:
           case Opcode.ILOAD_2:
           case Opcode.ILOAD_3:
+          case Opcode.ILOAD_W:
             stack.push(CD_int);
             return true;
 
@@ -750,6 +760,7 @@ public class CalcStack24 {
           case Opcode.LLOAD_1:
           case Opcode.LLOAD_2:
           case Opcode.LLOAD_3:
+          case Opcode.LLOAD_W:
             stack.push(CD_long);
             return true;
 
