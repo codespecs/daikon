@@ -1914,7 +1914,7 @@ public class DCInstrument24 {
       li = instructions.listIterator(item.instructionIndex());
       stack = item.stack();
       // UNDONE turn it on
-      boolean proceed = false;
+      boolean proceed = true;
       while (proceed) {
         if (!li.hasNext()) throw new Error("error in instruction list");
         inst_index = li.nextIndex();
