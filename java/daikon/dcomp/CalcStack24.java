@@ -51,7 +51,8 @@ public class CalcStack24 {
 
   /**
    * Calculates changes in contents of operand stack based on the symbolic execution of a Java
-   * bytecode instruction.
+   * bytecode instruction. Note that we assume the class file is valid and make no attempt to verify
+   * the code's correctness.
    *
    * @param mgen method containing the instruction (currently unused)
    * @param minfo for the given method's code (currently unused)
@@ -204,7 +205,7 @@ public class CalcStack24 {
           case Opcode.LSTORE_3:
           case Opcode.LSTORE_W:
             StoreInstruction si = (StoreInstruction) inst;
-            // UNDONE check that si.typeKind() matches stack.pop()?
+            // We assume code is correct and do not verify that si.typeKind() matches stack.pop().
             DCInstrument24.locals[si.slot()] = stack.pop();
             return true;
 
@@ -215,6 +216,7 @@ public class CalcStack24 {
             // execution pump will reset stack
             return false;
 
+          // UNDONE: the JVM says result is int, but should we track 'true' type?
           // operand stack:
           // ..., arrayref, index
           // ..., value
@@ -578,6 +580,7 @@ public class CalcStack24 {
               return false;
             }
 
+          // UNDONE: the JVM says result is int, but should we track 'true' type?
           // operand stack:
           // ..., value
           // ..., result
@@ -671,6 +674,7 @@ public class CalcStack24 {
             stack.push(CD_int);
             return true;
 
+          // UNDONE: the JVM says result is int, but should we track 'true' type?
           // operand stack:
           // ..., objectref
           // ..., result
@@ -686,8 +690,8 @@ public class CalcStack24 {
           // ..., [return address]
           case Opcode.JSR:
           case Opcode.JSR_W:
-            // UNDONE we should add label of next instruction  to work list? but we have no idea
-            // what stack will be
+            // Perhaps we should add label of next instruction to work list but we have no idea
+            // what stack will be after return from the JSR.
             stack.push(CD_Object); // there is no way to represent a return address, fake it
             DiscontinuedInstruction.JsrInstruction ji =
                 (DiscontinuedInstruction.JsrInstruction) inst;
@@ -795,7 +799,7 @@ public class CalcStack24 {
           case Opcode.MULTIANEWARRAY:
             final NewMultiArrayInstruction nmai = (NewMultiArrayInstruction) inst;
             stack.pop(nmai.dimensions()); // discard all the counts
-            // UNDONE is the element type or array type?
+            // UNDONE is this the element type or array type?
             // stack.push(nmai.componentType().asSymbol().arrayType(nmai.dimensions()));
             System.out.println("multianewarry: " + nmai.arrayType().asSymbol());
             stack.push(nmai.arrayType().asSymbol());
@@ -989,7 +993,7 @@ public class CalcStack24 {
       }
 
       case LineNumber ln -> {
-        // UNDONE do anything?
+        // Nothing needs to be done.
         return true;
       }
 
