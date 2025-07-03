@@ -5,8 +5,13 @@ import static java.lang.constant.ConstantDescs.CD_Object;
 import static java.lang.constant.ConstantDescs.CD_String;
 import static java.lang.constant.ConstantDescs.CD_Throwable;
 import static java.lang.constant.ConstantDescs.CD_boolean;
+import static java.lang.constant.ConstantDescs.CD_byte;
+import static java.lang.constant.ConstantDescs.CD_char;
+import static java.lang.constant.ConstantDescs.CD_double;
+import static java.lang.constant.ConstantDescs.CD_float;
 import static java.lang.constant.ConstantDescs.CD_int;
 import static java.lang.constant.ConstantDescs.CD_long;
+import static java.lang.constant.ConstantDescs.CD_short;
 import static java.lang.constant.ConstantDescs.CD_void;
 
 import daikon.DynComp;
@@ -119,7 +124,6 @@ import org.apache.bcel.generic.ObjectType;
 // import org.apache.bcel.generic.ReturnInstruction;
 // import org.apache.bcel.generic.StoreInstruction;
 import org.apache.bcel.generic.Type;
-import org.apache.bcel.verifier.structurals.OperandStack;
 import org.apache.commons.io.IOUtils;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
@@ -1842,6 +1846,9 @@ public class DCInstrument24 {
     }
 
     // The next section of code calculates the operand stack value(s) for the current method.
+    if (debugOperandStack) {
+      System.out.printf("%nStarting operand stack calculation%n");
+    }
 
     // Build a map of labels to instruction list offsets
     labelIndexMap = new HashMap<>();
@@ -1931,25 +1938,34 @@ public class DCInstrument24 {
       }
     }
 
+    if (debugOperandStack) {
+      System.out.printf("%nStarting instruction instrumentation%n");
+    }
     // set list iterator to start of the user instructions
     li = instructions.listIterator(newStartIndex);
 
-    // if we get index = li.nextIndex() here and increment each time through loop
-    // it sould match stack index we calculate above
+    // We set inst_index here and increment each time through loop.
+    // This should match the index into stacks we used above.
+    inst_index = li.nextIndex();
     while (li.hasNext()) {
-      // System.out.println("inst index: " + li.nextIndex());
+      System.out.println("inst indexes: " + inst_index + ", " + li.nextIndex());
       inst = li.next();
 
       // Get the stack information
       //      stack = stack_types.get(handle_offsets[index++]);
-
       //      new_il = xform_inst(mg, ih, stack);
+
       // Get the translation for this instruction (if any)
-      List<CodeElement> new_il = instrumentInstruction(mgen, minfo, inst);
+      if (DCInstrument24.debugOperandStack) {
+        System.out.println("code element in: " + inst);
+      }
+      List<CodeElement> new_il = instrumentInstruction(mgen, minfo, inst, stacks[inst_index]);
       if (new_il != null) {
-        // System.out.println("insts added: " + (new_il.size()-1));
         li.remove(); // remove the instruction we instrumented
         for (CodeElement ce : new_il) {
+          if (DCInstrument24.debugOperandStack) {
+            System.out.println("code element out: " + ce);
+          }
           li.add(ce);
         }
       }
@@ -1961,6 +1977,7 @@ public class DCInstrument24 {
       //   break;
       // }
 
+      inst_index++;
     }
   }
 
@@ -2101,7 +2118,7 @@ public class DCInstrument24 {
    * @return LocalVariable for the tag_frame local
    */
   LocalVariable createTagFrameLocal(MethodGen24 mgen, MethodGen24.MInfo24 minfo) {
-    return createLocalWithMethodScope(mgen, minfo, "dcomp_tag_frame$5a", objectArrayCD);
+    return BcelUtils24.addNewSpecialLocal(mgen, "dcomp_tag_frame$5a", objectArrayCD, minfo, false);
   }
 
   /**
@@ -2248,7 +2265,6 @@ public class DCInstrument24 {
     return instructions;
   }
 
-  // @param stack current contents of the stack
   /**
    * Transforms instructions to track comparability. Returns a list of instructions that replaces
    * the specified instruction. Returns null if the instruction should not be replaced.
@@ -2256,10 +2272,12 @@ public class DCInstrument24 {
    * @param mgen method to modify
    * @param minfo for the given method's code
    * @param ce instruction to be instrumented
-   * @return instrumentation for inst, or null is none
+   * @param stack current contents of the operand stack
+   * @return instrumentation for inst, or null if none
    */
   @Nullable List<CodeElement> instrumentInstruction(
-      MethodGen24 mgen, MethodGen24.MInfo24 minfo, CodeElement ce) {
+      MethodGen24 mgen, MethodGen24.MInfo24 minfo, CodeElement ce, OperandStack24 stack) {
+
     switch (ce) {
       case Instruction inst -> {
         switch (inst.opcode()) {
@@ -2456,18 +2474,14 @@ public class DCInstrument24 {
           // array's index.
           case Opcode.ANEWARRAY:
           case Opcode.NEWARRAY:
-            {
-              return new_array(inst);
-            }
+            return new_array(inst);
 
           // If the new array has 2 dimensions, make the integer arguments
           // comparable to the corresponding indices of the new array.
           // For any other number of dimensions, discard the tags for the
           // arguments.
           case Opcode.MULTIANEWARRAY:
-            {
-              return multi_newarray_dc((NewMultiArrayInstruction) inst);
-            }
+            return multi_newarray_dc((NewMultiArrayInstruction) inst);
 
           // Mark the array and its index as comparable.  Also for primitives,
           // push the tag of the array element on the tag stack
@@ -2479,9 +2493,7 @@ public class DCInstrument24 {
           case Opcode.IALOAD:
           case Opcode.LALOAD:
           case Opcode.SALOAD:
-            {
-              return array_load(mgen, (ArrayLoadInstruction) inst);
-            }
+            return array_load(mgen, (ArrayLoadInstruction) inst);
 
           // Prefix the return with a call to the correct normal_exit method
           // to handle the tag stack
@@ -2491,9 +2503,7 @@ public class DCInstrument24 {
           case Opcode.IRETURN:
           case Opcode.LRETURN:
           case Opcode.RETURN:
-            {
-              return return_tag(mgen, inst);
-            }
+            return return_tag(mgen, inst);
 
           // Throws an exception.  This clears the operand stack of the current
           // frame.  We need to clear the tag stack as well.
@@ -2560,6 +2570,88 @@ public class DCInstrument24 {
           case Opcode.INVOKEDYNAMIC:
             return handleInvokeDynamic((InvokeDynamicInstruction) inst);
 
+          // Duplicates the item on the top of stack.  If the value on the
+          // top of the stack is a primitive, we need to do the same on the
+          // tag stack.  Otherwise, we need do nothing.
+          case Opcode.DUP:
+            return dup_tag(inst, stack);
+
+          // Duplicates the item on the top of the stack and inserts it 2
+          // values down in the stack.  If the value at the top of the stack
+          // is not a primitive, there is nothing to do.  If the second
+          // value is not a primitive, then we need only to insert the duped
+          // value down 1 on the tag stack (which contains only primitives).
+          case Opcode.DUP_X1:
+            return dup_x1_tag(inst, stack);
+
+          // Duplicate the category 1 item on the top of the stack and insert it either
+          // two or three items down in the stack.
+          case Opcode.DUP_X2:
+            return dup_x2_tag(inst, stack);
+
+          // Duplicate either one category 2 item or two category 1 items.
+          case Opcode.DUP2:
+            return dup2_tag(inst, stack);
+
+          // Duplicate either the top 2 category 1 items or a single
+          // category 2 item and insert it 2 or 3 values down on the
+          // stack.
+          case Opcode.DUP2_X1:
+            return dup2_x1_tag(inst, stack);
+
+          // Duplicate the top one or two items and insert them two, three, or four values down.
+          case Opcode.DUP2_X2:
+            return dup2_x2_tag(inst, stack);
+
+          // Pop a category 1 item from the top of the stack.  We want to discard
+          // the top of the tag stack iff the item on the top of the stack is a
+          // primitive.
+          case Opcode.POP:
+            return pop_tag(inst, stack);
+
+          // Pops either the top 2 category 1 items or a single category 2 item
+          // from the top of the stack.  We must do the same to the tag stack
+          // if the values are primitives.
+          case Opcode.POP2:
+            return pop2_tag(inst, stack);
+
+          // Swaps the two category 1 items on the top of the stack.  We need
+          // to swap the top of the tag stack if the two top elements on the
+          // real stack are primitives.
+          case Opcode.SWAP:
+            return swap_tag(inst, stack);
+
+          // Mark the array and its index as comparable.  For primitives, store
+          // the tag for the value on the top of the stack in the tag storage
+          // for the array.
+          case Opcode.AASTORE:
+            return array_store(inst, "aastore", CD_Object);
+          case Opcode.BASTORE:
+            // The JVM uses bastore for both byte and boolean.
+            // We need to differentiate.
+            ClassDesc arrayref = stack.peek(2);
+            ClassDesc ct = arrayref.componentType();
+            if (ct == null) {
+              throw new Error("stack item not an arrayref: " + inst);
+            }
+            if (ct.equals(CD_boolean)) {
+              return array_store(inst, "zastore", CD_boolean);
+            } else {
+              return array_store(inst, "bastore", CD_byte);
+            }
+          case Opcode.CASTORE:
+            return array_store(inst, "castore", CD_char);
+          case Opcode.DASTORE:
+            return array_store(inst, "dastore", CD_double);
+          case Opcode.FASTORE:
+            return array_store(inst, "fastore", CD_float);
+          case Opcode.IASTORE:
+            return array_store(inst, "iastore", CD_int);
+          case Opcode.LASTORE:
+            return array_store(inst, "lastore", CD_long);
+          case Opcode.SASTORE:
+            return array_store(inst, "sastore", CD_short);
+
           // UNDONE default -> throw exception when done?
           default:
             //    System.out.println("Unexpected instruction opcode: " + ce);
@@ -2582,123 +2674,6 @@ public class DCInstrument24 {
         System.out.println("Unexpected CodeElement: " + ce);
         return null;
       }
-    }
-  }
-
-  /**
-   * Transforms instructions to track comparability. Returns a list of instructions that replaces
-   * the specified instruction. Returns null if the instruction should not be replaced.
-   *
-   * @param mg method being instrumented
-   * @param ih handle of Instruction to translate
-   * @param stack current contents of the stack
-   */
-  @Nullable InstructionList xform_inst(MethodGen mg, InstructionHandle ih, OperandStack stack) {
-
-    org.apache.bcel.generic.Instruction inst = ih.getInstruction();
-
-    switch (inst.getOpcode()) {
-
-      // Duplicates the item on the top of stack.  If the value on the
-      // top of the stack is a primitive, we need to do the same on the
-      // tag stack.  Otherwise, we need do nothing.
-      case Const.DUP:
-        {
-          return dup_tag(inst, stack);
-        }
-
-      // Duplicates the item on the top of the stack and inserts it 2
-      // values down in the stack.  If the value at the top of the stack
-      // is not a primitive, there is nothing to do here.  If the second
-      // value is not a primitive, then we need only to insert the duped
-      // value down 1 on the tag stack (which contains only primitives)
-      case Const.DUP_X1:
-        {
-          return dup_x1_tag(inst, stack);
-        }
-
-      // Duplicates either the top 2 category 1 values or a single
-      // category 2 value and inserts it 2 or 3 values down on the
-      // stack.
-      case Const.DUP2_X1:
-        {
-          return dup2_x1_tag(inst, stack);
-        }
-
-      // Duplicate either one category 2 value or two category 1 values.
-      case Const.DUP2:
-        {
-          return dup2_tag(inst, stack);
-        }
-
-      // Dup the category 1 value on the top of the stack and insert it either
-      // two or three values down on the stack.
-      case Const.DUP_X2:
-        {
-          return dup_x2(inst, stack);
-        }
-
-      case Const.DUP2_X2:
-        {
-          return dup2_x2(inst, stack);
-        }
-
-      // Pop instructions discard the top of the stack.  We want to discard
-      // the top of the tag stack iff the item on the top of the stack is a
-      // primitive.
-      case Const.POP:
-        {
-          return pop_tag(inst, stack);
-        }
-
-      // Pops either the top 2 category 1 values or a single category 2 value
-      // from the top of the stack.  We must do the same to the tag stack
-      // if the values are primitives.
-      case Const.POP2:
-        {
-          return pop2_tag(inst, stack);
-        }
-
-      // Swaps the two category 1 types on the top of the stack.  We need
-      // to swap the top of the tag stack if the two top elements on the
-      // real stack are primitives.
-      case Const.SWAP:
-        {
-          return swap_tag(inst, stack);
-        }
-
-      // end of dup opcodes
-
-      // Mark the array and its index as comparable.  For primitives, store
-      // the tag for the value on the top of the stack in the tag storage
-      // for the array.
-      case Const.AASTORE:
-        return array_store(inst, "aastore", Type.OBJECT);
-      case Const.BASTORE:
-        // The JVM uses bastore for both byte and boolean.
-        // We need to differentiate.
-        Type arr_type = stack.peek(2);
-        if (arr_type.getSignature().equals("[Z")) {
-          return array_store(inst, "zastore", Type.BOOLEAN);
-        } else {
-          return array_store(inst, "bastore", Type.BYTE);
-        }
-      case Const.CASTORE:
-        return array_store(inst, "castore", Type.CHAR);
-      case Const.DASTORE:
-        return array_store(inst, "dastore", Type.DOUBLE);
-      case Const.FASTORE:
-        return array_store(inst, "fastore", Type.FLOAT);
-      case Const.IASTORE:
-        return array_store(inst, "iastore", Type.INT);
-      case Const.LASTORE:
-        return array_store(inst, "lastore", Type.LONG);
-      case Const.SASTORE:
-        return array_store(inst, "sastore", Type.SHORT);
-
-      // Make sure we didn't miss anything
-      default:
-        throw new Error("instruction " + inst + " unsupported");
     }
   }
 
@@ -3854,12 +3829,11 @@ public class DCInstrument24 {
    * @param base_type type of array store
    * @return instruction list that calls the runtime to handle the array store instruction
    */
-  InstructionList array_store(
-      org.apache.bcel.generic.Instruction inst, String method, Type base_type) {
+  List<CodeElement> array_store(CodeElement inst, String method, ClassDesc base_type) {
+    List<CodeElement> il = new ArrayList<>();
 
-    InstructionList il = new InstructionList();
-    Type arr_type = new ArrayType(base_type, 1);
-    il.append(dcr_call(method, Type.VOID, new Type[] {arr_type, Type.INT, base_type}));
+    ClassDesc array_type = base_type.arrayType(1);
+    il.add(dcr_call(method, CD_void, new ClassDesc[] {array_type, CD_int, base_type}));
     return il;
   }
 
@@ -4039,17 +4013,17 @@ public class DCInstrument24 {
   }
 
   /**
-   * Duplicates the item on the top of stack. If the value on the top of the stack is a primitive,
-   * we need to do the same on the tag stack. Otherwise, we need do nothing.
+   * Duplicates a category 1 item on the top of stack. If it is a primitive, we need to do the same
+   * to the tag stack. Otherwise, we do nothing.
    */
-  InstructionList dup_tag(org.apache.bcel.generic.Instruction inst, OperandStack stack) {
-    // Type top = stack.peek();
+  List<CodeElement> dup_tag(CodeElement inst, OperandStack24 stack) {
+    ClassDesc top = stack.peek();
     if (debug_dup.enabled) {
       debug_dup.log("DUP -> %s [... %s]%n", "dup", stack_contents(stack, 2));
     }
-    // if (is_primitive(top)) {
-    //      return build_il(dcr_call("dup", Type.VOID, Type.NO_ARGS), inst);
-    // }
+    if (top.isPrimitive()) {
+      return build_il(dcr_call("dup", CD_void, noArgsCD), inst);
+    }
     return null;
   }
 
@@ -4059,82 +4033,21 @@ public class DCInstrument24 {
    * value is not a primitive, then we need only to insert the duped value down 1 on the tag stack
    * (which contains only primitives).
    */
-  InstructionList dup_x1_tag(org.apache.bcel.generic.Instruction inst, OperandStack stack) {
-    // Type top = stack.peek();
-    if (debug_dup.enabled) {
-      debug_dup.log("DUP -> %s [... %s]%n", "dup_x1", stack_contents(stack, 2));
-    }
-    // if (!is_primitive(top)) {
-    // return null;
-    // }
-    //    String method = "dup_x1";
-    // if (!is_primitive(stack.peek(1))) {
-    //      method = "dup";
-    // }
-    //    return build_il(dcr_call(method, Type.VOID, Type.NO_ARGS), inst);
-    return null;
-  }
-
-  /**
-   * Duplicates either the top 2 category 1 values or a single category 2 value and inserts it 2 or
-   * 3 values down on the stack.
-   */
-  InstructionList dup2_x1_tag(org.apache.bcel.generic.Instruction inst, OperandStack stack) {
-    // String op;
-    // Type top = stack.peek();
-    // if (is_category2(top)) {
-    // if (is_primitive(stack.peek(1))) {
-    // op = "dup_x1";
-    // } else { // not a primitive, so just dup
-    // op = "dup";
-    // }
-    // } else if (is_primitive(top)) {
-    // if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) op = "dup2_x1";
-    // else if (is_primitive(stack.peek(1))) op = "dup2";
-    // else if (is_primitive(stack.peek(2))) op = "dup_x1";
-    // else {
-    //// neither value 1 nor value 2 is primitive
-    // op = "dup";
-    // }
-    // } else { // top is not primitive
-    // if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) {
-    // op = "dup_x1";
-    // } else if (is_primitive(stack.peek(1))) {
-    // op = "dup";
-    // } else { // neither of the top two values is primitive
-    // op = null;
-    // }
-    // }
-    // if (debug_dup.enabled) {
-    // debug_dup.log("DUP2_X1 -> %s [... %s]%n", op, stack_contents(stack, 3));
-    // }
-
-    // if (op != null) {
-    //      return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
-    // }
-    return null;
-  }
-
-  /**
-   * Duplicate either one category 2 value or two category 1 values. The instruction is implemented
-   * as necessary on the tag stack.
-   */
-  InstructionList dup2_tag(org.apache.bcel.generic.Instruction inst, OperandStack stack) {
-    Type top = stack.peek();
+  List<CodeElement> dup_x1_tag(CodeElement inst, OperandStack24 stack) {
+    ClassDesc top = stack.peek();
     String op;
-    if (is_category2(top)) {
-      op = "dup";
-    } // else if (is_primitive(top) && is_primitive(stack.peek(1))) op = "dup2";
-    // else if (is_primitive(top) || is_primitive(stack.peek(1))) op = "dup";
-    else {
-      // both of the top two items are not primitive, nothing to dup
+    if (!top.isPrimitive()) {
       op = null;
+    } else if (stack.peek(1).isPrimitive()) {
+      op = "dup_x1";
+    } else {
+      op = "dup";
     }
     if (debug_dup.enabled) {
-      debug_dup.log("DUP2 -> %s [... %s]%n", op, stack_contents(stack, 2));
+      debug_dup.log("DUP_X1 -> %s [... %s]%n", op, stack_contents(stack, 2));
     }
     if (op != null) {
-      //      return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+      return build_il(dcr_call(op, CD_void, noArgsCD), inst);
     }
     return null;
   }
@@ -4143,22 +4056,101 @@ public class DCInstrument24 {
    * Dup the category 1 value on the top of the stack and insert it either two or three values down
    * on the stack.
    */
-  InstructionList dup_x2(org.apache.bcel.generic.Instruction inst, OperandStack stack) {
-    // Type top = stack.peek();
+  List<CodeElement> dup_x2_tag(CodeElement inst, OperandStack24 stack) {
+    ClassDesc value1 = stack.peek();
+    ClassDesc value2 = stack.peek(1);
     String op = null;
-    // if (is_primitive(top)) {
-    // if (is_category2(stack.peek(1))) op = "dup_x1";
-    // else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) op = "dup_x2";
-    // else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2))) op = "dup_x1";
-    // else {
-    // op = "dup";
-    // }
-    // }
+    if (value1.isPrimitive()) {
+      if (is_category2(value2)) {
+        op = "dup_x1";
+      } else {
+        ClassDesc value3 = stack.peek(2);
+        if (value2.isPrimitive() && value3.isPrimitive()) {
+          op = "dup_x2";
+        } else if (value2.isPrimitive() || value3.isPrimitive()) {
+          op = "dup_x1";
+        } else {
+          op = "dup";
+        }
+      }
+    }
     if (debug_dup.enabled) {
       debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
     }
     if (op != null) {
-      //      return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
+      return build_il(dcr_call(op, CD_void, noArgsCD), inst);
+    }
+    return null;
+  }
+
+  /**
+   * Duplicate either one category 2 value or two category 1 values. If the value(s) are primitives
+   * we need to do the same to the tag stack. Otherwise, we do nothing.
+   */
+  List<CodeElement> dup2_tag(CodeElement inst, OperandStack24 stack) {
+    ClassDesc top = stack.peek();
+    String op;
+    if (is_category2(top)) {
+      op = "dup";
+    } else if (top.isPrimitive() && stack.peek(1).isPrimitive()) {
+      op = "dup2";
+    } else if (top.isPrimitive() || stack.peek(1).isPrimitive()) {
+      op = "dup";
+    } else {
+      // both of the top two items are not primitive, nothing to dup
+      op = null;
+    }
+    if (debug_dup.enabled) {
+      debug_dup.log("DUP2 -> %s [... %s]%n", op, stack_contents(stack, 2));
+    }
+    if (op != null) {
+      return build_il(dcr_call(op, CD_void, noArgsCD), inst);
+    }
+    return null;
+  }
+
+  /**
+   * Duplicates either the top 2 category 1 values or a single category 2 value and inserts it 2 or
+   * 3 values down on the stack.
+   */
+  List<CodeElement> dup2_x1_tag(CodeElement inst, OperandStack24 stack) {
+    ClassDesc value1 = stack.peek();
+    ClassDesc value2 = stack.peek(1);
+    String op;
+    if (is_category2(value1)) {
+      if (value2.isPrimitive()) {
+        op = "dup_x1";
+      } else { // not a primitive, so just dup
+        op = "dup";
+      }
+    } else { // value1 is not category 2
+      ClassDesc value3 = stack.peek(2);
+      if (value1.isPrimitive()) {
+        if (value2.isPrimitive() && value3.isPrimitive()) {
+          op = "dup2_x1";
+        } else if (value2.isPrimitive()) {
+          op = "dup2";
+        } else if (value3.isPrimitive()) {
+          op = "dup_x1";
+        } else {
+          // neither value2 nor value3 is primitive
+          op = "dup";
+        }
+      } else { // value1 is not primitive
+        if (value2.isPrimitive() && value3.isPrimitive()) {
+          op = "dup_x1";
+        } else if (value2.isPrimitive()) {
+          op = "dup";
+        } else { // neither value2 or value3 is primitive
+          op = null;
+        }
+      }
+    }
+    if (debug_dup.enabled) {
+      debug_dup.log("DUP2_X1 -> %s [... %s]%n", op, stack_contents(stack, 3));
+    }
+    if (op != null) {
+      return build_il(dcr_call(op, CD_void, noArgsCD), inst);
     }
     return null;
   }
@@ -4166,79 +4158,103 @@ public class DCInstrument24 {
   /**
    * Duplicate the top one or two operand stack values and insert two, three, or four values down.
    */
-  InstructionList dup2_x2(org.apache.bcel.generic.Instruction inst, OperandStack stack) {
-    // Type top = stack.peek();
-    // String op;
-    // if (is_category2(top)) {
-    // if (is_category2(stack.peek(1))) op = "dup_x1";
-    // else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) op = "dup_x2";
-    // else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2))) op = "dup_x1";
-    // else {
-    //// both values are references
-    // op = "dup";
-    // }
-    // } else if (is_primitive(top)) {
-    // if (is_category2(stack.peek(1))) {
-    // throw new Error("not supposed to happen " + stack_contents(stack, 3));
-    // } else if (is_category2(stack.peek(2))) {
-    // if (is_primitive(stack.peek(1))) {
-    // op = "dup2_x1";
-    // } else {
-    // op = "dup_x1";
-    // }
-    // } else if (is_primitive(stack.peek(1))) {
-    // if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup2_x2";
-    // else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup2_x1";
-    // else {
-    //// both 2 and 3 are references
-    // op = "dup2";
-    // }
-    // } else { // 1 is a reference
-    // if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup_x2";
-    // else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup_x1";
-    // else {
-    //// both 2 and 3 are references
-    // op = "dup";
-    // }
-    // }
-    // } else { // top is a reference
-    // if (is_category2(stack.peek(1))) {
-    // throw new Error("not supposed to happen " + stack_contents(stack, 3));
-    // } else if (is_category2(stack.peek(2))) {
-    // if (is_primitive(stack.peek(1))) {
-    // op = "dup_x1";
-    // } else {
-    // op = null; // nothing to dup
-    // }
-    // } else if (is_primitive(stack.peek(1))) {
-    // if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup_x2";
-    // else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup_x1";
-    // else {
-    //// both 2 and 3 are references
-    // op = "dup";
-    // }
-    // } else { // 1 is a reference
-    // op = null; // nothing to dup
-    // }
-    // }
-    // if (debug_dup.enabled) {
-    // debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
-    // }
-    // if (op != null) {
-    //      return build_il(dcr_call(op, Type.VOID, Type.NO_ARGS), inst);
-    // }
+  List<CodeElement> dup2_x2_tag(CodeElement inst, OperandStack24 stack) {
+    ClassDesc value1 = stack.peek();
+    ClassDesc value2 = stack.peek(1);
+    String op;
+    if (is_category2(value1)) {
+      if (is_category2(value2)) {
+        op = "dup_x1";
+      } else {
+        ClassDesc value3 = stack.peek(2);
+        if (value2.isPrimitive() && value3.isPrimitive()) {
+          op = "dup_x2";
+        } else if (value2.isPrimitive() || value3.isPrimitive()) {
+          op = "dup_x1";
+        } else {
+          // neither value2 or value3 is primitive
+          op = "dup";
+        }
+      }
+    } else { // value1 and value2 are not category 2
+      ClassDesc value3 = stack.peek(2);
+      if (value1.isPrimitive()) {
+        if (is_category2(value2)) {
+          throw new Error("not supposed to happen " + stack_contents(stack, 3));
+        } else if (is_category2(value3)) {
+          if (value2.isPrimitive()) {
+            op = "dup2_x1";
+          } else {
+            op = "dup_x1";
+          }
+        } else if (value2.isPrimitive()) {
+          // value1 and value2 are primitive
+          ClassDesc value4 = stack.peek(3);
+          if (value3.isPrimitive() && value4.isPrimitive()) {
+            op = "dup2_x2";
+          } else if (value3.isPrimitive() || value4.isPrimitive()) {
+            op = "dup2_x1";
+          } else {
+            // neither value3 or value4 is primitive
+            op = "dup2";
+          }
+        } else { // value1 is primitive value2 is not primitive
+          ClassDesc value4 = stack.peek(3);
+          if (value3.isPrimitive() && value4.isPrimitive()) {
+            op = "dup_x2";
+          } else if (value3.isPrimitive() || value4.isPrimitive()) {
+            op = "dup_x1";
+          } else {
+            // neither value3 or value4 is primitive
+            op = "dup";
+          }
+        }
+      } else { // value1 is not primitive
+        if (is_category2(value2)) {
+          throw new Error("not supposed to happen " + stack_contents(stack, 3));
+        } else if (is_category2(value3)) {
+          if (value2.isPrimitive()) {
+            op = "dup_x1";
+          } else {
+            op = null; // nothing to dup
+          }
+        } else if (value2.isPrimitive()) {
+          // value1 is not primitive value2 is primitive
+          ClassDesc value4 = stack.peek(3);
+          if (value3.isPrimitive() && value4.isPrimitive()) {
+            op = "dup_x2";
+          } else if (value3.isPrimitive() || value4.isPrimitive()) {
+            op = "dup_x1";
+          } else {
+            // neither value3 or value4 is primitive
+            op = "dup";
+          }
+        } else { // neither value1 or value2 is primitive
+          op = null; // nothing to dup
+        }
+      }
+    }
+    if (debug_dup.enabled) {
+      debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
+    }
+    if (op != null) {
+      return build_il(dcr_call(op, CD_void, noArgsCD), inst);
+    }
     return null;
   }
 
   /**
-   * Pop instructions discard the top of the stack. We want to discard the top of the tag stack iff
-   * the item on the top of the stack is a primitive.
+   * Pops a category 1 value from the top of the stack. We want to discard the top of the tag stack
+   * iff the item on the top of the stack is a primitive.
    */
-  InstructionList pop_tag(org.apache.bcel.generic.Instruction inst, OperandStack stack) {
-    // Type top = stack.peek();
-    // if (is_primitive(top)) {
-    // return discard_tag_code(inst, 1);
-    // }
+  List<CodeElement> pop_tag(CodeElement inst, OperandStack24 stack) {
+    ClassDesc top = stack.peek();
+    if (debug_dup.enabled) {
+      debug_dup.log("POP -> %s [... %s]%n", "pop", stack_contents(stack, 1));
+    }
+    if (top.isPrimitive()) {
+      return discard_tag_code(inst, 1);
+    }
     return null;
   }
 
@@ -4246,35 +4262,41 @@ public class DCInstrument24 {
    * Pops either the top 2 category 1 values or a single category 2 value from the top of the stack.
    * We must do the same to the tag stack if the values are primitives.
    */
-  InstructionList pop2_tag(org.apache.bcel.generic.Instruction inst, OperandStack stack) {
-    Type top = stack.peek();
+  List<CodeElement> pop2_tag(CodeElement inst, OperandStack24 stack) {
+    ClassDesc top = stack.peek();
+    if (debug_dup.enabled) {
+      debug_dup.log("POP2 -> %s [... %s]%n", "pop2", stack_contents(stack, 1));
+    }
     if (is_category2(top)) {
-      // return discard_tag_code(inst, 1);
+      return discard_tag_code(inst, 1);
     } else {
       int cnt = 0;
-      // if (is_primitive(top)) {
-      // cnt++;
-      // }
-      // if (is_primitive(stack.peek(1))) {
-      // cnt++;
-      // }
+      if (top.isPrimitive()) {
+        cnt++;
+      }
+      if (stack.peek(1).isPrimitive()) {
+        cnt++;
+      }
       if (cnt > 0) {
-        // return discard_tag_code(inst, cnt);
+        return discard_tag_code(inst, cnt);
       }
     }
     return null;
   }
 
   /**
-   * Swaps the two category 1 types on the top of the stack. We need to swap the top of the tag
+   * Swaps the two category 1 values on the top of the stack. We need to swap the top of the tag
    * stack if the two top elements on the real stack are primitives.
    */
-  InstructionList swap_tag(org.apache.bcel.generic.Instruction inst, OperandStack stack) {
-    // Type type1 = stack.peek();
-    // Type type2 = stack.peek(1);
-    // if (is_primitive(type1) && is_primitive(type2)) {
-    //      return build_il(dcr_call("swap", Type.VOID, Type.NO_ARGS), inst);
-    // }
+  List<CodeElement> swap_tag(CodeElement inst, OperandStack24 stack) {
+    ClassDesc type1 = stack.peek();
+    ClassDesc type2 = stack.peek(1);
+    if (debug_dup.enabled) {
+      debug_dup.log("SWAP -> %s [... %s]%n", "swap", stack_contents(stack, 2));
+    }
+    if (type1.isPrimitive() && type2.isPrimitive()) {
+      return build_il(dcr_call("swap", CD_void, noArgsCD), inst);
+    }
     return null;
   }
 
@@ -4337,8 +4359,8 @@ public class DCInstrument24 {
    * @return true if type requires 8 bytes
    */
   @Pure
-  boolean is_category2(Type type) {
-    return (type == Type.DOUBLE) || (type == Type.LONG);
+  boolean is_category2(ClassDesc type) {
+    return type.equals(CD_double) || type.equals(CD_long);
   }
 
   /**
@@ -4421,6 +4443,7 @@ public class DCInstrument24 {
     }
     if (primitive_cnt > 0) {
       // il.append(discard_tag_code(new NOP(), primitive_cnt));
+      // il.addAll(discard_tag_code(NopInstruction.of(), primitive_cnt));
     }
 
     // push a tag if there is a primitive return value
@@ -4557,7 +4580,7 @@ public class DCInstrument24 {
    * @param max_items number of items to describe
    * @return string describing the top max_items on the operand stack
    */
-  static String stack_contents(OperandStack stack, int max_items) {
+  static String stack_contents(OperandStack24 stack, int max_items) {
     String contents = "";
     if (max_items >= stack.size()) {
       max_items = stack.size() - 1;
@@ -4732,7 +4755,6 @@ public class DCInstrument24 {
    * @param fm field to build an accessor for
    * @param tag_offset offset of fm in the tag storage for this field
    */
-  @SuppressWarnings("EnumOrdinal")
   void create_get_tag(ClassGen24 classGen, FieldModel fm, int tag_offset) {
 
     // Determine the method to call in DCRuntime.  Instance fields and static
@@ -4742,7 +4764,9 @@ public class DCInstrument24 {
     String methodname = "push_field_tag";
     String classname = classGen.getClassName();
     ClassDesc[] args = {CD_Object, CD_int};
-    if (fm.flags().has(AccessFlag.STATIC)) {
+    final boolean isStatic = (fm.flags().has(AccessFlag.STATIC)) ? true : false;
+
+    if (isStatic) {
       methodname = "push_static_tag";
       args = new ClassDesc[] {CD_int};
     } else if (is_uninit_class(classname)) {
@@ -4754,9 +4778,6 @@ public class DCInstrument24 {
 
     List<CodeElement> newCode = new ArrayList<>();
 
-    if (!fm.flags().has(AccessFlag.STATIC)) {
-      newCode.add(LoadInstruction.of(TypeKind.REFERENCE, 0)); // aload_0 (load this)
-    }
     newCode.add(loadIntegerConstant(tag_offset));
     newCode.add(dcr_call(methodname, CD_void, args));
     newCode.add(ReturnInstruction.of(TypeKind.VOID));
@@ -4764,20 +4785,21 @@ public class DCInstrument24 {
     int access_flags = fm.flags().flagsMask();
     if (classGen.isInterface()) {
       // method in interface cannot be final
-      access_flags &= ~AccessFlag.FINAL.ordinal();
+      access_flags &= ~AccessFlag.FINAL.mask();
       if (classModel.majorVersion() < ClassFile.JAVA_8_VERSION) {
         // If class file version is prior to 8 then a method in an interface
         // cannot be static (it's implicit) and must be abstract.
-        access_flags &= ~AccessFlag.STATIC.ordinal();
-        access_flags |= AccessFlag.ABSTRACT.ordinal();
+        access_flags &= ~AccessFlag.STATIC.mask();
+        access_flags |= AccessFlag.ABSTRACT.mask();
       }
     } else {
-      access_flags |= AccessFlag.FINAL.ordinal();
+      access_flags |= AccessFlag.FINAL.mask();
     }
 
-    access_flags |= ClassFile.ACC_PUBLIC;
-    access_flags &= ~ClassFile.ACC_PROTECTED;
+    // make method public
     access_flags &= ~ClassFile.ACC_PRIVATE;
+    access_flags &= ~ClassFile.ACC_PROTECTED;
+    access_flags |= ClassFile.ACC_PUBLIC;
 
     // Create the get accessor method
     classGen
@@ -4786,7 +4808,9 @@ public class DCInstrument24 {
             accessor_name,
             MethodTypeDesc.of(CD_void),
             access_flags,
-            methodBuilder -> methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, newCode)));
+            methodBuilder ->
+                methodBuilder.withCode(
+                    codeBuilder -> buildTagAccessor(codeBuilder, newCode, isStatic, classname)));
   }
 
   /**
@@ -4807,13 +4831,14 @@ public class DCInstrument24 {
    * @param fm field to build an accessor for
    * @param tag_offset offset of fm in the tag storage for this field
    */
-  @SuppressWarnings("EnumOrdinal")
   void create_set_tag(ClassGen24 classGen, FieldModel fm, int tag_offset) {
 
     String methodname = "pop_field_tag";
     String classname = classGen.getClassName();
     ClassDesc[] args = {CD_Object, CD_int};
-    if (fm.flags().has(AccessFlag.STATIC)) {
+    final boolean isStatic = (fm.flags().has(AccessFlag.STATIC)) ? true : false;
+
+    if (isStatic) {
       methodname = "pop_static_tag";
       args = new ClassDesc[] {CD_int};
     }
@@ -4823,9 +4848,6 @@ public class DCInstrument24 {
 
     List<CodeElement> newCode = new ArrayList<>();
 
-    if (!fm.flags().has(AccessFlag.STATIC)) {
-      newCode.add(LoadInstruction.of(TypeKind.REFERENCE, 0)); // aload_0 (load this)
-    }
     newCode.add(loadIntegerConstant(tag_offset));
     newCode.add(dcr_call(methodname, CD_void, args));
     newCode.add(ReturnInstruction.of(TypeKind.VOID));
@@ -4833,21 +4855,16 @@ public class DCInstrument24 {
     int access_flags = fm.flags().flagsMask();
     if (classGen.isInterface()) {
       // method in interface cannot be final
-      access_flags &= ~AccessFlag.FINAL.ordinal();
+      access_flags &= ~AccessFlag.FINAL.mask();
       if (classModel.majorVersion() < ClassFile.JAVA_8_VERSION) {
         // If class file version is prior to 8 then a method in an interface
         // cannot be static (it's implicit) and must be abstract.
-        access_flags &= ~AccessFlag.STATIC.ordinal();
-        access_flags |= AccessFlag.ABSTRACT.ordinal();
+        access_flags &= ~AccessFlag.STATIC.mask();
+        access_flags |= AccessFlag.ABSTRACT.mask();
       }
     } else {
-      access_flags |= AccessFlag.FINAL.ordinal();
+      access_flags |= AccessFlag.FINAL.mask();
     }
-
-    // make field public
-    access_flags |= ClassFile.ACC_PUBLIC;
-    access_flags &= ~ClassFile.ACC_PROTECTED;
-    access_flags &= ~ClassFile.ACC_PRIVATE;
 
     // Create the setter method
     classGen
@@ -4856,7 +4873,34 @@ public class DCInstrument24 {
             setter_name,
             MethodTypeDesc.of(CD_void),
             access_flags,
-            methodBuilder -> methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, newCode)));
+            methodBuilder ->
+                methodBuilder.withCode(
+                    codeBuilder -> buildTagAccessor(codeBuilder, newCode, isStatic, classname)));
+  }
+
+  /**
+   * Build a tag accessor method.
+   *
+   * @param codeBuilder for the given method's code
+   * @param instructions instruction list to copy
+   * @param isStatic true iff accessor is static
+   * @param classname classname holding accessor
+   */
+  private void buildTagAccessor(
+      CodeBuilder codeBuilder, List<CodeElement> instructions, boolean isStatic, String classname) {
+
+    Label startLabel = codeBuilder.newLabel();
+    Label endLabel = codeBuilder.newLabel();
+    if (!isStatic) {
+      codeBuilder.localVariable(0, "this", ClassDesc.of(classname), startLabel, endLabel);
+      codeBuilder.labelBinding(startLabel);
+      codeBuilder.with(LoadInstruction.of(TypeKind.REFERENCE, 0)); // aload_0 (load this)
+    }
+    for (CodeElement ce : instructions) {
+      debugInstrument.log("CodeElement: %s%n", ce);
+      codeBuilder.with(ce);
+    }
+    codeBuilder.labelBinding(endLabel); // shouldn't matter if isStatic
   }
 
   /**
@@ -5029,7 +5073,7 @@ public class DCInstrument24 {
 
     // Add the dcomp marker argument to indicate this is the
     // instrumented version of the method.
-    BcelUtils24.addNewParameter(mgen, "marker", dcomp_marker, minfo);
+    BcelUtils24.addNewSpecialLocal(mgen, "marker", dcomp_marker, minfo, true);
   }
 
   /**
