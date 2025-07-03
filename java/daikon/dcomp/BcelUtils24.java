@@ -129,23 +129,36 @@ public class BcelUtils24 {
   }
 
   /**
-   * Add a new parameter to the method. This will be added after last current parameter and before
-   * the first local variable. This might have the side effect of causing us to rewrite the method
-   * byte codes to adjust the offsets for the local variables - see below for details.
+   * Add a new local variable to the method. This will be inserted after last current parameter and
+   * before the first local variable. This might have the side effect of causing us to rewrite the
+   * method byte codes to adjust the offsets for the existing local variables - see below for
+   * details.
    *
-   * <p>Must call fixLocalVariableTable (just once per method) before calling this routine.
+   * <p>DCInstrument24 uses this routine for two special variables:
+   *
+   * <ol>
+   *   <li>the dcomp marker - added as a parameter
+   *   <li>the tag frame array - added as a local
+   * </ol>
+   *
+   * <p>Must call fixLocals (in MethodGen24) before calling this routine.
    *
    * @param mgen MethodGen to be modified
    * @param argName name of new parameter
    * @param argType type of new parameter
    * @param minfo for the given method's code
-   * @return a LocalVariableGen for the new parameter
+   * @param isParam if true, the new local is a new parameter
+   * @return a LocalVariable for the new variable
    */
-  public static final LocalVariable addNewParameter(
-      MethodGen24 mgen, String argName, ClassDesc argType, MethodGen24.MInfo24 minfo) {
-    // We add a new parameter, after any current ones, and then
-    // we need to make a pass over the byte codes to update the local
-    // offset values of all the locals we just shifted up.
+  public static final LocalVariable addNewSpecialLocal(
+      MethodGen24 mgen,
+      String argName,
+      ClassDesc argType,
+      MethodGen24.MInfo24 minfo,
+      boolean isParam) {
+    // We add a new local variable, after any parameters and before any
+    // existing local variables.  We then need to make a pass over the
+    // byte codes to update the local offset values of any locals we just shifted up.
 
     LocalVariable argNew = null;
     // get a copy of the locals before modification
@@ -179,12 +192,14 @@ public class BcelUtils24 {
       mgen.setMaxLocals(minfo.nextLocalIndex);
     }
 
-    // Update the method's parameter information.
-    argTypes = postpendToArray(argTypes, argType);
-    @SuppressWarnings("signature:assignment") // string manipulation
-    @Identifier String[] argNames = addString(mgen.getParameterNames(), argName);
-    mgen.setParameterTypes(argTypes);
-    mgen.setParameterNames(argNames);
+    if (isParam) {
+      // Update the method's parameter information.
+      argTypes = postpendToArray(argTypes, argType);
+      @SuppressWarnings("signature:assignment") // string manipulation
+      @Identifier String[] argNames = addString(mgen.getParameterNames(), argName);
+      mgen.setParameterTypes(argTypes);
+      mgen.setParameterNames(argNames);
+    }
 
     if (hasCode) {
       // we need to adjust the offset of any locals after our insertion
@@ -197,7 +212,8 @@ public class BcelUtils24 {
       }
 
       debugInstrument.log(
-          "Added arg    %s%n", argNew.slot() + ": " + argNew.name() + ", " + argNew.type());
+          "Added arg    %s%n",
+          argNew.slot() + ": " + argNew.name() + ", " + argNew.type() + ", " + argSize);
 
       // Now process the instruction list, adding one to the offset
       // within each LocalVariableInstruction that references a
