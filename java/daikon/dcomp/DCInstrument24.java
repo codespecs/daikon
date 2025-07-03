@@ -1948,7 +1948,7 @@ public class DCInstrument24 {
     // This should match the index into stacks we used above.
     inst_index = li.nextIndex();
     while (li.hasNext()) {
-      System.out.println("inst indexes: " + inst_index + ", " + li.nextIndex());
+      // System.out.println("inst indexes: " + inst_index + ", " + li.nextIndex());
       inst = li.next();
 
       // Get the stack information
@@ -2839,11 +2839,13 @@ public class DCInstrument24 {
     ClassDesc returnType = mtd.returnType();
     ClassDesc[] argTypes = mtd.parameterArray();
 
-    System.out.println();
-    System.out.println("InvokeInst: " + invoke);
-    System.out.println("returnType: " + returnType);
-    System.out.println("classname: " + classname);
-    // System.out.println("ref_type: " + invoke.getReferenceType(pool));
+    if (debugHandleInvoke) {
+      System.out.println();
+      System.out.println("InvokeInst: " + invoke);
+      System.out.println("returnType: " + returnType);
+      System.out.println("classname: " + classname);
+      // System.out.println("ref_type: " + invoke.getReferenceType(pool));
+    }
 
     if (is_object_equals(methodName, returnType, argTypes)) {
 
@@ -4764,7 +4766,7 @@ public class DCInstrument24 {
     String methodname = "push_field_tag";
     String classname = classGen.getClassName();
     ClassDesc[] args = {CD_Object, CD_int};
-    final boolean isStatic = (fm.flags().has(AccessFlag.STATIC)) ? true : false;
+    final boolean isStatic = fm.flags().has(AccessFlag.STATIC) ? true : false;
 
     if (isStatic) {
       methodname = "push_static_tag";
@@ -4836,7 +4838,7 @@ public class DCInstrument24 {
     String methodname = "pop_field_tag";
     String classname = classGen.getClassName();
     ClassDesc[] args = {CD_Object, CD_int};
-    final boolean isStatic = (fm.flags().has(AccessFlag.STATIC)) ? true : false;
+    final boolean isStatic = fm.flags().has(AccessFlag.STATIC) ? true : false;
 
     if (isStatic) {
       methodname = "pop_static_tag";
