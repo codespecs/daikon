@@ -75,9 +75,6 @@ public class MethodGen24 {
   /** True if the method is static. */
   private boolean isStatic;
 
-  /** True if the method was created in DCInstrument24. */
-  private boolean isNewMethod;
-
   /**
    * The method's CodeAttribute. This contains information about the bytecodes (instructions) of
    * this method. May be null if the method has no code.
@@ -220,7 +217,6 @@ public class MethodGen24 {
     descriptor = descriptor1;
     this.className = className;
     isStatic = (accessFlagsMask & ClassFile.ACC_STATIC) != 0;
-    isNewMethod = false;
 
     Optional<CodeModel> code = methodModel.code();
     if (code.isPresent()) {
@@ -322,7 +318,6 @@ public class MethodGen24 {
     this.maxStack = maxStack;
     this.maxLocals = maxLocals;
     isStatic = (accessFlagsMask & ClassFile.ACC_STATIC) != 0;
-    isNewMethod = true;
 
     // Create an empty localsTable. This will be filled in when InstrumentCode calls fixLocals.
     localsTable = new ArrayList<>();
@@ -389,9 +384,9 @@ public class MethodGen24 {
    */
   public boolean fixLocals(MInfo24 minfo) {
     boolean modified = false;
-    // If this is a new method from DCInstrument24, the localsTable is
-    // completely empty.  We may need to add a 'this' pointer.
-    if (isNewMethod && !isStatic) {
+    // If this is a new method from DCInstrument24 or a native method the
+    // localsTable may not exist.  We may need to add a 'this' pointer.
+    if ((localsTable.size() == 0) && !isStatic) {
       LocalVariable newVar =
           LocalVariable.of(0, "this", CD_Object, minfo.startLabel, minfo.endLabel);
       localsTable.add(newVar);
@@ -412,7 +407,7 @@ public class MethodGen24 {
       }
       slot += TypeKind.from(paramTypes[pIndex]).slotSize();
     }
-    // If we added params, then table is no longer sorted by slot
+    // If we added locals, then table is no longer sorted by slot.
     if (modified) {
       localsTable.sort(Comparator.comparing(LocalVariable::slot));
     }
@@ -639,10 +634,10 @@ public class MethodGen24 {
     return poolBuilder;
   }
 
-  // Not sure we need this
-  //  public void setInstructionList(List<CodeElement> il) {
-  //     codeList = il;
-  //  }
+  // Used to add instruction list to our native code wrapper.
+  public void setInstructionList(List<CodeElement> il) {
+    codeList = il;
+  }
 
   // need to fancy up!
   @Override
