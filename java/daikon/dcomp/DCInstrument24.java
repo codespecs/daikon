@@ -68,7 +68,7 @@ import java.lang.classfile.instruction.LocalVariableType;
 import java.lang.classfile.instruction.LookupSwitchInstruction;
 import java.lang.classfile.instruction.NewMultiArrayInstruction;
 import java.lang.classfile.instruction.NewReferenceArrayInstruction;
-import java.lang.classfile.instruction.NopInstruction;
+import java.lang.classfile.instruction.OperatorInstruction;
 import java.lang.classfile.instruction.ReturnInstruction;
 import java.lang.classfile.instruction.StackInstruction;
 import java.lang.classfile.instruction.StoreInstruction;
@@ -104,25 +104,13 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.classfile.RuntimeVisibleAnnotations;
 import org.apache.bcel.generic.AnnotationEntryGen;
-import org.apache.bcel.generic.ArrayType;
-import org.apache.bcel.generic.BasicType;
-// import org.apache.bcel.generic.BranchInstruction;
 import org.apache.bcel.generic.ClassGen;
 import org.apache.bcel.generic.ClassGenException;
 import org.apache.bcel.generic.ConstantPoolGen;
-// import org.apache.bcel.generic.FieldInstruction;
-import org.apache.bcel.generic.IADD;
-// import org.apache.bcel.generic.Instruction;
 import org.apache.bcel.generic.InstructionFactory;
 import org.apache.bcel.generic.InstructionHandle;
 import org.apache.bcel.generic.InstructionList;
-// import org.apache.bcel.generic.InvokeInstruction;
-// import org.apache.bcel.generic.LoadInstruction;
-import org.apache.bcel.generic.LocalVariableGen;
 import org.apache.bcel.generic.MethodGen;
-import org.apache.bcel.generic.ObjectType;
-// import org.apache.bcel.generic.ReturnInstruction;
-// import org.apache.bcel.generic.StoreInstruction;
 import org.apache.bcel.generic.Type;
 import org.apache.commons.io.IOUtils;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
@@ -236,9 +224,6 @@ public class DCInstrument24 {
   /** The BCEL InstructionFactory for generating byte code instructions. */
   protected InstructionFactory ifact;
 
-  /** The loader that loaded the Class to instrument. */
-  protected @Nullable ClassLoader loader;
-
   /** Has an {@code <init>} method completed initialization? */
   protected boolean constructor_is_initialized;
 
@@ -284,8 +269,8 @@ public class DCInstrument24 {
   /** If true, enable JUnit analysis debugging. */
   protected static final boolean debugJUnitAnalysis = false;
 
-  //  /** If true, enable {@link #getDefiningInterface} debugging. */
-  // protected static final boolean debugGetDefiningInterface = false;
+  /** If true, enable {@link #getDefiningInterface} debugging. */
+  protected static final boolean debugGetDefiningInterface = false;
 
   /** If true, enable {@link #handleInvoke} debugging. */
   protected static final boolean debugHandleInvoke = false;
@@ -693,7 +678,6 @@ public class DCInstrument24 {
     for (MethodModel mm : classModel.methods()) {
 
       try {
-
         MethodGen24 mgen = new MethodGen24(mm, classname, classBuilder);
 
         if (debugInstrument.enabled) {
@@ -888,76 +872,35 @@ public class DCInstrument24 {
       ClassInfo classInfo,
       boolean trackMethod) {
 
+    boolean codeModelSeen = false;
     for (MethodElement me : methodModel) {
       debugInstrument.log("MethodElement: %s%n", me);
       switch (me) {
-        case CodeModel codeModel ->
-            methodBuilder.withCode(
-                codeBuilder ->
-                    instrumentCode(codeBuilder, codeModel, mgen, classInfo, trackMethod));
-
+        case CodeModel codeModel -> {
+          codeModelSeen = true;
+          methodBuilder.withCode(
+              codeBuilder -> instrumentCode(codeBuilder, codeModel, mgen, classInfo, trackMethod));
+        }
         // copy all other MethodElements to output class (unchanged)
         default -> methodBuilder.with(me);
       }
     }
-  }
+    if (!codeModelSeen) {
+      // We assume it is a native method; we need to build our wrapper method.
+      methodBuilder.withCode(
+          codeBuilder -> instrumentCode(codeBuilder, null, mgen, classInfo, trackMethod));
 
-  //  /**
-  //   * Insert the our instrumentation code into the instruction list for the given method. This
-  //   * includes adding instrumentation code at the entry and at each return from the method. In
-  //   * addition, it changes each return statement to first place the value being returned into a
-  // local
-  //   * and then return.
-  //   *
-  //   * @param instructions instruction list for method
-  //   * @param mgen describes the given method
-  //   * @param curMethodInfo provides additional information about the method
-  //   * @param minfo for the given method's code
-  //   */
-  //  private void insertInstrumentationCode(
-  //      List<CodeElement> instructions,
-  //      MethodGen24 mgen,
-  //      MethodInfo curMethodInfo,
-  //      MethodGen24.MInfo24 minfo) {
-  //
-  //    // Add nonce local to matchup enter/exits
-  //    // addInstrumentationAtEntry(instructions, mgen, minfo);
-  //
-  //    // debugInstrument.log("Modified code: %s%n", mgen.getMethod().getCode());
-  //
-  //    assert curMethodInfo != null : "@AssumeAssertion(nullness): can't get here if null";
-  //    Iterator<Boolean> shouldIncludeIter = curMethodInfo.is_included.iterator();
-  //    Iterator<Integer> exitLocationIter = curMethodInfo.exit_locations.iterator();
-  //
-  //    // instrument return instructions
-  //    ListIterator<CodeElement> li = instructions.listIterator();
-  //    while (li.hasNext()) {
-  //
-  //      CodeElement inst = li.next();
-  //
-  //      // back up iterator to point to 'inst'
-  //      li.previous();
-  //
-  //      // If this is a return instruction, insert method exit instrumentation
-  //      // List<CodeElement> new_il =
-  //      // generate_return_instrumentation(inst, mgen, minfo, shouldIncludeIter,
-  // exitLocationIter);
-  //
-  //      // insert code prior to 'inst'
-  //      // for (CodeElement ce : new_il) {
-  //      // li.add(ce);
-  //      // }
-  //
-  //      // skip over 'inst' we just inserted new_il in front of
-  //      li.next();
-  //    }
-  //  }
+      // Turn off the native flag in wrapper method.
+      methodBuilder.withFlags(mgen.getAccessFlagsMask() & ~ClassFile.ACC_NATIVE);
+    }
+  }
 
   /**
    * Generate instrumentation code for the given method. This includes reading in and processing the
    * original instruction list, calling {@code insertInstrumentationCode} to add the instrumentation
    * code, and then copying the modified instruction list to the output method while updating the
-   * code labels, if needed.
+   * code labels, if needed. If DCInstrument24 generated the method or if it is a native method,
+   * then codeModel == null.
    *
    * @param codeBuilder for the given method's code
    * @param codeModel for the input method's code
@@ -977,16 +920,37 @@ public class DCInstrument24 {
     // Add back in any unused parameters that the Java compiler has optimized out.
     if (mgen.fixLocals(minfo)) {
       // localsTable was changed
+      debugInstrument.log("Revised LocalVariableTable:%n");
+      for (LocalVariable lv : mgen.localsTable) {
+        debugInstrument.log("  %s%n", lv);
+      }
     }
 
     // If the method is native
     if ((mgen.getAccessFlagsMask() & ClassFile.ACC_NATIVE) != 0) {
 
+      debugInstrument.log("Native Method%n");
       // Create Java code that cleans up the tag stack and calls the real native method.
-      // fix_native(gen, mgen);
+      fix_native(mgen);
 
       // Add the DCompMarker argument to distinguish our version
-      // add_dcomp_arg(mgen);
+      add_dcomp_arg(mgen, minfo);
+
+      // Copy the modified local variable table to the output class.
+      debugInstrument.log("LocalVariableTable:%n");
+      for (LocalVariable lv : mgen.localsTable) {
+        codeBuilder.localVariable(
+            lv.slot(), lv.name().stringValue(), lv.typeSymbol(), lv.startScope(), lv.endScope());
+        @SuppressWarnings("signature:assignment") // need JDK annotations
+        @FieldDescriptor String lvFD = lv.typeSymbol().descriptorString();
+        debugInstrument.log("  %s : %s%n", lv, convertDescriptorToFqBinaryName(lvFD));
+      }
+
+      // Copy the modified instruction list to the output class.
+      for (CodeElement ce : mgen.getInstructionList()) {
+        debugInstrument.log("CodeElement: %s%n", ce);
+        codeBuilder.with(ce);
+      }
 
     } else { // normal method
 
@@ -995,7 +959,7 @@ public class DCInstrument24 {
         add_dcomp_arg(mgen, minfo);
       }
 
-      debugInstrument.log("Revised LocalVariableTable:%n");
+      debugInstrument.log("LocalVariableTable:%n");
       for (LocalVariable lv : mgen.localsTable) {
         debugInstrument.log("  %s%n", lv);
       }
@@ -1168,7 +1132,7 @@ public class DCInstrument24 {
     debug_transform.indent();
 
     // Create the ClassInfo for this class and its list of methods
-    ClassInfo class_info = new ClassInfo(classname, loader);
+    // ClassInfo class_info = new ClassInfo(classname, loader);
     boolean track_class = false;
 
     // Handle object methods for this class
@@ -1388,7 +1352,7 @@ public class DCInstrument24 {
         if (mg.isNative()) {
 
           // Create Java code that cleans up the tag stack and calls the real native method.
-          fix_native(gen, mg);
+          // fix_native(gen, mg);
           has_code = true;
           //          setCurrentStackMapTable(mg, gen.getMajor());
 
@@ -1408,7 +1372,7 @@ public class DCInstrument24 {
           MethodInfo mi = null;
           if (track && has_code) {
             //         mi = create_method_info(class_info, mg);
-            class_info.method_infos.add(mi);
+            // class_info.method_infos.add(mi);
             DCRuntime.methods.add(mi);
           }
 
@@ -1528,10 +1492,10 @@ public class DCInstrument24 {
     // needs to know what classes are instrumented.  Its looks in the
     // Chicory runtime for this information.
     if (track_class) {
-      debug_transform.log("DCInstrument adding %s to all class list%n", class_info);
-      synchronized (daikon.chicory.SharedData.all_classes) {
-        daikon.chicory.SharedData.all_classes.add(class_info);
-      }
+      // debug_transform.log("DCInstrument adding %s to all class list%n", class_info);
+      // synchronized (daikon.chicory.SharedData.all_classes) {
+      // daikon.chicory.SharedData.all_classes.add(class_info);
+      // }
     }
     debug_transform.log("Instrumentation complete: %s%n", classname);
 
@@ -1677,7 +1641,7 @@ public class DCInstrument24 {
         if (mg.isNative()) {
 
           // Create Java code that cleans up the tag stack and calls the real native method.
-          fix_native(gen, mg);
+          // fix_native(gen, mg);
           has_code = true;
           //          setCurrentStackMapTable(mg, gen.getMajor());
 
@@ -1839,145 +1803,144 @@ public class DCInstrument24 {
       // Finally, we will also return to this location for code instrumentation after calculating
       // the operand stack values.
       newStartIndex = li.nextIndex();
-    } catch (Exception e) {
-      System.err.printf("Unexpected exception encountered: %s", e);
-      e.printStackTrace();
-      // UNDONE: throw?
-    }
 
-    // The next section of code calculates the operand stack value(s) for the current method.
-    if (debugOperandStack) {
-      System.out.printf("%nStarting operand stack calculation%n");
-    }
-
-    // Build a map of labels to instruction list offsets
-    labelIndexMap = new HashMap<>();
-    li = instructions.listIterator();
-    while (li.hasNext()) {
-      inst = li.next();
-      if (inst instanceof LabelTarget lt) {
-        if (debugOperandStack) {
-          System.out.println("label target: " + lt.label() + ", index: " + li.previousIndex());
-        }
-        // remember where this label is located within the instruction list
-        labelIndexMap.put(lt.label(), li.previousIndex());
-      }
-    }
-    if (oldStartLabel != null) {
-      // change offset of oldStartLabel to where we will define newStartLabel
-      labelIndexMap.put(oldStartLabel, newStartIndex);
-    }
-    labelIndexMap.put(newStartLabel, newStartIndex);
-
-    // Create an array to hold the calculated operand stack
-    // prior to each byte code instruction.
-    stacks = new OperandStack24[instructions.size()];
-
-    // Create an array containing the type of each local variable.
-    // This will be indexed by the local variable's slot number.
-    // There may be a gap for the second slot of a variable of type long or double.
-    // UNDONE: do we have to save state of locals like we do statck?
-    locals = new ClassDesc[mgen.getMaxLocals()];
-    // UNDONE: init locals with 'this' and params only
-    for (final LocalVariable lv : mgen.localsTable) {
-      locals[lv.slot()] = lv.typeSymbol();
-    }
-
-    worklistHistory = new HashMap<>();
-
-    // Create a worklist of instruction locations and operand stacks.
-
-    // Create a work item for start of users code.
-    if (oldStartLabel != null) {
-      addLabelToWorklist(oldStartLabel, new OperandStack24(mgen.getMaxStack()));
-    } else {
-      addLabelToWorklist(newStartLabel, new OperandStack24(mgen.getMaxStack()));
-    }
-
-    if (codeModel != null) {
-      // Create a work item for each exception handler.
-      for (ExceptionCatch ec : codeModel.exceptionHandlers()) {
-        Label l = ec.handler();
-        Optional<ClassEntry> catchType = ec.catchType();
-        OperandStack24 temp = new OperandStack24(mgen.getMaxStack());
-        if (catchType.isPresent()) {
-          temp.push(catchType.get().asSymbol());
-        } else {
-          temp.push(CD_Throwable);
-        }
-        addLabelToWorklist(l, temp);
-      }
-    }
-
-    WorkItem item;
-    OperandStack24 stack;
-    int inst_index;
-    while (!worklist.isEmpty()) {
-      item = worklist.remove();
+      // The next section of code calculates the operand stack value(s) for the current method.
       if (debugOperandStack) {
-        System.out.println(
-            "pull from worklist: " + item.instructionIndex() + ", stack: " + item.stack());
+        System.out.printf("%nStarting operand stack calculation%n");
       }
-      li = instructions.listIterator(item.instructionIndex());
-      stack = item.stack();
-      // UNDONE turn it on
-      boolean proceed = true;
-      while (proceed) {
-        if (!li.hasNext()) throw new Error("error in instruction list");
-        inst_index = li.nextIndex();
+
+      // Build a map of labels to instruction list offsets
+      labelIndexMap = new HashMap<>();
+      li = instructions.listIterator();
+      while (li.hasNext()) {
         inst = li.next();
-        if (debugOperandStack) {
-          System.out.println("inst_index: " + inst_index);
-          System.out.println("Operand Stack in: " + stack);
-        }
-        proceed = CalcStack24.calcOperandStack(mgen, minfo, inst, inst_index, stack);
-        if (debugOperandStack) {
-          System.out.println("Operand Stack out: " + stack);
-          System.out.println("proceed: " + proceed);
-        }
-      }
-    }
-
-    if (debugOperandStack) {
-      System.out.printf("%nStarting instruction instrumentation%n");
-    }
-    // set list iterator to start of the user instructions
-    li = instructions.listIterator(newStartIndex);
-
-    // We set inst_index here and increment each time through loop.
-    // This should match the index into stacks we used above.
-    inst_index = li.nextIndex();
-    while (li.hasNext()) {
-      // System.out.println("inst indexes: " + inst_index + ", " + li.nextIndex());
-      inst = li.next();
-
-      // Get the stack information
-      //      stack = stack_types.get(handle_offsets[index++]);
-      //      new_il = xform_inst(mg, ih, stack);
-
-      // Get the translation for this instruction (if any)
-      if (DCInstrument24.debugOperandStack) {
-        System.out.println("code element in: " + inst);
-      }
-      List<CodeElement> new_il = instrumentInstruction(mgen, minfo, inst, stacks[inst_index]);
-      if (new_il != null) {
-        li.remove(); // remove the instruction we instrumented
-        for (CodeElement ce : new_il) {
-          if (DCInstrument24.debugOperandStack) {
-            System.out.println("code element out: " + ce);
+        if (inst instanceof LabelTarget lt) {
+          if (debugOperandStack) {
+            System.out.println("label target: " + lt.label() + ", index: " + li.previousIndex());
           }
-          li.add(ce);
+          // remember where this label is located within the instruction list
+          labelIndexMap.put(lt.label(), li.previousIndex());
+        }
+      }
+      if (oldStartLabel != null) {
+        // change offset of oldStartLabel to where we will define newStartLabel
+        labelIndexMap.put(oldStartLabel, newStartIndex);
+      }
+      labelIndexMap.put(newStartLabel, newStartIndex);
+
+      // Create an array to hold the calculated operand stack
+      // prior to each byte code instruction.
+      stacks = new OperandStack24[instructions.size()];
+
+      // Create an array containing the type of each local variable.
+      // This will be indexed by the local variable's slot number.
+      // There may be a gap for the second slot of a variable of type long or double.
+      // UNDONE: do we have to save state of locals like we do statck?
+      locals = new ClassDesc[mgen.getMaxLocals()];
+      // UNDONE: init locals with 'this' and params only
+      for (final LocalVariable lv : mgen.localsTable) {
+        locals[lv.slot()] = lv.typeSymbol();
+      }
+
+      worklistHistory = new HashMap<>();
+
+      // Create a worklist of instruction locations and operand stacks.
+
+      // Create a work item for start of users code.
+      if (oldStartLabel != null) {
+        addLabelToWorklist(oldStartLabel, new OperandStack24(mgen.getMaxStack()));
+      } else {
+        addLabelToWorklist(newStartLabel, new OperandStack24(mgen.getMaxStack()));
+      }
+
+      if (codeModel != null) {
+        // Create a work item for each exception handler.
+        for (ExceptionCatch ec : codeModel.exceptionHandlers()) {
+          Label l = ec.handler();
+          Optional<ClassEntry> catchType = ec.catchType();
+          OperandStack24 temp = new OperandStack24(mgen.getMaxStack());
+          if (catchType.isPresent()) {
+            temp.push(catchType.get().asSymbol());
+          } else {
+            temp.push(CD_Throwable);
+          }
+          addLabelToWorklist(l, temp);
         }
       }
 
-      // If the modified method is now too large, we quit instrumenting the method
-      // and will rediscover the problem in the main instrumentation loop above
-      // and deal with it there.
-      // if (ih.getPosition() >= Const.MAX_CODE_SIZE) {
-      //   break;
-      // }
+      WorkItem item;
+      OperandStack24 stack;
+      int inst_index;
+      while (!worklist.isEmpty()) {
+        item = worklist.remove();
+        if (debugOperandStack) {
+          System.out.println(
+              "pull from worklist: " + item.instructionIndex() + ", stack: " + item.stack());
+        }
+        li = instructions.listIterator(item.instructionIndex());
+        stack = item.stack();
+        // UNDONE turn it on
+        boolean proceed = true;
+        while (proceed) {
+          if (!li.hasNext()) throw new Error("error in instruction list");
+          inst_index = li.nextIndex();
+          inst = li.next();
+          if (debugOperandStack) {
+            System.out.println("inst_index: " + inst_index);
+            System.out.println("Operand Stack in: " + stack);
+          }
+          proceed = CalcStack24.calcOperandStack(mgen, minfo, inst, inst_index, stack);
+          if (debugOperandStack) {
+            System.out.println("Operand Stack out: " + stack);
+            System.out.println("proceed: " + proceed);
+          }
+        }
+      }
 
-      inst_index++;
+      if (debugOperandStack) {
+        System.out.printf("%nStarting instruction instrumentation%n");
+      }
+      // set list iterator to start of the user instructions
+      li = instructions.listIterator(newStartIndex);
+
+      // We set inst_index here and increment each time through loop.
+      // This should match the index into stacks we used above.
+      inst_index = li.nextIndex();
+      while (li.hasNext()) {
+        // System.out.println("inst indexes: " + inst_index + ", " + li.nextIndex());
+        inst = li.next();
+
+        if (DCInstrument24.debugOperandStack) {
+          System.out.println("code element in: " + inst);
+        }
+        // Get the translation for this instruction (if any)
+        List<CodeElement> new_il = instrumentInstruction(mgen, minfo, inst, stacks[inst_index]);
+        if (new_il != null) {
+          li.remove(); // remove the instruction we instrumented
+          for (CodeElement ce : new_il) {
+            if (DCInstrument24.debugOperandStack) {
+              System.out.println("code element out: " + ce);
+            }
+            li.add(ce);
+          }
+        }
+
+        // UNDONE: can we check this with java.lang.classfile api?
+        // If the modified method is now too large, we quit instrumenting the method
+        // and will rediscover the problem in the main instrumentation loop above
+        // and deal with it there.
+        // if (ih.getPosition() >= Const.MAX_CODE_SIZE) {
+        //   break;
+        // }
+
+        inst_index++;
+      }
+    } catch (Throwable t) {
+      if (debugInstrument.enabled) {
+        t.printStackTrace();
+      }
+      throw new Error(
+          "Unexpected error processing " + mgen.getClassName() + "." + mgen.getName(), t);
     }
   }
 
@@ -2126,7 +2089,7 @@ public class DCInstrument24 {
    * This needs to be before the call to DCRuntime.enter (since it passed to that method).
    *
    * @param mgen describes the given method
-   * @return InstructionList for tag_frame setup code
+   * @return instruction list for tag_frame setup code
    */
   private List<CodeElement> createTagFrame(MethodGen24 mgen) {
 
@@ -2326,7 +2289,7 @@ public class DCInstrument24 {
           case Opcode.GETSTATIC:
           case Opcode.PUTSTATIC:
             {
-              return load_store_field(mgen, ((FieldInstruction) inst));
+              return load_store_field(mgen, minfo, ((FieldInstruction) inst));
             }
 
           case Opcode.DLOAD:
@@ -2738,52 +2701,55 @@ public class DCInstrument24 {
     }
   }
 
-  //  /**
-  //   * Return the interface class containing the implementation of the given method. The
-  // interfaces of
-  //   * {@code startClass} are recursively searched.
-  //   *
-  //   * @param startClass the ClassModel whose interfaces are to be searched
-  //   * @param methodName the target method to search for
-  //   * @param argTypes the target method's argument types
-  //   * @return the name of the interface class containing target method, or null if not found
-  //   */
-  //  private @Nullable @ClassGetName String getDefiningInterface(
-  //      ClassModel startClass, String methodName, Type[] argTypes) {
-  //
-  //    if (debugGetDefiningInterface) {
-  //      System.out.println("searching interfaces of: " + ClassGen24.getClassName(startClass));
-  //    }
-  //    for (@ClassGetName String interfaceName : startClass.getInterfaceNames()) {
-  //      if (debugGetDefiningInterface) {
-  //        System.out.println("interface: " + interfaceName);
-  //      }
-  //      ClassModel cm;
-  //      try {
-  //        cm = getClassModel(interfaceName);
-  //      } catch (Throwable e) {
-  //        throw new Error(String.format("Unable to load class: %s", interfaceName), e);
-  //      }
-  //     for (Method jm : cm.getMethods()) {
-  //       if (debugGetDefiningInterface) {
-  //         System.out.println("  " + jm.getName() + Arrays.toString(jm.getArgumentTypes()));
-  //       }
-  //       if (jm.getName().equals(methodName) && Arrays.equals(jm.getArgumentTypes(), argTypes))
-  // {
-  //         // We have a match.
-  //         return interfaceName;
-  //       }
-  //     }
-  //     // no match found; does this interface extend other interfaces?
-  //     @ClassGetName String foundAbove = getDefiningInterface(cm, methodName, argTypes);
-  //     if (foundAbove != null) {
-  //       // We have a match.
-  //       return foundAbove;
-  //     }
-  //    }
-  // nothing found
-  //    return null;
-  //  }
+  /**
+   * Return the interface class containing the implementation of the given method. The interfaces of
+   * {@code startClass} are recursively searched.
+   *
+   * @param startClass the ClassModel whose interfaces are to be searched
+   * @param methodName the target method to search for
+   * @param argTypes the target method's argument types
+   * @return the name of the interface class containing target method, or null if not found
+   */
+  private @Nullable @BinaryName String getDefiningInterface(
+      ClassModel startClass, String methodName, ClassDesc[] argTypes) {
+
+    if (debugGetDefiningInterface) {
+      System.out.println("searching interfaces of: " + ClassGen24.getClassName(startClass));
+    }
+    for (ClassEntry classEntry : startClass.interfaces()) {
+      // UNDONE: is this right? internal name or binary name?
+      @SuppressWarnings("signature:assignment") // need JDK annotations
+      @BinaryName String interfaceName = classEntry.asInternalName();
+      if (debugGetDefiningInterface) {
+        System.out.println("interface: " + interfaceName);
+      }
+      ClassModel cm;
+      try {
+        cm = getClassModel(interfaceName);
+      } catch (Throwable e) {
+        throw new Error(String.format("Unable to load class: %s", interfaceName), e);
+      }
+      for (MethodModel jm : cm.methods()) {
+        String jmName = jm.methodName().stringValue();
+        MethodTypeDesc mtd = jm.methodTypeSymbol();
+        if (debugGetDefiningInterface) {
+          System.out.println("  " + jmName + Arrays.toString(mtd.parameterArray()));
+        }
+        if (jmName.equals(methodName) && Arrays.equals(mtd.parameterArray(), argTypes)) {
+          // We have a match.
+          return interfaceName;
+        }
+      }
+      // no match found; does this interface extend other interfaces?
+      @BinaryName String foundAbove = getDefiningInterface(cm, methodName, argTypes);
+      if (foundAbove != null) {
+        // We have a match.
+        return foundAbove;
+      }
+    }
+    // nothing found
+    return null;
+  }
 
   /**
    * Process an InvokeDynamic instruction. We don't instrument lambda methods, so just clean up the
@@ -2834,7 +2800,7 @@ public class DCInstrument24 {
     // Get information about the call
     String methodName = invoke.name().stringValue();
     @SuppressWarnings("signature:assignment") // JDK 24 is not annotated as yet
-    @ClassGetName String classname = invoke.owner().asInternalName().replace('/', '.');
+    @BinaryName String classname = invoke.owner().asInternalName().replace('/', '.');
     MethodTypeDesc mtd = invoke.typeSymbol();
     ClassDesc returnType = mtd.returnType();
     ClassDesc[] argTypes = mtd.parameterArray();
@@ -2951,7 +2917,7 @@ public class DCInstrument24 {
       }
     }
     if (primitive_cnt > 0) {
-      il.addAll(discard_tag_code(NopInstruction.of(), primitive_cnt));
+      il.addAll(discard_tag_code(null, primitive_cnt));
     }
     return il;
   }
@@ -2969,7 +2935,7 @@ public class DCInstrument24 {
   private boolean isTargetInstrumented(
       InvokeInstruction invoke,
       MethodGen24 mgen,
-      @ClassGetName String classname,
+      @BinaryName String classname,
       String methodName,
       ClassDesc[] argTypes) {
 
@@ -3067,7 +3033,7 @@ public class DCInstrument24 {
             System.out.printf("invoke host: %s%n", gen.getClassName() + "." + mgen.getName());
           }
 
-          @ClassGetName String targetClassname = classname;
+          @BinaryName String targetClassname = classname;
           // Search this class for the target method. If not found, set targetClassname to
           // its superclass and try again.
           mainloop:
@@ -3110,7 +3076,7 @@ public class DCInstrument24 {
 
             {
               // no methods match - search this class's interfaces
-              @ClassGetName String found;
+              @BinaryName String found;
               try {
                 found = null; // //  getDefiningInterface(targetClass, methodName, argTypes);
               } catch (Throwable e) {
@@ -3210,7 +3176,7 @@ public class DCInstrument24 {
    * @param methodName method to be checked (currently unused)
    * @return true if classname is instrumented
    */
-  private boolean isClassnameInstrumented(@ClassGetName String classname, String methodName) {
+  private boolean isClassnameInstrumented(@BinaryName String classname, String methodName) {
 
     if (debugHandleInvoke) {
       System.out.printf("Checking callee instrumented on %s%n", classname);
@@ -3287,13 +3253,31 @@ public class DCInstrument24 {
   }
 
   /**
-   * Given a classname return it's superclass name. Note that BCEL reports that the superclass of
-   * 'java.lang.Object' is 'java.lang.Object' rather than saying there is no superclass.
+   * Return a list of the super classes of this class in ascending order, i.e., java.lang.Object is
+   * always the last element.
+   *
+   * @return list of super classes
+   */
+  public List<@BinaryName String> getSuperClassNames() {
+    final List<@BinaryName String> allSuperClassNames = new ArrayList<>();
+    @BinaryName String classname = classGen.getClassName();
+    while (!classname.equals("java.lang.Object")) {
+      classname = getSuperclassName(classname);
+      allSuperClassNames.add(classname);
+    }
+    return allSuperClassNames;
+  }
+
+  /**
+   * Given a classname return it's superclass name. Note that we copy BCEL and report that the
+   * superclass of 'java.lang.Object' is 'java.lang.Object' rather than saying there is no
+   * superclass. We are assured this will not cause a problem because we never call this method with
+   * 'java.lang.Object' as the argument.
    *
    * @param classname the fully qualified name of the class in binary form. E.g., "java.util.List"
    * @return superclass name of classname or null if there is an error
    */
-  private @ClassGetName String getSuperclassName(String classname) {
+  private @BinaryName String getSuperclassName(String classname) {
     ClassModel cm = getClassModel(classname);
     if (cm != null) {
       return ClassGen24.getSuperclassName(cm);
@@ -3379,7 +3363,7 @@ public class DCInstrument24 {
    * @return instruction list to call the correct version of clone or toString
    */
   private List<CodeElement> instrument_clone_call(
-      InvokeInstruction invoke, ClassDesc returnType, @ClassGetName String classname) {
+      InvokeInstruction invoke, ClassDesc returnType, @BinaryName String classname) {
 
     List<CodeElement> il = new ArrayList<>();
     if (classname.startsWith("[")) {
@@ -3435,8 +3419,14 @@ public class DCInstrument24 {
    * Handles load and store field instructions. The instructions must be augmented to either push
    * (load) or pop (store) the tag on the tag stack. This is accomplished by calling the tag get/set
    * method for this field.
+   *
+   * @param mgen describes the given method
+   * @param minfo for the given method's code
+   * @param f the field instruction
+   * @return instruction list to access the field
    */
-  private List<CodeElement> load_store_field(MethodGen24 mgen, FieldInstruction f) {
+  private List<CodeElement> load_store_field(
+      MethodGen24 mgen, MethodGen24.MInfo24 minfo, FieldInstruction f) {
 
     System.out.println();
     System.out.println("mgen: " + mgen);
@@ -3445,7 +3435,7 @@ public class DCInstrument24 {
     System.out.println("owner: " + f.owner());
     System.out.println("owner: " + f.owner().asInternalName().replace('/', '.'));
     ClassDesc field_type = f.typeSymbol();
-    System.out.println("field_type: " + field_type);
+    System.out.println("field_type: " + field_type + ", " + f.field().typeSymbol());
     int field_size = TypeKind.from(field_type).slotSize();
     if (!field_type.isPrimitive()) {
       return null;
@@ -3488,8 +3478,7 @@ public class DCInstrument24 {
               MethodTypeDesc.of(CD_void, noArgsCD));
       il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
     } else if (op.equals(Opcode.GETFIELD)) {
-      // il.add(InstructionFactory.createDup(obj_type.getSize()));
-      il.add(StackInstruction.of(Opcode.DUP));
+      il.add(StackInstruction.of(Opcode.DUP)); // dup 'this'
       MethodRefEntry mre =
           poolBuilder.methodRefEntry(
               ownerCD,
@@ -3498,26 +3487,26 @@ public class DCInstrument24 {
       il.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
     } else { // must be Opcode.PUTFIELD
       if (field_size == 2) {
-        // LocalVariableGen lv = get_tmp2_local(mg, field_type);
-        // il.add(InstructionFactory.createStore(field_type, lv.getIndex()));
-        // il.add(InstructionFactory.createDup(obj_type.getSize()));
-        // MethodRefEntry mre =
-        // poolBuilder.methodRefEntry(
-        // ownerCD, Premain.tag_method_name(Premain.SET_TAG, owner, fieldName),
-        // MethodTypeDesc.of(CD_void, noArgsCD));
-        // il.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
-        // il.add(InstructionFactory.createLoad(field_type, lv.getIndex()));
-      } else {
-        il.add(StackInstruction.of(Opcode.SWAP));
-        // il.add(StackInstruction.of(obj_type.getSize()));
-        il.add(StackInstruction.of(Opcode.DUP));
+        LocalVariable lv = get_tmp2_local(mgen, minfo, field_type);
+        il.add(StoreInstruction.of(TypeKind.from(field_type), lv.slot()));
+        il.add(StackInstruction.of(Opcode.DUP)); // dup 'this'
         MethodRefEntry mre =
             poolBuilder.methodRefEntry(
                 ownerCD,
                 Premain.tag_method_name(Premain.SET_TAG, owner, fieldName),
                 MethodTypeDesc.of(CD_void, noArgsCD));
         il.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
-        il.add(StackInstruction.of(Opcode.SWAP));
+        il.add(LoadInstruction.of(TypeKind.from(field_type), lv.slot()));
+      } else {
+        il.add(StackInstruction.of(Opcode.SWAP)); // swap 'this' and 'value'
+        il.add(StackInstruction.of(Opcode.DUP)); // dup 'this'
+        MethodRefEntry mre =
+            poolBuilder.methodRefEntry(
+                ownerCD,
+                Premain.tag_method_name(Premain.SET_TAG, owner, fieldName),
+                MethodTypeDesc.of(CD_void, noArgsCD));
+        il.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
+        il.add(StackInstruction.of(Opcode.SWAP)); // swap 'value' and 'this' back
       }
     }
 
@@ -3593,66 +3582,30 @@ public class DCInstrument24 {
     return il;
   }
 
-  /** Returns the number of the specified field in the primitive fields of obj_type. */
-  int get_field_num(String name, ObjectType obj_type) {
-
-    // If this is the current class, get the information directly
-    // if (obj_type.getClassName().equals(orig_class.getClassName())) {
-    // int fcnt = 0;
-    // for (Field f : orig_class.getFields()) {
-    // if (f.getName().equals(name)) {
-    // return fcnt;
-    // }
-    // if (f.getType() instanceof BasicType) {
-    // fcnt++;
-    // }
-    // }
-    // throw new Error("Can't find " + name + " in " + obj_type);
-    // }
-
-    // Look up the class using this classes class loader.  This may
-    // not be the best way to accomplish this.
-    Class<?> obj_class;
-    try {
-      obj_class = Class.forName(obj_type.getClassName(), false, loader);
-    } catch (Exception e) {
-      throw new Error("can't find class " + obj_type.getClassName(), e);
-    }
-
-    // Loop through all of the fields, counting the number of primitive fields
-    int fcnt = 0;
-    for (java.lang.reflect.Field f : obj_class.getDeclaredFields()) {
-      if (f.getName().equals(name)) {
-        return fcnt;
-      }
-      if (f.getType().isPrimitive()) {
-        fcnt++;
-      }
-    }
-    throw new Error("Can't find " + name + " in " + obj_class);
-  }
-
   /**
    * Gets the local variable used to store a category2 temporary. This is used in the PUTFIELD code
    * to temporarily store the value being placed in the field.
+   *
+   * @param mgen describes the given method
+   * @param minfo for the given method's code
+   * @param type type of the local temp
+   * @return the local temp
    */
-  LocalVariableGen get_tmp2_local(MethodGen mg, Type typ) {
+  LocalVariable get_tmp2_local(MethodGen24 mgen, MethodGen24.MInfo24 minfo, ClassDesc type) {
 
-    // UNDONE - not converted
-
-    String name = "dcomp_$tmp_" + typ;
-    // System.out.printf("local var name = %s%n", name);
+    String name = "dcomp_$tmp_" + type.descriptorString();
+    System.out.printf("local var name = %s%n", name);
 
     // See if the local has already been created
-    for (LocalVariableGen lv : mg.getLocalVariables()) { // should be localsTable?
-      if (lv.getName().equals(name)) {
-        assert lv.getType().equals(typ) : lv + " " + typ;
+    for (LocalVariable lv : mgen.localsTable) {
+      if (lv.name().stringValue().equals(name)) {
+        assert lv.typeSymbol().equals(type) : lv + " " + type;
         return lv;
       }
     }
 
     // Create the variable
-    return mg.addLocalVariable(name, typ, null, null);
+    return createLocalWithMethodScope(mgen, minfo, name, type);
   }
 
   /**
@@ -3683,39 +3636,6 @@ public class DCInstrument24 {
     }
 
     return minfo.returnLocal;
-  }
-
-  /**
-   * Returns the local variable used to store the return result. If it is not present, creates it
-   * with the specified type. If the variable is known to already exist, the type can be null.
-   */
-  LocalVariableGen get_return_local(MethodGen mg, @Nullable Type return_type) {
-
-    // UNDONE - not converted
-
-    // Find the local used for the return value
-    LocalVariableGen return_local = null;
-    for (LocalVariableGen lv : mg.getLocalVariables()) { // should be localsTable?
-      if (lv.getName().equals("return__$trace2_val")) {
-        return_local = lv;
-        break;
-      }
-    }
-
-    // If a type was specified and the variable was found, they must match
-    if (return_local == null) {
-      assert (return_type != null) : " return__$trace2_val doesn't exist";
-    } else {
-      assert return_type.equals(return_local.getType())
-          : " return_type = " + return_type + "; current type = " + return_local.getType();
-    }
-
-    if (return_local == null) {
-      // log ("Adding return local of type %s%n", return_type);
-      return_local = mg.addLocalVariable("return__$trace2_val", return_type, null, null);
-    }
-
-    return return_local;
   }
 
   /**
@@ -4000,7 +3920,8 @@ public class DCInstrument24 {
   }
 
   /**
-   * Create the code to call discard_tag(tag_count) and append inst to the end of that code.
+   * Create the code to call discard_tag(tag_count). If inst is not null, append it to the end of
+   * that code.
    *
    * @param inst instruction to be replaced
    * @param tag_count number of tags to discard
@@ -4010,7 +3931,9 @@ public class DCInstrument24 {
     List<CodeElement> il = new ArrayList<>();
     il.add(loadIntegerConstant(tag_count));
     il.add(dcr_call("discard_tag", CD_void, integer_arg));
-    il.add(inst);
+    if (inst != null) {
+      il.add(inst);
+    }
     return il;
   }
 
@@ -4366,152 +4289,74 @@ public class DCInstrument24 {
   }
 
   /**
-   * Converts a BCEL type to a Class. The class referenced will be loaded but not initialized. The
-   * specified loader must be able to find it. If load is null, the default loader will be used.
-   *
-   * @param t type to get class for
-   * @param loader to use to locate class
-   * @return instance of class
-   */
-  static Class<?> type_to_class(Type t, ClassLoader loader) {
-
-    if (loader == null) {
-      loader = DCInstrument24.class.getClassLoader();
-    }
-
-    if (t == Type.BOOLEAN) {
-      return Boolean.TYPE;
-    } else if (t == Type.BYTE) {
-      return Byte.TYPE;
-    } else if (t == Type.CHAR) {
-      return Character.TYPE;
-    } else if (t == Type.DOUBLE) {
-      return Double.TYPE;
-    } else if (t == Type.FLOAT) {
-      return Float.TYPE;
-    } else if (t == Type.INT) {
-      return Integer.TYPE;
-    } else if (t == Type.LONG) {
-      return Long.TYPE;
-    } else if (t == Type.SHORT) {
-      return Short.TYPE;
-    } else if (t instanceof ObjectType || t instanceof ArrayType) {
-      //      @ClassGetName String sig = typeToClassGetName(t);
-      try {
-        //        return Class.forName(sig, false, loader);
-        return null;
-      } catch (Exception e) {
-        //        throw new Error("can't get class " + sig, e);
-      }
-    } else {
-      throw new Error("unexpected type " + t);
-    }
-    return null;
-  }
-
-  /**
    * Modify a doubled native method to call its original method. It pops all of the parameter tags
    * off of the tag stack. If there is a primitive return value it puts a new tag value on the stack
    * for it.
    *
    * <p>TODO: add a way to provide a synopsis for native methods that affect comparability.
    *
-   * @param gen current class
-   * @param mg the interface method. Must be native.
+   * @param mgen the interface method. Must be native.
    */
-  void fix_native(ClassGen gen, MethodGen mg) {
+  void fix_native(MethodGen24 mgen) {
 
-    InstructionList il = new InstructionList();
-    Type[] argTypes = mg.getArgumentTypes();
-    String[] argNames = mg.getArgumentNames();
+    ClassDesc[] argTypes = mgen.getParameterTypes();
 
-    debug_native.log("Native call %s%n", mg);
+    debug_native.log("Native call %s%n", mgen);
 
-    // Build local variables for each argument to the method
-    if (!mg.isStatic()) {
-      mg.addLocalVariable("this", new ObjectType(mg.getClassName()), null, null);
-    }
-    for (int ii = 0; ii < argTypes.length; ii++) {
-      mg.addLocalVariable(argNames[ii], argTypes[ii], null, null);
-    }
-
-    // Discard the tags for any primitive arguments passed to system
-    // methods
-    int primitive_cnt = 0;
-    for (Type argType : argTypes) {
-      if (argType instanceof BasicType) {
-        primitive_cnt++;
-      }
-    }
-    if (primitive_cnt > 0) {
-      // il.append(discard_tag_code(new NOP(), primitive_cnt));
-      // il.addAll(discard_tag_code(NopInstruction.of(), primitive_cnt));
-    }
+    // Discard the tags for any primitive arguments passed to the method.
+    List<CodeElement> il = discard_primitive_tags(argTypes);
 
     // push a tag if there is a primitive return value
-    Type returnType = mg.getReturnType();
-    // UNDONE change to:
-    // if (is_primitive(returnType)) {
-    if ((returnType instanceof BasicType) && (returnType != Type.VOID)) {
-      il.append(dcr_call("push_const", Type.VOID, Type.NO_ARGS));
+    ClassDesc returnType = mgen.getReturnType();
+    if (is_primitive(returnType)) {
+      il.add(dcr_call("push_const", CD_void, noArgsCD));
     }
 
     // If the method is not static, push the instance on the stack
-    if (!mg.isStatic()) {
-      il.append(InstructionFactory.createLoad(new ObjectType(gen.getClassName()), 0));
+    if (!mgen.isStatic()) {
+      il.add(LoadInstruction.of(TypeKind.REFERENCE, 0)); // load this
     }
 
-    // System.out.printf("%s: atc = %d, anc = %d%n", mg.getName(), argTypes.length,
-    // argNames.length);
-
-    // if call is sun.reflect.Reflection.getCallerClass (realFramesToSkip)
-    if (mg.getName().equals("getCallerClass")
-        && (argTypes.length == 1)
+    // if call is sun.reflect.Reflection.getCallerClass(int depth)
+    // NOTE: This method was deleted in JDK 9.  At some point we should remove support.
+    if (mgen.getName().equals("getCallerClass")
+        && (argTypes.length == 1) // 'int depth'
         && gen.getClassName().equals("sun.reflect.Reflection")) {
 
-      // The call returns the class realFramesToSkip up on the stack. Since we
-      // have added this call in between, we need to increment that number by 1.
-      il.append(InstructionFactory.createLoad(Type.INT, 0));
-      il.append(ifact.createConstant(1));
-      il.append(new IADD());
+      // The call returns the class 'depth' frames up the stack. Since we have added
+      // our wrapper method call in between, we need to increment that number by 1.
+      il.add(LoadInstruction.of(TypeKind.INT, 0)); // load depth
+      il.add(loadIntegerConstant(1));
+      il.add(OperatorInstruction.of(Opcode.IADD));
       // System.out.printf("adding 1 in %s.%s%n", gen.getClassName(),
-      //                   mg.getName());
+      //                   mgen.getName());
 
     } else { // normal call
 
       // push each argument on the stack
       int param_index = 1;
-      if (mg.isStatic()) {
+      if (mgen.isStatic()) {
         param_index = 0;
       }
-      for (Type argType : argTypes) {
-        il.append(InstructionFactory.createLoad(argType, param_index));
-        param_index += argType.getSize();
+      for (ClassDesc argType : argTypes) {
+        il.add(LoadInstruction.of(TypeKind.from(argType), param_index));
+        param_index += TypeKind.from(argType).slotSize();
       }
     }
 
-    // Call the method
-    il.append(
-        ifact.createInvoke(
-            gen.getClassName(),
-            mg.getName(),
-            mg.getReturnType(),
-            argTypes,
-            (mg.isStatic() ? Const.INVOKESTATIC : Const.INVOKEVIRTUAL)));
+    // Call the native method
+    MethodRefEntry mre =
+        poolBuilder.methodRefEntry(
+            ClassDesc.of(mgen.getClassName()),
+            mgen.getName(),
+            MethodTypeDesc.of(returnType, argTypes));
+    Opcode op = mgen.isStatic() ? Opcode.INVOKESTATIC : Opcode.INVOKEVIRTUAL;
+    il.add(InvokeInstruction.of(op, mre));
 
-    // If there is a return value, return it
-    il.append(InstructionFactory.createReturn(mg.getReturnType()));
+    // generate return instruction
+    il.add(ReturnInstruction.of(TypeKind.from(returnType)));
 
-    // We've created new il; we need to set the instruction handle positions.
-    il.setPositions();
-
-    // Add the instructions to the method
-    mg.setInstructionList(il);
-    mg.setMaxStack();
-    mg.setMaxLocals();
-
-    // turn off the native flag
-    mg.setAccessFlags(mg.getAccessFlags() & ~Const.ACC_NATIVE);
+    mgen.setInstructionList(il);
   }
 
   /**
@@ -4646,39 +4491,34 @@ public class DCInstrument24 {
 
     // Build accessors for each field declared in a superclass that is
     // is not shadowed in a subclass
-    //    JavaClass[] super_classes;
-    //    try {
-    //      // super_classes = gen.getJavaClass().getSuperClasses();
-    //    } catch (Exception e) {
-    //      throw new Error(e);
-    //    }
-    //    for (JavaClass super_class : super_classes) {
-    //      for (Field f : super_class.getFields()) {
-    //        if (f.isPrivate()) {
-    //          continue;
-    //        }
-    //        if (field_set.contains(f.getName())) {
-    //          continue;
-    //        }
-    //        if (!is_primitive(f.getType())) {
-    //          continue;
-    //        }
-    //
-    //        field_set.add(f.getName());
-    //        MethodGen get_method;
-    //        MethodGen set_method;
-    //        if (f.isStatic()) {
-    //          String full_name = full_name(super_class, fm);
-    //          get_method = create_get_tag(classGen, fm, static_field_id.get(full_name));
-    //          set_method = create_set_tag(classGen, fm, static_field_id.get(full_name));
-    //        } else {
-    //          get_method = create_get_tag(classGen, fm, field_map.get(f));
-    //          set_method = create_set_tag(classGen, fm, field_map.get(f));
-    //        }
-    //        gen.addMethod(get_method.getMethod());
-    //        gen.addMethod(set_method.getMethod());
-    //      }
-    //    }
+    for (@BinaryName String scn : getSuperClassNames()) {
+      ClassModel scm = getClassModel(scn);
+      if (scm == null) {
+        throw new Error("Can't load ClassModel for: " + scn);
+      }
+
+      for (FieldModel fm : scm.fields()) {
+        if (fm.flags().has(AccessFlag.PRIVATE)) {
+          continue;
+        }
+        if (field_set.contains(fm.fieldName().stringValue())) {
+          continue;
+        }
+        if (!fm.fieldTypeSymbol().isPrimitive()) {
+          continue;
+        }
+
+        field_set.add(fm.fieldName().stringValue());
+        if (fm.flags().has(AccessFlag.STATIC)) {
+          String full_name = full_name(scm, fm);
+          create_get_tag(classGen, fm, static_field_id.get(full_name));
+          create_set_tag(classGen, fm, static_field_id.get(full_name));
+        } else {
+          create_get_tag(classGen, fm, field_map.get(fm));
+          create_set_tag(classGen, fm, field_map.get(fm));
+        }
+      }
+    }
   }
 
   /**
@@ -5441,21 +5281,6 @@ public class DCInstrument24 {
     return result.toString();
   }
 
-  //  /**
-  //   * Format a constant value for printing.
-  //   *
-  //   * @param item the constant to format
-  //   * @return a string containing the constant's value
-  //   */
-  //  private final String formatConstantDesc(ConstantDesc item) {
-  //    try {
-  //      return item.resolveConstantDesc(MethodHandles.lookup()).toString();
-  //    } catch (Exception e) {
-  //      System.err.printf("Unexpected error %s getting constant value for: %s%n", e, item);
-  //      return "";
-  //    }
-  //  }
-
   // UNDONE - this routine should probably be moved to MethodGen24.
 
   /**
@@ -5476,6 +5301,20 @@ public class DCInstrument24 {
     minfo.nextLocalIndex += TypeKind.from(localType).slotSize();
     mgen.setMaxLocals(minfo.nextLocalIndex);
     return newVar;
+  }
+
+  /**
+   * Build a dup instruction based on item size.
+   *
+   * @param size size of item to be duplicated
+   * @return a DUP or DUP2 instruction
+   */
+  protected CodeElement buildDUPInstruction(int size) {
+    if (size == 1) {
+      return StackInstruction.of(Opcode.DUP);
+    } else {
+      return StackInstruction.of(Opcode.DUP2);
+    }
   }
 
   /**
