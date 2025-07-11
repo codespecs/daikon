@@ -634,7 +634,11 @@ public class MethodGen24 {
     return poolBuilder;
   }
 
-  // Used to add instruction list to our native code wrapper.
+  /**
+   * Set the method's instruction list. Used to add instruction list to our native code wrapper.
+   *
+   * @param il the instruction list
+   */
   public void setInstructionList(List<CodeElement> il) {
     codeList = il;
   }

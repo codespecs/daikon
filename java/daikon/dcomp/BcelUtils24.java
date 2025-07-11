@@ -170,27 +170,25 @@ public class BcelUtils24 {
     boolean hasCode = !mgen.getInstructionList().isEmpty();
     int argSize = TypeKind.from(argType).slotSize();
 
-    if (hasCode) {
-      if (!mgen.isStatic()) {
-        // Skip the 'this' pointer.
-        newIndex++;
-        newOffset++; // size of 'this' is 1
-      }
-
-      if (argTypes.length > 0) {
-        LocalVariable lastArg;
-        newIndex = newIndex + argTypes.length;
-        // newIndex is now positive, because argTypes.length is
-        lastArg = locals.get(newIndex - 1);
-        newOffset = lastArg.slot() + TypeKind.from(lastArg.typeSymbol()).slotSize();
-      }
-
-      // Insert our new local variable into existing table at 'newOffset'.
-      argNew = LocalVariable.of(newOffset, argName, argType, minfo.startLabel, minfo.endLabel);
-      mgen.localsTable.add(newIndex, argNew);
-      minfo.nextLocalIndex += argSize;
-      mgen.setMaxLocals(minfo.nextLocalIndex);
+    if (!mgen.isStatic()) {
+      // Skip the 'this' pointer.
+      newIndex++;
+      newOffset++; // size of 'this' is 1
     }
+
+    if (argTypes.length > 0) {
+      LocalVariable lastArg;
+      newIndex = newIndex + argTypes.length;
+      // newIndex is now positive, because argTypes.length is
+      lastArg = locals.get(newIndex - 1);
+      newOffset = lastArg.slot() + TypeKind.from(lastArg.typeSymbol()).slotSize();
+    }
+
+    // Insert our new local variable into existing table at 'newOffset'.
+    argNew = LocalVariable.of(newOffset, argName, argType, minfo.startLabel, minfo.endLabel);
+    mgen.localsTable.add(newIndex, argNew);
+    minfo.nextLocalIndex += argSize;
+    mgen.setMaxLocals(minfo.nextLocalIndex);
 
     if (isParam) {
       // Update the method's parameter information.
@@ -201,6 +199,10 @@ public class BcelUtils24 {
       mgen.setParameterNames(argNames);
     }
 
+    debugInstrument.log(
+        "Added arg    %s%n",
+        argNew.slot() + ": " + argNew.name() + ", " + argNew.type() + ", " + argSize);
+
     if (hasCode) {
       // we need to adjust the offset of any locals after our insertion
       for (int i = newIndex + 1; i < locals.size(); i++) {
@@ -210,10 +212,6 @@ public class BcelUtils24 {
             LocalVariable.of(
                 lv.slot() + argSize, lv.name(), lv.type(), lv.startScope(), lv.endScope()));
       }
-
-      debugInstrument.log(
-          "Added arg    %s%n",
-          argNew.slot() + ": " + argNew.name() + ", " + argNew.type() + ", " + argSize);
 
       // Now process the instruction list, adding one to the offset
       // within each LocalVariableInstruction that references a

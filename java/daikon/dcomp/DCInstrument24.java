@@ -95,6 +95,7 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import org.apache.bcel.Const;
 import org.apache.bcel.classfile.AnnotationEntry;
@@ -886,12 +887,18 @@ public class DCInstrument24 {
       }
     }
     if (!codeModelSeen) {
-      // We assume it is a native method; we need to build our wrapper method.
-      methodBuilder.withCode(
-          codeBuilder -> instrumentCode(codeBuilder, null, mgen, classInfo, trackMethod));
+      debugInstrument.log("No CodeModel for method: %s%n", mgen.getName());
+      if ((mgen.getAccessFlagsMask() & ClassFile.ACC_NATIVE) != 0) {
+        // We need to build our wrapper method.
+        methodBuilder.withCode(
+            codeBuilder -> instrumentCode(codeBuilder, null, mgen, classInfo, trackMethod));
 
-      // Turn off the native flag in wrapper method.
-      methodBuilder.withFlags(mgen.getAccessFlagsMask() & ~ClassFile.ACC_NATIVE);
+        // Turn off the native flag in wrapper method.
+        methodBuilder.withFlags(mgen.getAccessFlagsMask() & ~ClassFile.ACC_NATIVE);
+      } else {
+        // Interface and/or Abstract
+        // UNDONE: do nothing?
+      }
     }
   }
 
@@ -4762,14 +4769,20 @@ public class DCInstrument24 {
    * @param classGen class to add method to
    */
   void add_dcomp_interface(ClassBuilder classBuilder, ClassGen24 classGen, ClassInfo classInfo) {
+
     classGen.addInterface(DCRuntime.instrumentation_interface);
     debugInstrument.log("Added interface DCompInstrumented%n");
 
     List<CodeElement> instructions = new ArrayList<>();
+    Consumer<? super MethodBuilder> codeHandler1 =
+        methodBuilder -> {
+          methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions));
+        };
 
     int access_flags = ClassFile.ACC_PUBLIC;
     if (classGen.isInterface()) {
       access_flags |= ClassFile.ACC_ABSTRACT;
+      codeHandler1 = methodBuilder -> {};
     }
 
     MethodTypeDesc mtd = MethodTypeDesc.of(CD_boolean, CD_Object);
@@ -4786,34 +4799,38 @@ public class DCInstrument24 {
     instructions.add(ReturnInstruction.of(TypeKind.BOOLEAN));
 
     // build the equals_dcomp_instrumented method
-    classBuilder.withMethod(
-        "equals_dcomp_instrumented",
-        mtd,
-        access_flags,
-        methodBuilder ->
-            methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions)));
+    classBuilder.withMethod("equals_dcomp_instrumented", mtd, access_flags, codeHandler1);
 
     // now build the instrumented version of the equals_dcomp_instrumented method
-    @BinaryName String classname = classInfo.class_name;
-    // create pseudo MethodGen24
-    MethodGen24 mgen =
-        new MethodGen24(
-            classname,
-            classBuilder,
-            "equals_dcomp_instrumented",
-            access_flags,
-            mtd,
-            instructions,
-            3, // maxStack
-            2); // maxLocals
-    boolean track = should_track(classname, mgen.getName(), classname + mgen);
-    classBuilder.withMethod(
-        "equals_dcomp_instrumented",
-        MethodTypeDesc.of(CD_boolean, CD_Object, dcomp_marker),
-        access_flags,
-        methodBuilder ->
-            methodBuilder.withCode(
-                codeBuilder -> instrumentCode(codeBuilder, null, mgen, classInfo, track)));
+    if (classGen.isInterface()) {
+      // no code if interface
+      classBuilder.withMethod(
+          "equals_dcomp_instrumented",
+          MethodTypeDesc.of(CD_boolean, CD_Object, dcomp_marker),
+          access_flags,
+          methodBuilder -> {});
+    } else {
+      @BinaryName String classname = classInfo.class_name;
+      // create pseudo MethodGen24
+      MethodGen24 mgen =
+          new MethodGen24(
+              classname,
+              classBuilder,
+              "equals_dcomp_instrumented",
+              access_flags,
+              mtd,
+              instructions,
+              3, // maxStack
+              2); // maxLocals
+      boolean track = should_track(classname, mgen.getName(), classname + mgen);
+      classBuilder.withMethod(
+          "equals_dcomp_instrumented",
+          MethodTypeDesc.of(CD_boolean, CD_Object, dcomp_marker),
+          access_flags,
+          methodBuilder ->
+              methodBuilder.withCode(
+                  codeBuilder -> instrumentCode(codeBuilder, null, mgen, classInfo, track)));
+    }
   }
 
   /**
@@ -4833,11 +4850,17 @@ public class DCInstrument24 {
    * @param classGen class to add method to
    */
   void add_equals_method(ClassBuilder classBuilder, ClassGen24 classGen, ClassInfo classInfo) {
+
     List<CodeElement> instructions = new ArrayList<>();
+    Consumer<? super MethodBuilder> codeHandler1 =
+        methodBuilder -> {
+          methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions));
+        };
 
     int access_flags = ClassFile.ACC_PUBLIC;
     if (classGen.isInterface()) {
       access_flags |= ClassFile.ACC_ABSTRACT;
+      codeHandler1 = methodBuilder -> {};
     }
 
     MethodTypeDesc mtd = MethodTypeDesc.of(CD_boolean, CD_Object);
@@ -4849,26 +4872,30 @@ public class DCInstrument24 {
     instructions.add(ReturnInstruction.of(TypeKind.BOOLEAN));
 
     // build the equals method
-    classBuilder.withMethod(
-        "equals",
-        mtd,
-        access_flags,
-        methodBuilder ->
-            methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions)));
+    classBuilder.withMethod("equals", mtd, access_flags, codeHandler1);
 
     // now build the instrumented version of the equals method
-    @BinaryName String classname = classInfo.class_name;
-    // create pseudo MethodGen24
-    MethodGen24 mgen =
-        new MethodGen24(classname, classBuilder, "equals", access_flags, mtd, instructions, 2, 2);
-    boolean track = should_track(classname, mgen.getName(), classname + mgen);
-    classBuilder.withMethod(
-        "equals",
-        MethodTypeDesc.of(CD_boolean, CD_Object, dcomp_marker),
-        access_flags,
-        methodBuilder ->
-            methodBuilder.withCode(
-                codeBuilder -> instrumentCode(codeBuilder, null, mgen, classInfo, track)));
+    if (classGen.isInterface()) {
+      // no code if interface
+      classBuilder.withMethod(
+          "equals",
+          MethodTypeDesc.of(CD_boolean, CD_Object, dcomp_marker),
+          access_flags,
+          methodBuilder -> {});
+    } else {
+      @BinaryName String classname = classInfo.class_name;
+      // create pseudo MethodGen24
+      MethodGen24 mgen =
+          new MethodGen24(classname, classBuilder, "equals", access_flags, mtd, instructions, 2, 2);
+      boolean track = should_track(classname, mgen.getName(), classname + mgen);
+      classBuilder.withMethod(
+          "equals",
+          MethodTypeDesc.of(CD_boolean, CD_Object, dcomp_marker),
+          access_flags,
+          methodBuilder ->
+              methodBuilder.withCode(
+                  codeBuilder -> instrumentCode(codeBuilder, null, mgen, classInfo, track)));
+    }
   }
 
   /**
