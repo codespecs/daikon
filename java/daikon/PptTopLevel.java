@@ -3650,8 +3650,14 @@ public class PptTopLevel extends Ppt {
     // Merge the ModBitTracker.
     // We'll reuse one dummy ValueTuple throughout, side-effecting its mods
     // array.
-    if (debugStdout) {
-      System.out.printf("in ppt %s%n", name());
+    boolean debugLocal =
+        debugStdout
+            && name()
+                .startsWith(
+                    "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
+
+    if (debugLocal) {
+      System.out.printf("mergeInvs in ppt %s%n", name());
       System.out.printf("  num_tracevars = %d%n", num_tracevars);
       System.out.printf("  mbtracker.num_vars() = %d%n", mbtracker.num_vars());
       for (int ii = 0; ii < var_infos.length; ii++) {
@@ -3667,8 +3673,19 @@ public class PptTopLevel extends Ppt {
     for (PptRelation rel : children) {
       ModBitTracker child_mbtracker = rel.child.mbtracker;
       int child_mbsize = child_mbtracker.num_samples();
-      // System.out.println("mergeInvs child #" + children.indexOf(rel) + "=" + rel.child.name() + "
-      // has size " + child_mbsize + " for " + name());
+      if (debugLocal) {
+        System.out.println(
+            "mergeInvs child #"
+                + children.indexOf(rel)
+                + "/"
+                + children.size()
+                + "="
+                + rel.child.name()
+                + " has size "
+                + child_mbsize
+                + " for "
+                + name());
+      }
       for (int sampno = 0; sampno < child_mbsize; sampno++) {
         Arrays.fill(mods, ValueTuple.MISSING_FLOW);
         for (int j = 0; j < var_infos.length; j++) {
@@ -3858,11 +3875,17 @@ public class PptTopLevel extends Ppt {
   @RequiresNonNull("equality_view")
   public void merge_invs_multiple_children() {
 
+    boolean debugLocal =
+        debugStdout
+            && name()
+                .startsWith(
+                    "com.rolemodelsoft.drawlet.basics.AbstractFigure.addPropertyChangeListener(java.beans.PropertyChangeListener)");
+
     // Debug print ppt and children
-    if (debugStdout) {
+    if (debugLocal) {
       System.out.printf("Merging invariants for ppt %s%n", this);
       for (PptRelation rel : children) {
-        System.out.printf("child: %s%n", rel);
+        System.out.printf("  child: %s%n", rel);
       }
     }
 
@@ -3877,8 +3900,9 @@ public class PptTopLevel extends Ppt {
         continue;
       }
       if (constants != null && constants.is_missing(l)) {
-        // System.out.printf("skipping leader %s in ppt %s, always missing%n",
-        //                   l, name());
+        if (debugLocal) {
+          System.out.printf("skipping leader %s in ppt %s, always missing%n", l, name());
+        }
         continue;
       }
       non_missing_leaders.add(l);
@@ -3899,6 +3923,9 @@ public class PptTopLevel extends Ppt {
         continue;
       }
       suppressed_invs.put(child, NIS.create_suppressed_invs(child));
+    }
+    if (debugLocal) {
+      System.out.println("suppressed_invs = " + suppressed_invs);
     }
 
     // Create unary views and related invariants

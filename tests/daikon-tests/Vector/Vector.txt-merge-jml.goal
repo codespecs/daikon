@@ -428,6 +428,7 @@ class Vector13 implements Cloneable, java.io.Serializable {
     @ ensures daikon.Quant.pairwiseEqual(this.elementData, \old(this.elementData));
     @ ensures this.elementCount == \old(this.elementCount);
     @ ensures this.capacityIncrement == \old(this.capacityIncrement);
+    @ ensures (\result == false)  ==>  (All the elements of this.elementData[..].getClass().getName() have LENGTH=16);
     @ ensures (\result == true)  ==>  (this.elementCount >= 1);
     @ ensures this.elementData.getClass().getName() != \old(elem.getClass().getName());
     @ ensures (!(daikon.Quant.size(this.elementData) == 0)) || (this.elementCount == 0);
