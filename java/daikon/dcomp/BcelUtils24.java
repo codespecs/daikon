@@ -160,7 +160,7 @@ public class BcelUtils24 {
     // existing local variables.  We then need to make a pass over the
     // byte codes to update the local offset values of any locals we just shifted up.
 
-    LocalVariable argNew = null;
+    LocalVariable argNew;
     // get a copy of the locals before modification
     ArrayList<LocalVariable> locals = mgen.localsTable;
     ClassDesc[] argTypes = mgen.getParameterTypes();
