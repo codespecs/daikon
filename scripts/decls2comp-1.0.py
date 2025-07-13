@@ -78,9 +78,9 @@ f = Path.open(Path(sys.argv[1]))
 # Program points are separated by "DECLARE" statements
 # Key: program point name
 # Value: list of all strings following program point
-all_ppts = {}
+all_ppts: dict[str, list[str]] = {}
 
-temp_all_ppts = []  # Temporary before placing in all_ppts
+temp_all_ppts: list[list[str]] = []  # Temporary before placing in all_ppts
 
 is_intermediate = 0
 

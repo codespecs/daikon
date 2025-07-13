@@ -18,7 +18,7 @@ all_lines = [line.strip() for line in decls_f]
 decls_f.close()
 
 
-def strip_comp_number(comp_num):
+def strip_comp_number(comp_num: str) -> str:
     """Kvasir does not support comparability for array indices, so strip those off.
 
     e.g. '104[105]' becomes '104'.
@@ -90,6 +90,7 @@ kvasir_ppt_names = []
 
 my_state = DeclState.Uninit
 
+cur_var_list: list[list[str]] = []
 for line in all_lines:
     if my_state == DeclState.Uninit:
         # The program point name always follows the

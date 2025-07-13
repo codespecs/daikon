@@ -21,7 +21,7 @@ cur_ppt = None
 
 # Initialize this to an empty list and append on the size of the
 # comparability sets for each line you encounter in the program point.
-cur_ppt_set_sizes = []
+cur_ppt_set_sizes: list[int] = []
 
 # Initialize ppt_info_dict
 for line in all_lines:
@@ -50,7 +50,7 @@ for line in all_lines:
 # Now ppt_info_dict should be initialized with all numerical data.
 # We can now crunch numbers and produce useful-looking results
 
-sum_of_avgs = 0
+sum_of_avgs = 0.0
 num_ppts = len(list(ppt_info_dict.keys()))
 
 total_square_vars = 0

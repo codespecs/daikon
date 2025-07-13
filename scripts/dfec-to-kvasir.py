@@ -80,7 +80,7 @@ DfecGlobalRE = re.compile(r"^::")
 # information is provided)
 
 
-def convert_dfec_var_name(var):
+def convert_dfec_var_name(var: str) -> str:
     """Convert variable var's name from Dfec conventions to Kvasir conventions.
 
     Args:
@@ -93,7 +93,7 @@ def convert_dfec_var_name(var):
     return global_converted.replace("->", "[].")
 
 
-def convert_kvasir_var_name(var):
+def convert_kvasir_var_name(var: str) -> str:
     """Strip off everything before the '/', if there is one.
 
     Dfec does not print out the function name for function-static variables,
@@ -112,7 +112,7 @@ def convert_kvasir_var_name(var):
     return var
 
 
-def strip_comp_number(comp_num):
+def strip_comp_number(comp_num: str) -> str:
     """Kvasir does not support comparability for array indices so strip those off.
 
     e.g. '104[105]' becomes '104'.
@@ -149,7 +149,7 @@ def strip_comp_number(comp_num):
 # to strip off the canonical function name.
 
 
-def strip_dfec_ppt_name(ppt):
+def strip_dfec_ppt_name(ppt: str) -> tuple[str, str]:
     """Strip the extraneous stuff off of Dfec's names and split into parts.
 
     Input:  'std.ccladd(int;int;)void:::ENTER'
@@ -178,7 +178,7 @@ def strip_dfec_ppt_name(ppt):
     return (fnname, enter_or_exit)
 
 
-def strip_kvasir_ppt_name(ppt):
+def strip_kvasir_ppt_name(ppt: str) -> tuple[str, str]:
     """Strip the extraneous stuff off of Kvasir's names and split into parts.
 
     Args:
@@ -240,10 +240,10 @@ my_state = DeclState.Uninit
 # where the keys are program point names (stripped using strip_dfec_ppt_name)
 # and the values are maps where the keys are variable names and the
 # values are comparability numbers
-dfec_ppt_map = {}
+dfec_ppt_map: dict[tuple[str, str], dict[str, str]] = {}
 
-cur_var_map = 0  # The current variable map, which is a value in dfec_ppt_map.
-cur_var_name = ""
+cur_var_map: dict[str, str] = {}  # The current variable map, which is a value in dfec_ppt_map.
+cur_var_name = "DUMMY VAR NAME"
 
 for line in dfec_all_lines:
     if my_state == DeclState.Uninit:
@@ -290,7 +290,7 @@ for line in dfec_all_lines:
 # declaredTypeCompNum is calculated later in the next step by assigning
 # each variable of the same declared type at a particular program point
 # the SAME number
-kvasir_ppt_map = {}
+kvasir_ppt_map: dict[str, list[list[str]]] = {}
 
 # A list of the same strings which are keys to kvasir_ppt_map
 # This is desirable because we want to output the program points
@@ -299,6 +299,7 @@ kvasir_ppt_names = []
 
 my_state = DeclState.Uninit
 
+cur_var_list: list[list[str]] = []
 for line in kvasir_all_lines:
     if my_state == DeclState.Uninit:
         # The program point name always follows the
@@ -341,7 +342,7 @@ for line in kvasir_all_lines:
         my_state = DeclState.VarName
 
 
-def strip_comments(comp_num):
+def strip_comments(comp_num: str) -> str:
     """Strip all comments after "#".
 
     Example:
@@ -366,14 +367,14 @@ for cur_var_list in kvasir_ppt_map.values():
     cur_comp_num = 1  # Start at 1 and monotonically increase
 
     # Key: declared type; Value: comp. num associated with that type
-    dec_types_map = {}
+    dec_types_map: dict[str, int] = {}
 
     for elt in cur_var_list:
         cur_dec_type = strip_comments(elt[1])
         if cur_dec_type in dec_types_map:
-            elt.append(dec_types_map[cur_dec_type])  # Use the stored comp. num
+            elt.append(str(dec_types_map[cur_dec_type]))  # Use the stored comp. num
         else:
-            elt.append(cur_comp_num)  # Use a fresh new comp. num
+            elt.append(str(cur_comp_num))  # Use a fresh new comp. num
             dec_types_map[cur_dec_type] = cur_comp_num  # and add the entry to the map
             cur_comp_num += 1  # Don't forget to increment this!
 
@@ -394,9 +395,11 @@ for cur_var_list in kvasir_ppt_map.values():
 result_map = {}
 
 for ppt, stripped in kvasir_ppt_map.items():
-    if stripped in dfec_ppt_map:
+    #  TODO BUG revealed by mypy
+    if stripped in dfec_ppt_map:  # type: ignore[comparison-overlap]
         KvasirVarList = kvasir_ppt_map[ppt]
-        DfecVarMap = dfec_ppt_map[stripped]
+        #  TODO BUG revealed by mypy
+        DfecVarMap = dfec_ppt_map[stripped]  # type: ignore[index]
 
         #        print "KvasirVarList:"
         #        print KvasirVarList
