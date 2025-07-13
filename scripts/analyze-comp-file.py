@@ -4,10 +4,11 @@
 
 import re
 import sys
+from pathlib import Path
 
-ppt_name_re = re.compile(":::")
+ppt_name_re = re.compile(r":::")
 
-f = open(sys.argv[1], "r")
+f = Path.open(Path(sys.argv[1]))
 all_lines = [line.strip() for line in f]
 
 # Key: program point name
@@ -57,7 +58,7 @@ total_vars = 0
 
 total_square_vars_no_comp = 0
 
-for ppt, comp_set_sizes_at_ppt in ppt_info_dict.items():
+for ppt, comp_set_sizes_at_ppt in ppt_info_dict.items():  # noqa: B007 PERF102
     total_vars_at_ppt = sum(comp_set_sizes_at_ppt)
     square_vars_at_ppt = sum((i * i) for i in comp_set_sizes_at_ppt)
 
@@ -81,6 +82,4 @@ for ppt, comp_set_sizes_at_ppt in ppt_info_dict.items():
 # print
 # print "Unweighted average:", ((sum_of_avgs) / float(num_ppts))
 print("Weighted average:", (float(total_square_vars) / float(total_vars)))
-print(
-    "Avg. (No comparability):", (float(total_square_vars_no_comp) / float(total_vars))
-)
+print("Avg. (No comparability):", (float(total_square_vars_no_comp) / float(total_vars)))
