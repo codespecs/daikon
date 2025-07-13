@@ -115,7 +115,7 @@ all_ppts = {}
 
 temp_all_ppts = []  # Temporary before placing in all_ppts
 
-for line in f.readlines():
+for line in f:
     line = line.strip()
 
     if line[0:4] == "ppt ":
@@ -147,7 +147,7 @@ for ppt_list in temp_all_ppts:
     all_ppts[ppt_name] = ppt_list[1:]
 
 # Alphabetically sort the program points
-sorted_ppt_keys = sorted(list(all_ppts.keys()))
+sorted_ppt_keys = sorted(all_ppts.keys())
 
 # Process each PPT
 for ppt_name in sorted_ppt_keys:
@@ -176,7 +176,7 @@ for ppt_name in sorted_ppt_keys:
 
     # Now we can do the real work of grouping variables together
     # in comparability sets based on their numbers
-    sorted_vars = sorted(list(var2comp.keys()))
+    sorted_vars = sorted(var2comp.keys())
 
     print(ppt_name)
 
@@ -198,7 +198,7 @@ for ppt_name in sorted_ppt_keys:
         if comp_num:
             del var2comp[var_name]
 
-            sorted_vars = sorted(list(var2comp.keys()))
+            sorted_vars = sorted(var2comp.keys())
 
             for other_var in sorted_vars:
                 if var2comp[other_var] == comp_num:
@@ -208,6 +208,6 @@ for ppt_name in sorted_ppt_keys:
 
         # Update sorted_vars after deleting the appropriate entries
         # from var2comp
-        sorted_vars = sorted(list(var2comp.keys()))
+        sorted_vars = sorted(var2comp.keys())
 
     print()

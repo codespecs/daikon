@@ -12,7 +12,7 @@ import sys
 
 # Process command-line args:
 decls_f = open(sys.argv[1], "r")
-all_lines = [line.strip() for line in decls_f.readlines()]
+all_lines = [line.strip() for line in decls_f]
 decls_f.close()
 
 

@@ -16,7 +16,7 @@ import sys
 
 # Process command-line args:
 kvasir_decls_f = open(sys.argv[1], "r")
-kvasir_decls_all_lines = [line.strip() for line in kvasir_decls_f.readlines()]
+kvasir_decls_all_lines = [line.strip() for line in kvasir_decls_f]
 kvasir_decls_f.close()
 
 
@@ -70,7 +70,7 @@ def convert_kvasir_var_name(var):
     if var[0] == "/":
         return var
     elif "/" in var:
-        return "/" + var.split("/")[1]
+        return "/" + var.split("/", maxsplit=1)[1]
     else:
         return var
 
