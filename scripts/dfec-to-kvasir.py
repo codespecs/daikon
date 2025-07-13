@@ -1,39 +1,42 @@
 #!/usr/bin/python3
 
-# The point of this script is to convert Dfec-generated .decls data
-# with Lackwit comparability info. into a form that Kvasir can
-# understand so that we don't have to run Dfec at all.
+"""Convert Dfec-generated .decls data with Lackwit comparability information into Kvasir form.
 
-# Takes a .decls file that Dfec produced (with Lackwit comparability),
-# a .decls file that Kvasir produced (with DynComp comparability), and
-# outputs 4 .decls file that contain the intersection of Dfec and
-# Kvasir program points and variables in a format that is compatible
-# with Kvasir:
-#
-# kvasir-with-lackwit.decls: comparability numbers from Lackwit
-# kvasir-with-dyncomp.decls: comparability numbers from DynComp
-# kvasir-with-declared-types.decls: comparability numbers inferred from declared types
-# kvasir-no-comp.decls: no comparability numbers (this is the same thing that
-#                       --var-list-file=intersection.vars would generate)
-#
-# and outputs a variable list file (intersection.vars) so that Kvasir
-# can be run and trace data can be collected only for those variables.
+Then, we don't have to run Dfec at all.
 
-# Created on 2005-08-09 by Philip Guo
+Takes a .decls file that Dfec produced (with Lackwit comparability),
+a .decls file that Kvasir produced (with DynComp comparability), and
+outputs 4 .decls file that contain the intersection of Dfec and
+Kvasir program points and variables in a format that is compatible
+with Kvasir:
 
-# Usage: (Takes in 7 filenames as params.  The first 2 files are inputs
-#         and the latter 5 are outputs.)
-# ./Lackwit2DynComp.py dfec-produced.decls kvasir-produced.decls kvasir-with-lackwit.decls kvasir-with-dyncomp.decls kvasir-with-declared-types.decls kvasir-no-comp.decls intersection.vars
+kvasir-with-lackwit.decls: comparability numbers from Lackwit
+kvasir-with-dyncomp.decls: comparability numbers from DynComp
+kvasir-with-declared-types.decls: comparability numbers inferred from declared types
+kvasir-no-comp.decls: no comparability numbers (this is the same thing that
+                      --var-list-file=intersection.vars would generate)
 
-# If everything goes correctly, kvasir-with-lackwit.decls and
-# kvasir-with-dyncomp.decls should only differ in their comparability
-# numbers.  Also, when running Kvasir with the
-# --var-list-file=intersection.vars option, both of these .decls files
-# should be compatible with the resulting .dtrace file so that Daikon
-# can run on both sets of output.
+and outputs a variable list file (intersection.vars) so that Kvasir
+can be run and trace data can be collected only for those variables.
+"""
 
 import re
 import sys
+
+"""Takes in 7 filenames as params.  The first 2 files are inputs and the latter 5 are outputs.
+
+Usage:
+./Lackwit2DynComp.py dfec-produced.decls kvasir-produced.decls \
+ kvasir-with-lackwit.decls kvasir-with-dyncomp.decls \
+ kvasir-with-declared-types.decls kvasir-no-comp.decls intersection.vars
+
+If everything goes correctly, kvasir-with-lackwit.decls and
+kvasir-with-dyncomp.decls should only differ in their comparability
+numbers.  Also, when running Kvasir with the
+--var-list-file=intersection.vars option, both of these .decls files
+should be compatible with the resulting .dtrace file so that Daikon
+can run on both sets of output.
+"""
 
 # Process command-line args:
 dfec_f = open(sys.argv[1], "r")
@@ -75,18 +78,31 @@ DfecGlobalRE = re.compile("^::")
 # information is provided)
 
 
-# Converts variable var's name from Dfec conventions
-# to Kvasir conventions and returns it as the result
 def convert_dfec_var_name(var):
-    globalConverted = DfecGlobalRE.sub("/", var)
-    return globalConverted.replace("->", "[].")
+    """Convert variable var's name from Dfec conventions to Kvasir conventions.
+
+    Args:
+        var: the variable's name in Dfec form.
+
+    Returns:
+       the variable's name in Kvasir form.
+    """
+    global_converted = DfecGlobalRE.sub("/", var)
+    return global_converted.replace("->", "[].")
 
 
-# Ok, we are going to just strip off everything before
-# the '/', if there is one, because Dfec does not print
-# out the function name for function-static variables
-# e.g. 'flex_c@epsclosure/did_stk_init' becomes '/did_stk_init'
 def convert_kvasir_var_name(var):
+    """Strip off everything before the '/', if there is one.
+
+    Dfec does not print out the function name for function-static variables,
+    e.g., 'flex_c@epsclosure/did_stk_init' becomes '/did_stk_init'.
+
+    Args:
+        var: a string
+
+    Returns:
+        The string starting after the '/', or the whole string.
+    """
     if var[0] == "/":
         return var
     elif "/" in var:
@@ -95,10 +111,17 @@ def convert_kvasir_var_name(var):
         return var
 
 
-# Kvasir does not support comparability for array indices
-# so strip those off.
-# e.g. '104[105]' becomes '104'
 def strip_comp_number(comp_num):
+    """Kvasir does not support comparability for array indices so strip those off.
+
+    e.g. '104[105]' becomes '104'.
+
+    Args:
+        comp_num: a comparability, possibly in array form
+
+    Returns:
+        the comparibility without the array part
+    """
     if "[" in comp_num:
         return comp_num[: comp_num.find("[")]
     else:
@@ -125,14 +148,19 @@ def strip_comp_number(comp_num):
 # in the parens since C doesn't have overloading.  We just want
 # to strip off the canonical function name.
 
-# Strips the extraneous stuff off of Dfec's names and returns
-# a 2-tuple of ppt name and either 'ENTER' or 'EXITxxx'
-
-# Input:  'std.ccladd(int;int;)void:::ENTER'
-# Output: ('ccladd', 'ENTER')
-
 
 def strip_dfec_ppt_name(ppt):
+    """Strip the extraneous stuff off of Dfec's names and split into parts.
+
+    Input:  'std.ccladd(int;int;)void:::ENTER'
+    Output: ('ccladd', 'ENTER')
+
+    Args:
+        ppt: a dfec program point name
+
+    Returns:
+        a 2-tuple of cleaned ppt name and either 'ENTER' or 'EXITxxx'
+    """
     fnname, enter_or_exit = ppt.split(":::")
     if fnname[:4] == "std.":
         fnname = fnname[4:]
@@ -151,6 +179,14 @@ def strip_dfec_ppt_name(ppt):
 
 
 def strip_kvasir_ppt_name(ppt):
+    """Strip the extraneous stuff off of Kvasir's names and split into parts.
+
+    Args:
+        ppt: a Kvasir program point name
+
+    Returns:
+        a 2-tuple of cleaned ppt name and either 'ENTER' or 'EXITxxx'
+    """
     fnname, enter_or_exit = ppt.split(":::")
 
     # For globals, grab everything from '..' to '('
@@ -189,6 +225,7 @@ class State:
     Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
 
 
+# The current parse state.
 my_state = DeclState.Uninit
 
 
@@ -198,13 +235,12 @@ my_state = DeclState.Uninit
 # values are comparability numbers
 dfec_ppt_map = {}
 
-cur_var_map = 0  # The current variable map
+cur_var_map = 0  # The current variable map, which is a value in dfec_ppt_map.
 cur_var_name = ""
 
 for line in dfec_all_lines:
     if my_state == DeclState.Uninit:
-        # The program point name always follows the
-        # line called "DECLARE"
+        # The program point name always follows the line called "DECLARE".
         if line == "DECLARE":
             my_state = DeclState.PptName
 
@@ -298,13 +334,29 @@ for line in kvasir_all_lines:
         my_state = DeclState.VarName
 
 
-# Strips all comments after #
-# space-delimited token:
-# Input:  int # isParam=true
-# Output: int
 def strip_comments(comp_num):
+    """Strip all comments after "#".
+
+        Example:
+    # space-delimited token:
+        Input:  int # isParam=true
+        Output: int
+
+        Args:
+            comp_num: a string
+
+        Returns:
+            the string with trailing comments stripped
+    """
     return comp_num.split("#")[0].strip()
 
+
+for cur_var_list in kvasir_ppt_map.values():
+    """Initialize the declaredTypeCompNum of each entry within kvasir_ppt_map.
+
+    All variables with identical declared type strings will have the
+    same comparability number at each program point.
+    """
 
 # Now we are going to initialize the declaredTypeCompNum of each entry
 # within kvasir_ppt_map.  All variables with identical declared type

@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
-# Usage: ./generate-dec-types.py <decls-file>
+"""Generates a .decls file with declared type comparability numbers.
 
-# Generates a .decls file with declared type comparability numbers
+Usage: ./generate-dec-types.py <decls-file>
+"""
 
 # Warning: This was hacked together by copy/paste from
 # dfec-to-kvasir.py so some of the comments may make no sense at all
@@ -16,18 +17,37 @@ decls_f.close()
 
 
 def strip_comp_number(comp_num):
+    """Kvasir does not support comparability for array indices so strip those off.
+
+    e.g. '104[105]' becomes '104'.
+
+    Args:
+        comp_num: a comparability, possibly in array form
+
+    Returns:
+        the comparibility without the array part
+    """
     if "[" in comp_num:
         return comp_num[: comp_num.find("[")]
     else:
         return comp_num
 
 
-# Strips all comments after #
-# space-delimited token:
-# Input:  int # isParam=true
-# Output: int
 def strip_comments(comp_num):
-    return comp_num.split("#")[0].strip()
+    """Strip all comments after "#".
+
+    Example:
+    # space-delimited token:
+    Input:  int # isParam=true
+    Output: int
+
+    Args:
+        comp_num: a string
+
+    Returns:
+        the string with trailing comments stripped
+    """
+    return comp_num.split("#", maxsplit=1)[0].strip()
 
 
 # States:
@@ -42,6 +62,7 @@ class State:
     Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
 
 
+# The current parse state.
 my_state = DeclState.Uninit
 
 
@@ -103,11 +124,13 @@ for line in all_lines:
         my_state = DeclState.VarName
 
 
-# Now we are going to initialize the declaredTypeCompNum of each entry
-# within kvasir_ppt_map.  All variables with identical declared type
-# strings will have the same comparability number at each program
-# point.
-for ppt in kvasir_ppt_map:
+for cur_var_list in kvasir_ppt_map.values():
+    """Initialize the declaredTypeCompNum of each entry within kvasir_ppt_map.
+
+    All variables with identical declared type strings will have the
+    same comparability number at each program point.
+    """
+
     cur_comp_num = 1  # Start at 1 and monotonically increase
 
     # Key: declared type; Value: comp. num associated with that type

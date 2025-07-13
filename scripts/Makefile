@@ -1,6 +1,7 @@
 HIERDIR = ../tools/hierarchical
 KMDIR = ../tools/kmeans
 
+# These are executables and/or downloaded from the Internet.
 all: difftbl cluster clgroup kmeans trace-untruncate-fast checkargs.pm
 .PHONY: all
 

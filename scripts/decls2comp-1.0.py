@@ -1,71 +1,63 @@
 #!/usr/bin/python3
 
-# Converts a .decls file with comparability numbers to a file which is
-# organized by variable comparability sets at each program point.
-# This helps out with automating regression tests of DynComp.
+"""Converts a .decls file to a file organized by variable comparability sets at each program point.
 
-# Created on 2005-05-13 by Philip J. Guo
-# MIT CSAIL Program Analysis Group
+The input is a .decls file with comparability numbers.
+This helps with automating regression tests of DynComp.
 
-# Input: .decls file with comparability numbers
+Input: .decls file with comparability numbers
 
-# Output: A file which lists the comparability sets of all relevant
-# variables at each program point, alphabetically sorted and separated
-# by spaces.  All program points are also sorted by alphabetical
-# order. Output is written to stdout by default
+Output: A file which lists the comparability sets of all relevant
+variables at each program point, alphabetically sorted and separated
+by spaces.  All program points are also sorted by alphabetical
+order. Output is written to stdout by default
 
-# Usage: ./decls2comp.py input.decls 'no-hashcodes' [optional]
-# Running this with the 'no-hashcodes' string as the 2nd arg results
-# in the tool ignoring all variables of rep. type 'hashcode' or
-# 'hashcode[]', etc...
+Usage: ./decls2comp.py input.decls 'no-hashcodes' [optional]
+Running this with the 'no-hashcodes' string as the 2nd arg results
+in the tool ignoring all variables of rep. type 'hashcode' or
+'hashcode[]', etc...
 
-# Prog pt name
-# All variable names in one comp set
-# All variable names in another comp set
-# ...
-# <blank line>
+Prog pt name
+All variable names in one comp set
+All variable names in another comp set
+...
+<blank line>
 
-# Input:
+Input:
 
-# DECLARE
-# ..add():::ENTER
-# a
-# int # isParam=true
-# int
-# 1
-# b
-# int # isParam=true
-# int
-# 1
-# c
-# int # isParam=true
-# int
-# 2
-# d
-# int # isParam=true
-# int
-# -1
+DECLARE
+..add():::ENTER
+a
+int # isParam=true
+int
+1
+b
+int # isParam=true
+int
+1
+c
+int # isParam=true
+int
+2
+d
+int # isParam=true
+int
+-1
 
-# Output:
+Output:
 
-# ..add():::ENTER
-# a b
-# c
-# -1: d
+..add():::ENTER
+a b
+c
+-1: d
 
-# NOTE (2005-09-08): No longer does this anymore:
-# Prints out a '-1: ' prefix in front of the special comparability set
-# with a number of -1
+Note: Lackwit produces comparability numbers for arrays in the
+following format: '9[10]' - we are going to ignore what is between
+the brackets so we will treat it as '9'.
+"""
 
-# 2006-01-18: Added support for "INTERMEDIATE DECLARE" keyword
-#             for the --dyncomp-print-inc option
-
-import sys
-
-# Note: Lackwit produces comparability numbers for arrays in the
-# following format: '9[10]' - we are going to ignore what is between
-# the brackets so we will treat it as '9'
 import re
+import sys
 
 LWArrayRExp = re.compile("\[.\]")
 
