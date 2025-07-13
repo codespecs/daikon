@@ -85,4 +85,6 @@ for ppt in ppt_info_dict:
 # print
 # print "Unweighted average:", ((sum_of_avgs) / float(num_ppts))
 print("Weighted average:", (float(total_square_vars) / float(total_vars)))
-print("Avg. (No comparability):", (float(total_square_vars_no_comp) / float(total_vars)))
+print(
+    "Avg. (No comparability):", (float(total_square_vars_no_comp) / float(total_vars))
+)

@@ -185,7 +185,7 @@ def strip_kvasir_ppt_name(ppt):
 # 3 = variable declared type
 # 4 = variable rep. type
 # 5 = variable comparability number - VERY important
-class State:
+class DeclState:
     Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
 
 
