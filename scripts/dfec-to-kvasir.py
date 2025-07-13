@@ -22,6 +22,7 @@ can be run and trace data can be collected only for those variables.
 
 import re
 import sys
+from enum import Enum
 from pathlib import Path
 
 """Takes in 7 filenames as params.  The first 2 files are inputs and the latter 5 are outputs.
@@ -220,10 +221,15 @@ def strip_kvasir_ppt_name(ppt):
 # 3 = variable declared type
 # 4 = variable rep. type
 # 5 = variable comparability number - VERY important
-class DeclState:
+class DeclState(Enum):
     """The parse state: what is about to be read."""
 
-    Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
+    Uninit = 0
+    PptName = 1
+    VarName = 2
+    DecType = 3
+    RepType = 4
+    CompNum = 5
 
 
 # The current parse state.
