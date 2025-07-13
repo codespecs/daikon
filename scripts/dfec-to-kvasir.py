@@ -351,13 +351,6 @@ def strip_comments(comp_num):
     return comp_num.split("#")[0].strip()
 
 
-for cur_var_list in kvasir_ppt_map.values():
-    """Initialize the declaredTypeCompNum of each entry within kvasir_ppt_map.
-
-    All variables with identical declared type strings will have the
-    same comparability number at each program point.
-    """
-
 # Now we are going to initialize the declaredTypeCompNum of each entry
 # within kvasir_ppt_map.  All variables with identical declared type
 # strings will have the same comparability number at each program

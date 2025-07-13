@@ -17,7 +17,7 @@ decls_f.close()
 
 
 def strip_comp_number(comp_num):
-    """Kvasir does not support comparability for array indices so strip those off.
+    """Kvasir does not support comparability for array indices, so strip those off.
 
     e.g. '104[105]' becomes '104'.
 
@@ -124,13 +124,11 @@ for line in all_lines:
         my_state = DeclState.VarName
 
 
-for cur_var_list in kvasir_ppt_map.values():
-    """Initialize the declaredTypeCompNum of each entry within kvasir_ppt_map.
-
-    All variables with identical declared type strings will have the
-    same comparability number at each program point.
-    """
-
+# Now we are going to initialize the declaredTypeCompNum of each entry
+# within kvasir_ppt_map.  All variables with identical declared type
+# strings will have the same comparability number at each program
+# point.
+for ppt in kvasir_ppt_map:
     cur_comp_num = 1  # Start at 1 and monotonically increase
 
     # Key: declared type; Value: comp. num associated with that type
