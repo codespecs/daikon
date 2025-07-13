@@ -9,7 +9,6 @@
 
 import sys
 from enum import Enum
-from pathlib import Path
 
 # Process command-line args:
 declsF = open(sys.argv[1], "r")
@@ -49,6 +48,7 @@ class DeclState(Enum):
     DecType = 3
     RepType = 4
     CompNum = 5
+
 
 # The current parse state.
 myState = DeclState.Uninit
