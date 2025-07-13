@@ -78,8 +78,8 @@ DfecGlobalRE = re.compile("^::")
 # Converts variable var's name from Dfec conventions
 # to Kvasir conventions and returns it as the result
 def convert_dfec_var_name(var):
-    globalConverted = DfecGlobalRE.sub("/", var)
-    return globalConverted.replace("->", "[].")
+    global_converted = DfecGlobalRE.sub("/", var)
+    return global_converted.replace("->", "[].")
 
 
 # Ok, we are going to just strip off everything before
