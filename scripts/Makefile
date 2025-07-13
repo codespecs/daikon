@@ -7,7 +7,7 @@ all: difftbl cluster clgroup kmeans trace-untruncate-fast checkargs.pm
 
 
 style-fix: shell-style-fix python-style-fix perl-style-fix
-style-check: shell-style-check python-style-check perl-style-check
+style-check: shell-style-check python-style-check python-typecheck perl-style-check
 .PHONY: style-fix shell-style-fix python-style-fix perl-style-fix style-check shell-style-check python-style-check perl-style-check
 
 perl-style:

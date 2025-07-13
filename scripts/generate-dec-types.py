@@ -141,14 +141,14 @@ for cur_var_list in kvasir_ppt_map.values():
     cur_comp_num = 1  # Start at 1 and monotonically increase
 
     # Key: declared type; Value: comp. num associated with that type
-    dec_types_map = {}
+    dec_types_map: dict[str, int] = {}
 
     for elt in cur_var_list:
         cur_dec_type = strip_comments(elt[1])
         if cur_dec_type in dec_types_map:
-            elt.append(dec_types_map[cur_dec_type])  # Use the stored comp. num
+            elt.append(str(dec_types_map[cur_dec_type]))  # Use the stored comp. num
         else:
-            elt.append(cur_comp_num)  # Use a fresh new comp. num
+            elt.append(str(cur_comp_num))  # Use a fresh new comp. num
             dec_types_map[cur_dec_type] = cur_comp_num  # and add the entry to the map
             cur_comp_num += 1  # Don't forget to increment this!
 
