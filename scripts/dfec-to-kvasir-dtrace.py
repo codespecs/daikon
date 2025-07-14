@@ -13,8 +13,8 @@ will make absolutely no sense!!!
 
 import re
 import sys
-from pathlib import Path
 from enum import Enum
+from pathlib import Path
 
 # Process command-line args:
 kvasir_decls_f = Path.open(Path(sys.argv[1]))
