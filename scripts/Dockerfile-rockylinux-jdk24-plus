@@ -41,7 +41,6 @@ RUN dnf -q -y install \
   graphviz \
   netpbm \
   netpbm-progs \
-  pip \
   python3 \
   python3-distutils-extra \
   ShellCheck \
@@ -52,8 +51,6 @@ RUN dnf -q -y install \
 RUN dnf config-manager --set-enabled crb \
 && dnf -y install dnf-plugins-core \
 && dnf -y install texinfo texinfo-tex
-
-RUN pip install ruff
 
 # Install the JDK.
 # Packages java-24-openjdk* don't yet exist as of 2025-04-28.
