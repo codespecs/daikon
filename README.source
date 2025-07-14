@@ -10,8 +10,8 @@ Daikon's version control repository, named "daikon":
 git clone https://github.com/codespecs/daikon.git
 
 2.  Set your environment variables according to the instructions in
-list item 2, of section 2.2.2 of the Daikon manual:
-http://plse.cs.washington.edu/daikon/download/doc/daikon.html#Unix_002fLinux_002fMacOSX-installation
+list item 2, of section 2.2 of the Daikon manual:
+https://plse.cs.washington.edu/daikon/download/doc/daikon.html#Installation
 
 3.  Compile Daikon:
 

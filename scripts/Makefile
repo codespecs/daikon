@@ -21,16 +21,19 @@ install-ruff:
 	@if ! command -v ruff ; then pipx install ruff ; fi
 python-style-fix: install-ruff
 ifneq (${PYTHON_FILES_TO_CHECK},)
+	@ruff --version
 	@ruff format ${PYTHON_FILES_TO_CHECK}
 	@ruff -q check ${PYTHON_FILES_TO_CHECK} --fix
 endif
 python-style-check: install-ruff
 ifneq (${PYTHON_FILES_TO_CHECK},)
+	@ruff --version
 	@ruff -q format --check ${PYTHON_FILES_TO_CHECK}
 	@ruff -q check ${PYTHON_FILES_TO_CHECK}
 endif
 python-typecheck: install-mypy
 ifneq (${PYTHON_FILES_TO_CHECK},)
+	@mypy --version
 	@mypy --strict --install-types --non-interactive ${PYTHON_FILES_TO_CHECK} > /dev/null 2>&1 || true
 	mypy --strict --ignore-missing-imports ${PYTHON_FILES_TO_CHECK}
 endif
