@@ -32,7 +32,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   which
 
 # Install the JDK.
-RUN dnf -q -y install \
+RUN dnf -q -y upgrade && dnf -q -y install \
   java-1.8.0-openjdk \
   java-1.8.0-openjdk-devel
 
