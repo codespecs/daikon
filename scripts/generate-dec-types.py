@@ -34,7 +34,7 @@ def strip_comp_number(comp_num: str) -> str:
     return comp_num
 
 
-def strip_comments(comp_num):
+def strip_comments(comp_num: str) -> str:
     """Strip all comments after "#".
 
     Example:
