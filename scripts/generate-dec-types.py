@@ -8,6 +8,7 @@
 # dfec-to-kvasir.py so some of the comments may make no sense at all
 
 import sys
+from enum import Enum
 
 # Process command-line args:
 declsF = open(sys.argv[1], "r")
@@ -38,11 +39,19 @@ def StripComments(comp_num):
 # 3 = variable declared type
 # 4 = variable rep. type
 # 5 = variable comparability number - VERY important
-class State:
-    Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
+class DeclState(Enum):
+    """The parse state: what is about to be read."""
+
+    Uninit = 0
+    PptName = 1
+    VarName = 2
+    DecType = 3
+    RepType = 4
+    CompNum = 5
 
 
-myState = State.Uninit
+# The current parse state.
+myState = DeclState.Uninit
 
 
 # Key: program point name
@@ -59,48 +68,48 @@ KvasirPptMap = {}
 # in the same order as they were read in
 KvasirPptNames = []
 
-myState = State.Uninit
+myState = DeclState.Uninit
 
 for line in allLines:
-    if myState == State.Uninit:
+    if myState == DeclState.Uninit:
         # The program point name always follows the
         # line called "DECLARE"
         if line == "DECLARE":
-            myState = State.PptName
+            myState = DeclState.PptName
 
-    elif myState == State.PptName:
+    elif myState == DeclState.PptName:
         curVarList = []
         # Remember to add an entry to both the list and the map
         KvasirPptNames.append(line)
         KvasirPptMap[line] = curVarList
-        myState = State.VarName
+        myState = DeclState.VarName
 
-    elif myState == State.VarName:
+    elif myState == DeclState.VarName:
         if line == "DECLARE":
-            myState = State.PptName
+            myState = DeclState.PptName
         elif line == "":
-            myState = State.Uninit
+            myState = DeclState.Uninit
         else:
             curVarList.append([])
             curVarList[-1].append(line)
-            myState = State.DecType
+            myState = DeclState.DecType
 
-    elif myState == State.DecType:
+    elif myState == DeclState.DecType:
         curVarList[-1].append(line)
-        myState = State.RepType
+        myState = DeclState.RepType
 
-    elif myState == State.RepType:
+    elif myState == DeclState.RepType:
         curVarList[-1].append(line)
-        myState = State.CompNum
+        myState = DeclState.CompNum
 
-    elif myState == State.CompNum:
+    elif myState == DeclState.CompNum:
         curVarList[-1].append(line)
 
         # Assume we are gonna read another variable.
         # When we actually read the subsequent line,
         # we'll branch according to whether it's a real
         # variable or another thing
-        myState = State.VarName
+        myState = DeclState.VarName
 
 
 # Now we are going to initialize the declaredTypeCompNum of each entry
