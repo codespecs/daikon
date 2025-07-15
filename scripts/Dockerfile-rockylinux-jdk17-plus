@@ -62,7 +62,7 @@ RUN dnf -q -y install \
 && PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install ruff
 
 # Install the JDK.
-RUN dnf -q -y install \
+RUN dnf -q -y upgrade && dnf -q -y install \
   java-17-openjdk \
   java-17-openjdk-devel
 

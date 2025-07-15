@@ -32,16 +32,14 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   which
 
 # Install the JDK.
-# Packages java-24-openjdk* don't yet exist as of 2025-04-28.
-# RUN dnf -q -y install \
-#   java-24-openjdk \
-#   java-24-openjdk-devel
-
-RUN curl --silent -o jdk-24_linux-x64_bin.tar.gz https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.tar.gz \
-&& tar xzf jdk-24_linux-x64_bin.tar.gz
-ENV PATH="/jdk-24.0.1/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
-RUN chmod og+rx /root \
-&& chmod og+r /root/*
+RUN dnf -q -y upgrade && dnf -q -y install \
+  java-24-openjdk \
+  java-24-openjdk-devel
+# Use this when the java-24-openjdk* packages don't yet exist.
+# RUN curl --silent -o jdk-24_linux-x64_bin.tar.gz https://download.oracle.com/java/24/latest/jdk-24_linux-x64_bin.tar.gz \
+# && tar xzf jdk-24_linux-x64_bin.tar.gz
+# ENV PATH="/jdk-24.0.1/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+# RUN chmod og+rx /root \
+# && chmod og+r /root/*
 
 RUN dnf -q clean all
