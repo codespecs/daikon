@@ -1,12 +1,15 @@
 #!/usr/bin/python3
 
-# Usage: ./dfec-to-kvasir-dtrace.py <kvasir .decls file> <dfec .dtrace file>
+"""Outputs a Kvasir-compatible .dtrace file from a Dfec .dtrace file.
 
-# Outputs a Kvasir-compatible .dtrace file from the Dfec .dtrace file
-# based on the variables and ordering in the Kvasir .decls file
+Outputs a Kvasir-compatible .dtrace file from the Dfec .dtrace file
+based on the variables and ordering in the Kvasir .decls file.
 
-# Cannibalized from dfec-to-kvasir.py so most of these comments
-# will make absolutely no sense!!!
+Usage: ./dfec-to-kvasir-dtrace.py <kvasir .decls file> <dfec .dtrace file>
+
+Cannibalized from dfec-to-kvasir.py so most of these comments
+will make absolutely no sense!!!
+"""
 
 import re
 import sys
@@ -40,18 +43,31 @@ DfecGlobalRE = re.compile("^::")
 # information is provided)
 
 
-# Converts variable var's name from Dfec conventions
-# to Kvasir conventions and returns it as the result
 def convert_dfec_var_name(var):
+    """Convert variable var's name from Dfec conventions to Kvasir conventions.
+
+    Args:
+        var: the variable's name in Dfec form.
+
+    Returns:
+       the variable's name in Kvasir form.
+    """
     global_converted = DfecGlobalRE.sub("/", var)
     return global_converted.replace("->", "[].")
 
 
-# Ok, we are going to just strip off everything before
-# the '/', if there is one, because Dfec does not print
-# out the function name for function-static variables
-# e.g. 'flex_c@epsclosure/did_stk_init' becomes '/did_stk_init'
 def convert_kvasir_var_name(var):
+    """Strip off everything before the '/', if there is one.
+
+    Dfec does not print out the function name for function-static variables,
+    e.g., 'flex_c@epsclosure/did_stk_init' becomes '/did_stk_init'.
+
+    Args:
+        var: a string
+
+    Returns:
+        The string starting after the '/', or the whole string.
+    """
     if var[0] == "/":
         return var
     elif "/" in var:
@@ -60,10 +76,17 @@ def convert_kvasir_var_name(var):
         return var
 
 
-# Kvasir does not support comparability for array indices
-# so strip those off.
-# e.g. '104[105]' becomes '104'
 def strip_comp_number(comp_num):
+    """Kvasir does not support comparability for array indices so strip those off.
+
+    e.g. '104[105]' becomes '104'.
+
+    Args:
+        comp_num: a comparability, possibly in array form
+
+    Returns:
+        the comparibility without the array part
+    """
     if "[" in comp_num:
         return comp_num[: comp_num.find("[")]
     else:
@@ -90,14 +113,19 @@ def strip_comp_number(comp_num):
 # in the parens since C doesn't have overloading.  We just want
 # to strip off the canonical function name.
 
-# Strips the extraneous stuff off of Dfec's names and returns
-# a 2-tuple of ppt name and either 'ENTER' or 'EXITxxx'
-
-# Input:  'std.ccladd(int;int;)void:::ENTER'
-# Output: ('ccladd', 'ENTER')
-
 
 def strip_dfec_ppt_name(ppt):
+    """Strip the extraneous stuff off of Dfec's names and split into parts.
+
+    Input:  'std.ccladd(int;int;)void:::ENTER'
+    Output: ('ccladd', 'ENTER')
+
+    Args:
+        ppt: a dfec program point name
+
+    Returns:
+        a 2-tuple of cleaned ppt name and either 'ENTER' or 'EXITxxx'
+    """
     fnname, enter_or_exit = ppt.split(":::")
     if fnname[:4] == "std.":
         fnname = fnname[4:]
@@ -116,6 +144,14 @@ def strip_dfec_ppt_name(ppt):
 
 
 def strip_kvasir_ppt_name(ppt):
+    """Strip the extraneous stuff off of Kvasir's names and split into parts.
+
+    Args:
+        ppt: a Kvasir program point name
+
+    Returns:
+        a 2-tuple of cleaned ppt name and either 'ENTER' or 'EXITxxx'
+    """
     fnname, enter_or_exit = ppt.split(":::")
 
     # For globals, grab everything from '..' to '('
@@ -170,12 +206,12 @@ cur_var_name = ""
 #                               where each sub-list is: [variable name, rep. type]
 kvasir_ppt_map = {}
 
+# The current parse state.
 my_state = DeclsState.Uninit
 
 for line in kvasir_decls_all_lines:
     if my_state == DeclsState.Uninit:
-        # The program point name always follows the
-        # line called "DECLARE"
+        # The program point name always follows the line called "DECLARE".
         if line == "DECLARE":
             my_state = DeclsState.PptName
 
@@ -213,9 +249,10 @@ for line in kvasir_decls_all_lines:
 
 
 def process_ppt(ppt_name, var_info):
-    # First check if this ppt is in the Kvasir .decls file
-    # by munging its name, and if so, print out the Kvasir
-    # version of the name
+    """Print out the Kvasir version of the name.
+
+    Does nothing if this ppt is not in the Kvasir .decls file.
+    """
     stripped = strip_dfec_ppt_name(ppt_name)
 
     if stripped in kvasir_ppt_map:

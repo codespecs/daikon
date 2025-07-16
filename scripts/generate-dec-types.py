@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
-# Usage: ./generate-dec-types.py <decls-file>
+"""Generates a .decls file with declared type comparability numbers.
 
-# Generates a .decls file with declared type comparability numbers
+Usage: ./generate-dec-types.py <decls-file>
+"""
 
 # Warning: This was hacked together by copy/paste from
 # dfec-to-kvasir.py so some of the comments may make no sense at all
@@ -17,18 +18,37 @@ decls_f.close()
 
 
 def strip_comp_number(comp_num):
+    """Kvasir does not support comparability for array indices, so strip those off.
+
+    e.g. '104[105]' becomes '104'.
+
+    Args:
+        comp_num: a comparability, possibly in array form
+
+    Returns:
+        the comparibility without the array part
+    """
     if "[" in comp_num:
         return comp_num[: comp_num.find("[")]
     else:
         return comp_num
 
 
-# Strips all comments after #
-# space-delimited token:
-# Input:  int # isParam=true
-# Output: int
 def strip_comments(comp_num):
-    return comp_num.split("#")[0].strip()
+    """Strip all comments after "#".
+
+    Example:
+    # space-delimited token:
+    Input:  int # isParam=true
+    Output: int
+
+    Args:
+        comp_num: a string
+
+    Returns:
+        the string with trailing comments stripped
+    """
+    return comp_num.split("#", maxsplit=1)[0].strip()
 
 
 # States:
