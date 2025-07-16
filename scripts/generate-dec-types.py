@@ -9,6 +9,7 @@ Usage: ./generate-dec-types.py <decls-file>
 # dfec-to-kvasir.py so some of the comments may make no sense at all
 
 import sys
+from enum import Enum
 
 # Process command-line args:
 decls_f = open(sys.argv[1], "r")
@@ -58,8 +59,15 @@ def strip_comments(comp_num):
 # 3 = variable declared type
 # 4 = variable rep. type
 # 5 = variable comparability number - VERY important
-class DeclState:
-    Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
+class DeclState(Enum):
+    """The parse state: what is about to be read."""
+
+    Uninit = 0
+    PptName = 1
+    VarName = 2
+    DecType = 3
+    RepType = 4
+    CompNum = 5
 
 
 # The current parse state.
