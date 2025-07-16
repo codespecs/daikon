@@ -102,7 +102,7 @@ COMP_START = "comparability "
 # following format: '9[10]' - we are going to ignore what is between
 # the brackets so we will treat it as '9'
 
-ignoreHashcodes = False
+ignore_hashcodes = False
 
 if len(sys.argv) < 2:
     print("Usage: decls2compy decls-file [no-hashcodes]")
@@ -110,11 +110,11 @@ if len(sys.argv) < 2:
 
 
 if (len(sys.argv) == 3) and sys.argv[2] == "no-hashcodes":
-    ignoreHashcodes = True
+    ignore_hashcodes = True
 
 # If 'no-hashcodes' option is on, then ignore all variables whose
 # rep. type is hashcode
-hashcodeRE = re.compile("hashcode.*")
+hashcode_re = re.compile("hashcode.*")
 
 
 f = open(sys.argv[1], "r")
@@ -123,103 +123,103 @@ f = open(sys.argv[1], "r")
 # Program points are separated by "DECLARE" statements
 # Key: program point name
 # Value: list of all strings following program point
-allPpts = {}
+all_ppts = {}
 
-tempAllPpts = []  # Temporary before placing in allPpts
+temp_all_ppts = []  # Temporary before placing in all_ppts
 
 for line in f.readlines():
     line = line.strip()
 
     if line[0:4] == "ppt ":
-        tempAllPpts.append([line[len(PPT_START) :]])  # Start a new list
-        isIntermediate = 0
+        temp_all_ppts.append([line[len(PPT_START) :]])  # Start a new list
+        is_intermediate = 0
     elif line != "" and line[0] != "#":  # Don't add blank lines & comments
-        if len(tempAllPpts) > 0:
-            tempAllPpts[-1].append(line)  # Append line to the latest entry
+        if len(temp_all_ppts) > 0:
+            temp_all_ppts[-1].append(line)  # Append line to the latest entry
 
 
-# Init allPpts from tempAllPpts
-for pptList in tempAllPpts:
+# Init all_ppts from temp_all_ppts
+for ppt_list in temp_all_ppts:
     # Allow duplicates by appending numeric indices onto program point
     # name
     index = 1
 
-    pptName = pptList[0]
+    ppt_name = ppt_list[0]
 
     # There is already an entry
-    if pptList[0] in allPpts:
+    if ppt_list[0] in all_ppts:
         # Try appending numbers until there isn't an entry
         found = 1
         while found:
-            pptName = pptList[0] + " (" + str(index) + ")"
-            if pptName not in allPpts:
+            ppt_name = ppt_list[0] + " (" + str(index) + ")"
+            if ppt_name not in all_ppts:
                 break
             index += 1
 
-    allPpts[pptName] = pptList[1:]
+    all_ppts[ppt_name] = ppt_list[1:]
 
 # Alphabetically sort the program points
-sortedPptKeys = sorted(list(allPpts.keys()))
+sorted_ppt_keys = sorted(list(all_ppts.keys()))
 
 # Process each PPT
-for pptName in sortedPptKeys:
-    v = allPpts[pptName]
+for ppt_name in sorted_ppt_keys:
+    v = all_ppts[ppt_name]
     i = 0
     var2comp = {}  # Key: variable name, Value: comparability number
 
     # The comparability info for a variable at a program point is
     # prefixed by comparability
 
-    curVar = None
+    cur_var = None
     for line in v:
-        strippedLine = line.strip()
+        stripped_line = line.strip()
 
-        if strippedLine[0 : len(VAR_START)] == VAR_START:
-            curVar = strippedLine[len(VAR_START) :]
-        elif strippedLine[0 : len(REP_START)] == REP_START:
-            assert curVar  # There should have been a variable entry before rep-type
-            curRep = strippedLine[len(REP_START) :]
-        elif strippedLine[0 : len(COMP_START)] == COMP_START:
+        if stripped_line[0 : len(VAR_START)] == VAR_START:
+            cur_var = stripped_line[len(VAR_START) :]
+        elif stripped_line[0 : len(REP_START)] == REP_START:
+            assert cur_var  # There should have been a variable entry before rep-type
+            cur_rep = stripped_line[len(REP_START) :]
+        elif stripped_line[0 : len(COMP_START)] == COMP_START:
             assert (
-                curVar  # There should have been a variable entry before comparability
+                cur_var  # There should have been a variable entry before comparability
             )
-            curComp = strippedLine[len(COMP_START) :]
-            var2comp[curVar] = curComp
+            cur_comp = stripped_line[len(COMP_START) :]
+            var2comp[cur_var] = cur_comp
 
     # Now we can do the real work of grouping variables together
     # in comparability sets based on their numbers
-    sortedVars = sorted(list(var2comp.keys()))
+    sorted_vars = sorted(list(var2comp.keys()))
 
-    print(pptName)
+    print(ppt_name)
 
-    startOfLine = 1
-    while len(sortedVars) > 0:
-        varName = sortedVars[0]
+    start_of_line = 1
+    while len(sorted_vars) > 0:
+        var_name = sorted_vars[0]
 
-        #        if var2comp[varName] == '-1': # Remember that everything is a string
-        #            print '-1:', varName,
+        #        if var2comp[var_name] == '-1': # Remember that everything is a string
+        #            print '-1:', var_name,
         #        else:
-        if startOfLine == 1:
-            print(varName, end="")
+        if start_of_line == 1:
+            print(var_name, end="")
             StartOfLine = 0
         else:
-            print("", varName, end="")
+            print("", var_name, end="")
 
-        compNum = var2comp[varName]
+        comp_num = var2comp[var_name]
 
-        if compNum:
-            del var2comp[varName]
+        if comp_num:
+            del var2comp[var_name]
 
-            sortedVars = sorted(list(var2comp.keys()))
+            sorted_vars = sorted(list(var2comp.keys()))
 
-            for otherVar in sortedVars:
-                if var2comp[otherVar] == compNum:
-                    print("", otherVar, end="")
-                    del var2comp[otherVar]
+            for other_var in sorted_vars:
+                if var2comp[other_var] == comp_num:
+                    print("", other_var, end="")
+                    del var2comp[other_var]
         print()
 
-        # Update sortedVars after deleting the appropriate entries
+        # Update sorted_vars after deleting the appropriate entries
         # from var2comp
-        sortedVars = sorted(list(var2comp.keys()))
+        sorted_vars = sorted(list(var2comp.keys()))
 
     print()
