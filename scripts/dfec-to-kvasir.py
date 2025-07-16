@@ -232,6 +232,7 @@ class DeclState(Enum):
     RepType = 4
     CompNum = 5
 
+
 # The current parse state.
 my_state = DeclState.Uninit
 
