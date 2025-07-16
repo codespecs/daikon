@@ -13,6 +13,7 @@ will make absolutely no sense!!!
 
 import re
 import sys
+from enum import Enum
 
 # Process command-line args:
 kvasir_decls_f = open(sys.argv[1], "r")
@@ -185,8 +186,15 @@ def strip_kvasir_ppt_name(ppt):
 # 3 = variable declared type
 # 4 = variable rep. type
 # 5 = variable comparability number - VERY important
-class DeclsState:
-    Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
+class DeclsState(Enum):
+    """The parse state: what is about to be read."""
+
+    Uninit = 0
+    PptName = 1
+    VarName = 2
+    DecType = 3
+    RepType = 4
+    CompNum = 5
 
 
 cur_var_map = 0  # The current variable map
@@ -305,8 +313,14 @@ def process_ppt(ppt_name, var_info):
 # 2 = value
 # 3 = modbit
 # 4 = Ignore nonce
-class DtraceState:
-    Uninit, VarName, Value, Modbit, IgnoreNonce = list(range(5))
+class DtraceState(Enum):
+    """The parse state: what is about to be read."""
+
+    Uninit = 0
+    VarName = 1
+    Value = 2
+    Modbit = 3
+    IgnoreNonce = 4
 
 
 dt_state = DtraceState.Uninit
