@@ -136,13 +136,11 @@ for line in all_lines:
 # within kvasir_ppt_map.  All variables with identical declared type
 # strings will have the same comparability number at each program
 # point.
-for ppt in kvasir_ppt_map:
+for cur_var_list in kvasir_ppt_map.values():
     cur_comp_num = 1  # Start at 1 and monotonically increase
 
     # Key: declared type; Value: comp. num associated with that type
     dec_types_map = {}
-
-    cur_var_list = kvasir_ppt_map[ppt]
 
     for elt in cur_var_list:
         cur_dec_type = strip_comments(elt[1])
