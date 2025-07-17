@@ -41,11 +41,11 @@ can run on both sets of output.
 
 # Process command-line args:
 dfec_f = open(sys.argv[1], "r")
-dfec_all_lines = [line.strip() for line in dfec_f.readlines()]
+dfec_all_lines = [line.strip() for line in dfec_f]
 dfec_f.close()
 
 kvasir_f = open(sys.argv[2], "r")
-kvasir_all_lines = [line.strip() for line in kvasir_f.readlines()]
+kvasir_all_lines = [line.strip() for line in kvasir_f]
 kvasir_f.close()
 
 output_lackwit_decls_f = open(sys.argv[3], "w")
@@ -107,7 +107,7 @@ def convert_kvasir_var_name(var):
     if var[0] == "/":
         return var
     elif "/" in var:
-        return "/" + var.split("/")[1]
+        return "/" + var.split("/", maxsplit=1)[1]
     else:
         return var
 
@@ -356,7 +356,7 @@ def strip_comments(comp_num):
         Returns:
             the string with trailing comments stripped
     """
-    return comp_num.split("#")[0].strip()
+    return comp_num.split("#", maxsplit=1)[0].strip()
 
 
 # Now we are going to initialize the declaredTypeCompNum of each entry

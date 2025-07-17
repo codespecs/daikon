@@ -8,7 +8,7 @@ import sys
 ppt_name_re = re.compile(":::")
 
 f = open(sys.argv[1], "r")
-all_lines = [line.strip() for line in f.readlines()]
+all_lines = [line.strip() for line in f]
 
 # Key: program point name
 # Value: a list where each element is the size of a comparability set
@@ -60,7 +60,7 @@ total_square_vars_no_comp = 0
 for ppt in ppt_info_dict:
     comp_set_sizes_at_ppt = ppt_info_dict[ppt]
     total_vars_at_ppt = sum(comp_set_sizes_at_ppt)
-    square_vars_at_ppt = sum([(i * i) for i in comp_set_sizes_at_ppt])
+    square_vars_at_ppt = sum((i * i) for i in comp_set_sizes_at_ppt)
 
     if total_vars_at_ppt > 0:
         avg_for_ppt = float(square_vars_at_ppt) / float(total_vars_at_ppt)
