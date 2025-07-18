@@ -14,14 +14,15 @@ will make absolutely no sense!!!
 import re
 import sys
 from enum import Enum
+from pathlib import Path
 
 # Process command-line args:
-kvasir_decls_f = open(sys.argv[1], "r")
+kvasir_decls_f = Path.open(Path(sys.argv[1]))
 kvasir_decls_all_lines = [line.strip() for line in kvasir_decls_f]
 kvasir_decls_f.close()
 
 
-DfecGlobalRE = re.compile("^::")
+DfecGlobalRE = re.compile(r"^::")
 
 # Dfec and Kvasir variable differences:
 
@@ -70,10 +71,9 @@ def convert_kvasir_var_name(var):
     """
     if var[0] == "/":
         return var
-    elif "/" in var:
+    if "/" in var:
         return "/" + var.split("/", maxsplit=1)[1]
-    else:
-        return var
+    return var
 
 
 def strip_comp_number(comp_num):
@@ -89,8 +89,7 @@ def strip_comp_number(comp_num):
     """
     if "[" in comp_num:
         return comp_num[: comp_num.find("[")]
-    else:
-        return comp_num
+    return comp_num
 
 
 # Dfec and Kvasir program point name differences:
@@ -336,7 +335,7 @@ cur_var_info = None
 
 # This is shorthand for xreadlines so that it doesn't have to read the
 # entire file in at once, which is crucial for huge examples:
-for line in open(sys.argv[2], "r"):
+for line in Path.open(Path(sys.argv[2])):
     line = line.strip()
 
     if dt_state == DtraceState.Uninit:
@@ -377,9 +376,9 @@ for line in open(sys.argv[2], "r"):
         dt_state = DtraceState.VarName
 
 
-##result_map = {}
+# result_map = {}
 
-##for ppt in kvasir_ppt_map:
+# for ppt in kvasir_ppt_map:
 ##    stripped = strip_kvasir_ppt_name(ppt)
 ##    if stripped in dfec_ppt_map:
 ##        KvasirVarList = kvasir_ppt_map[ppt]
@@ -450,39 +449,39 @@ for line in open(sys.argv[2], "r"):
 ### assumption that the same global variables appear everywhere at all
 ### program points ... will have to investigate further later ...
 
-##output_vars_f.write("----SECTION----\n")
-##output_vars_f.write("globals\n")
+# output_vars_f.write("----SECTION----\n")
+# output_vars_f.write("globals\n")
 
-##example_var_list = result_map[kvasir_ppt_names[0]]
+# example_var_list = result_map[kvasir_ppt_names[0]]
 
-##for var_entry in example_var_list:
+# for var_entry in example_var_list:
 ##    if '/' in var_entry[0]: # only print out globals and file-statics
 ##        output_vars_f.write(var_entry[0])
 ##        output_vars_f.write("\n")
 
-##output_vars_f.write("\n")
+# output_vars_f.write("\n")
 
 
 ### Filter kvasir_ppt_names to remove any program points that are NOT
 ### in the Dfec-generated .decls file:
-##kvasir_ppt_names = [name for
+# kvasir_ppt_names = [name for
 ##                  name in kvasir_ppt_names
 ##                  if (strip_kvasir_ppt_name(name) in dfec_ppt_map)]
 
 
 ###
 
-##output_no_comp_decls_f.write("VarComparability\nnone\n\n");
+# output_no_comp_decls_f.write("VarComparability\nnone\n\n");
 
 
-##all_decls_files = [output_lackwit_decls_f,
+# all_decls_files = [output_lackwit_decls_f,
 ##                 output_dyn_comp_decls_f,
 ##                 output_dec_types_decls_f,
 ##                 output_no_comp_decls_f]
 
 ### Output the various .decls files
 ### (Read these names from kvasir_ppt_names to preserve ordering)
-##for ppt in kvasir_ppt_names:
+# for ppt in kvasir_ppt_names:
 
 ##    for f in all_decls_files:
 ##        f.write("DECLARE\n")
@@ -547,12 +546,12 @@ for line in open(sys.argv[2], "r"):
 ##        output_vars_f.write("\n")
 
 
-###print '# Dfec ppts:', len(dfec_ppt_map.keys())
-###print '# Kvasir ppts:', len(kvasir_ppt_map.keys())
-###print '# Common ppts:', len(result_map.keys())
+# print '# Dfec ppts:', len(dfec_ppt_map.keys())
+# print '# Kvasir ppts:', len(kvasir_ppt_map.keys())
+# print '# Common ppts:', len(result_map.keys())
 
 
-##for f in all_decls_files:
-##    f.close()
+# for f in all_decls_files:
+#     f.close()
 
-##output_vars_f.close()
+# output_vars_f.close()

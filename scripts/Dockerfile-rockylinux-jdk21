@@ -32,7 +32,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   which
 
 # Install the JDK.
-RUN dnf -q -y install \
+RUN dnf -q -y upgrade && dnf -q -y install \
   java-21-openjdk \
   java-21-openjdk-devel
 

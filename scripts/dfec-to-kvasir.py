@@ -23,6 +23,7 @@ can be run and trace data can be collected only for those variables.
 import re
 import sys
 from enum import Enum
+from pathlib import Path
 
 """Takes in 7 filenames as params.  The first 2 files are inputs and the latter 5 are outputs.
 
@@ -40,24 +41,24 @@ can run on both sets of output.
 """
 
 # Process command-line args:
-dfec_f = open(sys.argv[1], "r")
+dfec_f = Path.open(Path(sys.argv[1]))
 dfec_all_lines = [line.strip() for line in dfec_f]
 dfec_f.close()
 
-kvasir_f = open(sys.argv[2], "r")
+kvasir_f = Path.open(Path(sys.argv[2]))
 kvasir_all_lines = [line.strip() for line in kvasir_f]
 kvasir_f.close()
 
-output_lackwit_decls_f = open(sys.argv[3], "w")
-output_dyn_comp_decls_f = open(sys.argv[4], "w")
+output_lackwit_decls_f = Path.open(Path(sys.argv[3]), "w")
+output_dyn_comp_decls_f = Path.open(Path(sys.argv[4]), "w")
 
-output_dec_types_decls_f = open(sys.argv[5], "w")
-output_no_comp_decls_f = open(sys.argv[6], "w")
+output_dec_types_decls_f = Path.open(Path(sys.argv[5]), "w")
+output_no_comp_decls_f = Path.open(Path(sys.argv[6]), "w")
 
-output_vars_f = open(sys.argv[7], "w")
+output_vars_f = Path.open(Path(sys.argv[7]), "w")
 
 
-DfecGlobalRE = re.compile("^::")
+DfecGlobalRE = re.compile(r"^::")
 
 # Dfec and Kvasir variable differences:
 
@@ -106,10 +107,9 @@ def convert_kvasir_var_name(var):
     """
     if var[0] == "/":
         return var
-    elif "/" in var:
+    if "/" in var:
         return "/" + var.split("/", maxsplit=1)[1]
-    else:
-        return var
+    return var
 
 
 def strip_comp_number(comp_num):
@@ -125,8 +125,7 @@ def strip_comp_number(comp_num):
     """
     if "[" in comp_num:
         return comp_num[: comp_num.find("[")]
-    else:
-        return comp_num
+    return comp_num
 
 
 # Dfec and Kvasir program point name differences:
@@ -345,15 +344,15 @@ for line in kvasir_all_lines:
 def strip_comments(comp_num):
     """Strip all comments after "#".
 
-        Example:
+    Example:
     # space-delimited token:
         Input:  int # isParam=true
         Output: int
 
-        Args:
+    Args:
             comp_num: a string
 
-        Returns:
+    Returns:
             the string with trailing comments stripped
     """
     return comp_num.split("#", maxsplit=1)[0].strip()

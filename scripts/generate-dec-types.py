@@ -10,9 +10,10 @@ Usage: ./generate-dec-types.py <decls-file>
 
 import sys
 from enum import Enum
+from pathlib import Path
 
 # Process command-line args:
-decls_f = open(sys.argv[1], "r")
+decls_f = Path.open(Path(sys.argv[1]))
 all_lines = [line.strip() for line in decls_f]
 decls_f.close()
 
@@ -30,8 +31,7 @@ def strip_comp_number(comp_num):
     """
     if "[" in comp_num:
         return comp_num[: comp_num.find("[")]
-    else:
-        return comp_num
+    return comp_num
 
 
 def strip_comments(comp_num):

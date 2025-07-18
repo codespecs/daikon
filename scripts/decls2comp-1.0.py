@@ -58,8 +58,9 @@ the brackets so we will treat it as '9'.
 
 import re
 import sys
+from pathlib import Path
 
-LWArrayRExp = re.compile("\[.\]")
+LWArrayRExp = re.compile(r"\[.\]")
 
 ignore_hashcodes = False
 
@@ -68,10 +69,10 @@ if (len(sys.argv) == 3) and sys.argv[2] == "no-hashcodes":
 
 # If 'no-hashcodes' option is on, then ignore all variables whose
 # rep. type is hashcode
-hashcode_re = re.compile("hashcode.*")
+hashcode_re = re.compile(r"hashcode.*")
 
 
-f = open(sys.argv[1], "r")
+f = Path.open(Path(sys.argv[1]))
 
 # Break each program point declaration up into separate lists.
 # Program points are separated by "DECLARE" statements
