@@ -394,10 +394,9 @@ for cur_var_list in kvasir_ppt_map.values():
 
 result_map = {}
 
-for ppt in kvasir_ppt_map:
+for ppt, KvasirVarList in kvasir_ppt_map.items():
     stripped = strip_kvasir_ppt_name(ppt)
     if stripped in dfec_ppt_map:
-        KvasirVarList = kvasir_ppt_map[ppt]
         DfecVarMap = dfec_ppt_map[stripped]
 
         #        print "KvasirVarList:"
