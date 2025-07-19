@@ -18,7 +18,7 @@ all_lines = [line.strip() for line in decls_f]
 decls_f.close()
 
 
-def strip_comp_number(comp_num):
+def strip_comp_number(comp_num: str) -> str:
     """Kvasir does not support comparability for array indices, so strip those off.
 
     e.g. '104[105]' becomes '104'.
@@ -34,7 +34,7 @@ def strip_comp_number(comp_num):
     return comp_num
 
 
-def strip_comments(comp_num):
+def strip_comments(comp_num: str) -> str:
     """Strip all comments after "#".
 
     Example:
@@ -90,6 +90,7 @@ kvasir_ppt_names = []
 
 my_state = DeclState.Uninit
 
+cur_var_list: list[list[str]] = []
 for line in all_lines:
     if my_state == DeclState.Uninit:
         # The program point name always follows the
@@ -140,14 +141,14 @@ for cur_var_list in kvasir_ppt_map.values():
     cur_comp_num = 1  # Start at 1 and monotonically increase
 
     # Key: declared type; Value: comp. num associated with that type
-    dec_types_map = {}
+    dec_types_map: dict[str, int] = {}
 
     for elt in cur_var_list:
         cur_dec_type = strip_comments(elt[1])
         if cur_dec_type in dec_types_map:
-            elt.append(dec_types_map[cur_dec_type])  # Use the stored comp. num
+            elt.append(str(dec_types_map[cur_dec_type]))  # Use the stored comp. num
         else:
-            elt.append(cur_comp_num)  # Use a fresh new comp. num
+            elt.append(str(cur_comp_num))  # Use a fresh new comp. num
             dec_types_map[cur_dec_type] = cur_comp_num  # and add the entry to the map
             cur_comp_num += 1  # Don't forget to increment this!
 

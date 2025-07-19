@@ -44,7 +44,7 @@ DfecGlobalRE = re.compile(r"^::")
 # information is provided)
 
 
-def convert_dfec_var_name(var):
+def convert_dfec_var_name(var: str) -> str:
     """Convert variable var's name from Dfec conventions to Kvasir conventions.
 
     Args:
@@ -57,7 +57,7 @@ def convert_dfec_var_name(var):
     return global_converted.replace("->", "[].")
 
 
-def convert_kvasir_var_name(var):
+def convert_kvasir_var_name(var: str) -> str:
     """Strip off everything before the '/', if there is one.
 
     Dfec does not print out the function name for function-static variables,
@@ -76,7 +76,7 @@ def convert_kvasir_var_name(var):
     return var
 
 
-def strip_comp_number(comp_num):
+def strip_comp_number(comp_num: str) -> str:
     """Kvasir does not support comparability for array indices so strip those off.
 
     e.g. '104[105]' becomes '104'.
@@ -113,7 +113,7 @@ def strip_comp_number(comp_num):
 # to strip off the canonical function name.
 
 
-def strip_dfec_ppt_name(ppt):
+def strip_dfec_ppt_name(ppt: str) -> tuple[str, str]:
     """Strip the extraneous stuff off of Dfec's names and split into parts.
 
     Input:  'std.ccladd(int;int;)void:::ENTER'
@@ -142,7 +142,7 @@ def strip_dfec_ppt_name(ppt):
     return (fnname, enter_or_exit)
 
 
-def strip_kvasir_ppt_name(ppt):
+def strip_kvasir_ppt_name(ppt: str) -> tuple[str, str]:
     """Strip the extraneous stuff off of Kvasir's names and split into parts.
 
     Args:
@@ -208,6 +208,7 @@ kvasir_ppt_map = {}
 # The current parse state.
 my_state = DeclsState.Uninit
 
+cur_var_list: list[list[str]] = []
 for line in kvasir_decls_all_lines:
     if my_state == DeclsState.Uninit:
         # The program point name always follows the line called "DECLARE".
@@ -247,7 +248,7 @@ for line in kvasir_decls_all_lines:
         my_state = DeclsState.VarName
 
 
-def process_ppt(ppt_name, var_info):
+def process_ppt(ppt_name: str, var_info: dict[str, list[str]]) -> None:
     """Print out the Kvasir version of the name.
 
     Does nothing if this ppt is not in the Kvasir .decls file.
@@ -324,14 +325,15 @@ class DtraceState(Enum):
 
 dt_state = DtraceState.Uninit
 
-cur_ppt_name = ""
+cur_ppt_name = "DUMMY PPT NAME"
 # For current program point only:
 # Key: Variable name (after running through convert_dfec_var_name())
 # Value: list of 2 elts: [value, modbit]
-var_info = {}
+# TODO: Change value from list to tuple?
+var_info: dict[str, list[str]] = {}
 
-cur_var_name = None
-cur_var_info = None
+cur_var_name = "DUMMY VAR NAME"
+cur_var_info: list[str] = []
 
 # This is shorthand for xreadlines so that it doesn't have to read the
 # entire file in at once, which is crucial for huge examples:
@@ -355,7 +357,7 @@ for line in Path.open(Path(sys.argv[2])):
             # So process it
             process_ppt(cur_ppt_name, var_info)
 
-            cur_ppt_name = None
+            cur_ppt_name = "DUMMY PPT NAME"
             var_info = {}
 
             dt_state = DtraceState.Uninit
@@ -371,8 +373,8 @@ for line in Path.open(Path(sys.argv[2])):
     elif dt_state == DtraceState.Modbit:
         cur_var_info.append(line)
         var_info[convert_dfec_var_name(cur_var_name)] = cur_var_info
-        cur_var_name = None
-        cur_var_info = None
+        cur_var_name = "DUMMY VAR NAME"
+        cur_var_info = []
         dt_state = DtraceState.VarName
 
 
