@@ -394,12 +394,11 @@ for cur_var_list in kvasir_ppt_map.values():
 
 result_map = {}
 
-for ppt, stripped in kvasir_ppt_map.items():
-    #  TODO BUG revealed by mypy
-    if stripped in dfec_ppt_map:  # type: ignore[comparison-overlap]
+for ppt in kvasir_ppt_map:
+    stripped = strip_kvasir_ppt_name(ppt)
+    if stripped in dfec_ppt_map:
         KvasirVarList = kvasir_ppt_map[ppt]
-        #  TODO BUG revealed by mypy
-        DfecVarMap = dfec_ppt_map[stripped]  # type: ignore[index]
+        DfecVarMap = dfec_ppt_map[stripped]
 
         #        print "KvasirVarList:"
         #        print KvasirVarList
