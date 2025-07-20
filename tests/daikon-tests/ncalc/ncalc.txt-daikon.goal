@@ -1,0 +1,16 @@
+===========================================================================
+ncalc:::OBJECT
+this has only one value
+===========================================================================
+ncalc.main(java.lang.String[]):::ENTER
+args has only one value
+args.getClass().getName() == java.lang.String[].class
+args[] == []
+args[].toString == []
+===========================================================================
+ncalc.main(java.lang.String[]):::EXIT
+args[] == orig(args[])
+args[] == []
+args[].toString == []
+===========================================================================
+ncalc.ncalc():::EXIT
