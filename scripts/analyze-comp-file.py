@@ -8,8 +8,8 @@ from pathlib import Path
 
 ppt_name_re = re.compile(r":::")
 
-f = Path.open(Path(sys.argv[1]))
-all_lines = [line.strip() for line in f]
+with Path(sys.argv[1]).open() as f:
+    all_lines = [line.strip() for line in f]
 
 # Key: program point name
 # Value: a list where each element is the size of a comparability set

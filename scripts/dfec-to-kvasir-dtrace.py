@@ -17,9 +17,8 @@ from enum import Enum
 from pathlib import Path
 
 # Process command-line args:
-kvasir_decls_f = Path.open(Path(sys.argv[1]))
-kvasir_decls_all_lines = [line.strip() for line in kvasir_decls_f]
-kvasir_decls_f.close()
+with Path(sys.argv[1]).open() as kvasir_decls_f:
+    kvasir_decls_all_lines = [line.strip() for line in kvasir_decls_f]
 
 
 DfecGlobalRE = re.compile(r"^::")
@@ -337,45 +336,46 @@ cur_var_info: list[str] = []
 
 # This is shorthand for xreadlines so that it doesn't have to read the
 # entire file in at once, which is crucial for huge examples:
-for line in Path.open(Path(sys.argv[2])):
-    line = line.strip()
+with Path(sys.argv[2]).open() as lines:
+    for line in lines:
+        line = line.strip()
 
-    if dt_state == DtraceState.Uninit:
-        # Match program point name with ':::ENTER' or ':::EXIT'
-        if ":::ENTER" in line or ":::EXIT" in line:
-            cur_ppt_name = line
+        if dt_state == DtraceState.Uninit:
+            # Match program point name with ':::ENTER' or ':::EXIT'
+            if ":::ENTER" in line or ":::EXIT" in line:
+                cur_ppt_name = line
+                dt_state = DtraceState.VarName
+
+        elif dt_state == DtraceState.IgnoreNonce:
             dt_state = DtraceState.VarName
 
-    elif dt_state == DtraceState.IgnoreNonce:
-        dt_state = DtraceState.VarName
+        elif dt_state == DtraceState.VarName:
+            if line == "this_invocation_nonce":
+                dt_state = DtraceState.IgnoreNonce
+            elif line == "":
+                # We've reached the end of a ppt entry!!!
+                # So process it
+                process_ppt(cur_ppt_name, var_info)
 
-    elif dt_state == DtraceState.VarName:
-        if line == "this_invocation_nonce":
-            dt_state = DtraceState.IgnoreNonce
-        elif line == "":
-            # We've reached the end of a ppt entry!!!
-            # So process it
-            process_ppt(cur_ppt_name, var_info)
+                cur_ppt_name = "DUMMY PPT NAME"
+                var_info = {}
 
-            cur_ppt_name = "DUMMY PPT NAME"
-            var_info = {}
+                dt_state = DtraceState.Uninit
+            else:
+                cur_var_name = line
+                cur_var_info = []
+                dt_state = DtraceState.Value
 
-            dt_state = DtraceState.Uninit
-        else:
-            cur_var_name = line
+        elif dt_state == DtraceState.Value:
+            cur_var_info.append(line)
+            dt_state = DtraceState.Modbit
+
+        elif dt_state == DtraceState.Modbit:
+            cur_var_info.append(line)
+            var_info[convert_dfec_var_name(cur_var_name)] = cur_var_info
+            cur_var_name = "DUMMY VAR NAME"
             cur_var_info = []
-            dt_state = DtraceState.Value
-
-    elif dt_state == DtraceState.Value:
-        cur_var_info.append(line)
-        dt_state = DtraceState.Modbit
-
-    elif dt_state == DtraceState.Modbit:
-        cur_var_info.append(line)
-        var_info[convert_dfec_var_name(cur_var_name)] = cur_var_info
-        cur_var_name = "DUMMY VAR NAME"
-        cur_var_info = []
-        dt_state = DtraceState.VarName
+            dt_state = DtraceState.VarName
 
 
 # result_map = {}

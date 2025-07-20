@@ -106,8 +106,6 @@ if (len(sys.argv) == 3) and sys.argv[2] == "no-hashcodes":
 hashcode_re = re.compile(r"hashcode.*")
 
 
-f = Path.open(Path(sys.argv[1]))
-
 # Break each program point declaration up into separate lists.
 # Program points are separated by "DECLARE" statements
 # Key: program point name
@@ -116,15 +114,16 @@ all_ppts = {}
 
 temp_all_ppts = []  # Temporary before placing in all_ppts
 
-for line in f:
-    line = line.strip()
+with Path(sys.argv[1]).open() as f:
+    for line in f:
+        line = line.strip()
 
-    if line[0:4] == "ppt ":
-        temp_all_ppts.append([line[len(PPT_START) :]])  # Start a new list
-        is_intermediate = 0
-    elif line != "" and line[0] != "#":  # Don't add blank lines & comments
-        if len(temp_all_ppts) > 0:
-            temp_all_ppts[-1].append(line)  # Append line to the latest entry
+        if line[0:4] == "ppt ":
+            temp_all_ppts.append([line[len(PPT_START) :]])  # Start a new list
+            is_intermediate = 0
+        elif line != "" and line[0] != "#":  # Don't add blank lines & comments
+            if len(temp_all_ppts) > 0:
+                temp_all_ppts[-1].append(line)  # Append line to the latest entry
 
 
 # Init all_ppts from temp_all_ppts

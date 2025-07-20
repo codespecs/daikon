@@ -13,9 +13,8 @@ from enum import Enum
 from pathlib import Path
 
 # Process command-line args:
-decls_f = Path.open(Path(sys.argv[1]))
-all_lines = [line.strip() for line in decls_f]
-decls_f.close()
+with Path(sys.argv[1]).open() as decls_f:
+    all_lines = [line.strip() for line in decls_f]
 
 
 def strip_comp_number(comp_num: str) -> str:

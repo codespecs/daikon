@@ -41,21 +41,19 @@ can run on both sets of output.
 """
 
 # Process command-line args:
-dfec_f = Path.open(Path(sys.argv[1]))
-dfec_all_lines = [line.strip() for line in dfec_f]
-dfec_f.close()
+with Path(sys.argv[1]).open() as dfec_f:
+    dfec_all_lines = [line.strip() for line in dfec_f]
 
-kvasir_f = Path.open(Path(sys.argv[2]))
-kvasir_all_lines = [line.strip() for line in kvasir_f]
-kvasir_f.close()
+with Path(sys.argv[2]).open() as kvasir_f:
+    kvasir_all_lines = [line.strip() for line in kvasir_f]
 
-output_lackwit_decls_f = Path.open(Path(sys.argv[3]), "w")
-output_dyn_comp_decls_f = Path.open(Path(sys.argv[4]), "w")
+output_lackwit_decls_f = Path(sys.argv[3]).open("w")  # noqa: SIM115
+output_dyn_comp_decls_f = Path(sys.argv[4]).open("w")  # noqa: SIM115
 
-output_dec_types_decls_f = Path.open(Path(sys.argv[5]), "w")
-output_no_comp_decls_f = Path.open(Path(sys.argv[6]), "w")
+output_dec_types_decls_f = Path(sys.argv[5]).open("w")  # noqa: SIM115
+output_no_comp_decls_f = Path(sys.argv[6]).open("w")  # noqa: SIM115
 
-output_vars_f = Path.open(Path(sys.argv[7]), "w")
+output_vars_f = Path(sys.argv[7]).open("w")  # noqa: SIM115
 
 
 DfecGlobalRE = re.compile(r"^::")
