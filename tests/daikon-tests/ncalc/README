@@ -16,10 +16,11 @@ java program is calling.
 Then to create the shared libary:
   gcc -fPIC -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -shared -o libcalculator.so ncalc.c
 
-In general, when running a Java program tha uses JNI, you need to tell the JVM where to findr
+In general, when running a Java program that uses JNI, you need to tell the JVM where to find
 any shared library code. For example:
   java -Djava.library.path=. ncalc
-However, the current directory (.) is one of the default locations the JVM searches. Makefile.common
-has been modified to copy the library to where Chicory is run. This is not necessary for DynComp
-as it is run here in this directoy.
-
+For Daikon testing we do this by adding the line:
+  export LD_LIBRARY_PATH=$(PROJECT) && \
+in tests/Makefile.common. This is inserted prior to every use of DynComp or Chicory. Note
+that this means it is set for every test case, but that should not be a problem as no other
+test uses 'loadLibary'.
