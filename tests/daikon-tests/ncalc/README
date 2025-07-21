@@ -1,0 +1,26 @@
+This is a simple test of Daikon's ability to process a Java program that calls native code.
+
+It is built using the Java Native Interface (JNI) that enables Java code running in a Java
+Virtual Machine (JVM) to interact with native applications and libraries written in other
+languages, such as C or C++.
+
+libcalculator.so is a shared code library that contains a single function that returns the
+result of adding its two interger arguments. This file is checked into the repository, but
+if it should need to be recreated here are the steps.
+
+First, compile the java code with the '-h' option:
+  javac -h . ncalc.java
+This creates the normal .class file but also a .h file that describes the JNI interface the
+java program is calling.
+
+Then to create the shared libary:
+  gcc -fPIC -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -shared -o libcalculator.so ncalc.c
+
+In general, when running a Java program that uses JNI, you need to tell the JVM where to find
+any shared library code. For example:
+  java -Djava.library.path=. ncalc
+For Daikon testing we do this by adding the line:
+  export LD_LIBRARY_PATH=$(PROJECT) && \
+in tests/Makefile.common. This is inserted prior to every use of DynComp or Chicory. Note
+that this means it is set for every test case, but that should not be a problem as no other
+test uses 'loadLibary'.
