@@ -517,9 +517,14 @@ public class DCInstrument24 {
           classModel.thisClass().asSymbol(),
           classBuilder -> instrumentClass(classBuilder, classModel, classInfo));
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s in transform of %s%n", t, classInfo.class_name);
-      t.printStackTrace();
-      throw new RuntimeException("Unexpected error", t);
+      if (debugInstrument.enabled) {
+        t.printStackTrace();
+      }
+      System.err.printf(
+          "DynComp warning: Class %s is being skipped due to the following:%n",
+          classInfo.class_name);
+      System.err.printf("%s.%n", t);
+      return null;
     }
   }
 
@@ -648,7 +653,7 @@ public class DCInstrument24 {
         break;
 
       default:
-        throw new Error("invalid junit_state");
+        throw new DynCompError("invalid junit_state");
     }
 
     debugInstrument.log("junit_state: %s%n", junit_state);
@@ -771,9 +776,14 @@ public class DCInstrument24 {
       for (CodeElement ce : call_initNotify(poolBuilder, classInfo)) {
         li.add(ce);
       }
-    } catch (Exception e) {
-      System.err.printf("Unexpected exception encountered: %s", e);
-      e.printStackTrace();
+    } catch (Throwable t) {
+      if (t instanceof DynCompError) {
+        throw t;
+      }
+      throw new DynCompError(
+          String.format(
+              "Unexpected error processing %s.%s.%n", mgen.getClassName(), mgen.getName()),
+          t);
     }
   }
 
@@ -953,10 +963,10 @@ public class DCInstrument24 {
 
         debug_transform.exdent();
       } catch (Throwable t) {
-        if (debugInstrument.enabled) {
-          t.printStackTrace();
+        if (t instanceof DynCompError) {
+          throw t;
         }
-        throw new Error(
+        throw new DynCompError(
             "Unexpected error processing " + classname + "." + mm.methodName().stringValue(), t);
       }
     }
@@ -1040,32 +1050,60 @@ public class DCInstrument24 {
       ClassInfo classInfo,
       boolean trackMethod) {
 
-    boolean codeModelSeen = false;
-    for (MethodElement me : methodModel) {
-      debugInstrument.log("MethodElement: %s%n", me);
-      switch (me) {
-        case CodeModel codeModel -> {
-          codeModelSeen = true;
-          methodBuilder.withCode(
-              codeBuilder -> instrumentCode(codeBuilder, codeModel, mgen, classInfo, trackMethod));
+    try {
+      boolean codeModelSeen = false;
+      for (MethodElement me : methodModel) {
+        debugInstrument.log("MethodElement: %s%n", me);
+        switch (me) {
+          case CodeModel codeModel -> {
+            codeModelSeen = true;
+            methodBuilder.withCode(
+                codeBuilder ->
+                    instrumentCode(codeBuilder, codeModel, mgen, classInfo, trackMethod));
+          }
+          case RuntimeVisibleAnnotationsAttribute rvaa -> {
+            // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
+            // the original method to our instrumented method as the signature will
+            // not match anything in the JVM's list.  This won't cause an execution
+            // problem but will produce a number of warnings.
+            // JDK 11: @HotSpotIntrinsicCandidate
+            // JDK 17: @IntrinsicCandidate
+            boolean output = true;
+            for (final Annotation item : rvaa.annotations()) {
+              String description = item.className().stringValue();
+              if (description.endsWith("IntrinsicCandidate;")) {
+                output = false;
+                debugInstrument.log("Annotation not copied: %s%n", description);
+              }
+            }
+            if (output) {
+              methodBuilder.with(me);
+            }
+          }
+          // copy all other MethodElements to output class (unchanged)
+          default -> methodBuilder.with(me);
         }
-        // copy all other MethodElements to output class (unchanged)
-        default -> methodBuilder.with(me);
       }
-    }
-    if (!codeModelSeen) {
-      debugInstrument.log("No CodeModel for method: %s%n", mgen.getName());
-      if ((mgen.getAccessFlagsMask() & ClassFile.ACC_NATIVE) != 0) {
-        // We need to build our wrapper method.
-        methodBuilder.withCode(
-            codeBuilder -> instrumentCode(codeBuilder, null, mgen, classInfo, trackMethod));
+      if (!codeModelSeen) {
+        debugInstrument.log("No CodeModel for method: %s%n", mgen.getName());
+        if ((mgen.getAccessFlagsMask() & ClassFile.ACC_NATIVE) != 0) {
+          // We need to build our wrapper method for a call to native code.
+          methodBuilder.withCode(
+              codeBuilder -> instrumentCode(codeBuilder, null, mgen, classInfo, trackMethod));
 
-        // Turn off the native flag in wrapper method.
-        methodBuilder.withFlags(mgen.getAccessFlagsMask() & ~ClassFile.ACC_NATIVE);
-      } else {
-        // Interface and/or Abstract
-        // UNDONE: do nothing?
+          // Turn off the native flag in wrapper method.
+          methodBuilder.withFlags(mgen.getAccessFlagsMask() & ~ClassFile.ACC_NATIVE);
+        } else {
+          // Interface and/or Abstract
+          // UNDONE: do nothing?
+        }
       }
+    } catch (Throwable t) {
+      if (t instanceof DynCompError) {
+        throw t;
+      }
+      throw new DynCompError(
+          "Unexpected error processing " + classInfo.class_name + "." + mgen.getName(), t);
     }
   }
 
@@ -1244,21 +1282,6 @@ public class DCInstrument24 {
         codeBuilder.exceptionCatch(newStartLabel, handlerLabel, handlerLabel, CD_Throwable);
       }
     }
-
-    // UNDONE needs to be moved?
-    // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
-    // the original method to our instrumented method as the signature will
-    // not match anything in the JVM's list.  This won't cause an execution
-    // problem but will produce a massive number of warnings.
-    // JDK 11: @HotSpotIntrinsicCandidate
-    // JDK 17: @IntrinsicCandidate
-    // AnnotationEntryGen[] aes = mgen.getAnnotationEntries();
-    // for (AnnotationEntryGen item : aes) {
-    // String type = item.getTypeName();
-    // if (type.endsWith("IntrinsicCandidate;")) {
-    // mgen.removeAnnotationEntry(item);
-    // }
-    // }
 
     // UNDONE
     //   can we do this with java.lang.classfile?
@@ -2011,7 +2034,7 @@ public class DCInstrument24 {
       // There may be a gap for the second slot of a variable of type long or double.
       // UNDONE: do we have to save state of locals like we do statck?
       locals = new ClassDesc[mgen.getMaxLocals()];
-      // UNDONE: init locals with 'this' and params only
+      // UNDONE: init locals with 'this' and params only?
       for (final LocalVariable lv : mgen.localsTable) {
         locals[lv.slot()] = lv.typeSymbol();
       }
@@ -2054,10 +2077,9 @@ public class DCInstrument24 {
         }
         li = instructions.listIterator(item.instructionIndex());
         stack = item.stack();
-        // UNDONE turn it on
         boolean proceed = true;
         while (proceed) {
-          if (!li.hasNext()) throw new Error("error in instruction list");
+          if (!li.hasNext()) throw new DynCompError("error in instruction list");
           inst_index = li.nextIndex();
           inst = li.next();
           if (debugOperandStack) {
@@ -2111,11 +2133,13 @@ public class DCInstrument24 {
         inst_index++;
       }
     } catch (Throwable t) {
-      if (debugInstrument.enabled) {
-        t.printStackTrace();
+      if (t instanceof DynCompError) {
+        throw t;
       }
-      throw new Error(
-          "Unexpected error processing " + mgen.getClassName() + "." + mgen.getName(), t);
+      throw new DynCompError(
+          String.format(
+              "Unexpected error processing %s.%s.%n", mgen.getClassName(), mgen.getName()),
+          t);
     }
   }
 
@@ -2174,7 +2198,7 @@ public class DCInstrument24 {
       System.out.println("current stack: " + current);
       System.out.flush();
     }
-    throw new Error("operand stacks do not match at label:" + target);
+    throw new DynCompError("operand stacks do not match at label:" + target);
   }
 
   /**
@@ -2281,7 +2305,9 @@ public class DCInstrument24 {
 
     // unsigned byte max = 255.  minus the character '0' (decimal 48)
     // Largest frame size noted so far is 123.
-    assert frame_size < 207 : frame_size + " " + mgen.getClassName() + "." + mgen.getName();
+    if (frame_size > 206) {
+      throw new DynCompError("method too large to instrument: " + mgen.getName());
+    }
     String params = "" + (char) (frame_size + '0');
     // Character.forDigit (frame_size, Character.MAX_RADIX);
     List<Integer> plist = new ArrayList<>();
@@ -2790,27 +2816,23 @@ public class DCInstrument24 {
           case Opcode.SASTORE:
             return array_store(inst, "sastore", CD_short);
 
-          // UNDONE default -> throw exception when done?
           default:
-            //    System.out.println("Unexpected instruction opcode: " + ce);
-            return null;
+            throw new DynCompError("Unexpected instruction opcode: " + inst.opcode());
         }
       }
 
       case Label l -> {
-        // UNDONE do anything?
+        // Ignore Label CodeELements.
         return null;
       }
 
       case LineNumber ln -> {
-        // UNDONE do anything?
+        // Ignore LineNumber CodeELements.
         return null;
       }
 
-      // UNDONE default -> throw exception when done?
       default -> {
-        System.out.println("Unexpected CodeElement: " + ce);
-        return null;
+        throw new DynCompError("Unexpected CodeElement: " + ce);
       }
     }
   }
@@ -2859,7 +2881,7 @@ public class DCInstrument24 {
           newCode.add(StoreInstruction.of(typeKind, returnLocal.slot()));
         }
         if (!exitLocationIter.hasNext()) {
-          throw new RuntimeException("Not enough exit locations in the exitLocationIter");
+          throw new DynCompError("Not enough exit locations in the exitLocationIter");
         }
         newCode.addAll(
             callEnterOrExit(mgen, minfo, method_info_index, "exit", exitLocationIter.next()));
@@ -2901,8 +2923,8 @@ public class DCInstrument24 {
       ClassModel cm;
       try {
         cm = getClassModel(interfaceName);
-      } catch (Throwable e) {
-        throw new Error(String.format("Unable to load class: %s", interfaceName), e);
+      } catch (Throwable t) {
+        throw new DynCompError(String.format("Unable to load class: %s", interfaceName), t);
       }
       for (MethodModel jm : cm.methods()) {
         String jmName = jm.methodName().stringValue();
@@ -3491,8 +3513,7 @@ public class DCInstrument24 {
           return result;
         }
       } catch (Throwable t) {
-        t.printStackTrace();
-        throw new Error(String.format("Unexpected error while reading %s%n", classname), t);
+        throw new DynCompError(String.format("Unexpected error while reading %s%n", classname), t);
       }
     }
     // Do not cache a null result, because a subsequent invocation might return non-null.
@@ -4280,7 +4301,7 @@ public class DCInstrument24 {
       ClassDesc value3 = stack.peek(2);
       if (value1.isPrimitive()) {
         if (is_category2(value2)) {
-          throw new Error("not supposed to happen " + stack_contents(stack, 3));
+          throw new DynCompError("not supposed to happen " + stack_contents(stack, 3));
         } else if (is_category2(value3)) {
           if (value2.isPrimitive()) {
             op = "dup2_x1";
@@ -4311,7 +4332,7 @@ public class DCInstrument24 {
         }
       } else { // value1 is not primitive
         if (is_category2(value2)) {
-          throw new Error("not supposed to happen " + stack_contents(stack, 3));
+          throw new DynCompError("not supposed to happen " + stack_contents(stack, 3));
         } else if (is_category2(value3)) {
           if (value2.isPrimitive()) {
             op = "dup_x1";
@@ -4669,7 +4690,7 @@ public class DCInstrument24 {
     for (@BinaryName String scn : getSuperClassNames()) {
       ClassModel scm = getClassModel(scn);
       if (scm == null) {
-        throw new Error("Can't load ClassModel for: " + scn);
+        throw new DynCompError("Can't load ClassModel for: " + scn);
       }
 
       for (FieldModel fm : scm.fields()) {
@@ -4716,7 +4737,7 @@ public class DCInstrument24 {
     String superclassName = ce.get().asInternalName().replace('/', '.');
     ClassModel super_cm = getClassModel(superclassName);
     if (super_cm == null) {
-      throw new Error("Can't get superclass for " + superclassName);
+      throw new DynCompError("Can't get superclass for " + superclassName);
     }
 
     Map<FieldModel, Integer> field_map = build_field_map(super_cm);
@@ -5398,7 +5419,7 @@ public class DCInstrument24 {
         result.append(descriptorToFqBinaryName(descriptor));
         break;
       default:
-        throw new IllegalArgumentException("Invalid descriptor: " + descriptor);
+        throw new DynCompError("Invalid descriptor: " + descriptor);
     }
 
     // Append array brackets if applicable
@@ -5433,7 +5454,7 @@ public class DCInstrument24 {
       // Regular object type
       result.append(descriptor.substring(1, endOfBaseType).replace('/', '.'));
     } else {
-      throw new IllegalArgumentException("Malformed object type descriptor: " + descriptor);
+      throw new DynCompError("Malformed object type descriptor: " + descriptor);
     }
     return result.toString();
   }
@@ -5475,8 +5496,6 @@ public class DCInstrument24 {
     result.append(String.join(", ", params));
     return result.toString();
   }
-
-  // UNDONE - this routine should probably be moved to MethodGen24.
 
   /**
    * Create a new local variable whose scope is the full method.
