@@ -612,7 +612,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #endif
 
   /**
-   * Return a format string for the specified output format. Each instance of %varN% will be
+   * Returns a format string for the specified output format. Each instance of %varN% will be
    * replaced by the correct name for varN.
    */
   public abstract String get_format_str(@GuardSatisfied CLASSNAME this, OutputFormat format);

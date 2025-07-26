@@ -43,8 +43,8 @@ public class PptMap implements Serializable {
   }
 
   /**
-   * Get the pptname named 'name' from the map. Note that conditional program points are not stored
-   * in the map by name. They are only available through their parent.
+   * Returns the pptname named 'name' from the map. Note that conditional program points are not
+   * stored in the map by name. They are only available through their parent.
    */
   @Pure
   public @Nullable PptTopLevel get(String name) {
@@ -52,8 +52,8 @@ public class PptMap implements Serializable {
   }
 
   /**
-   * Get the pptname 'name' from the map. Note that conditional program points are not stored in the
-   * map by name. They are only available through their parent.
+   * Returns the pptname 'name' from the map. Note that conditional program points are not stored in
+   * the map by name. They are only available through their parent.
    */
   @Pure
   public @Nullable PptTopLevel get(PptName name) {
@@ -61,8 +61,8 @@ public class PptMap implements Serializable {
   }
 
   /**
-   * Returns whether or not 'name' is the name of a Ppt in the map. Note that conditional program
-   * points are not stored in the map by name. They are only available through their parent.
+   * Returns true if 'name' is the name of a Ppt in the map. Note that conditional program points
+   * are not stored in the map by name. They are only available through their parent.
    */
   @Pure
   @SuppressWarnings("nullness") // postcondition: linked maps

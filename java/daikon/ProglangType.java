@@ -86,7 +86,7 @@ public final @Interned class ProglangType implements Serializable {
   private int dimensions;
 
   /**
-   * Return the number of dimensions (zero for a non-array).
+   * Returns the number of dimensions (zero for a non-array).
    *
    * @return the number of dimensions
    */
@@ -690,7 +690,7 @@ public final @Interned class ProglangType implements Serializable {
   }
 
   /**
-   * Return true if this is java.lang.Object.
+   * Returns true if this is java.lang.Object.
    *
    * @return true if this is java.lang.Object
    */
@@ -700,7 +700,7 @@ public final @Interned class ProglangType implements Serializable {
   }
 
   /**
-   * Return true if the base (the final element type) is a reference type rather than integer,
+   * Returns true if the base (the final element type) is a reference type rather than integer,
    * float, or boolean.
    *
    * @return true if the base is Object
@@ -734,7 +734,7 @@ public final @Interned class ProglangType implements Serializable {
   }
 
   /**
-   * Return true if these two types can be sensibly compared to one another, or if one can be cast
+   * Returns true if these two types can be sensibly compared to one another, or if one can be cast
    * to the other. For instance, int is castable to long, but boolean is not castable to float, and
    * int is not castable to int[]. This is a reflexive relationship, but not a transitive one
    * because it might not be true for two children of a superclass, even though it's true for the
@@ -762,7 +762,7 @@ public final @Interned class ProglangType implements Serializable {
   }
 
   /**
-   * Return true if these two types can be sensibly compared to one another, and if non-integral,
+   * Returns true if these two types can be sensibly compared to one another, and if non-integral,
    * whether this could be a superclass of other. A List is comparableOrSuperclassOf to a ArrayList,
    * but not the other way around. This is a transitive method, but not reflexive.
    */
@@ -809,8 +809,8 @@ public final @Interned class ProglangType implements Serializable {
   }
 
   /**
-   * Returns whether or not this declared type is a function pointer Only valid if the front end
-   * marks the function pointer with the name '*func'.
+   * Returns true if this declared type is a function pointer Only valid if the front end marks the
+   * function pointer with the name '*func'.
    */
   @Pure
   public boolean is_function_pointer() {

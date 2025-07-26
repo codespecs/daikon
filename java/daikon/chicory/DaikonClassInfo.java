@@ -56,7 +56,7 @@ public class DaikonClassInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Get a String representation of the given Object's run-time type and the corresponding
+   * Returns a String representation of the given Object's run-time type and the corresponding
    * "modified" value.
    *
    * @param val the Object whose run-time class we wish to get a String representation of

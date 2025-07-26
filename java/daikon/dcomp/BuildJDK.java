@@ -63,7 +63,7 @@ public class BuildJDK {
    */
   public static final String java_home = System.getProperty("java.home");
 
-  /** Whether to print information about the classes being instrumented. */
+  /** If true, print information about the classes being instrumented. */
   private static boolean verbose = false;
 
   /** Number of class files processed; used for progress display. */

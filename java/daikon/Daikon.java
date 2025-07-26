@@ -303,7 +303,7 @@ public final class Daikon {
   public static boolean show_progress = false;
 
   /**
-   * Whether to use the "new" equality set mechanism for handling equality, using canonicals to have
+   * If true, use the "new" equality set mechanism for handling equality, using canonicals to have
    * instantiation of invariants only over equality sets.
    */
   public static boolean use_equality_optimization = true;
@@ -347,13 +347,13 @@ public final class Daikon {
   public static @Interned String dkconfig_guardNulls = "default";
 
   /**
-   * Whether to associate the program points in a dataflow hierarchy, as via Nimmer's thesis.
+   * If true, associate the program points in a dataflow hierarchy, as via Nimmer's thesis.
    * Deactivate only for languages and analyses where flow relation is nonsensical.
    */
   public static boolean use_dataflow_hierarchy = true;
 
   /**
-   * Whether to use the bottom up implementation of the dataflow hierarchy. This mechanism builds
+   * If true, use the bottom up implementation of the dataflow hierarchy. This mechanism builds
    * invariants initially only at the leaves of the partial order. Upper points are calculated by
    * joining the invariants from each of their children points.
    */
@@ -390,10 +390,10 @@ public final class Daikon {
   // Whether we want the memory monitor activated
   private static boolean use_mem_monitor = false;
 
-  /** Whether Daikon should print its version number and date. */
+  /** True if Daikon should print its version number and date. */
   public static boolean noversion_output = false;
 
-  /** Whether Daikon is in its inferencing loop. Used only for assertion checks. */
+  /** True if Daikon is in its inferencing loop. Used only for assertion checks. */
   public static boolean isInferencing = false;
 
   /**

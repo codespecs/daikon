@@ -54,7 +54,7 @@ public class DynamicConstants implements Serializable {
   // daikon.config.Configuration interface.
 
   /**
-   * Whether to use the dynamic constants optimization. This optimization doesn't instantiate
+   * If true, use the dynamic constants optimization. This optimization doesn't instantiate
    * invariants over constant variables (i.e., that that have only seen one value). When the
    * variable receives a second value, invariants are instantiated and are given the sample
    * representing the previous constant value.
@@ -139,24 +139,24 @@ public class DynamicConstants implements Serializable {
     /** The variable that has this value. */
     public VarInfo vi;
 
-    /** Whether or not this has been missing for every sample to date. */
+    /** True if this has been missing for every sample to date. */
     boolean always_missing = true;
 
-    /** Whether or not this is constant. */
+    /** True if this is constant. */
     boolean constant = false;
 
     /**
-     * Whether or not this was constant at the beginning of this sample. At the beginning of the
-     * add() method, all newly non-constant variables are marked (constant=false). It is sometimes
-     * useful within the remainder of processing that sample to know that a variable was constant at
-     * the beginning. The field previously_constant is set to true when constant is set to false,
-     * and then is itself set to false at the end of the add() method.
+     * True if this was constant at the beginning of this sample. At the beginning of the add()
+     * method, all newly non-constant variables are marked (constant=false). It is sometimes useful
+     * within the remainder of processing that sample to know that a variable was constant at the
+     * beginning. The field previously_constant is set to true when constant is set to false, and
+     * then is itself set to false at the end of the add() method.
      */
     boolean previously_constant = false;
 
     /**
-     * Whether or not this was always missing at the beginning of this sample. At the beginning of
-     * the add() method, all newly non missing variables are marked (always_missing=false). It is
+     * True if this was always missing at the beginning of this sample. At the beginning of the
+     * add() method, all newly non missing variables are marked (always_missing=false). It is
      * sometimes useful within the remainder of processing that sample to know that a variable was
      * missing at the beginning. The field previous_missing set to true when missing is set to
      * false, and then is itself set to false at the end of the add() method.
@@ -190,7 +190,7 @@ public class DynamicConstants implements Serializable {
     }
 
     /**
-     * Returns whether the specified variable is currently a constant OR was a constant at the
+     * Returns true if the specified variable is currently a constant OR was a constant at the
      * beginning of constants processing.
      */
     @Pure
@@ -406,7 +406,7 @@ public class DynamicConstants implements Serializable {
     }
   }
 
-  /** Returns whether the specified variable is missing in this ValueTuple. */
+  /** Returns true if the specified variable is missing in this ValueTuple. */
   private boolean missing(VarInfo vi, ValueTuple vt) {
 
     int mod = vt.getModified(vi);
@@ -422,7 +422,7 @@ public class DynamicConstants implements Serializable {
     return result;
   }
 
-  /** Returns whether the specified variable is currently a constant. */
+  /** Returns true if the specified variable is currently a constant. */
   @Pure
   public boolean is_constant(VarInfo vi) {
 
@@ -430,7 +430,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * Returns whether the specified variable is currently a constant OR was a constant at the
+   * Returns true if the specified variable is currently a constant OR was a constant at the
    * beginning of constants processing.
    */
   @Pure
@@ -450,7 +450,7 @@ public class DynamicConstants implements Serializable {
     return result;
   }
 
-  /** Returns whether the specified variable missing for all values so far. */
+  /** Returns true if the specified variable missing for all values so far. */
   @Pure
   public boolean is_missing(VarInfo vi) {
 
@@ -458,7 +458,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * Returns whether the specified variable is currently missing OR was missing at the beginning of
+   * Returns true if the specified variable is currently missing OR was missing at the beginning of
    * constants processing.
    */
   @Pure

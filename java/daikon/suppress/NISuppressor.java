@@ -171,8 +171,8 @@ public class NISuppressor {
   }
 
   /**
-   * Returns whether or not this suppressor is enabled. A suppressor is enabled if the invariant on
-   * which it depends is enabled.
+   * Returns true if this suppressor is enabled. A suppressor is enabled if the invariant on which
+   * it depends is enabled.
    */
   @Pure
   public boolean is_enabled() {
@@ -180,10 +180,10 @@ public class NISuppressor {
   }
 
   /**
-   * Returns whether or not this suppressor invariant could be instantiated over the specified
-   * variables. A suppressor that canot be instantiated over the variables cannot possibly suppress.
-   * Consider the NonZero invariant. It is suppressed by EqualsOne. But while NonZero is valid over
-   * all variables, EqualsOne is only valid over non-pointer variables. Thus the suppression is only
+   * Returns true if this suppressor invariant could be instantiated over the specified variables. A
+   * suppressor that canot be instantiated over the variables cannot possibly suppress. Consider the
+   * NonZero invariant. It is suppressed by EqualsOne. But while NonZero is valid over all
+   * variables, EqualsOne is only valid over non-pointer variables. Thus the suppression is only
    * valid over non-pointer variables.
    */
   public boolean instantiate_ok(VarInfo[] vis) {
