@@ -218,7 +218,7 @@ public class LOWERBOUNDCORE implements Serializable, Cloneable {
   }
 
   /**
-   * Whether this would change if the given value was seen. Used to test for need of cloning and
+   * Returns true if this would change if the given value was seen. Used to test for need of cloning and
    * flowing before this would be changed.
    */
   public boolean wouldChange(PRIMITIVE value) {

@@ -249,7 +249,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   }
 
   /**
-   * Returns whether or not the invariant is currently active. We become active after MINTRIPLES
+   * Returns true if the invariant is currently active. We become active after MINTRIPLES
    * values have been seen and a line is not calculated. In addition, the coefficients (a, b, c)
    * must all be non-zero, else the invariant would be described by a LinearBinary or constant
    * invariant. Before that, a, b, and c are uninitialized.

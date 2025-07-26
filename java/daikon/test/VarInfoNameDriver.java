@@ -27,7 +27,7 @@ import java.util.StringTokenizer;
 public class VarInfoNameDriver {
 
   /**
-   * Convenience entry point for TraceSelect
+   * Convenience entry point for TraceSelect.
    *
    * @param args command-line arguments
    */

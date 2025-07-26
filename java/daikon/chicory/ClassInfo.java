@@ -44,7 +44,7 @@ public class ClassInfo {
   /** DaikonVariables for the class program point (static variables only). */
   public @MonotonicNonNull RootInfo traversalClass;
 
-  /** Whether or not any methods in this class were instrumented. */
+  /** True if any methods in this class were instrumented. */
   public boolean shouldInclude = false;
 
   /** Mapping from field name to string representation of its value* */

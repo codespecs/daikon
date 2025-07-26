@@ -907,8 +907,8 @@ public final class FileIO {
     }
 
     /**
-     * Return a string representation of this. The Invocation is formatted on two lines, indented by
-     * two spaces. The receiver Invocation may be canonicalized or not.
+     * Returns a string representation of this. The Invocation is formatted on two lines, indented
+     * by two spaces. The receiver Invocation may be canonicalized or not.
      *
      * @return a string representation of this
      */
@@ -917,8 +917,8 @@ public final class FileIO {
     }
 
     /**
-     * Return a string representation of this. The Invocation is formatted on two lines, indented by
-     * two spaces. The receiver Invocation may be canonicalized or not.
+     * Returns a string representation of this. The Invocation is formatted on two lines, indented
+     * by two spaces. The receiver Invocation may be canonicalized or not.
      *
      * @param show_values if true, show values; otherwise, return just the Ppt name
      * @return a string representation of this
@@ -2550,9 +2550,8 @@ public final class FileIO {
   }
 
   /**
-   * Returns whether or not the specified ppt name should be included in processing. Ppts can be
-   * excluded because they match the omit_regexp, don't match ppt_regexp, or are greater than
-   * ppt_max_name.
+   * Returns true if the specified ppt name should be included in processing. Ppts can be excluded
+   * because they match the omit_regexp, don't match ppt_regexp, or are greater than ppt_max_name.
    */
   public static boolean ppt_included(String ppt_name) {
 
@@ -3129,7 +3128,7 @@ public final class FileIO {
     throw new Daikon.UserError(cause, msg);
   }
 
-  /** Returns whether the line is the start of a ppt declaration. */
+  /** Returns true if the line is the start of a ppt declaration. */
   @RequiresNonNull("FileIO.new_decl_format")
   @Pure
   private static boolean is_declaration_header(String line) {

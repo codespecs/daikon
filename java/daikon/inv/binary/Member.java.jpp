@@ -136,7 +136,7 @@ public final class CLASSNAME extends SEQUENCESCALAR {
     return super.isObviousStatically(vis);
   }
 
-  /** Check whether sclvar is a member of seqvar can be determined statically. */
+  /** Returns true if sclvar is a member of seqvar can be determined statically. */
   @Pure
   public static boolean isObviousMember(VarInfo sclvar, VarInfo seqvar) {
 

@@ -257,7 +257,7 @@ public final class FileCompiler {
   }
 
   /**
-   * Return the file path to where a class file for a source file at sourceFilePath would be
+   * Returns the file path to where a class file for a source file at sourceFilePath would be
    * generated.
    *
    * @param sourceFilePath the path to the .java file

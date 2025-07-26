@@ -168,7 +168,7 @@ public final class SplitDtrace {
   }
 
   /**
-   * Returns true if the given line starts a program point declaration
+   * Returns true if the given line starts a program point declaration.
    *
    * @param res a line from a .decls or .dtrace file
    * @return true if the given line starts a program point declaration

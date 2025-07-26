@@ -81,8 +81,8 @@ public class StreamRedirectThread extends Thread {
    * @param name name of the thread
    * @param in stream to copy from
    * @param out stream to copy to
-   * @param line_by_line whether to copy one line at a time
-   * @param debug whether to enable debugging
+   * @param line_by_line if true, copy one line at a time
+   * @param debug if true, enable debugging
    */
   @SuppressWarnings("ThreadPriorityCheck")
   public StreamRedirectThread(

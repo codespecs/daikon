@@ -188,7 +188,7 @@ public class NONZERO extends SINGLESCALAR {
     return status;
   }
 
-  /** Returns whether or not the variable is a pointer. */
+  /** Returns true if the variable is a pointer. */
   @Pure
   private boolean is_pointer(@GuardSatisfied NONZERO this) {
     return ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE;

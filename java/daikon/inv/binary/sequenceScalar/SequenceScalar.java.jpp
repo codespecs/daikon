@@ -63,7 +63,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   /**
-   * Returns whether or not the specified types are valid. All subclasses accept a scalar in one
+   * Returns true if the specified types are valid. All subclasses accept a scalar in one
    * parameter and an array over the same scalar type in the other.
    */
   @Override
@@ -137,14 +137,14 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   /**
-   * Return the sequence variable in the tuple whose VarInfos are corresponds to this.ppt.var_infos.
+   * Returns the sequence variable in the tuple whose VarInfos are corresponds to this.ppt.var_infos.
    */
   public VarInfo seqvar(VarInfo[] vis) {
     return vis[seq_index()];
   }
 
   /**
-   * Return the scalar variable in the tuple whose VarInfos are corresponds to this.ppt.var_infos.
+   * Returns the scalar variable in the tuple whose VarInfos are corresponds to this.ppt.var_infos.
    */
   public VarInfo sclvar(VarInfo[] vis) {
     return vis[scl_index()];
@@ -189,7 +189,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * @param count how many identical samples were observed in a row. For example, three calls to
    *     check_modified with a count parameter of 1 is equivalent to one call to check_modified with
    *     a count parameter of 3.
-   * @return whether or not the sample is consistent with the invariant
+   * @return true if the sample is consistent with the invariant
    */
   public abstract InvariantStatus check_modified(PRIMITIVE @Interned [] v1, PRIMITIVE v2, int count);
 

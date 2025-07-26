@@ -21,16 +21,16 @@ public class FieldInfo extends DaikonVariableInfo {
   /** The offset of this field in its containing class. */
   private int field_num;
 
-  /** Whether or not this is a static field. */
+  /** True if this is a static field. */
   private boolean is_static;
 
-  /** Whether or not this field is final. */
+  /** True if this field is final. */
   private boolean is_final;
 
-  /** Whether or not this field is of a primitive type. */
+  /** True if this field is of a primitive type. */
   private boolean is_primitive;
 
-  /** Whether or not this field is an outer this variable. */
+  /** True if this field is an outer this variable. */
   private boolean is_outer_this;
 
   /**

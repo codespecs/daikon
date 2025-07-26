@@ -343,9 +343,9 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns whether or not this ppt has any splitters.
+   * Returns true if this ppt has any splitters.
    *
-   * @return whether or not this ppt has any splitters
+   * @return true if this ppt has any splitters
    */
   @SuppressWarnings("contracts.conditional.postcondition") // Checker Framework bug: "splitters"
   @EnsuresNonNullIf(result = true, expression = "splitters")
@@ -1338,7 +1338,7 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /** Returns whether or not the specified variable is dynamically constant. */
+  /** Returns true if the specified variable is dynamically constant. */
   @SuppressWarnings("contracts.conditional.postcondition") // Checker Framework bug
   @EnsuresNonNullIf(result = true, expression = "constants")
   @Pure
@@ -1347,8 +1347,8 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns whether or not the specified variable is currently dynamically constant, or was a
-   * dynamic constant at the beginning of constant processing.
+   * Returns true if the specified variable is currently dynamically constant, or was a dynamic
+   * constant at the beginning of constant processing.
    */
   @SuppressWarnings("contracts.conditional.postcondition") // Checker Framework bug
   @EnsuresNonNullIf(result = true, expression = "constants")
@@ -1357,7 +1357,7 @@ public class PptTopLevel extends Ppt {
     return (constants != null) && constants.is_prev_constant(v);
   }
 
-  /** Returns whether or not the specified variable has been missing for all samples seen so far. */
+  /** Returns true if the specified variable has been missing for all samples seen so far. */
   @SuppressWarnings("contracts.conditional.postcondition") // Checker Framework bug
   @EnsuresNonNullIf(result = true, expression = "constants")
   @Pure
@@ -1951,7 +1951,7 @@ public class PptTopLevel extends Ppt {
     return true;
   }
 
-  /** Returns whether or not v1 is a subset of v2. */
+  /** Returns true if v1 is a subset of v2. */
   @SuppressWarnings("all:purity") // side effects to local state
   @Pure
   public boolean is_subset(VarInfo v1, VarInfo v2) {
@@ -1984,7 +1984,7 @@ public class PptTopLevel extends Ppt {
     return slice.is_inv_true(inv);
   }
 
-  /** Returns whether or not v1 is always non-zero. */
+  /** Returns true if v1 is always non-zero. */
   @SuppressWarnings("all:purity") // caching
   @Pure
   public boolean is_nonzero(VarInfo v) {
@@ -2022,8 +2022,8 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns whether or not the specified variables are equal (ie, an equality invariant exists
-   * between them).
+   * Returns true if the specified variables are equal (ie, an equality invariant exists between
+   * them).
    */
   @Pure
   public boolean is_equal(VarInfo v1, VarInfo v2) {
@@ -2380,7 +2380,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns whether the variable should be involved in an unary slice. The variable must be a
+   * Returns true if the variable should be involved in an unary slice. The variable must be a
    * leader, not a constant, and not always missing.
    */
   @Pure
@@ -2410,7 +2410,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns whether the variable should be involved in a binary slice. The variable must be a
+   * Returns true if the variable should be involved in a binary slice. The variable must be a
    * leader and not always missing. The function allows early termination when looking at
    * combinations of variables for creating slices. For example, if variable x is not suitable for
    * binary slices, then we do not need to look at x with any other variable in a binary slice (fail
@@ -2439,7 +2439,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns whether the variable should be involved in a ternary slice. In addition to the
+   * Returns true if the variable should be involved in a ternary slice. In addition to the
    * requirements of variables in the binary slices, for ternary slices, the variable must be an
    * integer or float and must not be an array. The function allows early termination when looking
    * at combinations of variables for creating slices. For example, if variable x is not suitable
@@ -2475,7 +2475,7 @@ public class PptTopLevel extends Ppt {
     return true;
   }
 
-  /** Returns whether or not the specified slice should be created. */
+  /** Returns true if the specified slice should be created. */
   @Pure
   public boolean is_slice_ok(VarInfo[] vis, int arity) {
     if (arity == 1) {
@@ -2488,8 +2488,8 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns whether or not the specified unary slice should be created. The slice should not be
-   * created if the variable does not meet qualifications for the unary slice.
+   * Returns true if the specified unary slice should be created. The slice should not be created if
+   * the variable does not meet qualifications for the unary slice.
    *
    * @see #is_var_ok_unary(VarInfo)
    */
@@ -2500,8 +2500,8 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns whether or not the specified binary slice should be created. The slice should not be
-   * created if any of the following are true:
+   * Returns true if the specified binary slice should be created. The slice should not be created
+   * if any of the following are true:
    *
    * <p>- One of the variables does not meet qualifications for the binary slice - Variables are not
    * compatible - Both variables are constant.
@@ -2542,7 +2542,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns whether or not the specified ternary slice should be created by checking the variables'
+   * Returns true if the specified ternary slice should be created by checking the variables'
    * qualifications. In addition, The slice should not be created if any of the following are true:
    *
    * <ul>
@@ -2602,7 +2602,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Determines whether the order of the variables in vis is a valid permutation (i.e., their
+   * Returns true if the order of the variables in vis is a valid permutation (i.e., their
    * varinfo_index's are ordered). Null elements are ignored (and an all-null list is OK).
    */
   public boolean vis_order_ok(VarInfo[] vis) {
@@ -2622,7 +2622,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Return a slice that contains the given VarInfos (creating if needed). It is incumbent on the
+   * Returns a slice that contains the given VarInfos (creating if needed). It is incumbent on the
    * caller that the slice be either filled with one or more invariants, or else removed from the
    * views collection.
    *
@@ -2646,7 +2646,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Return a slice that contains the given VarInfos (creating if needed). It is incumbent on the
+   * Returns a slice that contains the given VarInfos (creating if needed). It is incumbent on the
    * caller that the slice be either filled with one or more invariants, or else removed from the
    * views collection.
    */
@@ -2665,7 +2665,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Return a slice that contains the given VarInfos (creating if needed). It is incumbent on the
+   * Returns a slice that contains the given VarInfos (creating if needed). It is incumbent on the
    * caller that the slice be either filled with one or more invariants, or else removed from the
    * views collection.
    */
@@ -2692,7 +2692,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Return a slice that contains the given VarInfos (creating if needed). It is incumbent on the
+   * Returns a slice that contains the given VarInfos (creating if needed). It is incumbent on the
    * caller that the slice be either filled with one or more invariants, or else removed from the
    * views collection.
    */
@@ -3283,8 +3283,8 @@ public class PptTopLevel extends Ppt {
   //
 
   /**
-   * Return a List of all the invariants for the program point. Also consider using views_iterator()
-   * instead. You can't modify the result of this.
+   * Returns a List of all the invariants for the program point. Also consider using
+   * views_iterator() instead. You can't modify the result of this.
    */
   public List<Invariant> getInvariants() {
     List<Invariant> result = new ArrayList<>();
@@ -3561,7 +3561,7 @@ public class PptTopLevel extends Ppt {
     return out.toString();
   }
 
-  /** Returns whether or not the specified variable in this ppt has any parents. */
+  /** Returns true if the specified variable in this ppt has any parents. */
   public boolean has_parent(VarInfo v) {
 
     for (PptRelation rel : parents) {

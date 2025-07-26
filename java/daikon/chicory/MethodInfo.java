@@ -75,7 +75,7 @@ public class MethodInfo {
   public int capture_cnt = 0;
 
   /**
-   * Whether or not the method is pure (has no side-effects). Will only be set to true if the {@code
+   * True if the method is pure (has no side-effects). Will only be set to true if the {@code
    * --purity-analysis} command-line option is given to Chicory, and the method returns some value.
    * Only set during initViaReflection() method.
    */

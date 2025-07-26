@@ -115,7 +115,7 @@ public class PptSliceEquality extends PptSlice {
     }
 
     /**
-     * Whether two VarInfos can be set to be equal to each other is whether they are comparableNWay.
+     * True if two VarInfos can be set to be equal to each other is whether they are comparableNWay.
      * Since we do not yet handle inheritance, we require that the comparability go both ways.
      */
     @EnsuresNonNullIf(result = true, expression = "#1")

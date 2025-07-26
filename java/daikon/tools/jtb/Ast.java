@@ -106,7 +106,7 @@ public class Ast {
   }
 
   /**
-   * This method translates a line like
+   * This method translates a line like.
    *
    * <pre>{@code
    * a statement; // a comment
@@ -718,7 +718,7 @@ public class Ast {
   //
 
   /**
-   * Returns the class corresponding to the given node
+   * Returns the class corresponding to the given node.
    *
    * @param n a node
    * @return the class corresponding to the given node

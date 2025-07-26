@@ -131,7 +131,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   private @Nullable VarInfo leaderCache = null;
 
   /**
-   * Return the canonical VarInfo of this. Note that the leader never changes.
+   * Returns the canonical VarInfo of this. Note that the leader never changes.
    *
    * @return the canonical VarInfo of this
    */
@@ -382,7 +382,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   // Processing of data
 
   /**
-   * Return a List of VarInfos that do not fit into this set anymore.
+   * Returns a List of VarInfos that do not fit into this set anymore.
    *
    * <p>Originally (8/14/2003), this did not check for the modified bits. It seems however, quite
    * wrong to leave variables in the same equality set when one is missing and the other is not.

@@ -268,7 +268,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Get the value of a certain field in theObj.
+   * Returns the value of a certain field in theObj.
    *
    * @param classField which field we are interested in
    * @param theObj the object whose field we are examining. TheoObj must be null, Nonsensical, or of
@@ -364,7 +364,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Return a List derived from an aray.
+   * Returns a List derived from an aray.
    *
    * @param arrayVal must be an array type
    * @return a List (with correct primitive wrappers) corresponding to the array
@@ -459,7 +459,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Get the type of val, removing any PrimitiveWrapper if it exists For example, if we execute
+   * Returns the type of val, removing any PrimitiveWrapper if it exists For example, if we execute
    * removeWRappers(val, boolean.class, true) where (val instanceof Runtime.PrimitiveWrapper), then
    * the method returns boolean.class
    *

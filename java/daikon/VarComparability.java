@@ -79,13 +79,13 @@ public abstract class VarComparability {
   /** Returns true if this is comparable to everything else. */
   public abstract boolean alwaysComparable(@GuardSatisfied VarComparability this);
 
-  /** Returns whether two variables are comparable. */
+  /** Returns true if two variables are comparable. */
   @Pure
   public static boolean comparable(VarInfo v1, VarInfo v2) {
     return comparable(v1.comparability, v2.comparability);
   }
 
-  /** Returns whether two comparabilities are comparable. */
+  /** Returns true if two comparabilities are comparable. */
   @SuppressWarnings("all:purity") // Override the purity checker
   @Pure
   public static boolean comparable(

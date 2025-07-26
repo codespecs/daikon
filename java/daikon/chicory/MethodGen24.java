@@ -286,7 +286,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the method's access flags.
+   * Returns the method's access flags.
    *
    * @return the access flags
    */
@@ -295,7 +295,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return true if the method is static.
+   * Returns true if the method is static.
    *
    * @return static flag
    */
@@ -304,7 +304,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the method's name.
+   * Returns the method's name.
    *
    * @return the method's name
    */
@@ -313,7 +313,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the method's return type.
+   * Returns the method's return type.
    *
    * @return the method's return type
    */
@@ -322,7 +322,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the name of the ith parameter.
+   * Returns the name of the ith parameter.
    *
    * @param i which parameter's name is requested
    * @return the parameter name
@@ -332,7 +332,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the parameter names.
+   * Returns the parameter names.
    *
    * @return the parameter names
    */
@@ -341,7 +341,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the type of the ith parameter.
+   * Returns the type of the ith parameter.
    *
    * @param i which parameter's type is requested
    * @return the indicated parameter type
@@ -351,7 +351,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the parameter types for the method.
+   * Returns the parameter types for the method.
    *
    * @return the parameter types for the method
    */
@@ -360,7 +360,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the local variable table.
+   * Returns the local variable table.
    *
    * @return the local variable table
    */
@@ -369,7 +369,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the name of the containing class.
+   * Returns the name of the containing class.
    *
    * @return the binary name of the class that contains this method
    */
@@ -378,7 +378,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the CodeAttribute for the method. This contains information about the bytecodes
+   * Returns the CodeAttribute for the method. This contains information about the bytecodes
    * (instructions) of the method. May be null if the method has no code.
    *
    * @return the CodeAttribute for the method, or null
@@ -388,7 +388,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the maximum number of locals.
+   * Returns the maximum number of locals.
    *
    * @return the maximum number of locals
    */
@@ -397,7 +397,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the maximum stack size.
+   * Returns the maximum stack size.
    *
    * @return the maximum stack size
    */
@@ -406,7 +406,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the descriptor for the current method. This is a String that encodes type information
+   * Returns the descriptor for the current method. This is a String that encodes type information
    * about the parameters that the method takes (if any) and the method's return type (if any).
    *
    * @return descriptor for the current method
@@ -416,7 +416,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the signature for the current method. This is a String that encodes type information
+   * Returns the signature for the current method. This is a String that encodes type information
    * about a (possibly generic) method declaration. It describes any type parameters of the method;
    * the (possibly parameterized) types of any formal parameters; the (possibly parameterized)
    * return type, if any.
@@ -428,7 +428,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the instruction list for the current method.
+   * Returns the instruction list for the current method.
    *
    * @return instruction list as CodeElements
    */
@@ -437,7 +437,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return the constant pool builder.
+   * Returns the constant pool builder.
    *
    * @return the constant pool builder
    */

@@ -291,7 +291,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * Get the value of the variable vi in this ValueTuple.
+   * Returns the value of the variable vi in this ValueTuple.
    *
    * @param vi the variable whose value is to be returned
    * @return the value of the variable at this ValueTuple
@@ -302,7 +302,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * Get the value of the variable vi in this ValueTuple, or null if it is missing. Use of this
+   * Returns the value of the variable vi in this ValueTuple, or null if it is missing. Use of this
    * method is discouraged.
    *
    * @param vi the variable whose value is to be returned
@@ -315,7 +315,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * Get the value at the val_index, which should not have a missing value. Note: For clients,
+   * Returns the value at the val_index, which should not have a missing value. Note: For clients,
    * getValue(VarInfo) is preferred to getValue(int).
    *
    * @see #getValue(VarInfo)
@@ -328,7 +328,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * Get the value at the val_index, or null if it is missing. Use of this method is (doubly)
+   * Returns the value at the val_index, or null if it is missing. Use of this method is (doubly)
    * discouraged.
    *
    * @see #getValue(int)
@@ -443,8 +443,9 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * Return the values of this tuple ("missing" is used for each missing value). If vis is non-null,
-   * the values are annotated with the VarInfo name that would be associated with the value.
+   * Returns the values of this tuple ("missing" is used for each missing value). If vis is
+   * non-null, the values are annotated with the VarInfo name that would be associated with the
+   * value.
    */
   @SideEffectFree
   public String toString(@GuardSatisfied ValueTuple this, VarInfo @Nullable [] vis) {
@@ -519,7 +520,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * Return a new ValueTuple consisting of the elements of this one with indices listed in indices.
+   * Returns a new ValueTuple consisting of the elements of this one with indices listed in indices.
    */
   public ValueTuple slice(int[] indices) {
     int new_len = indices.length;

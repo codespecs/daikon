@@ -162,7 +162,7 @@ public class NIS {
   // Statistics that are kept during processing.  Some of these are kept
   // and/or make sense for some approaches and not for others
 
-  /** Whether or not to keep statistics. */
+  /** If true, keep statistics. */
   public static boolean keep_stats = false;
 
   /** Number of falsified invariants in the program point. */

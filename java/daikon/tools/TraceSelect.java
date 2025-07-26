@@ -59,7 +59,7 @@ public class TraceSelect {
               + " foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
 
   /**
-   * The entry point of TraceSelect
+   * The entry point of TraceSelect.
    *
    * @param args command-line arguments
    */

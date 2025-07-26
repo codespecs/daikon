@@ -137,7 +137,7 @@ public final class DCRuntime implements ComparabilityProvider {
   // Set in Premain.premain().
   static ComparabilityProvider comparabilityProvider;
 
-  /** Whether the header has been printed. */
+  /** True if the header has been printed. */
   private static boolean headerPrinted = false;
 
   /** Class to hold per-thread comparability data. */
@@ -262,7 +262,7 @@ public final class DCRuntime implements ComparabilityProvider {
    *
    * @param o1 the first argument to equals()
    * @param o2 the second argument to equals()
-   * @return whether the two values are equal
+   * @return true if the two values are equal
    */
   public static boolean dcomp_equals(Object o1, Object o2) {
     // Make obj1 and obj2 comparable
@@ -324,7 +324,7 @@ public final class DCRuntime implements ComparabilityProvider {
    *
    * @param o1 the first argument to super.equals()
    * @param o2 the second argument to super.equals()
-   * @return whether the two values are equal, according to super.equals()
+   * @return true if the two values are equal, according to super.equals()
    * @see #active_equals_calls
    */
   public static boolean dcomp_super_equals(Object o1, Object o2) {
@@ -2866,7 +2866,7 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * Returns whether or not the specified class is initialized.
+   * Returns true if the specified class is initialized.
    *
    * @param clazz class to check
    * @return true if clazz has been initialized

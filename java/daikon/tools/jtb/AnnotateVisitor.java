@@ -78,7 +78,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   public boolean lightweight;
 
   /**
-   * Whether to use reflection when trying to figure out if a method overrides/implements another
+   * If true, use reflection when trying to figure out if a method overrides/implements another
    * method. If this variable is set to false, then Annotate will not try to determine if a method
    * overrides/implements another method, which means that it will not try to add "also" tags to its
    * output.

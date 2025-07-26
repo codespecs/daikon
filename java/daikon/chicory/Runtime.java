@@ -407,7 +407,7 @@ public class Runtime {
   }
 
   /**
-   * Return true iff the class with fully qualified name className has been initialized.
+   * Returns true iff the class with fully qualified name className has been initialized.
    *
    * @param className fully qualified class name
    */
@@ -563,7 +563,7 @@ public class Runtime {
    * Specify the dtrace file to which to write.
    *
    * @param filename to use as the data trace file
-   * @param append whether to open dtrace file in append mode
+   * @param append if true, open dtrace file in append mode
    */
   @EnsuresNonNull("dtrace")
   public static void setDtrace(String filename, boolean append) {

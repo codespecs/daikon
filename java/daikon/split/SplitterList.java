@@ -155,8 +155,8 @@ public abstract class SplitterList {
   // //////////////////////
 
   /**
-   * Return the splitters associated with this program point name (or null). The resulting splitters
-   * are factories, not instantiated splitters.
+   * Returns the splitters associated with this program point name (or null). The resulting
+   * splitters are factories, not instantiated splitters.
    *
    * @return an array of splitters
    */
@@ -195,7 +195,7 @@ public abstract class SplitterList {
   }
 
   /**
-   * Return all the splitters in this program, The resulting splitters are factories, not
+   * Returns all the splitters in this program, The resulting splitters are factories, not
    * instantiated splitters.
    *
    * @return an array of splitters
