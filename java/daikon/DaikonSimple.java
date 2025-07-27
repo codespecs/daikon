@@ -311,8 +311,8 @@ public class DaikonSimple {
   }
 
   /**
-   * Returns whether or not the specified binary slice should be created. The slice should not be
-   * created if the vars are not compatible.
+   * Returns true if the specified binary slice should be created. The slice should not be created
+   * if the vars are not compatible.
    *
    * <p>Since we are trying to create all of the invariants, the variables does not have to be a
    * leader and can be a constant. Note that the always missing check is only applicable when the
@@ -327,8 +327,8 @@ public class DaikonSimple {
   }
 
   /**
-   * Returns whether or not the specified ternary slice should be created. The slice should not be
-   * created if any of the following are true
+   * Returns true if the specified ternary slice should be created. The slice should not be created
+   * if any of the following are true
    *
    * <ul>
    *   <li>Any var is an array

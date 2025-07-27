@@ -196,7 +196,7 @@ class StatementReplacer extends DepthFirstVisitor {
   }
 
   /**
-   * Returns whether n represents a "non-this" call to a method. "Non-this" methods calls are not
+   * Returns true if n represents a "non-this" call to a method. "Non-this" methods calls are not
    * prefixed with "this.". For example "get(5)" and "Collections.sort(new ArrayList())" are
    * "non-this" method calls.
    */
@@ -209,7 +209,7 @@ class StatementReplacer extends DepthFirstVisitor {
   }
 
   /**
-   * Returns whether n represents a "this" call to a method. "This" methods calls are prefixed with
+   * Returns true if n represents a "this" call to a method. "This" methods calls are prefixed with
    * "this.". For example "this.get(5)" is a "this" method call.
    */
   @Pure

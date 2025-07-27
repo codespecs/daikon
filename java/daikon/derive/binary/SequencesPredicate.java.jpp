@@ -71,7 +71,7 @@ public final class CLASSNAME extends BinaryDerivation {
   /** What value to predicate on. */
   private PRIMITIVE choose;
 
-  /** Whether we keep or discard values that match this.choose. */
+  /** If true, keep values that match this.choose; if false, discard them. */
   private boolean keep;
 
   /** What this predication is called (e.g. for choose == 0 and 1, use "false" and "true"). */

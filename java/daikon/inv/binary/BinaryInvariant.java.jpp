@@ -126,7 +126,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     return dim_ok && vis[0].file_rep_type.BASE_IS_TYPE && vis[1].file_rep_type.BASE_IS_TYPE;
   }
 
-  /** Returns whether or not the variable order is currently swapped for this invariant. */
+  /** Returns true if the variable order is currently swapped for this invariant. */
   @Override
   public boolean get_swap() {
     return swap;
@@ -261,7 +261,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * @param count how many identical samples were observed in a row. For example, three calls to
    *     check_modified with a count parameter of 1 is equivalent to one call to check_modified with
    *     a count parameter of 3.
-   * @return whether or not the sample is consistent with the invariant
+   * @return true if the sample is consistent with the invariant
    */
   public abstract InvariantStatus check_modified(PRIMITIVE v1, PRIMITIVE v2, int count);
 
@@ -287,7 +287,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   /**
-   * Return true if both invariants are the same class and the order of the variables (swap) is the
+   * Returns true if both invariants are the same class and the order of the variables (swap) is the
    * same.
    */
   @Pure

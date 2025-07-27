@@ -378,8 +378,8 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
     }
 
     /**
-     * Returns whether or not this relation is from a static variable in an object ppt to its
-     * matching variable at the class level.
+     * Returns true if this relation is from a static variable in an object ppt to its matching
+     * variable at the class level.
      */
     @Pure
     public boolean is_class_relation() {
@@ -588,11 +588,11 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
   }
 
   /**
-   * Get the caparability value for a varaible.
+   * Returns the caparability value for a varaible.
    *
    * @param var variable whose value is desired
    * @param compare_ppt ppt with compare value if comparability-file present, null otherwise
-   * @return String containing the comparability value
+   * @return string containing the comparability value
    */
   @Override
   public String getComparability(DaikonVariableInfo var, DeclReader.DeclPpt compare_ppt) {

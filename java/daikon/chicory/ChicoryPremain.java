@@ -400,8 +400,8 @@ public class ChicoryPremain {
     }
 
     /**
-     * Returns whether or not the two URL represent the same location for org.apache.bcel. Two
-     * locations match if they refer to the same jar file or the same directory in the filesystem.
+     * Returns true if the two URL represent the same location for org.apache.bcel. Two locations
+     * match if they refer to the same jar file or the same directory in the filesystem.
      */
     private static boolean same_location(URL url1, URL url2) {
       if (!url1.getProtocol().equals(url2.getProtocol())) {
@@ -443,7 +443,7 @@ public class ChicoryPremain {
     }
 
     /**
-     * Get all of the URLs that match the specified name in the classpath. The name should be in
+     * Returns all of the URLs that match the specified name in the classpath. The name should be in
      * normal classname format (eg, org.apache.bcel.Const). An empty list is returned if no names
      * match.
      */

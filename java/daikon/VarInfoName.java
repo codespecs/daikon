@@ -178,7 +178,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   }
 
   /**
-   * Return the String representation of this name in the default output format.
+   * Returns the String representation of this name in the default output format.
    *
    * @return the string representation (interned) of this name, in the default output format
    */
@@ -204,7 +204,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   protected abstract String name_impl(@GuardSatisfied VarInfoName this);
 
   /**
-   * Return the String representation of this name in the esc style output format.
+   * Returns the String representation of this name in the esc style output format.
    *
    * @return the string representation (interned) of this name, in the esc style output format
    */
@@ -273,7 +273,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   protected abstract String simplify_name_impl(boolean prestate);
 
   /**
-   * Return the String representation of this name in the java style output format.
+   * Returns the String representation of this name in the java style output format.
    *
    * @return the string representation (interned) of this name, in the java style output format
    */
@@ -292,7 +292,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   private @Interned String java_name_cached = null; // interned
 
   /**
-   * Return the String representation of this name in java format. Cached and interned by {@link
+   * Returns the String representation of this name in java format. Cached and interned by {@link
    * #java_name}.
    */
   protected abstract String java_name_impl(VarInfo v);
@@ -331,7 +331,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   public static boolean testCall = false;
 
   /**
-   * Return the String representation of this name in the dbc style output format.
+   * Returns the String representation of this name in the dbc style output format.
    *
    * @param var the VarInfo which goes along with this VarInfoName. Used to determine the type of
    *     the variable.
@@ -356,7 +356,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   private @Interned String dbc_name_cached = null; // interned
 
   /**
-   * Return the name in the DBC style output format. If v is null, uses JML style instead. Cached
+   * Returns the name in the DBC style output format. If v is null, uses JML style instead. Cached
    * and interned by {@link #dbc_name}.
    */
   protected abstract String dbc_name_impl(VarInfo v);
@@ -528,8 +528,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   }
 
   /**
-   * Returns whether or not this name refers to the 'this' variable of a class. True for both normal
-   * and prestate versions of the variable.
+   * Returns true if this name refers to the 'this' variable of a class. True for both normal and
+   * prestate versions of the variable.
    */
   @Pure
   public boolean isThis() {
@@ -1164,7 +1164,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     /**
-     * Return a comma-separated list of element names.
+     * Returns a comma-separated list of element names.
      *
      * @return comma-separated list of element names
      */

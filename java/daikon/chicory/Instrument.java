@@ -691,7 +691,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    *
    * @param inst the instruction to inspect, which might be a return instruction
    * @param mgen describes the given method
-   * @param shouldIncludeIter whether or not to instrument this return
+   * @param shouldIncludeIter if true, instrument this return
    * @param exitLocationIter list of exit line numbers
    * @return instruction list for instrumenting the return, or null if {@code inst} is not a return
    *     or the return should not be instrumented
@@ -1100,7 +1100,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Return an array of strings, each corresponding to mgen's parameter types as a fully qualified
+   * Returns an array of strings, each corresponding to mgen's parameter types as a fully qualified
    * name: how a type is represented in Java source code.
    *
    * @param mgen describes the given method

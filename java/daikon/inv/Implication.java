@@ -182,7 +182,7 @@ public class Implication extends Joiner {
   }
 
   /**
-   * Return true if the right side of the implication and some equality combinations of its member
+   * Returns true if the right side of the implication and some equality combinations of its member
    * variables are statically obvious. For example, if a == b, and f(a) is obvious, then so is f(b).
    * We use the someInEquality (or least interesting) method during printing so we only print an
    * invariant if all its variables are interesting, since a single, static, non interesting
@@ -207,7 +207,7 @@ public class Implication extends Joiner {
   }
 
   /**
-   * Return true if the rightr side of the implication some equality combinations of its member
+   * Returns true if the rightr side of the implication some equality combinations of its member
    * variables are dynamically obvious. For example, a == b, and f(a) is obvious, so is f(b). We use
    * the someInEquality (or least interesting) method during printing so we only print an invariant
    * if all its variables are interesting, since a single, dynamic, non interesting occurance means
@@ -304,7 +304,7 @@ public class Implication extends Joiner {
    * Logs a description of the invariant and the specified msg via the logger as described in {@code
    * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}. Uses the consequent as the logger.
    *
-   * @return whether or not it logged anything
+   * @return true if it logged anything
    */
   @Override
   @FormatMethod

@@ -781,7 +781,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Return a subset of the argument list, removing invariants that do not have a properly
+   * Returns a subset of the argument list, removing invariants that do not have a properly
    * implemented Java format.
    *
    * @param invariants a list of invariants
