@@ -385,7 +385,6 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     // End of old code.
-
   }
 
   /**
@@ -403,6 +402,9 @@ public class Instrument24 implements ClassFileTransformer {
     }
     if (classname.startsWith("daikon/chicory/")
         && !classname.equals("daikon/chicory/ChicoryTest")) {
+      return true;
+    }
+    if (classname.equals("daikon/Chicory")) {
       return true;
     }
     if (classname.equals("daikon/PptTopLevel$PptType")) {
