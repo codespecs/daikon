@@ -194,14 +194,12 @@ public class Premain {
     Thread shutdown_thread = new ShutdownThread();
     java.lang.Runtime.getRuntime().addShutdownHook(shutdown_thread);
 
-    // UNDONE: turn on Instrument24
-    String instrumenter = "daikon.dcomp.Instrument";
-    // String instrumenter;
-    // if (BcelUtil.javaVersion >= 24) {
-    //   instrumenter = "daikon.dcomp.Instrument24";
-    // } else {
-    //   instrumenter = "daikon.dcomp.Instrument";
-    // }
+    String instrumenter;
+    if (BcelUtil.javaVersion >= 24) {
+      instrumenter = "daikon.dcomp.Instrument24";
+    } else {
+      instrumenter = "daikon.dcomp.Instrument";
+    }
 
     // Setup the transformer
     ClassFileTransformer transformer;
