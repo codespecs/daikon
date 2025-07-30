@@ -1924,8 +1924,8 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Return the interface class containing the implementation of the given method. The interfaces of
-   * {@code startClass} are recursively searched.
+   * Returns the interface class containing the implementation of the given method. The interfaces
+   * of {@code startClass} are recursively searched.
    *
    * @param startClass the JavaClass whose interfaces are to be searched
    * @param methodName the target method to search for
@@ -2470,7 +2470,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not the method is Object.equals().
+   * Returns true if the method is Object.equals().
    *
    * @param methodName method to check
    * @param returnType return type of method
@@ -3050,8 +3050,8 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not this ppt should be included. A ppt is included if it matches ones of the
-   * select patterns and doesn't match any of the omit patterns.
+   * Returns true if this ppt should be included. A ppt is included if it matches ones of the select
+   * patterns and doesn't match any of the omit patterns.
    *
    * @param className class to test
    * @param methodName method to test
@@ -3440,7 +3440,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not the specified type is a primitive (int, float, double, etc).
+   * Returns true if the specified type is a primitive (int, float, double, etc).
    *
    * @param type type to check
    * @return true if type is primitive
@@ -3451,7 +3451,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not the specified type is a category 2 (8 byte) type.
+   * Returns true if the specified type is a category 2 (8 byte) type.
    *
    * @param type type to check
    * @return true if type requires 8 bytes
@@ -3606,8 +3606,8 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not tag fields are used within the specified method of the specified class.
-   * We can safely use class fields except in Object, String, and Class.
+   * Returns true if tag fields are used within the specified method of the specified class. We can
+   * safely use class fields except in Object, String, and Class.
    *
    * @param mg method to check
    * @param classname class to check
@@ -4111,7 +4111,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not the method is defined in Object.
+   * Returns true if the method is defined in Object.
    *
    * @param methodName method to check
    * @param argTypes array of argument types to method
@@ -4128,8 +4128,8 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not the class is one of those that has values initialized by the JVM or
-   * native methods.
+   * Returns true if the class is one of those that has values initialized by the JVM or native
+   * methods.
    *
    * @param classname class to check
    * @return true if classname has members that are uninitialized
@@ -4238,7 +4238,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Return the fully qualified fieldname of the specified field.
+   * Returns the fully qualified fieldname of the specified field.
    *
    * @param jc class containing the field
    * @param f the field
@@ -4249,7 +4249,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Return simplified name of a method. Both exceptions and annotations are removed.
+   * Returns simplified name of a method. Both exceptions and annotations are removed.
    *
    * @param m the method
    * @return string containing the simplified method name

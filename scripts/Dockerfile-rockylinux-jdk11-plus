@@ -41,7 +41,6 @@ RUN dnf -q -y install \
   graphviz \
   netpbm \
   netpbm-progs \
-  pip \
   python3 \
   python3-distutils-extra \
   ShellCheck \
@@ -53,10 +52,17 @@ RUN dnf config-manager --set-enabled crb \
 && dnf -y install dnf-plugins-core \
 && dnf -y install texinfo texinfo-tex
 
-RUN pip install ruff
+# `pipx ensurepath` only adds to the path in newly-started shells.
+# BUT, setting the path for the current user is not enough.
+# Azure creates a new user and runs jobs as it.
+# So, install into /usr/local/bin which is already on every user's path.
+RUN dnf -q -y install \
+  pipx \
+&& PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install mypy \
+&& PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install ruff
 
 # Install the JDK.
-RUN dnf -q -y install \
+RUN dnf -q -y upgrade && dnf -q -y install \
   java-11-openjdk \
   java-11-openjdk-devel
 

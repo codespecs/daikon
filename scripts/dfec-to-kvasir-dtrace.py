@@ -1,23 +1,27 @@
 #!/usr/bin/python3
 
-# Usage: ./dfec-to-kvasir-dtrace.py <kvasir .decls file> <dfec .dtrace file>
+"""Outputs a Kvasir-compatible .dtrace file from a Dfec .dtrace file.
 
-# Outputs a Kvasir-compatible .dtrace file from the Dfec .dtrace file
-# based on the variables and ordering in the Kvasir .decls file
+Outputs a Kvasir-compatible .dtrace file from the Dfec .dtrace file
+based on the variables and ordering in the Kvasir .decls file.
 
-# Cannibalized from dfec-to-kvasir.py so most of these comments
-# will make absolutely no sense!!!
+Usage: ./dfec-to-kvasir-dtrace.py <kvasir .decls file> <dfec .dtrace file>
+
+Cannibalized from dfec-to-kvasir.py so most of these comments
+will make absolutely no sense!!!
+"""
 
 import re
 import sys
+from enum import Enum
+from pathlib import Path
 
 # Process command-line args:
-kvasirDeclsF = open(sys.argv[1], "r")
-kvasirDeclsAllLines = [line.strip() for line in kvasirDeclsF.readlines()]
-kvasirDeclsF.close()
+with Path(sys.argv[1]).open() as kvasir_decls_f:
+    kvasir_decls_all_lines = [line.strip() for line in kvasir_decls_f]
 
 
-DfecGlobalRE = re.compile("^::")
+DfecGlobalRE = re.compile(r"^::")
 
 # Dfec and Kvasir variable differences:
 
@@ -39,34 +43,52 @@ DfecGlobalRE = re.compile("^::")
 # information is provided)
 
 
-# Converts variable var's name from Dfec conventions
-# to Kvasir conventions and returns it as the result
-def ConvertDfecVarName(var):
-    globalConverted = DfecGlobalRE.sub("/", var)
-    return globalConverted.replace("->", "[].")
+def convert_dfec_var_name(var: str) -> str:
+    """Convert variable var's name from Dfec conventions to Kvasir conventions.
+
+    Args:
+        var: the variable's name in Dfec form.
+
+    Returns:
+       the variable's name in Kvasir form.
+    """
+    global_converted = DfecGlobalRE.sub("/", var)
+    return global_converted.replace("->", "[].")
 
 
-# Ok, we are going to just strip off everything before
-# the '/', if there is one, because Dfec does not print
-# out the function name for function-static variables
-# e.g. 'flex_c@epsclosure/did_stk_init' becomes '/did_stk_init'
-def ConvertKvasirVarName(var):
+def convert_kvasir_var_name(var: str) -> str:
+    """Strip off everything before the '/', if there is one.
+
+    Dfec does not print out the function name for function-static variables,
+    e.g., 'flex_c@epsclosure/did_stk_init' becomes '/did_stk_init'.
+
+    Args:
+        var: a string
+
+    Returns:
+        The string starting after the '/', or the whole string.
+    """
     if var[0] == "/":
         return var
-    elif "/" in var:
-        return "/" + var.split("/")[1]
-    else:
-        return var
+    if "/" in var:
+        return "/" + var.split("/", maxsplit=1)[1]
+    return var
 
 
-# Kvasir does not support comparability for array indices
-# so strip those off.
-# e.g. '104[105]' becomes '104'
-def StripCompNumber(comp_num):
+def strip_comp_number(comp_num: str) -> str:
+    """Kvasir does not support comparability for array indices so strip those off.
+
+    e.g. '104[105]' becomes '104'.
+
+    Args:
+        comp_num: a comparability, possibly in array form
+
+    Returns:
+        the comparibility without the array part
+    """
     if "[" in comp_num:
         return comp_num[: comp_num.find("[")]
-    else:
-        return comp_num
+    return comp_num
 
 
 # Dfec and Kvasir program point name differences:
@@ -89,15 +111,20 @@ def StripCompNumber(comp_num):
 # in the parens since C doesn't have overloading.  We just want
 # to strip off the canonical function name.
 
-# Strips the extraneous stuff off of Dfec's names and returns
-# a 2-tuple of ppt name and either 'ENTER' or 'EXITxxx'
 
-# Input:  'std.ccladd(int;int;)void:::ENTER'
-# Output: ('ccladd', 'ENTER')
+def strip_dfec_ppt_name(ppt: str) -> tuple[str, str]:
+    """Strip the extraneous stuff off of Dfec's names and split into parts.
 
+    Input:  'std.ccladd(int;int;)void:::ENTER'
+    Output: ('ccladd', 'ENTER')
 
-def StripDfecPptName(ppt):
-    fnname, enterOrExit = ppt.split(":::")
+    Args:
+        ppt: a dfec program point name
+
+    Returns:
+        a 2-tuple of cleaned ppt name and either 'ENTER' or 'EXITxxx'
+    """
+    fnname, enter_or_exit = ppt.split(":::")
     if fnname[:4] == "std.":
         fnname = fnname[4:]
     # Find the first '(' and end the function name there
@@ -105,17 +132,25 @@ def StripDfecPptName(ppt):
 
     # Just return 'ENTER' or 'EXIT' with no numbers
     # (This means that we can only keep one exit ppt)
-    if enterOrExit[1] == "N":
-        enterOrExit = "ENTER"
+    if enter_or_exit[1] == "N":
+        enter_or_exit = "ENTER"
     else:
-        enterOrExit = "EXIT"
+        enter_or_exit = "EXIT"
 
     # Return a pair of the function name and 'ENTER' or 'EXITxxx'
-    return (fnname, enterOrExit)
+    return (fnname, enter_or_exit)
 
 
-def StripKvasirPptName(ppt):
-    fnname, enterOrExit = ppt.split(":::")
+def strip_kvasir_ppt_name(ppt: str) -> tuple[str, str]:
+    """Strip the extraneous stuff off of Kvasir's names and split into parts.
+
+    Args:
+        ppt: a Kvasir program point name
+
+    Returns:
+        a 2-tuple of cleaned ppt name and either 'ENTER' or 'EXITxxx'
+    """
+    fnname, enter_or_exit = ppt.split(":::")
 
     # For globals, grab everything from '..' to '('
     # e.g. for '..main():::ENTER'
@@ -132,13 +167,13 @@ def StripKvasirPptName(ppt):
 
     # Just return 'ENTER' or 'EXIT' with no numbers
     # (This means that we can only keep one exit ppt)
-    if enterOrExit[1] == "N":
-        enterOrExit = "ENTER"
+    if enter_or_exit[1] == "N":
+        enter_or_exit = "ENTER"
     else:
-        enterOrExit = "EXIT"
+        enter_or_exit = "EXIT"
 
     # Return a pair of the function name and 'ENTER' or 'EXITxxx'
-    return (fnname, enterOrExit)
+    return (fnname, enter_or_exit)
 
 
 # .decls States:
@@ -149,97 +184,106 @@ def StripKvasirPptName(ppt):
 # 3 = variable declared type
 # 4 = variable rep. type
 # 5 = variable comparability number - VERY important
-class DeclsState:
-    Uninit, PptName, VarName, DecType, RepType, CompNum = list(range(6))
+class DeclsState(Enum):
+    """The parse state: what is about to be read."""
+
+    Uninit = 0
+    PptName = 1
+    VarName = 2
+    DecType = 3
+    RepType = 4
+    CompNum = 5
 
 
-curVarMap = 0  # The current variable map
-curVarName = ""
+cur_var_map = 0  # The current variable map
+cur_var_name = ""
 
-# Key: program point name (stripped using StripKvasirPptName)
+# Key: program point name (stripped using strip_kvasir_ppt_name)
 # Value: A list of 2 elts: car: full ppt name
 #                          cdr: A list of lists,
 #                               where each sub-list is: [variable name, rep. type]
-KvasirPptMap = {}
+kvasir_ppt_map = {}
 
-myState = DeclsState.Uninit
+# The current parse state.
+my_state = DeclsState.Uninit
 
-for line in kvasirDeclsAllLines:
-    if myState == DeclsState.Uninit:
-        # The program point name always follows the
-        # line called "DECLARE"
+cur_var_list: list[list[str]] = []
+for line in kvasir_decls_all_lines:
+    if my_state == DeclsState.Uninit:
+        # The program point name always follows the line called "DECLARE".
         if line == "DECLARE":
-            myState = DeclsState.PptName
+            my_state = DeclsState.PptName
 
-    elif myState == DeclsState.PptName:
-        curVarList = []
-        KvasirPptMap[StripKvasirPptName(line)] = [line, curVarList]
-        myState = DeclsState.VarName
+    elif my_state == DeclsState.PptName:
+        cur_var_list = []
+        kvasir_ppt_map[strip_kvasir_ppt_name(line)] = [line, cur_var_list]
+        my_state = DeclsState.VarName
 
-    elif myState == DeclsState.VarName:
+    elif my_state == DeclsState.VarName:
         if line == "DECLARE":
-            myState = DeclsState.PptName
+            my_state = DeclsState.PptName
         elif line == "":
-            myState = DeclsState.Uninit
+            my_state = DeclsState.Uninit
         else:
-            curVarList.append([])
-            curVarList[-1].append(line)
-            myState = DeclsState.DecType
+            cur_var_list.append([])
+            cur_var_list[-1].append(line)
+            my_state = DeclsState.DecType
 
-    elif myState == DeclsState.DecType:
-        #        curVarList[-1].append(line)
-        myState = DeclsState.RepType
+    elif my_state == DeclsState.DecType:
+        #        cur_var_list[-1].append(line)
+        my_state = DeclsState.RepType
 
-    elif myState == DeclsState.RepType:
-        curVarList[-1].append(line)
-        myState = DeclsState.CompNum
+    elif my_state == DeclsState.RepType:
+        cur_var_list[-1].append(line)
+        my_state = DeclsState.CompNum
 
-    elif myState == DeclsState.CompNum:
-        #        curVarList[-1].append(line)
+    elif my_state == DeclsState.CompNum:
+        #        cur_var_list[-1].append(line)
 
         # Assume we are gonna read another variable.
         # When we actually read the subsequent line,
         # we'll branch according to whether it's a real
         # variable or another thing
-        myState = DeclsState.VarName
+        my_state = DeclsState.VarName
 
 
-def processPpt(pptName, varInfo):
-    # First check if this ppt is in the Kvasir .decls file
-    # by munging its name, and if so, print out the Kvasir
-    # version of the name
-    stripped = StripDfecPptName(pptName)
+def process_ppt(ppt_name: str, var_info: dict[str, list[str]]) -> None:
+    """Print out the Kvasir version of the name.
 
-    if stripped in KvasirPptMap:
-        print(KvasirPptMap[stripped][0])
+    Does nothing if this ppt is not in the Kvasir .decls file.
+    """
+    stripped = strip_dfec_ppt_name(ppt_name)
+
+    if stripped in kvasir_ppt_map:
+        print(kvasir_ppt_map[stripped][0])
 
         # Iterate thru all variables in .decls file (to preserve
         # order) and print ut the corresponding entries in the .dtrace
         # file:
-        varList = KvasirPptMap[stripped][1]
-        for varEntry in varList:
-            varName = varEntry[0]
-            repType = varEntry[1]
+        var_list = kvasir_ppt_map[stripped][1]
+        for var_entry in var_list:
+            var_name = var_entry[0]
+            rep_type = var_entry[1]
 
-            # Try to look up varName in the varInfo dict., remembering
+            # Try to look up var_name in the var_info dict., remembering
             # the differences between Kvasir and Dfec names:
 
-            # If repType == "java.lang.String", then look
+            # If rep_type == "java.lang.String", then look
             # up the entry for the variable + '[]' because
             # Dfec has separate variables for the pointer
             # and content of strings
-            varToLookup = varName
-            if "java.lang.String" in repType:
-                varToLookup += "[]"
+            var_to_lookup = var_name
+            if "java.lang.String" in rep_type:
+                var_to_lookup += "[]"
 
-            varToLookup = ConvertKvasirVarName(varToLookup)
+            var_to_lookup = convert_kvasir_var_name(var_to_lookup)
 
-            if varToLookup in varInfo:
-                stuff = varInfo[varToLookup]
-                print(varName)
+            if var_to_lookup in var_info:
+                stuff = var_info[var_to_lookup]
+                print(var_name)
 
                 if (
-                    repType[-2:] == "[]"
+                    rep_type[-2:] == "[]"
                     and stuff[0][0] != "["
                     and stuff[0] != "uninit"
                     and stuff[0] != "nonsensical"
@@ -251,7 +295,7 @@ def processPpt(pptName, varInfo):
                 print(stuff[1])
             # Total cop out ... print blank
             else:
-                print(varName)
+                print(var_name)
 
                 print("uninit")
 
@@ -268,71 +312,79 @@ def processPpt(pptName, varInfo):
 # 2 = value
 # 3 = modbit
 # 4 = Ignore nonce
-class DtraceState:
-    Uninit, VarName, Value, Modbit, IgnoreNonce = list(range(5))
+class DtraceState(Enum):
+    """The parse state: what is about to be read."""
+
+    Uninit = 0
+    VarName = 1
+    Value = 2
+    Modbit = 3
+    IgnoreNonce = 4
 
 
-dState = DtraceState.Uninit
+dt_state = DtraceState.Uninit
 
-curPptName = ""
+cur_ppt_name = "DUMMY PPT NAME"
 # For current program point only:
-# Key: Variable name (after running through ConvertDfecVarName())
+# Key: Variable name (after running through convert_dfec_var_name())
 # Value: list of 2 elts: [value, modbit]
-VarInfo = {}
+# TODO: Change value from list to tuple?
+var_info: dict[str, list[str]] = {}
 
-curVarName = None
-curVarInfo = None
+cur_var_name = "DUMMY VAR NAME"
+cur_var_info: list[str] = []
 
 # This is shorthand for xreadlines so that it doesn't have to read the
 # entire file in at once, which is crucial for huge examples:
-for line in open(sys.argv[2], "r"):
-    line = line.strip()
+with Path(sys.argv[2]).open() as lines:
+    for line in lines:
+        line = line.strip()
 
-    if dState == DtraceState.Uninit:
-        # Match program point name with ':::ENTER' or ':::EXIT'
-        if ":::ENTER" in line or ":::EXIT" in line:
-            curPptName = line
-            dState = DtraceState.VarName
+        if dt_state == DtraceState.Uninit:
+            # Match program point name with ':::ENTER' or ':::EXIT'
+            if ":::ENTER" in line or ":::EXIT" in line:
+                cur_ppt_name = line
+                dt_state = DtraceState.VarName
 
-    elif dState == DtraceState.IgnoreNonce:
-        dState = DtraceState.VarName
+        elif dt_state == DtraceState.IgnoreNonce:
+            dt_state = DtraceState.VarName
 
-    elif dState == DtraceState.VarName:
-        if line == "this_invocation_nonce":
-            dState = DtraceState.IgnoreNonce
-        elif line == "":
-            # We've reached the end of a ppt entry!!!
-            # So process it
-            processPpt(curPptName, VarInfo)
+        elif dt_state == DtraceState.VarName:
+            if line == "this_invocation_nonce":
+                dt_state = DtraceState.IgnoreNonce
+            elif line == "":
+                # We've reached the end of a ppt entry!!!
+                # So process it
+                process_ppt(cur_ppt_name, var_info)
 
-            curPptName = None
-            VarInfo = {}
+                cur_ppt_name = "DUMMY PPT NAME"
+                var_info = {}
 
-            dState = DtraceState.Uninit
-        else:
-            curVarName = line
-            curVarInfo = []
-            dState = DtraceState.Value
+                dt_state = DtraceState.Uninit
+            else:
+                cur_var_name = line
+                cur_var_info = []
+                dt_state = DtraceState.Value
 
-    elif dState == DtraceState.Value:
-        curVarInfo.append(line)
-        dState = DtraceState.Modbit
+        elif dt_state == DtraceState.Value:
+            cur_var_info.append(line)
+            dt_state = DtraceState.Modbit
 
-    elif dState == DtraceState.Modbit:
-        curVarInfo.append(line)
-        VarInfo[ConvertDfecVarName(curVarName)] = curVarInfo
-        curVarName = None
-        curVarInfo = None
-        dState = DtraceState.VarName
+        elif dt_state == DtraceState.Modbit:
+            cur_var_info.append(line)
+            var_info[convert_dfec_var_name(cur_var_name)] = cur_var_info
+            cur_var_name = "DUMMY VAR NAME"
+            cur_var_info = []
+            dt_state = DtraceState.VarName
 
 
-##ResultMap = {}
+# result_map = {}
 
-##for ppt in KvasirPptMap:
-##    stripped = StripKvasirPptName(ppt)
-##    if stripped in DfecPptMap:
-##        KvasirVarList = KvasirPptMap[ppt]
-##        DfecVarMap = DfecPptMap[stripped]
+# for ppt in kvasir_ppt_map:
+##    stripped = strip_kvasir_ppt_name(ppt)
+##    if stripped in dfec_ppt_map:
+##        KvasirVarList = kvasir_ppt_map[ppt]
+##        DfecVarMap = dfec_ppt_map[stripped]
 
 ###        print "KvasirVarList:"
 ###        print KvasirVarList
@@ -341,29 +393,29 @@ for line in open(sys.argv[2], "r"):
 ###        print
 ###        print
 
-##        curResultVarList = []
+##        cur_result_var_list = []
 
 ###        print ppt
 
 ##        # Now iterate through the Kvasir variable list:
 ##        for entry in KvasirVarList:
 ##            var = entry[0]
-##            decType = entry[1]
-##            repType = entry[2]
-##            kvasirCompNum = entry[3]
-##            decTypeCompNum = entry[4]
+##            dec_type = entry[1]
+##            rep_type = entry[2]
+##            kvasir_comp_num = entry[3]
+##            dec_type_comp_num = entry[4]
 
-##            # If repType == "java.lang.String", then look
+##            # If rep_type == "java.lang.String", then look
 ##            # up the entry for the variable + '[]' because
 ##            # Dfec has separate variables for the pointer
 ##            # and content of strings
-##            varToLookup = var
-##            if repType == "java.lang.String":
-##                varToLookup += '[]'
+##            var_to_lookup = var
+##            if rep_type == "java.lang.String":
+##                var_to_lookup += '[]'
 
-##            varToLookup = ConvertKvasirVarName(varToLookup)
+##            var_to_lookup = convert_kvasir_var_name(var_to_lookup)
 
-##            if varToLookup in DfecVarMap:
+##            if var_to_lookup in DfecVarMap:
 ##                # Throw the comparability number on the end
 ##                # of the entry for that variable
 
@@ -371,17 +423,17 @@ for line in open(sys.argv[2], "r"):
 ##                # Each entry should be the following:
 ##                #  (variable name, dec. type, rep. type,
 ##                #           (Lackwit comp. num, Kvasir comp. num, dec. type comp num)
-##                curResultVarList.append((var, decType, repType,
-##                                         (DfecVarMap[varToLookup],
-##                                          kvasirCompNum,
-##                                          decTypeCompNum)))
-##                if DfecVarMap[varToLookup] == "":
-##                    print "EMPTY COMP. NUMBER!", var, varToLookup
+##                cur_result_var_list.append((var, dec_type, rep_type,
+##                                         (DfecVarMap[var_to_lookup],
+##                                          kvasir_comp_num,
+##                                          dec_type_comp_num)))
+##                if DfecVarMap[var_to_lookup] == "":
+##                    print "EMPTY COMP. NUMBER!", var, var_to_lookup
 
 ##                # Only for debugging
-###                DfecVarMap.pop(varToLookup)
+###                DfecVarMap.pop(var_to_lookup)
 
-##        ResultMap[ppt] = curResultVarList
+##        result_map[ppt] = cur_result_var_list
 
 ### This is important to see how much of the intersection between
 ### Dfec and Kvasir variables that we've successfully picked up:
@@ -389,7 +441,7 @@ for line in open(sys.argv[2], "r"):
 ###        print "Leftovers", DfecVarMap.keys()
 ###        print "# vars in Dfec:  ", len(DfecVarMap.keys())
 ###        print "# vars in Kvasir:", len(KvasirVarList)
-###        print "# vars in result:", len(curResultVarList)
+###        print "# vars in result:", len(cur_result_var_list)
 ###        print
 
 ### Output the resulting .decls file and the var list file:
@@ -399,41 +451,41 @@ for line in open(sys.argv[2], "r"):
 ### assumption that the same global variables appear everywhere at all
 ### program points ... will have to investigate further later ...
 
-##outputVarsF.write("----SECTION----\n")
-##outputVarsF.write("globals\n")
+# output_vars_f.write("----SECTION----\n")
+# output_vars_f.write("globals\n")
 
-##exampleVarList = ResultMap[KvasirPptNames[0]]
+# example_var_list = result_map[kvasir_ppt_names[0]]
 
-##for varEntry in exampleVarList:
-##    if '/' in varEntry[0]: # only print out globals and file-statics
-##        outputVarsF.write(varEntry[0])
-##        outputVarsF.write("\n")
+# for var_entry in example_var_list:
+##    if '/' in var_entry[0]: # only print out globals and file-statics
+##        output_vars_f.write(var_entry[0])
+##        output_vars_f.write("\n")
 
-##outputVarsF.write("\n")
+# output_vars_f.write("\n")
 
 
-### Filter KvasirPptNames to remove any program points that are NOT
+### Filter kvasir_ppt_names to remove any program points that are NOT
 ### in the Dfec-generated .decls file:
-##KvasirPptNames = [name for
-##                  name in KvasirPptNames
-##                  if (StripKvasirPptName(name) in DfecPptMap)]
+# kvasir_ppt_names = [name for
+##                  name in kvasir_ppt_names
+##                  if (strip_kvasir_ppt_name(name) in dfec_ppt_map)]
 
 
 ###
 
-##outputNoCompDeclsF.write("VarComparability\nnone\n\n");
+# output_no_comp_decls_f.write("VarComparability\nnone\n\n");
 
 
-##allDeclsFiles = [outputLackwitDeclsF,
-##                 outputDynCompDeclsF,
-##                 outputDecTypesDeclsF,
-##                 outputNoCompDeclsF]
+# all_decls_files = [output_lackwit_decls_f,
+##                 output_dyn_comp_decls_f,
+##                 output_dec_types_decls_f,
+##                 output_no_comp_decls_f]
 
 ### Output the various .decls files
-### (Read these names from KvasirPptNames to preserve ordering)
-##for ppt in KvasirPptNames:
+### (Read these names from kvasir_ppt_names to preserve ordering)
+# for ppt in kvasir_ppt_names:
 
-##    for f in allDeclsFiles:
+##    for f in all_decls_files:
 ##        f.write("DECLARE\n")
 ##        f.write(ppt)
 ##        f.write("\n")
@@ -443,65 +495,65 @@ for line in open(sys.argv[2], "r"):
 
 ##    # Remember that we need to print program points in the form of
 ##    # '..main()' and NOT '..main():::ENTER' and '..main():::EXIT0'
-##    isExit = False
+##    is_exit = False
 
-##    fnname, enterOrExit = ppt.split(':::')
-##    if enterOrExit[:4] == "EXIT":
-##        isExit = True
+##    fnname, enter_or_exit = ppt.split(':::')
+##    if enter_or_exit[:4] == "EXIT":
+##        is_exit = True
 
-##    if isExit:
-##        outputVarsF.write("----SECTION----\n")
-##        outputVarsF.write(fnname)
-##        outputVarsF.write("\n")
+##    if is_exit:
+##        output_vars_f.write("----SECTION----\n")
+##        output_vars_f.write(fnname)
+##        output_vars_f.write("\n")
 
-##    for varEntry in ResultMap[ppt]:
+##    for var_entry in result_map[ppt]:
 
-##        for f in allDeclsFiles:
+##        for f in all_decls_files:
 ##            # Variable name
-##            f.write(varEntry[0])
+##            f.write(var_entry[0])
 ##            f.write("\n")
 
 ##            # Declared type
-##            f.write(varEntry[1])
+##            f.write(var_entry[1])
 ##            f.write("\n")
 
 ##            # Representation type
-##            f.write(varEntry[2])
+##            f.write(var_entry[2])
 ##            f.write("\n")
 
 ##        # Comparability number - this is where the action is!
 ##        # For Lackwit, we choose the car of the tuple,
-##        outputLackwitDeclsF.write(varEntry[3][0])
+##        output_lackwit_decls_f.write(var_entry[3][0])
 ##        # For DynComp, we choose the cadr
-##        outputDynCompDeclsF.write(varEntry[3][1])
+##        output_dyn_comp_decls_f.write(var_entry[3][1])
 ##        # For dec. type, we choose the caddr
-##        outputDecTypesDeclsF.write(str(varEntry[3][2]))
+##        output_dec_types_decls_f.write(str(var_entry[3][2]))
 ##        # For no comparability, simply print out '22'
-##        outputNoCompDeclsF.write("22")
+##        output_no_comp_decls_f.write("22")
 
-##        for f in allDeclsFiles:
+##        for f in all_decls_files:
 ##            f.write("\n")
 
 ##        # Don't print out globals or file-static vars in the
 ##        # var-list-file for individual program points
-##        if isExit and not ('/' in varEntry[0]):
-##            outputVarsF.write(varEntry[0])
-##            outputVarsF.write("\n")
+##        if is_exit and not ('/' in var_entry[0]):
+##            output_vars_f.write(var_entry[0])
+##            output_vars_f.write("\n")
 
 ##    # Newline separating neighboring program points
-##    for f in allDeclsFiles:
+##    for f in all_decls_files:
 ##        f.write("\n")
 
-##    if isExit:
-##        outputVarsF.write("\n")
+##    if is_exit:
+##        output_vars_f.write("\n")
 
 
-###print '# Dfec ppts:', len(DfecPptMap.keys())
-###print '# Kvasir ppts:', len(KvasirPptMap.keys())
-###print '# Common ppts:', len(ResultMap.keys())
+# print '# Dfec ppts:', len(dfec_ppt_map.keys())
+# print '# Kvasir ppts:', len(kvasir_ppt_map.keys())
+# print '# Common ppts:', len(result_map.keys())
 
 
-##for f in allDeclsFiles:
-##    f.close()
+# for f in all_decls_files:
+#     f.close()
 
-##outputVarsF.close()
+# output_vars_f.close()

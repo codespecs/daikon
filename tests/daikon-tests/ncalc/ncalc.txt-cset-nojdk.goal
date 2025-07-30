@@ -1,0 +1,25 @@
+
+Variable sets for ncalc.<init>() enter
+Variable sets for ncalc.<init>() exit
+  [1] [this]
+
+Variable sets for ncalc.main([Ljava.lang.String; args) enter
+  [1] [Parameter args]
+  [1] [Class of args]
+  [1] [Array args[..]]
+  [1] [String args[..].toString]
+Variable sets for ncalc.main([Ljava.lang.String; args) exit
+  [1] [Parameter args]
+  [1] [Class of args]
+  [1] [Array args[..]]
+  [1] [String args[..].toString]
+
+Variable sets for ncalc.equals(java.lang.Object obj) enter
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+Variable sets for ncalc.equals(java.lang.Object obj) exit
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]

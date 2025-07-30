@@ -44,7 +44,7 @@ public class PptRelation implements Serializable {
   public enum PptRelationType {
     /** Acyclic relationship to a parent, eg, method to its object. */
     PARENT,
-    /** Possibly cyclic relationship, eg. nested object instances */
+    /** Possibly cyclic relationship, eg, nested object instances. */
     USER,
     /** Entrance of method to exit of method. */
     ENTER_EXIT,
@@ -159,8 +159,8 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns whether or not this relation is a primary relation. This used to simplify debug prints
-   * of the PPt tree (so that extra relations don't result in duplicative information).
+   * Returns true if this relation is a primary relation. This used to simplify debug prints of the
+   * PPt tree (so that extra relations don't result in duplicative information).
    *
    * <p>Somewhat arbitrarily, Object&rarr;User and Enter&rarr;Exit are not considered primary while
    * all others are. The remaining relations (class&rarr;object, object&rarr;method,and
@@ -213,7 +213,7 @@ public class PptRelation implements Serializable {
     return parent_to_child_map.get(parentVar);
   }
 
-  /** Returns whether or not this relation's child has children of its own. */
+  /** Returns true if this relation's child has children of its own. */
   public boolean hasChildren() {
     return (child.children.size() > 0);
   }

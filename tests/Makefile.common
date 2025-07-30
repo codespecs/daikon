@@ -503,6 +503,7 @@ $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-ti
 	@echo
 	@echo "### Run Chicory (${PROJECT_FILE})"
 	@echo
+	export LD_LIBRARY_PATH=$(PROJECT) && \
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 	  --dtrace-file=$(PROJECT_FILE).dtrace.gz \
 	  --comparability-file=$(CWD)/$(PROJECT_FILE).decls-DynComp \
@@ -558,7 +559,9 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
 #	@echo inst_Files: '$(INST_FILES)'
 	rm -f $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
+	export LD_LIBRARY_PATH=$(PROJECT) && \
 	$(RUN_JAVA) daikon.DynComp $(DCOMP_ARGS) ${JUNIT} $(MAIN_CLASS) $(MAIN_ARGS)
+	export LD_LIBRARY_PATH=$(PROJECT) && \
 	$(RUN_JAVA) daikon.DynComp '--ppt-select-pattern=$(INST_FILES)' \
 		--comparability-file=$(PROJECT_FILE).txt-cset-nojdk \
 		--decl_file $(PROJECT_FILE).decls-DynComp-nojdk \
@@ -654,6 +657,7 @@ ${SPINFO_INV_FILE}: ${PROJECT_FILE}.decls-DynComp ${PROJECT_FILE}.spinfo-static 
 	@echo
 	@echo "### run Chicory with DynComp input (${PROJECT_FILE})"
 	@echo
+	export LD_LIBRARY_PATH=$(PROJECT) && \
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 		--dtrace-file=$(PROJECT_FILE)-dyncomp.dtrace.gz \
 		--comparability-file=${CWD}/$(PROJECT_FILE).decls-DynComp \

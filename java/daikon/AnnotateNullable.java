@@ -261,9 +261,9 @@ public class AnnotateNullable {
   }
 
   /**
-   * Get the annotation for the specified variable. Returns @Nullable if samples were found for this
-   * variable and at least one sample contained a null value. Returns an (interned) empty string if
-   * no annotation is applicable. Otherwise, the return value contains a trailing space.
+   * Returns the annotation for the specified variable. Returns @Nullable if samples were found for
+   * this variable and at least one sample contained a null value. Returns an (interned) empty
+   * string if no annotation is applicable. Otherwise, the return value contains a trailing space.
    */
   public static String get_annotation(PptTopLevel ppt, VarInfo vi) {
 
@@ -429,9 +429,9 @@ public class AnnotateNullable {
   }
 
   /**
-   * Returns whether or not the method of the specified ppt is static or not. The ppt must be an
-   * exit ppt. Exit ppts that do not have an object as a parent are inferred to be static. This does
-   * not work for enter ppts, because constructors do not have the object as a parent on entry.
+   * Returns true if the method of the specified ppt is static or not. The ppt must be an exit ppt.
+   * Exit ppts that do not have an object as a parent are inferred to be static. This does not work
+   * for enter ppts, because constructors do not have the object as a parent on entry.
    */
   @Pure
   public static boolean is_static_method(PptTopLevel ppt) {

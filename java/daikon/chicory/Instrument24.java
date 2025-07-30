@@ -874,7 +874,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param inst the instruction to inspect, which might be a return instruction
    * @param mgen describes the given method
    * @param minfo for the given method's code
-   * @param shouldIncludeIter whether or not to instrument this return
+   * @param shouldIncludeIter if true, instrument this return
    * @param exitLocationIter list of exit line numbers
    * @return instruction list for instrumenting the return, or an empty list if {@code inst} is not
    *     a return or the return should not be instrumented
@@ -1323,8 +1323,8 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Get the ClassGetName form of a ClassDesc. For a non-array type, the binary name; for an array
-   * type, a format like the FieldDescriptor field descriptor, but using "." where the field
+   * Returns the ClassGetName form of a ClassDesc. For a non-array type, the binary name; for an
+   * array type, a format like the FieldDescriptor field descriptor, but using "." where the field
    * descriptor uses "/".
    *
    * @param t a type
@@ -1341,7 +1341,7 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Return an array of strings, each corresponding to mgen's parameter types as a fully qualified
+   * Returns an array of strings, each corresponding to mgen's parameter types as a fully qualified
    * name.
    *
    * @param mgen describes the given method
@@ -1739,7 +1739,7 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Build a load constant instruction for values of type int, short, char, byte
+   * Build a load constant instruction for values of type int, short, char, byte.
    *
    * @param value to be pushed
    * @return a push instruction

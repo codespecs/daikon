@@ -243,7 +243,7 @@ public class SplitterFactory {
     return fileCompiler.compileFiles(fileNames);
   }
 
-  /** Determine whether a Ppt's name matches the given pattern. */
+  /** Returns true if a Ppt's name matches the given pattern. */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
     if (ppt.name.equals(ppt_name)) {
       return true;

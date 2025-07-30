@@ -253,7 +253,7 @@ class FormatTestCase {
   }
 
   /**
-   * Checks to see whether all tests on this invariant are passed.
+   * Returns true if all tests on this invariant are passed.
    *
    * @return true if all the tests on this invariant passed, false otherwise
    */

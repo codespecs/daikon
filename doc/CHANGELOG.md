@@ -35,7 +35,7 @@ Improved DtraceDiff tool.
 
 Bug fixes and implementation details:
  * BCEL update to 6.8.1.
- * CheckerFramework update to 3.42.
+ * Checker Framework update to 3.42.
  * fixed a problem with DynComp (#532)
 
 
@@ -97,7 +97,7 @@ Bug fixes and implementation details:
  * Valgrind update from 3.16.1 to 3.17.0. (Daikon #327, Fjalar #51).
  * Binutils update from 2.35.1 to 2.37 (Fjalar #53, Fjalar #54).
  * Have Chicory and DynComp use same code for ppt-omit and ppt-select (#342).
- * Update bcel util to version 1.1.12 (#344) (Includes several fixes to local variable table generation).
+ * Update bcel-util to version 1.1.12 (#344) (Includes several fixes to local variable table generation).
 
 
 Version 5.8.8 (March 2, 2021)

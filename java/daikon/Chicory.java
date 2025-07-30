@@ -259,7 +259,7 @@ public class Chicory {
   }
 
   /**
-   * Return true iff argument was given to run a purity analysis.
+   * Returns true iff argument was given to run a purity analysis.
    *
    * <p>You should only call this after parsing arguments.
    */
@@ -267,7 +267,7 @@ public class Chicory {
     return purityAnalysis;
   }
 
-  /** Return true iff a file name was specified to supply pure method names. */
+  /** Returns true iff a file name was specified to supply pure method names. */
   @Pure
   public static @Nullable File get_purity_file() {
     return purity_file;
@@ -570,7 +570,7 @@ public class Chicory {
   /**
    * Wait for daikon to complete and return its exit status.
    *
-   * @return Daikon's exit status
+   * @return the exit status of Daikon
    */
   @RequiresNonNull("daikon_proc")
   private int waitForDaikon() {
