@@ -92,6 +92,7 @@ public class BcelUtils24 {
   protected static void adjust_code_for_locals_change(
       MethodGen24 mgen, int offsetFirstMovedLocal, int size) {
 
+    debugInstrument.log("adjust code: %d %d%n", offsetFirstMovedLocal, size);
     try {
       List<CodeElement> il = mgen.getInstructionList();
       ListIterator<CodeElement> iter = il.listIterator();
@@ -199,9 +200,10 @@ public class BcelUtils24 {
       mgen.setParameterNames(argNames);
     }
 
+    String varType = isParam ? "arg" : "local";
     debugInstrument.log(
-        "Added arg    %s%n",
-        argNew.slot() + ": " + argNew.name() + ", " + argNew.type() + ", " + argSize);
+        "Added %s at %s%n",
+        varType, argNew.slot() + ": " + argNew.name() + ", " + argNew.type() + ", " + argSize);
 
     if (hasCode) {
       // we need to adjust the offset of any locals after our insertion
