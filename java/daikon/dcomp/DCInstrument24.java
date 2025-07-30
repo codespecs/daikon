@@ -50,7 +50,7 @@ import java.lang.classfile.attribute.CodeAttribute;
 import java.lang.classfile.attribute.RuntimeVisibleAnnotationsAttribute;
 import java.lang.classfile.constantpool.ClassEntry;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
-import java.lang.classfile.constantpool.ConstantValueEntry;
+import java.lang.classfile.constantpool.LoadableConstantEntry;
 import java.lang.classfile.constantpool.MethodRefEntry;
 import java.lang.classfile.constantpool.NameAndTypeEntry;
 import java.lang.classfile.instruction.ArrayLoadInstruction;
@@ -239,6 +239,9 @@ public class DCInstrument24 {
 
   /** Has an {@code <init>} method completed initialization? */
   protected boolean constructor_is_initialized;
+
+  /** Record containing subset of LocalVariable fields. */
+  public record myLocalVariable(int slot, String name, ClassDesc descriptor) {}
 
   /** Local that stores the tag frame for the current method. */
   protected LocalVariable tagFrameLocal;
@@ -561,24 +564,6 @@ public class DCInstrument24 {
 
     classInfo.isJunitTestClass = false;
 
-    // Have all top-level classes implement our interface
-    if (classGen.getSuperclassName().equals("java.lang.Object")) {
-      @SuppressWarnings("signature:assignment")
-      @MethodDescriptor String objectArgReturnBoolean = "(Ljava/lang/Object;)Z";
-      // Add equals method if it doesn't already exist. This ensures
-      // that an instrumented version, equals(Object, DCompMarker),
-      // will be created in this class.
-      MethodModel eq = classGen.containsMethod("equals", objectArgReturnBoolean);
-      if (eq == null) {
-        debugInstrument.log("Added equals method%n");
-        add_equals_method(classBuilder, classGen, classInfo);
-      }
-
-      // Add DCompInstrumented interface and the required
-      // equals_dcomp_instrumented method.
-      add_dcomp_interface(classBuilder, classGen, classInfo);
-    }
-
     // A very tricky special case: If JUnit is running and the current
     // class has been passed to JUnit on the command line, then this
     // is a JUnit test class and our normal instrumentation will
@@ -736,6 +721,24 @@ public class DCInstrument24 {
 
     instrument_all_methods(classModel, classBuilder, classInfo);
 
+    // Have all top-level classes implement our interface
+    if (classGen.getSuperclassName().equals("java.lang.Object")) {
+      @SuppressWarnings("signature:assignment")
+      @MethodDescriptor String objectArgReturnBoolean = "(Ljava/lang/Object;)Z";
+      // Add equals method if it doesn't already exist. This ensures
+      // that an instrumented version, equals(Object, DCompMarker),
+      // will be created in this class.
+      MethodModel eq = classGen.containsMethod("equals", objectArgReturnBoolean);
+      if (eq == null) {
+        debugInstrument.log("Added equals method%n");
+        add_equals_method(classBuilder, classGen, classInfo);
+      }
+
+      // Add DCompInstrumented interface and the required
+      // equals_dcomp_instrumented method.
+      add_dcomp_interface(classBuilder, classGen, classInfo);
+    }
+
     // Add tag accessor methods for each primitive in the class
     create_tag_accessors(classGen);
 
@@ -804,7 +807,7 @@ public class DCInstrument24 {
         MethodTypeDesc.of(CD_void),
         ClassFile.ACC_STATIC,
         methodBuilder ->
-            methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions)));
+            methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions, null)));
   }
 
   /**
@@ -920,19 +923,17 @@ public class DCInstrument24 {
         debug_transform.log("  Processing method %s, track=%b%n", mgen, track);
         debug_transform.indent();
 
+        // local variables referenced from a lambda expression must be final or effectively final
+        final boolean trackMethod = track;
+        boolean addingDcompArg = true;
+
         // check for the class static initializer method
         if (mgen.isClinit()) {
           classInfo.hasClinit = true;
           addInvokeToClinit(mgen, classInfo);
-          // We are not going to add any additional instrumentation to this method.
-          // We need to copy it to the output class.
-          outputMethodUnchanged(classBuilder, mm, mgen);
-          continue;
+          addingDcompArg = false;
         }
 
-        // local variables referenced from a lambda expression must be final or effectively final
-        final boolean trackMethod = track;
-        boolean addingDcompArg = true;
         if (mgen.isMain()) {
           addingDcompArg = false;
           createMainStub(mgen, classBuilder, classInfo);
@@ -1012,7 +1013,8 @@ public class DCInstrument24 {
       debugInstrument.log("MethodElement: %s%n", me);
       switch (me) {
         case CodeModel codeModel ->
-            methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, mgen.getInstructionList()));
+            methodBuilder.withCode(
+                codeBuilder -> copyCode(codeBuilder, mgen.getInstructionList(), null));
 
         // copy all other MethodElements to output class (unchanged)
         default -> methodBuilder.with(me);
@@ -1025,8 +1027,21 @@ public class DCInstrument24 {
    *
    * @param codeBuilder for the given method's code
    * @param instructions instruction list to copy
+   * @param newLocals method scope locals to define; may be null if none
    */
-  private void copyCode(CodeBuilder codeBuilder, List<CodeElement> instructions) {
+  private void copyCode(
+      CodeBuilder codeBuilder, List<CodeElement> instructions, List<myLocalVariable> newLocals) {
+
+    if (newLocals != null) {
+      for (myLocalVariable lv : newLocals) {
+        codeBuilder.localVariable(
+            lv.slot(),
+            lv.name(),
+            lv.descriptor(),
+            codeBuilder.startLabel(),
+            codeBuilder.endLabel());
+      }
+    }
 
     for (CodeElement ce : instructions) {
       debugInstrument.log("CodeElement: %s%n", ce);
@@ -1059,7 +1074,7 @@ public class DCInstrument24 {
             codeModelSeen = true;
             methodBuilder.withCode(
                 codeBuilder ->
-                    instrumentCode(codeBuilder, codeModel, mgen, classInfo, trackMethod));
+                    instrumentCode(codeBuilder, codeModel, null, mgen, classInfo, trackMethod));
           }
           case RuntimeVisibleAnnotationsAttribute rvaa -> {
             // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
@@ -1089,7 +1104,7 @@ public class DCInstrument24 {
         if ((mgen.getAccessFlagsMask() & ClassFile.ACC_NATIVE) != 0) {
           // We need to build our wrapper method for a call to native code.
           methodBuilder.withCode(
-              codeBuilder -> instrumentCode(codeBuilder, null, mgen, classInfo, trackMethod));
+              codeBuilder -> instrumentCode(codeBuilder, null, null, mgen, classInfo, trackMethod));
 
           // Turn off the native flag in wrapper method.
           methodBuilder.withFlags(mgen.getAccessFlagsMask() & ~ClassFile.ACC_NATIVE);
@@ -1112,10 +1127,11 @@ public class DCInstrument24 {
    * original instruction list, calling {@code insertInstrumentationCode} to add the instrumentation
    * code, and then copying the modified instruction list to the output method while updating the
    * code labels, if needed. If DCInstrument24 generated the method or if it is a native method,
-   * then codeModel == null.
+   * then codeModel == null. If DCInstrument24 generated the method then localsTable will be set.
    *
    * @param codeBuilder for the given method's code
-   * @param codeModel for the input method's code
+   * @param codeModel for the input method's code; may be null
+   * @param newLocals method scope locals to define; may be null if none
    * @param mgen describes the output method
    * @param classInfo for the current class
    * @param trackMethod true iff we need to track the daikon variables in this method
@@ -1123,18 +1139,43 @@ public class DCInstrument24 {
   private void instrumentCode(
       CodeBuilder codeBuilder,
       CodeModel codeModel,
+      List<myLocalVariable> newLocals,
       MethodGen24 mgen,
       ClassInfo classInfo,
       boolean trackMethod) {
 
     // method_info_index is not used at this point in DCInstrument
     MethodGen24.MInfo24 minfo = new MethodGen24.MInfo24(0, mgen.getMaxLocals(), codeBuilder);
-    // Add back in any unused parameters that the Java compiler has optimized out.
+
+    if (newLocals != null) {
+      for (myLocalVariable lv : newLocals) {
+        mgen.localsTable.add(
+            LocalVariable.of(
+                lv.slot(),
+                lv.name(),
+                lv.descriptor(),
+                codeBuilder.startLabel(),
+                codeBuilder.endLabel()));
+      }
+      mgen.setOriginalLocalVariables(
+          mgen.localsTable.toArray(new LocalVariable[mgen.localsTable.size()]));
+    }
+
+    // Clean up parameter names and add in any unused parameters that the Java compiler has
+    // optimized out.
     if (mgen.fixLocals(minfo)) {
       // localsTable was changed
       debugInstrument.log("Revised LocalVariableTable:%n");
       for (LocalVariable lv : mgen.localsTable) {
         debugInstrument.log("  %s%n", lv);
+      }
+    }
+
+    if (debugInstrument.enabled) {
+      String[] paramNames = mgen.getParameterNames();
+      debugInstrument.log("paramNames: %s%n", paramNames.length);
+      for (int i = 0; i < paramNames.length; i++) {
+        debugInstrument.log("param: %s%n", paramNames[i]);
       }
     }
 
@@ -1199,6 +1240,9 @@ public class DCInstrument24 {
         }
       }
 
+      // Create the local to store the tag frame for this method
+      tagFrameLocal = createTagFrameLocal(mgen, minfo);
+
       // The localsTable was initialized in the MethodGen24 constructor. Here we initialize the
       // codeList. We also remove the local variable type records. Some instrumentation changes
       // require these to be updated, but it should be safe to just delete them since the
@@ -1229,9 +1273,6 @@ public class DCInstrument24 {
           default -> codeList.add(ce); // save all other elements
         }
       }
-
-      // Create the local to store the tag frame for this method
-      tagFrameLocal = createTagFrameLocal(mgen, minfo);
 
       // Create newStartLabel now so instrumentCodeList can use it.
       newStartLabel = codeBuilder.newLabel();
@@ -2963,7 +3004,9 @@ public class DCInstrument24 {
     MethodTypeDesc mtd = invoke.typeSymbol();
     ClassDesc returnType = mtd.returnType();
     ClassDesc[] argTypes = mtd.parameterArray();
-    System.out.println("invoke: " + invoke);
+    if (debugHandleInvoke) {
+      System.out.println("invoke: " + invoke);
+    }
 
     return cleanInvokeTagStack(invoke, classname, returnType, argTypes);
   }
@@ -3088,7 +3131,7 @@ public class DCInstrument24 {
     // Add a tag for the return type if it is primitive.
     if (is_primitive(returnType)) {
       if (debugHandleInvoke) {
-        System.out.printf("push tag for return  type of %s%n", returnType);
+        System.out.printf("push tag for return type of %s%n", returnType);
       }
       il.add(dcr_call("push_const", CD_void, noArgsCD));
     }
@@ -3139,6 +3182,7 @@ public class DCInstrument24 {
     boolean targetInstrumented = true;
     Opcode op = invoke.opcode();
 
+    // UNDONE: can't get here if InvokeDynamic?
     if (op.equals(Opcode.INVOKEDYNAMIC)) {
       // We don't instrument lambda methods.
       if (debugHandleInvoke) {
@@ -3376,13 +3420,19 @@ public class DCInstrument24 {
   private boolean isClassnameInstrumented(@BinaryName String classname, String methodName) {
 
     if (debugHandleInvoke) {
-      System.out.printf("Checking callee instrumented on %s%n", classname);
+      System.out.printf("Checking callee instrumented on %s.%s%n", classname, methodName);
     }
 
     // Our copy of daikon.plumelib is not instrumented.  It would be odd, though,
     // to see calls to this.
     if (classname.startsWith("daikon.plumelib")) {
       return false;
+    }
+
+    if (classname.startsWith("daikon.dcomp")) {
+      if (methodName.equals("set_class_initialized")) {
+        return false;
+      }
     }
 
     // Special-case JUnit test classes.
@@ -3569,7 +3619,7 @@ public class DCInstrument24 {
     }
 
     // push the target class
-    il.add(buildLDCInstruction(poolBuilder.stringEntry(classname)));
+    il.add(buildLDCInstruction(poolBuilder.classEntry(ClassDesc.of(classname))));
 
     // if this is a super call
     if (invoke.opcode().equals(Opcode.INVOKESPECIAL)) {
@@ -4963,9 +5013,10 @@ public class DCInstrument24 {
     debugInstrument.log("Added interface DCompInstrumented%n");
 
     List<CodeElement> instructions = new ArrayList<>();
+    List<myLocalVariable> localsTable = new ArrayList<>();
     Consumer<? super MethodBuilder> codeHandler1 =
         methodBuilder -> {
-          methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions));
+          methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions, localsTable));
         };
 
     int access_flags = ClassFile.ACC_PUBLIC;
@@ -4973,6 +5024,11 @@ public class DCInstrument24 {
       access_flags |= ClassFile.ACC_ABSTRACT;
       codeHandler1 = methodBuilder -> {};
     }
+
+    // Defining local variables is not strictly necessary, but we do
+    // it to reduce the diffs with previous versions of DynComp.
+    localsTable.add(new myLocalVariable(0, "this", CD_Object));
+    localsTable.add(new myLocalVariable(1, "obj", CD_Object));
 
     MethodTypeDesc mtd = MethodTypeDesc.of(CD_boolean, CD_Object);
     instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 0)); // load this
@@ -5018,7 +5074,8 @@ public class DCInstrument24 {
           access_flags,
           methodBuilder ->
               methodBuilder.withCode(
-                  codeBuilder -> instrumentCode(codeBuilder, null, mgen, classInfo, track)));
+                  codeBuilder ->
+                      instrumentCode(codeBuilder, null, localsTable, mgen, classInfo, track)));
     }
   }
 
@@ -5041,9 +5098,10 @@ public class DCInstrument24 {
   void add_equals_method(ClassBuilder classBuilder, ClassGen24 classGen, ClassInfo classInfo) {
 
     List<CodeElement> instructions = new ArrayList<>();
+    List<myLocalVariable> localsTable = new ArrayList<>();
     Consumer<? super MethodBuilder> codeHandler1 =
         methodBuilder -> {
-          methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions));
+          methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions, localsTable));
         };
 
     int access_flags = ClassFile.ACC_PUBLIC;
@@ -5051,6 +5109,11 @@ public class DCInstrument24 {
       access_flags |= ClassFile.ACC_ABSTRACT;
       codeHandler1 = methodBuilder -> {};
     }
+
+    // Defining local variables is not strictly necessary, but we do
+    // it to reduce the diffs with previous versions of DynComp.
+    localsTable.add(new myLocalVariable(0, "this", CD_Object));
+    localsTable.add(new myLocalVariable(1, "obj", CD_Object));
 
     MethodTypeDesc mtd = MethodTypeDesc.of(CD_boolean, CD_Object);
     instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 0)); // load this
@@ -5083,7 +5146,8 @@ public class DCInstrument24 {
           access_flags,
           methodBuilder ->
               methodBuilder.withCode(
-                  codeBuilder -> instrumentCode(codeBuilder, null, mgen, classInfo, track)));
+                  codeBuilder ->
+                      instrumentCode(codeBuilder, null, localsTable, mgen, classInfo, track)));
     }
   }
 
@@ -5192,10 +5256,10 @@ public class DCInstrument24 {
 
     classBuilder.withMethod(
         "main",
-        MethodTypeDesc.of(CD_void, CD_Object, dcomp_marker),
+        MethodTypeDesc.of(CD_void, CD_String.arrayType(1), dcomp_marker),
         mgen.getAccessFlagsMask(),
         methodBuilder ->
-            methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions)));
+            methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions, null)));
   }
 
   /**
@@ -5538,7 +5602,7 @@ public class DCInstrument24 {
    * @param entry describes the constant pool element to be loaded
    * @return a LDC instruction
    */
-  protected CodeElement buildLDCInstruction(ConstantValueEntry entry) {
+  protected CodeElement buildLDCInstruction(LoadableConstantEntry entry) {
     if (entry.index() > 255) {
       return ConstantInstruction.ofLoad(Opcode.LDC_W, entry);
     } else {
