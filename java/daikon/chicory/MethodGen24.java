@@ -273,7 +273,6 @@ public class MethodGen24 {
     // Not necessarily sorted, so sort to make searching/insertion easier.
     localsTable.sort(Comparator.comparing(LocalVariable::slot));
     origLocalVariables = localsTable.toArray(new LocalVariable[localsTable.size()]);
-    // System.out.println("orig locals: " + Arrays.toString(origLocalVariables));
 
     poolBuilder = classBuilder.constantPool();
 
@@ -290,6 +289,7 @@ public class MethodGen24 {
    * @param methodName for the method
    * @param accessFlagsMask for the method
    * @param mtd MethodTypeDescriptor for the method
+   * @param instructions instruction list for the method
    * @param maxStack for the method
    * @param maxLocals for the method
    */
@@ -384,7 +384,7 @@ public class MethodGen24 {
    */
   public boolean fixLocals(MInfo24 minfo) {
     boolean modified = false;
-    // If this is a new method from DCInstrument24 or a native method the
+    // If this is a native method the
     // localsTable may not exist.  We may need to add a 'this' pointer.
     if ((localsTable.size() == 0) && !isStatic) {
       LocalVariable newVar =
@@ -393,10 +393,23 @@ public class MethodGen24 {
       modified = true;
     }
 
+    // System.out.println("orig locals: " + Arrays.toString(origLocalVariables));
+
     int lBase = isStatic ? 0 : 1;
     int slot = isStatic ? 0 : 1;
     for (int pIndex = 0; pIndex < paramTypes.length; pIndex++) {
       int lIndex = lBase + pIndex;
+
+      // update paramNames from localsTable
+      if (lIndex < localsTable.size()) {
+        @SuppressWarnings("signature:assignment") // need JDK annotations
+        @Identifier String localName = localsTable.get(lIndex).name().stringValue();
+        if (!paramNames[pIndex].equals(localName)) {
+          paramNames[pIndex] = localName;
+          modified = true;
+        }
+      }
+
       if ((lIndex >= origLocalVariables.length) || (slot != origLocalVariables[lIndex].slot())) {
         // need to add a LocalVariable for this parameter
         LocalVariable newVar =
@@ -546,6 +559,16 @@ public class MethodGen24 {
    */
   public LocalVariable[] getOriginalLocalVariables() {
     return origLocalVariables.clone();
+  }
+
+  /**
+   * Set the original local variable table. This method is only used when DCInstrument24 creates a
+   * new user method.
+   *
+   * @param locals the new original local variable table
+   */
+  public void setOriginalLocalVariables(LocalVariable[] locals) {
+    origLocalVariables = locals.clone();
   }
 
   /**
