@@ -15,23 +15,19 @@ perl-style:
 
 PYTHON_FILES:=$(wildcard *.py) $(shell grep -r -l --exclude='*.py' --exclude='*~' --exclude='*.tar' --exclude=gradlew --exclude-dir=.git '^\#! \?\(/bin/\|/usr/bin/env \)python')
 PYTHON_FILES_TO_CHECK:=$(filter-out ${lcb_runner},${PYTHON_FILES})
-install-mypy:
-	@if ! command -v mypy ; then pip install mypy ; fi
-install-ruff:
-	@if ! command -v ruff ; then pipx install ruff ; fi
-python-style-fix: install-ruff
+python-style-fix:
 ifneq (${PYTHON_FILES_TO_CHECK},)
 	@ruff --version
 	@ruff format ${PYTHON_FILES_TO_CHECK}
 	@ruff -q check ${PYTHON_FILES_TO_CHECK} --fix
 endif
-python-style-check: install-ruff
+python-style-check:
 ifneq (${PYTHON_FILES_TO_CHECK},)
 	@ruff --version
 	@ruff -q format --check ${PYTHON_FILES_TO_CHECK}
 	@ruff -q check ${PYTHON_FILES_TO_CHECK}
 endif
-python-typecheck: install-mypy
+python-typecheck:
 ifneq (${PYTHON_FILES_TO_CHECK},)
 	@mypy --version
 	@mypy --strict --install-types --non-interactive ${PYTHON_FILES_TO_CHECK} > /dev/null 2>&1 || true
