@@ -242,6 +242,11 @@ public class Instrument24 implements ClassFileTransformer {
         return null;
       }
 
+      if (className.startsWith("java/lang/instrument/")) {
+        debug_transform.log("Skipping java instrumentation class %s%n", binaryClassName);
+        return null;
+      }
+
       if (className.equals("java/lang/DCRuntime")) {
         debug_transform.log("Skipping special DynComp runtime class %s%n", binaryClassName);
         return null;
@@ -346,45 +351,46 @@ public class Instrument24 implements ClassFileTransformer {
       if (DynComp.dump) {
         outputDebugFiles(newBytes, debug_instrumented_dir, binaryClassName);
       }
-      // return newBytes;
+      return newBytes;
     } else {
       // debug_transform.log("Didn't instrument %s%n", binaryClassName);
-      // No changes to the bytecodes
-      // return null;
-    }
-
-    // End of new code.
-
-    // Do instrumentation both old and new way during development.
-    // Following code is old way.
-    // TEMPORARY
-    DynComp.debug = false;
-
-    // Instrument the classfile, die on any errors
-    JavaClass njc;
-    try {
-      DCInstrument dcio = new DCInstrument(c, in_jdk, loader);
-      njc = dcio.instrument();
-    } catch (Throwable t) {
-      RuntimeException re =
-          new RuntimeException(
-              String.format("Unexpected error %s in transform of %s", t, binaryClassName), t);
-      re.printStackTrace();
-      throw re;
-    }
-
-    if (njc != null) {
-      if (DynComp.dump) {
-        outputOldDebugFiles(njc, debug_instrumented_dir, binaryClassName);
-      }
-      return njc.getBytes();
-    } else {
-      debug_transform.log("Didn't instrument %s%n", binaryClassName);
       // No changes to the bytecodes
       return null;
     }
 
-    // End of old code.
+    // End of new code.
+    /*
+       // Do instrumentation both old and new way during development.
+       // Following code is old way.
+       // TEMPORARY
+       DynComp.debug = false;
+
+       // Instrument the classfile, die on any errors
+       JavaClass njc;
+       try {
+         DCInstrument dcio = new DCInstrument(c, in_jdk, loader);
+         njc = dcio.instrument();
+       } catch (Throwable t) {
+         RuntimeException re =
+             new RuntimeException(
+                 String.format("Unexpected error %s in transform of %s", t, binaryClassName), t);
+         re.printStackTrace();
+         throw re;
+       }
+
+       if (njc != null) {
+         if (DynComp.dump) {
+           outputOldDebugFiles(njc, debug_instrumented_dir, binaryClassName);
+         }
+         return njc.getBytes();
+       } else {
+         debug_transform.log("Didn't instrument %s%n", binaryClassName);
+         // No changes to the bytecodes
+         return null;
+       }
+
+       // End of old code.
+    */
   }
 
   /**
