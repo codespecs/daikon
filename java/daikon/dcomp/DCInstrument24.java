@@ -50,17 +50,12 @@ import java.lang.classfile.MethodModel;
 import java.lang.classfile.Opcode;
 import java.lang.classfile.TypeKind;
 import java.lang.classfile.attribute.CodeAttribute;
-import java.lang.classfile.attribute.InnerClassInfo;
-import java.lang.classfile.attribute.InnerClassesAttribute;
 import java.lang.classfile.attribute.RuntimeVisibleAnnotationsAttribute;
-import java.lang.classfile.attribute.SignatureAttribute;
-import java.lang.classfile.attribute.SourceFileAttribute;
 import java.lang.classfile.constantpool.ClassEntry;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.LoadableConstantEntry;
 import java.lang.classfile.constantpool.MethodRefEntry;
 import java.lang.classfile.constantpool.NameAndTypeEntry;
-import java.lang.classfile.constantpool.Utf8Entry;
 import java.lang.classfile.instruction.ArrayLoadInstruction;
 import java.lang.classfile.instruction.ArrayStoreInstruction;
 import java.lang.classfile.instruction.BranchInstruction;
@@ -100,7 +95,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -3394,8 +3388,6 @@ public class DCInstrument24 {
     return targetInstrumented;
   }
 
-  StringBuilder buf;
-
   /**
    * Returns the access flags for the given class.
    *
@@ -3414,36 +3406,9 @@ public class DCInstrument24 {
         System.out.println("classModel: " + cm.thisClass().name().stringValue());
         System.out.println("getAccessFlags: " + classname);
         // Now check for FunctionalInterface
-        buf = new StringBuilder();
         searchloop:
         for (java.lang.classfile.Attribute<?> attribute : cm.attributes()) {
           System.out.println("attribute: " + attribute);
-          buf.append(indentStr + attribute.attributeName() + ":\n");
-          indent();
-          try {
-            switch (attribute) {
-              //        case CodeAttribute c -> formatCodeAttribute(c);
-              //        case DeprecatedAttribute d -> {}
-              //        case ExceptionsAttribute e -> formatExceptionsAttribute(e.exceptions());
-              case InnerClassesAttribute ic -> formatInnerClassesAttribute(ic.classes());
-              //        case NestMembersAttribute nm ->
-              // formatNestMembersAttribute(nm.nestMembers());
-              case RuntimeVisibleAnnotationsAttribute rva ->
-                  formatAnnotationsAttribute(rva.annotations());
-              case SignatureAttribute s ->
-                  buf.append(indentStr + s.signature().stringValue() + "\n");
-              case SourceFileAttribute sf ->
-                  buf.append(indentStr + sf.sourceFile().stringValue() + "\n");
-              //        case ConstantValueAttribute cv -> buf.append(indentStr +
-              // formatConstantDesc(cv.constant().constantValue()));
-              default -> buf.append(indentStr + attribute.toString() + "\n");
-            }
-            ;
-            exdent();
-          } catch (Throwable t) {
-            throw new DynCompError(
-                String.format("Unexpected error in getAccessFlags for %s%n", classname), t);
-          }
           if (attribute instanceof RuntimeVisibleAnnotationsAttribute rvaa) {
             for (final Annotation item : rvaa.annotations()) {
               System.out.println("item: " + item);
@@ -3461,7 +3426,6 @@ public class DCInstrument24 {
             }
           }
         }
-        System.out.println(buf.toString());
       } else {
         // We cannot locate or read the .class file, better pretend it is an Annotation.
         if (debugHandleInvoke) {
@@ -3472,64 +3436,6 @@ public class DCInstrument24 {
       accessFlags.put(classname, access);
     }
     return access;
-  }
-
-  private final void formatAnnotationsAttribute(List<Annotation> annotations) throws IOException {
-
-    int i = buf.lastIndexOf(":");
-    buf.insert(i, "(" + annotations.size() + ")");
-
-    for (Annotation a : annotations) {
-      buf.append(indentStr + a.className().stringValue().replaceAll("/", ".") + "\n");
-    }
-  }
-
-  private final void formatInnerClassesAttribute(List<InnerClassInfo> classes) throws IOException {
-
-    int i = buf.lastIndexOf(":");
-    buf.insert(i, "(" + classes.size() + ")");
-
-    for (InnerClassInfo ici : classes) {
-      buf.append(indentStr);
-      for (AccessFlag af : ici.flags()) {
-        buf.append(af.name().toLowerCase(Locale.ENGLISH) + " ");
-      }
-      Optional<Utf8Entry> innerName = ici.innerName();
-      if (innerName.isPresent()) {
-        buf.append(innerName.get().stringValue());
-      } else {
-        buf.append("<anonymous>");
-      }
-      buf.append(" = class " + ici.innerClass().name().stringValue());
-      Optional<ClassEntry> outerClass = ici.outerClass();
-      if (outerClass.isPresent()) {
-        buf.append(" of class " + outerClass.get().name().stringValue());
-      }
-      buf.append("\n");
-    }
-  }
-
-  private int indentLevel = 0;
-  private static final String INDENT = "  ";
-  private String indentStr = "";
-
-  public void indent() {
-    indentLevel++;
-    indentStr = indentStr + INDENT;
-  }
-
-  public void exdent() {
-    if (indentLevel == 0) {
-      System.err.println("Called exdent when indentation level was 0.");
-    } else {
-      indentLevel--;
-      indentStr = indentStr.substring(INDENT.length());
-    }
-  }
-
-  public void resetIndent() {
-    indentLevel = 0;
-    indentStr = "";
   }
 
   /**
