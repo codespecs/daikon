@@ -21,7 +21,6 @@ import java.lang.classfile.instruction.LocalVariable;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.ArrayList;
-// import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -345,13 +344,21 @@ public class MethodGen24 {
       @SuppressWarnings("signature:assignment") // need JDK annotations
       @FieldDescriptor String arg0Fd = paramTypes[0].descriptorString();
       String arg0Type = Instrument24.convertDescriptorToFqBinaryName(arg0Fd);
+      // Note for tests below: first local will always be 'this'.
       if (dollarPos >= 0
           &&
           // see if type of first parameter is classname up to the "$"
           className.substring(0, dollarPos).equals(arg0Type)
           &&
+          // don't change if second local is in slot 2
+          !(origLocalVariables[1].slot() == 2)
+          &&
+          // don't change if type of first param matches type of second local
+          !origLocalVariables[1].typeSymbol().equals(paramTypes[0])
+          &&
           // don't change paramTypes if 'this$0' is present
           !origLocalVariables[1].name().stringValue().equals("this$0")) {
+        // some need some don't. what is difference?
         // remove first param type so consistent with other methods
         ClassDesc[] newArray = new ClassDesc[paramTypes.length - 1];
         System.arraycopy(paramTypes, 1, newArray, 0, paramTypes.length - 1);
@@ -362,15 +369,27 @@ public class MethodGen24 {
     // These initial values for {@code paramNames} may be incorrect.  They could
     // be altered in {@code fixLocals}.
     paramNames = new String[paramTypes.length];
-    int index = isStatic ? 0 : 1;
-    for (int i = 0; i < paramTypes.length; i++) {
-      if ((index + i) < origLocalVariables.length) {
-        @SuppressWarnings("signature:assignment") // need JDK annotations
-        @Identifier String paramName = origLocalVariables[index + i].name().stringValue();
-        paramNames[i] = paramName;
+    int pIndex = 0;
+    int lIndex = isStatic ? 0 : 1;
+    int slot = isStatic ? 0 : 1;
+    int lLen = origLocalVariables.length; // we may add dummy param names
+
+    while (pIndex < paramTypes.length) {
+      if ((lIndex >= origLocalVariables.length)
+          || (pIndex >= lLen)
+          || (origLocalVariables[lIndex].slot() != slot)) {
+        paramNames[pIndex] = "param" + slot;
       } else {
-        paramNames[i] = "param" + i;
+        // UNDONE: should we assert type of paramTypes[pIndex] == type of
+        // origLocalVariables[lindex]?
+        @SuppressWarnings("signature:assignment") // need JDK annotations
+        @Identifier String paramName = origLocalVariables[lIndex].name().stringValue();
+        paramNames[pIndex] = paramName;
+        lIndex++;
+        lLen++; // pretend there is one more local
       }
+      slot += TypeKind.from(paramTypes[pIndex]).slotSize();
+      pIndex++;
     }
   }
 
@@ -393,14 +412,62 @@ public class MethodGen24 {
       modified = true;
     }
 
-    // System.out.println("orig locals: " + Arrays.toString(origLocalVariables));
-
     int lBase = isStatic ? 0 : 1;
     int slot = isStatic ? 0 : 1;
-    for (int pIndex = 0; pIndex < paramTypes.length; pIndex++) {
-      int lIndex = lBase + pIndex;
+    int pLen = paramTypes.length; // we may add dummy params
+    int lIndex = lBase;
+    for (int pIndex = 0; pIndex < pLen; pIndex++) {
+      if (lIndex >= origLocalVariables.length) {
+        // more parameters than locals; need to add a LocalVariable for this parameter
+        LocalVariable newVar =
+            LocalVariable.of(
+                slot, paramNames[pIndex], paramTypes[pIndex], minfo.startLabel, minfo.endLabel);
+        localsTable.add(newVar);
+        modified = true;
+      } else if (slot != origLocalVariables[lIndex].slot()) {
+        // we have an alignment gap or missing local
+        if ((TypeKind.from(paramTypes[pIndex]).slotSize() == 2)
+            && paramTypes[pIndex].equals(origLocalVariables[lIndex].typeSymbol())) {
+          // has to have length 2 otherwise slot would be equal
+          // we have an alignment gap
+          // insert a dummy entry into the param tables
+          int newLen = paramTypes.length + 1;
+          ClassDesc[] newTypes = new ClassDesc[newLen];
+          @Identifier String[] newNames = new String[newLen];
+          System.arraycopy(paramTypes, 0, newTypes, 0, pIndex);
+          System.arraycopy(paramNames, 0, newNames, 0, pIndex);
+          newTypes[pIndex] = CD_Object; // good as any for dummy
+          newNames[pIndex] = "align" + pIndex;
+          System.arraycopy(paramTypes, pIndex, newTypes, pIndex + 1, paramTypes.length - pIndex);
+          System.arraycopy(paramNames, pIndex, newNames, pIndex + 1, paramTypes.length - pIndex);
+          paramTypes = newTypes;
+          paramNames = newNames;
+          pLen++; // we've added a new param; will create corresponding local below
+        }
+        // create an alignment temp or a local that compiler has optimized out
+        LocalVariable newVar =
+            LocalVariable.of(
+                slot, paramNames[pIndex], paramTypes[pIndex], minfo.startLabel, minfo.endLabel);
+        localsTable.add(newVar);
+        lIndex--; // we've added an alignment local or missing local, we need to visit current local
+        // again
+        modified = true;
+      }
+      slot += TypeKind.from(paramTypes[pIndex]).slotSize();
+      lIndex++;
+    }
 
-      // update paramNames from localsTable
+    // UNDONE: do we need to check for alignment gaps in locals after the paramerters?
+
+    // If we added locals, then table is no longer sorted by slot.
+    if (modified) {
+      localsTable.sort(Comparator.comparing(LocalVariable::slot));
+    }
+
+    // Now that we have updated and/or corrected the locals table, the paramNames
+    // may need to be updated.
+    for (int pIndex = 0; pIndex < paramTypes.length; pIndex++) {
+      lIndex = lBase + pIndex;
       if (lIndex < localsTable.size()) {
         @SuppressWarnings("signature:assignment") // need JDK annotations
         @Identifier String localName = localsTable.get(lIndex).name().stringValue();
@@ -409,21 +476,8 @@ public class MethodGen24 {
           modified = true;
         }
       }
+    }
 
-      if ((lIndex >= origLocalVariables.length) || (slot != origLocalVariables[lIndex].slot())) {
-        // need to add a LocalVariable for this parameter
-        LocalVariable newVar =
-            LocalVariable.of(
-                slot, paramNames[pIndex], paramTypes[pIndex], minfo.startLabel, minfo.endLabel);
-        localsTable.add(newVar);
-        modified = true;
-      }
-      slot += TypeKind.from(paramTypes[pIndex]).slotSize();
-    }
-    // If we added locals, then table is no longer sorted by slot.
-    if (modified) {
-      localsTable.sort(Comparator.comparing(LocalVariable::slot));
-    }
     return modified;
   }
 
@@ -437,7 +491,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Returns whether or not the method is a constructor.
+   * Returns true if the method is a constructor.
    *
    * @return true iff the method is a constructor
    */
@@ -446,7 +500,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Returns whether or not the method is a class initializer.
+   * Returns true if the method is a class initializer.
    *
    * @return true iff the method is a class initializer
    */
@@ -455,8 +509,8 @@ public class MethodGen24 {
   }
 
   /**
-   * Returns whether or not this is a standard main method (static, void, name is 'main', and one
-   * formal parameter: a string array).
+   * Returns true if this is a standard main method (static, void, name is 'main', and one formal
+   * parameter: a string array).
    *
    * @return true iff the method is a main method
    */
