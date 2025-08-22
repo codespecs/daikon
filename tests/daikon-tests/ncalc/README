@@ -5,7 +5,7 @@ Virtual Machine (JVM) to interact with native applications and libraries written
 languages, such as C or C++.
 
 libcalculator.so is a shared code library that contains a single function that returns the
-result of adding its two interger arguments. This file is checked into the repository, but
+result of adding its two integer arguments. This file is checked into the repository, but
 if it should need to be recreated here are the steps.
 
 First, compile the java code with the '-h' option:
