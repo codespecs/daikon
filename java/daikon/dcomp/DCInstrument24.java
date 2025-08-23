@@ -26,10 +26,8 @@ import daikon.plumelib.options.Option;
 import daikon.plumelib.reflection.Signatures;
 import daikon.plumelib.util.EntryReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.classfile.Annotation;
 // import java.lang.classfile.Attribute;
@@ -3568,8 +3566,6 @@ public class DCInstrument24 {
   private static Map<String, ClassModel> classModelCache =
       new ConcurrentHashMap<String, ClassModel>();
 
-  boolean first = true;
-
   /**
    * There are times when it is useful to inspect a class file other than the one we are currently
    * instrumenting. Note we cannot use classForName to do this as it might trigger a recursive call
@@ -3594,12 +3590,6 @@ public class DCInstrument24 {
       try (InputStream inputStream = class_url.openStream()) {
         if (inputStream != null) {
           byte[] buffer = inputStream.readAllBytes();
-          if (first && classname.equals("java.lang.Runnable")) {
-            File targetFile = new File("fake.class");
-            OutputStream outStream = new FileOutputStream(targetFile);
-            outStream.write(buffer);
-            first = false;
-          }
           ClassModel result = classFile.parse(buffer);
           classModelCache.put(classname, result);
           return result;
@@ -4030,7 +4020,7 @@ public class DCInstrument24 {
     return il;
   }
 
-  static int counter = 0;
+  // static int counter = 0;
 
   /**
    * Creates code to make the index comparable (for indexing purposes) with the array in the array
