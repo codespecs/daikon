@@ -286,10 +286,10 @@ public class DCInstrument24 {
   protected static final boolean debugJUnitAnalysis = false;
 
   /** If true, enable {@link #getDefiningInterface} debugging. */
-  protected static final boolean debugGetDefiningInterface = true;
+  protected static final boolean debugGetDefiningInterface = false;
 
   /** If true, enable {@link #handleInvoke} debugging. */
-  protected static final boolean debugHandleInvoke = true;
+  protected static final boolean debugHandleInvoke = false;
 
   /** If true, enable operand stack debugging. */
   protected static final boolean debugOperandStack = false;
@@ -467,8 +467,8 @@ public class DCInstrument24 {
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
     // TEMPORARY
-    debugInstrument.enabled = false;
     debugInstrument.enabled = true;
+    debugInstrument.enabled = false;
     debug_native.enabled = DynComp.debug;
     debug_transform.enabled = daikon.dcomp.Instrument24.debug_transform.enabled;
 
