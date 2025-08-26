@@ -45,7 +45,7 @@ public class BcelUtils24 {
    */
 
   /** A log to which to print debugging information about program instrumentation. */
-  protected static SimpleLog debugInstrument = new SimpleLog(true);
+  private static SimpleLog debugInstrument = new SimpleLog(false);
 
   /**
    * Returns a copy of the given type array, with newType added to the end.
@@ -157,6 +157,9 @@ public class BcelUtils24 {
       ClassDesc argType,
       MethodGen24.MInfo24 minfo,
       boolean isParam) {
+
+    debugInstrument.enabled = daikon.dcomp.DCInstrument24.bcelDebug;
+
     // We add a new local variable, after any parameters and before any
     // existing local variables.  We then need to make a pass over the
     // byte codes to update the local offset values of any locals we just shifted up.

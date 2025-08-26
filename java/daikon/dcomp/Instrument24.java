@@ -85,36 +85,6 @@ public class Instrument24 implements ClassFileTransformer {
     System.out.println();
   }
 
-  // TEMPORARY - REMOVE when DCInstrument24 is working
-
-  /**
-   * Output a .oclass file and a .obcel version of the class file.
-   *
-   * @param c the Java class to output
-   * @param directory output location for the files
-   * @param className the current class
-   */
-  private void outputOldDebugFiles(JavaClass c, File directory, @BinaryName String className) {
-    try {
-      debug_transform.log("Dumping .oclass and .obcel for %s to %s%n", className, directory);
-      // Write the byte array to a .oclass file.
-      c.dump(new File(directory, className + ".oclass"));
-      // write .bcel file
-      BcelUtil.dump(c, directory);
-      // rename .bcel file to .obcel
-      File outputFile = new File(directory, className + ".bcel");
-      boolean ok = outputFile.renameTo(new File(directory, className + ".obcel"));
-      if (!ok) {
-        System.err.printf("Unexpected error renaming %s file for: %s%n", outputFile, className);
-        // ignore the error, it shouldn't affect the instrumentation
-      }
-    } catch (Throwable t) {
-      System.err.printf("Unexpected error %s writing debug files for: %s%n", t, className);
-      t.printStackTrace();
-      // ignore the error, it shouldn't affect the instrumentation
-    }
-  }
-
   /**
    * Output a .class file and a .bcel version of the class file.
    *
@@ -288,29 +258,6 @@ public class Instrument24 implements ClassFileTransformer {
           "Transforming class %s, loader %s - %s%n", className, loader, loader.getParent());
     }
 
-    // Do instrumentation both old and new way during development.
-    // Following code is old way.
-
-    // Parse the bytes of the classfile, die on any errors.
-    JavaClass c;
-    try (ByteArrayInputStream bais = new ByteArrayInputStream(classfileBuffer)) {
-      ClassParser parser = new ClassParser(bais, className);
-      c = parser.parse();
-    } catch (Throwable t) {
-      System.err.printf("Unexpected error %s while reading %s%n", t, binaryClassName);
-      t.printStackTrace();
-      // No changes to the bytecodes
-      return null;
-    }
-
-    if (DynComp.dump) {
-      outputOldDebugFiles(c, debug_uninstrumented_dir, binaryClassName);
-    }
-
-    // End of old code.
-
-    // Start of new code.
-
     // Parse the bytes of the classfile, die on any errors.
     ClassFile classFile =
         ClassFile.of(
@@ -357,40 +304,6 @@ public class Instrument24 implements ClassFileTransformer {
       // No changes to the bytecodes
       return null;
     }
-
-    // End of new code.
-    /*
-       // Do instrumentation both old and new way during development.
-       // Following code is old way.
-       // TEMPORARY
-       DynComp.debug = false;
-
-       // Instrument the classfile, die on any errors
-       JavaClass njc;
-       try {
-         DCInstrument dcio = new DCInstrument(c, in_jdk, loader);
-         njc = dcio.instrument();
-       } catch (Throwable t) {
-         RuntimeException re =
-             new RuntimeException(
-                 String.format("Unexpected error %s in transform of %s", t, binaryClassName), t);
-         re.printStackTrace();
-         throw re;
-       }
-
-       if (njc != null) {
-         if (DynComp.dump) {
-           outputOldDebugFiles(njc, debug_instrumented_dir, binaryClassName);
-         }
-         return njc.getBytes();
-       } else {
-         debug_transform.log("Didn't instrument %s%n", binaryClassName);
-         // No changes to the bytecodes
-         return null;
-       }
-
-       // End of old code.
-    */
   }
 
   /**

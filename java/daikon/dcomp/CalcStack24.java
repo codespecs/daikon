@@ -799,9 +799,6 @@ public class CalcStack24 {
           case Opcode.MULTIANEWARRAY:
             final NewMultiArrayInstruction nmai = (NewMultiArrayInstruction) inst;
             stack.pop(nmai.dimensions()); // discard all the counts
-            // UNDONE is this the element type or array type?
-            // stack.push(nmai.componentType().asSymbol().arrayType(nmai.dimensions()));
-            System.out.println("multianewarry: " + nmai.arrayType().asSymbol());
             stack.push(nmai.arrayType().asSymbol());
             return true;
 

@@ -102,12 +102,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import org.apache.bcel.Const;
-import org.apache.bcel.classfile.AnnotationEntry;
-import org.apache.bcel.classfile.Annotations;
-import org.apache.bcel.classfile.Attribute;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
-import org.apache.bcel.classfile.RuntimeVisibleAnnotations;
 import org.apache.bcel.generic.AnnotationEntryGen;
 import org.apache.bcel.generic.ClassGen;
 import org.apache.bcel.generic.ClassGenException;
@@ -153,6 +149,9 @@ public class DCInstrument24 {
 
   /** A log to which to print debugging information about program instrumentation. */
   protected SimpleLog debugInstrument = new SimpleLog(false);
+
+  /** Debug flag for BcelUtils24. */
+  public static boolean bcelDebug;
 
   /**
    * Used when testing to continue processing if an error occurs. Currently, This flag is only used
@@ -466,11 +465,14 @@ public class DCInstrument24 {
     // System.out.printf("DCInstrument %s%n", orig_class.getClassName());
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
+    debug_native.enabled = DynComp.debug;
+    debug_transform.enabled = daikon.dcomp.Instrument24.debug_transform.enabled;
+
     // TEMPORARY
     debugInstrument.enabled = true;
     debugInstrument.enabled = false;
-    debug_native.enabled = DynComp.debug;
-    debug_transform.enabled = daikon.dcomp.Instrument24.debug_transform.enabled;
+
+    bcelDebug = debugInstrument.enabled;
 
     if (debugOperandStack) {
       // Create a new PrintStream with autoflush enabled
@@ -506,8 +508,6 @@ public class DCInstrument24 {
     for (java.lang.classfile.Attribute<?> attribute : classModel.attributes()) {
       if (attribute instanceof RuntimeVisibleAnnotationsAttribute rvaa) {
         for (final Annotation item : rvaa.annotations()) {
-          // UNDONE: delete comment out or wrap with debug flag
-          System.out.print("annotation: " + item.className().stringValue());
           if (item.className().stringValue().startsWith("Lorg/evosuite/runtime")) {
             debug_transform.log(
                 "Not instrumenting possible Evosuite target: %s%n", classInfo.class_name);
@@ -548,9 +548,10 @@ public class DCInstrument24 {
     runtimeCD = ClassDesc.of(dcompRuntimeClassname);
     poolBuilder = classBuilder.constantPool();
 
-    debug_transform.log("%nInstrumenting class: %s, Attributes:%n", classInfo.class_name);
+    debug_transform.log("%nInstrumenting class: %s%n", classInfo.class_name);
+    debugInstrument.log("Attributes:%n");
     for (java.lang.classfile.Attribute<?> a : classModel.attributes()) {
-      debug_transform.log("  %s%n", a);
+      debugInstrument.log("  %s%n", a);
     }
 
     debugInstrument.log("Class Interfaces:%n");
@@ -1117,8 +1118,7 @@ public class DCInstrument24 {
           // Turn off the native flag in wrapper method.
           methodBuilder.withFlags(mgen.getAccessFlagsMask() & ~ClassFile.ACC_NATIVE);
         } else {
-          // Interface and/or Abstract
-          // UNDONE: do nothing?
+          // Interface and/or Abstract; do nothing.
         }
       }
     } catch (Throwable t) {
@@ -1154,7 +1154,7 @@ public class DCInstrument24 {
 
     // method_info_index is not used at this point in DCInstrument
     MethodGen24.MInfo24 minfo = new MethodGen24.MInfo24(0, mgen.getMaxLocals(), codeBuilder);
-    System.out.printf("nextLocalIndex: %d%n", minfo.nextLocalIndex);
+    debugInstrument.log("nextLocalIndex: %d%n", minfo.nextLocalIndex);
 
     if (newLocals != null) {
       for (myLocalVariable lv : newLocals) {
@@ -1188,7 +1188,7 @@ public class DCInstrument24 {
       }
     }
 
-    System.out.printf("nextLocalIndex: %d%n", minfo.nextLocalIndex);
+    debugInstrument.log("nextLocalIndex: %d%n", minfo.nextLocalIndex);
 
     // If the method is native
     if ((mgen.getAccessFlagsMask() & ClassFile.ACC_NATIVE) != 0) {
@@ -1223,16 +1223,17 @@ public class DCInstrument24 {
         add_dcomp_arg(mgen, minfo);
       }
 
-      System.out.printf("nextLocalIndex: %d%n", minfo.nextLocalIndex);
-
-      debugInstrument.log("LocalVariableTable:%n");
-      for (LocalVariable lv : mgen.localsTable) {
-        debugInstrument.log("  %s%n", lv);
+      if (debugInstrument.enabled) {
+        System.out.printf("nextLocalIndex: %d%n", minfo.nextLocalIndex);
+        System.out.printf("LocalVariableTable:%n");
+        for (LocalVariable lv : mgen.localsTable) {
+          System.out.printf("  %s%n", lv);
+        }
+        System.out.println(
+            "instrumentCode - param types: " + Arrays.toString(mgen.getParameterTypes()));
+        System.out.printf("length: %d%n", mgen.getParameterTypes().length);
       }
 
-      System.out.println(
-          "instrumentCode - param types: " + Arrays.toString(mgen.getParameterTypes()));
-      System.out.printf("length: %d%n", mgen.getParameterTypes().length);
       int paramCount = (mgen.isStatic() ? 0 : 1) + mgen.getParameterTypes().length;
       debugInstrument.log("paramCount: %d%n", paramCount);
 
@@ -1260,8 +1261,8 @@ public class DCInstrument24 {
       // Create the local to store the tag frame for this method
       tagFrameLocal = createTagFrameLocal(mgen, minfo);
 
-      System.out.printf("nextLocalIndex: %d%n", minfo.nextLocalIndex);
-      System.out.printf("maxlocals: %d%n", mgen.getMaxLocals());
+      debugInstrument.log("nextLocalIndex: %d%n", minfo.nextLocalIndex);
+      debugInstrument.log("maxlocals: %d%n", mgen.getMaxLocals());
 
       // The localsTable was initialized in the MethodGen24 constructor. Here we initialize the
       // codeList. We also remove the local variable type records. Some instrumentation changes
@@ -1354,410 +1355,6 @@ public class DCInstrument24 {
     //      throw new ClassGenException(
     //          "Code array too big: must be smaller than " + Const.MAX_CODE_SIZE + " bytes.");
     //    }
-  }
-
-  /** old instrumenter - to be removed */
-  public JavaClass old_instrument() {
-
-    @BinaryName String classname = gen.getClassName();
-
-    // Don't know where I got this idea.  They are executed.  Don't remember why
-    // adding dcomp marker causes problems.
-    // Don't instrument annotations.  They aren't executed and adding
-    // the marker argument causes subtle errors
-    if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
-      debug_transform.log("Not instrumenting annotation %s%n", classname);
-      // WHY NOT RETURN NULL?
-      return gen.getJavaClass().copy();
-    }
-
-    // If a class has an EvoSuite annotation it may be instrumented by Evosuite;
-    // thus, we should not instrument it before Evosuite does.
-    //    for (final Attribute attribute : orig_class.getAttributes()) {
-    //      if (attribute instanceof RuntimeVisibleAnnotations) {
-    //        for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
-    //          if (item.toString().startsWith("@Lorg/evosuite/runtime")) {
-    //            debug_transform.log("Not instrumenting possible Evosuite target: %s%n",
-    // classname);
-    //            // WHY NOT RETURN NULL?
-    //            return gen.getJavaClass().copy();
-    //          }
-    //        }
-    //      }
-    //    }
-
-    debug_transform.log("Instrumenting class %s%n", classname);
-    debug_transform.indent();
-
-    // Create the ClassInfo for this class and its list of methods
-    // ClassInfo class_info = new ClassInfo(classname, loader);
-    boolean track_class = false;
-
-    // Handle object methods for this class
-    // handle_object(classGen);
-
-    // Have all top-level classes implement our interface
-    if (gen.getSuperclassName().equals("java.lang.Object")) {
-      // Add equals method if it doesn't already exist. This ensures
-      // that an instrumented version, equals(Object, DCompMarker),
-      // will be created in this class.
-      Method eq = gen.containsMethod("equals", "(Ljava/lang/Object;)Z");
-      if (eq == null) {
-        debugInstrument.log("Added equals method%n");
-        // add_equals_method(gen);
-      }
-
-      // Add DCompInstrumented interface and the required
-      // equals_dcomp_instrumented method.
-      // add_dcomp_interface(gen);
-    }
-
-    // A very tricky special case: If JUnit is running and the current
-    // class has been passed to JUnit on the command line, then this
-    // is a JUnit test class and our normal instrumentation will
-    // cause JUnit to complain about multiple constructors and
-    // methods that should have no arguments. To work around these
-    // restrictions, we replace rather than duplicate each method
-    // we instrument and we do not add the dcomp marker argument.
-    // We must also remember the class name so if we see a subsequent
-    // call to one of its methods we do not add the dcomp argument.
-
-    debugInstrument.log("junit_state: %s%n", junit_state);
-
-    StackTraceElement[] stack_trace;
-
-    switch (junit_state) {
-      case NOT_SEEN:
-        if (classname.startsWith("org.junit")) {
-          junit_state = JUnitState.STARTING;
-        }
-        break;
-
-      case STARTING:
-        // Now check to see if JUnit is looking for test class(es).
-        stack_trace = Thread.currentThread().getStackTrace();
-        // [0] is getStackTrace
-        for (int i = 1; i < stack_trace.length; i++) {
-          if (debugJUnitAnalysis) {
-            System.out.printf(
-                "%s : %s%n", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
-          }
-          if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
-            junit_parse_seen = true;
-            junit_state = JUnitState.TEST_DISCOVERY;
-            break;
-          }
-        }
-        break;
-
-      case TEST_DISCOVERY:
-        // Now check to see if JUnit is done looking for test class(es).
-        boolean local_junit_parse_seen = false;
-        stack_trace = Thread.currentThread().getStackTrace();
-        // [0] is getStackTrace
-        for (int i = 1; i < stack_trace.length; i++) {
-          if (debugJUnitAnalysis) {
-            System.out.printf(
-                "%s : %s%n", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
-          }
-          if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
-            local_junit_parse_seen = true;
-            break;
-          }
-        }
-        if (junit_parse_seen && !local_junit_parse_seen) {
-          junit_parse_seen = false;
-          junit_state = JUnitState.RUNNING;
-        } else if (!junit_parse_seen && local_junit_parse_seen) {
-          junit_parse_seen = true;
-        }
-        break;
-
-      case RUNNING:
-        if (debugJUnitAnalysis) {
-          stack_trace = Thread.currentThread().getStackTrace();
-          // [0] is getStackTrace
-          for (int i = 1; i < stack_trace.length; i++) {
-            System.out.printf(
-                "%s : %s%n", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
-          }
-        }
-        // nothing to do
-        break;
-
-      default:
-        throw new Error("invalid junit_state");
-    }
-
-    debugInstrument.log("junit_state: %s%n", junit_state);
-
-    boolean junit_test_class = false;
-    if (junit_state == JUnitState.TEST_DISCOVERY) {
-      // We have a possible JUnit test class.  We need to verify by
-      // one of two methods.  Either the class is a subclass of
-      // junit.framework.TestCase or one of its methods has a
-      // RuntimeVisibleAnnotation of org/junit/Test.
-      Deque<String> classnameStack = new ArrayDeque<>();
-      String super_class;
-      String this_class = classname;
-      while (true) {
-        super_class = getSuperclassName(this_class);
-        if (super_class == null) {
-          // something has gone wrong
-          break;
-        }
-        if (debugJUnitAnalysis) {
-          System.out.printf("this_class: %s%n", this_class);
-          System.out.printf("super_class: %s%n", super_class);
-        }
-        if (super_class.equals("junit.framework.TestCase")) {
-          // This is a junit test class and so are the
-          // elements of classnameStack.
-          junit_test_class = true;
-          junitTestClasses.add(this_class);
-          while (!classnameStack.isEmpty()) {
-            junitTestClasses.add(classnameStack.pop());
-          }
-          break;
-        } else if (super_class.equals("java.lang.Object")) {
-          // We're done; not a junit test class.
-          // Ignore items on classnameStack.
-          break;
-        }
-        // Recurse and check the super_class.
-        classnameStack.push(this_class);
-        this_class = super_class;
-      }
-    }
-
-    // Even if we have not detected that JUnit is active, any class that
-    // contains a method with a RuntimeVisibleAnnotation of org/junit/Test
-    // needs to be marked as a JUnit test class. (Daikon issue #536)
-
-    if (!junit_test_class) {
-      // need to check for junit Test annotation on a method
-      searchloop:
-      for (Method m : gen.getMethods()) {
-        for (final Attribute attribute : m.getAttributes()) {
-          if (attribute instanceof RuntimeVisibleAnnotations) {
-            if (debugJUnitAnalysis) {
-              System.out.printf("attribute: %s%n", attribute.toString());
-            }
-            for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
-              if (debugJUnitAnalysis) {
-                System.out.printf("item: %s%n", item.toString());
-              }
-              if (item.toString().endsWith("org/junit/Test;") // JUnit 4
-                  || item.toString().endsWith("org/junit/jupiter/api/Test;") // JUnit 5
-              ) {
-                junit_test_class = true;
-                junitTestClasses.add(classname);
-                break searchloop;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    if (junit_test_class) {
-      debugInstrument.log("JUnit test class: %s%n", classname);
-    } else {
-      debugInstrument.log("Not a JUnit test class: %s%n", classname);
-    }
-
-    // Process each method
-    for (Method m : gen.getMethods()) {
-
-      try {
-        // Note whether we want to track the daikon variables in this method
-        boolean track = should_track(classname, m.getName(), methodEntryName(classname, m));
-
-        // We do not want to track bridge methods the compiler has synthesized as
-        // they are overloaded on return type which normal Java does not support.
-        if ((m.getAccessFlags() & Const.ACC_BRIDGE) != 0) {
-          track = false;
-        }
-
-        // If any one method is tracked, then the class is tracked.
-        if (track) {
-          track_class = true;
-        }
-
-        // If we are tracking variables, make sure the class is public
-        if (track && !gen.isPublic()) {
-          gen.isPrivate(false);
-          gen.isProtected(false);
-          gen.isPublic(true);
-        }
-
-        debug_transform.log("  Processing method %s, track=%b%n", simplify_method_name(m), track);
-        debug_transform.indent();
-
-        MethodGen mg = new MethodGen(m, classname, pool);
-        mgen = mg; // copy to global
-
-        InstructionList il = mg.getInstructionList();
-        boolean has_code = (il != null);
-        //        if (has_code) {
-        //          setCurrentStackMapTable(mg, gen.getMajor());
-        //          buildUninitializedNewMap(il);
-        //        }
-        //
-        //        fixLocalVariableTable(mg);
-
-        // If the method is native
-        if (mg.isNative()) {
-
-          // Create Java code that cleans up the tag stack and calls the real native method.
-          // fix_native(gen, mg);
-          has_code = true;
-          //          setCurrentStackMapTable(mg, gen.getMajor());
-
-          // Add the DCompMarker argument to distinguish our version
-          // add_dcomp_arg(mg);
-
-        } else { // normal method
-
-          if (!junit_test_class) {
-            // Add the DCompMarker argument to distinguish our version
-            // add_dcomp_arg(mg);
-          }
-
-          // Create a MethodInfo that describes this method's arguments
-          // and exit line numbers (information not available via reflection)
-          // and add it to the list for this class.
-          MethodInfo mi = null;
-          if (track && has_code) {
-            //         mi = create_method_info(class_info, mg);
-            // class_info.method_infos.add(mi);
-            DCRuntime.methods.add(mi);
-          }
-
-          // Instrument the method
-          if (has_code) {
-            // Create the local to store the tag frame for this method
-            // tag_frame_local = create_tag_frame_local(mg);
-            // build_exception_handler(mg);
-            // instrument_method(mg);
-            if (track) {
-              // add_enter(mg, mi, DCRuntime.methods.size() - 1);
-              // add_exit(mg, mi, DCRuntime.methods.size() - 1);
-            }
-            // install_exception_handler(mg);
-          }
-        }
-
-        if (has_code) {
-          //          updateUninitializedNewOffsets(mg.getInstructionList());
-          //          createNewStackMapAttribute(mg);
-          mg.setMaxLocals();
-          mg.setMaxStack();
-        } else {
-          mg.removeCodeAttributes();
-          mg.removeLocalVariables();
-        }
-
-        //        remove_local_variable_type_table(mg);
-
-        // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
-        // the original method to our instrumented method as the signature will
-        // not match anything in the JVM's list.  This won't cause an execution
-        // problem but will produce a massive number of warnings.
-        // JDK 11: @HotSpotIntrinsicCandidate
-        // JDK 17: @IntrinsicCandidate
-        AnnotationEntryGen[] aes = mg.getAnnotationEntries();
-        for (AnnotationEntryGen item : aes) {
-          String type = item.getTypeName();
-          if (type.endsWith("IntrinsicCandidate;")) {
-            mg.removeAnnotationEntry(item);
-          }
-        }
-
-        // Can't duplicate 'main' or 'clinit' or a JUnit test.
-        boolean replacingMethod = BcelUtil.isMain(mg) || BcelUtil.isClinit(mg) || junit_test_class;
-        try {
-          if (has_code) {
-            il = mg.getInstructionList();
-            InstructionHandle end = il.getEnd();
-            int length = end.getPosition() + end.getInstruction().getLength();
-            if (length >= Const.MAX_CODE_SIZE) {
-              throw new ClassGenException(
-                  "Code array too big: must be smaller than " + Const.MAX_CODE_SIZE + " bytes.");
-            }
-          }
-          if (replacingMethod) {
-            gen.replaceMethod(m, mg.getMethod());
-            if (BcelUtil.isMain(mg)) {
-              // gen.addMethod(create_dcomp_stub(mg).getMethod());
-            }
-          } else {
-            gen.addMethod(mg.getMethod());
-          }
-        } catch (Exception e) {
-          String s = e.getMessage();
-          if (s == null) {
-            throw e;
-          }
-          if (s.startsWith("Branch target offset too large")
-              || s.startsWith("Code array too big")) {
-            System.err.printf(
-                "DynComp warning: ClassFile: %s - method %s is too large to instrument and is"
-                    + " being skipped.%n",
-                classname, mg.getName());
-            // Build a dummy instrumented method that has DCompMarker
-            // argument and no instrumentation.
-            // first, restore unmodified method
-            mg = new MethodGen(m, classname, pool);
-            // restore StackMapTable
-            //            setCurrentStackMapTable(mg, gen.getMajor());
-            // Add the DCompMarker argument
-            // add_dcomp_arg(mg);
-            //            remove_local_variable_type_table(mg);
-            // try again
-            if (replacingMethod) {
-              gen.replaceMethod(m, mg.getMethod());
-              if (BcelUtil.isMain(mg)) {
-                //  gen.addMethod(create_dcomp_stub(mg).getMethod());
-              }
-            } else {
-              gen.addMethod(mg.getMethod());
-            }
-          } else {
-            throw e;
-          }
-        }
-        debug_transform.exdent();
-      } catch (Throwable t) {
-        // debug code
-        // t.printStackTrace();
-        if (debugInstrument.enabled) {
-          t.printStackTrace();
-        }
-        throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
-      }
-    }
-
-    // Add tag accessor methods for each primitive in the class
-    // create_tag_accessors(gen);
-
-    // Keep track of when the class is initialized (so we don't look
-    // for fields in uninitialized classes)
-    // track_class_init();
-    debug_transform.exdent();
-
-    // The code that builds the list of daikon variables for each ppt
-    // needs to know what classes are instrumented.  Its looks in the
-    // Chicory runtime for this information.
-    if (track_class) {
-      // debug_transform.log("DCInstrument adding %s to all class list%n", class_info);
-      // synchronized (daikon.chicory.SharedData.all_classes) {
-      // daikon.chicory.SharedData.all_classes.add(class_info);
-      // }
-    }
-    debug_transform.log("Instrumentation complete: %s%n", classname);
-
-    return gen.getJavaClass().copy();
   }
 
   /**
@@ -2093,9 +1690,8 @@ public class DCInstrument24 {
       // Create an array containing the type of each local variable.
       // This will be indexed by the local variable's slot number.
       // There may be a gap for the second slot of a variable of type long or double.
-      // UNDONE: do we have to save state of locals like we do statck?
       locals = new ClassDesc[mgen.getMaxLocals()];
-      // UNDONE: init locals with 'this' and params only?
+      // UNDONE: Should we init locals for 'this' and params only?
       for (final LocalVariable lv : mgen.localsTable) {
         locals[lv.slot()] = lv.typeSymbol();
       }
@@ -2976,9 +2572,8 @@ public class DCInstrument24 {
       System.out.println("searching interfaces of: " + ClassGen24.getClassName(startClass));
     }
     for (ClassEntry classEntry : startClass.interfaces()) {
-      // UNDONE: is this right? internal name or binary name?
       @SuppressWarnings("signature:assignment") // need JDK annotations
-      @BinaryName String interfaceName = classEntry.asInternalName();
+      @BinaryName String interfaceName = classEntry.asInternalName().replace('/', '.');
       if (debugGetDefiningInterface) {
         System.out.println("interface: " + interfaceName);
       }
@@ -3204,14 +2799,7 @@ public class DCInstrument24 {
     boolean targetInstrumented = true;
     Opcode op = invoke.opcode();
 
-    // UNDONE: can't get here if InvokeDynamic?
-    if (op.equals(Opcode.INVOKEDYNAMIC)) {
-      // We don't instrument lambda methods.
-      if (debugHandleInvoke) {
-        System.out.printf("invokedynamic NOT the classname: %s%n", classname);
-      }
-      targetInstrumented = false;
-    } else if (is_object_method(methodName, argTypes)) {
+    if (is_object_method(methodName, argTypes)) {
       targetInstrumented = false;
     } else {
       // At this point, we will never see classname = java.lang.Object.
@@ -3401,15 +2989,14 @@ public class DCInstrument24 {
       if (cm != null) {
         access = cm.flags().flagsMask();
 
-        System.out.println("classModel: " + cm.thisClass().name().stringValue());
-        System.out.println("getAccessFlags: " + classname);
+        debugInstrument.log("classModel: " + cm.thisClass().name().stringValue());
+        debugInstrument.log("getAccessFlags: " + classname);
         // Now check for FunctionalInterface
         searchloop:
         for (java.lang.classfile.Attribute<?> attribute : cm.attributes()) {
-          System.out.println("attribute: " + attribute);
+          debugInstrument.log("attribute: " + attribute);
           if (attribute instanceof RuntimeVisibleAnnotationsAttribute rvaa) {
             for (final Annotation item : rvaa.annotations()) {
-              System.out.println("item: " + item);
               String annotation = item.className().stringValue();
               if (debugHandleInvoke) {
                 System.out.println("annotation: " + annotation);
@@ -3585,7 +3172,6 @@ public class DCInstrument24 {
 
     ClassFile classFile = ClassFile.of();
     URL class_url = ClassLoader.getSystemResource(classname.replace('.', '/') + ".class");
-    System.out.println("URL: " + class_url);
     if (class_url != null) {
       try (InputStream inputStream = class_url.openStream()) {
         if (inputStream != null) {
@@ -3706,15 +3292,8 @@ public class DCInstrument24 {
   private List<CodeElement> load_store_field(
       MethodGen24 mgen, MethodGen24.MInfo24 minfo, FieldInstruction f) {
 
-    // UNDONE: delete, comment out or wrap with debug flag
-    System.out.println();
-    System.out.println("mgen: " + mgen);
-    System.out.println("FieldInst: " + f);
-    System.out.println("field_name: " + f.name().stringValue());
-    System.out.println("owner: " + f.owner());
-    System.out.println("owner: " + f.owner().asInternalName().replace('/', '.'));
     ClassDesc field_type = f.typeSymbol();
-    System.out.println("field_type: " + field_type + ", " + f.field().typeSymbol());
+    debugInstrument.log("field_type: " + field_type + ", " + f.field().typeSymbol());
     int field_size = TypeKind.from(field_type).slotSize();
     if (!field_type.isPrimitive()) {
       return null;
@@ -3873,8 +3452,6 @@ public class DCInstrument24 {
   LocalVariable get_tmp2_local(MethodGen24 mgen, MethodGen24.MInfo24 minfo, ClassDesc type) {
 
     String name = "dcomp_$tmp_" + type.descriptorString();
-    // UNDONE: delete, comment out or wrap with debug flag
-    System.out.printf("local var name = %s%n", name);
 
     // See if the local has already been created
     for (LocalVariable lv : mgen.localsTable) {
