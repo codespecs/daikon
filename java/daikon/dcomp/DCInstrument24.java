@@ -2989,8 +2989,8 @@ public class DCInstrument24 {
       if (cm != null) {
         access = cm.flags().flagsMask();
 
-        debugInstrument.log("classModel: " + cm.thisClass().name().stringValue());
-        debugInstrument.log("getAccessFlags: " + classname);
+        debugInstrument.log("classModel: %s%n", cm.thisClass().name().stringValue());
+        debugInstrument.log("getAccessFlags: %s%n", classname);
         // Now check for FunctionalInterface
         searchloop:
         for (java.lang.classfile.Attribute<?> attribute : cm.attributes()) {
