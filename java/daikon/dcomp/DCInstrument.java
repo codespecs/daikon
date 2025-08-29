@@ -3096,9 +3096,9 @@ public class DCInstrument extends InstructionListUtils {
     String full_name = m.toString();
     full_name = full_name.replaceFirst("\\s*throws.*", "");
 
-    return fullClassName
-        + "."
-        + DaikonWriter.methodEntryName(fullClassName, type_names, full_name, m.getName());
+    // UNDONE: full_name is not used by DaikonWriter.methodEntryName.
+
+    return DaikonWriter.methodEntryName(fullClassName, type_names, full_name, m.getName());
   }
 
   /**
