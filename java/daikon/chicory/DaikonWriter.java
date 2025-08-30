@@ -116,7 +116,7 @@ public abstract class DaikonWriter {
       // replace <init>'s with the actual class name
       // so "public void <init>" becomes "public void StackAr" for example
       short_name = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
-      // name = name.replace("<init>", short_name);
+      name = name.replace("<init>", short_name);
     }
 
     // build up the string to go inside the parens
