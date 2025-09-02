@@ -105,10 +105,12 @@ public abstract class DaikonWriter {
   private static String methodName(
       String fullClassName, String[] types, String name, String short_name, String point) {
 
+    // UNDONE: name is no longer used
+
     // System.out.printf("fullclass: %s !!! name: %s !!! short_name: %s %n",
     //                  fullClassName, name, short_name);
 
-    boolean isConstructor = name.equals("<init>") || name.equals("");
+    boolean isConstructor = short_name.equals("<init>") || short_name.equals("");
 
     if (isConstructor) {
       // replace <init>'s with the actual class name

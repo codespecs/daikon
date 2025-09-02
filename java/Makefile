@@ -140,10 +140,6 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER = sort
 endif
 
-# Currently, there are four files that require Java 24:
-# chicory/Instrument24.java chicory/MethodGen24.java
-# dcomp/Instrument24.java dcomp/DCinstrument24.java.
-
 DAIKON_JAVA_FILES := $(shell find daikon/ -name '*.java' -not -name '*\#*' -print | ${SORT_DIRECTORY_ORDER})
 ifeq ($(JAVA24), 0)
   DAIKON_JAVA_FILES :=  $(filter-out %24.java, $(DAIKON_JAVA_FILES))
