@@ -51,7 +51,8 @@ public class Premain {
 
   /**
    * Specifies if we are to use an instrumented version of the JDK. Calls into the JDK must be
-   * modified to remove the arguments from the tag stack if the JDK is not instrumented.
+   * modified to remove the arguments from the tag stack if the JDK is not instrumented. The default
+   * value is set to true for BuildJDK. Other tools will set this flag based on their options.
    */
   protected static boolean jdk_instrumented = true; // default to true for BuildJDK
 
