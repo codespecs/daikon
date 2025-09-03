@@ -30,11 +30,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.lang.classfile.Annotation;
-// import java.lang.classfile.Attribute;
+import java.lang.classfile.Attribute;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassElement;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.ClassModel;
+import java.lang.classfile.ClassTransform;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.CodeElement;
 import java.lang.classfile.CodeModel;
@@ -102,7 +103,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import org.apache.bcel.Const;
-import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.AnnotationEntryGen;
 import org.apache.bcel.generic.ClassGen;
@@ -123,7 +123,6 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 import org.checkerframework.checker.signature.qual.FieldDescriptor;
-import org.checkerframework.checker.signature.qual.FqBinaryName;
 import org.checkerframework.checker.signature.qual.MethodDescriptor;
 import org.checkerframework.dataflow.qual.Pure;
 
@@ -469,8 +468,8 @@ public class DCInstrument24 {
     debug_transform.enabled = daikon.dcomp.Instrument24.debug_transform.enabled;
 
     // TEMPORARY
-    debugInstrument.enabled = true;
     debugInstrument.enabled = false;
+    debugInstrument.enabled = true;
 
     bcelDebug = debugInstrument.enabled;
 
@@ -505,7 +504,7 @@ public class DCInstrument24 {
 
     // If a class has an EvoSuite annotation it may be instrumented by Evosuite;
     // thus, we should not instrument it before Evosuite does.
-    for (java.lang.classfile.Attribute<?> attribute : classModel.attributes()) {
+    for (Attribute<?> attribute : classModel.attributes()) {
       if (attribute instanceof RuntimeVisibleAnnotationsAttribute rvaa) {
         for (final Annotation item : rvaa.annotations()) {
           if (item.className().stringValue().startsWith("Lorg/evosuite/runtime")) {
@@ -550,7 +549,7 @@ public class DCInstrument24 {
 
     debug_transform.log("%nInstrumenting class: %s%n", classInfo.class_name);
     debugInstrument.log("Attributes:%n");
-    for (java.lang.classfile.Attribute<?> a : classModel.attributes()) {
+    for (Attribute<?> a : classModel.attributes()) {
       debugInstrument.log("  %s%n", a);
     }
 
@@ -691,7 +690,7 @@ public class DCInstrument24 {
       // need to check for junit Test annotation on a method
       searchloop:
       for (MethodModel mm : classModel.methods()) {
-        for (java.lang.classfile.Attribute<?> attribute : mm.attributes()) {
+        for (Attribute<?> attribute : mm.attributes()) {
           if (attribute instanceof RuntimeVisibleAnnotationsAttribute rvaa) {
             if (debugJUnitAnalysis) {
               System.out.printf("attribute: %s%n", attribute);
@@ -872,7 +871,8 @@ public class DCInstrument24 {
           for (int j = 0; j < paramTypes.length; j++) {
             @SuppressWarnings("signature:assignment") // need JDK annotations
             @FieldDescriptor String paramFD = paramTypes[j].descriptorString();
-            types = types + convertDescriptorToFqBinaryName(paramFD) + " ";
+            types =
+                types + daikon.chicory.Instrument24.convertDescriptorToFqBinaryName(paramFD) + " ";
           }
           for (int j = 0; j < paramNames.length; j++) {
             names = names + paramNames[j] + " ";
@@ -880,13 +880,13 @@ public class DCInstrument24 {
           for (int j = 0; j < local_vars.length; j++) {
             locals = locals + local_vars[j].name().stringValue() + " ";
           }
-          debugInstrument.log("%nMethod = %s%n", mgen);
+          debugInstrument.log("%nMethod = %s%n", mgen.getName());
           debugInstrument.log("paramTypes(%d): %s%n", paramTypes.length, types);
           debugInstrument.log("paramNames(%d): %s%n", paramNames.length, names);
           debugInstrument.log("localvars(%d): %s%n", local_vars.length, locals);
           //         debugInstrument.log("Original code: %s%n", mgen.getMethod().getCode());
           debugInstrument.log("Method Attributes:%n");
-          for (java.lang.classfile.Attribute<?> a : mm.attributes()) {
+          for (Attribute<?> a : mm.attributes()) {
             debugInstrument.log("  %s%n", a);
           }
           debugInstrument.log("mgen.getSignature: %s%n", mgen.getSignature());
@@ -896,9 +896,7 @@ public class DCInstrument24 {
         }
 
         // Note whether we want to track the daikon variables in this method
-        // boolean track = should_track(classname, mgen.getName(), methodEntryName(classname,
-        // mgen));
-        boolean track = should_track(classname, mgen.getName(), classname + mgen);
+        boolean track = should_track(classname, mgen.getName(), methodEntryName(classname, mgen));
 
         // We do not want to track bridge methods the compiler has synthesized as
         // they are overloaded on return type which normal Java does not support.
@@ -921,9 +919,8 @@ public class DCInstrument24 {
         // reset class access flags in case they have been changed
         classBuilder.withFlags(access_flags);
 
-        // debug_transform.log("  Processing method %s, track=%b%n", simplify_method_name(mgen),
-        // track);
-        debug_transform.log("  Processing method %s, track=%b%n", mgen, track);
+        debug_transform.log(
+            "  Processing method %s, track=%b%n", simplify_method_name(mgen), track);
         debug_transform.indent();
 
         // local variables referenced from a lambda expression must be final or effectively final
@@ -1207,7 +1204,8 @@ public class DCInstrument24 {
             lv.slot(), lv.name().stringValue(), lv.typeSymbol(), lv.startScope(), lv.endScope());
         @SuppressWarnings("signature:assignment") // need JDK annotations
         @FieldDescriptor String lvFD = lv.typeSymbol().descriptorString();
-        debugInstrument.log("  %s : %s%n", lv, convertDescriptorToFqBinaryName(lvFD));
+        debugInstrument.log(
+            "  %s : %s%n", lv, daikon.chicory.Instrument24.convertDescriptorToFqBinaryName(lvFD));
       }
 
       // Copy the modified instruction list to the output class.
@@ -1253,7 +1251,7 @@ public class DCInstrument24 {
       // no codeModel if DCInstrument24 generated the method
       if (codeModel != null) {
         debugInstrument.log("Code Attributes:%n");
-        for (java.lang.classfile.Attribute<?> a : codeModel.attributes()) {
+        for (Attribute<?> a : codeModel.attributes()) {
           debugInstrument.log("  %s%n", a);
         }
       }
@@ -1284,7 +1282,8 @@ public class DCInstrument24 {
           // debuging code
           // case LocalVariableType lvt -> {
           // @FieldDescriptor String lvFD = lvt.signatureSymbol().signatureString();
-          // System.out.printf("  %s : %s%n", lvt, convertDescriptorToFqBinaryName(lvFD)); }
+          // System.out.printf("  %s : %s%n", lvt,
+          // daikon.chicory.Instrument24.convertDescriptorToFqBinaryName(lvFD)); }
           case LabelTarget l -> {
             if (ca.labelToBci(l.label()) == 0) {
               oldStartLabel = l.label();
@@ -1313,7 +1312,8 @@ public class DCInstrument24 {
             lv.slot(), lv.name().stringValue(), lv.typeSymbol(), lv.startScope(), lv.endScope());
         @SuppressWarnings("signature:assignment") // need JDK annotations
         @FieldDescriptor String lvFD = lv.typeSymbol().descriptorString();
-        debugInstrument.log("  %s : %s%n", lv, convertDescriptorToFqBinaryName(lvFD));
+        debugInstrument.log(
+            "  %s : %s%n", lv, daikon.chicory.Instrument24.convertDescriptorToFqBinaryName(lvFD));
       }
 
       // Copy the modified instruction list to the output class.
@@ -1404,6 +1404,8 @@ public class DCInstrument24 {
   // method in daikon.dcomp.DCRuntime. The Java runtime does not enforce the security check in this
   // case.
 
+  // UNDONE
+
   /**
    * Instruments a JDK class to perform dynamic comparability and returns the new class definition.
    * A second version of each method in the class is created which is instrumented for
@@ -1411,16 +1413,18 @@ public class DCInstrument24 {
    *
    * @return the modified JavaClass
    */
-  public JavaClass instrument_jdk() {
+  public byte @Nullable [] instrument_jdk(ClassInfo classInfo) {
 
-    String classname = gen.getClassName();
+    @BinaryName String classname = classInfo.class_name;
 
+    // Don't know where I got this idea.  They are executed.  Don't remember why
+    // adding dcomp marker causes problems.
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
-    if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
+    if (classModel.flags().has(AccessFlag.ANNOTATION)) {
       debug_transform.log("Not instrumenting annotation %s%n", classname);
-      // MUST NOT RETURN NULL
-      return gen.getJavaClass().copy();
+      // Return classfile unmodified.
+      return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
     }
 
     int i = classname.lastIndexOf('.');
@@ -1430,7 +1434,8 @@ public class DCInstrument24 {
       String packageName = classname.substring(0, i);
       if (Premain.problem_packages.contains(packageName)) {
         debug_transform.log("Skipping problem package %s%n", packageName);
-        return gen.getJavaClass().copy();
+        // Return classfile unmodified.
+        return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
       }
     }
 
@@ -1439,7 +1444,8 @@ public class DCInstrument24 {
       // See Premain.java for a list and explainations.
       if (Premain.problem_classes.contains(classname)) {
         debug_transform.log("Skipping problem class %s%n", classname);
-        return gen.getJavaClass().copy();
+        // Return classfile unmodified.
+        return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
       }
       dcompRuntimeClassname = "java.lang.DCRuntime";
     }
@@ -1477,7 +1483,7 @@ public class DCInstrument24 {
           continue;
         }
 
-        debug_transform.log("  Processing method %s%n", simplify_method_name(m));
+        // debug_transform.log("  Processing method %s%n", simplify_method_name(m));
         debug_transform.indent();
 
         MethodGen mg = new MethodGen(m, classname, pool);
@@ -1608,7 +1614,9 @@ public class DCInstrument24 {
     debug_transform.exdent();
     debug_transform.log("Instrumentation complete: %s%n", classname);
 
-    return gen.getJavaClass().copy();
+    // UNDONE
+    // Return classfile unmodified.
+    return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
   }
 
   /**
@@ -2993,8 +3001,8 @@ public class DCInstrument24 {
         debugInstrument.log("getAccessFlags: %s%n", classname);
         // Now check for FunctionalInterface
         searchloop:
-        for (java.lang.classfile.Attribute<?> attribute : cm.attributes()) {
-          debugInstrument.log("attribute: " + attribute);
+        for (Attribute<?> attribute : cm.attributes()) {
+          debugInstrument.log("attribute: %s%n", attribute);
           if (attribute instanceof RuntimeVisibleAnnotationsAttribute rvaa) {
             for (final Annotation item : rvaa.annotations()) {
               String annotation = item.className().stringValue();
@@ -3293,7 +3301,7 @@ public class DCInstrument24 {
       MethodGen24 mgen, MethodGen24.MInfo24 minfo, FieldInstruction f) {
 
     ClassDesc field_type = f.typeSymbol();
-    debugInstrument.log("field_type: " + field_type + ", " + f.field().typeSymbol());
+    debugInstrument.log("field_type: %s%n", field_type);
     int field_size = TypeKind.from(field_type).slotSize();
     if (!field_type.isPrimitive()) {
       return null;
@@ -3731,28 +3739,29 @@ public class DCInstrument24 {
    * Constructs a ppt entry name from a Method.
    *
    * @param fullClassName class name
-   * @param m method
+   * @param mgen method
    * @return corresponding ppt name
    */
-  static String methodEntryName(String fullClassName, Method m) {
+  static String methodEntryName(String fullClassName, MethodGen24 mgen) {
 
-    // System.out.printf("classname = %s, method = %s, short_name = %s%n",
-    //                   fullClassName, m, m.getName());
+    // System.out.printf("classname = %s, short_name = %s%n",
+    // fullClassName, mgen.getName());
 
     // Get an array of the type names
-    Type[] argTypes = m.getArgumentTypes();
+    ClassDesc[] argTypes = mgen.getParameterTypes();
     String[] type_names = new String[argTypes.length];
     for (int ii = 0; ii < argTypes.length; ii++) {
-      type_names[ii] = argTypes[ii].toString();
+      @SuppressWarnings("signature:assignment") // need JDK annotations
+      @FieldDescriptor String paramFD = argTypes[ii].descriptorString();
+      type_names[ii] = daikon.chicory.Instrument24.convertDescriptorToFqBinaryName(paramFD);
     }
 
-    // Remove exceptions from the name
-    String full_name = m.toString();
-    full_name = full_name.replaceFirst("\\s*throws.*", "");
+    // // Remove exceptions from the name
+    // String full_name = m.toString();
+    // full_name = full_name.replaceFirst("\\s*throws.*", "");
+    // Note that full_name is not used; replaced with "".
 
-    return fullClassName
-        + "."
-        + DaikonWriter.methodEntryName(fullClassName, type_names, full_name, m.getName());
+    return DaikonWriter.methodEntryName(fullClassName, type_names, "", mgen.getName());
   }
 
   /**
@@ -4691,7 +4700,7 @@ public class DCInstrument24 {
               instructions,
               3, // maxStack
               2); // maxLocals
-      boolean track = should_track(classname, mgen.getName(), classname + mgen);
+      boolean track = should_track(classname, mgen.getName(), methodEntryName(classname, mgen));
       classBuilder.withMethod(
           "equals_dcomp_instrumented",
           mtdDComp,
@@ -4769,7 +4778,7 @@ public class DCInstrument24 {
       MethodGen24 mgen =
           new MethodGen24(
               classname, classBuilder, "equals", access_flags, mtdNormal, instructions, 2, 2);
-      boolean track = should_track(classname, mgen.getName(), classname + mgen);
+      boolean track = should_track(classname, mgen.getName(), methodEntryName(classname, mgen));
       classBuilder.withMethod(
           "equals",
           mtdDComp,
@@ -4945,14 +4954,15 @@ public class DCInstrument24 {
   /**
    * Return simplified name of a method. Both exceptions and annotations are removed.
    *
-   * @param m the method
+   * @param mgen the method
    * @return string containing the simplified method name
    */
-  protected String simplify_method_name(Method m) {
+  protected String simplify_method_name(MethodGen24 mgen) {
     // Remove exceptions from the full method name
-    String full_name = m.toString().replaceFirst("\\s*throws.*", "");
+    // String full_name = m.toString().replaceFirst("\\s*throws.*", "");
     // Remove annotations from full method name
-    return full_name.replaceFirst("(?s) \\[.*", "");
+    // return full_name.replaceFirst("(?s) \\[.*", "");
+    return mgen.toString();
   }
 
   // UNDONE consider making this a Java record
@@ -5055,142 +5065,6 @@ public class DCInstrument24 {
     } else {
       return null;
     }
-  }
-
-  /**
-   * Format a field descriptor for output. The main difference between a descriptor and a signature
-   * is that the latter may contain type arguments. This routine was orginaly written for
-   * descriptors, but some support for type arguments has been added.
-   *
-   * <p>The output format is an extension of binary name format that includes primitives and arrays.
-   * It is almost identical to a fully qualified name, but using “$” instead of “.” to separate
-   * nested classes from their enclosing classes.
-   *
-   * @param descriptor the object to format
-   * @return a @FqBinaryName formatted string
-   */
-  @SuppressWarnings("signature") // conversion method
-  public static @FqBinaryName String convertDescriptorToFqBinaryName(
-      @FieldDescriptor String descriptor) {
-    StringBuilder result = new StringBuilder();
-
-    int arrayDimensions = 0;
-    while (descriptor.charAt(0) == '[') {
-      arrayDimensions++;
-      @SuppressWarnings("signature") // string manipulation
-      @FieldDescriptor String descriptorFd = descriptor.substring(1);
-      descriptor = descriptorFd;
-    }
-
-    // Convert primitive types
-    switch (descriptor.charAt(0)) {
-      case 'B':
-        result.append("byte");
-        break;
-      case 'C':
-        result.append("char");
-        break;
-      case 'D':
-        result.append("double");
-        break;
-      case 'F':
-        result.append("float");
-        break;
-      case 'I':
-        result.append("int");
-        break;
-      case 'J':
-        result.append("long");
-        break;
-      case 'S':
-        result.append("short");
-        break;
-      case 'Z':
-        result.append("boolean");
-        break;
-      case 'V':
-        result.append("void");
-        break;
-      case 'L': // Object type, starts with 'L' and ends with ';'
-        result.append(descriptorToFqBinaryName(descriptor));
-        break;
-      default:
-        throw new DynCompError("Invalid descriptor: " + descriptor);
-    }
-
-    // Append array brackets if applicable
-    for (int i = 0; i < arrayDimensions; i++) {
-      result.append("[]");
-    }
-
-    return result.toString();
-  }
-
-  /**
-   * Format a class name that may contain type arguments.
-   *
-   * @param descriptor the object to format
-   * @return a @FqBinaryName formatted string
-   */
-  @SuppressWarnings("signature") // conversion method
-  private static @FqBinaryName String descriptorToFqBinaryName(String descriptor) {
-    StringBuilder result = new StringBuilder();
-    int genericStart = descriptor.indexOf('<');
-    int genericEnd = descriptor.lastIndexOf('>');
-    int endOfBaseType = descriptor.indexOf(';');
-
-    if (genericStart > 0 && genericEnd > genericStart) {
-      // Base type with generics
-      String baseType = descriptor.substring(1, genericStart).replace('/', '.');
-      result.append(baseType).append('<');
-      String genericPart = descriptor.substring(genericStart + 1, genericEnd);
-      result.append(typeArgumentsToBinaryNames(genericPart));
-      result.append('>');
-    } else if (endOfBaseType > 0) {
-      // Regular object type
-      result.append(descriptor.substring(1, endOfBaseType).replace('/', '.'));
-    } else {
-      throw new DynCompError("Malformed object type descriptor: " + descriptor);
-    }
-    return result.toString();
-  }
-
-  /**
-   * Format one or more type parameters.
-   *
-   * @param genericPart the type parameter(s) to format
-   * @return a string containing a list of types as binary names
-   */
-  @SuppressWarnings("signature") // string manipulation
-  private static String typeArgumentsToBinaryNames(String genericPart) {
-    StringBuilder result = new StringBuilder();
-    int depth = 0;
-    StringBuilder current = new StringBuilder();
-    List<String> params = new ArrayList<>();
-
-    for (int i = 0; i < genericPart.length(); i++) {
-      char c = genericPart.charAt(i);
-      if (c == '<') {
-        depth++;
-        current.append(c);
-      } else if (c == '>') {
-        depth--;
-        current.append(c);
-      } else if (c == ';' && depth == 0) {
-        current.append(c);
-        params.add(convertDescriptorToFqBinaryName(current.toString()));
-        current.setLength(0); // Clear the buffer
-      } else {
-        current.append(c);
-      }
-    }
-
-    if (current.length() > 0) {
-      params.add(convertDescriptorToFqBinaryName(current.toString()));
-    }
-
-    result.append(String.join(", ", params));
-    return result.toString();
   }
 
   /**
