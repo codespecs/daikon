@@ -151,19 +151,6 @@ public class Instrument24 implements ClassFileTransformer {
     @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
     if (className == null) {
-      /*
-      // debug code to display unnamed class
-      try {
-        // Parse the bytes of the classfile, die on any errors
-        ClassParser parser = new ClassParser(new ByteArrayInputStream(classfileBuffer), className);
-        JavaClass c = parser.parse();
-        System.out.println(c.toString());
-      } catch (Throwable e) {
-        System.out.printf("Unexpected Error: %s%n", e);
-        e.printStackTrace();
-        throw new RuntimeException("Unexpected error", e);
-      }
-      */
       // most likely a lambda related class
       return null;
     }
