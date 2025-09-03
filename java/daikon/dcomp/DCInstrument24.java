@@ -468,8 +468,8 @@ public class DCInstrument24 {
     debug_transform.enabled = daikon.dcomp.Instrument24.debug_transform.enabled;
 
     // TEMPORARY
-    debugInstrument.enabled = false;
     debugInstrument.enabled = true;
+    debugInstrument.enabled = false;
 
     bcelDebug = debugInstrument.enabled;
 
