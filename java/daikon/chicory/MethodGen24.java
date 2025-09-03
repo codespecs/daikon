@@ -720,32 +720,77 @@ public class MethodGen24 {
     codeList = il;
   }
 
-  // need to fancy up!
+  /**
+   * Return string representation close to declaration format, 'public static void main(String[])',
+   * e.g.
+   *
+   * @return String representation of the method declaration.
+   */
   @Override
   public final String toString(@GuardSatisfied MethodGen24 this) {
-    return methodName;
+    StringBuilder result = new StringBuilder(getAccess(accessFlagsMask));
+    result.append(returnType.equals(CD_void) ? "void" : convertClassDesc(returnType));
+    result.append(" " + methodName + "(");
+    if (paramTypes.length > 0) {
+      for (int i = 0; i < paramTypes.length; i++) {
+        String arg = convertClassDesc(paramTypes[i]);
+        if ((accessFlagsMask & ClassFile.ACC_VARARGS) != 0 && (i == (paramTypes.length - 1))) {
+          arg = arg.replace("[]", "...");
+        }
+        result.append(arg + " " + paramNames[i] + ", ");
+      }
+      result.setLength(result.length() - 2); // remove last ", "
+    }
+    result.append(")");
+    return result.toString();
   }
 
-  /*
-     @Override
-     public final String toString() {
-         final String access = Utility.accessToString(super.getAccessFlags());
-         String signature = Type.getMethodSignature(super.getType(), paramTypes);
-         signature = Utility.methodSignatureToString(signature, super.getName(), access, true, getLocalVariableTable(super.getConstantPool()));
-         final StringBuilder buf = new StringBuilder(signature);
-         for (final Attribute a : getAttributes()) {
-             if (!(a instanceof Code || a instanceof ExceptionTable)) {
-                 buf.append(" [").append(a).append("]");
-             }
-         }
+  /**
+   * Returns a string representation of a ClassDesc. Removes a leading "java.lang.".
+   *
+   * @param type the ClassDesc to translate
+   */
+  private String convertClassDesc(@GuardSatisfied MethodGen24 this, ClassDesc type) {
+    @SuppressWarnings("signature:assignment") // need JDK annotations
+    @FieldDescriptor String arg0Fd = type.descriptorString();
+    String result = daikon.chicory.Instrument24.convertDescriptorToFqBinaryName(arg0Fd);
+    if (result.startsWith("java.lang.")) {
+      result = result.replace("java.lang.", "");
+    }
+    return result;
+  }
 
-         if (!throwsList.isEmpty()) {
-             for (final String throwsDescriptor : throwsList) {
-                 buf.append("\n\t\tthrows ").append(throwsDescriptor);
-             }
-         }
-         return buf.toString();
-     }
-  */
-
+  /**
+   * Returns a string representation of a method's access flags.
+   *
+   * @param accessFlagsMask some access flags.
+   */
+  private String getAccess(@GuardSatisfied MethodGen24 this, final int accessFlagsMask) {
+    StringBuilder result = new StringBuilder();
+    if ((accessFlagsMask & ClassFile.ACC_PUBLIC) != 0) {
+      result.append("public ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_PRIVATE) != 0) {
+      result.append("private ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_PROTECTED) != 0) {
+      result.append("protected ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_ABSTRACT) != 0) {
+      result.append("abstract ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_STATIC) != 0) {
+      result.append("static ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_FINAL) != 0) {
+      result.append("final ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_SYNCHRONIZED) != 0) {
+      result.append("synchronized ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_NATIVE) != 0) {
+      result.append("native ");
+    }
+    return result.toString();
+  }
 }
