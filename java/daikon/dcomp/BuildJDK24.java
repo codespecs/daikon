@@ -44,13 +44,13 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 
 /**
- * BuildJDK(24) uses {@link DCInstrument} to add comparability instrumentation to Java class files,
+ * BuildJDK24 uses {@link DCInstrument24} to add comparability instrumentation to Java class files,
  * then stores the modified files into a directory identified by a (required) command line argument.
  *
- * <p>DCInstrument duplicates each method of a class file. The new methods are distinguished by the
- * addition of a final parameter of type DCompMarker and are instrumented to track comparability.
- * Based on its invocation arguments, DynComp will decide whether to call the instrumented or
- * uninstrumented version of a method.
+ * <p>DCInstrument24 duplicates each method of a class file. The new methods are distinguished by
+ * the addition of a final parameter of type DCompMarker and are instrumented to track
+ * comparability. Based on its invocation arguments, DynComp will decide whether to call the
+ * instrumented or uninstrumented version of a method.
  */
 @SuppressWarnings({
   "mustcall:type.argument",
@@ -76,14 +76,17 @@ public class BuildJDK24 {
   /** Name of file in output jar containing the static-fields map. */
   private static String static_field_id_filename = "dcomp_jdk_static_field_id";
 
+  @SuppressWarnings("nullness")
+  private static daikon.dcomp.Instrument24 inst24;
+
   /**
-   * Collects names of all methods that DCInstrument could not process. Should be empty. Format is
+   * Collects names of all methods that DCInstrument24 could not process. Should be empty. Format is
    * &lt;fully-qualified class name&gt;.&lt;method name&gt;
    */
   private static List<String> skipped_methods = new ArrayList<>();
 
   /**
-   * A list of methods known to cause DCInstrument to fail. This is used to remove known problems
+   * A list of methods known to cause DCInstrument24 to fail. This is used to remove known problems
    * from the list of failures displayed at the end of BuildJDK's execution. Format is
    * &lt;fully-qualified class name&gt;.&lt;method name&gt;
    */
@@ -116,7 +119,7 @@ public class BuildJDK24 {
         new Options(
             "daikon.BuildJDK24 [options] dest_dir [classfiles...]",
             DynComp.class,
-            DCInstrument.class);
+            DCInstrument24.class);
     String[] cl_args = options.parse(true, args);
     if (cl_args.length < 1) {
       System.err.println("must specify destination dir");
@@ -124,6 +127,7 @@ public class BuildJDK24 {
       System.exit(1);
     }
     verbose = DynComp.verbose;
+    inst24 = new daikon.dcomp.Instrument24();
 
     File dest_dir = new File(cl_args[0]);
 
@@ -146,9 +150,9 @@ public class BuildJDK24 {
       // But if we're using it to fix a broken classfile, then we need
       // to restore the static-fields map from when our runtime jar was originally
       // built.  We assume it is in the destination directory.
-      DCInstrument.restore_static_field_id(new File(dest_dir, static_field_id_filename));
+      DCInstrument24.restore_static_field_id(new File(dest_dir, static_field_id_filename));
       System.out.printf(
-          "Restored %d entries in static map.%n", DCInstrument.static_field_id.size());
+          "Restored %d entries in static map.%n", DCInstrument24.static_field_id.size());
 
       class_stream_map = new HashMap<>();
       for (String classFileName : class_files) {
@@ -180,8 +184,8 @@ public class BuildJDK24 {
       build.addInterfaceClasses(dest_dir.getName());
 
       // Write out the file containing the static-fields map.
-      System.out.printf("Found %d static fields.%n", DCInstrument.static_field_id.size());
-      DCInstrument.save_static_field_id(new File(dest_dir, static_field_id_filename));
+      System.out.printf("Found %d static fields.%n", DCInstrument24.static_field_id.size());
+      DCInstrument24.save_static_field_id(new File(dest_dir, static_field_id_filename));
 
       // Write out the list of all classes in the jar file
       File jdk_classes_file = new File(dest_dir, "java/lang/jdk_classes.txt");
@@ -392,12 +396,20 @@ public class BuildJDK24 {
                 ClassFile.ClassHierarchyResolverOption.of(
                     ClassHierarchyResolver.ofResourceParsing(loader)));
         ClassModel classModel;
+        byte[] buffer;
+
         // Parse the bytes of the classfile, die on any errors.
         try (InputStream is = class_stream_map.get(classFileName)) {
-          byte[] buffer = is.readAllBytes();
+          buffer = is.readAllBytes();
           classModel = classFile.parse(buffer);
         } catch (Throwable e) {
           throw new Error("Failed to parse classfile " + classFileName, e);
+        }
+
+        @SuppressWarnings("signature:assignment") // type conversion
+        @BinaryName String classname = classFileName.replace(".class", "").replace('/', '.');
+        if (DynComp.dump) {
+          inst24.outputDebugFiles(buffer, inst24.debug_uninstrumented_dir, classname);
         }
 
         // Instrument the class file.
@@ -505,13 +517,17 @@ public class BuildJDK24 {
       System.out.printf("processing target %s%n", classFileName);
     }
 
+    // remove '.class' first
     @SuppressWarnings("signature:assignment") // type conversion
-    @BinaryName String classname = classFileName.replace('/', '.');
+    @BinaryName String classname = classFileName.replace(".class", "").replace('/', '.');
     ClassInfo classInfo = new ClassInfo(classname, loader);
     DCInstrument24 dci = new DCInstrument24(classFile, classModel, true);
     byte[] classBytes = dci.instrument_jdk(classInfo);
     if (classBytes == null) {
       throw new Error("Instrumentation failed: " + classFile);
+    }
+    if (DynComp.dump) {
+      inst24.outputDebugFiles(classBytes, inst24.debug_instrumented_dir, classname);
     }
     skipped_methods.addAll(dci.get_skipped_methods());
     File classfile = new File(classFileName);
