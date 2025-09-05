@@ -46,8 +46,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class CalcStack24 {
 
   /** ClassDesc for 'null'. */
-  @SuppressWarnings("nullness:assignment")
-  protected static final ClassDesc nullCD = null;
+  protected static final ClassDesc nullCD = ClassDesc.of("fake.ClassDecs.for.null");
 
   /**
    * Calculates changes in contents of operand stack based on the symbolic execution of a Java
@@ -94,7 +93,7 @@ public class CalcStack24 {
             {
               stack.pop(); // discard the index
               final ClassDesc t = stack.pop(); // pop the arrayref
-              if (t == null) {
+              if (t == null || nullCD.equals(t)) {
                 stack.push(nullCD);
                 // Do nothing stackwise --- a NullPointerException will be thrown when executed
               } else {
@@ -249,7 +248,7 @@ public class CalcStack24 {
           case Opcode.CHECKCAST:
             {
               final ClassDesc t = stack.pop(); // pop the objectref
-              if (t == null) {
+              if (t == null || nullCD.equals(t)) {
                 stack.push(nullCD);
               } else {
                 TypeCheckInstruction tci = (TypeCheckInstruction) inst;
