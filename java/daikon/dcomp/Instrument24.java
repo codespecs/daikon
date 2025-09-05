@@ -92,7 +92,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param directory output location for the files
    * @param className the current class
    */
-  private void outputDebugFiles(byte[] classBytes, File directory, @BinaryName String className) {
+  public void outputDebugFiles(byte[] classBytes, File directory, @BinaryName String className) {
     // Convert the classBytes to a BCEL JavaClass
     JavaClass c;
     try (ByteArrayInputStream bais = new ByteArrayInputStream(classBytes)) {
