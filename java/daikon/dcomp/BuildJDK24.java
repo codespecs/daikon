@@ -76,6 +76,7 @@ public class BuildJDK24 {
   /** Name of file in output jar containing the static-fields map. */
   private static String static_field_id_filename = "dcomp_jdk_static_field_id";
 
+  /** Allow BuildJDK24 to access outputDebugFiles. */
   @SuppressWarnings("nullness")
   private static daikon.dcomp.Instrument24 inst24;
 
