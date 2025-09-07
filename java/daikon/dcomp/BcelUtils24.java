@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.ListIterator;
 import org.checkerframework.checker.signature.qual.Identifier;
 
-/** This class provides utility methods to ...??? */
+/** This class provides utility methods for manipulating bytecode structures in the Java 24 instrumentation pipeline, including operations on local variables, parameter types, and instruction adjustments. */
 @SuppressWarnings("nullness")
 public class BcelUtils24 {
 
