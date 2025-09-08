@@ -9,6 +9,7 @@ nonquick_job(ubuntu, 8)
 nonquick_job(ubuntu, 11)
 nonquick_job(ubuntu, 17)
 nonquick_job(ubuntu, 21)
+nonquick_job(ubuntu, 24)
 nonquick_job(ubuntu, 25)
 
 nontxt_job(ubuntu, 8)
