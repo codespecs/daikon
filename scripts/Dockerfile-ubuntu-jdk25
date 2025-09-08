@@ -46,6 +46,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && apt -qqy install \
   openjdk-25-jdk \
 && update-java-alternatives --set java-1.25.0-openjdk-amd64
+ENV JAVA25_HOME=/usr/bin/jvm/java-25-openjdk
 
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt autoremove \

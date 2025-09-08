@@ -53,7 +53,7 @@ endif
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
 # Test for Java 25 because it is an LTS version.
 ifeq ($(JAVA25), 1)
-JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system $JAVA25_HOME/lib/modules
+JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/lib/modules
 else ifeq ($(JAVA24), 1)
 JAVAC_TARGET_FLAGS ?= -source 24 -target 24
 else
