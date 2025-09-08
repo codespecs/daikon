@@ -50,7 +50,7 @@ endif
 ifeq ($(JAVA24), 0)
 JAVAC_TARGET_FLAGS ?= -source 8 -target 8
 else
-JAVAC_TARGET_FLAGS ?= -source 24 -target 24
+JAVAC_TARGET_FLAGS ?= --release 24
 endif
 
 # TODO: -Werror is temporary.
