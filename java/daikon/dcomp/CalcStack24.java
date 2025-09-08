@@ -94,8 +94,10 @@ public class CalcStack24 {
               stack.pop(); // discard the index
               final ClassDesc t = stack.pop(); // pop the arrayref
               if (t == null || nullCD.equals(t)) {
+                // Push nullCD to maintain stack consistency. The actual NullPointerException
+                // will be thrown at runtime if this code path is executed, not during
+                // instrumentation.
                 stack.push(nullCD);
-                // Do nothing stackwise --- a NullPointerException will be thrown when executed
               } else {
                 final ClassDesc ct = t.componentType();
                 if (ct == null) {
@@ -682,7 +684,10 @@ public class CalcStack24 {
             stack.push(CD_int);
             return true;
 
-          // UNDONE should we just throw on jsr and ret? They are illegal post JDK 6.
+          // TODO: JSR and RET have been illegal since JDK 7 (class file version 51.0).
+          // Consider throwing an UnsupportedOperationException for these opcodes
+          // if we're only supporting modern class files (version 51.0+).
+          // Currently maintaining support for completeness.
 
           // operand stack:
           // ...
@@ -842,7 +847,7 @@ public class CalcStack24 {
                 descriptor = "[S";
               }
               default -> {
-                throw new Error("unknow primitive array type: " + inst);
+                throw new Error("unknown primitive array type: " + inst);
               }
             }
             stack.push(ClassDesc.ofDescriptor(descriptor));

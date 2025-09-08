@@ -1314,7 +1314,7 @@ public class Instrument24 implements ClassFileTransformer {
    */
   @Pure
   private boolean isConstructor(MethodGen24 mgen) {
-    if (mgen.getName().equals("<init>") || mgen.getName().equals("")) {
+    if (mgen.getName().equals("<init>")) {
       debugInstrument.log("isConstructor(%s) => true%n", mgen.getName());
       return true;
     } else {

@@ -78,8 +78,8 @@ public class MethodGen24 {
    * The method's CodeAttribute. This contains information about the bytecodes (instructions) of
    * this method. May be null if the method has no code.
    *
-   * <p>Several fields of CodeAttribute are declared as fields of MedthodGen24 to better model
-   * BCEL's version of MethodGen and to reduce re-computation. Note that we set these fields in the
+   * <p>Several fields of CodeAttribute are declared as fields of MethodGen24 to better model BCEL's
+   * version of MethodGen and to reduce re-computation. Note that we set these fields in the
    * constructor, but they could be calculated lazily on first reference.
    */
   private @Nullable CodeAttribute codeAttribute;
@@ -111,12 +111,12 @@ public class MethodGen24 {
    * The method's signature. This is a String that encodes type information about a (possibly
    * generic) method declaration. It describes any type parameters of the method; the (possibly
    * parameterized) types of any formal parameters; the (possibly parameterized) return type, if
-   * any. It is not a true method signature as documented in the Java Vitural Machine Specification
+   * any. It is not a true method signature as documented in the Java Virtual Machine Specification
    * as it does not include the types of any exceptions declared in the method's throws clause.
    */
   private @MethodDescriptor String signature;
 
-  // Informatation extracted from {@code mtd}, the MethodTypeDescriptor.
+  // Information extracted from {@code mtd}, the MethodTypeDescriptor.
   /** The method's parameter types. */
   private ClassDesc[] paramTypes;
 
@@ -165,7 +165,7 @@ public class MethodGen24 {
     /** Label for last byte code of method, used to give new locals method scope. */
     public final Label endLabel;
 
-    /** Label for start of orignal code, post insertion of entry instrumentation. */
+    /** Label for start of original code, post insertion of entry instrumentation. */
     public Label entryLabel;
 
     /**
@@ -396,7 +396,7 @@ public class MethodGen24 {
   /**
    * Due to a Java compiler optimization, unused parameters may not be included in the local
    * variables. Some of DynComp's instrumentation requires their presence. This routine makes these
-   * changes, if neccesary.
+   * changes, if necessary.
    *
    * @param minfo MInfo24 object for current method
    * @return true if modified localsTable, false otherwise
@@ -457,7 +457,7 @@ public class MethodGen24 {
       lIndex++;
     }
 
-    // UNDONE: do we need to check for alignment gaps in locals after the paramerters?
+    // UNDONE: do we need to check for alignment gaps in locals after the parameters?
 
     // If we added locals, then table is no longer sorted by slot.
     if (modified) {

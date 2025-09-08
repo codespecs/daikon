@@ -29,7 +29,7 @@ import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * This is a modified version of BCEL's OperandStack. We assume that the class file has been
- * previously verified, so we check very few error contitions.
+ * previously verified, so we check very few error conditions.
  *
  * <p>This class implements a stack used for symbolic JVM stack simulation. [It's used as an operand
  * stack substitute.] Elements of this stack are {@link ClassDesc} objects.

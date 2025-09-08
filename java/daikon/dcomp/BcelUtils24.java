@@ -60,7 +60,8 @@ public class BcelUtils24 {
    */
   public static ClassDesc[] postpendToArray(ClassDesc[] types, ClassDesc newType) {
     if (types.length == Integer.MAX_VALUE) {
-      throw new Error("array " + Arrays.toString(types) + " is too large to extend");
+      throw new IllegalArgumentException(
+          "array " + Arrays.toString(types) + " is too large to extend");
     }
     ClassDesc[] newTypes = new ClassDesc[types.length + 1];
     System.arraycopy(types, 0, newTypes, 0, types.length);
@@ -77,9 +78,7 @@ public class BcelUtils24 {
    */
   protected static String[] addString(String[] arr, String newString) {
     String[] newArr = new String[arr.length + 1];
-    for (int ii = 0; ii < arr.length; ii++) {
-      newArr[ii] = arr[ii];
-    }
+    System.arraycopy(arr, 0, newArr, 0, arr.length);
     newArr[arr.length] = newString;
     return newArr;
   }
@@ -146,7 +145,7 @@ public class BcelUtils24 {
    *   <li>the tag frame array - added as a local
    * </ol>
    *
-   * <p>Must call fixLocals (in MethodGen24) before calling this routine.
+   * <p>Must call {@link MethodGen24#fixLocals()} before calling this routine.
    *
    * @param mgen MethodGen to be modified
    * @param argName name of new parameter

@@ -168,7 +168,7 @@ public class ClassGen24 {
 
   /**
    * Returns the name of the super class of this class. In the case that this class is {@link
-   * Object}, it will return itself ({@link Object}). This is probably incorrect but is consistant
+   * Object}, it will return itself ({@link Object}). This is probably incorrect but is consistent
    * with the BCEL version of getSuperclassName.
    *
    * @return the binary name of the class that contains this class
@@ -180,7 +180,7 @@ public class ClassGen24 {
   /**
    * Returns the name of the super class of the argument. In the case that the argument class is
    * {@link Object}, it will return itself ({@link Object}). This is probably incorrect but is
-   * consistant with the BCEL version of getSuperclassName.
+   * consistent with the BCEL version of getSuperclassName.
    *
    * @param classModel the class to check
    * @return the binary name of the superclass of classModel or "java.lang.Object" if it has no
@@ -193,7 +193,7 @@ public class ClassGen24 {
       @BinaryName String scn = ce.get().asInternalName().replace('/', '.');
       return scn;
     } else {
-      // This is probably incorrect but is consistant with the BCEL version of superclassName.
+      // This is probably incorrect but is consistent with the BCEL version of superclassName.
       // What about if this is module-info.class?
       return "java.lang.Object";
     }
