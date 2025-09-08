@@ -791,7 +791,7 @@ else
   extra-error-prone-args-1 = --should-stop=ifError=FLOW
 endif
 ifeq ($(JAVA24), 1)
-  extra-error-prone-args-2 = -source 24 -target 24
+  extra-error-prone-args-2 = --release 24
 endif
 
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-${error-prone-version}-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.48.4.jar
@@ -1263,7 +1263,7 @@ ifeq ($(JAVA8), 1)
 endif
 
 ifeq ($(JAVA24), 1)
-  extra-javadoc-arg = -source 24
+  extra-javadoc-arg = --release 24
 else
   extra-javadoc-arg =
 endif
