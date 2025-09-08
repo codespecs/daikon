@@ -38,8 +38,12 @@ endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 17; echo $$?),0)
   JAVA17 := 1
 endif
+# Temporary, since Java 24 is not a LTS release.
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 24; echo $$?),0)
   JAVA24 := 1
+endif
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 25; echo $$?),0)
+  JAVA25 := 1
 endif
 
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
@@ -47,10 +51,13 @@ ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
 endif
 
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
-ifeq ($(JAVA24), 0)
-JAVAC_TARGET_FLAGS ?= -source 8 -target 8
+# Test for Java 25 because it is an LTS version.
+ifeq ($(JAVA25), 1)
+JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system $JAVA25_HOME/lib/modules
+else ifeq ($(JAVA24), 1)
+JAVAC_TARGET_FLAGS ?= -source 24 -target 24
 else
-JAVAC_TARGET_FLAGS ?= --release 24
+JAVAC_TARGET_FLAGS ?= -source 8 -target 8
 endif
 
 # TODO: -Werror is temporary.
@@ -790,9 +797,6 @@ else
   error-prone-version = 2.36.0
   extra-error-prone-args-1 = --should-stop=ifError=FLOW
 endif
-ifeq ($(JAVA24), 1)
-  extra-error-prone-args-2 = --release 24
-endif
 
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-${error-prone-version}-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.48.4.jar
 
@@ -825,7 +829,6 @@ else
 	  -Xmaxwarns 100000 \
 	  -Werror \
 	  ${extra-error-prone-args-1} \
-	  ${extra-error-prone-args-2} \
 	  ${JAVA_FILES_FOR_STYLE}
 endif
 
@@ -839,7 +842,6 @@ errorprone-replacements:
 	  '-Xplugin:ErrorProne -XepPatchChecks:UnnecessaryParentheses,ArrayToString -XepPatchLocation:${DAIKONDIR}/java' \
 	  -Xmaxwarns 100000 \
 	  ${extra-error-prone-args-1} \
-	  ${extra-error-prone-args-2} \
 	  ${JAVA_FILES_FOR_STYLE}
 
 findbugs: .findbugs-output
@@ -1260,12 +1262,6 @@ endif
 # If Java 8, don't run javadoc; a bug in javadoc causes it to crash.
 ifeq ($(JAVA8), 1)
   SKIP_JAVADOC=1
-endif
-
-ifeq ($(JAVA24), 1)
-  extra-javadoc-arg = --release 24
-else
-  extra-javadoc-arg =
 endif
 
 # Build javadoc using the daikon package and all subpackages of daikon.
