@@ -145,7 +145,7 @@ public class BcelUtils24 {
    *   <li>the tag frame array - added as a local
    * </ol>
    *
-   * <p>Must call {@link MethodGen24#fixLocals()} before calling this routine.
+   * <p>Must call {@link MethodGen24#fixLocals} before calling this routine.
    *
    * @param mgen MethodGen to be modified
    * @param argName name of new parameter
