@@ -54,8 +54,9 @@ endif
 
 default: summary-w-daikon
 
+# lsb_release is downloaded rather than packaged because of its license.
 ifeq (,$(wildcard ${DAIKONDIR}/scripts/lsb_release))
-$(shell cd ${DAIKONDIR}/scripts && wget https://raw.githubusercontent.com/OpenMandrivaSoftware/lsb-release/refs/heads/master/lsb_release && chmod +x lsb_release)
+$(shell cd ${DAIKONDIR}/scripts && wget -N https://raw.githubusercontent.com/OpenMandrivaSoftware/lsb-release/refs/heads/master/lsb_release && chmod +x lsb_release)
 endif
 
 # Set up potential OS_ID and OS_ID+OS_REL specific goal targets.
