@@ -677,26 +677,6 @@ public class ParameterDoclet implements Doclet {
               formatTexinfo = false;
               return OK;
             }
-          },
-          // In JDK 25, src/jdk.javadoc/share/classes/jdk/javadoc/internal/tool/Start.java has:
-          //   options.processCompilerOption(com.sun.tools.javac.main.Option.XLINT_CUSTOM, "-Xlint:-options");
-          // That line has been present for a long time, but only in JDK 25 does it lead to
-          //   error: fatal error encountered: java.lang.AssertionError: ignored flag: -Xlint:-options
-          // when running `javadoc`.
-          // The only recent change in Options.java is addition of `isLint*` methods.
-
-          // Adding these does not help!
-          new DocletOption("-Xlint:-options", "", 0, "ignored") {
-            @Override
-            public boolean process(String option, List<String> arguments) {
-              return OK;
-            }
-          },
-          new DocletOption("-Xlint", "", 1, "ignored") {
-            @Override
-            public boolean process(String option, List<String> arguments) {
-              return OK;
-            }
           });
 
   /**

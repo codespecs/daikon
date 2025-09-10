@@ -50,22 +50,28 @@ ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
   LINT_THIS_ESCAPE=-Xlint:-this-escape
 endif
 
+OS_ID := $(shell sed -n -e 's/^NAME="\(.*\)"/\1/p' /etc/os-release)
+OS_REL := $(shell sed -n -e 's/^VERSION_ID="(.*)"/\1/' /etc/os-release)
+
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
 # Use "--source 25 --target 25" because Java 25 is an LTS version.
 ifeq ($(JAVA25), 1)
-# Check for jmods/ before lib/modules, because Rocky 25 has both but must be
-# called with `--system .../jmods`.
-ifneq ("($wildcard ${JAVA25_HOME}/jmods"), "")
-JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/jmods
-else ifneq ("$(wildcard ${JAVA25_HOME}/lib/modules"), "")
-JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/lib/modules
-else
-$(error Cannot find system modules.  JAVA25_HOME=${JAVA25_HOME})
-endif
+  # Rocky 25 has both jmods/ and lib/modules, but must be called with `--system .../jmods`.
+  ifeq (${OS_ID},Rocky Linux)
+    JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/jmods
+  else ifeq (${OS_ID},Ubuntu)
+    JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/lib/modules
+  else ifneq ("$(wildcard ${JAVA25_HOME}/lib/modules"), "")
+    JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/lib/modules
+  else ifneq ("($wildcard ${JAVA25_HOME}/jmods"), "")
+    JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/jmods
+  else
+  $(error Cannot find system modules.  JAVA25_HOME=${JAVA25_HOME})
+  endif
 else ifeq ($(JAVA24), 1)
-JAVAC_TARGET_FLAGS ?= -source 24 -target 24
+  JAVAC_TARGET_FLAGS ?= -source 24 -target 24
 else
-JAVAC_TARGET_FLAGS ?= -source 8 -target 8
+  JAVAC_TARGET_FLAGS ?= -source 8 -target 8
 endif
 
 # TODO: -Werror is temporary.

@@ -2,7 +2,7 @@ HIERDIR = ../tools/hierarchical
 KMDIR = ../tools/kmeans
 
 # These are executables and/or downloaded from the Internet.
-all: difftbl cluster clgroup kmeans trace-untruncate-fast checkargs.pm style-fix style-check
+all: lsb_release difftbl cluster clgroup kmeans trace-untruncate-fast checkargs.pm style-fix style-check
 .PHONY: all
 
 
@@ -64,6 +64,11 @@ TAGS: tags
 
 tags:
 	etags `find . | grep -v '~\|^\.$$\|^\./[kx]means$$'`
+
+# lsb_release is downloaded rather than packaged because of its license.
+lsb_release:
+	wget -N https://raw.githubusercontent.com/OpenMandrivaSoftware/lsb-release/refs/heads/master/lsb_release
+	chmod +x lsb_release
 
 difftbl: $(HIERDIR)/difftbl
 	cp -p $^ $@
