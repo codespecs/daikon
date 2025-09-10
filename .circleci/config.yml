@@ -1351,7 +1351,6 @@ jobs:
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
 
-
 # For an explanation of the dependence logic, see ../.azure/azure-pipelines.yml .
 
 workflows:

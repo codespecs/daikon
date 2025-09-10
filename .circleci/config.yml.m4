@@ -16,7 +16,6 @@ jobs:
 
 include([../.azure/jobs.m4])dnl
 
-
 # For an explanation of the dependence logic, see ../.azure/azure-pipelines.yml .
 
 workflows:
@@ -25,12 +24,12 @@ workflows:
     jobs:
       - canary-jobs:
           requires:
-            - quick-txt-diff-ubuntu-jdk21
-            - nonquick-txt-diff-ubuntu-jdk21
-            - non-txt-diff-ubuntu-jdk21
-            - misc-ubuntu-jdk21
-            - kvasir-ubuntu-jdk21
-            - typecheck-bundled-ubuntu-jdk21
+            - quick-txt-diff-ubuntu-jdk[]canary_version
+            - nonquick-txt-diff-ubuntu-jdk[]canary_version
+            - non-txt-diff-ubuntu-jdk[]canary_version
+            - misc-ubuntu-jdk[]canary_version
+            - kvasir-ubuntu-jdk[]canary_version
+            - typecheck-bundled-ubuntu-jdk[]canary_version
 job_dependences(ubuntu, 8, quick-txt-diff)
 job_dependences(ubuntu, 11, quick-txt-diff)
 job_dependences(ubuntu, 17, quick-txt-diff)
