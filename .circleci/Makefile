@@ -3,6 +3,7 @@ all default: config.yml
 
 %: %.m4 defs.m4 ../.azure/jobs.m4
 	m4 $< > $@
+	(cd .. && circleci config validate)
 
 clean:
 	rm -f config.yml
