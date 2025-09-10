@@ -18,7 +18,7 @@ else
 endif
 
 LDAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
-OS_ID := $(shell sed -n -e 's/^NAME="\(.*\)"/\1/p' /etc/os-release)
+OS_ID := $(shell sed -n -e 's/^NAME="\(.*\)"/\1/p' /etc/os-release | cut -d " " -f1)
 OS_REL := $(shell sed -n -e 's/^VERSION_ID="(.*)"/\1/' /etc/os-release)
 ifeq ($(OS_ID),Ubuntu)
 ifeq ($(OS_REL),22.10)
