@@ -1515,11 +1515,7 @@ workflows:
             - canary-jobs
             - typecheck-latest-ubuntu-jdk21
 
-      - typecheck-latest-ubuntu-jdk25:
-          requires:
-            - canary-jobs
-            - typecheck-latest-ubuntu-jdk21
-
+# job_dependences(ubuntu, 25, typecheck-latest)
       - typecheck-bundled-ubuntu-jdk24:
           requires:
             - canary-jobs
