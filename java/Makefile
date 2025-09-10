@@ -53,10 +53,10 @@ endif
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
 # Use "--source 25 --target 25" because Java 25 is an LTS version.
 ifeq ($(JAVA25), 1)
-# Check for jmod/ before lib/modules, because Rocky 25 has both but must be
-# called with `--system .../jmod`.
-ifneq ("($wildcard ${JAVA25_HOME}/jmod"), "")
-JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/jmod
+# Check for jmods/ before lib/modules, because Rocky 25 has both but must be
+# called with `--system .../jmods`.
+ifneq ("($wildcard ${JAVA25_HOME}/jmods"), "")
+JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/jmods
 else ifneq ("$(wildcard ${JAVA25_HOME}/lib/modules"), "")
 JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/lib/modules
 else
