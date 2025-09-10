@@ -58,7 +58,7 @@ public class ClassGen24 {
   private @BinaryName String superclassName;
 
   /** The list of interfaces this class implements. */
-  private List<ClassEntry> interfaceList;
+  protected static List<ClassEntry> interfaceList;
 
   /**
    * Creates a ClassGen24 object.
@@ -67,6 +67,7 @@ public class ClassGen24 {
    * @param className the containing class, in binary name format
    * @param classBuilder for the class
    */
+  @SuppressWarnings("StaticAssignmentInConstructor")
   public ClassGen24(
       final ClassModel classModel,
       final @BinaryName String className,
@@ -83,7 +84,6 @@ public class ClassGen24 {
     superclassName = getSuperclassName(classModel);
 
     // The original interface list is immutable, so we need to make a copy.
-    // @SuppressWarnings("JdkObsolete")
     interfaceList = new ArrayList<ClassEntry>(classModel.interfaces());
   }
 
@@ -99,7 +99,6 @@ public class ClassGen24 {
       return;
     }
     interfaceList.add(ce);
-    classBuilder.withInterfaces(interfaceList);
   }
 
   /**

@@ -721,6 +721,20 @@ public class DCInstrument24 {
       add_dcomp_interface(classBuilder, classGen, classInfo);
     }
 
+    // Output the list of interfaces.
+    classBuilder.withInterfaces(daikon.dcomp.ClassGen24.interfaceList);
+
+    // Copy all other ClassElements to output class (unchanged).
+    for (ClassElement ce : classModel) {
+      debugInstrument.log("ClassElement: %s%n", ce);
+      switch (ce) {
+        case MethodModel mm -> {}
+        case Interfaces i -> {}
+        // Copy all other ClassElements to output class (unchanged).
+        default -> classBuilder.with(ce);
+      }
+    }
+
     // Add tag accessor methods for each primitive in the class
     create_tag_accessors(classGen);
 
@@ -984,17 +998,6 @@ public class DCInstrument24 {
           System.err.printf("Unexpected error processing %s: %s%n", method, t);
           System.err.printf("Method is NOT instrumented.%n");
         }
-      }
-    }
-
-    // Copy all other ClassElements to output class (unchanged).
-    for (ClassElement ce : classModel) {
-      debugInstrument.log("ClassElement: %s%n", ce);
-      switch (ce) {
-        case MethodModel mm -> {}
-        case Interfaces i -> {}
-        // Copy all other ClassElements to output class (unchanged).
-        default -> classBuilder.with(ce);
       }
     }
   }
@@ -3156,14 +3159,12 @@ public class DCInstrument24 {
 
     List<CodeElement> il = new ArrayList<>();
     Opcode op = f.opcode();
-    // ObjectType obj_type = (ObjectType) f.getReferenceType(pool);
-    @BinaryName String classname = classGen.getClassName();
     String fieldName = f.name().stringValue();
     String owner = f.owner().asInternalName().replace('/', '.');
     ClassDesc ownerCD = f.owner().asSymbol();
 
     // If this class doesn't support tag fields, don't load/store them
-    if (!tag_fields_ok(mgen, classname)) {
+    if (!tag_fields_ok(mgen, owner)) {
       if (op.equals(Opcode.GETFIELD) || op.equals(Opcode.GETSTATIC)) {
         il.add(dcr_call("push_const", CD_void, noArgsCD));
       } else {
