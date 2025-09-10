@@ -3160,7 +3160,8 @@ public class DCInstrument24 {
     List<CodeElement> il = new ArrayList<>();
     Opcode op = f.opcode();
     String fieldName = f.name().stringValue();
-    String owner = f.owner().asInternalName().replace('/', '.');
+    @SuppressWarnings("signature:assignment") // type conversion
+    @BinaryName String owner = f.owner().asInternalName().replace('/', '.');
     ClassDesc ownerCD = f.owner().asSymbol();
 
     // If this class doesn't support tag fields, don't load/store them
