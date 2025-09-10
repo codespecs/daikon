@@ -51,9 +51,15 @@ ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
 endif
 
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
-# Test for Java 25 because it is an LTS version.
+# Use "--source 25 --target 25" because Java 25 is an LTS version.
 ifeq ($(JAVA25), 1)
+ifneq ("${JAVA25_HOME}/lib/modules", )
 JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/lib/modules
+else ifneq ("${JAVA25_HOME}/jmod", )
+JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/jmod
+else
+$(error Cannot find system modules.  JAVA25_HOME=${JAVA25_HOME})
+endif
 else ifeq ($(JAVA24), 1)
 JAVAC_TARGET_FLAGS ?= -source 24 -target 24
 else
