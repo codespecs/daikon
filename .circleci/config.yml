@@ -1,5 +1,6 @@
 
 
+# The canary version cannot be Java 25 until the Checker Framework builds under Java 25.
 version: 2.1
 
 jobs:
