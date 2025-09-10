@@ -1,3 +1,5 @@
+// -*- java -*-
+
 package daikon.config;
 
 import com.sun.javadoc.*;
