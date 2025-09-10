@@ -58,6 +58,7 @@ public class ClassGen24 {
   private @BinaryName String superclassName;
 
   /** The list of interfaces this class implements. */
+  @SuppressWarnings("nullness:initialization")
   protected static List<ClassEntry> interfaceList;
 
   /**
