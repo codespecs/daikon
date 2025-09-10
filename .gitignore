@@ -336,6 +336,7 @@ scripts/clgroup
 scripts/cluster
 scripts/difftbl
 scripts/kmeans
+scripts/lsb_release
 scripts/trace-untruncate-fast
 
 # Testing
