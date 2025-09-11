@@ -117,8 +117,7 @@ ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
   DAIKON_CLASSPATH := $(DAIKON_CLASSPATH):${JAVA_HOME}/jre/lib/rt.jar
 endif
 
-# -docletpath doesn't seem to respect path wildcards as -cp does
-DOCLETPATH := $(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):${DAIKON_CLASSPATH}:${DAIKONDIR}/java/lib/daikon-plumelib.jar
+DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
 DOCLET_FLAGS :=
 LINKOFFLINE := https://docs.oracle.com/javase/8/docs/api/
@@ -790,9 +789,6 @@ else
   error-prone-version = 2.36.0
   extra-error-prone-args-1 = --should-stop=ifError=FLOW
 endif
-ifeq ($(JAVA24), 1)
-  extra-error-prone-args-2 = -source 24 -target 24
-endif
 
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-${error-prone-version}-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.48.4.jar
 
@@ -825,7 +821,6 @@ else
 	  -Xmaxwarns 100000 \
 	  -Werror \
 	  ${extra-error-prone-args-1} \
-	  ${extra-error-prone-args-2} \
 	  ${JAVA_FILES_FOR_STYLE}
 endif
 
@@ -839,7 +834,6 @@ errorprone-replacements:
 	  '-Xplugin:ErrorProne -XepPatchChecks:UnnecessaryParentheses,ArrayToString -XepPatchLocation:${DAIKONDIR}/java' \
 	  -Xmaxwarns 100000 \
 	  ${extra-error-prone-args-1} \
-	  ${extra-error-prone-args-2} \
 	  ${JAVA_FILES_FOR_STYLE}
 
 findbugs: .findbugs-output
@@ -1262,12 +1256,6 @@ ifeq ($(JAVA8), 1)
   SKIP_JAVADOC=1
 endif
 
-ifeq ($(JAVA24), 1)
-  extra-javadoc-arg = -source 24
-else
-  extra-javadoc-arg =
-endif
-
 # Build javadoc using the daikon package and all subpackages of daikon.
 javadoc: api
 .PHONY: api
@@ -1279,7 +1267,7 @@ ifeq ($(SKIP_JAVADOC),1)
 else
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} ${extra-javadoc-arg} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all ${DOCLET_FLAGS} \
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
@@ -1388,6 +1376,7 @@ showvars:
 
 	@echo CLASSPATH = "${CLASSPATH}"
 	@echo DAIKON_CLASSPATH = "${DAIKON_CLASSPATH}"
+	@echo DOCLETPATH = "${DOCLETPATH}"
 
 	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
 	@echo DAIKONDIR = "${DAIKONDIR}"
