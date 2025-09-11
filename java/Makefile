@@ -1288,7 +1288,7 @@ ifeq ($(SKIP_JAVADOC),1)
 else
 	mkdir -p $(JAVADOC_DEST)
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} ${extra-javadoc-arg} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea $(JAVADOC_FLAGS) -Xdoclint:all ${DOCLET_FLAGS} \
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 	cd $(JAVADOC_DEST) && $(PLUMESCRIPTS)/preplace '^ *&#64;cindex.*' ''
