@@ -1348,17 +1348,6 @@ public class DCInstrument24 {
         codeBuilder.exceptionCatch(newStartLabel, handlerLabel, handlerLabel, CD_Throwable);
       }
     }
-
-    // UNDONE
-    //   can we do this with java.lang.classfile?
-    //   needs to be moved?
-    //    il = mg.getInstructionList();
-    //    InstructionHandle end = il.getEnd();
-    //    int length = end.getPosition() + end.getInstruction().getLength();
-    //    if (length >= Const.MAX_CODE_SIZE) {
-    //      throw new ClassGenException(
-    //          "Code array too big: must be smaller than " + Const.MAX_CODE_SIZE + " bytes.");
-    //    }
   }
 
   /**
@@ -1637,15 +1626,6 @@ public class DCInstrument24 {
             li.add(ce);
           }
         }
-
-        // UNDONE: can we check this with java.lang.classfile api?
-        // If the modified method is now too large, we quit instrumenting the method
-        // and will rediscover the problem in the main instrumentation loop above
-        // and deal with it there.
-        // if (ih.getPosition() >= Const.MAX_CODE_SIZE) {
-        //   break;
-        // }
-
         inst_index++;
       }
     } catch (Throwable t) {
@@ -2966,7 +2946,7 @@ public class DCInstrument24 {
     // (Typical of random() algorithms.) This has the undesirable side
     // effect of putting all the generated values in the same comparison
     // set when they should be distinct.
-    // NOTE: If we find other classes that should not use the instrumented
+    // Note: If we find other classes that should not use the instrumented
     // versions, we should consider making this a searchable list.
     if (classname.equals("java.util.Random")) {
       return false;
@@ -3609,11 +3589,6 @@ public class DCInstrument24 {
       type_names[ii] = daikon.chicory.Instrument24.convertDescriptorToFqBinaryName(paramFD);
     }
 
-    // // Remove exceptions from the name
-    // String full_name = m.toString();
-    // full_name = full_name.replaceFirst("\\s*throws.*", "");
-    // Note that full_name is not used; replaced with "".
-
     return DaikonWriter.methodEntryName(fullClassName, type_names, "", mgen.getName());
   }
 
@@ -4030,7 +4005,7 @@ public class DCInstrument24 {
     }
 
     // if call is sun.reflect.Reflection.getCallerClass(int depth)
-    // NOTE: This method was deleted in JDK 9.  At some point we should remove support.
+    // TODO: This method was deleted in JDK 9.  At some point we should remove support.
     if (mgen.getName().equals("getCallerClass")
         && (argTypes.length == 1) // 'int depth'
         && mgen.getClassName().equals("sun.reflect.Reflection")) {
@@ -4684,7 +4659,7 @@ public class DCInstrument24 {
    */
   @Pure
   boolean is_object_method(String methodName, ClassDesc[] argTypes) {
-    // UNDONE: kind of wierd we don't check that classname = Object but it's been
+    // Note: kind of wierd we don't check that classname = Object but it's been
     // that way forever. just means foo.finialize(), e.g., will be marked uninstrumented.
     for (MethodDef md : obj_methods) {
       if (md.equals(methodName, argTypes)) {
