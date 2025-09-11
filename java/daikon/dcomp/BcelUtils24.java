@@ -21,7 +21,6 @@ import org.checkerframework.checker.signature.qual.Identifier;
  * instrumentation pipeline, including operations on local variables, parameter types, and
  * instruction adjustments.
  */
-@SuppressWarnings("nullness")
 public class BcelUtils24 {
 
   /** Create a new BcelUtils24 object. */
@@ -41,11 +40,6 @@ public class BcelUtils24 {
    *     The Java Virtual Machine Specification uses
    *     'index into the local variable array of the current frame'
    *     or 'slot number' to describe this second case.
-   *
-   * Unfortunately, BCEL uses the method names getIndex and setIndex
-   * to refer to 'offset's into the local stack frame.
-   * It uses getPosition and setPosition to refer to 'offset's into
-   * the byte codes.
    */
 
   /** A log to which to print debugging information about program instrumentation. */
@@ -84,7 +78,7 @@ public class BcelUtils24 {
   }
 
   /**
-   * Process the instruction list, adding size (1 or 2) to the index of each Instruction that
+   * Process the instruction list, adding size (1 or 2) to the slot number of each Instruction that
    * references a local that is equal or higher in the local map than offsetFirstMovedlocal. Size
    * should be the size of the new local that was just inserted at offsetFirstMovedlocal.
    *
@@ -135,7 +129,7 @@ public class BcelUtils24 {
   /**
    * Add a new local variable to the method. This will be inserted after last current parameter and
    * before the first local variable. This might have the side effect of causing us to rewrite the
-   * method byte codes to adjust the offsets for the existing local variables - see below for
+   * method byte codes to adjust the slot numbers for the existing local variables - see below for
    * details.
    *
    * <p>DCInstrument24 uses this routine for two special variables:
@@ -165,14 +159,14 @@ public class BcelUtils24 {
 
     // We add a new local variable, after any parameters and before any
     // existing local variables.  We then need to make a pass over the
-    // byte codes to update the local offset values of any locals we just shifted up.
+    // byte codes to update the slot number of any locals we just shifted up.
 
     LocalVariable argNew;
     // get a copy of the locals before modification
     ArrayList<LocalVariable> locals = mgen.localsTable;
     ClassDesc[] argTypes = mgen.getParameterTypes();
-    int newIndex = 0;
-    int newOffset = 0;
+    int newIndex = 0; // index into 'locals'
+    int newOffset = 0; // current local slot number
 
     boolean hasCode = !mgen.getInstructionList().isEmpty();
     int argSize = TypeKind.from(argType).slotSize();

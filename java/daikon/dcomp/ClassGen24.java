@@ -193,8 +193,6 @@ public class ClassGen24 {
       @BinaryName String scn = ce.get().asInternalName().replace('/', '.');
       return scn;
     } else {
-      // This is probably incorrect but is consistent with the BCEL version of superclassName.
-      // What about if this is module-info.class?
       return "java.lang.Object";
     }
   }
@@ -208,7 +206,11 @@ public class ClassGen24 {
     return classBuilder;
   }
 
-  // need to fancy up!
+  /**
+   * Return the class name.
+   *
+   * @return the class name
+   */
   @Override
   public final String toString(@GuardSatisfied ClassGen24 this) {
     return className;

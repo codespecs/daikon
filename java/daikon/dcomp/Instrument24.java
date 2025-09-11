@@ -85,6 +85,8 @@ public class Instrument24 implements ClassFileTransformer {
     System.out.println();
   }
 
+  // UNDONE: Should we stop using bcel and use classModel.toDebugString() instead?
+
   /**
    * Output a .class file and a .bcel version of the class file.
    *
@@ -112,14 +114,6 @@ public class Instrument24 implements ClassFileTransformer {
       Files.write(outputFile.toPath(), classBytes);
       // Write a BCEL-like file.
       BcelUtil.dump(c, directory);
-      // TEMPORARY - REMOVE when DCInstrument24 is working
-      // rename .bcel file to .nbcel
-      outputFile = new File(directory, className + ".bcel");
-      boolean ok = outputFile.renameTo(new File(directory, className + ".nbcel"));
-      if (!ok) {
-        System.err.printf("Unexpected error renaming %s file for: %s%n", outputFile, className);
-        // ignore the error, it shouldn't affect the instrumentation
-      }
     } catch (Throwable t) {
       System.err.printf("Unexpected error %s writing debug files for: %s%n", t, className);
       t.printStackTrace();

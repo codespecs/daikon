@@ -892,7 +892,10 @@ public class CalcStack24 {
             stack.pop(); // discard the value
             return true;
 
-          // UNDONE should we just throw on jsr and ret? They are illegal post JDK 6.
+          // TODO: JSR and RET have been illegal since JDK 7 (class file version 51.0).
+          // Consider throwing an UnsupportedOperationException for these opcodes
+          // if we're only supporting modern class files (version 51.0+).
+          // Currently maintaining support for completeness.
 
           // operand stack:
           // [no change]
