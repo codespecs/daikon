@@ -27,13 +27,13 @@ jobs:
 # The remainder of jobs are run only if the canary_jobs pass.
 - job: canary_jobs
   dependsOn:
-    - quick_ubuntu_jdk[]canary_version
-    - nonquick_ubuntu_jdk[]canary_version
-    - nontxt_ubuntu_jdk[]canary_version
-    - misc_ubuntu_jdk[]canary_version
-    - kvasir_ubuntu_jdk[]canary_version
-    - typecheck_latest_ubuntu_jdk[]canary_version
-    - typecheck_bundled_ubuntu_jdk[]canary_version
+    - quick_[]canary_os[]_jdk[]canary_version
+    - nonquick_[]canary_os[]_jdk[]canary_version
+    - nontxt_[]canary_os[]_jdk[]canary_version
+    - misc_[]canary_os[]_jdk[]canary_version
+    - kvasir_[]canary_os[]_jdk[]canary_version
+    - typecheck_latest_[]canary_os[]_jdk[]canary_version
+    - typecheck_bundled_[]canary_os[]_jdk[]canary_version
   pool:
     vmImage: 'ubuntu-latest'
   steps:
