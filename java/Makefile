@@ -56,18 +56,7 @@ OS_REL := $(shell sed -n -e 's/^VERSION_ID="(.*)"/\1/' /etc/os-release)
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
 # Use "--source 25 --target 25" because Java 25 is an LTS version.
 ifeq ($(JAVA25), 1)
-  # Rocky 25 has both jmods/ and lib/modules, but must be called with `--system .../jmods`.
-  ifeq (${OS_ID},Rocky Linux)
-    JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/jmods
-  else ifeq (${OS_ID},Ubuntu)
-    JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/lib/modules
-  else ifneq ("$(wildcard ${JAVA25_HOME}/lib/modules"), "")
-    JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/lib/modules
-  else ifneq ("($wildcard ${JAVA25_HOME}/jmods"), "")
-    JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}/jmods
-  else
-  $(error Cannot find system modules.  JAVA25_HOME=${JAVA25_HOME})
-  endif
+  JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}
 else ifeq ($(JAVA24), 1)
   JAVAC_TARGET_FLAGS ?= -source 24 -target 24
 else
