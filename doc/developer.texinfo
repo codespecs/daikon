@@ -4312,4 +4312,9 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  chmod og rwx BIBDIR CHECKERFRAMEWORK pipefail wget OSNAME
 @c  LocalWords:  readelf DAIKONVERSION xargs codespecs kvasir repo rf pwd
 @c  LocalWords:  untracked Makefile's mernstdaikon mkdir checklink Wayback
-@c  LocalWords:  URI md cvsaa cvsai cvsa merging'' substrings splitter
+@c  LocalWords:  URI md cvsaa cvsai cvsa merging'' substrings splitter fi
+@c  LocalWords:  perl classname1 classname2 exitnn pptcond r1 Galar func
+@c  LocalWords:  ClearView bb nomod readonly variable'' f1 vN varname2 MD5
+@c  LocalWords:  getName EXIT103 varname1 type1 information1 value1 type2
+@c  LocalWords:  comparable1 information2 value2 comparable2 invariants''
+@c  LocalWords:  pathnames EXIT55 EXIT67

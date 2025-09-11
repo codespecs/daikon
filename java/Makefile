@@ -38,19 +38,29 @@ endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 17; echo $$?),0)
   JAVA17 := 1
 endif
+# Temporary, since Java 24 is not a LTS release.
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 24; echo $$?),0)
   JAVA24 := 1
+endif
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 25; echo $$?),0)
+  JAVA25 := 1
 endif
 
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
   LINT_THIS_ESCAPE=-Xlint:-this-escape
 endif
 
+OS_ID := $(shell sed -n -e 's/^NAME="\(.*\)"/\1/p' /etc/os-release)
+OS_REL := $(shell sed -n -e 's/^VERSION_ID="(.*)"/\1/' /etc/os-release)
+
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
-ifeq ($(JAVA24), 0)
-JAVAC_TARGET_FLAGS ?= -source 8 -target 8
+# Use "--source 25 --target 25" because Java 25 is an LTS version.
+ifeq ($(JAVA25), 1)
+  JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}
+else ifeq ($(JAVA24), 1)
+  JAVAC_TARGET_FLAGS ?= -source 24 -target 24
 else
-JAVAC_TARGET_FLAGS ?= -source 24 -target 24
+  JAVAC_TARGET_FLAGS ?= -source 8 -target 8
 endif
 
 # TODO: -Werror is temporary.
@@ -1324,7 +1334,7 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS}\
+	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS} \
 		--texinfo tmpfile \
 		@javadoc-files.txt
 	mv -f tmpfile $@
@@ -1335,7 +1345,7 @@ requireJavadoc: $(JAVA_FILES)
 
 ../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS}\
+	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS} \
 		--texinfo tmpfile \
 		@javadoc-files.txt
 	perl -pi -e 's/&#64;cindex/\@cindex/g' tmpfile
