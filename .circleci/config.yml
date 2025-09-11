@@ -738,8 +738,27 @@ jobs:
           command: scripts/test-typecheck-with-bundled-cf.sh
           no_output_timeout: 30m
 
-## The Checker Framework does not yet build on Java 25.
-# typecheck_latest_job(ubuntu, 25)
+  typecheck-latest-ubuntu-jdk25:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk25
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: env
+      - run:
+          command: scripts/test-typecheck-with-latest-cf.sh
+          no_output_timeout: 30m
   typecheck-bundled-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25
