@@ -1,6 +1,5 @@
 
 
-# The canary version cannot be Java 25 until the Checker Framework builds under Java 25.
 version: 2.1
 
 jobs:
@@ -1542,7 +1541,7 @@ workflows:
             - canary-jobs
             - typecheck-latest-ubuntu-jdk25
 
-# job_dependences(ubuntu, 25, typecheck-latest)
+      - typecheck-latest-ubuntu-jdk25
       - typecheck-bundled-ubuntu-jdk24:
           requires:
             - canary-jobs
