@@ -54,13 +54,9 @@ endif
 
 default: summary-w-daikon
 
-ifeq (,$(wildcard ${DAIKONDIR}/scripts/lsb_release))
-$(shell cd ${DAIKONDIR}/scripts && wget https://raw.githubusercontent.com/OpenMandrivaSoftware/lsb-release/refs/heads/master/lsb_release && chmod +x lsb_release)
-endif
-
 # Set up potential OS_ID and OS_ID+OS_REL specific goal targets.
-OS_ID := $(shell ${DAIKONDIR}/scripts/lsb_release -si)
-OS_REL := $(shell ${DAIKONDIR}/scripts/lsb_release -sr)
+OS_ID := $(shell sed -n -e 's/^NAME="\(.*\)"/\1/p' /etc/os-release | cut -d " " -f1)
+OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
 # bogus goal to force goal_name to try all paths
 GOAL := DUMMY
 

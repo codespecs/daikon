@@ -1,0 +1,77 @@
+# Create a Docker image that is ready to run the full Daikon tests,
+# including building the manual and Javadoc.
+# But it's used primarily for running miscellaneous tests such as the manual
+# and Javadoc.
+
+FROM rockylinux:9
+LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
+
+# According to
+# https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
+#  * Put "apt update" and "apt install" in the same RUN command.
+#  * Do not run "apt upgrade"; instead get upstream to update.
+
+# The EPEL repository contains certain packages.
+RUN dnf -q -y upgrade && dnf -q -y install \
+  epel-release
+
+RUN dnf -q -y upgrade && dnf -q -y install \
+  autoconf \
+  automake \
+  bc \
+  binutils-devel \
+  diffutils \
+  findutils \
+  gcc \
+  git \
+  jq \
+  m4 \
+  make \
+  perl-English \
+  perl-filetest \
+  rsync \
+  tar \
+  unzip \
+  which
+
+RUN dnf -q -y install \
+  ctags \
+  devscripts-checkbashisms \
+  gcc-c++ \
+  graphviz \
+  netpbm \
+  netpbm-progs \
+  python3 \
+  python3-distutils-extra \
+  ShellCheck \
+  texlive \
+  wget
+
+# Alternately, run: dnf --enablerepo=crb install PACKAGENAME
+RUN dnf config-manager --set-enabled crb \
+&& dnf -y install dnf-plugins-core \
+&& dnf -y install texinfo texinfo-tex
+
+# `pipx ensurepath` only adds to the path in newly-started shells.
+# BUT, setting the path for the current user is not enough.
+# Azure creates a new user and runs jobs as it.
+# So, install into /usr/local/bin which is already on every user's path.
+RUN dnf -q -y install \
+  pipx \
+&& PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install mypy \
+&& PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install ruff
+
+## Install the JDK.
+# RUN dnf -q -y upgrade && dnf -q -y install \
+#   java-25-openjdk \
+#   java-25-openjdk-devel
+## Use this when the java-25-openjdk* packages don't yet exist.
+# RUN curl --silent -o jdk-25_linux-x64_bin.tar.gz https://download.oracle.com/java/25/latest/jdk-25_linux-x64_bin.tar.gz \
+RUN curl --silent -o jdk-25_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk25/bd75d5f9689641da8e1daabeccb5528b/36/GPL/openjdk-25_linux-x64_bin.tar.gz \
+&& tar xzf jdk-25_linux-x64_bin.tar.gz
+ENV PATH="/jdk-25/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV JAVA25_HOME=/jdk-25
+RUN chmod og+rx /root \
+&& chmod og+r /root/*
+
+RUN dnf -q clean all
