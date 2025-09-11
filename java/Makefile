@@ -54,7 +54,7 @@ ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
 endif
 
 OS_ID := $(shell sed -n -e 's/^NAME="\(.*\)"/\1/p' /etc/os-release)
-OS_REL := $(shell sed -n -e 's/^VERSION_ID="(.*)"/\1/' /etc/os-release)
+OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
 
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
 # Use "--source 25 --target 25" because Java 25 is an LTS version.
