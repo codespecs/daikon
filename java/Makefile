@@ -21,6 +21,8 @@ JAVAC ?= javac
 JAVADOC ?= javadoc
 JAR ?= jar
 
+BuildJDKTool = BuildJDK
+
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
 JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
@@ -40,6 +42,7 @@ ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 17; echo $$?),0)
 endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 24; echo $$?),0)
   JAVA24 := 1
+  BuildJDKTool = BuildJDK24
 endif
 
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
@@ -608,7 +611,7 @@ dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 $(DCOMP_RT) dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	$(INSTALL) -d $(DCOMP_RT)
-	$(JAVA_COMMAND) -Xmx3600m daikon.dcomp.BuildJDK $(DCOMP_RT)
+	$(JAVA_COMMAND) -Xmx3600m daikon.dcomp.$(BuildJDKTool) $(DCOMP_RT)
 # "then" clause is Java 8, "else" clause is Java 9+.
 # For Java 9+, there appears to be a bug in the Java reflection invoke code that it
 # does not check that the arg list matches.  Hence, it tries to invoke

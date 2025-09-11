@@ -1,20 +1,5 @@
 ###########################################################################
 
-JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
-startJVS := $(shell echo start${JAVA_VERSION_STRING})
-ifneq (,$(findstring start1.8,$(startJVS)))
-  JAVA_RELEASE_NUMBER := 8
-else
-  # Old Java releases (e.g. 1.7) will set JAVA_RELEASE_NUMBER to 1.
-  # This will cause the JAVA8_OR_NEWER test to fail as desired.
-  JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]\+\)\(\..*\)\?\(-.*\)\?/\1/')
-endif
-
-ifeq ($(shell [ $(JAVA_RELEASE_NUMBER) -ge 24 ] && echo yes),yes)
-  SKIP_TEST := 1
-  $(info skipping this test for JDK $(JAVA_RELEASE_NUMBER))
-endif
-
 ifeq ($(shell uname), Darwin)
   JAVA_HOME ?= $(/usr/libexec/java_home)
 else

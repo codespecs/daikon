@@ -2338,13 +2338,20 @@ public class DCInstrument24 {
         }
       }
 
+      // We ignore PseudoInstructions.
+
+      case ExceptionCatch ec -> {
+        // Ignore ExceptionCatch CodeElements.
+        return null;
+      }
+
       case Label l -> {
-        // Ignore Label CodeELements.
+        // Ignore Label CodeElements.
         return null;
       }
 
       case LineNumber ln -> {
-        // Ignore LineNumber CodeELements.
+        // Ignore LineNumber CodeElements.
         return null;
       }
 

@@ -23,6 +23,7 @@ import java.lang.classfile.constantpool.StringEntry;
 import java.lang.classfile.instruction.BranchInstruction;
 import java.lang.classfile.instruction.ConstantInstruction;
 import java.lang.classfile.instruction.DiscontinuedInstruction;
+import java.lang.classfile.instruction.ExceptionCatch;
 import java.lang.classfile.instruction.FieldInstruction;
 import java.lang.classfile.instruction.InvokeDynamicInstruction;
 import java.lang.classfile.instruction.InvokeInstruction;
@@ -74,7 +75,7 @@ public class CalcStack24 {
     switch (ce) {
       case Instruction inst -> {
         if (DCInstrument24.stacks[inst_index] != null) {
-          throw new Error("instruction revisited: " + inst);
+          throw new DynCompError("instruction revisited: " + inst);
         } else {
           DCInstrument24.stacks[inst_index] = stack.getClone();
         }
@@ -101,7 +102,7 @@ public class CalcStack24 {
               } else {
                 final ClassDesc ct = t.componentType();
                 if (ct == null) {
-                  throw new Error("stack item not an arrayref: " + inst);
+                  throw new DynCompError("stack item not an arrayref: " + inst);
                 }
                 stack.push(ct);
               }
@@ -847,7 +848,7 @@ public class CalcStack24 {
                 descriptor = "[S";
               }
               default -> {
-                throw new Error("unknown primitive array type: " + inst);
+                throw new DynCompError("unknown primitive array type: " + inst);
               }
             }
             stack.push(ClassDesc.ofDescriptor(descriptor));
@@ -971,10 +972,18 @@ public class CalcStack24 {
             }
 
           default:
-            throw new Error("Unexpected instruction opcode: " + inst);
+            throw new DynCompError("Unexpected instruction opcode: " + inst);
         }
       }
 
+      // We ignore most PseudoInstructions.
+
+      case ExceptionCatch ec -> {
+        // Nothing needs to be done.
+        return true;
+      }
+
+      // Technically, a Classfile element, not a PseudoInstruction.
       case Label l -> {
         if (DCInstrument24.stacks[inst_index] != null) {
           // we've seen this label before
@@ -999,7 +1008,7 @@ public class CalcStack24 {
       }
 
       default -> {
-        throw new Error("Unexpected CodeElement: " + ce);
+        throw new DynCompError("Unexpected CodeElement: " + ce);
       }
     }
   }
