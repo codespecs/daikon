@@ -603,9 +603,10 @@ public class LogicalCompare {
           // expression, then look for a comment after that. But that
           // would involve counting parens and vertical bars and
           // backslashes, which I'm too lazy to do right now.
-          if (line.indexOf("#") != -1) {
-            formula = line.substring(0, line.indexOf("#"));
-            comment = line.substring(line.indexOf("#") + 1);
+          int hash = line.indexOf('#');
+          if (hash != -1) {
+            formula = line.substring(0, hash);
+            comment = line.substring(hash + 1);
           } else {
             formula = line;
             comment = "User-supplied assumption";

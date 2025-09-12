@@ -837,7 +837,7 @@ public final class Debug {
 
     // Get the classes, vars, and ppt
     int var_start = def.indexOf('<');
-    int ppt_start = def.indexOf("@");
+    int ppt_start = def.indexOf('@');
     if ((var_start == -1) && (ppt_start == -1)) {
       classes = def;
     } else if (var_start != -1) {
