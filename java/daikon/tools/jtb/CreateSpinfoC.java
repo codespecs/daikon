@@ -27,7 +27,7 @@ public class CreateSpinfoC {
       return;
     }
     try {
-      String fileName = args[0].substring(0, args[0].lastIndexOf("."));
+      String fileName = args[0].substring(0, args[0].lastIndexOf('.'));
       File temp = new File(fileName + ".temp");
       // filter out the '\f' characters in the file
       try (Reader reader = Files.newBufferedReader(Paths.get(args[0]), UTF_8);

@@ -1373,7 +1373,7 @@ public class Instrument24 implements ClassFileTransformer {
     // the outer class constructor.  I need to detect this and adjust the
     // parameter names appropriately.  This check is ugly.
     if (mgen.getName().equals("<init>") && mgen.getParameterTypes().length > 0) {
-      int dollarPos = mgen.getClassName().lastIndexOf("$");
+      int dollarPos = mgen.getClassName().lastIndexOf('$');
       @SuppressWarnings("signature:assignment") // need JDK annotations
       @FieldDescriptor String arg0Fd = mgen.getParameterType(0).descriptorString();
       String arg0Name = convertDescriptorToFqBinaryName(arg0Fd);

@@ -2200,7 +2200,7 @@ public final class DCRuntime implements ComparabilityProvider {
     }
     String dvtxt = dv.toString();
     String type = dvtxt.split(":")[0];
-    type = type.substring(type.lastIndexOf(".") + 1);
+    type = type.substring(type.lastIndexOf('.') + 1);
     String name = dvtxt.split(":")[1];
     if (type.equals("ThisObjInfo")) {
       dvtxt = "this";

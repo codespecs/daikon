@@ -127,7 +127,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     if (name.endsWith("]")) {
       // This isn't quite right:  we really want the matching open bracket,
       // not the last open bracket.
-      int lbracket = name.lastIndexOf("[");
+      int lbracket = name.lastIndexOf('[');
       if (lbracket >= 0) {
         String seqname = name.substring(0, lbracket) + "[]";
         String idxname = name.substring(lbracket + 1, name.length() - 1);
@@ -1731,14 +1731,14 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   // sansOrig()
   //      int origpos = s.indexOf("orig(");
   //      assert origpos != -1;
-  //      int rparenpos = s.lastIndexOf(")");
+  //      int rparenpos = s.lastIndexOf(')');
   //      return s.substring(0, origpos)
   //        + s.substring(origpos+5, rparenpos)
   //        + s.substring(rparenpos+1);
 
   //      int origpos = s.indexOf("\\old(");
   //      assert origpos != -1;
-  //      int rparenpos = s.lastIndexOf(")");
+  //      int rparenpos = s.lastIndexOf(')');
   //      return s.substring(0, origpos)
   //        + s.substring(origpos+5, rparenpos)
   //        + s.substring(rparenpos+1);
