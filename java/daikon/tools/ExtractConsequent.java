@@ -415,11 +415,11 @@ public class ExtractConsequent {
   }
 
   /**
-   * Remove non-word characters and everything after ":::" from the program point name, leaving
-   * "PackageName.ClassName.MethodName".
+   * Remove non-word characters and everything after "(" (which includes everything after ":::")
+   * from the program point name, leaving "PackageName.ClassName.MethodName".
    *
    * @param pptname a program point name
-   * @return the argument, without non-word characters and without ":::" suffix
+   * @return the argument, without non-word characters and without parens or ":::" suffix
    */
   private static String cleanup_pptname(String pptname) {
     int index;
