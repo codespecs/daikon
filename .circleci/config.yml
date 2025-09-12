@@ -1,6 +1,5 @@
 
 
-# The canary version cannot be Java 25 until the Checker Framework builds under Java 25.
 version: 2.1
 
 jobs:
@@ -738,8 +737,27 @@ jobs:
           command: scripts/test-typecheck-with-bundled-cf.sh
           no_output_timeout: 30m
 
-## The Checker Framework does not yet build on Java 25.
-# typecheck_latest_job(ubuntu, 25)
+  typecheck-latest-ubuntu-jdk25:
+    docker:
+      - image: mdernst/daikon-ubuntu-jdk25
+    resource_class: large
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+    steps:
+      - restore_cache:
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
+      - run: env
+      - run:
+          command: scripts/test-typecheck-with-latest-cf.sh
+          no_output_timeout: 30m
   typecheck-bundled-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25
@@ -1360,344 +1378,348 @@ workflows:
     jobs:
       - canary-jobs:
           requires:
-            - quick-txt-diff-ubuntu-jdk21
-            - nonquick-txt-diff-ubuntu-jdk21
-            - non-txt-diff-ubuntu-jdk21
-            - misc-ubuntu-jdk21
-            - kvasir-ubuntu-jdk21
-            - typecheck-bundled-ubuntu-jdk21
+            - quick-txt-diff-ubuntu-jdk25
+            - nonquick-txt-diff-ubuntu-jdk25
+            - non-txt-diff-ubuntu-jdk25
+            - misc-ubuntu-jdk25
+            - kvasir-ubuntu-jdk25
+            - typecheck-bundled-ubuntu-jdk25
       - quick-txt-diff-ubuntu-jdk8:
           requires:
             - canary-jobs
-            - quick-txt-diff-ubuntu-jdk21
+            - quick-txt-diff-ubuntu-jdk25
 
       - quick-txt-diff-ubuntu-jdk11:
           requires:
             - canary-jobs
-            - quick-txt-diff-ubuntu-jdk21
+            - quick-txt-diff-ubuntu-jdk25
 
       - quick-txt-diff-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - quick-txt-diff-ubuntu-jdk21
+            - quick-txt-diff-ubuntu-jdk25
 
-      - quick-txt-diff-ubuntu-jdk21
+      - quick-txt-diff-ubuntu-jdk21:
+          requires:
+            - canary-jobs
+            - quick-txt-diff-ubuntu-jdk25
+
       - quick-txt-diff-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - quick-txt-diff-ubuntu-jdk21
+            - quick-txt-diff-ubuntu-jdk25
 
-      - quick-txt-diff-ubuntu-jdk25:
-          requires:
-            - canary-jobs
-            - quick-txt-diff-ubuntu-jdk21
-
+      - quick-txt-diff-ubuntu-jdk25
       - nonquick-txt-diff-ubuntu-jdk8:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-ubuntu-jdk21
+            - nonquick-txt-diff-ubuntu-jdk25
 
       - nonquick-txt-diff-ubuntu-jdk11:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-ubuntu-jdk21
+            - nonquick-txt-diff-ubuntu-jdk25
 
       - nonquick-txt-diff-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-ubuntu-jdk21
+            - nonquick-txt-diff-ubuntu-jdk25
 
-      - nonquick-txt-diff-ubuntu-jdk21
+      - nonquick-txt-diff-ubuntu-jdk21:
+          requires:
+            - canary-jobs
+            - nonquick-txt-diff-ubuntu-jdk25
+
       - nonquick-txt-diff-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-ubuntu-jdk21
+            - nonquick-txt-diff-ubuntu-jdk25
 
-      - nonquick-txt-diff-ubuntu-jdk25:
-          requires:
-            - canary-jobs
-            - nonquick-txt-diff-ubuntu-jdk21
-
+      - nonquick-txt-diff-ubuntu-jdk25
       - non-txt-diff-ubuntu-jdk8:
           requires:
             - canary-jobs
-            - non-txt-diff-ubuntu-jdk21
+            - non-txt-diff-ubuntu-jdk25
 
       - non-txt-diff-ubuntu-jdk11:
           requires:
             - canary-jobs
-            - non-txt-diff-ubuntu-jdk21
+            - non-txt-diff-ubuntu-jdk25
 
       - non-txt-diff-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - non-txt-diff-ubuntu-jdk21
+            - non-txt-diff-ubuntu-jdk25
 
-      - non-txt-diff-ubuntu-jdk21
+      - non-txt-diff-ubuntu-jdk21:
+          requires:
+            - canary-jobs
+            - non-txt-diff-ubuntu-jdk25
+
       - non-txt-diff-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - non-txt-diff-ubuntu-jdk21
+            - non-txt-diff-ubuntu-jdk25
 
-      - non-txt-diff-ubuntu-jdk25:
-          requires:
-            - canary-jobs
-            - non-txt-diff-ubuntu-jdk21
-
+      - non-txt-diff-ubuntu-jdk25
       - misc-ubuntu-jdk8:
           requires:
             - canary-jobs
-            - misc-ubuntu-jdk21
+            - misc-ubuntu-jdk25
 
       - misc-ubuntu-jdk11:
           requires:
             - canary-jobs
-            - misc-ubuntu-jdk21
+            - misc-ubuntu-jdk25
 
       - misc-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - misc-ubuntu-jdk21
+            - misc-ubuntu-jdk25
 
-      - misc-ubuntu-jdk21
+      - misc-ubuntu-jdk21:
+          requires:
+            - canary-jobs
+            - misc-ubuntu-jdk25
+
       - misc-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - misc-ubuntu-jdk21
+            - misc-ubuntu-jdk25
 
-      - misc-ubuntu-jdk25:
-          requires:
-            - canary-jobs
-            - misc-ubuntu-jdk21
-
+      - misc-ubuntu-jdk25
       - kvasir-ubuntu-jdk8:
           requires:
             - canary-jobs
-            - kvasir-ubuntu-jdk21
+            - kvasir-ubuntu-jdk25
 
       - kvasir-ubuntu-jdk11:
           requires:
             - canary-jobs
-            - kvasir-ubuntu-jdk21
+            - kvasir-ubuntu-jdk25
 
       - kvasir-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - kvasir-ubuntu-jdk21
+            - kvasir-ubuntu-jdk25
 
-      - kvasir-ubuntu-jdk21
+      - kvasir-ubuntu-jdk21:
+          requires:
+            - canary-jobs
+            - kvasir-ubuntu-jdk25
+
       - kvasir-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - kvasir-ubuntu-jdk21
+            - kvasir-ubuntu-jdk25
 
-      - kvasir-ubuntu-jdk25:
-          requires:
-            - canary-jobs
-            - kvasir-ubuntu-jdk21
-
+      - kvasir-ubuntu-jdk25
 ## The Checker Framework cannot be built, or run, under Java 8 or 11.
 ## Thus, there is no typecheck_*_ubuntu_jdk{8,11) job.
       - typecheck-latest-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - typecheck-latest-ubuntu-jdk21
+            - typecheck-latest-ubuntu-jdk25
 
       - typecheck-bundled-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - typecheck-bundled-ubuntu-jdk21
+            - typecheck-bundled-ubuntu-jdk25
 
-      - typecheck-latest-ubuntu-jdk21
-      - typecheck-bundled-ubuntu-jdk21
+      - typecheck-latest-ubuntu-jdk21:
+          requires:
+            - canary-jobs
+            - typecheck-latest-ubuntu-jdk25
+
+      - typecheck-bundled-ubuntu-jdk21:
+          requires:
+            - canary-jobs
+            - typecheck-bundled-ubuntu-jdk25
+
       - typecheck-latest-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - typecheck-latest-ubuntu-jdk21
+            - typecheck-latest-ubuntu-jdk25
 
-# job_dependences(ubuntu, 25, typecheck-latest)
+      - typecheck-latest-ubuntu-jdk25
       - typecheck-bundled-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - typecheck-bundled-ubuntu-jdk21
+            - typecheck-bundled-ubuntu-jdk25
 
-      - typecheck-bundled-ubuntu-jdk25:
-          requires:
-            - canary-jobs
-            - typecheck-bundled-ubuntu-jdk21
-
+      - typecheck-bundled-ubuntu-jdk25
       - quick-txt-diff-rockylinux-jdk8:
           requires:
             - canary-jobs
-            - quick-txt-diff-rockylinux-jdk21
+            - quick-txt-diff-rockylinux-jdk25
             - quick-txt-diff-ubuntu-jdk8
 
       - quick-txt-diff-rockylinux-jdk11:
           requires:
             - canary-jobs
-            - quick-txt-diff-rockylinux-jdk21
+            - quick-txt-diff-rockylinux-jdk25
             - quick-txt-diff-ubuntu-jdk11
 
       - quick-txt-diff-rockylinux-jdk17:
           requires:
             - canary-jobs
-            - quick-txt-diff-rockylinux-jdk21
+            - quick-txt-diff-rockylinux-jdk25
             - quick-txt-diff-ubuntu-jdk17
 
       - quick-txt-diff-rockylinux-jdk21:
           requires:
             - canary-jobs
+            - quick-txt-diff-rockylinux-jdk25
             - quick-txt-diff-ubuntu-jdk21
 
       - quick-txt-diff-rockylinux-jdk24:
           requires:
             - canary-jobs
-            - quick-txt-diff-rockylinux-jdk21
+            - quick-txt-diff-rockylinux-jdk25
             - quick-txt-diff-ubuntu-jdk24
 
       - quick-txt-diff-rockylinux-jdk25:
           requires:
             - canary-jobs
-            - quick-txt-diff-rockylinux-jdk21
             - quick-txt-diff-ubuntu-jdk25
 
       - nonquick-txt-diff-rockylinux-jdk8:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk21
+            - nonquick-txt-diff-rockylinux-jdk25
             - nonquick-txt-diff-ubuntu-jdk8
 
       - nonquick-txt-diff-rockylinux-jdk11:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk21
+            - nonquick-txt-diff-rockylinux-jdk25
             - nonquick-txt-diff-ubuntu-jdk11
 
       - nonquick-txt-diff-rockylinux-jdk17:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk21
+            - nonquick-txt-diff-rockylinux-jdk25
             - nonquick-txt-diff-ubuntu-jdk17
 
       - nonquick-txt-diff-rockylinux-jdk21:
           requires:
             - canary-jobs
+            - nonquick-txt-diff-rockylinux-jdk25
             - nonquick-txt-diff-ubuntu-jdk21
 
       - nonquick-txt-diff-rockylinux-jdk24:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk21
+            - nonquick-txt-diff-rockylinux-jdk25
             - nonquick-txt-diff-ubuntu-jdk24
 
       - nonquick-txt-diff-rockylinux-jdk25:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk21
             - nonquick-txt-diff-ubuntu-jdk25
 
       - non-txt-diff-rockylinux-jdk8:
           requires:
             - canary-jobs
-            - non-txt-diff-rockylinux-jdk21
+            - non-txt-diff-rockylinux-jdk25
             - non-txt-diff-ubuntu-jdk8
 
       - non-txt-diff-rockylinux-jdk11:
           requires:
             - canary-jobs
-            - non-txt-diff-rockylinux-jdk21
+            - non-txt-diff-rockylinux-jdk25
             - non-txt-diff-ubuntu-jdk11
 
       - non-txt-diff-rockylinux-jdk17:
           requires:
             - canary-jobs
-            - non-txt-diff-rockylinux-jdk21
+            - non-txt-diff-rockylinux-jdk25
             - non-txt-diff-ubuntu-jdk17
 
       - non-txt-diff-rockylinux-jdk21:
           requires:
             - canary-jobs
+            - non-txt-diff-rockylinux-jdk25
             - non-txt-diff-ubuntu-jdk21
 
       - non-txt-diff-rockylinux-jdk24:
           requires:
             - canary-jobs
-            - non-txt-diff-rockylinux-jdk21
+            - non-txt-diff-rockylinux-jdk25
             - non-txt-diff-ubuntu-jdk24
 
       - non-txt-diff-rockylinux-jdk25:
           requires:
             - canary-jobs
-            - non-txt-diff-rockylinux-jdk21
             - non-txt-diff-ubuntu-jdk25
 
       - misc-rockylinux-jdk8:
           requires:
             - canary-jobs
-            - misc-rockylinux-jdk21
+            - misc-rockylinux-jdk25
             - misc-ubuntu-jdk8
 
       - misc-rockylinux-jdk11:
           requires:
             - canary-jobs
-            - misc-rockylinux-jdk21
+            - misc-rockylinux-jdk25
             - misc-ubuntu-jdk11
 
       - misc-rockylinux-jdk17:
           requires:
             - canary-jobs
-            - misc-rockylinux-jdk21
+            - misc-rockylinux-jdk25
             - misc-ubuntu-jdk17
 
       - misc-rockylinux-jdk21:
           requires:
             - canary-jobs
+            - misc-rockylinux-jdk25
             - misc-ubuntu-jdk21
 
       - misc-rockylinux-jdk24:
           requires:
             - canary-jobs
-            - misc-rockylinux-jdk21
+            - misc-rockylinux-jdk25
             - misc-ubuntu-jdk24
 
       - misc-rockylinux-jdk25:
           requires:
             - canary-jobs
-            - misc-rockylinux-jdk21
             - misc-ubuntu-jdk25
 
       - kvasir-rockylinux-jdk8:
           requires:
             - canary-jobs
-            - kvasir-rockylinux-jdk21
+            - kvasir-rockylinux-jdk25
             - kvasir-ubuntu-jdk8
 
       - kvasir-rockylinux-jdk11:
           requires:
             - canary-jobs
-            - kvasir-rockylinux-jdk21
+            - kvasir-rockylinux-jdk25
             - kvasir-ubuntu-jdk11
 
       - kvasir-rockylinux-jdk17:
           requires:
             - canary-jobs
-            - kvasir-rockylinux-jdk21
+            - kvasir-rockylinux-jdk25
             - kvasir-ubuntu-jdk17
 
       - kvasir-rockylinux-jdk21:
           requires:
             - canary-jobs
+            - kvasir-rockylinux-jdk25
             - kvasir-ubuntu-jdk21
 
       - kvasir-rockylinux-jdk24:
           requires:
             - canary-jobs
-            - kvasir-rockylinux-jdk21
+            - kvasir-rockylinux-jdk25
             - kvasir-ubuntu-jdk24
 
       - kvasir-rockylinux-jdk25:
           requires:
             - canary-jobs
-            - kvasir-rockylinux-jdk21
             - kvasir-ubuntu-jdk25
 
