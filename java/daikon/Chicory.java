@@ -641,7 +641,7 @@ public class Chicory {
   public String args_to_string(List<String> args) {
     String str = "";
     for (String arg : args) {
-      if (arg.indexOf(" ") != -1) {
+      if (arg.indexOf(' ') != -1) {
         str = "'" + str + "'";
       }
       str += arg + " ";

@@ -157,7 +157,7 @@ public class CreateSpinfo {
         "Warning: CreateSpinfo input file " + javaFileName + "does not end in .java.");
 
     // change the file extension to .spinfo
-    int dotPos = javaFileName.indexOf(".");
+    int dotPos = javaFileName.indexOf('.');
     if (dotPos == -1) {
       return javaFileName + ".spinfo";
     } else {

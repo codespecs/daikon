@@ -99,7 +99,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
     List<String> dim_reps = new ArrayList<>();
     // handle array types
     while (rep.endsWith("]")) {
-      int openpos = rep.lastIndexOf("[");
+      int openpos = rep.lastIndexOf('[');
       dim_reps.add(0, rep.substring(openpos + 1, rep.length() - 1));
       rep = rep.substring(0, openpos);
     }

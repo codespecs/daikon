@@ -1076,7 +1076,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
     String javarep = inv.format_using(OutputFormat.JAVA);
 
-    if (daikonrep.indexOf("\"") != -1 || daikonrep.indexOf("\\") != -1) {
+    if (daikonrep.indexOf('\"') != -1 || daikonrep.indexOf('\\') != -1) {
       // Now comes some real ugliness: [[ ... ]] It's easier to do
       // this transformation on a character list than by pattern
       // matching against a String.
