@@ -195,14 +195,12 @@ public class Premain {
     Thread shutdown_thread = new ShutdownThread();
     java.lang.Runtime.getRuntime().addShutdownHook(shutdown_thread);
 
-    // UNDONE: turn on Instrument24
-    String instrumenter = "daikon.dcomp.Instrument";
-    // String instrumenter;
-    // if (BcelUtil.javaVersion >= 24) {
-    //   instrumenter = "daikon.dcomp.Instrument24";
-    // } else {
-    //   instrumenter = "daikon.dcomp.Instrument";
-    // }
+    String instrumenter;
+    if (BcelUtil.javaVersion >= 24) {
+      instrumenter = "daikon.dcomp.Instrument24";
+    } else {
+      instrumenter = "daikon.dcomp.Instrument";
+    }
 
     // Setup the transformer
     ClassFileTransformer transformer;
@@ -213,7 +211,7 @@ public class Premain {
           (ClassFileTransformer)
               loader.loadClass(instrumenter).getDeclaredConstructor().newInstance();
     } catch (Exception e) {
-      throw new RuntimeException("Unexpected error loading Instrument", e);
+      throw new RuntimeException("Unexpected error loading Instrumenter " + instrumenter, e);
     }
     if (verbose) {
       // If jdk_instrumented is true then the printf below will output
