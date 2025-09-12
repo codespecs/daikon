@@ -312,13 +312,16 @@ class TagEntry extends WeakReference<Object> {
    * Returns a description of the given StackTraceElement.
    *
    * @param ste a StackTraceElement to describe
-   * @param abbreviate if true, omit package name
+   * @param abbreviate if true, use simple name (omit package name)
    * @return a description of the given StackTraceElement
    */
   private static String traceLineToString(StackTraceElement ste, boolean abbreviate) {
     String className = ste.getClassName();
     if (abbreviate) {
-      className = className.substring(className.lastIndexOf("."));
+      int dotPos = className.lastIndexOf(".");
+      if (dotPos != -1) {
+        className = className.substring(dotPos + 1);
+      }
     }
     return className + ":" + ste.getMethodName() + "(), " + ste.getLineNumber();
   }
