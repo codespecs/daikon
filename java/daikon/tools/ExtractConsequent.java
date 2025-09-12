@@ -418,7 +418,7 @@ public class ExtractConsequent {
   // program point name, leaving PackageName.ClassName.MethodName
   private static String cleanup_pptname(String pptname) {
     int index;
-    if ((index = pptname.indexOf("(")) > 0) {
+    if ((index = pptname.indexOf('(')) > 0) {
       pptname = pptname.substring(0, index);
     }
 
