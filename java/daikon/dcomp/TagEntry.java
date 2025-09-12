@@ -318,7 +318,7 @@ class TagEntry extends WeakReference<Object> {
   private static String traceLineToString(StackTraceElement ste, boolean abbreviate) {
     String className = ste.getClassName();
     if (abbreviate) {
-      int dotPos = className.lastIndexOf(".");
+      int dotPos = className.lastIndexOf('.');
       if (dotPos != -1) {
         className = className.substring(dotPos + 1);
       }
