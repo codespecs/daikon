@@ -45,17 +45,25 @@ endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 25; echo $$?),0)
   JAVA25 := 1
 endif
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 25; echo $$?),0)
+  ifndef JAVA25_HOME
+    JAVA25_HOME := ${JAVA_HOME}
+  endif
+endif
 
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
   LINT_THIS_ESCAPE=-Xlint:-this-escape
 endif
 
 OS_ID := $(shell sed -n -e 's/^NAME="\(.*\)"/\1/p' /etc/os-release)
-OS_REL := $(shell sed -n -e 's/^VERSION_ID="(.*)"/\1/' /etc/os-release)
+OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
 
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
 # Use "--source 25 --target 25" because Java 25 is an LTS version.
 ifeq ($(JAVA25), 1)
+  ifndef JAVA25_HOME
+    $(error JAVA25_HOME is not set)
+  endif
   JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}
 else ifeq ($(JAVA24), 1)
   JAVAC_TARGET_FLAGS ?= -source 24 -target 24
