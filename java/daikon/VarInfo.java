@@ -1111,7 +1111,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // This should eventually turn into
     //   return name.indexOf("closure(") != -1;
     // when I rename those variables to "closure(...)".
-    return name().indexOf("~") != -1; // XXX
+    return name().indexOf('~') != -1; // XXX
   }
 
   /** Cached value for getDerivedParam(). */
@@ -3202,7 +3202,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         if (enclosing_var != null) {
 
           if (isStatic(str_name, enclosing_var.name())) {
-            String qualifiedName = str_name.substring(0, str_name.indexOf("("));
+            String qualifiedName = str_name.substring(0, str_name.indexOf('('));
             return qualifiedName + "(" + enclosing_var.csharp_name(index) + ")";
           } else if (var_flags.contains(VarFlags.IS_PROPERTY)) {
             return enclosing_var.csharp_name(index) + "." + relative_name;

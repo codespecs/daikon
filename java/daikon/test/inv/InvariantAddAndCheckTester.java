@@ -448,7 +448,7 @@ public class InvariantAddAndCheckTester {
     private static void executeCheckOrAddCommand(String command, int lineNumber) {
 
       // remove the command
-      String args = command.substring(command.indexOf(":") + 1);
+      String args = command.substring(command.indexOf(':') + 1);
 
       StringTokenizer tokens = new StringTokenizer(args, argDivider);
       if (tokens.countTokens() != types.length + 2) {
@@ -495,7 +495,7 @@ public class InvariantAddAndCheckTester {
     /** Given a line from an input file, generates appropriate check or add command. */
     private static void generateCheckOrAddCommand(String command, int lineNumber) {
       // remove the command
-      String args = command.substring(command.indexOf(":") + 1);
+      String args = command.substring(command.indexOf(':') + 1);
 
       StringTokenizer tokens = new StringTokenizer(args, argDivider);
       if (tokens.countTokens() != types.length) {

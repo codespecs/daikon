@@ -178,7 +178,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     // point number
 
     // could be float, look for "."
-    if (numLiteral.indexOf(".") > -1) {
+    if (numLiteral.indexOf('.') > -1) {
       // float fnum = Float.parseFloat(numLiteral);
       // for now, accept all floats (ignore return value of parseFloat)
       return true;
