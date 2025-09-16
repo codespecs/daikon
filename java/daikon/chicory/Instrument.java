@@ -238,6 +238,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       return null;
     }
 
+    if (className.contains("/$Proxy")) {
+      debug_transform.log("Skipping proxy class %s%n", binaryClassName);
+      return null;
+    }
+
     // Don't instrument our own code.
     if (isChicory(className)) {
       debug_transform.log("Not transforming Chicory class %s%n", binaryClassName);
