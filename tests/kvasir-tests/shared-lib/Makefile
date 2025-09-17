@@ -6,8 +6,5 @@ EXTRA_JUNK = ${LIBS}
 
 include ../Makefile.common
 
-liba.so: liba.c
-	${CC} -fPIC ${CFLAGS} ${DEFINES} $< -shared -o $@
-
-libb.so: libb.c
+%.so: %.c
 	${CC} -fPIC ${CFLAGS} ${DEFINES} $< -shared -o $@
