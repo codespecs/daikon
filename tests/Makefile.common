@@ -869,12 +869,24 @@ txt-all: ${PROJECT_FILE}.txt-daikon ${PROJECT_FILE}.txt-simplify merge;
 endif
 endif
 
+ifdef SKIP_TEST
+diffs:
+	@echo "SKIP_TEST is set for: ${PROJECT_FILE}"
+else
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make diffs          : run all regression tests and display results"
 diffs: txt-diff results
+endif
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-diff       : makes .diff files (from diff -u $$.goal)"
+
+ifdef SKIP_TEST
+txt-diff:
+	@echo "SKIP_TEST is set for: ${PROJECT_FILE}"
+else
+
+# !SKIP_TEST
 
 ifdef ESC_ON
 ifndef NO_MERGE
@@ -948,6 +960,7 @@ endif
 endif # ifndef NO_MERGE
 endif # ifdef NO_JML
 endif # ifdef ESC_ON
+endif # ifdef SKIP_TEST
 
 txt-daikon-diff: ${PROJECT_FILE}.txt-daikon.diff;
 txt-daikon-end2end-diff: ${PROJECT_FILE}.txt-daikon-end2end.diff;
