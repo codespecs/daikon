@@ -6,10 +6,7 @@ define([canary_version], [25])dnl
 define([canary_test], [canary_os[]canary_version])dnl
 ifelse([each macro takes two arguments, the OS name and the JDK version])dnl
 dnl
-define([quick_job], [dnl
-  quick-txt-diff-$1-jdk$2:
-    docker:
-      - image: mdernst/daikon-$1-jdk$2
+define([circleci_boilerplate], [dnl
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -23,7 +20,13 @@ define([quick_job], [dnl
       - save_cache:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
-            - ".git"
+            - ".git"])dnl
+dnl
+define([quick_job], [dnl
+  quick-txt-diff-$1-jdk$2:
+    docker:
+      - image: mdernst/daikon-$1-jdk$2
+circleci_boilerplate
       - run: ./scripts/test-quick-txt-diff.sh
 ])dnl
 dnl
@@ -31,20 +34,7 @@ define([nonquick_job], [dnl
   nonquick-txt-diff-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+circleci_boilerplate
       - run: ./scripts/test-nonquick-txt-diff.sh
 ])dnl
 dnl
@@ -52,40 +42,14 @@ define([nontxt_job], [dnl
   non-txt-diff-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+circleci_boilerplate
       - run: ./scripts/test-non-txt-diff.sh])dnl
 dnl
 define([misc_job], [dnl
   misc-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+circleci_boilerplate
       - run:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m])dnl
@@ -94,20 +58,7 @@ define([kvasir_job], [dnl
   kvasir-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+circleci_boilerplate
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
@@ -117,20 +68,7 @@ define([typecheck_latest_job], [dnl
   typecheck-latest-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+circleci_boilerplate
       - run: env
       - run:
           command: scripts/test-typecheck-with-latest-cf.sh
@@ -139,20 +77,7 @@ define([typecheck_bundled_job], [dnl
   typecheck-bundled-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+circleci_boilerplate
       - run: |
           make showvars
           make compile daikon.jar
@@ -177,20 +102,7 @@ define([nonquick_job_dependences], [dnl
   nonquick-txt-diff-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+circleci_boilerplate
       - run: ./scripts/test-nonquick-txt-diff.sh
 ])dnl
 dnl
@@ -198,40 +110,14 @@ define([nontxt_job_dependences], [dnl
   non-txt-diff-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+circleci_boilerplate
       - run: ./scripts/test-non-txt-diff.sh])dnl
 dnl
 define([misc_job_dependences], [dnl
   misc-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+circleci_boilerplate
       - run:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m])dnl
@@ -240,20 +126,7 @@ define([kvasir_job_dependences], [dnl
   kvasir-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+circleci_boilerplate
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
@@ -263,20 +136,7 @@ define([typecheck_latest_job_dependences], [dnl
   typecheck-latest-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+circleci_boilerplate
       - run: env
       - run:
           command: scripts/test-typecheck-with-latest-cf.sh
@@ -285,20 +145,7 @@ define([typecheck_bundled_job_dependences], [dnl
   typecheck-bundled-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - ".git"
+circleci_boilerplate
       - run: |
           make showvars
           make compile daikon.jar
