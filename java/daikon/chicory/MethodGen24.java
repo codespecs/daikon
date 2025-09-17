@@ -327,7 +327,7 @@ public class MethodGen24 {
    * @param i which parameter's name is requested
    * @return the parameter name
    */
-  public String getParameterName(final int i) {
+  public @Identifier String getParameterName(final int i) {
     return paramNames[i];
   }
 
@@ -336,7 +336,7 @@ public class MethodGen24 {
    *
    * @return the parameter names
    */
-  public String[] getParameterNames() {
+  public @Identifier String[] getParameterNames() {
     return paramNames.clone();
   }
 
