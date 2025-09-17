@@ -327,7 +327,7 @@ public class MethodGen24 {
    * @param i which parameter's name is requested
    * @return the parameter name
    */
-  public String getParameterName(final int i) {
+  public @Identifier String getParameterName(final int i) {
     return paramNames[i];
   }
 
