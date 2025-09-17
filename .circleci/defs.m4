@@ -13,12 +13,12 @@ define([circleci_boilerplate], [dnl
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"])dnl
 dnl

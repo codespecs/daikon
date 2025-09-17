@@ -22,12 +22,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -41,12 +41,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -60,12 +60,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -79,12 +79,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -98,12 +98,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -117,12 +117,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -137,12 +137,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -156,12 +156,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -175,12 +175,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -194,12 +194,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -213,12 +213,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -232,12 +232,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -252,12 +252,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -270,12 +270,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -288,12 +288,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -306,12 +306,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -324,12 +324,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -342,12 +342,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -361,12 +361,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -381,12 +381,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -401,12 +401,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -421,12 +421,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -441,12 +441,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -461,12 +461,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -482,12 +482,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -503,12 +503,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -524,12 +524,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -545,12 +545,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -566,12 +566,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -587,12 +587,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -611,12 +611,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: env
@@ -632,12 +632,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: |
@@ -656,12 +656,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: env
@@ -677,12 +677,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: |
@@ -701,12 +701,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: env
@@ -722,12 +722,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: |
@@ -746,12 +746,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: env
@@ -767,12 +767,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: |
@@ -792,12 +792,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -811,12 +811,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -830,12 +830,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -849,12 +849,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -868,12 +868,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -887,12 +887,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -907,12 +907,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -926,12 +926,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -945,12 +945,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -964,12 +964,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -983,12 +983,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -1002,12 +1002,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -1022,12 +1022,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -1040,12 +1040,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -1058,12 +1058,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -1076,12 +1076,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -1094,12 +1094,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -1112,12 +1112,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -1131,12 +1131,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1151,12 +1151,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1171,12 +1171,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1191,12 +1191,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1211,12 +1211,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1231,12 +1231,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1252,12 +1252,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1273,12 +1273,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1294,12 +1294,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1315,12 +1315,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1336,12 +1336,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1357,12 +1357,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: *source-cache
           paths:
             - ".git"
       - run:
