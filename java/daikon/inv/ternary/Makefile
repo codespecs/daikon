@@ -1,5 +1,5 @@
 %:
-	cd .. && ${MAKE} $@
+	${MAKE} -C .. $@
 
 default:
-	cd .. && ${MAKE} default
+	${MAKE} -C .. default

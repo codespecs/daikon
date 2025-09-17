@@ -175,13 +175,13 @@ help:
 compile: compile-java
 
 compile-java:
-	cd java && ${MAKE} all
+	${MAKE} -C java all
 
 very-clean:
 	find . -type f -name "*~" -exec rm -f {} \;
 	${MAKE} -C ${DAIKONDIR} clean-everything
-	cd scripts && ${MAKE} clean
-	cd tests && ${MAKE} very-clean
+	${MAKE} -C scripts clean
+	${MAKE} -C tests very-clean
 	-rm -rf examples/java-examples/QueueAr/DataStructures/*.class
 	-rm -rf examples/java-examples/StackAr/DataStructures/*.class
 	-rm -rf tests/sources/DataStructures/*.class
@@ -189,20 +189,20 @@ very-clean:
 	-rm -rf utils
 
 clean-java:
-	cd java && ${MAKE} clean
+	${MAKE} -C java clean
 
 javadoc:
-	cd java && ${MAKE} javadoc
+	${MAKE} -C java javadoc
 
 dyncomp-jdk:
-	cd java && ${MAKE} dyncomp-jdk
+	${MAKE} -C java dyncomp-jdk
 
 dcomp-jdk:
-	cd java && ${MAKE} dcomp-jdk
+	${MAKE} -C java dcomp-jdk
 
 format: reformat
 reformat:
-	cd java && ${MAKE} reformat
+	${MAKE} -C java reformat
 
 
 ### Kvasir (C/C++ front end)
@@ -281,10 +281,10 @@ clean-kvasir:
 # Note that these do NOT compile the code, even if compilation is necessary.
 
 test:
-	cd tests && ${MAKE} all
+	${MAKE} -C tests all
 
 junit:
-	cd java && ${MAKE} junit
+	${MAKE} -C java junit
 
 # A quick test used to verify that Chicory and Daikon
 # are working properly.
@@ -323,7 +323,7 @@ nightly-test-except-doc-pdf:
 TAGS: tags
 .PHONY: tags
 tags:
-	cd java && ${MAKE} tags
+	${MAKE} -C java tags
 	etags --include=java/TAGS
 
 
@@ -361,19 +361,19 @@ test-staged-dist: ${STAGING_DIR}
 	mkdir -p ${DISTTESTDIR}
 	(cd ${DISTTESTDIR}; tar xzf ${STAGING_DIR}/download/${NEW_RELEASE_NAME}.tar.gz)
 	(cd ${DISTTESTDIR}; mv ${NEW_RELEASE_NAME} daikon)
-	(cd ${DISTTESTDIR}/daikon/java && ${MAKE} junit)
+	cd  ${MAKE} -C ${DISTTESTDIR}/daikon/java && junit
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
 	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print | xargs -n 1 ../utils/plume-scripts/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
 	(cd ${DISTTESTDIRJAVA}/daikon; rm `find . -name '*.class'`; ${MAKE} all_javac)
 	## Test that these new .class files work properly.
-	(cd ${DISTTESTDIR}/daikon/java && ${MAKE} junit)
+	${MAKE} -C ${DISTTESTDIR}/daikon/java junit
 	## Test the main target of the makefile.
 	cd ${DISTTESTDIR}/daikon && make
 	## Test that we can build docs.
-	cd ${DISTTESTDIR}/daikon && ${MAKE} doc-all
+	${MAKE} -C ${DISTTESTDIR}/daikon doc-all
 	## Test the basic operation of Chicory/DynComp/Daikon.
-	cd ${DISTTESTDIR}/daikon && ${MAKE} distribution-check
+	${MAKE} -C ${DISTTESTDIR}/daikon distribution-check
 
 # I would rather define this inside the repository-test rule.  (In that case I
 # must use "$$FOO", not ${FOO}, to refer to it.)
@@ -389,7 +389,7 @@ repository-test:
 # vars for Daikon
 	export DAIKONDIR=${MYTESTDIR}/daikon
 #	source ${DAIKONDIR}/scripts/daikon.bashrc
-	cd daikon && ${MAKE}
+	${MAKE} -C daikon
 
 
 validate:
@@ -455,7 +455,7 @@ staging:
 	cd doc/www && ${RSYNC_AR} ${WWW_DAIKON_FILES} ${STAGING_DIR}
 	# Build pubs and copy the results
 	@echo "]2;Building Pubs"
-	cd doc/www && ${MAKE} pubs
+	${MAKE} -C doc/www pubs
 	mkdir ${STAGING_DIR}/pubs
 	cp -pR doc/www/pubs/* ${STAGING_DIR}/pubs
 	cp -p doc/daikon-favicon.png ${STAGING_DIR}
@@ -507,9 +507,9 @@ doc/CHANGELOG.md: doc/daikon.texinfo
 
 
 doc-all:
-	cd doc && ${MAKE} all
+	${MAKE} -C doc all
 doc-all-except-pdf:
-	cd doc && ${MAKE} all-except-pdf
+	${MAKE} -C doc all-except-pdf
 
 # Get the current release version,
 # if on the CSE filesystem where an old daikon-*.zip file exists.

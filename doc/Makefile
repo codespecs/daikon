@@ -26,10 +26,10 @@ config-options.texinfo:
 invariants-doc.texinfo:
 else
 config-options.texinfo:
-	cd ../java && ${MAKE} ../doc/config-options.texinfo
+	${MAKE} -C ../java ../doc/config-options.texinfo
 
 invariants-doc.texinfo:
-	cd ../java && ${MAKE} ../doc/invariants-doc.texinfo
+	${MAKE} -C ../java ../doc/invariants-doc.texinfo
 
 # Always remake config-options.texinfo
 # (We delegate to ../java/Makefile, which is more discerning)
@@ -145,12 +145,12 @@ very-clean: clean
 
 # Remakes entire distribution; use with caution.
 dist:
-	cd .. && ${MAKE} dist
+	${MAKE} -C .. dist
 
 # "www" target wouldn't work from here, because "www" is an (existing)
 # directory; but go to the parent directory and run the rule from there.
 # www:
-# 	cd .. && ${MAKE} www
+# 	${MAKE} -C .. www
 
 .PHONY: find-changes spell-check
 find-changes:

@@ -876,7 +876,7 @@ findbugs-cat:
 .PHONY: jar
 jar: ../daikon.jar
 ../daikon.jar: ../utils/plume-scripts ${AUTO_GENERATED_FILES} compile
-	cd .. && ${MAKE} daikon.jar
+	${MAKE} -C .. daikon.jar
 
 jlint:
 	jlint . | grep -v "Value of referenced variable '.*' may be NULL" | grep -v "Compare strings as object references" | perl -p -e 's:^daikon/::'
@@ -1185,7 +1185,7 @@ possible-annos: ${ALL_GENERATED_FILES} compile-typequals compile
 test: tests
 
 tests: junit
-	cd ../tests && ${MAKE} all
+	${MAKE} -C ../tests all
 
 # run a static check on currently-compiled classes
 # ensure serialized classes have a date-style UID assigned
