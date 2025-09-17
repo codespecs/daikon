@@ -2,4 +2,4 @@
 # run more easily while toying with the merged source.
 
 esc-force %:
-	cd .. && $(MAKE) $@
+	cd .. && ${MAKE} $@
