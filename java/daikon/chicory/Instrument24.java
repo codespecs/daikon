@@ -59,7 +59,6 @@ import java.lang.constant.MethodTypeDesc;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.AccessFlag;
 import java.nio.file.Files;
 import java.security.ProtectionDomain;
 import java.util.ArrayList;
@@ -520,7 +519,7 @@ public class Instrument24 implements ClassFileTransformer {
           }
 
           // If method is synthetic... (default constructors and <clinit> are not synthetic).
-          if (mgen.getAccessFlags().has(AccessFlag.SYNTHETIC)) {
+          if ((mgen.getAccessFlagsMask() & ClassFile.ACC_SYNTHETIC) != 0) {
             // We are not going to instrument this method.
             // We need to copy it to the output class.
             outputMethodUnchanged(classBuilder, mm, mgen);

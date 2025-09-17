@@ -1,8 +1,8 @@
 package daikon.chicory;
 
-import java.lang.classfile.AccessFlags;
 import java.lang.classfile.Attributes;
 import java.lang.classfile.ClassBuilder;
+import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.CodeElement;
 import java.lang.classfile.CodeModel;
@@ -15,7 +15,6 @@ import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.instruction.LocalVariable;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
-import java.lang.reflect.AccessFlag;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -54,8 +53,8 @@ public class MethodGen24 {
    */
   private @Nullable CodeModel code;
 
-  /** The method's access flags. */
-  private AccessFlags accessFlags;
+  /** The method's access flags as a bit mask. */
+  private int accessFlagsMask;
 
   /** The method's name. */
   private String methodName;
@@ -200,13 +199,13 @@ public class MethodGen24 {
       final @BinaryName String className,
       ClassBuilder classBuilder) {
 
-    accessFlags = methodModel.flags();
+    accessFlagsMask = methodModel.flags().flagsMask();
     methodName = methodModel.methodName().stringValue();
     @SuppressWarnings("signature") // JDK 24 is not annotated as yet
     @MethodDescriptor String descriptor1 = methodModel.methodType().stringValue();
     descriptor = descriptor1;
     this.className = className;
-    isStatic = accessFlags.has(AccessFlag.STATIC);
+    isStatic = (accessFlagsMask & ClassFile.ACC_STATIC) != 0;
 
     Optional<CodeModel> code = methodModel.code();
     if (code.isPresent()) {
@@ -290,8 +289,8 @@ public class MethodGen24 {
    *
    * @return the access flags
    */
-  public AccessFlags getAccessFlags() {
-    return accessFlags;
+  public int getAccessFlagsMask() {
+    return accessFlagsMask;
   }
 
   /**
