@@ -538,7 +538,7 @@ public class Instrument24 implements ClassFileTransformer {
           if (debugInstrument.enabled) {
             ClassDesc[] paramTypes = mgen.getParameterTypes();
             String[] paramNames = mgen.getParameterNames();
-            LocalVariable[] local_vars = mgen.getLocalVariables();
+            LocalVariable[] local_vars = mgen.getOriginalLocalVariables();
             String types = "", names = "", locals = "";
 
             for (int j = 0; j < paramTypes.length; j++) {
@@ -1356,7 +1356,7 @@ public class Instrument24 implements ClassFileTransformer {
 
     // Get the parameter names for this method.
     String[] paramNames = mgen.getParameterNames();
-    LocalVariable[] lvs = mgen.getLocalVariables();
+    LocalVariable[] lvs = mgen.getOriginalLocalVariables();
     int param_offset = 1;
     if (mgen.isStatic()) {
       param_offset = 0;
