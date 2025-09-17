@@ -623,9 +623,9 @@ dyncomp-update-goals dcomp-update-goals:
 DCOMP_RT	:= dcomp-rt
 dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 $(DCOMP_RT) dcomp_rt.jar : dcomp_premain.jar
-	/bin/rm -rf $(DCOMP_RT)
-	$(INSTALL) -d $(DCOMP_RT)
-	$(JAVA_COMMAND) -Xmx3600m daikon.dcomp.BuildJDK $(DCOMP_RT)
+	/bin/rm -rf ${DCOMP_RT}
+	${INSTALL} -d ${DCOMP_RT}
+	${JAVA_COMMAND} -Xmx3600m daikon.dcomp.BuildJDK ${DCOMP_RT}
 # "then" clause is Java 8, "else" clause is Java 9+.
 # For Java 9+, there appears to be a bug in the Java reflection invoke code that it
 # does not check that the arg list matches.  Hence, it tries to invoke
