@@ -213,7 +213,7 @@ public class Premain {
           (ClassFileTransformer)
               loader.loadClass(instrumenter).getDeclaredConstructor().newInstance();
     } catch (Exception e) {
-      throw new RuntimeException("Unexpected error loading Instrument", e);
+      throw new RuntimeException("Unexpected error loading Instrumenter " + instrumenter, e);
     }
     if (verbose) {
       // If jdk_instrumented is true then the printf below will output
