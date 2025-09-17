@@ -91,68 +91,15 @@ define([job_dependences], [dnl
 ifelse($1$2,canary_test,,[:
           requires:
             - canary-jobs
-ifelse($2,canary_version,,[            - $3-$1-jdk[]canary_version
+ifelse($2,canary_version,,[dnl
+            - $3-$1-jdk[]canary_version
 ])dnl
-ifelse($1,canary_os,,[            - $3-canary_os[]-jdk$2
+ifelse($1,canary_os,,[dnl
+            - $3-canary_os[]-jdk$2
 ])dnl
 ])dnl
-])dnl
-dnl
-define([nonquick_job_dependences], [dnl
-  nonquick-txt-diff-$1-jdk$2:
-    docker:
-      - image: mdernst/daikon-$1-jdk$2
-circleci_boilerplate
-      - run: ./scripts/test-nonquick-txt-diff.sh
 ])dnl
 dnl
-define([nontxt_job_dependences], [dnl
-  non-txt-diff-$1-jdk$2:
-    docker:
-      - image: mdernst/daikon-$1-jdk$2
-circleci_boilerplate
-      - run: ./scripts/test-non-txt-diff.sh])dnl
-dnl
-define([misc_job_dependences], [dnl
-  misc-$1-jdk$2:
-    docker:
-      - image: mdernst/daikon-$1-jdk$2-plus
-circleci_boilerplate
-      - run:
-          command: ./scripts/test-misc.sh
-          no_output_timeout: 20m])dnl
-dnl
-define([kvasir_job_dependences], [dnl
-  kvasir-$1-jdk$2:
-    docker:
-      - image: mdernst/daikon-$1-jdk$2-plus
-circleci_boilerplate
-      - run:
-          name: Test Kvasir
-          command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m])dnl
-dnl
-define([typecheck_latest_job_dependences], [dnl
-  typecheck-latest-$1-jdk$2:
-    docker:
-      - image: mdernst/daikon-$1-jdk$2
-circleci_boilerplate
-      - run: env
-      - run:
-          command: scripts/test-typecheck-with-latest-cf.sh
-          no_output_timeout: 30m])dnl
-define([typecheck_bundled_job_dependences], [dnl
-  typecheck-bundled-$1-jdk$2:
-    docker:
-      - image: mdernst/daikon-$1-jdk$2
-circleci_boilerplate
-      - run: |
-          make showvars
-          make compile daikon.jar
-      - run:
-          command: scripts/test-typecheck-with-bundled-cf.sh
-          no_output_timeout: 30m
-])dnl
 ifelse([
 Local Variables:
 eval: (make-local-variable 'after-save-hook)
