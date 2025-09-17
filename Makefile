@@ -779,7 +779,7 @@ ifndef NONETWORK
 	if test -d utils/plume-scripts/.git ; then \
 	  (cd utils/plume-scripts && (git pull -q || (sleep 1m && (git pull || true)))) \
 	elif ! test -d utils/plume-scripts ; then \
-	  mkdir -p utils && (git clone -q --depth=1 --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts || (sleep 1m && git clone -q --depth=1 --depth 1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts)) \
+	  mkdir -p utils && (git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts)) \
 	fi
 endif
 
