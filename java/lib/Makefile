@@ -1,6 +1,6 @@
 # This target creates daikon-plumelib.jar, whether or not it already exists.
 all:
-	$(MAKE) build-jarjar
+	${MAKE} build-jarjar
 	\rm -f daikon-plumelib.jar
 	./create-daikon-plumelib.sh
 

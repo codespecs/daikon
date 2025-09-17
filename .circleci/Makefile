@@ -1,3 +1,4 @@
+.PHONY: all default clean
 all default: config.yml
 # TODO: all default: config.yml config-daily.yml
 

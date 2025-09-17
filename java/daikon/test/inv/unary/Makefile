@@ -1,5 +1,6 @@
 %:
-	cd .. && $(MAKE) $@
+	${MAKE} -C .. $@
 
+.PHONY: default
 default:
-	cd .. && $(MAKE) default
+	${MAKE} -C .. default
