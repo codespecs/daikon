@@ -104,9 +104,6 @@ public class Instrument24 implements ClassFileTransformer {
   /** The ClassDesc for the Chicory runtime support class. */
   private static final ClassDesc runtimeCD = ClassDesc.of(runtime_classname);
 
-  /** The ClassDesc for the Java Object class. */
-  private static final ClassDesc objectCD = ClassDesc.of("java.lang.Object");
-
   /** Debug information about which classes and/or methods are transformed and why. */
   protected static final SimpleLog debug_transform = new SimpleLog(false);
 
@@ -1073,8 +1070,7 @@ public class Instrument24 implements ClassFileTransformer {
     // anewarray
     // Create an array of objects with elements for each parameter.
     newCode.add(loadIntegerConstant(paramTypes.length, mgen));
-    ClassDesc objectArrayCD = objectCD.arrayType(1);
-    newCode.add(NewReferenceArrayInstruction.of(mgen.getPoolBuilder().classEntry(objectCD)));
+    newCode.add(NewReferenceArrayInstruction.of(mgen.getPoolBuilder().classEntry(CD_Object)));
 
     // Put each parameter into the array.
     int param_index = param_offset;
@@ -1111,6 +1107,7 @@ public class Instrument24 implements ClassFileTransformer {
       newCode.add(loadIntegerConstant(line, mgen));
     }
 
+    ClassDesc objectArrayCD = CD_Object.arrayType(1);
     MethodTypeDesc methodArgs;
     // Call the specified method.
     if (methodToCall.equals("exit")) {
