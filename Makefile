@@ -363,7 +363,7 @@ test-staged-dist: ${STAGING_DIR}
 	(cd ${DISTTESTDIR}; mv ${NEW_RELEASE_NAME} daikon)
 	cd  ${MAKE} -C ${DISTTESTDIR}/daikon/java && junit
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
-	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print | xargs -n 1 ../utils/plume-scripts/classfile_check_version 52)
+	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print0 | xargs -0 -n 1 ../utils/plume-scripts/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
 	(cd ${DISTTESTDIRJAVA}/daikon; rm `find . -name '*.class'`; ${MAKE} all_javac)
 	## Test that these new .class files work properly.
@@ -648,7 +648,7 @@ daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
 	mkdir ${TMPDIR}/daikon/examples
 	cp -pR examples/java-examples ${TMPDIR}/daikon/examples
 	# Keep .java files, delete everything else
-	(cd ${TMPDIR}/daikon && find examples/java-examples -name '*.java' -prune -o \( -type f -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf)
+	(cd ${TMPDIR}/daikon && find examples/java-examples -name '*.java' -prune -o \( -type f -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print0 | xargs -0 rm -rf)
 
 	# Perl example files
 	mkdir ${TMPDIR}/daikon/examples/perl-examples

@@ -115,7 +115,7 @@ as follows:
 
   cd ${INV}/java
 
-  find ./jtb -name "*.java" | xargs javac
+  find ./jtb -name "*.java" -print0 | xargs -0 javac
 
   manually modified some files to suit my needs. All modifications are commented and have the
   name "Carlos Pacheco" in the comments (so you can search for them).

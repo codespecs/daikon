@@ -111,7 +111,7 @@ results_header:
 	@echo ""
 
 results_cat:
-	@find ${BASE} ${RESULTS_PATTERN} | xargs cat
+	@find ${BASE} ${RESULTS_PATTERN} -print0 | xargs -0 cat
 
 results: results_header results_cat summary
 
