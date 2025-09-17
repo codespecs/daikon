@@ -336,7 +336,7 @@ public class MethodGen24 {
    *
    * @return the parameter names
    */
-  public String[] getParameterNames() {
+  public @Identifier String[] getParameterNames() {
     return paramNames.clone();
   }
 
