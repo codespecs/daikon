@@ -1314,7 +1314,7 @@ public class Instrument24 implements ClassFileTransformer {
    */
   @Pure
   private boolean isConstructor(MethodGen24 mgen) {
-    if (mgen.getName().equals("<init>") || mgen.getName().equals("")) {
+    if (mgen.getName().equals("<init>")) {
       debugInstrument.log("isConstructor(%s) => true%n", mgen.getName());
       return true;
     } else {
@@ -1331,7 +1331,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @return the class name in ClassGetName format
    */
   @SuppressWarnings("signature") // conversion method
-  private static @ClassGetName String typeToClassGetName(ClassDesc t) {
+  public static @ClassGetName String typeToClassGetName(ClassDesc t) {
     String s = t.descriptorString();
     if (s.startsWith("[")) {
       return s.replace('/', '.');
