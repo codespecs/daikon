@@ -120,18 +120,16 @@ developer.pdf: developer.texinfo
 # config-options.texinfo.
 
 clean: texi-clean
+	rm -rf daikon/*
 	rm -f daikon.tmp \
 		daikon.info daikon.info-[0-9] \
 		daikon.log daikon.dvi daikon.pdf daikon.html
-	rm -f *.bak
-	rm -rf daikon/*
+	rm -rf developer/*
 	rm -f developer.tmp \
 		developer.info developer.info-[0-9] \
 		developer.log developer.dvi developer.pdf developer.html
-	rm -rf developer/*
 	rm -f images/dfepl-flow.{eps,pdf,jpg}
-# Obsolete files
-	rm -f daikon.ps developer.ps
+	rm -f *.bak
 
 texi-clean:
 	rm -rf daikon.aux daikon.cp daikon.cps daikon.fn daikon.fns \

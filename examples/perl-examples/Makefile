@@ -2,8 +2,10 @@ JAVA = java -Xmx3600m -XX:MaxPermSize=768M
 # DAIKON = ${JAVA} daikon.Daikon --no_text_output --show_progress --suppress_redundant
 DAIKON = ${JAVA} daikon.Daikon --no_text_output --show_progress
 
+.PHONY: all
 all: birthday.inv standalone.inv
 
+.PHONY: clean
 clean:
 	rm -rf birthday.inv standalone.inv daikon-untyped daikon-instrumented daikon-output
 

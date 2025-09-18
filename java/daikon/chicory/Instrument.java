@@ -979,8 +979,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // anewarray
     // Create an array of objects with elements for each parameter.
     newCode.append(instFactory.createConstant(paramTypes.length));
-    Type object_arr_typ = new ArrayType("java.lang.Object", 1);
     newCode.append(instFactory.createNewArray(Type.OBJECT, (short) 1));
+
+    Type object_arr_typ = new ArrayType("java.lang.Object", 1);
 
     // Put each parameter into the array.
     int param_index = param_offset;
