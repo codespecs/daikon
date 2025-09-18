@@ -413,7 +413,7 @@ Variable Flags
     no_size     false     True if a collection's size is not relevant.
                           Used to be has_size.  Only valid on collections
     no_mod      false     True if a variable cannot be modified (e.g., is
-                          final in java).  New.
+                          final in Java).  New.
     synthetic   false     Any variable created by the front end that is not
                           a program variable.  For example, the class name
                           variables.  Pure method calls are marked with
