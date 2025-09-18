@@ -848,9 +848,8 @@ Resolved Issues:
          rgb[1].foo[]
          rgb[2].foo[]
 
-      otherwise, rgb[].foo[] is a 2-D array which Daikon cannot currently
+      Otherwise, rgb[].foo[] is a 2-D array which Daikon cannot currently
       support.
-
       As shown in the examples, this is legal.  A number inside of
       brackets is treated as a special field name.  Front ends can
       decide if they wish to do this or not.
