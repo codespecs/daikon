@@ -20,8 +20,8 @@ variables:
 jobs:
 
 # The dependsOn clauses (in this file and in .circleci/config.yml) are:
-#  * Everything not *_ubuntu_jdk17 or typecheck_*_jdk17 depends on jdk17_jobs.
-#  * Anything *_jdk8 or *_jdk11 or *_jdk17 or _jdk24 or _jdk25 depends on *_jdk21.
+#  * Everything not *_ubuntu_jdk[]canary_version or typecheck_*_jdk[]canary_version depends on canary_jobs.
+#  * Anything *_jdk8 or *_jdk11 or *_jdk17 or _jdk21 depends on *_jdk25.
 #  * Anything *_rockylinux_* depends on *_ubuntu_*.
 
 # The remainder of jobs are run only if the canary_jobs pass.
