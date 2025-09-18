@@ -3,6 +3,9 @@ changequote(`[',`]')dnl
 include([defs.m4])dnl
 version: 2.1
 
+name: CI
+on: [push, pull_request]
+
 jobs:
 
   # Only proceed to other jobs if canary-jobs passes.
