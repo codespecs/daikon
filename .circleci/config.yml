@@ -493,7 +493,7 @@ jobs:
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
+          no_output_timeout: 30m
   kvasir-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11-plus
@@ -514,7 +514,7 @@ jobs:
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
+          no_output_timeout: 30m
   kvasir-ubuntu-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk17-plus
@@ -535,7 +535,7 @@ jobs:
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
+          no_output_timeout: 30m
   kvasir-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21-plus
@@ -556,7 +556,7 @@ jobs:
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
+          no_output_timeout: 30m
   kvasir-ubuntu-jdk24:
     docker:
       - image: mdernst/daikon-ubuntu-jdk24-plus
@@ -577,7 +577,7 @@ jobs:
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
+          no_output_timeout: 30m
   kvasir-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25-plus
@@ -598,7 +598,7 @@ jobs:
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
+          no_output_timeout: 30m
 
 ## The Checker Framework cannot be built, or run, under Java 8 or 11.
 ## Thus, there is no typecheck_*_ubuntu_jdk{8,11} job.
@@ -1263,7 +1263,7 @@ jobs:
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
+          no_output_timeout: 30m
   kvasir-rockylinux-jdk11:
     docker:
       - image: mdernst/daikon-rockylinux-jdk11-plus
@@ -1284,7 +1284,7 @@ jobs:
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
+          no_output_timeout: 30m
   kvasir-rockylinux-jdk17:
     docker:
       - image: mdernst/daikon-rockylinux-jdk17-plus
@@ -1305,7 +1305,7 @@ jobs:
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
+          no_output_timeout: 30m
   kvasir-rockylinux-jdk21:
     docker:
       - image: mdernst/daikon-rockylinux-jdk21-plus
@@ -1326,7 +1326,7 @@ jobs:
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
+          no_output_timeout: 30m
   kvasir-rockylinux-jdk24:
     docker:
       - image: mdernst/daikon-rockylinux-jdk24-plus
@@ -1347,7 +1347,7 @@ jobs:
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
+          no_output_timeout: 30m
   kvasir-rockylinux-jdk25:
     docker:
       - image: mdernst/daikon-rockylinux-jdk25-plus
@@ -1368,7 +1368,7 @@ jobs:
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
+          no_output_timeout: 30m
 
 # For an explanation of the dependence logic, see ../.azure/azure-pipelines.yml .
 

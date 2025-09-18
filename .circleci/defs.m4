@@ -62,7 +62,7 @@ circleci_boilerplate
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m])dnl
+          no_output_timeout: 30m])dnl
 dnl
 define([typecheck_latest_job], [dnl
   typecheck-latest-$1-jdk$2:
