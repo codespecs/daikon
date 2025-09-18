@@ -141,7 +141,7 @@ public class Instrument24 implements ClassFileTransformer {
   /**
    * Returns true if the given ppt should be ignored. Uses the patterns in {@link
    * daikon.chicory.Runtime#ppt_omit_pattern} and {@link daikon.chicory.Runtime#ppt_select_pattern}.
-   * This method is used by both Chicory and Dyncomp.
+   * This method is used by both Chicory and DynComp.
    *
    * @param className class name to be checked
    * @param methodName method name to be checked
@@ -196,7 +196,7 @@ public class Instrument24 implements ClassFileTransformer {
    * boot classes have the null loader, but some generated classes (such as those in sun.reflect)
    * will have a non-null loader. Some of these have a null parent loader, but some do not. The
    * check for the sun.reflect package is a hack to catch all of these. A more consistent mechanism
-   * to determine boot classes would be preferrable.
+   * to determine boot classes would be preferable.
    *
    * @param className class name to be checked
    * @param loader the class loader for the class
@@ -813,9 +813,9 @@ public class Instrument24 implements ClassFileTransformer {
     for (CodeElement ce : mgen.getInstructionList()) {
       debugInstrument.log("CodeElement: %s%n", ce);
       switch (ce) {
-        case LocalVariable lv -> {} // we have alreay processed these
+        case LocalVariable lv -> {} // we have already processed these
         case LocalVariableType lvt -> {} // we can discard local variable types
-        // debuging code
+        // debugging code
         // case LocalVariableType lvt -> {
         // @FieldDescriptor String lvFD = lvt.signatureSymbol().signatureString();
         // System.out.printf("  %s : %s%n", lvt, convertDescriptorToFqBinaryName(lvFD)); }
@@ -1014,7 +1014,7 @@ public class Instrument24 implements ClassFileTransformer {
     //   <the actual code for the method>
     //
     // We want to insert our instrumentation code after the LocalVariables (if any) and after the
-    // inital label (if present), but before any LineNumber or Instruction.
+    // initial label (if present), but before any LineNumber or Instruction.
     CodeElement inst = null;
     try {
       ListIterator<CodeElement> li = instructions.listIterator();
@@ -1150,7 +1150,7 @@ public class Instrument24 implements ClassFileTransformer {
     /**
      * Creates a ModifiedSwitchInfo.
      *
-     * @param modifiedTarget possibly modified default swith target
+     * @param modifiedTarget possibly modified default with target
      * @param modifiedCaseList possibly modified switch case list
      */
     public ModifiedSwitchInfo(Label modifiedTarget, List<SwitchCase> modifiedCaseList) {
