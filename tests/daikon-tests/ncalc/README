@@ -5,7 +5,7 @@ Virtual Machine (JVM) to interact with native applications and libraries written
 languages, such as C or C++.
 
 libcalculator.so is a shared code library that contains a single function that returns the
-result of adding its two interger arguments. This file is checked into the repository, but
+result of adding its two integer arguments. This file is checked into the repository, but
 if it should need to be recreated here are the steps.
 
 First, compile the java code with the '-h' option:
@@ -13,7 +13,7 @@ First, compile the java code with the '-h' option:
 This creates the normal .class file but also a .h file that describes the JNI interface the
 java program is calling.
 
-Then to create the shared libary:
+Then to create the shared library:
   gcc -fPIC -I"$JAVA_HOME/include" -I"$JAVA_HOME/include/linux" -shared -o libcalculator.so ncalc.c
 
 In general, when running a Java program that uses JNI, you need to tell the JVM where to find
