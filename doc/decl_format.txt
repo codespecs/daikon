@@ -713,7 +713,7 @@ Resolved Issues:
       that we remove this.  We can always add it if/when we find a need
       for it.
 
-      Mike thinks that this was used as hint when producing java output.
+      Mike thinks that this was used as a hint when producing Java output.
       But I'm not sure how it could be used.
 
     - Should a ppt name be parsable or could we simply make this an
