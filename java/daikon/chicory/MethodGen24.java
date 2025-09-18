@@ -360,11 +360,12 @@ public class MethodGen24 {
   }
 
   /**
-   * Returns the local variable table.
+   * Returns the original local variable table. In most cases, instrumentation code should use the
+   * {@code localsTable} instead.
    *
-   * @return the local variable table
+   * @return the original local variable table
    */
-  public LocalVariable[] getLocalVariables() {
+  public LocalVariable[] getOriginalLocalVariables() {
     return origLocalVariables.clone();
   }
 
