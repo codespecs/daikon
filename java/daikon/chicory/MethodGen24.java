@@ -27,9 +27,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.FieldDescriptor;
 import org.checkerframework.checker.signature.qual.Identifier;
@@ -203,7 +205,6 @@ public class MethodGen24 {
    * @param className the containing class, in binary name format
    * @param classBuilder for the class
    */
-  @SuppressWarnings({"nullness:initialization", "nullness:method.invocation"})
   public MethodGen24(
       final MethodModel methodModel,
       final @BinaryName String className,
@@ -277,7 +278,9 @@ public class MethodGen24 {
 
     // Set up the parameter types and names.
     mtd = methodModel.methodTypeSymbol();
-    getParamInfo();
+    returnType = mtd.returnType();
+    paramTypes = getParamTypes();
+    paramNames = getParamNames();
   }
 
   /**
@@ -292,7 +295,6 @@ public class MethodGen24 {
    * @param maxStack for the method
    * @param maxLocals for the method
    */
-  @SuppressWarnings({"nullness:initialization", "nullness:method.invocation"})
   public MethodGen24(
       final @BinaryName String className,
       ClassBuilder classBuilder,
@@ -324,14 +326,20 @@ public class MethodGen24 {
 
     poolBuilder = classBuilder.constantPool();
 
-    // Set up the parameter types and names.
-    getParamInfo();
+    returnType = mtd.returnType();
+    paramTypes = getParamTypes();
+    paramNames = getParamNames();
   }
 
-  /** Setup the paramTypes and paramNames arrays. */
-  private void getParamInfo() {
-    paramTypes = mtd.parameterArray();
-    returnType = mtd.returnType();
+  /**
+   * Returns the value for the {@link #paramTypes} field. Intended to be called only once, from the
+   * constructor.
+   *
+   * @return the value for the {@link #paramTypes} field
+   */
+  @RequiresNonNull({"mtd", "methodName", "origLocalVariables", "className"})
+  private ClassDesc[] getParamTypes(@UnderInitialization(Object.class) MethodGen24 this) {
+    ClassDesc[] result = mtd.parameterArray();
 
     // java.lang.classfile seems to be inconsistent with the parameter types
     // of an inner class constructor. It may optimize away the hidden 'this$0'
@@ -339,10 +347,10 @@ public class MethodGen24 {
     // parameterArray().  In order to correctly derive the names of the
     // parameters I need to detect this special case and remove the
     // incorrect entry from the parameterArray(). This check is ugly.
-    if (methodName.equals("<init>") && paramTypes.length > 0 && origLocalVariables.length > 1) {
+    if (methodName.equals("<init>") && result.length > 0 && origLocalVariables.length > 1) {
       int dollarPos = className.lastIndexOf("$");
       @SuppressWarnings("signature:assignment") // need JDK annotations
-      @FieldDescriptor String arg0Fd = paramTypes[0].descriptorString();
+      @FieldDescriptor String arg0Fd = result[0].descriptorString();
       String arg0Type = Instrument24.convertDescriptorToFqBinaryName(arg0Fd);
       // Note for tests below: first local will always be 'this'.
       if (dollarPos >= 0
@@ -354,21 +362,34 @@ public class MethodGen24 {
           !(origLocalVariables[1].slot() == 2)
           &&
           // don't change if type of first param matches type of second local
-          !origLocalVariables[1].typeSymbol().equals(paramTypes[0])
+          !origLocalVariables[1].typeSymbol().equals(result[0])
           &&
-          // don't change paramTypes if 'this$0' is present
+          // don't change result if 'this$0' is present
           !origLocalVariables[1].name().stringValue().equals("this$0")) {
         // some need some don't. what is difference?
         // remove first param type so consistent with other methods
-        ClassDesc[] newArray = new ClassDesc[paramTypes.length - 1];
-        System.arraycopy(paramTypes, 1, newArray, 0, paramTypes.length - 1);
-        paramTypes = newArray;
+        ClassDesc[] newArray = new ClassDesc[result.length - 1];
+        System.arraycopy(result, 1, newArray, 0, result.length - 1);
+        result = newArray;
       }
     }
 
+    return result;
+  }
+
+  /**
+   * Returns the value for the {@link #paramNames} field. Intended to be called only once, from the
+   * constructor.
+   *
+   * @return the value for the {@link #paramNames} field
+   */
+  @RequiresNonNull({"mtd", "paramTypes", "origLocalVariables"})
+  private @Identifier String[] getParamNames(@UnderInitialization(Object.class) MethodGen24 this) {
+
     // These initial values for {@code paramNames} may be incorrect.  They could
     // be altered in {@code fixLocals}.
-    paramNames = new String[paramTypes.length];
+    @Identifier String[] result = new String[paramTypes.length];
+
     int pIndex = 0;
     int lIndex = isStatic ? 0 : 1;
     int slot = isStatic ? 0 : 1;
@@ -378,19 +399,21 @@ public class MethodGen24 {
       if ((lIndex >= origLocalVariables.length)
           || (pIndex >= lLen)
           || (origLocalVariables[lIndex].slot() != slot)) {
-        paramNames[pIndex] = "param" + slot;
+        result[pIndex] = "param" + slot;
       } else {
         // UNDONE: should we assert type of paramTypes[pIndex] == type of
         // origLocalVariables[lindex]?
         @SuppressWarnings("signature:assignment") // need JDK annotations
         @Identifier String paramName = origLocalVariables[lIndex].name().stringValue();
-        paramNames[pIndex] = paramName;
+        result[pIndex] = paramName;
         lIndex++;
         lLen++; // pretend there is one more local
       }
       slot += TypeKind.from(paramTypes[pIndex]).slotSize();
       pIndex++;
     }
+
+    return result;
   }
 
   /**
