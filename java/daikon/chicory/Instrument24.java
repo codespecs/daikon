@@ -31,6 +31,7 @@ import java.lang.classfile.Opcode;
 import java.lang.classfile.TypeKind;
 import java.lang.classfile.attribute.CodeAttribute;
 import java.lang.classfile.attribute.ConstantValueAttribute;
+import java.lang.classfile.constantpool.ClassEntry;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.ConstantValueEntry;
 import java.lang.classfile.constantpool.MethodRefEntry;
@@ -368,9 +369,19 @@ public class Instrument24 implements ClassFileTransformer {
   private void instrumentClass(
       ClassBuilder classBuilder, ClassModel classModel, ClassInfo classInfo) {
 
+    debugInstrument.log("Class Name:%n");
+    @SuppressWarnings("signature:assignment") // type conversion
+    @InternalForm String temp = classModel.thisClass().asInternalName();
+    debugInstrument.log("  %s%n", Signatures.internalFormToBinaryName(temp));
+
     debugInstrument.log("Class Attributes:%n");
     for (java.lang.classfile.Attribute<?> a : classModel.attributes()) {
       debugInstrument.log("  %s%n", a);
+    }
+
+    debugInstrument.log("Class Interfaces:%n");
+    for (ClassEntry ce : classModel.interfaces()) {
+      debugInstrument.log("  %s%n", ce.asInternalName());
     }
 
     // Modify each non-void method to save its result in a local variable before returning.
@@ -561,6 +572,9 @@ public class Instrument24 implements ClassFileTransformer {
             for (java.lang.classfile.Attribute<?> a : mm.attributes()) {
               debugInstrument.log("  %s%n", a);
             }
+            debugInstrument.log("mm.methodName: %s%n", mm.methodName().stringValue());
+            debugInstrument.log("mm.methodType: %s%n", mm.methodType().stringValue());
+
             debugInstrument.log("mgen.getSignature: %s%n", mgen.getSignature());
             MethodTypeDesc mtd = mm.methodTypeSymbol();
             debugInstrument.log("mtd.descriptorString: %s%n", mtd.descriptorString());
@@ -815,6 +829,11 @@ public class Instrument24 implements ClassFileTransformer {
           }
           codeList.add(ce);
         }
+        // debug code
+        // case BranchInstruction bi -> {
+        // System.out.printf("  %s : %s%n", bi, bi.target());
+        // codeList.add(ce);
+        // }
         default -> codeList.add(ce); // save all other elements
       }
     }
@@ -1361,10 +1380,12 @@ public class Instrument24 implements ClassFileTransformer {
     if (mgen.isStatic()) {
       param_offset = 0;
     }
+
+    debugInstrument.log("create_method_info for: %s%n", classInfo.class_name);
     if (debugInstrument.enabled) {
       debugInstrument.log("create_method_info1 %s%n", paramNames.length);
       for (int i = 0; i < paramNames.length; i++) {
-        debugInstrument.log("param: %s%n", paramNames[i]);
+        debugInstrument.log("param name: %s%n", paramNames[i]);
       }
     }
 
@@ -1404,7 +1425,7 @@ public class Instrument24 implements ClassFileTransformer {
     if (debugInstrument.enabled) {
       debugInstrument.log("create_method_info2 %s%n", paramNames.length);
       for (int i = 0; i < paramNames.length; i++) {
-        debugInstrument.log("param: %s%n", paramNames[i]);
+        debugInstrument.log("param name: %s%n", paramNames[i]);
       }
     }
 
@@ -1427,6 +1448,13 @@ public class Instrument24 implements ClassFileTransformer {
     @ClassGetName String[] arg_type_strings = new @ClassGetName String[paramTypes.length];
     for (int i = 0; i < paramTypes.length; i++) {
       arg_type_strings[i] = typeToClassGetName(paramTypes[i]);
+    }
+
+    if (debugInstrument.enabled) {
+      debugInstrument.log("create_method_info3 %s%n", paramTypes.length);
+      for (int ii = 0; ii < paramTypes.length; ii++) {
+        debugInstrument.log("param type: %s%n", arg_type_strings[ii]);
+      }
     }
 
     // Loop through each instruction and find the line number for each return opcode.

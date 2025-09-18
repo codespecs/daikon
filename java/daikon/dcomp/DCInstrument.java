@@ -3055,22 +3055,29 @@ public class DCInstrument extends InstructionListUtils {
   boolean should_track(@BinaryName String className, String methodName, String pptName) {
 
     debugInstrument.log("Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
+    debug_transform.log("Consider collecting data for ppt: %s%n", pptName);
 
     // Don't track any JDK classes
     if (BcelUtil.inJdk(className)) {
-      debug_transform.log("ignoring %s, is a JDK class%n", className);
+      debug_transform.log("not including as %s is a JDK class%n", className);
       return false;
     }
 
     // Don't track toString methods because we call them in
     // our debug statements.
     if (pptName.contains("toString")) {
-      debug_transform.log("ignoring %s, is a toString method%n", pptName);
+      debug_transform.log("not including %s, as it is a toString method%n", pptName);
       return false;
     }
 
     // call shouldIgnore to check ppt-omit-pattern(s) and ppt-select-pattern(s)
-    return !daikon.chicory.Instrument.shouldIgnore(className, methodName, pptName);
+    boolean shouldIgnore = daikon.chicory.Instrument.shouldIgnore(className, methodName, pptName);
+    if (shouldIgnore) {
+      debug_transform.log("ignoring %s, not included in ppt_select patterns%n", pptName);
+    } else {
+      debug_transform.log("including %s%n", pptName);
+    }
+    return !shouldIgnore;
   }
 
   /**
