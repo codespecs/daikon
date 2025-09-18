@@ -25,5 +25,6 @@ summary: ${DIFF}
 	  fi; \
 	done
 
+.PHONY: clean
 clean:
 	rm -f ${OUTPUT} ${DIFF}
