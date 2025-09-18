@@ -1159,8 +1159,8 @@ Appendix C -- Internal Variable Names
   pure) and not a field.  Arguments can optionally be specified.  Initial
   versions may not fully support arguments.  If the function is an instance
   method, then it should appear enclosed within its receiver variable.
-  Static methods appear at the top level (e.g., m1(b.c))  If the receiver
-  or any the arguments to a function is an array element, other arguments must
+  Static methods appear at the top level (e.g., m1(b.c)). If the receiver
+  or any of the arguments to a function is an array element, other arguments must
   be elements of the same array or occur before the array.  It is not
   possible to use elements from two unrelated arrays as arguments.  For
   example:
