@@ -10,7 +10,6 @@ import java.lang.classfile.instruction.LoadInstruction;
 import java.lang.classfile.instruction.LocalVariable;
 import java.lang.classfile.instruction.StoreInstruction;
 import java.lang.constant.ClassDesc;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
@@ -163,7 +162,7 @@ public class BcelUtils24 {
 
     LocalVariable argNew;
     // get a copy of the locals before modification
-    ArrayList<LocalVariable> locals = mgen.localsTable;
+    List<LocalVariable> locals = mgen.localsTable;
     ClassDesc[] argTypes = mgen.getParameterTypes();
     int newIndex = 0; // index into 'locals'
     int newOffset = 0; // current local slot number
