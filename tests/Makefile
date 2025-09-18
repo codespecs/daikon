@@ -27,7 +27,7 @@ help-recurse-list:
 
 # To produce incremental output, invoke make as: make MPARG=-Otarget ...
 # To not run in parallel, invoke make as: make MPARG=-j1 ...
-ifeq (4.0,$(firstword $(sort $(MAKE_VERSION) 4.0)))
+ifeq (4.0,$(firstword $(sort ${MAKE_VERSION} 4.0)))
   # Version 4.0 or higher
   MPARG ?= -Orecurse
 else
@@ -47,43 +47,43 @@ quick-txt-diff nonquick-txt-diff txt-diff update-goals merge spinfo-static txt-s
 txt-daikon txt-chicory cross-checker chicory chicory-diff \
 esc jml inv txt-daikon-diff txt-esc-diff txt-jml-diff txt-csharpcontract-diff txt-merge-diff \
 txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
-	$(MAKE) pat-daikon-tests-$@
+	${MAKE} pat-daikon-tests-$@
 pat-daikon-tests-%:
-	$(MAKE) -C daikon-tests --jobs=4 $(MPARG) $*
+	${MAKE} -C daikon-tests --jobs=4 ${MPARG} $*
 
 list-targets:
-	$(MAKE) -C daikon-tests list-targets
+	${MAKE} -C daikon-tests list-targets
 
 diff-tests:
-	$(MAKE) -C diff-tests
+	${MAKE} -C diff-tests
 .PHONY: diff-tests
 
 chicory-tests:
-	$(MAKE) -C chicory-tests
+	${MAKE} -C chicory-tests
 .PHONY: chicory-tests
 
 merge-invariants-tests:
-	$(MAKE) -C merge-invariants-tests
+	${MAKE} -C merge-invariants-tests
 .PHONY: merge-invariants-tests
 
 parser-tests:
-	$(MAKE) -C parser-tests
+	${MAKE} -C parser-tests
 .PHONY: parser-tests
 
 dyncomp-tests:
-	$(MAKE) -C dyncomp-tests regression-tests
+	${MAKE} -C dyncomp-tests regression-tests
 .PHONY: dyncomp-tests
 
 clean:
-	$(MAKE) -C chicory-tests clean
-	$(MAKE) -C daikon-tests clean
-	$(MAKE) -C diff-tests clean
-	$(MAKE) -C merge-invariants-tests clean
-	$(MAKE) -C parser-tests clean
-	$(MAKE) -C dyncomp-tests clean
+	${MAKE} -C chicory-tests clean
+	${MAKE} -C daikon-tests clean
+	${MAKE} -C diff-tests clean
+	${MAKE} -C merge-invariants-tests clean
+	${MAKE} -C parser-tests clean
+	${MAKE} -C dyncomp-tests clean
 
 very-clean: clean
-	$(MAKE) -C kvasir-tests clean-all
+	${MAKE} -C kvasir-tests clean-all
 
 # output display; can be called from children (they will set BASE)
 BASE?=chicory-tests daikon-tests diff-tests merge-invariants-tests parser-tests dyncomp-tests
@@ -111,16 +111,16 @@ results_header:
 	@echo ""
 
 results_cat:
-	@find ${BASE} $(RESULTS_PATTERN) | xargs cat
+	@find ${BASE} ${RESULTS_PATTERN} -print0 | xargs -0 cat
 
 results: results_header results_cat summary
 
 summary:
-	@ls -l `find ${BASE} $(RESULTS_PATTERN)` \
+	@ls -l `find ${BASE} ${RESULTS_PATTERN}` \
 	  | perl -pe 's|\Q${BASE}|.|;' \
 	  | ${PERL_CLEANUP_LS_OUTPUT}
 
 summary2: # omit pristine tests
-	@$(MAKE) --no-print-directory summary | egrep -v '^0' || echo 'No differences'
+	@${MAKE} --no-print-directory summary | egrep -v '^0' || echo 'No differences'
 summary3: # also omit esc differences
-	@$(MAKE) --no-print-directory summary2 | grep -v 'txt-esc' || echo 'No non-ESC differences'
+	@${MAKE} --no-print-directory summary2 | grep -v 'txt-esc' || echo 'No non-ESC differences'

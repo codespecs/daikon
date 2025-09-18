@@ -83,9 +83,9 @@ MapQuick.inv.gz: separate*.inv.gz
 
 # This screws up LOC counting, but we miss edits in non-checked files otherwise
 ${PROJECT_FILE}.stats:
-	@$(MAKE) stats-impl --no-print-directory 'STATS_FILES=`find merged/ -name "*.java"`'
+	@${MAKE} stats-impl --no-print-directory 'STATS_FILES=`find merged/ -name "*.java"`'
 
 sum: ${PROJECT_FILE}.stats.sum
 ${PROJECT_FILE}.stats.sum: ${PROJECT_FILE}.stats
-	$(SCRIPTS)/esc-stats-latex.pl $< > $@
+	${SCRIPTS}/esc-stats-latex.pl $< > $@
 	@cat $@

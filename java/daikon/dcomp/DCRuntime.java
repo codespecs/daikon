@@ -2918,7 +2918,7 @@ public final class DCRuntime implements ComparabilityProvider {
       }
       String default_tostring =
           String.format("%s@%s", obj.getClass().getName(), System.identityHashCode(obj));
-      if (tostring.equals(default_tostring)) {
+      if (tostring != null && tostring.equals(default_tostring)) {
         return tostring;
       } else {
         // Limit display of object contents to 60 characters.

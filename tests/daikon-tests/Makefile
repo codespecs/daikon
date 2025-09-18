@@ -2,27 +2,27 @@
 # Read Makefile in parent directory to see what this all means
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
-SCRIPTS=$(DAIKONDIR)/scripts
+DAIKONDIR ?= $(realpath $(dir $(lastword ${MAKEFILE_LIST}))..)
+SCRIPTS=${DAIKONDIR}/scripts
 
 # Help system
 default help: help-recurse
 
 .PHONY: regression-tests
 regression-tests:
-	$(MAKE) txt-diff
-	$(MAKE) summary
+	${MAKE} txt-diff
+	${MAKE} summary
 
 # Targets that ascend to parent directories
 results summary summary2 summary3 help-recurse:
-	@$(MAKE) --no-print-directory BASE?=`pwd` -C .. $@
+	@${MAKE} --no-print-directory BASE?=`pwd` -C .. $@
 
 # Targets that descend to child directories
 clean clean-output txt-diff txt-daikon-suppress-diffed txt-suppress txt-daikon txt-chicory update-goals txt-all merge stats instrument compile diffs inv-checker-diff list-targets chicory chicory-diff esc jml inv txt-daikon-diff txt-chicory-diff spinfo-static dyncomp dyncomp-diff txt-simplify txt-simplify-diff txt-csharpcontract txt-csharpcontract-diff txt-repair-diff txt-esc txt-esc-diff txt-jml-diff txt-merge-diff txt-jaif-diff txt-jaif rtc rtc-diff txt-logicalcompare txt-logicalcompare-diff:
-	$(MAKE) everything-$@
+	${MAKE} everything-$@
 
 cross-checker:
-	$(MAKE) everything-cross-checker
+	${MAKE} everything-cross-checker
 
 ###########################################################################
 # Useful groupings of projects (everything, default, by source, etc.)
@@ -85,10 +85,10 @@ cross-checker-good-%: do-BinaryTree-% do-compar-% do-DisjSets-% do-encapsulate_d
 DIR = $(word 1,$(subst -, ,$*))
 ifdef PARALLEL
 do-%:
-	@echo exec $(MAKE) -C daikon-tests/$(DIR) $(subst $(DIR)-,,$*)
+	@echo exec ${MAKE} -C daikon-tests/${DIR} $(subst ${DIR}-,,$*)
 else
 do-%:
-	@$(MAKE) -C $(DIR) --jobs=1 $(subst $(DIR)-,,$*)
+	@${MAKE} -C ${DIR} --jobs=1 $(subst ${DIR}-,,$*)
 endif
 
 HR:="=========================================================================="

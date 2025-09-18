@@ -3077,13 +3077,13 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     // call shouldIgnore to check ppt-omit-pattern(s) and ppt-select-pattern(s)
-    if (daikon.chicory.Instrument.shouldIgnore(className, methodName, pptName)) {
+    boolean shouldIgnore = daikon.chicory.Instrument.shouldIgnore(className, methodName, pptName);
+    if (shouldIgnore) {
       debug_transform.log("ignoring %s, not included in ppt_select patterns%n", pptName);
-      return false;
     } else {
       debug_transform.log("including %s%n", pptName);
-      return true;
     }
+    return !shouldIgnore;
   }
 
   /**
