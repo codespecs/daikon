@@ -2777,11 +2777,9 @@ public class DCInstrument extends InstructionListUtils {
     if (mg.isStatic()) {
       param_offset = 0;
     }
-    if (lvs != null) {
-      for (int ii = 0; ii < argNames.length; ii++) {
-        if ((ii + param_offset) < lvs.length) {
-          argNames[ii] = lvs[ii + param_offset].getName();
-        }
+    for (int ii = 0; ii < argNames.length; ii++) {
+      if ((ii + param_offset) < lvs.length) {
+        argNames[ii] = lvs[ii + param_offset].getName();
       }
     }
 

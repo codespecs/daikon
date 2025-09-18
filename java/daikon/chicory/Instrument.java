@@ -1178,11 +1178,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       }
     }
 
-    if (lvs != null) {
-      for (int ii = lv_start; ii < paramNames.length; ii++) {
-        if ((ii + param_offset) < lvs.length) {
-          paramNames[ii] = lvs[ii + param_offset].getName();
-        }
+    for (int ii = lv_start; ii < paramNames.length; ii++) {
+      if ((ii + param_offset) < lvs.length) {
+        paramNames[ii] = lvs[ii + param_offset].getName();
       }
     }
 
