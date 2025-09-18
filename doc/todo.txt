@@ -19,7 +19,7 @@ Projects
 
 External tools
 
-  - Mechanism to check invariants found by Daikon in programs (ie, add
+  - Mechanism to check invariants found by Daikon in programs (i.e.,, add
     as assertions or some other mechanism).  Optimally it would be easy
     to read and edit.  Also it would be easy to update if new invariants
     are calculated
