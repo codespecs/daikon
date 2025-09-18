@@ -22,12 +22,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -41,12 +41,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -60,12 +60,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -79,12 +79,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -98,31 +98,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
-
-  quick-txt-diff-ubuntu-jdk25:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk25
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -137,12 +118,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -156,12 +137,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -175,12 +156,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -194,12 +175,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -213,31 +194,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
-
-  nonquick-txt-diff-ubuntu-jdk25:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk25
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -252,12 +214,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -270,12 +232,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -288,12 +250,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -306,12 +268,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -324,30 +286,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
-  non-txt-diff-ubuntu-jdk25:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk25
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -361,12 +305,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -381,12 +325,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -401,12 +345,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -421,12 +365,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -441,32 +385,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          command: ./scripts/test-misc.sh
-          no_output_timeout: 20m
-  misc-ubuntu-jdk25:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk25-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -482,12 +406,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -503,12 +427,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -524,12 +448,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -545,12 +469,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -566,33 +490,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          name: Test Kvasir
-          command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
-  kvasir-ubuntu-jdk25:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk25-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -611,12 +514,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: env
@@ -632,12 +535,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: |
@@ -656,12 +559,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: env
@@ -677,12 +580,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: |
@@ -692,27 +595,8 @@ jobs:
           command: scripts/test-typecheck-with-bundled-cf.sh
           no_output_timeout: 30m
 
-  typecheck-latest-ubuntu-jdk24:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk24
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: env
-      - run:
-          command: scripts/test-typecheck-with-latest-cf.sh
-          no_output_timeout: 30m
+## The Checker Framework does not yet build under Java 24.
+# typecheck_latest_job(ubuntu, 24)
   typecheck-bundled-ubuntu-jdk24:
     docker:
       - image: mdernst/daikon-ubuntu-jdk24
@@ -722,57 +606,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: |
-          make showvars
-          make compile daikon.jar
-      - run:
-          command: scripts/test-typecheck-with-bundled-cf.sh
-          no_output_timeout: 30m
-
-  typecheck-latest-ubuntu-jdk25:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk25
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: env
-      - run:
-          command: scripts/test-typecheck-with-latest-cf.sh
-          no_output_timeout: 30m
-  typecheck-bundled-ubuntu-jdk25:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk25
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: |
@@ -792,12 +631,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -811,12 +650,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -830,12 +669,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -849,12 +688,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -868,31 +707,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
-
-  quick-txt-diff-rockylinux-jdk25:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk25
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
@@ -907,12 +727,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -926,12 +746,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -945,12 +765,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -964,12 +784,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -983,31 +803,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
-
-  nonquick-txt-diff-rockylinux-jdk25:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk25
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
@@ -1022,12 +823,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -1040,12 +841,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -1058,12 +859,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -1076,12 +877,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -1094,30 +895,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
-  non-txt-diff-rockylinux-jdk25:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk25
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
@@ -1131,12 +914,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -1151,12 +934,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -1171,12 +954,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -1191,12 +974,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -1211,32 +994,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          command: ./scripts/test-misc.sh
-          no_output_timeout: 20m
-  misc-rockylinux-jdk25:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk25-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -1252,12 +1015,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -1273,12 +1036,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -1294,12 +1057,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -1315,12 +1078,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
@@ -1336,39 +1099,19 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
       - checkout
       - save_cache:
-          key: *source-cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
       - run:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
-  kvasir-rockylinux-jdk25:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk25-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          name: Test Kvasir
-          command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
+
 
 # For an explanation of the dependence logic, see ../.azure/azure-pipelines.yml .
 
@@ -1378,348 +1121,275 @@ workflows:
     jobs:
       - canary-jobs:
           requires:
-            - quick-txt-diff-ubuntu-jdk25
-            - nonquick-txt-diff-ubuntu-jdk25
-            - non-txt-diff-ubuntu-jdk25
-            - misc-ubuntu-jdk25
-            - kvasir-ubuntu-jdk25
-            - typecheck-bundled-ubuntu-jdk25
+            - quick-txt-diff-ubuntu-jdk21
+            - nonquick-txt-diff-ubuntu-jdk21
+            - non-txt-diff-ubuntu-jdk21
+            - misc-ubuntu-jdk21
+            - kvasir-ubuntu-jdk21
+            - typecheck-bundled-ubuntu-jdk21
       - quick-txt-diff-ubuntu-jdk8:
           requires:
             - canary-jobs
-            - quick-txt-diff-ubuntu-jdk25
+            - quick-txt-diff-ubuntu-jdk21
 
       - quick-txt-diff-ubuntu-jdk11:
           requires:
             - canary-jobs
-            - quick-txt-diff-ubuntu-jdk25
+            - quick-txt-diff-ubuntu-jdk21
 
       - quick-txt-diff-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - quick-txt-diff-ubuntu-jdk25
+            - quick-txt-diff-ubuntu-jdk21
 
-      - quick-txt-diff-ubuntu-jdk21:
-          requires:
-            - canary-jobs
-            - quick-txt-diff-ubuntu-jdk25
-
+      - quick-txt-diff-ubuntu-jdk21
       - quick-txt-diff-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - quick-txt-diff-ubuntu-jdk25
+            - quick-txt-diff-ubuntu-jdk21
 
-      - quick-txt-diff-ubuntu-jdk25
       - nonquick-txt-diff-ubuntu-jdk8:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-ubuntu-jdk25
+            - nonquick-txt-diff-ubuntu-jdk21
 
       - nonquick-txt-diff-ubuntu-jdk11:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-ubuntu-jdk25
+            - nonquick-txt-diff-ubuntu-jdk21
 
       - nonquick-txt-diff-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-ubuntu-jdk25
+            - nonquick-txt-diff-ubuntu-jdk21
 
-      - nonquick-txt-diff-ubuntu-jdk21:
-          requires:
-            - canary-jobs
-            - nonquick-txt-diff-ubuntu-jdk25
-
+      - nonquick-txt-diff-ubuntu-jdk21
       - nonquick-txt-diff-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-ubuntu-jdk25
+            - nonquick-txt-diff-ubuntu-jdk21
 
-      - nonquick-txt-diff-ubuntu-jdk25
       - non-txt-diff-ubuntu-jdk8:
           requires:
             - canary-jobs
-            - non-txt-diff-ubuntu-jdk25
+            - non-txt-diff-ubuntu-jdk21
 
       - non-txt-diff-ubuntu-jdk11:
           requires:
             - canary-jobs
-            - non-txt-diff-ubuntu-jdk25
+            - non-txt-diff-ubuntu-jdk21
 
       - non-txt-diff-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - non-txt-diff-ubuntu-jdk25
+            - non-txt-diff-ubuntu-jdk21
 
-      - non-txt-diff-ubuntu-jdk21:
-          requires:
-            - canary-jobs
-            - non-txt-diff-ubuntu-jdk25
-
+      - non-txt-diff-ubuntu-jdk21
       - non-txt-diff-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - non-txt-diff-ubuntu-jdk25
+            - non-txt-diff-ubuntu-jdk21
 
-      - non-txt-diff-ubuntu-jdk25
       - misc-ubuntu-jdk8:
           requires:
             - canary-jobs
-            - misc-ubuntu-jdk25
+            - misc-ubuntu-jdk21
 
       - misc-ubuntu-jdk11:
           requires:
             - canary-jobs
-            - misc-ubuntu-jdk25
+            - misc-ubuntu-jdk21
 
       - misc-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - misc-ubuntu-jdk25
+            - misc-ubuntu-jdk21
 
-      - misc-ubuntu-jdk21:
-          requires:
-            - canary-jobs
-            - misc-ubuntu-jdk25
-
+      - misc-ubuntu-jdk21
       - misc-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - misc-ubuntu-jdk25
+            - misc-ubuntu-jdk21
 
-      - misc-ubuntu-jdk25
       - kvasir-ubuntu-jdk8:
           requires:
             - canary-jobs
-            - kvasir-ubuntu-jdk25
+            - kvasir-ubuntu-jdk21
 
       - kvasir-ubuntu-jdk11:
           requires:
             - canary-jobs
-            - kvasir-ubuntu-jdk25
+            - kvasir-ubuntu-jdk21
 
       - kvasir-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - kvasir-ubuntu-jdk25
+            - kvasir-ubuntu-jdk21
 
-      - kvasir-ubuntu-jdk21:
-          requires:
-            - canary-jobs
-            - kvasir-ubuntu-jdk25
-
+      - kvasir-ubuntu-jdk21
       - kvasir-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - kvasir-ubuntu-jdk25
+            - kvasir-ubuntu-jdk21
 
-      - kvasir-ubuntu-jdk25
 ## The Checker Framework cannot be built, or run, under Java 8 or 11.
 ## Thus, there is no typecheck_*_ubuntu_jdk{8,11) job.
       - typecheck-latest-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - typecheck-latest-ubuntu-jdk25
+            - typecheck-latest-ubuntu-jdk21
 
       - typecheck-bundled-ubuntu-jdk17:
           requires:
             - canary-jobs
-            - typecheck-bundled-ubuntu-jdk25
+            - typecheck-bundled-ubuntu-jdk21
 
-      - typecheck-latest-ubuntu-jdk21:
-          requires:
-            - canary-jobs
-            - typecheck-latest-ubuntu-jdk25
-
-      - typecheck-bundled-ubuntu-jdk21:
-          requires:
-            - canary-jobs
-            - typecheck-bundled-ubuntu-jdk25
-
-      - typecheck-latest-ubuntu-jdk24:
-          requires:
-            - canary-jobs
-            - typecheck-latest-ubuntu-jdk25
-
-      - typecheck-latest-ubuntu-jdk25
+      - typecheck-latest-ubuntu-jdk21
+      - typecheck-bundled-ubuntu-jdk21
+## The Checker Framework does not yet build under Java 24.
+# job_dependences(ubuntu, 24, typecheck-latest)
       - typecheck-bundled-ubuntu-jdk24:
           requires:
             - canary-jobs
-            - typecheck-bundled-ubuntu-jdk25
+            - typecheck-bundled-ubuntu-jdk21
 
-      - typecheck-bundled-ubuntu-jdk25
       - quick-txt-diff-rockylinux-jdk8:
           requires:
             - canary-jobs
-            - quick-txt-diff-rockylinux-jdk25
+            - quick-txt-diff-rockylinux-jdk21
             - quick-txt-diff-ubuntu-jdk8
 
       - quick-txt-diff-rockylinux-jdk11:
           requires:
             - canary-jobs
-            - quick-txt-diff-rockylinux-jdk25
+            - quick-txt-diff-rockylinux-jdk21
             - quick-txt-diff-ubuntu-jdk11
 
       - quick-txt-diff-rockylinux-jdk17:
           requires:
             - canary-jobs
-            - quick-txt-diff-rockylinux-jdk25
+            - quick-txt-diff-rockylinux-jdk21
             - quick-txt-diff-ubuntu-jdk17
 
       - quick-txt-diff-rockylinux-jdk21:
           requires:
             - canary-jobs
-            - quick-txt-diff-rockylinux-jdk25
             - quick-txt-diff-ubuntu-jdk21
 
       - quick-txt-diff-rockylinux-jdk24:
           requires:
             - canary-jobs
-            - quick-txt-diff-rockylinux-jdk25
+            - quick-txt-diff-rockylinux-jdk21
             - quick-txt-diff-ubuntu-jdk24
-
-      - quick-txt-diff-rockylinux-jdk25:
-          requires:
-            - canary-jobs
-            - quick-txt-diff-ubuntu-jdk25
 
       - nonquick-txt-diff-rockylinux-jdk8:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk25
+            - nonquick-txt-diff-rockylinux-jdk21
             - nonquick-txt-diff-ubuntu-jdk8
 
       - nonquick-txt-diff-rockylinux-jdk11:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk25
+            - nonquick-txt-diff-rockylinux-jdk21
             - nonquick-txt-diff-ubuntu-jdk11
 
       - nonquick-txt-diff-rockylinux-jdk17:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk25
+            - nonquick-txt-diff-rockylinux-jdk21
             - nonquick-txt-diff-ubuntu-jdk17
 
       - nonquick-txt-diff-rockylinux-jdk21:
           requires:
             - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk25
             - nonquick-txt-diff-ubuntu-jdk21
 
-      - nonquick-txt-diff-rockylinux-jdk24:
-          requires:
-            - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk25
-            - nonquick-txt-diff-ubuntu-jdk24
-
-      - nonquick-txt-diff-rockylinux-jdk25:
-          requires:
-            - canary-jobs
-            - nonquick-txt-diff-ubuntu-jdk25
-
+# job_dependences(rockylinux, 24, nonquick-txt-diff)
       - non-txt-diff-rockylinux-jdk8:
           requires:
             - canary-jobs
-            - non-txt-diff-rockylinux-jdk25
+            - non-txt-diff-rockylinux-jdk21
             - non-txt-diff-ubuntu-jdk8
 
       - non-txt-diff-rockylinux-jdk11:
           requires:
             - canary-jobs
-            - non-txt-diff-rockylinux-jdk25
+            - non-txt-diff-rockylinux-jdk21
             - non-txt-diff-ubuntu-jdk11
 
       - non-txt-diff-rockylinux-jdk17:
           requires:
             - canary-jobs
-            - non-txt-diff-rockylinux-jdk25
+            - non-txt-diff-rockylinux-jdk21
             - non-txt-diff-ubuntu-jdk17
 
       - non-txt-diff-rockylinux-jdk21:
           requires:
             - canary-jobs
-            - non-txt-diff-rockylinux-jdk25
             - non-txt-diff-ubuntu-jdk21
 
       - non-txt-diff-rockylinux-jdk24:
           requires:
             - canary-jobs
-            - non-txt-diff-rockylinux-jdk25
+            - non-txt-diff-rockylinux-jdk21
             - non-txt-diff-ubuntu-jdk24
-
-      - non-txt-diff-rockylinux-jdk25:
-          requires:
-            - canary-jobs
-            - non-txt-diff-ubuntu-jdk25
 
       - misc-rockylinux-jdk8:
           requires:
             - canary-jobs
-            - misc-rockylinux-jdk25
+            - misc-rockylinux-jdk21
             - misc-ubuntu-jdk8
 
       - misc-rockylinux-jdk11:
           requires:
             - canary-jobs
-            - misc-rockylinux-jdk25
+            - misc-rockylinux-jdk21
             - misc-ubuntu-jdk11
 
       - misc-rockylinux-jdk17:
           requires:
             - canary-jobs
-            - misc-rockylinux-jdk25
+            - misc-rockylinux-jdk21
             - misc-ubuntu-jdk17
 
       - misc-rockylinux-jdk21:
           requires:
             - canary-jobs
-            - misc-rockylinux-jdk25
             - misc-ubuntu-jdk21
 
       - misc-rockylinux-jdk24:
           requires:
             - canary-jobs
-            - misc-rockylinux-jdk25
+            - misc-rockylinux-jdk21
             - misc-ubuntu-jdk24
-
-      - misc-rockylinux-jdk25:
-          requires:
-            - canary-jobs
-            - misc-ubuntu-jdk25
 
       - kvasir-rockylinux-jdk8:
           requires:
             - canary-jobs
-            - kvasir-rockylinux-jdk25
+            - kvasir-rockylinux-jdk21
             - kvasir-ubuntu-jdk8
 
       - kvasir-rockylinux-jdk11:
           requires:
             - canary-jobs
-            - kvasir-rockylinux-jdk25
+            - kvasir-rockylinux-jdk21
             - kvasir-ubuntu-jdk11
 
       - kvasir-rockylinux-jdk17:
           requires:
             - canary-jobs
-            - kvasir-rockylinux-jdk25
+            - kvasir-rockylinux-jdk21
             - kvasir-ubuntu-jdk17
 
       - kvasir-rockylinux-jdk21:
           requires:
             - canary-jobs
-            - kvasir-rockylinux-jdk25
             - kvasir-ubuntu-jdk21
 
       - kvasir-rockylinux-jdk24:
           requires:
             - canary-jobs
-            - kvasir-rockylinux-jdk25
+            - kvasir-rockylinux-jdk21
             - kvasir-ubuntu-jdk24
-
-      - kvasir-rockylinux-jdk25:
-          requires:
-            - canary-jobs
-            - kvasir-ubuntu-jdk25
 
