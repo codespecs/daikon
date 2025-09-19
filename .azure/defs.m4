@@ -145,7 +145,6 @@ ifelse($1,canary_os,,[    - typecheck_bundled_[]canary_os[]_jdk$2
     displayName: test-typecheck-with-bundled-cf.sh])dnl
 ifelse([
 Local Variables:
-eval: (make-local-variable 'after-save-hook)
-eval: (add-hook 'after-save-hook '(lambda () (compile "make")))
+eval: (add-hook 'after-save-hook '(lambda () (run-command nil "make")) nil 'local)
 end:
 ])dnl
