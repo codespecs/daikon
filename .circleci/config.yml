@@ -94,26 +94,6 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
-  quick-txt-diff-ubuntu-jdk24:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk24
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
-
   quick-txt-diff-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25
@@ -198,26 +178,6 @@ jobs:
   nonquick-txt-diff-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
-
-  nonquick-txt-diff-ubuntu-jdk24:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk24
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -332,25 +292,6 @@ jobs:
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
-  non-txt-diff-ubuntu-jdk24:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk24
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
   non-txt-diff-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25
@@ -437,27 +378,6 @@ jobs:
   misc-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          command: ./scripts/test-misc.sh
-          no_output_timeout: 20m
-  misc-ubuntu-jdk24:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk24-plus
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -586,28 +506,6 @@ jobs:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
-  kvasir-ubuntu-jdk24:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk24-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          name: Test Kvasir
-          command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
   kvasir-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25-plus
@@ -705,53 +603,6 @@ jobs:
   typecheck-bundled-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: |
-          make showvars
-          make compile daikon.jar
-      - run:
-          command: scripts/test-typecheck-with-bundled-cf.sh
-          no_output_timeout: 30m
-
-  typecheck-latest-ubuntu-jdk24:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk24
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: env
-      - run:
-          command: scripts/test-typecheck-with-latest-cf.sh
-          no_output_timeout: 30m
-  typecheck-bundled-ubuntu-jdk24:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk24
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -902,26 +753,6 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
-  quick-txt-diff-rockylinux-jdk24:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk24
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
-
   quick-txt-diff-rockylinux-jdk25:
     docker:
       - image: mdernst/daikon-rockylinux-jdk25
@@ -1006,26 +837,6 @@ jobs:
   nonquick-txt-diff-rockylinux-jdk21:
     docker:
       - image: mdernst/daikon-rockylinux-jdk21
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
-
-  nonquick-txt-diff-rockylinux-jdk24:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk24
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -1140,25 +951,6 @@ jobs:
           paths:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
-  non-txt-diff-rockylinux-jdk24:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk24
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
   non-txt-diff-rockylinux-jdk25:
     docker:
       - image: mdernst/daikon-rockylinux-jdk25
@@ -1245,27 +1037,6 @@ jobs:
   misc-rockylinux-jdk21:
     docker:
       - image: mdernst/daikon-rockylinux-jdk21-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          command: ./scripts/test-misc.sh
-          no_output_timeout: 20m
-  misc-rockylinux-jdk24:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk24-plus
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
@@ -1394,28 +1165,6 @@ jobs:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
-  kvasir-rockylinux-jdk24:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk24-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          name: Test Kvasir
-          command: ./scripts/test-kvasir.sh
-          no_output_timeout: 20m
   kvasir-rockylinux-jdk25:
     docker:
       - image: mdernst/daikon-rockylinux-jdk25-plus
@@ -1472,11 +1221,6 @@ workflows:
             - canary-jobs
             - quick-txt-diff-ubuntu-jdk25
 
-      - quick-txt-diff-ubuntu-jdk24:
-          requires:
-            - canary-jobs
-            - quick-txt-diff-ubuntu-jdk25
-
       - quick-txt-diff-ubuntu-jdk25
       - nonquick-txt-diff-ubuntu-jdk8:
           requires:
@@ -1494,11 +1238,6 @@ workflows:
             - nonquick-txt-diff-ubuntu-jdk25
 
       - nonquick-txt-diff-ubuntu-jdk21:
-          requires:
-            - canary-jobs
-            - nonquick-txt-diff-ubuntu-jdk25
-
-      - nonquick-txt-diff-ubuntu-jdk24:
           requires:
             - canary-jobs
             - nonquick-txt-diff-ubuntu-jdk25
@@ -1524,11 +1263,6 @@ workflows:
             - canary-jobs
             - non-txt-diff-ubuntu-jdk25
 
-      - non-txt-diff-ubuntu-jdk24:
-          requires:
-            - canary-jobs
-            - non-txt-diff-ubuntu-jdk25
-
       - non-txt-diff-ubuntu-jdk25
       - misc-ubuntu-jdk8:
           requires:
@@ -1550,11 +1284,6 @@ workflows:
             - canary-jobs
             - misc-ubuntu-jdk25
 
-      - misc-ubuntu-jdk24:
-          requires:
-            - canary-jobs
-            - misc-ubuntu-jdk25
-
       - misc-ubuntu-jdk25
       - kvasir-ubuntu-jdk8:
           requires:
@@ -1572,11 +1301,6 @@ workflows:
             - kvasir-ubuntu-jdk25
 
       - kvasir-ubuntu-jdk21:
-          requires:
-            - canary-jobs
-            - kvasir-ubuntu-jdk25
-
-      - kvasir-ubuntu-jdk24:
           requires:
             - canary-jobs
             - kvasir-ubuntu-jdk25
@@ -1604,17 +1328,7 @@ workflows:
             - canary-jobs
             - typecheck-bundled-ubuntu-jdk25
 
-      - typecheck-latest-ubuntu-jdk24:
-          requires:
-            - canary-jobs
-            - typecheck-latest-ubuntu-jdk25
-
       - typecheck-latest-ubuntu-jdk25
-      - typecheck-bundled-ubuntu-jdk24:
-          requires:
-            - canary-jobs
-            - typecheck-bundled-ubuntu-jdk25
-
       - typecheck-bundled-ubuntu-jdk25
       - quick-txt-diff-rockylinux-jdk8:
           requires:
@@ -1639,12 +1353,6 @@ workflows:
             - canary-jobs
             - quick-txt-diff-rockylinux-jdk25
             - quick-txt-diff-ubuntu-jdk21
-
-      - quick-txt-diff-rockylinux-jdk24:
-          requires:
-            - canary-jobs
-            - quick-txt-diff-rockylinux-jdk25
-            - quick-txt-diff-ubuntu-jdk24
 
       - quick-txt-diff-rockylinux-jdk25:
           requires:
@@ -1675,12 +1383,6 @@ workflows:
             - nonquick-txt-diff-rockylinux-jdk25
             - nonquick-txt-diff-ubuntu-jdk21
 
-      - nonquick-txt-diff-rockylinux-jdk24:
-          requires:
-            - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk25
-            - nonquick-txt-diff-ubuntu-jdk24
-
       - nonquick-txt-diff-rockylinux-jdk25:
           requires:
             - canary-jobs
@@ -1709,12 +1411,6 @@ workflows:
             - canary-jobs
             - non-txt-diff-rockylinux-jdk25
             - non-txt-diff-ubuntu-jdk21
-
-      - non-txt-diff-rockylinux-jdk24:
-          requires:
-            - canary-jobs
-            - non-txt-diff-rockylinux-jdk25
-            - non-txt-diff-ubuntu-jdk24
 
       - non-txt-diff-rockylinux-jdk25:
           requires:
@@ -1745,12 +1441,6 @@ workflows:
             - misc-rockylinux-jdk25
             - misc-ubuntu-jdk21
 
-      - misc-rockylinux-jdk24:
-          requires:
-            - canary-jobs
-            - misc-rockylinux-jdk25
-            - misc-ubuntu-jdk24
-
       - misc-rockylinux-jdk25:
           requires:
             - canary-jobs
@@ -1779,12 +1469,6 @@ workflows:
             - canary-jobs
             - kvasir-rockylinux-jdk25
             - kvasir-ubuntu-jdk21
-
-      - kvasir-rockylinux-jdk24:
-          requires:
-            - canary-jobs
-            - kvasir-rockylinux-jdk25
-            - kvasir-ubuntu-jdk24
 
       - kvasir-rockylinux-jdk25:
           requires:
