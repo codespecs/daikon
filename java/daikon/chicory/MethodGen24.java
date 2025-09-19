@@ -62,7 +62,7 @@ public class MethodGen24 {
   private @Nullable CodeModel code;
 
   /** The method's access flags as a bit mask. */
-  private int accessFlagsMask;
+  private final int accessFlagsMask;
 
   /** The method's name. */
   private String methodName;

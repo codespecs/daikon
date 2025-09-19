@@ -1,5 +1,6 @@
 changequote
 changequote(`[',`]')dnl
+changecom([], [disable comments, that is, expand within them])dnl
 ifelse([the built-in "dnl" macro means "discard to next line",])dnl
 define([canary_os], [ubuntu])dnl
 define([canary_version], [25])dnl
@@ -10,6 +11,7 @@ define([circleci_boilerplate], [dnl
     resource_class: large
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+      TERM: dumb
     steps:
       - restore_cache:
           keys:
@@ -102,7 +104,6 @@ ifelse($1,canary_os,,[dnl
 dnl
 ifelse([
 Local Variables:
-eval: (make-local-variable 'after-save-hook)
-eval: (add-hook 'after-save-hook '(lambda () (compile "make")))
+eval: (add-hook 'after-save-hook '(lambda () (run-command nil "make")) nil 'local)
 end:
 ])dnl

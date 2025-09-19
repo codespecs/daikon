@@ -1410,11 +1410,9 @@ public class Instrument24 implements ClassFileTransformer {
       }
     }
 
-    if (lvs != null) {
-      for (int i = lv_start; i < paramNames.length; i++) {
-        if ((i + param_offset) < lvs.length) {
-          paramNames[i] = lvs[i + param_offset].name().stringValue();
-        }
+    for (int i = lv_start; i < paramNames.length; i++) {
+      if ((i + param_offset) < lvs.length) {
+        paramNames[i] = lvs[i + param_offset].name().stringValue();
       }
     }
 
