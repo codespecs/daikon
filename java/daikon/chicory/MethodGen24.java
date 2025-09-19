@@ -287,7 +287,7 @@ public class MethodGen24 {
   /**
    * Returns the method's access flags.
    *
-   * @return the access flags
+   * @return the access flags as a bit mask
    */
   public int getAccessFlagsMask() {
     return accessFlagsMask;
