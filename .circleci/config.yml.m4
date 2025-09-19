@@ -11,6 +11,7 @@ jobs:
       - image: cimg/base:2022.06
     environment:
       CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+      TERM: dumb
     steps:
       - run: /bin/true
 
@@ -19,7 +20,6 @@ include([../.azure/jobs.m4])dnl
 # For an explanation of the dependence logic, see ../.azure/azure-pipelines.yml .
 
 workflows:
-  version: 2
   build:
     jobs:
       - canary-jobs:
