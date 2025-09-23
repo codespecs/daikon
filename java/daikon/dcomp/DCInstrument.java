@@ -3063,14 +3063,14 @@ public class DCInstrument extends InstructionListUtils {
 
     // Don't track any JDK classes
     if (BcelUtil.inJdk(className)) {
-      debug_transform.log("not including as %s is a JDK class%n", className);
+      debug_transform.log("not including %s as it is a JDK class%n", className);
       return false;
     }
 
     // Don't track toString methods because we call them in
     // our debug statements.
     if (pptName.contains("toString")) {
-      debug_transform.log("not including %s, as it is a toString method%n", pptName);
+      debug_transform.log("not including %s as it is a toString method%n", pptName);
       return false;
     }
 

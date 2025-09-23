@@ -1150,7 +1150,7 @@ public class Instrument24 implements ClassFileTransformer {
     /**
      * Creates a ModifiedSwitchInfo.
      *
-     * @param modifiedTarget possibly modified default with target
+     * @param modifiedTarget possibly modified default switch target
      * @param modifiedCaseList possibly modified switch case list
      */
     public ModifiedSwitchInfo(Label modifiedTarget, List<SwitchCase> modifiedCaseList) {
@@ -1377,9 +1377,9 @@ public class Instrument24 implements ClassFileTransformer {
       param_offset = 0;
     }
 
-    debugInstrument.log("create_method_info for: %s%n", classInfo.class_name);
     if (debugInstrument.enabled) {
-      debugInstrument.log("create_method_info1 %s%n", paramNames.length);
+      debugInstrument.log("create_method_info for: %s%n", classInfo.class_name);
+      debugInstrument.log("number of parameters: %s%n", paramNames.length);
       for (int i = 0; i < paramNames.length; i++) {
         debugInstrument.log("param name: %s%n", paramNames[i]);
       }
@@ -1417,7 +1417,8 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     if (debugInstrument.enabled) {
-      debugInstrument.log("create_method_info2 %s%n", paramNames.length);
+      debugInstrument.log("create_method_info part 2%n");
+      debugInstrument.log("number of parameters: %s%n", paramNames.length);
       for (int i = 0; i < paramNames.length; i++) {
         debugInstrument.log("param name: %s%n", paramNames[i]);
       }
@@ -1445,7 +1446,8 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     if (debugInstrument.enabled) {
-      debugInstrument.log("create_method_info3 %s%n", paramTypes.length);
+      debugInstrument.log("create_method_info part 3%n");
+      debugInstrument.log("number of parameters: %s%n", paramNames.length);
       for (int ii = 0; ii < paramTypes.length; ii++) {
         debugInstrument.log("param type: %s%n", arg_type_strings[ii]);
       }
