@@ -1006,7 +1006,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   private static class InvariantsAndModifiedVars {
     final List<Invariant> invariants;
-    final String modifiedVars;
+    // `modifiedVars` cannot be final.
+    String modifiedVars;
 
     InvariantsAndModifiedVars(List<Invariant> invariants, String modifiedVars) {
       this.invariants = invariants;
