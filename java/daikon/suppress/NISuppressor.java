@@ -220,7 +220,8 @@ public class NISuppressor {
 
     // If the underlying invariant is not enabled, we can't possibly be true
     if (!is_enabled()) {
-      return (state = NIS.SuppressState.INVALID);
+      state = NIS.SuppressState.INVALID;
+      return state;
     }
 
     if (Debug.logDetail() && NIS.debug.isLoggable(Level.FINE)) {
@@ -245,7 +246,8 @@ public class NISuppressor {
       if (!instantiate_ok(new VarInfo[] {v1})) {
         // System.out.printf("suppressor %s invalid over variable %s%n",
         //                   this, v1);
-        return (state = NIS.SuppressState.INVALID);
+        state = NIS.SuppressState.INVALID;
+        return state;
       }
 
       // Check to see if inv matches this suppressor.  The invariant class
@@ -253,7 +255,8 @@ public class NISuppressor {
       // needed for the falsified method.
       if (!NIS.antecedent_method) {
         if ((inv != null) && (inv.getClass() == inv_class) && (v1 == inv.ppt.var_infos[0])) {
-          return (state = NIS.SuppressState.MATCH);
+          state = NIS.SuppressState.MATCH;
+          return state;
         }
       }
 
@@ -277,13 +280,15 @@ public class NISuppressor {
         } else {
           current_state_str = "invalid over constant " + ppt.constants.constant_value(v1);
         }
-        return (state = (valid ? NIS.SuppressState.VALID : NIS.SuppressState.INVALID));
+        state = (valid ? NIS.SuppressState.VALID : NIS.SuppressState.INVALID);
+        return state;
       }
 
       // Check to see the variable is missing
       if (ppt.is_prev_missing(v1)) {
         current_state_str = "nonsensical";
-        return (state = NIS.SuppressState.NONSENSICAL);
+        state = NIS.SuppressState.NONSENSICAL;
+        return state;
       }
 
       // Check to see if this suppressor is true.  Note that we don't check
@@ -296,12 +301,14 @@ public class NISuppressor {
         for (Invariant slice_inv : slice.invs) {
           if (match_true(slice_inv)) {
             current_state_str = "invariant " + slice_inv.format();
-            return (state = NIS.SuppressState.VALID);
+            state = NIS.SuppressState.VALID;
+            return state;
           }
         }
       }
       current_state_str = "invariant not found";
-      return (state = NIS.SuppressState.INVALID);
+      state = NIS.SuppressState.INVALID;
+      return state;
 
     } else /* must be binary */ {
       if (v1_index >= vis.length || v2_index >= vis.length) {
@@ -320,7 +327,8 @@ public class NISuppressor {
       if (!instantiate_ok(new VarInfo[] {v1, v2})) {
         // System.out.printf("suppressor %s invalid over variables %s & %s%n",
         //                  this, v1, v2);
-        return (state = NIS.SuppressState.INVALID);
+        state = NIS.SuppressState.INVALID;
+        return state;
       }
 
       // Check to see if inv matches this suppressor.  The invariant class,
@@ -334,7 +342,8 @@ public class NISuppressor {
           if (NIS.debug.isLoggable(Level.FINE)) {
             NIS.debug.fine("Matches falsified inv " + inv.format());
           }
-          return (state = NIS.SuppressState.MATCH);
+          state = NIS.SuppressState.MATCH;
+          return state;
         }
       }
 
@@ -370,13 +379,15 @@ public class NISuppressor {
         if (!valid) {
           current_state_str = "not " + current_state_str;
         }
-        return (state = (valid ? NIS.SuppressState.VALID : NIS.SuppressState.INVALID));
+        state = (valid ? NIS.SuppressState.VALID : NIS.SuppressState.INVALID);
+        return state;
       }
 
       // Check to see if either variable is missing
       if (ppt.is_prev_missing(v1) || ppt.is_prev_missing(v2)) {
         current_state_str = "nonsensical";
-        return (state = NIS.SuppressState.NONSENSICAL);
+        state = NIS.SuppressState.NONSENSICAL;
+        return state;
       }
 
       // Check to see if this suppressor is true.  Note that we don't check
@@ -394,12 +405,14 @@ public class NISuppressor {
                   "suppressor matches inv " + slice_inv.format() + " " + !slice_inv.is_false());
             }
             current_state_str = "invariant " + slice_inv.format();
-            return (state = NIS.SuppressState.VALID);
+            state = NIS.SuppressState.VALID;
+            return state;
           }
         }
       }
       NIS.debug.fine("suppressor not found");
-      return (state = NIS.SuppressState.INVALID);
+      state = NIS.SuppressState.INVALID;
+      return state;
     }
   }
 

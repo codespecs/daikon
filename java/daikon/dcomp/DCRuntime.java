@@ -183,7 +183,7 @@ public final class DCRuntime implements ComparabilityProvider {
     String descr;
     Throwable stack_trace;
 
-    public UninitFieldTag(String descr, Throwable stack_trace) {
+    UninitFieldTag(String descr, Throwable stack_trace) {
       this.descr = descr;
       this.stack_trace = stack_trace;
     }
@@ -374,7 +374,7 @@ public final class DCRuntime implements ComparabilityProvider {
         return_val = ((Boolean) m.invoke(o1, o2, null));
       } else {
         // Push tag for return value, and call the uninstrumented version
-        @MustCall() ThreadData td = thread_to_data.get(Thread.currentThread());
+        @MustCall ThreadData td = thread_to_data.get(Thread.currentThread());
         td.tag_stack.push(new Constant());
         Method m = o1super.getMethod("equals", new Class<?>[] {java_lang_Object_class});
         return_val = ((Boolean) m.invoke(o1, o2));
@@ -2239,7 +2239,7 @@ public final class DCRuntime implements ComparabilityProvider {
       }
     }
 
-    public void sort() {
+    void sort() {
       Collections.sort(this);
     }
   }

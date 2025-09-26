@@ -189,10 +189,10 @@ public class InstrumentHandler extends CommandHandler {
 
   @UsesObjectEquals
   private static class Arguments {
-    public String invFile;
-    public List<String> javaFileNames;
+    String invFile;
+    List<String> javaFileNames;
 
-    public Arguments(String invFile, List<String> javaFileNames) {
+    Arguments(String invFile, List<String> javaFileNames) {
       this.invFile = invFile;
       this.javaFileNames = javaFileNames;
     }

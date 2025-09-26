@@ -54,9 +54,10 @@ the command-line installation instructions up to date.)
 Instructions from https://errorprone.info/docs/installation#command-line :
 (cd error-prone && \
 export EP_VERSION=2.42.0 && \
-export DATAFLOW_EP_VERSION=3.51.0 && \
+export DATAFLOW_EP_VERSION=3.49.3 && \
 wget -N https://repo1.maven.org/maven2/com/google/errorprone/error_prone_core/${EP_VERSION?}/error_prone_core-${EP_VERSION?}-with-dependencies.jar && \
-wget -N https://repo1.maven.org/maven2/org/checkerframework/dataflow-errorprone/${DATAFLOW_EP_VERSION}/dataflow-errorprone-${DATAFLOW_EP_VERSION}.jar)
+wget -N https://repo1.maven.org/maven2/io/github/eisop/dataflow-errorprone/${DATAFLOW_EP_VERSION}-eisop1/dataflow-errorprone-${DATAFLOW_EP_VERSION}-eisop1.jar)
+# Older: wget -N https://repo1.maven.org/maven2/org/checkerframework/dataflow-errorprone/${DATAFLOW_EP_VERSION}/dataflow-errorprone-${DATAFLOW_EP_VERSION}.jar
 Also, update the version number in java/Makefile .
 
 hashmap-util-0.0.1.jar : https://central.sonatype.com/search?q=hashmap-util

@@ -159,11 +159,11 @@ public class PptSlice0 extends PptSlice {
 
   private static final class ImplicationWrapper {
 
-    public Implication theImp;
+    Implication theImp;
     // hashCode is cached to make equality checks faster.
     private int hashCode;
 
-    public ImplicationWrapper(Implication theImp) {
+    ImplicationWrapper(Implication theImp) {
       this.theImp = theImp;
       // this.format = theImp.format();
       this.hashCode = 0;

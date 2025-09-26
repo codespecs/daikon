@@ -91,7 +91,7 @@ public class PptSliceEquality extends PptSlice {
    * VarComparability.comparable() to each other.
    */
   private static class VarInfoAndComparability {
-    public VarInfo vi;
+    VarInfo vi;
 
     @Pure
     @Override
@@ -120,7 +120,7 @@ public class PptSliceEquality extends PptSlice {
      */
     @EnsuresNonNullIf(result = true, expression = "#1")
     @Pure
-    public boolean equalsVarInfoAndComparability(
+    boolean equalsVarInfoAndComparability(
         @GuardSatisfied VarInfoAndComparability this, @GuardSatisfied VarInfoAndComparability o) {
 
       return (vi.comparableNWay(o.vi)
@@ -128,7 +128,7 @@ public class PptSliceEquality extends PptSlice {
           && vi.aux.equals_for_instantiation(o.vi.aux));
     }
 
-    public VarInfoAndComparability(VarInfo vi) {
+    VarInfoAndComparability(VarInfo vi) {
       this.vi = vi;
     }
   }

@@ -329,7 +329,7 @@ public class InvariantAddAndCheckTester {
      *
      * @return a string containing error messages for any failed cases
      */
-    public static @Nullable String runTest(LineNumberReader commands) {
+    static @Nullable String runTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, false);
       if (endOfFile) {
         return null;
@@ -359,7 +359,7 @@ public class InvariantAddAndCheckTester {
      *     test case
      */
     @SuppressWarnings("UnusedMethod")
-    public static @Nullable String generateTest(LineNumberReader commands) {
+    static @Nullable String generateTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, true);
       if (endOfFile) {
         return null;
