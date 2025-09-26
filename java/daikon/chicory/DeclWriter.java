@@ -350,7 +350,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
     static SimpleLog debug = new SimpleLog(false);
 
     /** Create a VarRelation. */
-    public VarRelation(
+    VarRelation(
         String parent_ppt_name,
         String type,
         String local_prefix,
@@ -365,7 +365,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
     }
 
     /** Create a var relation with the matching names. */
-    public VarRelation(String parent_ppt_name, String type) {
+    VarRelation(String parent_ppt_name, String type) {
       this(parent_ppt_name, type, null, null, null);
     }
 
@@ -382,7 +382,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
      * variable at the class level.
      */
     @Pure
-    public boolean is_class_relation() {
+    boolean is_class_relation() {
       return parent_ppt_name.endsWith(":::CLASS");
     }
 
@@ -391,7 +391,8 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
      * parent-ppt-name id parent-variable-name. If the variable is static, it always has the same
      * name in the parent (since fully specified names are used for static variables).
      */
-    public String relation_str(DaikonVariableInfo var) {
+    @SideEffectFree
+    String relation_str(DaikonVariableInfo var) {
       String out = parent_ppt_name + " " + id;
       if (!var.isStatic() && (local_prefix != null) && !local_prefix.equals(parent_prefix)) {
         out += " " + var.getName().replaceFirst(Pattern.quote(local_prefix), parent_prefix);

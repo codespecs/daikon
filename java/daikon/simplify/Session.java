@@ -86,6 +86,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
    * Initializes the simplify environment for interaction. Use {@code Cmd} objects to interact with
    * this Session.
    */
+  @SuppressWarnings("AssignmentExpression") // for "while ((f = new File ..."
   public Session() {
     // Note that this local variable shadows `this.trace_file`.
     PrintStream trace_file = null;

@@ -189,7 +189,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     return false;
   }
 
-  /*
+  /**
    * Output a .class file and a .bcel version of the class file.
    *
    * @param c the Java class to output

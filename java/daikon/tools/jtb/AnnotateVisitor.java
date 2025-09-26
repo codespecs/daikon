@@ -352,7 +352,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       Node n;
       boolean behaviorInserted;
 
-      public InsertBehaviorVisitor(Node n) {
+      InsertBehaviorVisitor(Node n) {
         super();
         this.n = n;
         behaviorInserted = false;
@@ -1005,10 +1005,11 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   private static class InvariantsAndModifiedVars {
-    public List<Invariant> invariants;
-    public String modifiedVars;
+    final List<Invariant> invariants;
+    // `modifiedVars` cannot be final.
+    String modifiedVars;
 
-    public InvariantsAndModifiedVars(List<Invariant> invariants, String modifiedVars) {
+    InvariantsAndModifiedVars(List<Invariant> invariants, String modifiedVars) {
       this.invariants = invariants;
       this.modifiedVars = modifiedVars;
     }

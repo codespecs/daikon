@@ -2498,7 +2498,7 @@ public final class Daikon {
   }
 
   private static class Count {
-    public int val;
+    int val;
 
     Count(int val) {
       this.val = val;

@@ -226,7 +226,7 @@ public class Instrument24 implements ClassFileTransformer {
     return false;
   }
 
-  /*
+  /**
    * Output a .class file and a .bcel version of the class file.
    *
    * @param classBytes a byte array of the class file to output
@@ -1142,10 +1142,10 @@ public class Instrument24 implements ClassFileTransformer {
   private static class ModifiedSwitchInfo {
 
     /** Possibly modified default switch target. */
-    public Label modifiedTarget;
+    Label modifiedTarget;
 
     /** Possibly modified switch case list. */
-    public List<SwitchCase> modifiedCaseList;
+    List<SwitchCase> modifiedCaseList;
 
     /**
      * Creates a ModifiedSwitchInfo.
@@ -1153,7 +1153,7 @@ public class Instrument24 implements ClassFileTransformer {
      * @param modifiedTarget possibly modified default switch target
      * @param modifiedCaseList possibly modified switch case list
      */
-    public ModifiedSwitchInfo(Label modifiedTarget, List<SwitchCase> modifiedCaseList) {
+    ModifiedSwitchInfo(Label modifiedTarget, List<SwitchCase> modifiedCaseList) {
       this.modifiedTarget = modifiedTarget;
       this.modifiedCaseList = modifiedCaseList;
     }

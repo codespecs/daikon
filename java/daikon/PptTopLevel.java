@@ -4050,6 +4050,7 @@ public class PptTopLevel extends Ppt {
    * sets at the parent, the invariants true at A in the child are the union of those true at A and
    * B at the parent.
    */
+  @SuppressWarnings("AssignmentExpression") // for "assert (assert_enabled = true);"
   public VarInfo @Nullable [] parent_vis(PptRelation rel, PptSlice slice) {
 
     /*NNC:@MonotonicNonNull*/ VarInfo[] pvis = new VarInfo[slice.var_infos.length];

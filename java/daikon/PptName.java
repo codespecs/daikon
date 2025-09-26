@@ -499,7 +499,7 @@ public class PptName implements Serializable {
 
   // ==================== OBJECT METHODS ====================
 
-  /* @return interned string such that this.equals(new PptName(this.toString())) */
+  // Returns an interned string such that `this.equals(new PptName(this.toString()))`.
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied PptName this) {

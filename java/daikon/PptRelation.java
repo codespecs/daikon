@@ -628,10 +628,10 @@ public class PptRelation implements Serializable {
 
   // used by init_hierarchy below
   private static class SplitChild {
-    public PptRelation rel;
-    public PptSplitter ppt_split;
+    PptRelation rel;
+    PptSplitter ppt_split;
 
-    public SplitChild(PptRelation rel, PptSplitter ppt_split) {
+    SplitChild(PptRelation rel, PptSplitter ppt_split) {
       this.rel = rel;
       this.ppt_split = ppt_split;
     }
