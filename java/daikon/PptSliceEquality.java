@@ -91,7 +91,7 @@ public class PptSliceEquality extends PptSlice {
    * VarComparability.comparable() to each other.
    */
   private static class VarInfoAndComparability {
-    VarInfo vi;
+    final VarInfo vi;
 
     @Pure
     @Override

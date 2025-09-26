@@ -391,6 +391,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
      * parent-ppt-name id parent-variable-name. If the variable is static, it always has the same
      * name in the parent (since fully specified names are used for static variables).
      */
+    @SideEffectFree
     String relation_str(DaikonVariableInfo var) {
       String out = parent_ppt_name + " " + id;
       if (!var.isStatic() && (local_prefix != null) && !local_prefix.equals(parent_prefix)) {

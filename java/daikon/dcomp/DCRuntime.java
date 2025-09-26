@@ -180,8 +180,8 @@ public final class DCRuntime implements ComparabilityProvider {
    */
   @SuppressWarnings("UnusedVariable") // used only for debugging
   private static class UninitFieldTag {
-    String descr;
-    Throwable stack_trace;
+    final String descr;
+    final Throwable stack_trace;
 
     UninitFieldTag(String descr, Throwable stack_trace) {
       this.descr = descr;
