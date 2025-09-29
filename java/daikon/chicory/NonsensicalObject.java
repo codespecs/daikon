@@ -11,8 +11,11 @@ package daikon.chicory;
  * print "null" for x's value. However, we print "nonsensical" for x.name's value.
  */
 public final class NonsensicalObject {
+
+  /** A NonsensicalObject instance. */
   private static NonsensicalObject instance = new NonsensicalObject();
 
+  /** constructor */
   private NonsensicalObject() {}
 
   public static NonsensicalObject getInstance() {

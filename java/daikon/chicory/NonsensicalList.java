@@ -13,6 +13,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 // It's problematic to make this generic:  what would "get" return?
 public final class NonsensicalList extends AbstractList<Object> implements List<Object> {
 
+  /** constructor */
   private NonsensicalList() {
     super();
   }
