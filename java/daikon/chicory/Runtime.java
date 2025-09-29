@@ -47,7 +47,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 @SuppressWarnings({
   "JavaLangClash" // same class name as one in java.lang.
 })
-public class Runtime {
+public final class Runtime {
   /** Unique id for method entry/exit (so they can be matched up) */
   public static AtomicInteger nonce = new AtomicInteger();
 

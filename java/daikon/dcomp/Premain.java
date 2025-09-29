@@ -193,7 +193,7 @@ public class Premain {
 
     // Setup the shutdown hook
     Thread shutdown_thread = new ShutdownThread();
-    java.lang.Runtime.getRuntime().addShutdownHook(shutdown_thread);
+    Runtime.getRuntime().addShutdownHook(shutdown_thread);
 
     // UNDONE: turn on Instrument24
     String instrumenter = "daikon.dcomp.Instrument";

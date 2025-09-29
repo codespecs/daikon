@@ -106,7 +106,7 @@ public class StringInfo extends DaikonVariableInfo {
 
   // encodes a string: surrounds in quotes and removes line breaks
   private String getString(String stringRef) {
-    return ("\"" + encodeString(stringRef) + "\"");
+    return "\"" + encodeString(stringRef) + "\"";
   }
 
   // removes endlines in string

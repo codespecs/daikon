@@ -89,7 +89,7 @@ public class DeclReader {
      * @return DeclVarInfo for the program point variable
      * @throws IOException if there is trouble reading the file
      */
-    public DeclVarInfo read_var(EntryReader decl_file) throws java.io.IOException {
+    public DeclVarInfo read_var(EntryReader decl_file) throws IOException {
 
       String firstLine = decl_file.readLine();
       if (firstLine == null) {
@@ -196,7 +196,9 @@ public class DeclReader {
   }
 
   /** Create a new DeclReader. */
-  public DeclReader() {}
+  public DeclReader() {
+    // This constructor is intentially empty.
+  }
 
   /**
    * Read declarations from the specified pathname.
@@ -274,8 +276,7 @@ public class DeclReader {
   // fail when using the --comparability-file=... command-line argument
   // with a file produced by DynComp.
   public @Nullable DeclPpt find_ppt(String ppt_name) {
-    DeclPpt result = ppts.get(ppt_name);
-    return result;
+    return ppts.get(ppt_name);
   }
 
   /**

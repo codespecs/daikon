@@ -161,7 +161,7 @@ public abstract class DaikonVariableInfo
     debug_vars.log(
         "Construct DaikonVariableInfo: %s : %s : %s", this.getClass().getName(), name, typeName);
 
-    children = new ArrayList<DaikonVariableInfo>();
+    children = new ArrayList<>();
     isArray = arr;
 
     if ((theName != null) && (theName.contains("[..]") || theName.contains("[]")) && !isArray) {
@@ -806,7 +806,7 @@ public abstract class DaikonVariableInfo
       if (cinfo != null) {
         value = cinfo.staticMap.get(theName);
 
-        if (DaikonVariableInfo.dkconfig_constant_infer) {
+        if (dkconfig_constant_infer) {
           if (value == null) {
             isPrimitive = false;
             String className = field.getDeclaringClass().getName();
@@ -832,7 +832,7 @@ public abstract class DaikonVariableInfo
         newField.repTypeName += " = " + value;
         newField.const_val = value;
         newField.dtraceShouldPrint = false;
-        if (DaikonVariableInfo.dkconfig_constant_infer && isPrimitive) {
+        if (dkconfig_constant_infer && isPrimitive) {
           newField.dtraceShouldPrintChildren = false;
         }
       }
@@ -1003,7 +1003,7 @@ public abstract class DaikonVariableInfo
 
     // System.out.printf("Package name for type  %s is %s%n", type, pkgName);
 
-    StringBuilder ret = new StringBuilder();
+    StringBuilder ret = new StringBuilder(50);
 
     // In Java 9+ package name is empty string for the unnamed package.
     if (pkgName != null && !pkgName.isEmpty()) {
@@ -1118,7 +1118,7 @@ public abstract class DaikonVariableInfo
    * @return true iff type implements the List interface
    */
   public static boolean implementsList(Class<?> type) {
-    if (type.equals(java.util.List.class)) {
+    if (type.equals(List.class)) {
       return true;
     }
 
@@ -1126,7 +1126,7 @@ public abstract class DaikonVariableInfo
     Class<?>[] interfaces = type.getInterfaces();
     for (Class<?> inter : interfaces) {
       // System.out.println("  implements: " + inter.getName());
-      if (inter.equals(java.util.List.class)) {
+      if (inter.equals(List.class)) {
         return true;
       }
     }
