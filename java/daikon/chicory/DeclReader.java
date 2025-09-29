@@ -197,7 +197,7 @@ public class DeclReader {
 
   /** Create a new DeclReader. */
   public DeclReader() {
-    // This constructor is intentially empty.
+    // This constructor is intentionally empty.
   }
 
   /**
