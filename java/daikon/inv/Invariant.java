@@ -671,6 +671,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * @param parent_ppt slice that will contain the new invariant
    * @return the merged invariant or null if the invariants didn't represent the same invariant
    */
+  @SuppressWarnings("AssignmentExpression") // for "assert (assert_enabled = true);"
   public @Nullable @NonPrototype Invariant merge(
       @Prototype Invariant this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
 

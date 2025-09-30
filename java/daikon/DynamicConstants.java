@@ -137,7 +137,7 @@ public class DynamicConstants implements Serializable {
     public int count = 0;
 
     /** The variable that has this value. */
-    public VarInfo vi;
+    public final VarInfo vi;
 
     /** True if this has been missing for every sample to date. */
     boolean always_missing = true;

@@ -503,7 +503,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             Ast.create(
                 "ClassOrInterfaceBodyDeclaration",
                 new Class[] {Boolean.TYPE},
-                new Object[] {Boolean.FALSE}, // isInterface == false
+                new Object[] {false}, // isInterface == false
                 modifiers_declaration_stringbuffer.toString());
     Ast.addDeclaration(c, d);
     NodeSequence ns = (NodeSequence) d.f0.choice;
@@ -629,7 +629,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         Ast.create(
             "ClassOrInterfaceBodyDeclaration",
             new Class[] {Boolean.TYPE},
-            new Object[] {Boolean.FALSE}, // isInterface == false
+            new Object[] {false}, // isInterface == false
             "public static boolean isDaikonInstrumented() { return true; }");
   }
 
@@ -642,7 +642,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         Ast.create(
             "ClassOrInterfaceBodyDeclaration",
             new Class[] {Boolean.TYPE},
-            new Object[] {Boolean.FALSE}, // isInterface == false
+            new Object[] {false}, // isInterface == false
             code.toString());
   }
 
@@ -654,7 +654,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         Ast.create(
             "ClassOrInterfaceBodyDeclaration",
             new Class[] {Boolean.TYPE},
-            new Object[] {Boolean.FALSE}, // isInterface == false
+            new Object[] {false}, // isInterface == false
             code.toString());
   }
 
@@ -689,7 +689,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         Ast.create(
             "ClassOrInterfaceBodyDeclaration",
             new Class[] {Boolean.TYPE},
-            new Object[] {Boolean.FALSE}, // isInterface == false
+            new Object[] {false}, // isInterface == false
             code.toString());
   }
 
@@ -711,7 +711,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         Ast.create(
             "ClassOrInterfaceBodyDeclaration",
             new Class[] {Boolean.TYPE},
-            new Object[] {Boolean.FALSE}, // isInterface == false
+            new Object[] {false}, // isInterface == false
             code.toString());
   }
 
@@ -732,7 +732,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         Ast.create(
             "ClassOrInterfaceBodyDeclaration",
             new Class[] {Boolean.TYPE},
-            new Object[] {Boolean.FALSE}, // isInterface == false
+            new Object[] {false}, // isInterface == false
             code.toString());
   }
 
@@ -1113,13 +1113,13 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
   /** A pair consisting of an Invariant and its corresponding Property. */
   private static class InvProp {
-    public InvProp(Invariant inv, Property p) {
+    InvProp(Invariant inv, Property p) {
       this.invariant = inv;
       this.property = p;
     }
 
-    public Invariant invariant;
-    public Property property;
+    Invariant invariant;
+    Property property;
   }
 
   /**

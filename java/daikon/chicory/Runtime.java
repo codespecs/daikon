@@ -142,7 +142,7 @@ public class Runtime {
     boolean captured;
 
     @Holding("Runtime.class")
-    public CallInfo(int nonce, boolean captured) {
+    CallInfo(int nonce, boolean captured) {
       this.nonce = nonce;
       this.captured = captured;
     }
