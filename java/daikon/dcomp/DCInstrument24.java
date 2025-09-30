@@ -13,6 +13,7 @@ import static java.lang.constant.ConstantDescs.CD_int;
 import static java.lang.constant.ConstantDescs.CD_long;
 import static java.lang.constant.ConstantDescs.CD_short;
 import static java.lang.constant.ConstantDescs.CD_void;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
 import daikon.chicory.ClassInfo;
@@ -179,7 +180,7 @@ public class DCInstrument24 {
 
   /** Comparator to sort WorkItems with lowest address first. */
   protected static Comparator<WorkItem> indexComparator =
-      new Comparator<WorkItem>() {
+      new Comparator<>() {
         @Override
         public int compare(WorkItem w1, WorkItem w2) {
           return Integer.compare(w1.instructionIndex, w2.instructionIndex);
@@ -220,13 +221,13 @@ public class DCInstrument24 {
 
   // Argument descriptors
   /** Type array with two objects. */
-  protected static ClassDesc[] two_objects_arg = new ClassDesc[] {CD_Object, CD_Object};
+  protected static ClassDesc[] two_objects_arg = {CD_Object, CD_Object};
 
   /** Type array with an int. */
-  protected static ClassDesc[] integer_arg = new ClassDesc[] {CD_int};
+  protected static ClassDesc[] integer_arg = {CD_int};
 
   /** Type array with an object. */
-  protected static ClassDesc[] object_arg = new ClassDesc[] {CD_Object};
+  protected static ClassDesc[] object_arg = {CD_Object};
 
   /** ClassDesc for the special dcomp_marker argument. */
   protected final ClassDesc dcomp_marker;
@@ -235,7 +236,7 @@ public class DCInstrument24 {
   protected static final ClassDesc objectArrayCD = CD_Object.arrayType(1);
 
   /** Type array with an Object array. */
-  protected static final ClassDesc[] objectArrayCD_arg = new ClassDesc[] {objectArrayCD};
+  protected static final ClassDesc[] objectArrayCD_arg = {objectArrayCD};
 
   /** Type array with no arguments. */
   protected static final ClassDesc[] noArgsCD = new ClassDesc[0];
@@ -291,7 +292,7 @@ public class DCInstrument24 {
     TEST_DISCOVERY,
     /** Have completed identifing junit test classes. */
     RUNNING
-  };
+  }
 
   /** Current state of JUnit test discovery. */
   protected static JUnitState junit_state = JUnitState.NOT_SEEN;
@@ -323,31 +324,29 @@ public class DCInstrument24 {
    * be allocated as part of a load. We call a special runtime method for this so that we can check
    * for this in other cases.
    */
-  protected static String[] uninit_classes =
-      new String[] {
-        "java.lang.String",
-        "java.lang.Class",
-        "java.lang.StringBuilder",
-        "java.lang.AbstractStringBuilder",
-      };
+  protected static String[] uninit_classes = {
+    "java.lang.String",
+    "java.lang.Class",
+    "java.lang.StringBuilder",
+    "java.lang.AbstractStringBuilder",
+  };
 
   /**
    * List of Object methods. Since we can't instrument Object, none of these can be instrumented,
    * and most of them don't provide useful comparability information anyway. The equals method and
    * the clone method are special-cased in the {@link #handleInvoke} routine.
    */
-  protected static MethodDef[] obj_methods =
-      new MethodDef[] {
-        new MethodDef("finalize", new ClassDesc[0]),
-        new MethodDef("getClass", new ClassDesc[0]),
-        new MethodDef("hashCode", new ClassDesc[0]),
-        new MethodDef("notify", new ClassDesc[0]),
-        new MethodDef("notifyall", new ClassDesc[0]),
-        new MethodDef("toString", new ClassDesc[0]),
-        new MethodDef("wait", new ClassDesc[0]),
-        new MethodDef("wait", new ClassDesc[] {CD_long}),
-        new MethodDef("wait", new ClassDesc[] {CD_long, CD_int}),
-      };
+  protected static MethodDef[] obj_methods = {
+    new MethodDef("finalize", new ClassDesc[0]),
+    new MethodDef("getClass", new ClassDesc[0]),
+    new MethodDef("hashCode", new ClassDesc[0]),
+    new MethodDef("notify", new ClassDesc[0]),
+    new MethodDef("notifyall", new ClassDesc[0]),
+    new MethodDef("toString", new ClassDesc[0]),
+    new MethodDef("wait", new ClassDesc[0]),
+    new MethodDef("wait", new ClassDesc[] {CD_long}),
+    new MethodDef("wait", new ClassDesc[] {CD_long, CD_int}),
+  };
 
   /** Class that defines a method (by its name and argument types) */
   static class MethodDef {
@@ -441,18 +440,18 @@ public class DCInstrument24 {
     debug_transform.enabled = daikon.dcomp.Instrument24.debug_transform.enabled;
 
     // TEMPORARY
-    debugInstrument.enabled = true;
     debugInstrument.enabled = false;
+    debugInstrument.enabled = true;
 
     bcelDebug = debugInstrument.enabled;
 
     if (debugOperandStack) {
       // Create a new PrintStream with autoflush enabled
-      PrintStream newOut = new PrintStream(System.out, true);
+      PrintStream newOut = new PrintStream(System.out, true, UTF_8);
       // Reassign System.out to the new PrintStream
       System.setOut(newOut);
       // Create a new PrintStream with autoflush enabled
-      PrintStream newErr = new PrintStream(System.err, true);
+      PrintStream newErr = new PrintStream(System.err, true, UTF_8);
       // Reassign System.err to the new PrintStream
       System.setErr(newErr);
     }
@@ -779,10 +778,9 @@ public class DCInstrument24 {
       for (CodeElement ce : call_initNotify(poolBuilder, classInfo)) {
         li.add(ce);
       }
+    } catch (DynCompError e) {
+      throw e;
     } catch (Throwable t) {
-      if (t instanceof DynCompError) {
-        throw t;
-      }
       throw new DynCompError(
           String.format(
               "Unexpected error processing %s.%s.%n", mgen.getClassName(), mgen.getName()),
@@ -1130,10 +1128,9 @@ public class DCInstrument24 {
           // Interface and/or Abstract; do nothing.
         }
       }
+    } catch (DynCompError e) {
+      throw e;
     } catch (Throwable t) {
-      if (t instanceof DynCompError) {
-        throw t;
-      }
       throw new DynCompError(
           "Unexpected error processing " + classInfo.class_name + "." + mgen.getName(), t);
     }
@@ -1192,8 +1189,8 @@ public class DCInstrument24 {
     if (debugInstrument.enabled) {
       String[] paramNames = mgen.getParameterNames();
       debugInstrument.log("paramNames: %s%n", paramNames.length);
-      for (int i = 0; i < paramNames.length; i++) {
-        debugInstrument.log("param: %s%n", paramNames[i]);
+      for (String paramName : paramNames) {
+        debugInstrument.log("param name: %s%n", paramName);
       }
     }
 
@@ -1322,7 +1319,7 @@ public class DCInstrument24 {
 
       // Copy the modified instruction list to the output class.
       ListIterator<CodeElement> li = codeList.listIterator();
-      CodeElement ce = null;
+      CodeElement ce;
       while (li.hasNext()) {
         if (li.nextIndex() == newStartIndex) {
           codeBuilder.labelBinding(newStartLabel);
@@ -1483,7 +1480,7 @@ public class DCInstrument24 {
     // We want to insert the tag_frame setup code after the LocalVariables (if any) and after the
     // inital label (if present), but before any LineNumber or Instruction.
     ListIterator<CodeElement> li = instructions.listIterator();
-    CodeElement inst = null;
+    CodeElement inst;
     try {
       while (li.hasNext()) {
         inst = li.next();
@@ -1584,7 +1581,9 @@ public class DCInstrument24 {
         stack = item.stack();
         boolean proceed = true;
         while (proceed) {
-          if (!li.hasNext()) throw new DynCompError("error in instruction list");
+          if (!li.hasNext()) {
+            throw new DynCompError("error in instruction list");
+          }
           inst_index = li.nextIndex();
           inst = li.next();
           if (debugOperandStack) {
@@ -1611,7 +1610,7 @@ public class DCInstrument24 {
       while (li.hasNext()) {
         inst = li.next();
 
-        if (DCInstrument24.debugOperandStack) {
+        if (debugOperandStack) {
           System.out.println("code element in: " + inst);
           System.out.println("current stack: " + stacks[inst_index]);
         }
@@ -1620,7 +1619,7 @@ public class DCInstrument24 {
         if (new_il != null) {
           li.remove(); // remove the instruction we instrumented
           for (CodeElement ce : new_il) {
-            if (DCInstrument24.debugOperandStack) {
+            if (debugOperandStack) {
               System.out.println("code element out: " + ce);
             }
             li.add(ce);
@@ -1628,10 +1627,9 @@ public class DCInstrument24 {
         }
         inst_index++;
       }
+    } catch (DynCompError e) {
+      throw e;
     } catch (Throwable t) {
-      if (t instanceof DynCompError) {
-        throw t;
-      }
       throw new DynCompError(
           String.format(
               "Unexpected error processing %s.%s.%n", mgen.getClassName(), mgen.getName()),
@@ -1712,7 +1710,7 @@ public class DCInstrument24 {
    * first.)
    */
   public List<String> get_skipped_methods() {
-    return new ArrayList<String>(skipped_methods);
+    return new ArrayList<>(skipped_methods);
   }
 
   /**
@@ -1732,10 +1730,8 @@ public class DCInstrument24 {
     // the exception handler should be after the primary object is
     // initialized - but this is hard to determine without a full
     // analysis of the code.  Hence, we just skip these methods.
-    if (!mgen.isStatic()) {
-      if (mgen.isConstructor()) {
-        return null;
-      }
+    if (!mgen.isStatic() && mgen.isConstructor()) {
+      return null;
     }
 
     List<CodeElement> instructions = new ArrayList<>();
@@ -2533,8 +2529,7 @@ public class DCInstrument24 {
       // Replace calls to Object's clone method with calls to our
       // replacement, a static method in DCRuntime.
 
-      List<CodeElement> il = instrument_clone_call(invoke, returnType, classname);
-      return il;
+      return instrument_clone_call(invoke, returnType, classname);
     }
 
     boolean callee_instrumented =
@@ -2641,7 +2636,7 @@ public class DCInstrument24 {
       String methodName,
       ClassDesc[] argTypes) {
 
-    boolean targetInstrumented = true;
+    boolean targetInstrumented;
     Opcode op = invoke.opcode();
 
     if (is_object_method(methodName, argTypes)) {
@@ -2696,7 +2691,7 @@ public class DCInstrument24 {
           && (op.equals(Opcode.INVOKEINTERFACE) || op.equals(Opcode.INVOKEVIRTUAL))) {
         Integer access = getAccessFlags(classname);
 
-        if ((access.intValue() & ClassFile.ACC_ANNOTATION) != 0) {
+        if ((access & ClassFile.ACC_ANNOTATION) != 0) {
           targetInstrumented = false;
         }
 
@@ -2890,10 +2885,8 @@ public class DCInstrument24 {
     // When a class contains an existing <clinit>, it will be instrumented. Thus, we need to mark
     // our
     // added call to 'DCRuntime.set_class_initialized' as not instrumented.
-    if (classname.endsWith("DCRuntime")) {
-      if (methodName.equals("set_class_initialized")) {
-        return false;
-      }
+    if (classname.endsWith("DCRuntime") && methodName.equals("set_class_initialized")) {
+      return false;
     }
 
     // Special-case JUnit test classes.
@@ -2928,12 +2921,10 @@ public class DCInstrument24 {
     }
 
     int i = classname.lastIndexOf('.');
-    if (i > 0) {
-      if (Premain.problem_packages.contains(classname.substring(0, i))) {
-        debugInstrument.log(
-            "Don't call instrumented member of problem package %s%n", classname.substring(0, i));
-        return false;
-      }
+    if (i > 0 && Premain.problem_packages.contains(classname.substring(0, i))) {
+      debugInstrument.log(
+          "Don't call instrumented member of problem package %s%n", classname.substring(0, i));
+      return false;
     }
 
     if (Premain.problem_classes.contains(classname)) {
@@ -2995,8 +2986,7 @@ public class DCInstrument24 {
   }
 
   /** Cache for {@link #getClassModel} method. */
-  private static Map<String, ClassModel> classModelCache =
-      new ConcurrentHashMap<String, ClassModel>();
+  private static Map<String, ClassModel> classModelCache = new ConcurrentHashMap<>();
 
   /**
    * There are times when it is useful to inspect a class file other than the one we are currently
@@ -3354,8 +3344,8 @@ public class DCInstrument24 {
 
     if (debugInstrument.enabled) {
       debugInstrument.log("create_method_info: %s%n", paramNames.length);
-      for (int i = 0; i < paramNames.length; i++) {
-        debugInstrument.log("param: %s%n", paramNames[i]);
+      for (String paramName : paramNames) {
+        debugInstrument.log("param name: %s%n", paramName);
       }
     }
 
@@ -4053,12 +4043,7 @@ public class DCInstrument24 {
    * @return an instruction list
    */
   private List<CodeElement> build_il(CodeElement... instructions) {
-    List<CodeElement> il = new ArrayList<>();
-
-    for (CodeElement inst : instructions) {
-      il.add(inst);
-    }
-    return il;
+    return new ArrayList<>(Arrays.asList(instructions));
   }
 
   /**
@@ -4097,14 +4082,10 @@ public class DCInstrument24 {
       return true;
     }
 
-    if (classname.equals("java.lang.String")
+    return !(classname.equals("java.lang.String")
         || classname.equals("java.lang.Class")
         || classname.equals("java.lang.Object")
-        || classname.equals("java.lang.ClassLoader")) {
-      return false;
-    }
-
-    return true;
+        || classname.equals("java.lang.ClassLoader"));
   }
 
   /**
@@ -4148,7 +4129,9 @@ public class DCInstrument24 {
   void create_tag_accessors(ClassGen24 classGen) {
 
     // If this class doesn't support tag fields, don't create them
-    if (!tag_fields_ok(null, classGen.getClassName())) return;
+    if (!tag_fields_ok(null, classGen.getClassName())) {
+      return;
+    }
 
     Set<String> field_set = new HashSet<>();
     Map<FieldModel, Integer> field_map = build_field_map(classModel);
@@ -4244,7 +4227,9 @@ public class DCInstrument24 {
       if (fm.flags().has(AccessFlag.STATIC)) {
         if (!in_jdk) {
           int min_size = static_field_id.size() + DCRuntime.max_jdk_static;
-          while (DCRuntime.static_tags.size() <= min_size) DCRuntime.static_tags.add(null);
+          while (DCRuntime.static_tags.size() <= min_size) {
+            DCRuntime.static_tags.add(null);
+          }
           static_field_id.put(full_name(classModel, fm), min_size);
         } else { // building jdk
           String full_name = full_name(classModel, fm);
@@ -4726,7 +4711,7 @@ public class DCInstrument24 {
    */
   static void save_static_field_id(File file) throws IOException {
 
-    PrintStream ps = new PrintStream(file);
+    PrintStream ps = new PrintStream(file, UTF_8);
     for (Map.Entry<@KeyFor("static_field_id") String, Integer> entry : static_field_id.entrySet()) {
       ps.printf("%s  %d%n", entry.getKey(), entry.getValue());
     }
@@ -4758,8 +4743,7 @@ public class DCInstrument24 {
    * @return string containing the fully qualified name
    */
   protected String full_name(ClassModel cm, FieldModel fm) {
-    String temp = ClassGen24.getClassName(cm) + "." + fm.fieldName().stringValue();
-    return temp;
+    return ClassGen24.getClassName(cm) + "." + fm.fieldName().stringValue();
   }
 
   /**
@@ -4782,10 +4766,10 @@ public class DCInstrument24 {
   private static class ModifiedSwitchInfo {
 
     /** Possibly modified default switch target. */
-    public Label modifiedTarget;
+    Label modifiedTarget;
 
     /** Possibly modified switch case list. */
-    public List<SwitchCase> modifiedCaseList;
+    List<SwitchCase> modifiedCaseList;
 
     /**
      * Creates a ModifiedSwitchInfo.
@@ -4793,7 +4777,7 @@ public class DCInstrument24 {
      * @param modifiedTarget possibly modified default swith target
      * @param modifiedCaseList possibly modified switch case list
      */
-    public ModifiedSwitchInfo(Label modifiedTarget, List<SwitchCase> modifiedCaseList) {
+    ModifiedSwitchInfo(Label modifiedTarget, List<SwitchCase> modifiedCaseList) {
       this.modifiedTarget = modifiedTarget;
       this.modifiedCaseList = modifiedCaseList;
     }
@@ -4861,7 +4845,7 @@ public class DCInstrument24 {
       modifiedTarget = defaultTarget;
     }
 
-    List<SwitchCase> newCaseList = new ArrayList<SwitchCase>();
+    List<SwitchCase> newCaseList = new ArrayList<>();
     for (SwitchCase item : caseList) {
       if (item.target().equals(oldStartLabel)) {
         newCaseList.add(SwitchCase.of(item.caseValue(), newStartLabel));

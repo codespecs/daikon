@@ -57,8 +57,13 @@ public class OperandStack24 implements Cloneable {
    * ClassDesc objects on the stack are shared.
    */
   @Override
-  public Object clone(@GuardSatisfied OperandStack24 this) {
-    final OperandStack24 newstack = new OperandStack24(this.maxStack);
+  public OperandStack24 clone(@GuardSatisfied OperandStack24 this) {
+    final OperandStack24 newstack;
+    try {
+      newstack = (OperandStack24) super.clone();
+    } catch (CloneNotSupportedException e) {
+      throw new DynCompError("Unexpected error: ", e);
+    }
     newstack.stack = new ArrayList<>(this.stack);
     return newstack;
   }
@@ -83,10 +88,8 @@ public class OperandStack24 implements Cloneable {
       ClassDesc thisItem = this.stack.get(i);
       ClassDesc otherItem = other.stack.get(i);
       if (thisItem == null) {
-        if (otherItem != null) {
-          if (otherItem.isPrimitive()) {
-            return false;
-          }
+        if (otherItem != null && otherItem.isPrimitive()) {
+          return false;
         }
       } else if (otherItem == null) {
         // we know thisItem != null
@@ -107,10 +110,8 @@ public class OperandStack24 implements Cloneable {
         }
         // We assume a class matches any array or any class as they all have Object as super class
         // at some point.
-      } else if (thisItem.isPrimitive()) {
-        if (!otherItem.isPrimitive()) {
-          return false;
-        }
+      } else if (thisItem.isPrimitive() && !otherItem.isPrimitive()) {
+        return false;
         // We don't bother to check they are the same primitive.
       }
     }
@@ -123,7 +124,7 @@ public class OperandStack24 implements Cloneable {
    * @see #clone()
    */
   public OperandStack24 getClone() {
-    return (OperandStack24) this.clone();
+    return this.clone();
   }
 
   /**
@@ -204,17 +205,14 @@ public class OperandStack24 implements Cloneable {
   /** Returns a String representation of this OperandStack instance. */
   @Override
   public String toString(@GuardSatisfied OperandStack24 this) {
-    final StringBuilder sb = new StringBuilder();
-    sb.append("Slots used: ");
-    sb.append(slotsUsed());
-    sb.append(" MaxStack: ");
-    sb.append(maxStack);
-    sb.append(".\n");
+    final StringBuilder sb = new StringBuilder(60);
+    sb.append("Slots used: ")
+        .append(slotsUsed())
+        .append(" MaxStack: ")
+        .append(maxStack)
+        .append('\n');
     for (int i = 0; i < size(); i++) {
-      sb.append(peek(i));
-      sb.append(" (Size: ");
-      sb.append(String.valueOf(slotSize(peek(i))));
-      sb.append(")\n");
+      sb.append(peek(i)).append(" (Size: ").append(String.valueOf(slotSize(peek(i)))).append(")\n");
     }
     return sb.toString();
   }

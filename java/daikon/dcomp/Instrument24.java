@@ -181,11 +181,9 @@ public class Instrument24 implements ClassFileTransformer {
         }
       }
 
-      if (BcelUtil.javaVersion > 8) {
-        if (Premain.problem_classes.contains(binaryClassName)) {
-          debug_transform.log("Skipping problem class %s%n", binaryClassName);
-          return null;
-        }
+      if ((BcelUtil.javaVersion > 8) && Premain.problem_classes.contains(binaryClassName)) {
+        debug_transform.log("Skipping problem class %s%n", binaryClassName);
+        return null;
       }
 
       if (className.contains("/$Proxy")) {
@@ -265,7 +263,7 @@ public class Instrument24 implements ClassFileTransformer {
     // Instrument the classfile, die on any errors.
     ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
     DCInstrument24 dci = new DCInstrument24(classFile, classModel, in_jdk);
-    byte @Nullable [] newBytes = null;
+    byte @Nullable [] newBytes;
     // debug_transform.log("%nTransforming: %s%n", binaryClassName);
     try {
       newBytes = dci.instrument(classInfo);

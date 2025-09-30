@@ -44,10 +44,13 @@ import java.util.List;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /** This class calculates the state of the operand stack via simulation. */
-public class CalcStack24 {
+public final class CalcStack24 {
+
+  /** Don't allow others to create a new CalcStack24 object. */
+  private CalcStack24() {}
 
   /** ClassDesc for 'null'. */
-  protected static final ClassDesc nullCD = ClassDesc.of("fake.ClassDecs.for.null");
+  static final ClassDesc nullCD = ClassDesc.of("fake.ClassDecs.for.null");
 
   /**
    * Calculates changes in contents of operand stack based on the symbolic execution of a Java
@@ -62,7 +65,7 @@ public class CalcStack24 {
    * @return true if should continue with next instruction, false otherwise
    */
   @SuppressWarnings("fallthrough")
-  protected static boolean calcOperandStack(
+  static boolean calcOperandStack(
       MethodGen24 mgen,
       MethodGen24.MInfo24 minfo,
       CodeElement ce,
@@ -1023,10 +1026,12 @@ public class CalcStack24 {
    * @param cases a set of case statement labels; additional start points for simulation
    * @param stack state of operand stack at target and case labels
    */
-  protected static void addLabelsToWorklist(
+  static void addLabelsToWorklist(
       Label target, @Nullable List<SwitchCase> cases, OperandStack24 stack) {
     DCInstrument24.addLabelToWorklist(target, stack);
-    if (cases == null) return;
+    if (cases == null) {
+      return;
+    }
     for (SwitchCase item : cases) {
       DCInstrument24.addLabelToWorklist(item.target(), stack);
     }

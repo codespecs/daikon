@@ -20,12 +20,10 @@ import org.checkerframework.checker.signature.qual.Identifier;
  * instrumentation pipeline, including operations on local variables, parameter types, and
  * instruction adjustments.
  */
-public class BcelUtils24 {
+public final class BcelUtils24 {
 
-  /** Create a new BcelUtils24 object. */
-  public BcelUtils24() {
-    // Nothing to do.
-  }
+  /** Don't allow others to create a new BcelUtils24 object. */
+  private BcelUtils24() {}
 
   /*
    * NOMENCLATURE
@@ -69,7 +67,7 @@ public class BcelUtils24 {
    * @param newString string to be added
    * @return the new string array
    */
-  protected static String[] addString(String[] arr, String newString) {
+  static String[] addString(String[] arr, String newString) {
     String[] newArr = new String[arr.length + 1];
     System.arraycopy(arr, 0, newArr, 0, arr.length);
     newArr[arr.length] = newString;
@@ -85,8 +83,7 @@ public class BcelUtils24 {
    * @param offsetFirstMovedLocal original offset of first local moved "up"
    * @param size size of new local added (1 or 2)
    */
-  protected static void adjust_code_for_locals_change(
-      MethodGen24 mgen, int offsetFirstMovedLocal, int size) {
+  static void adjust_code_for_locals_change(MethodGen24 mgen, int offsetFirstMovedLocal, int size) {
 
     debugInstrument.log("adjust code: %d %d%n", offsetFirstMovedLocal, size);
     try {
@@ -147,7 +144,7 @@ public class BcelUtils24 {
    * @param isParam if true, the new local is a new parameter
    * @return a LocalVariable for the new variable
    */
-  public static final LocalVariable addNewSpecialLocal(
+  public static LocalVariable addNewSpecialLocal(
       MethodGen24 mgen,
       String argName,
       ClassDesc argType,

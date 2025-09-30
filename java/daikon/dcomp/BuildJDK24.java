@@ -56,9 +56,9 @@ import org.checkerframework.checker.signature.qual.BinaryName;
   "mustcall:type.argument",
   "mustcall:type.arguments.not.inferred"
 }) // assignments into owning collection
-public class BuildJDK24 {
+public final class BuildJDK24 {
 
-  /** Creates a new BuildJDK24. */
+  /** Don't allow others to create a new BuildJDK24 object. */
   private BuildJDK24() {}
 
   /**
@@ -513,7 +513,7 @@ public class BuildJDK24 {
       File outputDir,
       String classFileName,
       int classTotal)
-      throws java.io.IOException {
+      throws IOException {
     if (verbose) {
       System.out.printf("processing target %s%n", classFileName);
     }
