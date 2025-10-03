@@ -59,7 +59,7 @@ public class ClassGen24 {
 
   /** The list of interfaces this class implements. */
   @SuppressWarnings("nullness:initialization")
-  protected static List<ClassEntry> interfaceList;
+  protected List<ClassEntry> interfaceList;
 
   /**
    * Creates a ClassGen24 object.
@@ -68,7 +68,6 @@ public class ClassGen24 {
    * @param className the containing class, in binary name format
    * @param classBuilder for the class
    */
-  @SuppressWarnings("StaticAssignmentInConstructor")
   public ClassGen24(
       final ClassModel classModel,
       final @BinaryName String className,
@@ -195,6 +194,15 @@ public class ClassGen24 {
     } else {
       return "java.lang.Object";
     }
+  }
+
+  /**
+   * Return the interfaceList.
+   *
+   * @return the interfaceList
+   */
+  public List<ClassEntry> getInterfaceList() {
+    return interfaceList;
   }
 
   /**
