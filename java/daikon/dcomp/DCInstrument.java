@@ -415,7 +415,9 @@ public class DCInstrument extends InstructionListUtils {
     // We must also remember the class name so if we see a subsequent
     // call to one of its methods we do not add the dcomp argument.
 
-    debugInstrument.log("junit_state: %s%n", junit_state);
+    if (debugJUnitAnalysis) {
+      System.out.printf("junit_state 1: %s%n", junit_state);
+    }
 
     StackTraceElement[] stack_trace;
 
@@ -482,7 +484,9 @@ public class DCInstrument extends InstructionListUtils {
         throw new Error("invalid junit_state");
     }
 
-    debugInstrument.log("junit_state: %s%n", junit_state);
+    if (debugJUnitAnalysis) {
+      System.out.printf("junit_state 2: %s%n", junit_state);
+    }
 
     boolean junit_test_class = false;
     if (junit_state == JUnitState.TEST_DISCOVERY) {
@@ -553,10 +557,12 @@ public class DCInstrument extends InstructionListUtils {
       }
     }
 
-    if (junit_test_class) {
-      debugInstrument.log("JUnit test class: %s%n", classname);
-    } else {
-      debugInstrument.log("Not a JUnit test class: %s%n", classname);
+    if (debugJUnitAnalysis) {
+      if (junit_test_class) {
+        System.out.printf("JUnit test class: %s%n", classname);
+      } else {
+        System.out.printf("Not a JUnit test class: %s%n", classname);
+      }
     }
 
     // Process each method
