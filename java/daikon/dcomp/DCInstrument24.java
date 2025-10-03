@@ -284,13 +284,13 @@ public class DCInstrument24 {
 
   /** Possible states of JUnit test discovery. */
   protected enum JUnitState {
-    /** Have not seen a junit class file. */
+    /** Have not seen a JUnit class file. */
     NOT_SEEN,
-    /** Have seen a junit class file. */
+    /** Have seen a JUnit class file. */
     STARTING,
-    /** Have seen a junit class file that loads junit test classes. */
+    /** Have seen a JUnit class file that loads JUnit test classes. */
     TEST_DISCOVERY,
-    /** Have completed identifing junit test classes. */
+    /** Have completed identifing JUnit test classes. */
     RUNNING
   }
 
@@ -440,8 +440,8 @@ public class DCInstrument24 {
     debug_transform.enabled = daikon.dcomp.Instrument24.debug_transform.enabled;
 
     // TEMPORARY
-    debugInstrument.enabled = false;
     debugInstrument.enabled = true;
+    debugInstrument.enabled = false;
 
     bcelDebug = debugInstrument.enabled;
 
@@ -573,7 +573,7 @@ public class DCInstrument24 {
               System.out.printf(
                   "%s : %s%n", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
             }
-            if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
+            if (isJUnitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
               junit_parse_seen = true;
               junit_state = JUnitState.TEST_DISCOVERY;
               break;
@@ -591,7 +591,7 @@ public class DCInstrument24 {
               System.out.printf(
                   "%s : %s%n", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
             }
-            if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
+            if (isJUnitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
               local_junit_parse_seen = true;
               break;
             }
@@ -641,7 +641,7 @@ public class DCInstrument24 {
             System.out.printf("super_class: %s%n", super_class);
           }
           if (super_class.equals("junit.framework.TestCase")) {
-            // This is a junit test class and so are the
+            // This is a JUnit test class and so are the
             // elements of classnameStack.
             junit_test_class = true;
             junitTestClasses.add(this_class);
@@ -650,7 +650,7 @@ public class DCInstrument24 {
             }
             break;
           } else if (super_class.equals("java.lang.Object")) {
-            // We're done; not a junit test class.
+            // We're done; not a JUnit test class.
             // Ignore items on classnameStack.
             break;
           }
@@ -665,7 +665,7 @@ public class DCInstrument24 {
       // needs to be marked as a JUnit test class. (Daikon issue #536)
 
       if (!junit_test_class) {
-        // need to check for junit Test annotation on a method
+        // need to check for JUnit Test annotation on a method
         searchloop:
         for (MethodModel mm : classModel.methods()) {
           for (Attribute<?> attribute : mm.attributes()) {
@@ -698,7 +698,7 @@ public class DCInstrument24 {
       }
     }
 
-    classInfo.isJunitTestClass = junit_test_class;
+    classInfo.isJUnitTestClass = junit_test_class;
 
     instrumentAllMethods(classModel, classBuilder, classInfo);
 
@@ -721,7 +721,7 @@ public class DCInstrument24 {
     }
 
     // Output the list of interfaces.
-    classBuilder.withInterfaces(daikon.dcomp.ClassGen24.interfaceList);
+    classBuilder.withInterfaces(classGen.getInterfaceList());
 
     // Copy all other ClassElements to output class (unchanged).
     for (ClassElement ce : classModel) {
@@ -954,7 +954,7 @@ public class DCInstrument24 {
           createMainStub(mgen, classBuilder, classInfo);
         }
 
-        if (classInfo.isJunitTestClass) {
+        if (classInfo.isJUnitTestClass) {
           addingDcompArg = false;
         }
 
@@ -1225,7 +1225,7 @@ public class DCInstrument24 {
 
     } else { // normal method
 
-      if (!classInfo.isJunitTestClass) {
+      if (!classInfo.isJUnitTestClass) {
         // Add the DCompMarker argument to distinguish our version
         add_dcomp_arg(mgen, minfo);
       }
@@ -1354,7 +1354,7 @@ public class DCInstrument24 {
    * @param method_name method to be checked
    * @return true if the given method is a JUnit trigger
    */
-  boolean isJunitTrigger(String classname, String method_name) {
+  boolean isJUnitTrigger(String classname, String method_name) {
     if ((classname.contains("JUnitCommandLineParseResult")
             && method_name.equals("parse")) // JUnit 4
         || (classname.contains("EngineDiscoveryRequestResolution")
@@ -4462,11 +4462,11 @@ public class DCInstrument24 {
     instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 0)); // load this
     instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 1)); // load obj
 
-    if (!classInfo.isJunitTestClass) {
+    if (!classInfo.isJUnitTestClass) {
       instructions.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL)); // use null for marker
       mtdDComp = MethodTypeDesc.of(CD_boolean, CD_Object, dcomp_marker);
     } else {
-      // for junit test class, the instrumented version has no dcomp arg
+      // for JUnit test class, the instrumented version has no dcomp arg
       mtdDComp = mtdNormal;
     }
 
@@ -4475,7 +4475,7 @@ public class DCInstrument24 {
     instructions.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
     instructions.add(ReturnInstruction.of(TypeKind.BOOLEAN));
 
-    if (!classInfo.isJunitTestClass) {
+    if (!classInfo.isJUnitTestClass) {
       // build the uninstrumented equals_dcomp_instrumented method
       classBuilder.withMethod("equals_dcomp_instrumented", mtdNormal, access_flags, codeHandler1);
     }
@@ -4556,13 +4556,13 @@ public class DCInstrument24 {
     instructions.add(InvokeInstruction.of(Opcode.INVOKESPECIAL, mre));
     instructions.add(ReturnInstruction.of(TypeKind.BOOLEAN));
 
-    if (!classInfo.isJunitTestClass) {
+    if (!classInfo.isJUnitTestClass) {
       // build the uninstrumented equals method
       classBuilder.withMethod("equals", mtdNormal, access_flags, codeHandler1);
-      // since not junit test class, add dcomp_marker to instrumented version of equals built below
+      // since not JUnit test class, add dcomp_marker to instrumented version of equals built below
       mtdDComp = MethodTypeDesc.of(CD_boolean, CD_Object, dcomp_marker);
     } else {
-      // for junit test class, we build only the instrumented version with no dcomp arg
+      // for JUnit test class, we build only the instrumented version with no dcomp arg
       mtdDComp = mtdNormal;
     }
 
