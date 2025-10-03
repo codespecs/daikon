@@ -761,7 +761,6 @@ very-clean: clean clean-generated-files
 	-rm -rf daikon/dcomp/DcompTest.log
 	-rm -rf daikon/chicory/debug
 
-
 run:	all
 	${JAVA_COMMAND} daikon.Daikon
 
