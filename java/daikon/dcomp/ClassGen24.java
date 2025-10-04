@@ -58,7 +58,7 @@ public class ClassGen24 {
   private @BinaryName String superclassName;
 
   /** The list of interfaces this class implements. */
-  protected List<ClassEntry> interfaceList;
+  private List<ClassEntry> interfaceList;
 
   /**
    * Creates a ClassGen24 object.
