@@ -182,7 +182,7 @@ public final class BuildJDK24 {
 
       // We've finished instrumenting all the class files. Now we create some
       // abstract interface classes for use by the DynComp runtime.
-      build.addInterfaceClasses(dest_dir.getName());
+      build.addInterfaceClasses(dest_dir);
 
       // Write out the file containing the static-fields map.
       System.out.printf("Found %d static fields.%n", DCInstrument24.static_field_id.size());
@@ -431,7 +431,7 @@ public final class BuildJDK24 {
    *
    * @param destDir where to store the interface classes
    */
-  private void addInterfaceClasses(String destDir) {
+  private void addInterfaceClasses(File destDir) {
     // Create the DcompMarker class which is used to identify instrumented calls.
     createDCompClass(destDir, "DCompMarker", false);
 
@@ -451,7 +451,7 @@ public final class BuildJDK24 {
    * @param dcompInstrumented if true, add equals_dcomp_instrumented method to class
    */
   private void createDCompClass(
-      String destDir, @BinaryName String className, boolean dcompInstrumented) {
+      File destDir, @BinaryName String className, boolean dcompInstrumented) {
     byte[] classBytes;
 
     try {
