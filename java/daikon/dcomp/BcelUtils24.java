@@ -116,9 +116,12 @@ public final class BcelUtils24 {
           default -> {} // ignore all other instructions
         }
       }
-    } catch (Exception e) {
-      System.err.printf("Unexpected exception encountered: %s", e);
-      e.printStackTrace();
+    } catch (Throwable t) {
+      if (debugInstrument.enabled) {
+        t.printStackTrace();
+      }
+      throw new DynCompError(
+          "Unexpected exception encountered in adjust_code_for_locals_change", t);
     }
   }
 
