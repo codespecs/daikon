@@ -429,8 +429,9 @@ public class MethodGen24 {
     // If this is a native method the
     // localsTable may not exist.  We may need to add a 'this' pointer.
     if ((localsTable.size() == 0) && !isStatic) {
+      ClassDesc thisDesc = ClassDesc.of(className);
       LocalVariable newVar =
-          LocalVariable.of(0, "this", CD_Object, minfo.startLabel, minfo.endLabel);
+          LocalVariable.of(0, "this", thisDesc, minfo.startLabel, minfo.endLabel);
       localsTable.add(newVar);
       modified = true;
     }

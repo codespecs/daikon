@@ -4453,7 +4453,7 @@ public class DCInstrument24 {
 
     // Defining local variables is not strictly necessary, but we do
     // it to reduce the diffs with previous versions of DynComp.
-    localsTable.add(new myLocalVariable(0, "this", CD_Object));
+    localsTable.add(new myLocalVariable(0, "this", ClassDesc.of(classInfo.class_name)));
     localsTable.add(new myLocalVariable(1, "obj", CD_Object));
 
     MethodTypeDesc mtdNormal, mtdDComp;
@@ -4543,7 +4543,7 @@ public class DCInstrument24 {
 
     // Defining local variables is not strictly necessary, but we do
     // it to reduce the diffs with previous versions of DynComp.
-    localsTable.add(new myLocalVariable(0, "this", CD_Object));
+    localsTable.add(new myLocalVariable(0, "this", ClassDesc.of(classInfo.class_name)));
     localsTable.add(new myLocalVariable(1, "obj", CD_Object));
 
     MethodTypeDesc mtdNormal, mtdDComp;
