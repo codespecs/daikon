@@ -4762,7 +4762,7 @@ public class DCInstrument24 {
 
   // UNDONE consider making this a Java record
 
-  /** Variables used for processing a switch instruction. */
+  /** Information about processing a switch instruction. */
   private static class ModifiedSwitchInfo {
 
     /** Possibly modified default switch target. */

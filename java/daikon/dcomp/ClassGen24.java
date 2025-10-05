@@ -18,11 +18,10 @@ import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.checker.signature.qual.MethodDescriptor;
 
 /**
- * ClassGen24 collects and stores all the relevant information about a class that DCInstrument24
- * might need. ClassGen24 is analogous to the BCEL ClassGen class. The similarity makes it easier to
- * keep DCInstrument.java and DCInstrument24.java in sync.
+ * ClassGen24 represents a class. ClassGen24 is analogous to the BCEL ClassGen class. The similarity
+ * makes it easier to keep DCInstrument.java and DCInstrument24.java in sync.
  *
- * <p>ClassGen24 uses Java's ({@code java.lang.classfile}) APIs for reading and modifying .class
+ * <p>ClassGen24 uses Java's {@code java.lang.classfile} APIs for reading and modifying .class
  * files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more complete and robust
  * (no more fiddling with StackMaps) and are always up to date with any .class file changes (since
  * they are part of the JDK). (We will need to continue to support Instrument.java using BCEL, as we
