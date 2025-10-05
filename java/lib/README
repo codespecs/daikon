@@ -40,7 +40,7 @@ daikon-plumelib.jar : Contains bcel-util, options, hashmap-util,
   plume-util, and reflection-util, but in package "daikon.plumelib".
   # Adjust version numbers in file `build.gradle`.  (TODO: make that unnecessary.)
   gradle shadowjar
-  mv -f build/libs/lib-all.jar daikon-plumelib.jar
+  mv -f build/libs/daikon-plumelib.jar .
   rm -rf build
 
 error-prone/ : https://repo1.maven.org/maven2/com/google/errorprone/error_prone_core/
