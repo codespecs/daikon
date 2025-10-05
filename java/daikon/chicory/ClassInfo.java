@@ -26,7 +26,7 @@ public class ClassInfo {
   public boolean hasClinit;
 
   /** True if the class is a JUnit test class. */
-  public boolean isJUnitTestClass;
+  public boolean isJunitTestClass;
 
   // set by initViaReflection()
   /** reflection object for this class. */
