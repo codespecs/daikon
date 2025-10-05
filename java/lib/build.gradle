@@ -1,0 +1,23 @@
+plugins {
+  id 'java'
+  id 'com.gradleup.shadow' version '9.2.2'
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation files('bcel-util-1.2.3.jar')
+  implementation files('hashmap-util-0.0.1.jar')
+  implementation files('options-1.0.6.jar')
+  implementation files('plume-util-1.11.0.jar')
+  implementation files('reflection-util-1.1.5.jar')
+}
+
+tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+  relocate 'org.plumelib', 'daikon.plumelib'
+  archiveBaseName = 'daikon-plumelib'
+  archiveClassifier = ''
+  archiveVersion = ''
+}
