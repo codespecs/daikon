@@ -35,7 +35,12 @@ commons-exec-1.4.0.jar : https://commons.apache.org/proper/commons-exec/
   unzip -p commons-exec-$VER-bin.zip commons-exec-$VER/commons-exec-$VER.jar > commons-exec-$VER.jar
   rm -f commons-exec-$VER-bin.zip
 
-commons-lang3-3.15.0.jar : https://commons.apache.org/proper/commons-lang/download_lang.cgi
+commons-lang3-3.19.0.jar : https://commons.apache.org/proper/commons-lang/download_lang.cgi
+  VER=3.19.0
+  rm -f commons-lang3-*.jar
+  wget https://dlcdn.apache.org//commons/lang/binaries/commons-lang3-$VER-bin.zip
+  unzip -p commons-lang3-$VER-bin.zip commons-lang3-$VER/commons-lang3-$VER.jar > commons-lang3-$VER.jar
+  rm -f commons-lang3-$VER-bin.zip
 
 daikon-plumelib.jar : Contains bcel-util, options, hashmap-util,
   plume-util, and reflection-util, but in package "daikon.plumelib".
@@ -47,10 +52,6 @@ JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut
 [ "$JAVA_VER" == "8" ] && make || echo "Use Java 8 (or, maybe the build failed)"
 
 error-prone/ : https://repo1.maven.org/maven2/com/google/errorprone/error_prone_core/
-I tried to update to 2.19.1, but it required:
-wget https://repo1.maven.org/maven2/com/google/inject/guice/5.1.0/guice-5.1.0.jar
-and even then failed with an error. (Error Prone isn't good about keeping
-the command-line installation instructions up to date.)
 Instructions from https://errorprone.info/docs/installation#command-line :
 (cd error-prone && \
 export EP_VERSION=2.42.0 && \
