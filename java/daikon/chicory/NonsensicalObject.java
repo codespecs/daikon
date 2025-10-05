@@ -7,8 +7,8 @@ package daikon.chicory;
  */
 public final class NonsensicalObject {
 
-  /** A NonsensicalObject instance. */
-  private static NonsensicalObject instance = new NonsensicalObject();
+  /** The singleton instance of NonsensicalObject. */
+  private static final NonsensicalObject instance = new NonsensicalObject();
 
   /** constructor */
   private NonsensicalObject() {}
