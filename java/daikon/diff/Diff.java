@@ -32,7 +32,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.FilesPlume;
-import org.plumelib.util.MPair;
+import org.plumelib.util.IPair;
 import org.plumelib.util.OrderedPairIterator;
 import org.plumelib.util.StringsPlume;
 
@@ -577,13 +577,13 @@ public final class Diff {
   public RootNode diffInvMap(InvMap map1, InvMap map2, boolean includeUnjustified) {
     RootNode root = new RootNode();
 
-    Iterator<MPair<@Nullable PptTopLevel, @Nullable PptTopLevel>> opi =
+    Iterator<IPair<@Nullable PptTopLevel, @Nullable PptTopLevel>> opi =
         new OrderedPairIterator<PptTopLevel>(
             map1.pptSortedIterator(PPT_COMPARATOR),
             map2.pptSortedIterator(PPT_COMPARATOR),
             PPT_COMPARATOR);
     while (opi.hasNext()) {
-      MPair<@Nullable PptTopLevel, @Nullable PptTopLevel> ppts = opi.next();
+      IPair<@Nullable PptTopLevel, @Nullable PptTopLevel> ppts = opi.next();
       PptTopLevel ppt1 = ppts.first;
       PptTopLevel ppt2 = ppts.second;
       if (shouldAdd(ppt1) || shouldAdd(ppt2)) {
@@ -662,10 +662,10 @@ public final class Diff {
       invs2 = new ArrayList<Invariant>();
     }
 
-    Iterator<MPair<@Nullable Invariant, @Nullable Invariant>> opi =
+    Iterator<IPair<@Nullable Invariant, @Nullable Invariant>> opi =
         new OrderedPairIterator<Invariant>(invs1.iterator(), invs2.iterator(), invPairComparator);
     while (opi.hasNext()) {
-      MPair<@Nullable Invariant, @Nullable Invariant> invariants = opi.next();
+      IPair<@Nullable Invariant, @Nullable Invariant> invariants = opi.next();
       Invariant inv1 = invariants.first;
       Invariant inv2 = invariants.second;
       if (!includeUnjustified) {
