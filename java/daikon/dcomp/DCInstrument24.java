@@ -698,7 +698,7 @@ public class DCInstrument24 {
       }
     }
 
-    classInfo.isJUnitTestClass = junit_test_class;
+    classInfo.isJunitTestClass = junit_test_class;
 
     instrumentAllMethods(classModel, classBuilder, classInfo);
 
@@ -954,7 +954,7 @@ public class DCInstrument24 {
           createMainStub(mgen, classBuilder, classInfo);
         }
 
-        if (classInfo.isJUnitTestClass) {
+        if (classInfo.isJunitTestClass) {
           addingDcompArg = false;
         }
 
@@ -1225,7 +1225,7 @@ public class DCInstrument24 {
 
     } else { // normal method
 
-      if (!classInfo.isJUnitTestClass) {
+      if (!classInfo.isJunitTestClass) {
         // Add the DCompMarker argument to distinguish our version
         add_dcomp_arg(mgen, minfo);
       }
@@ -4462,7 +4462,7 @@ public class DCInstrument24 {
     instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 0)); // load this
     instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 1)); // load obj
 
-    if (!classInfo.isJUnitTestClass) {
+    if (!classInfo.isJunitTestClass) {
       instructions.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL)); // use null for marker
       mtdDComp = MethodTypeDesc.of(CD_boolean, CD_Object, dcomp_marker);
     } else {
@@ -4475,7 +4475,7 @@ public class DCInstrument24 {
     instructions.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
     instructions.add(ReturnInstruction.of(TypeKind.BOOLEAN));
 
-    if (!classInfo.isJUnitTestClass) {
+    if (!classInfo.isJunitTestClass) {
       // build the uninstrumented equals_dcomp_instrumented method
       classBuilder.withMethod("equals_dcomp_instrumented", mtdNormal, access_flags, codeHandler1);
     }
@@ -4556,7 +4556,7 @@ public class DCInstrument24 {
     instructions.add(InvokeInstruction.of(Opcode.INVOKESPECIAL, mre));
     instructions.add(ReturnInstruction.of(TypeKind.BOOLEAN));
 
-    if (!classInfo.isJUnitTestClass) {
+    if (!classInfo.isJunitTestClass) {
       // build the uninstrumented equals method
       classBuilder.withMethod("equals", mtdNormal, access_flags, codeHandler1);
       // since not JUnit test class, add dcomp_marker to instrumented version of equals built below

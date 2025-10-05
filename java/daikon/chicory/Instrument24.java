@@ -83,12 +83,12 @@ import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
- * This class is responsible for modifying another class's bytecodes. Specifically, its main task is
- * to add calls into the Chicory runtime at method entries and exits for instrumentation purposes.
- * These added calls are sometimes referred to as "hooks".
+ * This class modifies another class's bytecodes. It adds calls into the Chicory runtime at method
+ * entries and exits for instrumentation purposes. These added calls are sometimes referred to as
+ * "hooks".
  *
  * <p>This class is loaded by ChicoryPremain at startup. It is a ClassFileTransformer which means
- * that its {@code transform} method gets called each time the JVM loads a class.
+ * that its {@link #transform} method gets called each time the JVM loads a class.
  *
  * <p>Instrument24 uses Java's ({@code java.lang.classfile}) APIs for reading and modifying .class
  * files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more complete and robust
@@ -98,17 +98,17 @@ import org.checkerframework.dataflow.qual.Pure;
  */
 public class Instrument24 implements ClassFileTransformer {
 
-  /** The location of the runtime support class. */
+  /** The name of the Chicory runtime support class. */
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
   /** The ClassDesc for the Chicory runtime support class. */
   private static final ClassDesc runtimeCD = ClassDesc.of(runtime_classname);
 
-  /** Debug information about which classes and/or methods are transformed and why. */
+  /** A log for debug information about which classes and/or methods are transformed and why. */
   protected static final SimpleLog debug_transform = new SimpleLog(false);
 
-  // Public so can be enabled from daikon.dcomp.Instrument24.
-  /** Debug information about ppt-omit and ppt-select. */
+  // Public so daikon.dcomp.Instrument24 can enable it.
+  /** A log for debug information about ppt-omit and ppt-select. */
   public static final SimpleLog debug_ppt_omit = new SimpleLog(false);
 
   /** A log to which to print debugging information about program instrumentation. */
@@ -326,10 +326,11 @@ public class Instrument24 implements ClassFileTransformer {
           binaryClassName);
     }
 
+    debug_transform.log("%nTransforming: %s%n", binaryClassName);
+
     // Instrument the classfile, die on any errors
     ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
-    byte[] newBytes = {};
-    debug_transform.log("%nTransforming: %s%n", binaryClassName);
+    byte[] newBytes;
     try {
       newBytes =
           classFile.build(
