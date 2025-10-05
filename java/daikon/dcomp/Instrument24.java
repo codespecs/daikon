@@ -146,12 +146,12 @@ public class Instrument24 implements ClassFileTransformer {
 
     debug_transform.log("%nEntering dcomp.Instrument24.transform(): class = %s%n", className);
 
-    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
-
     if (className == null) {
       // most likely a lambda related class
       return null;
     }
+
+    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
     // See comments in Premain.java about meaning and use of in_shutdown.
     if (Premain.in_shutdown) {
