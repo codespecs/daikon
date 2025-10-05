@@ -14,11 +14,14 @@ import java.lang.classfile.Instruction;
 import java.lang.classfile.Label;
 import java.lang.classfile.Opcode;
 import java.lang.classfile.constantpool.ClassEntry;
+import java.lang.classfile.constantpool.ConstantDynamicEntry;
 import java.lang.classfile.constantpool.DoubleEntry;
 import java.lang.classfile.constantpool.FloatEntry;
 import java.lang.classfile.constantpool.IntegerEntry;
 import java.lang.classfile.constantpool.LoadableConstantEntry;
 import java.lang.classfile.constantpool.LongEntry;
+import java.lang.classfile.constantpool.MethodHandleEntry;
+import java.lang.classfile.constantpool.MethodTypeEntry;
 import java.lang.classfile.constantpool.StringEntry;
 import java.lang.classfile.instruction.BranchInstruction;
 import java.lang.classfile.instruction.ConstantInstruction;
@@ -749,18 +752,22 @@ public final class CalcStack24 {
             ConstantInstruction.LoadConstantInstruction ldc =
                 (ConstantInstruction.LoadConstantInstruction) inst;
             LoadableConstantEntry lce = ldc.constantEntry();
-            if (lce instanceof IntegerEntry) {
-              stack.push(CD_int);
-            } else if (lce instanceof LongEntry) {
-              stack.push(CD_long);
-            } else if (lce instanceof FloatEntry) {
-              stack.push(CD_float);
-            } else if (lce instanceof DoubleEntry) {
-              stack.push(CD_double);
-            } else if (lce instanceof StringEntry) {
-              stack.push(CD_String);
-            } else if (lce instanceof ClassEntry cent) {
-              stack.push(cent.asSymbol());
+
+            switch (lce) {
+              case ClassEntry cle -> stack.push(cle.asSymbol());
+              case ConstantDynamicEntry cde -> stack.push(cde.typeSymbol());
+              case DoubleEntry de ->
+                  stack.push(CD_double); // LDC2_W only, but we assume correct code
+              case FloatEntry fe -> stack.push(CD_float);
+              case IntegerEntry ie -> stack.push(CD_int);
+              case LongEntry le -> stack.push(CD_long); // LDC2_W only, but we assume correct code
+              case MethodHandleEntry mhe ->
+                  stack.push(ClassDesc.of("java.lang.invoke.MethodHandle"));
+              case MethodTypeEntry mte -> stack.push(ClassDesc.of("java.lang.invoke.MethodType"));
+              case StringEntry se -> stack.push(CD_String);
+              default -> {
+                throw new DynCompError("Illegal LoadableConstantEntry: " + lce);
+              }
             }
             return true;
 
