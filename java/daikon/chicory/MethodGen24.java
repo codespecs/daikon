@@ -55,10 +55,12 @@ public class MethodGen24 {
    * CodeElements, which is the only way to access Instructions; the order of elements of a code
    * model is significant. May be null if the method has no code.
    *
-   * <p>Several fields of CodeModel are declared as fields of MethodGen24 to better correspond to
+   * <p>Several fields of MethodModel are declared as fields of MethodGen24 to better correspond to
    * BCEL's version of MethodGen and to reduce re-computation. Currently we set these fields in the
    * constructor, but they could be calculated lazily on first reference.
    */
+  // Start of MethodModel items.
+
   private @Nullable CodeModel code;
 
   /** The method's access flags as a bit mask. */
@@ -73,12 +75,14 @@ public class MethodGen24 {
    */
   private MethodTypeDesc mtd;
 
+  // End of MethodModel items.
+
   /** True if the method is static. */
   private boolean isStatic;
 
   /**
-   * The method's CodeAttribute. This contains information about the bytecodes (instructions) of
-   * this method. May be null if the method has no code.
+   * The method's CodeAttribute. This contains the bytecodes (instructions) of the method as well as
+   * additional information about the bytecodes. May be null if the method has no code.
    *
    * <p>Several fields of CodeAttribute are declared as fields of MethodGen24 to better model BCEL's
    * version of MethodGen and to reduce re-computation. Note that we set these fields in the
@@ -86,11 +90,15 @@ public class MethodGen24 {
    */
   private @Nullable CodeAttribute codeAttribute;
 
+  // Start of CodeAttribute items.
+
   /** The method's maximum number of local slots. */
   private int maxLocals;
 
   /** The method's maximum stack size. */
   private int maxStack;
+
+  // End of CodeAttribute items.
 
   /** The name of the method's enclosing class, in binary name format. */
   private @BinaryName String className;
@@ -118,7 +126,7 @@ public class MethodGen24 {
    */
   private @MethodDescriptor String signature;
 
-  // Information extracted from {@code mtd}, the MethodTypeDescriptor.
+  // The next two items are extracted from {@code mtd}, the MethodTypeDescriptor.
   /** The method's parameter types. */
   private ClassDesc[] paramTypes;
 
