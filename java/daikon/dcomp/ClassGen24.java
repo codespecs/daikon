@@ -39,11 +39,21 @@ public class ClassGen24 {
    */
   private ClassModel classModel;
 
+  // Start of ClassModel items.
+
   /** The class's access flags. */
   private AccessFlags accessFlags;
 
+  /** The list of interfaces this class implements. */
+  private List<ClassEntry> interfaceList;
+
+  /** The name of the class's enclosing class, in binary name format. */
+  private @BinaryName String superclassName;
+
   /** The class's name. */
   private @BinaryName String className;
+
+  // End of ClassModel items.
 
   /** The ClassBuilder for this class. */
   private ClassBuilder classBuilder;
@@ -53,12 +63,6 @@ public class ClassGen24 {
 
   /** True if the class is static. */
   private boolean isStatic;
-
-  /** The name of the class's enclosing class, in binary name format. */
-  private @BinaryName String superclassName;
-
-  /** The list of interfaces this class implements. */
-  private List<ClassEntry> interfaceList;
 
   /**
    * Creates a ClassGen24 object.
