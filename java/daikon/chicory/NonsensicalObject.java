@@ -10,7 +10,7 @@ public final class NonsensicalObject {
   /** The singleton instance of NonsensicalObject. */
   private static final NonsensicalObject instance = new NonsensicalObject();
 
-  /** constructor */
+  /** Creates a new NonsensicalObject. */
   private NonsensicalObject() {}
 
   public static NonsensicalObject getInstance() {
