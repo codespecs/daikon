@@ -288,14 +288,14 @@ public class Instrument24 implements ClassFileTransformer {
       }
       return newBytes;
     } else {
-      // debug_transform.log("Didn't instrument %s%n", binaryClassName);
+      debug_transform.log("Didn't instrument %s%n", binaryClassName);
       // No changes to the bytecodes
       return null;
     }
   }
 
   /**
-   * Returns whether or not the specified class is part of dcomp itself (and thus should not be
+   * Returns true if the specified class is part of dcomp itself (and thus should not be
    * instrumented). Some Daikon classes that are used by DynComp are included here as well.
    *
    * @param classname class to be checked
@@ -324,7 +324,7 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Returns whether or not the specified class is part of a tool known to do Java byte code
+   * Returns true if the specified class is part of a tool known to do Java byte code
    * transformation. We need to warn the user that this may not work correctly.
    *
    * @param classname class to be checked
