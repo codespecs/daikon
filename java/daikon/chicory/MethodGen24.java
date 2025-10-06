@@ -265,7 +265,7 @@ public class MethodGen24 {
 
     // Not necessarily sorted, so sort to make searching/insertion easier.
     localsTable.sort(Comparator.comparing(LocalVariable::slot));
-    origLocalVariables = localsTable.toArray(new LocalVariable[0]);
+    origLocalVariables = localsTable.toArray(new LocalVariable[localsTable.size()]);
 
     // System.out.println("locals:" + Arrays.toString(origLocalVariables));
     // System.out.println("types:" + Arrays.toString(paramTypes));

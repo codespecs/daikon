@@ -1639,7 +1639,8 @@ public class Instrument24 implements ClassFileTransformer {
       String baseType = descriptor.substring(1, genericStart).replace('/', '.');
       result.append(baseType).append('<');
       String genericPart = descriptor.substring(genericStart + 1, genericEnd);
-      result.append(typeArgumentsToBinaryNames(genericPart)).append('>');
+      result.append(typeArgumentsToBinaryNames(genericPart));
+      result.append('>');
     } else if (endOfBaseType > 0) {
       // Regular object type
       result.append(descriptor.substring(1, endOfBaseType).replace('/', '.'));

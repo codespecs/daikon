@@ -105,7 +105,7 @@ public class StringInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Encodes a string: surrounds in quotes and removes line breaks.
+   * Encodes a string: surrounds it in quotes and removes line breaks.
    *
    * @param stringRef the string to be quoted
    * @return the quoted string

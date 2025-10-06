@@ -1003,14 +1003,12 @@ public abstract class DaikonVariableInfo
 
     // System.out.printf("Package name for type  %s is %s%n", type, pkgName);
 
-    StringBuilder ret = new StringBuilder(50);
-
     // In Java 9+ package name is empty string for the unnamed package.
     if (pkgName != null && !pkgName.isEmpty()) {
-      ret.append(" # declaringClassPackageName=" + pkgName);
+      return " # declaringClassPackageName=" + pkgName;
+    } else {
+      return "";
     }
-
-    return ret.toString();
   }
 
   /**

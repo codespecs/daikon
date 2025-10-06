@@ -12,9 +12,9 @@ import java.util.Arrays;
 @SuppressWarnings("nullness") // to do
 public final class RootInfo extends DaikonVariableInfo {
 
-  /** constructor */
+  /** Creates a RootInfo object. */
   private RootInfo() {
-    // the root needs no name, etc. but set them to preserve nullness property
+    // The root needs no name, etc., but set them to preserve nullness property.
     super(" RootInfo Object ", " RootInfo Object type ", " RootInfo Object reptype ");
   }
 
