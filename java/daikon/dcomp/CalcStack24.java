@@ -1,5 +1,6 @@
 package daikon.dcomp;
 
+import static java.lang.constant.ConstantDescs.CD_Class;
 import static java.lang.constant.ConstantDescs.CD_Object;
 import static java.lang.constant.ConstantDescs.CD_String;
 import static java.lang.constant.ConstantDescs.CD_double;
@@ -754,7 +755,7 @@ public final class CalcStack24 {
             LoadableConstantEntry lce = ldc.constantEntry();
 
             switch (lce) {
-              case ClassEntry cle -> stack.push(cle.asSymbol());
+              case ClassEntry cle -> stack.push(CD_Class);
               case ConstantDynamicEntry cde -> stack.push(cde.typeSymbol());
               case DoubleEntry de ->
                   stack.push(CD_double); // LDC2_W only, but we assume correct code
