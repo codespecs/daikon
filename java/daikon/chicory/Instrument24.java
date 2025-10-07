@@ -90,7 +90,7 @@ import org.checkerframework.dataflow.qual.Pure;
  * <p>This class is loaded by ChicoryPremain at startup. It is a ClassFileTransformer which means
  * that its {@link #transform} method gets called each time the JVM loads a class.
  *
- * <p>Instrument24 uses Java's ({@code java.lang.classfile}) APIs for reading and modifying .class
+ * <p>Instrument24 uses Java's {@code java.lang.classfile} APIs for reading and modifying .class
  * files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more complete and robust
  * (no more fiddling with StackMaps) and are always up to date with any .class file changes (since
  * they are part of the JDK). (We will need to continue to support Instrument.java using BCEL, as we
@@ -1139,7 +1139,7 @@ public class Instrument24 implements ClassFileTransformer {
     newCode.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
   }
 
-  /** Variables used for processing a switch instruction. */
+  /** Used for processing a switch instruction. */
   private static class ModifiedSwitchInfo {
 
     /** Possibly modified default switch target. */
