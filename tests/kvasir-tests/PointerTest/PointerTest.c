@@ -1,5 +1,4 @@
 // Pointer test program for Valgrind
-// Created on 2-18-04 by Philip Guo
 
 // TODO: This is another test case that fails on AMD64 due to the
 // DynComp single tag per register issue.  If (when) we fix this,

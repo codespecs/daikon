@@ -287,6 +287,11 @@ public class Instrument24 implements ClassFileTransformer {
       return null;
     }
 
+    if (className.contains("/$Proxy")) {
+      debug_transform.log("Skipping proxy class %s%n", binaryClassName);
+      return null;
+    }
+
     // Don't instrument our own code.
     if (isChicory(className)) {
       debug_transform.log("Not transforming Chicory class %s%n", binaryClassName);
@@ -1224,7 +1229,7 @@ public class Instrument24 implements ClassFileTransformer {
       modifiedTarget = defaultTarget;
     }
 
-    List<SwitchCase> newCaseList = new ArrayList<SwitchCase>();
+    List<SwitchCase> newCaseList = new ArrayList<>();
     for (SwitchCase item : caseList) {
       if (item.target().equals(minfo.oldStartLabel)) {
         newCaseList.add(SwitchCase.of(item.caseValue(), minfo.entryLabel));
@@ -1381,8 +1386,8 @@ public class Instrument24 implements ClassFileTransformer {
     if (debugInstrument.enabled) {
       debugInstrument.log("create_method_info for: %s%n", classInfo.class_name);
       debugInstrument.log("number of parameters: %s%n", paramNames.length);
-      for (int i = 0; i < paramNames.length; i++) {
-        debugInstrument.log("param name: %s%n", paramNames[i]);
+      for (String paramName : paramNames) {
+        debugInstrument.log("param name: %s%n", paramName);
       }
     }
 
@@ -1420,8 +1425,8 @@ public class Instrument24 implements ClassFileTransformer {
     if (debugInstrument.enabled) {
       debugInstrument.log("create_method_info part 2%n");
       debugInstrument.log("number of parameters: %s%n", paramNames.length);
-      for (int i = 0; i < paramNames.length; i++) {
-        debugInstrument.log("param name: %s%n", paramNames[i]);
+      for (String paramName : paramNames) {
+        debugInstrument.log("param name: %s%n", paramName);
       }
     }
 
@@ -1695,7 +1700,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param item the constant to format
    * @return a string containing the constant's value
    */
-  private final String formatConstantDesc(ConstantDesc item) {
+  private String formatConstantDesc(ConstantDesc item) {
     try {
       return item.resolveConstantDesc(MethodHandles.lookup()).toString();
     } catch (Exception e) {

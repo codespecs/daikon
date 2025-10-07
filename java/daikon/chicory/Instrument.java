@@ -274,6 +274,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       outputDebugFiles(c, debug_uninstrumented_dir, binaryClassName);
     }
 
+    debug_transform.log("%nTransforming: %s%n", binaryClassName);
+
     // Instrument the classfile, die on any errors
     ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
     JavaClass njc;
