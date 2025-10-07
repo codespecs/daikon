@@ -219,7 +219,7 @@ public class ChicoryPremain {
    * @param pathLoc the relative path; interpret {@code purityFileName} with respect to it
    */
   private static void readPurityFile(File purityFileName, @Nullable File pathLoc) {
-    pureMethods = new HashSet<String>();
+    pureMethods = new HashSet<>();
     File purityFile = new File(pathLoc, purityFileName.getPath());
     String purityFileAbsolutePath = purityFile.getAbsolutePath();
 
@@ -347,7 +347,7 @@ public class ChicoryPremain {
   public static class ChicoryLoader extends ClassLoader {
 
     /** Log file if verbose is enabled. */
-    public static final SimpleLog debug = new SimpleLog(ChicoryPremain.verbose);
+    public static final SimpleLog debug = new SimpleLog(verbose);
 
     /**
      * Constructor for special BCEL class loader.
@@ -363,7 +363,7 @@ public class ChicoryPremain {
       List<URL> bcel_urls = get_resource_list(bcel_classname);
       List<URL> plse_urls = get_resource_list(plse_marker_classname);
 
-      if (plse_urls.size() == 0) {
+      if (plse_urls.isEmpty()) {
         System.err.printf(
             "%nBCEL 6.1 or newer must be on the classpath.  Normally it is found in daikon.jar.%n");
         Runtime.chicoryLoaderInstantiationError = true;
@@ -451,7 +451,7 @@ public class ChicoryPremain {
     static List<URL> get_resource_list(String classname) throws IOException {
 
       String name = classname_to_resource_name(classname);
-      Enumeration<URL> enum_urls = ClassLoader.getSystemResources(name);
+      Enumeration<URL> enum_urls = getSystemResources(name);
       List<URL> urls = new ArrayList<>();
       while (enum_urls.hasMoreElements()) {
         urls.add(enum_urls.nextElement());
@@ -469,7 +469,7 @@ public class ChicoryPremain {
 
     @Override
     protected Class<?> loadClass(@BinaryName String name, boolean resolve)
-        throws java.lang.ClassNotFoundException {
+        throws ClassNotFoundException {
 
       return super.loadClass(name, resolve);
     }

@@ -89,7 +89,7 @@ public class DeclReader {
      * @return DeclVarInfo for the program point variable
      * @throws IOException if there is trouble reading the file
      */
-    public DeclVarInfo read_var(EntryReader decl_file) throws java.io.IOException {
+    public DeclVarInfo read_var(EntryReader decl_file) throws IOException {
 
       String firstLine = decl_file.readLine();
       if (firstLine == null) {
@@ -196,7 +196,9 @@ public class DeclReader {
   }
 
   /** Create a new DeclReader. */
-  public DeclReader() {}
+  public DeclReader() {
+    // This constructor is intentionally empty.
+  }
 
   /**
    * Read declarations from the specified pathname.
@@ -267,15 +269,19 @@ public class DeclReader {
     return ppt;
   }
 
-  // This can return null.  Example:  when DynComp is run to compute
-  // comparability information, it produces no information (not even a
-  // declaration) for program points that are never executed.  But, Chicory
-  // outputs a declaration for every program point, and this lookup can
-  // fail when using the --comparability-file=... command-line argument
-  // with a file produced by DynComp.
+  /**
+   * Fetches program point declaration for the ppt_name argument.
+   *
+   * <p>This can return null. Example: when DynComp is run to compute comparability information, it
+   * produces no information (not even a declaration) for program points that are never executed.
+   * But, Chicory outputs a declaration for every program point, and this lookup can fail when using
+   * the --comparability-file=... command-line argument with a file produced by DynComp.
+   *
+   * @param ppt_name name of Ppt to fetch
+   * @return the program point declaration
+   */
   public @Nullable DeclPpt find_ppt(String ppt_name) {
-    DeclPpt result = ppts.get(ppt_name);
-    return result;
+    return ppts.get(ppt_name);
   }
 
   /**
