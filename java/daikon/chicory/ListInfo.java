@@ -1,7 +1,3 @@
-/*
- * Created on May 3, 2005
- *
- */
 package daikon.chicory;
 
 import java.lang.reflect.InvocationTargetException;

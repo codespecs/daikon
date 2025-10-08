@@ -89,7 +89,9 @@ public class Instrument implements ClassFileTransformer {
       BcelUtil.dump(c, directory);
     } catch (Throwable t) {
       System.err.printf("Unexpected error %s writing debug files for: %s%n", t, className);
-      t.printStackTrace();
+      if (debug_transform.enabled) {
+        t.printStackTrace();
+      }
       // ignore the error, it shouldn't affect the instrumentation
     }
   }
@@ -113,27 +115,14 @@ public class Instrument implements ClassFileTransformer {
     // for debugging
     // new Throwable().printStackTrace();
 
-    debug_transform.log("Entering dcomp.Instrument.transform(): class = %s%n", className);
-
-    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
+    debug_transform.log("%nEntering dcomp.Instrument.transform(): class = %s%n", className);
 
     if (className == null) {
-      /*
-      // debug code to display unnamed class
-      try {
-        // Parse the bytes of the classfile, die on any errors
-        ClassParser parser = new ClassParser(new ByteArrayInputStream(classfileBuffer), className);
-        JavaClass c = parser.parse();
-        System.out.println(c.toString());
-      } catch (Throwable e) {
-        System.out.printf("Unexpected Error: %s%n", e);
-        e.printStackTrace();
-        throw new RuntimeException("Unexpected error", e);
-      }
-      */
       // most likely a lambda related class
       return null;
     }
+
+    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
     // See comments in Premain.java about meaning and use of in_shutdown.
     if (Premain.in_shutdown) {
@@ -167,15 +156,18 @@ public class Instrument implements ClassFileTransformer {
         }
       }
 
-      if (BcelUtil.javaVersion > 8) {
-        if (Premain.problem_classes.contains(binaryClassName)) {
-          debug_transform.log("Skipping problem class %s%n", binaryClassName);
-          return null;
-        }
+      if ((BcelUtil.javaVersion > 8) && Premain.problem_classes.contains(binaryClassName)) {
+        debug_transform.log("Skipping problem class %s%n", binaryClassName);
+        return null;
       }
 
       if (className.contains("/$Proxy")) {
         debug_transform.log("Skipping proxy class %s%n", binaryClassName);
+        return null;
+      }
+
+      if (className.startsWith("java/lang/instrument/")) {
+        debug_transform.log("Skipping java instrumentation class %s%n", binaryClassName);
         return null;
       }
 
@@ -226,8 +218,10 @@ public class Instrument implements ClassFileTransformer {
       ClassParser parser = new ClassParser(bais, className);
       c = parser.parse();
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s while reading %s%n", t, binaryClassName);
-      t.printStackTrace();
+      System.err.printf("Unexpected error %s reading in %s%n", t, binaryClassName);
+      if (debug_transform.enabled) {
+        t.printStackTrace();
+      }
       // No changes to the bytecodes
       return null;
     }
@@ -242,11 +236,12 @@ public class Instrument implements ClassFileTransformer {
       DCInstrument dci = new DCInstrument(c, in_jdk, loader);
       njc = dci.instrument();
     } catch (Throwable t) {
-      RuntimeException re =
-          new RuntimeException(
-              String.format("Unexpected error %s in transform of %s", t, binaryClassName), t);
-      re.printStackTrace();
-      throw re;
+      System.err.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
+      if (debug_transform.enabled) {
+        t.printStackTrace();
+      }
+      // No changes to the bytecodes
+      return null;
     }
 
     if (njc != null) {
@@ -276,6 +271,9 @@ public class Instrument implements ClassFileTransformer {
     }
     if (classname.startsWith("daikon/chicory/")
         && !classname.equals("daikon/chicory/ChicoryTest")) {
+      return true;
+    }
+    if (classname.equals("daikon/Chicory")) {
       return true;
     }
     if (classname.equals("daikon/PptTopLevel$PptType")) {

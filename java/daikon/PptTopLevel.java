@@ -3325,7 +3325,7 @@ public class PptTopLevel extends Ppt {
 
   /** Iterate over all of the invariants at this ppt (but not any implications). */
   public Iterator<Invariant> invariants_iterator() {
-    return new CollectionsPlume.MergedIterator<Invariant>(views_iterator_iterator());
+    return CollectionsPlume.mergedIterator(views_iterator_iterator());
   }
 
   /** An iterator whose elements are themselves iterators that return invariants. */

@@ -10,9 +10,11 @@ import java.util.Arrays;
  * It contains no variable information other than what is stored in its children.
  */
 @SuppressWarnings("nullness") // to do
-public class RootInfo extends DaikonVariableInfo {
+public final class RootInfo extends DaikonVariableInfo {
+
+  /** Creates a RootInfo object. */
   private RootInfo() {
-    // the root needs no name, etc. but set them to preserve nullness property
+    // The root needs no name, etc., but set them to preserve nullness property.
     super(" RootInfo Object ", " RootInfo Object type ", " RootInfo Object reptype ");
   }
 

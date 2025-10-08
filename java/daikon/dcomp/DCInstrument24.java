@@ -698,7 +698,7 @@ public class DCInstrument24 {
       }
     }
 
-    classInfo.isJunitTestClass = junit_test_class;
+    classInfo.isJUnitTestClass = junit_test_class;
 
     instrumentAllMethods(classModel, classBuilder, classInfo);
 
@@ -954,7 +954,7 @@ public class DCInstrument24 {
           createMainStub(mgen, classBuilder, classInfo);
         }
 
-        if (classInfo.isJunitTestClass) {
+        if (classInfo.isJUnitTestClass) {
           addingDcompArg = false;
         }
 
@@ -1225,7 +1225,7 @@ public class DCInstrument24 {
 
     } else { // normal method
 
-      if (!classInfo.isJunitTestClass) {
+      if (!classInfo.isJUnitTestClass) {
         // Add the DCompMarker argument to distinguish our version
         add_dcomp_arg(mgen, minfo);
       }
@@ -1784,7 +1784,7 @@ public class DCInstrument24 {
    */
   private List<CodeElement> createTagFrame(MethodGen24 mgen) {
 
-    ClassDesc arg_types[] = mgen.getParameterTypes();
+    ClassDesc paramTypes[] = mgen.getParameterTypes();
 
     // Determine the offset of the first argument in the frame
     int offset = 1;
@@ -1803,11 +1803,11 @@ public class DCInstrument24 {
     String params = "" + (char) (frame_size + '0');
     // Character.forDigit (frame_size, Character.MAX_RADIX);
     List<Integer> plist = new ArrayList<>();
-    for (ClassDesc argType : arg_types) {
-      if (argType.isPrimitive()) {
+    for (ClassDesc paramType : paramTypes) {
+      if (paramType.isPrimitive()) {
         plist.add(offset);
       }
-      offset += TypeKind.from(argType).slotSize();
+      offset += TypeKind.from(paramType).slotSize();
     }
     for (int ii = plist.size() - 1; ii >= 0; ii--) {
       char tmpChar = (char) (plist.get(ii) + '0');
@@ -2404,11 +2404,11 @@ public class DCInstrument24 {
    *
    * @param startClass the ClassModel whose interfaces are to be searched
    * @param methodName the target method to search for
-   * @param argTypes the target method's argument types
+   * @param paramTypes the target method's parameter types
    * @return the name of the interface class containing target method, or null if not found
    */
   private @Nullable @BinaryName String getDefiningInterface(
-      ClassModel startClass, String methodName, ClassDesc[] argTypes) {
+      ClassModel startClass, String methodName, ClassDesc[] paramTypes) {
 
     if (debugGetDefiningInterface) {
       System.out.println("searching interfaces of: " + ClassGen24.getClassName(startClass));
@@ -2431,13 +2431,13 @@ public class DCInstrument24 {
         if (debugGetDefiningInterface) {
           System.out.println("  " + jmName + Arrays.toString(mtd.parameterArray()));
         }
-        if (jmName.equals(methodName) && Arrays.equals(mtd.parameterArray(), argTypes)) {
+        if (jmName.equals(methodName) && Arrays.equals(mtd.parameterArray(), paramTypes)) {
           // We have a match.
           return interfaceName;
         }
       }
       // no match found; does this interface extend other interfaces?
-      @BinaryName String foundAbove = getDefiningInterface(cm, methodName, argTypes);
+      @BinaryName String foundAbove = getDefiningInterface(cm, methodName, paramTypes);
       if (foundAbove != null) {
         // We have a match.
         return foundAbove;
@@ -2461,13 +2461,13 @@ public class DCInstrument24 {
     String classname = "";
     MethodTypeDesc mtd = invoke.typeSymbol();
     ClassDesc returnType = mtd.returnType();
-    ClassDesc[] argTypes = mtd.parameterArray();
+    ClassDesc[] paramTypes = mtd.parameterArray();
     if (debugHandleInvoke) {
       System.out.println("invokedynamic: " + invoke);
       System.out.printf("  callee_instrumented: false%n");
     }
 
-    return cleanInvokeTagStack(invoke, classname, returnType, argTypes);
+    return cleanInvokeTagStack(invoke, classname, returnType, paramTypes);
   }
 
   /**
@@ -2502,7 +2502,7 @@ public class DCInstrument24 {
     @BinaryName String classname = invoke.owner().asInternalName().replace('/', '.');
     MethodTypeDesc mtd = invoke.typeSymbol();
     ClassDesc returnType = mtd.returnType();
-    ClassDesc[] argTypes = mtd.parameterArray();
+    ClassDesc[] paramTypes = mtd.parameterArray();
 
     if (debugHandleInvoke) {
       System.out.println();
@@ -2511,7 +2511,7 @@ public class DCInstrument24 {
       System.out.println("classname: " + classname);
     }
 
-    if (is_object_equals(methodName, returnType, argTypes)) {
+    if (is_object_equals(methodName, returnType, paramTypes)) {
 
       // Replace calls to Object's equals method with calls to our
       // replacement, a static method in DCRuntime.
@@ -2524,7 +2524,7 @@ public class DCInstrument24 {
       return il;
     }
 
-    if (is_object_clone(methodName, returnType, argTypes)) {
+    if (is_object_clone(methodName, returnType, paramTypes)) {
 
       // Replace calls to Object's clone method with calls to our
       // replacement, a static method in DCRuntime.
@@ -2533,7 +2533,7 @@ public class DCInstrument24 {
     }
 
     boolean callee_instrumented =
-        isTargetInstrumented(invoke, mgen, classname, methodName, argTypes);
+        isTargetInstrumented(invoke, mgen, classname, methodName, paramTypes);
 
     if (debugHandleInvoke) {
       System.out.printf("handleInvoke(%s)%n", invoke);
@@ -2550,7 +2550,7 @@ public class DCInstrument24 {
       il.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
 
       // Add the DCompMarker to the arg types list.
-      List<ClassDesc> new_arg_types = new ArrayList<>(Arrays.asList(argTypes));
+      List<ClassDesc> new_arg_types = new ArrayList<>(Arrays.asList(paramTypes));
       new_arg_types.add(dcomp_marker);
 
       NameAndTypeEntry nte =
@@ -2559,7 +2559,7 @@ public class DCInstrument24 {
       return il;
 
     } else { // not instrumented, discard the tags before making the call
-      return cleanInvokeTagStack(invoke, classname, returnType, argTypes);
+      return cleanInvokeTagStack(invoke, classname, returnType, paramTypes);
     }
   }
 
@@ -2570,11 +2570,11 @@ public class DCInstrument24 {
    * @param invoke a method invocation bytecode instruction
    * @param classname target class of the invoke
    * @param returnType return type of method
-   * @param argTypes argument types of target method
+   * @param paramTypes parameter types of target method
    * @return instructions to replace the given instruction
    */
   private List<CodeElement> cleanInvokeTagStack(
-      Instruction invoke, String classname, ClassDesc returnType, ClassDesc[] argTypes) {
+      Instruction invoke, String classname, ClassDesc returnType, ClassDesc[] paramTypes) {
     List<CodeElement> il = new ArrayList<>();
 
     // JUnit test classes are a bit strange.  They are marked as not being callee_instrumented
@@ -2582,7 +2582,7 @@ public class DCInstrument24 {
     // they actually contain instrumentation code.  So we do not want to discard
     // the primitive tags prior to the call.
     if (!junitTestClasses.contains(classname)) {
-      il = discard_primitive_tags(argTypes);
+      il = discard_primitive_tags(paramTypes);
     }
 
     // Add a tag for the return type if it is primitive.
@@ -2598,18 +2598,18 @@ public class DCInstrument24 {
 
   /**
    * Returns instructions that will discard any primitive tags corresponding to the specified
-   * arguments. Returns an empty instruction list if there are no primitive arguments to discard.
+   * parameters. Returns an empty instruction list if there are no primitive parameters to discard.
    *
-   * @param argTypes argument types of target method
+   * @param paramTypes parameter types of target method
    * @return an instruction list that discards primitive tags from DCRuntime's per-thread
    *     comparability data stack
    */
-  private List<CodeElement> discard_primitive_tags(ClassDesc[] argTypes) {
+  private List<CodeElement> discard_primitive_tags(ClassDesc[] paramTypes) {
     List<CodeElement> il = new ArrayList<>();
 
     int primitive_cnt = 0;
-    for (ClassDesc argType : argTypes) {
-      if (argType.isPrimitive()) {
+    for (ClassDesc paramType : paramTypes) {
+      if (paramType.isPrimitive()) {
         primitive_cnt++;
       }
     }
@@ -2626,7 +2626,7 @@ public class DCInstrument24 {
    * @param mgen host method of invoke
    * @param classname target class of the invoke
    * @param methodName target method of the invoke
-   * @param argTypes argument types of target method
+   * @param paramTypes parameter types of target method
    * @return true if the target is instrumented
    */
   private boolean isTargetInstrumented(
@@ -2634,12 +2634,12 @@ public class DCInstrument24 {
       MethodGen24 mgen,
       @BinaryName String classname,
       String methodName,
-      ClassDesc[] argTypes) {
+      ClassDesc[] paramTypes) {
 
     boolean targetInstrumented;
     Opcode op = invoke.opcode();
 
-    if (is_object_method(methodName, argTypes)) {
+    if (is_object_method(methodName, paramTypes)) {
       targetInstrumented = false;
     } else {
       // At this point, we will never see classname = java.lang.Object.
@@ -2720,7 +2720,7 @@ public class DCInstrument24 {
 
           if (debugHandleInvoke) {
             System.out.println("method: " + methodName);
-            System.out.println("argTypes: " + Arrays.toString(argTypes));
+            System.out.println("paramTypes: " + Arrays.toString(paramTypes));
             System.out.printf("invoke host: %s%n", mgen.getClassName() + "." + mgen.getName());
           }
 
@@ -2754,7 +2754,7 @@ public class DCInstrument24 {
               if (debugHandleInvoke) {
                 System.out.println("  " + jmName + Arrays.toString(mtd.parameterArray()));
               }
-              if (jmName.equals(methodName) && Arrays.equals(mtd.parameterArray(), argTypes)) {
+              if (jmName.equals(methodName) && Arrays.equals(mtd.parameterArray(), paramTypes)) {
                 // We have a match.
                 if (debugHandleInvoke) {
                   System.out.printf("we have a match%n%n");
@@ -2770,7 +2770,7 @@ public class DCInstrument24 {
               // no methods match - search this class's interfaces
               @BinaryName String found;
               try {
-                found = getDefiningInterface(targetClass, methodName, argTypes);
+                found = getDefiningInterface(targetClass, methodName, paramTypes);
               } catch (Throwable e) {
                 // We cannot locate or read the .class file, better assume it is not instrumented.
                 targetInstrumented = false;
@@ -3028,7 +3028,7 @@ public class DCInstrument24 {
    *
    * @param methodName method to check
    * @param returnType return type of method
-   * @param args array of argument types to method
+   * @param args array of parameter types to method
    * @return true if method is Object.equals()
    */
   @Pure
@@ -3044,7 +3044,7 @@ public class DCInstrument24 {
    *
    * @param methodName method to check
    * @param returnType return type of method
-   * @param args array of argument types to method
+   * @param args array of parameter types to method
    * @return true if method is Object.clone()
    */
   @Pure
@@ -3339,7 +3339,7 @@ public class DCInstrument24 {
    */
   private @Nullable MethodInfo create_method_info(ClassInfo classInfo, MethodGen24 mgen) {
 
-    // Get the argument names for this method
+    // Get the parameter names for this method
     String[] paramNames = mgen.getParameterNames();
 
     if (debugInstrument.enabled) {
@@ -3571,11 +3571,11 @@ public class DCInstrument24 {
   static String methodEntryName(String fullClassName, MethodGen24 mgen) {
 
     // Get an array of the type names
-    ClassDesc[] argTypes = mgen.getParameterTypes();
-    String[] type_names = new String[argTypes.length];
-    for (int ii = 0; ii < argTypes.length; ii++) {
+    ClassDesc[] paramTypes = mgen.getParameterTypes();
+    String[] type_names = new String[paramTypes.length];
+    for (int ii = 0; ii < paramTypes.length; ii++) {
       @SuppressWarnings("signature:assignment") // need JDK annotations
-      @FieldDescriptor String paramFD = argTypes[ii].descriptorString();
+      @FieldDescriptor String paramFD = paramTypes[ii].descriptorString();
       type_names[ii] = daikon.chicory.Instrument24.convertDescriptorToFqBinaryName(paramFD);
     }
 
@@ -3587,12 +3587,13 @@ public class DCInstrument24 {
    *
    * @param methodName method to call
    * @param returnType type of method return
-   * @param argTypes array of method argument types
+   * @param paramTypes array of method parameter types
    * @return InvokeInstruction for the call
    */
-  InvokeInstruction dcr_call(String methodName, ClassDesc returnType, ClassDesc[] argTypes) {
+  InvokeInstruction dcr_call(String methodName, ClassDesc returnType, ClassDesc[] paramTypes) {
     MethodRefEntry mre =
-        poolBuilder.methodRefEntry(runtimeCD, methodName, MethodTypeDesc.of(returnType, argTypes));
+        poolBuilder.methodRefEntry(
+            runtimeCD, methodName, MethodTypeDesc.of(returnType, paramTypes));
     return InvokeInstruction.of(Opcode.INVOKESTATIC, mre);
   }
 
@@ -3976,12 +3977,12 @@ public class DCInstrument24 {
    */
   void fix_native(MethodGen24 mgen) {
 
-    ClassDesc[] argTypes = mgen.getParameterTypes();
+    ClassDesc[] paramTypes = mgen.getParameterTypes();
 
     debug_native.log("Native call %s%n", mgen);
 
     // Discard the tags for any primitive arguments passed to the method.
-    List<CodeElement> il = discard_primitive_tags(argTypes);
+    List<CodeElement> il = discard_primitive_tags(paramTypes);
 
     // push a tag if there is a primitive return value
     ClassDesc returnType = mgen.getReturnType();
@@ -3997,7 +3998,7 @@ public class DCInstrument24 {
     // if call is sun.reflect.Reflection.getCallerClass(int depth)
     // TODO: This method was deleted in JDK 9.  At some point we should remove support.
     if (mgen.getName().equals("getCallerClass")
-        && (argTypes.length == 1) // 'int depth'
+        && (paramTypes.length == 1) // 'int depth'
         && mgen.getClassName().equals("sun.reflect.Reflection")) {
 
       // The call returns the class 'depth' frames up the stack. Since we have added
@@ -4015,9 +4016,9 @@ public class DCInstrument24 {
       if (mgen.isStatic()) {
         param_index = 0;
       }
-      for (ClassDesc argType : argTypes) {
-        il.add(LoadInstruction.of(TypeKind.from(argType), param_index));
-        param_index += TypeKind.from(argType).slotSize();
+      for (ClassDesc paramType : paramTypes) {
+        il.add(LoadInstruction.of(TypeKind.from(paramType), param_index));
+        param_index += TypeKind.from(paramType).slotSize();
       }
     }
 
@@ -4026,7 +4027,7 @@ public class DCInstrument24 {
         poolBuilder.methodRefEntry(
             ClassDesc.of(mgen.getClassName()),
             mgen.getName(),
-            MethodTypeDesc.of(returnType, argTypes));
+            MethodTypeDesc.of(returnType, paramTypes));
     Opcode op = mgen.isStatic() ? Opcode.INVOKESTATIC : Opcode.INVOKEVIRTUAL;
     il.add(InvokeInstruction.of(op, mre));
 
@@ -4462,7 +4463,7 @@ public class DCInstrument24 {
     instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 0)); // load this
     instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 1)); // load obj
 
-    if (!classInfo.isJunitTestClass) {
+    if (!classInfo.isJUnitTestClass) {
       instructions.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL)); // use null for marker
       mtdDComp = MethodTypeDesc.of(CD_boolean, CD_Object, dcomp_marker);
     } else {
@@ -4475,7 +4476,7 @@ public class DCInstrument24 {
     instructions.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
     instructions.add(ReturnInstruction.of(TypeKind.BOOLEAN));
 
-    if (!classInfo.isJunitTestClass) {
+    if (!classInfo.isJUnitTestClass) {
       // build the uninstrumented equals_dcomp_instrumented method
       classBuilder.withMethod("equals_dcomp_instrumented", mtdNormal, access_flags, codeHandler1);
     }
@@ -4556,7 +4557,7 @@ public class DCInstrument24 {
     instructions.add(InvokeInstruction.of(Opcode.INVOKESPECIAL, mre));
     instructions.add(ReturnInstruction.of(TypeKind.BOOLEAN));
 
-    if (!classInfo.isJunitTestClass) {
+    if (!classInfo.isJUnitTestClass) {
       // build the uninstrumented equals method
       classBuilder.withMethod("equals", mtdNormal, access_flags, codeHandler1);
       // since not JUnit test class, add dcomp_marker to instrumented version of equals built below
@@ -4639,15 +4640,15 @@ public class DCInstrument24 {
    * Returns whether or not the method is defined in Object.
    *
    * @param methodName method to check
-   * @param argTypes array of argument types to method
+   * @param paramTypes array of parameter types to method
    * @return true if method is member of Object
    */
   @Pure
-  boolean is_object_method(String methodName, ClassDesc[] argTypes) {
+  boolean is_object_method(String methodName, ClassDesc[] paramTypes) {
     // Note: kind of wierd we don't check that classname = Object but it's been
     // that way forever. just means foo.finialize(), e.g., will be marked uninstrumented.
     for (MethodDef md : obj_methods) {
-      if (md.equals(methodName, argTypes)) {
+      if (md.equals(methodName, paramTypes)) {
         return true;
       }
     }
@@ -4762,7 +4763,7 @@ public class DCInstrument24 {
 
   // UNDONE consider making this a Java record
 
-  /** Variables used for processing a switch instruction. */
+  /** Information about processing a switch instruction. */
   private static class ModifiedSwitchInfo {
 
     /** Possibly modified default switch target. */

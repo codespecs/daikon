@@ -90,7 +90,7 @@ import org.checkerframework.dataflow.qual.Pure;
  * <p>This class is loaded by ChicoryPremain at startup. It is a ClassFileTransformer which means
  * that its {@link #transform} method gets called each time the JVM loads a class.
  *
- * <p>Instrument24 uses Java's ({@code java.lang.classfile}) APIs for reading and modifying .class
+ * <p>Instrument24 uses Java's {@code java.lang.classfile} APIs for reading and modifying .class
  * files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more complete and robust
  * (no more fiddling with StackMaps) and are always up to date with any .class file changes (since
  * they are part of the JDK). (We will need to continue to support Instrument.java using BCEL, as we
@@ -284,6 +284,11 @@ public class Instrument24 implements ClassFileTransformer {
     @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
     if (isBootClass(binaryClassName, loader)) {
+      return null;
+    }
+
+    if (className.contains("/$Proxy")) {
+      debug_transform.log("Skipping proxy class %s%n", binaryClassName);
       return null;
     }
 
@@ -1139,7 +1144,7 @@ public class Instrument24 implements ClassFileTransformer {
     newCode.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
   }
 
-  /** Variables used for processing a switch instruction. */
+  /** Used for processing a switch instruction. */
   private static class ModifiedSwitchInfo {
 
     /** Possibly modified default switch target. */
@@ -1224,7 +1229,7 @@ public class Instrument24 implements ClassFileTransformer {
       modifiedTarget = defaultTarget;
     }
 
-    List<SwitchCase> newCaseList = new ArrayList<SwitchCase>();
+    List<SwitchCase> newCaseList = new ArrayList<>();
     for (SwitchCase item : caseList) {
       if (item.target().equals(minfo.oldStartLabel)) {
         newCaseList.add(SwitchCase.of(item.caseValue(), minfo.entryLabel));
@@ -1381,8 +1386,8 @@ public class Instrument24 implements ClassFileTransformer {
     if (debugInstrument.enabled) {
       debugInstrument.log("create_method_info for: %s%n", classInfo.class_name);
       debugInstrument.log("number of parameters: %s%n", paramNames.length);
-      for (int i = 0; i < paramNames.length; i++) {
-        debugInstrument.log("param name: %s%n", paramNames[i]);
+      for (String paramName : paramNames) {
+        debugInstrument.log("param name: %s%n", paramName);
       }
     }
 
@@ -1420,8 +1425,8 @@ public class Instrument24 implements ClassFileTransformer {
     if (debugInstrument.enabled) {
       debugInstrument.log("create_method_info part 2%n");
       debugInstrument.log("number of parameters: %s%n", paramNames.length);
-      for (int i = 0; i < paramNames.length; i++) {
-        debugInstrument.log("param name: %s%n", paramNames[i]);
+      for (String paramName : paramNames) {
+        debugInstrument.log("param name: %s%n", paramName);
       }
     }
 
@@ -1695,7 +1700,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param item the constant to format
    * @return a string containing the constant's value
    */
-  private final String formatConstantDesc(ConstantDesc item) {
+  private String formatConstantDesc(ConstantDesc item) {
     try {
       return item.resolveConstantDesc(MethodHandles.lookup()).toString();
     } catch (Exception e) {

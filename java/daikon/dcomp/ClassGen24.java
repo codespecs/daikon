@@ -18,11 +18,10 @@ import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.checker.signature.qual.MethodDescriptor;
 
 /**
- * ClassGen24 collects and stores all the relevant information about a class that DCInstrument24
- * might need. ClassGen24 is analogous to the BCEL ClassGen class. The similarity makes it easier to
- * keep DCInstrument.java and DCInstrument24.java in sync.
+ * ClassGen24 represents a class. ClassGen24 is analogous to the BCEL ClassGen class. The similarity
+ * makes it easier to keep DCInstrument.java and DCInstrument24.java in sync.
  *
- * <p>ClassGen24 uses Java's ({@code java.lang.classfile}) APIs for reading and modifying .class
+ * <p>ClassGen24 uses Java's {@code java.lang.classfile} APIs for reading and modifying .class
  * files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more complete and robust
  * (no more fiddling with StackMaps) and are always up to date with any .class file changes (since
  * they are part of the JDK). (We will need to continue to support Instrument.java using BCEL, as we
@@ -39,11 +38,21 @@ public class ClassGen24 {
    */
   private ClassModel classModel;
 
+  // Start of ClassModel items.
+
   /** The class's access flags. */
   private AccessFlags accessFlags;
 
+  /** The list of interfaces this class implements. */
+  private List<ClassEntry> interfaceList;
+
+  /** The name of the class's enclosing class, in binary name format. */
+  private @BinaryName String superclassName;
+
   /** The class's name. */
   private @BinaryName String className;
+
+  // End of ClassModel items.
 
   /** The ClassBuilder for this class. */
   private ClassBuilder classBuilder;
@@ -53,12 +62,6 @@ public class ClassGen24 {
 
   /** True if the class is static. */
   private boolean isStatic;
-
-  /** The name of the class's enclosing class, in binary name format. */
-  private @BinaryName String superclassName;
-
-  /** The list of interfaces this class implements. */
-  private List<ClassEntry> interfaceList;
 
   /**
    * Creates a ClassGen24 object.

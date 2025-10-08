@@ -33,7 +33,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
   //  Class.getName() returns JVM names (eg, [Ljava.lang.String;)
 
   /** Debug flag set from Chicory.debug_decl_print. */
-  public boolean debug = false;
+  public boolean debug;
 
   // If the --comparability-file option is active, there might be
   // variables for which DynComp saw no interactions and did not
@@ -469,7 +469,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
       }
 
     } else { // this is the dummy root for class statics
-      if ((relations != null) && (relations.size() > 0)) {
+      if (relations != null && !relations.isEmpty()) {
         relation = find_relation(cinfo, true, parent, var);
         if (relation != null) {
           int index = relations.indexOf(relation);
@@ -575,7 +575,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
 
     // Write out the variable flags if any are set
     EnumSet<VarFlags> var_flags = var.get_var_flags();
-    if (var_flags.size() > 0) {
+    if (!var_flags.isEmpty()) {
       outFile.print("  flags");
       for (Enum<?> e : var_flags) {
         outFile.print(" " + out_name(e));
@@ -715,7 +715,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
     // one of these should go in the list of relations.
     VarRelation relation = find_relation(ci, is_static_method, parent, var);
     if (relation != null) {
-      if ((relations.size() == 0)
+      if (relations.isEmpty()
           || (relations.get(0).is_class_relation() && relation.is_class_relation())) {
         relations.add(relation);
         relation.id = relations.size();
