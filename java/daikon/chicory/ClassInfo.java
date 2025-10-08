@@ -25,6 +25,9 @@ public class ClassInfo {
   /** True if the class has a class initializer. */
   public boolean hasClinit;
 
+  /** True if the class is a JUnit test class. */
+  public boolean isJUnitTestClass;
+
   // set by initViaReflection()
   /** reflection object for this class. */
   public @MonotonicNonNull Class<?> clazz;

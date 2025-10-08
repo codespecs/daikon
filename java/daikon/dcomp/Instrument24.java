@@ -1,13 +1,19 @@
 package daikon.dcomp;
 
 import daikon.DynComp;
+import daikon.chicory.ClassInfo;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.reflection.Signatures;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.ClassHierarchyResolver;
+import java.lang.classfile.ClassModel;
+import java.lang.classfile.ClassTransform;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
+import java.nio.file.Files;
 import java.security.ProtectionDomain;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
@@ -23,8 +29,15 @@ import org.checkerframework.dataflow.qual.Pure;
  *
  * <p>This class is loaded by Premain at startup. It is a ClassFileTransformer which means that its
  * {@code transform} method gets called each time the JVM loads a class.
+ *
+ * <p>Instrument24 and DCInstrument24 use Java's ({@code java.lang.classfile}) APIs for reading and
+ * modifying .class files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more
+ * complete and robust (no more fiddling with StackMaps) and are always up to date with any .class
+ * file changes (since they are part of the JDK). (We will need to continue to support
+ * Instrument.java using BCEL, as we anticipate our clients using JDK 21 or less for quite some
+ * time.)
  */
-public class Instrument implements ClassFileTransformer {
+public class Instrument24 implements ClassFileTransformer {
 
   /** Directory for debug output. */
   final File debug_dir;
@@ -45,10 +58,10 @@ public class Instrument implements ClassFileTransformer {
   protected static final SimpleLog debug_transform = new SimpleLog(false);
 
   /** Create an instrumenter. Setup debug directories, if needed. */
-  public Instrument() {
+  public Instrument24() {
     debug_transform.enabled =
         DynComp.debug || DynComp.debug_transform || Premain.debug_dcinstrument || DynComp.verbose;
-    daikon.chicory.Instrument.debug_ppt_omit.enabled = DynComp.debug;
+    daikon.chicory.Instrument24.debug_ppt_omit.enabled = DynComp.debug;
 
     debug_dir = DynComp.debug_dir;
     debug_instrumented_dir = new File(debug_dir, "instrumented");
@@ -72,19 +85,35 @@ public class Instrument implements ClassFileTransformer {
     System.out.println();
   }
 
+  // UNDONE: Should we stop using bcel and use classModel.toDebugString() instead?
+
   /**
    * Output a .class file and a .bcel version of the class file.
    *
-   * @param c the Java class to output
+   * @param classBytes a byte array of the class file to output
    * @param directory output location for the files
    * @param className the current class
    */
-  private void outputDebugFiles(JavaClass c, File directory, @BinaryName String className) {
+  public void outputDebugFiles(byte[] classBytes, File directory, @BinaryName String className) {
+    // Convert the classBytes to a BCEL JavaClass
+    JavaClass c;
+    try (ByteArrayInputStream bais = new ByteArrayInputStream(classBytes)) {
+      ClassParser parser = new ClassParser(bais, className);
+      c = parser.parse();
+    } catch (Throwable t) {
+      System.err.printf("Unexpected error %s while reading %s%n", t, className);
+      if (debug_transform.enabled) {
+        t.printStackTrace();
+      }
+      // ignore the error, it shouldn't affect the instrumentation
+      return;
+    }
+
     try {
       debug_transform.log("Dumping .class and .bcel for %s to %s%n", className, directory);
       // Write the byte array to a .class file.
       File outputFile = new File(directory, className + ".class");
-      c.dump(outputFile);
+      Files.write(outputFile.toPath(), classBytes);
       // Write a BCEL-like file.
       BcelUtil.dump(c, directory);
     } catch (Throwable t) {
@@ -115,7 +144,7 @@ public class Instrument implements ClassFileTransformer {
     // for debugging
     // new Throwable().printStackTrace();
 
-    debug_transform.log("%nEntering dcomp.Instrument.transform(): class = %s%n", className);
+    debug_transform.log("%nEntering dcomp.Instrument24.transform(): class = %s%n", className);
 
     if (className == null) {
       // most likely a lambda related class
@@ -213,10 +242,14 @@ public class Instrument implements ClassFileTransformer {
     }
 
     // Parse the bytes of the classfile, die on any errors.
-    JavaClass c;
-    try (ByteArrayInputStream bais = new ByteArrayInputStream(classfileBuffer)) {
-      ClassParser parser = new ClassParser(bais, className);
-      c = parser.parse();
+    ClassFile classFile =
+        ClassFile.of(
+            ClassFile.ClassHierarchyResolverOption.of(
+                ClassHierarchyResolver.ofResourceParsing(cfLoader)));
+
+    ClassModel classModel;
+    try {
+      classModel = classFile.parse(classfileBuffer);
     } catch (Throwable t) {
       System.err.printf("Unexpected error %s reading in %s%n", t, binaryClassName);
       if (debug_transform.enabled) {
@@ -227,14 +260,19 @@ public class Instrument implements ClassFileTransformer {
     }
 
     if (DynComp.dump) {
-      outputDebugFiles(c, debug_uninstrumented_dir, binaryClassName);
+      outputDebugFiles(
+          classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL),
+          debug_uninstrumented_dir,
+          binaryClassName);
     }
 
-    // Instrument the classfile, die on any errors
-    JavaClass njc;
+    // Instrument the classfile, die on any errors.
+    ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
+    DCInstrument24 dci = new DCInstrument24(classFile, classModel, in_jdk);
+    byte @Nullable [] newBytes;
+    // debug_transform.log("%nTransforming: %s%n", binaryClassName);
     try {
-      DCInstrument dci = new DCInstrument(c, in_jdk, loader);
-      njc = dci.instrument();
+      newBytes = dci.instrument(classInfo);
     } catch (Throwable t) {
       System.err.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
       if (debug_transform.enabled) {
@@ -244,11 +282,11 @@ public class Instrument implements ClassFileTransformer {
       return null;
     }
 
-    if (njc != null) {
+    if (newBytes != null) {
       if (DynComp.dump) {
-        outputDebugFiles(njc, debug_instrumented_dir, binaryClassName);
+        outputDebugFiles(newBytes, debug_instrumented_dir, binaryClassName);
       }
-      return njc.getBytes();
+      return newBytes;
     } else {
       debug_transform.log("Didn't instrument %s%n", binaryClassName);
       // No changes to the bytecodes
