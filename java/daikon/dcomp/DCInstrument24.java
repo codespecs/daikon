@@ -573,7 +573,7 @@ public class DCInstrument24 {
               System.out.printf(
                   "%s : %s%n", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
             }
-            if (isJUnitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
+            if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
               junit_parse_seen = true;
               junit_state = JUnitState.TEST_DISCOVERY;
               break;
@@ -591,7 +591,7 @@ public class DCInstrument24 {
               System.out.printf(
                   "%s : %s%n", stack_trace[i].getClassName(), stack_trace[i].getMethodName());
             }
-            if (isJUnitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
+            if (isJunitTrigger(stack_trace[i].getClassName(), stack_trace[i].getMethodName())) {
               local_junit_parse_seen = true;
               break;
             }
@@ -1354,7 +1354,7 @@ public class DCInstrument24 {
    * @param method_name method to be checked
    * @return true if the given method is a JUnit trigger
    */
-  boolean isJUnitTrigger(String classname, String method_name) {
+  boolean isJunitTrigger(String classname, String method_name) {
     if ((classname.contains("JUnitCommandLineParseResult")
             && method_name.equals("parse")) // JUnit 4
         || (classname.contains("EngineDiscoveryRequestResolution")
