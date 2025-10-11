@@ -326,7 +326,8 @@ jobs:
             - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
-      - checkout
+      - checkout:
+          method: full
       - save_cache:
           key: *source-cache
           paths:
@@ -347,7 +348,8 @@ jobs:
             - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
-      - checkout
+      - checkout:
+          method: full
       - save_cache:
           key: *source-cache
           paths:
@@ -368,7 +370,8 @@ jobs:
             - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
-      - checkout
+      - checkout:
+          method: full
       - save_cache:
           key: *source-cache
           paths:
@@ -389,7 +392,8 @@ jobs:
             - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
-      - checkout
+      - checkout:
+          method: full
       - save_cache:
           key: *source-cache
           paths:
@@ -410,7 +414,8 @@ jobs:
             - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
-      - checkout
+      - checkout:
+          method: full
       - save_cache:
           key: *source-cache
           paths:
@@ -985,7 +990,8 @@ jobs:
             - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
-      - checkout
+      - checkout:
+          method: full
       - save_cache:
           key: *source-cache
           paths:
@@ -1006,7 +1012,8 @@ jobs:
             - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
-      - checkout
+      - checkout:
+          method: full
       - save_cache:
           key: *source-cache
           paths:
@@ -1027,7 +1034,8 @@ jobs:
             - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
-      - checkout
+      - checkout:
+          method: full
       - save_cache:
           key: *source-cache
           paths:
@@ -1048,7 +1056,8 @@ jobs:
             - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
-      - checkout
+      - checkout:
+          method: full
       - save_cache:
           key: *source-cache
           paths:
@@ -1069,7 +1078,8 @@ jobs:
             - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
-      - checkout
+      - checkout:
+          method: full
       - save_cache:
           key: *source-cache
           paths:

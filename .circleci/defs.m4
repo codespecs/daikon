@@ -5,8 +5,8 @@ ifelse([the built-in "dnl" macro means "discard to next line",])dnl
 define([canary_os], [ubuntu])dnl
 define([canary_version], [25])dnl
 define([canary_test], [canary_os[]canary_version])dnl
-ifelse([each macro takes two arguments, the OS name and the JDK version])dnl
 dnl
+ifelse([If the first argument is "full", do a full checkout.])dnl
 define([circleci_boilerplate], [dnl
     resource_class: large
     environment:
@@ -18,11 +18,18 @@ define([circleci_boilerplate], [dnl
             - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
             - source-v1-
+ifelse($1,full,[dnl
+      - checkout:
+          method: full
+],[dnl
       - checkout
+])dnl
       - save_cache:
           key: *source-cache
           paths:
             - ".git"])dnl
+dnl
+ifelse([Each macro takes two arguments, the OS name and the JDK version.])dnl
 dnl
 define([quick_job], [dnl
   quick-txt-diff-$1-jdk$2:
@@ -51,7 +58,7 @@ define([misc_job], [dnl
   misc-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2-plus
-circleci_boilerplate
+circleci_boilerplate(full)
       - run:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m])dnl
