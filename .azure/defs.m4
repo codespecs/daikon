@@ -8,22 +8,22 @@ define([canary_test], [canary_os[]canary_version])dnl
 ifelse([each macro takes two arguments, the OS name and the JDK version])dnl
 dnl
 define([quick_job], [dnl
-- job: quick_$1_jdk$2
-ifelse($1$2,canary_test,,[  dependsOn:
-    - canary_jobs
-ifelse($2,canary_version,,[    - quick_$1_jdk[]canary_version
+  - job: quick_$1_jdk$2
+ifelse($1$2,canary_test,,[    dependsOn:
+      - canary_jobs
+ifelse($2,canary_version,,[      - quick_$1_jdk[]canary_version
 ])dnl
-ifelse($1,canary_os,,[    - quick_[]canary_os[]_jdk$2
+ifelse($1,canary_os,,[      - quick_[]canary_os[]_jdk$2
 ])dnl
 ])dnl
   pool:
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-$1-jdk$2${{ variables.testingSuffix }}:latest
   steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-quick-txt-diff.sh
-    displayName: test-quick-txt-diff.sh])dnl
+    - checkout: self
+      fetchDepth: 25
+    - bash: ./scripts/test-quick-txt-diff.sh
+      displayName: test-quick-txt-diff.sh])dnl
 dnl
 define([nonquick_job], [dnl
 - job: nonquick_$1_jdk$2
@@ -38,10 +38,10 @@ ifelse($1,canary_os,,[    - nonquick_[]canary_os[]_jdk$2
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-$1-jdk$2${{ variables.testingSuffix }}:latest
   steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-nonquick-txt-diff.sh
-    displayName: test-nonquick-txt-diff.sh])dnl
+    - checkout: self
+      fetchDepth: 25
+    - bash: ./scripts/test-nonquick-txt-diff.sh
+      displayName: test-nonquick-txt-diff.sh])dnl
 dnl
 define([nontxt_job], [dnl
 - job: nontxt_$1_jdk$2
@@ -74,12 +74,12 @@ ifelse($1,canary_os,,[    - misc_[]canary_os[]_jdk$2
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-$1-jdk$2-plus${{ variables.testingSuffix }}:latest
   steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: make showvars
-    displayName: make showvars
-  - bash: ./scripts/test-misc.sh
-    displayName: test-misc.sh])dnl
+    - checkout: self
+      fetchDepth: 25
+    - bash: make showvars
+      displayName: make showvars
+    - bash: ./scripts/test-misc.sh
+      displayName: test-misc.sh])dnl
 dnl
 define([kvasir_job], [dnl
 - job: kvasir_$1_jdk$2
@@ -94,10 +94,10 @@ ifelse($1,canary_os,,[    - kvasir_[]canary_os[]_jdk$2
     vmImage: 'ubuntu-latest'
   container: mdernst/daikon-$1-jdk$2-plus${{ variables.testingSuffix }}:latest
   steps:
-  - checkout: self
-    fetchDepth: 25
-  - bash: ./scripts/test-kvasir.sh
-    displayName: test-kvasir.sh])dnl
+    - checkout: self
+      fetchDepth: 25
+    - bash: ./scripts/test-kvasir.sh
+      displayName: test-kvasir.sh])dnl
 dnl
 define([typecheck_latest_job], [dnl
 - job: typecheck_latest_$1_jdk$2
