@@ -15,7 +15,7 @@ define([circleci_boilerplate], [dnl
     steps:
       - restore_cache:
           keys:
-            - &source$1-cache source-v1$1-{{ .Branch }}-{{ .Revision }}
+            - &source$1-cache source$1-v1$1-{{ .Branch }}-{{ .Revision }}
             - source$1-v1$1-{{ .Branch }}-
             - source$1-v1$1-
       - checkout[]ifelse($1,full,[:
