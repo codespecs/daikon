@@ -323,13 +323,13 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
+            - sourcefull-v1full-{{ .Branch }}-
+            - sourcefull-v1full-
       - checkout:
           method: full
       - save_cache:
-          key: *source-cache
+          key: *sourcefull-cache
           paths:
             - ".git"
       - run:
@@ -345,13 +345,13 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
+            - sourcefull-v1full-{{ .Branch }}-
+            - sourcefull-v1full-
       - checkout:
           method: full
       - save_cache:
-          key: *source-cache
+          key: *sourcefull-cache
           paths:
             - ".git"
       - run:
@@ -367,13 +367,13 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
+            - sourcefull-v1full-{{ .Branch }}-
+            - sourcefull-v1full-
       - checkout:
           method: full
       - save_cache:
-          key: *source-cache
+          key: *sourcefull-cache
           paths:
             - ".git"
       - run:
@@ -389,13 +389,13 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
+            - sourcefull-v1full-{{ .Branch }}-
+            - sourcefull-v1full-
       - checkout:
           method: full
       - save_cache:
-          key: *source-cache
+          key: *sourcefull-cache
           paths:
             - ".git"
       - run:
@@ -411,13 +411,13 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
+            - sourcefull-v1full-{{ .Branch }}-
+            - sourcefull-v1full-
       - checkout:
           method: full
       - save_cache:
-          key: *source-cache
+          key: *sourcefull-cache
           paths:
             - ".git"
       - run:
@@ -987,13 +987,13 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
+            - sourcefull-v1full-{{ .Branch }}-
+            - sourcefull-v1full-
       - checkout:
           method: full
       - save_cache:
-          key: *source-cache
+          key: *sourcefull-cache
           paths:
             - ".git"
       - run:
@@ -1009,13 +1009,13 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
+            - sourcefull-v1full-{{ .Branch }}-
+            - sourcefull-v1full-
       - checkout:
           method: full
       - save_cache:
-          key: *source-cache
+          key: *sourcefull-cache
           paths:
             - ".git"
       - run:
@@ -1031,13 +1031,13 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
+            - sourcefull-v1full-{{ .Branch }}-
+            - sourcefull-v1full-
       - checkout:
           method: full
       - save_cache:
-          key: *source-cache
+          key: *sourcefull-cache
           paths:
             - ".git"
       - run:
@@ -1053,13 +1053,13 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
+            - sourcefull-v1full-{{ .Branch }}-
+            - sourcefull-v1full-
       - checkout:
           method: full
       - save_cache:
-          key: *source-cache
+          key: *sourcefull-cache
           paths:
             - ".git"
       - run:
@@ -1075,13 +1075,13 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
+            - sourcefull-v1full-{{ .Branch }}-
+            - sourcefull-v1full-
       - checkout:
           method: full
       - save_cache:
-          key: *source-cache
+          key: *sourcefull-cache
           paths:
             - ".git"
       - run:
@@ -1317,8 +1317,8 @@ workflows:
             - kvasir-ubuntu-jdk25
 
       - kvasir-ubuntu-jdk25
-      ## The Checker Framework cannot be built, or run, under Java 8 or 11.
-      ## Thus, there is no typecheck_*_ubuntu_jdk{8,11) job.
+## The Checker Framework cannot be built, or run, under Java 8 or 11.
+## Thus, there is no typecheck_*_ubuntu_jdk{8,11} job.
       - typecheck-latest-ubuntu-jdk17:
           requires:
             - canary-jobs

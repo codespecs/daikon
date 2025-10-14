@@ -15,17 +15,13 @@ define([circleci_boilerplate], [dnl
     steps:
       - restore_cache:
           keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-ifelse($1,full,[dnl
-      - checkout:
-          method: full
-],[dnl
-      - checkout
-])dnl
+            - &source$1-cache source$1-v1$1-{{ .Branch }}-{{ .Revision }}
+            - source$1-v1$1-{{ .Branch }}-
+            - source$1-v1$1-
+      - checkout[]ifelse($1,full,[:
+          method: full])
       - save_cache:
-          key: *source-cache
+          key: *source$1-cache
           paths:
             - ".git"])dnl
 dnl
