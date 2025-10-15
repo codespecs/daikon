@@ -42,7 +42,7 @@ public class Instrument24 implements ClassFileTransformer {
   /** Directory for debug output. */
   final File debug_dir;
 
-  /** Directory into which to dump debug-instrumented classes. */
+  /** Directory into which to dump instrumented classes. */
   final File debug_instrumented_dir;
 
   /** Directory into which to dump original classes. */
@@ -85,8 +85,6 @@ public class Instrument24 implements ClassFileTransformer {
     System.out.println();
   }
 
-  // UNDONE: Should we stop using bcel and use classModel.toDebugString() instead?
-
   /**
    * Output a .class file and a .bcel version of the class file.
    *
@@ -94,19 +92,20 @@ public class Instrument24 implements ClassFileTransformer {
    * @param directory output location for the files
    * @param className the current class
    */
-  public void outputDebugFiles(byte[] classBytes, File directory, @BinaryName String className) {
+  public void writeDebugClassFiles(
+      byte[] classBytes, File directory, @BinaryName String className) {
+    // UNDONE: Should we stop using bcel and use classModel.toDebugString() instead?
     // Convert the classBytes to a BCEL JavaClass
-    JavaClass c;
+    JavaClass c = null;
     try (ByteArrayInputStream bais = new ByteArrayInputStream(classBytes)) {
       ClassParser parser = new ClassParser(bais, className);
       c = parser.parse();
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s while reading %s%n", t, className);
+      System.err.printf("Unexpected error %s while parsing the bytes of %s%n", t, className);
       if (debug_transform.enabled) {
         t.printStackTrace();
       }
-      // ignore the error, it shouldn't affect the instrumentation
-      return;
+      // Ignore the error, it shouldn't affect the instrumentation.
     }
 
     try {
@@ -115,13 +114,15 @@ public class Instrument24 implements ClassFileTransformer {
       File outputFile = new File(directory, className + ".class");
       Files.write(outputFile.toPath(), classBytes);
       // Write a BCEL-like file.
-      BcelUtil.dump(c, directory);
+      if (c != null) {
+        BcelUtil.dump(c, directory);
+      }
     } catch (Throwable t) {
       System.err.printf("Unexpected error %s writing debug files for: %s%n", t, className);
       if (debug_transform.enabled) {
         t.printStackTrace();
       }
-      // ignore the error, it shouldn't affect the instrumentation
+      // Ignore the error, it shouldn't affect the instrumentation.
     }
   }
 
@@ -141,7 +142,7 @@ public class Instrument24 implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    // for debugging
+    // For debugging.
     // new Throwable().printStackTrace();
 
     debug_transform.log("%nEntering dcomp.Instrument24.transform(): class = %s%n", className);
@@ -234,11 +235,11 @@ public class Instrument24 implements ClassFileTransformer {
     ClassLoader cfLoader;
     if (loader == null) {
       cfLoader = ClassLoader.getSystemClassLoader();
-      debug_transform.log("Transforming class %s, loader %s - %s%n", className, loader, cfLoader);
+      debug_transform.log("Transforming class %s, loaders %s, %s%n", className, loader, cfLoader);
     } else {
       cfLoader = loader;
       debug_transform.log(
-          "Transforming class %s, loader %s - %s%n", className, loader, loader.getParent());
+          "Transforming class %s, loaders %s, %s%n", className, loader, loader.getParent());
     }
 
     // Parse the bytes of the classfile, die on any errors.
@@ -251,16 +252,16 @@ public class Instrument24 implements ClassFileTransformer {
     try {
       classModel = classFile.parse(classfileBuffer);
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s reading in %s%n", t, binaryClassName);
+      System.err.printf("Unexpected error %s while parsing bytes of %s%n", t, binaryClassName);
       if (debug_transform.enabled) {
         t.printStackTrace();
       }
-      // No changes to the bytecodes
+      // No changes to the bytecodes.
       return null;
     }
 
     if (DynComp.dump) {
-      outputDebugFiles(
+      writeDebugClassFiles(
           classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL),
           debug_uninstrumented_dir,
           binaryClassName);
@@ -270,7 +271,6 @@ public class Instrument24 implements ClassFileTransformer {
     ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
     DCInstrument24 dci = new DCInstrument24(classFile, classModel, in_jdk);
     byte @Nullable [] newBytes;
-    // debug_transform.log("%nTransforming: %s%n", binaryClassName);
     try {
       newBytes = dci.instrument(classInfo);
     } catch (Throwable t) {
@@ -278,18 +278,18 @@ public class Instrument24 implements ClassFileTransformer {
       if (debug_transform.enabled) {
         t.printStackTrace();
       }
-      // No changes to the bytecodes
+      // No changes to the bytecodes.
       return null;
     }
 
     if (newBytes != null) {
       if (DynComp.dump) {
-        outputDebugFiles(newBytes, debug_instrumented_dir, binaryClassName);
+        writeDebugClassFiles(newBytes, debug_instrumented_dir, binaryClassName);
       }
       return newBytes;
     } else {
       debug_transform.log("Didn't instrument %s%n", binaryClassName);
-      // No changes to the bytecodes
+      // No changes to the bytecodes.
       return null;
     }
   }

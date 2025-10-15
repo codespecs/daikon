@@ -228,7 +228,7 @@ public final class BuildJDK24 {
     try {
       jrt = jrt.getCanonicalFile();
     } catch (Exception e) {
-      System.err.printf("Error geting canonical file for %s: %s", jrt, e.getMessage());
+      System.err.printf("Error getting canonical file for %s: %s", jrt, e.getMessage());
       System.exit(1);
     }
 
@@ -410,7 +410,7 @@ public final class BuildJDK24 {
         @SuppressWarnings("signature:assignment") // type conversion
         @BinaryName String classname = classFileName.replace(".class", "").replace('/', '.');
         if (DynComp.dump) {
-          inst24.outputDebugFiles(buffer, inst24.debug_uninstrumented_dir, classname);
+          inst24.writeDebugClassFiles(buffer, inst24.debug_uninstrumented_dir, classname);
         }
 
         // Instrument the class file.
@@ -435,7 +435,7 @@ public final class BuildJDK24 {
     // Create the DcompMarker class which is used to identify instrumented calls.
     createDCompClass(destDir, "DCompMarker", false);
 
-    // The remainer of the generated classes are needed for JDK 9+ only.
+    // The remainder of the generated classes are needed for JDK 9+ only.
     if (BcelUtil.javaVersion > 8) {
       createDCompClass(destDir, "DCompInstrumented", true);
       createDCompClass(destDir, "DCompClone", false);
@@ -528,7 +528,7 @@ public final class BuildJDK24 {
       throw new Error("Instrumentation failed: " + classFile);
     }
     if (DynComp.dump) {
-      inst24.outputDebugFiles(classBytes, inst24.debug_instrumented_dir, classname);
+      inst24.writeDebugClassFiles(classBytes, inst24.debug_instrumented_dir, classname);
     }
     skipped_methods.addAll(dci.get_skipped_methods());
     File classfile = new File(classFileName);

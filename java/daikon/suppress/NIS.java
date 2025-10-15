@@ -215,7 +215,7 @@ public class NIS {
     suppressor_proto_invs = new ArrayList<@Prototype Invariant>();
 
     // This should be the first statement in the method, but put it after the
-    // field initalizations so that the Initialization Checker doesn't complain.
+    // field initializations so that the Initialization Checker doesn't complain.
     if (!dkconfig_enabled) {
       return;
     }
