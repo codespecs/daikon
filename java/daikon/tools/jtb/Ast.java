@@ -47,11 +47,11 @@ public class Ast {
       String javafilename, Node root, Writer output, AnnotateVisitor visitor) {
     root.accept(visitor);
     root.accept(new InsertCommentFormatter(visitor.addedComments));
-    PrintWriter writer = new PrintWriter(output, true);
-    for (int i = 0; i < visitor.javaFileLines.size(); i++) {
-      writer.println(visitor.javaFileLines.get(i));
+    try (PrintWriter writer = new PrintWriter(output, true)) {
+      for (int i = 0; i < visitor.javaFileLines.size(); i++) {
+        writer.println(visitor.javaFileLines.get(i));
+      }
     }
-    writer.close();
 
     // root.accept(new TreeDumper(output));
   }
