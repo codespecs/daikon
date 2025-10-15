@@ -208,7 +208,7 @@ public class DCInstrument extends InstructionListUtils {
     STARTING,
     /** Have seen a JUnit class file that loads JUnit test classes. */
     TEST_DISCOVERY,
-    /** Have completed identifing JUnit test classes. */
+    /** Have completed identifying JUnit test classes. */
     RUNNING
   }
 
@@ -848,7 +848,7 @@ public class DCInstrument extends InstructionListUtils {
     int i = classname.lastIndexOf('.');
     if (i > 0) {
       // Don't instrument problem packages.
-      // See Premain.java for a list and explainations.
+      // See Premain.java for a list and explanations.
       String packageName = classname.substring(0, i);
       if (Premain.problem_packages.contains(packageName)) {
         debug_transform.log("Skipping problem package %s%n", packageName);
@@ -858,7 +858,7 @@ public class DCInstrument extends InstructionListUtils {
 
     if (BcelUtil.javaVersion > 8) {
       // Don't instrument problem classes.
-      // See Premain.java for a list and explainations.
+      // See Premain.java for a list and explanations.
       if (Premain.problem_classes.contains(classname)) {
         debug_transform.log("Skipping problem class %s%n", classname);
         return gen.getJavaClass().copy();
