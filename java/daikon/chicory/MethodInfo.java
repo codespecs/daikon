@@ -52,7 +52,7 @@ public class MethodInfo {
    * Exit locations for this method.
    *
    * <p>Chicory and DynComp treat this field differently. Chicory only adds an exit location if the
-   * corresponding entry in exit_location_is_included is true. (Bassed on the ppt omit/select
+   * corresponding entry in exit_location_is_included is true. (Based on the ppt omit/select
    * patterns.) DynComp adds all exit locations and sets every exit_location_is_included value to
    * true.
    */
