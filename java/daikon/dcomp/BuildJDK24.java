@@ -228,7 +228,7 @@ public final class BuildJDK24 {
     try {
       jrt = jrt.getCanonicalFile();
     } catch (Exception e) {
-      System.err.printf("Error getting canonical file for %s: %s", jrt, e.getMessage());
+      System.err.printf("Error getting canonical file for %s: %s%n", jrt, e.getMessage());
       System.exit(1);
     }
 
