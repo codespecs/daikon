@@ -410,7 +410,7 @@ public final class BuildJDK24 {
         @SuppressWarnings("signature:assignment") // type conversion
         @BinaryName String classname = classFileName.replace(".class", "").replace('/', '.');
         if (DynComp.dump) {
-          inst24.outputDebugFiles(buffer, inst24.debug_uninstrumented_dir, classname);
+          inst24.writeDebugClassFiles(buffer, inst24.debug_uninstrumented_dir, classname);
         }
 
         // Instrument the class file.
@@ -528,7 +528,7 @@ public final class BuildJDK24 {
       throw new Error("Instrumentation failed: " + classFile);
     }
     if (DynComp.dump) {
-      inst24.outputDebugFiles(classBytes, inst24.debug_instrumented_dir, classname);
+      inst24.writeDebugClassFiles(classBytes, inst24.debug_instrumented_dir, classname);
     }
     skipped_methods.addAll(dci.get_skipped_methods());
     File classfile = new File(classFileName);

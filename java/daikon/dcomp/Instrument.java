@@ -29,7 +29,7 @@ public class Instrument implements ClassFileTransformer {
   /** Directory for debug output. */
   final File debug_dir;
 
-  /** Directory into which to dump debug-instrumented classes. */
+  /** Directory into which to dump instrumented classes. */
   final File debug_instrumented_dir;
 
   /** Directory into which to dump original classes. */
@@ -79,7 +79,7 @@ public class Instrument implements ClassFileTransformer {
    * @param directory output location for the files
    * @param className the current class
    */
-  private void outputDebugFiles(JavaClass c, File directory, @BinaryName String className) {
+  private void writeDebugClassFiles(JavaClass c, File directory, @BinaryName String className) {
     try {
       debug_transform.log("Dumping .class and .bcel for %s to %s%n", className, directory);
       // Write the byte array to a .class file.
@@ -92,7 +92,7 @@ public class Instrument implements ClassFileTransformer {
       if (debug_transform.enabled) {
         t.printStackTrace();
       }
-      // ignore the error, it shouldn't affect the instrumentation
+      // Ignore the error, it shouldn't affect the instrumentation.
     }
   }
 
@@ -112,7 +112,7 @@ public class Instrument implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    // for debugging
+    // For debugging.
     // new Throwable().printStackTrace();
 
     debug_transform.log("%nEntering dcomp.Instrument.transform(): class = %s%n", className);
@@ -205,11 +205,11 @@ public class Instrument implements ClassFileTransformer {
     ClassLoader cfLoader;
     if (loader == null) {
       cfLoader = ClassLoader.getSystemClassLoader();
-      debug_transform.log("Transforming class %s, loader %s - %s%n", className, loader, cfLoader);
+      debug_transform.log("Transforming class %s, loaders %s, %s%n", className, loader, cfLoader);
     } else {
       cfLoader = loader;
       debug_transform.log(
-          "Transforming class %s, loader %s - %s%n", className, loader, loader.getParent());
+          "Transforming class %s, loaders %s, %s%n", className, loader, loader.getParent());
     }
 
     // Parse the bytes of the classfile, die on any errors.
@@ -218,16 +218,16 @@ public class Instrument implements ClassFileTransformer {
       ClassParser parser = new ClassParser(bais, className);
       c = parser.parse();
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s reading in %s%n", t, binaryClassName);
+      System.err.printf("Unexpected error %s while parsing bytes of %s%n", t, binaryClassName);
       if (debug_transform.enabled) {
         t.printStackTrace();
       }
-      // No changes to the bytecodes
+      // No changes to the bytecodes.
       return null;
     }
 
     if (DynComp.dump) {
-      outputDebugFiles(c, debug_uninstrumented_dir, binaryClassName);
+      writeDebugClassFiles(c, debug_uninstrumented_dir, binaryClassName);
     }
 
     // Instrument the classfile, die on any errors
@@ -240,18 +240,18 @@ public class Instrument implements ClassFileTransformer {
       if (debug_transform.enabled) {
         t.printStackTrace();
       }
-      // No changes to the bytecodes
+      // No changes to the bytecodes.
       return null;
     }
 
     if (njc != null) {
       if (DynComp.dump) {
-        outputDebugFiles(njc, debug_instrumented_dir, binaryClassName);
+        writeDebugClassFiles(njc, debug_instrumented_dir, binaryClassName);
       }
       return njc.getBytes();
     } else {
       debug_transform.log("Didn't instrument %s%n", binaryClassName);
-      // No changes to the bytecodes
+      // No changes to the bytecodes.
       return null;
     }
   }
