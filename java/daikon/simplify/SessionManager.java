@@ -132,18 +132,18 @@ public class SessionManager implements Closeable {
           throw new RuntimeException(
               "Could not find resource daikon/simplify/" + fileName + " on the classpath");
         }
-        BufferedReader lines = new BufferedReader(new InputStreamReader(bg_stream, UTF_8));
-        String line;
-        while ((line = lines.readLine()) != null) {
-          line = line.trim();
-          if ((line.length() == 0) || line.startsWith(";")) {
-            continue;
+        try (BufferedReader lines = new BufferedReader(new InputStreamReader(bg_stream, UTF_8))) {
+          String line;
+          while ((line = lines.readLine()) != null) {
+            line = line.trim();
+            if ((line.length() == 0) || line.startsWith(";")) {
+              continue;
+            }
+            result.append(" ");
+            result.append(line);
+            result.append(daikon.Global.lineSep);
           }
-          result.append(" ");
-          result.append(line);
-          result.append(daikon.Global.lineSep);
         }
-        lines.close();
         prover_background = result.toString();
       } catch (IOException e) {
         throw new RuntimeException("Could not load prover background");

@@ -178,15 +178,15 @@ public class Premain {
                   + " see Daikon manual, section \"Instrumenting the JDK with DynComp\"");
           System.exit(1);
         }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(strm, UTF_8));
-
-        while (true) {
-          String line = reader.readLine();
-          if (line == null) {
-            break;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(strm, UTF_8))) {
+          while (true) {
+            String line = reader.readLine();
+            if (line == null) {
+              break;
+            }
+            // System.out.printf("adding '%s'%n", line);
+            pre_instrumented.add(line);
           }
-          // System.out.printf("adding '%s'%n", line);
-          pre_instrumented.add(line);
         }
       }
     }

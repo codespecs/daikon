@@ -32,24 +32,13 @@ public class CommandHandler {
       System.err.println("Didn't find documentation for " + getClass());
       return;
     }
-    BufferedReader reader = new BufferedReader(new InputStreamReader(in, UTF_8));
-    try {
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(in, UTF_8))) {
       String line;
       while ((line = reader.readLine()) != null) {
         System.err.println(line);
       }
     } catch (IOException e) {
-      try {
-        reader.close();
-      } catch (IOException e2) {
-        // ignore second exception
-      }
-      throw new Error(e);
-    }
-    try {
-      reader.close();
-    } catch (IOException e) {
-      throw new UncheckedIOException("problem closing " + docFile, e);
+      throw new UncheckedIOException("problem reading " + docFile, e);
     }
   }
 }
