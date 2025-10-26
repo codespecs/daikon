@@ -3605,7 +3605,7 @@ Specifies the maximum size, in bytes, of the memory allocation pool for
 the target program.  Also applies to Daikon, if the @option{--daikon}
 command-line argument is given.
 The size is specified in the same manner as the
-@option{--Xmx} switch to @command{java}; for example: @option{--heap-size=8g}.
+@option{-Xmx} switch to @command{java}; for example: @option{--heap-size=8g}.
 
 @item --premain=@var{path}
 Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
@@ -7926,7 +7926,7 @@ available to Chicory and to Daikon (the latter with Chicory's
 @option{--heap-size} command-line argument).  For example:
 @example
 java -Xmx8g daikon.Chicory --comparability-file=MyClass.decls-DynComp \
-     --heap-size=2600m --daikon mypackage.MyClass arg1 arg2 arg3
+     --heap-size=8g --daikon mypackage.MyClass arg1 arg2 arg3
 @end example
 
 When using the Java @command{HotSpot} JVM, an additional parameter may need to
