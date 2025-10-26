@@ -919,7 +919,7 @@ step may take several minutes.
 Since the default memory size used by a Java virtual machine varies, we
 suggest that Daikon be run with at least 256 megabytes of
 memory (and perhaps much more).  For many JVMs, specify a maximum heap size
-of @nospellcheck{3.6GB} by the option @option{-Xmx8g}.
+of @nospellcheck{8 GB} by using @option{-Xmx8g}.
 For more information about specifying the memory usage for Daikon, see
 @ref{Out of memory}.
 
