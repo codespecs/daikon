@@ -1,4 +1,4 @@
-JAVA = java -Xmx3600m -XX:MaxPermSize=768M
+JAVA = java -Xmx8g -XX:MaxPermSize=768M
 # DAIKON = ${JAVA} daikon.Daikon --no_text_output --show_progress --suppress_redundant
 DAIKON = ${JAVA} daikon.Daikon --no_text_output --show_progress
 

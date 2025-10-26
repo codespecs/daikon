@@ -11,8 +11,8 @@ DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 PROGRAM := $(notdir $(shell pwd))
-DAIKON := java -cp $(DAIKON_CLASSPATH) -Xmx3600m daikon.Daikon
-INV_DIFF := java -cp $(DAIKON_CLASSPATH) -Xmx3600m daikon.diff.Diff
+DAIKON := java -cp $(DAIKON_CLASSPATH) -Xmx8g daikon.Daikon
+INV_DIFF := java -cp $(DAIKON_CLASSPATH) -Xmx8g daikon.diff.Diff
 DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DIFF_CLASS?=${DAIKONDIR}/java/daikon/diff/Diff.class
 
