@@ -188,14 +188,20 @@ CP_PARENTS := rsync -aR
 ifeq ($(shell uname), Darwin)
   JAVA_HOME ?= $(/usr/libexec/java_home)
 else
-  JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
+ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
+  JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
+else
+  $(info Failure: Here is the output of: which javac)
+  $(info $(shell which javac))
+  $(error 'which javac' had exit status 1)
 endif
-JAVA  := $(JAVA_HOME)/bin/java
-JAVAC ?= $(JAVA_HOME)/bin/javac
+endif
+JAVA  := ${JAVA_HOME}/bin/java
+JAVAC ?= ${JAVA_HOME}/bin/javac
 
 JUNIT_CLASSPATH ?=
 
-JAVALIB_CLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
+JAVALIB_CLASSPATH := ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
@@ -250,83 +256,32 @@ ifneq (${JAVA8_OR_NEWER}, 1)
 endif
 
 # goal_name is a function that will be called like "$(call goal_name, FILENAME)"
-# to compute goal filename extension.  Java 8 is the default.
-# If we are running Java 19:
-#    if filename.test.goal.j19 exists, use it;
-#    otherwise, if filename.test.goal.j17 exists, use it;
-#    otherwise, if filename.test.goal.j11 exists, use it;
-# If we are running Java 17:
-#    if filename.test.goal.j17 exists, use it;
-#    otherwise, if filename.test.goal.j11 exists, use it;
-# otherwise, if we are running Java 11:
-#    if filename.test.goal.j11 exists, use it;
-# otherwise, use filename.test.goal
-# Reasons for different behavior between Java 8 and Java 11 include:
+# to compute goal filename extension.
+# The argument ($(1)) is '<filename>.<test>', which is passed to "$(call goal_name, ...)".
+# The algorithm is:
+#   For every Java version NN:
+#     if we are running Java NN or later and if filename.test.goal.jNN exists, use it.
+#   otherwise, use filename.test.goal
+# Reasons for different behavior between Java versions include:
 # - javac versions 8 & 9 sometimes generate dummy field accessor methods
 #   that javac 11 does not
 # - string concatenation of variables sometimes caused the varaibles to be
 #   associated in Java 8 but not in Java 11. (This is an improvement.)
 #
-# The argument ($(1)) is '<filename>.<test>', which is passed to "$(call goal_name, ...)".
-#
 # This goal_name does not apply to kvasir-tests which
 # have their own goal_name calculation.
-goal_name = $(if $(findstring 0, $(JAVA11_OR_NEWER)), \
-				$(1).goal, \
-				$(if $(findstring 1, $(JAVA24_OR_NEWER)), \
-					$(if $(shell if [ -f $(1).goal.j24 ] ; then echo true; fi), \
-						$(1).goal.j24, \
-					    $(if $(shell if [ -f $(1).goal.j21 ] ; then echo true; fi), \
-						    $(1).goal.j21, \
-					        $(if $(shell if [ -f $(1).goal.j19 ] ; then echo true; fi), \
-						        $(1).goal.j19, \
-						        $(if $(shell if [ -f $(1).goal.j17 ] ; then echo true; fi), \
-							        $(1).goal.j17, \
-						            $(if $(shell if [ -f $(1).goal.j11 ] ; then echo true; fi), \
-							            $(1).goal.j11, \
-							            $(1).goal) \
-						            ) \
-						        ) \
-						    ) \
-					), \
-					$(if $(findstring 1, $(JAVA21_OR_NEWER)), \
-						$(if $(shell if [ -f $(1).goal.j21 ] ; then echo true; fi), \
-							$(1).goal.j21, \
-						    $(if $(shell if [ -f $(1).goal.j19 ] ; then echo true; fi), \
-							    $(1).goal.j19, \
-							    $(if $(shell if [ -f $(1).goal.j17 ] ; then echo true; fi), \
-								    $(1).goal.j17, \
-							        $(if $(shell if [ -f $(1).goal.j11 ] ; then echo true; fi), \
-								        $(1).goal.j11, \
-								        $(1).goal) \
-							        ) \
-							    ) \
-						), \
-					    $(if $(findstring 1, $(JAVA19_OR_NEWER)), \
-						    $(if $(shell if [ -f $(1).goal.j19 ] ; then echo true; fi), \
-							    $(1).goal.j19, \
-							    $(if $(shell if [ -f $(1).goal.j17 ] ; then echo true; fi), \
-								    $(1).goal.j17, \
-							        $(if $(shell if [ -f $(1).goal.j11 ] ; then echo true; fi), \
-								        $(1).goal.j11, \
-								        $(1).goal) \
-							    ) \
-						    ), \
-					        $(if $(findstring 1, $(JAVA17_OR_NEWER)), \
-						        $(if $(shell if [ -f $(1).goal.j17 ] ; then echo true; fi), \
-							        $(1).goal.j17, \
-							        $(if $(shell if [ -f $(1).goal.j11 ] ; then echo true; fi), \
-								        $(1).goal.j11, \
-								        $(1).goal) \
-						        ), \
-						        $(if $(shell if [ -f $(1).goal.j11 ] ; then echo true; fi), \
-							        $(1).goal.j11, \
-							        $(1).goal) \
-					          ) \
-					      ) \
-					  ) \
-				  ) \
-			)
+goal_name = \
+  $(if $(and $(findstring 1, $(JAVA24_OR_NEWER)), $(wildcard $(1).goal.j24)), \
+       $(1).goal.j23, \
+    $(if $(and $(findstring 1, $(JAVA21_OR_NEWER)), $(wildcard $(1).goal.j21)), \
+         $(1).goal.j21, \
+      $(if $(and $(findstring 1, $(JAVA19_OR_NEWER)), $(wildcard $(1).goal.j19)), \
+	   $(1).goal.j19, \
+	$(if $(and $(findstring 1, $(JAVA17_OR_NEWER)), $(wildcard $(1).goal.j17)), \
+	     $(1).goal.j17, \
+	  $(if $(and $(findstring 1, $(JAVA11_OR_NEWER)), $(wildcard $(1).goal.j11)), \
+	       $(1).goal.j11, \
+             $(1).goal)))))
 
 
 $(PRINT_INVARIANTS_CLASS):
@@ -548,6 +503,7 @@ $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-ti
 	@echo
 	@echo "### Run Chicory (${PROJECT_FILE})"
 	@echo
+	export LD_LIBRARY_PATH=$(PROJECT) && \
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 	  --dtrace-file=$(PROJECT_FILE).dtrace.gz \
 	  --comparability-file=$(CWD)/$(PROJECT_FILE).decls-DynComp \
@@ -603,7 +559,9 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
 #	@echo inst_Files: '$(INST_FILES)'
 	rm -f $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
+	export LD_LIBRARY_PATH=$(PROJECT) && \
 	$(RUN_JAVA) daikon.DynComp $(DCOMP_ARGS) ${JUNIT} $(MAIN_CLASS) $(MAIN_ARGS)
+	export LD_LIBRARY_PATH=$(PROJECT) && \
 	$(RUN_JAVA) daikon.DynComp '--ppt-select-pattern=$(INST_FILES)' \
 		--comparability-file=$(PROJECT_FILE).txt-cset-nojdk \
 		--decl_file $(PROJECT_FILE).decls-DynComp-nojdk \
@@ -699,6 +657,7 @@ ${SPINFO_INV_FILE}: ${PROJECT_FILE}.decls-DynComp ${PROJECT_FILE}.spinfo-static 
 	@echo
 	@echo "### run Chicory with DynComp input (${PROJECT_FILE})"
 	@echo
+	export LD_LIBRARY_PATH=$(PROJECT) && \
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 		--dtrace-file=$(PROJECT_FILE)-dyncomp.dtrace.gz \
 		--comparability-file=${CWD}/$(PROJECT_FILE).decls-DynComp \
@@ -910,12 +869,24 @@ txt-all: ${PROJECT_FILE}.txt-daikon ${PROJECT_FILE}.txt-simplify merge;
 endif
 endif
 
+ifdef SKIP_TEST
+diffs:
+	@echo "SKIP_TEST is set for: ${PROJECT_FILE}"
+else
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make diffs          : run all regression tests and display results"
 diffs: txt-diff results
+endif
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-diff       : makes .diff files (from diff -u $$.goal)"
+
+ifdef SKIP_TEST
+txt-diff:
+	@echo "SKIP_TEST is set for: ${PROJECT_FILE}"
+else
+
+# !SKIP_TEST
 
 ifdef ESC_ON
 ifndef NO_MERGE
@@ -989,6 +960,7 @@ endif
 endif # ifndef NO_MERGE
 endif # ifdef NO_JML
 endif # ifdef ESC_ON
+endif # ifdef SKIP_TEST
 
 txt-daikon-diff: ${PROJECT_FILE}.txt-daikon.diff;
 txt-daikon-end2end-diff: ${PROJECT_FILE}.txt-daikon-end2end.diff;
@@ -1421,6 +1393,13 @@ showvars:
 	@echo "RUN_JAVA            =" ${RUN_JAVA}
 	@echo "java version:"
 	@${RUN_JAVA} -version
+	@echo "JAVA24_OR_NEWER     =" ${JAVA24_OR_NEWER}
+	@echo "JAVA21_OR_NEWER     =" ${JAVA21_OR_NEWER}
+	@echo "JAVA19_OR_NEWER     =" ${JAVA19_OR_NEWER}
+	@echo "JAVA17_OR_NEWER     =" ${JAVA17_OR_NEWER}
+	@echo "JAVA11_OR_NEWER     =" ${JAVA11_OR_NEWER}
+	@echo "JAVA8_OR_NEWER      =" ${JAVA8_OR_NEWER}
+
 	@echo "CLASSPATH           =" ${CLASSPATH}
 	@echo "DAIKON_TESTS_CLASSPATH =" ${DAIKON_TESTS_CLASSPATH}
 	@echo "SHELL               =" ${SHELL}

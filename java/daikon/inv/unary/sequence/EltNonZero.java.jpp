@@ -111,7 +111,7 @@ public final class CLASSNAME extends SUPERCLASS {
     return new CLASSNAME(slice);
   }
 
-  /** Returns whether or not the variable is a pointer. */
+  /** Returns true if the variable is a pointer. */
   @Pure
   private boolean is_pointer(@GuardSatisfied CLASSNAME this) {
     return !ppt.var_infos[0].type.BASEISTYPE;

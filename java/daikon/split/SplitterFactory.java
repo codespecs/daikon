@@ -243,7 +243,7 @@ public class SplitterFactory {
     return fileCompiler.compileFiles(fileNames);
   }
 
-  /** Determine whether a Ppt's name matches the given pattern. */
+  /** Returns true if a Ppt's name matches the given pattern. */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
     if (ppt.name.equals(ppt_name)) {
       return true;
@@ -289,7 +289,7 @@ public class SplitterFactory {
    * "myPackage.myClass.someMethod" and guid = 12, then the following would be returned:
    * "myPackage_myClass_someMethod_12".
    *
-   * @param ppt_name the name of the Ppt that the splitter Java file wil be used with
+   * @param ppt_name the name of the Ppt that the splitter Java file will be used with
    */
   private static String getFileName(String ppt_name) {
     String splitterName = clean(ppt_name);

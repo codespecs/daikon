@@ -805,7 +805,7 @@ public final class PPTSLICE1 extends PptSlice {
   }
 
   /**
-   * Returns whether or not the slice is missing due to having one or more of its variables always
+   * Returns true if the slice is missing due to having one or more of its variables always
    * missing. This returns true only for missing flow and/or missing nonsensical. Out of Bounds is
    * treated differently since it destroys all of its invariants.
    */

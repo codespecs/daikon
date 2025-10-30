@@ -232,9 +232,9 @@ public final class Configuration implements Serializable {
 
     if (type.equals(Boolean.TYPE)) {
       if (unparsed.equals("1") || unparsed.equalsIgnoreCase("true")) {
-        value = Boolean.TRUE;
+        value = true;
       } else if (unparsed.equals("0") || unparsed.equalsIgnoreCase("false")) {
-        value = Boolean.FALSE;
+        value = false;
       } else {
         throw new ConfigException(
             "Badly formatted boolean argument "

@@ -345,9 +345,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * Determines whether or not the suppression set is valid in the specified slice. The suppression
-   * set is valid if any of its suppressions are valid. A suppression is valid if all of its
-   * suppressors are true.
+   * Returns true if the suppression set is valid in the specified slice. The suppression set is
+   * valid if any of its suppressions are valid. A suppression is valid if all of its suppressors
+   * are true.
    *
    * <p>Also updates the debug information in each suppressor.
    *
@@ -359,7 +359,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * Determines whether or not the suppression set is valid in the specified ppt and var_infos. The
+   * Returns true if the suppression set is valid in the specified ppt and var_infos. The
    * suppression set is valid if any of its suppressions are valid. A suppression is valid if all of
    * its suppressors are true.
    *
@@ -409,9 +409,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * Determines whether or not the suppression set is valid in the specified slice. The suppression
-   * set is valid if any of its suppressions are valid. A suppression is valid if all of its
-   * non-missing suppressors are true.
+   * Returns true if the suppression set is valid in the specified slice. The suppression set is
+   * valid if any of its suppressions are valid. A suppression is valid if all of its non-missing
+   * suppressors are true.
    */
   @Pure
   public boolean is_instantiate_ok(PptSlice slice) {
@@ -420,9 +420,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   }
 
   /**
-   * Determines whether or not the suppressee of the suppression set should be instantiated.
-   * Instantiation is ok only if each suppression is invalid. A suppression is valid if all of its
-   * non-missing suppressors are true.
+   * Returns true if the suppressee of the suppression set should be instantiated. Instantiation is
+   * ok only if each suppression is invalid. A suppression is valid if all of its non-missing
+   * suppressors are true.
    */
   @Pure
   public boolean is_instantiate_ok(PptTopLevel ppt, VarInfo[] var_infos) {

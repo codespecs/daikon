@@ -3,7 +3,6 @@ package daikon.dcomp;
 import daikon.DynComp;
 import daikon.chicory.ClassInfo;
 import daikon.chicory.DaikonWriter;
-import daikon.chicory.Instrument;
 import daikon.chicory.MethodInfo;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.InstructionListUtils;
@@ -99,8 +98,14 @@ import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 import org.checkerframework.dataflow.qual.Pure;
 
-/** Instruments a class file to perform Dynamic Comparability. */
-@SuppressWarnings({"nullness"}) //
+/**
+ * Instruments a class file to perform Dynamic Comparability.
+ *
+ * <p>The DCInstrument class is responsible for modifying another class's bytecodes. Specifically,
+ * its main task is to add calls into the DynComp Runtime to calculate comparability values. These
+ * added calls are sometimes referred to as "hooks".
+ */
+@SuppressWarnings("nullness")
 public class DCInstrument extends InstructionListUtils {
 
   /**
@@ -167,6 +172,12 @@ public class DCInstrument extends InstructionListUtils {
   /** Log file if debug_dup is enabled. */
   protected static SimpleLog debug_dup = new SimpleLog(false);
 
+  /**
+   * Debug information about which classes and/or methods are transformed and why. Use
+   * debugInstrument for actual instrumentation details.
+   */
+  protected static SimpleLog debug_transform = new SimpleLog(false);
+
   // Flags to enable additional console output for debugging
   /** If true, enable JUnit analysis debugging. */
   protected static final boolean debugJUnitAnalysis = false;
@@ -180,28 +191,11 @@ public class DCInstrument extends InstructionListUtils {
   /** Keeps track of the methods that were not successfully instrumented. */
   protected List<String> skipped_methods = new ArrayList<>();
 
-  /**
-   * Specifies if we are to use an instrumented version of the JDK. Calls into the JDK must be
-   * modified to remove the arguments from the tag stack if the JDK is not instrumented. This flag
-   * is set/reset in daikon.dcomp.Premain.
-   */
-  protected static boolean jdk_instrumented = true;
-
-  /** Either "java.lang.DCompInstrumented" or "daikon.dcomp.DCompInstrumented". */
-  // Static because used in DCRuntime
-  protected static @BinaryName String instrumentation_interface;
-
   /** Either "java.lang" or "daikon.dcomp". */
   protected @DotSeparatedIdentifiers String dcomp_prefix;
 
   /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
   protected @DotSeparatedIdentifiers String dcompRuntimeClassName = "daikon.dcomp.DCRuntime";
-
-  /** Name prefix for tag setter methods. */
-  protected static final String SET_TAG = "set_tag";
-
-  /** Name prefix for tag getter methods. */
-  protected static final String GET_TAG = "get_tag";
 
   /** Set of JUnit test classes. */
   protected static Set<String> junitTestClasses = new HashSet<>();
@@ -270,8 +264,8 @@ public class DCInstrument extends InstructionListUtils {
         new MethodDef("wait", new Type[] {Type.LONG, Type.INT}),
       };
 
-  protected static InstructionList global_catch_il;
-  protected static CodeExceptionGen global_exception_handler;
+  protected static InstructionList global_catch_il = null;
+  protected static CodeExceptionGen global_exception_handler = null;
   private InstructionHandle insertion_placeholder;
 
   /** Class that defines a method (by its name and argument types) */
@@ -333,7 +327,7 @@ public class DCInstrument extends InstructionListUtils {
     pool = gen.getConstantPool();
     ifact = new InstructionFactory(gen);
     constructor_is_initialized = false;
-    if (jdk_instrumented) {
+    if (Premain.jdk_instrumented) {
       dcomp_prefix = "java.lang";
     } else {
       dcomp_prefix = "daikon.dcomp";
@@ -342,12 +336,13 @@ public class DCInstrument extends InstructionListUtils {
     if (BcelUtil.javaVersion == 8) {
       dcomp_prefix = "daikon.dcomp";
     }
-    instrumentation_interface = Signatures.addPackage(dcomp_prefix, "DCompInstrumented");
+    DCRuntime.instrumentation_interface = Signatures.addPackage(dcomp_prefix, "DCompInstrumented");
 
     // System.out.printf("DCInstrument %s%n", orig_class.getClassName());
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
     debug_native.enabled = DynComp.debug;
+    debug_transform.enabled = daikon.dcomp.Instrument.debug_transform.enabled;
   }
 
   /**
@@ -358,14 +353,14 @@ public class DCInstrument extends InstructionListUtils {
    */
   public JavaClass instrument() {
 
-    String classname = gen.getClassName();
+    @BinaryName String classname = gen.getClassName();
 
     // Don't know where I got this idea.  They are executed.  Don't remember why
     // adding dcomp marker causes problems.
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
-      Instrument.debug_transform.log("Not instrumenting annotation %s%n", classname);
+      debug_transform.log("Not instrumenting annotation %s%n", classname);
       // WHY NOT RETURN NULL?
       return gen.getJavaClass().copy();
     }
@@ -376,8 +371,7 @@ public class DCInstrument extends InstructionListUtils {
       if (attribute instanceof RuntimeVisibleAnnotations) {
         for (final AnnotationEntry item : ((Annotations) attribute).getAnnotationEntries()) {
           if (item.toString().startsWith("@Lorg/evosuite/runtime")) {
-            Instrument.debug_transform.log(
-                "Not instrumenting possible Evosuite target: %s%n", classname);
+            debug_transform.log("Not instrumenting possible Evosuite target: %s%n", classname);
             // WHY NOT RETURN NULL?
             return gen.getJavaClass().copy();
           }
@@ -385,8 +379,8 @@ public class DCInstrument extends InstructionListUtils {
       }
     }
 
-    Instrument.debug_transform.log("Instrumenting class %s%n", classname);
-    Instrument.debug_transform.indent();
+    debug_transform.log("Instrumenting class %s%n", classname);
+    debug_transform.indent();
 
     // Create the ClassInfo for this class and its list of methods
     ClassInfo class_info = new ClassInfo(classname, loader);
@@ -421,7 +415,7 @@ public class DCInstrument extends InstructionListUtils {
     // We must also remember the class name so if we see a subsequent
     // call to one of its methods we do not add the dcomp argument.
 
-    Instrument.debug_transform.log("junit_state: %s%n", junit_state);
+    debugInstrument.log("junit_state: %s%n", junit_state);
 
     StackTraceElement[] stack_trace;
 
@@ -488,7 +482,7 @@ public class DCInstrument extends InstructionListUtils {
         throw new Error("invalid junit_state");
     }
 
-    Instrument.debug_transform.log("junit_state: %s%n", junit_state);
+    debugInstrument.log("junit_state: %s%n", junit_state);
 
     boolean junit_test_class = false;
     if (junit_state == JUnitState.TEST_DISCOVERY) {
@@ -560,9 +554,9 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     if (junit_test_class) {
-      Instrument.debug_transform.log("JUnit test class: %s%n", classname);
+      debugInstrument.log("JUnit test class: %s%n", classname);
     } else {
-      Instrument.debug_transform.log("Not a JUnit test class: %s%n", classname);
+      debugInstrument.log("Not a JUnit test class: %s%n", classname);
     }
 
     // Process each method
@@ -591,9 +585,8 @@ public class DCInstrument extends InstructionListUtils {
           gen.isPublic(true);
         }
 
-        Instrument.debug_transform.log(
-            "  Processing method %s, track=%b%n", simplify_method_name(m), track);
-        Instrument.debug_transform.indent();
+        debug_transform.log("  Processing method %s, track=%b%n", simplify_method_name(m), track);
+        debug_transform.indent();
 
         MethodGen mg = new MethodGen(m, classname, pool);
         mgen = mg; // copy to global
@@ -728,7 +721,7 @@ public class DCInstrument extends InstructionListUtils {
             throw e;
           }
         }
-        Instrument.debug_transform.exdent();
+        debug_transform.exdent();
       } catch (Throwable t) {
         // debug code
         // t.printStackTrace();
@@ -745,18 +738,18 @@ public class DCInstrument extends InstructionListUtils {
     // Keep track of when the class is initialized (so we don't look
     // for fields in uninitialized classes)
     track_class_init();
-    Instrument.debug_transform.exdent();
+    debug_transform.exdent();
 
     // The code that builds the list of daikon variables for each ppt
     // needs to know what classes are instrumented.  Its looks in the
     // Chicory runtime for this information.
     if (track_class) {
-      Instrument.debug_transform.log("DCInstrument adding %s to all class list%n", class_info);
+      debug_transform.log("DCInstrument adding %s to all class list%n", class_info);
       synchronized (daikon.chicory.SharedData.all_classes) {
         daikon.chicory.SharedData.all_classes.add(class_info);
       }
     }
-    Instrument.debug_transform.log("Instrumentation complete: %s%n", classname);
+    debug_transform.log("Instrumentation complete: %s%n", classname);
 
     return gen.getJavaClass().copy();
   }
@@ -822,7 +815,7 @@ public class DCInstrument extends InstructionListUtils {
     // Don't instrument annotations.  They aren't executed and adding
     // the marker argument causes subtle errors
     if ((gen.getModifiers() & Const.ACC_ANNOTATION) != 0) {
-      Instrument.debug_transform.log("Not instrumenting annotation %s%n", classname);
+      debug_transform.log("Not instrumenting annotation %s%n", classname);
       // MUST NOT RETURN NULL
       return gen.getJavaClass().copy();
     }
@@ -833,7 +826,7 @@ public class DCInstrument extends InstructionListUtils {
       // See Premain.java for a list and explainations.
       String packageName = classname.substring(0, i);
       if (Premain.problem_packages.contains(packageName)) {
-        Instrument.debug_transform.log("Skipping problem package %s%n", packageName);
+        debug_transform.log("Skipping problem package %s%n", packageName);
         return gen.getJavaClass().copy();
       }
     }
@@ -842,14 +835,14 @@ public class DCInstrument extends InstructionListUtils {
       // Don't instrument problem classes.
       // See Premain.java for a list and explainations.
       if (Premain.problem_classes.contains(classname)) {
-        Instrument.debug_transform.log("Skipping problem class %s%n", classname);
+        debug_transform.log("Skipping problem class %s%n", classname);
         return gen.getJavaClass().copy();
       }
       dcompRuntimeClassName = "java.lang.DCRuntime";
     }
 
-    Instrument.debug_transform.log("Instrumenting class(JDK) %s%n", classname);
-    Instrument.debug_transform.indent();
+    debug_transform.log("Instrumenting class(JDK) %s%n", classname);
+    debug_transform.indent();
 
     // Handle object methods for this class
     handle_object(gen);
@@ -881,8 +874,8 @@ public class DCInstrument extends InstructionListUtils {
           continue;
         }
 
-        Instrument.debug_transform.log("  Processing method %s%n", simplify_method_name(m));
-        Instrument.debug_transform.indent();
+        debug_transform.log("  Processing method %s%n", simplify_method_name(m));
+        debug_transform.indent();
 
         MethodGen mg = new MethodGen(m, classname, pool);
         mgen = mg; // copy to global
@@ -986,7 +979,7 @@ public class DCInstrument extends InstructionListUtils {
           }
         }
 
-        Instrument.debug_transform.exdent();
+        debug_transform.exdent();
       } catch (Throwable t) {
         if (debugInstrument.enabled) {
           t.printStackTrace();
@@ -1009,8 +1002,8 @@ public class DCInstrument extends InstructionListUtils {
     // for client classes
     // track_class_init();
 
-    Instrument.debug_transform.exdent();
-    Instrument.debug_transform.log("Instrumentation complete: %s%n", classname);
+    debug_transform.exdent();
+    debug_transform.log("Instrumentation complete: %s%n", classname);
 
     return gen.getJavaClass().copy();
   }
@@ -1311,7 +1304,7 @@ public class DCInstrument extends InstructionListUtils {
   public void add_enter(MethodGen mg, MethodInfo mi, int method_info_index) {
     InstructionList il = mg.getInstructionList();
     replaceInstructions(
-        mg, il, insertion_placeholder, call_enter_exit(mg, method_info_index, "enter", -1));
+        mg, il, insertion_placeholder, callEnterOrExit(mg, method_info_index, "enter", -1));
   }
 
   /**
@@ -1385,7 +1378,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param line source line number if type is exit
    * @return InstructionList for the enter or exit code
    */
-  InstructionList call_enter_exit(
+  InstructionList callEnterOrExit(
       MethodGen mg, int method_info_index, String method_name, int line) {
 
     InstructionList il = new InstructionList();
@@ -1422,7 +1415,7 @@ public class DCInstrument extends InstructionListUtils {
       Type at = arg_types[ii];
       if (at instanceof BasicType) {
         il.append(new ACONST_NULL());
-        // il.append (create_wrapper (c, at, param_index));
+        // il.append (createPrimitiveWrapper (c, at, param_index));
       } else { // must be reference of some sort
         il.append(InstructionFactory.createLoad(Type.OBJECT, param_index));
       }
@@ -1442,7 +1435,7 @@ public class DCInstrument extends InstructionListUtils {
         LocalVariableGen return_local = get_return_local(mg, returnType);
         if (returnType instanceof BasicType) {
           il.append(new ACONST_NULL());
-          // il.append (create_wrapper (c, returnType, return_local.getIndex()));
+          // il.append (createPrimitiveWrapper (c, returnType, return_local.getIndex()));
         } else {
           il.append(InstructionFactory.createLoad(Type.OBJECT, return_local.getIndex()));
         }
@@ -1481,17 +1474,17 @@ public class DCInstrument extends InstructionListUtils {
 
     switch (inst.getOpcode()) {
 
-        // Replace the object comparison instructions with a call to
-        // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
-        // return a boolean which is used in a ifeq/ifne instruction
+      // Replace the object comparison instructions with a call to
+      // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
+      // return a boolean which is used in a ifeq/ifne instruction
       case Const.IF_ACMPEQ:
         return object_comparison((BranchInstruction) inst, "object_eq", Const.IFNE);
       case Const.IF_ACMPNE:
         return object_comparison((BranchInstruction) inst, "object_ne", Const.IFNE);
 
-        // These instructions compare the integer on the top of the stack
-        // to zero.  Nothing is made comparable by this, so we need only
-        // discard the tag on the top of the stack.
+      // These instructions compare the integer on the top of the stack
+      // to zero.  Nothing is made comparable by this, so we need only
+      // discard the tag on the top of the stack.
       case Const.IFEQ:
       case Const.IFNE:
       case Const.IFLT:
@@ -1502,46 +1495,46 @@ public class DCInstrument extends InstructionListUtils {
           return discard_tag_code(inst, 1);
         }
 
-        // Instanceof pushes either 0 or 1 on the stack depending on whether
-        // the object on top of stack is of the specified type.  We push a
-        // tag for a constant, since nothing is made comparable by this.
+      // Instanceof pushes either 0 or 1 on the stack depending on whether
+      // the object on top of stack is of the specified type.  We push a
+      // tag for a constant, since nothing is made comparable by this.
       case Const.INSTANCEOF:
         return build_il(dcr_call("push_const", Type.VOID, Type.NO_ARGS), inst);
 
-        // Duplicates the item on the top of stack.  If the value on the
-        // top of the stack is a primitive, we need to do the same on the
-        // tag stack.  Otherwise, we need do nothing.
+      // Duplicates the item on the top of stack.  If the value on the
+      // top of the stack is a primitive, we need to do the same on the
+      // tag stack.  Otherwise, we need do nothing.
       case Const.DUP:
         {
           return dup_tag(inst, stack);
         }
 
-        // Duplicates the item on the top of the stack and inserts it 2
-        // values down in the stack.  If the value at the top of the stack
-        // is not a primitive, there is nothing to do here.  If the second
-        // value is not a primitive, then we need only to insert the duped
-        // value down 1 on the tag stack (which contains only primitives)
+      // Duplicates the item on the top of the stack and inserts it 2
+      // values down in the stack.  If the value at the top of the stack
+      // is not a primitive, there is nothing to do here.  If the second
+      // value is not a primitive, then we need only to insert the duped
+      // value down 1 on the tag stack (which contains only primitives)
       case Const.DUP_X1:
         {
           return dup_x1_tag(inst, stack);
         }
 
-        // Duplicates either the top 2 category 1 values or a single
-        // category 2 value and inserts it 2 or 3 values down on the
-        // stack.
+      // Duplicates either the top 2 category 1 values or a single
+      // category 2 value and inserts it 2 or 3 values down on the
+      // stack.
       case Const.DUP2_X1:
         {
           return dup2_x1_tag(inst, stack);
         }
 
-        // Duplicate either one category 2 value or two category 1 values.
+      // Duplicate either one category 2 value or two category 1 values.
       case Const.DUP2:
         {
           return dup2_tag(inst, stack);
         }
 
-        // Dup the category 1 value on the top of the stack and insert it either
-        // two or three values down on the stack.
+      // Dup the category 1 value on the top of the stack and insert it either
+      // two or three values down on the stack.
       case Const.DUP_X2:
         {
           return dup_x2(inst, stack);
@@ -1552,25 +1545,25 @@ public class DCInstrument extends InstructionListUtils {
           return dup2_x2(inst, stack);
         }
 
-        // Pop instructions discard the top of the stack.  We want to discard
-        // the top of the tag stack iff the item on the top of the stack is a
-        // primitive.
+      // Pop instructions discard the top of the stack.  We want to discard
+      // the top of the tag stack iff the item on the top of the stack is a
+      // primitive.
       case Const.POP:
         {
           return pop_tag(inst, stack);
         }
 
-        // Pops either the top 2 category 1 values or a single category 2 value
-        // from the top of the stack.  We must do the same to the tag stack
-        // if the values are primitives.
+      // Pops either the top 2 category 1 values or a single category 2 value
+      // from the top of the stack.  We must do the same to the tag stack
+      // if the values are primitives.
       case Const.POP2:
         {
           return pop2_tag(inst, stack);
         }
 
-        // Swaps the two category 1 types on the top of the stack.  We need
-        // to swap the top of the tag stack if the two top elements on the
-        // real stack are primitives.
+      // Swaps the two category 1 types on the top of the stack.  We need
+      // to swap the top of the tag stack if the two top elements on the
+      // real stack are primitives.
       case Const.SWAP:
         {
           return swap_tag(inst, stack);
@@ -1661,9 +1654,9 @@ public class DCInstrument extends InstructionListUtils {
           return ldc_tag(inst, stack);
         }
 
-        // Push the tag for the array onto the tag stack.  This causes
-        // anything comparable to the length to be comparable to the array
-        // as an index.
+      // Push the tag for the array onto the tag stack.  This causes
+      // anything comparable to the length to be comparable to the array
+      // as an index.
       case Const.ARRAYLENGTH:
         {
           return array_length(inst);
@@ -1689,9 +1682,9 @@ public class DCInstrument extends InstructionListUtils {
           return build_il(dcr_call("push_const", Type.VOID, Type.NO_ARGS), inst);
         }
 
-        // Primitive Binary operators.  Each is augmented with a call to
-        // DCRuntime.binary_tag_op that merges the tags and updates the tag
-        // Stack.
+      // Primitive Binary operators.  Each is augmented with a call to
+      // DCRuntime.binary_tag_op that merges the tags and updates the tag
+      // Stack.
       case Const.DADD:
       case Const.DCMPG:
       case Const.DCMPL:
@@ -1731,35 +1724,35 @@ public class DCInstrument extends InstructionListUtils {
       case Const.LXOR:
         return build_il(dcr_call("binary_tag_op", Type.VOID, Type.NO_ARGS), inst);
 
-        // Computed jump based on the int on the top of stack.  Since that int
-        // is not made comparable to anything, we just discard its tag.  One
-        // might argue that the key should be made comparable to each value in
-        // the jump table.  But the tags for those values are not available.
-        // And since they are all constants, its not clear how interesting it
-        // would be anyway.
+      // Computed jump based on the int on the top of stack.  Since that int
+      // is not made comparable to anything, we just discard its tag.  One
+      // might argue that the key should be made comparable to each value in
+      // the jump table.  But the tags for those values are not available.
+      // And since they are all constants, its not clear how interesting it
+      // would be anyway.
       case Const.LOOKUPSWITCH:
       case Const.TABLESWITCH:
         return discard_tag_code(inst, 1);
 
-        // Make the integer argument to ANEWARRAY comparable to the new
-        // array's index.
+      // Make the integer argument to ANEWARRAY comparable to the new
+      // array's index.
       case Const.ANEWARRAY:
       case Const.NEWARRAY:
         {
           return new_array(inst);
         }
 
-        // If the new array has 2 dimensions, make the integer arguments
-        // comparable to the corresponding indices of the new array.
-        // For any other number of dimensions, discard the tags for the
-        // arguments.
+      // If the new array has 2 dimensions, make the integer arguments
+      // comparable to the corresponding indices of the new array.
+      // For any other number of dimensions, discard the tags for the
+      // arguments.
       case Const.MULTIANEWARRAY:
         {
           return multi_newarray_dc(inst);
         }
 
-        // Mark the array and its index as comparable.  Also for primitives,
-        // push the tag of the array element on the tag stack
+      // Mark the array and its index as comparable.  Also for primitives,
+      // push the tag of the array element on the tag stack
       case Const.AALOAD:
       case Const.BALOAD:
       case Const.CALOAD:
@@ -1772,9 +1765,9 @@ public class DCInstrument extends InstructionListUtils {
           return array_load(inst);
         }
 
-        // Mark the array and its index as comparable.  For primitives, store
-        // the tag for the value on the top of the stack in the tag storage
-        // for the array.
+      // Mark the array and its index as comparable.  For primitives, store
+      // the tag for the value on the top of the stack in the tag storage
+      // for the array.
       case Const.AASTORE:
         return array_store(inst, "aastore", Type.OBJECT);
       case Const.BASTORE:
@@ -1799,8 +1792,8 @@ public class DCInstrument extends InstructionListUtils {
       case Const.SASTORE:
         return array_store(inst, "sastore", Type.SHORT);
 
-        // Prefix the return with a call to the correct normal_exit method
-        // to handle the tag stack
+      // Prefix the return with a call to the correct normal_exit method
+      // to handle the tag stack
       case Const.ARETURN:
       case Const.DRETURN:
       case Const.FRETURN:
@@ -1811,10 +1804,10 @@ public class DCInstrument extends InstructionListUtils {
           return return_tag(mg, inst);
         }
 
-        // Handle subroutine calls.  Calls to instrumented code are modified
-        // to call the instrumented version (with the DCompMarker argument).
-        // Calls to uninstrumented code (rare) discard primitive arguments
-        // from the tag stack and produce an arbitrary return tag.
+      // Handle subroutine calls.  Calls to instrumented code are modified
+      // to call the instrumented version (with the DCompMarker argument).
+      // Calls to uninstrumented code (rare) discard primitive arguments
+      // from the tag stack and produce an arbitrary return tag.
       case Const.INVOKESTATIC:
       case Const.INVOKEVIRTUAL:
       case Const.INVOKESPECIAL:
@@ -1822,12 +1815,12 @@ public class DCInstrument extends InstructionListUtils {
       case Const.INVOKEDYNAMIC:
         return handleInvoke((InvokeInstruction) inst);
 
-        // Throws an exception.  This clears the operand stack of the current
-        // frame.  We need to clear the tag stack as well.
+      // Throws an exception.  This clears the operand stack of the current
+      // frame.  We need to clear the tag stack as well.
       case Const.ATHROW:
         return build_il(dcr_call("throw_op", Type.VOID, Type.NO_ARGS), inst);
 
-        // Opcodes that don't need any modifications.  Here for reference
+      // Opcodes that don't need any modifications.  Here for reference
       case Const.ACONST_NULL:
       case Const.ALOAD:
       case Const.ALOAD_0:
@@ -1861,8 +1854,8 @@ public class DCInstrument extends InstructionListUtils {
       case Const.IINC: // increment local variable by a constant
       case Const.INEG: // negate integer on top of stack
       case Const.JSR: // pushes return address on the stack, but that
-        // is thought of as an object, so we don't need
-        // a tag for it.
+      // is thought of as an object, so we don't need
+      // a tag for it.
       case Const.JSR_W:
       case Const.L2D: // long to double
       case Const.L2F: // long to float
@@ -1875,7 +1868,7 @@ public class DCInstrument extends InstructionListUtils {
       case Const.RET: // this is the internal JSR return
         return null;
 
-        // Make sure we didn't miss anything
+      // Make sure we didn't miss anything
       default:
         throw new Error("instruction " + inst + " unsupported");
     }
@@ -1915,7 +1908,7 @@ public class DCInstrument extends InstructionListUtils {
           new_il.append(InstructionFactory.createDup(type.getSize()));
           new_il.append(InstructionFactory.createStore(type, return_loc.getIndex()));
         }
-        new_il.append(call_enter_exit(mg, method_info_index, "exit", exit_iter.next()));
+        new_il.append(callEnterOrExit(mg, method_info_index, "exit", exit_iter.next()));
         new_il.append(inst);
         replaceInstructions(mg, il, ih, new_il);
       }
@@ -1925,8 +1918,8 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Return the interface class containing the implementation of the given method. The interfaces of
-   * {@code startClass} are recursively searched.
+   * Returns the interface class containing the implementation of the given method. The interfaces
+   * of {@code startClass} are recursively searched.
    *
    * @param startClass the JavaClass whose interfaces are to be searched
    * @param methodName the target method to search for
@@ -2199,7 +2192,7 @@ public class DCInstrument extends InstructionListUtils {
       // If we are not using the instrumented JDK, then we need to track down the
       // actual target of an INVOKEVIRTUAL to see if it has been instrumented or not.
       if (targetInstrumented == true && invoke instanceof INVOKEVIRTUAL) {
-        if (!jdk_instrumented && !mgen.getName().equals("equals_dcomp_instrumented")) {
+        if (!Premain.jdk_instrumented && !mgen.getName().equals("equals_dcomp_instrumented")) {
 
           if (debugHandleInvoke) {
             System.out.println("method: " + methodName);
@@ -2409,7 +2402,7 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     // If using the instrumented JDK, then everthing but object is instrumented
-    if (jdk_instrumented && !classname.equals("java.lang.Object")) {
+    if (Premain.jdk_instrumented && !classname.equals("java.lang.Object")) {
       return true;
     }
 
@@ -2471,7 +2464,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not the method is Object.equals().
+   * Returns true if the method is Object.equals().
    *
    * @param methodName method to check
    * @param returnType return type of method
@@ -2588,7 +2581,7 @@ public class DCInstrument extends InstructionListUtils {
       il.append(
           ifact.createInvoke(
               classname,
-              tag_method_name(GET_TAG, classname, f.getFieldName(pool)),
+              Premain.tag_method_name(Premain.GET_TAG, classname, f.getFieldName(pool)),
               Type.VOID,
               Type.NO_ARGS,
               Const.INVOKESTATIC));
@@ -2596,7 +2589,7 @@ public class DCInstrument extends InstructionListUtils {
       il.append(
           ifact.createInvoke(
               classname,
-              tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
+              Premain.tag_method_name(Premain.SET_TAG, classname, f.getFieldName(pool)),
               Type.VOID,
               Type.NO_ARGS,
               Const.INVOKESTATIC));
@@ -2605,7 +2598,7 @@ public class DCInstrument extends InstructionListUtils {
       il.append(
           ifact.createInvoke(
               classname,
-              tag_method_name(GET_TAG, classname, f.getFieldName(pool)),
+              Premain.tag_method_name(Premain.GET_TAG, classname, f.getFieldName(pool)),
               Type.VOID,
               Type.NO_ARGS,
               Const.INVOKEVIRTUAL));
@@ -2617,7 +2610,7 @@ public class DCInstrument extends InstructionListUtils {
         il.append(
             ifact.createInvoke(
                 classname,
-                tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
+                Premain.tag_method_name(Premain.SET_TAG, classname, f.getFieldName(pool)),
                 Type.VOID,
                 Type.NO_ARGS,
                 Const.INVOKEVIRTUAL));
@@ -2628,7 +2621,7 @@ public class DCInstrument extends InstructionListUtils {
         il.append(
             ifact.createInvoke(
                 classname,
-                tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
+                Premain.tag_method_name(Premain.SET_TAG, classname, f.getFieldName(pool)),
                 Type.VOID,
                 Type.NO_ARGS,
                 Const.INVOKEVIRTUAL));
@@ -2752,7 +2745,7 @@ public class DCInstrument extends InstructionListUtils {
       assert (return_type != null) : " return__$trace2_val doesn't exist";
     } else {
       assert return_type.equals(return_local.getType())
-          : " return_type = " + return_type + "current type = " + return_local.getType();
+          : " return_type = " + return_type + "; current type = " + return_local.getType();
     }
 
     if (return_local == null) {
@@ -2784,11 +2777,9 @@ public class DCInstrument extends InstructionListUtils {
     if (mg.isStatic()) {
       param_offset = 0;
     }
-    if (lvs != null) {
-      for (int ii = 0; ii < argNames.length; ii++) {
-        if ((ii + param_offset) < lvs.length) {
-          argNames[ii] = lvs[ii + param_offset].getName();
-        }
+    for (int ii = 0; ii < argNames.length; ii++) {
+      if ((ii + param_offset) < lvs.length) {
+        argNames[ii] = lvs[ii + param_offset].getName();
       }
     }
 
@@ -3051,34 +3042,40 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not this ppt should be included. A ppt is included if it matches ones of the
-   * select patterns and doesn't match any of the omit patterns.
+   * Returns true if this ppt should be included. A ppt is included if it matches ones of the select
+   * patterns and doesn't match any of the omit patterns.
    *
    * @param className class to test
    * @param methodName method to test
    * @param pptName ppt to look for
    * @return true if this ppt should be included
    */
-  boolean should_track(@ClassGetName String className, String methodName, String pptName) {
+  boolean should_track(@BinaryName String className, String methodName, String pptName) {
 
-    Instrument.debug_transform.log(
-        "Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
+    debugInstrument.log("Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
+    debug_transform.log("Consider collecting data for ppt: %s%n", pptName);
 
     // Don't track any JDK classes
     if (BcelUtil.inJdk(className)) {
-      Instrument.debug_transform.log("ignoring %s, is a JDK class%n", className);
+      debug_transform.log("not including %s as it is a JDK class%n", className);
       return false;
     }
 
     // Don't track toString methods because we call them in
     // our debug statements.
     if (pptName.contains("toString")) {
-      Instrument.debug_transform.log("ignoring %s, is a toString method%n", pptName);
+      debug_transform.log("not including %s as it is a toString method%n", pptName);
       return false;
     }
 
     // call shouldIgnore to check ppt-omit-pattern(s) and ppt-select-pattern(s)
-    return !daikon.chicory.Instrument.shouldIgnore(className, methodName, pptName);
+    boolean shouldIgnore = daikon.chicory.Instrument.shouldIgnore(className, methodName, pptName);
+    if (shouldIgnore) {
+      debug_transform.log("ignoring %s, not included in ppt_select patterns%n", pptName);
+    } else {
+      debug_transform.log("including %s%n", pptName);
+    }
+    return !shouldIgnore;
   }
 
   /**
@@ -3104,9 +3101,9 @@ public class DCInstrument extends InstructionListUtils {
     String full_name = m.toString();
     full_name = full_name.replaceFirst("\\s*throws.*", "");
 
-    return fullClassName
-        + "."
-        + DaikonWriter.methodEntryName(fullClassName, type_names, full_name, m.getName());
+    // UNDONE: full_name is not used by DaikonWriter.methodEntryName.
+
+    return DaikonWriter.methodEntryName(fullClassName, type_names, full_name, m.getName());
   }
 
   /**
@@ -3435,7 +3432,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not the specified type is a primitive (int, float, double, etc).
+   * Returns true if the specified type is a primitive (int, float, double, etc).
    *
    * @param type type to check
    * @return true if type is primitive
@@ -3446,7 +3443,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not the specified type is a category 2 (8 byte) type.
+   * Returns true if the specified type is a category 2 (8 byte) type.
    *
    * @param type type to check
    * @return true if type requires 8 bytes
@@ -3601,8 +3598,8 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not tag fields are used within the specified method of the specified class.
-   * We can safely use class fields except in Object, String, and Class.
+   * Returns true if tag fields are used within the specified method of the specified class. We can
+   * safely use class fields except in Object, String, and Class.
    *
    * @param mg method to check
    * @param classname class to check
@@ -3623,7 +3620,7 @@ public class DCInstrument extends InstructionListUtils {
       }
     }
 
-    if (!jdk_instrumented) {
+    if (!Premain.jdk_instrumented) {
       if (BcelUtil.inJdk(classname)) {
         return false;
       }
@@ -3846,7 +3843,7 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     String classname = gen.getClassName();
-    String accessor_name = tag_method_name(GET_TAG, classname, f.getName());
+    String accessor_name = Premain.tag_method_name(Premain.GET_TAG, classname, f.getName());
 
     InstructionList il = new InstructionList();
 
@@ -3921,7 +3918,7 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     String classname = gen.getClassName();
-    String setter_name = tag_method_name(SET_TAG, classname, f.getName());
+    String setter_name = Premain.tag_method_name(Premain.SET_TAG, classname, f.getName());
 
     InstructionList il = new InstructionList();
 
@@ -3980,7 +3977,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param gen class to add interface to
    */
   void add_dcomp_interface(ClassGen gen) {
-    gen.addInterface(instrumentation_interface);
+    gen.addInterface(DCRuntime.instrumentation_interface);
     debugInstrument.log("Added interface DCompInstrumented%n");
 
     InstructionList il = new InstructionList();
@@ -4084,18 +4081,6 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns a field tag accessor method name.
-   *
-   * @param type "get_tag" or "set_tag"
-   * @param classname name of class
-   * @param fname name of field
-   * @return name of tag accessor method
-   */
-  static String tag_method_name(String type, String classname, String fname) {
-    return fname + "_" + classname.replace('.', '_') + "__$" + type;
-  }
-
-  /**
    * Add a dcomp marker argument to indicate this is the instrumented version of the method.
    *
    * @param mg method to ard dcomp marker to
@@ -4118,7 +4103,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not the method is defined in Object.
+   * Returns true if the method is defined in Object.
    *
    * @param methodName method to check
    * @param argTypes array of argument types to method
@@ -4135,8 +4120,8 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns whether or not the class is one of those that has values initialized by the JVM or
-   * native methods.
+   * Returns true if the class is one of those that has values initialized by the JVM or native
+   * methods.
    *
    * @param classname class to check
    * @return true if classname has members that are uninitialized
@@ -4245,7 +4230,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Return the fully qualified fieldname of the specified field.
+   * Returns the fully qualified fieldname of the specified field.
    *
    * @param jc class containing the field
    * @param f the field
@@ -4256,7 +4241,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Return simplified name of a method. Both exceptions and annotations are removed.
+   * Returns simplified name of a method. Both exceptions and annotations are removed.
    *
    * @param m the method
    * @return string containing the simplified method name
@@ -4265,6 +4250,6 @@ public class DCInstrument extends InstructionListUtils {
     // Remove exceptions from the full method name
     String full_name = m.toString().replaceFirst("\\s*throws.*", "");
     // Remove annotations from full method name
-    return full_name.replaceAll(" \\[.*\\]", "");
+    return full_name.replaceFirst("(?s) \\[.*", "");
   }
 }

@@ -94,7 +94,7 @@ public class SpinfoFile {
   }
 
   /**
-   * Return the number of splitters (SplitterObject objects) represented by all the files in the
+   * Returns the number of splitters (SplitterObject objects) represented by all the files in the
    * list.
    */
   public static int numSplittterObjects(List<SpinfoFile> spinfoFiles) {
@@ -293,7 +293,7 @@ public class SpinfoFile {
     }
   }
 
-  /** Returns whether the line is blank (or null). */
+  /** Returns true if the line is blank (or null). */
   @EnsuresNonNullIf(result = false, expression = "#1")
   @Pure
   private static boolean isBlank(@Nullable String line) {
@@ -301,7 +301,7 @@ public class SpinfoFile {
   }
 
   /**
-   * Returns whether the line is a spinfo file comment line. A line is a comment if it starts with a
+   * Returns true if the line is a spinfo file comment line. A line is a comment if it starts with a
    * (possibly indented) "#".
    */
   @Pure
@@ -310,7 +310,7 @@ public class SpinfoFile {
   }
 
   /**
-   * Returns whether the line is a spinfo file formatting command. A line is a formatting command if
+   * Returns true if the line is a spinfo file formatting command. A line is a formatting command if
    * line is indented with a tab ("\t") or spaces (" ").
    */
   @Pure

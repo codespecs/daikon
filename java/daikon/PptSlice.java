@@ -347,9 +347,9 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Returns whether or not this slice already contains the specified invariant. Whether not
-   * invariants match is determine by Invariant.match() This will return true for invariants of the
-   * same kind with different formulas (eg, one_of, bound, linearbinary).
+   * Returns true if this slice already contains the specified invariant. Whether not invariants
+   * match is determine by Invariant.match() This will return true for invariants of the same kind
+   * with different formulas (eg, one_of, bound, linearbinary).
    */
   public boolean contains_inv(Invariant inv) {
 
@@ -362,8 +362,8 @@ public abstract class PptSlice extends Ppt {
   }
 
   /**
-   * Returns whether or not this slice contains an exact match for the specified invariant. An exact
-   * match requires that the invariants be of the same class and have the same formula.
+   * Returns true if this slice contains an exact match for the specified invariant. An exact match
+   * requires that the invariants be of the same class and have the same formula.
    */
   @EnsuresNonNullIf(result = true, expression = "find_inv_exact(#1)")
   public boolean contains_inv_exact(Invariant inv) {

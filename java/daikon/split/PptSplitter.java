@@ -34,7 +34,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.CollectionsPlume;
-import org.plumelib.util.MPair;
+import org.plumelib.util.IPair;
 import org.plumelib.util.OrderedPairIterator;
 
 /**
@@ -643,8 +643,7 @@ public class PptSplitter implements Serializable {
   @SuppressWarnings("UnusedMethod")
   private boolean at_same_ppt(List<Invariant> invs1, List<Invariant> invs2) {
     PptSlice ppt = null;
-    Iterator<Invariant> itor =
-        new CollectionsPlume.MergedIterator2<Invariant>(invs1.iterator(), invs2.iterator());
+    Iterator<Invariant> itor = CollectionsPlume.mergedIterator2(invs1.iterator(), invs2.iterator());
     for (; itor.hasNext(); ) {
       Invariant inv = itor.next();
       if (ppt == null) {
@@ -709,7 +708,7 @@ public class PptSplitter implements Serializable {
     for (OrderedPairIterator<Invariant> opi =
             new OrderedPairIterator<Invariant>(ss1.iterator(), ss2.iterator(), icfp);
         opi.hasNext(); ) {
-      MPair<@Nullable Invariant, @Nullable Invariant> pair = opi.next();
+      IPair<@Nullable Invariant, @Nullable Invariant> pair = opi.next();
       if ((pair.first == null) || (pair.second == null)
       // || (icfp.compare(pair.a, pair.b) != 0)
       ) {

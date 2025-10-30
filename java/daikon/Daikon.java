@@ -223,10 +223,10 @@ public final class Daikon {
   public static int dkconfig_progress_delay = 1000;
 
   /** The current version of Daikon. */
-  public static final String release_version = "5.8.21";
+  public static final String release_version = "5.8.23";
 
   /** The date for the current version of Daikon. */
-  public static final String release_date = "May 14, 2024";
+  public static final String release_date = "June 4, 2025";
 
   /** A description of the Daikon release (version number, date, and URL). */
   public static final String release_string =
@@ -303,7 +303,7 @@ public final class Daikon {
   public static boolean show_progress = false;
 
   /**
-   * Whether to use the "new" equality set mechanism for handling equality, using canonicals to have
+   * If true, use the "new" equality set mechanism for handling equality, using canonicals to have
    * instantiation of invariants only over equality sets.
    */
   public static boolean use_equality_optimization = true;
@@ -347,13 +347,13 @@ public final class Daikon {
   public static @Interned String dkconfig_guardNulls = "default";
 
   /**
-   * Whether to associate the program points in a dataflow hierarchy, as via Nimmer's thesis.
+   * If true, associate the program points in a dataflow hierarchy, as via Nimmer's thesis.
    * Deactivate only for languages and analyses where flow relation is nonsensical.
    */
   public static boolean use_dataflow_hierarchy = true;
 
   /**
-   * Whether to use the bottom up implementation of the dataflow hierarchy. This mechanism builds
+   * If true, use the bottom up implementation of the dataflow hierarchy. This mechanism builds
    * invariants initially only at the leaves of the partial order. Upper points are calculated by
    * joining the invariants from each of their children points.
    */
@@ -390,10 +390,10 @@ public final class Daikon {
   // Whether we want the memory monitor activated
   private static boolean use_mem_monitor = false;
 
-  /** Whether Daikon should print its version number and date. */
+  /** True if Daikon should print its version number and date. */
   public static boolean noversion_output = false;
 
-  /** Whether Daikon is in its inferencing loop. Used only for assertion checks. */
+  /** True if Daikon is in its inferencing loop. Used only for assertion checks. */
   public static boolean isInferencing = false;
 
   /**
@@ -708,11 +708,11 @@ public final class Daikon {
       System.err.println("Bug in Daikon.  Please report.");
       System.exit(2);
     } else {
-      // This caes should never be executed.
+      // This case should never be executed.
       System.err.println();
-      System.err.println("Bug in Daikon.  Please report.");
+      System.err.println("Unknown problem in Daikon.  Please report.");
       e.printStackTrace(System.err);
-      System.err.println("Bug in Daikon.  Please report.");
+      System.err.println("Unknown problem in Daikon.  Please report.");
       System.exit(2);
     }
   }
@@ -723,7 +723,10 @@ public final class Daikon {
    *
    * @param args the command-line arguments
    */
-  @SuppressWarnings("nullness:contracts.precondition") // private field
+  @SuppressWarnings({
+    "nullness:contracts.precondition", // private field
+    "SystemConsoleNull" // https://errorprone.info/bugpattern/SystemConsoleNull
+  })
   public static void mainHelper(final String[] args) {
     long startTime = System.nanoTime();
     long duration;
@@ -1387,12 +1390,12 @@ public final class Daikon {
             throw new Daikon.UserError("Cannot write to serialization output file " + inv_file);
           }
           break;
-          //
+        //
         case '?':
           // break; // getopt() already printed an error
           System.out.println(usage);
           throw new Daikon.NormalTermination();
-          //
+        //
         default:
           throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
@@ -2495,7 +2498,7 @@ public final class Daikon {
   }
 
   private static class Count {
-    public int val;
+    int val;
 
     Count(int val) {
       this.val = val;

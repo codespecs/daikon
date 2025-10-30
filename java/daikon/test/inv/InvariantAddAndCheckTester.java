@@ -329,7 +329,7 @@ public class InvariantAddAndCheckTester {
      *
      * @return a string containing error messages for any failed cases
      */
-    public static @Nullable String runTest(LineNumberReader commands) {
+    static @Nullable String runTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, false);
       if (endOfFile) {
         return null;
@@ -338,7 +338,7 @@ public class InvariantAddAndCheckTester {
         String commandLine = getNextRealLine(commands);
         int lineNumber = commands.getLineNumber();
         if (InvariantAddAndCheckTester.isComment(commandLine)) {
-          continue;
+          // continue;
         } else if (isTestTerminator(commandLine)) {
           break;
         } else if (isAddCommand(commandLine) || isCheckCommand(commandLine)) {
@@ -359,7 +359,7 @@ public class InvariantAddAndCheckTester {
      *     test case
      */
     @SuppressWarnings("UnusedMethod")
-    public static @Nullable String generateTest(LineNumberReader commands) {
+    static @Nullable String generateTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, true);
       if (endOfFile) {
         return null;
@@ -448,7 +448,7 @@ public class InvariantAddAndCheckTester {
     private static void executeCheckOrAddCommand(String command, int lineNumber) {
 
       // remove the command
-      String args = command.substring(command.indexOf(":") + 1);
+      String args = command.substring(command.indexOf(':') + 1);
 
       StringTokenizer tokens = new StringTokenizer(args, argDivider);
       if (tokens.countTokens() != types.length + 2) {
@@ -495,7 +495,7 @@ public class InvariantAddAndCheckTester {
     /** Given a line from an input file, generates appropriate check or add command. */
     private static void generateCheckOrAddCommand(String command, int lineNumber) {
       // remove the command
-      String args = command.substring(command.indexOf(":") + 1);
+      String args = command.substring(command.indexOf(':') + 1);
 
       StringTokenizer tokens = new StringTokenizer(args, argDivider);
       if (tokens.countTokens() != types.length) {

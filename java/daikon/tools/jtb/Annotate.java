@@ -185,13 +185,13 @@ public class Annotate {
         case 'i':
           insert_inexpressible = true;
           break;
-          // case 'r':
-          //   // Should do this witout calling out to the system.  (There must be
-          //   // an easy way to do this in Java.)
-          //   Process p = System.exec("find . -type f -name '*.java' -print");
-          //   p.waitFor();
-          //   StringBuilderInputStream sbis
-          //   break;
+        // case 'r':
+        //   // Should do this witout calling out to the system.  (There must be
+        //   // an easy way to do this in Java.)
+        //   Process p = System.exec("find . -type f -name '*.java' -print");
+        //   p.waitFor();
+        //   StringBuilderInputStream sbis
+        //   break;
         case 's':
           slashslash = true;
           break;

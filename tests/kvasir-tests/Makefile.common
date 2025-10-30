@@ -55,8 +55,8 @@ endif
 default: summary-w-daikon
 
 # Set up potential OS_ID and OS_ID+OS_REL specific goal targets.
-OS_ID := $(shell ${DAIKONDIR}/scripts/lsb_release -si)
-OS_REL := $(shell ${DAIKONDIR}/scripts/lsb_release -sr)
+OS_ID := $(shell sed -n -e 's/^NAME="\(.*\)"/\1/p' /etc/os-release | cut -d " " -f1)
+OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
 # bogus goal to force goal_name to try all paths
 GOAL := DUMMY
 
@@ -78,6 +78,15 @@ ifeq ($(OS_ID),Rocky)
 endif
 
 ifeq ($(OS_ID),Ubuntu)
+ifeq ($(OS_REL),25.10)
+	GOAL := goal-Ubuntu2510
+endif
+ifeq ($(OS_REL),25.04)
+	GOAL := goal-Ubuntu2504
+endif
+ifeq ($(OS_REL),24.10)
+	GOAL := goal-Ubuntu2410
+endif
 ifeq ($(OS_REL),24.04)
 	GOAL := goal-Ubuntu2404
 endif

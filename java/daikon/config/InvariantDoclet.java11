@@ -123,8 +123,8 @@ public class InvariantDoclet implements Doclet {
       }
       return te1.getSimpleName()
           .toString()
-          .toLowerCase()
-          .compareTo(te2.getSimpleName().toString().toLowerCase());
+          .toLowerCase(Locale.ROOT)
+          .compareTo(te2.getSimpleName().toString().toLowerCase(Locale.ROOT));
     }
   }
 
@@ -141,7 +141,7 @@ public class InvariantDoclet implements Doclet {
       if (te2 == null) {
         return 1;
       }
-      return getBinaryName(te1).toLowerCase().compareTo(getBinaryName(te2).toLowerCase());
+      return getBinaryName(te1).toLowerCase(Locale.ROOT).compareTo(getBinaryName(te2).toLowerCase(Locale.ROOT));
     }
   }
 
@@ -160,8 +160,8 @@ public class InvariantDoclet implements Doclet {
       }
       return te1.getQualifiedName()
           .toString()
-          .toLowerCase()
-          .compareTo(te2.getQualifiedName().toString().toLowerCase());
+          .toLowerCase(Locale.ROOT)
+          .compareTo(te2.getQualifiedName().toString().toLowerCase(Locale.ROOT));
     }
   }
 
@@ -493,7 +493,7 @@ public class InvariantDoclet implements Doclet {
    * @param cd the base class from which to start the search
    * @param set the set to add classes to. Should start out empty.
    */
-  public void gather_derived_classes(@KeyFor("this.cmap") ClassInfo cd, TreeSet<TypeElement> set) {
+  public void gather_derived_classes(@KeyFor("this.cmap") ClassInfo cd, Set<TypeElement> set) {
     assert cmap.containsKey(cd.classInfo().toString());
 
     // System.out.println("Processing " + cd.classInfo());

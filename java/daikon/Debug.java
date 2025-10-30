@@ -289,14 +289,14 @@ public final class Debug {
   public static boolean dkconfig_show_stack_trace = false;
 
   /**
-   * Determines whether or not traceback information is printed for each call to log.
+   * Returns true if traceback information is printed for each call to log.
    *
    * @see #log(Logger, Class, Ppt, String)
    */
   public static boolean dkconfig_showTraceback = false;
 
   /**
-   * Determines whether or not detailed info (such as from {@code add_modified}) is printed.
+   * Returns true if detailed info (such as from {@code add_modified}) is printed.
    *
    * @see #log(Logger, Class, Ppt, String)
    * @see #logDetail()
@@ -304,7 +304,7 @@ public final class Debug {
   public static boolean dkconfig_logDetail = false;
 
   /**
-   * Returns whether or not detailed logging is on. Note that this check is not performed inside the
+   * Returns true if detailed logging is on. Note that this check is not performed inside the
    * logging calls themselves, it must be performed by the caller.
    *
    * @see #log(Logger, Class, Ppt, String)
@@ -315,7 +315,7 @@ public final class Debug {
   }
 
   /**
-   * Returns whether or not logging is on.
+   * Returns true if logging is on.
    *
    * @see #log(Logger, Class, Ppt, String)
    */
@@ -444,7 +444,7 @@ public final class Debug {
    * Logs a description of the cached class, ppt, and variables and the specified msg via the logger
    * as described in {@link #log(Logger, Class, Ppt, VarInfo[], String)}
    *
-   * @return whether or not it logged anything
+   * @return true if it logged anything
    */
   public boolean log(String msg) {
     if (!logOn()) {
@@ -457,7 +457,7 @@ public final class Debug {
    * Logs a description of the class, ppt, ppt variables and the specified msg via the logger as
    * described in {@link #log(Logger, Class, Ppt, VarInfo[], String)}.
    *
-   * @return whether or not it logged anything
+   * @return true if it logged anything
    */
   // 3-argument form
   public static boolean log(
@@ -471,7 +471,11 @@ public final class Debug {
    * described in {@link #log(Logger, Class, Ppt, String)}. Accepts vis because sometimes the
    * variables are different from those in the ppt.
    *
-   * @return whether or not it logged anything
+   * @param inv_class the class to be logged
+   * @param ppt the program point to be logged
+   * @param vis the VarInfos for the ppt
+   * @param msg the message to be logged
+   * @return true if it logged something
    */
   // 4-argument form
   public static boolean log(
@@ -552,7 +556,7 @@ public final class Debug {
     return true;
   }
 
-  /** Returns whether or not the specified class matches the classes being tracked. */
+  /** Returns true if the specified class matches the classes being tracked. */
   public static boolean class_match(@Nullable Class<?> inv_class) {
 
     if ((debugTrackClass.length > 0) && (inv_class != null)) {
@@ -561,7 +565,7 @@ public final class Debug {
     return true;
   }
 
-  /** Returns whether or not the specified ppt matches the ppts being tracked. */
+  /** Returns true if the specified ppt matches the ppts being tracked. */
   public static boolean ppt_match(
       @Nullable @UnknownInitialization(daikon.PptTopLevel.class) Ppt ppt) {
 
@@ -572,9 +576,8 @@ public final class Debug {
   }
 
   /**
-   * Returns whether or not the specified vars match the ones being tracked. Also, sets
-   * Debug.ourvars with the names of the variables matched if they are not the leader of their
-   * equality sets.
+   * Returns true if the specified vars match the ones being tracked. Also, sets Debug.ourvars with
+   * the names of the variables matched if they are not the leader of their equality sets.
    */
   public static boolean var_match(VarInfo @Nullable [] vis) {
 
@@ -834,7 +837,7 @@ public final class Debug {
 
     // Get the classes, vars, and ppt
     int var_start = def.indexOf('<');
-    int ppt_start = def.indexOf("@");
+    int ppt_start = def.indexOf('@');
     if ((var_start == -1) && (ppt_start == -1)) {
       classes = def;
     } else if (var_start != -1) {

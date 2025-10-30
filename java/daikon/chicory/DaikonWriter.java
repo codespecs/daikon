@@ -18,7 +18,10 @@ public abstract class DaikonWriter {
   /** Platform-dependent line separator. Should be "\n" on Unix. */
   public static final String lineSep = System.lineSeparator();
 
-  protected DaikonWriter() {}
+  /** Create a new DaikonWriter. */
+  protected DaikonWriter() {
+    // This constructor is intentially empty.
+  }
 
   /**
    * Determines if this field warrants an [ = val ] entry in decls file.
@@ -105,10 +108,12 @@ public abstract class DaikonWriter {
   private static String methodName(
       String fullClassName, String[] types, String name, String short_name, String point) {
 
+    // UNDONE: name is no longer used
+
     // System.out.printf("fullclass: %s !!! name: %s !!! short_name: %s %n",
     //                  fullClassName, name, short_name);
 
-    boolean isConstructor = name.equals("<init>") || name.equals("");
+    boolean isConstructor = short_name.equals("<init>") || short_name.equals("");
 
     if (isConstructor) {
       // replace <init>'s with the actual class name
@@ -119,8 +124,8 @@ public abstract class DaikonWriter {
 
     // build up the string to go inside the parens
     StringJoiner paramTypes = new StringJoiner(",", "(", ")");
-    for (int i = 0; i < types.length; i++) {
-      paramTypes.add(types[i]);
+    for (String type : types) {
+      paramTypes.add(type);
     }
     String pptname = fullClassName + "." + short_name + paramTypes + ":::" + point;
 
@@ -167,8 +172,7 @@ public abstract class DaikonWriter {
         arg_str += arg.getName();
       }
     }
-    String ppt_name = String.format("%s(%s):::%s", fullname, arg_str, point);
-    return ppt_name;
+    return String.format("%s(%s):::%s", fullname, arg_str, point);
   }
 
   /** Determines if the given method should be instrumented. */
@@ -177,10 +181,7 @@ public abstract class DaikonWriter {
       return Chicory.instrument_clinit;
     }
     int modifiers = method.getModifiers();
-    if (Modifier.isAbstract(modifiers) || Modifier.isNative(modifiers)) {
-      return false;
-    }
-    return true;
+    return !(Modifier.isAbstract(modifiers) || Modifier.isNative(modifiers));
   }
 
   /**

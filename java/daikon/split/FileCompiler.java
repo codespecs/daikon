@@ -90,7 +90,7 @@ public final class FileCompiler {
    * @param timeLimit the maximum permitted compilation time, in msec
    */
   @SuppressWarnings("value") // no index checker list support
-  public FileCompiler(/*(at)MinLen(1)*/ ArrayList<String> compiler, @Positive long timeLimit) {
+  public FileCompiler(/*(at)MinLen(1)*/ List<String> compiler, @Positive long timeLimit) {
     this(compiler.toArray(new String[0]), timeLimit);
   }
 
@@ -257,7 +257,7 @@ public final class FileCompiler {
   }
 
   /**
-   * Return the file path to where a class file for a source file at sourceFilePath would be
+   * Returns the file path to where a class file for a source file at sourceFilePath would be
    * generated.
    *
    * @param sourceFilePath the path to the .java file
