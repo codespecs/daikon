@@ -27,16 +27,23 @@ JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | s
 ifneq (,$(findstring start1.8,start${JAVA_VERSION_STRING}))
   JAVA8 := 1
   JAVA17 := 0
+  JAVA21 := 0
   JAVA24 := 0
+  JAVA25 := 0
   JAVA_RELEASE_NUMBER := 8
 else
   JAVA8 := 0
   JAVA17 := 0
+  JAVA21 := 0
   JAVA24 := 0
+  JAVA25 := 0
   JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]*\)\..*/\1/')
 endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 17; echo $$?),0)
   JAVA17 := 1
+endif
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 21; echo $$?),0)
+  JAVA21 := 1
 endif
 # Temporary, since Java 24 is not a LTS release.
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 24; echo $$?),0)
@@ -799,7 +806,8 @@ endif
 ###
 
 # See version numbers at https://github.com/google/error-prone/releases
-# and https://errorprone.info/docs/installation .
+# and https://errorprone.info/docs/installation.
+# UNDONE: this if branch no longer needed as JAVA must be >= 21?
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -lt 17; echo $$?),0)
   error-prone-version = 2.31.0
   extra-error-prone-args-1 =
@@ -825,10 +833,10 @@ JAVAC_ANNOTATION_PROCESSOR_ARGS ?= \
 error-prone: errorprone
 errorprone: compile errorprone-nocompile
 # Some of the -Xep are temporary
-#   -Xep:PatternMatchingInstanceof:OFF  requires Java 17
+#   -Xep:PatternMatchingInstanceof:OFF  requires Java 17 source code
 errorprone-nocompile:
-ifeq (${JAVA8}, 1)
-	@echo "Error Prone is not run under Java 8"
+ifneq (${JAVA21}, 1)
+	@echo "Error Prone is only run under Java 21+"
 else
 	@echo "Using Error Prone version ${error-prone-version}"
 ## MutablePublicArray is off because it suggests a dependency on Google Guava.
