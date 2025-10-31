@@ -807,14 +807,9 @@ endif
 
 # See version numbers at https://github.com/google/error-prone/releases
 # and https://errorprone.info/docs/installation.
-# UNDONE: this if branch no longer needed as JAVA must be >= 21?
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -lt 17; echo $$?),0)
-  error-prone-version = 2.31.0
-  extra-error-prone-args-1 =
-else
-  error-prone-version = 2.42.0
-  extra-error-prone-args-1 = --should-stop=ifError=FLOW
-endif
+# Only run under Java 21+.
+error-prone-version = 2.42.0
+extra-error-prone-args-1 = --should-stop=ifError=FLOW
 
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-${error-prone-version}-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.49.3-eisop1.jar
 

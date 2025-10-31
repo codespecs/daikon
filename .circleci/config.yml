@@ -535,30 +535,10 @@ jobs:
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
 
-  ## The Checker Framework cannot be built, or run, under Java 8 or 11.
-  ## Thus, there is no typecheck_*_ubuntu_jdk{8,11} job.
-  typecheck-latest-ubuntu-jdk17:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk17
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: env
-      - run:
-          command: scripts/test-typecheck-with-latest-cf.sh
-          no_output_timeout: 30m
+  ## The Checker Framework cannot be built under Java 8, 11 or 17.
+  ## Thus, there is no typecheck_latest_ubuntu_jdk{8,11,17} job.
+  ## The Checker Framework cannot be run under Java 8 or 11.
+  ## Thus, there is no typecheck_bundled_ubuntu_jdk{8,11} job.
   typecheck-bundled-ubuntu-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk17
@@ -1317,13 +1297,10 @@ workflows:
             - kvasir-ubuntu-jdk25
 
       - kvasir-ubuntu-jdk25
-## The Checker Framework cannot be built, or run, under Java 8 or 11.
-## Thus, there is no typecheck_*_ubuntu_jdk{8,11} job.
-      - typecheck-latest-ubuntu-jdk17:
-          requires:
-            - canary-jobs
-            - typecheck-latest-ubuntu-jdk25
-
+## The Checker Framework cannot be built under Java 8, 11 or 17.
+## Thus, there is no typecheck_latest_ubuntu_jdk{8,11,17} job.
+## The Checker Framework cannot be run under Java 8 or 11.
+## Thus, there is no typecheck_bundled_ubuntu_jdk{8,11} job.
       - typecheck-bundled-ubuntu-jdk17:
           requires:
             - canary-jobs
