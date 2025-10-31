@@ -41,8 +41,8 @@ AFTER_RUN ?= @:
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
-DAIKON := java -Xmx8g -cp "${DAIKON_CLASSPATH}" daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true
-PRINT_INV := java -Xmx8g -cp "${DAIKON_CLASSPATH}" daikon.PrintInvariants
+DAIKON := java -Xmx7g -cp "${DAIKON_CLASSPATH}" daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true
+PRINT_INV := java -Xmx7g -cp "${DAIKON_CLASSPATH}" daikon.PrintInvariants
 
 default: summary
 

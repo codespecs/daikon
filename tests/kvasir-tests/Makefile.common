@@ -44,12 +44,12 @@ BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
 
 ifeq (i386, $(shell uname -i))
-DAIKON := java -Xmx8g -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
-PRINT_INV := java -Xmx8g -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
+DAIKON := java -Xmx7g -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
+PRINT_INV := java -Xmx7g -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
 else
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
-DAIKON := java -ea -Xmx8g -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
-PRINT_INV := java -Xmx8g -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
+DAIKON := java -ea -Xmx7g -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
+PRINT_INV := java -Xmx7g -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
 endif
 
 default: summary-w-daikon

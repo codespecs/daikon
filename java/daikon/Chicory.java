@@ -91,7 +91,7 @@ public class Chicory {
   // for Daikon separately.
   /** Heap size for the target program, and for Daikon if Daikon is run. */
   @Option("Size of the heap for the target program, and for Daikon if it is run")
-  public static String heap_size = "8g";
+  public static String heap_size = "7g";
 
   /**
    * Path to Java agent jar file that performs the transformation. The "main" procedure is {@link
