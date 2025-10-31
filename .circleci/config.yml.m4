@@ -57,9 +57,10 @@ job_dependences(ubuntu, 11, kvasir)
 job_dependences(ubuntu, 17, kvasir)
 job_dependences(ubuntu, 21, kvasir)
 job_dependences(ubuntu, 25, kvasir)
-## The Checker Framework cannot be built, or run, under Java 8 or 11.
-## Thus, there is no typecheck_*_ubuntu_jdk{8,11} job.
-job_dependences(ubuntu, 17, typecheck-latest)
+## The Checker Framework cannot be built under Java 8, 11 or 17.
+## Thus, there is no typecheck_latest_ubuntu_jdk{8,11,17} job.
+## The Checker Framework cannot be run under Java 8 or 11.
+## Thus, there is no typecheck_bundled_ubuntu_jdk{8,11} job.
 job_dependences(ubuntu, 17, typecheck-bundled)
 job_dependences(ubuntu, 21, typecheck-latest)
 job_dependences(ubuntu, 21, typecheck-bundled)
