@@ -854,7 +854,7 @@ kvasir-dtrace --no-dyncomp --dtrace-file=daikon-output/wordplay2.dtrace \
     ./wordplay -f words.txt 'better results from multiple runs'
 kvasir-dtrace --no-dyncomp --dtrace-file=daikon-output/wordplay3.dtrace \
     ./wordplay -f words.txt 'more testing equals better testing'
-java -Xmx3600m -cp $DAIKONDIR/daikon.jar daikon.Daikon \
+java -Xmx7g -cp $DAIKONDIR/daikon.jar daikon.Daikon \
     daikon-output/wordplay*.dtrace daikon-output/wordplay.decls
 @end smallexample
 
@@ -875,7 +875,7 @@ kvasir-dtrace --no-dyncomp --dtrace-append \
 kvasir-dtrace --no-dyncomp --dtrace-append \
     --dtrace-file=daikon-output/wordplay-all.dtrace \
     ./wordplay -f words.txt 'more testing equals better testing'
-java -Xmx3600m -cp $DAIKONDIR/daikon.jar daikon.Daikon \
+java -Xmx7g -cp $DAIKONDIR/daikon.jar daikon.Daikon \
     daikon-output/wordplay-all.dtrace daikon-output/wordplay.decls
 @end smallexample
 
@@ -919,7 +919,7 @@ step may take several minutes.
 Since the default memory size used by a Java virtual machine varies, we
 suggest that Daikon be run with at least 256 megabytes of
 memory (and perhaps much more).  For many JVMs, specify a maximum heap size
-of @nospellcheck{3.6GB} by the option @option{-Xmx3600m}.
+of @nospellcheck{8 GB} by using @option{-Xmx7g}.
 For more information about specifying the memory usage for Daikon, see
 @ref{Out of memory}.
 
@@ -3605,7 +3605,7 @@ Specifies the maximum size, in bytes, of the memory allocation pool for
 the target program.  Also applies to Daikon, if the @option{--daikon}
 command-line argument is given.
 The size is specified in the same manner as the
-@option{--Xmx} switch to @command{java}; for example: @option{--heap-size=3600m}.
+@option{-Xmx} switch to @command{java}; for example: @option{--heap-size=7g}.
 
 @item --premain=@var{path}
 Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
@@ -5691,7 +5691,7 @@ file.txt} to compress a text file (but start with a small one first).
 @file{$DAIKONDIR/@/examples/@/c-examples/@/bzip2} of the distribution) by
 saying @command{gcc -gdwarf-2 -no-pie bzip2.c -o bzip2}, and that
 @env{$DAIKON} stands for the command that invokes Daikon, for
-instance @command{java -Xmx3600m daikon.Daikon --config_option
+instance @command{java -Xmx7g daikon.Daikon --config_option
 daikon.@/derive.@/Derivation.@/disable_derived_variables=true}.)
 
 @cindex named pipe, as data trace file
@@ -7915,7 +7915,7 @@ Some implementations of Java use a surprisingly small default, such as 64
 megabytes; to permit use of up to 2048
 megabytes, you would run Java like so:
 @example
-java -Xmx3600m ...
+java -Xmx7g ...
 @end example
 @noindent
 though you can use much more depending on the limitations of your JVM.
@@ -7925,8 +7925,8 @@ run Daikon, then you must separately indicate the amount of memory
 available to Chicory and to Daikon (the latter with Chicory's
 @option{--heap-size} command-line argument).  For example:
 @example
-java -Xmx3600m daikon.Chicory --comparability-file=MyClass.decls-DynComp \
-     --heap-size=2600m --daikon mypackage.MyClass arg1 arg2 arg3
+java -Xmx7g daikon.Chicory --comparability-file=MyClass.decls-DynComp \
+     --heap-size=7g --daikon mypackage.MyClass arg1 arg2 arg3
 @end example
 
 When using the Java @command{HotSpot} JVM, an additional parameter may need to
@@ -7938,7 +7938,7 @@ be necessary to increase this limit as well, with the
 of which at most 256 can be used for the permanent generation, you
 would run Java like so:
 @example
-java -Xmx3600m -XX:MaxPermSize=256m
+java -Xmx7g -XX:MaxPermSize=256m
 @end example
 
 Another possible problem is the creation of too many derived variables.
@@ -9216,20 +9216,20 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  evenheading thispage thischaptername thischapternum hfuzz
 @c  LocalWords:  oddheading thissectionnum thissectionname everyfooting d1
 @c  LocalWords:  QuickTime QTSystem QTJava arg1 arg2 arg3 MyMain Makefile
-@c  LocalWords:  originalclasspath grep EXIT79 EXIT32 prepend Xmx3600m var1
+@c  LocalWords:  originalclasspath grep EXIT79 EXIT32 prepend Xmx7g var1
 @c  LocalWords:  prepended computeConfidence numsamples getName var2 var3
 @c  LocalWords:  jcc Java2 seq1 CSharpContract myString otherString EXIT48
 @c  LocalWords:  unsplit if'' condition1 condition2 condition3 procedure1
 @c  LocalWords:  replacement1 procedure2 replacement2 arg0 EXIT33 pack1 d2
 @c  LocalWords:  pack2 online'' EXIT11 o1 o2 SIGSEGV O0 fjalar gcc3 EXIT0
-@c  LocalWords:  I' C' S' A' P' superclasses vv1 bzip2 Xmx3600m bfd dev ABI
+@c  LocalWords:  I' C' S' A' P' superclasses vv1 bzip2 Xmx7g bfd dev ABI
 @c  LocalWords:  binutils AMD64 EM64T amd64 CeleriacLauncher celeriacArg1
 @c  LocalWords:  celeriacArg2 EXIT22 checkargs Takuan WS BPEL file1 file2
 @c  LocalWords:  readlink Hynger HYbrid iNvariant GEneratoR SLSF Bak Udon
 @c  LocalWords:  Drager I1 I2 invSortComparator1 invSortComparator2 prover
 @c  LocalWords:  Myprog2 isDaikonInstrumented getDaikonInvariants GeoPoint
 @c  LocalWords:  valid'' deserializing declsfiles1 dtracefile1 declsfiles2
-@c  LocalWords:  dtracefile2 NoClassDefFoundError overfitting Xmx3600m ps1
+@c  LocalWords:  dtracefile2 NoClassDefFoundError overfitting Xmx7g ps1
 @c  LocalWords:  LIB2 CVC4 unformattable LinkageError SquarePanel Donohue
 @c  LocalWords:  SecurityManager setSecurityManager omitpattern Software''
 @c  LocalWords:  MyProblemMethod Liu Galeotti Mangala Gowri ABB LVTT LVT
