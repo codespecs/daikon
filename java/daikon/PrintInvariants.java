@@ -880,7 +880,7 @@ public final class PrintInvariants {
       }
       return;
     }
-    if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.isEmpty())) {
+    if ((ppt.numViews() == 0) && ppt.joiner_view.invs.isEmpty()) {
       if (debugPrint.isLoggable(FINE)) {
         debugPrint.fine("[No views for " + ppt.name() + "]");
       }

@@ -350,7 +350,7 @@ public class PptTopLevel extends Ppt {
   @SuppressWarnings("contracts.conditional.postcondition") // Checker Framework bug: "splitters"
   @EnsuresNonNullIf(result = true, expression = "splitters")
   public boolean has_splitters() {
-    return (splitters != null) && (!splitters.isEmpty());
+    return (splitters != null) && !splitters.isEmpty();
   }
 
   /** All children relations in the variable/ppt hierarchy. */

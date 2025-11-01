@@ -590,7 +590,7 @@ public class SampleTester {
    */
   private boolean proc_show_invs_assert(List<String> varNames) {
 
-    if ((varNames.isEmpty()) || (varNames.size() > 3)) {
+    if (varNames.isEmpty() || (varNames.size() > 3)) {
       parse_error("bad argument count (" + varNames.size() + ") for show_invs");
     }
 

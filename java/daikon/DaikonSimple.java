@@ -108,7 +108,7 @@ public class DaikonSimple {
     Set<File> decls_files = files.decls;
     Set<String> dtrace_files = files.dtrace;
 
-    if ((decls_files.isEmpty()) && (dtrace_files.isEmpty())) {
+    if (decls_files.isEmpty() && dtrace_files.isEmpty()) {
       throw new Daikon.UserError("No .decls or .dtrace files specified");
     }
 

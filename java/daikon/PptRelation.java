@@ -225,7 +225,7 @@ public class PptRelation implements Serializable {
 
   /** Returns true if this relation's child has children of its own. */
   public boolean hasChildren() {
-    return (!child.children.isEmpty());
+    return !child.children.isEmpty();
   }
 
   /**
@@ -1029,7 +1029,7 @@ public class PptRelation implements Serializable {
     // happen when there are ppts such as OBJECT or CLASS that don't end up
     // with any children (due to the program source or because of ppt filtering).
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if ((ppt.children.isEmpty()) && (ppt.equality_view == null)) {
+      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
         assert ppt.is_object() || ppt.is_class() || ppt.is_enter() : ppt;
         ppt.equality_view = new PptSliceEquality(ppt);
         ppt.equality_view.instantiate_invariants();

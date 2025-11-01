@@ -429,7 +429,7 @@ public class PptSplitter implements Serializable {
       invs = castNonNullDeep(invs); // https://tinyurl.com/cfissue/986
 
       // If neither child slice has invariants there is nothing to do
-      if ((invs[0].isEmpty()) && (invs[1].isEmpty())) {
+      if (invs[0].isEmpty() && invs[1].isEmpty()) {
         if (pslice.invs.isEmpty()) {
           parent.removeSlice(pslice);
         }

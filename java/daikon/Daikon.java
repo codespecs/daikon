@@ -740,7 +740,7 @@ public final class Daikon {
     Set<String> dtrace_files = files.dtrace;
     Set<File> spinfo_files = files.spinfo;
     Set<File> map_files = files.map;
-    if (server_dir == null && (decls_files.isEmpty()) && (dtrace_files.isEmpty())) {
+    if (server_dir == null && decls_files.isEmpty() && dtrace_files.isEmpty()) {
       System.out.println("No .decls or .dtrace files specified");
       throw new Daikon.UserError("No .decls or .dtrace files specified");
     }

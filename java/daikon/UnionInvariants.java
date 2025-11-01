@@ -150,7 +150,7 @@ public final class UnionInvariants {
   public static void union(PptMap collector, PptMap source) {
     for (PptTopLevel ppt : source.pptIterable()) {
 
-      if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.isEmpty())) {
+      if ((ppt.numViews() == 0) && ppt.joiner_view.invs.isEmpty()) {
         continue;
       }
 
