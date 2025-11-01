@@ -173,7 +173,7 @@ public class AnnotateNullable {
    * Returns the class program point corresponding to an object program point. Returns null if no
    * corresponding class ppt exists.
    *
-   * @param an object program point
+   * @param object_ppt an object program point
    * @return the class program point corresponding to an object program point
    */
   private static @Nullable PptTopLevel class_for_object(PptTopLevel object_ppt) {
