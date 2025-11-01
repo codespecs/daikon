@@ -158,6 +158,11 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return false;
   }
 
+  /**
+   * Returns the recall.
+   *
+   * @return the recall
+   */
   public double calcRecall() {
     System.out.println("Recall: " + recall.size() + " / " + targSet.size());
     if (targSet.isEmpty()) {

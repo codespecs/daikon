@@ -169,7 +169,13 @@ public class AnnotateNullable {
     }
   }
 
-  // Returns null if no corresponding class ppt exists
+  /**
+   * Returns the class program point corresponding to an object program point. Returns null if no
+   * corresponding class ppt exists.
+   *
+   * @param an object program point
+   * @return the class program point corresponding to an object program point
+   */
   private static @Nullable PptTopLevel class_for_object(PptTopLevel object_ppt) {
     if (object_ppt.parents.isEmpty()) {
       return null;
