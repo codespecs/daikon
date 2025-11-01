@@ -758,9 +758,12 @@ very_clean: very-clean
 very-clean: clean clean-generated-files
 	-rm -f TAGS
 	-rm -rf dcomp_premain.jar dcomp_rt.jar ${DCOMP_RT}
-	-rm -rf api
-	-rm -rf daikon/dcomp/std_dcomp_out.diff daikon/dcomp/std_dcomp_out.txt
+	-rm -rf api/
 	-rm -rf daikon/chicory/ChicoryTest.inv.out
+	-rm -rf daikon/chicory/debug/
+	-rm -rf daikon/dcomp/debug/
+	-rm -rf daikon/dcomp/DcompTest.log
+	-rm -rf daikon/dcomp/std_dcomp_out.diff daikon/dcomp/std_dcomp_out.txt
 
 run:	all
 	${JAVA_COMMAND} daikon.Daikon
