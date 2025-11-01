@@ -203,7 +203,7 @@ class StatementReplacer extends DepthFirstVisitor {
   @Pure
   private boolean isNonThisMethod(PrimaryExpression n) {
     return (n.f0.f0.choice instanceof Name
-        && !n.f1.isEmpty()
+        && n.f1.size() > 0
         && n.f1.elementAt(0) instanceof PrimarySuffix
         && ((PrimarySuffix) n.f1.elementAt(0)).f0.choice instanceof Arguments);
   }

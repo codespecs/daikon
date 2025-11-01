@@ -393,7 +393,7 @@ public class Ast {
     // First, try to get a name from the PrimarySuffix.
 
     NodeListOptional pslist = pe.f1;
-    if (!pslist.isEmpty()) {
+    if (pslist.size() > 0) {
       PrimarySuffix ps = (PrimarySuffix) pslist.elementAt(pslist.size() - 1);
       NodeChoice psnc = ps.f0;
       // PrimarySuffix:

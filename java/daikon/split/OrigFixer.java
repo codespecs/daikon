@@ -105,7 +105,7 @@ class OrigFixer extends DepthFirstVisitor {
   private boolean isOrig(PrimaryExpression n) {
     return ((n.f0.f0.choice instanceof Name)
         && ((Name) n.f0.f0.choice).f0.tokenImage.equals("orig")
-        && (!n.f1.isEmpty())
+        && (n.f1.size() > 0)
         && (n.f1.elementAt(0) instanceof PrimarySuffix)
         && (((PrimarySuffix) n.f1.elementAt(0)).f0.choice instanceof Arguments));
   }

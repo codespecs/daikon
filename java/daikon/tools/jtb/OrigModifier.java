@@ -56,11 +56,11 @@ public class OrigModifier extends DepthFirstVisitor {
 
     // test if optional list length is zero, if not, then it is not
     // the name of a simple variable
-    if (n.f1.isEmpty()) {
+    if (n.f1.size() == 0) {
       // checks if the nodeChoice's choice is Name
       if (n.f0.f0.choice instanceof Name) {
         // checks if the Name is simple
-        if (((Name) n.f0.f0.choice).f1.isEmpty()) {
+        if (((Name) n.f0.f0.choice).f1.size() == 0) {
           NodeToken variableToken = ((Name) n.f0.f0.choice).f0;
           variableToken.tokenImage = "orig(" + variableToken.tokenImage + ")";
           columnshift = columnshift + 6;

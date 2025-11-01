@@ -114,6 +114,16 @@ public class PptRelation implements Serializable {
     return parent_to_child_map.size();
   }
 
+  /**
+   * Returns true if this PptRelation is empty.
+   *
+   * @return true if this PptRelation is empty
+   */
+  @Pure
+  public boolean isEmpty() {
+    return size() == 0;
+  }
+
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied PptRelation this) {
