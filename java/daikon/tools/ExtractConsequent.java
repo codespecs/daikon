@@ -258,13 +258,19 @@ public class ExtractConsequent {
   }
 
   /**
-   * Extract consequents from a implications at a single program point. It only searches for
+   * Extract consequents from all implications at a single program point. It only searches for
    * top-level program points because Implications are produced only at those points.
    */
   public static void extract_consequent_maybe(PptTopLevel ppt, PptMap all_ppts) {
     ppt.simplify_variable_names();
 
     List<Invariant> invs = new ArrayList<>();
+    // Collect Implication invariants at this program point.
+    for (Invariant inv : ppt.invariants_vector()) {
+      if (inv instanceof Implication) {
+        invs.add(inv);
+      }
+    }
     if (!invs.isEmpty()) {
       String pptname = cleanup_pptname(ppt.name());
       for (Invariant maybe_as_inv : invs) {

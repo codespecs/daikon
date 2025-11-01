@@ -108,7 +108,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     vars.addAll(variables);
     VarInfo leader = leader();
 
-    // ensure well-formedness and set equality slots
+    // Ensure well-formedness and set equality slots.
     assert !variables.isEmpty();
     assert vars.size() == variables.size();
 
