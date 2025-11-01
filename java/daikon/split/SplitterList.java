@@ -135,7 +135,7 @@ public abstract class SplitterList {
   //     if (result != null)
   //       splitterArrays.addElement(result);
   //
-  //     if (splitterArrays.size() == 0) {
+  //     if (splitterArrays.isEmpty()) {
   //         Global.debugSplit.fine("SplitterList.get found no splitters for " + pptName);
   //         return null;
   //     } else {
@@ -178,7 +178,7 @@ public abstract class SplitterList {
       }
     }
 
-    if (splitterArrays.size() == 0) {
+    if (splitterArrays.isEmpty()) {
       Global.debugSplit.fine("SplitterList.get found no splitters for " + pptName);
       return null;
     } else {

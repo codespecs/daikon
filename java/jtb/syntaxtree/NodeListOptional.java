@@ -8,44 +8,63 @@ import java.util.*;
 
 // Represents an optional grammar list, e.g. ( A )*
 public class NodeListOptional implements NodeListInterface {
-   // This was added after running jtb to remove serializable warning.
-   static final long serialVersionUID = 20150406L;
+  // This was added after running jtb to remove serializable warning.
+  static final long serialVersionUID = 20150406L;
 
-   public NodeListOptional() {
-      nodes = new Vector<Node>();
-   }
+  public NodeListOptional() {
+    nodes = new Vector<Node>();
+  }
 
-   public NodeListOptional(Node firstNode) {
-      nodes = new Vector<Node>();
-      addNode(firstNode);
-   }
+  public NodeListOptional(Node firstNode) {
+    nodes = new Vector<Node>();
+    addNode(firstNode);
+  }
 
-   public void addNode(Node n) {
-      nodes.addElement(n);
-      n.setParent(this);
-   }
+  public void addNode(Node n) {
+    nodes.addElement(n);
+    n.setParent(this);
+  }
 
-   public Enumeration<Node> elements() { return nodes.elements(); }
-   public Node elementAt(int i)  { return nodes.elementAt(i); }
-   public int size()             { return nodes.size(); }
-   public boolean present()      { return nodes.size() != 0; }
-   public void accept(jtb.visitor.Visitor v) {
-      v.visit(this);
-   }
-   public <R,A> R accept(jtb.visitor.GJVisitor<R,A> v, A argu) {
-      return v.visit(this,argu);
-   }
-   public <R> R accept(jtb.visitor.GJNoArguVisitor<R> v) {
-      return v.visit(this);
-   }
-   public <A> void accept(jtb.visitor.GJVoidVisitor<A> v, A argu) {
-      v.visit(this,argu);
-   }
+  public Enumeration<Node> elements() {
+    return nodes.elements();
+  }
 
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
+  public Node elementAt(int i) {
+    return nodes.elementAt(i);
+  }
 
-   private Node parent;
-   public Vector<Node> nodes;
+  public int size() {
+    return nodes.size();
+  }
+
+  public boolean present() {
+    return !nodes.isEmpty();
+  }
+
+  public void accept(jtb.visitor.Visitor v) {
+    v.visit(this);
+  }
+
+  public <R, A> R accept(jtb.visitor.GJVisitor<R, A> v, A argu) {
+    return v.visit(this, argu);
+  }
+
+  public <R> R accept(jtb.visitor.GJNoArguVisitor<R> v) {
+    return v.visit(this);
+  }
+
+  public <A> void accept(jtb.visitor.GJVoidVisitor<A> v, A argu) {
+    v.visit(this, argu);
+  }
+
+  public void setParent(Node n) {
+    parent = n;
+  }
+
+  public Node getParent() {
+    return parent;
+  }
+
+  private Node parent;
+  public Vector<Node> nodes;
 }
-

@@ -232,7 +232,7 @@ public class SpinfoFile {
     List<SplitterObject[]> splittersForAllPpts = new ArrayList<>();
     for (List<String> pptSection : pptSections) {
       List<SplitterObject> splittersForThisPpt = new ArrayList<>();
-      if (pptSection.size() > 0) {
+      if (!pptSection.isEmpty()) {
         String pptName = pptSection.get(0).trim();
         SplitterObject splitObj = null;
         for (int j = 1; j < pptSection.size(); j++) {

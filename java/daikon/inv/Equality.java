@@ -109,7 +109,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     VarInfo leader = leader();
 
     // ensure well-formedness and set equality slots
-    assert variables.size() > 0;
+    assert !variables.isEmpty();
     assert vars.size() == variables.size();
 
     for (VarInfo vi : variables) {
@@ -254,10 +254,10 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     }
     // Choose a leader, preferring the valid variables.
     VarInfo leader;
-    if (valid_equiv.size() > 0) {
+    if (!valid_equiv.isEmpty()) {
       leader = valid_equiv.get(0);
     } else {
-      assert invalid_equiv.size() > 0;
+      assert !invalid_equiv.isEmpty();
       leader = invalid_equiv.get(0);
     }
     // Print the equality statements, stating expressible ones first.

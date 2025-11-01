@@ -233,7 +233,7 @@ public class ExtractConsequent {
         }
       }
 
-      if (allConds.size() > 0) {
+      if (!allConds.isEmpty()) {
         pw.println();
         pw.println("PPT_NAME " + pptname);
         for (String s : allConds) {
@@ -265,7 +265,7 @@ public class ExtractConsequent {
     ppt.simplify_variable_names();
 
     List<Invariant> invs = new ArrayList<>();
-    if (invs.size() > 0) {
+    if (!invs.isEmpty()) {
       String pptname = cleanup_pptname(ppt.name());
       for (Invariant maybe_as_inv : invs) {
         Implication maybe = (Implication) maybe_as_inv;

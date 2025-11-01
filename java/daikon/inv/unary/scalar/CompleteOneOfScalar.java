@@ -80,7 +80,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
   @Override
   public String format_using(@GuardSatisfied CompleteOneOfScalar this, OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
-      if (vals.size() == 0) {
+      if (vals.isEmpty()) {
         return var().name() + "has no values";
       }
       StringJoiner out = new StringJoiner(" ", var().name() + " has values: ", "");
@@ -113,7 +113,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
   @Override
   protected double computeConfidence() {
     ValueSet vs = ppt.var_infos[0].get_value_set();
-    if (vs.size() > 0) {
+    if (!vs.isEmpty()) {
       return Invariant.CONFIDENCE_JUSTIFIED;
     } else {
       return Invariant.CONFIDENCE_UNJUSTIFIED;

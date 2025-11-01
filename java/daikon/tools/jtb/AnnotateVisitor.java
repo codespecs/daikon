@@ -735,7 +735,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
           // PrimarySuffix or else its prefix is "this" (check that here).
           String fieldname = null;
           // System.out.println("pe.f1.size:" + pe.f1.size());
-          if (pe.f1.size() == 0) {
+          if (pe.f1.isEmpty()) {
             fieldname = Ast.fieldName(pe);
           } else if (pe.f1.size() == 1) {
             if (pe.f0.f0.which == 1) { // prefix is "this"

@@ -517,7 +517,7 @@ public class DynamicConstants implements Serializable {
     // the remaining constants and the newly-non constants.  Any slices
     // between the non-constants and other variables will have already
     // been created when those other variables became non-constants.
-    if (noncons.size() > 0) {
+    if (!noncons.isEmpty()) {
       List<Constant> cons = new ArrayList<>();
       cons.addAll(con_list);
       cons.addAll(noncons);
@@ -528,7 +528,7 @@ public class DynamicConstants implements Serializable {
     // Create all views over the newly non-missing.  Since missing
     // vars were not included in any previous views, we must match them
     // against all variables.
-    if (non_missing.size() > 0) {
+    if (!non_missing.isEmpty()) {
       debug.fine("Instantiating non missing in ppt: " + ppt.name());
       instantiate_views(non_missing, all_list);
     }
@@ -699,7 +699,7 @@ public class DynamicConstants implements Serializable {
             inv.log("Invariant %s destroyed by constant values %s", inv.format(), vals);
           }
         }
-        if (slice.invs.size() > 0) {
+        if (!slice.invs.isEmpty()) {
           slice_cnt[slice.arity()]++;
         }
         inv_cnt[slice.arity()] += slice.invs.size();
@@ -1096,7 +1096,7 @@ public class DynamicConstants implements Serializable {
         assert con.val != null : "@AssumeAssertion(nullness): dependent: val when count>0";
         slice1.add_val_bu(con.val, mod, con.count);
       }
-      if (slice1.invs.size() > 0) {
+      if (!slice1.invs.isEmpty()) {
         new_views.add(slice1);
       }
     }
@@ -1124,7 +1124,7 @@ public class DynamicConstants implements Serializable {
               : "@AssumeAssertion(nullness): dependent: val != null when count>0";
           slice2.add_val_bu(con1.val, con2.val, mod, mod, con1.count);
         }
-        if (slice2.invs.size() > 0) {
+        if (!slice2.invs.isEmpty()) {
           new_views.add(slice2);
         }
       }

@@ -740,7 +740,7 @@ public final class Daikon {
     Set<String> dtrace_files = files.dtrace;
     Set<File> spinfo_files = files.spinfo;
     Set<File> map_files = files.map;
-    if (server_dir == null && (decls_files.size() == 0) && (dtrace_files.size() == 0)) {
+    if (server_dir == null && (decls_files.isEmpty()) && (dtrace_files.isEmpty())) {
       System.out.println("No .decls or .dtrace files specified");
       throw new Daikon.UserError("No .decls or .dtrace files specified");
     }
@@ -1813,7 +1813,7 @@ public final class Daikon {
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
       // System.out.printf("considering ppt %s parents: %s, children: %s%n",
       //                     ppt.name, ppt.parents, ppt.children);
-      if (ppt.parents.size() == 0) {
+      if (ppt.parents.isEmpty()) {
         ppt.mergeInvs();
       }
     }
@@ -2082,7 +2082,7 @@ public final class Daikon {
         debugTrace.fine("Initializing partial order");
       }
       fileio_progress.clear();
-      if (!Daikon.dkconfig_quiet && decl_files.size() > 0) {
+      if (!Daikon.dkconfig_quiet && !decl_files.isEmpty()) {
         System.out.print("\r(read ");
         System.out.print(StringsPlume.nplural(decl_files.size(), "decls file"));
         System.out.println(")");
@@ -2131,7 +2131,7 @@ public final class Daikon {
    */
   private static void load_map_files(Set<File> map_files) {
     long startTime = System.nanoTime();
-    if (!PptSplitter.dkconfig_disable_splitting && map_files.size() > 0) {
+    if (!PptSplitter.dkconfig_disable_splitting && !map_files.isEmpty()) {
       System.out.print("Reading map (context) files ");
       ContextSplitterFactory.load_mapfiles_into_splitterlist(
           map_files, ContextSplitterFactory.dkconfig_granularity);
@@ -2360,7 +2360,7 @@ public final class Daikon {
           String.format("Finished reading %d samples", FileIO.samples_processed));
     }
 
-    if (all_ppts.size() == 0) {
+    if (all_ppts.isEmpty()) {
       String message = "No program point declarations were found.";
       if (FileIO.omitted_declarations != 0) {
         message +=
@@ -2765,7 +2765,7 @@ public final class Daikon {
           }
         }
 
-        if (vars.size() > 0) {
+        if (!vars.isEmpty()) {
 
           // Create new equality sets for all of the non-equal vars
           List<Equality> newInvs = sliceEquality.createEqualityInvs(vars, eq);

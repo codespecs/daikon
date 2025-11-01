@@ -109,7 +109,7 @@ class WriteViolationFile {
                 + daikon.Global.lineSep
                 + "# Violations: ");
 
-        if (vios.size() == 0) {
+        if (vios.isEmpty()) {
           writer.write("none." + daikon.Global.lineSep);
         } else {
           writer.write(daikon.Global.lineSep);

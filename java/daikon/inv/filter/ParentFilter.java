@@ -152,7 +152,7 @@ public class ParentFilter extends InvariantFilter {
                   "Not in guarding list %s for %s: parent var %s at %s for %s at %s%n",
                   guardedVars, pinv, pv, rel.parent, v.name(), rel.child);
             }
-            VarInfo pgv = pGuardedVars.size() > 0 ? pGuardedVars.get(0) : null;
+            VarInfo pgv = !pGuardedVars.isEmpty() ? pGuardedVars.get(0) : null;
             assert (pgv != pv);
             if (debug && pgv != null) {
               System.out.printf(

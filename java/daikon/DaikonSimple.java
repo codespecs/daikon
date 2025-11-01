@@ -108,7 +108,7 @@ public class DaikonSimple {
     Set<File> decls_files = files.decls;
     Set<String> dtrace_files = files.dtrace;
 
-    if ((decls_files.size() == 0) && (dtrace_files.size() == 0)) {
+    if ((decls_files.isEmpty()) && (dtrace_files.isEmpty())) {
       throw new Daikon.UserError("No .decls or .dtrace files specified");
     }
 
@@ -594,7 +594,7 @@ public class DaikonSimple {
         // DaikonSimple will not do this to be consistent.
         // The better idea is for Daikon to assert that these valuetuples are
         // empty and then skip the sample.
-        assert vt.size() == 0;
+        assert vt.isEmpty();
         return;
       }
 

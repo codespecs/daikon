@@ -904,7 +904,7 @@ class FormatTestCase {
    *     variables involved
    */
   private static void populateWithSamples(Invariant inv, List<Object[]> samples) {
-    if (samples == null || samples.size() == 0) {
+    if (samples == null || samples.isEmpty()) {
       return;
     }
 

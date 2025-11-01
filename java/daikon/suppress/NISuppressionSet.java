@@ -500,7 +500,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     }
     // This isn't necessarily true if the suppressee is of the same
     // class but doesn't match due to variable swapping.
-    // assert new_suppressions.size() > 0;
+    // assert !new_suppressions.isEmpty();
 
     // Create a new suppression set with all of the suppressions.
     /*NNC:@MonotonicNonNull*/ NISuppression[] new_array =

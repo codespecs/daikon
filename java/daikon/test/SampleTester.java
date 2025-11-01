@@ -590,7 +590,7 @@ public class SampleTester {
    */
   private boolean proc_show_invs_assert(List<String> varNames) {
 
-    if ((varNames.size() < 1) || (varNames.size() > 3)) {
+    if ((varNames.isEmpty()) || (varNames.size() > 3)) {
       parse_error("bad argument count (" + varNames.size() + ") for show_invs");
     }
 
@@ -629,7 +629,7 @@ public class SampleTester {
    */
   private boolean proc_constant_assert(List<String> varNames) {
 
-    if (varNames.size() < 1) {
+    if (varNames.isEmpty()) {
       parse_error("Must be at least one argument for constant assertion");
     }
 

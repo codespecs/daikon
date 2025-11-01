@@ -130,7 +130,7 @@ public class SplitterFactory {
             }
             System.out.printf(
                 "%s: %d of %d splitters successful%n", ppt_name, numGood, numsplitters);
-            if (sp.size() >= 1) {
+            if (!sp.isEmpty()) {
               SplitterList.put(ppt_name, sp.toArray(new Splitter[0]));
             }
             // delete this entry in the splitter array to prevent it from

@@ -3437,7 +3437,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         VarInfoName root, @Nullable VarInfoName index_base, int index_off) {
       QuantifierVisitor qv = new QuantifierVisitor(root);
       List<VarInfoName> unquants = new ArrayList<>(qv.unquants());
-      if (unquants.size() == 0) {
+      if (unquants.isEmpty()) {
         // Nothing to do?
         return null;
       } else if (unquants.size() == 1) {
@@ -3466,7 +3466,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         VarInfoName root, String index_base, boolean free, int index_off) {
       QuantifierVisitor qv = new QuantifierVisitor(root);
       List<VarInfoName> unquants = new ArrayList<>(qv.unquants());
-      if (unquants.size() == 0) {
+      if (unquants.isEmpty()) {
         // Nothing to do?
         return null;
       } else if (unquants.size() == 1) {
@@ -3560,7 +3560,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       char tmp = 'i';
       for (int i = 0; i < roots.length; i++) {
         List<VarInfoName> uq = new ArrayList<>(helper[i].unquants());
-        if (uq.size() == 0) {
+        if (uq.isEmpty()) {
           // nothing needs quantification
           result.root_primes[i] = roots[i];
         } else {

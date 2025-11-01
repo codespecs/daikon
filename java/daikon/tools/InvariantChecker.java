@@ -239,7 +239,7 @@ public class InvariantChecker {
         invariants.add(f);
       }
     }
-    if (invariants.size() == 0) {
+    if (invariants.isEmpty()) {
       throw new Daikon.UserError(
           "Did not find any invariant files in the directory " + dir_file + Global.lineSep + usage);
     }
@@ -249,7 +249,7 @@ public class InvariantChecker {
         dtraces.add(f);
       }
     }
-    if (dtraces.size() == 0) {
+    if (dtraces.isEmpty()) {
       throw new Daikon.UserError(
           "Did not find any dtrace files in the directory " + dir_file + Global.lineSep + usage);
     }

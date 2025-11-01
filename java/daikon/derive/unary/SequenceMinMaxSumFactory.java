@@ -41,7 +41,7 @@ public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
       result.add(new SequenceSum(vi));
     }
 
-    if (result.size() == 0) {
+    if (result.isEmpty()) {
       return null;
     }
 

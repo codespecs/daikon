@@ -193,7 +193,7 @@ public final class Debug {
     VarInfo v = visTracked(vis);
     if (v != null) {
       set(c, ppt, new VarInfo[] {v});
-    } else if (vis.size() > 0) {
+    } else if (!vis.isEmpty()) {
       set(c, ppt, new VarInfo[] {vis.get(0)});
     } else {
       set(c, ppt, null);

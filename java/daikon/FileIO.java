@@ -1753,7 +1753,7 @@ public final class FileIO {
         throw new Daikon.UserError(message, reader, state.filename);
       }
 
-      if (state.all_ppts.size() == 0) {
+      if (state.all_ppts.isEmpty()) {
         throw new Daikon.UserError(
             "No declarations were provided before the first sample.  Perhaps you did not supply"
                 + " the proper .decls file to Daikon.  (Or, there could be a bug in the front end"
