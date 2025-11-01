@@ -121,7 +121,7 @@ public class PptRelation implements Serializable {
    */
   @Pure
   public boolean isEmpty() {
-    return size() == 0;
+    return parent_to_child_map.isEmpty();
   }
 
   @SideEffectFree
