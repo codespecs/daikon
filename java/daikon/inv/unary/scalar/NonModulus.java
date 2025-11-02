@@ -143,7 +143,7 @@ public class NonModulus extends SingleScalar {
     if (results_accurate) {
       return;
     }
-    if (elements.size() == 0) {
+    if (elements.isEmpty()) {
       no_result_yet = true;
     } else {
       // Do I want to communicate back some information about the smallest

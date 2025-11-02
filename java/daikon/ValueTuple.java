@@ -429,6 +429,16 @@ public final class ValueTuple implements Cloneable {
     return vals.length;
   }
 
+  /**
+   * Returns true if this ValueTuple is empty.
+   *
+   * @return true if this ValueTuple is empty
+   */
+  @Pure
+  public boolean isEmpty() {
+    return size() == 0;
+  }
+
   /** Return a new ValueTuple containing this one's first len elements. */
   public ValueTuple trim(int len) {
     @Nullable @Interned Object[] new_vals = ArraysPlume.subarray(vals, 0, len);

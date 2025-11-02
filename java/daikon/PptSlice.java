@@ -143,7 +143,7 @@ public abstract class PptSlice extends Ppt {
     boolean removed = invs.remove(inv);
     assert removed : "inv " + inv + " not in ppt " + name();
     Global.falsified_invariants++;
-    if (invs.size() == 0) {
+    if (invs.isEmpty()) {
       if (Debug.logDetail()) {
         log("last invariant removed");
       }
@@ -163,7 +163,7 @@ public abstract class PptSlice extends Ppt {
       invs.removeAll(to_remove);
       assert old_invs_size - invs.size() == to_remove.size();
       Global.falsified_invariants += to_remove.size();
-      if (invs.size() == 0) {
+      if (invs.isEmpty()) {
         if (Debug.logDetail()) {
           log("last invariant removed");
         }
@@ -267,7 +267,7 @@ public abstract class PptSlice extends Ppt {
 
   /** Remove the invariants noted in omitTypes. */
   public void processOmissions(boolean[] omitTypes) {
-    if (invs.size() == 0) {
+    if (invs.isEmpty()) {
       return;
     }
     List<Invariant> toRemove = new ArrayList<>();

@@ -56,7 +56,7 @@ public final class SplitDtrace {
       }
       while (true) {
         readRec(reader, rec);
-        if (rec.size() == 0) {
+        if (rec.isEmpty()) {
           break;
         }
         if (isDeclare(rec)) {
@@ -99,7 +99,7 @@ public final class SplitDtrace {
       }
       while (true) {
         readRec(reader, rec);
-        if (rec.size() == 0) {
+        if (rec.isEmpty()) {
           break;
         }
         boolean isDecl = isDeclare(rec);

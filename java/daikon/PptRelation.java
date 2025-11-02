@@ -114,6 +114,16 @@ public class PptRelation implements Serializable {
     return parent_to_child_map.size();
   }
 
+  /**
+   * Returns true if this PptRelation is empty.
+   *
+   * @return true if this PptRelation is empty
+   */
+  @Pure
+  public boolean isEmpty() {
+    return parent_to_child_map.isEmpty();
+  }
+
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied PptRelation this) {
@@ -215,7 +225,7 @@ public class PptRelation implements Serializable {
 
   /** Returns true if this relation's child has children of its own. */
   public boolean hasChildren() {
-    return (child.children.size() > 0);
+    return !child.children.isEmpty();
   }
 
   /**
@@ -859,7 +869,7 @@ public class PptRelation implements Serializable {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("PPT Hierarchy");
       for (PptTopLevel ppt : all_ppts.pptIterable()) {
-        if (ppt.parents.size() == 0) {
+        if (ppt.parents.isEmpty()) {
           ppt.debug_print_tree(debug, 0, null);
         }
       }
@@ -1019,7 +1029,7 @@ public class PptRelation implements Serializable {
     // happen when there are ppts such as OBJECT or CLASS that don't end up
     // with any children (due to the program source or because of ppt filtering).
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if ((ppt.children.size() == 0) && (ppt.equality_view == null)) {
+      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
         assert ppt.is_object() || ppt.is_class() || ppt.is_enter() : ppt;
         ppt.equality_view = new PptSliceEquality(ppt);
         ppt.equality_view.instantiate_invariants();
@@ -1030,7 +1040,7 @@ public class PptRelation implements Serializable {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("PPT Hierarchy");
       for (PptTopLevel ppt : all_ppts.pptIterable()) {
-        if (ppt.parents.size() == 0) {
+        if (ppt.parents.isEmpty()) {
           ppt.debug_print_tree(debug, 0, null);
         }
       }

@@ -350,7 +350,7 @@ public class PptTopLevel extends Ppt {
   @SuppressWarnings("contracts.conditional.postcondition") // Checker Framework bug: "splitters"
   @EnsuresNonNullIf(result = true, expression = "splitters")
   public boolean has_splitters() {
-    return (splitters != null) && (splitters.size() > 0);
+    return (splitters != null) && !splitters.isEmpty();
   }
 
   /** All children relations in the variable/ppt hierarchy. */
@@ -1022,7 +1022,7 @@ public class PptTopLevel extends Ppt {
     // Debug print some (program specific) variables
     if (debug.isLoggable(Level.FINE)) {
       System.out.println("Processing samples at " + name());
-      if (vt.size() > 0) {
+      if (!vt.isEmpty()) {
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < vt.size(); i++) {
           VarInfo vi = var_infos[i];
@@ -1039,7 +1039,7 @@ public class PptTopLevel extends Ppt {
 
     // stop early if there are no vars
     if (var_infos.length == 0) {
-      assert vt.size() == 0;
+      assert vt.isEmpty();
       return null;
     }
 
@@ -1178,7 +1178,7 @@ public class PptTopLevel extends Ppt {
 
     // Add the sample to each slice
     for (PptSlice slice : views_iterable()) {
-      if (slice.invs.size() == 0) {
+      if (slice.invs.isEmpty()) {
         continue;
       }
       weakened_invs.addAll(slice.add(vt, count));
@@ -1213,7 +1213,7 @@ public class PptTopLevel extends Ppt {
       // invariants below.
       NIS.apply_samples(vt, count);
       first_pass_with_sample = false;
-    } while (NIS.newly_falsified.size() != 0);
+    } while (!NIS.newly_falsified.isEmpty());
 
     first_pass_with_sample = true;
 
@@ -1221,7 +1221,7 @@ public class PptTopLevel extends Ppt {
     // (Removal requires use of old-style for loop and Iterator.)
     for (Iterator<PptSlice> itor = views_iterator(); itor.hasNext(); ) {
       PptSlice view = itor.next();
-      if (view.invs.size() == 0) {
+      if (view.invs.isEmpty()) {
         itor.remove();
         if (Global.debugInfer.isLoggable(Level.FINE)) {
           Global.debugInfer.fine("add(ValueTulple,int): slice died: " + name() + view.varNames());
@@ -1563,7 +1563,7 @@ public class PptTopLevel extends Ppt {
     // pass might not have come up with any invariants.
     for (Iterator<PptSlice> itor = slices_vector_copy.iterator(); itor.hasNext(); ) {
       PptSlice slice = itor.next();
-      if (slice.invs.size() == 0) {
+      if (slice.invs.isEmpty()) {
         // removes the element from slices_vector_copy
         itor.remove();
       }
@@ -3134,7 +3134,7 @@ public class PptTopLevel extends Ppt {
           LemmaStack.printLemmas(System.err, proverStack.minimizeContradiction());
           System.err.println();
         }
-        if (problems.size() == 0) {
+        if (problems.isEmpty()) {
           System.err.println("Warning: removal failed, punting");
           return;
         }
@@ -3592,8 +3592,8 @@ public class PptTopLevel extends Ppt {
     }
 
     // If we don't have any children, there is nothing to do.
-    if (children.size() == 0) {
-      assert equality_view != null : "children.size() == 0 and equality_view == null for " + this;
+    if (children.isEmpty()) {
+      assert equality_view != null : "children.isEmpty() and equality_view == null for " + this;
       return;
     }
 
@@ -3635,7 +3635,7 @@ public class PptTopLevel extends Ppt {
     // some ppt relationships such as constructor ENTER ppts to their
     // object ppts do not have any variable relationships).
     for (PptRelation rel : children) {
-      if (rel.size() > 0) {
+      if (!rel.isEmpty()) {
         values_num_samples += rel.child.values_num_samples;
       }
     }
@@ -3867,7 +3867,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // There shouldn't be any slices when we start
-    assert views.size() == 0;
+    assert views.isEmpty();
 
     // Create an array of leaders to build slices over
     List<VarInfo> non_missing_leaders = new ArrayList<>(equality_view.invs.size());
@@ -3923,7 +3923,7 @@ public class PptTopLevel extends Ppt {
         PptSlice2 slice2 = new PptSlice2(this, leaders[i], leaders[j]);
 
         slice2.merge_invariants();
-        if (slice2.invs.size() > 0) {
+        if (!slice2.invs.isEmpty()) {
           binary_slices.add(slice2);
         }
       }
@@ -3956,7 +3956,7 @@ public class PptTopLevel extends Ppt {
 
           slice3.merge_invariants();
 
-          if (slice3.invs.size() > 0) {
+          if (!slice3.invs.isEmpty()) {
             ternary_slices.add(slice3);
           }
         }
@@ -3990,7 +3990,7 @@ public class PptTopLevel extends Ppt {
       System.out.printf("merge_invs_one_child " + this);
     }
 
-    assert views.size() == 0;
+    assert views.isEmpty();
     assert children.size() == 1;
 
     PptRelation rel = children.get(0);
@@ -4110,7 +4110,7 @@ public class PptTopLevel extends Ppt {
     debugConditional.fine("attempting merge conditional for " + name());
 
     // If there are no children, there is nothing to do
-    if (children.size() == 0) {
+    if (children.isEmpty()) {
       return;
     }
 
@@ -4263,7 +4263,7 @@ public class PptTopLevel extends Ppt {
       }
 
       // If all of the invariants in a slice were removed, note it for removal
-      if (slice.invs.size() == 0) {
+      if (slice.invs.isEmpty()) {
         slices_to_remove.add(slice);
       }
     }
@@ -4352,7 +4352,7 @@ public class PptTopLevel extends Ppt {
     if (invEquals != null) {
       newSlice.addInvariant(invEquals);
     } else {
-      if (newSlice.invs.size() == 0) {
+      if (newSlice.invs.isEmpty()) {
         newSlice.parent.removeSlice(newSlice);
       }
     }

@@ -96,9 +96,15 @@ public class InvariantFilters {
     propertyFilters.add(filter);
   }
 
+  /**
+   * Returns a filter corresponding to "should keep" information.
+   *
+   * @param invariant an invariant
+   * @return a filter corresponding to "should keep" information
+   */
   public @Nullable InvariantFilter shouldKeepVarFilters(Invariant invariant) {
     // Logger df = PrintInvariants.debugFiltering;
-    if (variableFilters.size() != 0) {
+    if (!variableFilters.isEmpty()) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
         boolean hasAnyVariable = false;
         for (VariableFilter filter : variableFilters) {
