@@ -209,7 +209,7 @@ foreach my $dtrace_file (@trace_files) {
 }
 
 my $invfile = "runcluster_temp_$algorithm-$ncluster.inv";
-$command = "java -cp $SCRIPTDIR/../daikon.jar -Xmx3600m daikon.Daikon -o $invfile --config_option daikon.PptTopLevel.pairwise_implications=true --var_omit_pattern=\"class\" --no_text_output --no_show_progress $spinfo_file $decls_new " . join(' ', @new_dtraces) . " 2>&1 > runcluster_temp_Daikon_output.txt";
+$command = "java -cp $SCRIPTDIR/../daikon.jar -Xmx7g daikon.Daikon -o $invfile --config_option daikon.PptTopLevel.pairwise_implications=true --var_omit_pattern=\"class\" --no_text_output --no_show_progress $spinfo_file $decls_new " . join(' ', @new_dtraces) . " 2>&1 > runcluster_temp_Daikon_output.txt";
 system_or_die($command, $verbose);
 
 $invfile =~ /(.*)\.inv/;

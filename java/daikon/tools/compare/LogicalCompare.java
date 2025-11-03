@@ -431,7 +431,7 @@ public class LogicalCompare {
     for (int i = 0; i < unsafeAssumptions.size(); i++) {
       List<Lemma> unsafe = unsafeAssumptions.subList(i, j);
       boolean safe = false;
-      while (!safe && unsafe.size() > 0) {
+      while (!safe && !unsafe.isEmpty()) {
         int innerMark = lemmas.markLevel();
         lemmas.pushLemmas(new ArrayList<Lemma>(unsafe));
         if (lemmas.checkForContradiction() == 'T') {
@@ -445,7 +445,7 @@ public class LogicalCompare {
         }
       }
       if (!safe) {
-        assert unsafe.size() == 0;
+        assert unsafe.isEmpty();
         j = unsafeAssumptions.size();
       }
     }

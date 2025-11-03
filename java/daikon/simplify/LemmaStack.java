@@ -425,7 +425,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   public void removeContradiction() throws SimplifyError {
     do {
       List<Lemma> problems = minimizeContradiction();
-      if (problems.size() == 0) {
+      if (problems.isEmpty()) {
         throw new SimplifyError("Minimization failed");
       }
       Lemma bad = problems.get(problems.size() - 1);

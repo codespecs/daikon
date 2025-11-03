@@ -60,7 +60,7 @@ public class Common {
         vlist.add(vi.enclosing_var);
       }
     }
-    if (vlist.size() > 0) {
+    if (!vlist.isEmpty()) {
       VarInfo[] full = new VarInfo[vars.length + vlist.size()];
       int index = 0;
       for (VarInfo vi : vars) {

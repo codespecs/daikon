@@ -430,7 +430,7 @@ public final class Runtime {
       // Get the first class in the list (if any)
       ClassInfo class_info = null;
       synchronized (SharedData.new_classes) {
-        if (SharedData.new_classes.size() > 0) {
+        if (!SharedData.new_classes.isEmpty()) {
           class_info = SharedData.new_classes.removeFirst();
         }
       }
@@ -679,7 +679,7 @@ public final class Runtime {
 
                 if (chicoryLoaderInstantiationError) {
                   // Warning messages have already been printed.
-                } else if (SharedData.all_classes.size() == 0) {
+                } else if (SharedData.all_classes.isEmpty()) {
                   System.out.println("Chicory warning: No methods were instrumented.");
                   if (!ppt_select_pattern.isEmpty() || !ppt_omit_pattern.isEmpty()) {
                     System.out.println(

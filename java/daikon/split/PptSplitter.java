@@ -429,14 +429,14 @@ public class PptSplitter implements Serializable {
       invs = castNonNullDeep(invs); // https://tinyurl.com/cfissue/986
 
       // If neither child slice has invariants there is nothing to do
-      if ((invs[0].size() == 0) && (invs[1].size() == 0)) {
-        if (pslice.invs.size() == 0) {
+      if (invs[0].isEmpty() && invs[1].isEmpty()) {
+        if (pslice.invs.isEmpty()) {
           parent.removeSlice(pslice);
         }
         continue;
       }
 
-      if (pslice.invs.size() == 0) {
+      if (pslice.invs.isEmpty()) {
         debug.fine("PptSplitter: created new slice " + Arrays.toString(vis) + " @" + parent.name);
       }
 
@@ -475,7 +475,7 @@ public class PptSplitter implements Serializable {
 
     // Add the splitting condition as an exclusive condition if requested
     if ((splitter != null) && dkconfig_dummy_invariant_level > 0) {
-      if (exclusive_invs_vec.size() == 0 || dkconfig_dummy_invariant_level >= 2) {
+      if (exclusive_invs_vec.isEmpty() || dkconfig_dummy_invariant_level >= 2) {
         // As a last resort, try using the user's supplied DummyInvariant
         debug.fine("addImplications: resorting to dummy");
         PptConditional cond1 = (PptConditional) ppt1;
@@ -503,7 +503,7 @@ public class PptSplitter implements Serializable {
     }
 
     // If there are no exclusive conditions, we can do nothing here
-    if (exclusive_invs_vec.size() == 0) {
+    if (exclusive_invs_vec.isEmpty()) {
       debug.fine("addImplications: no exclusive conditions");
       return;
     }

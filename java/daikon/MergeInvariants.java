@@ -225,7 +225,7 @@ public final class MergeInvariants {
 
     // if no decls file was specified
     if (decl_file == null) {
-      if (splitter_files.size() > 0) {
+      if (!splitter_files.isEmpty()) {
         throw new Daikon.UserError(".spinfo files may only be specified along with a .decls file");
       }
 
@@ -288,11 +288,11 @@ public final class MergeInvariants {
 
       // Skip everything that is not a final exit point
       if (!ppt.ppt_name.isExitPoint()) {
-        assert ppt.children.size() > 0 : ppt;
+        assert !ppt.children.isEmpty() : ppt;
         continue;
       }
       if (ppt.ppt_name.isCombinedExitPoint()) {
-        assert ppt.children.size() > 0 : ppt;
+        assert !ppt.children.isEmpty() : ppt;
         continue;
       }
 
@@ -304,7 +304,7 @@ public final class MergeInvariants {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters) {
           for (PptTopLevel p : ppt_split.ppts) {
-            assert p.children.size() == 0 : p;
+            assert p.children.isEmpty() : p;
           }
         }
       }
@@ -356,12 +356,12 @@ public final class MergeInvariants {
       }
 
       // Make sure at least one child was found
-      assert ppt.children.size() > 0 : ppt;
+      assert !ppt.children.isEmpty() : ppt;
       if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters) {
           for (PptTopLevel p : ppt_split.ppts) {
-            assert p.children.size() > 0 : p;
+            assert !p.children.isEmpty() : p;
           }
         }
       }
@@ -374,7 +374,7 @@ public final class MergeInvariants {
     if (debug.isLoggable(FINE)) {
       debug.fine("PPT Hierarchy");
       for (PptTopLevel ppt : merge_ppts.pptIterable()) {
-        if (ppt.parents.size() == 0) {
+        if (ppt.parents.isEmpty()) {
           ppt.debug_print_tree(debug, 0, null);
         }
       }

@@ -246,6 +246,16 @@ public class PptMap implements Serializable {
     return nameToPpt.size();
   }
 
+  /**
+   * Returns true if this PptMap is empty.
+   *
+   * @return true if this PptMap is empty
+   */
+  @Pure
+  public boolean isEmpty() {
+    return size() == 0;
+  }
+
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied PptMap this) {

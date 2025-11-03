@@ -103,7 +103,7 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 
 # Not := because DAIKON_CLASSPATH is set later in this file.
 JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
-JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx3600m ${JAVAC_ARGS}
+JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
 JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
 
 
@@ -632,7 +632,7 @@ dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 ${DCOMP_RT} dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf ${DCOMP_RT}
 	${INSTALL} -d ${DCOMP_RT}
-	${JAVA_COMMAND} -Xmx3600m daikon.dcomp.BuildJDK ${DCOMP_RT}
+	${JAVA_COMMAND} -Xmx7g daikon.dcomp.BuildJDK ${DCOMP_RT}
 # "then" clause is Java 8, "else" clause is Java 9+.
 # For Java 9+, there appears to be a bug in the Java reflection invoke code that it
 # does not check that the arg list matches.  Hence, it tries to invoke
@@ -758,9 +758,12 @@ very_clean: very-clean
 very-clean: clean clean-generated-files
 	-rm -f TAGS
 	-rm -rf dcomp_premain.jar dcomp_rt.jar ${DCOMP_RT}
-	-rm -rf api
-	-rm -rf daikon/dcomp/std_dcomp_out.diff daikon/dcomp/std_dcomp_out.txt
+	-rm -rf api/
 	-rm -rf daikon/chicory/ChicoryTest.inv.out
+	-rm -rf daikon/chicory/debug/
+	-rm -rf daikon/dcomp/debug/
+	-rm -rf daikon/dcomp/DcompTest.log
+	-rm -rf daikon/dcomp/std_dcomp_out.diff daikon/dcomp/std_dcomp_out.txt
 
 run:	all
 	${JAVA_COMMAND} daikon.Daikon
@@ -807,14 +810,9 @@ endif
 
 # See version numbers at https://github.com/google/error-prone/releases
 # and https://errorprone.info/docs/installation.
-# UNDONE: this if branch no longer needed as JAVA must be >= 21?
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -lt 17; echo $$?),0)
-  error-prone-version = 2.31.0
-  extra-error-prone-args-1 =
-else
-  error-prone-version = 2.42.0
-  extra-error-prone-args-1 = --should-stop=ifError=FLOW
-endif
+# Only run under Java 21+.
+error-prone-version = 2.42.0
+extra-error-prone-args-1 = --should-stop=ifError=FLOW
 
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-${error-prone-version}-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.49.3-eisop1.jar
 
@@ -1293,7 +1291,7 @@ ifeq (${SKIP_JAVADOC},1)
 else
 	mkdir -p ${JAVADOC_DEST}
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea ${JAVADOC_FLAGS} -Xdoclint:all ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} -J-Xmx7g -J-ea ${JAVADOC_FLAGS} -Xdoclint:all ${DOCLET_FLAGS} \
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 	cd ${JAVADOC_DEST} && ${PLUMESCRIPTS}/preplace '^ *&#64;cindex.*' ''
@@ -1312,7 +1310,7 @@ ifeq (${SKIP_JAVADOC},1)
 else
 	mkdir -p ${JAVADOC_DEST}
 	@make javadoc-files.txt
-	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx3600m -J-ea ${JAVADOC_FLAGS} ${DOCLET_FLAGS} $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
+	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx7g -J-ea ${JAVADOC_FLAGS} ${DOCLET_FLAGS} $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
 	@rm -f javadoc-files.txt
 endif
 
@@ -1323,7 +1321,7 @@ ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 8; echo $$?),0)
 	@echo "Skipping api-private target under Java 8"
 else
 	mkdir -p ${JAVADOC_DEST}
-	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea ${JAVADOC_FLAGS} -private -Xdoclint:all ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea ${JAVADOC_FLAGS} -private -Xdoclint:all ${DOCLET_FLAGS} \
 	  daikon -subpackages ${DAIKON_PACKAGES}
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 endif
@@ -1350,7 +1348,7 @@ requireJavadoc: ${JAVA_FILES}
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS} \
 		--texinfo tmpfile \
 		@javadoc-files.txt
 	mv -f tmpfile $@
@@ -1361,7 +1359,7 @@ requireJavadoc: ${JAVA_FILES}
 
 ../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS} \
 		--texinfo tmpfile \
 		@javadoc-files.txt
 	perl -pi -e 's/&#64;cindex/\@cindex/g' tmpfile

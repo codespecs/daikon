@@ -158,9 +158,14 @@ public class MatchCountVisitor extends PrintAllVisitor {
     return false;
   }
 
+  /**
+   * Returns the recall.
+   *
+   * @return the recall
+   */
   public double calcRecall() {
     System.out.println("Recall: " + recall.size() + " / " + targSet.size());
-    if (targSet.size() == 0) {
+    if (targSet.isEmpty()) {
       // avoids divide by zero
       return -1;
     }
@@ -195,7 +200,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
   public double calcPrecision() {
 
     System.out.println("Prec: " + recall.size() + " / " + cnt.size());
-    if (cnt.size() == 0) {
+    if (cnt.isEmpty()) {
       // to avoid a divide by zero
       return -1;
     }

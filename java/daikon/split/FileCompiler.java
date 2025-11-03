@@ -150,7 +150,7 @@ public final class FileCompiler {
     @SuppressWarnings("UnusedVariable") // for debugging
     String compile_output;
 
-    if (filenames.size() == 0) {
+    if (filenames.isEmpty()) {
       throw new Error("no files to compile were provided");
     }
 
@@ -250,7 +250,7 @@ public final class FileCompiler {
         }
       }
 
-      if (retry.size() > 0) {
+      if (!retry.isEmpty()) {
         compile_source(retry);
       }
     }

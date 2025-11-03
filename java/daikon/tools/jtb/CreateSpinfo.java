@@ -257,7 +257,7 @@ public class CreateSpinfo {
     for (@KeyFor("conditions") String method : CollectionsPlume.sortedKeySet(conditions)) {
       List<String> method_conds = conditions.get(method);
       Collections.sort(method_conds);
-      if (method_conds.size() > 0) {
+      if (!method_conds.isEmpty()) {
         String qualifiedMethod = (packageName == null) ? method : packageName + "." + method;
         output.println("PPT_NAME " + qualifiedMethod);
         for (int i = 0; i < method_conds.size(); i++) {
