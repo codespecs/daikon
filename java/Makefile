@@ -984,18 +984,33 @@ show_nullness_java_files:
 	@echo ${DAIKON_JAVA_FILES}
 
 ## TODO: Reinstate these dependencies later:  typecheck-prototype typecheck-vindex
-# Check is in two parts because Travis won't run jobs longer than 50 minutes.
+# Check is in multiple parts because Travis won't run jobs longer than 50 minutes
+# and because CI memory can get exhausted on multiple CI platforms (why?).
 # Index Checker takes much longer than any other checker.
+# Typechecking times (in minutes, as of 2025-11-03):
+# formatter 1.25
+# index 9
+# interning 1.25
+# nullness 3
+# lock 1.75
+# regex 1.25
+# resourceleak 3.5
+# signature 1.25
+# signedness 3
+# total: 25.5
 # It is essential that "compile" completes before any typechecking commences.
 typecheck-part1: ${ALL_GENERATED_FILES} compile compile-typequals
 	${MAKE} typecheck-part1-nocompile
-typecheck-part1-nocompile: typecheck-formatter-nocompile typecheck-index-nocompile typecheck-interning-nocompile typecheck-nullness
+typecheck-part1-nocompile: typecheck-formatter-nocompile typecheck-interning-nocompile typecheck-nullness typecheck-lock-nocompile typecheck-regex-nocompile
 typecheck-part2: ${ALL_GENERATED_FILES} compile
 	${MAKE} typecheck-part2-nocompile
-typecheck-part2-nocompile: typecheck-lock-nocompile typecheck-regex-nocompile typecheck-resourceleak-nocompile typecheck-signature-nocompile typecheck-signedness-nocompile
+typecheck-part2-nocompile: typecheck-nullness-nocompile
+typecheck-part3: ${ALL_GENERATED_FILES} compile
+	${MAKE} typecheck-part3-nocompile
+typecheck-part3-nocompile: typecheck-resourceleak-nocompile typecheck-signature-nocompile typecheck-signedness-nocompile
 typecheck-all: ${ALL_GENERATED_FILES} compile
 	${MAKE} typecheck-all-nocompile
-typecheck-all-nocompile: typecheck-part1 typecheck-part2
+typecheck-all-nocompile: typecheck-part1 typecheck-part2 typecheck-part3
 typecheck: typecheck-all
 
 typecheck-formatter: ${ALL_GENERATED_FILES} compile
