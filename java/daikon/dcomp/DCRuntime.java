@@ -45,6 +45,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.mustcall.qual.MustCall;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;
+import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
@@ -81,6 +82,9 @@ public final class DCRuntime implements ComparabilityProvider {
 
   /** Storage for each static tag. */
   public static List<@Nullable Object> static_tags = new ArrayList<>();
+
+  /** Either "java.lang.DCompInstrumented" or "daikon.dcomp.DCompInstrumented". */
+  static @BinaryName String instrumentation_interface;
 
   /**
    * Object used to mark procedure entries in the tag stack. It is pushed on the stack at entry and
@@ -133,7 +137,7 @@ public final class DCRuntime implements ComparabilityProvider {
   // Set in Premain.premain().
   static ComparabilityProvider comparabilityProvider;
 
-  /** Whether the header has been printed. */
+  /** True if the header has been printed. */
   private static boolean headerPrinted = false;
 
   /** Class to hold per-thread comparability data. */
@@ -176,10 +180,10 @@ public final class DCRuntime implements ComparabilityProvider {
    */
   @SuppressWarnings("UnusedVariable") // used only for debugging
   private static class UninitFieldTag {
-    String descr;
-    Throwable stack_trace;
+    final String descr;
+    final Throwable stack_trace;
 
-    public UninitFieldTag(String descr, Throwable stack_trace) {
+    UninitFieldTag(String descr, Throwable stack_trace) {
       this.descr = descr;
       this.stack_trace = stack_trace;
     }
@@ -218,7 +222,7 @@ public final class DCRuntime implements ComparabilityProvider {
     }
 
     try {
-      if (!DCInstrument.jdk_instrumented) {
+      if (!Premain.jdk_instrumented) {
         dcomp_marker_class = Class.forName("daikon.dcomp.DCompMarker");
       } else {
         dcomp_marker_class = Class.forName("java.lang.DCompMarker");
@@ -258,7 +262,7 @@ public final class DCRuntime implements ComparabilityProvider {
    *
    * @param o1 the first argument to equals()
    * @param o2 the second argument to equals()
-   * @return whether the two values are equal
+   * @return true if the two values are equal
    */
   public static boolean dcomp_equals(Object o1, Object o2) {
     // Make obj1 and obj2 comparable
@@ -320,7 +324,7 @@ public final class DCRuntime implements ComparabilityProvider {
    *
    * @param o1 the first argument to super.equals()
    * @param o2 the second argument to super.equals()
-   * @return whether the two values are equal, according to super.equals()
+   * @return true if the two values are equal, according to super.equals()
    * @see #active_equals_calls
    */
   public static boolean dcomp_super_equals(Object o1, Object o2) {
@@ -353,7 +357,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     boolean instrumented = false;
     for (Class<?> c : o1superifaces) {
-      if (c.getName().equals(DCInstrument.instrumentation_interface)) {
+      if (c.getName().equals(instrumentation_interface)) {
         instrumented = true;
         break;
       }
@@ -370,7 +374,7 @@ public final class DCRuntime implements ComparabilityProvider {
         return_val = ((Boolean) m.invoke(o1, o2, null));
       } else {
         // Push tag for return value, and call the uninstrumented version
-        @MustCall() ThreadData td = thread_to_data.get(Thread.currentThread());
+        @MustCall ThreadData td = thread_to_data.get(Thread.currentThread());
         td.tag_stack.push(new Constant());
         Method m = o1super.getMethod("equals", new Class<?>[] {java_lang_Object_class});
         return_val = ((Boolean) m.invoke(o1, o2));
@@ -1228,8 +1232,6 @@ public final class DCRuntime implements ComparabilityProvider {
         System.out.printf("DCRuntime.enter adding %s to all class list%n", ci);
       }
       all_classes.add(ci);
-      // Moved to DCInstrument.instrument()
-      // daikon.chicory.Runtime.all_classes.add (ci);
       merge_dv.log("initializing traversal for %s%n", ci);
       ci.init_traversal(depth);
     }
@@ -1300,6 +1302,13 @@ public final class DCRuntime implements ComparabilityProvider {
   /**
    * Process all of the daikon variables in the tree starting at root. If the values referenced by
    * those variables are comparable mark the variables as comparable.
+   *
+   * @param mi a MethodInfo
+   * @param root the daikon variables
+   * @param tag_frame the tags for the primitive arguments of this method
+   * @param obj the value of {@code this}, or null if the method is static
+   * @param args the arguments to the method
+   * @param ret_val value returned by the method, or null if the method is a constructor or void
    */
   public static void process_all_vars(
       MethodInfo mi, RootInfo root, Object[] tag_frame, Object obj, Object[] args, Object ret_val) {
@@ -1673,6 +1682,7 @@ public final class DCRuntime implements ComparabilityProvider {
   static int synthetic_cnt = 0;
   static int enum_cnt = 0;
 
+  // Only called if 'verbose' is true.
   /** Prints statistics about the number of decls to stdout. */
   public static void decl_stats() {
 
@@ -2055,7 +2065,7 @@ public final class DCRuntime implements ComparabilityProvider {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
+        List<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         pw.printf("  [%d] %s%n", stuff.size(), stuff);
       }
@@ -2070,7 +2080,7 @@ public final class DCRuntime implements ComparabilityProvider {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        ArrayList<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
+        List<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         pw.printf("  [%d] %s%n", stuff.size(), stuff);
       }
@@ -2171,9 +2181,13 @@ public final class DCRuntime implements ComparabilityProvider {
    * <p>e.g. "daikon.chicory.ParameterInfo:foo" becomes "Parameter foo"
    *
    * <p>"daikon.chicory.FieldInfo:this.foo" becomes "Field foo"
+   *
+   * @param l a DVSet
+   * @param on value of daikon.Daikon.abridger_vars
+   * @return a readable version of {@code l}
    */
-  private static ArrayList<String> skinyOutput(DVSet l, boolean on) {
-    ArrayList<String> o = new ArrayList<>();
+  private static List<String> skinyOutput(DVSet l, boolean on) {
+    List<String> o = new ArrayList<>();
     for (DaikonVariableInfo dvi : l) {
       o.add(skinyOutput(dvi, on));
     }
@@ -2186,7 +2200,7 @@ public final class DCRuntime implements ComparabilityProvider {
     }
     String dvtxt = dv.toString();
     String type = dvtxt.split(":")[0];
-    type = type.substring(type.lastIndexOf(".") + 1);
+    type = type.substring(type.lastIndexOf('.') + 1);
     String name = dvtxt.split(":")[1];
     if (type.equals("ThisObjInfo")) {
       dvtxt = "this";
@@ -2225,7 +2239,7 @@ public final class DCRuntime implements ComparabilityProvider {
       }
     }
 
-    public void sort() {
+    void sort() {
       Collections.sort(this);
     }
   }
@@ -2852,7 +2866,7 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * Returns whether or not the specified class is initialized.
+   * Returns true if the specified class is initialized.
    *
    * @param clazz class to check
    * @return true if clazz has been initialized
@@ -2904,7 +2918,7 @@ public final class DCRuntime implements ComparabilityProvider {
       }
       String default_tostring =
           String.format("%s@%s", obj.getClass().getName(), System.identityHashCode(obj));
-      if (tostring.equals(default_tostring)) {
+      if (tostring != null && tostring.equals(default_tostring)) {
         return tostring;
       } else {
         // Limit display of object contents to 60 characters.
@@ -2950,7 +2964,7 @@ public final class DCRuntime implements ComparabilityProvider {
   /** Removes DCompMarker from the signature. */
   public static String clean_decl_name(String decl_name) {
 
-    if (DCInstrument.jdk_instrumented) {
+    if (Premain.jdk_instrumented) {
       jdk_decl_matcher.reset(decl_name);
       return jdk_decl_matcher.replaceFirst("");
     } else {
@@ -2990,8 +3004,7 @@ public final class DCRuntime implements ComparabilityProvider {
       assert fi.isPrimitive();
       Field field = fi.getField();
       Class<?> clazz = field.getDeclaringClass();
-      String name =
-          DCInstrument.tag_method_name(DCInstrument.GET_TAG, clazz.getName(), field.getName());
+      String name = Premain.tag_method_name(Premain.GET_TAG, clazz.getName(), field.getName());
       try {
         get_tag = clazz.getMethod(name);
       } catch (Exception e) {

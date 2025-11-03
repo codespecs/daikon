@@ -1,0 +1,47 @@
+# Create a Docker image that is ready to run the Daikon tests.
+
+FROM rockylinux:9
+LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
+
+# According to
+# https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
+#  * Put "apt update" and "apt install" in the same RUN command.
+#  * Do not run "apt upgrade"; instead get upstream to update.
+
+# The EPEL repository contains certain packages.
+RUN dnf -q -y upgrade && dnf -q -y install \
+  epel-release
+
+RUN dnf -q -y upgrade && dnf -q -y install \
+  autoconf \
+  automake \
+  bc \
+  binutils-devel \
+  diffutils \
+  findutils \
+  gcc \
+  git \
+  jq \
+  m4 \
+  make \
+  perl-English \
+  perl-filetest \
+  rsync \
+  tar \
+  unzip \
+  which
+
+## Install the JDK.
+# RUN dnf -q -y upgrade && dnf -q -y install \
+#   java-25-openjdk \
+#   java-25-openjdk-devel
+## Use this when the java-25-openjdk* packages don't yet exist.
+# RUN curl --silent -o jdk-25_linux-x64_bin.tar.gz https://download.oracle.com/java/25/latest/jdk-25_linux-x64_bin.tar.gz \
+RUN curl --silent -o jdk-25_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk25/bd75d5f9689641da8e1daabeccb5528b/36/GPL/openjdk-25_linux-x64_bin.tar.gz \
+&& tar xzf jdk-25_linux-x64_bin.tar.gz
+ENV PATH="/jdk-25/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV JAVA25_HOME=/jdk-25
+RUN chmod og+rx /root \
+&& chmod og+r /root/*
+
+RUN dnf -q clean all

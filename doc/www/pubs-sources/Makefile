@@ -1,5 +1,5 @@
 ###########################################################################
-DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../../..)
+DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
 CHECKLINK ?= ${DAIKONDIR}/utils/checklink
 HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
 PLUMESCRIPTS ?= ${DAIKONDIR}/utils/plume-scripts

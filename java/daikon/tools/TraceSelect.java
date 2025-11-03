@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 import java.util.StringTokenizer;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -58,7 +59,7 @@ public class TraceSelect {
               + " foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
 
   /**
-   * The entry point of TraceSelect
+   * The entry point of TraceSelect.
    *
    * @param args command-line arguments
    */
@@ -90,7 +91,7 @@ public class TraceSelect {
     boolean knowArgStart = false;
     for (int i = 2; i < args.length; i++) {
       // allows seed setting
-      if (args[i].toUpperCase().equals("-SEED")) {
+      if (args[i].toUpperCase(Locale.ENGLISH).equals("-SEED")) {
         if (i + 1 >= args.length) {
           throw new daikon.Daikon.UserError("-SEED options requires argument");
         }
@@ -100,7 +101,7 @@ public class TraceSelect {
 
       // NOCLEAN argument will leave the trace samples even after
       // the invariants from these samples have been generated
-      else if (args[i].toUpperCase().equals("-NOCLEAN")) {
+      else if (args[i].toUpperCase(Locale.ENGLISH).equals("-NOCLEAN")) {
         CLEAN = false;
         daikonArgStart = i + 1;
       }
@@ -108,7 +109,7 @@ public class TraceSelect {
       // INCLUDE_UNRETURNED option will allow selecting method invocations
       // that entered the method successfully but did not exit normally;
       // either from a thrown Exception or abnormal termination.
-      else if (args[i].toUpperCase().equals("-INCLUDE_UNRETURNED")) {
+      else if (args[i].toUpperCase(Locale.ENGLISH).equals("-INCLUDE_UNRETURNED")) {
         INCLUDE_UNRETURNED = true;
         daikonArgStart = i + 1;
       }
@@ -118,7 +119,7 @@ public class TraceSelect {
       // daikon.diff.Diff over each of the samples and finding
       // properties that appear in some but not all of the
       // samples.
-      else if (args[i].toUpperCase().equals("-DO_DIFFS")) {
+      else if (args[i].toUpperCase(Locale.ENGLISH).equals("-DO_DIFFS")) {
         DO_DIFFS = true;
         daikonArgStart = i + 1;
       }
@@ -278,8 +279,6 @@ public class TraceSelect {
     } catch (InterruptedException e) {
       // do nothing
     }
-
-    return;
   }
 
   private static void reinitializeDaikon() {

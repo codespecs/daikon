@@ -3,9 +3,15 @@
 ifeq ($(shell uname), Darwin)
   JAVA_HOME ?= $(/usr/libexec/java_home)
 else
-  JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
+ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
+  JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
+else
+  $(info Failure: Here is the output of: which javac)
+  $(info $(shell which javac))
+  $(error 'which javac' had exit status 1)
+endif
 endif
 
 # need junit.jar on classpath to compile all junit references
-JUNIT_CLASSPATH := $(wildcard ${DAIKONDIR}/java/lib/junit-4*-Daikon.jar)
-JAVAC := $(JAVA_HOME)/bin/javac -cp $(JUNIT_CLASSPATH)
+JUNIT_CLASSPATH := ${DAIKONDIR}/java/lib/*
+JAVAC := $(JAVA_HOME)/bin/javac -cp .:$(JUNIT_CLASSPATH)

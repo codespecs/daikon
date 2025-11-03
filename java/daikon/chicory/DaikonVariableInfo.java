@@ -161,7 +161,7 @@ public abstract class DaikonVariableInfo
     debug_vars.log(
         "Construct DaikonVariableInfo: %s : %s : %s", this.getClass().getName(), name, typeName);
 
-    children = new ArrayList<DaikonVariableInfo>();
+    children = new ArrayList<>();
     isArray = arr;
 
     if ((theName != null) && (theName.contains("[..]") || theName.contains("[]")) && !isArray) {
@@ -212,7 +212,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Return a StringBuilder that contains the name of this node and all ancestors of this node.
+   * Returns a StringBuilder that contains the name of this node and all ancestors of this node.
    * Longer indentations correspond to deeper levels in the tree.
    *
    * @param offset the offset to begin each line with
@@ -806,7 +806,7 @@ public abstract class DaikonVariableInfo
       if (cinfo != null) {
         value = cinfo.staticMap.get(theName);
 
-        if (DaikonVariableInfo.dkconfig_constant_infer) {
+        if (dkconfig_constant_infer) {
           if (value == null) {
             isPrimitive = false;
             String className = field.getDeclaringClass().getName();
@@ -832,7 +832,7 @@ public abstract class DaikonVariableInfo
         newField.repTypeName += " = " + value;
         newField.const_val = value;
         newField.dtraceShouldPrint = false;
-        if (DaikonVariableInfo.dkconfig_constant_infer && isPrimitive) {
+        if (dkconfig_constant_infer && isPrimitive) {
           newField.dtraceShouldPrintChildren = false;
         }
       }
@@ -874,7 +874,7 @@ public abstract class DaikonVariableInfo
    * representation type of a class object is "hashcode."
    *
    * @param type the type of the variable
-   * @param asArray whether the variable is being output as an array (true) or as a pointer (false)
+   * @param asArray true if the variable is being output as an array (true) or as a pointer (false)
    * @return the representation type as a string
    */
   public static String getRepName(Class<?> type, boolean asArray) {
@@ -946,7 +946,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Returns whether or not the specified field is visible from the Class current. All fields within
+   * Returns true if the specified field is visible from the Class current. All fields within
    * instrumented classes are considered visible from everywhere (to match dfej behavior).
    */
   public static boolean isFieldVisible(Class<?> current, Field field) {
@@ -1003,14 +1003,12 @@ public abstract class DaikonVariableInfo
 
     // System.out.printf("Package name for type  %s is %s%n", type, pkgName);
 
-    StringBuilder ret = new StringBuilder();
-
     // In Java 9+ package name is empty string for the unnamed package.
     if (pkgName != null && !pkgName.isEmpty()) {
-      ret.append(" # declaringClassPackageName=" + pkgName);
+      return " # declaringClassPackageName=" + pkgName;
+    } else {
+      return "";
     }
-
-    return ret.toString();
   }
 
   /**
@@ -1118,7 +1116,7 @@ public abstract class DaikonVariableInfo
    * @return true iff type implements the List interface
    */
   public static boolean implementsList(Class<?> type) {
-    if (type.equals(java.util.List.class)) {
+    if (type.equals(List.class)) {
       return true;
     }
 
@@ -1126,7 +1124,7 @@ public abstract class DaikonVariableInfo
     Class<?>[] interfaces = type.getInterfaces();
     for (Class<?> inter : interfaces) {
       // System.out.println("  implements: " + inter.getName());
-      if (inter.equals(java.util.List.class)) {
+      if (inter.equals(List.class)) {
         return true;
       }
     }
@@ -1230,9 +1228,9 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Returns whether or not the fields of the specified class should be included, based on whether
-   * the Class type is a system class or not. Right now, any system classes are excluded, but a
-   * better way of determining this is probably necessary.
+   * Returns true if the fields of the specified class should be included, based on whether the
+   * Class type is a system class or not. Right now, any system classes are excluded, but a better
+   * way of determining this is probably necessary.
    */
   public static boolean systemClass(Class<?> type) {
     String class_name = type.getName();
@@ -1253,7 +1251,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Return the type name without aux information.
+   * Returns the type name without aux information.
    *
    * @see #getTypeName()
    */
@@ -1318,7 +1316,7 @@ public abstract class DaikonVariableInfo
     return name.compareTo(dv.name);
   }
 
-  /** Returns whether or not this variable is an array. */
+  /** Returns true if this variable is an array. */
   public boolean isArray() {
     return isArray;
   }
@@ -1333,7 +1331,7 @@ public abstract class DaikonVariableInfo
     return null;
   }
 
-  /** Returns whether or not this variable has a rep type of hashcode. */
+  /** Returns true if this variable has a rep type of hashcode. */
   public boolean isHashcode() {
     return getRepTypeName().equals("hashcode");
   }
@@ -1342,7 +1340,7 @@ public abstract class DaikonVariableInfo
     return getRepTypeName().equals("hashcode[]");
   }
 
-  /** Returns whether or not the declared type of this variable is int. */
+  /** Returns true if the declared type of this variable is int. */
   public boolean isInt() {
     String[] sarr = getTypeName().split("  *");
     return sarr[0].equals("int");

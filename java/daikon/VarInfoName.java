@@ -127,7 +127,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     if (name.endsWith("]")) {
       // This isn't quite right:  we really want the matching open bracket,
       // not the last open bracket.
-      int lbracket = name.lastIndexOf("[");
+      int lbracket = name.lastIndexOf('[');
       if (lbracket >= 0) {
         String seqname = name.substring(0, lbracket) + "[]";
         String idxname = name.substring(lbracket + 1, name.length() - 1);
@@ -178,7 +178,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   }
 
   /**
-   * Return the String representation of this name in the default output format.
+   * Returns the String representation of this name in the default output format.
    *
    * @return the string representation (interned) of this name, in the default output format
    */
@@ -204,7 +204,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   protected abstract String name_impl(@GuardSatisfied VarInfoName this);
 
   /**
-   * Return the String representation of this name in the esc style output format.
+   * Returns the String representation of this name in the esc style output format.
    *
    * @return the string representation (interned) of this name, in the esc style output format
    */
@@ -273,7 +273,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   protected abstract String simplify_name_impl(boolean prestate);
 
   /**
-   * Return the String representation of this name in the java style output format.
+   * Returns the String representation of this name in the java style output format.
    *
    * @return the string representation (interned) of this name, in the java style output format
    */
@@ -292,7 +292,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   private @Interned String java_name_cached = null; // interned
 
   /**
-   * Return the String representation of this name in java format. Cached and interned by {@link
+   * Returns the String representation of this name in java format. Cached and interned by {@link
    * #java_name}.
    */
   protected abstract String java_name_impl(VarInfo v);
@@ -331,7 +331,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   public static boolean testCall = false;
 
   /**
-   * Return the String representation of this name in the dbc style output format.
+   * Returns the String representation of this name in the dbc style output format.
    *
    * @param var the VarInfo which goes along with this VarInfoName. Used to determine the type of
    *     the variable.
@@ -356,7 +356,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   private @Interned String dbc_name_cached = null; // interned
 
   /**
-   * Return the name in the DBC style output format. If v is null, uses JML style instead. Cached
+   * Returns the name in the DBC style output format. If v is null, uses JML style instead. Cached
    * and interned by {@link #dbc_name}.
    */
   protected abstract String dbc_name_impl(VarInfo v);
@@ -528,8 +528,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   }
 
   /**
-   * Returns whether or not this name refers to the 'this' variable of a class. True for both normal
-   * and prestate versions of the variable.
+   * Returns true if this name refers to the 'this' variable of a class. True for both normal and
+   * prestate versions of the variable.
    */
   @Pure
   public boolean isThis() {
@@ -1164,7 +1164,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     /**
-     * Return a comma-separated list of element names.
+     * Returns a comma-separated list of element names.
      *
      * @return comma-separated list of element names
      */
@@ -1631,6 +1631,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Returns a name for a the prestate value of this object; form is like "orig(this)" or
    * "\old(this)".
+   *
+   * @return a name for the prestate value of this object
    */
   public VarInfoName applyPrestate(@Interned VarInfoName this) {
     if (this instanceof Poststate) {
@@ -1729,14 +1731,14 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   // sansOrig()
   //      int origpos = s.indexOf("orig(");
   //      assert origpos != -1;
-  //      int rparenpos = s.lastIndexOf(")");
+  //      int rparenpos = s.lastIndexOf(')');
   //      return s.substring(0, origpos)
   //        + s.substring(origpos+5, rparenpos)
   //        + s.substring(rparenpos+1);
 
   //      int origpos = s.indexOf("\\old(");
   //      assert origpos != -1;
-  //      int rparenpos = s.lastIndexOf(")");
+  //      int rparenpos = s.lastIndexOf(')');
   //      return s.substring(0, origpos)
   //        + s.substring(origpos+5, rparenpos)
   //        + s.substring(rparenpos+1);
@@ -2052,6 +2054,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   /**
    * Caller is subscripting an orig(a[]) array. Take the requested index and make it useful in that
    * context.
+   *
+   * @param index an index into an orig array
+   * @return a name for the indexed orig item
    */
   static VarInfoName indexToPrestate(VarInfoName index) {
     // 1 orig(a[]) . orig(index) -> orig(a[index])

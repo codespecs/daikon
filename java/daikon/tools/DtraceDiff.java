@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -123,7 +124,7 @@ public class DtraceDiff {
     while ((c = g.getopt()) != -1) {
       switch (c) {
 
-          // long option
+        // long option
         case 0:
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
@@ -221,7 +222,7 @@ public class DtraceDiff {
             throw new RuntimeException("Unknown long option received: " + option_name);
           }
 
-          // short options
+        // short options
         case 'h':
           System.out.println(usage);
           throw new Daikon.NormalTermination();
@@ -463,7 +464,7 @@ public class DtraceDiff {
     if (!vi.var_flags.isEmpty()) {
       System.out.printf("  flags");
       for (VarFlags flag : vi.var_flags) {
-        System.out.printf(" %s", flag.name().toLowerCase());
+        System.out.printf(" %s", flag.name().toLowerCase(Locale.ENGLISH));
       }
       System.out.printf("%n");
     }

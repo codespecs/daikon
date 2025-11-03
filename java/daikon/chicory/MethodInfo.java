@@ -75,7 +75,7 @@ public class MethodInfo {
   public int capture_cnt = 0;
 
   /**
-   * Whether or not the method is pure (has no side-effects). Will only be set to true if the {@code
+   * True if the method is pure (has no side-effects). Will only be set to true if the {@code
    * --purity-analysis} command-line option is given to Chicory, and the method returns some value.
    * Only set during initViaReflection() method.
    */
@@ -149,7 +149,7 @@ public class MethodInfo {
       if (is_class_initializer()) {
         member = null;
         // This case DOES occur at run time.  -MDE 1/22/2010
-      } else if (is_constructor()) {
+      } else if (isConstructor()) {
         member = class_info.clazz.getDeclaredConstructor(arg_types);
       } else {
         member = class_info.clazz.getDeclaredMethod(method_name, arg_types);
@@ -180,7 +180,7 @@ public class MethodInfo {
    * @return true iff this method is a constructor
    */
   @Pure
-  public boolean is_constructor() {
+  public boolean isConstructor() {
     return method_name.equals("<init>") || method_name.equals("");
   }
 
@@ -244,7 +244,11 @@ public class MethodInfo {
     return isPure;
   }
 
-  /** Returns the turn type of the method, or Void.TYPE for a constructor. */
+  /**
+   * Returns the return type of this method, or Void.TYPE for a constructor.
+   *
+   * @return the return type of this method
+   */
   public Class<?> return_type() {
     if (member instanceof Method) {
       Method m = (Method) member;

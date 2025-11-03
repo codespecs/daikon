@@ -106,7 +106,7 @@ public class Ast {
   }
 
   /**
-   * This method translates a line like
+   * This method translates a line like.
    *
    * <pre>{@code
    * a statement; // a comment
@@ -490,7 +490,7 @@ public class Ast {
       private final NodeToken comment;
       private final boolean first;
 
-      public AddCommentVisitor(NodeToken comment, boolean first) {
+      AddCommentVisitor(NodeToken comment, boolean first) {
         this.comment = comment;
         this.first = first;
       }
@@ -551,7 +551,7 @@ public class Ast {
       private final NodeToken comment;
       private final boolean first;
 
-      public AddCommentVisitor(NodeToken comment, boolean first) {
+      AddCommentVisitor(NodeToken comment, boolean first) {
         this.comment = comment;
         this.first = first;
       }
@@ -614,7 +614,7 @@ public class Ast {
     // After the traversal, the "lastNodeToken" slot contains the
     // last NodeToken visited.
     class LastNodeTokenVisitor extends DepthFirstVisitor {
-      public NodeToken lastNodeToken = null;
+      NodeToken lastNodeToken = null;
 
       @Override
       public void visit(NodeToken node) {
@@ -626,10 +626,10 @@ public class Ast {
     // descendant of the token from whcih traversal starts.)
     class NextNodeTokenVisitor extends DepthFirstVisitor {
       private boolean seenPredecessor = false;
-      public NodeToken nextNodeToken;
+      NodeToken nextNodeToken;
       private final NodeToken predecessor;
 
-      public NextNodeTokenVisitor(NodeToken predecessor) {
+      NextNodeTokenVisitor(NodeToken predecessor) {
         this.predecessor = predecessor;
       }
 
@@ -718,7 +718,7 @@ public class Ast {
   //
 
   /**
-   * Returns the class corresponding to the given node
+   * Returns the class corresponding to the given node.
    *
    * @param n a node
    * @return the class corresponding to the given node
@@ -1001,10 +1001,10 @@ public class Ast {
   // returns true if, for some node in the tree, node.tokenImage.equals(s)
   public static boolean contains(Node n, String s) {
     class ContainsVisitor extends DepthFirstVisitor {
-      public boolean found = false;
+      boolean found = false;
       private final String s;
 
-      public ContainsVisitor(String s) {
+      ContainsVisitor(String s) {
         this.s = s;
       }
 
@@ -1043,7 +1043,7 @@ public class Ast {
   // parameters.
   public static List<FormalParameter> getParameters(MethodDeclaration m) {
     class GetParametersVisitor extends DepthFirstVisitor {
-      public List<FormalParameter> parameters = new ArrayList<>();
+      List<FormalParameter> parameters = new ArrayList<>();
 
       @Override
       public void visit(FormalParameter p) {
@@ -1061,7 +1061,7 @@ public class Ast {
   // inner classes.
   public static List<FormalParameter> getParametersNoImplicit(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
-      public List<FormalParameter> parameters = new ArrayList<>();
+      List<FormalParameter> parameters = new ArrayList<>();
 
       @Override
       public void visit(FormalParameter p) {
@@ -1079,7 +1079,7 @@ public class Ast {
   // parameters.
   public static List<FormalParameter> getParameters(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
-      public List<FormalParameter> parameters = new ArrayList<>();
+      List<FormalParameter> parameters = new ArrayList<>();
 
       @Override
       public void visit(FormalParameter p) {
@@ -1147,7 +1147,7 @@ public class Ast {
   public static Set<String> getVariableNames(Node expr) {
 
     class GetSymbolNamesVisitor extends DepthFirstVisitor {
-      public Set<String> symbolNames = new HashSet<>();
+      Set<String> symbolNames = new HashSet<>();
 
       @Override
       public void visit(Name n) {

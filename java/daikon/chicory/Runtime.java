@@ -47,7 +47,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 @SuppressWarnings({
   "JavaLangClash" // same class name as one in java.lang.
 })
-public class Runtime {
+public final class Runtime {
   /** Unique id for method entry/exit (so they can be matched up) */
   public static AtomicInteger nonce = new AtomicInteger();
 
@@ -142,7 +142,7 @@ public class Runtime {
     boolean captured;
 
     @Holding("Runtime.class")
-    public CallInfo(int nonce, boolean captured) {
+    CallInfo(int nonce, boolean captured) {
       this.nonce = nonce;
       this.captured = captured;
     }
@@ -407,7 +407,7 @@ public class Runtime {
   }
 
   /**
-   * Return true iff the class with fully qualified name className has been initialized.
+   * Returns true iff the class with fully qualified name className has been initialized.
    *
    * @param className fully qualified class name
    */
@@ -563,7 +563,7 @@ public class Runtime {
    * Specify the dtrace file to which to write.
    *
    * @param filename to use as the data trace file
-   * @param append whether to open dtrace file in append mode
+   * @param append if true, open dtrace file in append mode
    */
   @EnsuresNonNull("dtrace")
   public static void setDtrace(String filename, boolean append) {

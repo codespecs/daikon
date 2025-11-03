@@ -66,7 +66,7 @@ public class HtmlToTexinfo {
     s = s.replace(lineSep + "</pre>", lineSep + "@end example" + lineSep);
     s = s.replace("</pre>", lineSep + "@end example" + lineSep);
     // Catch-all for parameters, filenames, etc. for which there is no specific HTML formatting.
-    // But Javadoc should use <code>...</code> rather than <tt>.
+    // But Javadoc should use {@code ...} rather than <tt>.
     s = s.replace("<tt>", "@code{");
     s = s.replace("</tt>", "}");
 

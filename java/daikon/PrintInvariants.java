@@ -1249,9 +1249,9 @@ public final class PrintInvariants {
 
     if (!sort) {
       String r = varInfo.name_using(OutputFormat.CSHARPCONTRACT);
-      int a = r.indexOf("[");
-      int b = r.indexOf("]");
-      if (a != 1 && b != 1 && a < b) {
+      int a = r.indexOf('[');
+      int b = r.indexOf(']');
+      if (a != -1 && b != -1 && a < b) {
         String middle = r.substring(a + 1, b);
         if (middle.equals("..")) {
           r = r.substring(0, a + 1) + ".." + r.substring(b, r.length());

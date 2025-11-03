@@ -143,7 +143,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
         // remember identifiers can not begin with [0-9\-]
         if (Character.isDigit(firstChar) || firstChar == '-') {
           if (acceptableNumber(oneToken)) {
-            continue;
+            // continue;
           } else {
             return true;
           }
@@ -152,7 +152,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
       } catch (NumberFormatException e) {
         System.out.println(
             "Should never get here... NumberFormatException in filterOut: " + oneToken);
-        continue;
+        // continue;
       }
     }
     return false;
@@ -178,7 +178,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     // point number
 
     // could be float, look for "."
-    if (numLiteral.indexOf(".") > -1) {
+    if (numLiteral.indexOf('.') > -1) {
       // float fnum = Float.parseFloat(numLiteral);
       // for now, accept all floats (ignore return value of parseFloat)
       return true;

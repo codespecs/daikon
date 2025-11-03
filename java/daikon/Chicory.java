@@ -39,9 +39,20 @@ public class Chicory {
   @Option("-v Print progress information")
   public static boolean verbose = false;
 
-  /** Print debug information and save instrumented classes. */
-  @Option("-d Print debug information and save instrumented classes")
+  /**
+   * Dump the instrumented classes to disk, for diagnostic purposes. The directory is specified by
+   * {@code --debug-dir} (default {@code debug}).
+   */
+  @Option("Dump the instrumented classes to disk")
+  public static boolean dump = false;
+
+  /** Output debugging information. */
+  @Option("-d Output debugging information (implies --dump)")
   public static boolean debug = false;
+
+  /** The directory in which to dump instrumented class files. */
+  @Option("Directory in which to create debug files")
+  public static File debug_dir = new File("debug");
 
   /** File in which to put dtrace output. */
   @Option("File in which to put dtrace output")
@@ -248,7 +259,7 @@ public class Chicory {
   }
 
   /**
-   * Return true iff argument was given to run a purity analysis.
+   * Returns true iff argument was given to run a purity analysis.
    *
    * <p>You should only call this after parsing arguments.
    */
@@ -256,7 +267,7 @@ public class Chicory {
     return purityAnalysis;
   }
 
-  /** Return true iff a file name was specified to supply pure method names. */
+  /** Returns true iff a file name was specified to supply pure method names. */
   @Pure
   public static @Nullable File get_purity_file() {
     return purity_file;
@@ -559,7 +570,7 @@ public class Chicory {
   /**
    * Wait for daikon to complete and return its exit status.
    *
-   * @return Daikon's exit status
+   * @return the exit status of Daikon
    */
   @RequiresNonNull("daikon_proc")
   private int waitForDaikon() {
@@ -630,7 +641,7 @@ public class Chicory {
   public String args_to_string(List<String> args) {
     String str = "";
     for (String arg : args) {
-      if (arg.indexOf(" ") != -1) {
+      if (arg.indexOf(' ') != -1) {
         str = "'" + str + "'";
       }
       str += arg + " ";

@@ -113,15 +113,15 @@ public class NIS {
    * these states on each suppressor.
    */
   public enum SuppressState {
-    /** initial state -- suppressor has not been checked yet */
+    /** Initial state -- suppressor has not been checked yet. */
     NONE,
-    /** suppressor matches the falsified invariant */
+    /** Suppressor matches the falsified invariant. */
     MATCH,
-    /** suppressor is true */
+    /** Suppressor is true. */
     VALID,
-    /** suppressor is not true */
+    /** Suppressor is not true. */
     INVALID,
-    /** suppressor contains a variable that has always been nonsensical */
+    /** Suppressor contains a variable that has always been nonsensical. */
     NONSENSICAL
   }
 
@@ -162,7 +162,7 @@ public class NIS {
   // Statistics that are kept during processing.  Some of these are kept
   // and/or make sense for some approaches and not for others
 
-  /** Whether or not to keep statistics. */
+  /** If true, keep statistics. */
   public static boolean keep_stats = false;
 
   /** Number of falsified invariants in the program point. */

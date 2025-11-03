@@ -1,3 +1,5 @@
+// -*- java -*-
+
 package daikon.config;
 
 import com.sun.source.doctree.DocCommentTree;
@@ -50,9 +52,6 @@ public class ParameterDoclet implements Doclet {
   /** If true, then output format is Texinfo. */
   private boolean formatTexinfo = false;
 
-  /** The DocTrees instance assocated with the DocletEnvironment. */
-  private DocTrees docTrees;
-
   /** Used to report errors. */
   private Reporter reporter;
 
@@ -74,26 +73,21 @@ public class ParameterDoclet implements Doclet {
   }
 
   @Override
-  public Set<? extends Doclet.Option> getSupportedOptions() {
-    return docletOptions;
-  }
-
-  @Override
   public SourceVersion getSupportedSourceVersion() {
     return SourceVersion.latest();
   }
 
   /** Entry point for this doclet (invoked by javadoc). */
   @Override
-  public boolean run(DocletEnvironment denv) {
+  public boolean run(DocletEnvironment docEnv) {
 
     postprocessOptions();
-    docTrees = denv.getDocTrees();
+    DocTrees docTrees = docEnv.getDocTrees();
     initDocCategories();
 
-    // Save a list of class elements for subsequent processing
+    // Save a list of class elements for subsequent processing.
     List<TypeElement> clazzes = new ArrayList<>();
-    for (Element item : denv.getSpecifiedElements()) {
+    for (Element item : docEnv.getSpecifiedElements()) {
       if (!isTypeElement(item)) {
         throw new Error(
             String.format("Unexpected specified element of kind %s: %s", item.getKind(), item));
@@ -105,7 +99,7 @@ public class ParameterDoclet implements Doclet {
     for (TypeElement te : clazzes) {
       for (Element field : te.getEnclosedElements()) {
         if (field.getKind() != ElementKind.FIELD) continue;
-        processField(field);
+        processField(docTrees, field);
       }
     }
 
@@ -361,7 +355,7 @@ public class ParameterDoclet implements Doclet {
    *
    * @param field the javadoc element for a member field.
    */
-  public void processField(Element field) {
+  public void processField(DocTrees docTrees, Element field) {
     String name = field.getSimpleName().toString();
     if (name.startsWith(Configuration.PREFIX)) {
       String fullname = field.getEnclosingElement().toString() + "." + name;
@@ -561,7 +555,12 @@ public class ParameterDoclet implements Doclet {
   // Javadoc command-line options
   //
 
-  // The doclet cannot use the Options class itself because  Javadoc specifies its own way of
+  @Override
+  public Set<? extends Doclet.Option> getSupportedOptions() {
+    return docletOptions;
+  }
+
+  // The doclet cannot use the Options class itself because Javadoc specifies its own way of
   // handling command-line arguments.
 
   /**
@@ -650,8 +649,7 @@ public class ParameterDoclet implements Doclet {
 
   /** The command-line options for OptionsDoclet. */
   @SuppressWarnings(
-      "nullness:method.invocation" // when methods such as printError() are called, the receiver
-  // (an OptionsDoclet) is initialized
+      "nullness:method.invocation" // the receiver (OptionsDoclet) of printError() is initialized
   )
   private final Set<DocletOption> docletOptions =
       Set.of(

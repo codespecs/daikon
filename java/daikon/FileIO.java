@@ -47,6 +47,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.StringJoiner;
@@ -368,9 +369,9 @@ public final class FileIO {
     String ppt_name = need(state, scanner, "ppt name");
     ppt_name = user_mod_ppt_name(ppt_name);
 
-    /** Information that will populate the new program point. */
+    // Information that will populate the new program point.
     Map<String, VarDefinition> varmap = new LinkedHashMap<>();
-    /** The VarDefinition we are in the middle of reading, or null if we are not. */
+    // The VarDefinition we are in the middle of reading, or null if we are not.
     VarDefinition vardef = null;
     List<ParentRelation> ppt_parents = new ArrayList<>();
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf(PptFlags.class);
@@ -906,8 +907,8 @@ public final class FileIO {
     }
 
     /**
-     * Return a string representation of this. The Invocation is formatted on two lines, indented by
-     * two spaces. The receiver Invocation may be canonicalized or not.
+     * Returns a string representation of this. The Invocation is formatted on two lines, indented
+     * by two spaces. The receiver Invocation may be canonicalized or not.
      *
      * @return a string representation of this
      */
@@ -916,8 +917,8 @@ public final class FileIO {
     }
 
     /**
-     * Return a string representation of this. The Invocation is formatted on two lines, indented by
-     * two spaces. The receiver Invocation may be canonicalized or not.
+     * Returns a string representation of this. The Invocation is formatted on two lines, indented
+     * by two spaces. The receiver Invocation may be canonicalized or not.
      *
      * @param show_values if true, show values; otherwise, return just the Ppt name
      * @return a string representation of this
@@ -1154,34 +1155,26 @@ public final class FileIO {
    *
    * @return the stream that is connected to Chicory
    */
-  private static @Owning InputStream connectToChicory() {
+  private static @Owning InputStream connectToChicory() throws IOException {
+    Socket chicSocket = null;
 
     // bind to any free port
     try (ServerSocket daikonServer = new ServerSocket(0)) {
-
       // tell Chicory what port we have!
       System.out.println("DaikonChicoryOnlinePort=" + daikonServer.getLocalPort());
-
       daikonServer.setReceiveBufferSize(64000);
-
-      Socket chicSocket;
-      try {
-        daikonServer.setSoTimeout(5000);
-
-        // System.out.println("waiting for chicory connection on port " +
-        // daikonServer.getLocalPort());
-        chicSocket = daikonServer.accept();
-      } catch (IOException e) {
-        throw new RuntimeException("Unable to connect to Chicory", e);
+      daikonServer.setSoTimeout(5000);
+      chicSocket = daikonServer.accept();
+      return chicSocket.getInputStream();
+    } catch (Exception e) {
+      if (chicSocket != null) {
+        try {
+          chicSocket.close();
+        } catch (Exception closeException) {
+          // do nothing
+        }
       }
-
-      try {
-        return chicSocket.getInputStream();
-      } catch (IOException e) {
-        throw new RuntimeException("Unable to get Chicory's input stream", e);
-      }
-    } catch (IOException e) {
-      throw new RuntimeException("Unable to create server", e);
+      throw e;
     }
   }
 
@@ -1252,19 +1245,30 @@ public final class FileIO {
 
   /** The type of the record that was most recently read. */
   public enum RecordType {
-    SAMPLE, // got a sample
+    /** Got a sample. */
+    SAMPLE,
 
-    DECL, // got a ppt decl
-    DECL_VERSION, // got an indication of the ppt decl format
-    COMPARABILITY, // got a VarComparability declaration
-    LIST_IMPLEMENTORS, // got a ListImplementors declaration
-    INPUT_LANGUAGE, // got an input-language declaration
+    /** Got a ppt decl. */
+    DECL,
+    /** Got an indication of the ppt decl format. */
+    DECL_VERSION,
+    /** Got a VarComparability declaration. */
+    COMPARABILITY,
+    /** Got a ListImplementors declaration. */
+    LIST_IMPLEMENTORS,
+    /** Got an input-language declaration. */
+    INPUT_LANGUAGE,
 
-    NULL, // haven't read anything yet
-    COMMENT, // got a comment
-    EOF, // reached end of file
-    TRUNCATED, // dkconfig_max_line_number reached (without error)
-    ERROR, // continuable error; fatal errors thrown as exceptions
+    /** Haven't read anything yet. */
+    NULL,
+    /** Got a comment. */
+    COMMENT,
+    /** Reached end of file. */
+    EOF,
+    /** Dkconfig_max_line_number reached (without error). */
+    TRUNCATED,
+    /** Continuable error; fatal errors thrown as exceptions. */
+    ERROR,
   };
 
   /**
@@ -1320,7 +1324,7 @@ public final class FileIO {
 
     /**
      * Current ppt. Used when status=DECL or SAMPLE. Can be null if this declaration was skipped
-     * because of --ppt-select-pattern or --ppt-omit-pattern.
+     * because of {@code --ppt-select-pattern} or {@code --ppt-omit-pattern}.
      */
     public @Nullable PptTopLevel ppt;
 
@@ -1844,7 +1848,6 @@ public final class FileIO {
     }
 
     state.rtype = RecordType.EOF;
-    return;
   }
 
   /**
@@ -2490,6 +2493,11 @@ public final class FileIO {
   /**
    * Read either a serialized PptMap or a InvMap and return a PptMap. If an InvMap is specified, it
    * is converted to a PptMap.
+   *
+   * @param file the input file
+   * @param use_saved_config flag
+   * @return a serialized PptMap
+   * @throws IOException if there is trouble reading the file
    */
   @EnsuresNonNull("FileIO.new_decl_format")
   public static PptMap read_serialized_pptmap(File file, boolean use_saved_config)
@@ -2542,9 +2550,8 @@ public final class FileIO {
   }
 
   /**
-   * Returns whether or not the specified ppt name should be included in processing. Ppts can be
-   * excluded because they match the omit_regexp, don't match ppt_regexp, or are greater than
-   * ppt_max_name.
+   * Returns true if the specified ppt name should be included in processing. Ppts can be excluded
+   * because they match the omit_regexp, don't match ppt_regexp, or are greater than ppt_max_name.
    */
   public static boolean ppt_included(String ppt_name) {
 
@@ -3082,7 +3089,7 @@ public final class FileIO {
 
     @Interned String str = need(state, scanner, descr);
     try {
-      E e = Enum.valueOf(enum_class, str.toUpperCase());
+      E e = Enum.valueOf(enum_class, str.toUpperCase(Locale.ENGLISH));
       return e;
     } catch (Exception exception) {
       @SuppressWarnings(
@@ -3090,7 +3097,7 @@ public final class FileIO {
       E @NonNull [] all = enum_class.getEnumConstants();
       StringJoiner msg = new StringJoiner(", ");
       for (E e : all) {
-        msg.add(String.format("'%s'", e.name().toLowerCase()));
+        msg.add(String.format("'%s'", e.name().toLowerCase(Locale.ENGLISH)));
       }
       decl_error(state, "'%s' found where %s expected", str, msg);
       throw new Error("execution cannot get to here, previous line threw an error");
@@ -3106,7 +3113,6 @@ public final class FileIO {
    */
   private static void decl_error(ParseState state, String format, @Nullable Object... args) {
     @SuppressWarnings({
-      "formatter:unneeded.suppression", // temporary?
       "formatter:format.string" // https://tinyurl.com/cfissue/2584
     })
     String msg = String.format(format, args) + state.line_file_message();
@@ -3122,7 +3128,7 @@ public final class FileIO {
     throw new Daikon.UserError(cause, msg);
   }
 
-  /** Returns whether the line is the start of a ppt declaration. */
+  /** Returns true if the line is the start of a ppt declaration. */
   @RequiresNonNull("FileIO.new_decl_format")
   @Pure
   private static boolean is_declaration_header(String line) {
@@ -3137,6 +3143,9 @@ public final class FileIO {
    * Handle any possible modifications to the ppt name. For now, just support the Applications
    * Communities specific modification to remove duplicate stack entries. But a more generic
    * technique could be implemented in the future.
+   *
+   * @param ppt_name a program point
+   * @return modified ppt name
    */
   public static String user_mod_ppt_name(String ppt_name) {
 

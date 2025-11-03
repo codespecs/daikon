@@ -133,7 +133,7 @@ public class NISuppression {
   }
 
   /**
-   * Determines whether or not the falsified invariant previously passed to {@link
+   * Returns true if the falsified invariant previously passed to {@link
    * #check(PptTopLevel,VarInfo[],Invariant)} was the first suppressor to be falsified in this
    * suppression. If the falsified invariant is not involved in this suppression, then it can't have
    * been invalidated.
@@ -499,7 +499,7 @@ public class NISuppression {
   }
 
   /**
-   * Determines whether the order of the variables in vis a valid permutations (i.e., their
+   * Returns true if the order of the variables in vis a valid permutations (i.e., their
    * varinfo_index's are ordered). Null elements are ignored (and an all-null list is OK).
    */
   private boolean vis_order_ok(VarInfo[] vis) {
