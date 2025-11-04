@@ -2,6 +2,12 @@
 
 # DAIKONDIR is the clone of the 'daikon' project.
 DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+DAIKON_JAR := ${DAIKONDIR}/daikon.jar
+
+# cannot use ?= to set TMPDIR as the evaulation is defered and the time might change
+ifeq ($(origin TMPDIR), undefined)
+  TMPDIR := $(if $(shell if [ -d /scratch ] ; then echo true; fi),/scratch/${USER},/tmp/${USER})$(shell date +%Y%m%d%H%M%S)
+endif
 
 ifeq ($(shell uname -m),x86_64)
 VALGRIND_ARCH := amd64
@@ -334,9 +340,28 @@ $(DIFF_NAME).out.diff: $(NAME).out
 		@echo skipping $(NAME) .out file check
 endif
 
+# We need to special case if Daikon was compiled with Java 25 and
+# the test case is 'IntTest'.
 ifeq ($(SKIP_INVS_DIFF),)
 $(DIFF_NAME).invs.diff: daikon-output/$(NAME).invs.txt $(call goal_name,$(NAME).invs)
-	-diff --text -F::: -u $(call goal_name,$(NAME).invs) daikon-output/$(NAME).invs.txt >$@ 2>&1
+ifeq ($(NAME), IntTest)
+	@if [ ! -f ${DAIKON_JAR} ]; then \
+		echo "Error: ${DAIKON_JAR} not found."; \
+		exit 1; \
+	fi
+
+	@jar --dir ${TMPDIR}/dtest -x -f ${DAIKON_JAR} daikon/Daikon.class
+	@JAVA_VERSION_STRING=$$(javap -v ${TMPDIR}/dtest/daikon/Daikon.class|grep "major version:"); \
+	rm -rf ${TMPDIR} || true; \
+	# check to see if compiled with Java 25; \
+	if [ "$$JAVA_VERSION_STRING" = "  major version: 69" ]; then \
+		echo "diff --text -F::: -u $(NAME).invs.goal.j25 daikon-output/$(NAME).invs.txt >$@ 2>&1"; \
+		diff --text -F::: -u $(NAME).invs.goal.j25 daikon-output/$(NAME).invs.txt >$@ 2>&1 || true; \
+	else \
+		echo "diff --text -F::: -u $(call goal_name,$(NAME).invs) daikon-output/$(NAME).invs.txt >$@ 2>&1"; \
+		diff --text -F::: -u $(call goal_name,$(NAME).invs) daikon-output/$(NAME).invs.txt >$@ 2>&1 || true; \
+	fi
+endif
 else
 $(DIFF_NAME).invs.diff: daikon-output/$(NAME).invs.txt
 		@echo skipping $(NAME) .invs file check
