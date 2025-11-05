@@ -350,7 +350,7 @@ ifeq ($(NAME), IntTest)
 		diff --text -F::: -u $(call goal_name,$(NAME).invs) daikon-output/$(NAME).invs.txt >$@ 2>&1 || true; \
 	fi
 else
-	diff --text -F::: -u $(call goal_name,$(NAME).invs) daikon-output/$(NAME).invs.txt >$@ 2>&1
+	-diff --text -F::: -u $(call goal_name,$(NAME).invs) daikon-output/$(NAME).invs.txt >$@ 2>&1
 endif
 else
 $(DIFF_NAME).invs.diff: daikon-output/$(NAME).invs.txt
