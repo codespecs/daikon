@@ -337,9 +337,9 @@ ifeq ($(SKIP_INVS_DIFF),)
 $(DIFF_NAME).invs.diff: TMPDIR := $(if $(shell if [ -d /scratch ] ; then echo true; fi),/scratch/${USER},/tmp/${USER})$(shell date +%Y%m%d%H%M%S)
 $(DIFF_NAME).invs.diff: daikon-output/$(NAME).invs.txt $(call goal_name,$(NAME).invs)
 ifeq ($(NAME), IntTest)
-	@mkdir -p ${TMPDIR}/dtest
-	@cd ${TMPDIR}/dtest && jar -xf ${DAIKON_JAR} daikon/Daikon.class
-	@JAVA_VERSION_STRING=$$(javap -v ${TMPDIR}/dtest/daikon/Daikon.class|grep "major version:"); \
+	mkdir -p ${TMPDIR}/dtest
+	cd ${TMPDIR}/dtest && jar -xf ${DAIKON_JAR} daikon/Daikon.class
+	JAVA_VERSION_STRING=$$(javap -v ${TMPDIR}/dtest/daikon/Daikon.class|grep "major version:"); \
 	rm -rf ${TMPDIR} || true; \
 	# check to see if compiled with Java 25; \
 	if [ "$$JAVA_VERSION_STRING" = "  major version: 69" ]; then \
