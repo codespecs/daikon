@@ -331,27 +331,9 @@ $(DIFF_NAME).out.diff: $(NAME).out
 		@echo skipping $(NAME) .out file check
 endif
 
-# We need to special case if Daikon was compiled with Java 25 and
-# the test case is 'IntTest'.
 ifeq ($(SKIP_INVS_DIFF),)
-$(DIFF_NAME).invs.diff: TMPDIR := $(if $(shell if [ -d /scratch ] ; then echo true; fi),/scratch/${USER},/tmp/${USER})$(shell date +%Y%m%d%H%M%S)
 $(DIFF_NAME).invs.diff: daikon-output/$(NAME).invs.txt $(call goal_name,$(NAME).invs)
-ifeq ($(NAME), IntTest)
-	mkdir -p ${TMPDIR}/dtest
-	cd ${TMPDIR}/dtest && jar -xf ${DAIKON_JAR} daikon/Daikon.class
-	JAVA_VERSION_STRING=$$(javap -v ${TMPDIR}/dtest/daikon/Daikon.class|grep "major version:"); \
-	rm -rf ${TMPDIR} || true; \
-	# check to see if compiled with Java 25; \
-	if [ "$$JAVA_VERSION_STRING" = "  major version: 69" ]; then \
-		echo "diff --text -F::: -u $(NAME).invs.goal.j25 daikon-output/$(NAME).invs.txt >$@ 2>&1"; \
-		diff --text -F::: -u $(NAME).invs.goal.j25 daikon-output/$(NAME).invs.txt >$@ 2>&1 || true; \
-	else \
-		echo "diff --text -F::: -u $(call goal_name,$(NAME).invs) daikon-output/$(NAME).invs.txt >$@ 2>&1"; \
-		diff --text -F::: -u $(call goal_name,$(NAME).invs) daikon-output/$(NAME).invs.txt >$@ 2>&1 || true; \
-	fi
-else
 	-diff --text -F::: -u $(call goal_name,$(NAME).invs) daikon-output/$(NAME).invs.txt >$@ 2>&1
-endif
 else
 $(DIFF_NAME).invs.diff: daikon-output/$(NAME).invs.txt
 		@echo skipping $(NAME) .invs file check
