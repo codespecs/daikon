@@ -49,7 +49,13 @@ esc jml inv txt-daikon-diff txt-esc-diff txt-jml-diff txt-csharpcontract-diff tx
 txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
 	${MAKE} pat-daikon-tests-$@
 pat-daikon-tests-%:
-	${MAKE} -C daikon-tests --jobs=4 ${MPARG} $*
+# Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
+	if [ -n "$CIRCLECI" ] || [ -n "$AZURE_HTTP_USER_AGENT" ]; then
+	  num_jobs=1 \
+	else \
+	  num_jobs=4 \
+	fi
+	${MAKE} -C daikon-tests --jobs=${num_jobs} ${MPARG} $*
 
 list-targets:
 	${MAKE} -C daikon-tests list-targets

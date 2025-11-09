@@ -62,7 +62,12 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	${MAKE} --jobs=4 ${MPARG} nightly-tests__clean
+	if [ -n "$CIRCLECI" ] || [ -n "$AZURE_HTTP_USER_AGENT" ]; then
+	  num_jobs=1 \
+	else \
+	  num_jobs=4 \
+	fi
+	${MAKE} --jobs="${num_jobs}" ${MPARG} nightly-tests__clean
 
 
 default-projects__%: pgbovine-tests__%
