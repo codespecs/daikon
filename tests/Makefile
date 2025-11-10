@@ -50,12 +50,11 @@ txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
 	${MAKE} pat-daikon-tests-$@
 pat-daikon-tests-%:
 # Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-	if [ -n "$CIRCLECI" ] || [ -n "$AZURE_HTTP_USER_AGENT" ]; then
-	  num_jobs=1 \
+	if [ -n "$("${CHECKERFRAMEWORK}"/checker/bin-devel/is-ci.sh)" ]; then \
+	  ${MAKE} -C daikon-tests --jobs=1 ${MPARG} $* \
 	else \
-	  num_jobs=4 \
+	  ${MAKE} -C daikon-tests --jobs=4 ${MPARG} $* \
 	fi
-	${MAKE} -C daikon-tests --jobs=${num_jobs} ${MPARG} $*
 
 list-targets:
 	${MAKE} -C daikon-tests list-targets

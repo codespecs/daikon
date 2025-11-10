@@ -62,12 +62,11 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	if [ -n "$CIRCLECI" ] || [ -n "$AZURE_HTTP_USER_AGENT" ]; then
-	  num_jobs=1 \
+	if [ -n "$("${CHECKERFRAMEWORK}"/checker/bin-devel/is-ci.sh)" ]; then \
+	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean
 	else \
-	  num_jobs=4 \
+	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean
 	fi
-	${MAKE} --jobs="${num_jobs}" ${MPARG} nightly-tests__clean
 
 
 default-projects__%: pgbovine-tests__%

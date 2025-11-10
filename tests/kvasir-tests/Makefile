@@ -24,12 +24,11 @@ default: summary-w-daikon
 
 .PHONY: regression-tests
 regression-tests:
-	if [ -n "$CIRCLECI" ] || [ -n "$AZURE_HTTP_USER_AGENT" ]; then
-	  num_jobs=1 \
+	if [ -n "$("${CHECKERFRAMEWORK}"/checker/bin-devel/is-ci.sh)" ]; then \
+	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__diffs-w-daikon-if-working \
 	else \
-	  num_jobs=4 \
+	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__diffs-w-daikon-if-working \
 	fi
-	${MAKE} --jobs="${num_jobs}" ${MPARG} nightly-tests__diffs-w-daikon-if-working
 	${MAKE} nightly-summary-only-w-daikon
 	@${MAKE} --no-print-directory results
 
@@ -79,13 +78,11 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	if [ -n "$CIRCLECI" ] || [ -n "$AZURE_HTTP_USER_AGENT" ]; then
-	  num_jobs=1 \
+	if [ -n "$("${CHECKERFRAMEWORK}"/checker/bin-devel/is-ci.sh)" ]; then \
+	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean \
 	else \
-	  num_jobs=4 \
+	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean \
 	fi
-	${MAKE} --jobs="${num_jobs}" ${MPARG} nightly-tests__clean
-
 
 default-projects__%: pgbovine-tests__% smcc-tests__% tiny-real-tests__% tws-tests__%
 	@
