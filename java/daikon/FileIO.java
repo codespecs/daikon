@@ -1982,8 +1982,8 @@ public final class FileIO {
         if (dkconfig_verbose_unmatched_procedure_entries) {
           System.out.println(
               "Remaining "
-                   StringsPlume.nPlural(unmatched_count, "stack call")
-                   " summarized below.");
+                  + StringsPlume.nPlural(unmatched_count, "stack call")
+                  + " summarized below.");
           print_invocations_verbose(call_stack);
         } else {
           print_invocations_grouped(call_stack);
