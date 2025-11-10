@@ -69,8 +69,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.FilesPlume;
+import org.plumelib.util.MapsP;
 import org.plumelib.util.StringsPlume;
 
 /** File I/O utilities. */
@@ -1965,7 +1965,7 @@ public final class FileIO {
       if (!call_hashmap.isEmpty()) {
         // Put the invocations in sorted order for printing.
         ArrayList<Invocation> invocations = new ArrayList<>();
-        for (@KeyFor("call_hashmap") Integer i : CollectionsPlume.sortedKeySet(call_hashmap)) {
+        for (@KeyFor("call_hashmap") Integer i : MapsP.sortedKeySet(call_hashmap)) {
           Invocation invok = call_hashmap.get(i);
           assert invok != null;
           invocations.add(invok);
