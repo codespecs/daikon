@@ -1956,7 +1956,7 @@ public final class FileIO {
       System.out.println();
       System.out.print(
           "No return from procedure observed "
-              + StringsPlume.nplural(unmatched_count, "time")
+              + StringsPlume.nPlural(unmatched_count, "time")
               + ".");
       if (Daikon.use_dataflow_hierarchy) {
         System.out.print("  Unmatched entries are ignored!");
@@ -1982,7 +1982,7 @@ public final class FileIO {
         if (dkconfig_verbose_unmatched_procedure_entries) {
           System.out.println(
               "Remaining "
-                  + StringsPlume.nplural(unmatched_count, "stack")
+                  + StringsPlume.nPlural(unmatched_count, "stack")
                   + " call summarized below.");
           print_invocations_verbose(call_stack);
         } else {
@@ -2023,7 +2023,7 @@ public final class FileIO {
     // Print the invocations in sorted order.
     for (Map.Entry<@Interned String, Integer> invokEntry : counter.entrySet()) {
       System.out.println(
-          invokEntry.getKey() + " : " + StringsPlume.nplural(invokEntry.getValue(), "invocation"));
+          invokEntry.getKey() + " : " + StringsPlume.nPlural(invokEntry.getValue(), "invocation"));
     }
   }
 
