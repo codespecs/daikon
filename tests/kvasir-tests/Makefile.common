@@ -3,7 +3,8 @@
 # DAIKONDIR is the clone of the 'daikon' project.
 DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
 DAIKON_JAR := ${DAIKONDIR}/daikon.jar
-$(if $(wildcard ${DAIKON_JAR}),,$(error daikon.jar not found at ${DAIKON_JAR}))
+# Fails when running "clean".
+# $(if $(wildcard ${DAIKON_JAR}),,$(error daikon.jar not found at ${DAIKON_JAR}))
 
 ifeq ($(shell uname -m),x86_64)
 VALGRIND_ARCH := amd64
