@@ -1,6 +1,8 @@
 #!/bin/bash
+# Use bash, not sh, because of `set -o pipefail`.
 
 # This is the "typecheck-onefile" job of the pull request.
+# It uses the HEAD version of the Checker Framework: the latest commit in the GitHub repository.
 
 set -e
 set -o pipefail

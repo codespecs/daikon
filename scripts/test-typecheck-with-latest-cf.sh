@@ -1,5 +1,5 @@
 #!/bin/bash
-# Bash, not sh, because of `set -o pipefail`.
+# Use bash, not sh, because of `set -o pipefail`.
 
 # This is the "typecheck" job of the pull request.
 # It uses the HEAD version of the Checker Framework: the latest commit in the GitHub repository.

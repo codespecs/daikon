@@ -43,7 +43,7 @@ commons-lang3-3.19.0.jar : https://commons.apache.org/proper/commons-lang/downlo
 
 daikon-plumelib.jar : Contains bcel-util, options, hashmap-util,
   plume-util, and reflection-util, but in package "daikon.plumelib".
-  # Adjust version numbers in file `build.gradle`.  (TODO: make that unnecessary.)
+  # First, adjust version numbers in file `build.gradle`.  (TODO: make that unnecessary.)
   gradle shadowjar
   mv -f build/libs/daikon-plumelib.jar .
   rm -rf build
