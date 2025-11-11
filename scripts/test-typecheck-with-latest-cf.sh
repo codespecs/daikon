@@ -10,6 +10,8 @@ set -o verbose
 set -o xtrace
 export SHELLOPTS
 
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
+
 make showvars
 make compile daikon.jar
 
@@ -21,7 +23,7 @@ fi
 
 # Use a version of the Checker Framework cloned from a GitHub
 # repository, NOT the version checked in at java/lib/checker-framework/.
-utils/git-scripts/git-clone-related typetools checker-framework
+"${SCRIPT_DIR}"/utils/git-scripts/git-clone-related typetools checker-framework
 (cd ../checker-framework && ./gradlew assembleForJavac --console=plain -Dorg.gradle.internal.http.socketTimeout=60000 -Dorg.gradle.internal.http.connectionTimeout=60000)
 CHECKERFRAMEWORK=$(realpath ../checker-framework)
 export CHECKERFRAMEWORK
