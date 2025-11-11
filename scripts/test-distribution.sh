@@ -6,7 +6,7 @@ SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd -P)"
 
 # Fail the whole script if any command fails
 set -e
-# Fail if any command in a pipeline fails
+# Fail if any command in a pipeline fails; requires bash, not sh.
 #set -o pipefail
 # Echo commands before executing them
 set -x
