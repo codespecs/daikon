@@ -19,6 +19,7 @@ import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.FilesPlume;
+import org.plumelib.util.MapsP;
 
 /**
  * ParameterDoclet is a JavaDoc doclet that collects information about the run-time configuration
@@ -407,7 +408,7 @@ public class ParameterDoclet {
       out.println();
 
       for (
-      @KeyFor("categories[c].fields") String field : CollectionsPlume.sortedKeySet(categories[c].fields)) {
+      @KeyFor("categories[c].fields") String field : MapsP.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defaultString = getDefaultString(field);
 
@@ -443,7 +444,7 @@ public class ParameterDoclet {
       out.println();
 
       for (
-      @KeyFor("categories[c].fields") String field : CollectionsPlume.sortedKeySet(categories[c].fields)) {
+      @KeyFor("categories[c].fields") String field : MapsP.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defaultString = getDefaultString(field);
 
@@ -461,7 +462,7 @@ public class ParameterDoclet {
 
   public void writeList(PrintWriter out) {
     for (int c = 0; c < categories.length; c++) {
-      for (String field : CollectionsPlume.sortedKeySet(categories[c].fields)) {
+      for (String field : MapsP.sortedKeySet(categories[c].fields)) {
         out.println(field);
       }
     }

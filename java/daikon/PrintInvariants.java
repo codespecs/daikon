@@ -937,7 +937,7 @@ public final class PrintInvariants {
     if (Daikon.output_num_samples) {
       out.print("  ");
       if (!wrap_xml) {
-        out.print(StringsPlume.nplural(ppt.num_samples(), "sample"));
+        out.print(StringsPlume.nPlural(ppt.num_samples(), "sample"));
       } else {
         printXmlTagged(out, "SAMPLES", ppt.num_samples());
       }
@@ -1152,7 +1152,7 @@ public final class PrintInvariants {
 
     if (Daikon.output_num_samples) {
       int inv_num_samps = inv.ppt.num_samples();
-      String num_values_samples = "\t\t(" + StringsPlume.nplural(inv_num_samps, "sample") + ")";
+      String num_values_samples = "\t\t(" + StringsPlume.nPlural(inv_num_samps, "sample") + ")";
       inv_rep += num_values_samples;
     }
 
