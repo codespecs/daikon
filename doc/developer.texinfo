@@ -159,7 +159,7 @@ This chapter describes how to customize or modify Daikon.
 
 To compile Daikon, type @command{make} in @file{$@{DAIKONDIR@}/java/} or any of its
 subdirectories.  Alternately, type @command{make -C $@{DAIKONDIR@} compile}.
-To create the @file{daikon.jar} file, type @command{make -C $@{DAIKONDIR} daikon.jar}.
+To create the @file{daikon.jar} file, type @command{make -C $@{DAIKONDIR@} daikon.jar}.
 
 The distribution includes @file{daikon.jar} and compiled @file{.class} files,
 so you do not need to compile them yourself unless you make changes.
