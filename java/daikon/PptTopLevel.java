@@ -2750,7 +2750,7 @@ public class PptTopLevel extends Ppt {
 
     debugConditional.fine(
         "Applying "
-            + StringsPlume.nplural(((splits == null) ? 0 : splits.length), "split")
+            + StringsPlume.nPlural(((splits == null) ? 0 : splits.length), "split")
             + " to "
             + name());
 

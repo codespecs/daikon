@@ -118,6 +118,9 @@ ifeq "$(wildcard ${DAIKONDIR}/java/lib/daikon-plumelib.jar)" "${DAIKONDIR}/java/
   # Add jar files that only exist for the development version, not the
   # distributed version, of Daikon.  The if clause avoids a (harmless but
   # annoying) javac error message that they don't exist.
+  # This classpath is a problem, because CHECKERFRAMEWORK_JAR may have
+  # a different version of a plume-lib library than java/lib/* does.
+  # One (unclean) approach is to update them simultaneously.  Does that even work?
   DAIKON_CLASSPATH := ${CHECKERFRAMEWORK_JAR}:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
 else
   DAIKON_CLASSPATH := ${DAIKONDIR}/java

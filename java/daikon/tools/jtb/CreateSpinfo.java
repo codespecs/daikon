@@ -21,6 +21,7 @@ import jtb.syntaxtree.*;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.CollectionsPlume;
+import org.plumelib.util.MapsP;
 import org.plumelib.util.StringsPlume;
 
 /**
@@ -247,14 +248,14 @@ public class CreateSpinfo {
     if (!replaceStatements.values().isEmpty()) {
       output.println("REPLACE");
       for (
-      @KeyFor("replaceStatements") String declaration : CollectionsPlume.sortedKeySet(replaceStatements)) {
+      @KeyFor("replaceStatements") String declaration : MapsP.sortedKeySet(replaceStatements)) {
         output.println(declaration);
         String replacement = replaceStatements.get(declaration);
         output.println(removeNewlines(replacement));
       }
       output.println();
     }
-    for (@KeyFor("conditions") String method : CollectionsPlume.sortedKeySet(conditions)) {
+    for (@KeyFor("conditions") String method : MapsP.sortedKeySet(conditions)) {
       List<String> method_conds = conditions.get(method);
       Collections.sort(method_conds);
       if (!method_conds.isEmpty()) {

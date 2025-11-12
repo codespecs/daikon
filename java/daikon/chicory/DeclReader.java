@@ -210,7 +210,7 @@ public class DeclReader {
 
     // have caller deal with FileNotFound
 
-    try (EntryReader decl_file = new EntryReader(pathname, "^(//|#).*", null)) {
+    try (EntryReader decl_file = new EntryReader(pathname, false, "^(//|#).*", null)) {
       for (String line = decl_file.readLine(); line != null; line = decl_file.readLine()) {
         // Skip all input until we find a ppt.
         if (!line.startsWith("ppt ")) {
