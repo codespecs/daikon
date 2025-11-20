@@ -25,9 +25,9 @@ default: summary-w-daikon
 .PHONY: regression-tests
 regression-tests:
 	if [ -n "$("${CHECKERFRAMEWORK}"/checker/bin-devel/is-ci.sh)" ]; then \
-	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__diffs-w-daikon-if-working \
+	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
 	else \
-	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__diffs-w-daikon-if-working \
+	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
 	fi
 	${MAKE} nightly-summary-only-w-daikon
 	@${MAKE} --no-print-directory results
