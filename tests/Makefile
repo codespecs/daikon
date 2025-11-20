@@ -51,9 +51,9 @@ txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
 pat-daikon-tests-%:
 # Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
 	if [ -n "$("${DAIKONDIR}"/scripts/is-ci.sh)" ]; then \
-	  ${MAKE} -C daikon-tests --jobs=1 ${MPARG} $* \
+	  ${MAKE} -C daikon-tests --jobs=1 ${MPARG} $*; \
 	else \
-	  ${MAKE} -C daikon-tests --jobs=4 ${MPARG} $* \
+	  ${MAKE} -C daikon-tests --jobs=4 ${MPARG} $*; \
 	fi
 
 list-targets:
