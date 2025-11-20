@@ -507,7 +507,7 @@ public class PptTopLevel extends Ppt {
 
     // Fix variable pointers so that they refer to the variables
     // in this program point (they may have been cloned from a diff
-    // program point)
+    // program point).
     for (VarInfo vi : var_infos) {
       vi.update_after_moving_to_new_ppt();
     }
@@ -2750,7 +2750,7 @@ public class PptTopLevel extends Ppt {
 
     debugConditional.fine(
         "Applying "
-            + StringsPlume.nplural(((splits == null) ? 0 : splits.length), "split")
+            + StringsPlume.nPlural(((splits == null) ? 0 : splits.length), "split")
             + " to "
             + name());
 

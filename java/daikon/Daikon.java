@@ -2084,7 +2084,7 @@ public final class Daikon {
       fileio_progress.clear();
       if (!Daikon.dkconfig_quiet && !decl_files.isEmpty()) {
         System.out.print("\r(read ");
-        System.out.print(StringsPlume.nplural(decl_files.size(), "decls file"));
+        System.out.print(StringsPlume.nPlural(decl_files.size(), "decls file"));
         System.out.println(")");
       }
       return all_ppts;
@@ -2108,10 +2108,10 @@ public final class Daikon {
       System.out.print("Reading splitter info files ");
       create_splitters(spinfo_files);
       System.out.print("\r(read ");
-      System.out.print(StringsPlume.nplural(spinfo_files.size(), "spinfo file"));
+      System.out.print(StringsPlume.nPlural(spinfo_files.size(), "spinfo file"));
       System.out.print(", ");
       System.out.print(
-          StringsPlume.nplural(SpinfoFile.numSplittterObjects(spinfoFiles), "splitter"));
+          StringsPlume.nPlural(SpinfoFile.numSplittterObjects(spinfoFiles), "splitter"));
       System.out.println(")");
     } catch (IOException e) {
       System.out.println();
@@ -2136,7 +2136,7 @@ public final class Daikon {
       ContextSplitterFactory.load_mapfiles_into_splitterlist(
           map_files, ContextSplitterFactory.dkconfig_granularity);
       System.out.print("\r(read ");
-      System.out.print(StringsPlume.nplural(map_files.size(), "map (context) file"));
+      System.out.print(StringsPlume.nPlural(map_files.size(), "map (context) file"));
       System.out.println(")");
       long duration = System.nanoTime() - startTime;
       debugProgress.fine(
@@ -2169,7 +2169,7 @@ public final class Daikon {
     }
     if (pconds != null) {
       Global.debugSplit.fine(
-          "Got " + StringsPlume.nplural(pconds.length, "splitter") + " for " + ppt.name());
+          "Got " + StringsPlume.nPlural(pconds.length, "splitter") + " for " + ppt.name());
       ppt.addConditions(pconds);
     }
 
@@ -2323,7 +2323,7 @@ public final class Daikon {
       if (!Daikon.dkconfig_quiet) {
         System.out.println(
             "Processing trace data; reading "
-                + StringsPlume.nplural(dtrace_files.size(), "dtrace file")
+                + StringsPlume.nPlural(dtrace_files.size(), "dtrace file")
                 + ":");
       }
       FileIO.read_data_trace_files(dtrace_files, all_ppts);
@@ -2380,7 +2380,7 @@ public final class Daikon {
     if ((use_dataflow_hierarchy && FileIO.samples_processed == unmatched_count)
         || (FileIO.samples_processed == 0)) {
       throw new Daikon.UserError(
-          "No samples found for any of " + StringsPlume.nplural(all_ppts.size(), "program point"));
+          "No samples found for any of " + StringsPlume.nPlural(all_ppts.size(), "program point"));
     }
 
     // ppt_stats (all_ppts);

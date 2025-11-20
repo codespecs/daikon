@@ -15,6 +15,7 @@ LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>
 RUN dnf -q -y upgrade && dnf -q -y install \
   epel-release
 
+# curl is installed by default on Rocky Linux.
 RUN dnf -q -y upgrade && dnf -q -y install \
   autoconf \
   automake \
@@ -32,6 +33,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   rsync \
   tar \
   unzip \
+  wget \
   which
 
 RUN dnf -q -y install \
@@ -44,8 +46,7 @@ RUN dnf -q -y install \
   python3 \
   python3-distutils-extra \
   ShellCheck \
-  texlive \
-  wget
+  texlive
 
 # Alternately, run: dnf --enablerepo=crb install PACKAGENAME
 RUN dnf config-manager --set-enabled crb \

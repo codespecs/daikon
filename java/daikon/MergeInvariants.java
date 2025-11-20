@@ -199,7 +199,7 @@ public final class MergeInvariants {
     if (inv_files.size() < 2) {
       throw new Daikon.UserError(
           "Provided "
-              + StringsPlume.nplural(inv_files.size(), "inv file")
+              + StringsPlume.nPlural(inv_files.size(), "inv file")
               + " but needs at least two");
     }
 
