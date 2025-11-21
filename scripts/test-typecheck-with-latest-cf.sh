@@ -31,7 +31,7 @@ CHECKERFRAMEWORK=$(realpath ../checker-framework)
 export CHECKERFRAMEWORK
 
 # Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-if [ -n "$CIRCLECI" ] || [ -n "$AZURE_HTTP_USER_AGENT" ]; then
+if [ -n "$("${SCRIPT_DIR}"/is-ci.sh)" ]; then
   make -C java typecheck
 else
   num_jobs="$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1)"
