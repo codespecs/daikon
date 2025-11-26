@@ -231,7 +231,7 @@ public final class DCRuntime implements ComparabilityProvider {
       Class<Object> tmp = (Class<Object>) Class.forName("java.lang.Object");
       java_lang_Object_class = tmp;
     } catch (Exception e) {
-      throw new RuntimeException("Error initializing DCRuntime:", e);
+      throw new RuntimeException("Error initializing DCRuntime", e);
     }
 
     // Initialize the array of static tags
