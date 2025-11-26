@@ -4177,7 +4177,7 @@ public class DCInstrument extends InstructionListUtils {
 
     // Create the method
     Type[] argTypes = ArraysPlume.append(mg.getArgumentTypes(), dcomp_marker);
-    String[] argNames = addString(mg.getArgumentNames(), "marker");
+    String[] argNames = ArraysPlume.append(mg.getArgumentNames(), "marker");
     MethodGen dcomp_mg =
         new MethodGen(
             mg.getAccessFlags(),
