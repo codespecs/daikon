@@ -2910,8 +2910,7 @@ public class DCInstrument extends InstructionListUtils {
       if (debugInstrument.enabled) {
         t.printStackTrace();
       }
-      throw new Error(
-          "Error processing " + gen.getClassName() + "." + cinit.getName(), t);
+      throw new Error("Error processing " + gen.getClassName() + "." + cinit.getName(), t);
     }
   }
 

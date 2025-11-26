@@ -585,9 +585,7 @@ public final class DCRuntime implements ComparabilityProvider {
         throw e.getCause();
       } catch (Exception e) {
         throw new RuntimeException(
-            "Error invoking clone(DCompMarker) on object of class "
-                + orig_obj.getClass(),
-            e);
+            "Error invoking clone(DCompMarker) on object of class " + orig_obj.getClass(), e);
       }
     }
 

@@ -285,8 +285,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       njc = cg.getJavaClass();
     } catch (Throwable t) {
       RuntimeException re =
-          new RuntimeException(
-              String.format("Error %s in transform of %s", t, binaryClassName), t);
+          new RuntimeException(String.format("Error %s in transform of %s", t, binaryClassName), t);
       re.printStackTrace();
       throw re;
     }

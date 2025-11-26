@@ -337,8 +337,7 @@ public class Instrument24 implements ClassFileTransformer {
               classBuilder -> instrumentClass(classBuilder, classModel, classInfo));
     } catch (Throwable t) {
       RuntimeException re =
-          new RuntimeException(
-              String.format("Error %s in transform of %s", t, binaryClassName), t);
+          new RuntimeException(String.format("Error %s in transform of %s", t, binaryClassName), t);
       re.printStackTrace();
       throw re;
     }
