@@ -10,6 +10,7 @@ import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.bcelutil.StackTypes;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.reflection.Signatures;
+import daikon.plumelib.util.ArraysPlume;
 import daikon.plumelib.util.EntryReader;
 import java.io.File;
 import java.io.IOException;
@@ -2029,7 +2030,7 @@ public class DCInstrument extends InstructionListUtils {
       InstructionList il = new InstructionList();
       // Add the DCompMarker argument so that it calls the instrumented version.
       il.append(new ACONST_NULL());
-      Type[] new_arg_types = BcelUtil.postpendToArray(argTypes, dcomp_marker);
+      Type[] new_arg_types = ArraysPlume.append(argTypes, dcomp_marker);
       Constant methodref = pool.getConstant(invoke.getIndex());
       il.append(
           ifact.createInvoke(
@@ -4162,8 +4163,8 @@ public class DCInstrument extends InstructionListUtils {
     il.append(InstructionFactory.createReturn(returnType));
 
     // Create the method
-    Type[] argTypes = BcelUtil.postpendToArray(mg.getArgumentTypes(), dcomp_marker);
-    String[] argNames = addString(mg.getArgumentNames(), "marker");
+    Type[] argTypes = ArraysPlume.append(mg.getArgumentTypes(), dcomp_marker);
+    String[] argNames = ArraysPlume.append(mg.getArgumentNames(), "marker");
     MethodGen dcomp_mg =
         new MethodGen(
             mg.getAccessFlags(),
