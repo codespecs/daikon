@@ -62,7 +62,11 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	${MAKE} --jobs=4 ${MPARG} nightly-tests__clean
+	if [ -n "$("${DAIKONDIR}"/scripts/is-ci.sh)" ]; then \
+	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
+	else \
+	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \
+	fi
 
 
 default-projects__%: pgbovine-tests__%

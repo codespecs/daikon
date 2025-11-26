@@ -940,7 +940,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + methodName
             + "("
             + "Object thiz"
-            + (parameters.size() > 0 ? ", " : "")
+            + (!parameters.isEmpty() ? ", " : "")
             + String.join(", ", parameters)
             + ") {");
 
@@ -978,7 +978,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + "("
             + "Object thiz "
             + (returnType.equals("void") ? "" : ", " + returnType + " checker_returnval")
-            + (parameters.size() > 0 ? ", " : "")
+            + (!parameters.isEmpty() ? ", " : "")
             + String.join(", ", parameters)
             + ") {");
 
@@ -1048,7 +1048,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             + methodName
             + "("
             + "Object thiz "
-            + (parameters.size() > 0 ? ", " : "")
+            + (!parameters.isEmpty() ? ", " : "")
             + String.join(", ", parameters)
             + ") {");
 
@@ -1212,7 +1212,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
               + m.getName()
               + "("
               + "Object thiz"
-              + (parameters.size() > 0 ? ", " : "")
+              + (!parameters.isEmpty() ? ", " : "")
               + String.join(", ", parameters)
               + ") { /* no properties for this member */ }");
 
@@ -1226,7 +1226,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
               + (m.getReturnType().equals(Void.TYPE)
                   ? ""
                   : (", " + Ast.classnameForSourceOutput(m.getReturnType()) + " checker_returnval"))
-              + (parameters.size() > 0 ? ", " : "")
+              + (!parameters.isEmpty() ? ", " : "")
               + String.join(", ", parameters)
               + ") { /* no properties for this member */ }");
     }
@@ -1270,7 +1270,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
               + baseClassName
               + "("
               + "Object thiz "
-              + (parameters.size() > 0 ? ", " : "")
+              + (!parameters.isEmpty() ? ", " : "")
               + String.join(", ", parameters)
               + ") { /* no properties for this member */ }");
     }

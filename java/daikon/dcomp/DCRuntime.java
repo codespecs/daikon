@@ -2230,9 +2230,9 @@ public final class DCRuntime implements ComparabilityProvider {
     @Pure
     @Override
     public int compareTo(@GuardSatisfied DVSet this, DVSet s1) {
-      if (s1.size() == 0) {
+      if (s1.isEmpty()) {
         return 1;
-      } else if (size() == 0) {
+      } else if (isEmpty()) {
         return -1;
       } else {
         return this.get(0).compareTo(s1.get(0));

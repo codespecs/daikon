@@ -24,7 +24,11 @@ default: summary-w-daikon
 
 .PHONY: regression-tests
 regression-tests:
-	${MAKE} --jobs=4 ${MPARG} nightly-tests__diffs-w-daikon-if-working
+	if [ -n "$("${DAIKONDIR}"/scripts/is-ci.sh)" ]; then \
+	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
+	else \
+	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__diffs-w-daikon-if-working; \
+	fi
 	${MAKE} nightly-summary-only-w-daikon
 	@${MAKE} --no-print-directory results
 
@@ -74,8 +78,11 @@ update-all:
 
 .PHONY: clean-all
 clean-all:
-	${MAKE} --jobs=4 ${MPARG} nightly-tests__clean
-
+	if [ -n "$("${DAIKONDIR}"/scripts/is-ci.sh)" ]; then \
+	  ${MAKE} --jobs=1 ${MPARG} nightly-tests__clean; \
+	else \
+	  ${MAKE} --jobs=4 ${MPARG} nightly-tests__clean; \
+	fi
 
 default-projects__%: pgbovine-tests__% smcc-tests__% tiny-real-tests__% tws-tests__%
 	@

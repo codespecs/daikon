@@ -65,7 +65,7 @@ public class VarInfoNameDriver {
       }
 
       // ignore blank lines
-      if (list.size() == 0) {
+      if (list.isEmpty()) {
         continue;
       }
 

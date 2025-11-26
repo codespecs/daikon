@@ -2,6 +2,9 @@
 
 # DAIKONDIR is the clone of the 'daikon' project.
 DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+DAIKON_JAR := ${DAIKONDIR}/daikon.jar
+# Fails when running "clean".
+# $(if $(wildcard ${DAIKON_JAR}),,$(error daikon.jar not found at ${DAIKON_JAR}))
 
 ifeq ($(shell uname -m),x86_64)
 VALGRIND_ARCH := amd64
@@ -43,14 +46,9 @@ DIFF_NAME ?= $(shell basename `pwd`)
 BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
 
-ifeq (i386, $(shell uname -i))
-DAIKON := java -Xmx3600m -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
-PRINT_INV := java -Xmx3600m -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
-else
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
-DAIKON := java -ea -Xmx3600M -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
-PRINT_INV := java -Xmx3600M -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
-endif
+DAIKON := java -ea -Xmx7g -cp ${DAIKON_JAR} daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
+PRINT_INV := java -Xmx7g -cp ${DAIKON_JAR} daikon.PrintInvariants
 
 default: summary-w-daikon
 
@@ -78,6 +76,9 @@ ifeq ($(OS_ID),Rocky)
 endif
 
 ifeq ($(OS_ID),Ubuntu)
+ifeq ($(OS_REL),25.10)
+	GOAL := goal-Ubuntu2510
+endif
 ifeq ($(OS_REL),25.04)
 	GOAL := goal-Ubuntu2504
 endif

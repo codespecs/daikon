@@ -223,9 +223,26 @@ public class ChicoryPremain {
     File purityFile = new File(pathLoc, purityFileName.getPath());
     String purityFileAbsolutePath = purityFile.getAbsolutePath();
 
-    BufferedReader reader;
-    try {
-      reader = FilesPlume.newBufferedFileReader(purityFile);
+    try (BufferedReader reader = FilesPlume.newBufferedFileReader(purityFile)) {
+      if (verbose) {
+        System.out.printf("Reading '%s' for pure methods %n", purityFileName);
+      }
+
+      String line = null;
+      do {
+        try {
+          line = reader.readLine();
+        } catch (IOException e) {
+          throw new UncheckedIOException(
+              "Error reading file " + purityFileName + " = " + purityFileAbsolutePath, e);
+        }
+
+        if (line != null) {
+          pureMethods.add(line.trim());
+          // System.out.printf("Adding '%s' to list of pure methods%n",
+          //                   line);
+        }
+      } while (line != null);
     } catch (FileNotFoundException e) {
       System.err.printf(
           "%nCould not find purity file %s = %s%n", purityFileName, purityFileAbsolutePath);
@@ -235,38 +252,6 @@ public class ChicoryPremain {
     } catch (IOException e) {
       throw new UncheckedIOException(
           "Problem reading purity file " + purityFileName + " = " + purityFileAbsolutePath, e);
-    }
-
-    if (verbose) {
-      System.out.printf("Reading '%s' for pure methods %n", purityFileName);
-    }
-
-    String line = null;
-    do {
-      try {
-        line = reader.readLine();
-      } catch (IOException e) {
-        try {
-          reader.close();
-        } catch (IOException e2) {
-          // Do nothing
-        }
-        throw new UncheckedIOException(
-            "Error reading file " + purityFileName + " = " + purityFileAbsolutePath, e);
-      }
-
-      if (line != null) {
-        pureMethods.add(line.trim());
-        // System.out.printf("Adding '%s' to list of pure methods%n",
-        //                   line);
-      }
-    } while (line != null);
-
-    try {
-      reader.close();
-    } catch (IOException e) {
-      System.err.println("Error while closing " + purityFileName + " after reading.");
-      System.exit(1);
     }
 
     // System.out.printf("leaving purify file%n");

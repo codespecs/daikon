@@ -69,8 +69,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.FilesPlume;
+import org.plumelib.util.MapsP;
 import org.plumelib.util.StringsPlume;
 
 /** File I/O utilities. */
@@ -1753,7 +1753,7 @@ public final class FileIO {
         throw new Daikon.UserError(message, reader, state.filename);
       }
 
-      if (state.all_ppts.size() == 0) {
+      if (state.all_ppts.isEmpty()) {
         throw new Daikon.UserError(
             "No declarations were provided before the first sample.  Perhaps you did not supply"
                 + " the proper .decls file to Daikon.  (Or, there could be a bug in the front end"
@@ -1956,7 +1956,7 @@ public final class FileIO {
       System.out.println();
       System.out.print(
           "No return from procedure observed "
-              + StringsPlume.nplural(unmatched_count, "time")
+              + StringsPlume.nPlural(unmatched_count, "time")
               + ".");
       if (Daikon.use_dataflow_hierarchy) {
         System.out.print("  Unmatched entries are ignored!");
@@ -1965,7 +1965,7 @@ public final class FileIO {
       if (!call_hashmap.isEmpty()) {
         // Put the invocations in sorted order for printing.
         ArrayList<Invocation> invocations = new ArrayList<>();
-        for (@KeyFor("call_hashmap") Integer i : CollectionsPlume.sortedKeySet(call_hashmap)) {
+        for (@KeyFor("call_hashmap") Integer i : MapsP.sortedKeySet(call_hashmap)) {
           Invocation invok = call_hashmap.get(i);
           assert invok != null;
           invocations.add(invok);
@@ -1982,8 +1982,8 @@ public final class FileIO {
         if (dkconfig_verbose_unmatched_procedure_entries) {
           System.out.println(
               "Remaining "
-                  + StringsPlume.nplural(unmatched_count, "stack")
-                  + " call summarized below.");
+                  + StringsPlume.nPlural(unmatched_count, "stack call")
+                  + " summarized below.");
           print_invocations_verbose(call_stack);
         } else {
           print_invocations_grouped(call_stack);
@@ -2023,7 +2023,7 @@ public final class FileIO {
     // Print the invocations in sorted order.
     for (Map.Entry<@Interned String, Integer> invokEntry : counter.entrySet()) {
       System.out.println(
-          invokEntry.getKey() + " : " + StringsPlume.nplural(invokEntry.getValue(), "invocation"));
+          invokEntry.getKey() + " : " + StringsPlume.nPlural(invokEntry.getValue(), "invocation"));
     }
   }
 

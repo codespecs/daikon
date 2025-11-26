@@ -29,16 +29,23 @@ JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | s
 ifneq (,$(findstring start1.8,start${JAVA_VERSION_STRING}))
   JAVA8 := 1
   JAVA17 := 0
+  JAVA21 := 0
   JAVA24 := 0
+  JAVA25 := 0
   JAVA_RELEASE_NUMBER := 8
 else
   JAVA8 := 0
   JAVA17 := 0
+  JAVA21 := 0
   JAVA24 := 0
+  JAVA25 := 0
   JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]*\)\..*/\1/')
 endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 17; echo $$?),0)
   JAVA17 := 1
+endif
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 21; echo $$?),0)
+  JAVA21 := 1
 endif
 # Temporary, since Java 24 is not a LTS release.
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 24; echo $$?),0)
@@ -99,7 +106,7 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 
 # Not := because DAIKON_CLASSPATH is set later in this file.
 JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
-JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx3600m ${JAVAC_ARGS}
+JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
 JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
 
 
@@ -114,6 +121,9 @@ ifeq "$(wildcard ${DAIKONDIR}/java/lib/daikon-plumelib.jar)" "${DAIKONDIR}/java/
   # Add jar files that only exist for the development version, not the
   # distributed version, of Daikon.  The if clause avoids a (harmless but
   # annoying) javac error message that they don't exist.
+  # This classpath is a problem, because CHECKERFRAMEWORK_JAR may have
+  # a different version of a plume-lib library than java/lib/* does.
+  # One (unclean) approach is to update them simultaneously.  Does that even work?
   DAIKON_CLASSPATH := ${CHECKERFRAMEWORK_JAR}:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
 else
   DAIKON_CLASSPATH := ${DAIKONDIR}/java
@@ -628,7 +638,7 @@ dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 ${DCOMP_RT} dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf ${DCOMP_RT}
 	${INSTALL} -d ${DCOMP_RT}
-	${JAVA_COMMAND} -Xmx3600m daikon.dcomp.${BuildJDKTool} ${DCOMP_RT}
+	${JAVA_COMMAND} -Xmx7g daikon.dcomp.${BuildJDKTool} ${DCOMP_RT}
 # "then" clause is Java 8, "else" clause is Java 9+.
 # For Java 9+, there appears to be a bug in the Java reflection invoke code that it
 # does not check that the arg list matches.  Hence, it tries to invoke
@@ -754,12 +764,12 @@ very_clean: very-clean
 very-clean: clean clean-generated-files
 	-rm -f TAGS
 	-rm -rf dcomp_premain.jar dcomp_rt.jar ${DCOMP_RT}
-	-rm -rf api
-	-rm -rf daikon/dcomp/std_dcomp_out.diff daikon/dcomp/std_dcomp_out.txt
+	-rm -rf api/
 	-rm -rf daikon/chicory/ChicoryTest.inv.out
-	-rm -rf daikon/dcomp/debug/
+	-rm -rf daikon/chicory/debug/
 	-rm -rf daikon/dcomp/DcompTest.log
-	-rm -rf daikon/chicory/debug
+	-rm -rf daikon/dcomp/debug/
+	-rm -rf daikon/dcomp/std_dcomp_out.diff daikon/dcomp/std_dcomp_out.txt
 
 run:	all
 	${JAVA_COMMAND} daikon.Daikon
@@ -805,14 +815,10 @@ endif
 ###
 
 # See version numbers at https://github.com/google/error-prone/releases
-# and https://errorprone.info/docs/installation .
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -lt 17; echo $$?),0)
-  error-prone-version = 2.31.0
-  extra-error-prone-args-1 =
-else
-  error-prone-version = 2.42.0
-  extra-error-prone-args-1 = --should-stop=ifError=FLOW
-endif
+# and https://errorprone.info/docs/installation.
+# Only run under Java 21+.
+error-prone-version = 2.42.0
+extra-error-prone-args-1 = --should-stop=ifError=FLOW
 
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-${error-prone-version}-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.49.3-eisop1.jar
 
@@ -831,10 +837,10 @@ JAVAC_ANNOTATION_PROCESSOR_ARGS ?= \
 error-prone: errorprone
 errorprone: compile errorprone-nocompile
 # Some of the -Xep are temporary
-#   -Xep:PatternMatchingInstanceof:OFF  requires Java 17
+#   -Xep:PatternMatchingInstanceof:OFF  requires Java 17 source code
 errorprone-nocompile:
-ifeq (${JAVA8}, 1)
-	@echo "Error Prone is not run under Java 8"
+ifneq (${JAVA21}, 1)
+	@echo "Error Prone is only run under Java 21+"
 else
 	@echo "Using Error Prone version ${error-prone-version}"
 ## MutablePublicArray is off because it suggests a dependency on Google Guava.
@@ -984,18 +990,33 @@ show_nullness_java_files:
 	@echo ${DAIKON_JAVA_FILES}
 
 ## TODO: Reinstate these dependencies later:  typecheck-prototype typecheck-vindex
-# Check is in two parts because Travis won't run jobs longer than 50 minutes.
+# Check is in multiple parts because Travis won't run jobs longer than 50 minutes
+# and because CI memory can get exhausted on multiple CI platforms (why?).
 # Index Checker takes much longer than any other checker.
+# Typechecking times (in minutes, as of 2025-11-03):
+# formatter 1.25
+# index 9
+# interning 1.25
+# nullness 3
+# lock 1.75
+# regex 1.25
+# resourceleak 3.5
+# signature 1.25
+# signedness 3
+# total: 25.5
 # It is essential that "compile" completes before any typechecking commences.
 typecheck-part1: ${ALL_GENERATED_FILES} compile compile-typequals
 	${MAKE} typecheck-part1-nocompile
-typecheck-part1-nocompile: typecheck-formatter-nocompile typecheck-index-nocompile typecheck-interning-nocompile typecheck-nullness
+typecheck-part1-nocompile: typecheck-formatter-nocompile typecheck-interning-nocompile typecheck-nullness-nocompile typecheck-lock-nocompile typecheck-regex-nocompile
 typecheck-part2: ${ALL_GENERATED_FILES} compile
 	${MAKE} typecheck-part2-nocompile
-typecheck-part2-nocompile: typecheck-lock-nocompile typecheck-regex-nocompile typecheck-resourceleak-nocompile typecheck-signature-nocompile typecheck-signedness-nocompile
+typecheck-part2-nocompile: typecheck-index-nocompile
+typecheck-part3: ${ALL_GENERATED_FILES} compile
+	${MAKE} typecheck-part3-nocompile
+typecheck-part3-nocompile: typecheck-resourceleak-nocompile typecheck-signature-nocompile typecheck-signedness-nocompile
 typecheck-all: ${ALL_GENERATED_FILES} compile
 	${MAKE} typecheck-all-nocompile
-typecheck-all-nocompile: typecheck-part1 typecheck-part2
+typecheck-all-nocompile: typecheck-part1 typecheck-part2 typecheck-part3
 typecheck: typecheck-all
 
 typecheck-formatter: ${ALL_GENERATED_FILES} compile
@@ -1291,7 +1312,7 @@ ifeq (${SKIP_JAVADOC},1)
 else
 	mkdir -p ${JAVADOC_DEST}
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} -J-Xmx3600m -J-ea ${JAVADOC_FLAGS} -Xdoclint:all ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} -J-Xmx7g -J-ea ${JAVADOC_FLAGS} -Xdoclint:all ${DOCLET_FLAGS} \
 		@javadoc-files.txt
 	@rm -f javadoc-files.txt
 	cd ${JAVADOC_DEST} && ${PLUMESCRIPTS}/preplace '^ *&#64;cindex.*' ''
@@ -1310,7 +1331,7 @@ ifeq (${SKIP_JAVADOC},1)
 else
 	mkdir -p ${JAVADOC_DEST}
 	@make javadoc-files.txt
-	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx3600m -J-ea ${JAVADOC_FLAGS} ${DOCLET_FLAGS} $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
+	while read filename ; do echo "filename: $$filename" ; ${JAVADOC_COMMAND} -J-Xmx7g -J-ea ${JAVADOC_FLAGS} ${DOCLET_FLAGS} $$filename > $$filename-javadoc-output.txt 2>&1 ; done < javadoc-files.txt
 	@rm -f javadoc-files.txt
 endif
 
@@ -1321,7 +1342,7 @@ ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 8; echo $$?),0)
 	@echo "Skipping api-private target under Java 8"
 else
 	mkdir -p ${JAVADOC_DEST}
-	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea ${JAVADOC_FLAGS} -private -Xdoclint:all ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea ${JAVADOC_FLAGS} -private -Xdoclint:all ${DOCLET_FLAGS} \
 	  daikon -subpackages ${DAIKON_PACKAGES}
 	cd api && ../../utils/plume-scripts/preplace '^ *&#64;cindex.*' ''
 endif
@@ -1348,7 +1369,7 @@ requireJavadoc: ${JAVA_FILES}
 
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS} \
 		--texinfo tmpfile \
 		@javadoc-files.txt
 	mv -f tmpfile $@
@@ -1359,7 +1380,7 @@ requireJavadoc: ${JAVA_FILES}
 
 ../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
-	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx3600m -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS} \
+	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS} \
 		--texinfo tmpfile \
 		@javadoc-files.txt
 	perl -pi -e 's/&#64;cindex/\@cindex/g' tmpfile

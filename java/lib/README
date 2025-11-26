@@ -14,7 +14,7 @@ bcel-util-1.2.3.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-uti
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
 checker-framework/ and checker-qual.jar : https://github.com/typetools/checker-framework/releases
-  VER=3.48.2
+  VER=3.52.0
   wget https://github.com/typetools/checker-framework/releases/download/checker-framework-$VER/checker-framework-$VER.zip
   unzip -q checker-framework-$VER.zip
   mv -f checker-framework-$VER/checker/dist/checker.jar checker-framework-$VER/checker/dist/javac.jar checker-framework/
@@ -43,7 +43,7 @@ commons-lang3-3.19.0.jar : https://commons.apache.org/proper/commons-lang/downlo
 
 daikon-plumelib.jar : Contains bcel-util, options, hashmap-util,
   plume-util, and reflection-util, but in package "daikon.plumelib".
-  # Adjust version numbers in file `build.gradle`.  (TODO: make that unnecessary.)
+  # First, adjust version numbers in file `build.gradle`.  (TODO: make that unnecessary.)
   gradle shadowjar
   mv -f build/libs/daikon-plumelib.jar .
   rm -rf build
@@ -88,9 +88,9 @@ options-1.0.6.jar : https://central.sonatype.com/artifact/org.plumelib/options
   wget https://repo.maven.apache.org/maven2/org/plumelib/options/1.0.6/options-1.0.6.jar
   When you update this, remove the old daikon-plumelib.jar then remake it (see above).
 
-plume-util-1.11.0.jar : https://central.sonatype.com/artifact/org.plumelib/plume-util/versions
+plume-util-1.12.1.jar : https://central.sonatype.com/artifact/org.plumelib/plume-util/versions
   rm plume-util-*.jar
-  VER=1.11.0 && wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/${VER}/plume-util-${VER}.jar
+  VER=1.12.1 && wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/${VER}/plume-util-${VER}.jar
   rm -f daikon-plumelib.jar
   When you update this, remove the old daikon-plumelib.jar then remake it.
 

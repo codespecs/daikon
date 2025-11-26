@@ -484,7 +484,7 @@ public final class PrintInvariants {
     if (debug.isLoggable(FINE)) {
       debug.fine("Printing PPT Hierarchy");
       for (PptTopLevel my_ppt : ppts.pptIterable()) {
-        if (my_ppt.parents.size() == 0) {
+        if (my_ppt.parents.isEmpty()) {
           my_ppt.debug_print_tree(debug, 0, null);
         }
       }
@@ -880,7 +880,7 @@ public final class PrintInvariants {
       }
       return;
     }
-    if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0)) {
+    if ((ppt.numViews() == 0) && ppt.joiner_view.invs.isEmpty()) {
       if (debugPrint.isLoggable(FINE)) {
         debugPrint.fine("[No views for " + ppt.name() + "]");
       }
@@ -937,7 +937,7 @@ public final class PrintInvariants {
     if (Daikon.output_num_samples) {
       out.print("  ");
       if (!wrap_xml) {
-        out.print(StringsPlume.nplural(ppt.num_samples(), "sample"));
+        out.print(StringsPlume.nPlural(ppt.num_samples(), "sample"));
       } else {
         printXmlTagged(out, "SAMPLES", ppt.num_samples());
       }
@@ -1012,14 +1012,14 @@ public final class PrintInvariants {
     if (Daikon.output_num_samples
         || (Daikon.output_format == OutputFormat.ESCJAVA)
         || (Daikon.output_format == OutputFormat.DBCJAVA)) {
-      if (modified_vars.size() > 0) {
+      if (!modified_vars.isEmpty()) {
         out.print("      Modified variables:");
         for (VarInfo vi : modified_vars) {
           out.print(" " + vi.old_var_name());
         }
         out.println();
       }
-      if (reassigned_parameters.size() > 0) {
+      if (!reassigned_parameters.isEmpty()) {
         // out.print("      Reassigned parameters:");
         out.print("      Modified primitive arguments:");
         for (VarInfo vi : reassigned_parameters) {
@@ -1027,7 +1027,7 @@ public final class PrintInvariants {
         }
         out.println();
       }
-      if (unmodified_vars.size() > 0) {
+      if (!unmodified_vars.isEmpty()) {
         out.print("      Unmodified variables:");
         for (VarInfo vi : unmodified_vars) {
           out.print(" " + vi.old_var_name());
@@ -1047,7 +1047,7 @@ public final class PrintInvariants {
       }
 
       // Print out the modifies/assignable list
-      if (mods.size() > 0) {
+      if (!mods.isEmpty()) {
         if (Daikon.output_format == OutputFormat.ESCJAVA) {
           out.print("modifies ");
         } else {
@@ -1152,7 +1152,7 @@ public final class PrintInvariants {
 
     if (Daikon.output_num_samples) {
       int inv_num_samps = inv.ppt.num_samples();
-      String num_values_samples = "\t\t(" + StringsPlume.nplural(inv_num_samps, "sample") + ")";
+      String num_values_samples = "\t\t(" + StringsPlume.nPlural(inv_num_samps, "sample") + ")";
       inv_rep += num_values_samples;
     }
 

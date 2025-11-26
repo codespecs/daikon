@@ -29,7 +29,7 @@ cp -pR /afs/csail.mit.edu/group/pag/projects/invariants/.CVS CVS-REPOS
 # Takes 1 minute.
 rm -rf invariants invariants-hg
 # Takes <1 minute
-cvs -d `pwd`/CVS-REPOS checkout -P -ko invariants
+cvs -d $(pwd)/CVS-REPOS checkout -P -ko invariants
 # Needs to do about 11300 commits.
 # Without filemap, takes 10 hours to get to #5421, by which time each one
 # is very slow.  (Different commits do seem to take different amounts of time.)
@@ -48,7 +48,7 @@ diff -u -b -r --exclude=CVS=.hg --exclude=.hgtags --exclude=.svn --exclude='*.cl
 # Now, restore parts of $inv/notes/hg-convert-filemap
 cp -pR ../invariants/tests tests
 rm -rf tests/dfec-tests tests/dfej-tests
-rm -rf `find . -name CVS`
+rm -rf $(find . -name CVS)
 hg addremove
 hg commit -m "Add current revision of tests"
 hg push
@@ -104,7 +104,7 @@ cp -pR /afs/csail.mit.edu/group/pag/projects/invariants/.CVS CVS-REPOS
 # Takes 1 minute.
 rm -rf valgrind-3 valgrind-3-hg
 # Takes <1 minute
-cvs -d `pwd`/CVS-REPOS checkout -P -ko valgrind-3
+cvs -d $(pwd)/CVS-REPOS checkout -P -ko valgrind-3
 # Needs to do about 11300 commits.
 # Without filemap, takes 10 hours to get to #5421, by which time each one
 # is very slow.  (Different commits do seem to take different amounts of time.)

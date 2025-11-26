@@ -17,8 +17,8 @@ export LD_LIBRARY_PATH=/usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
 # Remove duplicates so path and classpath don't get too long
 if [ -x ${PLUMESCRIPTS}/path-remove.pl ]; then
-  export CLASSPATH=`echo $CLASSPATH | ${PLUMESCRIPTS}/path-remove.pl`
-  export PATH=`echo $PATH | ${PLUMESCRIPTS}/path-remove.pl`
+  export CLASSPATH=$(echo "${CLASSPATH}" | ${PLUMESCRIPTS}/path-remove.pl)
+  export PATH=$(echo "${PATH}" | ${PLUMESCRIPTS}/path-remove.pl)
 fi
 
 export EDITOR=${EDITOR:-emacsclient}
