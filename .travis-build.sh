@@ -40,6 +40,7 @@ if [[ "${GROUP}" == "quick-txt-diff" || "${GROUP}" == "all" ]]; then
   if [[ $MAKE_VERSION =~ "GNU Make 4" ]]; then
     MPARG_ARG="MPARG=-Otarget"
   fi
+  # shellcheck disable=SC2086
   make -C tests $MPARG_ARG quick-txt-diff results
 fi
 
@@ -76,7 +77,7 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
   # For refactorings that touch a lot of code that you don't understand, create
   # top-level file SKIP-REQUIRE-JAVADOC.  Delete it after the pull request is merged.
   if [ ! -f SKIP-REQUIRE-JAVADOC ]; then
-    (make -C java requireJavadocPrivate > /tmp/warnings.txt 2>&1) || true
+    (make -C java requireJavadoc > /tmp/warnings.txt 2>&1) || true
     /tmp/plume-scripts/ci-lint-diff /tmp/warnings.txt
   fi
 fi
