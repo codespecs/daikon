@@ -36,7 +36,7 @@ import org.checkerframework.dataflow.qual.Pure;
  */
 public class OperandStack24 implements Cloneable {
 
-  /** We hold the stack information here. */
+  /** The underlying stack delegate. */
   private ArrayList<ClassDesc> stack = new ArrayList<>();
 
   /** The maximum number of stack slots this OperandStack instance may hold. */
@@ -53,8 +53,8 @@ public class OperandStack24 implements Cloneable {
   }
 
   /**
-   * Returns a deep copy of this object; that means, the clone operates on a new stack. However, the
-   * ClassDesc objects on the stack are shared.
+   * Returns a copy of this object. The clone contains a new stack. However, the ClassDesc objects
+   * on the stack are shared.
    */
   @Override
   public OperandStack24 clone(@GuardSatisfied OperandStack24 this) {
@@ -70,7 +70,8 @@ public class OperandStack24 implements Cloneable {
 
   /**
    * Returns true if and only if this OperandStack equals another, meaning equal lengths and equal
-   * objects on the stacks. Special case 'null' which matches anything but a primitive.
+   * objects on the stacks. A special case is {@code null} in the stack, which matches anything but
+   * a primitive.
    */
   @Override
   public boolean equals(@GuardSatisfied OperandStack24 this, @GuardSatisfied @Nullable Object o) {
@@ -112,8 +113,8 @@ public class OperandStack24 implements Cloneable {
         // at some point.
       } else if (thisItem.isPrimitive() && !otherItem.isPrimitive()) {
         return false;
-        // We don't bother to check they are the same primitive.
       }
+      // We don't bother to check they are the same primitive.
     }
     return true;
   }
@@ -128,7 +129,7 @@ public class OperandStack24 implements Cloneable {
   }
 
   /**
-   * @return a hash code value for the object.
+   * @return a hash code value for the object
    */
   @Override
   public int hashCode(@GuardSatisfied OperandStack24 this) {
@@ -167,9 +168,9 @@ public class OperandStack24 implements Cloneable {
   }
 
   /**
-   * Pops i elements off the stack. Always returns null.
+   * Pops i elements off the stack. Always returns {@code null}.
    *
-   * @return Always returns null.
+   * @return {@code null}
    */
   public @Nullable ClassDesc pop(final int count) {
     for (int j = 0; j < count; j++) {
@@ -183,7 +184,10 @@ public class OperandStack24 implements Cloneable {
     stack.add(type);
   }
 
-  /** Returns the size of this OperandStack; that means, how many ClassDesc objects there are. */
+  /**
+   * Returns the size of this OperandStack; that means, how many ClassDesc objects it currently
+   * contains.
+   */
   @Pure
   public @NonNegative int size(@GuardSatisfied OperandStack24 this) {
     return stack.size();
