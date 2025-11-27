@@ -1802,7 +1802,7 @@ public class DCInstrument24 {
     if (frame_size > 206) {
       throw new DynCompError("method too large to instrument: " + mgen.getName());
     }
-    String params = "" + (char) (frame_size + '0');
+    String params = Character.toString((char) (frame_size + '0'));
     // Character.forDigit (frame_size, Character.MAX_RADIX);
     List<Integer> plist = new ArrayList<>();
     for (ClassDesc paramType : paramTypes) {
