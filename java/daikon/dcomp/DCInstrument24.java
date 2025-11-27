@@ -1356,7 +1356,7 @@ public class DCInstrument24 {
    * @param method_name method to be checked
    * @return true if the given method is a JUnit trigger
    */
-  boolean isJunitTrigger(String classname, String method_name) {
+  boolean isJunitTrigger(String classname, @Identifier String method_name) {
     if ((classname.contains("JUnitCommandLineParseResult")
             && method_name.equals("parse")) // JUnit 4
         || (classname.contains("EngineDiscoveryRequestResolution")
@@ -2408,7 +2408,7 @@ public class DCInstrument24 {
    * @return the name of the interface class containing target method, or null if not found
    */
   private @Nullable @BinaryName String getDefiningInterface(
-      ClassModel startClass, String methodName, ClassDesc[] paramTypes) {
+      ClassModel startClass, @Identifier String methodName, ClassDesc[] paramTypes) {
 
     if (debugGetDefiningInterface) {
       System.out.println("searching interfaces of: " + ClassGen24.getClassName(startClass));
@@ -2633,7 +2633,7 @@ public class DCInstrument24 {
       InvokeInstruction invoke,
       MethodGen24 mgen,
       @BinaryName String classname,
-      String methodName,
+      @Identifier String methodName,
       ClassDesc[] paramTypes) {
 
     boolean targetInstrumented;
@@ -2870,7 +2870,8 @@ public class DCInstrument24 {
    * @param methodName method to be checked (currently unused)
    * @return true if classname is instrumented
    */
-  private boolean isClassnameInstrumented(@BinaryName String classname, String methodName) {
+  private boolean isClassnameInstrumented(
+      @BinaryName String classname, @Identifier String methodName) {
 
     if (debugHandleInvoke) {
       System.out.printf("Checking callee instrumented on %s.%s%n", classname, methodName);
@@ -3032,7 +3033,7 @@ public class DCInstrument24 {
    * @return true if method is Object.equals()
    */
   @Pure
-  boolean is_object_equals(String methodName, ClassDesc returnType, ClassDesc[] args) {
+  boolean is_object_equals(@Identifier String methodName, ClassDesc returnType, ClassDesc[] args) {
     return (methodName.equals("equals")
         && returnType.equals(CD_boolean)
         && args.length == 1
@@ -3048,7 +3049,7 @@ public class DCInstrument24 {
    * @return true if method is Object.clone()
    */
   @Pure
-  boolean is_object_clone(String methodName, ClassDesc returnType, ClassDesc[] args) {
+  boolean is_object_clone(@Identifier String methodName, ClassDesc returnType, ClassDesc[] args) {
     return methodName.equals("clone") && returnType.equals(CD_Object) && (args.length == 0);
   }
 
@@ -3537,7 +3538,8 @@ public class DCInstrument24 {
    * @param pptName ppt to look for
    * @return true if this ppt should be included
    */
-  boolean should_track(@BinaryName String className, String methodName, String pptName) {
+  boolean should_track(
+      @BinaryName String className, @Identifier String methodName, String pptName) {
 
     debugInstrument.log(
         "Considering tracking (24) ppt: %s, %s, %s%n", className, methodName, pptName);
@@ -3588,7 +3590,8 @@ public class DCInstrument24 {
    * @param paramTypes array of method parameter types
    * @return InvokeInstruction for the call
    */
-  InvokeInstruction dcr_call(String methodName, ClassDesc returnType, ClassDesc[] paramTypes) {
+  InvokeInstruction dcr_call(
+      @Identifier String methodName, ClassDesc returnType, ClassDesc[] paramTypes) {
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(
             runtimeCD, methodName, MethodTypeDesc.of(returnType, paramTypes));
@@ -4642,7 +4645,7 @@ public class DCInstrument24 {
    * @return true if method is member of Object
    */
   @Pure
-  boolean is_object_method(String methodName, ClassDesc[] paramTypes) {
+  boolean is_object_method(@Identifier String methodName, ClassDesc[] paramTypes) {
     // Note: kind of wierd we don't check that classname = Object but it's been
     // that way forever. just means foo.finialize(), e.g., will be marked uninstrumented.
     for (MethodDef md : obj_methods) {
