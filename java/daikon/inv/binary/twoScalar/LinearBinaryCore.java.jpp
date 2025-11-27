@@ -481,7 +481,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
 
     //we want to ensure that the positive value is used because the sign has already been determined
     String coeff_string =
-        (ncoeff == (int)ncoeff) ? "" + Math.abs((int)ncoeff) : "" + Math.abs(ncoeff);
+        (ncoeff == (int)ncoeff) ? Integer.toString(Math.abs((int)ncoeff)) :  Double.toString(Math.abs(ncoeff));
     if (varname == null) {
       return sign + coeff_string;
     }

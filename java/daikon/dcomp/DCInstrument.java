@@ -1341,7 +1341,7 @@ public class DCInstrument extends InstructionListUtils {
     // unsigned byte max = 255.  minus the character '0' (decimal 48)
     // Largest frame size noted so far is 123.
     assert frame_size < 207 : frame_size + " " + mg.getClassName() + "." + mg.getName();
-    String params = "" + (char) (frame_size + '0');
+    String params = Character.toString((char) (frame_size + '0'));
     // Character.forDigit (frame_size, Character.MAX_RADIX);
     List<Integer> plist = new ArrayList<>();
     for (Type argType : arg_types) {
