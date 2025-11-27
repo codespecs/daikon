@@ -102,9 +102,9 @@ import org.checkerframework.dataflow.qual.Pure;
 /**
  * Instruments a class file to perform Dynamic Comparability.
  *
- * <p>The DCInstrument class is responsible for modifying another class's bytecodes. Specifically,
- * its main task is to add calls into the DynComp Runtime to calculate comparability values. These
- * added calls are sometimes referred to as "hooks".
+ * <p>The DCInstrument class is responsible for modifying bytecodes. Specifically, its main task is
+ * to add calls into the DynComp Runtime to calculate comparability values. These added calls are
+ * sometimes referred to as "hooks".
  */
 @SuppressWarnings("nullness")
 public class DCInstrument extends InstructionListUtils {

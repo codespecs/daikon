@@ -26,6 +26,10 @@ import org.checkerframework.dataflow.qual.Pure;
  */
 public class Instrument implements ClassFileTransformer {
 
+  //
+  // Start of diagnostics.
+  //
+
   /** Directory for debug output. */
   final File debug_dir;
 
@@ -34,9 +38,6 @@ public class Instrument implements ClassFileTransformer {
 
   /** Directory into which to dump original classes. */
   final File debug_uninstrumented_dir;
-
-  /** Have we seen a class member of a known transformer? */
-  private static boolean transformer_seen = false;
 
   /**
    * Debug information about which classes and/or methods are transformed and why. Use
@@ -96,6 +97,13 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
+  //
+  // End of diagnostics.
+  //
+
+  /** Have we seen a class member of a known transformer? */
+  private static boolean transformer_seen = false;
+
   /**
    * Given a class, return a transformed version of the class that contains instrumentation code.
    * Because DynComp is invoked as a javaagent, the transform method is called by the Java runtime
@@ -118,7 +126,7 @@ public class Instrument implements ClassFileTransformer {
     debug_transform.log("%nEntering dcomp.Instrument.transform(): class = %s%n", className);
 
     if (className == null) {
-      // most likely a lambda related class
+      // most likely a lambda-related class
       return null;
     }
 
@@ -130,8 +138,8 @@ public class Instrument implements ClassFileTransformer {
       return null;
     }
 
-    // If already instrumented, nothing to do
-    // (This set will be empty if Premain.jdk_instrumented is false)
+    // If already instrumented, there is nothing to do.
+    // (This set will be empty if Premain.jdk_instrumented is false.)
     if (Premain.pre_instrumented.contains(className)) {
       debug_transform.log("Skipping pre_instrumented JDK class %s%n", binaryClassName);
       return null;
@@ -180,8 +188,8 @@ public class Instrument implements ClassFileTransformer {
       debug_transform.log("Instrumenting JDK class %s%n", binaryClassName);
     } else {
 
-      // We're not in a JDK class
-      // Don't instrument our own classes
+      // We're not in a JDK class.
+      // Don't instrument our own classes.
       if (is_dcomp(className)) {
         debug_transform.log("Skipping is_dcomp class %s%n", binaryClassName);
         return null;

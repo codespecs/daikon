@@ -232,7 +232,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     debug_transform.log("%nEntering chicory.Instrument.transform(): class = %s%n", className);
 
     if (className == null) {
-      // most likely a lambda related class
+      // most likely a lambda-related class
       return null;
     }
 

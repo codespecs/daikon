@@ -288,7 +288,7 @@ public class Instrument24 implements ClassFileTransformer {
     debug_transform.log("%nEntering chicory.Instrument24.transform(): class = %s%n", className);
 
     if (className == null) {
-      // most likely a lambda related class
+      // most likely a lambda-related class
       return null;
     }
 
