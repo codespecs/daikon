@@ -10,6 +10,7 @@ import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
@@ -34,7 +35,7 @@ public class MethodInfo {
   /**
    * Method name. For example: "public static void sort(int[] arr)" would have method_name "sort".
    */
-  public String method_name;
+  public @Identifier String method_name;
 
   /** Array of argument names for this method. */
   public String[] arg_names;
@@ -84,7 +85,7 @@ public class MethodInfo {
   /** Creates a MethodInfo with the specified class, arg_names, and exit locations. */
   public MethodInfo(
       ClassInfo class_info,
-      String method_name,
+      @Identifier String method_name,
       String[] arg_names,
       @ClassGetName String[] arg_type_strings,
       List<Integer> exit_locations,

@@ -118,15 +118,15 @@ public class ClassInfo {
   }
 
   /**
-   * Determines if fully qualified method name is in this class. Example methodName:
+   * Determines if fully qualified method signature is in this class. Example methodSignature:
    *
    * <pre>public static String mypackage.MyClass.doStuff(int, java.lang.Object)</pre>
    */
-  private boolean isInThisClass(String methodName) {
+  private boolean isInThisClass(String methodSignature) {
     // A heuristical way to determine if the method is in this class.
     // Match anything of the form: ____class_name.____(____
     // Where ____ corresponds to any sequence of characters
-    return methodName.matches(".*" + Pattern.quote(class_name) + "\\..*\\(.*");
+    return methodSignature.matches(".*" + Pattern.quote(class_name) + "\\..*\\(.*");
   }
 
   /**

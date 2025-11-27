@@ -57,7 +57,7 @@ public class MethodGen24 {
   private final int accessFlagsMask;
 
   /** The method's name. */
-  private String methodName;
+  private @Identifier String methodName;
 
   /**
    * The method's type descriptor. This contains information about the parameters and return type of

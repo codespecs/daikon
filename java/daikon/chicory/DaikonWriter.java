@@ -47,7 +47,7 @@ public abstract class DaikonWriter {
    * @return the decorated method entry name for Daikon
    */
   public static String methodEntryName(Member method) {
-    return methodName(method, daikon.FileIO.enter_suffix);
+    return methodPptName(method, daikon.FileIO.enter_suffix);
   }
 
   /**
@@ -63,7 +63,7 @@ public abstract class DaikonWriter {
    */
   public static String methodEntryName(
       String fullClassName, String[] types, String name, String short_name) {
-    return methodName(fullClassName, types, name, short_name, daikon.FileIO.enter_suffix);
+    return methodPptName(fullClassName, types, name, short_name, daikon.FileIO.enter_suffix);
   }
 
   /**
@@ -74,7 +74,7 @@ public abstract class DaikonWriter {
    * @return the decorated method exit name for Daikon
    */
   public static String methodExitName(Member method, int lineNum) {
-    return methodName(method, daikon.FileIO.exit_suffix + lineNum);
+    return methodPptName(method, daikon.FileIO.exit_suffix + lineNum);
   }
 
   /**
@@ -90,7 +90,8 @@ public abstract class DaikonWriter {
    */
   public static String methodExitName(
       String fullClassName, String[] types, String name, String short_name, int lineNum) {
-    return methodName(fullClassName, types, name, short_name, daikon.FileIO.exit_suffix + lineNum);
+    return methodPptName(
+        fullClassName, types, name, short_name, daikon.FileIO.exit_suffix + lineNum);
   }
 
   /**
@@ -103,9 +104,9 @@ public abstract class DaikonWriter {
    *     DataStructures.StackArTester.doNew(int size)"
    * @param short_name just the method's name ("{@code <init>}" for constructors)
    * @param point program point type/suffix such as "EXIT" or "ENTER"
-   * @return same thing as {@link #methodName(Member, String)}
+   * @return same thing as {@link #methodPptName(Member, String)}
    */
-  private static String methodName(
+  private static String methodPptName(
       String fullClassName, String[] types, String name, String short_name, String point) {
 
     // UNDONE: name is no longer used
@@ -148,7 +149,7 @@ public abstract class DaikonWriter {
    * @param point usually "ENTER" or "EXIT"
    * @return the program point name
    */
-  private static String methodName(Member member, String point) {
+  private static String methodPptName(Member member, String point) {
     String fullname;
     Class<?>[] args;
     Class<?> declaring_class = member.getDeclaringClass();
