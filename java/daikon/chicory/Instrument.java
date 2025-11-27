@@ -1217,9 +1217,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
     // Get the parameter types for this method.
     Type[] paramTypes = mgen.getArgumentTypes();
-    @ClassGetName String[] arg_type_strings = new @ClassGetName String[paramTypes.length];
+    @ClassGetName String[] param_type_strings = new @ClassGetName String[paramTypes.length];
     for (int ii = 0; ii < paramTypes.length; ii++) {
-      arg_type_strings[ii] = typeToClassGetName(paramTypes[ii]);
+      param_type_strings[ii] = typeToClassGetName(paramTypes[ii]);
     }
 
     // Loop through each instruction and find the line number for each return opcode.
@@ -1290,7 +1290,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     if (shouldInclude) {
       return new MethodInfo(
-          classInfo, mgen.getName(), paramNames, arg_type_strings, exit_line_numbers, isIncluded);
+          classInfo, mgen.getName(), paramNames, param_type_strings, exit_line_numbers, isIncluded);
     } else {
       return null;
     }

@@ -403,26 +403,26 @@ public abstract class DaikonVariableInfo
    *
    * @param cinfo the method's class
    * @param method the method
-   * @param argnames the method's arguments
+   * @param paramNames the method's parameters
    * @param depth the remaining depth to print variables to
    */
-  protected void addParameters(ClassInfo cinfo, Member method, List<String> argnames, int depth) {
+  protected void addParameters(ClassInfo cinfo, Member method, List<String> paramNames, int depth) {
     debug_vars.log("enter addParameters%n");
 
     Class<?>[] parameterTypes =
         (method instanceof Constructor<?>)
             ? ((Constructor<?>) method).getParameterTypes()
             : ((Method) method).getParameterTypes();
-    assert argnames.size() == parameterTypes.length;
+    assert paramNames.size() == parameterTypes.length;
 
     int param_offset = 0;
     for (int i = 0; i < parameterTypes.length; i++) {
       Class<?> type = parameterTypes[i];
-      String name = argnames.get(i);
       if (type.getName().equals("daikon.dcomp.DCompMarker")
           || type.getName().equals("java.lang.DCompMarker")) {
         continue;
       }
+      String name = paramNames.get(i);
       debug_vars.log("processing parameter '%s'%n", name);
       debug_vars.indent();
       DaikonVariableInfo theChild =
@@ -659,11 +659,11 @@ public abstract class DaikonVariableInfo
       String name,
       String offset,
       int depth,
-      int argNum,
+      int paramNum,
       int param_offset) {
     debug_vars.log("enter addParamDeclVar%n");
     // add this variable to the tree as a child of curNode
-    DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum, type, param_offset);
+    DaikonVariableInfo newChild = new ParameterInfo(offset + name, paramNum, type, param_offset);
 
     addChild(newChild);
 

@@ -773,11 +773,11 @@ public class MethodGen24 {
     result.append(" " + methodName + "(");
     if (paramTypes.length > 0) {
       for (int i = 0; i < paramTypes.length; i++) {
-        String arg = convertClassDesc(paramTypes[i]);
+        String paramType = convertClassDesc(paramTypes[i]);
         if ((accessFlagsMask & ClassFile.ACC_VARARGS) != 0 && (i == (paramTypes.length - 1))) {
-          arg = arg.replace("[]", "...");
+          paramType = paramType.replace("[]", "...");
         }
-        result.append(arg + " " + paramNames[i] + ", ");
+        result.append(paramType + " " + paramNames[i] + ", ");
       }
       result.setLength(result.length() - 2); // remove last ", "
     }
