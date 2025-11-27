@@ -659,11 +659,11 @@ public abstract class DaikonVariableInfo
       String name,
       String offset,
       int depth,
-      int argNum,
+      int paramNum,
       int param_offset) {
     debug_vars.log("enter addParamDeclVar%n");
     // add this variable to the tree as a child of curNode
-    DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum, type, param_offset);
+    DaikonVariableInfo newChild = new ParameterInfo(offset + name, paramNum, type, param_offset);
 
     addChild(newChild);
 

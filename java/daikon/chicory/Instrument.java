@@ -1115,20 +1115,20 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   private @BinaryName String[] getFullyQualifiedParameterTypes(MethodGen mgen) {
 
     Type[] paramTypes = mgen.getArgumentTypes();
-    @BinaryName String[] arg_type_strings = new @BinaryName String[paramTypes.length];
+    @BinaryName String[] param_type_strings = new @BinaryName String[paramTypes.length];
 
     for (int ii = 0; ii < paramTypes.length; ii++) {
       Type t = paramTypes[ii];
       /*if (t instanceof ObjectType)
-        arg_type_strings[ii] = ((ObjectType) t).getClassName();
+        param_type_strings[ii] = ((ObjectType) t).getClassName();
         else {
-        arg_type_strings[ii] = t.getSignature().replace('/', '.');
+        param_type_strings[ii] = t.getSignature().replace('/', '.');
         }
       */
-      arg_type_strings[ii] = t.toString();
+      param_type_strings[ii] = t.toString();
     }
 
-    return arg_type_strings;
+    return param_type_strings;
   }
 
   /**
@@ -1207,9 +1207,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
     // Get the parameter types for this method.
     Type[] paramTypes = mgen.getArgumentTypes();
-    @ClassGetName String[] arg_type_strings = new @ClassGetName String[paramTypes.length];
+    @ClassGetName String[] param_type_strings = new @ClassGetName String[paramTypes.length];
     for (int ii = 0; ii < paramTypes.length; ii++) {
-      arg_type_strings[ii] = typeToClassGetName(paramTypes[ii]);
+      param_type_strings[ii] = typeToClassGetName(paramTypes[ii]);
     }
 
     // Loop through each instruction and find the line number for each return opcode.
@@ -1280,7 +1280,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     if (shouldInclude) {
       return new MethodInfo(
-          classInfo, mgen.getName(), paramNames, arg_type_strings, exit_locs, isIncluded);
+          classInfo, mgen.getName(), paramNames, param_type_strings, exit_locs, isIncluded);
     } else {
       return null;
     }

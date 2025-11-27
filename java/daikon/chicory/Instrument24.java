@@ -1440,16 +1440,16 @@ public class Instrument24 implements ClassFileTransformer {
     }
     // Get the parameter types for this method.
     ClassDesc[] paramTypes = mgen.getParameterTypes();
-    @ClassGetName String[] arg_type_strings = new @ClassGetName String[paramTypes.length];
+    @ClassGetName String[] param_type_strings = new @ClassGetName String[paramTypes.length];
     for (int i = 0; i < paramTypes.length; i++) {
-      arg_type_strings[i] = typeToClassGetName(paramTypes[i]);
+      param_type_strings[i] = typeToClassGetName(paramTypes[i]);
     }
 
     if (debugInstrument.enabled) {
       debugInstrument.log("create_method_info part 3%n");
       debugInstrument.log("number of parameters: %s%n", paramNames.length);
       for (int ii = 0; ii < paramTypes.length; ii++) {
-        debugInstrument.log("param type: %s%n", arg_type_strings[ii]);
+        debugInstrument.log("param type: %s%n", param_type_strings[ii]);
       }
     }
 
@@ -1504,7 +1504,7 @@ public class Instrument24 implements ClassFileTransformer {
 
     if (shouldInclude) {
       return new MethodInfo(
-          classInfo, mgen.getName(), paramNames, arg_type_strings, exit_locs, isIncluded);
+          classInfo, mgen.getName(), paramNames, param_type_strings, exit_locs, isIncluded);
     } else {
       return null;
     }
