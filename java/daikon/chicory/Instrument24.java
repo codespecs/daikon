@@ -80,6 +80,7 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.FieldDescriptor;
 import org.checkerframework.checker.signature.qual.FqBinaryName;
+import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
@@ -151,7 +152,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @return true if the item should be filtered out
    */
   public static boolean shouldIgnore(
-      @BinaryName String className, String methodName, String pptName) {
+      @BinaryName String className, @Identifier String methodName, String pptName) {
 
     // Because this comes first, exclusion takes precedence.
     // Don't instrument the class if it matches an excluded regular expression.

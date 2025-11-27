@@ -24,6 +24,7 @@ import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.signature.qual.Identifier;
 import org.plumelib.util.StringsPlume;
 
 /**
@@ -928,7 +929,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   private StringBuilder checkPreconditions_checker_method(
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
-      String methodName,
+      @Identifier String methodName,
       List<String> parameters,
       boolean majorProperties) {
 
@@ -964,7 +965,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   private StringBuilder checkPostconditions_checker_method(
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
-      String methodName,
+      @Identifier String methodName,
       String returnType,
       List<String> parameters,
       boolean majorProperties) {
@@ -1002,7 +1003,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   private StringBuilder checkPreconditions_checker_constructor(
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
-      String methodName,
+      @Identifier String methodName,
       List<String> parameters,
       boolean majorProperties) {
 
@@ -1036,7 +1037,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   private StringBuilder checkPostconditions_checker_constructor(
       List<PptTopLevel> matching_ppts,
       PptMap pptmap,
-      String methodName,
+      @Identifier String methodName,
       List<String> parameters,
       boolean majorProperties) {
 

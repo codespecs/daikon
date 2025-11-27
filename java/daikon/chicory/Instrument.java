@@ -47,6 +47,7 @@ import org.apache.bcel.generic.Type;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
@@ -113,7 +114,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * @return true if the item should be filtered out
    */
   public static boolean shouldIgnore(
-      @BinaryName String className, String methodName, String pptName) {
+      @BinaryName String className, @Identifier String methodName, String pptName) {
 
     // Because this comes first, exclusion takes precedence.
     // Don't instrument the class if it matches an excluded regular expression.
