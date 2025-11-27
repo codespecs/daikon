@@ -217,7 +217,7 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied VarComparabilityImplicit this) {
-    String result = "" + base;
+    String result = Integer.toString(base);
     for (int i = 0; i < dimensions; i++) {
       result += "[" + indexType(i) + "]";
     }

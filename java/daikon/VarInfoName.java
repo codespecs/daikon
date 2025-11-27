@@ -2253,7 +2253,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     @Override
     protected String name_impl(@GuardSatisfied Slice this) {
       return sequence.name_impl(
-          "" + ((i == null) ? "0" : i.name()) + ".." + ((j == null) ? "" : j.name()));
+          ((i == null) ? "0" : i.name()) + ".." + ((j == null) ? "" : j.name()));
     }
 
     @Override

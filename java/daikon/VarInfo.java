@@ -325,7 +325,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     assert ppt != null;
     assert 0 <= varinfo_index && varinfo_index < ppt.var_infos.length;
     assert -1 <= value_index && value_index <= varinfo_index
-        : "" + this + " value_index=" + value_index + ", varinfo_index=" + varinfo_index;
+        : this + " value_index=" + value_index + ", varinfo_index=" + varinfo_index;
     assert is_static_constant == (value_index == -1);
     assert is_static_constant || (static_constant_value == null);
   }
@@ -844,7 +844,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
             : "@AssumeAssertion(nullness): dependent: result_vardef was copied from vi and their"
                 + " enclosing_var fields are the same";
         result_vardef.enclosing_var_name = vi.enclosing_var.prestate_name();
-        assert result_vardef.enclosing_var_name != null : "" + result_vardef;
+        assert result_vardef.enclosing_var_name != null : result_vardef.toString();
       }
 
       // Build the prestate VarInfo from the VarDefinition.

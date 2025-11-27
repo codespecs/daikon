@@ -202,7 +202,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       // Write a BCEL-like file.
       BcelUtil.dump(c, directory);
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s writing debug files for: %s%n", t, className);
+      System.err.printf("Error %s writing debug files for: %s%n", t, className);
       if (debug_transform.enabled) {
         t.printStackTrace();
       }
@@ -269,7 +269,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       ClassParser parser = new ClassParser(bais, className);
       c = parser.parse();
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s while parsing bytes of %s%n", t, binaryClassName);
+      System.err.printf("Error %s while parsing bytes of %s%n", t, binaryClassName);
       if (debug_transform.enabled) {
         t.printStackTrace();
       }
@@ -290,7 +290,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       instrumentClass(cg, classInfo);
       njc = cg.getJavaClass();
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
+      System.err.printf("Error %s in transform of %s%n", t, binaryClassName);
       if (debug_transform.enabled) {
         t.printStackTrace();
       }

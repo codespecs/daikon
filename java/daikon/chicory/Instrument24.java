@@ -241,7 +241,7 @@ public class Instrument24 implements ClassFileTransformer {
       ClassParser parser = new ClassParser(bais, className);
       c = parser.parse();
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s while parsing the bytes of %s%n", t, className);
+      System.err.printf("Error %s while parsing the bytes of %s%n", t, className);
       if (debug_transform.enabled) {
         t.printStackTrace();
       }
@@ -258,7 +258,7 @@ public class Instrument24 implements ClassFileTransformer {
         BcelUtil.dump(c, directory);
       }
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s writing debug files for: %s%n", t, className);
+      System.err.printf("Error %s writing debug files for: %s%n", t, className);
       if (debug_transform.enabled) {
         t.printStackTrace();
       }
@@ -329,7 +329,7 @@ public class Instrument24 implements ClassFileTransformer {
     try {
       classModel = classFile.parse(classfileBuffer);
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s while parsing bytes of %s%n", t, binaryClassName);
+      System.err.printf("Error %s while parsing bytes of %s%n", t, binaryClassName);
       if (debug_transform.enabled) {
         t.printStackTrace();
       }
@@ -353,7 +353,7 @@ public class Instrument24 implements ClassFileTransformer {
               classModel.thisClass().asSymbol(),
               classBuilder -> instrumentClass(classBuilder, classModel, classInfo));
     } catch (Throwable t) {
-      System.err.printf("Unexpected error %s in transform of %s%n", t, binaryClassName);
+      System.err.printf("Error %s in transform of %s%n", t, binaryClassName);
       if (debug_transform.enabled) {
         t.printStackTrace();
       }
@@ -1695,7 +1695,7 @@ public class Instrument24 implements ClassFileTransformer {
     try {
       return item.resolveConstantDesc(MethodHandles.lookup()).toString();
     } catch (Exception e) {
-      System.err.printf("Unexpected error %s getting constant value for: %s%n", e, item);
+      System.err.printf("Error %s getting constant value for: %s%n", e, item);
       return "";
     }
   }

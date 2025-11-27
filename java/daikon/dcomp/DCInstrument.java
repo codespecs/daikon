@@ -752,7 +752,7 @@ public class DCInstrument extends InstructionListUtils {
         if (debugInstrument.enabled) {
           t.printStackTrace();
         }
-        throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
+        throw new Error("Error processing " + classname + "." + m.getName(), t);
       }
     }
 
@@ -1012,9 +1012,9 @@ public class DCInstrument extends InstructionListUtils {
         }
         skip_method(mgen);
         if (quit_if_error) {
-          throw new Error("Unexpected error processing " + classname + "." + m.getName(), t);
+          throw new Error("Error processing " + classname + "." + m.getName(), t);
         } else {
-          System.err.printf("Unexpected error processing %s.%s: %s%n", classname, m.getName(), t);
+          System.err.printf("Error processing %s.%s: %s%n", classname, m.getName(), t);
           System.err.printf("Method is NOT instrumented.%n");
         }
       }
@@ -1366,7 +1366,7 @@ public class DCInstrument extends InstructionListUtils {
     // unsigned byte max = 255.  minus the character '0' (decimal 48)
     // Largest frame size noted so far is 123.
     assert frame_size < 207 : frame_size + " " + mg.getClassName() + "." + mg.getName();
-    String params = "" + (char) (frame_size + '0');
+    String params = Character.toString((char) (frame_size + '0'));
     // Character.forDigit (frame_size, Character.MAX_RADIX);
     List<Integer> plist = new ArrayList<>();
     for (Type argType : arg_types) {
@@ -2450,7 +2450,7 @@ public class DCInstrument extends InstructionListUtils {
           return result;
         }
       } catch (Throwable t) {
-        throw new Error("Unexpected error reading " + class_url, t);
+        throw new Error("Error reading " + class_url, t);
       }
     }
     // Do not cache a null result, because a subsequent invocation might return non-null.
@@ -2904,8 +2904,7 @@ public class DCInstrument extends InstructionListUtils {
       if (debugInstrument.enabled) {
         t.printStackTrace();
       }
-      throw new Error(
-          "Unexpected error processing " + gen.getClassName() + "." + cinit.getName(), t);
+      throw new Error("Error processing " + gen.getClassName() + "." + cinit.getName(), t);
     }
   }
 

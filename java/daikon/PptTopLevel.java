@@ -436,7 +436,7 @@ public class PptTopLevel extends Ppt {
       try {
         ReflectionPlume.setFinalField(this, "name", name.intern());
       } catch (Exception e) {
-        throw new Error("unexpected error setting name", e);
+        throw new Error("Error setting name", e);
       }
     }
   }
