@@ -32,13 +32,14 @@ public class ClassGen24 {
   /**
    * Models the body of the class.
    *
-   * <p>Several fields of ClassModel are declared as fields of ClassGen24 to better correspond to
-   * BCEL's version of ClassGen and to reduce re-computation. Currently we set these fields in the
-   * constructor, but they could be calculated lazily on first reference.
+   * <p>Several fields of ClassModel are cached as fields of ClassGen24 to better correspond to
+   * BCEL's version of ClassGen and to reduce re-computation.
    */
   private ClassModel classModel;
 
+  //
   // Start of ClassModel items.
+  //
 
   /** The class's access flags. */
   private AccessFlags accessFlags;
@@ -52,15 +53,17 @@ public class ClassGen24 {
   /** The class's name. */
   private @BinaryName String className;
 
+  //
   // End of ClassModel items.
+  //
 
   /** The ClassBuilder for this class. */
   private ClassBuilder classBuilder;
 
-  /** True if the class is an interface. */
+  /** True if this class is an interface. */
   private boolean isInterface;
 
-  /** True if the class is static. */
+  /** True if this class is static. */
   private boolean isStatic;
 
   /**
@@ -92,7 +95,7 @@ public class ClassGen24 {
   /**
    * Add an interface to this class.
    *
-   * @param name the interface name (binary format)
+   * @param name the interface name, in binary format
    */
   public void addInterface(@BinaryName String name) {
     ClassDesc ue = ClassDesc.of(name);
@@ -121,7 +124,7 @@ public class ClassGen24 {
   }
 
   /**
-   * Return the class's access flags.
+   * Returns the class's access flags.
    *
    * @return the access flags
    */
@@ -130,25 +133,25 @@ public class ClassGen24 {
   }
 
   /**
-   * Return true if the class is an interface.
+   * Returns true if the class is an interface.
    *
-   * @return interface flag
+   * @return true if the class is an interface
    */
   public final boolean isInterface() {
     return isInterface;
   }
 
   /**
-   * Return true if the class is static.
+   * Returns true if the class is static.
    *
-   * @return static flag
+   * @return true if the class is static
    */
   public final boolean isStatic() {
     return isStatic;
   }
 
   /**
-   * Return the class's name.
+   * Returns the class's name.
    *
    * @return the class's name
    */
@@ -199,16 +202,16 @@ public class ClassGen24 {
   }
 
   /**
-   * Return the interfaceList.
+   * Returns the interfaces of this class.
    *
-   * @return the interfaceList
+   * @return the interfaces of this class
    */
   public List<ClassEntry> getInterfaceList() {
     return interfaceList;
   }
 
   /**
-   * Return the class builder.
+   * Returns the class builder.
    *
    * @return the class builder
    */
@@ -217,7 +220,7 @@ public class ClassGen24 {
   }
 
   /**
-   * Return the class name.
+   * Returns the class name.
    *
    * @return the class name
    */
