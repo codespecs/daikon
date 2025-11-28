@@ -1774,7 +1774,7 @@ public class DCInstrument24 {
    * @return LocalVariable for the tag_frame local
    */
   LocalVariable createTagFrameLocal(MethodGen24 mgen, MethodGen24.MInfo24 minfo) {
-    return BcelUtils24.addNewSpecialLocal(mgen, "dcomp_tag_frame$5a", objectArrayCD, minfo, false);
+    return BcelUtils24.addNewSpecialLocal(mgen, minfo, "dcomp_tag_frame$5a", objectArrayCD, false);
   }
 
   /**
@@ -4631,7 +4631,7 @@ public class DCInstrument24 {
 
     // Add the dcomp marker argument to indicate this is the
     // instrumented version of the method.
-    BcelUtils24.addNewSpecialLocal(mgen, "marker", dcomp_marker, minfo, true);
+    BcelUtils24.addNewSpecialLocal(mgen, minfo, "marker", dcomp_marker, true);
   }
 
   /**

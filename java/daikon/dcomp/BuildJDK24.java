@@ -58,7 +58,7 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 }) // assignments into owning collection
 public final class BuildJDK24 {
 
-  /** Don't allow others to create a new BuildJDK24 object. */
+  /** Do not instantiate from external code; only instantiate in {@link #main}. */
   private BuildJDK24() {}
 
   /**

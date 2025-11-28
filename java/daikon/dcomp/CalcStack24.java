@@ -50,8 +50,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 /** This class calculates the state of the operand stack via simulation. */
 public final class CalcStack24 {
 
-  /** Don't allow others to create a new CalcStack24 object. */
-  private CalcStack24() {}
+  /** Do not instantiate. */
+  private CalcStack24() {
+    throw new Error("Do not instantiate");
+  }
 
   /** ClassDesc for 'null'. */
   static final ClassDesc nullCD = ClassDesc.of("fake.ClassDecs.for.null");
