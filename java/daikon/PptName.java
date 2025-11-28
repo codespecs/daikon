@@ -112,7 +112,7 @@ public class PptName implements Serializable {
       cls = className.intern();
       fn_name = cls;
     }
-    // Then add method name
+    // Then add method signature
     if (methodSignature == null) {
       this.methodSignature = null;
       if (fn_name == null) {

@@ -69,6 +69,7 @@ public class Annotation {
     return daikonRep;
   }
 
+  /** The signature of the method. */
   private final String methodSignature;
 
   /** The method that this annotation refers to. */
@@ -100,6 +101,16 @@ public class Annotation {
     return daikonClass;
   }
 
+  /**
+   * Creates an Annotation.
+   *
+   * @param daikonRep the way this annotation would be printed by Daikon
+   * @param methodSignature the signature of the method
+   * @param kind the kind of this annotation
+   * @param invRep representation of this annotation (the format depends on which output format was
+   *     used to create the annotation in Daikon; it's one of JAVA, JML, ESC or DBC).
+   * @param daikonClass the Daikon class name that this invariant represents an instance of
+   */
   private Annotation(
       Kind kind, String daikonRep, String methodSignature, String invRep, String daikonClass) {
     this.kind = kind;

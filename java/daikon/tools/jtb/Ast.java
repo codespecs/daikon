@@ -187,6 +187,12 @@ public class Ast {
     return s.equals("public") || s.equals("protected") || s.equals("private");
   }
 
+  /**
+   * Returns the name of the formal parameter.
+   *
+   * @param p a formal parameter
+   * @return the name of the formal parameter
+   */
   // f4 -> VariableDeclaratorId()
   @SuppressWarnings("signature:return") // string manipulation
   public static @Identifier String getName(FormalParameter p) {
@@ -222,12 +228,24 @@ public class Ast {
     return type;
   }
 
+  /**
+   * Returns the name of the method.
+   *
+   * @param m a method
+   * @return the name of the method
+   */
   // f2 -> MethodDeclarator()
   @SuppressWarnings("signature:return") // JTB is not annotated
   public static @Identifier String getName(MethodDeclaration m) {
     return m.f2.f0.tokenImage;
   }
 
+  /**
+   * Returns the name of the constructor.
+   *
+   * @param m a constructor
+   * @return the name of the constructor
+   */
   // f1 -> <IDENTIFIER>
   @SuppressWarnings("signature:return") // JTB is not annotated
   public static @Identifier String getName(ConstructorDeclaration m) {

@@ -19,13 +19,13 @@ public class Property implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
-  // Maps into all the Property objects created.
+  /** Maps into all the Property objects created. */
   private static HashMap<Integer, Property> propertiesMap = new HashMap<>();
 
-  // The signature of the method that this property describes.
+  /** The signature of the method that this property describes. */
   private final String methodSignature;
 
-  /** The name of the method that this property describes. ("null" for object invariants.) */
+  /** The signature of the method that this property describes. ("null" for object invariants.) */
   public String methodSignature(@GuardSatisfied Property this) {
     return methodSignature;
   }

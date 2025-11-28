@@ -56,7 +56,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    */
   private Deque<Object> resultTypes = new ArrayDeque<Object>();
 
-  /** key = methodname (as String); value = conditional expressions (as Strings) */
+  /** key = method declaration (as String); value = conditional expressions (as Strings) */
   HashMap<String, List<String>> conditions = new HashMap<>();
 
   /** key = method declaration (String); value = method bodies (String) */
