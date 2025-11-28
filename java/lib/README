@@ -24,8 +24,8 @@ To install a snapshot of the current Checker Framework, run from this directory:
   (cd $CHECKERFRAMEWORK && ./gradlew assembleForJavac) && \
   cp -pf $CHECKERFRAMEWORK/checker/dist/checker.jar $CHECKERFRAMEWORK/checker/dist/javac.jar checker-framework/ && \
   cp -pf $CHECKERFRAMEWORK/checker/dist/checker-qual.jar .
-If environment variable CHECKERFRAMEWORK is set, compilation uses it instead of
-these .jar files in this directory.
+When compiling Daikon, if environment variable CHECKERFRAMEWORK is set,
+compilation uses it instead of these .jar files in this directory.
 
 commons-exec-1.4.0.jar : https://commons.apache.org/proper/commons-exec/
   VER=1.4.0
