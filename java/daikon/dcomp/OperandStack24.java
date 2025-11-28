@@ -62,7 +62,7 @@ public class OperandStack24 implements Cloneable {
     try {
       newstack = (OperandStack24) super.clone();
     } catch (CloneNotSupportedException e) {
-      throw new DynCompError("Unexpected error: ", e);
+      throw new DynCompError("Error: ", e);
     }
     newstack.stack = new ArrayList<>(this.stack);
     return newstack;
