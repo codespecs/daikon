@@ -50,7 +50,8 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  * Obviously, the tool Annotate outputs well-formed annotations, so the user shouldn't have to worry
  * too much about well-formedness.
  *
- * <p>Two annotations are equal iff their fields "daikonRep", "method" and "kind" are equal.
+ * <p>Two annotations are equal iff their fields "daikonRep", "methodSignature" and "kind" are
+ * equal.
  *
  * <p>The factory method get(String annoString) returns an annotation that equals to the annotation
  * represented by annoString. In particular, if the same String is given twice to get(String
