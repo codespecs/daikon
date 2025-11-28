@@ -35,7 +35,9 @@ class ConditionExtractor extends DepthFirstVisitor {
   /** The class name. */
   private String className = "classname field is uninitialized";
 
-  /** Name of current method being parsed. */
+  /**
+   * Name of current method being parsed. Actually a program point name rather than a method name.
+   */
   private @Nullable String curMethodName;
 
   /** Declaration of current method being parsed. */

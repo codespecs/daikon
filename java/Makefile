@@ -86,7 +86,6 @@ INSTALL ?= /usr/bin/install
 # By default, if environment variable CHECKERFRAMEWORK is set, that Checker Framework is used.
 # To force use of the Checker Framework in java/lib/, run like this:
 #   make NO_LOCAL_CHECKERFRAMEWORK=true typecheck-nullness
-# Note that CI uses the Checker Framework built from the repository.
 ifndef NO_LOCAL_CHECKERFRAMEWORK
   ifdef CHECKERFRAMEWORK
     ifneq ("$(wildcard ${CHECKERFRAMEWORK})","")
@@ -1122,7 +1121,7 @@ typecheck-signature-nocompile:
 # Typical command:
 # SIGNATURE_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make typecheck-signature-onefile
 # SIGNATURE_ONEFILE ?= daikon/chicory/Instrument.java daikon/dcomp/DCInstrument.java
-SIGNATURE_ONEFILE ?= daikon/dcomp/TypeStack.java
+SIGNATURE_ONEFILE ?= daikon/dcomp/DCInstrument.java
 typecheck-signature-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND} ${JAVAC_SIGNATURE_ARGS} ${CHECKER_ARGS} ${SIGNATURE_ONEFILE}
 

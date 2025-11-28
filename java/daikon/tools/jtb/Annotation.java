@@ -69,11 +69,11 @@ public class Annotation {
     return daikonRep;
   }
 
-  private final String method;
+  private final String methodSignature;
 
   /** The method that this annotation refers to. */
-  public String method(@GuardSatisfied Annotation this) {
-    return method;
+  public String methodSignature(@GuardSatisfied Annotation this) {
+    return methodSignature;
   }
 
   private final Kind kind;
@@ -101,10 +101,10 @@ public class Annotation {
   }
 
   private Annotation(
-      Kind kind, String daikonRep, String method, String invRep, String daikonClass) {
+      Kind kind, String daikonRep, String methodSignature, String invRep, String daikonClass) {
     this.kind = kind;
     this.daikonRep = daikonRep;
-    this.method = method;
+    this.methodSignature = methodSignature;
     this.invRep = invRep;
     this.daikonClass = daikonClass;
   }
@@ -168,7 +168,7 @@ public class Annotation {
         + daikonRep
         + " </DAIKON> "
         + "<METHOD> "
-        + method
+        + methodSignature
         + " </METHOD>"
         + "<INV>"
         + invRep
@@ -272,7 +272,9 @@ public class Annotation {
     return kind.toString() + " : " + daikonRep();
   }
 
-  /** Two annotations are equal iff their fields "daikonRep", "method" and "kind" are equal. */
+  /**
+   * Two annotations are equal iff their fields "daikonRep", "methodSignature" and "kind" are equal.
+   */
   @EnsuresNonNullIf(result = true, expression = "#1")
   @Pure
   @Override
@@ -285,22 +287,22 @@ public class Annotation {
     }
     Annotation anno = (Annotation) o;
     return (this.daikonRep().equals(anno.daikonRep())
-        && this.method().equals(anno.method())
+        && this.methodSignature().equals(anno.methodSignature())
         && this.kind().equals(anno.kind()));
   }
 
   @Pure
   @Override
   public int hashCode(@GuardSatisfied Annotation this) {
-    return daikonRep.hashCode() + kind.hashCode() + method.hashCode();
+    return daikonRep.hashCode() + kind.hashCode() + methodSignature.hashCode();
   }
 
   /** Get the annotation with corresponding properties. */
   public static Annotation get(
-      Kind kind, String daikonRep, String method, String invRep, String daikonClass)
+      Kind kind, String daikonRep, String methodSignature, String invRep, String daikonClass)
       throws Annotation.MalformedAnnotationException {
 
-    Annotation anno = new Annotation(kind, daikonRep, method, invRep, daikonClass);
+    Annotation anno = new Annotation(kind, daikonRep, methodSignature, invRep, daikonClass);
     Integer key = anno.hashCode();
     if (annotationsMap.containsKey(key)) {
       return annotationsMap.get(key);

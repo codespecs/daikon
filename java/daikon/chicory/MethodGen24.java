@@ -307,7 +307,7 @@ public class MethodGen24 {
    *
    * @return the method's name
    */
-  public String getName() {
+  public @Identifier String getName() {
     return methodName;
   }
 

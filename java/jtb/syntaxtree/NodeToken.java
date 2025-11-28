@@ -5,89 +5,98 @@
 package jtb.syntaxtree;
 
 import java.util.*;
+
 // Represents a single token in the grammar.  If the "-tk" option
 // is used, also contains a Vector of preceding special tokens.
 public class NodeToken implements Node {
-   // This was added after running jtb to remove serializable warning.
-   static final long serialVersionUID = 20150406L;
+  // This was added after running jtb to remove serializable warning.
+  static final long serialVersionUID = 20150406L;
 
-   public NodeToken(String s) {
-      this(s, -1, -1, -1, -1, -1);    }
+  public NodeToken(String s) {
+    this(s, -1, -1, -1, -1, -1);
+  }
 
-   public NodeToken(String s, int kind, int beginLine, int beginColumn, int endLine, int endColumn) {
-      tokenImage = s;
-      specialTokens = null;
-      this.kind = kind;
-      this.beginLine = beginLine;
-      this.beginColumn = beginColumn;
-      this.endLine = endLine;
-      this.endColumn = endColumn;
-   }
+  public NodeToken(String s, int kind, int beginLine, int beginColumn, int endLine, int endColumn) {
+    tokenImage = s;
+    specialTokens = null;
+    this.kind = kind;
+    this.beginLine = beginLine;
+    this.beginColumn = beginColumn;
+    this.endLine = endLine;
+    this.endColumn = endColumn;
+  }
 
-   public NodeToken getSpecialAt(int i) {
-      if ( specialTokens == null )
-         throw new java.util.NoSuchElementException("No specials in token");
-      return specialTokens.elementAt(i);
-   }
+  public NodeToken getSpecialAt(int i) {
+    if (specialTokens == null) throw new java.util.NoSuchElementException("No specials in token");
+    return specialTokens.elementAt(i);
+  }
 
-   public int numSpecials() {
-      if ( specialTokens == null ) return 0;
-      return specialTokens.size();
-   }
+  public int numSpecials() {
+    if (specialTokens == null) return 0;
+    return specialTokens.size();
+  }
 
-   public void addSpecial(NodeToken s) {
-      if ( specialTokens == null ) specialTokens = new Vector<NodeToken>();
-      specialTokens.addElement(s);
-      s.setParent(this);
-   }
+  public void addSpecial(NodeToken s) {
+    if (specialTokens == null) specialTokens = new Vector<NodeToken>();
+    specialTokens.addElement(s);
+    s.setParent(this);
+  }
 
-   public void trimSpecials() {
-      if ( specialTokens == null ) return;
-      specialTokens.trimToSize();
-   }
+  public void trimSpecials() {
+    if (specialTokens == null) return;
+    specialTokens.trimToSize();
+  }
 
-   public String toString()     { return tokenImage; }
+  public String toString() {
+    return tokenImage;
+  }
 
-   public String withSpecials() {
-      if ( specialTokens == null )
-          return tokenImage;
+  public String withSpecials() {
+    if (specialTokens == null) return tokenImage;
 
-       StringBuffer buf = new StringBuffer();
+    StringBuffer buf = new StringBuffer();
 
-       for ( Enumeration<NodeToken> e = specialTokens.elements(); e.hasMoreElements(); )
-          buf.append(e.nextElement().toString());
+    for (Enumeration<NodeToken> e = specialTokens.elements(); e.hasMoreElements(); )
+      buf.append(e.nextElement().toString());
 
-       buf.append(tokenImage);
-       return buf.toString();
-   }
+    buf.append(tokenImage);
+    return buf.toString();
+  }
 
-   public void accept(jtb.visitor.Visitor v) {
-      v.visit(this);
-   }
-   public <R,A> R accept(jtb.visitor.GJVisitor<R,A> v, A argu) {
-      return v.visit(this,argu);
-   }
-   public <R> R accept(jtb.visitor.GJNoArguVisitor<R> v) {
-      return v.visit(this);
-   }
-   public <A> void accept(jtb.visitor.GJVoidVisitor<A> v, A argu) {
-      v.visit(this,argu);
-   }
+  public void accept(jtb.visitor.Visitor v) {
+    v.visit(this);
+  }
 
-   public void setParent(Node n) { parent = n; }
-   public Node getParent()       { return parent; }
+  public <R, A> R accept(jtb.visitor.GJVisitor<R, A> v, A argu) {
+    return v.visit(this, argu);
+  }
 
-   private Node parent;
-   public String tokenImage;
+  public <R> R accept(jtb.visitor.GJNoArguVisitor<R> v) {
+    return v.visit(this);
+  }
 
-   // Stores a list of NodeTokens
-   public Vector<NodeToken> specialTokens;
+  public <A> void accept(jtb.visitor.GJVoidVisitor<A> v, A argu) {
+    v.visit(this, argu);
+  }
 
-   // -1 for these ints means no position info is available.
-   public int beginLine, beginColumn, endLine, endColumn;
+  public void setParent(Node n) {
+    parent = n;
+  }
 
-   // Equal to the JavaCC token "kind" integer.
-   // -1 if not available.
-   public int kind;
+  public Node getParent() {
+    return parent;
+  }
+
+  private Node parent;
+  public String tokenImage;
+
+  // Stores a list of NodeTokens
+  public Vector<NodeToken> specialTokens;
+
+  // -1 for these ints means no position info is available.
+  public int beginLine, beginColumn, endLine, endColumn;
+
+  // Equal to the JavaCC token "kind" integer.
+  // -1 if not available.
+  public int kind;
 }
-

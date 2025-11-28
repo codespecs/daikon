@@ -27,6 +27,7 @@ import jtb.visitor.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.checker.signature.qual.Identifier;
 import org.plumelib.util.StringsPlume;
 
 /** Static methods for manipulating the AST. */
@@ -187,7 +188,8 @@ public class Ast {
   }
 
   // f4 -> VariableDeclaratorId()
-  public static String getName(FormalParameter p) {
+  @SuppressWarnings("signature:return") // string manipulation
+  public static @Identifier String getName(FormalParameter p) {
     String name = format(p.f4);
     int startBrackets = name.indexOf('[');
     if (startBrackets == -1) {
@@ -221,12 +223,14 @@ public class Ast {
   }
 
   // f2 -> MethodDeclarator()
-  public static String getName(MethodDeclaration m) {
+  @SuppressWarnings("signature:return") // JTB is not annotated
+  public static @Identifier String getName(MethodDeclaration m) {
     return m.f2.f0.tokenImage;
   }
 
   // f1 -> <IDENTIFIER>
-  public static String getName(ConstructorDeclaration m) {
+  @SuppressWarnings("signature:return") // JTB is not annotated
+  public static @Identifier String getName(ConstructorDeclaration m) {
     return m.f1.tokenImage;
   }
 

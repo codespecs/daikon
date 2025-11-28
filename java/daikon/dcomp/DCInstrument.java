@@ -2642,7 +2642,7 @@ public class DCInstrument extends InstructionListUtils {
    * method in DCRuntime and passing that method the tag frame and the offset of local/parameter.
    */
   InstructionList load_store_local(
-      LocalVariableInstruction lvi, LocalVariableGen tag_frame_local, String method) {
+      LocalVariableInstruction lvi, LocalVariableGen tag_frame_local, @Identifier String method) {
 
     // Don't need tags for objects
     assert !(lvi instanceof ALOAD) && !(lvi instanceof ASTORE) : "lvi " + lvi;
@@ -2960,7 +2960,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param base_type type of array store
    * @return instruction list that calls the runtime to handle the array store instruction
    */
-  InstructionList array_store(Instruction inst, String method, Type base_type) {
+  InstructionList array_store(Instruction inst, @Identifier String method, Type base_type) {
 
     InstructionList il = new InstructionList();
     Type arr_type = new ArrayType(base_type, 1);
