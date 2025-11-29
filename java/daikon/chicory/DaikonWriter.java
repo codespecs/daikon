@@ -151,29 +151,29 @@ public abstract class DaikonWriter {
    */
   private static String methodPptName(Member member, String point) {
     String fullname;
-    Class<?>[] args;
+    Class<?>[] params;
     Class<?> declaring_class = member.getDeclaringClass();
     if (member instanceof Method) {
       Method method = (Method) member;
       fullname = declaring_class.getName() + "." + method.getName();
-      args = method.getParameterTypes();
+      params = method.getParameterTypes();
     } else {
       Constructor<?> constructor = (Constructor<?>) member;
       fullname = declaring_class.getName() + "." + declaring_class.getSimpleName();
-      args = constructor.getParameterTypes();
+      params = constructor.getParameterTypes();
     }
-    String arg_str = "";
-    for (Class<?> arg : args) {
-      if (arg_str.length() > 0) {
-        arg_str += ", ";
+    String param_str = "";
+    for (Class<?> param : params) {
+      if (param_str.length() > 0) {
+        param_str += ", ";
       }
-      if (arg.isArray()) {
-        arg_str += SignaturesUtil.classGetNameToBinaryName(arg.getName());
+      if (param.isArray()) {
+        param_str += SignaturesUtil.classGetNameToBinaryName(param.getName());
       } else {
-        arg_str += arg.getName();
+        param_str += param.getName();
       }
     }
-    return String.format("%s(%s):::%s", fullname, arg_str, point);
+    return String.format("%s(%s):::%s", fullname, param_str, point);
   }
 
   /** Determines if the given method should be instrumented. */

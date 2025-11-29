@@ -159,7 +159,7 @@ public class ChicoryPremain {
           (ClassFileTransformer)
               loader.loadClass(instrumenter).getDeclaredConstructor().newInstance();
     } catch (Exception e) {
-      throw new RuntimeException("Unexpected error loading " + instrumenter, e);
+      throw new RuntimeException("Error loading " + instrumenter, e);
     }
     if (Chicory.debug) {
       System.out.printf(

@@ -213,7 +213,7 @@ public class Premain {
           (ClassFileTransformer)
               loader.loadClass(instrumenter).getDeclaredConstructor().newInstance();
     } catch (Exception e) {
-      throw new RuntimeException("Unexpected error loading Instrumenter " + instrumenter, e);
+      throw new RuntimeException("Error loading Instrumenter " + instrumenter, e);
     }
     if (verbose) {
       // If jdk_instrumented is true then the printf below will output
@@ -267,7 +267,7 @@ public class Premain {
             throw new Error("openStream failed for " + class_url);
           }
         } catch (Throwable t) {
-          throw new Error("Unexpected error reading " + class_url, t);
+          throw new Error("Error reading " + class_url, t);
         }
       } else {
         throw new Error("Could not locate " + classname);

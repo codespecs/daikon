@@ -132,7 +132,7 @@ public class Quantify {
     @SideEffectFree
     @Override
     public String name(@GuardSatisfied Constant this) {
-      return "" + val;
+      return Integer.toString(val);
     }
 
     public int get_value() {

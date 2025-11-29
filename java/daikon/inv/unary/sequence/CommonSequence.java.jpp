@@ -12,6 +12,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME CommonSequence
   #define SUPERCLASS SingleScalarSequence
   #define PRIMITIVE long
+  #define PRIMITIVE_WRAPPER Long
   #define CLASSSTRING "CommonSequence"
   #define INDEXOF ArraysPlume.indexOf
   #define TOSTRING_SIMPLIFY(x) simplify_format_long(x)
@@ -20,6 +21,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME CommonFloatSequence
   #define SUPERCLASS SingleFloatSequence
   #define PRIMITIVE double
+  #define PRIMITIVE_WRAPPER Double
   #define CLASSSTRING "CommonFloatSequence"
   #define INDEXOF Global.fuzzy.indexOf
   #define TOSTRING_SIMPLIFY(x) simplify_format_double(x)
@@ -120,7 +122,7 @@ public class CLASSNAME extends SUPERCLASS {
 
     StringJoiner result = new StringJoiner(", ", "{", "}");
     for (int i = 0; i < intersect.length; i++) {
-      result.add("" + intersect[i]);
+      result.add(PRIMITIVE_WRAPPER.toString(intersect[i]));
     }
     return result.toString();
   }
@@ -157,7 +159,7 @@ public class CLASSNAME extends SUPERCLASS {
 
     StringJoiner exp = new StringJoiner(", ", "(", ")");
     for (PRIMITIVE i : intersect) {
-      exp.add("" + i);
+      exp.add(PRIMITIVE_WRAPPER.toString(i));
     }
 
     String[] split = var().csharp_array_split();
