@@ -2875,7 +2875,7 @@ public final class DCRuntime implements ComparabilityProvider {
     return initialized_eclassses.contains(clazz.getName());
   }
 
-  /** Returns the name of the method that called the caller of caller_name(). */
+  /** Returns the fully-qualified name of the method that called the caller of caller_name(). */
   private static String caller_name() {
 
     Throwable stack = new Throwable("caller");

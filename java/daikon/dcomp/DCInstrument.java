@@ -98,6 +98,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
+import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
@@ -797,7 +798,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param method_name method to be checked
    * @return true if the given method is a JUnit trigger
    */
-  boolean isJunitTrigger(String classname, String method_name) {
+  boolean isJunitTrigger(String classname, @Identifier String method_name) {
     if (classname.contains("JUnitCommandLineParseResult") && method_name.equals("parse")) {
       // JUnit 4
       return true;
@@ -1409,17 +1410,17 @@ public class DCInstrument extends InstructionListUtils {
 
   /**
    * Pushes the object, method info index, parameters, and return value on the stack and calls the
-   * specified Method (normally enter or exit) in DCRuntime. The parameters are passed as an array
-   * of objects.
+   * specified method (normally {@code enter()} or {@code exit}) in DCRuntime. The parameters are
+   * passed as an array of objects.
    *
    * @param mg method to modify
    * @param method_info_index index for MethodInfo
-   * @param method_name "enter" or "exit"
+   * @param enterOrExit the method to invoke: "enter" or "exit"
    * @param line source line number if type is exit
    * @return InstructionList for the enter or exit code
    */
   InstructionList callEnterOrExit(
-      MethodGen mg, int method_info_index, String method_name, int line) {
+      MethodGen mg, int method_info_index, String enterOrExit, int line) {
 
     InstructionList il = new InstructionList();
     Type[] arg_types = mg.getArgumentTypes();
@@ -1428,7 +1429,7 @@ public class DCInstrument extends InstructionListUtils {
     il.append(InstructionFactory.createLoad(object_arr, tag_frame_local.getIndex()));
 
     // Push the object.  Null if this is a static method or a constructor
-    if (mg.isStatic() || (method_name.equals("enter") && BcelUtil.isConstructor(mg))) {
+    if (mg.isStatic() || (enterOrExit.equals("enter") && BcelUtil.isConstructor(mg))) {
       il.append(new ACONST_NULL());
     } else { // must be an instance method
       il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
@@ -1464,10 +1465,9 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     // If this is an exit, push the return value and line number.
-    // The return value
-    // is stored in the local "return__$trace2_val"  If the return
-    // value is a primitive, wrap it in the appropriate run-time wrapper
-    if (method_name.equals("exit")) {
+    // The return value is stored in the local "return__$trace2_val".
+    // If the return value is a primitive, wrap it in the appropriate run-time wrapper.
+    if (enterOrExit.equals("exit")) {
       Type returnType = mg.getReturnType();
       if (returnType == Type.VOID) {
         il.append(new ACONST_NULL());
@@ -1487,7 +1487,7 @@ public class DCInstrument extends InstructionListUtils {
 
     // Call the specified method
     Type[] method_params;
-    if (method_name.equals("exit")) {
+    if (enterOrExit.equals("exit")) {
       method_params =
           new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr, Type.OBJECT, Type.INT};
     } else {
@@ -1495,7 +1495,7 @@ public class DCInstrument extends InstructionListUtils {
     }
     il.append(
         ifact.createInvoke(
-            dcompRuntimeClassName, method_name, Type.VOID, method_params, Const.INVOKESTATIC));
+            dcompRuntimeClassName, enterOrExit, Type.VOID, method_params, Const.INVOKESTATIC));
 
     return il;
   }
@@ -1935,7 +1935,7 @@ public class DCInstrument extends InstructionListUtils {
    * @return the name of the interface class containing target method, or null if not found
    */
   private @Nullable @ClassGetName String getDefiningInterface(
-      JavaClass startClass, String methodName, Type[] paramTypes) {
+      JavaClass startClass, @Identifier String methodName, Type[] paramTypes) {
 
     if (debugGetDefiningInterface) {
       System.out.println("searching interfaces of: " + startClass.getClassName());
@@ -2113,7 +2113,7 @@ public class DCInstrument extends InstructionListUtils {
   private boolean isTargetInstrumented(
       InvokeInstruction invoke,
       @ClassGetName String classname,
-      String methodName,
+      @Identifier String methodName,
       Type[] paramTypes) {
     boolean targetInstrumented;
 
@@ -2343,7 +2343,8 @@ public class DCInstrument extends InstructionListUtils {
    * @param methodName method to be checked (currently unused)
    * @return true if classname is instrumented
    */
-  private boolean isClassnameInstrumented(@ClassGetName String classname, String methodName) {
+  private boolean isClassnameInstrumented(
+      @ClassGetName String classname, @Identifier String methodName) {
 
     if (debugHandleInvoke) {
       System.out.printf("Checking callee instrumented on %s.%s%n", classname, methodName);
@@ -2480,7 +2481,7 @@ public class DCInstrument extends InstructionListUtils {
    * @return true if method is Object.equals()
    */
   @Pure
-  boolean is_object_equals(String methodName, Type returnType, Type[] args) {
+  boolean is_object_equals(@Identifier String methodName, Type returnType, Type[] args) {
     return (methodName.equals("equals")
         && returnType == Type.BOOLEAN
         && args.length == 1
@@ -2496,7 +2497,7 @@ public class DCInstrument extends InstructionListUtils {
    * @return true if method is Object.clone()
    */
   @Pure
-  boolean is_object_clone(String methodName, Type returnType, Type[] args) {
+  boolean is_object_clone(@Identifier String methodName, Type returnType, Type[] args) {
     return methodName.equals("clone") && returnType.equals(javalangObject) && (args.length == 0);
   }
 
@@ -2650,7 +2651,7 @@ public class DCInstrument extends InstructionListUtils {
    * method in DCRuntime and passing that method the tag frame and the offset of local/parameter.
    */
   InstructionList load_store_local(
-      LocalVariableInstruction lvi, LocalVariableGen tag_frame_local, String method) {
+      LocalVariableInstruction lvi, LocalVariableGen tag_frame_local, @Identifier String method) {
 
     // Don't need tags for objects
     assert !(lvi instanceof ALOAD) && !(lvi instanceof ASTORE) : "lvi " + lvi;
@@ -2966,7 +2967,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param base_type type of array store
    * @return instruction list that calls the runtime to handle the array store instruction
    */
-  InstructionList array_store(Instruction inst, String method, Type base_type) {
+  InstructionList array_store(Instruction inst, @Identifier String method, Type base_type) {
 
     InstructionList il = new InstructionList();
     Type arr_type = new ArrayType(base_type, 1);
@@ -3056,7 +3057,8 @@ public class DCInstrument extends InstructionListUtils {
    * @param pptName ppt to look for
    * @return true if this ppt should be included
    */
-  boolean should_track(@BinaryName String className, String methodName, String pptName) {
+  boolean should_track(
+      @BinaryName String className, @Identifier String methodName, String pptName) {
 
     debugInstrument.log("Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
     debug_transform.log("Consider collecting data for ppt: %s%n", pptName);
@@ -3120,7 +3122,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param paramTypes array of method argument types
    * @return InvokeInstruction for the call
    */
-  InvokeInstruction dcr_call(String methodName, Type returnType, Type[] paramTypes) {
+  InvokeInstruction dcr_call(@Identifier String methodName, Type returnType, Type[] paramTypes) {
 
     return ifact.createInvoke(
         dcompRuntimeClassName, methodName, returnType, paramTypes, Const.INVOKESTATIC);
@@ -4103,7 +4105,7 @@ public class DCInstrument extends InstructionListUtils {
    * @return true if method is member of Object
    */
   @Pure
-  boolean is_object_method(String methodName, Type[] paramTypes) {
+  boolean is_object_method(@Identifier String methodName, Type[] paramTypes) {
     for (MethodDef md : obj_methods) {
       if (md.equals(methodName, paramTypes)) {
         return true;

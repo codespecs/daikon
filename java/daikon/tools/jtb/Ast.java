@@ -27,6 +27,7 @@ import jtb.visitor.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.checker.signature.qual.Identifier;
 import org.plumelib.util.StringsPlume;
 
 /** Static methods for manipulating the AST. */
@@ -186,8 +187,15 @@ public class Ast {
     return s.equals("public") || s.equals("protected") || s.equals("private");
   }
 
+  /**
+   * Returns the name of the formal parameter.
+   *
+   * @param p a formal parameter
+   * @return the name of the formal parameter
+   */
   // f4 -> VariableDeclaratorId()
-  public static String getName(FormalParameter p) {
+  @SuppressWarnings("signature:return") // string manipulation
+  public static @Identifier String getName(FormalParameter p) {
     String name = format(p.f4);
     int startBrackets = name.indexOf('[');
     if (startBrackets == -1) {
@@ -220,13 +228,27 @@ public class Ast {
     return type;
   }
 
+  /**
+   * Returns the name of the method.
+   *
+   * @param m a method
+   * @return the name of the method
+   */
   // f2 -> MethodDeclarator()
-  public static String getName(MethodDeclaration m) {
+  @SuppressWarnings("signature:return") // JTB is not annotated
+  public static @Identifier String getName(MethodDeclaration m) {
     return m.f2.f0.tokenImage;
   }
 
+  /**
+   * Returns the name of the constructor.
+   *
+   * @param m a constructor
+   * @return the name of the constructor
+   */
   // f1 -> <IDENTIFIER>
-  public static String getName(ConstructorDeclaration m) {
+  @SuppressWarnings("signature:return") // JTB is not annotated
+  public static @Identifier String getName(ConstructorDeclaration m) {
     return m.f1.tokenImage;
   }
 

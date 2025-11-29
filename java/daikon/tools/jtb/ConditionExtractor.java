@@ -35,7 +35,9 @@ class ConditionExtractor extends DepthFirstVisitor {
   /** The class name. */
   private String className = "classname field is uninitialized";
 
-  /** Name of current method being parsed. */
+  /**
+   * Name of current method being parsed. Actually a program point name rather than a method name.
+   */
   private @Nullable String curMethodName;
 
   /** Declaration of current method being parsed. */
@@ -54,7 +56,7 @@ class ConditionExtractor extends DepthFirstVisitor {
    */
   private Deque<Object> resultTypes = new ArrayDeque<Object>();
 
-  /** key = methodname (as String); value = conditional expressions (as Strings) */
+  /** key = method declaration (as String); value = conditional expressions (as Strings) */
   HashMap<String, List<String>> conditions = new HashMap<>();
 
   /** key = method declaration (String); value = method bodies (String) */
