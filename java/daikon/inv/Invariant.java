@@ -41,6 +41,7 @@ import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.checkerframework.framework.qual.Unused;
@@ -2119,7 +2120,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * format.
    */
   // [[ This method doesn't belong here. But where? ]]
-  public static String formatFuzzy(String method, VarInfo v1, VarInfo v2, OutputFormat format) {
+  public static String formatFuzzy(
+      @Identifier String method, VarInfo v1, VarInfo v2, OutputFormat format) {
 
     StringBuilder results = new StringBuilder();
     return results

@@ -9,6 +9,7 @@ import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.Identifier;
 
 /**
  * Matches program point names with their corresponding MethodDeclaration's (or
@@ -142,7 +143,7 @@ public class PptNameMatcher {
     // 3. method parameters
 
     String classname;
-    String methodname;
+    @Identifier String methodname;
     List<FormalParameter> params;
 
     if (methodOrConstructorDeclaration instanceof MethodDeclaration) {
@@ -151,7 +152,9 @@ public class PptNameMatcher {
       params = Ast.getParameters((MethodDeclaration) methodOrConstructorDeclaration);
     } else if (methodOrConstructorDeclaration instanceof ConstructorDeclaration) {
       classname = Ast.getClassName((ConstructorDeclaration) methodOrConstructorDeclaration);
-      methodname = "<init>";
+      @SuppressWarnings("signature:assignment") // there should be a @MethodName qualifier
+      @Identifier String initMethodName = "<init>";
+      methodname = initMethodName;
       params = Ast.getParameters((ConstructorDeclaration) methodOrConstructorDeclaration);
     } else {
       throw new Error(
@@ -344,7 +347,8 @@ public class PptNameMatcher {
    * Returns the simple name of a possibly-fully-qualified class name. The argument can be a
    * fully-qualified name or a binary name.
    */
-  private static String simpleName(String classname) {
+  @SuppressWarnings("signature:return") // string manipulation
+  private static @Identifier String simpleName(String classname) {
     int dotpos = classname.lastIndexOf('.');
     int dollarpos = classname.lastIndexOf('$');
     int pos = Math.max(dotpos, dollarpos);

@@ -57,7 +57,7 @@ public class MethodGen24 {
   private final int accessFlagsMask;
 
   /** The method's name. */
-  private String methodName;
+  private @Identifier String methodName;
 
   /**
    * The method's type descriptor. This contains information about the parameters and return type of
@@ -200,7 +200,9 @@ public class MethodGen24 {
       ClassBuilder classBuilder) {
 
     accessFlagsMask = methodModel.flags().flagsMask();
-    methodName = methodModel.methodName().stringValue();
+    @SuppressWarnings("signature:assignment") // This particular Utf8Entry is an identifier.
+    @Identifier String methodNameTmp = methodModel.methodName().stringValue();
+    methodName = methodNameTmp;
     @SuppressWarnings("signature") // JDK 24 is not annotated as yet
     @MethodDescriptor String descriptor1 = methodModel.methodType().stringValue();
     descriptor = descriptor1;
@@ -307,7 +309,7 @@ public class MethodGen24 {
    *
    * @return the method's name
    */
-  public String getName() {
+  public @Identifier String getName() {
     return methodName;
   }
 
