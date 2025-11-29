@@ -37,16 +37,13 @@ public class ParameterInfo extends DaikonVariableInfo {
    *
    * @param theName the variable name (used in the declaration)
    */
-  public ParameterInfo(String theName, int theArgNum, Class<?> argType, int param_offset) {
-    super(
-        theName,
-        stdClassName(argType) + DaikonVariableInfo.isParamString,
-        getRepName(argType, false));
+  public ParameterInfo(String theName, int theArgNum, Class<?> type, int param_offset) {
+    super(theName, stdClassName(type) + DaikonVariableInfo.isParamString, getRepName(type, false));
 
     argNum = theArgNum;
     this.param_offset = param_offset;
-    this.argType = argType;
-    this.isPrimitive = argType.isPrimitive();
+    this.argType = type;
+    this.isPrimitive = type.isPrimitive();
   }
 
   /**
