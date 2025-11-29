@@ -544,13 +544,13 @@ public final class Diff {
       }
 
       // List<Invariant> invs = ppt.getInvariants();
-      List<Invariant> invs = CollectionsPlume.sortList(ppt.getInvariants(), PptTopLevel.icfp);
+      List<Invariant> invs = CollectionsPlume.sorted(ppt.getInvariants(), PptTopLevel.icfp);
       map.put(ppt, invs);
       if (examineAllPpts) {
         // Add conditional ppts
         for (PptConditional pptCond : ppt.cond_iterable()) {
           List<Invariant> invsCond =
-              CollectionsPlume.sortList(pptCond.getInvariants(), PptTopLevel.icfp);
+              CollectionsPlume.sorted(pptCond.getInvariants(), PptTopLevel.icfp);
           // List<Invariant> invsCond = pptCond.getInvariants();
           map.put(pptCond, invsCond);
         }
