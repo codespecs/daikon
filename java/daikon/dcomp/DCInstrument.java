@@ -669,7 +669,7 @@ public class DCInstrument extends InstructionListUtils {
           }
         }
 
-        // Can't duplicate 'main' or 'clinit' or a JUnit test.
+        // Can't duplicate "main" or "clinit" or a JUnit test.
         boolean replacingMethod = BcelUtil.isMain(mg) || BcelUtil.isClinit(mg) || junit_test_class;
         try {
           if (has_code) {
