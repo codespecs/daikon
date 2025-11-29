@@ -93,8 +93,8 @@ public class InvariantDoclet implements Doclet {
   /**
    * This method mimics the JDK 8 com.sun.javadoc.Doc.name() method. It returned a 'non-qualified
    * name' which differs from JDK 11+ javax.lang.model.element.TypeElement.getSimpleName() for a
-   * nested class. name() would return 'Outer$Inner' while getSimpleName() returns 'Inner'. Note
-   * that this version returns 'Outer.Inner'.
+   * nested class. name() would return "Outer$Inner" while getSimpleName() returns "Inner". Note
+   * that this version returns "Outer.Inner".
    *
    * @param te a class TypeElement
    * @return the class's 'partially' qualified name
