@@ -270,7 +270,7 @@ public class NONZERO extends SINGLESCALAR {
 
     if (!var.aux.hasNull()) {
       return new DiscardInfo(this, DiscardCode.obvious,
-                     "'null' has no special meaning for " + var.name());
+                             "'null' has no special meaning for " + var.name());
     }
 
     return super.isObviousStatically(vis);
