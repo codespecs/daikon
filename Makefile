@@ -105,7 +105,11 @@ WWW_DIR := ${WWW_PARENT}/daikon
 INV_DIR := $(shell pwd)
 
 JAR_DIR := ${INV_DIR}
-QT_PATH := ../../../daikon.jar:.:../../../java/*
+# This path needs to contain checker.jar, because the files being run
+# were compiled with checker.jar at the beginning of the path.  This
+# is a problem when checker.jar has a different version of a library
+# such as plume-util. TODO:  Find a way to remove checker.jar.
+QT_PATH := ../../../java/lib/checker-framework/checker.jar:../../../daikon.jar:.:../../../java/*
 
 # Staging area for the distribution
 STAGING_DIR := ${WWW_PARENT}/staging-daikon
