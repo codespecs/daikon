@@ -3153,7 +3153,7 @@ public class DCInstrument24 {
         il.add(dcr_call("discard_tag", CD_void, integer_arg));
       }
 
-      // Perform the origital field command.
+      // Perform the original field command.
       il.add(fi);
       return il;
     }
