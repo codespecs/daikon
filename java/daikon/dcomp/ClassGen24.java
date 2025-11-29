@@ -165,7 +165,6 @@ public class ClassGen24 {
    * @return the class's name
    */
   public static @BinaryName String getClassName(ClassModel classModel) {
-    @SuppressWarnings("signature:assignment") // type conversion
     @InternalForm String temp = classModel.thisClass().asInternalName();
     return Signatures.internalFormToBinaryName(temp);
   }
@@ -193,7 +192,6 @@ public class ClassGen24 {
   public static @BinaryName String getSuperclassName(ClassModel classModel) {
     Optional<ClassEntry> ce = classModel.superclass();
     if (ce.isPresent()) {
-      @SuppressWarnings("signature:assignment") // type conversion
       @BinaryName String scn = ce.get().asInternalName().replace('/', '.');
       return scn;
     } else {
