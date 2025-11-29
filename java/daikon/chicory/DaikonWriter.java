@@ -131,7 +131,7 @@ public abstract class DaikonWriter {
     String pptname = fullClassName + "." + short_name + paramTypes + ":::" + point;
 
     if (Chicory.debug_ppt_names) {
-      System.out.printf("methodName1 final ppt name = '%s'%n", pptname);
+      System.out.printf("methodPptName final ppt name = '%s'%n", pptname);
     }
 
     // Throwable t = new Throwable("debug");
