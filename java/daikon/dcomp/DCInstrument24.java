@@ -96,6 +96,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
@@ -113,6 +114,7 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 import org.checkerframework.checker.signature.qual.FieldDescriptor;
+import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.checker.signature.qual.MethodDescriptor;
 import org.checkerframework.dataflow.qual.Pure;
 
@@ -140,7 +142,7 @@ public class DCInstrument24 {
   public static boolean bcelDebug;
 
   /**
-   * Used when testing to continue processing if an error occurs. Currently, This flag is only used
+   * Used when testing to continue processing if an error occurs. Currently, this flag is only used
    * by BuildJDK.
    */
   @Option("Halt if an instrumentation error occurs")
@@ -201,7 +203,7 @@ public class DCInstrument24 {
   /** ConstantPool builder for current class. */
   private ConstantPoolBuilder poolBuilder;
 
-  /** True if we tracking any methods in the current class. */
+  /** True if we are tracking any methods in the current class. */
   private boolean trackClass = false;
 
   /** ClassGen for the current class. */
@@ -220,6 +222,7 @@ public class DCInstrument24 {
   protected LocalVariable tagFrameLocal;
 
   // Argument descriptors
+
   /** Type array with two objects. */
   protected static ClassDesc[] two_objects_arg = {CD_Object, CD_Object};
 
@@ -242,6 +245,7 @@ public class DCInstrument24 {
   protected static final ClassDesc[] noArgsCD = new ClassDesc[0];
 
   // Debug loggers
+
   /** Log file if debug_native is enabled. */
   protected static SimpleLog debug_native = new SimpleLog(false);
 
@@ -266,6 +270,8 @@ public class DCInstrument24 {
 
   /** If true, enable operand stack debugging. */
   protected static final boolean debugOperandStack = false;
+
+  // End of debug loggers.
 
   /** Keeps track of the methods that were not successfully instrumented. */
   protected List<String> skipped_methods = new ArrayList<>();
@@ -297,7 +303,7 @@ public class DCInstrument24 {
   /** Current state of JUnit test discovery. */
   protected static JunitState junit_state = JunitState.NOT_SEEN;
 
-  /** Have we seen 'JUnitCommandLineParseResult.parse'? */
+  /** Have we seen {@code JUnitCommandLineParseResult.parse}? */
   protected static boolean junit_parse_seen = false;
 
   /**
@@ -319,10 +325,10 @@ public class DCInstrument24 {
   static Integer Integer_ACC_ANNOTATION = Integer.valueOf(ClassFile.ACC_ANNOTATION);
 
   /**
-   * Array of classes whose fields are not initialized from java. Since the fields are not
-   * initialized from java, their tag storage is not allocated as part of a store, but rather must
-   * be allocated as part of a load. We call a special runtime method for this so that we can check
-   * for this in other cases.
+   * Array of classes whose fields are not initialized from Java (i.e., these classes are
+   * initialized by the JVM). Since the fields are not initialized from Java, their tag storage is
+   * not allocated as part of a store, but rather must be allocated as part of a load. We call a
+   * special runtime method for this so that we can check for this in other cases.
    */
   protected static String[] uninit_classes = {
     "java.lang.String",
@@ -333,8 +339,10 @@ public class DCInstrument24 {
 
   /**
    * List of Object methods. Since we can't instrument Object, none of these can be instrumented,
-   * and most of them don't provide useful comparability information anyway. The equals method and
-   * the clone method are special-cased in the {@link #handleInvoke} routine.
+   * and most of them don't provide useful comparability information anyway.
+   *
+   * <p>The equals method and the clone method are not listed here. They are special-cased in the
+   * {@link #handleInvoke} routine.
    */
   protected static MethodDef[] obj_methods = {
     new MethodDef("finalize", new ClassDesc[0]),
@@ -348,12 +356,12 @@ public class DCInstrument24 {
     new MethodDef("wait", new ClassDesc[] {CD_long, CD_int}),
   };
 
-  /** Class that defines a method (by its name and argument types) */
+  /** Represents a method (by its name and argument types). */
   static class MethodDef {
-    /** Name of method. */
+    /** Name of this method. */
     String name;
 
-    /** Arument types for the method. */
+    /** Argument types for this method. */
     ClassDesc[] arg_types;
 
     /**
@@ -403,11 +411,7 @@ public class DCInstrument24 {
     @Pure
     @Override
     public int hashCode(@GuardSatisfied MethodDef this) {
-      int code = name.hashCode();
-      for (ClassDesc arg : arg_types) {
-        code += arg.hashCode();
-      }
-      return code;
+      return Objects.hash(name, Arrays.hashCode(arg_types));
     }
   }
 
@@ -446,13 +450,13 @@ public class DCInstrument24 {
     bcelDebug = debugInstrument.enabled;
 
     if (debugOperandStack) {
-      // Create a new PrintStream with autoflush enabled
+      // Create a new PrintStream with autoflush enabled.
       PrintStream newOut = new PrintStream(System.out, true, UTF_8);
-      // Reassign System.out to the new PrintStream
+      // Reassign System.out to the new PrintStream.
       System.setOut(newOut);
-      // Create a new PrintStream with autoflush enabled
+      // Create a new PrintStream with autoflush enabled.
       PrintStream newErr = new PrintStream(System.err, true, UTF_8);
-      // Reassign System.err to the new PrintStream
+      // Reassign System.err to the new PrintStream.
       System.setErr(newErr);
     }
   }
@@ -505,7 +509,7 @@ public class DCInstrument24 {
   }
 
   /**
-   * Instrument the current class.
+   * Instrument the given class.
    *
    * @param classBuilder for the class
    * @param classModel for the class
@@ -519,11 +523,8 @@ public class DCInstrument24 {
     runtimeCD = ClassDesc.of(dcompRuntimeClassname);
     poolBuilder = classBuilder.constantPool();
 
-    if (in_jdk) {
-      debug_transform.log("%nInstrumenting class(JDK): %s%n", classInfo.class_name);
-    } else {
-      debug_transform.log("%nInstrumenting class: %s%n", classInfo.class_name);
-    }
+    debug_transform.log(
+        "%nInstrumenting class%s: %s%n", in_jdk ? " (in JDK)" : "", classInfo.class_name);
     debug_transform.indent();
 
     debugInstrument.log("Attributes:%n");
@@ -537,7 +538,7 @@ public class DCInstrument24 {
     }
 
     // Handle object methods for this class
-    handle_object(classGen);
+    add_clone_and_tostring_interfaces(classGen);
 
     trackClass = false;
     boolean junit_test_class = false;
@@ -702,14 +703,14 @@ public class DCInstrument24 {
 
     instrumentAllMethods(classModel, classBuilder, classInfo);
 
-    // Have all top-level classes implement our interface
+    // Have all top-level classes implement the DCompInstrumented interface.
     if (classGen.getSuperclassName().equals("java.lang.Object")) {
       @SuppressWarnings("signature:assignment")
-      @MethodDescriptor String objectArgReturnBoolean = "(Ljava/lang/Object;)Z";
+      @MethodDescriptor String objectToBoolean = "(Ljava/lang/Object;)Z";
       // Add equals method if it doesn't already exist. This ensures
       // that an instrumented version, equals(Object, DCompMarker),
       // will be created in this class.
-      MethodModel eq = classGen.containsMethod("equals", objectArgReturnBoolean);
+      MethodModel eq = classGen.containsMethod("equals", objectToBoolean);
       if (eq == null) {
         debugInstrument.log("Added equals method%n");
         add_equals_method(classBuilder, classGen, classInfo);
@@ -720,7 +721,7 @@ public class DCInstrument24 {
       add_dcomp_interface(classBuilder, classGen, classInfo);
     }
 
-    // Output the list of interfaces.
+    // Add interfaces to the class being built.
     classBuilder.withInterfaces(classGen.getInterfaceList());
 
     // Copy all other ClassElements to output class unchanged.
@@ -734,12 +735,12 @@ public class DCInstrument24 {
       }
     }
 
-    // Add tag accessor methods for each primitive in the class
+    // Add tag accessor methods for each primitive in the class.
     create_tag_accessors(classGen);
 
     // We don't need to track class initialization in the JDK because
     // that is only used when printing comparability which is only done
-    // for client classes
+    // for client classes.
     if (!in_jdk) {
       // If no clinit method, we need to add our own.
       if (!classInfo.hasClinit) {
@@ -762,8 +763,8 @@ public class DCInstrument24 {
   }
 
   /**
-   * Adds a call to the DynComp Runtime {@code set_class_initialized} method at the begining of the
-   * given method. Clients pass the class static initializer {@code <clinit>} as the method.
+   * Adds a call to the DynComp Runtime {@code set_class_initialized} method at the begining of
+   * {@code mgen}. Clients pass the class static initializer {@code <clinit>} as {@code mgen}.
    *
    * @param mgen the method to modify, should be the class static initializer {@code <clinit>}
    * @param classInfo for the given class
@@ -935,7 +936,8 @@ public class DCInstrument24 {
             "  Processing method %s, track=%b%n", simplify_method_name(mgen), track);
         debug_transform.indent();
 
-        // local variables referenced from a lambda expression must be final or effectively final
+        // `final` because local variables referenced from a lambda expression must be final or
+        // effectively final.
         final boolean trackMethod = track;
 
         // main methods, <clinit> methods and all methods in a JUnit test class
@@ -1001,8 +1003,8 @@ public class DCInstrument24 {
   }
 
   /**
-   * Copy the given method from the input class file to the output output class with no changes.
-   * Uses {@code copyMethod} to perform the actual copy.
+   * Copy the given method from the input class file to the output class with no changes. Uses
+   * {@code copyMethod} to perform the actual copy.
    *
    * @param classBuilder for the output class
    * @param mm MethodModel describes the input method
@@ -1017,7 +1019,7 @@ public class DCInstrument24 {
   }
 
   /**
-   * Copy the given method from the input class file to the output output class with no changes.
+   * Copy the given method from the input class file to the output class with no changes.
    *
    * @param methodBuilder for the output class
    * @param methodModel describes the input method
@@ -1139,8 +1141,10 @@ public class DCInstrument24 {
    * Generate instrumentation code for the given method. This includes reading in and processing the
    * original instruction list, calling {@code insertInstrumentationCode} to add the instrumentation
    * code, and then copying the modified instruction list to the output method while updating the
-   * code labels, if needed. If DCInstrument24 generated the method or if it is a native method,
-   * then codeModel == null. If DCInstrument24 generated the method then localsTable will be set.
+   * code labels, if needed.
+   *
+   * <p>If DCInstrument24 generated the method or if it is a native method, then {@code codeModel}
+   * == null. If DCInstrument24 generated the method then {@code localsTable} will be set.
    *
    * @param codeBuilder for the given method's code
    * @param codeModel for the input method's code; may be null
@@ -1349,41 +1353,43 @@ public class DCInstrument24 {
   /**
    * Returns true if the specified classname.method_name is the root of JUnit startup code.
    *
-   * @param classname class to be checked
+   * @param classname class containing the given method
    * @param method_name method to be checked
    * @return true if the given method is a JUnit trigger
    */
   boolean isJunitTrigger(String classname, String method_name) {
-    if ((classname.contains("JUnitCommandLineParseResult")
-            && method_name.equals("parse")) // JUnit 4
-        || (classname.contains("EngineDiscoveryRequestResolution")
-            && method_name.equals("resolve")) // JUnit 5
-    ) {
+    if (classname.contains("JUnitCommandLineParseResult") && method_name.equals("parse")) {
+      // JUnit 4
+      return true;
+    }
+    if (classname.contains("EngineDiscoveryRequestResolution") && method_name.equals("resolve")) {
+      // JUnit 5
       return true;
     }
     return false;
   }
 
+  // ///////////////////////////////////////////////////////////////////////////
   // General Java Runtime instrumentation strategy:
   //
-  // <p>It is a bit of a misnomer, but the Daikon code and documentation uses the term JDK to refer
+  // It is a bit of a misnomer, but the Daikon code and documentation uses the term JDK to refer
   // to the Java Runtime Environment class libraries. In Java 8 and earlier, they were usually found
   // in {@code <your java installation>/jre/lib/rt.jar}. For these versions of Java, we
   // pre-instrumented the entire rt.jar.
   //
-  // <p>In Java 9 and later, the Java Runtime classes have been divided into modules that are
+  // In Java 9 and later, the Java Runtime classes have been divided into modules that are
   // usually found in: {@code <your java installation>/jmods/*.jmod}.
   //
-  // <p>With the conversion to modules for Java 9 and beyond, we have elected to pre-instrument only
+  // With the conversion to modules for Java 9 and beyond, we have elected to pre-instrument only
   // java.base.jmod and instrument all other Java Runtime (aka JDK) classes dynamically as they are
   // loaded.
   //
-  // <p>Post Java 8 there are increased security checks when loading JDK classes. In particular, the
+  // Post Java 8 there are increased security checks when loading JDK classes. In particular, the
   // core classes contained in the java.base module may not reference anything outside of java.base.
   // This means we cannot pre-instrument classes in the same manner as was done for Java 8 as this
   // would introduce external references to the DynComp runtime (DCRuntime.java).
   //
-  // <p>However, we can get around this restriction in the following manner: We create a shadow
+  // However, we can get around this restriction in the following manner: We create a shadow
   // DynComp runtime called java.lang.DCRuntime that contains all the public methods of
   // daikon.dcomp.DCRuntime, but with method bodies that contain only a return statement. We
   // pre-instrument java.base the same as we would for JDK 8, but change all references to
@@ -1400,7 +1406,7 @@ public class DCInstrument24 {
    *
    * @return the modified JavaClass
    */
-  public byte @Nullable [] instrument_jdk(ClassInfo classInfo) {
+  public byte @Nullable [] instrument_jdk_class(ClassInfo classInfo) {
 
     @BinaryName String classname = classInfo.class_name;
 
@@ -1544,7 +1550,7 @@ public class DCInstrument24 {
 
       // Create a worklist of instruction locations and operand stacks.
 
-      // Create a work item for start of users code.
+      // Create a work item for start of user's code.
       if (oldStartLabel != null) {
         addLabelToWorklist(oldStartLabel, new OperandStack24(mgen.getMaxStack()));
       } else {
@@ -1703,8 +1709,8 @@ public class DCInstrument24 {
   }
 
   /**
-   * Returns the list of uninstrumented methods. (Note: instrument_jdk() needs to have been called
-   * first.)
+   * Returns the list of uninstrumented methods. (Note: instrument_jdk_class() needs to have been
+   * called first.)
    */
   public List<String> get_skipped_methods() {
     return new ArrayList<>(skipped_methods);
@@ -1722,8 +1728,8 @@ public class DCInstrument24 {
     if (mgen.getName().equals("main")) {
       return null;
     }
-    // <init> methods (constructors) turn out to be problematic
-    // for adding a whole method exception handler.  The start of
+    // <init> methods (constructors) are problematic
+    // for adding a whole-method exception handler.  The start of
     // the exception handler should be after the primary object is
     // initialized - but this is hard to determine without a full
     // analysis of the code.  Hence, we just skip these methods.
@@ -1743,7 +1749,7 @@ public class DCInstrument24 {
   }
 
   /**
-   * Adds the call to DCRuntime.enter to the beginning of the method.
+   * Adds a call to DCRuntime.enter at the beginning of the method.
    *
    * @param mgen method to modify
    * @param minfo for the given method's code
@@ -1799,20 +1805,20 @@ public class DCInstrument24 {
     }
     String params = Character.toString((char) (frame_size + '0'));
     // Character.forDigit (frame_size, Character.MAX_RADIX);
-    List<Integer> plist = new ArrayList<>();
+    List<Integer> paramList = new ArrayList<>();
     for (ClassDesc paramType : paramTypes) {
       if (paramType.isPrimitive()) {
-        plist.add(offset);
+        paramList.add(offset);
       }
       offset += TypeKind.from(paramType).slotSize();
     }
-    for (int ii = plist.size() - 1; ii >= 0; ii--) {
-      char tmpChar = (char) (plist.get(ii) + '0');
+    for (int ii = paramList.size() - 1; ii >= 0; ii--) {
+      char tmpChar = (char) (paramList.get(ii) + '0');
       params += tmpChar;
-      // Character.forDigit (plist.get(ii), Character.MAX_RADIX);
+      // Character.forDigit (paramList.get(ii), Character.MAX_RADIX);
     }
 
-    // Create code to create and init the tag_frame and store the result in tag_frame_local
+    // Create code to create and init the tag_frame and store the result in tag_frame_local.
     List<CodeElement> instructions = new ArrayList<>();
 
     MethodRefEntry mre =
@@ -1919,7 +1925,7 @@ public class DCInstrument24 {
   }
 
   /**
-   * Transforms instructions to track comparability. Returns a list of instructions that replaces
+   * Transforms on instruction to track comparability. Returns a list of instructions that replaces
    * the specified instruction. Returns null if the instruction should not be replaced.
    *
    * @param mgen method to modify
@@ -1937,7 +1943,7 @@ public class DCInstrument24 {
 
           // Replace the object comparison instructions with a call to
           // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
-          // return a boolean which is used in a ifeq/ifne instruction
+          // return a boolean which is used in a ifeq/ifne instruction.
           case Opcode.IF_ACMPEQ:
             return object_comparison((BranchInstruction) inst, "object_eq", Opcode.IFNE);
           case Opcode.IF_ACMPNE:
@@ -2080,8 +2086,7 @@ public class DCInstrument24 {
             }
 
           // Adjusts the tag stack for load constant opcodes. If the constant is a primitive, pushes
-          // its tag
-          // on the tag stack. If the constant is a reference (string, class), does nothing.
+          // its tag on the tag stack. If the constant is a reference (string, class), does nothing.
           case Opcode.LDC:
           case Opcode.LDC_W:
           case Opcode.LDC2_W:
@@ -2491,10 +2496,11 @@ public class DCInstrument24 {
    */
   private List<CodeElement> handleInvoke(InvokeInstruction invoke, MethodGen24 mgen) {
 
-    // Get information about the call
+    // Get information about the call.
+    @SuppressWarnings("signature:assignment") // JDK java.lang.classfile 24 is not yet annotated
+    @InternalForm String classnameInternalForm = invoke.owner().asInternalName();
+    @BinaryName String classname = classnameInternalForm.replace('/', '.');
     String methodName = invoke.name().stringValue();
-    @SuppressWarnings("signature:assignment") // JDK 24 is not annotated as yet
-    @BinaryName String classname = invoke.owner().asInternalName().replace('/', '.');
     MethodTypeDesc mtd = invoke.typeSymbol();
     ClassDesc returnType = mtd.returnType();
     ClassDesc[] paramTypes = mtd.parameterArray();
@@ -2600,8 +2606,6 @@ public class DCInstrument24 {
    *     comparability data stack
    */
   private List<CodeElement> discard_primitive_tags(ClassDesc[] paramTypes) {
-    List<CodeElement> il = new ArrayList<>();
-
     int primitive_cnt = 0;
     for (ClassDesc paramType : paramTypes) {
       if (paramType.isPrimitive()) {
@@ -2609,18 +2613,19 @@ public class DCInstrument24 {
       }
     }
     if (primitive_cnt > 0) {
-      il.addAll(discard_tag_code(null, primitive_cnt));
+      return discard_tag_code(null, primitive_cnt);
     }
-    return il;
+    // Must return a mutable array because some clients mutate it.
+    return new ArrayList<>();
   }
 
   /**
-   * Returns true if the invoke target is instrumented.
+   * Returns true if the invoked method (the callee) is instrumented.
    *
    * @param invoke instruction whose target is to be checked
    * @param mgen host method of invoke
-   * @param classname target class of the invoke
-   * @param methodName target method of the invoke
+   * @param classname target class of the invoke (the callee)
+   * @param methodName target method of the invoke (the callee)
    * @param paramTypes parameter types of target method
    * @return true if the target is instrumented
    */
@@ -2694,8 +2699,8 @@ public class DCInstrument24 {
         // case and verify this code is no longer needed.
         // This is a bit of a hack.  An invokeinterface instruction with a
         // a target of "java.util.stream.<something>" might be calling a
-        // Lambda method in which case we don't want to add the dcomp_marker.
-        // Might lose something in 'normal' cases, but no easy way to detect.
+        // lambda method in which case we don't want to add the dcomp_marker.
+        // Might lose something in "normal" cases, but no easy way to detect.
         if (classname.startsWith("java.util.stream")) {
           targetInstrumented = false;
         }
@@ -2893,7 +2898,7 @@ public class DCInstrument24 {
       return false;
     }
 
-    // Special case the execution trace tool.
+    // Special-case the execution trace tool.
     if (classname.startsWith("minst.Minst")) {
       return false;
     }
@@ -2910,7 +2915,7 @@ public class DCInstrument24 {
       }
     }
 
-    // If its not a JDK class, presume its instrumented.
+    // If it's not a JDK class, presume it's instrumented.
     if (!BcelUtil.inJdk(classname)) {
       return true;
     }
@@ -2929,7 +2934,7 @@ public class DCInstrument24 {
 
     // We have decided not to use the instrumented version of Random as
     // the method generates values based on an initial seed value.
-    // (Typical of random() algorithms.) This has the undesirable side
+    // (Typical of random() algorithms.) Instrumentation would have the undesirable side
     // effect of putting all the generated values in the same comparison
     // set when they should be distinct.
     // Note: If we find other classes that should not use the instrumented
@@ -2938,7 +2943,7 @@ public class DCInstrument24 {
       return false;
     }
 
-    // If using the instrumented JDK, then everthing but object is instrumented
+    // If using the instrumented JDK, then everthing but object is instrumented.
     if (Premain.jdk_instrumented && !classname.equals("java.lang.Object")) {
       return true;
     }
@@ -2947,12 +2952,13 @@ public class DCInstrument24 {
   }
 
   /**
-   * Return a list of the super classes of this class in ascending order, i.e., java.lang.Object is
-   * always the last element.
+   * Return a list of the superclasses of this class. This class itself is not in the list. The is
+   * in ascending order; that is, java.lang.Object is always the last element, unless the argument
+   * is java.lang.Object.
    *
    * @return list of super classes
    */
-  public List<@BinaryName String> getSuperClassNames() {
+  public List<@BinaryName String> getStrictSuperClassNames() {
     final List<@BinaryName String> allSuperClassNames = new ArrayList<>();
     @BinaryName String classname = classGen.getClassName();
     while (!classname.equals("java.lang.Object")) {
@@ -2963,13 +2969,13 @@ public class DCInstrument24 {
   }
 
   /**
-   * Given a classname return it's superclass name. Note that we copy BCEL and report that the
-   * superclass of 'java.lang.Object' is 'java.lang.Object' rather than saying there is no
-   * superclass. We are assured this will not cause a problem because we never call this method with
-   * 'java.lang.Object' as the argument.
+   * Given a classname return its superclass name. Note that we copy BCEL and report that the
+   * superclass of {@code java.lang.Object} is {@code java.lang.Object} rather than saying there is
+   * no superclass. We are assured this will not cause a problem because we never call this method
+   * with {@code java.lang.Object} as the argument.
    *
-   * @param classname the fully qualified name of the class in binary form. E.g., "java.util.List"
-   * @return superclass name of classname or null if there is an error
+   * @param classname the fully-qualified name of the class in binary form. E.g., "java.util.List"
+   * @return name of superclass, or null if there is an error
    */
   private @BinaryName String getSuperclassName(String classname) {
     ClassModel cm = getClassModel(classname);
@@ -2985,13 +2991,13 @@ public class DCInstrument24 {
 
   /**
    * There are times when it is useful to inspect a class file other than the one we are currently
-   * instrumenting. Note we cannot use classForName to do this as it might trigger a recursive call
-   * to Instrument which would not work at this point.
+   * instrumenting. We cannot use {@code classForName} to do this as it might trigger a recursive
+   * call to Instrument which would not work at this point.
    *
    * <p>Given a class name, we treat it as a system resource, create a {@code Path} to it and have
    * {@code java.lang.classfile} read and create a {@code ClassModel} object.
    *
-   * @param classname the fully qualified name of the class in binary form, e.g., "java.util.List"
+   * @param classname the fully-qualified name of the class in binary form, e.g., "java.util.List"
    * @return the ClassModel of the corresponding classname or null
    */
   private @Nullable ClassModel getClassModel(String classname) {
@@ -3011,7 +3017,8 @@ public class DCInstrument24 {
           return result;
         }
       } catch (Throwable t) {
-        throw new DynCompError(String.format("Error while reading %s%n", classname), t);
+        throw new DynCompError(
+            String.format("Error while reading %s %s%n", classname, class_url), t);
       }
     }
     // Do not cache a null result, because a subsequent invocation might return non-null.
@@ -3048,8 +3055,8 @@ public class DCInstrument24 {
   }
 
   /**
-   * Instrument calls to the Object method clone. An instrumented version is called if it exists,
-   * the non-instrumented version if it does not.
+   * Instrument calls to the Object method {@code clone}. An instrumented version is called if it
+   * exists, the non-instrumented version if it does not.
    *
    * @param invoke invoke instruction to inspect and replace
    * @param returnType return type of method
@@ -3069,15 +3076,16 @@ public class DCInstrument24 {
     // push the target class
     il.add(buildLDCInstruction(poolBuilder.classEntry(ClassDesc.of(classname))));
 
-    // if this is a super call
     if (invoke.opcode().equals(Opcode.INVOKESPECIAL)) {
+      // This is a super call.
 
       // Runtime will discover if the object's superclass has an instrumented clone method.
       // If so, call it; otherwise call the uninstrumented version.
       // use CD_Class
       il.add(dcr_call("dcomp_super_clone", returnType, new ClassDesc[] {CD_Object, CD_Class}));
 
-    } else { // a regular (non-super) clone() call
+    } else {
+      // This is a regular (non-super) clone() call.
 
       // Runtime will discover if the object has an instrumented clone method.
       // If so, call it; otherwise call the uninstrumented version.
@@ -3116,13 +3124,13 @@ public class DCInstrument24 {
    *
    * @param mgen describes the given method
    * @param minfo for the given method's code
-   * @param f the field instruction
+   * @param fi the field instruction
    * @return instruction list to access the field
    */
   private List<CodeElement> load_store_field(
-      MethodGen24 mgen, MethodGen24.MInfo24 minfo, FieldInstruction f) {
+      MethodGen24 mgen, MethodGen24.MInfo24 minfo, FieldInstruction fi) {
 
-    ClassDesc field_type = f.typeSymbol();
+    ClassDesc field_type = fi.typeSymbol();
     debugInstrument.log("field_type: %s%n", field_type);
     int field_size = TypeKind.from(field_type).slotSize();
     if (!field_type.isPrimitive()) {
@@ -3130,13 +3138,13 @@ public class DCInstrument24 {
     }
 
     List<CodeElement> il = new ArrayList<>();
-    Opcode op = f.opcode();
-    String fieldName = f.name().stringValue();
+    Opcode op = fi.opcode();
+    String fieldName = fi.name().stringValue();
     @SuppressWarnings("signature:assignment") // type conversion
-    @BinaryName String owner = f.owner().asInternalName().replace('/', '.');
-    ClassDesc ownerCD = f.owner().asSymbol();
+    @BinaryName String owner = fi.owner().asInternalName().replace('/', '.');
+    ClassDesc ownerCD = fi.owner().asSymbol();
 
-    // If this class doesn't support tag fields, don't load/store them
+    // If this class doesn't support tag fields, don't load/store them.
     if (!tag_fields_ok(mgen, owner)) {
       if (op.equals(Opcode.GETFIELD) || op.equals(Opcode.GETSTATIC)) {
         il.add(dcr_call("push_const", CD_void, noArgsCD));
@@ -3145,8 +3153,8 @@ public class DCInstrument24 {
         il.add(dcr_call("discard_tag", CD_void, integer_arg));
       }
 
-      // Perform the normal field command
-      il.add(f);
+      // Perform the origital field command.
+      il.add(fi);
       return il;
     }
 
@@ -3197,8 +3205,8 @@ public class DCInstrument24 {
       }
     }
 
-    // Perform the normal field command
-    il.add(f);
+    // Perform the original field command.
+    il.add(fi);
 
     return il;
   }
@@ -3414,7 +3422,7 @@ public class DCInstrument24 {
     String method = "primitive_array_load";
     if (inst.typeKind().equals(TypeKind.REFERENCE)) {
       method = "ref_array_load";
-    } else if (is_uninit_class(mgen.getClassName())) {
+    } else if (is_class_initialized_by_jvm(mgen.getClassName())) {
       method = "primitive_array_load_null_ok";
     }
 
@@ -3550,7 +3558,7 @@ public class DCInstrument24 {
       return false;
     }
 
-    // call shouldIgnore to check ppt-omit-pattern(s) and ppt-select-pattern(s)
+    // Call `shouldIgnore` to check ppt-omit-patterns and ppt-select-patterns.
     return !daikon.chicory.Instrument24.shouldIgnore(className, methodName, pptName);
   }
 
@@ -3576,7 +3584,7 @@ public class DCInstrument24 {
   }
 
   /**
-   * Convenience function to construct a call to a static method in DCRuntime.
+   * Constructs a call to a static method in DCRuntime.
    *
    * @param methodName method to call
    * @param returnType type of method return
@@ -3633,7 +3641,7 @@ public class DCInstrument24 {
     ClassDesc top = stack.peek();
     String op;
     if (!top.isPrimitive()) {
-      op = null;
+      return null;
     } else if (stack.peek(1).isPrimitive()) {
       op = "dup_x1";
     } else {
@@ -3642,10 +3650,7 @@ public class DCInstrument24 {
     if (debug_dup.enabled) {
       debug_dup.log("DUP_X1 -> %s [... %s]%n", op, stack_contents(stack, 2));
     }
-    if (op != null) {
-      return build_il(dcr_call(op, CD_void, noArgsCD), inst);
-    }
-    return null;
+    return build_il(dcr_call(op, CD_void, noArgsCD), inst);
   }
 
   /**
@@ -3654,29 +3659,27 @@ public class DCInstrument24 {
    */
   List<CodeElement> dup_x2_tag(CodeElement inst, OperandStack24 stack) {
     ClassDesc value1 = stack.peek();
+    if (!value1.isPrimitive()) {
+      return null;
+    }
     ClassDesc value2 = stack.peek(1);
-    String op = null;
-    if (value1.isPrimitive()) {
-      if (is_category2(value2)) {
+    String op;
+    if (is_category2(value2)) {
+      op = "dup_x1";
+    } else {
+      ClassDesc value3 = stack.peek(2);
+      if (value2.isPrimitive() && value3.isPrimitive()) {
+        op = "dup_x2";
+      } else if (value2.isPrimitive() || value3.isPrimitive()) {
         op = "dup_x1";
       } else {
-        ClassDesc value3 = stack.peek(2);
-        if (value2.isPrimitive() && value3.isPrimitive()) {
-          op = "dup_x2";
-        } else if (value2.isPrimitive() || value3.isPrimitive()) {
-          op = "dup_x1";
-        } else {
-          op = "dup";
-        }
+        op = "dup";
       }
     }
     if (debug_dup.enabled) {
       debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
     }
-    if (op != null) {
-      return build_il(dcr_call(op, CD_void, noArgsCD), inst);
-    }
-    return null;
+    return build_il(dcr_call(op, CD_void, noArgsCD), inst);
   }
 
   /**
@@ -3694,15 +3697,12 @@ public class DCInstrument24 {
       op = "dup";
     } else {
       // both of the top two items are not primitive, nothing to dup
-      op = null;
+      return null;
     }
     if (debug_dup.enabled) {
       debug_dup.log("DUP2 -> %s [... %s]%n", op, stack_contents(stack, 2));
     }
-    if (op != null) {
-      return build_il(dcr_call(op, CD_void, noArgsCD), inst);
-    }
-    return null;
+    return build_il(dcr_call(op, CD_void, noArgsCD), inst);
   }
 
   /**
@@ -3738,17 +3738,14 @@ public class DCInstrument24 {
         } else if (value2.isPrimitive()) {
           op = "dup";
         } else { // neither value2 or value3 is primitive
-          op = null;
+          return null;
         }
       }
     }
     if (debug_dup.enabled) {
       debug_dup.log("DUP2_X1 -> %s [... %s]%n", op, stack_contents(stack, 3));
     }
-    if (op != null) {
-      return build_il(dcr_call(op, CD_void, noArgsCD), inst);
-    }
-    return null;
+    return build_il(dcr_call(op, CD_void, noArgsCD), inst);
   }
 
   /**
@@ -3812,7 +3809,7 @@ public class DCInstrument24 {
           if (value2.isPrimitive()) {
             op = "dup_x1";
           } else {
-            op = null; // nothing to dup
+            return null; // nothing to dup
           }
         } else if (value2.isPrimitive()) {
           // value1 is not primitive value2 is primitive
@@ -3826,17 +3823,14 @@ public class DCInstrument24 {
             op = "dup";
           }
         } else { // neither value1 or value2 is primitive
-          op = null; // nothing to dup
+          return null; // nothing to dup
         }
       }
     }
     if (debug_dup.enabled) {
       debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
     }
-    if (op != null) {
-      return build_il(dcr_call(op, CD_void, noArgsCD), inst);
-    }
-    return null;
+    return build_il(dcr_call(op, CD_void, noArgsCD), inst);
   }
 
   /**
@@ -3913,8 +3907,8 @@ public class DCInstrument24 {
   }
 
   /**
-   * Create an instruction list that calls the runtime to handle returns for the tag stack follow by
-   * the original return instruction.
+   * Create an instruction list that calls the runtime to handle returns for the tag stack followed
+   * by the original return instruction.
    *
    * @param mgen method to check
    * @param inst return instruction to be replaced
@@ -3938,7 +3932,7 @@ public class DCInstrument24 {
   }
 
   /**
-   * Returns whether or not the specified type is a primitive (int, float, double, etc).
+   * Returns true if the specified type is a primitive (int, float, double, etc).
    *
    * @param type type to check
    * @return true if type is primitive
@@ -3949,7 +3943,7 @@ public class DCInstrument24 {
   }
 
   /**
-   * Returns whether or not the specified type is a category 2 (8 byte) type.
+   * Returns true if the specified type is a category 2 (8 byte) type.
    *
    * @param type type to check
    * @return true if type requires 8 bytes
@@ -4041,12 +4035,11 @@ public class DCInstrument24 {
   }
 
   /**
-   * Returns whether or not tag fields are used within the specified method of the specified class.
-   * We can safely use class fields except in Object, String, and Class. If checking a class, mgen
-   * is null.
+   * Returns true if tag fields are used within the specified method of the specified class. We can
+   * safely use class fields except in Object, String, and Class. If checking a class, mgen is null.
    *
    * @param mgen method to check
-   * @param classname class to check
+   * @param classname class containing {@code mgen}
    * @return true if tag fields may be used in class for method
    */
   boolean tag_fields_ok(@Nullable MethodGen24 mgen, @BinaryName String classname) {
@@ -4128,7 +4121,7 @@ public class DCInstrument24 {
     }
 
     Set<String> field_set = new HashSet<>();
-    Map<FieldModel, Integer> field_map = build_field_map(classModel);
+    Map<FieldModel, Integer> field_to_offset_map = build_field_to_offset_map(classModel);
 
     // Build accessors for all fields declared in this class
     for (FieldModel fm : classModel.fields()) {
@@ -4148,14 +4141,14 @@ public class DCInstrument24 {
         create_get_tag(classGen, fm, static_field_id.get(full_name));
         create_set_tag(classGen, fm, static_field_id.get(full_name));
       } else {
-        create_get_tag(classGen, fm, field_map.get(fm));
-        create_set_tag(classGen, fm, field_map.get(fm));
+        create_get_tag(classGen, fm, field_to_offset_map.get(fm));
+        create_set_tag(classGen, fm, field_to_offset_map.get(fm));
       }
     }
 
     // Build accessors for each field declared in a superclass that is
     // is not shadowed in a subclass
-    for (@BinaryName String scn : getSuperClassNames()) {
+    for (@BinaryName String scn : getStrictSuperClassNames()) {
       ClassModel scm = getClassModel(scn);
       if (scm == null) {
         throw new DynCompError("Can't load ClassModel for: " + scn);
@@ -4178,8 +4171,8 @@ public class DCInstrument24 {
           create_get_tag(classGen, fm, static_field_id.get(full_name));
           create_set_tag(classGen, fm, static_field_id.get(full_name));
         } else {
-          create_get_tag(classGen, fm, field_map.get(fm));
-          create_set_tag(classGen, fm, field_map.get(fm));
+          create_get_tag(classGen, fm, field_to_offset_map.get(fm));
+          create_set_tag(classGen, fm, field_to_offset_map.get(fm));
         }
       }
     }
@@ -4193,7 +4186,7 @@ public class DCInstrument24 {
    * @param classModel class to check for fields
    * @return field offset map
    */
-  Map<FieldModel, Integer> build_field_map(ClassModel classModel) {
+  Map<FieldModel, Integer> build_field_to_offset_map(ClassModel classModel) {
 
     Optional<ClassEntry> ce = classModel.superclass();
     if (!ce.isPresent()) {
@@ -4208,8 +4201,8 @@ public class DCInstrument24 {
       throw new DynCompError("Can't get superclass for " + superclassName);
     }
 
-    Map<FieldModel, Integer> field_map = build_field_map(super_cm);
-    int offset = field_map.size();
+    Map<FieldModel, Integer> field_to_offset_map = build_field_to_offset_map(super_cm);
+    int offset = field_to_offset_map.size();
 
     // Determine the offset for each primitive field in the class
     // Also make sure the static_tags list is large enough for all
@@ -4237,12 +4230,12 @@ public class DCInstrument24 {
           }
         }
       } else {
-        field_map.put(fm, offset);
+        field_to_offset_map.put(fm, offset);
         offset++;
       }
     }
 
-    return field_map;
+    return field_to_offset_map;
   }
 
   /**
@@ -4269,16 +4262,20 @@ public class DCInstrument24 {
     // fields are handled separately.  Also instance fields in special
     // classes that are created by the JVM are handled separately since only
     // in those classes can fields be read without being written (in java)
-    String methodname = "push_field_tag";
     String classname = classGen.getClassName();
-    ClassDesc[] args = {CD_Object, CD_int};
+    String methodname = "push_field_tag";
+    ClassDesc[] params;
     final boolean isStatic = fm.flags().has(AccessFlag.STATIC) ? true : false;
 
     if (isStatic) {
       methodname = "push_static_tag";
-      args = new ClassDesc[] {CD_int};
-    } else if (is_uninit_class(classname)) {
+      params = new ClassDesc[] {CD_int};
+    } else if (is_class_initialized_by_jvm(classname)) {
       methodname = "push_field_tag_null_ok";
+      params = new ClassDesc[] {CD_Object, CD_int};
+    } else {
+      methodname = "push_field_tag";
+      params = new ClassDesc[] {CD_Object, CD_int};
     }
 
     String accessor_name =
@@ -4287,7 +4284,7 @@ public class DCInstrument24 {
     List<CodeElement> newCode = new ArrayList<>();
 
     newCode.add(loadIntegerConstant(tag_offset));
-    newCode.add(dcr_call(methodname, CD_void, args));
+    newCode.add(dcr_call(methodname, CD_void, params));
     newCode.add(ReturnInstruction.of(TypeKind.VOID));
 
     int access_flags = fm.flags().flagsMask();
@@ -4341,14 +4338,14 @@ public class DCInstrument24 {
    */
   void create_set_tag(ClassGen24 classGen, FieldModel fm, int tag_offset) {
 
-    String methodname = "pop_field_tag";
     String classname = classGen.getClassName();
-    ClassDesc[] args = {CD_Object, CD_int};
+    String methodname = "pop_field_tag";
+    ClassDesc[] params = {CD_Object, CD_int};
     final boolean isStatic = fm.flags().has(AccessFlag.STATIC) ? true : false;
 
     if (isStatic) {
       methodname = "pop_static_tag";
-      args = new ClassDesc[] {CD_int};
+      params = new ClassDesc[] {CD_int};
     }
 
     String setter_name =
@@ -4357,7 +4354,7 @@ public class DCInstrument24 {
     List<CodeElement> newCode = new ArrayList<>();
 
     newCode.add(loadIntegerConstant(tag_offset));
-    newCode.add(dcr_call(methodname, CD_void, args));
+    newCode.add(dcr_call(methodname, CD_void, params));
     newCode.add(ReturnInstruction.of(TypeKind.VOID));
 
     int access_flags = fm.flags().flagsMask();
@@ -4374,7 +4371,7 @@ public class DCInstrument24 {
       access_flags |= AccessFlag.FINAL.mask();
     }
 
-    // Create the setter method
+    // Create the setter method.
     classGen
         .getClassBuilder()
         .withMethod(
@@ -4412,7 +4409,7 @@ public class DCInstrument24 {
   }
 
   /**
-   * Adds the DCompInstrumented interface to the given class. Adds the following method to the
+   * Adds the DCompInstrumented interface to the given class. Also adds the following method to the
    * class, so that it implements the DCompInstrumented interface:
    *
    * <pre>{@code
@@ -4421,8 +4418,8 @@ public class DCInstrument24 {
    * }
    * }</pre>
    *
-   * The method does nothing except call the instrumented equals method (boolean equals(Object,
-   * DCompMarker)).
+   * The method does nothing except call the instrumented equals method {@code boolean
+   * equals(Object, DCompMarker)}.
    *
    * @param classBuilder for the class
    * @param classGen class to add method to
@@ -4513,9 +4510,7 @@ public class DCInstrument24 {
    * }
    * }</pre>
    *
-   * Must only be called if the Object equals method has not been overridden; if the equals method
-   * is already defined in the class, a ClassFormatError will result because of the duplicate
-   * method.
+   * Throws a ClassFormatError if the equals method is already defined in the class.
    *
    * @param classBuilder for the class
    * @param classGen class to add method to
@@ -4583,13 +4578,13 @@ public class DCInstrument24 {
   }
 
   /**
-   * Marks the class as implementing various object methods (currently clone and toString). Callers
-   * will call the instrumented version of the method if it exists, otherwise they will call the
-   * uninstrumented version.
+   * Adds interfaces to indicate which of the Object methods (currently clone and toString) the
+   * class overrides. Callers will call the instrumented version of the method if it exists,
+   * otherwise they will call the uninstrumented version.
    *
    * @param classGen class to check
    */
-  void handle_object(ClassGen24 classGen) {
+  void add_clone_and_tostring_interfaces(ClassGen24 classGen) {
 
     @SuppressWarnings("signature:assignment")
     @MethodDescriptor String noArgsReturnObject = "()Ljava/lang/Object;";
@@ -4638,8 +4633,8 @@ public class DCInstrument24 {
    */
   @Pure
   boolean is_object_method(String methodName, ClassDesc[] paramTypes) {
-    // Note: kind of wierd we don't check that classname = Object but it's been
-    // that way forever. just means foo.finialize(), e.g., will be marked uninstrumented.
+    // Note: kind of weird we don't check that classname = Object but it's been
+    // that way forever. Just means foo.finialize(), e.g., will be marked uninstrumented.
     for (MethodDef md : obj_methods) {
       if (md.equals(methodName, paramTypes)) {
         return true;
@@ -4656,7 +4651,7 @@ public class DCInstrument24 {
    * @return true if classname has members that are uninitialized
    */
   @Pure
-  boolean is_uninit_class(String classname) {
+  boolean is_class_initialized_by_jvm(String classname) {
 
     for (String u_name : uninit_classes) {
       if (u_name.equals(classname)) {
@@ -4730,11 +4725,11 @@ public class DCInstrument24 {
   }
 
   /**
-   * Return the fully qualified fieldname of the specified field.
+   * Return the fully-qualified fieldname of the specified field.
    *
    * @param cm class containing the field
    * @param fm the field
-   * @return string containing the fully qualified name
+   * @return string containing the fully-qualified name
    */
   protected String full_name(ClassModel cm, FieldModel fm) {
     return ClassGen24.getClassName(cm) + "." + fm.fieldName().stringValue();

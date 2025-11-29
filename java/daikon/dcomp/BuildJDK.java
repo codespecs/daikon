@@ -484,7 +484,7 @@ public class BuildJDK {
     }
     DCInstrument dci = new DCInstrument(jc, true, null);
     JavaClass inst_jc;
-    inst_jc = dci.instrument_jdk();
+    inst_jc = dci.instrument_jdk_class();
     skipped_methods.addAll(dci.get_skipped_methods());
     File classfile = new File(classFileName);
     File dir;

@@ -523,7 +523,7 @@ public final class BuildJDK24 {
     @BinaryName String classname = classFileName.replace(".class", "").replace('/', '.');
     ClassInfo classInfo = new ClassInfo(classname, loader);
     DCInstrument24 dci = new DCInstrument24(classFile, classModel, true);
-    byte[] classBytes = dci.instrument_jdk(classInfo);
+    byte[] classBytes = dci.instrument_jdk_class(classInfo);
     if (classBytes == null) {
       throw new Error("Instrumentation failed: " + classFile);
     }
