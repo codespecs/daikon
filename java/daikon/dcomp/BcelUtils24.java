@@ -133,7 +133,7 @@ public final class BcelUtils24 {
     // get a copy of the locals before modification
     List<LocalVariable> locals = mgen.localsTable;
     ClassDesc[] paramTypes = mgen.getParameterTypes();
-    int newIndex = 0; // index into 'locals'
+    int newIndex = 0; // index into `locals`
     int newOffset = 0; // current local slot number
 
     int argSize = TypeKind.from(varType).slotSize();
@@ -152,7 +152,7 @@ public final class BcelUtils24 {
       newOffset = lastArg.slot() + TypeKind.from(lastArg.typeSymbol()).slotSize();
     }
 
-    // Insert our new local variable into existing table at 'newOffset'.
+    // Insert our new local variable into existing table at `newOffset`.
     varNew = LocalVariable.of(newOffset, varName, varType, minfo.startLabel, minfo.endLabel);
     mgen.localsTable.add(newIndex, varNew);
     minfo.nextLocalIndex += argSize;

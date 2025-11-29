@@ -55,20 +55,21 @@ public final class CalcStack24 {
     throw new Error("Do not instantiate");
   }
 
-  /** ClassDesc for 'null'. */
+  /** ClassDesc for {@code null}. */
   static final ClassDesc nullCD = ClassDesc.of("fake.ClassDecs.for.null");
 
   /**
-   * Calculates changes in contents of operand stack based on the symbolic execution of a Java
-   * bytecode instruction. Note that we assume the class file is valid and make no attempt to verify
-   * the code's correctness.
+   * Calculates changes in the operand stack based on the symbolic execution of a Java bytecode
+   * instruction. Note that we assume the class file is valid and make no attempt to verify the
+   * code's correctness.
    *
    * @param mgen method containing the instruction (currently unused)
    * @param minfo for the given method's code (currently unused)
    * @param ce instruction to be interpreted
    * @param inst_index index of ce in code element list
-   * @param stack current state of operand stack
-   * @return true if should continue with next instruction, false otherwise
+   * @param stack current state of operand stack; is side-effected
+   * @return true if control falls through to the next instruction, false otherwise (when {@code ce}
+   *     is an instruction like jump or return)
    */
   @SuppressWarnings("fallthrough")
   static boolean calcOperandStack(
@@ -96,16 +97,15 @@ public final class CalcStack24 {
         // caculate stack changes
         switch (inst.opcode()) {
 
-          // operand stack:
-          // ..., arrayref, index
-          // ..., value
+          // operand stack before: ..., arrayref, index
+          // operand stack after:  ..., value
           case Opcode.AALOAD:
             {
               stack.pop(); // discard the index
               final ClassDesc t = stack.pop(); // pop the arrayref
               if (t == null || nullCD.equals(t)) {
                 // Push nullCD to maintain stack consistency. The actual NullPointerException
-                // will be thrown at runtime if this code path is executed, not during
+                // will be thrown at run time if this code path is executed, not during
                 // instrumentation.
                 stack.push(nullCD);
               } else {
@@ -118,9 +118,8 @@ public final class CalcStack24 {
               return true;
             }
 
-          // operand stack:
-          // ..., arrayref, index, value
-          // ...
+          // operand stack before: ..., arrayref, index, value
+          // operand stack after:  ...
           case Opcode.AASTORE:
           case Opcode.BASTORE:
           case Opcode.CASTORE:
@@ -132,16 +131,14 @@ public final class CalcStack24 {
             stack.pop(3);
             return true;
 
-          // operand stack:
-          // ...
-          // ..., null
+          // operand stack before: ...
+          // operand stack after:  ..., null
           case Opcode.ACONST_NULL:
             stack.push(nullCD);
             return true;
 
-          // operand stack:
-          // ...
-          // ..., objectref
+          // operand stack before: ...
+          // operand stack after:  ..., objectref
           case Opcode.ALOAD:
           case Opcode.ALOAD_0:
           case Opcode.ALOAD_1:
@@ -152,9 +149,8 @@ public final class CalcStack24 {
             stack.push(DCInstrument24.locals[li.slot()]);
             return true;
 
-          // operand stack:
-          // ..., count
-          // ..., arrayref
+          // operand stack before: ..., count
+          // operand stack after:  ..., arrayref
           case Opcode.ANEWARRAY:
             stack.pop(); // discard the count
             final NewReferenceArrayInstruction nrai = (NewReferenceArrayInstruction) inst;
@@ -162,9 +158,8 @@ public final class CalcStack24 {
             stack.push(nrai.componentType().asSymbol().arrayType(1));
             return true;
 
-          // operand stack:
-          // ...
-          // [empty]
+          // operand stack before: ...
+          // operand stack after:  [empty]
           case Opcode.ARETURN:
           case Opcode.DRETURN:
           case Opcode.FRETURN:
@@ -174,17 +169,15 @@ public final class CalcStack24 {
             // execution pump will reset stack
             return false;
 
-          // operand stack:
-          // ..., arrayref
-          // ..., length
+          // operand stack before: ..., arrayref
+          // operand stack after:  ..., length
           case Opcode.ARRAYLENGTH:
             stack.pop(); // discard the arrayref
             stack.push(CD_int);
             return true;
 
-          // operand stack:
-          // ..., value
-          // ...
+          // operand stack before: ..., value
+          // operand stack after:  ...
           case Opcode.ASTORE:
           case Opcode.ASTORE_0:
           case Opcode.ASTORE_1:
@@ -220,17 +213,15 @@ public final class CalcStack24 {
             DCInstrument24.locals[si.slot()] = stack.pop();
             return true;
 
-          // operand stack:
-          // ..., objectref
-          // objectref
+          // operand stack before: ..., objectref
+          // operand stack after:  objectref
           case Opcode.ATHROW:
             // execution pump will reset stack
             return false;
 
-          // UNDONE: the JVM says result is int, but should we track 'true' type?
-          // operand stack:
-          // ..., arrayref, index
-          // ..., value
+          // UNDONE: the JVM says result is int, but should we track the type more precisely?
+          // operand stack before: ..., arrayref, index
+          // operand stack after:  ..., value
           case Opcode.BALOAD:
           case Opcode.CALOAD:
           case Opcode.IALOAD:
@@ -239,9 +230,8 @@ public final class CalcStack24 {
             stack.push(CD_int);
             return true;
 
-          // operand stack:
-          // ...
-          // ..., value
+          // operand stack before: ...
+          // operand stack after:  ..., value
           case Opcode.BIPUSH:
           case Opcode.ICONST_0:
           case Opcode.ICONST_1:
@@ -254,9 +244,8 @@ public final class CalcStack24 {
             stack.push(CD_int);
             return true;
 
-          // operand stack:
-          // ..., objectref
-          // ..., objectref
+          // operand stack before: ..., objectref
+          // operand stack after:  ..., objectref
           case Opcode.CHECKCAST:
             {
               final ClassDesc t = stack.pop(); // pop the objectref
@@ -272,9 +261,8 @@ public final class CalcStack24 {
               return true;
             }
 
-          // operand stack:
-          // ..., value
-          // ..., result
+          // operand stack before: ..., value
+          // operand stack after:  ..., result
           case Opcode.D2F: // double to float
           case Opcode.I2F: // integer to float
           case Opcode.L2F: // long to float
@@ -282,9 +270,8 @@ public final class CalcStack24 {
             stack.push(CD_float);
             return true;
 
-          // operand stack:
-          // ..., value
-          // ..., result
+          // operand stack before: ..., value
+          // operand stack after:  ..., result
           case Opcode.D2L: // double to long
           case Opcode.F2L: // float to long
           case Opcode.I2L: // integer to long
@@ -292,9 +279,8 @@ public final class CalcStack24 {
             stack.push(CD_long);
             return true;
 
-          // operand stack:
-          // ..., value1, value2
-          // ..., result
+          // operand stack before: ..., value1, value2
+          // operand stack after:  ..., result
           case Opcode.DADD:
           case Opcode.DDIV:
           case Opcode.DMUL:
@@ -304,17 +290,15 @@ public final class CalcStack24 {
             stack.push(CD_double);
             return true;
 
-          // operand stack:
-          // ..., arrayref, index
-          // ..., value
+          // operand stack before: ..., arrayref, index
+          // operand stack after:  ..., value
           case Opcode.DALOAD:
             stack.pop(2); // discard the arrayref and index
             stack.push(CD_double);
             return true;
 
-          // operand stack:
-          // ..., value1, value2
-          // ..., result
+          // operand stack before: ..., value1, value2
+          // operand stack after:  ..., result
           case Opcode.DCMPG:
           case Opcode.DCMPL:
           case Opcode.FCMPG:
@@ -323,17 +307,15 @@ public final class CalcStack24 {
             stack.push(CD_int);
             return true;
 
-          // operand stack:
-          // ...
-          // ..., value
+          // operand stack before: ...
+          // operand stack after:  ..., value
           case Opcode.DCONST_0:
           case Opcode.DCONST_1:
             stack.push(CD_double);
             return true;
 
-          // operand stack:
-          // ...
-          // ..., value
+          // operand stack before: ...
+          // operand stack after:  ..., value
           case Opcode.DLOAD:
           case Opcode.DLOAD_0:
           case Opcode.DLOAD_1:
@@ -343,17 +325,15 @@ public final class CalcStack24 {
             stack.push(CD_double);
             return true;
 
-          // operand stack:
-          // ..., value
-          // ..., result
+          // operand stack before: ..., value
+          // operand stack after:  ..., result
           case Opcode.DNEG:
             stack.pop(); // discard the value
             stack.push(CD_double);
             return true;
 
-          // operand stack:
-          // ..., value
-          // ..., value, value
+          // operand stack before: ..., value
+          // operand stack after:  ..., value, value
           case Opcode.DUP:
             {
               final ClassDesc t = stack.pop();
@@ -362,9 +342,8 @@ public final class CalcStack24 {
               return true;
             }
 
-          // operand stack:
-          // ..., value2, value1
-          // ..., value1, value2, value1
+          // operand stack before: ..., value2, value1
+          // operand stack after:  ..., value1, value2, value1
           case Opcode.DUP_X1:
             {
               final ClassDesc v1 = stack.pop();
@@ -375,9 +354,8 @@ public final class CalcStack24 {
               return true;
             }
 
-          // operand stack:
-          // ..., value3, value2, value1
-          // ..., value1, value3, value2, value1
+          // operand stack before: ..., value3, value2, value1
+          // operand stack after:  ..., value1, value3, value2, value1
           // where value1, value2, and value3 are all a category 1 computational type
           // OR
           // ..., value2, value1
@@ -400,9 +378,8 @@ public final class CalcStack24 {
               return true;
             }
 
-          // operand stack:
-          // ..., value2, value1
-          // ..., value2, value1, value2, value1
+          // operand stack before: ..., value2, value1
+          // operand stack after:  ..., value2, value1, value2, value1
           // where value1, and value2 are all a category 1 computational type
           // OR
           // ..., value
@@ -423,9 +400,8 @@ public final class CalcStack24 {
               return true;
             }
 
-          // operand stack:
-          // ..., value3, value2, value1
-          // ..., value2, value1, value3, value2, value1
+          // operand stack before: ..., value3, value2, value1
+          // operand stack after:  ..., value2, value1, value3, value2, value1
           // where value1, value2, and value3 are all a category 1 computational type
           // OR
           // ..., value2, value1
@@ -501,9 +477,8 @@ public final class CalcStack24 {
               return true;
             }
 
-          // operand stack:
-          // ..., value
-          // ..., result
+          // operand stack before: ..., value
+          // operand stack after:  ..., result
           case Opcode.F2D: // float to double
           case Opcode.I2D: // integer to double
           case Opcode.L2D: // long to double
@@ -511,9 +486,8 @@ public final class CalcStack24 {
             stack.push(CD_double);
             return true;
 
-          // operand stack:
-          // ..., value1, value2
-          // ..., result
+          // operand stack before: ..., value1, value2
+          // operand stack after:  ..., result
           case Opcode.FADD:
           case Opcode.FDIV:
           case Opcode.FMUL:
@@ -523,26 +497,23 @@ public final class CalcStack24 {
             stack.push(CD_float);
             return true;
 
-          // operand stack:
-          // ..., arrayref, index
-          // ..., value
+          // operand stack before: ..., arrayref, index
+          // operand stack after:  ..., value
           case Opcode.FALOAD:
             stack.pop(2); // discard the arrayref and index
             stack.push(CD_float);
             return true;
 
-          // operand stack:
-          // ...
-          // ..., value
+          // operand stack before: ...
+          // operand stack after:  ..., value
           case Opcode.FCONST_0:
           case Opcode.FCONST_1:
           case Opcode.FCONST_2:
             stack.push(CD_float);
             return true;
 
-          // operand stack:
-          // ...
-          // ..., value
+          // operand stack before: ...
+          // operand stack after:  ..., value
           case Opcode.FLOAD:
           case Opcode.FLOAD_0:
           case Opcode.FLOAD_1:
@@ -552,17 +523,15 @@ public final class CalcStack24 {
             stack.push(CD_float);
             return true;
 
-          // operand stack:
-          // ..., value
-          // ..., result
+          // operand stack before: ..., value
+          // operand stack after:  ..., result
           case Opcode.FNEG:
             stack.pop(); // discard the value
             stack.push(CD_float);
             return true;
 
-          // operand stack:
-          // ..., objectref
-          // ..., value
+          // operand stack before: ..., objectref
+          // operand stack after:  ..., value
           case Opcode.GETFIELD:
             {
               stack.pop(); // discard the value
@@ -571,9 +540,8 @@ public final class CalcStack24 {
               return true;
             }
 
-          // operand stack:
-          // ...
-          // ..., value
+          // operand stack before: ...
+          // operand stack after:  ..., value
           case Opcode.GETSTATIC:
             {
               FieldInstruction fi = (FieldInstruction) inst;
@@ -581,8 +549,7 @@ public final class CalcStack24 {
               return true;
             }
 
-          // operand stack:
-          // [no change]
+          // operand stack: no change
           case Opcode.GOTO:
           case Opcode.GOTO_W:
             {
@@ -591,10 +558,9 @@ public final class CalcStack24 {
               return false;
             }
 
-          // UNDONE: the JVM says result is int, but should we track 'true' type?
-          // operand stack:
-          // ..., value
-          // ..., result
+          // UNDONE: the JVM says result is int, but should we track the type more precisely?
+          // operand stack before: ..., value
+          // operand stack after:  ..., result
           case Opcode.I2B: // integer to byte
           case Opcode.I2C: // integer to char
           case Opcode.D2I: // double to integer
@@ -605,9 +571,8 @@ public final class CalcStack24 {
             stack.push(CD_int);
             return true;
 
-          // operand stack:
-          // ..., value1, value2
-          // ..., result
+          // operand stack before: ..., value1, value2
+          // operand stack after:  ..., result
           case Opcode.IADD:
           case Opcode.IAND:
           case Opcode.IDIV:
@@ -624,9 +589,8 @@ public final class CalcStack24 {
             stack.push(CD_int);
             return true;
 
-          // operand stack:
-          // ..., value1, value2
-          // ...
+          // operand stack before: ..., value1, value2
+          // operand stack after:  ...
           case Opcode.IF_ACMPEQ:
           case Opcode.IF_ACMPNE:
           case Opcode.IF_ICMPEQ:
@@ -642,9 +606,8 @@ public final class CalcStack24 {
               return true;
             }
 
-          // operand stack:
-          // ..., value
-          // ...
+          // operand stack before: ..., value
+          // operand stack after:  ...
           case Opcode.IFEQ:
           case Opcode.IFNE:
           case Opcode.IFLT:
@@ -658,16 +621,14 @@ public final class CalcStack24 {
             addLabelsToWorklist(bi.target(), null, stack);
             return true;
 
-          // operand stack:
-          // [no change]
+          // operand stack: no change
           case Opcode.IINC:
           case Opcode.IINC_W:
           case Opcode.NOP:
             return true;
 
-          // operand stack:
-          // ...
-          // ..., value
+          // operand stack before: ...
+          // operand stack after:  ..., value
           case Opcode.ILOAD:
           case Opcode.ILOAD_0:
           case Opcode.ILOAD_1:
@@ -677,18 +638,16 @@ public final class CalcStack24 {
             stack.push(CD_int);
             return true;
 
-          // operand stack:
-          // ..., value
-          // ..., result
+          // operand stack before: ..., value
+          // operand stack after:  ..., result
           case Opcode.INEG:
             stack.pop(); // discard the value
             stack.push(CD_int);
             return true;
 
-          // UNDONE: the JVM says result is int, but should we track 'true' type?
-          // operand stack:
-          // ..., objectref
-          // ..., result
+          // UNDONE: the JVM says result is int, but should we track the type more precisely?
+          // operand stack before: ..., objectref
+          // operand stack after:  ..., result
           case Opcode.INSTANCEOF:
             stack.pop(); // discard the value
             stack.push(CD_int);
@@ -699,9 +658,8 @@ public final class CalcStack24 {
           // if we're only supporting modern class files (version 51.0+).
           // Currently maintaining support for completeness.
 
-          // operand stack:
-          // ...
-          // ..., [return address]
+          // operand stack before: ...
+          // operand stack after:  ..., [return address]
           case Opcode.JSR:
           case Opcode.JSR_W:
             // Perhaps we should add label of next instruction to work list but we have no idea
@@ -712,9 +670,8 @@ public final class CalcStack24 {
             addLabelsToWorklist(ji.target(), null, stack);
             return false;
 
-          // operand stack:
-          // ..., value1, value2
-          // ..., result
+          // operand stack before: ..., value1, value2
+          // operand stack after:  ..., result
           case Opcode.LADD:
           case Opcode.LAND:
           case Opcode.LDIV:
@@ -730,25 +687,22 @@ public final class CalcStack24 {
             stack.push(CD_long);
             return true;
 
-          // operand stack:
-          // ..., arrayref, index
-          // ..., value
+          // operand stack before: ..., arrayref, index
+          // operand stack after:  ..., value
           case Opcode.LALOAD:
             stack.pop(2); // discard the arrayref and index
             stack.push(CD_long);
             return true;
 
-          // operand stack:
-          // ...
-          // ..., value
+          // operand stack before: ...
+          // operand stack after:  ..., value
           case Opcode.LCONST_0:
           case Opcode.LCONST_1:
             stack.push(CD_long);
             return true;
 
-          // operand stack:
-          // ...
-          // ..., value
+          // operand stack before: ...
+          // operand stack after:  ..., value
           case Opcode.LDC:
           case Opcode.LDC_W:
           case Opcode.LDC2_W:
@@ -774,9 +728,8 @@ public final class CalcStack24 {
             }
             return true;
 
-          // operand stack:
-          // ...
-          // ..., value
+          // operand stack before: ...
+          // operand stack after:  ..., value
           case Opcode.LLOAD:
           case Opcode.LLOAD_0:
           case Opcode.LLOAD_1:
@@ -786,97 +739,90 @@ public final class CalcStack24 {
             stack.push(CD_long);
             return true;
 
-          // operand stack:
-          // ..., value
-          // ..., result
+          // operand stack before: ..., value
+          // operand stack after:  ..., result
           case Opcode.LNEG:
             stack.pop(); // discard the value
             stack.push(CD_long);
             return true;
 
-          // operand stack:
-          // ..., key
-          // ...
+          // operand stack before: ..., key
+          // operand stack after:  ...
           case Opcode.LOOKUPSWITCH:
             stack.pop(); // discard the value
             LookupSwitchInstruction lsi = (LookupSwitchInstruction) inst;
             addLabelsToWorklist(lsi.defaultTarget(), lsi.cases(), stack);
             return false;
 
-          // operand stack:
-          // ..., objectref
-          // ...
+          // operand stack before: ..., objectref
+          // operand stack after:  ...
           case Opcode.MONITORENTER:
           case Opcode.MONITOREXIT:
             stack.pop(); // discard the value
             return true;
 
-          // operand stack:
-          // ..., count1, [count2, ...]
-          // ..., arrayref
+          // operand stack before: ..., count1, [count2, ...]
+          // operand stack after:  ..., arrayref
           case Opcode.MULTIANEWARRAY:
             final NewMultiArrayInstruction nmai = (NewMultiArrayInstruction) inst;
             stack.pop(nmai.dimensions()); // discard all the counts
             stack.push(nmai.arrayType().asSymbol());
             return true;
 
-          // operand stack:
-          // ...
-          // ..., objectref
+          // operand stack before: ...
+          // operand stack after:  ..., objectref
           case Opcode.NEW:
             final NewObjectInstruction noi = (NewObjectInstruction) inst;
             stack.push(noi.className().asSymbol());
             return true;
 
-          // operand stack:
-          // ..., count
-          // ..., arrayref
+          // operand stack before: ..., count
+          // operand stack after:  ..., arrayref
           case Opcode.NEWARRAY:
             stack.pop(); // discard the count
             final NewPrimitiveArrayInstruction npai = (NewPrimitiveArrayInstruction) inst;
-            String descriptor;
+            String eltDescriptor;
             switch (npai.typeKind()) {
               case BOOLEAN -> {
-                descriptor = "[Z";
+                eltDescriptor = "Z";
               }
               case BYTE -> {
-                descriptor = "[B";
+                eltDescriptor = "B";
               }
               case CHAR -> {
-                descriptor = "[C";
+                eltDescriptor = "C";
               }
               case DOUBLE -> {
-                descriptor = "[D";
+                eltDescriptor = "D";
               }
               case FLOAT -> {
-                descriptor = "[F";
+                eltDescriptor = "F";
               }
               case INT -> {
-                descriptor = "[I";
+                eltDescriptor = "I";
               }
               case LONG -> {
-                descriptor = "[J";
+                eltDescriptor = "J";
               }
               case SHORT -> {
-                descriptor = "[S";
+                eltDescriptor = "S";
               }
               default -> {
-                throw new DynCompError("unknown primitive array type: " + inst);
+                throw new DynCompError(
+                    "unknown primitive type " + npai.typeKind() + " in: " + inst);
               }
             }
-            stack.push(ClassDesc.ofDescriptor(descriptor));
+            stack.push(ClassDesc.ofDescriptor("[" + eltDescriptor));
             return true;
 
-          // operand stack:
-          // ..., value
-          // ...
+          // operand stack before: ..., value
+          // operand stack after:  ...
           case Opcode.POP:
             stack.pop(); // discard the value
             return true;
 
-          // operand stack:
-          // ..., value2, value1
-          // ...
+          // operand stack before: ..., value2, value1
+          // operand stack after:  ...
           // where each of value1 and value2 is a category 1 computational type
           // OR
           // ..., value
@@ -891,16 +837,14 @@ public final class CalcStack24 {
               return true;
             }
 
-          // operand stack:
-          // ..., objectref, value
-          // ...
+          // operand stack before: ..., objectref, value
+          // operand stack after:  ...
           case Opcode.PUTFIELD:
             stack.pop(2);
             return true;
 
-          // operand stack:
-          // ..., value
-          // ...
+          // operand stack before: ..., value
+          // operand stack after:  ...
           case Opcode.PUTSTATIC:
             stack.pop(); // discard the value
             return true;
@@ -909,18 +853,15 @@ public final class CalcStack24 {
           // Consider throwing an UnsupportedOperationException for these opcodes
           // if we're only supporting modern class files (version 51.0+).
           // Currently maintaining support for completeness.
-
-          // operand stack:
-          // [no change]
+          // operand stack: no change
           case Opcode.RET:
           case Opcode.RET_W:
             // the variable referenced must contain a return address
             // that we would treat as target of jump; no way to do that
             return false;
 
-          // operand stack:
-          // ..., value1, value2
-          // ..., value2, value1
+          // operand stack before: ..., value1, value2
+          // operand stack after:  ..., value2, value1
           case Opcode.SWAP:
             {
               final ClassDesc v2 = stack.pop();
@@ -930,18 +871,16 @@ public final class CalcStack24 {
               return true;
             }
 
-          // operand stack:
-          // ..., index
-          // ...
+          // operand stack before: ..., index
+          // operand stack after:  ...
           case Opcode.TABLESWITCH:
             stack.pop(); // discard the index
             TableSwitchInstruction tsi = (TableSwitchInstruction) inst;
             addLabelsToWorklist(tsi.defaultTarget(), tsi.cases(), stack);
             return false;
 
-          // operand stack:
-          // ..., objectref, [arg1, [arg2 ...]]
-          // ...
+          // operand stack before: ..., objectref, [arg1, [arg2 ...]]
+          // operand stack after:  ...
           case Opcode.INVOKEINTERFACE:
           case Opcode.INVOKESPECIAL:
           case Opcode.INVOKEVIRTUAL:
@@ -951,16 +890,15 @@ public final class CalcStack24 {
 
           // fall through is intentional:
 
-          // operand stack:
-          // ..., [arg1, [arg2 ...]]
-          // ...
+          // operand stack before: ..., [arg1, [arg2 ...]]
+          // operand stack after:  ...
           case Opcode.INVOKESTATIC:
             {
               final InvokeInstruction ii = (InvokeInstruction) inst;
               final MethodTypeDesc mtd = ii.typeSymbol();
               stack.pop(mtd.parameterCount()); // discard the arguments
               // We are sure the invoked method will xRETURN eventually.
-              // We simulate xRETURNs functionality here because we don't
+              // We simulate xRETURN's functionality here because we don't
               // really "jump into" and simulate the invoked method.
               final ClassDesc rt = mtd.returnType();
               if (!rt.equals(CD_void)) {
@@ -969,9 +907,8 @@ public final class CalcStack24 {
               return true;
             }
 
-          // operand stack:
-          // ..., [arg1, [arg2 ...]]
-          // ...
+          // operand stack before: ..., [arg1, [arg2 ...]]
+          // operand stack after:  ...
           case Opcode.INVOKEDYNAMIC:
             {
               final InvokeDynamicInstruction idi = (InvokeDynamicInstruction) inst;
@@ -1002,13 +939,12 @@ public final class CalcStack24 {
       // Technically, a Classfile element, not a PseudoInstruction.
       case Label l -> {
         if (DCInstrument24.stacks[inst_index] != null) {
-          // we've seen this label before
-          // will throw if stacks don't match
+          // We've seen this label before.
           DCInstrument24.verifyOperandStackMatches(l, DCInstrument24.stacks[inst_index], stack);
-          // stacks match; we're done with this worklist
+          // Stacks match; we're done with this worklist.
           return false;
         } else {
-          // have not seen this label before; remember state of operand stack
+          // We have not seen this label before; remember the operand stack.
           DCInstrument24.stacks[inst_index] = stack.getClone();
           if (DCInstrument24.debugOperandStack) {
             System.out.println("save stack state at: " + l);

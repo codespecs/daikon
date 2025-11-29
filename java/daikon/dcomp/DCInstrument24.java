@@ -1495,7 +1495,7 @@ public class DCInstrument24 {
       }
 
       // Insert the TagFrame code before the LineNumber or Instruction we just located.
-      // Back up the iterator to point to just before 'inst', then copy the newCode.
+      // Back up the iterator to point to just before `inst`, then copy the newCode.
       li.previous();
       for (CodeElement ce : newCode) {
         li.add(ce);
@@ -2386,8 +2386,8 @@ public class DCInstrument24 {
         newCode.addAll(
             callEnterOrExit(mgen, minfo, method_info_index, "exit", exitLocationIter.next()));
 
-        // back up iterator to point to 'inst', the return instruction, and insert the
-        // instrumentation
+        // Back up iterator to point to `inst`, the return instruction, and insert the
+        // instrumentation.
         li.previous();
         for (CodeElement ce : newCode) {
           li.add(ce);
@@ -4663,10 +4663,10 @@ public class DCInstrument24 {
   }
 
   /**
-   * Creates a pseudo 'main' method with a DcompMarker argument that does nothing but call the
-   * original 'main' method without the DCompMarker argument.
+   * Creates a pseudo "main" method with a DcompMarker argument that does nothing but call the
+   * original "main" method without the DCompMarker argument.
    *
-   * @param mgen describes the 'main' method
+   * @param mgen describes the "main" method
    * @param classBuilder for current class
    * @param classInfo for the given class
    */
