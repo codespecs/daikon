@@ -1461,7 +1461,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Transforms instructions to track comparability. Returns a list of instructions that replaces
+   * Transforms one instruction to track comparability. Returns a list of instructions that replaces
    * the specified instruction. Returns null if the instruction should not be replaced.
    *
    * @param mg method being instrumented

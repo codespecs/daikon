@@ -51,7 +51,7 @@ public class PptName implements Serializable {
   // fullname must contain ":::".
   // fn_name is the part of fullname before ::: and point is the part after.
   // If fn_name does contain a '(' and a '.' that comes before it, then
-  // cls is the portion before the dot and method is the portion after.
+  // cls is the portion before the dot and methodSignature is the portion after.
   // If fn_name contains '(' but no dot, cls is null and methodSignature
   // is the same as fn_name.
   // If fn_name does not contain '(', then class is the same as fn_name and
