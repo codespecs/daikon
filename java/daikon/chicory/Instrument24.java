@@ -366,7 +366,6 @@ public class Instrument24 implements ClassFileTransformer {
       ClassBuilder classBuilder, ClassModel classModel, ClassInfo classInfo) {
 
     debugInstrument.log("Class Name:%n");
-    @SuppressWarnings("signature:assignment") // type conversion
     @InternalForm String temp = classModel.thisClass().asInternalName();
     debugInstrument.log("  %s%n", Signatures.internalFormToBinaryName(temp));
 
