@@ -316,7 +316,7 @@ public class MethodGen24 {
   public MethodGen24(
       final @BinaryName String className,
       ClassBuilder classBuilder,
-      final String methodName,
+      final @Identifier String methodName,
       final int accessFlagsMask,
       final MethodTypeDesc mtd,
       List<CodeElement> instructions,

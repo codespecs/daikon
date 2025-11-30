@@ -14,7 +14,6 @@ import java.util.Optional;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
-import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.checker.signature.qual.MethodDescriptor;
 
 /**
@@ -165,8 +164,7 @@ public class ClassGen24 {
    * @return the class's name
    */
   public static @BinaryName String getClassName(ClassModel classModel) {
-    @InternalForm String temp = classModel.thisClass().asInternalName();
-    return Signatures.internalFormToBinaryName(temp);
+    return Signatures.internalFormToBinaryName(classModel.thisClass().asInternalName());
   }
 
   /**
@@ -192,8 +190,7 @@ public class ClassGen24 {
   public static @BinaryName String getSuperclassName(ClassModel classModel) {
     Optional<ClassEntry> ce = classModel.superclass();
     if (ce.isPresent()) {
-      @BinaryName String scn = ce.get().asInternalName().replace('/', '.');
-      return scn;
+      return ce.get().asInternalName().replace('/', '.');
     } else {
       return "java.lang.Object";
     }
