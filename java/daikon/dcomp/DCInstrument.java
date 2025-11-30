@@ -881,7 +881,7 @@ public class DCInstrument extends InstructionListUtils {
         debug_transform.indent();
 
         MethodGen mgen = new MethodGen(m, classname, pool);
-        mgen = mgen; // copy to global
+        this.mgen = mgen; // copy to global
 
         InstructionList il = mgen.getInstructionList();
         boolean has_code = (il != null);
