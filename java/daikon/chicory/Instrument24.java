@@ -880,7 +880,7 @@ public class Instrument24 implements ClassFileTransformer {
    *     a return or the return should not be instrumented
    */
   @SuppressWarnings("MixedMutabilityReturnType")
-  @RequireNonNull("#3.nonceLocal")
+  @RequiresNonNull("#3.nonceLocal")
   private List<CodeElement> generate_return_instrumentation(
       CodeElement inst,
       MethodGen24 mgen,
