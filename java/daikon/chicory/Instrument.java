@@ -44,6 +44,7 @@ import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.PUSH;
 import org.apache.bcel.generic.Type;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
@@ -819,7 +820,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       }
     }
 
-    return null;
+    throw new Error("Couldn't find the nonce local " + mgen);
   }
 
   /**
@@ -989,9 +990,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // Assumes addInstrumentationAtEntry has been called to create the nonce local.
     // iload
     // Push the nonce.
-    LocalVariableGen nonce_lv = get_nonce_local(mgen);
-    assert nonce_lv != null
-        : "@AssumeAssertion(nullness): get_nonce_local returned null in call_enter_exit";
+    @SuppressWarnings("nullness:assignment") // the nonce local exists
+    @NonNull LocalVariableGen nonce_lv = get_nonce_local(mgen);
     newCode.append(InstructionFactory.createLoad(Type.INT, nonce_lv.getIndex()));
 
     // iconst

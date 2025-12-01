@@ -74,8 +74,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.FieldDescriptor;
@@ -863,6 +865,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param mgen describes the given method
    * @param minfo for the given method's code
    */
+  @EnsuresNonNull("#3.nonceLocal")
   private void addInstrumentationAtEntry(
       List<CodeElement> instructions, MethodGen24 mgen, MethodGen24.MInfo24 minfo) {
 
@@ -911,6 +914,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param mgen describes the given method
    * @param minfo for the given method's code
    */
+  @EnsuresNonNull("#2.nonceLocal")
   private List<CodeElement> generateIncrementNonce(MethodGen24 mgen, MethodGen24.MInfo24 minfo) {
     String atomic_int_classname = "java.util.concurrent.atomic.AtomicInteger";
     ClassDesc atomic_intClassDesc = ClassDesc.of(atomic_int_classname);
@@ -1001,6 +1005,7 @@ public class Instrument24 implements ClassFileTransformer {
    *     a return or the return should not be instrumented
    */
   @SuppressWarnings("MixedMutabilityReturnType")
+  @RequiresNonNull("#3.nonceLocal")
   private List<CodeElement> generate_return_instrumentation(
       CodeElement inst,
       MethodGen24 mgen,
@@ -1086,6 +1091,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param methodToCall either "enter" or "exit"
    * @param line source line number if this is an exit
    */
+  @RequiresNonNull("#3.nonceLocal")
   private void callEnterOrExit(
       List<CodeElement> newCode,
       MethodGen24 mgen,
@@ -1108,10 +1114,8 @@ public class Instrument24 implements ClassFileTransformer {
     // The offset of the first parameter.
     int param_offset = mgen.isStatic() ? 0 : 1;
 
-    // Assumes addInstrumentationAtEntry has been called which creates the nonce local.
     // iload
     // Push the nonce.
-    assert minfo.nonceLocal != null : "@AssumeAssertion(nullness): can't get here if null";
     newCode.add(LoadInstruction.of(TypeKind.INT, minfo.nonceLocal.slot()));
 
     // iconst
