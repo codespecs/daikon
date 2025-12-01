@@ -743,7 +743,6 @@ public class Instrument24 implements ClassFileTransformer {
 
     // debugInstrument.log("Modified code: %s%n", mgen.getMethod().getCode());
 
-    assert curMethodInfo != null : "@AssumeAssertion(nullness): can't get here if null";
     Iterator<Boolean> shouldIncludeIter = curMethodInfo.is_included.iterator();
     Iterator<Integer> exitLocationIter = curMethodInfo.exit_locations.iterator();
 
@@ -957,6 +956,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param mgen describes the given method
    * @param minfo for the given method's code
    */
+  @EnsuresNonNull("#2.nonceLocal")
   private List<CodeElement> generateIncrementNonce(MethodGen24 mgen, MethodGen24.MInfo24 minfo) {
     String atomic_int_classname = "java.util.concurrent.atomic.AtomicInteger";
     ClassDesc atomic_intClassDesc = ClassDesc.of(atomic_int_classname);
@@ -983,7 +983,6 @@ public class Instrument24 implements ClassFileTransformer {
     newCode.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
 
     // store original value of nonce into this_invocation_nonce)
-    assert minfo.nonceLocal != null : "@AssumeAssertion(nullness): can't get here if null";
     newCode.add(StoreInstruction.of(TypeKind.INT, minfo.nonceLocal.slot()));
 
     return newCode;
@@ -1053,6 +1052,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param methodToCall either "enter" or "exit"
    * @param line source line number if this is an exit
    */
+  @RequiresNonNull("#3.nonceLocal")
   private void callEnterOrExit(
       List<CodeElement> newCode,
       MethodGen24 mgen,
@@ -1073,10 +1073,8 @@ public class Instrument24 implements ClassFileTransformer {
     // The offset of the first parameter.
     int param_offset = mgen.isStatic() ? 0 : 1;
 
-    // Assumes addInstrumentationAtEntry has been called which sets nonceLocal.
     // iload
     // Push the nonce.
-    assert minfo.nonceLocal != null : "@AssumeAssertion(nullness): can't get here if null";
     newCode.add(LoadInstruction.of(TypeKind.INT, minfo.nonceLocal.slot()));
 
     // iconst
