@@ -799,7 +799,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       }
     }
 
-    throw new Error("Couldn't find the nonce local " + mgen)
+    throw new Error("Couldn't find the nonce local " + mgen);
   }
 
   /**
