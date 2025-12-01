@@ -8,6 +8,8 @@ set -o verbose
 set -o xtrace
 export SHELLOPTS
 
+echo "HEAD=$(git rev-parse HEAD)"
+
 make compile daikon.jar
 
 if [ -d "/tmp/$USER/plume-scripts" ]; then
