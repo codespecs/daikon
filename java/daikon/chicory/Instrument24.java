@@ -548,7 +548,6 @@ public class Instrument24 implements ClassFileTransformer {
             String types = "", names = "", locals = "";
 
             for (int j = 0; j < paramTypes.length; j++) {
-              @SuppressWarnings("signature:assignment") // need JDK annotations
               @FieldDescriptor String paramFD = paramTypes[j].descriptorString();
               types = types + convertDescriptorToFqBinaryName(paramFD) + " ";
             }
@@ -841,7 +840,6 @@ public class Instrument24 implements ClassFileTransformer {
     for (LocalVariable lv : mgen.localsTable) {
       codeBuilder.localVariable(
           lv.slot(), lv.name().stringValue(), lv.typeSymbol(), lv.startScope(), lv.endScope());
-      @SuppressWarnings("signature:assignment") // need JDK annotations
       @FieldDescriptor String lvFD = lv.typeSymbol().descriptorString();
       debugInstrument.log("  %s : %s%n", lv, convertDescriptorToFqBinaryName(lvFD));
     }
@@ -1390,7 +1388,6 @@ public class Instrument24 implements ClassFileTransformer {
     // parameter names appropriately.  This check is ugly.
     if (mgen.getName().equals("<init>") && mgen.getParameterTypes().length > 0) {
       int dollarPos = mgen.getClassName().lastIndexOf('$');
-      @SuppressWarnings("signature:assignment") // need JDK annotations
       @FieldDescriptor String arg0Fd = mgen.getParameterType(0).descriptorString();
       String arg0Name = convertDescriptorToFqBinaryName(arg0Fd);
       if (dollarPos >= 0

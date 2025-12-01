@@ -277,7 +277,6 @@ public class MethodGen24 {
     int offset = isStatic ? 0 : 1;
     for (int i = 0; i < paramTypes.length; i++) {
       if ((offset + i) < origLocalVariables.length) {
-        @SuppressWarnings("signature:assignment") // need JDK annotations
         @Identifier String paramName = origLocalVariables[offset + i].name().stringValue();
         paramNames[i] = paramName;
       }
