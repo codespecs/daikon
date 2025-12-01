@@ -438,7 +438,7 @@ public class BuildJDK {
 
       if (dcompInstrumented) {
         @SuppressWarnings("nullness:argument") // null instruction list is ok for abstract
-        MethodGen mg =
+        MethodGen mgen =
             new MethodGen(
                 Const.ACC_PUBLIC | Const.ACC_ABSTRACT,
                 Type.BOOLEAN,
@@ -448,7 +448,7 @@ public class BuildJDK {
                 dcomp_class.getClassName(),
                 null,
                 dcomp_class.getConstantPool());
-        dcomp_class.addMethod(mg.getMethod());
+        dcomp_class.addMethod(mgen.getMethod());
       }
 
       dcomp_class
