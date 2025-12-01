@@ -135,6 +135,7 @@ public class BuildJDK {
     if (cl_args.length > 1) {
 
       // Arguments are <destdir> [<classfiles>...]
+      @SuppressWarnings("nullness:assignment") // https://tinyurl.com/cfissue/3224
       @NonNull String[] class_files = Arrays.copyOfRange(cl_args, 1, cl_args.length);
 
       // Instrumenting a specific list of class files is usually used for testing.
