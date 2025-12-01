@@ -880,6 +880,7 @@ public class Instrument24 implements ClassFileTransformer {
    *     a return or the return should not be instrumented
    */
   @SuppressWarnings("MixedMutabilityReturnType")
+  @RequireNonNull("#3.nonceLocal")
   private List<CodeElement> generate_return_instrumentation(
       CodeElement inst,
       MethodGen24 mgen,
@@ -1000,6 +1001,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param mgen describes the given method
    * @param minfo for the given method's code
    */
+  @EnsuresNonNull("#3.nonceLocal")
   private void addInstrumentationAtEntry(
       List<CodeElement> instructions, MethodGen24 mgen, MethodGen24.MInfo24 minfo) {
 

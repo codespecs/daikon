@@ -966,7 +966,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     // iload
     // Push the nonce.
-    LocalVariableGen nonce_lv = get_nonce_local(mgen);
+    @SuppressWarnings("nullness:assignment") // the nonce local exists
+    @NonNull LocalVariableGen nonce_lv = get_nonce_local(mgen);
     newCode.append(InstructionFactory.createLoad(Type.INT, nonce_lv.getIndex()));
 
     // iconst
