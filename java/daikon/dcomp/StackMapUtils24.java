@@ -17,12 +17,20 @@ import org.checkerframework.checker.signature.qual.Identifier;
 
 /**
  * This class provides static utility methods for manipulating bytecode structures, including
- * operations on local variables, parameter types, and instruction adjustments.
+ * operations on local variables, parameter types, and instruction adjustments. It is loosely based
+ * on StackMapUtils.java located in the plume-lib/bcel-util repository. It implements a very small
+ * subset of the methods in StackMapUtils and does no manipulation of StackMaps at all. Its primary
+ * method is addNewSpecialLocal which is a replacement for the two methods addNewParameter and
+ * create_method_scope_local in the original StackMapUtils.
+ *
+ * <p>StackMapUtils24 uses Java's {@code java.lang.classfile} APIs for reading and modifying .class
+ * files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more complete and robust
+ * and are always up to date with any .class file changes (since they are part of the JDK).
  */
-public final class BcelUtils24 {
+public final class StackMapUtils24 {
 
   /** Do not instantiate. */
-  private BcelUtils24() {
+  private StackMapUtils24() {
     throw new Error("Do not instantiate");
   }
 
@@ -45,16 +53,17 @@ public final class BcelUtils24 {
 
   /**
    * Add {@code size} (1 or 2) to the slot number of each Instruction that references a local that
-   * is equal or higher in the local map than {@code offsetFirstMovedLocal}. Size should be the size
-   * of the new local that was just inserted at {@code offsetFirstMovedLocal}.
+   * is equal or higher in the local map than {@code offsetFirstLocalToBeMoved}. Size should be the
+   * size of the new local that was just inserted at {@code offsetFirstLocalToBeMoved}.
    *
    * @param mgen MethodGen to be modified
-   * @param offsetFirstMovedLocal original offset of first local moved "up"
+   * @param offsetFirstLocalToBeMoved original offset of first local moved "up"
    * @param size size of new local added (1 or 2)
    */
-  static void adjust_code_for_locals_change(MethodGen24 mgen, int offsetFirstMovedLocal, int size) {
+  static void adjust_code_for_locals_change(
+      MethodGen24 mgen, int offsetFirstLocalToBeMoved, int size) {
 
-    debugInstrument.log("adjust_code_for_locals_change: %d %d%n", offsetFirstMovedLocal, size);
+    debugInstrument.log("adjust_code_for_locals_change: %d %d%n", offsetFirstLocalToBeMoved, size);
     try {
       List<CodeElement> il = mgen.getInstructionList();
       ListIterator<CodeElement> iter = il.listIterator();
@@ -63,22 +72,22 @@ public final class BcelUtils24 {
         CodeElement inst = iter.next();
         switch (inst) {
           case DiscontinuedInstruction.RetInstruction ret -> {
-            if (ret.slot() >= offsetFirstMovedLocal) {
+            if (ret.slot() >= offsetFirstLocalToBeMoved) {
               iter.set(DiscontinuedInstruction.RetInstruction.of(ret.slot() + size));
             }
           }
           case IncrementInstruction inc -> {
-            if (inc.slot() >= offsetFirstMovedLocal) {
+            if (inc.slot() >= offsetFirstLocalToBeMoved) {
               iter.set(IncrementInstruction.of(inc.slot() + size, inc.constant()));
             }
           }
           case LoadInstruction load -> {
-            if (load.slot() >= offsetFirstMovedLocal) {
+            if (load.slot() >= offsetFirstLocalToBeMoved) {
               iter.set(LoadInstruction.of(load.typeKind(), load.slot() + size));
             }
           }
           case StoreInstruction store -> {
-            if (store.slot() >= offsetFirstMovedLocal) {
+            if (store.slot() >= offsetFirstLocalToBeMoved) {
               iter.set(StoreInstruction.of(store.typeKind(), store.slot() + size));
             }
           }
@@ -95,10 +104,10 @@ public final class BcelUtils24 {
   }
 
   /**
-   * Add a new local variable to the method. This will be inserted after last current parameter and
-   * before the first local variable. This might have the side effect of causing us to rewrite the
-   * method byte codes to adjust the slot numbers for the existing local variables - see below for
-   * details.
+   * Add a new local variable to the method. This will be inserted after any parameters and before
+   * any existing local variables. If there are existing local variables this will have the side
+   * effect of rewritting the method byte codes to adjust the slot numbers for the existing local
+   * variables - see below for details.
    *
    * <p>DCInstrument24 uses this routine for two special variables:
    *
@@ -113,7 +122,7 @@ public final class BcelUtils24 {
    * @param minfo for the given method's code
    * @param varName name of new parameter
    * @param varType type of new parameter
-   * @param isParam if true, the new local is a new parameter
+   * @param isParam if true, the new local is a new parameter (the DCompMarker)
    * @return a LocalVariable for the new variable
    */
   public static LocalVariable addNewSpecialLocal(
@@ -124,10 +133,6 @@ public final class BcelUtils24 {
       boolean isParam) {
 
     debugInstrument.enabled = daikon.dcomp.DCInstrument24.bcelDebug;
-
-    // We add a new local variable, after any parameters and before any
-    // existing local variables.  We then make a pass over the
-    // byte codes to update the slot number of any locals we just shifted up.
 
     LocalVariable varNew;
     // get a copy of the locals before modification
