@@ -121,9 +121,9 @@ import org.checkerframework.dataflow.qual.Pure;
 /**
  * Instruments a class file to perform Dynamic Comparability.
  *
- * <p>The DCInstrument24 class is responsible for modifying another class's bytecodes. Specifically,
- * its main task is to add calls into the DynComp Runtime to calculate comparability values. These
- * added calls are sometimes referred to as "hooks".
+ * <p>This class is responsible for modifying bytecodes. Specifically, its main task is to add calls
+ * into the DynComp Runtime to calculate comparability values. These added calls are sometimes
+ * referred to as "hooks".
  *
  * <p>Instrument24 and DCInstrument24 use Java's ({@code java.lang.classfile}) APIs for reading and
  * modifying .class files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more
@@ -194,10 +194,10 @@ public class DCInstrument24 {
 
   // Variables used for the entire class.
 
-  /** The current ClassFile. */
+  /** The current classfile. */
   protected ClassFile classFile;
 
-  /** The current ClassModel. */
+  /** The current class. */
   protected ClassModel classModel;
 
   /** ConstantPool builder for current class. */
@@ -221,28 +221,42 @@ public class DCInstrument24 {
   /** Local that stores the tag frame for the current method. */
   protected LocalVariable tagFrameLocal;
 
-  // Argument descriptors
+  // Type descriptors
 
-  /** Type array with two objects. */
-  protected static ClassDesc[] two_objects_arg = {CD_Object, CD_Object};
+  /** "java.lang.Object[]". */
+  protected static final ClassDesc objectArrayCD = CD_Object.arrayType(1);
+
+  /** The special DCompMarker type. */
+  protected final ClassDesc dcomp_marker;
+
+  // Signature descriptors
+
+  // No arguments
+
+  /** Type array with no arguments. */
+  protected static final ClassDesc[] noArgsSig = new ClassDesc[0];
+
+  // One argument
 
   /** Type array with an int. */
-  protected static ClassDesc[] integer_arg = {CD_int};
+  protected static ClassDesc[] intSig = {CD_int};
+
+  /** Type array with a long. */
+  protected static ClassDesc[] longSig = {CD_long};
 
   /** Type array with an object. */
   protected static ClassDesc[] object_arg = {CD_Object};
 
-  /** ClassDesc for the special dcomp_marker argument. */
-  protected final ClassDesc dcomp_marker;
-
-  /** ClassDesc for an Object array. */
-  protected static final ClassDesc objectArrayCD = CD_Object.arrayType(1);
-
   /** Type array with an Object array. */
   protected static final ClassDesc[] objectArrayCD_arg = {objectArrayCD};
 
-  /** Type array with no arguments. */
-  protected static final ClassDesc[] noArgsCD = new ClassDesc[0];
+  // Two arguments
+
+  /** Type array with a long and an int. */
+  protected static ClassDesc[] longIntSig = {CD_long, CD_int};
+
+  /** Type array with two objects. */
+  protected static ClassDesc[] objectObjectSig = {CD_Object, CD_Object};
 
   // Debug loggers
 
@@ -280,7 +294,7 @@ public class DCInstrument24 {
   protected @DotSeparatedIdentifiers String dcomp_prefix;
 
   /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
-  private @BinaryName String dcompRuntimeClassname;
+  private @BinaryName String dcompRuntimeClassName;
 
   /** The ClassDesc for the DynComp runtime support class. */
   private ClassDesc runtimeCD;
@@ -345,15 +359,15 @@ public class DCInstrument24 {
    * {@link #handleInvoke} routine.
    */
   protected static MethodDef[] obj_methods = {
-    new MethodDef("finalize", new ClassDesc[0]),
-    new MethodDef("getClass", new ClassDesc[0]),
-    new MethodDef("hashCode", new ClassDesc[0]),
-    new MethodDef("notify", new ClassDesc[0]),
-    new MethodDef("notifyall", new ClassDesc[0]),
-    new MethodDef("toString", new ClassDesc[0]),
-    new MethodDef("wait", new ClassDesc[0]),
-    new MethodDef("wait", new ClassDesc[] {CD_long}),
-    new MethodDef("wait", new ClassDesc[] {CD_long, CD_int}),
+    new MethodDef("finalize", noArgsSig),
+    new MethodDef("getClass", noArgsSig),
+    new MethodDef("hashCode", noArgsSig),
+    new MethodDef("notify", noArgsSig),
+    new MethodDef("notifyall", noArgsSig),
+    new MethodDef("toString", noArgsSig),
+    new MethodDef("wait", noArgsSig),
+    new MethodDef("wait", longSig),
+    new MethodDef("wait", longIntSig),
   };
 
   /** Represents a method (by its name and argument types). */
@@ -435,7 +449,7 @@ public class DCInstrument24 {
     if (BcelUtil.javaVersion == 8) {
       dcomp_prefix = "daikon.dcomp";
     }
-    dcompRuntimeClassname = Signatures.addPackage(dcomp_prefix, "DCRuntime");
+    dcompRuntimeClassName = Signatures.addPackage(dcomp_prefix, "DCRuntime");
     DCRuntime.instrumentation_interface = Signatures.addPackage(dcomp_prefix, "DCompInstrumented");
 
     // Turn on some of the logging based on debug option.
@@ -480,7 +494,7 @@ public class DCInstrument24 {
 
     // If a class has an EvoSuite annotation it may be instrumented by Evosuite;
     // thus, we should not instrument it before Evosuite does.
-    for (Attribute<?> attribute : classModel.attributes()) {
+    for (final Attribute<?> attribute : classModel.attributes()) {
       if (attribute instanceof RuntimeVisibleAnnotationsAttribute rvaa) {
         for (final Annotation item : rvaa.annotations()) {
           if (item.className().stringValue().startsWith("Lorg/evosuite/runtime")) {
@@ -520,7 +534,7 @@ public class DCInstrument24 {
 
     @BinaryName String classname = classInfo.class_name;
     classGen = new ClassGen24(classModel, classname, classBuilder);
-    runtimeCD = ClassDesc.of(dcompRuntimeClassname);
+    runtimeCD = ClassDesc.of(dcompRuntimeClassName);
     poolBuilder = classBuilder.constantPool();
 
     debug_transform.log(
@@ -537,10 +551,11 @@ public class DCInstrument24 {
       debugInstrument.log("  %s%n", ce.asInternalName());
     }
 
-    // Handle object methods for this class
+    trackClass = false;
+
+    // Handle object methods for this class.
     add_clone_and_tostring_interfaces(classGen);
 
-    trackClass = false;
     boolean junit_test_class = false;
 
     if (!in_jdk) {
@@ -669,7 +684,7 @@ public class DCInstrument24 {
         // need to check for JUnit Test annotation on a method
         searchloop:
         for (MethodModel mm : classModel.methods()) {
-          for (Attribute<?> attribute : mm.attributes()) {
+          for (final Attribute<?> attribute : mm.attributes()) {
             if (attribute instanceof RuntimeVisibleAnnotationsAttribute rvaa) {
               if (debugJunitAnalysis) {
                 System.out.printf("attribute: %s%n", attribute);
@@ -854,7 +869,7 @@ public class DCInstrument24 {
       // throw new DynCompError("Classfile out of date");
     }
 
-    // Process each method in the class
+    // Process each method in the class.
     for (MethodModel mm : classModel.methods()) {
 
       try {
@@ -1067,7 +1082,7 @@ public class DCInstrument24 {
   }
 
   /**
-   * Instrument the given method using {@link #instrumentCode}.
+   * Instrument the specified method for dynamic comparability.
    *
    * @param methodBuilder for the given method
    * @param methodModel for the given method
@@ -1437,7 +1452,7 @@ public class DCInstrument24 {
         // Return classfile unmodified.
         return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
       }
-      dcompRuntimeClassname = "java.lang.DCRuntime";
+      dcompRuntimeClassName = "java.lang.DCRuntime";
     }
 
     try {
@@ -1699,10 +1714,10 @@ public class DCInstrument24 {
    * Adds the method name and containing class name to {@code skip_methods}, the list of
    * uninstrumented methods.
    *
-   * @param method method to add to skipped_methods list
+   * @param m method to add to skipped_methods list
    */
-  void skip_method(String method) {
-    skipped_methods.add(method);
+  void skip_method(String m) {
+    skipped_methods.add(m);
   }
 
   /**
@@ -1963,7 +1978,7 @@ public class DCInstrument24 {
           // the object on top of stack is of the specified type.  We push a
           // tag for a constant, since nothing is made comparable by this.
           case Opcode.INSTANCEOF:
-            return build_il(dcr_call("push_const", CD_void, noArgsCD), inst);
+            return build_il(dcr_call("push_const", CD_void, noArgsSig), inst);
 
           // Duplicates the item on the top of stack.  If the value on the
           // top of the stack is a primitive, we need to do the same on the
@@ -2023,7 +2038,7 @@ public class DCInstrument24 {
           case Opcode.IF_ICMPLT:
           case Opcode.IF_ICMPNE:
             {
-              return build_il(dcr_call("cmp_op", CD_void, noArgsCD), inst);
+              return build_il(dcr_call("cmp_op", CD_void, noArgsSig), inst);
             }
 
           case Opcode.GETFIELD:
@@ -2091,7 +2106,7 @@ public class DCInstrument24 {
               if (((ConstantInstruction) inst).typeKind().equals(TypeKind.REFERENCE)) {
                 return null;
               }
-              return build_il(dcr_call("push_const", CD_void, noArgsCD), inst);
+              return build_il(dcr_call("push_const", CD_void, noArgsSig), inst);
             }
 
           // Push the tag for the array onto the tag stack.  This causes
@@ -2119,7 +2134,7 @@ public class DCInstrument24 {
           case Opcode.LCONST_0:
           case Opcode.LCONST_1:
             {
-              return build_il(dcr_call("push_const", CD_void, noArgsCD), inst);
+              return build_il(dcr_call("push_const", CD_void, noArgsSig), inst);
             }
 
           // Primitive Binary operators.  Each is augmented with a call to
@@ -2162,7 +2177,7 @@ public class DCInstrument24 {
           case Opcode.LSUB:
           case Opcode.LUSHR:
           case Opcode.LXOR:
-            return build_il(dcr_call("binary_tag_op", CD_void, noArgsCD), inst);
+            return build_il(dcr_call("binary_tag_op", CD_void, noArgsSig), inst);
 
           // Computed jump based on the int on the top of stack.  Since that int
           // is not made comparable to anything, we just discard its tag.  One
@@ -2212,7 +2227,7 @@ public class DCInstrument24 {
           // Throws an exception.  This clears the operand stack of the current
           // frame.  We need to clear the tag stack as well.
           case Opcode.ATHROW:
-            return build_il(dcr_call("throw_op", CD_void, noArgsCD), inst);
+            return build_il(dcr_call("throw_op", CD_void, noArgsSig), inst);
 
           // Opcodes that don't need any modifications.  Here for reference
           case Opcode.ACONST_NULL:
@@ -2585,7 +2600,7 @@ public class DCInstrument24 {
       if (debugHandleInvoke) {
         System.out.printf("push tag for return type of %s%n", returnType);
       }
-      il.add(dcr_call("push_const", CD_void, noArgsCD));
+      il.add(dcr_call("push_const", CD_void, noArgsSig));
     }
     il.add(invoke);
     return il;
@@ -2878,8 +2893,7 @@ public class DCInstrument24 {
     }
 
     // When a class contains an existing <clinit>, it will be instrumented. Thus, we need to mark
-    // our
-    // added call to 'DCRuntime.set_class_initialized' as not instrumented.
+    // our added call to 'DCRuntime.set_class_initialized' as not instrumented.
     if (classname.endsWith("DCRuntime") && methodName.equals("set_class_initialized")) {
       return false;
     }
@@ -3108,7 +3122,7 @@ public class DCInstrument24 {
 
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(
-            runtimeCD, compare_method, MethodTypeDesc.of(CD_boolean, two_objects_arg));
+            runtimeCD, compare_method, MethodTypeDesc.of(CD_boolean, objectObjectSig));
     il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
     il.add(BranchInstruction.of(boolean_if, branch.target()));
     return il;
@@ -3143,10 +3157,10 @@ public class DCInstrument24 {
     // If this class doesn't support tag fields, don't load/store them.
     if (!tag_fields_ok(mgen, owner)) {
       if (op.equals(Opcode.GETFIELD) || op.equals(Opcode.GETSTATIC)) {
-        il.add(dcr_call("push_const", CD_void, noArgsCD));
+        il.add(dcr_call("push_const", CD_void, noArgsSig));
       } else {
         il.add(loadIntegerConstant(1));
-        il.add(dcr_call("discard_tag", CD_void, integer_arg));
+        il.add(dcr_call("discard_tag", CD_void, intSig));
       }
 
       // Perform the original field command.
@@ -3159,14 +3173,14 @@ public class DCInstrument24 {
           poolBuilder.methodRefEntry(
               ownerCD,
               Premain.tag_method_name(Premain.GET_TAG, owner, fieldName),
-              MethodTypeDesc.of(CD_void, noArgsCD));
+              MethodTypeDesc.of(CD_void, noArgsSig));
       il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
     } else if (op.equals(Opcode.PUTSTATIC)) {
       MethodRefEntry mre =
           poolBuilder.methodRefEntry(
               ownerCD,
               Premain.tag_method_name(Premain.SET_TAG, owner, fieldName),
-              MethodTypeDesc.of(CD_void, noArgsCD));
+              MethodTypeDesc.of(CD_void, noArgsSig));
       il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
     } else if (op.equals(Opcode.GETFIELD)) {
       il.add(StackInstruction.of(Opcode.DUP)); // dup 'this'
@@ -3174,7 +3188,7 @@ public class DCInstrument24 {
           poolBuilder.methodRefEntry(
               ownerCD,
               Premain.tag_method_name(Premain.GET_TAG, owner, fieldName),
-              MethodTypeDesc.of(CD_void, noArgsCD));
+              MethodTypeDesc.of(CD_void, noArgsSig));
       il.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
     } else { // must be Opcode.PUTFIELD
       if (field_size == 2) {
@@ -3185,7 +3199,7 @@ public class DCInstrument24 {
             poolBuilder.methodRefEntry(
                 ownerCD,
                 Premain.tag_method_name(Premain.SET_TAG, owner, fieldName),
-                MethodTypeDesc.of(CD_void, noArgsCD));
+                MethodTypeDesc.of(CD_void, noArgsSig));
         il.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
         il.add(LoadInstruction.of(TypeKind.from(field_type), lv.slot()));
       } else {
@@ -3195,7 +3209,7 @@ public class DCInstrument24 {
             poolBuilder.methodRefEntry(
                 ownerCD,
                 Premain.tag_method_name(Premain.SET_TAG, owner, fieldName),
-                MethodTypeDesc.of(CD_void, noArgsCD));
+                MethodTypeDesc.of(CD_void, noArgsSig));
         il.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
         il.add(StackInstruction.of(Opcode.SWAP)); // swap 'value' and 'this' back
       }
@@ -3497,7 +3511,7 @@ public class DCInstrument24 {
 
     // Make the array and the count comparable. Also, pop the tags for
     // the array and the count off the tag stack.
-    il.add(dcr_call("cmp_op", CD_void, noArgsCD));
+    il.add(dcr_call("cmp_op", CD_void, noArgsSig));
 
     return il;
   }
@@ -3606,7 +3620,7 @@ public class DCInstrument24 {
   List<CodeElement> discard_tag_code(CodeElement inst, int tag_count) {
     List<CodeElement> il = new ArrayList<>();
     il.add(loadIntegerConstant(tag_count));
-    il.add(dcr_call("discard_tag", CD_void, integer_arg));
+    il.add(dcr_call("discard_tag", CD_void, intSig));
     if (inst != null) {
       il.add(inst);
     }
@@ -3623,7 +3637,7 @@ public class DCInstrument24 {
       debug_dup.log("DUP -> %s [... %s]%n", "dup", stack_contents(stack, 2));
     }
     if (top.isPrimitive()) {
-      return build_il(dcr_call("dup", CD_void, noArgsCD), inst);
+      return build_il(dcr_call("dup", CD_void, noArgsSig), inst);
     }
     return null;
   }
@@ -3647,7 +3661,7 @@ public class DCInstrument24 {
     if (debug_dup.enabled) {
       debug_dup.log("DUP_X1 -> %s [... %s]%n", op, stack_contents(stack, 2));
     }
-    return build_il(dcr_call(op, CD_void, noArgsCD), inst);
+    return build_il(dcr_call(op, CD_void, noArgsSig), inst);
   }
 
   /**
@@ -3676,7 +3690,7 @@ public class DCInstrument24 {
     if (debug_dup.enabled) {
       debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
     }
-    return build_il(dcr_call(op, CD_void, noArgsCD), inst);
+    return build_il(dcr_call(op, CD_void, noArgsSig), inst);
   }
 
   /**
@@ -3699,7 +3713,7 @@ public class DCInstrument24 {
     if (debug_dup.enabled) {
       debug_dup.log("DUP2 -> %s [... %s]%n", op, stack_contents(stack, 2));
     }
-    return build_il(dcr_call(op, CD_void, noArgsCD), inst);
+    return build_il(dcr_call(op, CD_void, noArgsSig), inst);
   }
 
   /**
@@ -3742,7 +3756,7 @@ public class DCInstrument24 {
     if (debug_dup.enabled) {
       debug_dup.log("DUP2_X1 -> %s [... %s]%n", op, stack_contents(stack, 3));
     }
-    return build_il(dcr_call(op, CD_void, noArgsCD), inst);
+    return build_il(dcr_call(op, CD_void, noArgsSig), inst);
   }
 
   /**
@@ -3827,7 +3841,7 @@ public class DCInstrument24 {
     if (debug_dup.enabled) {
       debug_dup.log("DUP_X2 -> %s [... %s]%n", op, stack_contents(stack, 3));
     }
-    return build_il(dcr_call(op, CD_void, noArgsCD), inst);
+    return build_il(dcr_call(op, CD_void, noArgsSig), inst);
   }
 
   /**
@@ -3882,7 +3896,7 @@ public class DCInstrument24 {
       debug_dup.log("SWAP -> %s [... %s]%n", "swap", stack_contents(stack, 2));
     }
     if (type1.isPrimitive() && type2.isPrimitive()) {
-      return build_il(dcr_call("swap", CD_void, noArgsCD), inst);
+      return build_il(dcr_call("swap", CD_void, noArgsSig), inst);
     }
     return null;
   }
@@ -3971,7 +3985,7 @@ public class DCInstrument24 {
     // push a tag if there is a primitive return value
     ClassDesc returnType = mgen.getReturnType();
     if (is_primitive(returnType)) {
-      il.add(dcr_call("push_const", CD_void, noArgsCD));
+      il.add(dcr_call("push_const", CD_void, noArgsSig));
     }
 
     // If the method is not static, push the instance on the stack

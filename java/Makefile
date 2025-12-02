@@ -2127,6 +2127,25 @@ endif
 
 
 ###########################################################################
+### Diffs
+###
+
+# TODO: does this correspond to any other file? ./java/daikon/dcomp/CalcStack24.java
+
+diff24:
+	-diff -u daikon/dcomp/Instrument.java daikon/dcomp/Instrument24.java
+	-diff -u daikon/dcomp/DCInstrument.java daikon/dcomp/DCInstrument24.java
+	-diff -u daikon/dcomp/BuildJDK.java daikon/dcomp/BuildJDK24.java
+	-diff -u daikon/chicory/Instrument.java daikon/chicory/Instrument24.java
+
+	-diff -u ~/java/plume-lib/bcel-util/src/main/java/org/plumelib/bcelutil/BcelUtil.java daikon/dcomp/BcelUtils24.java
+
+	-diff -u ${CHECKERFRAMEWORK}/../commons-bcel/src/main/java/org/apache/bcel/generic/ClassGen.java daikon/dcomp/ClassGen24.java
+	-diff -u ${CHECKERFRAMEWORK}/../commons-bcel/src/main/java/org/apache/bcel/generic/MethodGen.java daikon/chicory/MethodGen24.java
+	-diff -u ${CHECKERFRAMEWORK}/../commons-bcel/src/main/java/org/apache/bcel/verifier/structurals/OperandStack.java daikon/dcomp/OperandStack24.java
+
+
+###########################################################################
 ### Delete-on-error
 ###
 
