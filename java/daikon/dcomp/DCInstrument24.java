@@ -1791,8 +1791,8 @@ public class DCInstrument24 {
   }
 
   /**
-   * Generates the code to create the tag frame for this method and store it in tag_frame_local.
-   * This needs to be before the call to DCRuntime.enter (since it passed to that method).
+   * Generates the code to create the tag frame for this method and store it in tagFrameLocal. This
+   * needs to be before the call to DCRuntime.enter (since it passed to that method).
    *
    * @param mgen describes the given method
    * @return instruction list for tag_frame setup code
