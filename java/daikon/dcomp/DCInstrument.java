@@ -4222,7 +4222,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   static void save_static_field_id(File file) throws IOException {
 
-    PrintStream ps = new PrintStream(file, "UTF-8"); // in Java 9+, use: StandardCharsets.UTF_8
+    PrintStream ps = new PrintStream(file, "UTF-8"); // in Java 10+, use: StandardCharsets.UTF_8
     for (Map.Entry<@KeyFor("static_field_id") String, Integer> entry : static_field_id.entrySet()) {
       ps.printf("%s  %d%n", entry.getKey(), entry.getValue());
     }
