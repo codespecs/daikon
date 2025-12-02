@@ -44,13 +44,13 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 
 /**
- * BuildJDK24 uses {@link DCInstrument24} to add comparability instrumentation to Java class files,
- * then stores the modified files into a directory identified by a (required) command line argument.
+ * Add comparability instrumentation to Java class files, then stores the modified files into a
+ * directory identified by a (required) command line argument.
  *
- * <p>DCInstrument24 duplicates each method of a class file. The new methods are distinguished by
- * the addition of a final parameter of type DCompMarker and are instrumented to track
- * comparability. Based on its invocation arguments, DynComp will decide whether to call the
- * instrumented or uninstrumented version of a method.
+ * <p>Duplicates each method of a class file. The new methods are distinguished by the addition of a
+ * final parameter of type DCompMarker and are instrumented to track comparability. Based on its
+ * invocation arguments, DynComp will decide whether to call the instrumented or uninstrumented
+ * version of a method.
  */
 @SuppressWarnings({
   "mustcall:type.argument",
@@ -137,7 +137,7 @@ public final class BuildJDK24 {
     // <p>We want to share code to read and instrument the Java class file members of a jar file
     // (JDK 8) or a module file (JDK 9+). However, jar files and module files are located in two
     // completely different file systems. So we open an InputStream for each class file we wish to
-    // instrument and save it in the class_stream_map with the file pathname as the key. From that
+    // instrument and save it in the class_stream_map with the file name as the key. From that
     // point the code to instrument a class file can be shared.
     Map<String, InputStream> class_stream_map;
 
@@ -406,7 +406,7 @@ public final class BuildJDK24 {
           throw new Error("Failed to parse classfile " + classFileName, e);
         }
 
-        @SuppressWarnings("signature:assignment") // type conversion
+        @SuppressWarnings("signature:assignment") // string manipulation
         @BinaryName String classname = classFileName.replace(".class", "").replace('/', '.');
         if (DynComp.dump) {
           inst24.writeDebugClassFiles(buffer, inst24.debug_uninstrumented_dir, classname);

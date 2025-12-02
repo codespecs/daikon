@@ -423,16 +423,17 @@ public class Instrument24 implements ClassFileTransformer {
       debug_transform.log("Trace info not added to class %s%n", classInfo);
     }
 
-    // Store constant static fields in `classInfo`. This ought to be a method of ClassInfo,
+    // Store constant static fields in `classInfo`.
+    // This ought to be a method of ClassInfo,
     // but that wouldn't work with both Instrument.java and Instrument24.java.
     List<FieldModel> fields = classModel.fields();
     for (FieldModel fm : fields) {
       Optional<ConstantValueAttribute> cva = fm.findAttribute(Attributes.constantValue());
       if (cva.isPresent()) {
         String name = fm.fieldName().stringValue();
-        String value = formatConstantDesc(cva.get().constant().constantValue());
-        debugInstrument.log("  Constant field: %s, value: %s%n", name, value);
-        classInfo.staticMap.put(name, value);
+        String valueString = formatConstantDesc(cva.get().constant().constantValue());
+        debugInstrument.log("  Constant field: %s, valueString: %s%n", name, valueString);
+        classInfo.staticMap.put(name, valueString);
       }
     }
 
@@ -901,7 +902,7 @@ public class Instrument24 implements ClassFileTransformer {
         li.add(ce);
       }
     } catch (Exception e) {
-      System.err.printf("Unexpected exception encountered: %s", e);
+      System.err.printf("Exception encountered: %s", e);
       e.printStackTrace();
     }
   }

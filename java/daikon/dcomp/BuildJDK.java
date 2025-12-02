@@ -40,21 +40,21 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 
 /**
- * BuildJDK uses {@link DCInstrument} to add comparability instrumentation to Java class files, then
- * stores the modified files into a directory identified by a (required) command line argument.
+ * Add comparability instrumentation to Java class files, then stores the modified files into a
+ * directory identified by a (required) command line argument.
  *
- * <p>DCInstrument duplicates each method of a class file. The new methods are distinguished by the
- * addition of a final parameter of type DCompMarker and are instrumented to track comparability.
- * Based on its invocation arguments, DynComp will decide whether to call the instrumented or
- * uninstrumented version of a method.
+ * <p>Duplicates each method of a class file. The new methods are distinguished by the addition of a
+ * final parameter of type DCompMarker and are instrumented to track comparability. Based on its
+ * invocation arguments, DynComp will decide whether to call the instrumented or uninstrumented
+ * version of a method.
  */
 @SuppressWarnings({
   "mustcall:type.argument",
   "mustcall:type.arguments.not.inferred"
 }) // assignments into owning collection
-public class BuildJDK {
+public final class BuildJDK {
 
-  /** Creates a new BuildJDK. */
+  /** Do not instantiate from external code; only instantiate in {@link #main}. */
   private BuildJDK() {}
 
   /**
@@ -470,7 +470,7 @@ public class BuildJDK {
    *
    * @param jc JavaClass to be instrumented
    * @param outputDir output directory for instrumented class
-   * @param classFileName name of class to be instrumented
+   * @param classFileName name of class to be instrumented (in internal form)
    * @param classTotal total number of classes to be processed; used for progress display
    * @throws IOException if unable to write out instrumented class
    */

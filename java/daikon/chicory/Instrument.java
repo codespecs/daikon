@@ -325,25 +325,27 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // Modify each non-void method to save its result in a local variable before returning.
     instrument_all_methods(cg, classInfo);
 
-    // Store constant static fields in `classInfo`. This ought to be a method of ClassInfo,
+    // Store constant static fields in `classInfo`.
+    // This ought to be a method of ClassInfo,
     // but that wouldn't work with both Instrument.java and Instrument24.java.
     Field[] fields = cg.getFields();
     for (Field field : fields) {
       if (field.isFinal() && field.isStatic() && (field.getType() instanceof BasicType)) {
-        ConstantValue value = field.getConstantValue();
-        String valString;
+        ConstantValue constantValue = field.getConstantValue();
+        String valueString;
 
-        if (value == null) {
-          // System.out.println("WARNING FROM " + field.getName());
-          // valString = "WARNING!!!";
-          valString = null;
+        String name = field.getName();
+        if (constantValue == null) {
+          // System.out.println("WARNING FROM " + name);
+          // valueString = "WARNING!!!";
+          valueString = null;
         } else {
-          valString = value.toString();
-          // System.out.println("GOOD FROM " + field.getName() +
-          //                    " --- " + valString);
+          valueString = constantValue.toString();
+          // System.out.println("GOOD FROM " + name +
+          //                    " --- " + valueString);
         }
-        if (valString != null) {
-          classInfo.staticMap.put(field.getName(), valString);
+        if (valueString != null) {
+          classInfo.staticMap.put(name, valueString);
         }
       }
     }
@@ -513,8 +515,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     try {
       for (Method m : methods) {
 
-        // The class data in StackMapUtils is not thread safe,
-        // allow only one method at a time to be instrumented.
+        // The class data in StackMapUtils is not thread safe.
+        // Allow only one method at a time to be instrumented.
         // DynComp does this by creating a new instrumentation object
         // for each class - probably a cleaner solution.
         synchronized (this) {
@@ -682,7 +684,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         }
       }
     } catch (Exception e) {
-      System.err.printf("Unexpected exception encountered: %s", e);
+      System.err.printf("Exception encountered: %s", e);
       e.printStackTrace();
     }
 
