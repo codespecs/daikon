@@ -955,6 +955,7 @@ public class Instrument24 implements ClassFileTransformer {
    * @param curMethodInfo provides additional information about the method
    * @param minfo for the given method's code
    */
+  @RequiresNonNull("#4.nonceLocal")
   private void addInstrumentationAtExits(
       List<CodeElement> instructions,
       MethodGen24 mgen,
