@@ -692,46 +692,76 @@ public class DCInstrument extends InstructionListUtils {
             }
             install_exception_handler(mgen);
           }
+        }
 
+        if (has_code) {
+          updateUninitializedNewOffsets(mgen.getInstructionList());
+          createNewStackMapAttribute(mgen);
+          mgen.setMaxLocals();
+          mgen.setMaxStack();
+        } else {
+          mgen.removeCodeAttributes();
+          mgen.removeLocalVariables();
+        }
+
+        remove_local_variable_type_table(mgen);
+
+        // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
+        // the original method to our instrumented method as the signature will
+        // not match anything in the JVM's list.  This won't cause an execution
+        // problem but will produce a number of warnings.
+        // JDK 11: @HotSpotIntrinsicCandidate
+        // JDK 17: @IntrinsicCandidate
+        AnnotationEntryGen[] aes = mgen.getAnnotationEntries();
+        for (AnnotationEntryGen item : aes) {
+          String type = item.getTypeName();
+          if (type.endsWith("IntrinsicCandidate;")) {
+            mgen.removeAnnotationEntry(item);
+          }
+        }
+
+        // Can't duplicate "main" or "clinit" or a JUnit test.
+        boolean replacingMethod =
+            BcelUtil.isMain(mgen) || BcelUtil.isClinit(mgen) || junit_test_class;
+        try {
           if (has_code) {
-            updateUninitializedNewOffsets(mgen.getInstructionList());
-            createNewStackMapAttribute(mgen);
-            mgen.setMaxLocals();
-            mgen.setMaxStack();
+            il = mgen.getInstructionList();
+            InstructionHandle end = il.getEnd();
+            int length = end.getPosition() + end.getInstruction().getLength();
+            if (length >= Const.MAX_CODE_SIZE) {
+              throw new ClassGenException(
+                  "Code array too big: must be smaller than " + Const.MAX_CODE_SIZE + " bytes.");
+            }
+          }
+          if (replacingMethod) {
+            classGen.replaceMethod(m, mgen.getMethod());
+            if (BcelUtil.isMain(mgen)) {
+              classGen.addMethod(create_dcomp_stub(mgen).getMethod());
+            }
           } else {
-            mgen.removeCodeAttributes();
-            mgen.removeLocalVariables();
+            classGen.addMethod(mgen.getMethod());
           }
-
-          remove_local_variable_type_table(mgen);
-
-          // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
-          // the original method to our instrumented method as the signature will
-          // not match anything in the JVM's list.  This won't cause an execution
-          // problem but will produce a number of warnings.
-          // JDK 11: @HotSpotIntrinsicCandidate
-          // JDK 17: @IntrinsicCandidate
-          AnnotationEntryGen[] aes = mgen.getAnnotationEntries();
-          for (AnnotationEntryGen item : aes) {
-            String type = item.getTypeName();
-            if (type.endsWith("IntrinsicCandidate;")) {
-              mgen.removeAnnotationEntry(item);
-            }
+        } catch (Exception e) {
+          String s = e.getMessage();
+          if (s == null) {
+            throw e;
           }
-
-          // Can't duplicate "main" or "clinit" or a JUnit test.
-          boolean replacingMethod =
-              BcelUtil.isMain(mgen) || BcelUtil.isClinit(mgen) || junit_test_class;
-          try {
-            if (has_code) {
-              il = mgen.getInstructionList();
-              InstructionHandle end = il.getEnd();
-              int length = end.getPosition() + end.getInstruction().getLength();
-              if (length >= Const.MAX_CODE_SIZE) {
-                throw new ClassGenException(
-                    "Code array too big: must be smaller than " + Const.MAX_CODE_SIZE + " bytes.");
-              }
-            }
+          if (s.startsWith("Branch target offset too large")
+              || s.startsWith("Code array too big")) {
+            System.err.printf(
+                "DynComp warning: ClassFile: %s - method %s is too large to instrument and is"
+                    + " being skipped.%n",
+                classname, mgen.getName());
+            // Build a dummy instrumented method that has DCompMarker
+            // parameter and no instrumentation.
+            // first, restore unmodified method
+            mgen = new MethodGen(m, classname, pool);
+            // restore StackMapTable
+            setCurrentStackMapTable(mgen, classGen.getMajor());
+            // Add the DCompMarker parameter
+            add_dcomp_param(mgen);
+            remove_local_variable_type_table(mgen);
+            // try again
             if (replacingMethod) {
               classGen.replaceMethod(m, mgen.getMethod());
               if (BcelUtil.isMain(mgen)) {
@@ -740,41 +770,11 @@ public class DCInstrument extends InstructionListUtils {
             } else {
               classGen.addMethod(mgen.getMethod());
             }
-          } catch (Exception e) {
-            String s = e.getMessage();
-            if (s == null) {
-              throw e;
-            }
-            if (s.startsWith("Branch target offset too large")
-                || s.startsWith("Code array too big")) {
-              System.err.printf(
-                  "DynComp warning: ClassFile: %s - method %s is too large to instrument and is"
-                      + " being skipped.%n",
-                  classname, mgen.getName());
-              // Build a dummy instrumented method that has DCompMarker
-              // parameter and no instrumentation.
-              // first, restore unmodified method
-              mgen = new MethodGen(m, classname, pool);
-              // restore StackMapTable
-              setCurrentStackMapTable(mgen, classGen.getMajor());
-              // Add the DCompMarker parameter
-              add_dcomp_param(mgen);
-              remove_local_variable_type_table(mgen);
-              // try again
-              if (replacingMethod) {
-                classGen.replaceMethod(m, mgen.getMethod());
-                if (BcelUtil.isMain(mgen)) {
-                  classGen.addMethod(create_dcomp_stub(mgen).getMethod());
-                }
-              } else {
-                classGen.addMethod(mgen.getMethod());
-              }
-            } else {
-              throw e;
-            }
+          } else {
+            throw e;
           }
-          debug_transform.exdent();
         }
+        debug_transform.exdent();
       } catch (Throwable t) {
         // debug code
         // t.printStackTrace();
