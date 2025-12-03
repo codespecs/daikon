@@ -77,7 +77,7 @@ public final class BuildJDK24 {
   private static String static_field_id_filename = "dcomp_jdk_static_field_id";
 
   /** Allow BuildJDK24 to access outputDebugFiles. */
-  @SuppressWarnings("nullness")
+  @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO
   private static daikon.dcomp.Instrument24 inst24;
 
   /**

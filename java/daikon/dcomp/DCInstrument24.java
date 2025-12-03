@@ -1831,7 +1831,7 @@ public class DCInstrument24 {
       // Character.forDigit (paramList.get(ii), Character.MAX_RADIX);
     }
 
-    // Create code to create and init the tag_frame and store the result in tag_frame_local.
+    // Create code to create and init the tag_frame and store the result in tagFrameLocal.
     List<CodeElement> instructions = new ArrayList<>();
 
     MethodRefEntry mre =
