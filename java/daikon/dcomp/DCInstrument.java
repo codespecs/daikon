@@ -2459,7 +2459,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /** Unchecked exception thrown if {@link #getSuperclassName} cannot find a superclass name. */
-  private class SuperclassNameError extends Error {
+  private static class SuperclassNameError extends Error {
     static final long serialVersionUID = 20251203;
 
     /**
