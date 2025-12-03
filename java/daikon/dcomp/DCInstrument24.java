@@ -4148,14 +4148,13 @@ public class DCInstrument24 {
         continue;
       }
 
-      if (fm.flags().has(AccessFlag.STATIC)) {
-        String full_name = full_name(classModel, fm);
-        create_get_tag(classGen, fm, static_field_id.get(full_name));
-        create_set_tag(classGen, fm, static_field_id.get(full_name));
-      } else {
-        create_get_tag(classGen, fm, field_to_offset_map.get(fm));
-        create_set_tag(classGen, fm, field_to_offset_map.get(fm));
-      }
+      @SuppressWarnings("nullness:unboxing.of.nullable")
+      int tagOffset =
+          fm.flags().has(AccessFlag.STATIC)
+              ? static_field_id.get(full_name(classModel, fm))
+              : field_to_offset_map.get(fm);
+      create_get_tag(classGen, fm, tagOffset);
+      create_set_tag(classGen, fm, tagOffset);
     }
 
     // Build accessors for each field declared in a superclass that is
@@ -4178,14 +4177,13 @@ public class DCInstrument24 {
         }
 
         field_set.add(fm.fieldName().stringValue());
-        if (fm.flags().has(AccessFlag.STATIC)) {
-          String full_name = full_name(scm, fm);
-          create_get_tag(classGen, fm, static_field_id.get(full_name));
-          create_set_tag(classGen, fm, static_field_id.get(full_name));
-        } else {
-          create_get_tag(classGen, fm, field_to_offset_map.get(fm));
-          create_set_tag(classGen, fm, field_to_offset_map.get(fm));
-        }
+        @SuppressWarnings("nullness:unboxing.of.nullable")
+        int tagOffset =
+            fm.flags().has(AccessFlag.STATIC)
+                ? static_field_id.get(full_name(scm, fm))
+                : field_to_offset_map.get(fm);
+        create_get_tag(classGen, fm, tagOffset);
+        create_set_tag(classGen, fm, tagOffset);
       }
     }
   }
