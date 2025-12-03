@@ -677,7 +677,7 @@ public class DCInstrument extends InstructionListUtils {
           if (has_code) {
             MethodInfo mi = null;
             if (track) {
-              mi = create_method_info(classInfo, mgen);
+              mi = create_method_info_if_instrumented(classInfo, mgen);
               classInfo.method_infos.add(mi);
               DCRuntime.methods.add(mi);
             }
