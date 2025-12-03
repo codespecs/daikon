@@ -676,7 +676,7 @@ public class DCInstrument extends InstructionListUtils {
           // and add it to the list for this class.
           MethodInfo mi = null;
           if (track && has_code) {
-            mi = create_method_info(classInfo, mgen);
+            mi = create_method_info_if_instrumented(classInfo, mgen);
             classInfo.method_infos.add(mi);
             DCRuntime.methods.add(mi);
           }
@@ -1936,7 +1936,7 @@ public class DCInstrument extends InstructionListUtils {
           new_il.append(InstructionFactory.createDup(type.getSize()));
           new_il.append(InstructionFactory.createStore(type, return_loc.getIndex()));
         }
-        new_il.append(callEnterOrExit(mgen, method_info_index, "exit", exit_iter.next()));
+        new_il.append(callEnterOrExit(mgen, method_info_index, "exit", exitLocationIter.next()));
         new_il.append(inst);
         replaceInstructions(mgen, il, ih, new_il);
       }
