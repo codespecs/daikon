@@ -2778,12 +2778,13 @@ public class DCInstrument extends InstructionListUtils {
     if (return_local == null) {
       assert (return_type != null) : " return__$trace2_val doesn't exist";
     } else {
-      assert return_type.equals(return_local.getType())
+      assert return_type != null && return_type.equals(return_local.getType())
           : " return_type = " + return_type + "; current type = " + return_local.getType();
     }
 
     if (return_local == null) {
       // log ("Adding return local of type %s%n", return_type);
+      assert return_type != null : "@AssumeAssertion(nullness)";
       return_local = mgen.addLocalVariable("return__$trace2_val", return_type, null, null);
     }
 
