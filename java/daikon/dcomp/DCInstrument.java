@@ -675,15 +675,13 @@ public class DCInstrument extends InstructionListUtils {
           // Create a MethodInfo that describes this method's parameters
           // and exit line numbers (information not available via reflection)
           // and add it to the list for this class.
-          MethodInfo mi = null;
           if (has_code) {
+            MethodInfo mi = null;
             if (track) {
               mi = create_method_info_if_instrumented(classInfo, mgen);
               classInfo.method_infos.add(mi);
               DCRuntime.methods.add(mi);
             }
-
-            // Instrument the method
             // Create the local to store the tag frame for this method
             tagFrameLocal = create_tagFrameLocal(mgen);
             build_exception_handler(mgen);
@@ -1842,7 +1840,9 @@ public class DCInstrument extends InstructionListUtils {
       case Const.INVOKESPECIAL:
       case Const.INVOKEINTERFACE:
       case Const.INVOKEDYNAMIC:
-        return handleInvoke((InvokeInstruction) inst);
+        {
+          return handleInvoke((InvokeInstruction) inst);
+        }
 
       // Throws an exception.  This clears the operand stack of the current
       // frame.  We need to clear the tag stack as well.
