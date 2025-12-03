@@ -578,9 +578,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
           // Create a MethodInfo that describes this method's arguments and exit line numbers
           // (information not available via reflection) and add it to the list for this class.
-          MethodInfo curMethodInfo = create_method_info(classInfo, mgen);
+          MethodInfo curMethodInfo = create_method_info_if_instrumented(classInfo, mgen);
 
-          printStackMapTable("After create_method_info");
+          printStackMapTable("After create_method_info_if_instrumented");
 
           if (curMethodInfo == null) { // method filtered out!
             // We are not going to instrument this method.
@@ -1149,7 +1149,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * @return a new MethodInfo for the method, or null if the method should not be instrumented
    */
   @SuppressWarnings("unchecked")
-  private @Nullable MethodInfo create_method_info(ClassInfo classInfo, MethodGen mgen) {
+  private @Nullable MethodInfo create_method_info_if_instrumented(
+      ClassInfo classInfo, MethodGen mgen) {
 
     // Get the parameter names for this method.
     String[] paramNames = mgen.getArgumentNames();
@@ -1160,7 +1161,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
 
     if (debugInstrument.enabled) {
-      debugInstrument.log("create_method_info for: %s%n", classInfo.class_name);
+      debugInstrument.log("create_method_info_if_instrumented for: %s%n", classInfo.class_name);
       debugInstrument.log("number of parameters: %s%n", paramNames.length);
       for (String paramName : paramNames) {
         debugInstrument.log("param name: %s%n", paramName);
@@ -1197,7 +1198,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     }
 
     if (debugInstrument.enabled) {
-      debugInstrument.log("create_method_info part 2%n");
+      debugInstrument.log("create_method_info_if_instrumented part 2%n");
       debugInstrument.log("number of parameters: %s%n", paramNames.length);
       for (String paramName : paramNames) {
         debugInstrument.log("param name: %s%n", paramName);

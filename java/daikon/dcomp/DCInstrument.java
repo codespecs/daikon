@@ -161,12 +161,12 @@ public class DCInstrument extends InstructionListUtils {
 
   // Signature descriptors
 
-  // No arguments
+  // No parameters
 
-  /** Type array with no arguments. */
+  /** Type array with no parameters. */
   protected static final Type[] noArgsSig = new Type[0];
 
-  // One argument
+  // One parameter
 
   /** Type array with an int. */
   protected static Type[] intSig = new Type[] {Type.INT};
@@ -180,7 +180,7 @@ public class DCInstrument extends InstructionListUtils {
   /** Type array with an object. */
   protected static Type[] object_arg = new Type[] {Type.OBJECT};
 
-  // Two arguments
+  // Two parameters
 
   /** Type array with a long and an int. */
   protected static Type[] longIntSig = new Type[] {Type.LONG, Type.INT};
@@ -306,12 +306,12 @@ public class DCInstrument extends InstructionListUtils {
   /** Temporary location of runtime initialization code. */
   private InstructionHandle insertion_placeholder;
 
-  /** Represents a method (by its name and argument types). */
+  /** Represents a method (by its name and parameter types). */
   static class MethodDef {
     /** Name of this method. */
     String name;
 
-    /** Argument types for this method. */
+    /** Parameter types for this method. */
     Type[] arg_types;
 
     /**
@@ -463,7 +463,7 @@ public class DCInstrument extends InstructionListUtils {
       // cause JUnit to complain about multiple constructors and
       // methods that should have no arguments. To work around these
       // restrictions, we replace rather than duplicate each method
-      // we instrument and we do not add the dcomp marker argument.
+      // we instrument and we do not add the dcomp marker parameter.
       // We must also remember the class name so if we see a subsequent
       // call to one of its methods we do not add the dcomp argument.
 
@@ -661,17 +661,17 @@ public class DCInstrument extends InstructionListUtils {
           has_code = true;
           setCurrentStackMapTable(mgen, classGen.getMajor());
 
-          // Add the DCompMarker argument to distinguish our version
-          add_dcomp_arg(mgen);
+          // Add the DCompMarker parameter to distinguish our version
+          add_dcomp_param(mgen);
 
         } else { // normal method
 
           if (!junit_test_class) {
-            // Add the DCompMarker argument to distinguish our version
-            add_dcomp_arg(mgen);
+            // Add the DCompMarker parameter to distinguish our version
+            add_dcomp_param(mgen);
           }
 
-          // Create a MethodInfo that describes this method's arguments
+          // Create a MethodInfo that describes this method's parameters
           // and exit line numbers (information not available via reflection)
           // and add it to the list for this class.
           MethodInfo mi = null;
@@ -754,13 +754,13 @@ public class DCInstrument extends InstructionListUtils {
                     + " being skipped.%n",
                 classname, mgen.getName());
             // Build a dummy instrumented method that has DCompMarker
-            // argument and no instrumentation.
+            // parameter and no instrumentation.
             // first, restore unmodified method
             mgen = new MethodGen(m, classname, pool);
             // restore StackMapTable
             setCurrentStackMapTable(mgen, classGen.getMajor());
-            // Add the DCompMarker argument
-            add_dcomp_arg(mgen);
+            // Add the DCompMarker parameter
+            add_dcomp_param(mgen);
             remove_local_variable_type_table(mgen);
             // try again
             if (replacingMethod) {
@@ -958,13 +958,13 @@ public class DCInstrument extends InstructionListUtils {
           has_code = true;
           setCurrentStackMapTable(mgen, classGen.getMajor());
 
-          // Add the DCompMarker argument to distinguish our version
-          add_dcomp_arg(mgen);
+          // Add the DCompMarker parameter to distinguish our version
+          add_dcomp_param(mgen);
 
         } else { // normal method
 
-          // Add the DCompMarker argument to distinguish our version
-          add_dcomp_arg(mgen);
+          // Add the DCompMarker parameter to distinguish our version
+          add_dcomp_param(mgen);
 
           // Instrument the method
           if (has_code) {
@@ -1025,13 +1025,13 @@ public class DCInstrument extends InstructionListUtils {
                     + " being skipped.%n",
                 classname, mgen.getName());
             // Build a dummy instrumented method that has DCompMarker
-            // argument and no instrumentation.
+            // parameter and no instrumentation.
             // first, restore unmodified method
             mgen = new MethodGen(m, classname, pool);
             // restore StackMapTable
             setCurrentStackMapTable(mgen, classGen.getMajor());
-            // Add the DCompMarker argument
-            add_dcomp_arg(mgen);
+            // Add the DCompMarker parameter
+            add_dcomp_param(mgen);
             remove_local_variable_type_table(mgen);
             // try again
             classGen.addMethod(mgen.getMethod());
@@ -1252,7 +1252,7 @@ public class DCInstrument extends InstructionListUtils {
     updateStackMapOffset(exc_offset, 0);
     int map_offset = exc_offset - runningOffset - 1;
 
-    // Get the argument types for this method
+    // Get the parameter types for this method
     Type[] arg_types = mgen.getArgumentTypes();
 
     int arg_index = (mgen.isStatic() ? 0 : 1);
@@ -1383,11 +1383,11 @@ public class DCInstrument extends InstructionListUtils {
    *
    * @param mgen method to modify
    * @param tagFrameLocal LocalVariableGen for the tag_frame local
-   * @return InstructionList for tag_frame setup code
+   * @return instruction list for tag_frame setup code
    */
   InstructionList create_tag_frame(MethodGen mgen, LocalVariableGen tagFrameLocal) {
 
-    Type arg_types[] = mgen.getArgumentTypes();
+    Type param_types[] = mgen.getArgumentTypes();
 
     // Determine the offset of the first argument in the frame
     int offset = 1;
@@ -1404,7 +1404,7 @@ public class DCInstrument extends InstructionListUtils {
     String params = Character.toString((char) (frame_size + '0'));
     // Character.forDigit (frame_size, Character.MAX_RADIX);
     List<Integer> paramList = new ArrayList<>();
-    for (Type paramType : arg_types) {
+    for (Type paramType : param_types) {
       if (paramType instanceof BasicType) {
         paramList.add(offset);
       }
@@ -1443,7 +1443,7 @@ public class DCInstrument extends InstructionListUtils {
       MethodGen mgen, int method_info_index, String enterOrExit, int line) {
 
     InstructionList il = new InstructionList();
-    Type[] arg_types = mgen.getArgumentTypes();
+    Type[] param_types = mgen.getArgumentTypes();
 
     // Push the tag frame
     il.append(InstructionFactory.createLoad(object_arr, tagFrameLocal.getIndex()));
@@ -1465,15 +1465,15 @@ public class DCInstrument extends InstructionListUtils {
     il.append(ifact.createConstant(method_info_index));
 
     // Create an array of objects with elements for each parameter
-    il.append(ifact.createConstant(arg_types.length));
+    il.append(ifact.createConstant(param_types.length));
     il.append(ifact.createNewArray(Type.OBJECT, (short) 1));
 
     // Put each argument into the array
     int param_index = param_offset;
-    for (int ii = 0; ii < arg_types.length; ii++) {
+    for (int ii = 0; ii < param_types.length; ii++) {
       il.append(InstructionFactory.createDup(object_arr.getSize()));
       il.append(ifact.createConstant(ii));
-      Type at = arg_types[ii];
+      Type at = param_types[ii];
       if (at instanceof BasicType) {
         il.append(new ACONST_NULL());
         // il.append (createPrimitiveWrapper (c, at, param_index));
@@ -1916,7 +1916,7 @@ public class DCInstrument extends InstructionListUtils {
     // Iterator over all of the exit line numbers for this method, in order.
     // We will read one element from it each time that we encounter a
     // return instruction.
-    Iterator<Integer> exit_iter = mi.exit_locations.iterator();
+    Iterator<Integer> exitLocationIter = mi.exit_locations.iterator();
 
     // Loop through each instruction, looking for return instructions.
     InstructionList il = mgen.getInstructionList();
@@ -1951,7 +1951,7 @@ public class DCInstrument extends InstructionListUtils {
    *
    * @param startClass the JavaClass whose interfaces are to be searched
    * @param methodName the target method to search for
-   * @param paramTypes the target method's argument types
+   * @param paramTypes the target method's parameter types
    * @return the name of the interface class containing target method, or null if not found
    */
   private @Nullable @ClassGetName String getDefiningInterface(
@@ -1999,8 +1999,8 @@ public class DCInstrument extends InstructionListUtils {
    *   <li>otherwise, determine whether the target of the invoke is instrumented or not (this is the
    *       {@code callee_instrumented} variable)
    *       <ul>
-   *         <li>If the target method is instrumented, add a DCompMarker argument to the end of the
-   *             argument list.
+   *         <li>If the target method is instrumented, add a DCompMarker parameter to the end of the
+   *             parameter list.
    *         <li>If the target method is not instrumented, we must account for the fact that the
    *             instrumentation code generated up to this point has assumed that the target method
    *             is instrumented. Hence, generate code to discard a primitive tag from the
@@ -2028,7 +2028,7 @@ public class DCInstrument extends InstructionListUtils {
       // Replace calls to Object's equals method with calls to our
       // replacement, a static method in DCRuntime.
 
-      Type[] new_arg_types = new Type[] {javalangObject, javalangObject};
+      Type[] new_param_types = new Type[] {javalangObject, javalangObject};
 
       InstructionList il = new InstructionList();
       il.append(
@@ -2036,7 +2036,7 @@ public class DCInstrument extends InstructionListUtils {
               dcompRuntimeClassName,
               (invoke.getOpcode() == Const.INVOKESPECIAL) ? "dcomp_super_equals" : "dcomp_equals",
               returnType,
-              new_arg_types,
+              new_param_types,
               Const.INVOKESTATIC));
       return il;
     }
@@ -2046,8 +2046,7 @@ public class DCInstrument extends InstructionListUtils {
       // Replace calls to Object's clone method with calls to our
       // replacement, a static method in DCRuntime.
 
-      InstructionList il = instrument_clone_call(invoke);
-      return il;
+      return instrument_clone_call(invoke);
     }
 
     boolean callee_instrumented = isTargetInstrumented(invoke, classname, methodName, paramTypes);
@@ -2062,16 +2061,16 @@ public class DCInstrument extends InstructionListUtils {
     if (callee_instrumented) {
 
       InstructionList il = new InstructionList();
-      // Add the DCompMarker argument so that it calls the instrumented version.
+      // Push the DCompMarker argument as we are calling the instrumented version.
       il.append(new ACONST_NULL());
-      Type[] new_arg_types = ArraysPlume.append(paramTypes, dcomp_marker);
+      Type[] new_param_types = ArraysPlume.append(paramTypes, dcomp_marker);
       Constant methodref = pool.getConstant(invoke.getIndex());
       il.append(
           ifact.createInvoke(
               classname,
               methodName,
               returnType,
-              new_arg_types,
+              new_param_types,
               invoke.getOpcode(),
               methodref instanceof ConstantInterfaceMethodref));
       return il;
@@ -2080,7 +2079,7 @@ public class DCInstrument extends InstructionListUtils {
 
       InstructionList il = new InstructionList();
       // JUnit test classes are a bit strange.  They are marked as not being callee_instrumented
-      // because they do not have the dcomp_marker added to the argument list, but
+      // because they do not have the dcomp_marker added to the parameter list, but
       // they actually contain instrumentation code.  So we do not want to discard
       // the primitive tags prior to the call.
       if (!junitTestClasses.contains(classname)) {
@@ -2101,9 +2100,9 @@ public class DCInstrument extends InstructionListUtils {
 
   /**
    * Returns instructions that will discard any primitive tags corresponding to the specified
-   * arguments. Returns an empty instruction list if there are no primitive arguments to discard.
+   * parameters. Returns an empty instruction list if there are no primitive arguments to discard.
    *
-   * @param paramTypes argument types of target method
+   * @param paramTypes parameter types of target method
    * @return an instruction list that discards primitive tags from DCRuntime's per-thread
    *     comparability data stack
    */
@@ -2127,7 +2126,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param invoke instruction whose target is to be checked
    * @param classname target class of the invoke
    * @param methodName target method of the invoke
-   * @param paramTypes argument types of target method
+   * @param paramTypes parameter types of target method
    * @return true if the target is instrumented
    */
   private boolean isTargetInstrumented(
@@ -2497,7 +2496,7 @@ public class DCInstrument extends InstructionListUtils {
    *
    * @param methodName method to check
    * @param returnType return type of method
-   * @param args array of argument types to method
+   * @param args array of parameter types to method
    * @return true if method is Object.equals()
    */
   @Pure
@@ -2513,7 +2512,7 @@ public class DCInstrument extends InstructionListUtils {
    *
    * @param methodName method to check
    * @param returnType return type of method
-   * @param args array of argument types to method
+   * @param args array of parameter types to method
    * @return true if method is Object.clone()
    */
   @Pure
@@ -2716,7 +2715,7 @@ public class DCInstrument extends InstructionListUtils {
       throw new Error("Can't find " + name + " in " + obj_type);
     }
 
-    // Look up the class using this classes class loader.  This may
+    // Look up the class using this class's class loader.  This may
     // not be the best way to accomplish this.
     Class<?> obj_class;
     try {
@@ -2799,7 +2798,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param mgen method to inspect
    * @return a new MethodInfo for the method, or null if the method should not be instrumented
    */
-  @Nullable MethodInfo create_method_info(ClassInfo classInfo, MethodGen mgen) {
+  @Nullable MethodInfo create_method_info_if_instrumented(ClassInfo classInfo, MethodGen mgen) {
 
     // if (mgen.getName().equals("<clinit>")) {
     //   // This case DOES occur at run time.  -MDE 1/22/2010
@@ -2818,7 +2817,7 @@ public class DCInstrument extends InstructionListUtils {
       }
     }
 
-    // Get the argument types for this method
+    // Get the parameter types for this method
     Type[] paramTypes = mgen.getArgumentTypes();
     @ClassGetName String[] param_type_strings = new @ClassGetName String[paramTypes.length];
     for (int ii = 0; ii < paramTypes.length; ii++) {
@@ -3144,7 +3143,7 @@ public class DCInstrument extends InstructionListUtils {
    *
    * @param methodName method to call
    * @param returnType type of method return
-   * @param paramTypes array of method argument types
+   * @param paramTypes array of method parameter types
    * @return InvokeInstruction for the call
    */
   InvokeInstruction dcr_call(@Identifier String methodName, Type returnType, Type[] paramTypes) {
@@ -4087,11 +4086,11 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Add a dcomp marker argument to indicate this is the instrumented version of the method.
+   * Add a dcomp marker parameter to indicate this is the instrumented version of the method.
    *
-   * @param mgen method to ard dcomp marker to
+   * @param mgen method to add dcomp marker to
    */
-  void add_dcomp_arg(MethodGen mgen) {
+  void add_dcomp_param(MethodGen mgen) {
 
     // Don't modify main or the JVM won't be able to find it.
     if (BcelUtil.isMain(mgen)) {
@@ -4103,7 +4102,7 @@ public class DCInstrument extends InstructionListUtils {
       return;
     }
 
-    // Add the dcomp marker argument to indicate this is the
+    // Add the dcomp marker parameter to indicate this is the
     // instrumented version of the method.
     addNewParameter(mgen, "marker", dcomp_marker);
   }
@@ -4112,7 +4111,7 @@ public class DCInstrument extends InstructionListUtils {
    * Returns true if the method is defined in Object.
    *
    * @param methodName method to check
-   * @param paramTypes array of argument types to method
+   * @param paramTypes array of parameter types to method
    * @return true if method is member of Object
    */
   @Pure
@@ -4145,7 +4144,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Creates a method with a DcompMarker argument that does nothing but call the corresponding
+   * Creates a method with a DcompMarker parameter that does nothing but call the corresponding
    * method without the DCompMarker argument. (Currently, only used for ? va main.)
    *
    * @param mgen MethodGen of method to create stub for
