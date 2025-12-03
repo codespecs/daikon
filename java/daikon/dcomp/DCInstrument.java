@@ -1918,7 +1918,7 @@ public class DCInstrument extends InstructionListUtils {
     // Iterator over all of the exit line numbers for this method, in order.
     // We will read one element from it each time that we encounter a
     // return instruction.
-    Iterator<Integer> exit_iter = mi.exit_locations.iterator();
+    Iterator<Integer> exitLocationIter = mi.exit_locations.iterator();
 
     // Loop through each instruction, looking for return instructions.
     InstructionList il = mgen.getInstructionList();
