@@ -1308,7 +1308,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   public void dump_code_attributes(MethodGen mgen) {
     // mgen.getMethod().getCode().getAttributes() forces attributes
     // to be instantiated; mgen.getCodeAttributes() does not.
-    for (Attribute a : mgen.getMethod().getCode().getAttributes()) {
+    Code code = mgen.getMethod().getCode();
+    for (Attribute a : code.getAttributes()) {
       int con_index = a.getNameIndex();
       Constant c = pool.getConstant(con_index);
       String att_name = ((ConstantUtf8) c).getBytes();
