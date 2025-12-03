@@ -3783,19 +3783,18 @@ public class DCInstrument extends InstructionListUtils {
    */
   Map<Field, Integer> build_field_to_offset_map(JavaClass jc) {
 
+    // Object doesn't have any primitive fields
+    if (jc.getClassName().equals("java.lang.Object")) {
+      return new LinkedHashMap<>();
+    }
+
+    // Get the offsets for each field in the superclasses.
     JavaClass super_jc;
     try {
       super_jc = jc.getSuperClass();
     } catch (Exception e) {
       throw new Error("can't get superclass for " + jc, e);
     }
-
-    if (super_jc == null) {
-      // Object doesn't have any primitive fields
-      return new LinkedHashMap<>();
-    }
-
-    // Get the offsets for each field in the superclasses.
     Map<Field, Integer> field_to_offset_map = build_field_to_offset_map(super_jc);
     int offset = field_to_offset_map.size();
 
