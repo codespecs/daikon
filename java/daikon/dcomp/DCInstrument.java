@@ -499,7 +499,9 @@ public class DCInstrument extends InstructionListUtils {
         try {
           super_class = getSuperclassName(this_class);
         } catch (SuperclassNameError e) {
-          // something has gone wrong
+          if (debugJUnitAnalysis) {
+            System.out.printf("Unable to get superclass for: %s%n", this_class);
+          }
           break;
         }
         if (debugJUnitAnalysis) {
@@ -2422,6 +2424,7 @@ public class DCInstrument extends InstructionListUtils {
    *
    * @param classname the fully-qualified name of the class in binary form. E.g., "java.util.List"
    * @return name of superclass
+   * @throws SuperclassNameError if the class cannot be loaded
    */
   private @ClassGetName String getSuperclassName(String classname) {
     JavaClass jc = getJavaClass(classname);
