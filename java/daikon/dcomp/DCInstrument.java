@@ -1948,7 +1948,7 @@ public class DCInstrument extends InstructionListUtils {
         throw new Error("Unable to load class: " + interfaceName, e);
       }
       if (ji == null) {
-        throw new Error("Unable to load class: " + interfaceName);
+        throw new Error("Unable to find class: " + interfaceName);
       }
       for (Method jm : ji.getMethods()) {
         if (debugGetDefiningInterface) {
