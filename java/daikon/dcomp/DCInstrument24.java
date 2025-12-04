@@ -1666,7 +1666,8 @@ public class DCInstrument24 {
             "push to worklist: " + target + ", " + labelIndexMap.get(target) + ", stack: " + stack);
       }
       worklistHistory.put(target, stack.getClone());
-      worklist.add(new WorkItem(labelIndexMap.get(target), stack.getClone()));
+      int indexInCodeList = labelIndexMap.get(target);
+      worklist.add(new WorkItem(indexInCodeList, stack.getClone()));
     } else {
       // will throw if stacks don't match
       verifyOperandStackMatches(target, existing, stack);

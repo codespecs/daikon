@@ -1840,7 +1840,9 @@ public class DCInstrument extends InstructionListUtils {
       case Const.INVOKESPECIAL:
       case Const.INVOKEINTERFACE:
       case Const.INVOKEDYNAMIC:
-        return handleInvoke((InvokeInstruction) inst);
+        {
+          return handleInvoke((InvokeInstruction) inst);
+        }
 
       // Throws an exception.  This clears the operand stack of the current
       // frame.  We need to clear the tag stack as well.
@@ -1935,7 +1937,8 @@ public class DCInstrument extends InstructionListUtils {
           new_il.append(InstructionFactory.createDup(type.getSize()));
           new_il.append(InstructionFactory.createStore(type, return_loc.getIndex()));
         }
-        new_il.append(callEnterOrExit(mgen, method_info_index, "exit", exitLocationIter.next()));
+        int exitLoc = exitLocationIter.next();
+        new_il.append(callEnterOrExit(mgen, method_info_index, "exit", exitLoc));
         new_il.append(inst);
         replaceInstructions(mgen, il, ih, new_il);
       }
