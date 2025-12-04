@@ -21,6 +21,8 @@ JAVAC ?= javac
 JAVADOC ?= javadoc
 JAR ?= jar
 
+BuildJDKTool = BuildJDK
+
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
 JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
@@ -48,6 +50,7 @@ endif
 # Temporary, since Java 24 is not a LTS release.
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 24; echo $$?),0)
   JAVA24 := 1
+  BuildJDKTool = BuildJDK24
 endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 25; echo $$?),0)
   JAVA25 := 1
@@ -634,7 +637,7 @@ dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 ${DCOMP_RT} dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf ${DCOMP_RT}
 	${INSTALL} -d ${DCOMP_RT}
-	${JAVA_COMMAND} -Xmx7g daikon.dcomp.BuildJDK ${DCOMP_RT}
+	${JAVA_COMMAND} -Xmx7g daikon.dcomp.${BuildJDKTool} ${DCOMP_RT}
 # "then" clause is Java 8, "else" clause is Java 9+.
 # For Java 9+, there appears to be a bug in the Java reflection invoke code that it
 # does not check that the arg list matches.  Hence, it tries to invoke
@@ -763,8 +766,8 @@ very-clean: clean clean-generated-files
 	-rm -rf api/
 	-rm -rf daikon/chicory/ChicoryTest.inv.out
 	-rm -rf daikon/chicory/debug/
-	-rm -rf daikon/dcomp/debug/
 	-rm -rf daikon/dcomp/DcompTest.log
+	-rm -rf daikon/dcomp/debug/
 	-rm -rf daikon/dcomp/std_dcomp_out.diff daikon/dcomp/std_dcomp_out.txt
 
 run:	all
@@ -2121,6 +2124,21 @@ ifeq (${JAVA8}, 1)
 else
 	cp -pf daikon/config/ParameterDoclet.java11 daikon/config/ParameterDoclet.java
 endif
+
+
+###########################################################################
+### Diffs
+###
+
+# Don't diff StackMapUtils24.java, ClassGen24.java, MethodGen24.java, or
+# OperandStack24.java, because there are too many differences between the
+# upstream version (in BCEL or in bcel-util) and the version in Daikon.
+.PHONY: diff24
+diff24:
+	-diff -u daikon/dcomp/Instrument.java daikon/dcomp/Instrument24.java
+	-diff -u daikon/dcomp/DCInstrument.java daikon/dcomp/DCInstrument24.java
+	-diff -u daikon/dcomp/BuildJDK.java daikon/dcomp/BuildJDK24.java
+	-diff -u daikon/chicory/Instrument.java daikon/chicory/Instrument24.java
 
 
 ###########################################################################
