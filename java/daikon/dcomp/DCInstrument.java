@@ -674,15 +674,14 @@ public class DCInstrument extends InstructionListUtils {
           // Create a MethodInfo that describes this method's parameters
           // and exit line numbers (information not available via reflection)
           // and add it to the list for this class.
-          MethodInfo mi = null;
-          if (track && has_code) {
-            mi = create_method_info_if_instrumented(classInfo, mgen);
-            classInfo.method_infos.add(mi);
-            DCRuntime.methods.add(mi);
-          }
-
-          // Instrument the method
           if (has_code) {
+            MethodInfo mi = null;
+            if (track) {
+              mi = create_method_info(classInfo, mgen);
+              classInfo.method_infos.add(mi);
+              DCRuntime.methods.add(mi);
+            }
+
             // Create the local to store the tag frame for this method
             tagFrameLocal = create_tagFrameLocal(mgen);
             build_exception_handler(mgen);
