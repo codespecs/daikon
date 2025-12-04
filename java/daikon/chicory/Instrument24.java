@@ -617,7 +617,7 @@ public class Instrument24 implements ClassFileTransformer {
 
           // Create a MethodInfo that describes this method's arguments and exit line numbers
           // (information not available via reflection) and add it to the list for this class.
-          MethodInfo curMethodInfo = create_method_info(classInfo, mgen);
+          MethodInfo curMethodInfo = create_method_info_if_instrumented(classInfo, mgen);
 
           if (curMethodInfo == null) { // method filtered out!
             // We are not going to instrument this method.
@@ -1382,7 +1382,8 @@ public class Instrument24 implements ClassFileTransformer {
    * @param mgen method to inspect
    * @return a new MethodInfo for the method, or null if the method should not be instrumented
    */
-  private @Nullable MethodInfo create_method_info(ClassInfo classInfo, MethodGen24 mgen) {
+  private @Nullable MethodInfo create_method_info_if_instrumented(
+      ClassInfo classInfo, MethodGen24 mgen) {
 
     // Get the parameter names for this method.
     String[] paramNames = mgen.getParameterNames();
@@ -1393,7 +1394,7 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     if (debugInstrument.enabled) {
-      debugInstrument.log("create_method_info for: %s%n", classInfo.class_name);
+      debugInstrument.log("create_method_info_if_instrumented for: %s%n", classInfo.class_name);
       debugInstrument.log("number of parameters: %s%n", paramNames.length);
       for (String paramName : paramNames) {
         debugInstrument.log("param name: %s%n", paramName);
@@ -1431,7 +1432,7 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     if (debugInstrument.enabled) {
-      debugInstrument.log("create_method_info part 2%n");
+      debugInstrument.log("create_method_info_if_instrumented part 2%n");
       debugInstrument.log("number of parameters: %s%n", paramNames.length);
       for (String paramName : paramNames) {
         debugInstrument.log("param name: %s%n", paramName);
@@ -1460,7 +1461,7 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     if (debugInstrument.enabled) {
-      debugInstrument.log("create_method_info part 3%n");
+      debugInstrument.log("create_method_info_if_instrumented part 3%n");
       debugInstrument.log("number of parameters: %s%n", paramNames.length);
       for (int ii = 0; ii < paramTypes.length; ii++) {
         debugInstrument.log("param type: %s%n", param_type_strings[ii]);
