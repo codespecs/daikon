@@ -1149,7 +1149,6 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * @param mgen method to inspect
    * @return a new MethodInfo for the method, or null if the method should not be instrumented
    */
-  @SuppressWarnings("unchecked")
   private @Nullable MethodInfo create_method_info(ClassInfo classInfo, MethodGen mgen) {
 
     // Get the parameter names for this method.
@@ -1305,11 +1304,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    *
    * @param mgen describes the given method
    */
-  @SuppressWarnings("nullness:dereference.of.nullable")
   public void dump_code_attributes(MethodGen mgen) {
     // mgen.getMethod().getCode().getAttributes() forces attributes
     // to be instantiated; mgen.getCodeAttributes() does not.
-    Code code = mgen.getMethod().getCode();
+    @SuppressWarnings("nullness:assignment")
+    @NonNull Code code = mgen.getMethod().getCode();
     for (Attribute a : code.getAttributes()) {
       int con_index = a.getNameIndex();
       Constant c = pool.getConstant(con_index);
