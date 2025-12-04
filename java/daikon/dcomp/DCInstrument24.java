@@ -2809,6 +2809,7 @@ public class DCInstrument24 {
               targetInstrumented = false;
               break;
             }
+
             // Recurse looking in the superclass.
             targetClassname = getSuperclassName(targetClassname);
           }

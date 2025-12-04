@@ -224,7 +224,7 @@ public class DCInstrument extends InstructionListUtils {
   protected @DotSeparatedIdentifiers String dcomp_prefix;
 
   /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
-  protected @DotSeparatedIdentifiers String dcompRuntimeClassName = "daikon.dcomp.DCRuntime";
+  protected @BinaryName String dcompRuntimeClassName = "daikon.dcomp.DCRuntime";
 
   /** Set of JUnit test classes. */
   protected static Set<String> junitTestClasses = new HashSet<>();
@@ -545,8 +545,9 @@ public class DCInstrument extends InstructionListUtils {
         String super_class;
         String this_class = classname;
         while (true) {
-          super_class = getSuperclassName(this_class);
-          if (super_class == null) {
+          try {
+            super_class = getSuperclassName(this_class);
+          } catch (SuperclassNameError e) {
             // something has gone wrong
             break;
           }
@@ -681,7 +682,6 @@ public class DCInstrument extends InstructionListUtils {
               classInfo.method_infos.add(mi);
               DCRuntime.methods.add(mi);
             }
-
             // Create the local to store the tag frame for this method
             tagFrameLocal = create_tagFrameLocal(mgen);
             build_exception_handler(mgen);
@@ -1970,7 +1970,10 @@ public class DCInstrument extends InstructionListUtils {
       try {
         ji = getJavaClass(interfaceName);
       } catch (Throwable e) {
-        throw new Error(String.format("Unable to load class: %s", interfaceName), e);
+        throw new Error("Unable to load class: " + interfaceName, e);
+      }
+      if (ji == null) {
+        throw new Error("Unable to load class: " + interfaceName);
       }
       for (Method jm : ji.getMethods()) {
         if (debugGetDefiningInterface) {
@@ -2240,6 +2243,7 @@ public class DCInstrument extends InstructionListUtils {
             try {
               targetClass = getJavaClass(targetClassname);
             } catch (Throwable e) {
+              System.out.printf("Problem while getting class: %s%n%s%n%n", targetClassname, e);
               targetClass = null;
             }
             if (targetClass == null) {
@@ -2444,14 +2448,27 @@ public class DCInstrument extends InstructionListUtils {
    * {@code java.lang.Object} is {@code java.lang.Object} rather than saying there is no superclass.
    *
    * @param classname the fully-qualified name of the class in binary form. E.g., "java.util.List"
-   * @return name of superclass, or null if there is an error
+   * @return name of superclass
    */
   private @ClassGetName String getSuperclassName(String classname) {
     JavaClass jc = getJavaClass(classname);
-    if (jc != null) {
-      return jc.getSuperclassName();
-    } else {
-      return null;
+    if (jc == null) {
+      throw new SuperclassNameError(classname);
+    }
+    return jc.getSuperclassName();
+  }
+
+  /** Unchecked exception thrown if {@link #getSuperclassName} cannot find a superclass name. */
+  private static class SuperclassNameError extends Error {
+    static final long serialVersionUID = 20251203;
+
+    /**
+     * Creates a SuperclassNameError.
+     *
+     * @param classname the name of the class whose parent cannot be found
+     */
+    SuperclassNameError(String classname) {
+      super(classname);
     }
   }
 
