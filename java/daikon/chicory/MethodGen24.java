@@ -266,7 +266,6 @@ public class MethodGen24 {
 
     Optional<SignatureAttribute> sa = methodModel.findAttribute(Attributes.signature());
     if (sa.isPresent()) {
-      @SuppressWarnings("signature") // JDK 24 is not annotated yet.
       @MethodDescriptor String signature1 = sa.get().signature().stringValue();
       signature = signature1;
     } else {
@@ -327,7 +326,6 @@ public class MethodGen24 {
     this.accessFlagsMask = accessFlagsMask;
     this.methodName = methodName;
     this.mtd = mtd;
-    @SuppressWarnings("signature") // JDK 24 is not annotated as yet
     @MethodDescriptor String descriptor1 = mtd.descriptorString();
     descriptor = descriptor1;
     signature = descriptor;

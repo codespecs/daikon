@@ -92,9 +92,12 @@ import org.apache.bcel.generic.StoreInstruction;
 import org.apache.bcel.generic.Type;
 import org.apache.bcel.verifier.structurals.OperandStack;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
@@ -108,7 +111,6 @@ import org.checkerframework.dataflow.qual.Pure;
  * into the DynComp Runtime to calculate comparability values. These added calls are sometimes
  * referred to as "hooks".
  */
-@SuppressWarnings("nullness")
 public class DCInstrument extends InstructionListUtils {
 
   /**
@@ -128,7 +130,7 @@ public class DCInstrument extends InstructionListUtils {
   protected ClassGen classGen;
 
   /** MethodGen for the current method. */
-  protected MethodGen mgen;
+  protected @MonotonicNonNull MethodGen mgen;
 
   /** Is the current class a member of the JDK? */
   protected boolean in_jdk;
@@ -140,7 +142,7 @@ public class DCInstrument extends InstructionListUtils {
   protected boolean constructor_is_initialized;
 
   /** Local that stores the tag frame for the current method. */
-  protected LocalVariableGen tagFrameLocal;
+  protected @Nullable LocalVariableGen tagFrameLocal;
 
   // Type descriptors
 
@@ -298,13 +300,13 @@ public class DCInstrument extends InstructionListUtils {
   };
 
   /** Catch block for our handler. */
-  protected static InstructionList global_catch_il = null;
+  protected static @Nullable InstructionList global_catch_il = null;
 
   /** Handler we add to surround entire method. */
-  protected static CodeExceptionGen global_exception_handler = null;
+  protected static @Nullable CodeExceptionGen global_exception_handler = null;
 
   /** Temporary location of runtime initialization code. */
-  private InstructionHandle insertion_placeholder;
+  private @MonotonicNonNull InstructionHandle insertion_placeholder;
 
   /** Represents a method (by its name and parameter types). */
   static class MethodDef {
@@ -676,20 +678,35 @@ public class DCInstrument extends InstructionListUtils {
           // and exit line numbers (information not available via reflection)
           // and add it to the list for this class.
           if (has_code) {
+            assert stackMapTable != null
+                : "@AssumeAssertion(nullness): is set above when has_code is true";
             MethodInfo mi = null;
             if (track) {
               mi = create_method_info_if_instrumented(classInfo, mgen);
+              assert mi != null : "@AssumeAssertion(nullness)";
               classInfo.method_infos.add(mi);
               DCRuntime.methods.add(mi);
             }
             // Create the local to store the tag frame for this method
             tagFrameLocal = create_tagFrameLocal(mgen);
             build_exception_handler(mgen);
+            assert stackMapTable != null
+                : "@AssumeAssertion(nullness): checked above and not modified since";
+            assert tagFrameLocal != null
+                : "@AssumeAssertion(nullness) set above and not modified by"
+                    + " build_exception_handler";
             instrumentMethod(mgen);
             if (track) {
+              assert mi != null : "@AssumeAssertion(nullness): track == true => mi != null";
+              assert tagFrameLocal != null
+                  : "@AssumeAssertion(nullness) set above and not modified by"
+                      + " build_exception_handler";
               add_enter(mgen, mi, DCRuntime.methods.size() - 1);
+              assert tagFrameLocal != null : "@AssumeAssertion(nullness): ??";
               add_exit(mgen, mi, DCRuntime.methods.size() - 1);
             }
+            assert this.stackMapTable != null
+                : "@AssumeAssertion(nullness): checked above and not modified since";
             install_exception_handler(mgen);
           }
         }
@@ -784,6 +801,8 @@ public class DCInstrument extends InstructionListUtils {
         throw new Error("Error processing " + classname + "." + m.getName(), t);
       }
     }
+
+    assert mgen != null : "@AssumeAssertion(nullness): bug? when the class has no methods";
 
     // Add tag accessor methods for each primitive in the class.
     create_tag_accessors(classGen);
@@ -970,7 +989,12 @@ public class DCInstrument extends InstructionListUtils {
             // Create the local to store the tag frame for this method
             tagFrameLocal = create_tagFrameLocal(mgen);
             build_exception_handler(mgen);
+            assert stackMapTable != null : "@AssumeAssertion(nullness): ??";
+            assert tagFrameLocal != null
+                : "@AssumeAssertion(nullness): set above and not modified by"
+                    + " build_exception_handler";
             instrumentMethod(mgen);
+            assert stackMapTable != null : "@AssumeAssertion(nullness): ??";
             install_exception_handler(mgen);
           }
         }
@@ -1044,7 +1068,10 @@ public class DCInstrument extends InstructionListUtils {
         if (debugInstrument.enabled) {
           t.printStackTrace();
         }
-        skip_method(mgen);
+        // TODO: Is it guaranteed that mgen is non-null by the time control reaches here?
+        if (mgen != null) {
+          skip_method(mgen);
+        }
         if (quit_if_error) {
           throw new Error("Error processing " + classname + "." + m.getName(), t);
         } else {
@@ -1053,6 +1080,9 @@ public class DCInstrument extends InstructionListUtils {
         }
       }
     }
+
+    assert mgen != null
+        : "@AssumeAssertion(nullness)"; // Bug? mgen could be null if the class has no methods
 
     // Add tag accessor methods for each primitive in the class.
     create_tag_accessors(classGen);
@@ -1073,6 +1103,8 @@ public class DCInstrument extends InstructionListUtils {
    *
    * @param mgen MethodGen for the method to be instrumented
    */
+  @RequiresNonNull({"stackMapTable", "tagFrameLocal"})
+  @EnsuresNonNull("insertion_placeholder")
   public void instrumentMethod(MethodGen mgen) {
 
     // Because the tagFrameLocal is active for the entire method
@@ -1133,6 +1165,9 @@ public class DCInstrument extends InstructionListUtils {
 
       // Get the stack information
       stack = stack_types.get(handle_offsets[index++]);
+
+      assert tagFrameLocal != null
+          : "@AssumeAssertion(nullness): precondition and not changed since";
 
       // Get the translation for this instruction (if any)
       new_il = xform_inst(mgen, ih, stack);
@@ -1217,15 +1252,22 @@ public class DCInstrument extends InstructionListUtils {
     // This is just a temporary handler to get the start and end
     // address tracked as we make code modifications.
     global_catch_il = catch_il;
-    global_exception_handler = new CodeExceptionGen(start, end, null, throwable);
+    @SuppressWarnings("nullness:argument") // looks like a genuine defect here in the call
+    CodeExceptionGen global_exception_handler_tmp =
+        new CodeExceptionGen(start, end, null, throwable);
+    global_exception_handler = global_exception_handler_tmp;
   }
 
   /** Adds a try/catch block around the entire method. */
+  @SuppressWarnings("nullness") // calls to side-effecting methods
+  @RequiresNonNull({"stackMapTable"})
   public void install_exception_handler(MethodGen mgen) {
 
     if (global_catch_il == null) {
       return;
     }
+
+    assert global_exception_handler != null : "@AssumeAssertion(nullness): ??";
 
     InstructionList cur_il = mgen.getInstructionList();
     InstructionHandle start = global_exception_handler.getStartPC();
@@ -1285,6 +1327,9 @@ public class DCInstrument extends InstructionListUtils {
    * Adds the code to create the tag frame to the beginning of the method. This needs to be before
    * the call to DCRuntime.enter (since it passed to that method).
    */
+  @SuppressWarnings("nullness") // calls to side-effecting methods
+  @RequiresNonNull({"tagFrameLocal", "stackMapTable"})
+  @EnsuresNonNull("insertion_placeholder")
   public void add_create_tag_frame(MethodGen mgen) {
 
     InstructionList nl = create_tag_frame(mgen, tagFrameLocal);
@@ -1361,6 +1406,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param mi MethodInfo for method
    * @param method_info_index index for MethodInfo
    */
+  @RequiresNonNull({"tagFrameLocal", "insertion_placeholder"})
   public void add_enter(MethodGen mgen, MethodInfo mi, int method_info_index) {
     InstructionList il = mgen.getInstructionList();
     replaceInstructions(
@@ -1436,8 +1482,10 @@ public class DCInstrument extends InstructionListUtils {
    * @param method_info_index index for MethodInfo
    * @param enterOrExit the method to invoke: "enter" or "exit"
    * @param line source line number if type is exit
-   * @return InstructionList for the enter or exit code
+   * @return instruction list for the enter or exit code
    */
+  @SuppressWarnings("nullness") // calls to side-effecting methods
+  @RequiresNonNull("tagFrameLocal")
   InstructionList callEnterOrExit(
       MethodGen mgen, int method_info_index, String enterOrExit, int line) {
 
@@ -1527,6 +1575,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param ih handle of Instruction to translate
    * @param stack current contents of the stack
    */
+  @RequiresNonNull("tagFrameLocal")
   @Nullable InstructionList xform_inst(MethodGen mgen, InstructionHandle ih, OperandStack stack) {
 
     Instruction inst = ih.getInstruction();
@@ -1841,6 +1890,9 @@ public class DCInstrument extends InstructionListUtils {
       case Const.INVOKEINTERFACE:
       case Const.INVOKEDYNAMIC:
         {
+          assert this.mgen != null
+              : "@AssumeAssertion(nullness): bug: local `mgen` is non-null, "
+                  + "but `this.mgen` has not been set";
           return handleInvoke((InvokeInstruction) inst);
         }
 
@@ -1912,6 +1964,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param mi MethodInfo for method
    * @param method_info_index index for MethodInfo
    */
+  @RequiresNonNull("tagFrameLocal")
   void add_exit(MethodGen mgen, MethodInfo mi, int method_info_index) {
 
     // Iterator over all of the exit line numbers for this method, in order.
@@ -1938,6 +1991,8 @@ public class DCInstrument extends InstructionListUtils {
           new_il.append(InstructionFactory.createStore(type, return_loc.getIndex()));
         }
         int exitLoc = exitLocationIter.next();
+        assert tagFrameLocal != null
+            : "@AssumeAssertion(nullness): not modified since method entry";
         new_il.append(callEnterOrExit(mgen, method_info_index, "exit", exitLoc));
         new_il.append(inst);
         replaceInstructions(mgen, il, ih, new_il);
@@ -2018,6 +2073,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param invoke a method invocation bytecode instruction
    * @return instructions to replace the given instruction
    */
+  @RequiresNonNull("mgen")
   private InstructionList handleInvoke(InvokeInstruction invoke) {
 
     // Get information about the call
@@ -2134,6 +2190,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param paramTypes parameter types of target method
    * @return true if the target is instrumented
    */
+  @RequiresNonNull("mgen")
   private boolean isTargetInstrumented(
       InvokeInstruction invoke,
       @ClassGetName String classname,
@@ -2444,13 +2501,14 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Given a classname return its superclass name. Note that BCEL reports that the superclass of
-   * {@code java.lang.Object} is {@code java.lang.Object} rather than saying there is no superclass.
+   * Given a classname return its superclass name. Note that we copy BCEL and report that the
+   * superclass of {@code java.lang.Object} is {@code java.lang.Object} rather than saying there is
+   * no superclass.
    *
    * @param classname the fully-qualified name of the class in binary form. E.g., "java.util.List"
    * @return name of superclass
    */
-  private @ClassGetName String getSuperclassName(String classname) {
+  private @BinaryName String getSuperclassName(String classname) {
     JavaClass jc = getJavaClass(classname);
     if (jc == null) {
       throw new SuperclassNameError(classname);
@@ -2503,7 +2561,8 @@ public class DCInstrument extends InstructionListUtils {
           return result;
         }
       } catch (Throwable t) {
-        throw new Error("Error reading " + class_url, t);
+        throw new DynCompError(
+            String.format("Error while reading %s %s%n", classname, class_url), t);
       }
     }
     // Do not cache a null result, because a subsequent invocation might return non-null.
@@ -2515,15 +2574,15 @@ public class DCInstrument extends InstructionListUtils {
    *
    * @param methodName method to check
    * @param returnType return type of method
-   * @param args array of parameter types to method
+   * @param paramTypes array of parameter types to method
    * @return true if method is Object.equals()
    */
   @Pure
-  boolean is_object_equals(@Identifier String methodName, Type returnType, Type[] args) {
+  boolean is_object_equals(@Identifier String methodName, Type returnType, Type[] paramTypes) {
     return (methodName.equals("equals")
         && returnType == Type.BOOLEAN
-        && args.length == 1
-        && args[0].equals(javalangObject));
+        && paramTypes.length == 1
+        && paramTypes[0].equals(javalangObject));
   }
 
   /**
@@ -2531,12 +2590,14 @@ public class DCInstrument extends InstructionListUtils {
    *
    * @param methodName method to check
    * @param returnType return type of method
-   * @param args array of parameter types to method
+   * @param paramTypes array of parameter types to method
    * @return true if method is Object.clone()
    */
   @Pure
-  boolean is_object_clone(@Identifier String methodName, Type returnType, Type[] args) {
-    return methodName.equals("clone") && returnType.equals(javalangObject) && (args.length == 0);
+  boolean is_object_clone(@Identifier String methodName, Type returnType, Type[] paramTypes) {
+    return methodName.equals("clone")
+        && returnType.equals(javalangObject)
+        && (paramTypes.length == 0);
   }
 
   /**
@@ -2544,7 +2605,7 @@ public class DCInstrument extends InstructionListUtils {
    * exists, the non-instrumented version if it does not.
    *
    * @param invoke invoke instruction to inspect and replace
-   * @return InstructionList to call the correct version of clone or toString
+   * @return instruction list to call the correct version of clone or toString
    */
   InstructionList instrument_clone_call(InvokeInstruction invoke) {
 
@@ -2605,7 +2666,7 @@ public class DCInstrument extends InstructionListUtils {
    * (load) or pop (store) the tag on the tag stack. This is accomplished by calling the tag get/set
    * method for this field.
    */
-  InstructionList load_store_field(MethodGen mgen, FieldInstruction fi) {
+  @Nullable InstructionList load_store_field(MethodGen mgen, FieldInstruction fi) {
 
     Type field_type = fi.getFieldType(pool);
     if (field_type instanceof ReferenceType) {
@@ -3176,7 +3237,7 @@ public class DCInstrument extends InstructionListUtils {
    *
    * @param inst instruction to be replaced
    * @param tag_count number of tags to discard
-   * @return InstructionList
+   * @return instruction list to discard tag(s)
    */
   InstructionList discard_tag_code(Instruction inst, int tag_count) {
     InstructionList il = new InstructionList();
@@ -3190,7 +3251,7 @@ public class DCInstrument extends InstructionListUtils {
    * Duplicates the item on the top of stack. If the value on the top of the stack is a primitive,
    * we need to do the same on the tag stack. Otherwise, we need do nothing.
    */
-  InstructionList dup_tag(Instruction inst, OperandStack stack) {
+  @Nullable InstructionList dup_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
     if (debug_dup.enabled) {
       debug_dup.log("DUP -> %s [... %s]%n", "dup", stack_contents(stack, 2));
@@ -3207,7 +3268,7 @@ public class DCInstrument extends InstructionListUtils {
    * value is not a primitive, then we need only to insert the duped value down 1 on the tag stack
    * (which contains only primitives).
    */
-  InstructionList dup_x1_tag(Instruction inst, OperandStack stack) {
+  @Nullable InstructionList dup_x1_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
     if (debug_dup.enabled) {
       debug_dup.log("DUP -> %s [... %s]%n", "dup_x1", stack_contents(stack, 2));
@@ -3226,7 +3287,7 @@ public class DCInstrument extends InstructionListUtils {
    * Duplicates either the top 2 category 1 values or a single category 2 value and inserts it 2 or
    * 3 values down on the stack.
    */
-  InstructionList dup2_x1_tag(Instruction inst, OperandStack stack) {
+  @Nullable InstructionList dup2_x1_tag(Instruction inst, OperandStack stack) {
     String op;
     Type top = stack.peek();
     if (is_category2(top)) {
@@ -3263,7 +3324,7 @@ public class DCInstrument extends InstructionListUtils {
    * Duplicate either one category 2 value or two category 1 values. The instruction is implemented
    * as necessary on the tag stack.
    */
-  InstructionList dup2_tag(Instruction inst, OperandStack stack) {
+  @Nullable InstructionList dup2_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
     String op;
     if (is_category2(top)) {
@@ -3284,7 +3345,7 @@ public class DCInstrument extends InstructionListUtils {
    * Dup the category 1 value on the top of the stack and insert it either two or three values down
    * on the stack.
    */
-  InstructionList dup_x2(Instruction inst, OperandStack stack) {
+  @Nullable InstructionList dup_x2(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
     if (!is_primitive(top)) {
       return null;
@@ -3305,7 +3366,7 @@ public class DCInstrument extends InstructionListUtils {
   /**
    * Duplicate the top one or two operand stack values and insert two, three, or four values down.
    */
-  InstructionList dup2_x2(Instruction inst, OperandStack stack) {
+  @Nullable InstructionList dup2_x2(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
     String op;
     if (is_category2(top)) {
@@ -3370,7 +3431,7 @@ public class DCInstrument extends InstructionListUtils {
    * Pop instructions discard the top of the stack. We want to discard the top of the tag stack iff
    * the item on the top of the stack is a primitive.
    */
-  InstructionList pop_tag(Instruction inst, OperandStack stack) {
+  @Nullable InstructionList pop_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
     if (is_primitive(top)) {
       return discard_tag_code(inst, 1);
@@ -3382,7 +3443,7 @@ public class DCInstrument extends InstructionListUtils {
    * Pops either the top 2 category 1 values or a single category 2 value from the top of the stack.
    * We must do the same to the tag stack if the values are primitives.
    */
-  InstructionList pop2_tag(Instruction inst, OperandStack stack) {
+  @Nullable InstructionList pop2_tag(Instruction inst, OperandStack stack) {
     Type top = stack.peek();
     if (is_category2(top)) {
       return discard_tag_code(inst, 1);
@@ -3405,7 +3466,7 @@ public class DCInstrument extends InstructionListUtils {
    * Swaps the two category 1 types on the top of the stack. We need to swap the top of the tag
    * stack if the two top elements on the real stack are primitives.
    */
-  InstructionList swap_tag(Instruction inst, OperandStack stack) {
+  @Nullable InstructionList swap_tag(Instruction inst, OperandStack stack) {
     Type type1 = stack.peek();
     Type type2 = stack.peek(1);
     if (is_primitive(type1) && is_primitive(type2)) {
@@ -3455,6 +3516,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param inst return instruction to be replaced
    * @return the instruction list
    */
+  @RequiresNonNull("tagFrameLocal")
   InstructionList return_tag(MethodGen mgen, Instruction inst) {
     Type type = mgen.getReturnType();
     InstructionList il = new InstructionList();
@@ -3501,7 +3563,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param loader to use to locate class
    * @return instance of class
    */
-  static Class<?> type_to_class(Type t, ClassLoader loader) {
+  static Class<?> type_to_class(Type t, @Nullable ClassLoader loader) {
 
     if (loader == null) {
       loader = DCInstrument.class.getClassLoader();
@@ -3715,6 +3777,7 @@ public class DCInstrument extends InstructionListUtils {
    *
    * @param classGen class to check for fields
    */
+  @RequiresNonNull("mgen")
   void create_tag_accessors(ClassGen classGen) {
 
     String classname = classGen.getClassName();
@@ -3736,6 +3799,7 @@ public class DCInstrument extends InstructionListUtils {
         continue;
       }
 
+      @SuppressWarnings("nullness:unboxing.of.nullable")
       int tagOffset =
           f.isStatic() ? static_field_id.get(full_name(orig_class, f)) : field_to_offset_map.get(f);
       classGen.addMethod(create_get_tag(classGen, f, tagOffset).getMethod());
@@ -3763,6 +3827,7 @@ public class DCInstrument extends InstructionListUtils {
         }
 
         field_set.add(f.getName());
+        @SuppressWarnings("nullness:unboxing.of.nullable")
         int tagOffset =
             f.isStatic()
                 ? static_field_id.get(full_name(super_class, f))
@@ -3794,6 +3859,9 @@ public class DCInstrument extends InstructionListUtils {
       super_jc = jc.getSuperClass();
     } catch (Exception e) {
       throw new Error("can't get superclass for " + jc, e);
+    }
+    if (super_jc == null) {
+      throw new Error("null superclass for " + jc);
     }
     Map<Field, Integer> field_to_offset_map = build_field_to_offset_map(super_jc);
     int offset = field_to_offset_map.size();
