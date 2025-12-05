@@ -173,9 +173,8 @@ public final class StackMapUtils24 {
     }
 
     debugInstrument.log(
-        "Added %s at %s%n",
-        isParam ? "arg" : "local",
-        varNew.slot() + ": " + varNew.name() + ", " + varNew.type() + ", " + argSize);
+        "Added a %s at slot %s.%n  name: %s type: %s size: %s%n",
+        isParam ? "parameter" : "local", varNew.slot(), varNew.name(), varNew.type(), argSize);
 
     boolean hasCode = !mgen.getInstructionList().isEmpty();
     if (hasCode) {

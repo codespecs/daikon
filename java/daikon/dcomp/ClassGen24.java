@@ -46,7 +46,7 @@ public class ClassGen24 {
   /** The list of interfaces this class implements. */
   private List<ClassEntry> interfaceList;
 
-  /** The name of the class's enclosing class, in binary name format. */
+  /** The name of the class's superclass, in binary name format. */
   private @BinaryName String superclassName;
 
   /** The class's name. */
@@ -68,8 +68,8 @@ public class ClassGen24 {
   /**
    * Creates a ClassGen24 object.
    *
-   * @param classModel the class
-   * @param className the containing class, in binary name format
+   * @param classModel for the class
+   * @param className class name, in binary name format
    * @param classBuilder for the class
    */
   public ClassGen24(
@@ -168,18 +168,18 @@ public class ClassGen24 {
   }
 
   /**
-   * Returns the name of the super class of this class. In the case that this class is {@link
+   * Returns the name of the superclass of this class. In the case that this class is {@link
    * Object}, it will return itself ({@link Object}). This is probably incorrect but is consistent
    * with the BCEL version of getSuperclassName.
    *
-   * @return the binary name of the class that contains this class
+   * @return the binary name of this class's superclass
    */
   public @BinaryName String getSuperclassName() {
     return superclassName;
   }
 
   /**
-   * Returns the name of the super class of the argument. In the case that the argument class is
+   * Returns the name of the superclass of the argument. In the case that the argument class is
    * {@link Object}, it will return itself ({@link Object}). This is probably incorrect but is
    * consistent with the BCEL version of getSuperclassName.
    *

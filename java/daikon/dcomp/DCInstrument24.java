@@ -163,7 +163,7 @@ public class DCInstrument24 {
    */
   protected int newStartIndex;
 
-  // Variables used for calculating the state of the operand stack.
+  // Variables used for calculating the state of a method's operand stack via simulation.
 
   // TODO: The following four variables are redefined for each method instrumented.
   // Rather than being global variables, they should be wrapped in a data structure that is passed
@@ -177,11 +177,13 @@ public class DCInstrument24 {
   @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO: method-local
   protected static Map<Label, OperandStack24> worklistHistory;
 
-  /** State of operand stack prior to each byte code instruction. */
+  /**
+   * The state of operand stack prior to each byte code instruction of the method being simulated.
+   */
   @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO: method-local
   protected static OperandStack24[] stacks;
 
-  /** The type of each local variable. */
+  /** The type of each parameter and local variable of the method being simulated. */
   @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO: method-local
   protected static ClassDesc[] locals;
 
@@ -1621,7 +1623,7 @@ public class DCInstrument24 {
             System.out.println("inst_index: " + inst_index);
             System.out.println("Operand Stack in: " + stack);
           }
-          proceed = CalcStack24.calcOperandStack(mgen, minfo, inst, inst_index, stack);
+          proceed = CalcStack24.simulateCodeElement(mgen, minfo, inst, inst_index, stack);
           if (debugOperandStack) {
             System.out.println("Operand Stack out: " + stack);
             System.out.println("proceed: " + proceed);
@@ -2893,7 +2895,8 @@ public class DCInstrument24 {
   }
 
   /**
-   * Returns true if the specified classname is instrumented.
+   * Returns true if the specified class is instrumented or we presume it will be instrumented by
+   * the time it is executed.
    *
    * @param classname class to be checked
    * @param methodName method to be checked (currently unused)
@@ -2985,16 +2988,16 @@ public class DCInstrument24 {
    * returned list is in ascending order; that is, java.lang.Object is always the last element,
    * unless the argument is java.lang.Object.
    *
-   * @return list of super classes
+   * @return list of superclasses
    */
-  public List<@BinaryName String> getStrictSuperClassNames() {
-    final List<@BinaryName String> allSuperClassNames = new ArrayList<>();
+  public List<@BinaryName String> getStrictSuperclassNames() {
+    final List<@BinaryName String> allSuperclassNames = new ArrayList<>();
     @BinaryName String classname = classGen.getClassName();
     while (!classname.equals("java.lang.Object")) {
       classname = getSuperclassName(classname);
-      allSuperClassNames.add(classname);
+      allSuperclassNames.add(classname);
     }
-    return allSuperClassNames;
+    return allSuperclassNames;
   }
 
   /**
@@ -4190,7 +4193,7 @@ public class DCInstrument24 {
 
     // Build accessors for each field declared in a superclass that is
     // is not shadowed in a subclass
-    for (@BinaryName String scn : getStrictSuperClassNames()) {
+    for (@BinaryName String scn : getStrictSuperclassNames()) {
       ClassModel scm = getClassModel(scn);
       if (scm == null) {
         throw new DynCompError("Can't load ClassModel for: " + scn);

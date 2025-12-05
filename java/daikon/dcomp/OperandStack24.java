@@ -49,7 +49,7 @@ public class OperandStack24 implements Cloneable {
 
   /** Clears the stack. */
   public void clear() {
-    stack = new ArrayList<>();
+    stack.clear();
   }
 
   /**
@@ -70,8 +70,10 @@ public class OperandStack24 implements Cloneable {
 
   /**
    * Returns true if and only if this OperandStack equals another, meaning equal lengths and equal
-   * objects on the stacks. A special case is {@code null} in the stack, which matches anything but
-   * a primitive.
+   * objects on the stacks. This method is used to verify that the operand stacks match when two
+   * execution paths meet. A special case is {@code null} on an operand stack, which matches
+   * anything but a primitive. As we are assuming that the class file is valid, then it is okay for
+   * an object to exist on one execution path and be null on the other.
    */
   @Override
   public boolean equals(@GuardSatisfied OperandStack24 this, @GuardSatisfied @Nullable Object o) {
@@ -103,13 +105,13 @@ public class OperandStack24 implements Cloneable {
         if (otherItem.isPrimitive()) {
           return false;
         }
-        // We assume an array matches any array or any class as they all have Object as super class
+        // We assume an array matches any array or any class as they all have Object as a superclass
         // at some point.
       } else if (thisItem.isClassOrInterface()) {
         if (otherItem.isPrimitive()) {
           return false;
         }
-        // We assume a class matches any array or any class as they all have Object as super class
+        // We assume a class matches any array or any class as they all have Object as a superclass
         // at some point.
       } else if (thisItem.isPrimitive() && !otherItem.isPrimitive()) {
         return false;
@@ -181,6 +183,9 @@ public class OperandStack24 implements Cloneable {
 
   /** Pushes a ClassDesc object onto the stack. */
   public void push(final ClassDesc type) {
+    if (stack.size() >= maxStack) {
+      throw new DynCompError("Operand stack size exceeded: " + stack);
+    }
     stack.add(type);
   }
 
