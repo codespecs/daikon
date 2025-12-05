@@ -496,9 +496,12 @@ public class DCInstrument extends InstructionListUtils {
       String super_class;
       String this_class = classname;
       while (true) {
-        super_class = getSuperclassName(this_class);
-        if (super_class == null) {
-          // something has gone wrong
+        try {
+          super_class = getSuperclassName(this_class);
+        } catch (SuperclassNameError e) {
+          if (debugJUnitAnalysis) {
+            System.out.printf("Unable to get superclass for: %s%n", this_class);
+          }
           break;
         }
         if (debugJUnitAnalysis) {
@@ -1941,7 +1944,10 @@ public class DCInstrument extends InstructionListUtils {
       try {
         ji = getJavaClass(interfaceName);
       } catch (Throwable e) {
-        throw new Error(String.format("Unable to load class: %s", interfaceName), e);
+        throw new Error("Unable to load class: " + interfaceName, e);
+      }
+      if (ji == null) {
+        throw new Error("Unable to find class: " + interfaceName);
       }
       for (Method jm : ji.getMethods()) {
         if (debugGetDefiningInterface) {
@@ -2415,15 +2421,29 @@ public class DCInstrument extends InstructionListUtils {
    * Given a classname return it's superclass name. Note that BCEL reports that the superclass of
    * 'java.lang.Object' is 'java.lang.Object' rather than saying there is no superclass.
    *
-   * @param classname the fully qualified name of the class in binary form. E.g., "java.util.List"
-   * @return superclass name of classname or null if there is an error
+   * @param classname the fully-qualified name of the class in binary form. E.g., "java.util.List"
+   * @return name of superclass
+   * @throws SuperclassNameError if the class cannot be loaded
    */
   private @ClassGetName String getSuperclassName(String classname) {
     JavaClass jc = getJavaClass(classname);
-    if (jc != null) {
-      return jc.getSuperclassName();
-    } else {
-      return null;
+    if (jc == null) {
+      throw new SuperclassNameError(classname);
+    }
+    return jc.getSuperclassName();
+  }
+
+  /** Unchecked exception thrown if {@link #getSuperclassName} cannot find a superclass name. */
+  private static class SuperclassNameError extends Error {
+    static final long serialVersionUID = 20251203;
+
+    /**
+     * Creates a SuperclassNameError.
+     *
+     * @param classname the name of the class whose parent cannot be found
+     */
+    SuperclassNameError(String classname) {
+      super(classname);
     }
   }
 
