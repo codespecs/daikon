@@ -944,7 +944,7 @@ public final class CalcStack24 {
    * Calculate a ClassDesc from a LoadableConstantEntry.
    *
    * @param lce a LoadableConstantEntry
-   * @returns the ClassDesc of {@code lce}
+   * @return the ClassDesc of {@code lce}
    * @throws DynCompError if we don't reconize {@code lce}
    */
   static ClassDesc lceToCD(LoadableConstantEntry lce) {
@@ -986,7 +986,7 @@ public final class CalcStack24 {
    * Calculate an element type descriptor from a NewPrimitiveArrayInstruction.
    *
    * @param npai a NewPrimitiveArrayInstruction
-   * @returns a String containing the element type descriptor
+   * @return a String containing the element type descriptor
    * @throws DynCompError if we don't recognize the type of {@code npai}
    */
   static String npaiToElementTypeDescriptor(NewPrimitiveArrayInstruction npai) {
