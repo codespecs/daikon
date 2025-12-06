@@ -45,6 +45,10 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   unzip \
   wget
 
+# Install uv
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& curl -LsSf https://astral.sh/uv/install.sh | sh
+
 # Install the JDK.
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt -qqy update \
