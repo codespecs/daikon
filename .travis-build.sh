@@ -14,7 +14,6 @@ if [[ "${GROUP}" != "all" && "${GROUP}" != "quick-txt-diff" && "${GROUP}" != "no
   exit 1
 fi
 
-
 # Fail the whole script if any command fails
 set -e
 set -o pipefail
@@ -69,7 +68,7 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
   # Documentation
   make javadoc doc-all
 
-  if [ -d "/tmp/plume-scripts" ] ; then
+  if [ -d "/tmp/plume-scripts" ]; then
     (cd /tmp/plume-scripts && git pull -q) > /dev/null 2>&1
   else
     (cd /tmp && (git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git || (sleep 1m && git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git)))

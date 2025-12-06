@@ -2,7 +2,7 @@ HIERDIR = ../tools/hierarchical
 KMDIR = ../tools/kmeans
 
 # These are executables and/or downloaded from the Internet.
-all: difftbl cluster clgroup kmeans trace-untruncate-fast checkargs.pm style-fix style-check
+all: difftbl cluster clgroup kmeans trace-untruncate-fast checkargs.pm style-fix
 .PHONY: all clean tags
 
 clean:
@@ -47,9 +47,3 @@ ${KMDIR}/kmeans:
 
 checkargs.pm:
 	wget https://raw.githubusercontent.com/plume-lib/html-tools/master/checkargs.pm
-
-# Code style; defines `style-check` and `style-fix`.
-ifeq (,$(wildcard .plume-scripts))
-dummy != git clone -q https://github.com/plume-lib/plume-scripts.git .plume-scripts
-endif
-include .plume-scripts/code-style.mak

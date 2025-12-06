@@ -5,5 +5,6 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "html5validator>=0.4.2",
     "ty>=0.0.1a32",
 ]
