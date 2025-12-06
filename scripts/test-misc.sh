@@ -4,9 +4,13 @@
 
 set -e
 set -o pipefail
-set -o verbose
-# set -o xtrace
 export SHELLOPTS
+
+## Useful for debugging and sometimes for interpreting the script.
+# # Output lines of this script as they are read.
+# set -o verbose
+# # Output expanded lines of this script as they are executed.
+# set -o xtrace
 
 echo "HEAD=$(git rev-parse HEAD)"
 
