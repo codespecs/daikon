@@ -3963,3 +3963,6 @@ Added many index entries to manual.
 ## Version 2.3.0 (11 September 2001)
 
 Added linear ternary invariants, of the form "z = ax + by + c".
+
+<!--  LocalWords:  html pdf DAIKONDIR javadoc DtraceDiff
+ -->
