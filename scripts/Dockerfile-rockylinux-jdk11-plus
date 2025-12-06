@@ -65,6 +65,7 @@ RUN dnf -q -y install \
 
 # Install uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+ENV PATH=/root/.local/bin:$PATH
 
 # Install the JDK.
 RUN dnf -q -y upgrade && dnf -q -y install \
