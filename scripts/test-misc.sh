@@ -5,7 +5,7 @@
 set -e
 set -o pipefail
 set -o verbose
-set -o xtrace
+# set -o xtrace
 export SHELLOPTS
 
 echo "HEAD=$(git rev-parse HEAD)"
