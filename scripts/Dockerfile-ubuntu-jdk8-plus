@@ -68,7 +68,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   graphviz \
   libc6-dbg \
   netpbm \
-  npm \
   python3-setuptools \
   shellcheck \
   shfmt \
@@ -77,10 +76,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   texlive-latex-extra \
   universal-ctags \
   zlib1g-dev
-
-# Install markdownlint.
-RUN export DEBIAN_FRONTEND=noninteractive \
-&& npm install markdownlint-cli2 --global
 
 # Install Python dependencies (obsolete, to be removed).
 # `pipx ensurepath` only adds to the path in newly-started shells.
