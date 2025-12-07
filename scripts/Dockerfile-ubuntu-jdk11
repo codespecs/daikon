@@ -49,6 +49,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   openjdk-11-jdk \
 && update-java-alternatives --set java-1.11.0-openjdk-amd64
 
+# Clean up.
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt autoremove \
 && apt clean \

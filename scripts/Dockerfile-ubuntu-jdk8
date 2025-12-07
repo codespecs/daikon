@@ -49,6 +49,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   openjdk-8-jdk \
 && update-java-alternatives --set java-1.8.0-openjdk-amd64
 
+# Clean up.
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt autoremove \
 && apt clean \
