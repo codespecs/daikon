@@ -65,6 +65,7 @@ RUN dnf config-manager --set-enabled crb \
 RUN dnf -q -y upgrade && dnf -q -y install \
   golang \
 && go install mvdan.cc/sh/v3/cmd/shfmt@latest
+ENV PATH=/root/go/bin:$PATH
 
 # Install Python dependencies (obsolete, to be removed).
 # `pipx ensurepath` only adds to the path in newly-started shells.
