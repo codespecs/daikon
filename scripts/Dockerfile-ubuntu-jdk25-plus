@@ -81,7 +81,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 
 # Install markdownlint.
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& npm install -y -q markdownlint-cli2 --global
+&& npm install markdownlint-cli2 --global
 
 # Install Python dependencies (obsolete, to be removed).
 # `pipx ensurepath` only adds to the path in newly-started shells.
