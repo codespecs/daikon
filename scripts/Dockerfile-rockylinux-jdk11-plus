@@ -61,6 +61,11 @@ RUN dnf config-manager --set-enabled crb \
   texinfo \
   texinfo-tex
 
+# Install shfmt.
+RUN dnf -q -y upgrade && dnf -q -y install \
+  golang \
+&& go install mvdan.cc/sh/v3/cmd/shfmt@latest
+
 # Install markdownlint.
 RUN curl -fsSL https://rpm.nodesource.com/setup_22.x | bash - \
 && dnf install -y -q nodejs \

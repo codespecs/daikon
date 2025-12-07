@@ -69,6 +69,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   graphviz \
   libc6-dbg \
   netpbm \
+  npm \
   python3-setuptools \
   shellcheck \
   shfmt \
@@ -80,9 +81,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 
 # Install markdownlint.
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy update \
-&& apt -qqy install \
-  npm \
 && npm install -y -q markdownlint-cli2 --global
 
 # Install Python dependencies (obsolete, to be removed).
