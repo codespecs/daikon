@@ -1015,24 +1015,6 @@ workflows:
             - quick-txt-diff-rockylinux-jdk25
             - quick-txt-diff-ubuntu-jdk8
 
-      - quick-txt-diff-rockylinux-jdk11:
-          requires:
-            - canary-jobs
-            - quick-txt-diff-rockylinux-jdk25
-            - quick-txt-diff-ubuntu-jdk11
-
-      - quick-txt-diff-rockylinux-jdk17:
-          requires:
-            - canary-jobs
-            - quick-txt-diff-rockylinux-jdk25
-            - quick-txt-diff-ubuntu-jdk17
-
-      - quick-txt-diff-rockylinux-jdk21:
-          requires:
-            - canary-jobs
-            - quick-txt-diff-rockylinux-jdk25
-            - quick-txt-diff-ubuntu-jdk21
-
       - quick-txt-diff-rockylinux-jdk25:
           requires:
             - canary-jobs
@@ -1043,24 +1025,6 @@ workflows:
             - canary-jobs
             - nonquick-txt-diff-rockylinux-jdk25
             - nonquick-txt-diff-ubuntu-jdk8
-
-      - nonquick-txt-diff-rockylinux-jdk11:
-          requires:
-            - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk25
-            - nonquick-txt-diff-ubuntu-jdk11
-
-      - nonquick-txt-diff-rockylinux-jdk17:
-          requires:
-            - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk25
-            - nonquick-txt-diff-ubuntu-jdk17
-
-      - nonquick-txt-diff-rockylinux-jdk21:
-          requires:
-            - canary-jobs
-            - nonquick-txt-diff-rockylinux-jdk25
-            - nonquick-txt-diff-ubuntu-jdk21
 
       - nonquick-txt-diff-rockylinux-jdk25:
           requires:
@@ -1073,24 +1037,6 @@ workflows:
             - non-txt-diff-rockylinux-jdk25
             - non-txt-diff-ubuntu-jdk8
 
-      - non-txt-diff-rockylinux-jdk11:
-          requires:
-            - canary-jobs
-            - non-txt-diff-rockylinux-jdk25
-            - non-txt-diff-ubuntu-jdk11
-
-      - non-txt-diff-rockylinux-jdk17:
-          requires:
-            - canary-jobs
-            - non-txt-diff-rockylinux-jdk25
-            - non-txt-diff-ubuntu-jdk17
-
-      - non-txt-diff-rockylinux-jdk21:
-          requires:
-            - canary-jobs
-            - non-txt-diff-rockylinux-jdk25
-            - non-txt-diff-ubuntu-jdk21
-
       - non-txt-diff-rockylinux-jdk25:
           requires:
             - canary-jobs
@@ -1102,24 +1048,6 @@ workflows:
             - misc-rockylinux-jdk25
             - misc-ubuntu-jdk8
 
-      - misc-rockylinux-jdk11:
-          requires:
-            - canary-jobs
-            - misc-rockylinux-jdk25
-            - misc-ubuntu-jdk11
-
-      - misc-rockylinux-jdk17:
-          requires:
-            - canary-jobs
-            - misc-rockylinux-jdk25
-            - misc-ubuntu-jdk17
-
-      - misc-rockylinux-jdk21:
-          requires:
-            - canary-jobs
-            - misc-rockylinux-jdk25
-            - misc-ubuntu-jdk21
-
       - misc-rockylinux-jdk25:
           requires:
             - canary-jobs
@@ -1130,24 +1058,6 @@ workflows:
             - canary-jobs
             - kvasir-rockylinux-jdk25
             - kvasir-ubuntu-jdk8
-
-      - kvasir-rockylinux-jdk11:
-          requires:
-            - canary-jobs
-            - kvasir-rockylinux-jdk25
-            - kvasir-ubuntu-jdk11
-
-      - kvasir-rockylinux-jdk17:
-          requires:
-            - canary-jobs
-            - kvasir-rockylinux-jdk25
-            - kvasir-ubuntu-jdk17
-
-      - kvasir-rockylinux-jdk21:
-          requires:
-            - canary-jobs
-            - kvasir-rockylinux-jdk25
-            - kvasir-ubuntu-jdk21
 
       - kvasir-rockylinux-jdk25:
           requires:
