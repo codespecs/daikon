@@ -4,9 +4,13 @@
 
 set -e
 set -o pipefail
-set -o verbose
-set -o xtrace
 export SHELLOPTS
+
+## Useful for debugging and sometimes for interpreting the script.
+# # Output lines of this script as they are read.
+# set -o verbose
+# # Output expanded lines of this script as they are executed.
+# set -o xtrace
 
 echo "HEAD=$(git rev-parse HEAD)"
 
@@ -22,7 +26,7 @@ fi
 # Code style & quality
 make -C java error-prone
 make -C java check-format || (make -C java reformat && git --no-pager diff && /bin/false)
-make -k -C scripts style-check
+make -k style-check
 
 # Documentation
 if java -version 2>&1 | grep -q '"1.8'; then

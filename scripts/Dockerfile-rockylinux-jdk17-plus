@@ -36,7 +36,12 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   wget \
   which
 
-RUN dnf -q -y install \
+# Install the JDK.
+RUN dnf -q -y upgrade && dnf -q -y install \
+  java-17-openjdk \
+  java-17-openjdk-devel
+
+RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \
   devscripts-checkbashisms \
   gcc-c++ \
@@ -50,9 +55,18 @@ RUN dnf -q -y install \
 
 # Alternately, run: dnf --enablerepo=crb install PACKAGENAME
 RUN dnf config-manager --set-enabled crb \
-&& dnf -y install dnf-plugins-core \
-&& dnf -y install texinfo texinfo-tex
+&& dnf -y install \
+  dnf-plugins-core \
+  texinfo \
+  texinfo-tex
 
+# Install shfmt.
+RUN dnf -q -y upgrade && dnf -q -y install \
+  golang \
+&& go install mvdan.cc/sh/v3/cmd/shfmt@latest
+ENV PATH=/root/go/bin:$PATH
+
+# Install Python dependencies (obsolete, to be removed).
 # `pipx ensurepath` only adds to the path in newly-started shells.
 # BUT, setting the path for the current user is not enough.
 # Azure creates a new user and runs jobs as it.
@@ -62,9 +76,13 @@ RUN dnf -q -y install \
 && PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install mypy \
 && PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install ruff
 
-# Install the JDK.
-RUN dnf -q -y upgrade && dnf -q -y install \
-  java-17-openjdk \
-  java-17-openjdk-devel
+# Install uv (manages Python dependencies).
+RUN echo "installing uv" \
+&& wget -qO- https://astral.sh/uv/install.sh | sh \
+&& find /root -exec chmod +r {} \; \
+&& find /root -type d -exec chmod +x {} \; \
+&& find /root/.local/bin -type f -exec chmod +x {} \;
+ENV PATH=/root/.local/bin:$PATH
 
+# Clean up.
 RUN dnf -q clean all
