@@ -46,4 +46,5 @@ ENV JAVA25_HOME=/jdk-25
 RUN chmod og+rx /root \
 && chmod og+r /root/*
 
+# Clean up.
 RUN dnf -q clean all

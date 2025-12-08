@@ -38,4 +38,5 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   java-17-openjdk \
   java-17-openjdk-devel
 
+# Clean up.
 RUN dnf -q clean all

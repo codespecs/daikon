@@ -319,6 +319,13 @@ nightly-test-except-doc-pdf:
 	${MAKE} dyncomp-jdk
 	${MAKE} junit test
 
+# Code style; defines `style-check` and `style-fix`.
+CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir utils --exclude clustering.html
+ifeq (,$(wildcard .plume-scripts))
+dummy != git clone -q https://github.com/plume-lib/plume-scripts.git .plume-scripts
+endif
+include .plume-scripts/code-style.mak
+
 
 ### Tags
 
@@ -727,7 +734,7 @@ daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
 ### Utilities
 ###
 
-showvars:
+showvars::
 	@echo "DAIKONDIR =" ${DAIKONDIR}
 	@echo "DAIKON_JAVA_FILES =" ${DAIKON_JAVA_FILES}
 	@echo "WWW_FILES =" ${WWW_FILES}

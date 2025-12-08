@@ -1,5 +1,7 @@
-History of Daikon changes
-=========================
+# History of Daikon changes
+
+<!-- markdownlint-disable no-duplicate-heading -->
+<!-- pyml disable no-duplicate-heading -->
 
 This file lists significant user-visible changes to Daikon.
 (Many other changes, including most bug fixes, are not noted here.)
@@ -19,8 +21,7 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
-Version 5.8.22 (June 3, 2025)
-=============================
+## Version 5.8.22 (June 3, 2025)
 
 All Daikon tools now work with Java 8-24.
 
@@ -29,8 +30,7 @@ Bug fixes:
 * fixed Daikon issues 515, 532, 536 and 556
 * fixed Fjalar issues 66 and 68
 
-Version 5.8.20 (May 14, 2024)
-=============================
+## Version 5.8.20 (May 14, 2024)
 
 Improved DtraceDiff tool.
 
@@ -40,22 +40,19 @@ Bug fixes and implementation details:
 * Checker Framework update to 3.42.
 * fixed a problem with DynComp (#532)
 
-Version 5.8.18 (June 23, 2023)
-==============================
+## Version 5.8.18 (June 23, 2023)
 
 Support Rocky Linux.
 
 All Daikon tools now work with Java 20.
 
-Version 5.8.16 (Nov 9, 2022)
-============================
+## Version 5.8.16 (Nov 9, 2022)
 
 All Daikon tools now work with Java 18.
 
 Fixed a bug in DynComp's command-line processing.
 
-Version 5.8.14 (October 6, 2022)
-================================
+## Version 5.8.14 (October 6, 2022)
 
 DynComp now supports the JUnit 5 test framework.
 
@@ -66,8 +63,7 @@ Bug fixes and implementation details:
 * fix DynComp command line input (#399)
 * fix Fjalar support for Ubuntu 22.04 (#56)
 
-Version 5.8.12 (July 14, 2022)
-==============================
+## Version 5.8.12 (July 14, 2022)
 
 All Daikon tools now work with Java 17.
 Javadoc Doclets are supported for Java 8, 11 and 17.
@@ -82,8 +78,7 @@ Bug fixes and implementation details:
 * Update bcel util to version 1.1.15 (Support for Groovy objects and
   improvements to local variable table generation).
 
-Version 5.8.10 (November 1, 2021)
-=================================
+## Version 5.8.10 (November 1, 2021)
 
 DynComp can now handle synthesized bridge methods.
 Merge comparability fix for fields.
@@ -102,15 +97,13 @@ Bug fixes and implementation details:
 * Update bcel-util to version 1.1.12 (#344).
   Includes several fixes to local variable table generation.
 
-Version 5.8.8 (March 2, 2021)
-=============================
+## Version 5.8.8 (March 2, 2021)
 
 Added DynComp `--dump` option, which dumps instrumented classes to a file.
 
 Improved DynComp comparability results for JDK 11.
 
-Version 5.8.6 (December 2, 2020)
-================================
+## Version 5.8.6 (December 2, 2020)
 
 DynComp handles lambdas (Java anonymous functions).
 
@@ -120,8 +113,7 @@ Removed DynComp option `--no-primitives`.
 
 Removed support for the obsolete version 1 file format.
 
-Version 5.8.4 (July 22, 2020)
-=============================
+## Version 5.8.4 (July 22, 2020)
 
 Moved the SplitDtrace class from the unnamed package to the daikon/ package.
 
@@ -136,15 +128,13 @@ Fjalar/Kvasir:
 * Improved documentation on gcc compiler options.
 * Updated the underlying Binutils infrastructure to version 2.34.
 
-Version 5.8.2 (May 4, 2020)
-===========================
+## Version 5.8.2 (May 4, 2020)
 
 Improved installation instructions.
 
 Updated Valgrind from 3.14.0 to 3.15.0.
 
-Version 5.8.0 (April 14, 2020)
-==============================
+## Version 5.8.0 (April 14, 2020)
 
 Daikon runs under both Java 8 and Java 11.
 
@@ -160,8 +150,7 @@ if the `javac` executable is on the path.
 Updated the readelf, Valgrind, and BCEL libraries.  This should improve
 compatibility with operating systems and C versions.
 
-Version 5.7.2 (November 7, 2018)
-================================
+## Version 5.7.2 (November 7, 2018)
 
 The Daikon instructions no longer suggest to set `CLASSPATH`, which is bad
 style.  Instead, a new environment variable `DAIKON_CLASSPATH` is set by
@@ -176,16 +165,14 @@ Windows and Unix paths.  If you want to develop Daikon on a computer that
 runs Windows, we suggest using Linux in a virtual machine, or Linux
 Subsystem for Windows (available since August 2016).
 
-Version 5.7.0 (August 22, 2018)
-===============================
+## Version 5.7.0 (August 22, 2018)
 
 Daikon now requires Java JDK 8; Java JDK 7 is no longer supported.
 
 Implementation detail:  Daikon no longer uses the monolithic plume-lib
 repository, which has been split into smaller ones such as plume-scripts.
 
-Version 5.6.6 (July 2, 2018)
-============================
+## Version 5.6.6 (July 2, 2018)
 
 DynComp:
 
@@ -195,8 +182,7 @@ Fjalar/Kvasir:
 
 * Fix issue #27 - Incorrect categorization of some SIMD instructions.
 
-Version 5.6.4 (April 3, 2018)
-=============================
+## Version 5.6.4 (April 3, 2018)
 
 Eliminate reliance on `plume.jar` file, in favor of smaller libraries
 (checklink, html-tools, options, plume-util, etc.).
@@ -207,8 +193,7 @@ Fjalar/Kvasir:
 
 The `--wrap_xml` command-line option now produces valid XML.
 
-Version 5.6.2 (February 2, 2018)
-================================
+## Version 5.6.2 (February 2, 2018)
 
 It is no longer necessary to set the `DAIKONDIR` environment variable when
 using or building Daikon.
@@ -219,8 +204,7 @@ Fjalar/Kvasir:
 * We updated the underlying Binutils infrastructure to version 2.29.1.
 * Improved Ubuntu 17.10 support.
 
-Version 5.6.0 (December 4, 2017)
-================================
+## Version 5.6.0 (December 4, 2017)
 
 Support was added for Ubuntu 17.10.  Please see User Guide notes about using
 the `-no-pie` option on gcc.
@@ -229,8 +213,7 @@ DynComp:
 
 * Fixed a few DynComp bugs.
 
-Version 5.5.14 (October 3, 2017)
-================================
+## Version 5.5.14 (October 3, 2017)
 
 Chicory:
 
@@ -239,8 +222,7 @@ Chicory:
 Updated our internal version of BCEL to match Apache version 6.1.
 Daikon will fail if some other version of BCEL is found first on the classpath.
 
-Version 5.5.12 (September 5, 2017)
-==================================
+## Version 5.5.12 (September 5, 2017)
 
 Chicory:
 
@@ -251,22 +233,19 @@ Fjalar/Kvasir:
 * We updated the underlying Binutils infrastructure to version 2.28.1.
 * Fix issue #10
 
-Version 5.5.10 (July 4, 2017)
-=============================
+## Version 5.5.10 (July 4, 2017)
 
 Chicory and DynComp:
 
 * Refactored some instrumentation code. Includes a few bug fixes.
 
-Version 5.5.8 (June 2, 2017)
-============================
+## Version 5.5.8 (June 2, 2017)
 
 DynComp:
 
 * Fixed a few DynComp bugs.
 
-Version 5.5.6 (May 2, 2017)
-===========================
+## Version 5.5.6 (May 2, 2017)
 
 DynComp:
 
@@ -276,8 +255,7 @@ Kvasir:
 
 * We updated the underlying Binutils infrastructure to version 2.27.0.
 
-Version 5.5.4 (April 3, 2017)
-=============================
+## Version 5.5.4 (April 3, 2017)
 
 DynComp and Chicory:
 
@@ -288,8 +266,7 @@ Kvasir:
 
 * We updated the underlying Valgrind infrastructure to version 3.12.0.
 
-Version 5.5.2 (March 1, 2017)
-=============================
+## Version 5.5.2 (March 1, 2017)
 
 DynComp:
 
@@ -303,8 +280,7 @@ Chicory:
 
 Updated our internal version of BCEL as part of StackMap fix.
 
-Version 5.5.0 (February 1, 2017)
-================================
+## Version 5.5.0 (February 1, 2017)
 
 Kvasir:
 
@@ -323,8 +299,7 @@ Documentation:
 
 * Improved discussion of DynComp and comparability sets.
 
-Version 5.4.6 (January 3, 2017)
-===============================
+## Version 5.4.6 (January 3, 2017)
 
 The changes in this release reflect an increased emphasis on using the
 DynComp tool for both Java and C/C++.
@@ -342,28 +317,24 @@ Documentation:
 * Modified the Example usage chapter of the User Guide to more accurately
   describe the tool options and expected outputs.
 
-Version 5.4.4 (December 2, 2016)
-================================
+## Version 5.4.4 (December 2, 2016)
 
 * Fixed calculation of a class's fields to include fields of its superclass(es).
 * Corrected files included in daikon.tar to support building the documents.
 * Corrected behavior of the calc_possible_invs configuration option.
 
-Version 5.4.2 (November 3, 2016)
-================================
+## Version 5.4.2 (November 3, 2016)
 
 Fixed numerous DynComp bugs.
 
-Version 5.4.0 (October 4, 2016)
-===============================
+## Version 5.4.0 (October 4, 2016)
 
 daikon.jar now includes Apache Commons BCEL 6.0; previously it used a
 locally-modified version of BCEL.  We have removed the "--default-bcel"
 command-line option; Daikon will fail if some other version of BCEL is
 found on the classpath.
 
-Version 5.3.10 (September 1, 2016)
-==================================
+## Version 5.3.10 (September 1, 2016)
 
 A new front end for LLVM is available.
 See <https://github.com/markus-kusano/udon>.
@@ -392,8 +363,7 @@ to be more consistent:
 * `--dyncomp-units`              => `--dyncomp-interactions=units`
 * [new option; is the default] => `--dyncomp-interactions=all`
 
-Version 5.3.8 (August 1, 2016)
-==============================
+## Version 5.3.8 (August 1, 2016)
 
 Improved portability:
 
@@ -403,8 +373,7 @@ Improved portability:
 
 Miscellaneous bug fixes and minor improvements.
 
-Version 5.3.6 (July 5, 2016)
-============================
+## Version 5.3.6 (July 5, 2016)
 
 A new front end for Simulink/Stateflow (SLSF) block diagrams is available.
 See <https://github.com/verivital/hynger> .
@@ -414,13 +383,11 @@ Fjalar/Kvasir:
 * DynComp has been modified to improve its accuracy and correct its
    garbage collection routine.
 
-Version 5.3.4 (June 1, 2016)
-============================
+## Version 5.3.4 (June 1, 2016)
 
 Miscellaneous bug fixes and minor improvements.
 
-Version 5.3.2 (May 2, 2016)
-===========================
+## Version 5.3.2 (May 2, 2016)
 
 Daikon:
 
@@ -439,8 +406,7 @@ Documentation:
 * Improved the discussion in the Troubleshooting chapter of the User Guide
   on how to respond to "Could not find or load main class."
 
-Version 5.3.0 (April 5, 2016)
-=============================
+## Version 5.3.0 (April 5, 2016)
 
 Daikon:
 
@@ -467,24 +433,21 @@ We have decided to deprecate support for 32-bit hosts.
   32-bit platform, but we have stopped testing this configuration and make
   no guarantees for the future.
 
-Version 5.2.26 (March 10, 2016)
-===============================
+## Version 5.2.26 (March 10, 2016)
 
 This is an update to 5.2.24 to correct a small problem in Chicory.  It was
 inadvertently adding extra information to its output files.  This did not
 cause Daikon to operate incorrectly.  It only made the data files larger
 than necessary.
 
-Version 5.2.24 (March 4, 2016)
-==============================
+## Version 5.2.24 (March 4, 2016)
 
 Documentation:
 
 * Added more examples of invariants.
 * Improved instructions on building Daikon and Kvasir.
 
-Version 5.2.22 (February 1, 2016)
-=================================
+## Version 5.2.22 (February 1, 2016)
 
 We have updated the Daikon tool set to include a newer version of BCEL.
 If Chicory throws an error such as the following:
@@ -492,15 +455,13 @@ If Chicory throws an error such as the following:
 Then the problem is most likely that your classpath contains a previous
 version of daikon.jar or plume.jar.
 
-Version 5.2.20 (January 5, 2016)
-================================
+## Version 5.2.20 (January 5, 2016)
 
 Documentation:
 
 * Improved instructions on building Daikon and Kvasir.
 
-Version 5.2.18 (December 5, 2015)
-=================================
+## Version 5.2.18 (December 5, 2015)
 
 Daikon:
 
@@ -522,8 +483,7 @@ Distribution:
 * The distribution contains new directories doc/www, java/jtb, and java/lib,
   which makes the directory layout more like the repository's.
 
-Version 5.2.16 (November 2, 2015)
-=================================
+## Version 5.2.16 (November 2, 2015)
 
 Chicory:
 
@@ -542,8 +502,7 @@ Kvasir:
   comparability information. Occasionally, the system loader was causing
   unrelated items to be placed in the same comparability set.
 
-Version 5.2.14 (October 5, 2015)
-================================
+## Version 5.2.14 (October 5, 2015)
 
 Daikon:
   We have improved splitter verification testing.
@@ -551,8 +510,7 @@ Daikon:
 Documentation:
   Improved discussion of splitters
 
-Version 5.2.12 (September 3, 2015)
-==================================
+## Version 5.2.12 (September 3, 2015)
 
 Daikon:
   We have improved splitter file processing.
@@ -560,8 +518,7 @@ Daikon:
 Documentation:
   Improved discussion of splitters
 
-Version 5.2.10 (August 4, 2015)
-===============================
+## Version 5.2.10 (August 4, 2015)
 
 Chicory:
 
@@ -584,8 +541,7 @@ Changes relevant to building from source:
 
 * Now support gcc 5.1.1 and Fedora 22.
 
-Version 5.2.8 (July 1, 2015)
-============================
+## Version 5.2.8 (July 1, 2015)
 
 The Daikon and Fjalar version control repositories have moved from Google
 Code to GitHub, and from the Mercurial version control system to Git.  You
@@ -613,8 +569,7 @@ Documentation:
   Chicory and DynComp with Daikon.
 * Improved formatting of Javadoc.
 
-Version 5.2.6 (June 2, 2015)
-============================
+## Version 5.2.6 (June 2, 2015)
 
 Daikon:
   Changed default value of `--suppressSplitterErrors` command-line option to true.
@@ -637,8 +592,7 @@ Changes relevant to building from source:
      make -C $DAIKONDIR compile
 ```
 
-Version 5.2.4 (May 1, 2015)
-===========================
+## Version 5.2.4 (May 1, 2015)
 
 Tools that process invariant files:
   Fixed a problem with Annotate and improved its output
@@ -653,8 +607,7 @@ Documentation:
 The location of the Celeriac front end has changed:
   <https://github.com/melonhead901/daikon-dot-net-front-end>
 
-Version 5.2.2 (April 10, 2015)
-==============================
+## Version 5.2.2 (April 10, 2015)
 
 **Tools that process invariant files:**
 
@@ -681,14 +634,15 @@ Java methods containing a switch.
 
 Fixed several Daikon issues:
 
+<!-- pyml disable-num-lines 6 no-missing-space-atx -->
+
 * #18: runtimechecker should not instrument abstract classes
 * #19: runtimechecker parser problem with ">" characters
 * #20: runtimechecker problem with 'Is power of 2'
 * #22: runtimechecker fails on inner classes with multiple constructors
 * #23: runtimechecker crashes when foreach variable has a final modifier
 
-Version 5.2.0 (March 3, 2015)
-=============================
+## Version 5.2.0 (March 3, 2015)
 
 We updated the underlying Valgrind infrastructure to version 3.10.1
 (build 14784).  Users of Kvasir to analyze C/C++ codes should not see
@@ -696,8 +650,7 @@ any differences in behavior from the previous version.
 
 We made various improvements to the documentation.
 
-Version 5.1.16 (February 2, 2015)
-=================================
+## Version 5.1.16 (February 2, 2015)
 
 Splitters now properly support unqualified member variables within
 .spinfo files.
@@ -708,16 +661,14 @@ see Daikon issue #37: <https://github.com/codespecs/daikon/issues/37>.)
 Updated bcel.jar (within plume.jar) for some minor improvements in
 JDK 8 support.
 
-Version 5.1.14 (December 22, 2014)
-==================================
+## Version 5.1.14 (December 22, 2014)
 
 Fjalar now builds correctly on Ubuntu 14.10.
 Improved installation instructions.
 Improved documentation on Simplify tool.
 Chicory and DynComp now support Java/JDK 8. (tested with 1.8.0-b129)
 
-Version 5.1.12 (December 2, 2014)
-=================================
+## Version 5.1.12 (December 2, 2014)
 
 Celeriac, Daikon's front end for .NET programs, works under Mono.
 See <https://github.com/codespecs/daikon-dot-net-front-end> .
@@ -757,8 +708,7 @@ To accomplish all of this, run the following commands:
   ./configure --prefix=`pwd`/inst
 ```
 
-Version 5.1.10 (October 31, 2014)
-=================================
+## Version 5.1.10 (October 31, 2014)
 
 We have fixed some problems in Kvasir with C++ code.  We now correctly
 support unnamed parameters and subclasses that add no additional data
@@ -778,8 +728,7 @@ own tool to manipulate a .dtrace file.
 The manual contains a link to Takuan, a Daikon front end for WS-BPEL
 tool process definitions.
 
-Version 5.1.8 (September 30, 2014)
-==================================
+## Version 5.1.8 (September 30, 2014)
 
 A large number of small corrections were made to the Javadoc annotations
 in the Daikon source tree.  This will most often manifest in the HTML
@@ -791,8 +740,7 @@ provide more accurate invariants in these cases.
 We have fixed a problem in DynComp with lambda expressions in Java 8
 programs.  Previously, this syntax would cause a program fault.
 
-Version 5.1.6 (August 29, 2014)
-===============================
+## Version 5.1.6 (August 29, 2014)
 
 A section has been added to the Daikon User Manual describing how to
 deal with a "duplicate class definition error" when running Chicory.
@@ -804,8 +752,7 @@ crash on input of the form:
   private static final Boolean name = false;
 ```
 
-Version 5.1.4 (July 31, 2014)
-=============================
+## Version 5.1.4 (July 31, 2014)
 
 Improved StackMap support.
 
@@ -813,8 +760,7 @@ Improved StackMap support.
 * for BASTORE instruction
 Improved Kvasir (C/C++ Daikon front end) support for 32bit hosts.
 
-Version 5.1.2 (June 30, 2014)
-=============================
+## Version 5.1.2 (June 30, 2014)
 
 Improved StackMap support.
 
@@ -823,8 +769,7 @@ Improved StackMap support.
 Documentation updates and cleanup.
 * Added material on CSharpContracts; usage and copyright.
 
-Version 5.1.0 (May 30, 2014)
-============================
+## Version 5.1.0 (May 30, 2014)
 
 Daikon can now infer code contracts for .NET programs, such as C# programs.
 You will require the Celeriac front end:
@@ -836,8 +781,7 @@ DynComp for Java now works with Java 7.  Chicory already worked with Java 7,
 but the DynComp component did not work with Java 7 until this release.
 (This is the fix for Daikon issue #24.)
 
-Version 5.0.8 (May 2, 2014)
-===========================
+## Version 5.0.8 (May 2, 2014)
 
 **General:**
   We have modified the directory layout relationship between Daikon
@@ -863,8 +807,7 @@ Version 5.0.8 (May 2, 2014)
   <https://github.com/codespecs/daikon/issues/29>
   <https://github.com/codespecs/daikon/issues/30>
 
-Version 5.0.6 (March 28, 2014)
-==============================
+## Version 5.0.6 (March 28, 2014)
 
 **Daikon:**
   This release contains a fix for Daikon issue #28.  See:
@@ -883,8 +826,7 @@ Version 5.0.6 (March 28, 2014)
   Lots of changes to correct spelling and .texinfo tag usage.
   No significant content changes were made.
 
-Version 5.0.4 (February 28, 2014)
-=================================
+## Version 5.0.4 (February 28, 2014)
 
 **Daikon:**
   This release contains a fix for Daikon issue #27.  See:
@@ -902,8 +844,7 @@ Version 5.0.4 (February 28, 2014)
 **Documentation:**
   We no longer distribute PostScript formatted versions of the documentation.
 
-Version 5.0.2 (January 31, 2014)
-================================
+## Version 5.0.2 (January 31, 2014)
 
 General
 
@@ -921,8 +862,7 @@ Documentation
 * Added split html document versions to drop.
 * Improved General Index(s).
 
-Version 5.0.0 (January 3, 2014)
-===============================
+## Version 5.0.0 (January 3, 2014)
 
 Highlights
 
@@ -989,20 +929,17 @@ Documentation
 * We have added a section to the developer documentation on how to make
   a distribution.
 
-Version 4.7.5 (December 12, 2013)
-=================================
+## Version 4.7.5 (December 12, 2013)
 
 * Fix for stack map problem in Chicory.
 * The bin directory is now called scripts to be consistent with the Google
 * Code repository and the documentation.
 
-Version 4.7.3 (November 1, 2013)
-================================
+## Version 4.7.3 (November 1, 2013)
 
 * Fix for stack map problem in Chicory.
 
-Version 4.7.1 (October 8, 2013)
-===============================
+## Version 4.7.1 (October 8, 2013)
 
 * Support for more recent versions of Linux (tested with Fedora 17).
 * Support for more recent versions of gnu tools (tested with gcc 4.7.2
@@ -1013,13 +950,11 @@ Version 4.7.1 (October 8, 2013)
     revision 1953 to 2538.  Together, this represents Valgrind 3.8.1.
 * Many improvements and bug fixes to Chicory, the Java front end for Daikon.
 
-Version 4.6.4 (June 23 2010)
-============================
+## Version 4.6.4 (June 23 2010)
 
-Daikon
-------
+### Daikon
 
-**User-visible changes**
+#### User-visible changes
 
 Added new invariants: CompleteOneOfScalar, CompleteOneOfString
 
@@ -1040,7 +975,7 @@ program point hierarchy.
 
 Daikon uses the JAVA_HOME environment variable, rather than JDKDIR.
 
-**Non-user-visible changes**
+#### Non-user-visible changes
 
 Extracted utilMDE and other utilities into a new library named
 plume-lib, which makes it easier to use in other programs.  See
@@ -1054,15 +989,13 @@ in this way.
 Interned some string variables when de-serializing an invariant file,
 saving an appreciable amount of memory.
 
-Chicory
--------
+### Chicory
 
 Documented Chicory options `--boot-classes=REGEX`, `--linked-lists`.
 
-Kvasir
-------
+### Kvasir
 
-**User-visible changes**
+#### User-visible changes
 
 Fixed an issue where Fjalar would not correctly traverse variables
 when using the var-list-file option.
@@ -1073,37 +1006,33 @@ variables for all of a program.
 
 Kvasir's support for GCC 4.4 has been further improved.
 
-**User Documentation**
+#### User Documentation
 
 Added documentation for several previously undocumented Kvasir
 command line options.
 
-DynComp
--------
+### DynComp
 
 Fixed a bug when searching for dcomp_premain.jar.  The jar file will
 now be found if it is anywhere in the classpath.
 
-InvariantChecker
-----------------
+### InvariantChecker
 
 Added `--verbose` option that will print all samples that violate an
 invariant.
 
-Version 4.6.3 (December 18 2009)
-================================
+## Version 4.6.3 (December 18 2009)
 
 Kvasir's support for GCC 4.4 has been improved.
 
-Kvasir
-------
+### Kvasir
 
-**User-visible changes**
+#### User-visible changes
 
 The output of variables declared as constant can now be
 suppressed via the "--ignore-constants" flag.
 
-**Bug fixes**
+#### Bug fixes
 
 Fixed an issue where Fjalar would not print variables
 declared constant for binaries created with some versions
@@ -1112,15 +1041,13 @@ of g++.
 Fixed comparability errors which occurred when Kvasir was run
 with dyncomp on an x86-64 host.
 
-Version 4.6.2 (October 1 2009)
-==============================
+## Version 4.6.2 (October 1 2009)
 
 Kvasir's support for x86-64 hosts and C++ programs has been improved.
 
-Kvasir
-------
+### Kvasir
 
-**User visible changes**
+#### User visible changes
 
 Kvasir now has limited support for non-local exits such as
 setjmp/longjmp and C++ Exceptions. Kvasir will correctly detect
@@ -1136,7 +1063,7 @@ binaries.
 
 Improved Kvasir's speed when working with large C++ binaries.
 
-**Bug fixes**
+#### Bug fixes
 
 Fixed an issue where Kvasir would print incorrect values
 for floating point numbers.
@@ -1149,29 +1076,25 @@ Fixed a memory leak in Fjalar's processing of variable names.
 Fixed a crash that would sometimes occur when processing
 C++ programs with large amounts of debugging information.
 
-Daikon
-------
+### Daikon
 
-**User Documentation**
+#### User Documentation
 
 Added an explanation of how additional data changes invariant
 output.
 
-Version 4.6.1 (September 1 2009)
-================================
+## Version 4.6.1 (September 1 2009)
 
 Support for GCC 4.3+ created binaries has been improved for Kvasir.
 
-Daikon
-------
+### Daikon
 
 Documentation
 
 * Appendix A (File Formats) of the Daikon user manual was moved to
     the developers manual.
 
-Kvasir
-------
+### Kvasir
 
 User-visible changes
 
@@ -1183,15 +1106,13 @@ Bug fixes
 * Fixed an issue where Kvasir would not detect entry to a function if
     it's body consisted of only a loop.
 
-Version 4.6.0 (July 1 2009)
-===========================
+## Version 4.6.0 (July 1 2009)
 
 Kvasir now supports binaries created with GCC 4.0+ and glibc versions 2.2
 to 2.10.  The Daikon user manual was updated for clarity and completeness.
 Bugs were fixed in Daikon, Kvasir, and Chicory.
 
-Daikon
-------
+### Daikon
 
 Documentation
 
@@ -1210,8 +1131,7 @@ Bug fixes
     source) did not support character comparisons.  This problem has been
     resolved.
 
-Chicory
--------
+### Chicory
 
 Bug fixes
 
@@ -1222,8 +1142,7 @@ Bug fixes
 
     Sampling now works correctly with applications with multiple threads
 
-Kvasir
-------
+### Kvasir
 
 User-visible changes
 
@@ -1251,14 +1170,12 @@ Bug fixes
  Fixed an issue where Kvasir attempted to print variables for which
  there was no debugging information available.
 
-Version 4.5.5 (April 1 2009)
-============================
+## Version 4.5.5 (April 1 2009)
 
 Support for Daikon and DynComp for Java has been improved for Mac OS X.
 The Daikon user and developer manuals were enhanced.
 
-Daikon
-------
+### Daikon
 
 Documentation
 
@@ -1273,22 +1190,19 @@ Documentation
 * Information on compiling Daikon for Mac OS X was added to
   section 2.1 of the Daikon Developers manual.
 
-DynComp Java
-------------
+### DynComp Java
 
 Documentation
 
 * Information describing how to create an instrumented JDK on Mac OS X
   was added to Section 7.2.1 (Instrumenting the JDK with DynComp)
 
-Version 4.5.4 (February 2 2009)
-===============================
+## Version 4.5.4 (February 2 2009)
 
 Bugs were fixed in Chicory and AnnotateNullable.  Daikon's
 documentation was improved.
 
-Chicory
--------
+### Chicory
 
 Bug fixes
 
@@ -1299,8 +1213,7 @@ Bug fixes
   (i.e., not part of the JDK).  This would result in classloader areas.
   This has been resolved.
 
-Daikon
-------
+### Daikon
 
 Documentation
 
@@ -1308,22 +1221,19 @@ Documentation
   compiling Daikon, creating implications, and the information required
   with bug reports.
 
-AnnotateNullable
-----------------
+### AnnotateNullable
 
 Bug fixes
 
 * A null pointer exception that occurred in the case of the default package
   was fixed.
 
-Version 4.5.3 (January 2 2009)
-==============================
+## Version 4.5.3 (January 2 2009)
 
 Resolved a number of problems in the build scripts and documentation for a
 complete Windows installation.
 
-Daikon
-------
+### Daikon
 
 Bug fixes
 
@@ -1337,13 +1247,11 @@ Documentation
   instructions were largely rewritten to make the required setup clear
   (particularly the format of filenames and paths).
 
-Version 4.5.2 (December 1 2008)
-===============================
+## Version 4.5.2 (December 1 2008)
 
 Some new String invariants were added to Daikon.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -1353,16 +1261,14 @@ User-visible changes
 * Added a SubString invariant and an elementwise SubString invariant
     (disabled by default)
 
-Version 4.5.1 (November 3 2008)
-===============================
+## Version 4.5.1 (November 3 2008)
 
 A new front end for Eiffel is available and a new tool (MergeInvariants)
 for merging serialized invariant files was added.  Some modifications and
 bug fixes were made to the AnnotateNullable tool and some Daikon bugs
 were fixed.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -1389,14 +1295,12 @@ Bug fixes
     are no longer considered.  Using such suppressors could cause otherwise
     valid invariants to be missed.
 
-Version 4.5.0 (September 3 2008)
-================================
+## Version 4.5.0 (September 3 2008)
 
 Kvasir was updated to create the new format for declaration records.
 Kvasir was also upgraded to support newer versions of glibc.
 
-Kvasir
-------
+### Kvasir
 
   Kvasir has been updated to produce trace files using the new
   format for declaration records. This format should allow
@@ -1423,15 +1327,13 @@ Bug fixes
     correctly leading to memory locations to appear in trace files
     as opposed to the value being referenced
 
-Version 4.4.2 (August 1 2008)
-=============================
+## Version 4.4.2 (August 1 2008)
 
 Daikon's set of invariants and derived variables enabled by default was
 changed to provide more relevant invariants.  Configuration options
 were added for some invariants.  Bugs were fixed in Daikon and Chicory.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -1478,8 +1380,7 @@ Bug fixes
 * Fixed some problems with supporting user implementations of
       java.util.List as sequences.
 
-Chicory
--------
+### Chicory
 
 Bug fixes
 
@@ -1488,15 +1389,13 @@ Bug fixes
   as part of processing a list or pure functions).  Recursive calls to
   enter() or exit() are simply ignored.
 
-Version 4.4.1 (July 1 2008)
-===========================
+## Version 4.4.1 (July 1 2008)
 
 A number of bugs were fixed in Daikon, Chicory, and DynComp.  The
 user manual was improved.  Support for IOA format was removed from
 Daikon.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -1512,16 +1411,14 @@ Documentation
 * Added troubleshooting section when expected invariants are not
   reported.
 
-Chicory
--------
+### Chicory
 
 Bug fixes
 
 * Fixed typo in comparability type when comparability information
   is included.
 
-DynComp
--------
+### DynComp
 
 Bug fixes
 
@@ -1540,15 +1437,13 @@ Documentation
 * Indicated that a NoSuchMethodException will be generated if a method
   in the JDK that could not be instrumented is called.
 
-Version 4.4.0 (June 11 2008)
-============================
+## Version 4.4.0 (June 11 2008)
 
 A new format for declaration records in Daikon trace data was
 introduced.  The AnnotateNullable tool was released.  A number
 of bugs were fixed.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -1559,15 +1454,13 @@ User-visible changes
     than being inferred from variable names.  See Appendix A of the
     user manual for more information.
 
-Chicory
--------
+### Chicory
 
 User-visible changes
 
 * Creates the new declaration format by default.
 
-AnnotateNullable
-----------------
+### AnnotateNullable
 
   AnnotateNullable determines which variables in a Java program were
   ever null during execution. Its primary use is for performing
@@ -1577,8 +1470,7 @@ AnnotateNullable
   See section "AnnotateNullable" of the Daikon user manual for more
   information.
 
-DynComp
--------
+### DynComp
 
 User-visible changes
 
@@ -1594,15 +1486,13 @@ User-visible changes
 
 * Support new declaration format
 
-Version 4.3.5 (April 3 2008)
-============================
+## Version 4.3.5 (April 3 2008)
 
 Daikon was enhanced to better support program points that are basic
 blocks.  Also, some minor enhancements and bugs fixes were made and the
 documentation was improved.
 
-Daikon
-------
+### Daikon
 
 Bug fixes
 
@@ -1640,16 +1530,14 @@ Documentation
 
 * A section on using Eclipse for editing the Daikon source was added.
 
-Version 4.3.4 (December 1, 2007)
-================================
+## Version 4.3.4 (December 1, 2007)
 
 DynComp (Java) was enhanced with a number of new options.  It has a
 new significantly faster mode where it only tracks references (and
 not primitives).  It also has additional output that makes it easier
 to determine where interactions occurred.
 
-DynComp (Java)
---------------
+### DynComp (Java)
 
 User-visible changes
 
@@ -1661,8 +1549,7 @@ User-visible changes
 * DynComp has a number of new command line options that provide
     information on the source of the interactions that merge variables.
 
-Daikon
-------
+### Daikon
 
 Bug fixes
 
@@ -1670,22 +1557,19 @@ Bug fixes
   necessary input files are resources in the jar file and the unit test
   code handles them as resources.
 
-Version 4.3.3 (October 3, 2007)
-===============================
+## Version 4.3.3 (October 3, 2007)
 
 A number of problems with building Daikon on Windows were resolved.
 Daikon now builds correctly with Cygwin.  The installation and build
 instructions were updated.
 
-Version 4.3.2 (September 3, 2007)
-=================================
+## Version 4.3.2 (September 3, 2007)
 
 Bug fixes and minor enhancements were made to Daikon, Kvasir, and
 DynComp (Java).  The "repair" output format is no longer supported
 by Daikon.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -1698,8 +1582,7 @@ Bug fixes
     it can be called multiple times.  This allows a caller to process
     multiple unrelated trace files within a single run.
 
-Kvasir
-------
+### Kvasir
 
 Bug fixes
 
@@ -1710,8 +1593,7 @@ Bug fixes
     visible effect is that the presence or absence of "REFERENCE_VALUE
     has only one value" invariants is more consistent.
 
-DynComp (Java)
---------------
+### DynComp (Java)
 
 Bug fixes
 
@@ -1720,14 +1602,12 @@ Bug fixes
 
 * The clone method of Object is now instrumented.
 
-Version 4.3.1 (August 2, 2007)
-==============================
+## Version 4.3.1 (August 2, 2007)
 
 Bug fixes and minor enhancements were made to Kvasir, DynComp (Java),
 DynComp (binary) and Daikon.
 
-Kvasir
-------
+### Kvasir
 
 Bug fixes
 
@@ -1739,8 +1619,7 @@ Bug fixes
 * An unneeded directory "auxprogs" whose presence caused a build
     failure on some systems has been removed.
 
-DynComp (Binary)
-----------------
+### DynComp (Binary)
 
 Bug fixes
 
@@ -1755,16 +1634,14 @@ Bug fixes
     the maximum practical with the current data structure, and
     overflows are now caught with an error message.
 
-DynComp (Java)
---------------
+### DynComp (Java)
 
 Bug fixes
 
 * The equals method of Object is now instrumented.  (The manual
     incorrectly claimed that this was the case in version 4.3.0.)
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -1786,23 +1663,20 @@ Bug fixes
     printing simplify output on some OneOfSequence invariants on a
     subsequence with a lower bound.
 
-Version 4.3.0 (July 1, 2007)
-============================
+## Version 4.3.0 (July 1, 2007)
 
 A new tool (DynComp) calculates variable comparability information
 for Java programs.  Kvasir has been enhanced to support x86-64 Linux
 platforms.
 
-Daikon
-------
+### Daikon
 
 Bug fixes
 
 * Distributed .jar and .class files are now runnable on a Java 5 (aka
     Java 1.5) JVM, rather than requiring Java 6.
 
-Kvasir
-------
+### Kvasir
 
   Portability
 
@@ -1815,8 +1689,7 @@ Kvasir
     systems. (The symptom of the problem is a linking failure
     mentioning "__stack_chk_fail".)
 
-DynComp Java
-------------
+### DynComp Java
 
   The DynComp tool for Java programs is available in this release.  This tool
   performs dynamic type inference to determine which variables should (and
@@ -1824,35 +1697,30 @@ DynComp Java
   can make Daikon run faster and avoid generating irrelevant invariants.
   See section 7.2 of the manual for more information.
 
-Version 4.2.16 (May 1, 2007)
-============================
+## Version 4.2.16 (May 1, 2007)
 
 This is a maintenance release with few substantive changes.
 
-Daikon
-------
+### Daikon
 
 Bug fixes
 
 * A bug that occurred when Daikon.jar appeared twice in the classpath
     on windows was fixed.
 
-DtraceDiff
-----------
+### DtraceDiff
 
 User-visible changes
 
 * Error messages are more informative.
 
-Version 4.2.15 (March 31, 2007)
-===============================
+## Version 4.2.15 (March 31, 2007)
 
 Configuration-variable-related Error messages were improved.
 Two bugs in Annotate, and one in the utilMDE utility package, were fixed.
 The source code was made compatible with Java 6.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -1879,15 +1747,13 @@ Bug fixes
 * Daikon now compiles cleanly when using Java 6.  (Java 6's compiler
     issues more warning messages than Java 5's compiler does.)
 
-Version 4.2.14 (February 1, 2007)
-=================================
+## Version 4.2.14 (February 1, 2007)
 
 A new mode was added to Daikon that allows it to handle constants
 more efficiently.  Also, a new configuration option was added
 and one was renamed.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -1910,15 +1776,13 @@ User-visible changes
 * The configuration option daikon.Daikon.disable_derived_variables was
     renamed to daikon.derive.Derivation.disable_derived_variables
 
-Version 4.2.13 (January 1, 2007)
-================================
+## Version 4.2.13 (January 1, 2007)
 
 A server mode was added to Daikon.  Two new command line switches
 were added to InvariantChecker to more finely control what invariants
 are checked.
 
-InvariantChecker
-----------------
+### InvariantChecker
 
 User-visible changes
 
@@ -1928,8 +1792,7 @@ User-visible changes
 * Added a switch (`--filter`) that checks only invariants that are not
     filtered by the default filters.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -1937,15 +1800,13 @@ User-visible changes
   In this mode, Daikon processes files that are placed in the specified
   server directory until a filename that ends in ".end" is encountered.
 
-Version 4.2.12 (December 1, 2006)
-=================================
+## Version 4.2.12 (December 1, 2006)
 
 InvariantChecker was enhanced to handle multiple input files and count
 the violations for each file. Some minor enhancements and bugs fixes
 were made to Daikon.
 
-InvariantChecker
-----------------
+### InvariantChecker
 
 User-visible changes
 
@@ -1957,8 +1818,7 @@ User-visible changes
 * Only invariants above the default confidence level and that have
     not been filtered out by the default filters are checked.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -1973,14 +1833,12 @@ Bug fixes
 * The percentage progress information was fixed to work on dtrace
     files specified with full pathnames.
 
-Version 4.2.11 (November 1, 2006)
-=================================
+## Version 4.2.11 (November 1, 2006)
 
 Some enhancements and bug fixes were made to Daikon.  Repeated declarations
 are no longer an error.  A new invariant and derived variable were added.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -2002,16 +1860,14 @@ Bug fixes
 * Simplify output now correctly references the length of synthetic
     arrays such as a[].getClass().
 
-Version 4.2.10 (October 2, 2006)
-================================
+## Version 4.2.10 (October 2, 2006)
 
 Some enhancements and bug fixes were made to Daikon.  Programs with a
 large number of variables are handled more efficiently.  A number of
 configuration options were changed.  PrintInvariants supports a new
 command line option.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -2034,8 +1890,7 @@ Bug fixes
     resulted in both unnecessary and missing guarding.  This has
     been fixed.
 
-Version 4.2.9 (September 1, 2006)
-=================================
+## Version 4.2.9 (September 1, 2006)
 
 Bugs were fixed in Chicory, Kvasir, and Daikon.  Chicory was enhanced
 to correctly instrument programs that use an incompatible version of
@@ -2043,8 +1898,7 @@ BCEL and to not instrument unselected classes.  Kvasir was modified to
 avoid making calls to the system C library.  Using the system C library
 can cause problems on some versions of Linux.
 
-Chicory
--------
+### Chicory
 
   Chicory uses the Byte Code Engineering Library (BCEL) to instrument
   class files.  Errors can occur if the application uses an incompatible
@@ -2057,8 +1911,7 @@ Chicory
   Chicory only modifies classes that are instrumented.  Previous versions
   made unnecessary changes to uninstrumented classes.
 
-Daikon
-------
+### Daikon
 
   The configuration option "omit_hashcode_values_Simplify" now uses
   artificial values for hashcodes that should remain consistent from run
@@ -2066,8 +1919,7 @@ Daikon
 
   A problem where Daikon crashed when producing JML output was fixed.
 
-Kvasir
-------
+### Kvasir
 
   Kvasir has changed to use internal versions of some C standard
   library routines, and versions provided by Valgrind, rather than
@@ -2084,29 +1936,25 @@ Kvasir
   in Daikon's output for values of type "float", because Daikon
   represents them internally with type "double".
 
-Version 4.2.8 (August 1, 2006)
-==============================
+## Version 4.2.8 (August 1, 2006)
 
 This is a maintenance release with few substantive changes.
 
-Daikon
-------
+### Daikon
 
   Performance changes
 
 * Non-instantiating suppression processing has been optimized to
     run 5 to 15% faster.
 
-Version 4.2.7 (July 1, 2006)
-============================
+## Version 4.2.7 (July 1, 2006)
 
 Minor enhancements were made to Chicory, Daikon, and Kvasir.  Chicory
 more accurately determines whether or not a class is a boot (system)
 class.  Daikon better handles spreadsheet data.  Kvasir's
 DynComp option more consistently handles array references.
 
-Chicory
--------
+### Chicory
 
 User-visible changes
 
@@ -2119,8 +1967,7 @@ User-visible changes
     can specify a regular expression that determines what classes are
     considered to be boot classes.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -2137,8 +1984,7 @@ User-visible changes
     when a linear binary invariant of the form 'C*a = b' exists and C
     is an integer constant.
 
-Kvasir
-------
+### Kvasir
 
 User-visible changes
 
@@ -2148,13 +1994,11 @@ User-visible changes
     indexes used in array dereferences are now always counted as
     interacting.
 
-Version 4.2.6 (June 1, 2006)
-============================
+## Version 4.2.6 (June 1, 2006)
 
 This is a maintenance release with few substantive changes.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -2171,15 +2015,13 @@ User-visible changes
 * Daikon no longer prints "Creating implications", which is
     irrelevant to most users.
 
-Kvasir
-------
+### Kvasir
 
 User-visible changes
 
 * New command-line option `--array-length-limit` has been added.
 
-Version 4.2.5 (May 1, 2006)
-===========================
+## Version 4.2.5 (May 1, 2006)
 
 Some enhancements were made to Daikon.  The list of modified and
 unmodified variables in DBC and JML output is more accurate.  A
@@ -2187,8 +2029,7 @@ configuration option was added to control the method by which Daikon
 determines variable comparability.  And the treatment of values near
 zero with fuzzy comparisons has been changed.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -2214,13 +2055,11 @@ Bug fixes
 * Fixed a bug in the Simplify formatting of index comparison invariants
     that occurred on slices starting from non-zero indices.
 
-Version 4.2.4 (April 1, 2006)
-=============================
+## Version 4.2.4 (April 1, 2006)
 
 This is a bug-fix release.  Several bugs in Daikon were fixed.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -2242,29 +2081,25 @@ Bug fixes
 * Fixed InvariantChecker so that it works correctly with trace files
     that contain declaration records.
 
-Version 4.2.3 (March 1, 2006)
-=============================
+## Version 4.2.3 (March 1, 2006)
 
 This is a bug-fix release.  It also adds a new, more detailed mode to
 the x86 DynComp tool.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
 * Changed the default value of configuration parameter
     daikon.PptRelation.enable_object_user from "true" to "false".
 
-Chicory
--------
+### Chicory
 
 User-visible changes
 
 * Fixed bugs in operation of `--purity-file` and in `--omit-var` switches.
 
-Kvasir
-------
+### Kvasir
 
 User-visible changes
 
@@ -2278,8 +2113,7 @@ User-visible changes
     3.2.0 from the Feb. 10, 2006 snapshot of the Subversion
     repository.
 
-Version 4.2.2 (February 1, 2006)
-================================
+## Version 4.2.2 (February 1, 2006)
 
 Enhancements were made to the Chicory and Kvasir front ends.
 Chicory allows a regular expression to choose variables to be
@@ -2287,8 +2121,7 @@ omitted by name and has some new and modified command line options.
 Kvasir has some new command line options to better control its
 comparability analysis.
 
-Chicory
--------
+### Chicory
 
 User-visible changes
 
@@ -2312,8 +2145,7 @@ User-visible changes
     variables are named with their full static pathname (for example:
     package.class.varname) rather than their relative name (this.varname)
 
-Kvasir
-------
+### Kvasir
 
 User-visible changes
 
@@ -2322,16 +2154,14 @@ User-visible changes
     finer user control over the DynComp comparability analysis tool,
     which is distributed along with Kvasir.
 
-Version 4.2.1 (January 1, 2006)
-===============================
+## Version 4.2.1 (January 1, 2006)
 
 Enhancements were made to the Mangel-Wurzel and Kvasir front ends.
 Mangel-Wurzel better supports arrays, C++, and regular expressions for
 specifying program point names.  Some Kvasir command line
 options were updated.
 
-Mangel-Wurzel
--------------
+### Mangel-Wurzel
 
   Enhancements
 
@@ -2357,8 +2187,7 @@ Bug fixes
 * Code with multiple return statements on the same line no longer results
     in duplicate exit PPT names.
 
-Kvasir
-------
+### Kvasir
 
 User-visible changes
 
@@ -2367,8 +2196,7 @@ User-visible changes
     the file that contains the static variable.  The new option
     `--all-static-vars` outputs static variables at all program points.
 
-Version 4.2.0 (December 6, 2005)
-================================
+## Version 4.2.0 (December 6, 2005)
 
 Daikon's support for C and C++ has been substantially improved.  The
 Mangel-Wurzel C/C++ front end now runs on Windows, and it supports new
@@ -2382,8 +2210,7 @@ are pure observer methods, and so can be treated as derived variables.
 Many small improvements to Daikon's output have been made (but most
 users will only notice small changes to the output).
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -2426,8 +2253,7 @@ User-visible changes
     parent DAIKONPARENT, is the preferred setting for the user to
     configure.
 
-Annotate
---------
+### Annotate
 
 Bug fixes
 
@@ -2435,8 +2261,7 @@ Bug fixes
     class fields.  This improves the output and eliminates a warning
     message.
 
-Kvasir
-------
+### Kvasir
 
 User-visible changes
 
@@ -2466,8 +2291,7 @@ User-visible changes
 
 * The Daikon User Manual describes C++ support in more detail.
 
-Mangel-Wurzel
--------------
+### Mangel-Wurzel
 
   Enhancements
 
@@ -2483,8 +2307,7 @@ Mangel-Wurzel
     users have no need to examine the internals of structures like FILE that
     are defined as interfaces to the underlying operating system.)
 
-Chicory
--------
+### Chicory
 
 User-visible changes
 
@@ -2501,8 +2324,7 @@ User-visible changes
   trace file (which can happen even if some methods match if those methods
   are never executed)
 
-Purity Analysis Kit
--------------------
+### Purity Analysis Kit
 
   The Purity Analysis Kit computes which methods of a Java program are pure
   (have no externally visible side effects).  The Purity Analysis Kit now
@@ -2511,8 +2333,7 @@ Purity Analysis Kit
   `--purity-file` option.  The Purity Analysis Kit was written by Alexandru
   Salcianu and is available from <http://www.mit.edu/~salcianu/purity/>.
 
-Version 4.1.7 (November 1 2005)
-===============================
+## Version 4.1.7 (November 1 2005)
 
 Enhancements were made to the Kvasir, Mangel-Wurzel and Chicory front
 ends.  Kvasir and Mangel-Wurzel both handle arrays of structures and
@@ -2520,8 +2341,7 @@ pointers better than previously.  The command line options for Chicory
 were standardized.  The documentation of each was reorganized and updated.
 Daikon has some new and enhanced configuration options.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -2539,8 +2359,7 @@ User-visible changes
     option daikon.inv.filter.DerivedVariableFilter.class_re for more
     information.
 
-Chicory
--------
+### Chicory
 
 Bug fixes
 
@@ -2564,8 +2383,7 @@ Bug fixes
     The documentation was also updated to provide a better explanation
     of the switches.
 
-Kvasir
-------
+### Kvasir
 
   Enhancements
 
@@ -2580,8 +2398,7 @@ Kvasir
      options, and added a section describing the DynComp dynamic
      comparability analysis tool that comes with Kvasir.
 
-Mangel-Wurzel
--------------
+### Mangel-Wurzel
 
 Bug fixes
 
@@ -2604,22 +2421,19 @@ Bug fixes
 * Arrays of structs are now treated as arrays of each scalar struct field
      (instead of being ignored), as in the other Daikon front ends.
 
-Version 4.1.6 (October 1 2005)
-==============================
+## Version 4.1.6 (October 1 2005)
 
 A number of bug fixes and minor enhancements have been made to the
 Mangel-Wurzel, Kvasir, and Chicory front ends.  The older front
 ends dfec and dfej have been removed from the distribution.
 
-Mangel-Wurzel
--------------
+### Mangel-Wurzel
 
   Printing of string variable values has been fixed to do a better job of
   distinguishing between null-terminated strings, and arrays of arbitrary
   byte values or pointers to a single character object.
 
-Kvasir
-------
+### Kvasir
 
 Bug fixes
 
@@ -2636,8 +2450,7 @@ Bug fixes
 * Improved the garbage collector for DynComp comparability analysis
     to allow it to scale up to larger programs.
 
-Daikon
-------
+### Daikon
 
   Manual
 
@@ -2652,15 +2465,13 @@ Daikon
     compiled using the supplied Makefile, there are no "javac -Xlint"
     warnings.
 
-Chicory
--------
+### Chicory
 
   Added command line options `--trace-percent` (only output the specified
   percentage of program points) and `--watch-static-recursion` (only
   output a particular static once).
 
-Removed components
-------------------
+### Removed components
 
   We have reduced the size of the Daikon distribution by removing several
   un-needed or out-of-date components.
@@ -2689,8 +2500,7 @@ Removed components
     only works with Java 1.1 and is the bottleneck in running dfej.  A
     replacement is in testing and will be included in a future release.
 
-Version 4.1.5 (September 1 2005)
-================================
+## Version 4.1.5 (September 1 2005)
 
 A new source-based C/C++ front end, Mangel-Wurzel, is now available.
 Mangel-Wurzel uses Rational Purify to determine the validity and extent
@@ -2699,22 +2509,19 @@ is available only for Linux/86, but future versions are planned for
 Windows and possibly other platforms.  Kvasir will remain the suggested
 C/C++ front end for Linux/86.
 
-Mangel-Wurzel
--------------
+### Mangel-Wurzel
 
   More information is available in the 'Mangel-Wurzel' section of the
   Daikon User Manual.
 
-Kvasir
-------
+### Kvasir
 
 Bug fixes
 
 * Optimized initialization code to greatly reduce start-up time when
     running Kvasir on large programs.
 
-Version 4.1.4 (August 1 2005)
-=============================
+## Version 4.1.4 (August 1 2005)
 
 Kvasir and Chicory have been enhanced with new command line options,
 improved performance and documentation.  Kvasir can more efficiently
@@ -2722,16 +2529,14 @@ trace a subset of a program.  Chicory supports pure functions as
 additional Daikon variables.  Also, Daikon problems are now tracked in
 a Bugzilla database.
 
-General
--------
+### General
 
   Daikon problems are now tracked in the Bugzilla database at at:
   <http://pag.csail.mit.edu/bugzilla/>.  There are separate products for
   Daikon and Kvasir.  Problems with Chicory and other front ends
   should be submitted against the Daikon product.
 
-Daikon
-------
+### Daikon
 
 User changes
 
@@ -2745,8 +2550,7 @@ Bug fixes
     output into source code as comments.  This eliminates errors reported
     by the JML syntax checker (available at <https://www.cs.ucf.edu/~leavens/JML/>).
 
-Chicory
--------
+### Chicory
 
 User-visible changes:
 
@@ -2782,8 +2586,7 @@ Bug fixes
 * Documented `--premain` switch to Chicory.  Noted that the default output file
     for Chicory is . (not ./daikon-output).
 
-Kvasir
-------
+### Kvasir
 
 User-visible changes:
 
@@ -2805,16 +2608,14 @@ User-visible changes:
     disambiguation with partial program tracing" entries to the Kvasir
     section of the Daikon User Manual.
 
-Version 4.1.3 (July 1 2005)
-===========================
+## Version 4.1.3 (July 1 2005)
 
 The dynamic comparability analysis in Kvasir has been improved (it
 indicates which variables interact with one another).  Switch
 `--var-select-pattern` has been added to Daikon, and a variety of bugs have
 been fixed and enhancements performed.
 
-Daikon
-------
+### Daikon
 
 User-visible changes:
 
@@ -2828,8 +2629,7 @@ User-visible changes:
 * Improved Daikon's diagnostics that indicate it was provided no program
     points, variables, or samples.
 
-Kvasir
-------
+### Kvasir
 
 User-visible changes:
 
@@ -2849,15 +2649,13 @@ User-visible changes:
     while running Kvasir with DynComp, try the `--dyncomp-fast-mode`
     option.
 
-Version 4.1.2 (June 1 2005)
-===========================
+## Version 4.1.2 (June 1 2005)
 
 Kvasir can now produce variable comparability information, Chicory can now
 run Daikon online (without writing any files to disk), and the new
 DtraceDiff program can be used to compare Daikon trace files.
 
-Kvasir
-------
+### Kvasir
 
 User-visible changes:
 
@@ -2875,8 +2673,7 @@ User-visible changes:
     the release version of Valgrind 2.2.  This should have no
     user-visible effects.
 
-Chicory
--------
+### Chicory
 
 User-visible changes:
 
@@ -2886,8 +2683,7 @@ User-visible changes:
     can avoid creation of large temporary .dtrace files on disk, and
     can make Daikon run faster.
 
-DtraceDiff
-----------
+### DtraceDiff
 
   New:
 
@@ -2906,8 +2702,7 @@ DtraceDiff
     It also signals an error when it detects incompatible program
     point declarations or when one file is shorter than the other.
 
-Daikon
-------
+### Daikon
 
   Implementation changes:
 
@@ -2917,14 +2712,12 @@ Daikon
 
 * Runtime-check instrumenter can emit "invariant-checker" classes.
 
-Version 4.1.1 (May 1 2005)
-==========================
+## Version 4.1.1 (May 1 2005)
 
 This is primarily a maintenance release with bug fixes to Kvasir and
 Chicory.
 
-Kvasir
-------
+### Kvasir
 
 User-visible changes:
 
@@ -2938,15 +2731,13 @@ Bug fixes:
     and global variables) and only prints out initialized data within
     arrays.
 
-Chicory
--------
+### Chicory
 
 Bug fixes:
 
 * Chicory no longer changes the order in which classes are initialized.
 
-Dfec
-----
+### Dfec
 
 User-visible changes:
 
@@ -2954,8 +2745,7 @@ User-visible changes:
     in the distribution.  Examples for Kvasir (the recommended C front end)
     are still available.
 
-Version 4.1.0 (Apr 1 2005)
-==========================
+## Version 4.1.0 (Apr 1 2005)
 
 Daikon now supports C++:  it is possible to infer invariants over C++
 programs, using the Kvasir front end.  (Kvasir works on Linux/x86 systems.)
@@ -2963,8 +2753,7 @@ As usual, many bugs have been corrected, and in particular, Kvasir has been
 made much more robust.  The Daikon manual has been copy-edited and
 reorganized for clarity.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -2981,8 +2770,7 @@ User-visible changes
     sections have been reorganized, and some redundant material has been
     eliminated.  These changes should make the manual more readable.
 
-Kvasir
-------
+### Kvasir
 
 User-visible changes
 
@@ -3019,15 +2807,13 @@ Bug fixes
     programs of significant size (for example, gcc 3.4.3, which is over
     300,000 lines of code).
 
-Version 4.0.3 (Mar 1 2005)
-==========================
+## Version 4.0.3 (Mar 1 2005)
 
 This version includes significant improvements to the manual, enhancements
 to Kvasir, and bug fixes.  Version 3.1.10 of the Daikon plug-in for Eclipse
 is also now available.
 
-Daikon
-------
+### Daikon
 
   Documentation changes
 
@@ -3041,18 +2827,15 @@ Daikon
     Manual have been expanded, and in particular a new section about how
     to instrument C programs has been added.
 
-Kvasir
-------
+### Kvasir
 
 Bug fixes
 
 * Kvasir now compiles on older versions of gcc such as 2.96.
 
-Version 4.0.2 (Feb 19 2005)
-===========================
+## Version 4.0.2 (Feb 19 2005)
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -3084,8 +2867,7 @@ User-visible changes
     exception to be thrown when the .dtrace file reaches the specified
     size; it does not forcibly terminate the program.
 
-Chicory
--------
+### Chicory
 
 User-visible changes
 
@@ -3101,11 +2883,9 @@ Bug fixes
 
 * Correct a problem with outputting values of type "char".
 
-Version 4.0.1 (Feb 13 2005)
-===========================
+## Version 4.0.1 (Feb 13 2005)
 
-Daikon
-------
+### Daikon
 
   The manual has been restructured and simplified, in order to clarify that
   the Chicory and Kvasir front ends (for Java and C, respectively) are
@@ -3121,8 +2901,7 @@ Daikon
   Invariants over typeOf derived variables are disabled in the instrumenter
   and Annotate's output.
 
-Kvasir
-------
+### Kvasir
 
 User changes
 
@@ -3138,8 +2917,7 @@ Bug fixes
     Kvasir more robust across different Linux platforms (kernel and gcc
     version differences).
 
-Eclipse plug-in
----------------
+### Eclipse plug-in
 
   Version 3.1.10 of the Daikon plug-in for Eclipse (written by David Cok)
   has been released.  It is compatible with Daikon version 3.1.7 (which is
@@ -3147,8 +2925,7 @@ Eclipse plug-in
   downloaded from the Daikon webpage).  A version of the plug-in that is
   fully compatible with Daikon 4 is still in preparation.
 
-Version 4.0.0 (Feb 7 2005)
-==========================
+## Version 4.0.0 (Feb 7 2005)
 
 The 4.0.0 version of Daikon introduces many substantial enhancements.
 These improvements include:
@@ -3161,14 +2938,12 @@ These improvements include:
 * Command-line options have been standardized across Daikon components.
 * Many bug fixes, documentation updates, and other minor improvements.
 
-License
--------
+### License
 
   Daikon's licensing terms have been liberalized.  Daikon is now distributed
   without restrictions under an MIT/BSD-style license.
 
-Chicory:  class file-based front end for Java
----------------------------------------------
+### Chicory:  class file-based front end for Java
 
   Chicory is a new Daikon front end for Java.  Its functionality is very
   similar to that of the dfej tool, and it supports most of the same
@@ -3191,8 +2966,7 @@ Chicory:  class file-based front end for Java
 * Chicory is platform-independent (and requires no special action to
      build), since it is written in Java.
 
-Eclipse plug-in
----------------
+### Eclipse plug-in
 
   Daikon is now accompanied by an Eclipse plug-in (written by David Cok)
   that provides the functionality of instrumenting files, obtaining trace
@@ -3204,8 +2978,7 @@ Eclipse plug-in
   3.1.7 and (like Eclipse 3.0.1) only versions of Java up to Java 1.4.2.
   A version of the plug-in for Eclipse 3.1 and Daikon 4.0.0 is forthcoming.
 
-Daikon
-------
+### Daikon
 
 User-visible changes
 
@@ -3283,8 +3056,7 @@ dfej
     -instrsourcedir=            --instr-dir=
 ```
 
-Annotate
---------
+### Annotate
 
   Annotate and other components of Daikon (including runtimechecker,
   described below) handle Java 5.0 code.  They continue to support all
@@ -3293,8 +3065,7 @@ Annotate
   Annotate respects tabs in the source file.  Previously, Annotate
   converted tabs to spaces.
 
-Runtime-check instrumenter
---------------------------
+### Runtime-check instrumenter
 
   A runtime-check instrumenter (named "runtimechecker") has been added to
   Daikon.  The instrumenter creates a new version of Java source code; the
@@ -3307,8 +3078,7 @@ Runtime-check instrumenter
   likely than random to reveal errors in programs.  You can download Eclat
   from <http://pag.csail.mit.edu/eclat/> .
 
-Kvasir
-------
+### Kvasir
 
 User changes
 
@@ -3340,14 +3110,12 @@ dfepl
     --instr-basedir=     --instr-dir=
 ```
 
-Version 3.1.7 (Jan 1 2005)
-==========================
+## Version 3.1.7 (Jan 1 2005)
 
 This version includes some improvements to the website, documentation
 enhancements and several bug fixes.
 
-Daikon
-------
+### Daikon
 
   Documentation Changes
 
@@ -3364,11 +3132,9 @@ Bug fixes
 * An incorrect assertion that caused Daikon to fail on some inputs
     was fixed.  Some other minor problems were resolved as well.
 
-Version 3.1.6 (Dec 1 2004)
-==========================
+## Version 3.1.6 (Dec 1 2004)
 
-Daikon
-------
+### Daikon
 
 User changes
 
@@ -3407,16 +3173,14 @@ Developer changes
 * Sections were added to the developer manual explaining regression
     testing and how to analyze historical versions of Daikon.
 
-Dfej
-----
+### Dfej
 
 Bug fixes
 
 * A bug that could cause errors in programs that used variables
     named "ps", "depth", or "prefix" was fixed.
 
-Kvasir
-------
+### Kvasir
 
 User changes
 
@@ -3437,11 +3201,9 @@ Bug fixes
     another that caused arrays to have too many elements.  On the
     whole, Kvasir produces significantly more output than before.
 
-Version 3.1.5 (Nov 1 2004)
-==========================
+## Version 3.1.5 (Nov 1 2004)
 
-Daikon
-------
+### Daikon
 
 User changes
 
@@ -3481,8 +3243,7 @@ Developer changes
     more specific message.  The C front ends dfec (distributed
     separately) and Kvasir have been updated accordingly.
 
-Kvasir (C front end)
---------------------
+### Kvasir (C front end)
 
 User changes
 
@@ -3503,8 +3264,7 @@ Developer changes
     representation type for strings in .decls files (see "Daikon
     Developer Changes" in this file).
 
-Dfec (C font end)
------------------
+### Dfec (C font end)
 
 Developer changes
 
@@ -3512,8 +3272,7 @@ Developer changes
     representation type for strings in .decls files (see "Daikon
     Developer Changes" in this file).
 
-Dfepl (Perl front end)
-----------------------
+### Dfepl (Perl front end)
 
 Bug fixes
 
@@ -3521,8 +3280,7 @@ Bug fixes
     of Perl starting with 5.8.1 has been fixed.  Dfepl has been
     verified to work with Perl version 5.8.4.
 
-Scripts
--------
+### Scripts
 
 User changes
 
@@ -3531,8 +3289,7 @@ User changes
     entry, and some parts of Daikon's toolset require .dtrace files to
     contain nonces.
 
-Version 3.1.4 (01 Oct 2004)
-===========================
+## Version 3.1.4 (01 Oct 2004)
 
 Changed the way that output formats are specified to the Daikon,
 PrintInvariants, and Annotate tools.  Previously, one supplied
@@ -3591,8 +3348,7 @@ and arrays.  The only user-visible changes so far are minor
 improvements in finding the names of structure members and the correct
 locations of function parameters in some circumstances.
 
-Version 3.1.3 (01 Sep 2004)
-===========================
+## Version 3.1.3 (01 Sep 2004)
 
 Several bugs in the LinearyTernary invariant were fixed.  Under some
 conditions, LinearTernary invariants were missed when initial points
@@ -3607,8 +3363,7 @@ Added configuration options daikon.Daikon.undo_opts and
 daikon.Daikon.quiet, See the "List of Configuration Options" section
 of the user manual for more information.
 
-Version 3.1.2 (03 Aug 2004)
-===========================
+## Version 3.1.2 (03 Aug 2004)
 
 The non-instantiating suppression mechanism has been significantly
 optimized.  Performance for programs with large number of variables
@@ -3652,8 +3407,7 @@ variable specific factories have been replaced with a single list of
 invariants.  See the "New Invariants" section of the developer manual
 for more information.
 
-Version 3.1.1 (01 July 2004)
-============================
+## Version 3.1.1 (01 July 2004)
 
 Modified Java formatting to use FuzzyFloat comparisons rather than
 directly comparing floating point numbers.  By default, FuzzyFloat
@@ -3676,8 +3430,7 @@ We have moved the Daikon mailing lists (daikon-announce, daikon-discuss,
 and daikon-developers) from pag.csail.mit.edu to lists.csail.mit.edu.  Any
 changes to your subscription must be made at lists.csail.mit.edu.
 
-Version 3.1.0 (01 June 2004)
-============================
+## Version 3.1.0 (01 June 2004)
 
 Daikon now includes a new front-end for C programs, named "Kvasir".
 Unlike previous C front-ends, which worked by rewriting source code,
@@ -3694,8 +3447,7 @@ parsed correctly by both the JML tools and ESC/Java2.  (However, the
 "assignable" clause is given a default value; it will be made more accurate
 in a future release.)
 
-Version 3.0.4 (01 May 2004)
-===========================
+## Version 3.0.4 (01 May 2004)
 
 Added Annotate as a replacement for MergeEsc.  Annotate inserts
 Daikon-generated invariants into Java source files as ESC/JML/DBC
@@ -3723,8 +3475,7 @@ terminate with an error if the trace file ends in the middle of the
 record.  The last record will simply be ignored.  The dtype-perl script
 is now included in the distribution.
 
-Version 3.0.3 (01 April 2004)
-=============================
+## Version 3.0.3 (01 April 2004)
 
 A new optimization was added to Daikon to suppress invariants that
 are implied by other invariants.  Suppressed invariants are neither
@@ -3754,8 +3505,7 @@ The manual was updated to explain how to work-around the use of
 realloc in C programs.  See the "C program requirements" section
 of the user manual for more information.
 
-Version 3.0.2 (27 February 2004)
-================================
+## Version 3.0.2 (27 February 2004)
 
 The environment variables DTRACELIMIT and DTRACELIMITTERMINATE were
 added to dfej.  These allow the size of the output tracefile to be controlled.
@@ -3778,8 +3528,7 @@ were also updated.
 
 The developer manual has been updated with a new "Unit Testing" section.
 
-Version 3.0.1 (02 February 2004)
-================================
+## Version 3.0.1 (02 February 2004)
 
 Three new binary invariants were added to Daikon: square, bitwise subset,
 and divides without remainder.  Each of these is checked both between
@@ -3803,8 +3552,7 @@ file.  It is possible to remove program points that are not referenced in
 the trace file, reflexive invariants, and invariants that are suppressed.
 See the "Command line options" section of the manual for more information.
 
-Version 3.0.0 (19 December 2003)
-================================
+## Version 3.0.0 (19 December 2003)
 
 Daikon version 3 is now the standard distribution.
 
@@ -3843,8 +3591,7 @@ program.  See the manual for details.
 The developers manual has been significantly rewritten for clarity and
 some sections have been added.
 
-Version 2.5.3 (01 October 2003)
-===============================
+## Version 2.5.3 (01 October 2003)
 
 The default VarComparability has been changed from none to implicit.
 Decls file may need to be changed to specify the comparability as
@@ -3856,8 +3603,7 @@ enhance clarity.
 
 A number of bugs were fixed, particularly in Daikon version 3 (experimental).
 
-Version 2.5.2 (03 September 2003)
-=================================
+## Version 2.5.2 (03 September 2003)
 
 Fixed some Simplify formatting bugs.
 
@@ -3872,8 +3618,7 @@ from the SubSet invariants (SuperSet, and SuperSetFloat).  See the
 information.  These invariants are also documented in the "Invariant
 List" section of the user manual.
 
-Version 2.5.1 (01 August 2003)
-==============================
+## Version 2.5.1 (01 August 2003)
 
 Added the LogicalCompare program which compares two sets of invariants
 describing a software module and determines if one set of the
@@ -3907,8 +3652,7 @@ SeqFloatGreaterEqual, etc).  See the "List of Configuration Options"
 section of the user manual for more information.  These invariants are
 also documented in the "Invariant List" section of the user manual.
 
-Version 2.5.0 (01 July 2003)
-============================
+## Version 2.5.0 (01 July 2003)
 
 Daikon now requires JDK 1.4.  If you are still using JDK 1.3, you will
 need to upgrade in order to run Daikon.
@@ -3926,8 +3670,7 @@ of invariants found by Daikon and create a specialized checking
 program that checks only those invariants.  See the "Invariant
 Checker" section of the manual for more information.
 
-Version 2.4.9 (02 June 2003)
-============================
+## Version 2.4.9 (02 June 2003)
 
 Changed the default for Simplify iterations from 1000000 to 1000.
 This should provide reasonable results while being less
@@ -3940,8 +3683,7 @@ Added new command line options for daikon.pl (`--instrument`, `--nogui`,
 `--src`, and `--debug`).  See the "Command line options for daikon.pl"
 section of the manual for more information.
 
-Version 2.4.8 (13 May 2003)
-===========================
+## Version 2.4.8 (13 May 2003)
 
 The internal mechanism for formatting output has been enhanced.  There
 is now a single routine (format_using (OutputFormat)) that replaces
@@ -3952,8 +3694,7 @@ new formatting routines.
 Added the capability to use a decls file to the convertcsv.pl script.
 See the usage message of convertcsv.pl for more information.
 
-Version 2.4.7 (30 April 2003)
-=============================
+## Version 2.4.7 (30 April 2003)
 
 The perl front end (dfepl) has been significantly enhanced.  An
 additional Perl example has been added.  See the "Perl examples" and
@@ -3963,8 +3704,7 @@ information.
 The manual has been reformatted and edited in a number of areas to improve
 clarity and readability.
 
-Version 2.4.6 (24 April 2003)
-=============================
+## Version 2.4.6 (24 April 2003)
 
 Floating-point quantities can be considered equal even if they differ
 slightly (say, due to floating-point roundoff).  Configuration option
@@ -3982,8 +3722,7 @@ a short description of each.  Recall that users can add their own
 Other parts of the manual have been enhanced, such as descriptions of
 variable names and dealing with too-large datasets.
 
-Version 2.4.5 (1 April 2003)
-============================
+## Version 2.4.5 (1 April 2003)
 
 "Dummy invariants" permit properties that are not in Daikon's grammar to be
 output, when they appear as splitting conditions.  It is possible to
@@ -3993,8 +3732,7 @@ the output formats that Daikon supports.
 The manual describes how to deal with contradictory invariants, which
 Daikon might sometimes produce due to a bug or a limitation.
 
-Version 2.4.4 (2 March 2003)
-============================
+## Version 2.4.4 (2 March 2003)
 
 dfec now works with gcc 2.96 (the version that is distributed with Red Hat
 Linux, but which is not an official gcc release).
@@ -4002,19 +3740,16 @@ Linux, but which is not an official gcc release).
 The Context GUI bug that caused it to sometimes print question marks in
 invariants is fixed.
 
-Version 2.4.3 (1 February 2003)
-===============================
+## Version 2.4.3 (1 February 2003)
 
 dfej now produces output with program points named in Java, not JVML
 format:  "foo(int, java.lang.String[])", not "foo(I[Ljava/lang/String;)".
 
-Version 2.4.2 (20 January 2003)
-===============================
+## Version 2.4.2 (20 January 2003)
 
 Fix several bugs, mostly reported by Tao Xie.
 
-Version 2.4.1 (1 January 2003)
-==============================
+## Version 2.4.1 (1 January 2003)
 
 There are two improvements to running Daikon under Windows.  First, Cygwin
 is no longer necessary to run Daikon:  the daikonenv.bat file sets up the
@@ -4022,8 +3757,7 @@ Windows environment to permit Daikon to be run without Cygwin.  Second,
 when running under Cygwin, the cygwin-runner.pl script smooths over
 differences in path conventions between Cygwin and Windows.
 
-Version 2.4.0 (1 December 2002)
-===============================
+## Version 2.4.0 (1 December 2002)
 
 Daikon can detect invariants in Perl programs.  See the "Perl examples" and
 "Instrumenting Perl programs" sections of the manual.
@@ -4051,8 +3785,7 @@ $DAIKONDIR/front-end/c/daikon_runtime.h.
 The manual sections on dealing with variable comparability, large .dtrace
 files, and memory exhaustion have been revised and expanded.
 
-Version 2.3.18 (2 November 2002)
-================================
+## Version 2.3.18 (2 November 2002)
 
 Improved directions for building dfec (if you have a license to the EDG
 C/C++ front end).  dfec has also been updated to use EDG 3.0 instead of EDG
@@ -4072,13 +3805,11 @@ Daikon can work over data that comes from sources other than program
 executions; that all exit points must have the same number of variables;
 that "nonsensical" is permitted as a value in a .dtrace file.
 
-Version 2.3.16 (1 October 2002)
-===============================
+## Version 2.3.16 (1 October 2002)
 
 Bugfix release.
 
-Version 2.3.15 (12 September 2002)
-==================================
+## Version 2.3.15 (12 September 2002)
 
 Discontinued the compiled distribution; now there is only one Daikon
 distribution, the source distribution, which includes both pre-compiled
@@ -4090,8 +3821,7 @@ dfec enhancements:
   added `--flatten-mdas` option
   improved documentation of disambiguation file
 
-Version 2.3.14 (1 August 2002)
-==============================
+## Version 2.3.14 (1 August 2002)
 
 CreateSpinfoC program creates splitting conditions via static analysis of C
 programs; this complements CreateSpinfo, which works for Java programs.
@@ -4099,8 +3829,7 @@ programs; this complements CreateSpinfo, which works for Java programs.
 daikon_runtime.h lists many customization variables for the Daikon C
 Runtime.
 
-Version 2.3.13 (17 July 2002)
-=============================
+## Version 2.3.13 (17 July 2002)
 
 Fix bug when running from daikon.jar.
 
@@ -4110,14 +3839,12 @@ Manual gives example of use of orig variables, explains what to do when
 Daikon runs slowly, discusses Ajax "too many levels of symbolic links"
 error.
 
-Version 2.3.12 (11 July 2002)
-=============================
+## Version 2.3.12 (11 July 2002)
 
 Daikon reports invariants over floating-point numbers.  Previously, it
 silently ignored floating-point numbers.
 
-Version 2.3.11 (9 July 2002)
-============================
+## Version 2.3.11 (9 July 2002)
 
 The runcluster.pl program performs cluster analysis (a machine learning
 technique) to produce splitter info files.  This is in addition to other
@@ -4135,20 +3862,17 @@ The manual emphasizes that dfec only works on ANSI/ISO C programs (that are
 also legal C++ programs), and gives a number of hints for making your C
 programs compliant.
 
-Version 2.3.10 (10 June 2002)
-=============================
+## Version 2.3.10 (10 June 2002)
 
 Bugfix release.
 
-Version 2.3.9 (4 June 2002)
-===========================
+## Version 2.3.9 (4 June 2002)
 
 Improve dfec documentation: explain more error messages (including array
 bounds errors), add gcc installation instructions, explain uninitialized
 array element processing.
 
-Version 2.3.8 (10 May 2002)
-===========================
+## Version 2.3.8 (10 May 2002)
 
 This release coordinates with a new release of the dfec binaries (at
 <http://pag.csail.mit.edu/daikon/download/>).
@@ -4161,8 +3885,7 @@ The Context GUI now supports C programs.
 
 Rearrange distribution to avoid very long file names in tar file.
 
-Version 2.3.7 (1 May 2002)
-==========================
+## Version 2.3.7 (1 May 2002)
 
 Rewrite of dfec documentation.  dfec is now easier to use, more robust, and
 supports new options, such as struct instrumentation depth.
@@ -4174,8 +3897,7 @@ Add documentation for CreateSpinfo program.
 Add new configuration options daikon.split.FileCompiler.compiler and
 daikon.split.TimedProcess.compile_wait.
 
-Version 2.3.6 (5 April 2002)
-============================
+## Version 2.3.6 (5 April 2002)
 
 MergeESC tool inserts Daikon output into Java source files as ESC/Java
 comments.
@@ -4192,15 +3914,13 @@ Ajax tool bug fixes.
 
 Improved installation and troubleshooting instructions.
 
-Version 2.3.5 (1 March 2002)
-============================
+## Version 2.3.5 (1 March 2002)
 
 Add `--files_from` command-line argument to Daikon.
 
 Add -a and -l command-line arguments to Diff.
 
-Version 2.3.4 (17 February 2002)
-================================
+## Version 2.3.4 (17 February 2002)
 
 Add four new programs to the distribution:
   `createspinfo.pl` `trace-untruncate` `trace-purge-fns.pl` `trace-purge-vars.pl`
@@ -4212,8 +3932,7 @@ Manual enhancements:
 * Add text about two new GUI filters.
 * Typo fixes.
 
-Version 2.3.3 (11 February 2002)
-================================
+## Version 2.3.3 (11 February 2002)
 
 Add new flags to Diff program.
 
@@ -4225,8 +3944,7 @@ Manual enhancements:
 * Explain more invariant (Daikon output) syntax.
 * Discuss dealing with errors in the external Ajax and Simplify programs.
 
-Version 2.3.2 (7 December 2001)
-===============================
+## Version 2.3.2 (7 December 2001)
 
 Support for splitter files that specify conditions to use when detecting
 implications (conditional invariants).
@@ -4238,15 +3956,16 @@ The Daikon Java runtime respects the DTRACEAPPEND environment variable.
 
 dfec requires that gcc be present.
 
-Version 2.3.1 (8 October 2001)
-==============================
+## Version 2.3.1 (8 October 2001)
 
 Added Context GUI, which shows relevant invariants in a separate window as
 you browse code in a text editor.
 
 Added many index entries to manual.
 
-Version 2.3.0 (11 September 2001)
-=================================
+## Version 2.3.0 (11 September 2001)
 
 Added linear ternary invariants, of the form "z = ax + by + c".
+
+<!--  LocalWords:  html pdf DAIKONDIR javadoc DtraceDiff
+ -->
