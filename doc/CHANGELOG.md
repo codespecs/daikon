@@ -1,6 +1,7 @@
 # History of Daikon changes
 
 <!-- markdownlint-disable no-duplicate-heading -->
+<!-- pyml disable no-duplicate-heading -->
 
 This file lists significant user-visible changes to Daikon.
 (Many other changes, including most bug fixes, are not noted here.)
@@ -632,6 +633,8 @@ Fixed an intermittently occurring problem in Chicory with instrumenting
 Java methods containing a switch.
 
 Fixed several Daikon issues:
+
+<!-- pyml disable-num-lines 6 no-missing-space-atx -->
 
 * #18: runtimechecker should not instrument abstract classes
 * #19: runtimechecker parser problem with ">" characters
