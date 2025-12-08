@@ -90,35 +90,66 @@ public class OperandStack24 implements Cloneable {
     for (int i = 0; i < this.stack.size(); i++) {
       ClassDesc thisItem = this.stack.get(i);
       ClassDesc otherItem = other.stack.get(i);
-      if (thisItem == null) {
-        if (otherItem != null && otherItem.isPrimitive()) {
-          return false;
-        }
-      } else if (otherItem == null) {
-        // we know thisItem != null
-        if (thisItem.isPrimitive()) {
-          return false;
-        }
-        // We should check if they are equal or have a common superclass, but we
-        // assume the class file is valid and take the easy way out.
-      } else if (thisItem.isArray()) {
-        if (otherItem.isPrimitive()) {
-          return false;
-        }
-        // We assume an array matches any array or any class as they all have Object as a superclass
-        // at some point.
-      } else if (thisItem.isClassOrInterface()) {
-        if (otherItem.isPrimitive()) {
-          return false;
-        }
-        // We assume a class matches any array or any class as they all have Object as a superclass
-        // at some point.
-      } else if (thisItem.isPrimitive() && !otherItem.isPrimitive()) {
+      if (!compareOperandStackElements(thisItem, otherItem)) {
         return false;
       }
-      // We don't bother to check they are the same primitive.
     }
     return true;
+  }
+
+  /**
+   * Returns true if and only if the two OperandStack elements are equal. An element may be one of
+   * four possible items:
+   *
+   * <ul>
+   *   <li>{@code null} a special case as it matches anything but a primitive
+   *   <li>a primitive (such as {@code int}, {@code long}, etc.)
+   *   <li>an array reference
+   *   <li>an object reference
+   * </ul>
+   *
+   * @param thisItem one OperandStack element
+   * @param otherItem another OperandStack element
+   * @return true if and only if the items match
+   */
+  protected boolean compareOperandStackElements(ClassDesc thisItem, ClassDesc otherItem) {
+    if (thisItem == null) {
+      if (otherItem != null && otherItem.isPrimitive()) {
+        return false;
+      }
+      // We assume null matches any array or any class.
+      return true;
+    } else if (otherItem == null) {
+      // we know thisItem != null
+      if (thisItem.isPrimitive()) {
+        return false;
+      }
+      // We assume null matches any array or any class.
+      return true;
+    } else if (thisItem.isArray()) {
+      if (otherItem.isPrimitive()) {
+        return false;
+      }
+      // We assume an array matches any array or any class as they all have Object as a superclass
+      // at some point.
+      return true;
+    } else if (thisItem.isClassOrInterface()) {
+      if (otherItem.isPrimitive()) {
+        return false;
+      }
+      // We assume a class matches any array or any class as they all have Object as a superclass
+      // at some point.
+      return true;
+    } else if (thisItem.isPrimitive() && !otherItem.isPrimitive()) {
+      return false;
+    }
+    // Both operands are primitives - they better match.
+    if (thisItem.equals(otherItem)) {
+      return true;
+    } else {
+      throw new DynCompError(
+          "Operand stack primitives don't match: " + thisItem + ", " + otherItem);
+    }
   }
 
   /**
@@ -199,7 +230,8 @@ public class OperandStack24 implements Cloneable {
   }
 
   /**
-   * Returns the number of stack slots used.
+   * Returns the total number of stack slots used. This could be larger than the total number of
+   * stack operands if any are of type {@code long} or {@code double}.
    *
    * @see #maxStack()
    */
@@ -227,7 +259,8 @@ public class OperandStack24 implements Cloneable {
   }
 
   /**
-   * Calculate the size of an item on the operand stack.
+   * Calculate the size of an item on the operand stack. This is 2 for {@code long} or {@code
+   * double}, 1 for everything else.
    *
    * @param item type to get size of
    * @return size of item
