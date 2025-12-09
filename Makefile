@@ -403,10 +403,6 @@ repository-test:
 	${MAKE} -C daikon
 
 
-validate:
-	html5validator --ignore /doc/daikon.html /doc/daikon/ /doc/developer.html /doc/developer/ /java/api/ tools/hierarchical/clustering.html /tests/sources/
-
-
 ###########################################################################
 ### Distribution
 ###
