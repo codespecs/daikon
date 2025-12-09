@@ -3,10 +3,14 @@ package daikon.dcomp;
 import static java.lang.constant.ConstantDescs.CD_Class;
 import static java.lang.constant.ConstantDescs.CD_Object;
 import static java.lang.constant.ConstantDescs.CD_String;
+import static java.lang.constant.ConstantDescs.CD_boolean;
+import static java.lang.constant.ConstantDescs.CD_byte;
+import static java.lang.constant.ConstantDescs.CD_char;
 import static java.lang.constant.ConstantDescs.CD_double;
 import static java.lang.constant.ConstantDescs.CD_float;
 import static java.lang.constant.ConstantDescs.CD_int;
 import static java.lang.constant.ConstantDescs.CD_long;
+import static java.lang.constant.ConstantDescs.CD_short;
 import static java.lang.constant.ConstantDescs.CD_void;
 
 import daikon.chicory.MethodGen24;
@@ -45,6 +49,7 @@ import java.lang.classfile.instruction.TypeCheckInstruction;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.List;
+import java.util.Set;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
@@ -62,6 +67,9 @@ public final class CalcStack24 {
 
   /** ClassDesc for {@code null}. */
   static final ClassDesc nullCD = ClassDesc.of("fake.ClassDecs.for.null");
+
+  /** Set of ClassDesc items that map to CD_int. */
+  static final Set<ClassDesc> INTEGRAL = Set.of(CD_boolean, CD_byte, CD_char, CD_int, CD_short);
 
   /**
    * Calculates changes in the operand stack based on the symbolic execution of a CodeElement. Note
@@ -276,7 +284,6 @@ public final class CalcStack24 {
         // execution pump will reset stack
         return false;
 
-      // UNDONE: the JVM says result is int, but should we track the type more precisely?
       // operand stack before: ..., arrayref, index
       // operand stack after:  ..., value
       case Opcode.BALOAD:
@@ -615,7 +622,6 @@ public final class CalcStack24 {
           return false;
         }
 
-      // UNDONE: the JVM says result is int, but should we track the type more precisely?
       // operand stack before: ..., value
       // operand stack after:  ..., result
       case Opcode.I2B: // integer to byte
@@ -704,7 +710,6 @@ public final class CalcStack24 {
         stack.push(CD_int);
         return true;
 
-      // UNDONE: the JVM says result is int, but should we track the type more precisely?
       // operand stack before: ..., objectref
       // operand stack after:  ..., result
       case Opcode.INSTANCEOF:
@@ -912,8 +917,14 @@ public final class CalcStack24 {
           // We simulate xRETURN's functionality here because we don't
           // really "jump into" and simulate the invoked method.
           final ClassDesc rt = mtd.returnType();
-          if (!rt.equals(CD_void)) {
-            stack.push(rt);
+          switch (rt) {
+            case ClassDesc c when c.equals(CD_void) -> {}
+            case ClassDesc c when INTEGRAL.contains(c) -> {
+              stack.push(CD_int);
+            }
+            default -> {
+              stack.push(rt);
+            }
           }
           return true;
         }
@@ -929,8 +940,14 @@ public final class CalcStack24 {
           // We simulate xRETURNs functionality here because we don't
           // really "jump into" and simulate the invoked method.
           final ClassDesc rt = mtd.returnType();
-          if (!rt.equals(CD_void)) {
-            stack.push(rt);
+          switch (rt) {
+            case ClassDesc c when c.equals(CD_void) -> {}
+            case ClassDesc c when INTEGRAL.contains(c) -> {
+              stack.push(CD_int);
+            }
+            default -> {
+              stack.push(rt);
+            }
           }
           return true;
         }
