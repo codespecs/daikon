@@ -112,7 +112,8 @@ public class OperandStack24 implements Cloneable {
    * @param otherItem another OperandStack element
    * @return true if and only if the items match
    */
-  protected boolean compareOperandStackElements(ClassDesc thisItem, ClassDesc otherItem) {
+  protected boolean compareOperandStackElements(
+      @GuardSatisfied OperandStack24 this, ClassDesc thisItem, ClassDesc otherItem) {
     if (thisItem == null) {
       if (otherItem != null && otherItem.isPrimitive()) {
         return false;
