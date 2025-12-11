@@ -322,7 +322,7 @@ nightly-test-except-doc-pdf:
 # Code style; defines `style-check` and `style-fix`.
 CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir utils --exclude clustering.html
 ifeq (,$(wildcard .plume-scripts))
-dummy != git clone -q https://github.com/plume-lib/plume-scripts.git .plume-scripts
+dummy := $(git clone -q https://github.com/plume-lib/plume-scripts.git .plume-scripts)
 endif
 include .plume-scripts/code-style.mak
 
