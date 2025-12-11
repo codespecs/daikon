@@ -597,19 +597,16 @@ public final class CalcStack24 {
       // operand stack before: ..., objectref
       // operand stack after:  ..., value
       case Opcode.GETFIELD:
-        {
-          stack.pop(); // discard the value
-          FieldInstruction fi = (FieldInstruction) inst;
-          stack.push(fi.typeSymbol());
-          return true;
-        }
+        stack.pop(); // discard the objectref
+
+      // fall through is intentional:
 
       // operand stack before: ...
       // operand stack after:  ..., value
       case Opcode.GETSTATIC:
         {
           FieldInstruction fi = (FieldInstruction) inst;
-          stack.push(fi.typeSymbol());
+          pushResultClassDesc(fi.typeSymbol(), stack);
           return true;
         }
 
@@ -916,16 +913,7 @@ public final class CalcStack24 {
           // We are sure the invoked method will xRETURN eventually.
           // We simulate xRETURN's functionality here because we don't
           // really "jump into" and simulate the invoked method.
-          final ClassDesc rt = mtd.returnType();
-          switch (rt) {
-            case ClassDesc c when c.equals(CD_void) -> {}
-            case ClassDesc c when INTEGRAL.contains(c) -> {
-              stack.push(CD_int);
-            }
-            default -> {
-              stack.push(rt);
-            }
-          }
+          pushResultClassDesc(mtd.returnType(), stack);
           return true;
         }
 
@@ -939,16 +927,7 @@ public final class CalcStack24 {
           // We are sure the invoked method will xRETURN eventually.
           // We simulate xRETURNs functionality here because we don't
           // really "jump into" and simulate the invoked method.
-          final ClassDesc rt = mtd.returnType();
-          switch (rt) {
-            case ClassDesc c when c.equals(CD_void) -> {}
-            case ClassDesc c when INTEGRAL.contains(c) -> {
-              stack.push(CD_int);
-            }
-            default -> {
-              stack.push(rt);
-            }
-          }
+          pushResultClassDesc(mtd.returnType(), stack);
           return true;
         }
 
@@ -1034,6 +1013,25 @@ public final class CalcStack24 {
       }
       default -> {
         throw new DynCompError("unknown primitive type " + npai.typeKind() + " in: " + npai);
+      }
+    }
+  }
+
+  /**
+   * Calculate a Java bytecode's result type and push it on the operand stack. If the type is void,
+   * nothing is pushed. If the type is boolean, byte, char or short an int is pushed. Otherwise, the
+   * result itself is pushed.
+   *
+   * @param result a NewPrimitiveArrayInstruction
+   */
+  static void pushResultClassDesc(ClassDesc result, OperandStack24 stack) {
+    switch (result) {
+      case ClassDesc c when c.equals(CD_void) -> {}
+      case ClassDesc c when INTEGRAL.contains(c) -> {
+        stack.push(CD_int);
+      }
+      default -> {
+        stack.push(result);
       }
     }
   }
