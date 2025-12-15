@@ -67,9 +67,6 @@ java/daikon/chicory/debug/
 # Obtained via Git
 utils
 .plume-scripts
-.markdownlint-cli2.yaml
-.pymarkdown
-.ruff.toml
 
 # Documentation (including WWW pages and the manual)
 doc/.fix-dev-menu
