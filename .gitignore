@@ -67,7 +67,6 @@ java/daikon/chicory/debug/
 # Obtained via Git
 utils
 .plume-scripts
-.ruff.toml
 
 # Documentation (including WWW pages and the manual)
 doc/.fix-dev-menu

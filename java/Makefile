@@ -188,8 +188,8 @@ ifeq (${JAVA24}, 0)
 endif
 
 # Don't exclude the whole ./daikon/test directory.
-TAG_FILES =        $(shell find . -type f -follow \( -name '*daikon-java*' -o -name '*Test.java' -o -name '*Tester.java' -o -name 'Test*.java' -o -name 'GenericTestClass.java' -o -name 'TestQuant.java' -o -name 'DiffDummyInvariant.java' -o -name 'AllTestsSuite.java' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${SORT_DIRECTORY_ORDER})
-TAG_FILES_NO_JTB = $(shell find . -type f -follow \( -name '*daikon-java*' -o -name '*Test.java' -o -name '*Tester.java' -o -name 'Test*.java' -o -name 'GenericTestClass.java' -o -name 'TestQuant.java' -o -name 'DiffDummyInvariant.java' -o -name 'AllTestsSuite.java' \) -prune -o \( -path './jtb' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${SORT_DIRECTORY_ORDER})
+TAG_FILES :=        $(shell find . -type f -follow \( -name '*daikon-java*' -o -name '*Test.java' -o -name '*Tester.java' -o -name 'Test*.java' -o -name 'GenericTestClass.java' -o -name 'TestQuant.java' -o -name 'DiffDummyInvariant.java' -o -name 'AllTestsSuite.java' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${SORT_DIRECTORY_ORDER})
+TAG_FILES_NO_JTB := $(shell find . -type f -follow \( -name '*daikon-java*' -o -name '*Test.java' -o -name '*Tester.java' -o -name 'Test*.java' -o -name 'GenericTestClass.java' -o -name 'TestQuant.java' -o -name 'DiffDummyInvariant.java' -o -name 'AllTestsSuite.java' \) -prune -o \( -path './jtb' \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${SORT_DIRECTORY_ORDER})
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
 AUTO_GENERATED_FILES = \
@@ -976,7 +976,7 @@ INDEX_JAVA_FILES = ${DAIKON_JAVA_FILES}
 INTERNING_JAVA_FILES_SKIP_COUNTS = Intern.java\|VarInfoName.java\|daikon/dcomp
 ## Which files to check.
 INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES}
-INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | ${SORT_DIRECTORY_ORDER})
+INTERNING_JAVA_FILES_COUNTS := $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | ${SORT_DIRECTORY_ORDER})
 NULLNESS_JAVA_FILES = ${DAIKON_JAVA_FILES}
 
 #  $(shell find daikon -name '*.java' -a -exec grep -L "^@SuppressWarnings.*nullness" {} \; | sort)

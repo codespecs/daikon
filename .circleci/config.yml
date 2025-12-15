@@ -1,5 +1,3 @@
-
-
 version: 2.1
 
 jobs:
@@ -115,7 +113,6 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
-
   nonquick-txt-diff-ubuntu-jdk8:
     docker:
       - image: mdernst/daikon-ubuntu-jdk8
@@ -215,7 +212,6 @@ jobs:
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
-
 
   non-txt-diff-ubuntu-jdk8:
     docker:
@@ -658,7 +654,6 @@ jobs:
           command: scripts/test-typecheck-with-bundled-cf.sh
           no_output_timeout: 30m
 
-
   quick-txt-diff-rockylinux-jdk8:
     docker:
       - image: mdernst/daikon-rockylinux-jdk8
@@ -699,7 +694,6 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
-
   nonquick-txt-diff-rockylinux-jdk8:
     docker:
       - image: mdernst/daikon-rockylinux-jdk8
@@ -739,7 +733,6 @@ jobs:
           paths:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
-
 
   non-txt-diff-rockylinux-jdk8:
     docker:
@@ -1063,4 +1056,3 @@ workflows:
           requires:
             - canary-jobs
             - kvasir-ubuntu-jdk25
-
