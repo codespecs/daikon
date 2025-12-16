@@ -354,7 +354,7 @@ public class DCInstrument24 {
    * not allocated as part of a store, but rather must be allocated as part of a load. We call a
    * special runtime method for this so that we can check for this in other cases.
    */
-  protected static String[] uninit_classes = {
+  protected static final String[] uninit_classes = {
     "java.lang.String",
     "java.lang.Class",
     "java.lang.StringBuilder",
@@ -368,7 +368,7 @@ public class DCInstrument24 {
    * <p>The equals method and the clone method are not listed here. They are special-cased in the
    * {@link #handleInvoke} routine.
    */
-  protected static MethodDef[] obj_methods = {
+  protected static final MethodDef[] obj_methods = {
     new MethodDef("finalize", noArgsSig),
     new MethodDef("getClass", noArgsSig),
     new MethodDef("hashCode", noArgsSig),

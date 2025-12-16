@@ -55,7 +55,12 @@ public class MethodInfo {
    * <p>Chicory and DynComp treat this field differently. Chicory only adds an exit location if the
    * corresponding entry in exit_location_is_included is true. (Based on the ppt omit/select
    * patterns.) DynComp adds all exit locations and sets every exit_location_is_included value to
-   * true.
+   * true. Thus:
+   *
+   * <ul>
+   *   <li>there is always an exit_location_is_included boolean for every return instruction
+   *   <li>exit_locations contains only those exits whose corresponding boolean is true
+   * </ul>
    */
   public List<Integer> exit_locations;
 

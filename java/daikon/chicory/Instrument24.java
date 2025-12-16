@@ -964,6 +964,8 @@ public class Instrument24 implements ClassFileTransformer {
       MethodInfo curMethodInfo,
       MethodGen24.MInfo24 minfo) {
 
+    // exit_location_is_included contains exactly one boolean per return instruction,
+    // exit_locations contains an integer only when that boolean is true.
     assert curMethodInfo != null : "@AssumeAssertion(nullness): can't get here if null";
     Iterator<Boolean> shouldIncludeIter = curMethodInfo.exit_location_is_included.iterator();
     Iterator<Integer> exitLocationIter = curMethodInfo.exit_locations.iterator();
@@ -989,6 +991,10 @@ public class Instrument24 implements ClassFileTransformer {
       // skip over `inst` we just inserted new_il in front of
       li.next();
     }
+
+    // Check for unused entries.
+    assert !shouldIncludeIter.hasNext();
+    assert !exitLocationIter.hasNext();
   }
 
   /**
@@ -1115,6 +1121,7 @@ public class Instrument24 implements ClassFileTransformer {
     // The offset of the first parameter.
     int param_offset = mgen.isStatic() ? 0 : 1;
 
+    // Assumes addInstrumentationAtEntry has been called to create the nonce local.
     // iload
     // Push the nonce.
     newCode.add(LoadInstruction.of(TypeKind.INT, minfo.nonceLocal.slot()));
@@ -1491,7 +1498,7 @@ public class Instrument24 implements ClassFileTransformer {
         debugInstrument.log("Exit at line %d%n", line_number);
 
         // Only do incremental lines if we haven't seen a line number since the last return.
-        if (line_number == prev_line_number && foundLine == false) {
+        if (line_number == prev_line_number && !foundLine) {
           debugInstrument.log("Could not find line %d%n", line_number);
           line_number++;
         }

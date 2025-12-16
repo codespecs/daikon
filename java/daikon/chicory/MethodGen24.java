@@ -431,9 +431,15 @@ public class MethodGen24 {
   }
 
   /**
-   * Due to a Java compiler optimization, unused parameters may not be included in the local
+   * Due to Java compiler optimizations, unused parameters may not be included in the local
    * variables. Some of DynComp's instrumentation requires their presence. This routine makes these
-   * changes, if necessary.
+   * changes, if necessary:
+   *
+   * <ul>
+   *   <li>ensures every parameter has a corresponding LocalVariable with matching slot and name
+   *   <li>may insert dummy alignN entries for 2-slot parameters
+   *   <li>resorts localsTable by slot when modified
+   * </ul>
    *
    * @param minfo MInfo24 object for current method
    * @return true if modified localsTable, false otherwise
@@ -606,7 +612,8 @@ public class MethodGen24 {
   }
 
   /**
-   * Set the parameter names.
+   * Set the parameter names. The user must ensure that the length of paramNames equals the length
+   * of paramTypes.
    *
    * @param paramNames the new paramNames array
    */
@@ -634,7 +641,8 @@ public class MethodGen24 {
   }
 
   /**
-   * Set the parameter types.
+   * Set the parameter types. The user must ensure that the length of paramNames equals the length
+   * of paramTypes.
    *
    * @param paramTypes the new paramTypes array
    */
@@ -691,9 +699,9 @@ public class MethodGen24 {
   }
 
   /**
-   * Set the current size of the locals table.
+   * Set the maximum number of locals.
    *
-   * @param size the current size of the locals table
+   * @param size the maximum number of locals
    */
   public void setMaxLocals(int size) {
     maxLocals = size;

@@ -41,29 +41,29 @@ public class ClassGen24 {
   //
 
   /** The class's access flags. */
-  private AccessFlags accessFlags;
+  private final AccessFlags accessFlags;
 
   /** The list of interfaces this class implements. */
-  private List<ClassEntry> interfaceList;
+  private final List<ClassEntry> interfaceList;
 
   /** The name of the class's superclass, in binary name format. */
-  private @BinaryName String superclassName;
+  private final @BinaryName String superclassName;
 
   /** The class's name. */
-  private @BinaryName String className;
+  private final @BinaryName String className;
 
   //
   // End of ClassModel items.
   //
 
   /** The ClassBuilder for this class. */
-  private ClassBuilder classBuilder;
+  private final ClassBuilder classBuilder;
 
   /** True if this class is an interface. */
-  private boolean isInterface;
+  private final boolean isInterface;
 
   /** True if this class is static. */
-  private boolean isStatic;
+  private final boolean isStatic;
 
   /**
    * Creates a ClassGen24 object.
@@ -97,11 +97,14 @@ public class ClassGen24 {
    * @param name the interface name, in binary format
    */
   public void addInterface(@BinaryName String name) {
+    String internalName = name.replace('.', '/');
+    for (ClassEntry existing : interfaceList) {
+      if (existing.asInternalName().equals(internalName)) {
+        return;
+      }
+    }
     ClassDesc ue = ClassDesc.of(name);
     ClassEntry ce = classBuilder.constantPool().classEntry(ue);
-    if (interfaceList.contains(ce)) {
-      return;
-    }
     interfaceList.add(ce);
   }
 

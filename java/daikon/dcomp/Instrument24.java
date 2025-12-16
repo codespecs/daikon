@@ -23,12 +23,10 @@ import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
- * This class is responsible for modifying bytecodes. Specifically, its main task is to add calls
- * into the DynComp Runtime for instrumentation purposes. These added calls are sometimes referred
- * to as "hooks".
- *
- * <p>This class is loaded by Premain at startup. It is a {@link ClassFileTransformer} which means
- * that its {@link #transform} method gets called each time the JVM loads a class.
+ * This class is loaded by Premain at startup. It is a {@link ClassFileTransformer} which means that
+ * its {@link #transform} method gets called each time the JVM loads a class. This method then
+ * decides if the class should be instrumented or not. If it should, it calls DCInstrument24 to do
+ * the instrumentation.
  *
  * <p>Instrument24 and DCInstrument24 use Java's ({@code java.lang.classfile}) APIs for reading and
  * modifying .class files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more
@@ -306,26 +304,26 @@ public class Instrument24 implements ClassFileTransformer {
    * Returns true if the specified class is part of dcomp itself (and thus should not be
    * instrumented). Some Daikon classes that are used by DynComp are included here as well.
    *
-   * @param classname class to be checked
-   * @return true if classname is a part of DynComp
+   * @param className class to be checked
+   * @return true if className is a part of DynComp
    */
   @Pure
-  private static boolean is_dcomp(String classname) {
+  private static boolean is_dcomp(@InternalForm String className) {
 
-    if (classname.startsWith("daikon/dcomp/") && !classname.startsWith("daikon/dcomp/DcompTest")) {
+    if (className.startsWith("daikon/dcomp/") && !className.startsWith("daikon/dcomp/DcompTest")) {
       return true;
     }
-    if (classname.startsWith("daikon/chicory/")
-        && !classname.equals("daikon/chicory/ChicoryTest")) {
+    if (className.startsWith("daikon/chicory/")
+        && !className.equals("daikon/chicory/ChicoryTest")) {
       return true;
     }
-    if (classname.equals("daikon/Chicory")) {
+    if (className.equals("daikon/Chicory")) {
       return true;
     }
-    if (classname.equals("daikon/PptTopLevel$PptType")) {
+    if (className.equals("daikon/PptTopLevel$PptType")) {
       return true;
     }
-    if (classname.startsWith("daikon/plumelib")) {
+    if (className.startsWith("daikon/plumelib")) {
       return true;
     }
     return false;
@@ -335,25 +333,25 @@ public class Instrument24 implements ClassFileTransformer {
    * Returns true if the specified class is part of a tool known to do Java byte code
    * transformation. We need to warn the user that this may not work correctly.
    *
-   * @param classname class to be checked
-   * @return true if classname is a known transformer
+   * @param className class to be checked
+   * @return true if className is a known transformer
    */
   @Pure
-  protected static boolean is_transformer(String classname) {
+  protected static boolean is_transformer(@InternalForm String className) {
 
-    if (classname.startsWith("org/codehaus/groovy")) {
+    if (className.startsWith("org/codehaus/groovy")) {
       return true;
     }
-    if (classname.startsWith("groovy/lang")) {
+    if (className.startsWith("groovy/lang")) {
       return true;
     }
-    if (classname.startsWith("org/mockito")) {
+    if (className.startsWith("org/mockito")) {
       return true;
     }
-    if (classname.startsWith("org/objenesis")) {
+    if (className.startsWith("org/objenesis")) {
       return true;
     }
-    if (classname.contains("ByMockito")) {
+    if (className.contains("ByMockito")) {
       return true;
     }
     return false;

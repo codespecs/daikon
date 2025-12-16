@@ -618,6 +618,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           // the amount of the switch padding changed.
           modifyStackMapsForSwitches(il.getStart(), il);
 
+          // exit_location_is_included contains exactly one boolean per return instruction,
+          // exit_locations contains an integer only when that boolean is true.
           Iterator<Boolean> shouldIncludeIter = curMethodInfo.exit_location_is_included.iterator();
           Iterator<Integer> exitLocationIter = curMethodInfo.exit_locations.iterator();
 
@@ -1261,7 +1263,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           debugInstrument.log("Exit at line %d%n", line_number);
 
           // Only do incremental lines if we haven't seen a line number since the last return.
-          if (line_number == prev_line_number && foundLine == false) {
+          if (line_number == prev_line_number && !foundLine) {
             debugInstrument.log("Could not find line %d%n", line_number);
             line_number++;
           }

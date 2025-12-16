@@ -246,8 +246,7 @@ public final class BuildJDK {
     Map<String, InputStream> class_stream_map = new HashMap<>();
     String jar_name = java_home + "/lib/rt.jar";
     System.out.printf("using jar file %s%n", jar_name);
-    try {
-      JarFile jfile = new JarFile(jar_name);
+    try (JarFile jfile = new JarFile(jar_name)) {
       // Get each class to be instrumented and store it away
       Enumeration<JarEntry> entries = jfile.entries();
       while (entries.hasMoreElements()) {
@@ -462,7 +461,7 @@ public final class BuildJDK {
   }
 
   /** Formats just the time part of a DateTime. */
-  private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+  private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
   /**
    * Instruments the JavaClass {@code jc} (whose name is {@code classFileName}). Writes the
