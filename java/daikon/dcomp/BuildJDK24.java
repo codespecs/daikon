@@ -557,7 +557,7 @@ public final class BuildJDK24 {
 
   /**
    * Print information about methods that were not instrumented. This happens when a method fails
-   * BCEL's verifier (which is more strict than Java's).
+   * the ClassFile API's verifier.
    */
   private static void print_skipped_methods() {
 

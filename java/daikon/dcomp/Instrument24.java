@@ -50,6 +50,9 @@ public class Instrument24 implements ClassFileTransformer {
   /** Directory into which to dump original classes. */
   final File debug_uninstrumented_dir;
 
+  /** Have we seen a class member of a known transformer? */
+  private static boolean transformer_seen = false;
+
   /**
    * Debug information about which classes and/or methods are transformed and why. Use
    * debugInstrument for actual instrumentation details.
@@ -128,9 +131,6 @@ public class Instrument24 implements ClassFileTransformer {
   //
   // End of diagnostics.
   //
-
-  /** Have we seen a class member of a known transformer? */
-  private static boolean transformer_seen = false;
 
   /**
    * Given a class, return a transformed version of the class that contains instrumentation code.

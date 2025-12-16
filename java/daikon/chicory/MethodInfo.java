@@ -64,7 +64,11 @@ public class MethodInfo {
    */
   public List<Integer> exit_locations;
 
-  /** Tells whether each exit point in method is instrumented, based on filters. */
+  /**
+   * Tells whether each exit point in the method is instrumented, based on filters. Note: that
+   * exit_locations and exit_location_is_included are not index-aligned; exit_locations is a
+   * filtered subset.
+   */
   public List<Boolean> exit_location_is_included;
 
   /**

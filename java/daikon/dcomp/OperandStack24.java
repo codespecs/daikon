@@ -42,7 +42,11 @@ public class OperandStack24 implements Cloneable {
   /** The maximum number of stack slots this OperandStack instance may hold. */
   private final @NonNegative int maxStack;
 
-  /** Creates an empty stack with a maximum of maxStack slots. */
+  /**
+   * Creates an empty stack with a maximum of maxStack items. Note that this might be larger than
+   * necessary as a method's maxStack is the maximum number of stack slots used. This could be
+   * larger than the number of stack operands if any are of type {@code long} or {@code double}.
+   */
   public OperandStack24(final @NonNegative int maxStack) {
     this.maxStack = maxStack;
   }
@@ -113,7 +117,9 @@ public class OperandStack24 implements Cloneable {
    * @return true if and only if the items match
    */
   protected boolean compareOperandStackElements(
-      @GuardSatisfied OperandStack24 this, ClassDesc thisItem, ClassDesc otherItem) {
+      @GuardSatisfied OperandStack24 this,
+      @Nullable ClassDesc thisItem,
+      @Nullable ClassDesc otherItem) {
     if (thisItem == null) {
       if (otherItem != null && otherItem.isPrimitive()) {
         return false;
@@ -202,7 +208,7 @@ public class OperandStack24 implements Cloneable {
   }
 
   /**
-   * Pops i elements off the stack. Always returns {@code null}.
+   * Pops {@code count} elements off the stack. Always returns {@code null}.
    *
    * @return {@code null}
    */
@@ -215,7 +221,7 @@ public class OperandStack24 implements Cloneable {
 
   /** Pushes a ClassDesc object onto the stack. */
   public void push(final ClassDesc type) {
-    if (stack.size() >= maxStack) {
+    if (slotsUsed() + slotSize(type) > maxStack) {
       throw new DynCompError("Operand stack size exceeded: " + stack);
     }
     stack.add(type);
@@ -238,8 +244,8 @@ public class OperandStack24 implements Cloneable {
    */
   public @NonNegative int slotsUsed(@GuardSatisfied OperandStack24 this) {
     int slots = 0;
-    for (int i = 0; i < stack.size(); i++) {
-      slots += slotSize(peek(i));
+    for (ClassDesc item : stack) {
+      slots += slotSize(item);
     }
     return slots;
   }

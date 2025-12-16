@@ -2248,7 +2248,10 @@ public class DCInstrument24 {
           case Opcode.ATHROW:
             return build_il(dcr_call("throw_op", CD_void, noArgsSig), inst);
 
-          // Opcodes that don't need any modifications.  Here for reference
+          // Opcodes that don't need any modifications.  Here for reference.
+          // Note that while we include JSR, JSR_W, RET and RET_W here, it is
+          // only for documentation. They will throw a "Unexpected instruction opcode"
+          // error during the operand stack calculation phase.
           case Opcode.ACONST_NULL:
           case Opcode.ALOAD:
           case Opcode.ALOAD_0:
@@ -2294,6 +2297,7 @@ public class DCInstrument24 {
           case Opcode.NEW:
           case Opcode.NOP:
           case Opcode.RET: // this is the internal JSR return
+          case Opcode.RET_W:
             return null;
 
           // Handle subroutine calls.  Calls to instrumented code are modified

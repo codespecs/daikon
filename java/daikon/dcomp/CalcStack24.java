@@ -1,7 +1,6 @@
 package daikon.dcomp;
 
 import static java.lang.constant.ConstantDescs.CD_Class;
-import static java.lang.constant.ConstantDescs.CD_Object;
 import static java.lang.constant.ConstantDescs.CD_String;
 import static java.lang.constant.ConstantDescs.CD_boolean;
 import static java.lang.constant.ConstantDescs.CD_byte;
@@ -30,7 +29,6 @@ import java.lang.classfile.constantpool.MethodTypeEntry;
 import java.lang.classfile.constantpool.StringEntry;
 import java.lang.classfile.instruction.BranchInstruction;
 import java.lang.classfile.instruction.ConstantInstruction;
-import java.lang.classfile.instruction.DiscontinuedInstruction;
 import java.lang.classfile.instruction.ExceptionCatch;
 import java.lang.classfile.instruction.FieldInstruction;
 import java.lang.classfile.instruction.InvokeDynamicInstruction;
@@ -65,8 +63,8 @@ public final class CalcStack24 {
     throw new Error("Do not instantiate");
   }
 
-  /** ClassDesc for {@code null}. */
-  static final ClassDesc nullCD = ClassDesc.of("fake.ClassDecs.for.null");
+  /** Sentinel ClassDesc representing {@code null} on the operand stack (not a real class). */
+  static final ClassDesc NULL_CD = ClassDesc.of("daikon.dcomp.CalcStack24$NullSentinel");
 
   /** Set of ClassDesc items that map to CD_int. */
   static final Set<ClassDesc> INTEGRAL = Set.of(CD_boolean, CD_byte, CD_char, CD_int, CD_short);
@@ -159,7 +157,7 @@ public final class CalcStack24 {
           "save stack state at: " + inst_index + ", " + DCInstrument24.stacks[inst_index]);
       System.out.println("opcode: " + inst.opcode());
     }
-    // caculate stack changes
+    // calculate stack changes
     switch (inst.opcode()) {
 
       // operand stack before: ..., arrayref, index
@@ -168,11 +166,10 @@ public final class CalcStack24 {
         {
           stack.pop(); // discard the index
           final ClassDesc t = stack.pop(); // pop the arrayref
-          if (t == null || nullCD.equals(t)) {
-            // Push nullCD to maintain stack consistency. The actual NullPointerException
-            // will be thrown at run time if this code path is executed, not during
-            // instrumentation.
-            stack.push(nullCD);
+          if (t == null || NULL_CD.equals(t)) {
+            // The arrayref is null. A NullPointerException will be thrown at run time if this
+            // AALOAD is executed.
+            stack.push(NULL_CD);
           } else {
             final ClassDesc ct = t.componentType();
             if (ct == null) {
@@ -199,7 +196,7 @@ public final class CalcStack24 {
       // operand stack before: ...
       // operand stack after:  ..., null
       case Opcode.ACONST_NULL:
-        stack.push(nullCD);
+        stack.push(NULL_CD);
         return true;
 
       // operand stack before: ...
@@ -313,8 +310,8 @@ public final class CalcStack24 {
       case Opcode.CHECKCAST:
         {
           final ClassDesc t = stack.pop(); // pop the objectref
-          if (t == null || nullCD.equals(t)) {
-            stack.push(nullCD);
+          if (t == null || NULL_CD.equals(t)) {
+            stack.push(NULL_CD);
           } else {
             TypeCheckInstruction tci = (TypeCheckInstruction) inst;
             final ClassDesc ct = tci.type().asSymbol();
@@ -714,21 +711,9 @@ public final class CalcStack24 {
         stack.push(CD_int);
         return true;
 
-      // TODO: JSR and RET have been illegal since JDK 7 (class file version 51.0).
-      // Consider throwing an UnsupportedOperationException for these opcodes
-      // if we're only supporting modern class files (version 51.0+).
-      // Currently maintaining support for completeness.
-
-      // operand stack before: ...
-      // operand stack after:  ..., [return address]
-      case Opcode.JSR:
-      case Opcode.JSR_W:
-        // Perhaps we should add label of next instruction to work list but we have no idea
-        // what stack will be after return from the JSR.
-        stack.push(CD_Object); // there is no way to represent a return address, fake it
-        DiscontinuedInstruction.JsrInstruction ji = (DiscontinuedInstruction.JsrInstruction) inst;
-        addLabelsToWorklist(ji.target(), null, stack);
-        return false;
+      // JSR and RET have been illegal since JDK 7 (class file version 51.0).
+      // We don't have a case label for JSR, JSR_W, RET or RET_W so that they fall
+      // into the default case and report an "Unexpected instruction opcode" error.
 
       // operand stack before: ..., value1, value2
       // operand stack after:  ..., result
@@ -862,17 +847,6 @@ public final class CalcStack24 {
         stack.pop(); // discard the value
         return true;
 
-      // TODO: JSR and RET have been illegal since JDK 7 (class file version 51.0).
-      // Consider throwing an UnsupportedOperationException for these opcodes
-      // if we're only supporting modern class files (version 51.0+).
-      // Currently maintaining support for completeness.
-      // operand stack: no change
-      case Opcode.RET:
-      case Opcode.RET_W:
-        // the variable referenced must contain a return address
-        // that we would treat as target of jump; no way to do that
-        return false;
-
       // operand stack before: ..., value1, value2
       // operand stack after:  ..., value2, value1
       case Opcode.SWAP:
@@ -941,7 +915,7 @@ public final class CalcStack24 {
    *
    * @param lce a LoadableConstantEntry
    * @return the ClassDesc of {@code lce}
-   * @throws DynCompError if we don't reconize {@code lce}
+   * @throws DynCompError if we don't recognize {@code lce}
    */
   static ClassDesc lceToCD(LoadableConstantEntry lce) {
     switch (lce) {
@@ -1022,7 +996,8 @@ public final class CalcStack24 {
    * nothing is pushed. If the type is boolean, byte, char or short an int is pushed. Otherwise, the
    * result itself is pushed.
    *
-   * @param result a NewPrimitiveArrayInstruction
+   * @param result the result type descriptor to push (may be void or a primitive/reference type)
+   * @param stack state of operand stack
    */
   static void pushResultClassDesc(ClassDesc result, OperandStack24 stack) {
     switch (result) {
