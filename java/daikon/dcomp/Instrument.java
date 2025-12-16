@@ -299,7 +299,7 @@ public class Instrument implements ClassFileTransformer {
    * @return true if className is a known transformer
    */
   @Pure
-  protected static boolean is_transformer(@InternalForm String className) {
+  protected static boolean is_transformer(String className) {
 
     if (className.startsWith("org/codehaus/groovy")) {
       return true;
