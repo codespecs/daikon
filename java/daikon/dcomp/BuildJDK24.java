@@ -255,7 +255,10 @@ public final class BuildJDK24 {
     Map<String, InputStream> class_stream_map = new HashMap<>();
     String jar_name = java_home + "/lib/rt.jar";
     System.out.printf("using jar file %s%n", jar_name);
-    try (JarFile jfile = new JarFile(jar_name)) {
+    // We intentionally do not close the jar file as we save
+    // input streams into it to be read later.
+    try {
+      JarFile jfile = new JarFile(jar_name);
       // Get each class to be instrumented and store it away
       Enumeration<JarEntry> entries = jfile.entries();
       while (entries.hasMoreElements()) {
