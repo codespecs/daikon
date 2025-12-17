@@ -1251,7 +1251,7 @@ public class Instrument24 implements ClassFileTransformer {
       modifiedTarget = defaultTarget;
     }
 
-    List<SwitchCase> newCaseList = new ArrayList<SwitchCase>();
+    List<SwitchCase> newCaseList = new ArrayList<>();
     for (SwitchCase item : caseList) {
       if (item.target().equals(minfo.oldStartLabel)) {
         newCaseList.add(SwitchCase.of(item.caseValue(), minfo.entryLabel));

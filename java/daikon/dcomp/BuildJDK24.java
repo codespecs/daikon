@@ -294,7 +294,7 @@ public final class BuildJDK24 {
     Path modules = fs.getPath("/modules");
     // The path java_home+/lib/modules is the file in the host file system that
     // corresponds to the modules file in the jrt: file system.
-    System.out.printf("using modules directory %s%n", java_home + "/lib/modules");
+    System.out.printf("using modules directory %s/lib/modules%n", java_home);
     try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(modules, "java.base*")) {
       for (Path moduleDir : directoryStream) {
         gather_runtime_from_modules_directory(
@@ -341,7 +341,7 @@ public final class BuildJDK24 {
   }
 
   /**
-   * Instrument each of the classes indentified by the class_stream_map argument.
+   * Instrument each of the classes identified by the class_stream_map argument.
    *
    * @param dest_dir where to store the instrumented classes
    * @param class_stream_map maps from class file name to an input stream on that file

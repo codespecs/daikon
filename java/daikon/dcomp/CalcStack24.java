@@ -148,7 +148,7 @@ public final class CalcStack24 {
   @SuppressWarnings("fallthrough")
   static boolean simulateInstruction(Instruction inst, int inst_index, OperandStack24 stack) {
     if (DCInstrument24.stacks[inst_index] != null) {
-      throw new DynCompError("instruction revisited: " + inst);
+      throw new DynCompError("instruction revisited at index " + inst_index + ": " + inst);
     } else {
       DCInstrument24.stacks[inst_index] = stack.getClone();
     }
@@ -960,35 +960,18 @@ public final class CalcStack24 {
    * @throws DynCompError if we don't recognize the type of {@code npai}
    */
   static String npaiToElementTypeDescriptor(NewPrimitiveArrayInstruction npai) {
-    switch (npai.typeKind()) {
-      case BOOLEAN -> {
-        return "Z";
-      }
-      case BYTE -> {
-        return "B";
-      }
-      case CHAR -> {
-        return "C";
-      }
-      case DOUBLE -> {
-        return "D";
-      }
-      case FLOAT -> {
-        return "F";
-      }
-      case INT -> {
-        return "I";
-      }
-      case LONG -> {
-        return "J";
-      }
-      case SHORT -> {
-        return "S";
-      }
-      default -> {
-        throw new DynCompError("unknown primitive type " + npai.typeKind() + " in: " + npai);
-      }
-    }
+    return switch (npai.typeKind()) {
+      case BOOLEAN -> "Z";
+      case BYTE -> "B";
+      case CHAR -> "C";
+      case DOUBLE -> "D";
+      case FLOAT -> "F";
+      case INT -> "I";
+      case LONG -> "J";
+      case SHORT -> "S";
+      default ->
+          throw new DynCompError("unknown primitive type " + npai.typeKind() + " in: " + npai);
+    };
   }
 
   /**

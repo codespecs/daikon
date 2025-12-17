@@ -2116,8 +2116,8 @@ public class DCInstrument extends InstructionListUtils {
 
     if (debugHandleInvoke) {
       System.out.printf("handleInvoke(%s)%n", invoke);
-      System.out.printf("  invoke host: %s%n", classGen.getClassName() + "." + mgen.getName());
-      System.out.printf("  invoke targ: %s%n", classname + "." + methodName);
+      System.out.printf("  invoke host: %s.%s%n", classGen.getClassName(), mgen.getName());
+      System.out.printf("  invoke targ: %s.%s%n", classname, methodName);
       System.out.printf("  callee_instrumented: %s%n", callee_instrumented);
     }
 
@@ -2215,14 +2215,13 @@ public class DCInstrument extends InstructionListUtils {
 
       if (debugHandleInvoke) {
         System.out.printf("isClassnameInstrumented: %s%n", targetInstrumented);
-        System.out.printf("invoke host: %s%n", classGen.getClassName() + "." + mgen.getName());
-        System.out.printf("invoke targ: %s%n", classname + "." + methodName);
+        System.out.printf("invoke host: %s.%s%n", classGen.getClassName(), mgen.getName());
+        System.out.printf("invoke targ: %s.%s%n", classname, methodName);
       }
 
       if (Premain.problem_methods.contains(classname + "." + methodName)) {
         debugInstrument.log(
-            "Don't call instrumented version of problem method %s.%n",
-            classname + "." + methodName);
+            "Don't call instrumented version of problem method %s.%s.%n", classname, methodName);
         targetInstrumented = false;
       }
 
@@ -2289,7 +2288,7 @@ public class DCInstrument extends InstructionListUtils {
           if (debugHandleInvoke) {
             System.out.println("method: " + methodName);
             System.out.println("paramTypes: " + Arrays.toString(paramTypes));
-            System.out.printf("invoke host: %s%n", classGen.getClassName() + "." + mgen.getName());
+            System.out.printf("invoke host: %s.%s%n", classGen.getClassName(), mgen.getName());
           }
 
           @ClassGetName String targetClassname = classname;

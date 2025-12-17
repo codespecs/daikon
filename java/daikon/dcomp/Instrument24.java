@@ -267,10 +267,14 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     if (DynComp.dump) {
-      writeDebugClassFiles(
-          classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL),
-          debug_uninstrumented_dir,
-          binaryClassName);
+      try {
+        writeDebugClassFiles(
+            classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL),
+            debug_uninstrumented_dir,
+            binaryClassName);
+      } catch (Throwable t) {
+        debug_transform.log("Failed to dump uninstrumented class %s: %s%n", binaryClassName, t);
+      }
     }
 
     // Instrument the classfile, die on any errors.

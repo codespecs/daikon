@@ -34,7 +34,7 @@ public class ClassGen24 {
    * <p>Several fields of ClassModel are cached as fields of ClassGen24 to better correspond to
    * BCEL's version of ClassGen and to reduce re-computation.
    */
-  private ClassModel classModel;
+  private final ClassModel classModel;
 
   //
   // Start of ClassModel items.

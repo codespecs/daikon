@@ -173,7 +173,19 @@ public class OperandStack24 implements Cloneable {
    */
   @Override
   public int hashCode(@GuardSatisfied OperandStack24 this) {
-    return stack.hashCode();
+    int result = 1;
+    for (ClassDesc item : stack) {
+      int elementHash;
+      if (item == null) {
+        elementHash = 0; // matches any non-primitive in equals
+      } else if (item.isPrimitive()) {
+        elementHash = item.hashCode(); // distinguish different primitive types
+      } else {
+        elementHash = 2; // all non-primitive, non-null items are equivalent in equals
+      }
+      result = 31 * result + elementHash;
+    }
+    return result;
   }
 
   /** Returns true IFF this OperandStack is empty. */

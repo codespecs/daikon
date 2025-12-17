@@ -1,7 +1,6 @@
 package daikon.dcomp;
 
 import daikon.chicory.MethodGen24;
-import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.util.ArraysPlume;
 import java.lang.classfile.CodeElement;
 import java.lang.classfile.TypeKind;
@@ -48,9 +47,6 @@ public final class StackMapUtils24 {
    *     or 'slot number' to describe this second case.
    */
 
-  /** A log to which to print debugging information about program instrumentation. */
-  private static SimpleLog debugInstrument = new SimpleLog(false);
-
   /**
    * Add {@code size} (1 or 2) to the slot number of each Instruction that references a local that
    * is equal or higher in the local map than {@code offsetFirstLocalToBeMoved}. Size should be the
@@ -63,7 +59,8 @@ public final class StackMapUtils24 {
   static void adjust_code_for_locals_change(
       MethodGen24 mgen, int offsetFirstLocalToBeMoved, int size) {
 
-    debugInstrument.log("adjust_code_for_locals_change: %d %d%n", offsetFirstLocalToBeMoved, size);
+    DCInstrument24.debugInstrument.log(
+        "adjust_code_for_locals_change: %d %d%n", offsetFirstLocalToBeMoved, size);
     try {
       List<CodeElement> il = mgen.getInstructionList();
       ListIterator<CodeElement> iter = il.listIterator();
@@ -95,7 +92,7 @@ public final class StackMapUtils24 {
         }
       }
     } catch (Throwable t) {
-      if (debugInstrument.enabled) {
+      if (DCInstrument24.debugInstrument.enabled) {
         t.printStackTrace();
       }
       throw new DynCompError(
@@ -131,8 +128,6 @@ public final class StackMapUtils24 {
       @Identifier String varName,
       ClassDesc varType,
       boolean isParam) {
-
-    debugInstrument.enabled = daikon.dcomp.DCInstrument24.bcelDebug;
 
     LocalVariable varNew;
     // get a copy of the locals before modification
@@ -172,7 +167,7 @@ public final class StackMapUtils24 {
       mgen.setParameterNames(paramNames);
     }
 
-    debugInstrument.log(
+    DCInstrument24.debugInstrument.log(
         "Added a %s at slot %s.%n  name: %s type: %s size: %s%n",
         isParam ? "parameter" : "local", varNew.slot(), varNew.name(), varNew.type(), argSize);
 
@@ -193,7 +188,7 @@ public final class StackMapUtils24 {
       // we just inserted.
       adjust_code_for_locals_change(mgen, newOffset, argSize);
 
-      // debugInstrument.log("New LocalVariableTable:%n%s%n", mgen.localsTable);
+      // DCInstrument24.debugInstrument.log("New LocalVariableTable:%n%s%n", mgen.localsTable);
     }
     return varNew;
   }

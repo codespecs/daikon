@@ -136,10 +136,7 @@ import org.checkerframework.dataflow.qual.Pure;
 public class DCInstrument24 {
 
   /** A log to which to print debugging information about program instrumentation. */
-  protected SimpleLog debugInstrument = new SimpleLog(false);
-
-  /** Debug flag for StackMapUtils24. */
-  public static boolean bcelDebug;
+  protected static SimpleLog debugInstrument = new SimpleLog(false);
 
   /**
    * Used when testing to continue processing if an error occurs. Currently, this flag is only used
@@ -466,12 +463,6 @@ public class DCInstrument24 {
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
     debug_native.enabled = DynComp.debug;
     debug_transform.enabled = daikon.dcomp.Instrument24.debug_transform.enabled;
-
-    // TEMPORARY
-    debugInstrument.enabled = true;
-    debugInstrument.enabled = false;
-
-    bcelDebug = debugInstrument.enabled;
 
     if (debugOperandStack) {
       // Create a new PrintStream with autoflush enabled.
@@ -2572,8 +2563,8 @@ public class DCInstrument24 {
 
     if (debugHandleInvoke) {
       System.out.printf("handleInvoke(%s)%n", invoke);
-      System.out.printf("  invoke host: %s%n", classGen.getClassName() + "." + mgen.getName());
-      System.out.printf("  invoke targ: %s%n", classname + "." + methodName);
+      System.out.printf("  invoke host: %s.%s%n", classGen.getClassName(), mgen.getName());
+      System.out.printf("  invoke targ: %s.%s%n", classname, methodName);
       System.out.printf("  callee_instrumented: %s%n", callee_instrumented);
     }
 
@@ -2681,14 +2672,13 @@ public class DCInstrument24 {
 
       if (debugHandleInvoke) {
         System.out.printf("isClassnameInstrumented: %s%n", targetInstrumented);
-        System.out.printf("invoke host: %s%n", classGen.getClassName() + "." + mgen.getName());
-        System.out.printf("invoke targ: %s%n", classname + "." + methodName);
+        System.out.printf("invoke host: %s.%s%n", classGen.getClassName(), mgen.getName());
+        System.out.printf("invoke targ: %s.%s%n", classname, methodName);
       }
 
       if (Premain.problem_methods.contains(classname + "." + methodName)) {
         debugInstrument.log(
-            "Don't call instrumented version of problem method %s.%n",
-            classname + "." + methodName);
+            "Don't call instrumented version of problem method %s.%s.%n", classname, methodName);
         targetInstrumented = false;
       }
 
@@ -2755,7 +2745,7 @@ public class DCInstrument24 {
           if (debugHandleInvoke) {
             System.out.println("method: " + methodName);
             System.out.println("paramTypes: " + Arrays.toString(paramTypes));
-            System.out.printf("invoke host: %s%n", mgen.getClassName() + "." + mgen.getName());
+            System.out.printf("invoke host: %s.%s%n", mgen.getClassName(), mgen.getName());
           }
 
           @BinaryName String targetClassname = classname;
