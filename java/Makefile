@@ -6,9 +6,9 @@
 
 $(info MAKE = ${MAKE})
 $(info MAKEFLAGS = ${MAKEFLAGS})
-$(info "set output:"
+$(info "set output:")
 dummy := $(shell set)
-$(info "env output:"
+$(info "env output:")
 dummy := $(shell env)
 
 # Don't let the user override this; it should refer to the current directory.
