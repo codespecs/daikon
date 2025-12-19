@@ -4,6 +4,7 @@
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
+$(info MAKE = ${MAKE})
 $(info MAKEFLAGS = ${MAKEFLAGS})
 
 # Don't let the user override this; it should refer to the current directory.
