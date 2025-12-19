@@ -9,7 +9,7 @@ DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))..)
 
 DAIKONSCRIPTS ?= ${DAIKONDIR}/scripts
 
-PLUMESCRIPTS ?= ${DAIKONDIR}/utils/plume-scripts
+PLUMESCRIPTS ?= ${DAIKONDIR}/.plume-scripts
 HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
 
 USER ?= daikonbuild
