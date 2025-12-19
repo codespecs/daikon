@@ -29,4 +29,4 @@ if [ -n "$("${SCRIPT_DIR}"/is-ci.sh)" ]; then
 else
   num_jobs="$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1)"
 fi
-  make -C java --jobs="$num_jobs" typecheck
+make -C java --jobs="$num_jobs" typecheck
