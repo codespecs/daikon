@@ -1343,7 +1343,7 @@ else
 	mkdir -p ${JAVADOC_DEST}
 	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea ${JAVADOC_FLAGS} -private -Xdoclint:all ${DOCLET_FLAGS} \
 	  daikon -subpackages ${DAIKON_PACKAGES}
-	cd ${JAVDOC_DEST} && ${PLUMESCRIPTS}/preplace '^ *&#64;cindex.*' ''
+	cd ${JAVADOC_DEST} && ${PLUMESCRIPTS}/preplace '^ *&#64;cindex.*' ''
 endif
 
 ## Test that each program component is documented with Javadoc.
