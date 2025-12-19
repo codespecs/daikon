@@ -6,8 +6,8 @@
 
 $(info MAKE = ${MAKE})
 $(info MAKEFLAGS = ${MAKEFLAGS})
-$(info $(set))
-$(info $(env))
+# dummy := $(shell set)
+# dummy := $(shell env)
 
 # Don't let the user override this; it should refer to the current directory.
 DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))..)
