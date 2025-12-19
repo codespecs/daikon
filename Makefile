@@ -739,8 +739,8 @@ showvars::
 	${MAKE} -C java showvars
 
 # If .git does not exist, then the directory was created from a Daikon archive file.
-update-libs: update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-run-google-java-format
-.PHONY: update-libs update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-run-google-java-format
+update-libs:        update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-plume-scripts-in-utils update-run-google-java-format
+.PHONY: update-libs update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-plume-scripts-in-utils update-run-google-java-format
 
 # Unfortunately, I don't see a way for the below not to output lots of "remote:" lines to the log.
 # But, I can avoid doing local output.
@@ -781,7 +781,7 @@ ifndef NONETWORK
 	fi
 endif
 
-update-plume-scripts:
+update-plume-scripts-in-utils:
 ifndef NONETWORK
 	if test -d utils/plume-scripts/.git ; then \
 	  (cd utils/plume-scripts && (git pull -q || (sleep 1m && (git pull || true)))) \
