@@ -49,7 +49,6 @@ else
   if [ -f SKIP-REQUIRE-JAVADOC ]; then
     echo "Skipping requireJavadoc because file SKIP-REQUIRE-JAVADOC exists."
   else
-
     # The `api-private` and `requireJavadoc` commands are separate to avoid
     # assuming that they both produce absolute filenames or both produce filenames
     # relative to the same directory.  Always run both to avoid one masking
