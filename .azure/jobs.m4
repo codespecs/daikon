@@ -32,11 +32,11 @@ kvasir_job(ubuntu, 25)
   ## Thus, there is no typecheck_bundled_ubuntu_jdk{8,11} job.
   ## The Checker Framework cannot be built under Java 8, 11 or 17.
   ## Thus, there is no typecheck_latest_ubuntu_jdk{8,11,17} job.
-typecheck_job(ubuntu, 17, bundled)
-typecheck_job(ubuntu, 21, bundled)
-typecheck_job(ubuntu, 21, latest)
-typecheck_job(ubuntu, 25, bundled)
-typecheck_job(ubuntu, 25, latest)
+typecheck_job_parts(ubuntu, 17, bundled)
+typecheck_job_parts(ubuntu, 21, bundled)
+typecheck_job_parts(ubuntu, 21, latest)
+typecheck_job_parts(ubuntu, 25, bundled)
+typecheck_job_parts(ubuntu, 25, latest)
 
 quick_job(rockylinux, 8)
 quick_job(rockylinux, 25)

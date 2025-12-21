@@ -4,6 +4,9 @@
 # This is the "typecheck" job of the pull request.
 # It uses the bundled version of the Checker Framework: the one commited to the Daikon repostiory.
 
+# The optional first argument is "part1", "part2", or "part3", indicating which
+# part of the type-checking job to run.
+
 set -e
 set -o pipefail
 export SHELLOPTS
@@ -29,4 +32,14 @@ if [ -n "$(.plume-scripts/is-ci.sh)" ]; then
 else
   num_jobs="$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1)"
 fi
-make -C java --jobs="$num_jobs" typecheck
+
+if [ "$#" -ge 2 ]; then
+    echo "$0: expected 0 or 1 arguments."
+    exit 2
+fi
+
+if [ "$#" -eq 0 ]; then
+  make -C java --jobs="$num_jobs" typecheck
+else
+  make -C java --jobs="$num_jobs" "typecheck-part$1"
+fi
