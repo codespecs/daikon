@@ -4,6 +4,9 @@
 # This is the "typecheck" job of the pull request.
 # It uses the HEAD version of the Checker Framework: the latest commit in the GitHub repository.
 
+# The optional first argument is "part1", "part2", or "part3", indicating which
+# part of the type-checking job to run.
+
 set -e
 set -o pipefail
 export SHELLOPTS
@@ -29,9 +32,19 @@ CHECKERFRAMEWORK=$(realpath ../checker-framework)
 export CHECKERFRAMEWORK
 
 # Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-if [ -n "$(".plume-scripts"/is-ci.sh)" ]; then
+if [ -n "$(.plume-scripts/is-ci.sh)" ]; then
   num_jobs=1
 else
   num_jobs="$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1)"
 fi
-make -C java --jobs="$num_jobs" typecheck
+
+if [ "$#" -ge 2 ]; then
+    echo "$0: expected 0 or 1 arguments."
+    exit 2
+fi
+
+if [ "$#" -eq 0 ]; then
+  make -C java --jobs="$num_jobs" typecheck
+else
+  make -C java --jobs="$num_jobs" "typecheck-part$1"
+fi
