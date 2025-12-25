@@ -1273,6 +1273,7 @@ JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
                 -Xmaxerrs 100000 -Xmaxwarns 100000 \
                 -d ${JAVADOC_DEST} \
                 -linkoffline ${LINKOFFLINE} ${LINKOFFLINE} \
+		-notimestamp \
                 -classpath "$(subst *:${DAIKONDIR}/java,*,${DAIKON_CLASSPATH})"
 JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
                 -docletpath "${DOCLETPATH}"
