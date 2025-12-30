@@ -34,8 +34,8 @@ else
 fi
 
 if [ "$#" -ge 2 ]; then
-    echo "$0: expected 0 or 1 arguments."
-    exit 2
+  echo "$0: expected 0 or 1 arguments."
+  exit 2
 fi
 
 if [ "$#" -eq 0 ]; then

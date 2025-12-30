@@ -31,7 +31,9 @@ workflows:
             - non-txt-diff-ubuntu-jdk[]canary_version
             - misc-ubuntu-jdk[]canary_version
             - kvasir-ubuntu-jdk[]canary_version
-            - typecheck-bundled-ubuntu-jdk[]canary_version
+            - typecheck-bundled-part1-ubuntu-jdk[]canary_version
+            - typecheck-bundled-part2-ubuntu-jdk[]canary_version
+            - typecheck-bundled-part3-ubuntu-jdk[]canary_version
 job_dependences(ubuntu, 8, quick-txt-diff)
 job_dependences(ubuntu, 11, quick-txt-diff)
 job_dependences(ubuntu, 17, quick-txt-diff)

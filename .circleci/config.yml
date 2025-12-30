@@ -1087,7 +1087,9 @@ workflows:
             - non-txt-diff-ubuntu-jdk25
             - misc-ubuntu-jdk25
             - kvasir-ubuntu-jdk25
-            - typecheck-bundled-ubuntu-jdk25
+            - typecheck-bundled-part1-ubuntu-jdk25
+            - typecheck-bundled-part2-ubuntu-jdk25
+            - typecheck-bundled-part3-ubuntu-jdk25
       - quick-txt-diff-ubuntu-jdk8:
           requires:
             - canary-jobs
