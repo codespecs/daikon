@@ -46,5 +46,5 @@ fi
 if [ "$#" -eq 0 ]; then
   make -C java --jobs="$num_jobs" typecheck
 else
-  make -C java --jobs="$num_jobs" "typecheck-part$1"
+  make -C java --jobs="$num_jobs" "typecheck-$1"
 fi
