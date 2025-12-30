@@ -176,12 +176,12 @@ public class OperandStack24 implements Cloneable {
     int result = 1;
     for (ClassDesc item : stack) {
       int elementHash;
-      if (item == null) {
-        elementHash = 0; // matches any non-primitive in equals
-      } else if (item.isPrimitive()) {
-        elementHash = item.hashCode(); // distinguish different primitive types
+      if (item != null && item.isPrimitive()) {
+        // Primitives must match exactly in equals, so use their own hash code.
+        elementHash = item.hashCode();
       } else {
-        elementHash = 2; // all non-primitive, non-null items are equivalent in equals
+        // `null`, arrays, and classes are all treated as equivalent in equals.
+        elementHash = 2;
       }
       result = 31 * result + elementHash;
     }

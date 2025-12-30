@@ -56,11 +56,10 @@ public final class StackMapUtils24 {
    * @param offsetFirstLocalToBeMoved original offset of first local moved "up"
    * @param size size of new local added (1 or 2)
    */
-  static void adjust_code_for_locals_change(
-      MethodGen24 mgen, int offsetFirstLocalToBeMoved, int size) {
+  static void adjustCodeForLocalsChange(MethodGen24 mgen, int offsetFirstLocalToBeMoved, int size) {
 
     DCInstrument24.debugInstrument.log(
-        "adjust_code_for_locals_change: %d %d%n", offsetFirstLocalToBeMoved, size);
+        "adjustCodeForLocalsChange: %d %d%n", offsetFirstLocalToBeMoved, size);
     try {
       List<CodeElement> il = mgen.getInstructionList();
       ListIterator<CodeElement> iter = il.listIterator();
@@ -95,8 +94,7 @@ public final class StackMapUtils24 {
       if (DCInstrument24.debugInstrument.enabled) {
         t.printStackTrace();
       }
-      throw new DynCompError(
-          "Unexpected exception encountered in adjust_code_for_locals_change", t);
+      throw new DynCompError("Unexpected exception encountered in adjustCodeForLocalsChange", t);
     }
   }
 
@@ -186,7 +184,7 @@ public final class StackMapUtils24 {
       // within each LocalVariableInstruction that references a
       // local that is 'higher' in the local map than new local
       // we just inserted.
-      adjust_code_for_locals_change(mgen, newOffset, argSize);
+      adjustCodeForLocalsChange(mgen, newOffset, argSize);
 
       // DCInstrument24.debugInstrument.log("New LocalVariableTable:%n%s%n", mgen.localsTable);
     }

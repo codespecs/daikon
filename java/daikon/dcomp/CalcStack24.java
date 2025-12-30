@@ -76,7 +76,7 @@ public final class CalcStack24 {
    * @param mgen method containing the instruction (currently unused)
    * @param minfo for the given method's code (currently unused)
    * @param ce CodeElement to be interpreted
-   * @param inst_index index of ce in code element list
+   * @param instIndex index of ce in code element list
    * @param stack current state of operand stack; is side-effected
    * @return true if control falls through to the next instruction, false otherwise (when {@code ce}
    *     is an instruction like jump or return)
@@ -86,7 +86,7 @@ public final class CalcStack24 {
       MethodGen24 mgen,
       MethodGen24.MInfo24 minfo,
       CodeElement ce,
-      int inst_index,
+      int instIndex,
       OperandStack24 stack) {
 
     if (DCInstrument24.debugOperandStack) {
@@ -94,7 +94,7 @@ public final class CalcStack24 {
     }
     switch (ce) {
       case Instruction inst -> {
-        return simulateInstruction(inst, inst_index, stack);
+        return simulateInstruction(inst, instIndex, stack);
       }
 
       // We ignore most PseudoInstructions.
@@ -106,17 +106,17 @@ public final class CalcStack24 {
 
       // Technically, a Classfile element, not a PseudoInstruction.
       case Label l -> {
-        if (DCInstrument24.stacks[inst_index] != null) {
+        if (DCInstrument24.stacks[instIndex] != null) {
           // We've seen this label before.
-          DCInstrument24.verifyOperandStackMatches(l, DCInstrument24.stacks[inst_index], stack);
+          DCInstrument24.verifyOperandStackMatches(l, DCInstrument24.stacks[instIndex], stack);
           // Stacks match; we're done with this worklist.
           return false;
         } else {
           // We have not seen this label before; remember the operand stack.
-          DCInstrument24.stacks[inst_index] = stack.getClone();
+          DCInstrument24.stacks[instIndex] = stack.getClone();
           if (DCInstrument24.debugOperandStack) {
             System.out.println("save stack state at: " + l);
-            System.out.println("  " + inst_index + ", " + DCInstrument24.stacks[inst_index]);
+            System.out.println("  " + instIndex + ", " + DCInstrument24.stacks[instIndex]);
           }
           return true;
         }
@@ -139,22 +139,22 @@ public final class CalcStack24 {
    * code's correctness.
    *
    * @param inst instruction to be interpreted
-   * @param inst_index index of inst in code element list
+   * @param instIndex index of inst in code element list
    * @param stack current state of operand stack; is side-effected
    * @return true if control falls through to the next instruction, false otherwise (when {@code
    *     inst} is an instruction like jump or return)
    * @throws DynCompError if there is an error during the instruction simulation
    */
   @SuppressWarnings("fallthrough")
-  static boolean simulateInstruction(Instruction inst, int inst_index, OperandStack24 stack) {
-    if (DCInstrument24.stacks[inst_index] != null) {
-      throw new DynCompError("instruction revisited at index " + inst_index + ": " + inst);
+  static boolean simulateInstruction(Instruction inst, int instIndex, OperandStack24 stack) {
+    if (DCInstrument24.stacks[instIndex] != null) {
+      throw new DynCompError("instruction revisited at index " + instIndex + ": " + inst);
     } else {
-      DCInstrument24.stacks[inst_index] = stack.getClone();
+      DCInstrument24.stacks[instIndex] = stack.getClone();
     }
     if (DCInstrument24.debugOperandStack) {
       System.out.println(
-          "save stack state at: " + inst_index + ", " + DCInstrument24.stacks[inst_index]);
+          "save stack state at: " + instIndex + ", " + DCInstrument24.stacks[instIndex]);
       System.out.println("opcode: " + inst.opcode());
     }
     // calculate stack changes

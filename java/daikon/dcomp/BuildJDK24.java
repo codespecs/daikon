@@ -42,6 +42,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 
 /**
  * Add comparability instrumentation to Java class files, then stores the modified files into a
@@ -330,6 +331,11 @@ public final class BuildJDK24 {
       }
     } else {
       String entryName = path.toString().substring(modulePrefixLength + 1);
+      if (!entryName.endsWith(".class") || entryName.equals("java/lang/Object.class")) {
+        // For JDK 9+ we do not process non-.class files and Object.class.
+        return;
+      }
+      // System.out.printf("processing entry %s%n", entryName);
       try {
         // Get the InputStream for this file
         InputStream is = Files.newInputStream(path);
@@ -347,6 +353,8 @@ public final class BuildJDK24 {
    * @param class_stream_map maps from class file name to an input stream on that file
    */
   void instrument_classes(File dest_dir, Map<String, InputStream> class_stream_map) {
+
+    @DotSeparatedIdentifiers String dcompPrefix;
 
     // Get our ClassLoader.
     ClassLoader loader = BuildJDK24.class.getClassLoader();
@@ -370,14 +378,8 @@ public final class BuildJDK24 {
         }
 
         // Handle non-.class files and Object.class.  In JDK 8, copy them unchanged.
-        // For JDK 9+ we do not copy as these items will be loaded from the original module file.
+        // For JDK 9+ they have not be added to class_stream_map.
         if (!classFileName.endsWith(".class") || classFileName.equals("java/lang/Object.class")) {
-          if (BcelUtil.javaVersion > 8) {
-            if (verbose) {
-              System.out.printf("Skipping file %s%n", classFileName);
-            }
-            continue;
-          }
           // This File constructor ignores dest_dir if classFileName is absolute.
           File classFile = new File(dest_dir, classFileName);
           if (classFile.getParentFile() == null) {
@@ -413,6 +415,16 @@ public final class BuildJDK24 {
         if (DynComp.dump) {
           inst24.writeDebugClassFiles(buffer, inst24.debug_uninstrumented_dir, classname);
         }
+
+        // As {@code instrumentation_interface} is a static field, we initialize it here rather than
+        // in the DCInstrument24 constructor.
+        if (Premain.jdk_instrumented && BcelUtil.javaVersion > 8) {
+          dcompPrefix = "java.lang";
+        } else {
+          dcompPrefix = "daikon.dcomp";
+        }
+        DCRuntime.instrumentation_interface =
+            Signatures.addPackage(dcompPrefix, "DCompInstrumented");
 
         // Instrument the class file.
         try {

@@ -19,6 +19,7 @@ import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
@@ -159,6 +160,7 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
+    @DotSeparatedIdentifiers String dcompPrefix;
 
     // See comments in Premain.java about meaning and use of in_shutdown.
     if (Premain.in_shutdown) {
@@ -276,6 +278,15 @@ public class Instrument24 implements ClassFileTransformer {
         debug_transform.log("Failed to dump uninstrumented class %s: %s%n", binaryClassName, t);
       }
     }
+
+    // As {@code instrumentation_interface} is a static field, we initialize it here rather than
+    // in the DCInstrument24 constructor.
+    if (Premain.jdk_instrumented && BcelUtil.javaVersion > 8) {
+      dcompPrefix = "java.lang";
+    } else {
+      dcompPrefix = "daikon.dcomp";
+    }
+    DCRuntime.instrumentation_interface = Signatures.addPackage(dcompPrefix, "DCompInstrumented");
 
     // Instrument the classfile, die on any errors.
     ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);

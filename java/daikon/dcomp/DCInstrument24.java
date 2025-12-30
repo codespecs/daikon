@@ -145,10 +145,12 @@ public class DCInstrument24 {
   @Option("Halt if an instrumentation error occurs")
   public static boolean quit_if_error = true;
 
-  /** The index of this method in SharedData.methods. */
-  int cur_method_info_index = 0;
-
-  /** Start of user code for current method, prior to instrumenting, as a CodeModel Label. */
+  /**
+   * Start of user code for current method, prior to instrumenting, as a CodeModel Label. Note that
+   * there are two kinds of Labels in the {@code java.lang.classfile} API. When a class file is
+   * input, it contains CodeModel labels that are immutable. When our instrumention generates new
+   * code that needs a label it gets one from the CodeBuilder.
+   */
   protected @MonotonicNonNull Label oldStartLabel;
 
   /** Start of user code for current method, after instrumenting, as a CodeBuilder Label. */
@@ -166,28 +168,43 @@ public class DCInstrument24 {
   // Rather than being global variables, they should be wrapped in a data structure that is passed
   // to the places that need it.
 
-  /** Mapping from a label to its index in the method's codeList. */
+  /** Mapping from a label to its index into the method's codeList. */
   @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO: method-local
   protected static Map<Label, Integer> labelIndexMap;
 
-  /** Mapping from a label to its operand stack. */
+  /**
+   * Mapping from a label to its operand stack. This is the state of the operand stack at the label,
+   * prior to the execution of any instruction at that label.
+   */
   @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO: method-local
-  protected static Map<Label, OperandStack24> worklistHistory;
+  protected static Map<Label, OperandStack24> labelOperandStackMap;
 
   /**
    * The state of operand stack prior to each byte code instruction of the method being simulated.
+   * There is a unique array entry for each instruction.
    */
   @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO: method-local
   protected static OperandStack24[] stacks;
 
-  /** The type of each parameter and local variable of the method being simulated. */
+  /**
+   * The type of each parameter and local variable of the method being simulated. This value is
+   * often unchanged during the method execution, but may differ when the compiler allocates more
+   * than one local variable at the same offset.
+   */
   @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO: method-local
   protected static ClassDesc[] locals;
 
-  /** Record containing a work item for the operand stack calculation. */
+  /**
+   * Record containing a work item for the operand stack calculation. The instructionIndex is an
+   * index into the method's instruction list. The stack is the state of the operand stack prior to
+   * the execution of the instruction.
+   */
   record WorkItem(int instructionIndex, OperandStack24 stack) {}
 
-  /** Comparator to sort WorkItems with lowest address first. */
+  /**
+   * Comparator to sort WorkItems with lowest instructionIndex first. This corresponds to the lowest
+   * byte code instruction offset.
+   */
   protected static Comparator<WorkItem> indexComparator =
       new Comparator<>() {
         @Override
@@ -196,12 +213,12 @@ public class DCInstrument24 {
         }
       };
 
-  /** Queue of items for the operand stack calculation. */
+  /** Queue of items for a method's operand stack calculation. */
   protected static SortedSet<WorkItem> worklist = new TreeSet<>(indexComparator);
 
   // Variables used for the entire class.
 
-  /** The current classfile. */
+  /** The current class file. */
   protected ClassFile classFile;
 
   /** The current class. */
@@ -210,7 +227,7 @@ public class DCInstrument24 {
   /** ConstantPool builder for current class. */
   private ConstantPoolBuilder poolBuilder;
 
-  /** True if we are tracking any methods in the current class. */
+  /** True if we are tracking any variables in any methods of the current class. */
   private boolean trackClass = false;
 
   /** ClassGen for the current class. */
@@ -222,10 +239,22 @@ public class DCInstrument24 {
   /** Has an {@code <init>} method completed initialization? */
   protected boolean constructor_is_initialized;
 
-  /** Record containing subset of LocalVariable fields. */
+  /**
+   * Record used to describe a new LocalVariable. When instrumentation wants to create a new method,
+   * it creates a list containing one of these records for each local variable of the method. This
+   * list is passed to {@link #copyCode} and {@link #instrumentCode} where the new variables are
+   * created.
+   */
   public record myLocalVariable(int slot, String name, ClassDesc descriptor) {}
 
-  /** Local that stores the tag frame for the current method. */
+  /**
+   * A local variable added by our instrumentation to each method. It is an {@code Object} array,
+   * always named {@code dcomp_tag_frame$5A}. The DynComp runtime uses the array to store the
+   * current tag value for each parameter on method entry. These tag values are used to track
+   * variable interactions. This allows the DynComp runtime to group variables into comparability
+   * sets. All variables in a comparability set belong to the same "abstract type" of data that the
+   * programmer likely intended to represent.
+   */
   protected LocalVariable tagFrameLocal;
 
   // Type descriptors
@@ -297,8 +326,14 @@ public class DCInstrument24 {
   /** Keeps track of the methods that were not successfully instrumented. */
   protected List<String> skipped_methods = new ArrayList<>();
 
-  /** Either "java.lang" or "daikon.dcomp". */
-  protected @DotSeparatedIdentifiers String dcomp_prefix;
+  /** If we're using an instrumented JDK, then "java.lang"; otherwise, "daikon.dcomp". */
+  protected @DotSeparatedIdentifiers String dcompMarkerPrefix;
+
+  /**
+   * If we're using an instrumented JDK and the JDK version is > 8, then "java.lang"; otherwise,
+   * "daikon.dcomp".
+   */
+  protected @DotSeparatedIdentifiers String dcompRuntimePrefix;
 
   /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
   private @BinaryName String dcompRuntimeClassName;
@@ -317,8 +352,8 @@ public class DCInstrument24 {
     STARTING,
     /** Have seen a JUnit class file that loads JUnit test classes. */
     TEST_DISCOVERY,
-    /** Have completed identifying JUnit test classes. */
-    RUNNING
+    /** Have completed identifying JUnit test classes and are instrumenting the code. */
+    INSTRUMENTING
   }
 
   /** Current state of JUnit test discovery. */
@@ -328,17 +363,19 @@ public class DCInstrument24 {
   protected static boolean junit_parse_seen = false;
 
   /**
-   * Map from each static field name to its unique integer id. Note that while it's intuitive to
-   * think that each static should show up exactly once, that is not the case. A static defined in a
-   * superclass can be accessed through each of its subclasses. Tag accessor methods must be added
-   * in each subclass and each should return the same id. We thus will lookup the same name multiple
-   * times.
+   * Map from each static qualified field name to a unique integer id. Note that while it's
+   * intuitive to think that each static should show up exactly once, that is not always true. A
+   * static defined in a superclass can be accessed through each of its subclasses. In this case,
+   * tag accessor methods must be added in each subclass and each should return the id of the field
+   * in the superclass. This map is populated in {@link build_field_to_offset_map} and used in
+   * {@link create_tag_accessors}.
    */
   static Map<String, Integer> static_field_id = new LinkedHashMap<>();
 
   /**
-   * Map from class name to its access_flags. Used to cache the results of the lookup done in {@link
-   * #getAccessFlags}. If a class is marked ACC_ANNOTATION then it will not have been instrumented.
+   * Map from binary class name to its access_flags. Used to cache the results of the lookup done in
+   * {@link #getAccessFlags}. If a class is marked ACC_ANNOTATION then it will not have been
+   * instrumented.
    */
   static Map<String, Integer> accessFlags = new HashMap<>();
 
@@ -407,15 +444,7 @@ public class DCInstrument24 {
       if (!name.equals(this.name)) {
         return false;
       }
-      if (this.arg_types.length != arg_types.length) {
-        return false;
-      }
-      for (int ii = 0; ii < arg_types.length; ii++) {
-        if (!arg_types[ii].equals(this.arg_types[ii])) {
-          return false;
-        }
-      }
-      return true;
+      return Arrays.equals(this.arg_types, arg_types);
     }
 
     @EnsuresNonNullIf(result = true, expression = "#1")
@@ -436,28 +465,28 @@ public class DCInstrument24 {
     }
   }
 
-  /** Initialize with the original class and whether or not the class is part of the JDK. */
-  @SuppressWarnings({
-    "nullness:StaticAssignmentInConstructor", // instrumentation_interface
-    "nullness:initialization",
-    "StaticAssignmentInConstructor" // ErrorProne: instrumentation_interface
-  })
+  /**
+   * Initialize the class information and whether or not that class is part of the JDK. Note that
+   * the fields poolBuilder, classGen and tagFrameLocal are not initialized until later.
+   */
+  @SuppressWarnings("nullness:initialization")
   public DCInstrument24(ClassFile classFile, ClassModel classModel, boolean in_jdk) {
     this.classFile = classFile;
     this.classModel = classModel;
     this.in_jdk = in_jdk;
     constructor_is_initialized = false;
     if (Premain.jdk_instrumented) {
-      dcomp_prefix = "java.lang";
+      dcompMarkerPrefix = "java.lang";
     } else {
-      dcomp_prefix = "daikon.dcomp";
+      dcompMarkerPrefix = "daikon.dcomp";
     }
-    dcomp_marker = ClassDesc.of(Signatures.addPackage(dcomp_prefix, "DCompMarker"));
+    dcomp_marker = ClassDesc.of(Signatures.addPackage(dcompMarkerPrefix, "DCompMarker"));
+    dcompRuntimePrefix = dcompMarkerPrefix;
     if (BcelUtil.javaVersion == 8) {
-      dcomp_prefix = "daikon.dcomp";
+      dcompRuntimePrefix = "daikon.dcomp";
     }
-    dcompRuntimeClassName = Signatures.addPackage(dcomp_prefix, "DCRuntime");
-    DCRuntime.instrumentation_interface = Signatures.addPackage(dcomp_prefix, "DCompInstrumented");
+    dcompRuntimeClassName = Signatures.addPackage(dcompRuntimePrefix, "DCRuntime");
+    runtimeCD = ClassDesc.of(dcompRuntimeClassName);
 
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
@@ -535,7 +564,6 @@ public class DCInstrument24 {
 
     @BinaryName String classname = classInfo.class_name;
     classGen = new ClassGen24(classModel, classname, classBuilder);
-    runtimeCD = ClassDesc.of(dcompRuntimeClassName);
     poolBuilder = classBuilder.constantPool();
 
     debug_transform.log(
@@ -554,7 +582,8 @@ public class DCInstrument24 {
 
     trackClass = false;
 
-    // Handle object methods for this class.
+    // Check to see if this class has a {@code clone} or {@code toString} method.
+    // If so, add the {@code DCompClone} and/or the {@code DCompToString} interface.
     add_clone_and_tostring_interfaces(classGen);
 
     boolean junit_test_class = false;
@@ -615,13 +644,13 @@ public class DCInstrument24 {
           }
           if (junit_parse_seen && !local_junit_parse_seen) {
             junit_parse_seen = false;
-            junit_state = JunitState.RUNNING;
+            junit_state = JunitState.INSTRUMENTING;
           } else if (!junit_parse_seen && local_junit_parse_seen) {
             junit_parse_seen = true;
           }
           break;
 
-        case RUNNING:
+        case INSTRUMENTING:
           if (debugJunitAnalysis) {
             stack_trace = Thread.currentThread().getStackTrace();
             // [0] is getStackTrace
@@ -717,7 +746,15 @@ public class DCInstrument24 {
 
     classInfo.isJunitTestClass = junit_test_class;
 
-    instrumentAllMethods(classModel, classBuilder, classInfo);
+    if (classModel.majorVersion() < ClassFile.JAVA_6_VERSION) {
+      System.out.printf(
+          "DynComp warning: ClassFile: %s - class file version (%d) is out of date and may not be"
+              + " processed correctly.%n",
+          classname, classModel.majorVersion());
+      // throw new DynCompError("Classfile out of date");
+    }
+
+    processAllMethods(classModel, classBuilder, classInfo);
 
     // Have all top-level classes implement the DCompInstrumented interface.
     if (classGen.getSuperclassName().equals("java.lang.Object")) {
@@ -728,7 +765,7 @@ public class DCInstrument24 {
       // will be created in this class.
       MethodModel eq = classGen.containsMethod("equals", objectToBoolean);
       if (eq == null) {
-        debugInstrument.log("Added equals method%n");
+        debugInstrument.log("Adding equals method%n");
         add_equals_method(classBuilder, classGen, classInfo);
       }
 
@@ -792,7 +829,7 @@ public class DCInstrument24 {
       // point to start of list
       ListIterator<CodeElement> li = il.listIterator();
 
-      for (CodeElement ce : call_initNotify(poolBuilder, classInfo)) {
+      for (CodeElement ce : createCodeToMarkClassInitialized(poolBuilder, classInfo)) {
         li.add(ce);
       }
     } catch (DynCompError e) {
@@ -812,7 +849,7 @@ public class DCInstrument24 {
    */
   private void createClinit(ClassBuilder classBuilder, ClassInfo classInfo) {
 
-    List<CodeElement> instructions = call_initNotify(poolBuilder, classInfo);
+    List<CodeElement> instructions = createCodeToMarkClassInitialized(poolBuilder, classInfo);
     instructions.add(ReturnInstruction.of(TypeKind.VOID)); // need to return!
 
     classBuilder.withMethod(
@@ -832,7 +869,8 @@ public class DCInstrument24 {
    * @param classInfo for the given class
    * @return the instruction list
    */
-  private List<CodeElement> call_initNotify(ConstantPoolBuilder poolBuilder, ClassInfo classInfo) {
+  private List<CodeElement> createCodeToMarkClassInitialized(
+      ConstantPoolBuilder poolBuilder, ClassInfo classInfo) {
 
     List<CodeElement> instructions = new ArrayList<>();
 
@@ -846,173 +884,206 @@ public class DCInstrument24 {
   }
 
   /**
-   * Instruments all the methods in a class to perform dynamic comparability. For each method, adds
-   * instrumentation code at the entry and at each return from the method. In addition, it adds
-   * instrumentation code to the body of the method to track variable interactions. When the
-   * instrumented method is executed, this instrumentation allows the DynComp runtime to group
-   * variables into comparability sets. All variables in a comparability set belong to the same
-   * "abstract type" of data that the programmer likely intended to represent.
+   * Instruments all the methods in a class to perform dynamic comparability.
    *
    * @param classModel for current class
    * @param classBuilder for current class
    * @param classInfo for the given class
    */
-  private void instrumentAllMethods(
+  private void processAllMethods(
       ClassModel classModel, ClassBuilder classBuilder, ClassInfo classInfo) {
+    for (MethodModel mm : classModel.methods()) {
+      processMethod(mm, classModel, classBuilder, classInfo);
+    }
+  }
+
+  // The process of instrumenting a method is structured as a hierarchical pipeline: each layer
+  // operates at a different level of abstraction and delegates detailed processing to the next
+  // layer.
+  //
+  // processMethod:
+  //   checks if need to track values of local variables
+  //   adds DCompArgument, if required
+  //
+  // instrumentMethod:
+  //   processes all non-code method elements and copies them to output
+  //   calls instrumentCode to process the code attribute
+  //
+  // instrumentCode:
+  //   process code labels
+  //   calls instrumentCodeList
+  //   copies instrumented code to output
+  //
+  // instrumentCodeList:
+  //   add code to create the tag frame local
+  //   calculate the state of the operand stack at each instruction
+  //   calls instrumentInstruction
+  //
+  // instrumentInstruction:
+  //   processes and instruments (if required) each individual instruction
+  //
+
+  /**
+   * Instruments a method to perform dynamic comparability. It adds instrumentation code at the
+   * entry and at each return from the method. In addition, it adds instrumentation code to the body
+   * of the method to track variable interactions. When the instrumented method is executed, this
+   * instrumentation allows the DynComp runtime to group variables into comparability sets. All
+   * variables in a comparability set belong to the same "abstract type" of data that the programmer
+   * likely intended to represent.
+   *
+   * @param methodModel for current method
+   * @param classModel for current class
+   * @param classBuilder for current class
+   * @param classInfo for the given class
+   */
+  private void processMethod(
+      MethodModel methodModel,
+      ClassModel classModel,
+      ClassBuilder classBuilder,
+      ClassInfo classInfo) {
 
     @BinaryName String classname = classInfo.class_name;
 
-    if (classModel.majorVersion() < ClassFile.JAVA_6_VERSION) {
-      System.out.printf(
-          "DynComp warning: ClassFile: %s - classfile version (%d) is out of date and may not be"
-              + " processed correctly.%n",
-          classname, classModel.majorVersion());
-      // throw new DynCompError("Classfile out of date");
-    }
+    try {
+      MethodGen24 mgen = new MethodGen24(methodModel, classname, classBuilder);
 
-    // Process each method in the class.
-    for (MethodModel mm : classModel.methods()) {
+      if (debugInstrument.enabled) {
+        ClassDesc[] paramTypes = mgen.getParameterTypes();
+        String[] paramNames = mgen.getParameterNames();
+        LocalVariable[] local_vars = mgen.getOriginalLocalVariables();
+        String types = "", names = "", locals = "";
 
-      try {
-        MethodGen24 mgen = new MethodGen24(mm, classname, classBuilder);
+        for (int j = 0; j < paramTypes.length; j++) {
+          @FieldDescriptor String paramFD = paramTypes[j].descriptorString();
+          types =
+              types + daikon.chicory.Instrument24.convertDescriptorToFqBinaryName(paramFD) + " ";
+        }
+        for (int j = 0; j < paramNames.length; j++) {
+          names = names + paramNames[j] + " ";
+        }
+        for (int j = 0; j < local_vars.length; j++) {
+          locals = locals + local_vars[j].name().stringValue() + " ";
+        }
+        debugInstrument.log("%nMethod = %s%n", mgen.getName());
+        debugInstrument.log("paramTypes(%d): %s%n", paramTypes.length, types);
+        debugInstrument.log("paramNames(%d): %s%n", paramNames.length, names);
+        debugInstrument.log("localvars(%d): %s%n", local_vars.length, locals);
+        //         debugInstrument.log("Original code: %s%n", mgen.getMethod().getCode());
+        debugInstrument.log("Method Attributes:%n");
+        for (Attribute<?> a : methodModel.attributes()) {
+          debugInstrument.log("  %s%n", a);
+        }
+        debugInstrument.log("mgen.getSignature: %s%n", mgen.getSignature());
+        MethodTypeDesc mtd = methodModel.methodTypeSymbol();
+        debugInstrument.log("mtd.descriptorString: %s%n", mtd.descriptorString());
+        debugInstrument.log("mtd.displayDescriptor: %s%n", mtd.displayDescriptor());
+      }
 
-        if (debugInstrument.enabled) {
-          ClassDesc[] paramTypes = mgen.getParameterTypes();
-          String[] paramNames = mgen.getParameterNames();
-          LocalVariable[] local_vars = mgen.getOriginalLocalVariables();
-          String types = "", names = "", locals = "";
+      boolean track = false;
+      if (!in_jdk) {
+        // Note whether we want to track the variables in this method.
+        track = should_track(classname, mgen.getName(), methodEntryName(classname, mgen));
 
-          for (int j = 0; j < paramTypes.length; j++) {
-            @FieldDescriptor String paramFD = paramTypes[j].descriptorString();
-            types =
-                types + daikon.chicory.Instrument24.convertDescriptorToFqBinaryName(paramFD) + " ";
-          }
-          for (int j = 0; j < paramNames.length; j++) {
-            names = names + paramNames[j] + " ";
-          }
-          for (int j = 0; j < local_vars.length; j++) {
-            locals = locals + local_vars[j].name().stringValue() + " ";
-          }
-          debugInstrument.log("%nMethod = %s%n", mgen.getName());
-          debugInstrument.log("paramTypes(%d): %s%n", paramTypes.length, types);
-          debugInstrument.log("paramNames(%d): %s%n", paramNames.length, names);
-          debugInstrument.log("localvars(%d): %s%n", local_vars.length, locals);
-          //         debugInstrument.log("Original code: %s%n", mgen.getMethod().getCode());
-          debugInstrument.log("Method Attributes:%n");
-          for (Attribute<?> a : mm.attributes()) {
-            debugInstrument.log("  %s%n", a);
-          }
-          debugInstrument.log("mgen.getSignature: %s%n", mgen.getSignature());
-          MethodTypeDesc mtd = mm.methodTypeSymbol();
-          debugInstrument.log("mtd.descriptorString: %s%n", mtd.descriptorString());
-          debugInstrument.log("mtd.displayDescriptor: %s%n", mtd.displayDescriptor());
+        // We cannot track the variables in bridge methods the compiler has synthesized as
+        // they are overloaded on return type which normal Java does not support.
+        if ((mgen.getAccessFlagsMask() & ClassFile.ACC_BRIDGE) != 0) {
+          track = false;
         }
 
-        boolean track = false;
-        if (!in_jdk) {
-          // Note whether we want to track the daikon variables in this method
-          track = should_track(classname, mgen.getName(), methodEntryName(classname, mgen));
-
-          // We do not want to track bridge methods the compiler has synthesized as
-          // they are overloaded on return type which normal Java does not support.
-          if ((mgen.getAccessFlagsMask() & ClassFile.ACC_BRIDGE) != 0) {
-            track = false;
-          }
-
-          // If any one method is tracked, then the class is tracked.
-          if (track) {
-            trackClass = true;
-          }
-
-          // If we are tracking variables, make sure the class is public
-          int access_flags = classModel.flags().flagsMask();
-          if (track && (access_flags & ClassFile.ACC_PUBLIC) == 0) {
-            access_flags |= ClassFile.ACC_PUBLIC;
-            access_flags &= ~ClassFile.ACC_PROTECTED;
-            access_flags &= ~ClassFile.ACC_PRIVATE;
-          }
-          // reset class access flags in case they have been changed
-          classBuilder.withFlags(access_flags);
-        } else {
-          // If JDK, don't modify class initialization methods.  They can't affect
-          // user comparability and there isn't any way to get a second
-          // copy of them.
-          if (mgen.isClinit()) {
-            debugInstrument.log("Copying method: %s%n", mgen.getName());
-            debugInstrument.indent();
-            outputMethodUnchanged(classBuilder, mm, mgen);
-            debugInstrument.exdent();
-            debugInstrument.log("End of copy%n");
-            continue;
-          }
+        // If a method has its variables tracked, then we need to mark the class as having some
+        // instrumented variables.
+        if (track) {
+          trackClass = true;
         }
 
-        debug_transform.log(
-            "  Processing method %s, track=%b%n", simplify_method_name(mgen), track);
-        debug_transform.indent();
-
-        // `final` because local variables referenced from a lambda expression must be final or
-        // effectively final.
-        final boolean trackMethod = track;
-
-        // main methods, <clinit> methods and all methods in a JUnit test class
-        // need special treatment.  They are not duplicated and they do not have
-        // a DCompMarker added to their parameter list.
-        boolean addingDcompArg = true;
-
+        // If we are tracking variables, make sure the class is public
+        int access_flags = classModel.flags().flagsMask();
+        if (track && (access_flags & ClassFile.ACC_PUBLIC) == 0) {
+          access_flags |= ClassFile.ACC_PUBLIC;
+          access_flags &= ~ClassFile.ACC_PROTECTED;
+          access_flags &= ~ClassFile.ACC_PRIVATE;
+        }
+        // reset class access flags in case they have been changed
+        classBuilder.withFlags(access_flags);
+      } else {
+        // If JDK, don't modify class initialization methods.  They can't affect
+        // user comparability and there isn't any way to get a second
+        // copy of them.
         if (mgen.isClinit()) {
-          classInfo.hasClinit = true;
-          addInvokeToClinit(mgen, classInfo);
-          addingDcompArg = false;
-        }
-
-        if (mgen.isMain()) {
-          addingDcompArg = false;
-          createMainStub(mgen, classBuilder, classInfo);
-        }
-
-        if (classInfo.isJunitTestClass) {
-          addingDcompArg = false;
-        }
-
-        if (addingDcompArg) {
-          // make copy of original method
           debugInstrument.log("Copying method: %s%n", mgen.getName());
           debugInstrument.indent();
-          outputMethodUnchanged(classBuilder, mm, mgen);
+          outputMethodUnchanged(classBuilder, methodModel, mgen);
           debugInstrument.exdent();
           debugInstrument.log("End of copy%n");
+          return;
         }
+      }
 
-        MethodTypeDesc mtd = mm.methodTypeSymbol();
-        if (addingDcompArg) {
-          // The original parameterList is immutable, so we need to make a copy.
-          List<ClassDesc> paramList = new ArrayList<ClassDesc>(mtd.parameterList());
-          paramList.add(dcomp_marker);
-          mtd = MethodTypeDesc.of(mtd.returnType(), paramList);
-        }
-        classBuilder.withMethod(
-            mm.methodName().stringValue(),
-            mtd,
-            mm.flags().flagsMask(),
-            methodBuilder -> instrumentMethod(methodBuilder, mm, mgen, classInfo, trackMethod));
+      debug_transform.log("  Processing method %s, track=%b%n", simplify_method_name(mgen), track);
+      debug_transform.indent();
 
-        debug_transform.exdent();
-      } catch (Throwable t) {
-        if (debugInstrument.enabled) {
-          t.printStackTrace();
+      // `final` because local variables referenced from a lambda expression must be final or
+      // effectively final.
+      final boolean trackMethod = track;
+
+      // main methods, <clinit> methods and all methods in a JUnit test class
+      // need special treatment.  They are not duplicated and they do not have
+      // a DCompMarker added to their parameter list.
+      boolean addingDcompArg = true;
+
+      if (mgen.isClinit()) {
+        classInfo.hasClinit = true;
+        addInvokeToClinit(mgen, classInfo);
+        addingDcompArg = false;
+      }
+
+      if (mgen.isMain()) {
+        addingDcompArg = false;
+        createMainStub(mgen, classBuilder, classInfo);
+      }
+
+      if (classInfo.isJunitTestClass) {
+        addingDcompArg = false;
+      }
+
+      if (addingDcompArg) {
+        // make copy of original method
+        debugInstrument.log("Copying method: %s%n", mgen.getName());
+        debugInstrument.indent();
+        outputMethodUnchanged(classBuilder, methodModel, mgen);
+        debugInstrument.exdent();
+        debugInstrument.log("End of copy%n");
+      }
+
+      MethodTypeDesc mtd = methodModel.methodTypeSymbol();
+      if (addingDcompArg) {
+        // The original parameterList is immutable, so we need to make a copy.
+        List<ClassDesc> paramList = new ArrayList<ClassDesc>(mtd.parameterList());
+        paramList.add(dcomp_marker);
+        mtd = MethodTypeDesc.of(mtd.returnType(), paramList);
+      }
+      classBuilder.withMethod(
+          methodModel.methodName().stringValue(),
+          mtd,
+          methodModel.flags().flagsMask(),
+          methodBuilder ->
+              instrumentMethod(methodBuilder, methodModel, mgen, classInfo, trackMethod));
+
+      debug_transform.exdent();
+    } catch (Throwable t) {
+      if (debugInstrument.enabled) {
+        t.printStackTrace();
+      }
+      String method = classname + "." + methodModel.methodName().stringValue();
+      skip_method(method);
+      if (quit_if_error) {
+        if (t instanceof DynCompError) {
+          throw t;
         }
-        String method = classname + "." + mm.methodName().stringValue();
-        skip_method(method);
-        if (quit_if_error) {
-          if (t instanceof DynCompError) {
-            throw t;
-          }
-          throw new DynCompError("Error processing " + method, t);
-        } else {
-          System.err.printf("Error processing %s: %s%n", method, t);
-          System.err.printf("Method is NOT instrumented.%n");
-        }
+        throw new DynCompError("Error processing " + method, t);
+      } else {
+        System.err.printf("Error processing %s: %s%n", method, t);
+        System.err.printf("Method is NOT instrumented.%n");
       }
     }
   }
@@ -1056,7 +1127,8 @@ public class DCInstrument24 {
   }
 
   /**
-   * Copy an instruction list into the given method.
+   * Copy an instruction list into its corresponding method in the output file. In addition, if the
+   * {@code newLocals} list is not empty, create new local variables in the output method.
    *
    * @param codeBuilder for the given method's code
    * @param instructions instruction list to copy
@@ -1158,10 +1230,11 @@ public class DCInstrument24 {
    * Generate instrumentation code for the given method. This includes reading in and processing the
    * original instruction list, calling {@code insertInstrumentationCode} to add the instrumentation
    * code, and then copying the modified instruction list to the output method while updating the
-   * code labels, if needed.
+   * code labels, if needed. In addition, if the {@code newLocals} list is not empty, add them to
+   * the {@code localsTable}.
    *
    * <p>If DCInstrument24 generated the method or if it is a native method, then {@code codeModel}
-   * == null. If DCInstrument24 generated the method then {@code localsTable} will be set.
+   * == null.
    *
    * @param codeBuilder for the given method's code
    * @param codeModel for the input method's code; may be null
@@ -1354,8 +1427,8 @@ public class DCInstrument24 {
         codeBuilder.with(ce);
       }
 
-      // build_exception_handler returns null if there isn't one.
-      List<CodeElement> handlerCode = build_exception_handler(mgen);
+      // generateExceptionHandlerCode returns null if there isn't one.
+      List<CodeElement> handlerCode = generateExceptionHandlerCode(mgen);
       if (handlerCode != null) {
         Label handlerLabel = codeBuilder.newBoundLabel();
         for (CodeElement ceh : handlerCode) {
@@ -1369,18 +1442,18 @@ public class DCInstrument24 {
   }
 
   /**
-   * Returns true if the specified classname.method_name is the root of JUnit startup code.
+   * Returns true if the specified classname.methodName is the root of JUnit startup code.
    *
    * @param classname class containing the given method
-   * @param method_name method to be checked
+   * @param methodName method to be checked
    * @return true if the given method is a JUnit trigger
    */
-  boolean isJunitTrigger(String classname, @Identifier String method_name) {
-    if (classname.contains("JUnitCommandLineParseResult") && method_name.equals("parse")) {
+  boolean isJunitTrigger(String classname, @Identifier String methodName) {
+    if (classname.contains("JUnitCommandLineParseResult") && methodName.equals("parse")) {
       // JUnit 4
       return true;
     }
-    if (classname.contains("EngineDiscoveryRequestResolution") && method_name.equals("resolve")) {
+    if (classname.contains("EngineDiscoveryRequestResolution") && methodName.equals("resolve")) {
       // JUnit 5
       return true;
     }
@@ -1434,7 +1507,7 @@ public class DCInstrument24 {
     // the marker argument causes subtle errors
     if (classModel.flags().has(AccessFlag.ANNOTATION)) {
       debug_transform.log("Not instrumenting annotation %s%n", classname);
-      // Return classfile unmodified.
+      // Return class file unmodified.
       return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
     }
 
@@ -1445,7 +1518,7 @@ public class DCInstrument24 {
       String packageName = classname.substring(0, i);
       if (Premain.problem_packages.contains(packageName)) {
         debug_transform.log("Skipping problem package %s%n", packageName);
-        // Return classfile unmodified.
+        // Return class file unmodified.
         return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
       }
     }
@@ -1455,7 +1528,7 @@ public class DCInstrument24 {
       // See Premain.java for a list and explanations.
       if (Premain.problem_classes.contains(classname)) {
         debug_transform.log("Skipping problem class %s%n", classname);
-        // Return classfile unmodified.
+        // Return class file unmodified.
         return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
       }
       dcompRuntimeClassName = "java.lang.DCRuntime";
@@ -1473,7 +1546,7 @@ public class DCInstrument24 {
           "DynComp warning: Class %s is being skipped due to the following:%n",
           classInfo.class_name);
       System.err.printf("%s.%n", t);
-      // Return classfile unmodified.
+      // Return class file unmodified.
       return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
     }
   }
@@ -1556,8 +1629,9 @@ public class DCInstrument24 {
       stacks = new OperandStack24[instructions.size()];
 
       // Create an array containing the type of each local variable.
-      // This will be indexed by the local variable's slot number.
-      // There may be a gap for the second slot of a variable of type long or double.
+      // This will be indexed by the local variable's slot number. Note that a
+      // variable of type long or double takes two slots; hence, there may
+      // be unused entries in the locals table.
       locals = new ClassDesc[mgen.getMaxLocals()];
       // UNDONE: Should we init locals for 'this' and params only?
       for (final LocalVariable lv : mgen.localsTable) {
@@ -1565,7 +1639,7 @@ public class DCInstrument24 {
         locals[lv.slot()] = lv.typeSymbol();
       }
 
-      worklistHistory = new HashMap<>();
+      labelOperandStackMap = new HashMap<>();
 
       // Create a worklist of instruction locations and operand stacks.
 
@@ -1593,7 +1667,7 @@ public class DCInstrument24 {
 
       WorkItem item;
       OperandStack24 stack;
-      int inst_index;
+      int instIndex;
       while (!worklist.isEmpty()) {
         item = worklist.first();
         worklist.remove(item);
@@ -1608,13 +1682,13 @@ public class DCInstrument24 {
           if (!li.hasNext()) {
             throw new DynCompError("error in instruction list");
           }
-          inst_index = li.nextIndex();
+          instIndex = li.nextIndex();
           inst = li.next();
           if (debugOperandStack) {
-            System.out.println("inst_index: " + inst_index);
+            System.out.println("instIndex: " + instIndex);
             System.out.println("Operand Stack in: " + stack);
           }
-          proceed = CalcStack24.simulateCodeElement(mgen, minfo, inst, inst_index, stack);
+          proceed = CalcStack24.simulateCodeElement(mgen, minfo, inst, instIndex, stack);
           if (debugOperandStack) {
             System.out.println("Operand Stack out: " + stack);
             System.out.println("proceed: " + proceed);
@@ -1628,18 +1702,18 @@ public class DCInstrument24 {
       // set list iterator to start of the user instructions
       li = instructions.listIterator(newStartIndex);
 
-      // We set inst_index here and increment each time through loop.
+      // We set instIndex here and increment each time through loop.
       // This should match the index into stacks we used above.
-      inst_index = li.nextIndex();
+      instIndex = li.nextIndex();
       while (li.hasNext()) {
         inst = li.next();
 
         if (debugOperandStack) {
           System.out.println("code element in: " + inst);
-          System.out.println("current stack: " + stacks[inst_index]);
+          System.out.println("current stack: " + stacks[instIndex]);
         }
         // Get the translation for this instruction (if any)
-        List<CodeElement> new_il = instrumentInstruction(mgen, minfo, inst, stacks[inst_index]);
+        List<CodeElement> new_il = instrumentInstruction(mgen, minfo, inst, stacks[instIndex]);
         if (new_il != null) {
           li.remove(); // remove the instruction we instrumented
           for (CodeElement ce : new_il) {
@@ -1649,7 +1723,7 @@ public class DCInstrument24 {
             li.add(ce);
           }
         }
-        inst_index++;
+        instIndex++;
       }
     } catch (DynCompError e) {
       throw e;
@@ -1666,13 +1740,13 @@ public class DCInstrument24 {
    * @param stack state of operand stack at target
    */
   protected static void addLabelToWorklist(Label target, OperandStack24 stack) {
-    OperandStack24 existing = worklistHistory.get(target);
+    OperandStack24 existing = labelOperandStackMap.get(target);
     if (existing == null) {
       if (debugOperandStack) {
         System.out.println(
             "push to worklist: " + target + ", " + labelIndexMap.get(target) + ", stack: " + stack);
       }
-      worklistHistory.put(target, stack.getClone());
+      labelOperandStackMap.put(target, stack.getClone());
       @SuppressWarnings("nullness:unboxing.of.nullable")
       int indexInCodeList = labelIndexMap.get(target);
       worklist.add(new WorkItem(indexInCodeList, stack.getClone()));
@@ -1708,14 +1782,12 @@ public class DCInstrument24 {
       return;
     }
     // stacks don't match
-    if (debugOperandStack) {
-      System.err.flush();
-      System.out.flush();
-      System.out.println("operand stacks do not match at label:" + target);
-      System.out.println("existing stack: " + existing);
-      System.out.println("current stack: " + current);
-      System.out.flush();
-    }
+    System.err.flush();
+    System.out.flush();
+    System.out.println("operand stacks do not match at label:" + target);
+    System.out.println("existing stack: " + existing);
+    System.out.println("current stack: " + current);
+    System.out.flush();
     throw new DynCompError("operand stacks do not match at label:" + target);
   }
 
@@ -1734,17 +1806,18 @@ public class DCInstrument24 {
    * called first.)
    */
   public List<String> get_skipped_methods() {
-    return new ArrayList<>(skipped_methods);
+    return skipped_methods;
   }
 
   /**
-   * Adds a try/catch block around the entire method. If an exception occurs, the tag stack is
-   * cleaned up and the exception is rethrown.
+   * In {@link #instrumentCode} we build a try/catch block around the entire method. Here we
+   * generate the exception handler code so that if an exception occurs when the instrumented method
+   * is executed, the tag stack is cleaned up and the exception is rethrown.
    *
    * @param mgen method to add exception handler
    * @return code list for handler, or null if method should not have a handler
    */
-  public @Nullable List<CodeElement> build_exception_handler(MethodGen24 mgen) {
+  public @Nullable List<CodeElement> generateExceptionHandlerCode(MethodGen24 mgen) {
 
     if (mgen.getName().equals("main")) {
       return null;
@@ -1985,7 +2058,8 @@ public class DCInstrument24 {
             }
 
           // Instanceof pushes either 0 or 1 on the stack depending on whether
-          // the object on top of stack is of the specified type.  We push a
+          // the object on top of stack is of the specified type.  The DynComp runtime will push a
+          // new, unique
           // tag for a constant, since nothing is made comparable by this.
           case Opcode.INSTANCEOF:
             return build_il(dcr_call("push_const", CD_void, noArgsSig), inst);
@@ -2365,8 +2439,7 @@ public class DCInstrument24 {
 
   /**
    * Adds a call to DCruntime.exit() at each return from the method. This call calculates
-   * comparability on the daikon variables. It is only necessary if we are tracking comparability
-   * for the variables of this method.
+   * comparability on any variables that are being tracked.
    *
    * @param mgen method to modify
    * @param mi MethodInfo for the given method's code
@@ -2425,8 +2498,8 @@ public class DCInstrument24 {
   }
 
   /**
-   * Returns the interface class containing the implementation of the given method. The interfaces
-   * of {@code startClass} are recursively searched.
+   * Returns the interface class name containing the implementation of the given method. The
+   * interfaces of {@code startClass} are recursively searched.
    *
    * @param startClass the ClassModel whose interfaces are to be searched
    * @param methodName the target method to search for
@@ -2590,8 +2663,11 @@ public class DCInstrument24 {
   }
 
   /**
-   * Process an invoke instruction that calls a non-instrumented method. We need to clean up the tag
-   * stack.
+   * Clean up the tag stack for an invoke instruction that calls a non-instrumented method. Items
+   * were pushed onto the tag stack for each argument to the invoke. But we have since discovered
+   * that the target method is not instrumented. Thus the DynComp runtime must discard (pop) these
+   * tags before the invoke is executed. In addition, if the method being invoked has a primitive
+   * return type, the runtime must push a new, unique tag after the invoke.
    *
    * @param invoke a method invocation bytecode instruction
    * @param classname target class of the invoke
@@ -2623,7 +2699,7 @@ public class DCInstrument24 {
   }
 
   /**
-   * Returns instructions that will discard any primitive tags corresponding to the specified
+   * Returns instructions that will discard (pop) any primitive tags corresponding to the specified
    * parameters. Returns an empty instruction list if there are no primitive arguments to discard.
    *
    * @param paramTypes parameter types of target method
@@ -2648,7 +2724,7 @@ public class DCInstrument24 {
    * Returns true if the invoked method (the callee) is instrumented.
    *
    * @param invoke instruction whose target is to be checked
-   * @param mgen host method of invoke
+   * @param mgen method containing the invoke
    * @param classname target class of the invoke (the callee)
    * @param methodName target method of the invoke (the callee)
    * @param paramTypes parameter types of target method
@@ -3137,30 +3213,30 @@ public class DCInstrument24 {
 
   /**
    * Create the instructions that replace the object eq or ne branch instruction. They are replaced
-   * by a call to the specified compare_method (which returns a boolean) followed by the specified
+   * by a call to the specified compareMethod (which returns a boolean) followed by the specified
    * boolean ifeq or ifne instruction.
    *
    * @param branch a branch instruction
-   * @param compare_method name of DCRuntime routine to call
+   * @param compareMethod name of DCRuntime routine to call
    * @param boolean_if branch instruction to gerate of the runtime call
    * @return instruction list to do object comparison
    */
   private List<CodeElement> object_comparison(
-      BranchInstruction branch, String compare_method, Opcode boolean_if) {
+      BranchInstruction branch, String compareMethod, Opcode boolean_if) {
     List<CodeElement> il = new ArrayList<>();
 
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(
-            runtimeCD, compare_method, MethodTypeDesc.of(CD_boolean, objectObjectSig));
+            runtimeCD, compareMethod, MethodTypeDesc.of(CD_boolean, objectObjectSig));
     il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
     il.add(BranchInstruction.of(boolean_if, branch.target()));
     return il;
   }
 
   /**
-   * Handles load and store field instructions. The instructions must be augmented to either push
-   * (load) or pop (store) the tag on the tag stack. This is accomplished by calling the tag get/set
-   * method for this field.
+   * Handles load and store field instructions. If the field is a primitive the instructions must be
+   * augmented to either push (load) or pop (store) the tag on the tag stack. This is accomplished
+   * by calling the tag get/set method for this field.
    *
    * @param mgen describes the given method
    * @param minfo for the given method's code
@@ -3372,8 +3448,8 @@ public class DCInstrument24 {
   }
 
   /**
-   * Creates a MethodInfo corresponding to the specified method. The exit locations are filled in,
-   * but the reflection information is not generated. Returns null if there are no instructions.
+   * Creates a MethodInfo corresponding to the specified method. The exit location information for
+   * the method is collected. Returns null if the method contains no instructions.
    *
    * @param classInfo class containing the method
    * @param mgen method to inspect
@@ -4628,14 +4704,14 @@ public class DCInstrument24 {
     @MethodDescriptor String noArgsReturnObject = "()Ljava/lang/Object;";
     MethodModel cl = classGen.containsMethod("clone", noArgsReturnObject);
     if (cl != null) {
-      classGen.addInterface(Signatures.addPackage(dcomp_prefix, "DCompClone"));
+      classGen.addInterface(Signatures.addPackage(dcompRuntimePrefix, "DCompClone"));
     }
 
     @SuppressWarnings("signature:assignment")
     @MethodDescriptor String noArgsReturnString = "()Ljava/lang/String;";
     MethodModel ts = classGen.containsMethod("toString", noArgsReturnString);
     if (ts != null) {
-      classGen.addInterface(Signatures.addPackage(dcomp_prefix, "DCompToString"));
+      classGen.addInterface(Signatures.addPackage(dcompRuntimePrefix, "DCompToString"));
     }
   }
 
@@ -4769,7 +4845,7 @@ public class DCInstrument24 {
    * @param fm the field
    * @return string containing the fully-qualified name
    */
-  protected String full_name(ClassModel cm, FieldModel fm) {
+  protected static String full_name(ClassModel cm, FieldModel fm) {
     return ClassGen24.getClassName(cm) + "." + fm.fieldName().stringValue();
   }
 
@@ -4792,8 +4868,8 @@ public class DCInstrument24 {
 
   /**
    * Checks to see if the instruction targets the method's CodeModel startLabel (held in
-   * oldStartLabel). If so, it replaces the target with the newStartLabel. Unfortunately, the
-   * classfile API does not allow us to simply replace the label, we have to replace the entire
+   * oldStartLabel). If so, it replaces the target with the newStartLabel. Unfortunately, the class
+   * file API does not allow us to simply replace the label, we have to replace the entire
    * instruction. Note that oldStartLabel may be null, but that is okay as any comparison to it will
    * fail and we will do nothing.
    *
