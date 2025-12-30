@@ -69,27 +69,31 @@ circleci_boilerplate
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m])dnl
 dnl
-define([typecheck_latest_job], [dnl
-  typecheck-latest-$1-jdk$2:
+ifelse([argument 3 is "latest" or "bundled"])dnl
+define([typecheck_job], [dnl
+  typecheck-$3-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2
 circleci_boilerplate
       - run: env
       - run:
-          command: scripts/test-typecheck-with-latest-cf.sh
+          command: scripts/test-typecheck-with-$3-cf.sh
           no_output_timeout: 30m])dnl
-define([typecheck_bundled_job], [dnl
-  typecheck-bundled-$1-jdk$2:
+dnl
+define([typecheck_job_parts], [dnl
+typecheck_job_part($1, $2, $3, part1)
+typecheck_job_part($1, $2, $3, part2)
+typecheck_job_part($1, $2, $3, part3)])dnl
+ifelse([argument 3 is "latest" or "bundled", argument 4 is "part1", "part2", or "part3"])dnl
+define([typecheck_job_part], [dnl
+  typecheck-$3-$4-$1-jdk$2:
     docker:
       - image: mdernst/daikon-$1-jdk$2
 circleci_boilerplate
-      - run: |
-          make showvars
-          make compile daikon.jar
+      - run: env
       - run:
-          command: scripts/test-typecheck-with-bundled-cf.sh
-          no_output_timeout: 30m
-])dnl
+          command: scripts/test-typecheck-with-$3-cf.sh $4
+          no_output_timeout: 30m])dnl
 dnl
 define([job_dependences], [dnl
       - $3-$1-jdk$2[]dnl
@@ -101,6 +105,19 @@ ifelse($2,canary_version,,[dnl
 ])dnl
 ifelse($1,canary_os,,[dnl
             - $3-canary_os[]-jdk$2
+])dnl
+])dnl
+])dnl
+define([job_dependences_part], [dnl
+      - $3-$4-$1-jdk$2[]dnl
+ifelse($1$2,canary_test,,[:
+          requires:
+            - canary-jobs
+ifelse($2,canary_version,,[dnl
+            - $3-$4-$1-jdk[]canary_version
+])dnl
+ifelse($1,canary_os,,[dnl
+            - $3-$4-canary_os[]-jdk$2
 ])dnl
 ])dnl
 ])dnl
