@@ -171,7 +171,7 @@ public final class BuildJDK24 {
 
       check_java_home();
 
-      if (BcelUtil.javaVersion > 8) {
+      if (Runtime.isJava9orLater()) {
         class_stream_map = build.gather_runtime_from_modules();
       } else {
         class_stream_map = build.gather_runtime_from_jar();
@@ -418,7 +418,7 @@ public final class BuildJDK24 {
 
         // As {@code instrumentation_interface} is a static field, we initialize it here rather than
         // in the DCInstrument24 constructor.
-        if (Premain.jdk_instrumented && BcelUtil.javaVersion > 8) {
+        if (Premain.jdk_instrumented && Runtime.isJava9orLater()) {
           dcompPrefix = "java.lang";
         } else {
           dcompPrefix = "daikon.dcomp";
@@ -449,7 +449,7 @@ public final class BuildJDK24 {
     createDCompClass(destDir, "DCompMarker", false);
 
     // The remainder of the generated classes are needed for JDK 9+ only.
-    if (BcelUtil.javaVersion > 8) {
+    if (Runtime.isJava9orLater()) {
       createDCompClass(destDir, "DCompInstrumented", true);
       createDCompClass(destDir, "DCompClone", false);
       createDCompClass(destDir, "DCompToString", false);

@@ -304,7 +304,7 @@ public class DynComp {
       // allow DCRuntime to make reflective access to java.land.Object.clone() without a warning
       cmdlist.add("--add-opens");
       cmdlist.add("java.base/java.lang=ALL-UNNAMED");
-      if (BcelUtil.javaVersion >= 24) {
+      if (Runtime.isJava24orLater()) {
         // needed to eliminate warning for JNI access to native code
         cmdlist.add("--enable-native-access=ALL-UNNAMED");
       }
