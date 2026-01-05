@@ -8,7 +8,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.StringJoiner;
 import org.checkerframework.checker.signature.qual.BinaryName;
-import org.plumelib.reflection.Signatures;
 
 /** DaikonWriter is the parent class of DeclWriter and DTraceWriter. */
 public abstract class DaikonWriter {
@@ -168,7 +167,7 @@ public abstract class DaikonWriter {
         param_str += ", ";
       }
       if (param.isArray()) {
-        param_str += Signatures.classGetNameToBinaryName(param.getName());
+        param_str += Runtime.classGetNameToBinaryName(param.getName());
       } else {
         param_str += param.getName();
       }
