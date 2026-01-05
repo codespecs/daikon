@@ -155,7 +155,7 @@ public class Premain {
 
     // We need to load the BcelUtil class prior to turning on instrumentation.
     @SuppressWarnings("UnusedVariable")
-    int junk = BcelUtil.javaVersion;
+    int toLoadBcelUtil = BcelUtil.javaVersion;
 
     jdk_instrumented = !DynComp.no_jdk;
 
@@ -193,10 +193,10 @@ public class Premain {
 
     // Setup the shutdown hook
     Thread shutdown_thread = new ShutdownThread();
-    Runtime.getRuntime().addShutdownHook(shutdown_thread);
+    java.lang.Runtime.getRuntime().addShutdownHook(shutdown_thread);
 
     String instrumenter;
-    if (BcelUtil.javaVersion >= 24) {
+    if (daikon.chicory.Runtime.isJava24orLater()) {
       instrumenter = "daikon.dcomp.Instrument24";
     } else {
       instrumenter = "daikon.dcomp.Instrument";
@@ -244,7 +244,7 @@ public class Premain {
     // dummy java.lang.DCRuntime with a version where each method calls the corresponding method in
     // daikon.dcomp.DCRuntime. The Java runtime does not enforce the security check in this case.
     //
-    if (BcelUtil.javaVersion > 8 && jdk_instrumented) {
+    if (daikon.chicory.Runtime.isJava9orLater() && jdk_instrumented) {
 
       // Buffer for input of our replacement java.lang.DCRuntime.
       // The size of the current version is 6326 bytes and we do not

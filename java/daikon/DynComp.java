@@ -1,7 +1,7 @@
 package daikon;
 
+import daikon.chicory.Runtime;
 import daikon.chicory.StreamRedirectThread;
-import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
@@ -294,7 +294,7 @@ public class DynComp {
     cmdlist.add(
         "-Xmx" + (int) Math.ceil(java.lang.Runtime.getRuntime().maxMemory() / 1073741824.0) + "G");
 
-    if (BcelUtil.javaVersion <= 8) {
+    if (!Runtime.isJava9orLater()) {
       if (!no_jdk) {
         // prepend to rather than replace boot classpath
         // If daikonPath is nonempty, it starts with a pathSeparator.
@@ -319,7 +319,7 @@ public class DynComp {
         // allow DCRuntime to make reflective access to sun.util.locale (equals_dcomp_instrumented)
         cmdlist.add("--add-exports");
         cmdlist.add("java.base/sun.util.locale=ALL-UNNAMED");
-        if (BcelUtil.javaVersion >= 24) {
+        if (Runtime.isJava24orLater()) {
           cmdlist.add("--add-opens");
           cmdlist.add("java.base/sun.util.resources=ALL-UNNAMED");
         }
