@@ -2008,7 +2008,7 @@ public class DCInstrument extends InstructionListUtils {
       // Replace calls to Object's equals method with calls to our
       // replacement, a static method in DCRuntime.
 
-      Type[] new_paramTypes = new Type[] {javalangObject, javalangObject};
+      Type[] new_param_types = new Type[] {javalangObject, javalangObject};
 
       InstructionList il = new InstructionList();
       il.append(
