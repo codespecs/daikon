@@ -1,5 +1,6 @@
 package daikon;
 
+import daikon.chicory.Runtime;
 import daikon.chicory.StreamRedirectThread;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;

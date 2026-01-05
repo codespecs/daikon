@@ -1,6 +1,7 @@
 package daikon.dcomp;
 
 import daikon.DynComp;
+import daikon.chicory.Runtime;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.reflection.Signatures;
