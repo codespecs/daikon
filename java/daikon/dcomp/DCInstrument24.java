@@ -21,6 +21,7 @@ import daikon.chicory.DaikonWriter;
 import daikon.chicory.Instrument24;
 import daikon.chicory.MethodGen24;
 import daikon.chicory.MethodInfo;
+import daikon.chicory.Runtime;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
