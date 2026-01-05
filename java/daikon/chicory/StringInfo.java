@@ -67,7 +67,7 @@ public class StringInfo extends DaikonVariableInfo {
       if (str == null) {
         buf.add("null");
       } else if (str instanceof String) {
-        buf.add("\"" + encodeString((String) str) + "\"");
+        buf.add("\"" + Runtime.escapeJava((String) str) + "\"");
       } else if (str instanceof NonsensicalObject || str instanceof NonsensicalList) {
         buf.add("nonsensical");
       } else {
@@ -111,12 +111,7 @@ public class StringInfo extends DaikonVariableInfo {
    * @return the quoted string
    */
   private String getString(String stringRef) {
-    return "\"" + encodeString(stringRef) + "\"";
-  }
-
-  // removes endlines in string
-  private static String encodeString(String input) {
-    return Runtime.quote(input);
+    return "\"" + Runtime.escapeJava(stringRef) + "\"";
   }
 
   /** toString is a function. */
