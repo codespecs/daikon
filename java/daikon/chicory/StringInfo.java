@@ -116,7 +116,7 @@ public class StringInfo extends DaikonVariableInfo {
 
   // removes endlines in string
   private static String encodeString(String input) {
-    return Runtime.quote(input);
+    return Runtime.escapeJava(input);
   }
 
   /** toString is a function. */

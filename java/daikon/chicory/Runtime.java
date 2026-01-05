@@ -26,8 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
+import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.checkerframework.checker.lock.qual.Holding;
@@ -38,6 +40,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.FieldDescriptor;
+import org.checkerframework.checker.signature.qual.FqBinaryName;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
@@ -939,115 +942,201 @@ public final class Runtime {
   // Copied code
   //
 
-  // Lifted directly from plume/UtilPlume.java, where it is called
-  // escapeJava(), but repeated here to make this class self-contained.
-  /** Quote \, ", \n, and \r characters in the target; return a new string. */
-  public static String quote(String orig) {
+  // This code is copied from elsewhere to make this class self-contained.
+
+  //
+  // From class StringsPlume
+  //
+
+  /**
+   * Escapes a String so that it is expressible in a string literal in Java source code. By
+   * surrounding the return value with double quote marks, the result will be a Java string literal
+   * denoting the original string.
+   *
+   * <p>Returns a new string only if any modifications were necessary.
+   *
+   * <p>Compared to the `escapeJava` method in Apache Commons Text StringEscapeUtils, this one
+   * correctly handles non-printable ASCII characters.
+   *
+   * @param orig string to quote
+   * @return quoted version of orig
+   */
+  @SideEffectFree
+  public static String escapeJava(String orig) {
     StringBuilder sb = new StringBuilder();
-    // The previous escape (or escaped) character was seen right before
-    // this position.  Alternately:  from this character forward, the string
-    // should be copied out verbatim (until the next escaped character).
-    int post_esc = 0;
-    int orig_len = orig.length();
-    for (int i = 0; i < orig_len; i++) {
+    // The previous escape character was seen right before this position.
+    @IndexOrHigh("orig") int postEsc = 0;
+    int origLen = orig.length();
+    for (int i = 0; i < origLen; i++) {
       char c = orig.charAt(i);
       switch (c) {
         case '\"':
-        case '\\':
-          if (post_esc < i) {
-            sb.append(orig.substring(post_esc, i));
+          if (postEsc < i) {
+            sb.append(orig.substring(postEsc, i));
           }
-          sb.append('\\');
-          post_esc = i;
+          sb.append("\\\"");
+          postEsc = i + 1;
+          break;
+        case '\\':
+          if (postEsc < i) {
+            sb.append(orig.substring(postEsc, i));
+          }
+          sb.append("\\\\");
+          postEsc = i + 1;
+          break;
+        case '\b':
+          if (postEsc < i) {
+            sb.append(orig.substring(postEsc, i));
+          }
+          sb.append("\\b");
+          postEsc = i + 1;
+          break;
+        case '\f':
+          if (postEsc < i) {
+            sb.append(orig.substring(postEsc, i));
+          }
+          sb.append("\\f");
+          postEsc = i + 1;
           break;
         case '\n': // not lineSep
-          if (post_esc < i) {
-            sb.append(orig.substring(post_esc, i));
+          if (postEsc < i) {
+            sb.append(orig.substring(postEsc, i));
           }
           sb.append("\\n"); // not lineSep
-          post_esc = i + 1;
+          postEsc = i + 1;
           break;
         case '\r':
-          if (post_esc < i) {
-            sb.append(orig.substring(post_esc, i));
+          if (postEsc < i) {
+            sb.append(orig.substring(postEsc, i));
           }
           sb.append("\\r");
-          post_esc = i + 1;
+          postEsc = i + 1;
           break;
+        case '\t':
+          if (postEsc < i) {
+            sb.append(orig.substring(postEsc, i));
+          }
+          sb.append("\\t");
+          postEsc = i + 1;
+          break;
+
         default:
-          // Do nothing; i gets incremented.
+          if (c >= ' ' && c <= '~') {
+            // Nothing to do: i gets incremented
+          } else if (c <= '\377') {
+            if (postEsc < i) {
+              sb.append(orig.substring(postEsc, i));
+            }
+            sb.append('\\');
+            int cAsInt = (int) c;
+            sb.append(String.format("%03o", cAsInt));
+            postEsc = i + 1;
+            break;
+          } else {
+            sb.append("\\u");
+            sb.append(String.format("%04x", (int) c));
+            postEsc = i + 1;
+            break;
+          }
       }
     }
     if (sb.length() == 0) {
       return orig;
     }
-    sb.append(orig.substring(post_esc));
+    sb.append(orig.substring(postEsc));
     return sb.toString();
   }
 
-  private static HashMap<String, String> primitiveClassesFromJvm = new HashMap<>(8);
+  //
+  // From class SignaturesUtil
+  //
+
+  /** A map from field descriptor (sach as "I") to Java primitive type (such as "int"). */
+  private static HashMap<String, String> fieldDescriptorToPrimitive = new HashMap<>(8);
 
   static {
-    primitiveClassesFromJvm.put("Z", "boolean");
-    primitiveClassesFromJvm.put("B", "byte");
-    primitiveClassesFromJvm.put("C", "char");
-    primitiveClassesFromJvm.put("D", "double");
-    primitiveClassesFromJvm.put("F", "float");
-    primitiveClassesFromJvm.put("I", "int");
-    primitiveClassesFromJvm.put("J", "long");
-    primitiveClassesFromJvm.put("S", "short");
+    fieldDescriptorToPrimitive.put("Z", "boolean");
+    fieldDescriptorToPrimitive.put("B", "byte");
+    fieldDescriptorToPrimitive.put("C", "char");
+    fieldDescriptorToPrimitive.put("D", "double");
+    fieldDescriptorToPrimitive.put("F", "float");
+    fieldDescriptorToPrimitive.put("I", "int");
+    fieldDescriptorToPrimitive.put("J", "long");
+    fieldDescriptorToPrimitive.put("S", "short");
+  }
+
+  /** Matches the "[[[" prefix of a field descriptor for an array. */
+  private static Pattern fdArrayBracketsPattern = Pattern.compile("^\\[+");
+
+  // does not convert "V" to "void".  Should it?
+  /**
+   * Convert a field descriptor to a binary name. For example, convert "Ljava/util/Map$Entry;" to
+   * "java.util.Map$Entry".
+   *
+   * <p>Strictly speaking, there is no binary name for primitives and arrays. In those cases, the
+   * result is a "fully-qualified binary name" ({@code @}{@link FqBinaryName}). For example, this
+   * method converts "[Ljava/util/Map$Entry;" to "java.util.Map$Entry[]" and converts "I" to "int".
+   *
+   * @param typename a field descriptor (the name of a type in JVML format)
+   * @return the corresponding binary name
+   */
+  @SuppressWarnings("signature") // conversion routine
+  public static @BinaryName String fieldDescriptorToBinaryName(@FieldDescriptor String typename) {
+    if (typename.equals("")) {
+      throw new Error("Empty string passed to fieldDescriptorToBinaryName");
+    }
+    Matcher m = fdArrayBracketsPattern.matcher(typename);
+    String classname = m.replaceFirst("");
+    int dimensions = typename.length() - classname.length();
+    String result;
+    if (classname.startsWith("L") && classname.endsWith(";")) {
+      result = classname.substring(1, classname.length() - 1);
+    } else {
+      result = fieldDescriptorToPrimitive.get(classname);
+      if (result == null) {
+        throw new Error(
+            "Malformed field descriptor should be \"L...;\" or a primitive: " + classname);
+      }
+    }
+    for (int i = 0; i < dimensions; i++) {
+      result += "[]";
+    }
+    return result.replace('/', '.');
   }
 
   /**
-   * Convert a classname from JVML format to Java format. For example, convert "[Ljava/lang/Object;"
-   * to "java.lang.Object[]".
+   * Convert a name in Class.getName format to a binary name. For example, convert
+   * "[Ljava/util/Map$Entry;" to "java.util.Map$Entry[]".
    *
-   * <p>If the argument is not a field descriptor, returns it as is. This enables this method to be
-   * used on the output of {@link Class#getName()}.
+   * @param typename a name in Class.getName format
+   * @return the corresponding binary name
    */
   @SuppressWarnings("signature") // conversion routine
-  public static String fieldDescriptorToBinaryName(@FieldDescriptor String classname) {
-
-    // System.out.println(classname);
-
-    int dims = 0;
-    while (classname.startsWith("[")) {
-      dims++;
-      classname = classname.substring(1);
+  public static @BinaryName String classGetNameToBinaryName(@ClassGetName String typename) {
+    if (typename.equals("")) {
+      throw new Error("Empty string passed to fieldDescriptorToBinaryName");
     }
-
+    Matcher m = fdArrayBracketsPattern.matcher(typename);
+    String classname = m.replaceFirst("");
+    int dimensions = typename.length() - classname.length();
     String result;
-    // array of reference type
-    if (classname.startsWith("L") && classname.endsWith(";")) {
-      result = classname.substring(1, classname.length() - 1);
-      result = result.replace('/', '.');
+    if (dimensions == 0) {
+      return classname;
     } else {
-      if (dims > 0) { // array of primitives
-        result = primitiveClassesFromJvm.get(classname);
+      if (classname.startsWith("L") && classname.endsWith(";")) {
+        result = classname.substring(1, classname.length() - 1);
       } else {
-        // just a primitive
-        result = classname;
+        result = fieldDescriptorToPrimitive.get(classname);
+        if (result == null) {
+          throw new Error(
+              "Malformed Class.getName array base type should be \"L...;\" or a primitive: "
+                  + classname);
+        }
       }
-
-      if (result == null) {
-        // As a failsafe, use the input; perhaps it is in Java, not JVML,
-        // format.
-        result = classname;
-        // throw new Error("Malformed base class: " + classname);
+      for (int i = 0; i < dimensions; i++) {
+        result += "[]";
       }
-    }
-    for (int i = 0; i < dims; i++) {
-      result += "[]";
-    }
-    return result;
-  }
-
-  @SuppressWarnings("signature") // conversion method
-  public static final @BinaryName String classGetNameToBinaryName(@ClassGetName String cgn) {
-    if (cgn.startsWith("[")) {
-      return fieldDescriptorToBinaryName(cgn);
-    } else {
-      return cgn;
+      return result;
     }
   }
 
