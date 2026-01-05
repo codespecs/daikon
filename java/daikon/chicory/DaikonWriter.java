@@ -1,7 +1,6 @@
 package daikon.chicory;
 
 import daikon.Chicory;
-import daikon.SignaturesUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -168,7 +167,7 @@ public abstract class DaikonWriter {
         param_str += ", ";
       }
       if (param.isArray()) {
-        param_str += SignaturesUtil.classGetNameToBinaryName(param.getName());
+        param_str += Runtime.classGetNameToBinaryName(param.getName());
       } else {
         param_str += param.getName();
       }
