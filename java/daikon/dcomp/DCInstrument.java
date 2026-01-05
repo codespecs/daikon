@@ -2887,7 +2887,7 @@ public class DCInstrument extends InstructionListUtils {
     //   // This case DOES occur at run time.  -MDE 1/22/2010
     // }
 
-    // Get the paramter names for this method
+    // Get the parameter names for this method
     String[] paramNames = mgen.getArgumentNames();
     LocalVariableGen[] lvs = mgen.getLocalVariables();
     int param_offset = 1;
