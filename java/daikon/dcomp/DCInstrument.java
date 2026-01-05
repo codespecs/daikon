@@ -1201,14 +1201,14 @@ public class DCInstrument extends InstructionListUtils {
     Type[] param_types = mgen.getArgumentTypes();
 
     int arg_index = (mgen.isStatic() ? 0 : 1);
-    StackMapType[] arg_map_types = new StackMapType[param_types.length + arg_index];
+    StackMapType[] arg_param_types = new StackMapType[param_types.length + arg_index];
     if (!mgen.isStatic()) {
-      arg_map_types[0] =
+      arg_param_types[0] =
           new StackMapType(
               Const.ITEM_Object, pool.addClass(mgen.getClassName()), pool.getConstantPool());
     }
     for (int ii = 0; ii < param_types.length; ii++) {
-      arg_map_types[arg_index++] = generateStackMapTypeFromType(param_types[ii]);
+      arg_param_types[arg_index++] = generateStackMapTypeFromType(param_types[ii]);
     }
 
     StackMapEntry map_entry;
@@ -1218,7 +1218,7 @@ public class DCInstrument extends InstructionListUtils {
     StackMapType[] stack_map_types = {stack_map_type};
     map_entry =
         new StackMapEntry(
-            Const.FULL_FRAME, map_offset, arg_map_types, stack_map_types, pool.getConstantPool());
+            Const.FULL_FRAME, map_offset, arg_param_types, stack_map_types, pool.getConstantPool());
 
     int orig_size = stackMapTable.length;
     StackMapEntry[] new_stack_map_table = new StackMapEntry[orig_size + 1];
@@ -1349,11 +1349,11 @@ public class DCInstrument extends InstructionListUtils {
     String params = Character.toString((char) (frame_size + '0'));
     // Character.forDigit (frame_size, Character.MAX_RADIX);
     List<Integer> plist = new ArrayList<>();
-    for (Type argType : param_types) {
-      if (argType instanceof BasicType) {
+    for (Type paramType : param_types) {
+      if (paramType instanceof BasicType) {
         plist.add(offset);
       }
-      offset += argType.getSize();
+      offset += paramType.getSize();
     }
     for (int ii = plist.size() - 1; ii >= 0; ii--) {
       char tmpChar = (char) (plist.get(ii) + '0');
@@ -2873,7 +2873,7 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     return new MethodInfo(
-        class_info, mgen.getName(), argNames, arg_type_strings, exit_locs, isIncluded);
+        class_info, mgen.getName(), argNames, param_type_strings, exit_locs, isIncluded);
   }
 
   /**
@@ -4105,11 +4105,11 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Add a dcomp marker argument to indicate this is the instrumented version of the method.
+   * Add a dcomp marker parameter to indicate this is the instrumented version of the method.
    *
    * @param mgen method to ard dcomp marker to
    */
-  void add_dcomp_arg(MethodGen mgen) {
+  void add_dcomp_param(MethodGen mgen) {
 
     // Don't modify main or the JVM won't be able to find it.
     if (BcelUtil.isMain(mgen)) {
@@ -4121,7 +4121,7 @@ public class DCInstrument extends InstructionListUtils {
       return;
     }
 
-    // Add the dcomp marker argument to indicate this is the
+    // Add the dcomp marker parameter to indicate this is the
     // instrumented version of the method.
     addNewParameter(mgen, "marker", dcomp_marker);
   }
@@ -4130,13 +4130,13 @@ public class DCInstrument extends InstructionListUtils {
    * Returns true if the method is defined in Object.
    *
    * @param methodName method to check
-   * @param argTypes array of argument types to method
+   * @param paramTypes array of argument types to method
    * @return true if method is member of Object
    */
   @Pure
-  boolean is_object_method(@Identifier String methodName, Type[] argTypes) {
+  boolean is_object_method(@Identifier String methodName, Type[] paramTypes) {
     for (MethodDef md : obj_methods) {
-      if (md.equals(methodName, argTypes)) {
+      if (md.equals(methodName, paramTypes)) {
         return true;
       }
     }
@@ -4199,14 +4199,14 @@ public class DCInstrument extends InstructionListUtils {
     il.append(InstructionFactory.createReturn(returnType));
 
     // Create the method
-    Type[] argTypes = ArraysPlume.append(mgen.getArgumentTypes(), dcomp_marker);
-    String[] argNames = ArraysPlume.append(mgen.getArgumentNames(), "marker");
+    Type[] paramTypes = ArraysPlume.append(mgen.getArgumentTypes(), dcomp_marker);
+    String[] paramNames = ArraysPlume.append(mgen.getArgumentNames(), "marker");
     MethodGen dcomp_mgen =
         new MethodGen(
             mgen.getAccessFlags(),
             returnType,
-            argTypes,
-            argNames,
+            paramTypes,
+            paramNames,
             mgen.getName(),
             mgen.getClassName(),
             il,
