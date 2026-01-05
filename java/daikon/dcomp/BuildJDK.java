@@ -3,6 +3,7 @@ package daikon.dcomp;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
+import daikon.chicory.Runtime;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.options.Options;
 import daikon.plumelib.reflection.Signatures;
@@ -161,7 +162,7 @@ public class BuildJDK {
 
       check_java_home();
 
-      if (BcelUtil.javaVersion > 8) {
+      if (Runtime.isJava9orLater()) {
         class_stream_map = build.gather_runtime_from_modules();
       } else {
         class_stream_map = build.gather_runtime_from_jar();
@@ -355,7 +356,7 @@ public class BuildJDK {
         // Handle non-.class files and Object.class.  In JDK 8, copy them unchanged.
         // For JDK 9+ we do not copy as these items will be loaded from the original module file.
         if (!classFileName.endsWith(".class") || classFileName.equals("java/lang/Object.class")) {
-          if (BcelUtil.javaVersion > 8) {
+          if (Runtime.isJava9orLater()) {
             if (verbose) {
               System.out.printf("Skipping file %s%n", classFileName);
             }
@@ -407,7 +408,7 @@ public class BuildJDK {
     createDCompClass(destDir, "DCompMarker", false);
 
     // The remainer of the generated classes are needed for JDK 9+ only.
-    if (BcelUtil.javaVersion > 8) {
+    if (Runtime.isJava9orLater()) {
       createDCompClass(destDir, "DCompInstrumented", true);
       createDCompClass(destDir, "DCompClone", false);
       createDCompClass(destDir, "DCompToString", false);

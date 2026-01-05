@@ -938,6 +938,34 @@ public final class Runtime {
     }
   }
 
+  /** True if the running JVM is for Java 9 or later. */
+  private static final boolean isJava9orLater =
+      !System.getProperty("java.version").startsWith("1.");
+
+  /**
+   * Returns true if the running JVM is for Java 9 or later.
+   *
+   * @return true if the running JVM is for Java 9 or later
+   */
+  public static boolean isJava9orLater() {
+    return isJava9orLater;
+  }
+
+  /** True if the running JVM is for Java 24 or later. */
+  private static final boolean isJava24orLater =
+      !System.getProperty("java.version").startsWith("1.")
+          && !System.getProperty("java.version").startsWith("9.")
+          && Integer.parseInt(System.getProperty("java.version").substring(0, 2)) >= 24;
+
+  /**
+   * Returns true if the running JVM is for Java 24 or later.
+   *
+   * @return true if the running JVM is for Java 24 or later
+   */
+  public static boolean isJava24orLater() {
+    return isJava24orLater;
+  }
+
   // ///////////////////////////////////////////////////////////////////////////
   // Copied code
   //
