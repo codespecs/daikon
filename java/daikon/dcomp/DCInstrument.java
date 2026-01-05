@@ -1297,17 +1297,17 @@ public class DCInstrument extends InstructionListUtils {
     int map_offset = exc_offset - runningOffset - 1;
 
     // Get the parameter types for this method
-    Type[] arg_types = mgen.getArgumentTypes();
+    Type[] param_types = mgen.getArgumentTypes();
 
     int arg_index = (mgen.isStatic() ? 0 : 1);
-    StackMapType[] arg_map_types = new StackMapType[arg_types.length + arg_index];
+    StackMapType[] arg_map_types = new StackMapType[param_types.length + arg_index];
     if (!mgen.isStatic()) {
       arg_map_types[0] =
           new StackMapType(
               Const.ITEM_Object, pool.addClass(mgen.getClassName()), pool.getConstantPool());
     }
-    for (int ii = 0; ii < arg_types.length; ii++) {
-      arg_map_types[arg_index++] = generateStackMapTypeFromType(arg_types[ii]);
+    for (int ii = 0; ii < param_types.length; ii++) {
+      arg_map_types[arg_index++] = generateStackMapTypeFromType(param_types[ii]);
     }
 
     StackMapEntry map_entry;
