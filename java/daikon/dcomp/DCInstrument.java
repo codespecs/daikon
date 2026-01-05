@@ -1332,7 +1332,7 @@ public class DCInstrument extends InstructionListUtils {
    */
   InstructionList create_tag_frame(MethodGen mgen, LocalVariableGen tag_frame_local) {
 
-    Type param_types[] = mgen.getArgumentTypes();
+    Type paramTypes[] = mgen.getArgumentTypes();
 
     // Determine the offset of the first argument in the frame
     int offset = 1;
@@ -1349,7 +1349,7 @@ public class DCInstrument extends InstructionListUtils {
     String params = Character.toString((char) (frame_size + '0'));
     // Character.forDigit (frame_size, Character.MAX_RADIX);
     List<Integer> plist = new ArrayList<>();
-    for (Type paramType : param_types) {
+    for (Type paramType : paramTypes) {
       if (paramType instanceof BasicType) {
         plist.add(offset);
       }
@@ -1388,7 +1388,7 @@ public class DCInstrument extends InstructionListUtils {
       MethodGen mgen, int method_info_index, String enterOrExit, int line) {
 
     InstructionList il = new InstructionList();
-    Type[] param_types = mgen.getArgumentTypes();
+    Type[] paramTypes = mgen.getArgumentTypes();
 
     // Push the tag frame
     il.append(InstructionFactory.createLoad(object_arr, tag_frame_local.getIndex()));
@@ -1410,15 +1410,15 @@ public class DCInstrument extends InstructionListUtils {
     il.append(ifact.createConstant(method_info_index));
 
     // Create an array of objects with elements for each parameter
-    il.append(ifact.createConstant(param_types.length));
+    il.append(ifact.createConstant(paramTypes.length));
     il.append(ifact.createNewArray(Type.OBJECT, (short) 1));
 
     // Put each argument into the array
     int param_index = param_offset;
-    for (int ii = 0; ii < param_types.length; ii++) {
+    for (int ii = 0; ii < paramTypes.length; ii++) {
       il.append(InstructionFactory.createDup(object_arr.getSize()));
       il.append(ifact.createConstant(ii));
-      Type at = param_types[ii];
+      Type at = paramTypes[ii];
       if (at instanceof BasicType) {
         il.append(new ACONST_NULL());
         // il.append (createPrimitiveWrapper (c, at, param_index));
@@ -2008,7 +2008,7 @@ public class DCInstrument extends InstructionListUtils {
       // Replace calls to Object's equals method with calls to our
       // replacement, a static method in DCRuntime.
 
-      Type[] new_param_types = new Type[] {javalangObject, javalangObject};
+      Type[] new_paramTypes = new Type[] {javalangObject, javalangObject};
 
       InstructionList il = new InstructionList();
       il.append(
