@@ -5,7 +5,6 @@ package daikon.chicory;
 import static daikon.tools.nullness.NullnessUtil.castNonNull;
 
 import daikon.Chicory;
-import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
@@ -144,7 +143,7 @@ public class ChicoryPremain {
     initializeDeclAndDTraceWriters();
 
     String instrumenter;
-    if (BcelUtil.javaVersion >= 24) {
+    if (Runtime.isJava24orLater()) {
       instrumenter = "daikon.chicory.Instrument24";
     } else {
       instrumenter = "daikon.chicory.Instrument";

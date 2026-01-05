@@ -4,6 +4,7 @@ import daikon.DynComp;
 import daikon.chicory.ClassInfo;
 import daikon.chicory.DaikonWriter;
 import daikon.chicory.MethodInfo;
+import daikon.chicory.Runtime;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.InstructionListUtils;
 import daikon.plumelib.bcelutil.SimpleLog;
@@ -836,7 +837,7 @@ public class DCInstrument extends InstructionListUtils {
       }
     }
 
-    if (BcelUtil.javaVersion > 8) {
+    if (Runtime.isJava9orLater()) {
       // Don't instrument problem classes.
       // See Premain.java for a list and explainations.
       if (Premain.problem_classes.contains(classname)) {
