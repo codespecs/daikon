@@ -961,10 +961,6 @@ public final class Runtime {
    * @param orig string to quote
    * @return quoted version of orig
    */
-  @SuppressWarnings({
-    "lock:method.guarantee.violated", // side effect to local state
-    "allcheckers:purity.not.sideeffectfree.call" // side effect to local state
-  })
   @SideEffectFree
   public static String escapeJava(String orig) {
     StringBuilder sb = new StringBuilder();
