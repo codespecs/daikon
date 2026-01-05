@@ -1201,14 +1201,14 @@ public class DCInstrument extends InstructionListUtils {
     Type[] param_types = mgen.getArgumentTypes();
 
     int arg_index = (mgen.isStatic() ? 0 : 1);
-    StackMapType[] arg_param_types = new StackMapType[param_types.length + arg_index];
+    StackMapType[] param_map_types = new StackMapType[param_types.length + arg_index];
     if (!mgen.isStatic()) {
-      arg_param_types[0] =
+      param_map_types[0] =
           new StackMapType(
               Const.ITEM_Object, pool.addClass(mgen.getClassName()), pool.getConstantPool());
     }
     for (int ii = 0; ii < param_types.length; ii++) {
-      arg_param_types[arg_index++] = generateStackMapTypeFromType(param_types[ii]);
+      param_map_types[arg_index++] = generateStackMapTypeFromType(param_types[ii]);
     }
 
     StackMapEntry map_entry;
@@ -1218,7 +1218,7 @@ public class DCInstrument extends InstructionListUtils {
     StackMapType[] stack_map_types = {stack_map_type};
     map_entry =
         new StackMapEntry(
-            Const.FULL_FRAME, map_offset, arg_param_types, stack_map_types, pool.getConstantPool());
+            Const.FULL_FRAME, map_offset, param_map_types, stack_map_types, pool.getConstantPool());
 
     int orig_size = stackMapTable.length;
     StackMapEntry[] new_stack_map_table = new StackMapEntry[orig_size + 1];
@@ -1451,16 +1451,16 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     // Call the specified method
-    Type[] method_args;
+    Type[] method_params;
     if (enterOrExit.equals("exit")) {
-      method_args =
+      method_params =
           new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr, Type.OBJECT, Type.INT};
     } else {
-      method_args = new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr};
+      method_params = new Type[] {object_arr, Type.OBJECT, Type.INT, object_arr};
     }
     il.append(
         ifact.createInvoke(
-            dcompRuntimeClassName, enterOrExit, Type.VOID, method_args, Const.INVOKESTATIC));
+            dcompRuntimeClassName, enterOrExit, Type.VOID, method_params, Const.INVOKESTATIC));
 
     return il;
   }
@@ -2492,15 +2492,15 @@ public class DCInstrument extends InstructionListUtils {
    *
    * @param methodName method to check
    * @param returnType return type of method
-   * @param args array of argument types to method
+   * @param paramTypes array of parameter types to method
    * @return true if method is Object.equals()
    */
   @Pure
-  boolean is_object_equals(@Identifier String methodName, Type returnType, Type[] args) {
+  boolean is_object_equals(@Identifier String methodName, Type returnType, Type[] paramTypes) {
     return (methodName.equals("equals")
         && returnType == Type.BOOLEAN
-        && args.length == 1
-        && args[0].equals(javalangObject));
+        && paramTypes.length == 1
+        && paramTypes[0].equals(javalangObject));
   }
 
   /**
@@ -2508,20 +2508,22 @@ public class DCInstrument extends InstructionListUtils {
    *
    * @param methodName method to check
    * @param returnType return type of method
-   * @param args array of argument types to method
+   * @param paramTypes array of parameter types to method
    * @return true if method is Object.clone()
    */
   @Pure
-  boolean is_object_clone(@Identifier String methodName, Type returnType, Type[] args) {
-    return methodName.equals("clone") && returnType.equals(javalangObject) && (args.length == 0);
+  boolean is_object_clone(@Identifier String methodName, Type returnType, Type[] paramTypes) {
+    return methodName.equals("clone")
+        && returnType.equals(javalangObject)
+        && (paramTypes.length == 0);
   }
 
   /**
-   * Instrument calls to the Object method clone. An instrumented version is called if it exists,
-   * the non-instrumented version if it does not.
+   * Instrument calls to the Object method {@code clone}. An instrumented version is called if it
+   * exists, the non-instrumented version if it does not.
    *
    * @param invoke invoke instruction to inspect and replace
-   * @return InstructionList to call the correct version of clone or toString
+   * @return instruction list to call the correct version of clone or toString
    */
   InstructionList instrument_clone_call(InvokeInstruction invoke) {
 
@@ -2794,16 +2796,16 @@ public class DCInstrument extends InstructionListUtils {
     //   // This case DOES occur at run time.  -MDE 1/22/2010
     // }
 
-    // Get the argument names for this method
-    String[] argNames = mgen.getArgumentNames();
+    // Get the paramter names for this method
+    String[] paramNames = mgen.getArgumentNames();
     LocalVariableGen[] lvs = mgen.getLocalVariables();
     int param_offset = 1;
     if (mgen.isStatic()) {
       param_offset = 0;
     }
-    for (int ii = 0; ii < argNames.length; ii++) {
+    for (int ii = 0; ii < paramNames.length; ii++) {
       if ((ii + param_offset) < lvs.length) {
-        argNames[ii] = lvs[ii + param_offset].getName();
+        paramNames[ii] = lvs[ii + param_offset].getName();
       }
     }
 
@@ -2873,7 +2875,7 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     return new MethodInfo(
-        class_info, mgen.getName(), argNames, param_type_strings, exit_locs, isIncluded);
+        class_info, mgen.getName(), paramNames, param_type_strings, exit_locs, isIncluded);
   }
 
   /**
@@ -3532,8 +3534,8 @@ public class DCInstrument extends InstructionListUtils {
   void fix_native(ClassGen gen, MethodGen mgen) {
 
     InstructionList il = new InstructionList();
-    Type[] argTypes = mgen.getArgumentTypes();
-    String[] argNames = mgen.getArgumentNames();
+    Type[] paramTypes = mgen.getArgumentTypes();
+    String[] paramNames = mgen.getArgumentNames();
 
     debug_native.log("Native call %s%n", mgen);
 
@@ -3541,15 +3543,15 @@ public class DCInstrument extends InstructionListUtils {
     if (!mgen.isStatic()) {
       mgen.addLocalVariable("this", new ObjectType(mgen.getClassName()), null, null);
     }
-    for (int ii = 0; ii < argTypes.length; ii++) {
-      mgen.addLocalVariable(argNames[ii], argTypes[ii], null, null);
+    for (int ii = 0; ii < paramTypes.length; ii++) {
+      mgen.addLocalVariable(paramNames[ii], paramTypes[ii], null, null);
     }
 
     // Discard the tags for any primitive arguments passed to system
     // methods
     int primitive_cnt = 0;
-    for (Type argType : argTypes) {
-      if (argType instanceof BasicType) {
+    for (Type paramType : paramTypes) {
+      if (paramType instanceof BasicType) {
         primitive_cnt++;
       }
     }
@@ -3568,12 +3570,12 @@ public class DCInstrument extends InstructionListUtils {
       il.append(InstructionFactory.createLoad(new ObjectType(gen.getClassName()), 0));
     }
 
-    // System.out.printf("%s: atc = %d, anc = %d%n", mgen.getName(), argTypes.length,
-    // argNames.length);
+    // System.out.printf("%s: atc = %d, anc = %d%n", mgen.getName(), paramTypes.length,
+    // paramNames.length);
 
     // if call is sun.reflect.Reflection.getCallerClass (realFramesToSkip)
     if (mgen.getName().equals("getCallerClass")
-        && (argTypes.length == 1)
+        && (paramTypes.length == 1)
         && gen.getClassName().equals("sun.reflect.Reflection")) {
 
       // The call returns the class realFramesToSkip up on the stack. Since we
@@ -3591,9 +3593,9 @@ public class DCInstrument extends InstructionListUtils {
       if (mgen.isStatic()) {
         param_index = 0;
       }
-      for (Type argType : argTypes) {
-        il.append(InstructionFactory.createLoad(argType, param_index));
-        param_index += argType.getSize();
+      for (Type paramType : paramTypes) {
+        il.append(InstructionFactory.createLoad(paramType, param_index));
+        param_index += paramType.getSize();
       }
     }
 
@@ -3603,7 +3605,7 @@ public class DCInstrument extends InstructionListUtils {
             gen.getClassName(),
             mgen.getName(),
             mgen.getReturnType(),
-            argTypes,
+            paramTypes,
             (mgen.isStatic() ? Const.INVOKESTATIC : Const.INVOKEVIRTUAL)));
 
     // If there is a return value, return it
@@ -3626,7 +3628,7 @@ public class DCInstrument extends InstructionListUtils {
    * safely use class fields except in Object, String, and Class.
    *
    * @param mgen method to check
-   * @param classname class to check
+   * @param classname class containing {@code mgen}
    * @return true if tag fields may be used in class for method
    */
   boolean tag_fields_ok(MethodGen mgen, @ClassGetName String classname) {
@@ -3858,10 +3860,10 @@ public class DCInstrument extends InstructionListUtils {
     // classes that are created by the JVM are handled separately since only
     // in those classes can fields be read without being written (in java)
     String methodname = "push_field_tag";
-    Type[] args = object_int;
+    Type[] params = object_int;
     if (f.isStatic()) {
       methodname = "push_static_tag";
-      args = integer_arg;
+      params = integer_arg;
     } else if (is_uninit_class(gen.getClassName())) {
       methodname = "push_field_tag_null_ok";
     }
@@ -3875,7 +3877,7 @@ public class DCInstrument extends InstructionListUtils {
       il.append(InstructionFactory.createThis());
     }
     il.append(ifact.createConstant(tag_offset));
-    il.append(dcr_call(methodname, Type.VOID, args));
+    il.append(dcr_call(methodname, Type.VOID, params));
     il.append(InstructionFactory.createReturn(Type.VOID));
 
     int access_flags = f.getAccessFlags();
@@ -3935,10 +3937,10 @@ public class DCInstrument extends InstructionListUtils {
   MethodGen create_set_tag(ClassGen gen, Field f, int tag_offset) {
 
     String methodname = "pop_field_tag";
-    Type[] args = object_int;
+    Type[] params = object_int;
     if (f.isStatic()) {
       methodname = "pop_static_tag";
-      args = integer_arg;
+      params = integer_arg;
     }
 
     String classname = gen.getClassName();
@@ -3950,7 +3952,7 @@ public class DCInstrument extends InstructionListUtils {
       il.append(InstructionFactory.createThis());
     }
     il.append(ifact.createConstant(tag_offset));
-    il.append(dcr_call(methodname, Type.VOID, args));
+    il.append(dcr_call(methodname, Type.VOID, params));
     il.append(InstructionFactory.createReturn(Type.VOID));
 
     int access_flags = f.getAccessFlags();
@@ -4107,7 +4109,7 @@ public class DCInstrument extends InstructionListUtils {
   /**
    * Add a dcomp marker parameter to indicate this is the instrumented version of the method.
    *
-   * @param mgen method to ard dcomp marker to
+   * @param mgen method to add dcomp marker to
    */
   void add_dcomp_param(MethodGen mgen) {
 
@@ -4130,7 +4132,7 @@ public class DCInstrument extends InstructionListUtils {
    * Returns true if the method is defined in Object.
    *
    * @param methodName method to check
-   * @param paramTypes array of argument types to method
+   * @param paramTypes array of parameter types to method
    * @return true if method is member of Object
    */
   @Pure
@@ -4163,7 +4165,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Creates a method with a DcompMarker argument that does nothing but call the corresponding
+   * Creates a method with a DcompMarker parameter that does nothing but call the corresponding
    * method without the DCompMarker argument. (Currently, only used for ? va main.)
    *
    * @param mgen MethodGen of method to create stub for
@@ -4182,9 +4184,9 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     // push each argument on the stack
-    for (Type argType : mgen.getArgumentTypes()) {
-      il.append(InstructionFactory.createLoad(argType, offset));
-      offset += argType.getSize();
+    for (Type paramType : mgen.getArgumentTypes()) {
+      il.append(InstructionFactory.createLoad(paramType, offset));
+      offset += paramType.getSize();
     }
 
     // Call the method
@@ -4254,11 +4256,11 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns the fully qualified fieldname of the specified field.
+   * Returns the fully-qualified fieldname of the specified field.
    *
    * @param jc class containing the field
    * @param f the field
-   * @return string containing the fully qualified name
+   * @return string containing the fully-qualified name
    */
   protected String full_name(JavaClass jc, Field f) {
     return jc.getClassName() + "." + f.getName();
