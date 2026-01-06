@@ -239,7 +239,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
     return valid;
   }
 
-  /** Return true if all the elements of bools between min and max (inclusive) are true. */
+  /** Returns true if all the elements of bools between min and max (inclusive) are true. */
   private static boolean allTrue(boolean[] bools, int min, int max) {
     for (int i = min; i <= max; i++) {
       if (!bools[i]) {

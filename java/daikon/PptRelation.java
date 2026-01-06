@@ -130,7 +130,7 @@ public class PptRelation implements Serializable {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }
 
-  /** Return a string containing all of the parent&rarr;child var relations. */
+  /** Returns a string containing all of the parent&rarr;child var relations. */
   public String parent_to_child_var_string() {
 
     StringJoiner var_str = new StringJoiner(", ");

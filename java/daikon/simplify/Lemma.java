@@ -23,7 +23,7 @@ public class Lemma implements Comparable<Lemma> {
     this.formula = formula;
   }
 
-  /** Return a human-readable description. */
+  /** Returns a human-readable description. */
   public String summarize(@GuardSatisfied Lemma this) {
     return summary;
   }

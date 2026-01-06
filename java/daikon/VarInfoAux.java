@@ -441,7 +441,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return map.get(key);
   }
 
-  /** Return {@code true} if the value for the given key is defined, and {@code false} otherwise. */
+  /**
+   * Returns {@code true} if the value for the given key is defined, and {@code false} otherwise.
+   */
   @Pure
   @EnsuresKeyForIf(result = true, expression = "#1", map = "map")
   public boolean hasValue(String key) {
@@ -455,7 +457,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return value.equals(TRUE);
   }
 
-  /** Return a new VarInfoAux with the desired value set. Does not modify this. */
+  /** Returns a new VarInfoAux with the desired value set. Does not modify this. */
   public @Interned VarInfoAux setValue(String key, String value) {
     HashMap<@Interned String, @Interned String> newMap = new HashMap<>(this.map);
     newMap.put(key.intern(), value.intern());

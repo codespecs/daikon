@@ -2561,7 +2561,7 @@ public final class DCRuntime implements ComparabilityProvider {
     }
   }
 
-  /** Return the number of primitive fields in clazz and all of its superclasses. */
+  /** Returns the number of primitive fields in clazz and all of its superclasses. */
   public static int num_prim_fields(Class<?> clazz) {
     if (clazz == Object.class) {
       return 0;
@@ -3010,7 +3010,7 @@ public final class DCRuntime implements ComparabilityProvider {
       }
     }
 
-    /** Return the tag associated with this field. */
+    /** Returns the tag associated with this field. */
     @Override
     Object get_tag(Object parent, Object obj) {
       Object tag;

@@ -84,7 +84,7 @@ public class SpinfoFile {
     return splitterObjects;
   }
 
-  /** Return the number of splitters (SplitterObject objects) represented by this file. */
+  /** Returns the number of splitters (SplitterObject objects) represented by this file. */
   public int numSplittterObjects() {
     int result = 0;
     for (SplitterObject[] spa : splitterObjects) {

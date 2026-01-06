@@ -257,7 +257,7 @@ public class ChicoryPremain {
 
   }
 
-  /** Return true iff Chicory has run a purity analysis or read a {@code *.pure} file. */
+  /** Returns true iff Chicory has run a purity analysis or read a {@code *.pure} file. */
   @SuppressWarnings("nullness") // dependent:  pureMethods is non-null if doPurity is true
   @EnsuresNonNullIf(result = true, expression = "pureMethods")
   public static boolean shouldDoPurity() {
@@ -285,7 +285,7 @@ public class ChicoryPremain {
     return false;
   }
 
-  /** Return an unmodifiable Set of the pure methods. */
+  /** Returns an unmodifiable Set of the pure methods. */
   // @RequiresNonNull("ChicoryPremain.pureMethods")
   @RequiresNonNull("pureMethods")
   public static Set<String> getPureMethods() {

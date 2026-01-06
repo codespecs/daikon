@@ -310,7 +310,7 @@ public class Ast {
     }
   }
 
-  /** Return the fully qualified name of the class containing the node. */
+  /** Returns the fully qualified name of the class containing the node. */
   public static @BinaryName String getClassName(Node d) {
 
     ClassOrInterfaceDeclaration n =
@@ -1215,7 +1215,7 @@ public class Ast {
     return false;
   }
 
-  /** Return true if this is the main method for this class. */
+  /** Returns true if this is the main method for this class. */
   public static boolean isMain(MethodDeclaration md) {
     if (Ast.getName(md).equals("main")) {
       List<FormalParameter> params = Ast.getParameters(md);

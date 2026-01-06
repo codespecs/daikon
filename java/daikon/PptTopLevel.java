@@ -555,7 +555,7 @@ public class PptTopLevel extends Ppt {
     return values_num_samples;
   }
 
-  /** Return the number of samples where vi1 is present (not missing) */
+  /** Returns the number of samples where vi1 is present (not missing) */
   public int num_samples(VarInfo vi1) {
     if (vi1.is_static_constant) {
       return mbtracker.num_samples();
@@ -565,7 +565,7 @@ public class PptTopLevel extends Ppt {
     return num_slice_samples;
   }
 
-  /** Return the number of samples where vi1 and vi2 are both present (not missing). */
+  /** Returns the number of samples where vi1 and vi2 are both present (not missing). */
   public int num_samples(VarInfo vi1, VarInfo vi2) {
     if (vi1.is_static_constant) {
       return num_samples(vi2);
@@ -579,7 +579,7 @@ public class PptTopLevel extends Ppt {
     return num_slice_samples;
   }
 
-  /** Return the number of samples where vi1, vi2, and vi3 are all present (not missing). */
+  /** Returns the number of samples where vi1, vi2, and vi3 are all present (not missing). */
   public int num_samples(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
     if (vi1.is_static_constant) {
       return num_samples(vi2, vi3);
