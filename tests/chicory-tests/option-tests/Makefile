@@ -32,6 +32,9 @@ DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daiko
 
 diffs : $(foreach x, ${TESTS}, $x.daikon.diff)
 
+${DAIKONDIR}/java/ChicoryPremain.jar:
+	${MAKE} -C ${DAIKONDIR}/java ChicoryPremain.jar
+
 # obtain and compile the sources
 compile : ${CLASS_FILES}
 ${CLASS_FILES} :
