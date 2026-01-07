@@ -463,9 +463,9 @@ all: daikon
 # and run smoke tests.  (And, it doesn't depend on enough files to
 # ensure that it would run if anything had changed.)
 daikon: showvars-brief update-libs ${AUTO_GENERATED_FILES}
-	${MAKE} smoke-tests
+	${MAKE} smoke-test
 
-smoke-tests: junit chicory-test dyncomp-test
+smoke-test: junit chicory-test dyncomp-test
 
 showvars-brief:
 	@echo "CLASSPATH = ${CLASSPATH}"
@@ -1159,7 +1159,7 @@ possible-annos: ${ALL_GENERATED_FILES} compile-typequals compile
 
 .PHONY: test tests
 test tests: daikon-tests
-daikon-tests: smoke-tests
+daikon-tests: smoke-test
 	${MAKE} -C ../tests all
 
 # run a static check on currently-compiled classes
