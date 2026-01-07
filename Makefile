@@ -155,7 +155,7 @@ help:
 	@echo
 	@echo "Targets:"
 	@echo " compile compile-java     -- compile Java files"
-	@echo " junit                    -- run unit tests"
+	@echo " smoke-test               -- run simplistic tests"
 	@echo " test                     -- run system tests"
 # must 'make compile' before 'make doc-all'
 	@echo " doc-all                  -- build all documentation"
@@ -179,7 +179,7 @@ help:
 compile: compile-java
 
 compile-java:
-	${MAKE} -C java all
+	${MAKE} -C java compile
 
 very-clean:
 	find . -type f -name "*~" -exec rm -f {} \;
@@ -601,7 +601,7 @@ daikon.jar: ${DAIKON_JAVA_FILES} $(patsubst %,java/%,${DAIKON_RESOURCE_FILES})
 	install -d ${TMPDIR}/daikon-jar
 	# Compile Daikon and copy the resulting class files
 	# to the ${TMPDIR}/daikon-jar directory
-	${MAKE} -C java all_directly
+	${MAKE} -C java compile
 	cd java && find . \( -name "dcomp-rt*" \) -prune -o -name '*.class' -print \
 		| sort | xargs '-I{}' ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar
 

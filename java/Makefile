@@ -674,17 +674,6 @@ all_except_daikon: ../utils/plume-scripts ${AUTO_GENERATED_FILES}
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod a-w ${AUTO_GENERATED_FILES}
 
-all_except: all_except_daikon
-
-all_force:	all_directly
-
-all_via_javac:
-	${MAKE} JAVAC='javac' all
-
-all_javac:	all_via_javac
-
-javac:	all_via_javac
-
 
 ###########################################################################
 ### Cleaning (removing generated files
