@@ -2085,7 +2085,7 @@ public class DCInstrument24 {
 
   /**
    * Generates the code to create the tag frame for this method and store it in tagFrameLocal. This
-   * needs to be before the call to DCRuntime.enter (since it passed to that method).
+   * needs to be before the call to DCRuntime.enter (since it is passed to that method).
    *
    * @param mgen describes the given method
    * @return instruction list for tag_frame setup code
@@ -2094,7 +2094,7 @@ public class DCInstrument24 {
 
     ClassDesc paramTypes[] = mgen.getParameterTypes();
 
-    // Determine the offset of the first argument in the frame
+    // Determine the offset of the first argument in the frame.
     int offset = 1;
     if (mgen.isStatic()) {
       offset = 0;
@@ -4422,11 +4422,11 @@ public class DCInstrument24 {
   }
 
   /**
-   * Creates tag get and set accessor methods for each field in gen. An accessor is created for each
-   * field (including final, static, and private fields). The accessors share the modifiers of their
-   * field (except that all are final). Accessors are named {@code <field>_<class>__$get_tag} and
-   * {@code <field>_<class>__$set_tag}. The class name must be included because field names can
-   * shadow one another.
+   * Creates tag get and set accessor methods for each field in the class. An accessor is created
+   * for each field (including final, static, and private fields). The accessors share the modifiers
+   * of their field (except that all are final). Accessors are named {@code
+   * <field>_<class>__$get_tag} and {@code <field>_<class>__$set_tag}. The class name must be
+   * included because field names can shadow one another.
    *
    * <p>If tag_fields_ok is true for the class, then tag fields are created and the accessor uses
    * the tag fields. If not, tag storage is created separately and accessed via the field number.

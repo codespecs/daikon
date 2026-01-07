@@ -76,7 +76,7 @@ public final class CalcStack24 {
    * @param mgen method containing the instruction (currently unused)
    * @param minfo for the given method's code (currently unused)
    * @param ce CodeElement to be interpreted
-   * @param instIndex index of ce in code element list
+   * @param instIndex index of {@code ce} in code element list
    * @param stack current state of operand stack; is side-effected
    * @return true if control falls through to the next instruction, false otherwise (when {@code ce}
    *     is an instruction like jump or return)
@@ -871,7 +871,9 @@ public final class CalcStack24 {
       case Opcode.INVOKEINTERFACE:
       case Opcode.INVOKESPECIAL:
       case Opcode.INVOKEVIRTUAL:
-        stack.pop(); // discard the objectref
+        stack.pop(); // Discard the last argument (which is at the top of the stack),
+      // or the objectref if there are no arguments.
+
       // may actually be removing an arg, but we'll
       // account for that when we remove args below
 
@@ -976,8 +978,8 @@ public final class CalcStack24 {
 
   /**
    * Calculate a Java bytecode's result type and push it on the operand stack. If the type is void,
-   * nothing is pushed. If the type is boolean, byte, char or short an int is pushed. Otherwise, the
-   * result itself is pushed.
+   * nothing is pushed. If the type is boolean, byte, char, or short, then an int is pushed.
+   * Otherwise, the result itself is pushed.
    *
    * @param result the result type descriptor to push (may be void or a primitive/reference type)
    * @param stack state of operand stack

@@ -84,7 +84,7 @@ public final class BuildJDK24 {
 
   /**
    * Collects names of all methods that DCInstrument24 could not process. Should be empty. Format is
-   * &lt;fully-qualified class name&gt;.&lt;method name&gt;
+   * {@code <fully-qualified class name>.<method name>}.
    */
   private static List<String> skipped_methods = new ArrayList<>();
 
@@ -284,8 +284,8 @@ public final class BuildJDK24 {
   /**
    * For Java 9+ the Java runtime is located in a series of modules. At this time, we are only
    * pre-instrumenting the java.base module. This method initializes the DirectoryStream used to
-   * explore java.base. It calls gather_runtime_from_modules_directory to process the directory
-   * structure.
+   * explore java.base. It calls {@link #gather_runtime_from_modules_directory} to process the
+   * directory structure.
    *
    * @return a map from class file name to the associated InputStream
    */
@@ -417,7 +417,7 @@ public final class BuildJDK24 {
           inst24.writeDebugClassFiles(buffer, inst24.debug_uninstrumented_dir, classname);
         }
 
-        // As {@code instrumentation_interface} is a static field, we initialize it here rather than
+        // As `instrumentation_interface` is a static field, we initialize it here rather than
         // in the DCInstrument24 constructor.
         if (Premain.jdk_instrumented && Runtime.isJava9orLater()) {
           dcompPrefix = "java.lang";
@@ -504,7 +504,7 @@ public final class BuildJDK24 {
     }
   }
 
-  /** Formats just the time part of a DateTime. */
+  /** Formats just the time part of a DateTime, for progress diagnostics. */
   private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
   /**
