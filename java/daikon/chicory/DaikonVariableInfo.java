@@ -403,26 +403,26 @@ public abstract class DaikonVariableInfo
    *
    * @param cinfo the method's class
    * @param method the method
-   * @param argnames the method's arguments
+   * @param paramNames the method's parameters
    * @param depth the remaining depth to print variables to
    */
-  protected void addParameters(ClassInfo cinfo, Member method, List<String> argnames, int depth) {
+  protected void addParameters(ClassInfo cinfo, Member method, List<String> paramNames, int depth) {
     debug_vars.log("enter addParameters%n");
 
     Class<?>[] parameterTypes =
         (method instanceof Constructor<?>)
             ? ((Constructor<?>) method).getParameterTypes()
             : ((Method) method).getParameterTypes();
-    assert argnames.size() == parameterTypes.length;
+    assert paramNames.size() == parameterTypes.length;
 
     int param_offset = 0;
     for (int i = 0; i < parameterTypes.length; i++) {
       Class<?> type = parameterTypes[i];
-      String name = argnames.get(i);
       if (type.getName().equals("daikon.dcomp.DCompMarker")
           || type.getName().equals("java.lang.DCompMarker")) {
         continue;
       }
+      String name = paramNames.get(i);
       debug_vars.log("processing parameter '%s'%n", name);
       debug_vars.indent();
       DaikonVariableInfo theChild =
@@ -1267,7 +1267,7 @@ public abstract class DaikonVariableInfo
     return repTypeName;
   }
 
-  /** Return the rep type name without the constant value. */
+  /** Returns the rep type name without the constant value. */
   public String getRepTypeNameOnly() {
     return repTypeName.replaceFirst(" = .*", "");
   }
@@ -1295,12 +1295,12 @@ public abstract class DaikonVariableInfo
     return compareInfoString;
   }
 
-  /** Return true iff the DeclWriter should print this node. */
+  /** Returns true iff the DeclWriter should print this node. */
   public boolean declShouldPrint() {
     return declShouldPrint;
   }
 
-  /** Return true iff the DTraceWriter should print this node. */
+  /** Returns true iff the DTraceWriter should print this node. */
   public boolean dTraceShouldPrint() {
     return dtraceShouldPrint;
   }

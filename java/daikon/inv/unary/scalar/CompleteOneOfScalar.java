@@ -75,7 +75,7 @@ public final class CompleteOneOfScalar extends SingleScalar {
     return new CompleteOneOfScalar(slice);
   }
 
-  /** Return description of invariant. Only Daikon format is implemented. */
+  /** Returns description of invariant. Only Daikon format is implemented. */
   @SideEffectFree
   @Override
   public String format_using(@GuardSatisfied CompleteOneOfScalar this, OutputFormat format) {

@@ -231,7 +231,7 @@ public class PptMap implements Serializable {
     }
   }
 
-  /** Return the number of active PptSlices. */
+  /** Returns the number of active PptSlices. */
   @Pure
   public int countSlices() {
     int result = 0;

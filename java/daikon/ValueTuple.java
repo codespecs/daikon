@@ -439,7 +439,7 @@ public final class ValueTuple implements Cloneable {
     return size() == 0;
   }
 
-  /** Return a new ValueTuple containing this one's first len elements. */
+  /** Returns a new ValueTuple containing this one's first len elements. */
   public ValueTuple trim(int len) {
     @Nullable @Interned Object[] new_vals = ArraysPlume.subarray(vals, 0, len);
     int[] new_mods = ArraysPlume.subarray(mods, 0, len);
