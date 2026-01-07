@@ -174,7 +174,7 @@ JAVA_FILES := $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-
 ifeq (${JAVA24}, 0)
   JAVA_FILES :=  $(filter-out %24.java, ${JAVA_FILES})
 endif
-JAVA_FILES_FOR_DEPENDENCES := $(filter-out java/daikon/test/split/SplitterFactoryTest.java, ${JAVA_FILES})
+JAVA_FILES_FOR_DEPENDENCES := $(filter-out java/daikon/test/split/SplitterFactoryTestUpdater.java, $(filter-out java/daikon/test/split/SplitterFactoryTest.java, ${JAVA_FILES}))
 JAVA_FILES_FOR_STYLE := $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name 'PrototypeChecker.java' -o -name 'VIndexChecker.java' -o -name 'VIndexAnnotatedTypeFactory.java' -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name 'WeakHasherMap.java' -o -name 'WeakIdentityHashMap.java' -o -name '\.\#*' -o -path './jtb' -o -path './daikon/dcomp-transfer' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 ifeq (${JAVA24}, 0)
   JAVA_FILES_FOR_STYLE :=  $(filter-out %24.java, ${JAVA_FILES_FOR_STYLE})
