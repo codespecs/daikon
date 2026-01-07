@@ -882,6 +882,11 @@ endif
 
 ## All of the following targets need to depend on "compile".
 
+## Code in dcomp directory is not called directly; annotations would be useless.
+INDEX_SKIPDEFS := ^daikon\.dcomp\|^jtb\.
+INTERNING_SKIPDEFS := ^daikon\.dcomp\|^jtb\.
+ALLSYSTEMS_SKIPDEFS := ^jtb\.
+
 # Just check that the Index Checker doesn't crash -- -AsuppressWarnings="index"
 # command-line argument suppresses all type-checking errors.
 JAVAC_RESOURCELEAK_ARGS := -processor org.checkerframework.checker.resourceleak.ResourceLeakChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}' -ApermitStaticOwning -ApermitInitializationLeak
@@ -905,10 +910,6 @@ JAVAC_VINDEX_ARGS := -processor org.checkerframework.common.subtyping.SubtypingC
 JAVAC_LOCK_ARGS := -processor org.checkerframework.checker.lock.LockChecker -AsuppressWarnings=lock:method.guarantee.violated,lock:override.sideeffect -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_JAVARI_ARGS := -processor org.checkerframework.checker.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_IGJ_ARGS := -processor org.checkerframework.checker.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-## Code in dcomp directory is not called directly; annotations would be useless.
-INDEX_SKIPDEFS := ^daikon\.dcomp\|^jtb\.
-INTERNING_SKIPDEFS := ^daikon\.dcomp\|^jtb\.
-ALLSYSTEMS_SKIPDEFS=^jtb\.
 INDEX_JAVA_FILES := ${DAIKON_JAVA_FILES}
 # Intern.java implements interning and so has very many annotations.  VarInfoName
 # is obsolescent, retained for backward compatibility only; it is of flawed design
