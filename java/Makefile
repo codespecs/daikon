@@ -520,10 +520,6 @@ ifeq (${JAVA24}, 0)
 CHICORY_JAVA_FILES := $(filter-out %24.java, ${CHICORY_JAVA_FILES})
 endif
 
-.PHONY: chicory-compile
-chicory-compile:
-	@${JAVAC_COMMAND} ${CHICORY_JAVA_FILES}
-
 # Note that this compiles all of Chicory even though all we need for
 # this step is chicory/ChicoryPremain.java.
 # Also note that it always compiles all of Chicory, to handle changing
@@ -531,7 +527,7 @@ chicory-compile:
 # compiled, but changing JDKs doesn't cause this Makefile to otherwise
 # trigger re-execution.
 .PRECIOUS: ChicoryPremain.jar
-ChicoryPremain.jar : chicory-compile daikon/chicory/manifest.txt
+ChicoryPremain.jar : daikon/Chicory.class daikon/chicory/manifest.txt
 	${JAR} cfm ChicoryPremain.jar daikon/chicory/manifest.txt \
 	  daikon/chicory/ChicoryPremain.class
 
