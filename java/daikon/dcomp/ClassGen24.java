@@ -109,7 +109,7 @@ public class ClassGen24 {
   }
 
   /**
-   * Determine if this class contains the indicatated method.
+   * Determine if this class contains the indicated method.
    *
    * @param name the method's name
    * @param descriptor the method's type descriptor

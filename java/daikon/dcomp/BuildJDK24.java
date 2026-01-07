@@ -379,7 +379,7 @@ public final class BuildJDK24 {
         }
 
         // Handle non-.class files and Object.class.  In JDK 8, copy them unchanged.
-        // For JDK 9+ they have not be added to class_stream_map.
+        // For JDK 9+ they have not been added to class_stream_map.
         if (!classFileName.endsWith(".class") || classFileName.equals("java/lang/Object.class")) {
           // This File constructor ignores dest_dir if classFileName is absolute.
           File classFile = new File(dest_dir, classFileName);
