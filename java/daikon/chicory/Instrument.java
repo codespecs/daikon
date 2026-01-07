@@ -45,6 +45,7 @@ import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.PUSH;
 import org.apache.bcel.generic.Type;
+import org.checkerframework.checker.interning.qual.InternedDistinct;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
@@ -87,6 +88,46 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
   /** InstructionFactory for a class. */
   public InstructionFactory instFactory;
+
+  // Type descriptors
+
+  /** "java.lang.Object". */
+  private static final ObjectType CD_Object = Type.OBJECT;
+
+  // /** Type for "java.lang.Class". */
+  // private static final ObjectType CD_Class = Type.CLASS;
+
+  /** Type for "java.lang.String". */
+  private static final ObjectType CD_String = Type.STRING;
+
+  // /** Type for "java.lang.Throwable". */
+  // protected static ObjectType CD_Throwable = new ObjectType("java.lang.Throwable");
+  // private static final ObjectType CD_Throwable = Type.THROWABLE;
+
+  // /** Type for "boolean". */
+  // private static final @InternedDistinct BasicType CD_boolean = Type.BOOLEAN;
+  // /** Type for "byte". */
+  // private static final @InternedDistinct BasicType CD_byte = Type.BYTE;
+  // /** Type for "char". */
+  // private static final @InternedDistinct BasicType CD_char = Type.CHAR;
+  // /** Type for "double". */
+  // private static final @InternedDistinct BasicType CD_double = Type.DOUBLE;
+  // /** Type for "float". */
+  // private static final @InternedDistinct BasicType CD_float = Type.FLOAT;
+  /** Type for "int". */
+  private static final @InternedDistinct BasicType CD_int = Type.INT;
+
+  // /** Type for "long". */
+  // private static final @InternedDistinct BasicType CD_long = Type.LONG;
+  // /** Type for "short". */
+  // private static final @InternedDistinct BasicType CD_short = Type.SHORT;
+  /** Type for "void". */
+  private static final @InternedDistinct BasicType CD_void = Type.VOID;
+
+  /** "java.lang.Object[]". */
+  protected static Type objectArrayCD = new ArrayType(CD_Object, 1);
+
+  // protected static ObjectType CD_Throwable = new ObjectType("java.lang.Throwable");
 
   /** Create an instrumenter. Setup debug directories, if needed. */
   @SuppressWarnings("nullness:initialization")
@@ -443,12 +484,12 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     InstructionList il = new InstructionList();
     il.append(call_initNotify(cg, classInfo));
-    il.append(InstructionFactory.createReturn(Type.VOID)); // need to return!
+    il.append(InstructionFactory.createReturn(CD_void)); // need to return!
 
     MethodGen newMethGen =
         new MethodGen(
             8,
-            Type.VOID,
+            CD_void,
             new Type[0],
             new String[0],
             "<clinit>",
@@ -480,11 +521,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     instructions.append(new PUSH(cp, classInfo.class_name));
     instructions.append(
         instFactory.createInvoke(
-            runtime_classname,
-            "initNotify",
-            Type.VOID,
-            new Type[] {Type.STRING},
-            Const.INVOKESTATIC));
+            runtime_classname, "initNotify", CD_void, new Type[] {CD_String}, Const.INVOKESTATIC));
 
     return instructions;
   }
@@ -758,7 +795,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     Type type = mgen.getReturnType();
     InstructionList newCode = new InstructionList();
-    if (type != Type.VOID) {
+    if (type != CD_void) {
       LocalVariableGen return_loc = getReturnLocal(mgen, type);
       newCode.append(InstructionFactory.createDup(type.getSize()));
       newCode.append(InstructionFactory.createStore(type, return_loc.getIndex()));
@@ -851,7 +888,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     InstructionList newCode = new InstructionList();
 
     // Create the nonce local variable.
-    LocalVariableGen nonce_lv = create_method_scope_local(mgen, "this_invocation_nonce", Type.INT);
+    LocalVariableGen nonce_lv = create_method_scope_local(mgen, "this_invocation_nonce", CD_int);
 
     printStackMapTable("After cln");
 
@@ -869,10 +906,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // This is multi-thread safe and leaves int value of nonce on stack.
     newCode.append(
         instFactory.createInvoke(
-            atomic_int_classname, "getAndIncrement", Type.INT, new Type[] {}, Const.INVOKEVIRTUAL));
+            atomic_int_classname, "getAndIncrement", CD_int, new Type[] {}, Const.INVOKEVIRTUAL));
 
     // istore <lv> (pop original value of nonce into this_invocation_nonce).
-    newCode.append(InstructionFactory.createStore(Type.INT, nonce_lv.getIndex()));
+    newCode.append(InstructionFactory.createStore(CD_int, nonce_lv.getIndex()));
 
     newCode.setPositions();
     InstructionHandle end = newCode.getEnd();
@@ -986,7 +1023,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       newCode.append(new ACONST_NULL());
     } else {
       // Must be an instance method.
-      newCode.append(InstructionFactory.createLoad(Type.OBJECT, 0));
+      newCode.append(InstructionFactory.createLoad(CD_Object, 0));
     }
 
     // The offset of the first parameter.
@@ -997,7 +1034,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // Push the nonce.
     @SuppressWarnings("nullness:assignment") // the nonce local exists
     @NonNull LocalVariableGen nonce_lv = get_nonce_local(mgen);
-    newCode.append(InstructionFactory.createLoad(Type.INT, nonce_lv.getIndex()));
+    newCode.append(InstructionFactory.createLoad(CD_int, nonce_lv.getIndex()));
 
     // iconst
     // Push the MethodInfo index.
@@ -1007,7 +1044,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // anewarray
     // Create an array of objects with elements for each parameter.
     newCode.append(instFactory.createConstant(paramTypes.length));
-    newCode.append(instFactory.createNewArray(Type.OBJECT, (short) 1));
+    newCode.append(instFactory.createNewArray(CD_Object, (short) 1));
 
     Type object_arr_typ = new ArrayType("java.lang.Object", 1);
 
@@ -1020,9 +1057,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       if (at instanceof BasicType) {
         newCode.append(createPrimitiveWrapper(at, param_index));
       } else { // must be reference of some sort
-        newCode.append(InstructionFactory.createLoad(Type.OBJECT, param_index));
+        newCode.append(InstructionFactory.createLoad(CD_Object, param_index));
       }
-      newCode.append(InstructionFactory.createArrayStore(Type.OBJECT));
+      newCode.append(InstructionFactory.createArrayStore(CD_Object));
       param_index += at.getSize();
     }
 
@@ -1031,14 +1068,14 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // If the return value is a primitive, wrap it in the appropriate wrapper.
     if (methodToCall.equals("exit")) {
       Type ret_type = mgen.getReturnType();
-      if (ret_type == Type.VOID) {
+      if (ret_type == CD_void) {
         newCode.append(new ACONST_NULL());
       } else {
         LocalVariableGen returnLocal = getReturnLocal(mgen, ret_type);
         if (ret_type instanceof BasicType) {
           newCode.append(createPrimitiveWrapper(ret_type, returnLocal.getIndex()));
         } else {
-          newCode.append(InstructionFactory.createLoad(Type.OBJECT, returnLocal.getIndex()));
+          newCode.append(InstructionFactory.createLoad(CD_Object, returnLocal.getIndex()));
         }
       }
 
@@ -1050,14 +1087,13 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // Call the specified method.
     Type[] methodArgs;
     if (methodToCall.equals("exit")) {
-      methodArgs =
-          new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ, Type.OBJECT, Type.INT};
+      methodArgs = new Type[] {CD_Object, CD_int, CD_int, object_arr_typ, CD_Object, CD_int};
     } else {
-      methodArgs = new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ};
+      methodArgs = new Type[] {CD_Object, CD_int, CD_int, object_arr_typ};
     }
     newCode.append(
         instFactory.createInvoke(
-            runtime_classname, methodToCall, Type.VOID, methodArgs, Const.INVOKESTATIC));
+            runtime_classname, methodToCall, CD_void, methodArgs, Const.INVOKESTATIC));
 
     return newCode;
   }
@@ -1108,11 +1144,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     InstructionList newCode = new InstructionList();
     String classname = runtime_classname + "$" + wrapperClassName;
     newCode.append(instFactory.createNew(classname));
-    newCode.append(InstructionFactory.createDup(Type.OBJECT.getSize()));
+    newCode.append(InstructionFactory.createDup(CD_Object.getSize()));
     newCode.append(InstructionFactory.createLoad(prim_type, var_index));
     newCode.append(
         instFactory.createInvoke(
-            classname, "<init>", Type.VOID, new Type[] {prim_type}, Const.INVOKESPECIAL));
+            classname, "<init>", CD_void, new Type[] {prim_type}, Const.INVOKESPECIAL));
 
     return newCode;
   }
