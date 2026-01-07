@@ -495,10 +495,6 @@ xlint: chicory ${ALL_GENERATED_FILES}
 # Do not mark this target as .PHONY.  We want it to
 # always recompile, whether recompilation is necessary or not.  (Why?)
 all_directly: ../utils/plume-scripts ${AUTO_GENERATED_FILES} java_files.txt
-# # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
-# 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
-# remove 'bin' and 'orig' after versions stablize
-	rm -f `find daikon -path "*/debug*/bin" -prune -o -path "*/debug*/orig" -prune -o -path "*/debug*/instrumented" -prune -o -path "*/debug*/uninstrumented" -prune -o -name "*.class" -print`
 	@echo "CLASSPATH = ${CLASSPATH}"
 	@echo "DAIKON_CLASSPATH = ${DAIKON_CLASSPATH}"
 	@echo "JAVA_RELEASE_NUMBER = ${JAVA_RELEASE_NUMBER}"
@@ -733,6 +729,10 @@ daikon/Diff.class: Diff.java ../utils/plume-scripts ${AUTO_GENERATED_FILES}
 ###########################################################################
 ### Cleaning (removing generated files
 ###
+
+# TODO:
+# 	rm -f `find daikon -path "*/debug*/bin" -prune -o -path "*/debug*/orig" -prune -o -path "*/debug*/instrumented" -prune -o -path "*/debug*/uninstrumented" -prune -o -name "*.class" -print`
+
 
 # It's good to run "make clean" occasionally, because it costs little to
 # regenerate .class files and it's bad to continue to use an orphaned class
