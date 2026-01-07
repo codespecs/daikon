@@ -35,6 +35,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.FieldDescriptor;
+import org.checkerframework.checker.signature.qual.FqBinaryName;
 import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.checker.signature.qual.MethodDescriptor;
 
@@ -791,15 +792,19 @@ public class MethodGen24 {
   }
 
   /**
-   * Returns a string representation of a ClassDesc. Removes a leading "java.lang.".
+   * Returns a string representation of a ClassDesc. It is a fully-qualified binary name, except
+   * that any leading "java.lang." is removed.
    *
    * @param type the ClassDesc to translate
+   * @return the class name, without
    */
-  private String convertClassDesc(@GuardSatisfied MethodGen24 this, ClassDesc type) {
+  private @FqBinaryName String convertClassDesc(@GuardSatisfied MethodGen24 this, ClassDesc type) {
     @FieldDescriptor String arg0Fd = type.descriptorString();
     String result = daikon.chicory.Instrument24.convertDescriptorToFqBinaryName(arg0Fd);
     if (result.startsWith("java.lang.")) {
-      result = result.replace("java.lang.", "");
+      @SuppressWarnings("signature:assign") // string manipulation
+      @FqBinaryName String truncated = result.replace("java.lang.", "");
+      return truncated;
     }
     return result;
   }
@@ -808,6 +813,7 @@ public class MethodGen24 {
    * Returns a string representation of a method's access flags.
    *
    * @param accessFlagsMask some access flags.
+   * @return a space-separated string of access modifier keywords
    */
   private String getAccess(@GuardSatisfied MethodGen24 this, final int accessFlagsMask) {
     StringBuilder result = new StringBuilder();
