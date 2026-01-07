@@ -802,7 +802,7 @@ public class MethodGen24 {
     @FieldDescriptor String arg0Fd = type.descriptorString();
     String result = daikon.chicory.Instrument24.convertDescriptorToFqBinaryName(arg0Fd);
     if (result.startsWith("java.lang.")) {
-      @SuppressWarnings("signature:assign") // string manipulation
+      @SuppressWarnings("signature:assignment") // string manipulation
       @FqBinaryName String truncated = result.replace("java.lang.", "");
       return truncated;
     }
