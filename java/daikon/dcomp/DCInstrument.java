@@ -499,17 +499,19 @@ public class DCInstrument extends InstructionListUtils {
   protected static boolean junit_parse_seen = false;
 
   /**
-   * Map from each static field name to its unique integer id. Note that while it's intuitive to
-   * think that each static should show up exactly once, that is not the case. A static defined in a
-   * superclass can be accessed through each of its subclasses. Tag accessor methods must be added
-   * in each subclass and each should return the same id. We thus will lookup the same name multiple
-   * times.
+   * Map from each static qualified field name to a unique integer id. Note that while it's
+   * intuitive to think that each static should show up exactly once, that is not always true. A
+   * static defined in a superclass can be accessed through each of its subclasses. In this case,
+   * tag accessor methods must be added in each subclass and each should return the id of the field
+   * in the superclass. This map is populated in {@link build_field_to_offset_map} and used in
+   * {@link create_tag_accessors}.
    */
   static Map<String, Integer> static_field_id = new LinkedHashMap<>();
 
   /**
-   * Map from class name to its access_flags. Used to cache the results of the lookup done in {@link
-   * #getAccessFlags}. If a class is marked ACC_ANNOTATION then it will not have been instrumented.
+   * Map from binary class name to its access_flags. Used to cache the results of the lookup done in
+   * {@link #getAccessFlags}. If a class is marked ACC_ANNOTATION then it will not have been
+   * instrumented.
    */
   static Map<String, Integer> accessFlags = new HashMap<>();
 
@@ -2409,7 +2411,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns instructions that will discard any primitive tags corresponding to the specified
+   * Returns instructions that will discard (pop) any primitive tags corresponding to the specified
    * parameters. Returns an empty instruction list if there are no primitive arguments to discard.
    *
    * @param paramTypes parameter types of target method
@@ -2905,9 +2907,9 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Handles load and store field instructions. The instructions must be augmented to either push
-   * (load) or pop (store) the tag on the tag stack. This is accomplished by calling the tag get/set
-   * method for this field.
+   * Handles load and store field instructions. If the field is a primitive the instructions must be
+   * augmented to either push (load) or pop (store) the tag on the tag stack. This is accomplished
+   * by calling the tag get/set method for this field.
    */
   @Nullable InstructionList load_store_field(MethodGen mgen, FieldInstruction fi) {
 
