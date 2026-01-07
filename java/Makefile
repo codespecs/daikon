@@ -522,7 +522,7 @@ endif
 
 .PHONY: chicory-compile
 chicory-compile:
-	${JAVAC_COMMAND} ${CHICORY_JAVA_FILES}
+	@${JAVAC_COMMAND} ${CHICORY_JAVA_FILES}
 
 # Note that this compiles all of Chicory even though all we need for
 # this step is chicory/ChicoryPremain.java.
@@ -562,7 +562,7 @@ DCOMP_DIR := daikon/dcomp
 # this step is dcomp/Premain.java.
 dcomp_premain.jar : ${INSTRUMENTATION_JAVA_FILES} daikon/dcomp/manifest.txt
 	${MAKE} plume-import-check
-	${JAVAC_COMMAND} ${INSTRUMENTATION_JAVA_FILES}
+	@${JAVAC_COMMAND} ${INSTRUMENTATION_JAVA_FILES}
 	${JAR} cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
 	  daikon/dcomp/Premain.class
 
