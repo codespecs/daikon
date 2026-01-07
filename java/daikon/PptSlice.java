@@ -194,10 +194,10 @@ public abstract class PptSlice extends Ppt {
     }
   }
 
-  /** Return an approximation of the number of samples seen on this slice. */
+  /** Returns an approximation of the number of samples seen on this slice. */
   public abstract int num_samples(@UnknownInitialization @GuardSatisfied PptSlice this);
 
-  /** Return an approximation of the number of distinct values seen on this slice. */
+  /** Returns an approximation of the number of distinct values seen on this slice. */
   public abstract int num_values();
 
   /** Instantiate invariants on the VarInfos this slice contains. */

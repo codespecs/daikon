@@ -75,7 +75,7 @@ public class FieldInfo extends DaikonVariableInfo {
     throw new Error("Can't find " + field + " in " + field.getDeclaringClass());
   }
 
-  /** Return the number of primitive fields in clazz and all of its superclasses. */
+  /** Returns the number of primitive fields in clazz and all of its superclasses. */
   public static int num_prim_fields(Class<?> clazz) {
     if (clazz == Object.class) {
       return 0;
