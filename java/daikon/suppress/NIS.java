@@ -1040,7 +1040,7 @@ public class NIS {
       return cinv;
     }
 
-    /** Return string representation of the suppressed invariant. */
+    /** Returns string representation of the suppressed invariant. */
     @SideEffectFree
     @Override
     public String toString(@GuardSatisfied SupInv this) {

@@ -766,7 +766,7 @@ public class MethodGen24 {
   }
 
   /**
-   * Return string representation close to declaration format, 'public static void main(String[])',
+   * Returns string representation close to declaration format, 'public static void main(String[])',
    * e.g.
    *
    * @return String representation of the method declaration.

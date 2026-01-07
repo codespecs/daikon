@@ -1267,7 +1267,7 @@ public abstract class DaikonVariableInfo
     return repTypeName;
   }
 
-  /** Return the rep type name without the constant value. */
+  /** Returns the rep type name without the constant value. */
   public String getRepTypeNameOnly() {
     return repTypeName.replaceFirst(" = .*", "");
   }
@@ -1295,12 +1295,12 @@ public abstract class DaikonVariableInfo
     return compareInfoString;
   }
 
-  /** Return true iff the DeclWriter should print this node. */
+  /** Returns true iff the DeclWriter should print this node. */
   public boolean declShouldPrint() {
     return declShouldPrint;
   }
 
-  /** Return true iff the DTraceWriter should print this node. */
+  /** Returns true iff the DTraceWriter should print this node. */
   public boolean dTraceShouldPrint() {
     return dtraceShouldPrint;
   }

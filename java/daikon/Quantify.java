@@ -23,7 +23,7 @@ public class Quantify {
     ADJACENT,
     /** two indices are different. */
     DISTINCT,
-    /** Return the names of the index variables. */
+    /** Returns the names of the index variables. */
     INCLUDE_INDEX;
 
     /** set with just ELEMENT_WISE turned on. */

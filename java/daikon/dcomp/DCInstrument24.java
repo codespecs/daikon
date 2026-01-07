@@ -3055,7 +3055,7 @@ public class DCInstrument24 {
   }
 
   /**
-   * Return a list of the superclasses of this class. This class itself is not in the list. The
+   * Returns a list of the superclasses of this class. This class itself is not in the list. The
    * returned list is in ascending order; that is, java.lang.Object is always the last element,
    * unless the argument is java.lang.Object.
    *
@@ -4840,7 +4840,7 @@ public class DCInstrument24 {
   }
 
   /**
-   * Return the fully-qualified fieldname of the specified field.
+   * Returns the fully-qualified fieldname of the specified field.
    *
    * @param cm class containing the field
    * @param fm the field
@@ -4851,7 +4851,7 @@ public class DCInstrument24 {
   }
 
   /**
-   * Return simplified name of a method. Both exceptions and annotations are removed.
+   * Returns simplified name of a method. Both exceptions and annotations are removed.
    *
    * @param mgen the method
    * @return string containing the simplified method name

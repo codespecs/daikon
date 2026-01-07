@@ -1063,7 +1063,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return index;
   }
 
-  /** Return the whitespace at the front of the string. */
+  /** Returns the whitespace at the front of the string. */
   public static String precedingWhitespace(String s) {
     for (int i = 0; i < s.length(); i++) {
       if (!Character.isWhitespace(s.charAt(i))) {

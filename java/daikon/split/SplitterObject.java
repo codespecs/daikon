@@ -179,7 +179,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
     this.guid = ID;
   }
 
-  /** Return the unique ID of this splitterObject. */
+  /** Returns the unique ID of this splitterObject. */
   public int getGUID() {
     return this.guid;
   }

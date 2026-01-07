@@ -73,7 +73,7 @@ public abstract class VarComparability {
 
   public abstract VarComparability indexType(@GuardSatisfied VarComparability this, int dim);
 
-  /** Return the comparability for the length of this string* */
+  /** Returns the comparability for the length of this string* */
   public abstract VarComparability string_length_type();
 
   /** Returns true if this is comparable to everything else. */

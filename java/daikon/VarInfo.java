@@ -1459,7 +1459,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return parent.parent_variable;
   }
 
-  /** Return the value of this long variable (as an integer) */
+  /** Returns the value of this long variable (as an integer) */
   public int getIndexValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
@@ -1474,7 +1474,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return ((Long) raw).intValue();
   }
 
-  /** Return the value of this long variable (as a long) */
+  /** Returns the value of this long variable (as a long) */
   public long getIntValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
@@ -1489,7 +1489,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return ((Long) raw).longValue();
   }
 
-  /** Return the value of an long[] variable. */
+  /** Returns the value of an long[] variable. */
   public long[] getIntArrayValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
@@ -1504,7 +1504,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return (long[]) raw;
   }
 
-  /** Return the value of a double variable. */
+  /** Returns the value of a double variable. */
   public double getDoubleValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
@@ -1519,7 +1519,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return ((Double) raw).doubleValue();
   }
 
-  /** Return the value of a double[] variable. */
+  /** Returns the value of a double[] variable. */
   public double[] getDoubleArrayValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
@@ -1534,7 +1534,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return (double[]) raw;
   }
 
-  /** Return the value of a String variable. */
+  /** Returns the value of a String variable. */
   public String getStringValue(ValueTuple vt) {
     return (String) getValue(vt);
   }
@@ -1578,7 +1578,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return equalitySet.leader();
   }
 
-  /** Return true if this is a pointer or reference to another object. */
+  /** Returns true if this is a pointer or reference to another object. */
   @Pure
   public boolean is_reference() {
 
@@ -2248,7 +2248,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return true;
   }
 
-  /** Return true if this sequence's first index type is compatible with the scalar variable. */
+  /** Returns true if this sequence's first index type is compatible with the scalar variable. */
   public boolean indexCompatible(VarInfo sclvar) {
     VarInfo seqvar = this;
     if (Daikon.check_program_types) {
@@ -2805,7 +2805,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Return the set of values that have been seen so far for this variable. */
+  /** Returns the set of values that have been seen so far for this variable. */
   public ValueSet get_value_set() {
 
     // Static constants don't have value sets, so we must make one
@@ -3479,7 +3479,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Return the name of this variable in its prestate (orig). */
+  /** Returns the name of this variable in its prestate (orig). */
   @SideEffectFree
   public @Interned String prestate_name() {
     return ("orig(" + name() + ")").intern();

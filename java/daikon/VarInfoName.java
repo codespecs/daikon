@@ -297,7 +297,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    */
   protected abstract String java_name_impl(VarInfo v);
 
-  /** Return the String representation of this name in the JML style output format. */
+  /** Returns the String representation of this name in the JML style output format. */
   public @Interned String jml_name(VarInfo v) {
     if (jml_name_cached == null) {
       try {
@@ -361,7 +361,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    */
   protected abstract String dbc_name_impl(VarInfo v);
 
-  /** Return the String representation of this name using only letters, numbers, and underscores. */
+  /**
+   * Returns the String representation of this name using only letters, numbers, and underscores.
+   */
   public @Interned String identifier_name() {
     if (identifier_name_cached == null) {
       try {
@@ -3507,7 +3509,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       return name;
     }
 
-    /** Return a fresh variable name that doesn't appear in the given variable names. */
+    /** Returns a fresh variable name that doesn't appear in the given variable names. */
     public static VarInfoName getFreeIndex(VarInfoName... vins) {
       Set<String> simples = new HashSet<>();
       for (VarInfoName vin : vins) {
