@@ -1,5 +1,7 @@
 package daikon.chicory;
 
+import static java.lang.classfile.ClassFile.ACC_STATIC;
+import static java.lang.classfile.ClassFile.ACC_SYNTHETIC;
 import static java.lang.constant.ConstantDescs.CD_Object;
 import static java.lang.constant.ConstantDescs.CD_String;
 import static java.lang.constant.ConstantDescs.CD_int;
@@ -492,7 +494,7 @@ public class Instrument24 implements ClassFileTransformer {
     classBuilder.withMethod(
         "<clinit>",
         MethodTypeDesc.of(CD_void),
-        ClassFile.ACC_STATIC,
+        ACC_STATIC,
         methodBuilder ->
             methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions)));
   }
@@ -566,7 +568,7 @@ public class Instrument24 implements ClassFileTransformer {
           }
 
           // If method is synthetic... (default constructors and <clinit> are not synthetic).
-          if ((mgen.getAccessFlagsMask() & ClassFile.ACC_SYNTHETIC) != 0) {
+          if ((mgen.getAccessFlagsMask() & ACC_SYNTHETIC) != 0) {
             // We are not going to instrument this method.
             // We need to copy it to the output class.
             copyMethodToOutputUnchanged(classBuilder, mm, mgen);

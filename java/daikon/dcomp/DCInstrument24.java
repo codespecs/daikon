@@ -1,5 +1,214 @@
 package daikon.dcomp;
 
+import static java.lang.classfile.ClassFile.ACC_ABSTRACT;
+import static java.lang.classfile.ClassFile.ACC_ANNOTATION;
+import static java.lang.classfile.ClassFile.ACC_BRIDGE;
+import static java.lang.classfile.ClassFile.ACC_NATIVE;
+import static java.lang.classfile.ClassFile.ACC_PRIVATE;
+import static java.lang.classfile.ClassFile.ACC_PROTECTED;
+import static java.lang.classfile.ClassFile.ACC_PUBLIC;
+import static java.lang.classfile.ClassFile.ACC_STATIC;
+import static java.lang.classfile.Opcode.AALOAD;
+import static java.lang.classfile.Opcode.AASTORE;
+import static java.lang.classfile.Opcode.ACONST_NULL;
+import static java.lang.classfile.Opcode.ALOAD;
+import static java.lang.classfile.Opcode.ALOAD_0;
+import static java.lang.classfile.Opcode.ALOAD_1;
+import static java.lang.classfile.Opcode.ALOAD_2;
+import static java.lang.classfile.Opcode.ALOAD_3;
+import static java.lang.classfile.Opcode.ANEWARRAY;
+import static java.lang.classfile.Opcode.ARETURN;
+import static java.lang.classfile.Opcode.ARRAYLENGTH;
+import static java.lang.classfile.Opcode.ASTORE;
+import static java.lang.classfile.Opcode.ASTORE_0;
+import static java.lang.classfile.Opcode.ASTORE_1;
+import static java.lang.classfile.Opcode.ASTORE_2;
+import static java.lang.classfile.Opcode.ASTORE_3;
+import static java.lang.classfile.Opcode.ATHROW;
+import static java.lang.classfile.Opcode.BALOAD;
+import static java.lang.classfile.Opcode.BASTORE;
+import static java.lang.classfile.Opcode.BIPUSH;
+import static java.lang.classfile.Opcode.CALOAD;
+import static java.lang.classfile.Opcode.CASTORE;
+import static java.lang.classfile.Opcode.CHECKCAST;
+import static java.lang.classfile.Opcode.D2F;
+import static java.lang.classfile.Opcode.D2I;
+import static java.lang.classfile.Opcode.D2L;
+import static java.lang.classfile.Opcode.DADD;
+import static java.lang.classfile.Opcode.DALOAD;
+import static java.lang.classfile.Opcode.DASTORE;
+import static java.lang.classfile.Opcode.DCMPG;
+import static java.lang.classfile.Opcode.DCMPL;
+import static java.lang.classfile.Opcode.DCONST_0;
+import static java.lang.classfile.Opcode.DCONST_1;
+import static java.lang.classfile.Opcode.DDIV;
+import static java.lang.classfile.Opcode.DLOAD;
+import static java.lang.classfile.Opcode.DLOAD_0;
+import static java.lang.classfile.Opcode.DLOAD_1;
+import static java.lang.classfile.Opcode.DLOAD_2;
+import static java.lang.classfile.Opcode.DLOAD_3;
+import static java.lang.classfile.Opcode.DMUL;
+import static java.lang.classfile.Opcode.DNEG;
+import static java.lang.classfile.Opcode.DREM;
+import static java.lang.classfile.Opcode.DRETURN;
+import static java.lang.classfile.Opcode.DSTORE;
+import static java.lang.classfile.Opcode.DSTORE_0;
+import static java.lang.classfile.Opcode.DSTORE_1;
+import static java.lang.classfile.Opcode.DSTORE_2;
+import static java.lang.classfile.Opcode.DSTORE_3;
+import static java.lang.classfile.Opcode.DSUB;
+import static java.lang.classfile.Opcode.DUP;
+import static java.lang.classfile.Opcode.DUP2;
+import static java.lang.classfile.Opcode.DUP2_X1;
+import static java.lang.classfile.Opcode.DUP2_X2;
+import static java.lang.classfile.Opcode.DUP_X1;
+import static java.lang.classfile.Opcode.DUP_X2;
+import static java.lang.classfile.Opcode.F2D;
+import static java.lang.classfile.Opcode.F2I;
+import static java.lang.classfile.Opcode.F2L;
+import static java.lang.classfile.Opcode.FADD;
+import static java.lang.classfile.Opcode.FALOAD;
+import static java.lang.classfile.Opcode.FASTORE;
+import static java.lang.classfile.Opcode.FCMPG;
+import static java.lang.classfile.Opcode.FCMPL;
+import static java.lang.classfile.Opcode.FCONST_0;
+import static java.lang.classfile.Opcode.FCONST_1;
+import static java.lang.classfile.Opcode.FCONST_2;
+import static java.lang.classfile.Opcode.FDIV;
+import static java.lang.classfile.Opcode.FLOAD;
+import static java.lang.classfile.Opcode.FLOAD_0;
+import static java.lang.classfile.Opcode.FLOAD_1;
+import static java.lang.classfile.Opcode.FLOAD_2;
+import static java.lang.classfile.Opcode.FLOAD_3;
+import static java.lang.classfile.Opcode.FMUL;
+import static java.lang.classfile.Opcode.FNEG;
+import static java.lang.classfile.Opcode.FREM;
+import static java.lang.classfile.Opcode.FRETURN;
+import static java.lang.classfile.Opcode.FSTORE;
+import static java.lang.classfile.Opcode.FSTORE_0;
+import static java.lang.classfile.Opcode.FSTORE_1;
+import static java.lang.classfile.Opcode.FSTORE_2;
+import static java.lang.classfile.Opcode.FSTORE_3;
+import static java.lang.classfile.Opcode.FSUB;
+import static java.lang.classfile.Opcode.GETFIELD;
+import static java.lang.classfile.Opcode.GETSTATIC;
+import static java.lang.classfile.Opcode.GOTO;
+import static java.lang.classfile.Opcode.GOTO_W;
+import static java.lang.classfile.Opcode.I2B;
+import static java.lang.classfile.Opcode.I2C;
+import static java.lang.classfile.Opcode.I2D;
+import static java.lang.classfile.Opcode.I2F;
+import static java.lang.classfile.Opcode.I2L;
+import static java.lang.classfile.Opcode.I2S;
+import static java.lang.classfile.Opcode.IADD;
+import static java.lang.classfile.Opcode.IALOAD;
+import static java.lang.classfile.Opcode.IAND;
+import static java.lang.classfile.Opcode.IASTORE;
+import static java.lang.classfile.Opcode.ICONST_0;
+import static java.lang.classfile.Opcode.ICONST_1;
+import static java.lang.classfile.Opcode.ICONST_2;
+import static java.lang.classfile.Opcode.ICONST_3;
+import static java.lang.classfile.Opcode.ICONST_4;
+import static java.lang.classfile.Opcode.ICONST_5;
+import static java.lang.classfile.Opcode.ICONST_M1;
+import static java.lang.classfile.Opcode.IDIV;
+import static java.lang.classfile.Opcode.IFEQ;
+import static java.lang.classfile.Opcode.IFGE;
+import static java.lang.classfile.Opcode.IFGT;
+import static java.lang.classfile.Opcode.IFLE;
+import static java.lang.classfile.Opcode.IFLT;
+import static java.lang.classfile.Opcode.IFNE;
+import static java.lang.classfile.Opcode.IFNONNULL;
+import static java.lang.classfile.Opcode.IFNULL;
+import static java.lang.classfile.Opcode.IF_ACMPEQ;
+import static java.lang.classfile.Opcode.IF_ACMPNE;
+import static java.lang.classfile.Opcode.IF_ICMPEQ;
+import static java.lang.classfile.Opcode.IF_ICMPGE;
+import static java.lang.classfile.Opcode.IF_ICMPGT;
+import static java.lang.classfile.Opcode.IF_ICMPLE;
+import static java.lang.classfile.Opcode.IF_ICMPLT;
+import static java.lang.classfile.Opcode.IF_ICMPNE;
+import static java.lang.classfile.Opcode.IINC;
+import static java.lang.classfile.Opcode.ILOAD;
+import static java.lang.classfile.Opcode.ILOAD_0;
+import static java.lang.classfile.Opcode.ILOAD_1;
+import static java.lang.classfile.Opcode.ILOAD_2;
+import static java.lang.classfile.Opcode.ILOAD_3;
+import static java.lang.classfile.Opcode.IMUL;
+import static java.lang.classfile.Opcode.INEG;
+import static java.lang.classfile.Opcode.INSTANCEOF;
+import static java.lang.classfile.Opcode.INVOKEDYNAMIC;
+import static java.lang.classfile.Opcode.INVOKEINTERFACE;
+import static java.lang.classfile.Opcode.INVOKESPECIAL;
+import static java.lang.classfile.Opcode.INVOKESTATIC;
+import static java.lang.classfile.Opcode.INVOKEVIRTUAL;
+import static java.lang.classfile.Opcode.IOR;
+import static java.lang.classfile.Opcode.IREM;
+import static java.lang.classfile.Opcode.IRETURN;
+import static java.lang.classfile.Opcode.ISHL;
+import static java.lang.classfile.Opcode.ISHR;
+import static java.lang.classfile.Opcode.ISTORE;
+import static java.lang.classfile.Opcode.ISTORE_0;
+import static java.lang.classfile.Opcode.ISTORE_1;
+import static java.lang.classfile.Opcode.ISTORE_2;
+import static java.lang.classfile.Opcode.ISTORE_3;
+import static java.lang.classfile.Opcode.ISUB;
+import static java.lang.classfile.Opcode.IUSHR;
+import static java.lang.classfile.Opcode.IXOR;
+import static java.lang.classfile.Opcode.JSR;
+import static java.lang.classfile.Opcode.JSR_W;
+import static java.lang.classfile.Opcode.L2D;
+import static java.lang.classfile.Opcode.L2F;
+import static java.lang.classfile.Opcode.L2I;
+import static java.lang.classfile.Opcode.LADD;
+import static java.lang.classfile.Opcode.LALOAD;
+import static java.lang.classfile.Opcode.LAND;
+import static java.lang.classfile.Opcode.LASTORE;
+import static java.lang.classfile.Opcode.LCMP;
+import static java.lang.classfile.Opcode.LCONST_0;
+import static java.lang.classfile.Opcode.LCONST_1;
+import static java.lang.classfile.Opcode.LDC;
+import static java.lang.classfile.Opcode.LDC2_W;
+import static java.lang.classfile.Opcode.LDC_W;
+import static java.lang.classfile.Opcode.LDIV;
+import static java.lang.classfile.Opcode.LLOAD;
+import static java.lang.classfile.Opcode.LLOAD_0;
+import static java.lang.classfile.Opcode.LLOAD_1;
+import static java.lang.classfile.Opcode.LLOAD_2;
+import static java.lang.classfile.Opcode.LLOAD_3;
+import static java.lang.classfile.Opcode.LMUL;
+import static java.lang.classfile.Opcode.LNEG;
+import static java.lang.classfile.Opcode.LOOKUPSWITCH;
+import static java.lang.classfile.Opcode.LOR;
+import static java.lang.classfile.Opcode.LREM;
+import static java.lang.classfile.Opcode.LRETURN;
+import static java.lang.classfile.Opcode.LSHL;
+import static java.lang.classfile.Opcode.LSHR;
+import static java.lang.classfile.Opcode.LSTORE;
+import static java.lang.classfile.Opcode.LSTORE_0;
+import static java.lang.classfile.Opcode.LSTORE_1;
+import static java.lang.classfile.Opcode.LSTORE_2;
+import static java.lang.classfile.Opcode.LSTORE_3;
+import static java.lang.classfile.Opcode.LSUB;
+import static java.lang.classfile.Opcode.LUSHR;
+import static java.lang.classfile.Opcode.LXOR;
+import static java.lang.classfile.Opcode.MONITORENTER;
+import static java.lang.classfile.Opcode.MONITOREXIT;
+import static java.lang.classfile.Opcode.MULTIANEWARRAY;
+import static java.lang.classfile.Opcode.NEW;
+import static java.lang.classfile.Opcode.NEWARRAY;
+import static java.lang.classfile.Opcode.NOP;
+import static java.lang.classfile.Opcode.POP;
+import static java.lang.classfile.Opcode.POP2;
+import static java.lang.classfile.Opcode.PUTFIELD;
+import static java.lang.classfile.Opcode.PUTSTATIC;
+import static java.lang.classfile.Opcode.RET;
+import static java.lang.classfile.Opcode.RETURN;
+import static java.lang.classfile.Opcode.SALOAD;
+import static java.lang.classfile.Opcode.SASTORE;
+import static java.lang.classfile.Opcode.SIPUSH;
+import static java.lang.classfile.Opcode.SWAP;
+import static java.lang.classfile.Opcode.TABLESWITCH;
 import static java.lang.constant.ConstantDescs.CD_Class;
 import static java.lang.constant.ConstantDescs.CD_Object;
 import static java.lang.constant.ConstantDescs.CD_String;
@@ -381,7 +590,7 @@ public class DCInstrument24 {
   static Map<String, Integer> accessFlags = new HashMap<>();
 
   /** Integer constant of access_flag value of ACC_ANNOTATION. */
-  static Integer Integer_ACC_ANNOTATION = Integer.valueOf(ClassFile.ACC_ANNOTATION);
+  static Integer Integer_ACC_ANNOTATION = Integer.valueOf(ACC_ANNOTATION);
 
   /**
    * Array of classes whose fields are not initialized from Java (i.e., these classes are
@@ -856,7 +1065,7 @@ public class DCInstrument24 {
     classBuilder.withMethod(
         "<clinit>",
         MethodTypeDesc.of(CD_void),
-        ClassFile.ACC_STATIC,
+        ACC_STATIC,
         methodBuilder ->
             methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions, null)));
   }
@@ -879,7 +1088,7 @@ public class DCInstrument24 {
         poolBuilder.methodRefEntry(
             runtimeCD, "set_class_initialized", MethodTypeDesc.of(CD_void, CD_String));
     instructions.add(buildLDCInstruction(poolBuilder.stringEntry(classInfo.class_name)));
-    instructions.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
+    instructions.add(InvokeInstruction.of(INVOKESTATIC, mre));
 
     return instructions;
   }
@@ -987,7 +1196,7 @@ public class DCInstrument24 {
 
         // We cannot track the variables in bridge methods the compiler has synthesized as
         // they are overloaded on return type which normal Java does not support.
-        if ((mgen.getAccessFlagsMask() & ClassFile.ACC_BRIDGE) != 0) {
+        if ((mgen.getAccessFlagsMask() & ACC_BRIDGE) != 0) {
           track = false;
         }
 
@@ -999,10 +1208,10 @@ public class DCInstrument24 {
 
         // If we are tracking variables, make sure the class is public
         int access_flags = classModel.flags().flagsMask();
-        if (track && (access_flags & ClassFile.ACC_PUBLIC) == 0) {
-          access_flags |= ClassFile.ACC_PUBLIC;
-          access_flags &= ~ClassFile.ACC_PROTECTED;
-          access_flags &= ~ClassFile.ACC_PRIVATE;
+        if (track && (access_flags & ACC_PUBLIC) == 0) {
+          access_flags |= ACC_PUBLIC;
+          access_flags &= ~ACC_PROTECTED;
+          access_flags &= ~ACC_PRIVATE;
         }
         // reset class access flags in case they have been changed
         classBuilder.withFlags(access_flags);
@@ -1209,13 +1418,13 @@ public class DCInstrument24 {
       }
       if (!codeModelSeen) {
         debugInstrument.log("No CodeModel for method: %s%n", mgen.getName());
-        if ((mgen.getAccessFlagsMask() & ClassFile.ACC_NATIVE) != 0) {
+        if ((mgen.getAccessFlagsMask() & ACC_NATIVE) != 0) {
           // We need to build our wrapper method for a call to native code.
           methodBuilder.withCode(
               codeBuilder -> instrumentCode(codeBuilder, null, null, mgen, classInfo, trackMethod));
 
           // Turn off the native flag in wrapper method.
-          methodBuilder.withFlags(mgen.getAccessFlagsMask() & ~ClassFile.ACC_NATIVE);
+          methodBuilder.withFlags(mgen.getAccessFlagsMask() & ~ACC_NATIVE);
         } else {
           // Interface and/or Abstract; do nothing.
         }
@@ -1291,7 +1500,7 @@ public class DCInstrument24 {
     debugInstrument.log("nextLocalIndex: %d%n", minfo.nextLocalIndex);
 
     // If the method is native
-    if ((mgen.getAccessFlagsMask() & ClassFile.ACC_NATIVE) != 0) {
+    if ((mgen.getAccessFlagsMask() & ACC_NATIVE) != 0) {
 
       debugInstrument.log("Native Method%n");
       // Create Java code that cleans up the tag stack and calls the real native method.
@@ -1834,11 +2043,11 @@ public class DCInstrument24 {
 
     List<CodeElement> instructions = new ArrayList<>();
 
-    instructions.add(StackInstruction.of(Opcode.DUP));
+    instructions.add(StackInstruction.of(DUP));
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(
             runtimeCD, "exception_exit", MethodTypeDesc.of(CD_void, CD_Object));
-    instructions.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
+    instructions.add(InvokeInstruction.of(INVOKESTATIC, mre));
     instructions.add(ThrowInstruction.of());
     return instructions;
   }
@@ -1921,7 +2130,7 @@ public class DCInstrument24 {
         poolBuilder.methodRefEntry(
             runtimeCD, "create_tag_frame", MethodTypeDesc.of(objectArrayCD, CD_String));
     instructions.add(buildLDCInstruction(poolBuilder.stringEntry(params)));
-    instructions.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
+    instructions.add(InvokeInstruction.of(INVOKESTATIC, mre));
     instructions.add(StoreInstruction.of(TypeKind.REFERENCE, tagFrameLocal.slot()));
 
     debugInstrument.log("Store Tag frame local at index %d%n", tagFrameLocal.slot());
@@ -1956,7 +2165,7 @@ public class DCInstrument24 {
 
     // Push the object.  Push null if this is a static method or a constructor.
     if (mgen.isStatic() || (enterOrExit.equals("enter") && mgen.isConstructor())) {
-      instructions.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
+      instructions.add(ConstantInstruction.ofIntrinsic(ACONST_NULL));
     } else { // must be an instance method
       instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 0));
     }
@@ -1974,15 +2183,15 @@ public class DCInstrument24 {
     // Put each argument into the array.
     int param_index = param_offset;
     for (int ii = 0; ii < paramTypes.length; ii++) {
-      instructions.add(StackInstruction.of(Opcode.DUP));
+      instructions.add(StackInstruction.of(DUP));
       instructions.add(loadIntegerConstant(ii));
       ClassDesc at = paramTypes[ii];
       if (at.isPrimitive()) {
-        instructions.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
+        instructions.add(ConstantInstruction.ofIntrinsic(ACONST_NULL));
       } else { // it's a reference of some sort
         instructions.add(LoadInstruction.of(TypeKind.REFERENCE, param_index));
       }
-      instructions.add(ArrayStoreInstruction.of(Opcode.AASTORE));
+      instructions.add(ArrayStoreInstruction.of(AASTORE));
       param_index += TypeKind.from(at).slotSize();
     }
 
@@ -1992,11 +2201,11 @@ public class DCInstrument24 {
     if (enterOrExit.equals("exit")) {
       ClassDesc returnType = mgen.getReturnType();
       if (returnType.equals(CD_void)) {
-        instructions.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
+        instructions.add(ConstantInstruction.ofIntrinsic(ACONST_NULL));
       } else {
         LocalVariable return_local = getReturnLocal(mgen, returnType, minfo);
         if (returnType.isPrimitive()) {
-          instructions.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
+          instructions.add(ConstantInstruction.ofIntrinsic(ACONST_NULL));
         } else {
           instructions.add(LoadInstruction.of(TypeKind.REFERENCE, return_local.slot()));
         }
@@ -2015,7 +2224,7 @@ public class DCInstrument24 {
       methodArgs = MethodTypeDesc.of(CD_void, objectArrayCD, CD_Object, CD_int, objectArrayCD);
     }
     MethodRefEntry mre = poolBuilder.methodRefEntry(runtimeCD, enterOrExit, methodArgs);
-    instructions.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
+    instructions.add(InvokeInstruction.of(INVOKESTATIC, mre));
 
     return instructions;
   }
@@ -2040,20 +2249,20 @@ public class DCInstrument24 {
           // Replace the object comparison instructions with a call to
           // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
           // return a boolean which is used in a ifeq/ifne instruction.
-          case Opcode.IF_ACMPEQ:
-            return object_comparison((BranchInstruction) inst, "object_eq", Opcode.IFNE);
-          case Opcode.IF_ACMPNE:
-            return object_comparison((BranchInstruction) inst, "object_ne", Opcode.IFNE);
+          case IF_ACMPEQ:
+            return object_comparison((BranchInstruction) inst, "object_eq", IFNE);
+          case IF_ACMPNE:
+            return object_comparison((BranchInstruction) inst, "object_ne", IFNE);
 
           // These instructions compare the integer on the top of the stack
           // to zero.  Nothing is made comparable by this, so we need only
           // discard the tag on the top of the stack.
-          case Opcode.IFEQ:
-          case Opcode.IFNE:
-          case Opcode.IFLT:
-          case Opcode.IFGE:
-          case Opcode.IFGT:
-          case Opcode.IFLE:
+          case IFEQ:
+          case IFNE:
+          case IFLT:
+          case IFGE:
+          case IFGT:
+          case IFLE:
             {
               return discard_tag_code(inst, 1);
             }
@@ -2062,13 +2271,13 @@ public class DCInstrument24 {
           // the object on top of stack is of the specified type.  The DynComp runtime will push a
           // new, unique
           // tag for a constant, since nothing is made comparable by this.
-          case Opcode.INSTANCEOF:
+          case INSTANCEOF:
             return build_il(dcr_call("push_const", CD_void, noArgsSig), inst);
 
           // Duplicates the item on the top of stack.  If the value on the
           // top of the stack is a primitive, we need to do the same on the
           // tag stack.  Otherwise, we need do nothing.
-          case Opcode.DUP:
+          case DUP:
             return dup_tag(inst, stack);
 
           // Duplicates the item on the top of the stack and inserts it 2
@@ -2076,117 +2285,117 @@ public class DCInstrument24 {
           // is not a primitive, there is nothing to do.  If the second
           // value is not a primitive, then we need only to insert the duped
           // value down 1 on the tag stack (which contains only primitives).
-          case Opcode.DUP_X1:
+          case DUP_X1:
             return dup_x1_tag(inst, stack);
 
           // Duplicate the category 1 item on the top of the stack and insert it either
           // two or three items down in the stack.
-          case Opcode.DUP_X2:
+          case DUP_X2:
             return dup_x2_tag(inst, stack);
 
           // Duplicate either one category 2 item or two category 1 items.
-          case Opcode.DUP2:
+          case DUP2:
             return dup2_tag(inst, stack);
 
           // Duplicate either the top 2 category 1 items or a single
           // category 2 item and insert it 2 or 3 values down on the
           // stack.
-          case Opcode.DUP2_X1:
+          case DUP2_X1:
             return dup2_x1_tag(inst, stack);
 
           // Duplicate the top one or two items and insert them two, three, or four values down.
-          case Opcode.DUP2_X2:
+          case DUP2_X2:
             return dup2_x2_tag(inst, stack);
 
           // Pop a category 1 item from the top of the stack.  We want to discard
           // the top of the tag stack iff the item on the top of the stack is a
           // primitive.
-          case Opcode.POP:
+          case POP:
             return pop_tag(inst, stack);
 
           // Pops either the top 2 category 1 items or a single category 2 item
           // from the top of the stack.  We must do the same to the tag stack
           // if the values are primitives.
-          case Opcode.POP2:
+          case POP2:
             return pop2_tag(inst, stack);
 
           // Swaps the two category 1 items on the top of the stack.  We need
           // to swap the top of the tag stack if the two top elements on the
           // real stack are primitives.
-          case Opcode.SWAP:
+          case SWAP:
             return swap_tag(inst, stack);
 
-          case Opcode.IF_ICMPEQ:
-          case Opcode.IF_ICMPGE:
-          case Opcode.IF_ICMPGT:
-          case Opcode.IF_ICMPLE:
-          case Opcode.IF_ICMPLT:
-          case Opcode.IF_ICMPNE:
+          case IF_ICMPEQ:
+          case IF_ICMPGE:
+          case IF_ICMPGT:
+          case IF_ICMPLE:
+          case IF_ICMPLT:
+          case IF_ICMPNE:
             {
               return build_il(dcr_call("cmp_op", CD_void, noArgsSig), inst);
             }
 
-          case Opcode.GETFIELD:
-          case Opcode.PUTFIELD:
-          case Opcode.GETSTATIC:
-          case Opcode.PUTSTATIC:
+          case GETFIELD:
+          case PUTFIELD:
+          case GETSTATIC:
+          case PUTSTATIC:
             {
               return load_store_field(mgen, minfo, ((FieldInstruction) inst));
             }
 
-          case Opcode.DLOAD:
-          case Opcode.DLOAD_0:
-          case Opcode.DLOAD_1:
-          case Opcode.DLOAD_2:
-          case Opcode.DLOAD_3:
-          case Opcode.FLOAD:
-          case Opcode.FLOAD_0:
-          case Opcode.FLOAD_1:
-          case Opcode.FLOAD_2:
-          case Opcode.FLOAD_3:
-          case Opcode.ILOAD:
-          case Opcode.ILOAD_0:
-          case Opcode.ILOAD_1:
-          case Opcode.ILOAD_2:
-          case Opcode.ILOAD_3:
-          case Opcode.LLOAD:
-          case Opcode.LLOAD_0:
-          case Opcode.LLOAD_1:
-          case Opcode.LLOAD_2:
-          case Opcode.LLOAD_3:
+          case DLOAD:
+          case DLOAD_0:
+          case DLOAD_1:
+          case DLOAD_2:
+          case DLOAD_3:
+          case FLOAD:
+          case FLOAD_0:
+          case FLOAD_1:
+          case FLOAD_2:
+          case FLOAD_3:
+          case ILOAD:
+          case ILOAD_0:
+          case ILOAD_1:
+          case ILOAD_2:
+          case ILOAD_3:
+          case LLOAD:
+          case LLOAD_0:
+          case LLOAD_1:
+          case LLOAD_2:
+          case LLOAD_3:
             {
               return load_local((LoadInstruction) inst, tagFrameLocal, "push_local_tag");
             }
 
-          case Opcode.DSTORE:
-          case Opcode.DSTORE_0:
-          case Opcode.DSTORE_1:
-          case Opcode.DSTORE_2:
-          case Opcode.DSTORE_3:
-          case Opcode.FSTORE:
-          case Opcode.FSTORE_0:
-          case Opcode.FSTORE_1:
-          case Opcode.FSTORE_2:
-          case Opcode.FSTORE_3:
-          case Opcode.ISTORE:
-          case Opcode.ISTORE_0:
-          case Opcode.ISTORE_1:
-          case Opcode.ISTORE_2:
-          case Opcode.ISTORE_3:
-          case Opcode.LSTORE:
-          case Opcode.LSTORE_0:
-          case Opcode.LSTORE_1:
-          case Opcode.LSTORE_2:
-          case Opcode.LSTORE_3:
+          case DSTORE:
+          case DSTORE_0:
+          case DSTORE_1:
+          case DSTORE_2:
+          case DSTORE_3:
+          case FSTORE:
+          case FSTORE_0:
+          case FSTORE_1:
+          case FSTORE_2:
+          case FSTORE_3:
+          case ISTORE:
+          case ISTORE_0:
+          case ISTORE_1:
+          case ISTORE_2:
+          case ISTORE_3:
+          case LSTORE:
+          case LSTORE_0:
+          case LSTORE_1:
+          case LSTORE_2:
+          case LSTORE_3:
             {
               return store_local((StoreInstruction) inst, tagFrameLocal, "pop_local_tag");
             }
 
           // Adjusts the tag stack for load constant opcodes. If the constant is a primitive, pushes
           // its tag on the tag stack. If the constant is a reference (string, class), does nothing.
-          case Opcode.LDC:
-          case Opcode.LDC_W:
-          case Opcode.LDC2_W:
+          case LDC:
+          case LDC_W:
+          case LDC2_W:
             {
               if (((ConstantInstruction) inst).typeKind().equals(TypeKind.REFERENCE)) {
                 return null;
@@ -2197,27 +2406,27 @@ public class DCInstrument24 {
           // Push the tag for the array onto the tag stack.  This causes
           // anything comparable to the length to be comparable to the array
           // as an index.
-          case Opcode.ARRAYLENGTH:
+          case ARRAYLENGTH:
             {
               return array_length(inst);
             }
 
-          case Opcode.BIPUSH:
-          case Opcode.SIPUSH:
-          case Opcode.DCONST_0:
-          case Opcode.DCONST_1:
-          case Opcode.FCONST_0:
-          case Opcode.FCONST_1:
-          case Opcode.FCONST_2:
-          case Opcode.ICONST_0:
-          case Opcode.ICONST_1:
-          case Opcode.ICONST_2:
-          case Opcode.ICONST_3:
-          case Opcode.ICONST_4:
-          case Opcode.ICONST_5:
-          case Opcode.ICONST_M1:
-          case Opcode.LCONST_0:
-          case Opcode.LCONST_1:
+          case BIPUSH:
+          case SIPUSH:
+          case DCONST_0:
+          case DCONST_1:
+          case FCONST_0:
+          case FCONST_1:
+          case FCONST_2:
+          case ICONST_0:
+          case ICONST_1:
+          case ICONST_2:
+          case ICONST_3:
+          case ICONST_4:
+          case ICONST_5:
+          case ICONST_M1:
+          case LCONST_0:
+          case LCONST_1:
             {
               return build_il(dcr_call("push_const", CD_void, noArgsSig), inst);
             }
@@ -2225,43 +2434,43 @@ public class DCInstrument24 {
           // Primitive Binary operators.  Each is augmented with a call to
           // DCRuntime.binary_tag_op that merges the tags and updates the tag
           // Stack.
-          case Opcode.DADD:
-          case Opcode.DCMPG:
-          case Opcode.DCMPL:
-          case Opcode.DDIV:
-          case Opcode.DMUL:
-          case Opcode.DREM:
-          case Opcode.DSUB:
-          case Opcode.FADD:
-          case Opcode.FCMPG:
-          case Opcode.FCMPL:
-          case Opcode.FDIV:
-          case Opcode.FMUL:
-          case Opcode.FREM:
-          case Opcode.FSUB:
-          case Opcode.IADD:
-          case Opcode.IAND:
-          case Opcode.IDIV:
-          case Opcode.IMUL:
-          case Opcode.IOR:
-          case Opcode.IREM:
-          case Opcode.ISHL:
-          case Opcode.ISHR:
-          case Opcode.ISUB:
-          case Opcode.IUSHR:
-          case Opcode.IXOR:
-          case Opcode.LADD:
-          case Opcode.LAND:
-          case Opcode.LCMP:
-          case Opcode.LDIV:
-          case Opcode.LMUL:
-          case Opcode.LOR:
-          case Opcode.LREM:
-          case Opcode.LSHL:
-          case Opcode.LSHR:
-          case Opcode.LSUB:
-          case Opcode.LUSHR:
-          case Opcode.LXOR:
+          case DADD:
+          case DCMPG:
+          case DCMPL:
+          case DDIV:
+          case DMUL:
+          case DREM:
+          case DSUB:
+          case FADD:
+          case FCMPG:
+          case FCMPL:
+          case FDIV:
+          case FMUL:
+          case FREM:
+          case FSUB:
+          case IADD:
+          case IAND:
+          case IDIV:
+          case IMUL:
+          case IOR:
+          case IREM:
+          case ISHL:
+          case ISHR:
+          case ISUB:
+          case IUSHR:
+          case IXOR:
+          case LADD:
+          case LAND:
+          case LCMP:
+          case LDIV:
+          case LMUL:
+          case LOR:
+          case LREM:
+          case LSHL:
+          case LSHR:
+          case LSUB:
+          case LUSHR:
+          case LXOR:
             return build_il(dcr_call("binary_tag_op", CD_void, noArgsSig), inst);
 
           // Computed jump based on the int on the top of stack.  Since that int
@@ -2270,121 +2479,121 @@ public class DCInstrument24 {
           // the jump table.  But the tags for those values are not available.
           // And since they are all constants, its not clear how interesting it
           // would be anyway.
-          case Opcode.LOOKUPSWITCH:
-          case Opcode.TABLESWITCH:
+          case LOOKUPSWITCH:
+          case TABLESWITCH:
             return discard_tag_code(inst, 1);
 
           // Make the integer argument to ANEWARRAY comparable to the new
           // array's index.
-          case Opcode.ANEWARRAY:
-          case Opcode.NEWARRAY:
+          case ANEWARRAY:
+          case NEWARRAY:
             return new_array(inst);
 
           // If the new array has 2 dimensions, make the integer arguments
           // comparable to the corresponding indices of the new array.
           // For any other number of dimensions, discard the tags for the
           // arguments.
-          case Opcode.MULTIANEWARRAY:
+          case MULTIANEWARRAY:
             return multi_newarray_dc((NewMultiArrayInstruction) inst);
 
           // Mark the array and its index as comparable.  Also for primitives,
           // push the tag of the array element on the tag stack
-          case Opcode.AALOAD:
-          case Opcode.BALOAD:
-          case Opcode.CALOAD:
-          case Opcode.DALOAD:
-          case Opcode.FALOAD:
-          case Opcode.IALOAD:
-          case Opcode.LALOAD:
-          case Opcode.SALOAD:
+          case AALOAD:
+          case BALOAD:
+          case CALOAD:
+          case DALOAD:
+          case FALOAD:
+          case IALOAD:
+          case LALOAD:
+          case SALOAD:
             return array_load(mgen, (ArrayLoadInstruction) inst);
 
           // Prefix the return with a call to the correct normal_exit method
           // to handle the tag stack
-          case Opcode.ARETURN:
-          case Opcode.DRETURN:
-          case Opcode.FRETURN:
-          case Opcode.IRETURN:
-          case Opcode.LRETURN:
-          case Opcode.RETURN:
+          case ARETURN:
+          case DRETURN:
+          case FRETURN:
+          case IRETURN:
+          case LRETURN:
+          case RETURN:
             return return_tag(mgen, inst);
 
           // Throws an exception.  This clears the operand stack of the current
           // frame.  We need to clear the tag stack as well.
-          case Opcode.ATHROW:
+          case ATHROW:
             return build_il(dcr_call("throw_op", CD_void, noArgsSig), inst);
 
           // Opcodes that don't need any modifications.  Here for reference.
           // Note that while we include JSR, JSR_W, RET and RET_W here, it is
           // only for documentation. They will throw a "Unexpected instruction opcode"
           // error during the operand stack calculation phase.
-          case Opcode.ACONST_NULL:
-          case Opcode.ALOAD:
-          case Opcode.ALOAD_0:
-          case Opcode.ALOAD_1:
-          case Opcode.ALOAD_2:
-          case Opcode.ALOAD_3:
-          case Opcode.ASTORE:
-          case Opcode.ASTORE_0:
-          case Opcode.ASTORE_1:
-          case Opcode.ASTORE_2:
-          case Opcode.ASTORE_3:
-          case Opcode.CHECKCAST:
-          case Opcode.D2F: // double to float
-          case Opcode.D2I: // double to integer
-          case Opcode.D2L: // double to long
-          case Opcode.DNEG: // Negate double on top of stack
-          case Opcode.F2D: // float to double
-          case Opcode.F2I: // float to integer
-          case Opcode.F2L: // float to long
-          case Opcode.FNEG: // Negate float on top of stack
-          case Opcode.GOTO:
-          case Opcode.GOTO_W:
-          case Opcode.I2B: // integer to byte
-          case Opcode.I2C: // integer to char
-          case Opcode.I2D: // integer to double
-          case Opcode.I2F: // integer to float
-          case Opcode.I2L: // integer to long
-          case Opcode.I2S: // integer to short
-          case Opcode.IFNONNULL:
-          case Opcode.IFNULL:
-          case Opcode.IINC: // increment local variable by a constant
-          case Opcode.IINC_W: // increment local variable by a constant
-          case Opcode.INEG: // negate integer on top of stack
-          case Opcode.JSR: // pushes return address on the stack, but that
+          case ACONST_NULL:
+          case ALOAD:
+          case ALOAD_0:
+          case ALOAD_1:
+          case ALOAD_2:
+          case ALOAD_3:
+          case ASTORE:
+          case ASTORE_0:
+          case ASTORE_1:
+          case ASTORE_2:
+          case ASTORE_3:
+          case CHECKCAST:
+          case D2F: // double to float
+          case D2I: // double to integer
+          case D2L: // double to long
+          case DNEG: // Negate double on top of stack
+          case F2D: // float to double
+          case F2I: // float to integer
+          case F2L: // float to long
+          case FNEG: // Negate float on top of stack
+          case GOTO:
+          case GOTO_W:
+          case I2B: // integer to byte
+          case I2C: // integer to char
+          case I2D: // integer to double
+          case I2F: // integer to float
+          case I2L: // integer to long
+          case I2S: // integer to short
+          case IFNONNULL:
+          case IFNULL:
+          case IINC: // increment local variable by a constant
+          case IINC_W: // increment local variable by a constant
+          case INEG: // negate integer on top of stack
+          case JSR: // pushes return address on the stack, but that
           // is thought of as an object, so we don't need a tag for it.
-          case Opcode.JSR_W:
-          case Opcode.L2D: // long to double
-          case Opcode.L2F: // long to float
-          case Opcode.L2I: // long to int
-          case Opcode.LNEG: // negate long on top of stack
-          case Opcode.MONITORENTER:
-          case Opcode.MONITOREXIT:
-          case Opcode.NEW:
-          case Opcode.NOP:
-          case Opcode.RET: // this is the internal JSR return
-          case Opcode.RET_W:
+          case JSR_W:
+          case L2D: // long to double
+          case L2F: // long to float
+          case L2I: // long to int
+          case LNEG: // negate long on top of stack
+          case MONITORENTER:
+          case MONITOREXIT:
+          case NEW:
+          case NOP:
+          case RET: // this is the internal JSR return
+          case RET_W:
             return null;
 
           // Handle subroutine calls.  Calls to instrumented code are modified
           // to call the instrumented version (with the DCompMarker argument).
           // Calls to uninstrumented code (rare) discard primitive arguments
           // from the tag stack and produce an arbitrary return tag.
-          case Opcode.INVOKESTATIC:
-          case Opcode.INVOKEVIRTUAL:
-          case Opcode.INVOKESPECIAL:
-          case Opcode.INVOKEINTERFACE:
+          case INVOKESTATIC:
+          case INVOKEVIRTUAL:
+          case INVOKESPECIAL:
+          case INVOKEINTERFACE:
             return handleInvoke((InvokeInstruction) inst, mgen);
 
-          case Opcode.INVOKEDYNAMIC:
+          case INVOKEDYNAMIC:
             return handleInvokeDynamic((InvokeDynamicInstruction) inst);
 
           // Mark the array and its index as comparable.  For primitives, store
           // the tag for the value on the top of the stack in the tag storage
           // for the array.
-          case Opcode.AASTORE:
+          case AASTORE:
             return array_store(inst, "aastore", CD_Object);
-          case Opcode.BASTORE:
+          case BASTORE:
             // The JVM uses bastore for both byte and boolean.
             // We need to differentiate.
             ClassDesc arrayref = stack.peek(2);
@@ -2397,17 +2606,17 @@ public class DCInstrument24 {
             } else {
               return array_store(inst, "bastore", CD_byte);
             }
-          case Opcode.CASTORE:
+          case CASTORE:
             return array_store(inst, "castore", CD_char);
-          case Opcode.DASTORE:
+          case DASTORE:
             return array_store(inst, "dastore", CD_double);
-          case Opcode.FASTORE:
+          case FASTORE:
             return array_store(inst, "fastore", CD_float);
-          case Opcode.IASTORE:
+          case IASTORE:
             return array_store(inst, "iastore", CD_int);
-          case Opcode.LASTORE:
+          case LASTORE:
             return array_store(inst, "lastore", CD_long);
-          case Opcode.SASTORE:
+          case SASTORE:
             return array_store(inst, "sastore", CD_short);
 
           default:
@@ -2474,9 +2683,9 @@ public class DCInstrument24 {
           TypeKind typeKind = TypeKind.from(type);
           LocalVariable returnLocal = getReturnLocal(mgen, type, minfo);
           if (typeKind.slotSize() == 1) {
-            newCode.add(StackInstruction.of(Opcode.DUP));
+            newCode.add(StackInstruction.of(DUP));
           } else {
-            newCode.add(StackInstruction.of(Opcode.DUP2));
+            newCode.add(StackInstruction.of(DUP2));
           }
           newCode.add(StoreInstruction.of(typeKind, returnLocal.slot()));
         }
@@ -2618,7 +2827,7 @@ public class DCInstrument24 {
       List<CodeElement> il = new ArrayList<>();
       il.add(
           dcr_call(
-              invoke.opcode().equals(Opcode.INVOKESPECIAL) ? "dcomp_super_equals" : "dcomp_equals",
+              invoke.opcode().equals(INVOKESPECIAL) ? "dcomp_super_equals" : "dcomp_equals",
               returnType,
               new ClassDesc[] {CD_Object, CD_Object}));
       return il;
@@ -2647,7 +2856,7 @@ public class DCInstrument24 {
       List<CodeElement> il = new ArrayList<>();
 
       // Push the DCompMarker argument as we are calling the instrumented version.
-      il.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL));
+      il.add(ConstantInstruction.ofIntrinsic(ACONST_NULL));
 
       // Add the DCompMarker type to the parameter types list.
       List<ClassDesc> new_param_types = new ArrayList<>(Arrays.asList(paramTypes));
@@ -2788,11 +2997,10 @@ public class DCInstrument24 {
       // Note that to simplify our code we set the access flags for a functional
       // interface to ANNOTATION in our accessFlags map.
       //
-      if (targetInstrumented == true
-          && (op.equals(Opcode.INVOKEINTERFACE) || op.equals(Opcode.INVOKEVIRTUAL))) {
+      if (targetInstrumented == true && (op.equals(INVOKEINTERFACE) || op.equals(INVOKEVIRTUAL))) {
         Integer access = getAccessFlags(classname);
 
-        if ((access & ClassFile.ACC_ANNOTATION) != 0) {
+        if ((access & ACC_ANNOTATION) != 0) {
           targetInstrumented = false;
         }
 
@@ -2816,7 +3024,7 @@ public class DCInstrument24 {
 
       // If we are not using the instrumented JDK, then we need to track down the
       // actual target of an INVOKEVIRTUAL to see if it has been instrumented or not.
-      if (targetInstrumented == true && op.equals(Opcode.INVOKEVIRTUAL)) {
+      if (targetInstrumented == true && op.equals(INVOKEVIRTUAL)) {
         if (!Premain.jdk_instrumented && !mgen.getName().equals("equals_dcomp_instrumented")) {
 
           if (debugHandleInvoke) {
@@ -2907,7 +3115,7 @@ public class DCInstrument24 {
       }
     }
 
-    if (op.equals(Opcode.INVOKESPECIAL)) {
+    if (op.equals(INVOKESPECIAL)) {
       if (classname.equals(classGen.getSuperclassName()) && methodName.equals("<init>")) {
         this.constructor_is_initialized = true;
       }
@@ -3193,7 +3401,7 @@ public class DCInstrument24 {
     // push the target class
     il.add(buildLDCInstruction(poolBuilder.classEntry(ClassDesc.of(classname))));
 
-    if (invoke.opcode().equals(Opcode.INVOKESPECIAL)) {
+    if (invoke.opcode().equals(INVOKESPECIAL)) {
       // This is a super call.
 
       // Runtime will discover if the object's superclass has an instrumented clone method.
@@ -3229,7 +3437,7 @@ public class DCInstrument24 {
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(
             runtimeCD, compareMethod, MethodTypeDesc.of(CD_boolean, objectObjectSig));
-    il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
+    il.add(InvokeInstruction.of(INVOKESTATIC, mre));
     il.add(BranchInstruction.of(boolean_if, branch.target()));
     return il;
   }
@@ -3262,7 +3470,7 @@ public class DCInstrument24 {
 
     // If this class doesn't support tag fields, don't load/store them.
     if (!tag_fields_ok(mgen, owner)) {
-      if (op.equals(Opcode.GETFIELD) || op.equals(Opcode.GETSTATIC)) {
+      if (op.equals(GETFIELD) || op.equals(GETSTATIC)) {
         il.add(dcr_call("push_const", CD_void, noArgsSig));
       } else {
         il.add(loadIntegerConstant(1));
@@ -3274,50 +3482,50 @@ public class DCInstrument24 {
       return il;
     }
 
-    if (op.equals(Opcode.GETSTATIC)) {
+    if (op.equals(GETSTATIC)) {
       MethodRefEntry mre =
           poolBuilder.methodRefEntry(
               ownerCD,
               Premain.tag_method_name(Premain.GET_TAG, owner, fieldName),
               MethodTypeDesc.of(CD_void, noArgsSig));
-      il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
-    } else if (op.equals(Opcode.PUTSTATIC)) {
+      il.add(InvokeInstruction.of(INVOKESTATIC, mre));
+    } else if (op.equals(PUTSTATIC)) {
       MethodRefEntry mre =
           poolBuilder.methodRefEntry(
               ownerCD,
               Premain.tag_method_name(Premain.SET_TAG, owner, fieldName),
               MethodTypeDesc.of(CD_void, noArgsSig));
-      il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
-    } else if (op.equals(Opcode.GETFIELD)) {
-      il.add(StackInstruction.of(Opcode.DUP)); // dup 'this'
+      il.add(InvokeInstruction.of(INVOKESTATIC, mre));
+    } else if (op.equals(GETFIELD)) {
+      il.add(StackInstruction.of(DUP)); // dup 'this'
       MethodRefEntry mre =
           poolBuilder.methodRefEntry(
               ownerCD,
               Premain.tag_method_name(Premain.GET_TAG, owner, fieldName),
               MethodTypeDesc.of(CD_void, noArgsSig));
-      il.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
-    } else { // must be Opcode.PUTFIELD
+      il.add(InvokeInstruction.of(INVOKEVIRTUAL, mre));
+    } else { // must be PUTFIELD
       if (field_size == 2) {
         LocalVariable lv = get_tmp2_local(mgen, minfo, field_type);
         il.add(StoreInstruction.of(TypeKind.from(field_type), lv.slot()));
-        il.add(StackInstruction.of(Opcode.DUP)); // dup 'this'
+        il.add(StackInstruction.of(DUP)); // dup 'this'
         MethodRefEntry mre =
             poolBuilder.methodRefEntry(
                 ownerCD,
                 Premain.tag_method_name(Premain.SET_TAG, owner, fieldName),
                 MethodTypeDesc.of(CD_void, noArgsSig));
-        il.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
+        il.add(InvokeInstruction.of(INVOKEVIRTUAL, mre));
         il.add(LoadInstruction.of(TypeKind.from(field_type), lv.slot()));
       } else {
-        il.add(StackInstruction.of(Opcode.SWAP)); // swap 'this' and 'value'
-        il.add(StackInstruction.of(Opcode.DUP)); // dup 'this'
+        il.add(StackInstruction.of(SWAP)); // swap 'this' and 'value'
+        il.add(StackInstruction.of(DUP)); // dup 'this'
         MethodRefEntry mre =
             poolBuilder.methodRefEntry(
                 ownerCD,
                 Premain.tag_method_name(Premain.SET_TAG, owner, fieldName),
                 MethodTypeDesc.of(CD_void, noArgsSig));
-        il.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
-        il.add(StackInstruction.of(Opcode.SWAP)); // swap 'value' and 'this' back
+        il.add(InvokeInstruction.of(INVOKEVIRTUAL, mre));
+        il.add(StackInstruction.of(SWAP)); // swap 'value' and 'this' back
       }
     }
 
@@ -3353,7 +3561,7 @@ public class DCInstrument24 {
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(
             runtimeCD, method, MethodTypeDesc.of(CD_void, objectArrayCD, CD_int));
-    il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
+    il.add(InvokeInstruction.of(INVOKESTATIC, mre));
 
     // the original load instruction
     il.add(load);
@@ -3386,7 +3594,7 @@ public class DCInstrument24 {
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(
             runtimeCD, method, MethodTypeDesc.of(CD_void, objectArrayCD, CD_int));
-    il.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
+    il.add(InvokeInstruction.of(INVOKESTATIC, mre));
 
     // the original store instruction
     il.add(store);
@@ -3535,7 +3743,7 @@ public class DCInstrument24 {
     // which will make the index comparable with the array.  In the case
     // of primtives it will also get the tag for the primitive and push
     // it on the tag stack.
-    il.add(StackInstruction.of(Opcode.DUP2));
+    il.add(StackInstruction.of(DUP2));
     String method = "primitive_array_load";
     if (inst.typeKind().equals(TypeKind.REFERENCE)) {
       method = "ref_array_load";
@@ -3590,7 +3798,7 @@ public class DCInstrument24 {
 
     // Duplicate the array ref and pass it to DCRuntime which will push
     // it onto the tag stack.
-    il.add(StackInstruction.of(Opcode.DUP));
+    il.add(StackInstruction.of(DUP));
     il.add(dcr_call("push_array_tag", CD_void, object_arg));
 
     // Perform the original instruction
@@ -3613,7 +3821,7 @@ public class DCInstrument24 {
 
     // Duplicate the array ref from the top of the stack and pass it
     // to DCRuntime which will push it onto the tag stack.
-    il.add(StackInstruction.of(Opcode.DUP));
+    il.add(StackInstruction.of(DUP));
     il.add(dcr_call("push_array_tag", CD_void, object_arg));
 
     // Make the array and the count comparable. Also, pop the tags for
@@ -3634,14 +3842,14 @@ public class DCInstrument24 {
     List<CodeElement> il = new ArrayList<>();
 
     // Duplicate both count arguments
-    il.add(StackInstruction.of(Opcode.DUP2));
+    il.add(StackInstruction.of(DUP2));
 
     // Perform the original instruction
     il.add(inst);
 
     // Duplicate the new arrayref and put it below the count arguments
     // Stack is now: ..., arrayref, count1, count2, arrayref
-    il.add(StackInstruction.of(Opcode.DUP_X2));
+    il.add(StackInstruction.of(DUP_X2));
 
     il.add(dcr_call("multianewarray2", CD_void, new ClassDesc[] {CD_int, CD_int, objectArrayCD}));
 
@@ -3712,7 +3920,7 @@ public class DCInstrument24 {
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(
             runtimeCD, methodName, MethodTypeDesc.of(returnType, paramTypes));
-    return InvokeInstruction.of(Opcode.INVOKESTATIC, mre);
+    return InvokeInstruction.of(INVOKESTATIC, mre);
   }
 
   /**
@@ -4109,7 +4317,7 @@ public class DCInstrument24 {
       // our wrapper method call in between, we need to increment that number by 1.
       il.add(LoadInstruction.of(TypeKind.INT, 0)); // load depth
       il.add(loadIntegerConstant(1));
-      il.add(OperatorInstruction.of(Opcode.IADD));
+      il.add(OperatorInstruction.of(IADD));
       // System.out.printf("adding 1 in %s.%s%n", mgen.getClassName(),
       //                   mgen.getName());
 
@@ -4132,7 +4340,7 @@ public class DCInstrument24 {
             ClassDesc.of(mgen.getClassName()),
             mgen.getName(),
             MethodTypeDesc.of(returnType, paramTypes));
-    Opcode op = mgen.isStatic() ? Opcode.INVOKESTATIC : Opcode.INVOKEVIRTUAL;
+    Opcode op = mgen.isStatic() ? INVOKESTATIC : INVOKEVIRTUAL;
     il.add(InvokeInstruction.of(op, mre));
 
     // generate return instruction
@@ -4417,9 +4625,9 @@ public class DCInstrument24 {
     }
 
     // make method public
-    access_flags &= ~ClassFile.ACC_PRIVATE;
-    access_flags &= ~ClassFile.ACC_PROTECTED;
-    access_flags |= ClassFile.ACC_PUBLIC;
+    access_flags &= ~ACC_PRIVATE;
+    access_flags &= ~ACC_PROTECTED;
+    access_flags |= ACC_PUBLIC;
 
     // Create the get accessor method
     classGen
@@ -4551,9 +4759,9 @@ public class DCInstrument24 {
           methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions, localsTable));
         };
 
-    int access_flags = ClassFile.ACC_PUBLIC;
+    int access_flags = ACC_PUBLIC;
     if (classGen.isInterface()) {
-      access_flags |= ClassFile.ACC_ABSTRACT;
+      access_flags |= ACC_ABSTRACT;
       codeHandler1 = methodBuilder -> {};
     }
 
@@ -4569,7 +4777,7 @@ public class DCInstrument24 {
     instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 1)); // load obj
 
     if (!classInfo.isJunitTestClass) {
-      instructions.add(ConstantInstruction.ofIntrinsic(Opcode.ACONST_NULL)); // use null for marker
+      instructions.add(ConstantInstruction.ofIntrinsic(ACONST_NULL)); // use null for marker
       mtdDComp = MethodTypeDesc.of(CD_boolean, CD_Object, dcomp_marker);
     } else {
       // for JUnit test class, the instrumented version has no dcomp arg
@@ -4578,7 +4786,7 @@ public class DCInstrument24 {
 
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(ClassDesc.of(classGen.getClassName()), "equals", mtdDComp);
-    instructions.add(InvokeInstruction.of(Opcode.INVOKEVIRTUAL, mre));
+    instructions.add(InvokeInstruction.of(INVOKEVIRTUAL, mre));
     instructions.add(ReturnInstruction.of(TypeKind.BOOLEAN));
 
     if (!classInfo.isJunitTestClass) {
@@ -4639,9 +4847,9 @@ public class DCInstrument24 {
           methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions, localsTable));
         };
 
-    int access_flags = ClassFile.ACC_PUBLIC;
+    int access_flags = ACC_PUBLIC;
     if (classGen.isInterface()) {
-      access_flags |= ClassFile.ACC_ABSTRACT;
+      access_flags |= ACC_ABSTRACT;
       codeHandler1 = methodBuilder -> {};
     }
 
@@ -4657,7 +4865,7 @@ public class DCInstrument24 {
     instructions.add(LoadInstruction.of(TypeKind.REFERENCE, 1)); // load obj
     MethodRefEntry mre =
         poolBuilder.methodRefEntry(ClassDesc.of(classGen.getSuperclassName()), "equals", mtdNormal);
-    instructions.add(InvokeInstruction.of(Opcode.INVOKESPECIAL, mre));
+    instructions.add(InvokeInstruction.of(INVOKESPECIAL, mre));
     instructions.add(ReturnInstruction.of(TypeKind.BOOLEAN));
 
     if (!classInfo.isJunitTestClass) {
@@ -4794,7 +5002,7 @@ public class DCInstrument24 {
             ClassDesc.of(classInfo.class_name),
             "main",
             MethodTypeDesc.of(CD_void, CD_String.arrayType(1)));
-    instructions.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre)); // call real main
+    instructions.add(InvokeInstruction.of(INVOKESTATIC, mre)); // call real main
     instructions.add(ReturnInstruction.of(TypeKind.VOID));
 
     classBuilder.withMethod(
@@ -4976,9 +5184,9 @@ public class DCInstrument24 {
    */
   protected CodeElement buildDUPInstruction(int size) {
     if (size == 1) {
-      return StackInstruction.of(Opcode.DUP);
+      return StackInstruction.of(DUP);
     } else {
-      return StackInstruction.of(Opcode.DUP2);
+      return StackInstruction.of(DUP2);
     }
   }
 
@@ -4991,9 +5199,9 @@ public class DCInstrument24 {
    */
   protected CodeElement buildLDCInstruction(LoadableConstantEntry entry) {
     if (entry.index() > 255) {
-      return ConstantInstruction.ofLoad(Opcode.LDC_W, entry);
+      return ConstantInstruction.ofLoad(LDC_W, entry);
     } else {
-      return ConstantInstruction.ofLoad(Opcode.LDC, entry);
+      return ConstantInstruction.ofLoad(LDC, entry);
     }
   }
 
@@ -5005,18 +5213,18 @@ public class DCInstrument24 {
    */
   protected CodeElement loadIntegerConstant(final int value) {
     return switch (value) {
-      case -1 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_M1);
-      case 0 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_0);
-      case 1 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_1);
-      case 2 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_2);
-      case 3 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_3);
-      case 4 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_4);
-      case 5 -> ConstantInstruction.ofIntrinsic(Opcode.ICONST_5);
+      case -1 -> ConstantInstruction.ofIntrinsic(ICONST_M1);
+      case 0 -> ConstantInstruction.ofIntrinsic(ICONST_0);
+      case 1 -> ConstantInstruction.ofIntrinsic(ICONST_1);
+      case 2 -> ConstantInstruction.ofIntrinsic(ICONST_2);
+      case 3 -> ConstantInstruction.ofIntrinsic(ICONST_3);
+      case 4 -> ConstantInstruction.ofIntrinsic(ICONST_4);
+      case 5 -> ConstantInstruction.ofIntrinsic(ICONST_5);
       default ->
           (value >= Byte.MIN_VALUE && value <= Byte.MAX_VALUE)
-              ? ConstantInstruction.ofArgument(Opcode.BIPUSH, value)
+              ? ConstantInstruction.ofArgument(BIPUSH, value)
               : (value >= Short.MIN_VALUE && value <= Short.MAX_VALUE)
-                  ? ConstantInstruction.ofArgument(Opcode.SIPUSH, value)
+                  ? ConstantInstruction.ofArgument(SIPUSH, value)
                   : buildLDCInstruction(poolBuilder.intEntry(value));
     };
   }

@@ -1,7 +1,10 @@
 package daikon.test.split;
 
-import daikon.*;
-import daikon.split.*;
+import daikon.Daikon;
+import daikon.FileIO;
+import daikon.PptMap;
+import daikon.split.PptSplitter;
+import daikon.split.SplitterFactory;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

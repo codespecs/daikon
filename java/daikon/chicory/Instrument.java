@@ -1,5 +1,7 @@
 package daikon.chicory;
 
+import static org.apache.bcel.Const.ACC_SYNTHETIC;
+
 import daikon.Chicory;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.InstructionListUtils;
@@ -575,7 +577,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           }
 
           // If method is synthetic... (default constructors and <clinit> are not synthetic).
-          if ((Const.ACC_SYNTHETIC & mgen.getAccessFlags()) > 0) {
+          if ((ACC_SYNTHETIC & mgen.getAccessFlags()) > 0) {
             // We are not going to instrument this method.
             continue;
           }
