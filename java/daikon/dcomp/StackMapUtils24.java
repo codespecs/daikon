@@ -15,12 +15,12 @@ import java.util.ListIterator;
 import org.checkerframework.checker.signature.qual.Identifier;
 
 /**
- * This class provides static utility methods for manipulating bytecode structures, including
- * operations on local variables, parameter types, and instruction adjustments. It is loosely based
- * on StackMapUtils.java located in the plume-lib/bcel-util repository. It implements a very small
+ * This class provides static methods for manipulating bytecode structures, including operations on
+ * local variables, parameter types, and instruction adjustments. It is loosely based on
+ * StackMapUtils.java located in the plume-lib/bcel-util repository. It implements a very small
  * subset of the methods in StackMapUtils and does no manipulation of StackMaps at all. Its primary
- * method is addNewSpecialLocal which is a replacement for the two methods addNewParameter and
- * create_method_scope_local in the original StackMapUtils.
+ * method is {@link #addNewSpecialLocal} which is a replacement for the two methods addNewParameter
+ * and create_method_scope_local in the original StackMapUtils.
  *
  * <p>StackMapUtils24 uses Java's {@code java.lang.classfile} APIs for reading and modifying .class
  * files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more complete and robust

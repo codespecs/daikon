@@ -838,8 +838,8 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Insert the our instrumentation code into the instruction list for the given method. This
-   * comprises adding instrumentation code at method entry and at each return from the method.
+   * Insert our instrumentation code into the instruction list for the given method. This comprises
+   * adding instrumentation code at method entry and at each return from the method.
    *
    * @param instructions instruction list for method
    * @param mgen describes the given method
