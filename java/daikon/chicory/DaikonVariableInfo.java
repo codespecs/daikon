@@ -1383,6 +1383,9 @@ public abstract class DaikonVariableInfo
    */
   private boolean check_for_dup_names() {
 
+    // TODO: It seems wrong to choose the first occurrence of the variable, which could be a nested
+    // occurrence rather than the canonical top-level occurrence.
+
     if (ppt_statics.contains(name)) {
       debug_vars.log("ignoring already included variable %s [%s]", name, getClass());
       // if (!isStatic()) {

@@ -19,16 +19,21 @@ import daikon.chicory.StringInfo;
 import daikon.chicory.ThisObjInfo;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.util.WeakIdentityHashMap;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
@@ -38,6 +43,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -2225,6 +2231,15 @@ public final class DCRuntime implements ComparabilityProvider {
   private static class DVSet extends ArrayList<DaikonVariableInfo> implements Comparable<DVSet> {
     static final long serialVersionUID = 20050923L;
 
+    private DVSet() {
+      super();
+    }
+
+    // Copy constructor
+    private DVSet(Collection<DaikonVariableInfo> arg) {
+      super(arg);
+    }
+
     @Pure
     @Override
     public int compareTo(@GuardSatisfied DVSet this, DVSet s1) {
@@ -2239,6 +2254,14 @@ public final class DCRuntime implements ComparabilityProvider {
 
     void sort() {
       Collections.sort(this);
+    }
+
+    String toStringWithIdentityHashCode() {
+      StringJoiner result = new StringJoiner(", ", "[", "]");
+      for (DaikonVariableInfo dvi : this) {
+        result.add(String.format("%s [%s]", dvi, System.identityHashCode(dvi)));
+      }
+      return result.toString();
     }
   }
 
@@ -2276,6 +2299,28 @@ public final class DCRuntime implements ComparabilityProvider {
     Collections.sort(set_list);
 
     return set_list;
+  }
+
+  /**
+   * Produce debugging output for a {@code List<DVSet>}.
+   *
+   * @param dvsets a list of DVSet objects
+   * @return a string representation of {@code dvsets}
+   */
+  static String dvSetsToString(List<DVSet> dvsets, int indent) {
+    // In Java 11, use String::repeat
+    String indentString = new String(new char[indent]).replace("\0", " ");
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    String utf8 = StandardCharsets.UTF_8.name();
+    try (PrintStream ps = new PrintStream(baos, true, utf8)) {
+      for (DVSet dvset : dvsets) {
+        ps.print(indentString);
+        ps.println(dvset.toStringWithIdentityHashCode());
+      }
+      return baos.toString(utf8);
+    } catch (UnsupportedEncodingException e) {
+      throw new Error(e);
+    }
   }
 
   /**
@@ -2394,6 +2439,13 @@ public final class DCRuntime implements ComparabilityProvider {
    */
   static void merge_dv_comparability(RootInfo src, RootInfo dest, String debuginfo) {
 
+    // TODO: Why does this take a RootInfo?  A RootInfo contains many more variables than we are
+    // interested in.
+    // What is a better way to obtain just the relevant DaikonVariableInfo objects for a given
+    // program point?
+
+    // TODO: We should never merge across different program points.
+
     debug_merge_comp.log("merge_dv_comparability: %s%n", debuginfo);
 
     debug_merge_comp.indent();
@@ -2401,7 +2453,20 @@ public final class DCRuntime implements ComparabilityProvider {
     // Create a map relating destination names to their variables
     Map<String, DaikonVariableInfo> dest_map = new LinkedHashMap<>();
     for (DaikonVariableInfo dest_var : varlist(dest)) {
-      dest_map.put(dest_var.getName(), dest_var);
+      String dest_var_name = dest_var.getName();
+      if (dest_map.containsKey(dest_var_name)) {
+        DaikonVariableInfo old_dest_var = dest_map.get(dest_var_name);
+        throw new Error(
+            String.format(
+                "duplicate var name %s%n for %s [%s]%n and %s [%s]%n in %s",
+                dest_var_name,
+                old_dest_var,
+                System.identityHashCode(old_dest_var),
+                dest_var,
+                System.identityHashCode(dest_var),
+                new DVSet(varlist(dest)).toStringWithIdentityHashCode()));
+      }
+      dest_map.put(dest_var_name, dest_var);
     }
 
     // Get the variable sets for the source
