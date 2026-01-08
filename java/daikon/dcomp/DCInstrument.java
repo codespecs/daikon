@@ -1685,11 +1685,8 @@ public class DCInstrument extends InstructionListUtils {
 
     Type paramTypes[] = mgen.getArgumentTypes();
 
-    // Determine the offset of the first argument in the frame
-    int offset = 1;
-    if (mgen.isStatic()) {
-      offset = 0;
-    }
+    // Determine the offset of the first argument in the frame.
+    int offset = mgen.isStatic() ? 0 : 1;
 
     // allocate an extra slot to save the tag frame depth for debugging
     int frame_size = mgen.getMaxLocals() + 1;
@@ -1753,11 +1750,8 @@ public class DCInstrument extends InstructionListUtils {
       il.append(InstructionFactory.createLoad(CD_Object, 0));
     }
 
-    // Determine the offset of the first parameter
-    int param_offset = 1;
-    if (mgen.isStatic()) {
-      param_offset = 0;
-    }
+    // The offset of the first parameter.
+    int param_offset = mgen.isStatic() ? 0 : 1;
 
     // Push the MethodInfo index
     il.append(ifact.createConstant(method_info_index));
@@ -3538,10 +3532,13 @@ public class DCInstrument extends InstructionListUtils {
         op = "dup";
       }
     } else if (is_primitive(top)) {
-      if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) op = "dup2_x1";
-      else if (is_primitive(stack.peek(1))) op = "dup2";
-      else if (is_primitive(stack.peek(2))) op = "dup_x1";
-      else {
+      if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) {
+        op = "dup2_x1";
+      } else if (is_primitive(stack.peek(1))) {
+        op = "dup2";
+      } else if (is_primitive(stack.peek(2))) {
+        op = "dup_x1";
+      } else {
         // neither value 1 nor value 2 is primitive
         op = "dup";
       }
@@ -3570,9 +3567,11 @@ public class DCInstrument extends InstructionListUtils {
     String op;
     if (is_category2(top)) {
       op = "dup";
-    } else if (is_primitive(top) && is_primitive(stack.peek(1))) op = "dup2";
-    else if (is_primitive(top) || is_primitive(stack.peek(1))) op = "dup";
-    else {
+    } else if (is_primitive(top) && is_primitive(stack.peek(1))) {
+      op = "dup2";
+    } else if (is_primitive(top) || is_primitive(stack.peek(1))) {
+      op = "dup";
+    } else {
       // both of the top two items are not primitive, nothing to dup
       return null;
     }
@@ -3592,10 +3591,13 @@ public class DCInstrument extends InstructionListUtils {
       return null;
     }
     String op;
-    if (is_category2(stack.peek(1))) op = "dup_x1";
-    else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) op = "dup_x2";
-    else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2))) op = "dup_x1";
-    else {
+    if (is_category2(stack.peek(1))) {
+      op = "dup_x1";
+    } else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) {
+      op = "dup_x2";
+    } else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2))) {
+      op = "dup_x1";
+    } else {
       op = "dup";
     }
     if (debug_dup.enabled) {
@@ -3611,10 +3613,13 @@ public class DCInstrument extends InstructionListUtils {
     Type top = stack.peek();
     String op;
     if (is_category2(top)) {
-      if (is_category2(stack.peek(1))) op = "dup_x1";
-      else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) op = "dup_x2";
-      else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2))) op = "dup_x1";
-      else {
+      if (is_category2(stack.peek(1))) {
+        op = "dup_x1";
+      } else if (is_primitive(stack.peek(1)) && is_primitive(stack.peek(2))) {
+        op = "dup_x2";
+      } else if (is_primitive(stack.peek(1)) || is_primitive(stack.peek(2))) {
+        op = "dup_x1";
+      } else {
         // both values are references
         op = "dup";
       }
@@ -3628,16 +3633,20 @@ public class DCInstrument extends InstructionListUtils {
           op = "dup_x1";
         }
       } else if (is_primitive(stack.peek(1))) {
-        if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup2_x2";
-        else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup2_x1";
-        else {
+        if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) {
+          op = "dup2_x2";
+        } else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) {
+          op = "dup2_x1";
+        } else {
           // both 2 and 3 are references
           op = "dup2";
         }
       } else { // 1 is a reference
-        if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup_x2";
-        else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup_x1";
-        else {
+        if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) {
+          op = "dup_x2";
+        } else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) {
+          op = "dup_x1";
+        } else {
           // both 2 and 3 are references
           op = "dup";
         }
@@ -3652,9 +3661,11 @@ public class DCInstrument extends InstructionListUtils {
           return null; // nothing to dup
         }
       } else if (is_primitive(stack.peek(1))) {
-        if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) op = "dup_x2";
-        else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) op = "dup_x1";
-        else {
+        if (is_primitive(stack.peek(2)) && is_primitive(stack.peek(3))) {
+          op = "dup_x2";
+        } else if (is_primitive(stack.peek(2)) || is_primitive(stack.peek(3))) {
+          op = "dup_x1";
+        } else {
           // both 2 and 3 are references
           op = "dup";
         }
