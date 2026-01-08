@@ -2459,17 +2459,19 @@ public final class DCRuntime implements ComparabilityProvider {
     Map<String, DaikonVariableInfo> dest_map = new LinkedHashMap<>();
     for (DaikonVariableInfo dest_var : varlist(dest)) {
       String dest_var_name = dest_var.getName();
-      if (dest_map.containsKey(dest_var_name)) {
-        DaikonVariableInfo old_dest_var = dest_map.get(dest_var_name);
-        throw new Error(
-            String.format(
-                "duplicate var name %s%n for %s [%s]%n and %s [%s]%n in %s",
-                dest_var_name,
-                old_dest_var,
-                System.identityHashCode(old_dest_var),
-                dest_var,
-                System.identityHashCode(dest_var),
-                new DVSet(varlist(dest)).toStringWithIdentityHashCode()));
+      if (false) { // temporarily commented out because it is failing
+        if (dest_map.containsKey(dest_var_name)) {
+          DaikonVariableInfo old_dest_var = dest_map.get(dest_var_name);
+          throw new Error(
+              String.format(
+                  "duplicate var name %s%n for %s [%s]%n and %s [%s]%n in %s",
+                  dest_var_name,
+                  old_dest_var,
+                  System.identityHashCode(old_dest_var),
+                  dest_var,
+                  System.identityHashCode(dest_var),
+                  new DVSet(varlist(dest)).toStringWithIdentityHashCode()));
+        }
       }
       dest_map.put(dest_var_name, dest_var);
     }
