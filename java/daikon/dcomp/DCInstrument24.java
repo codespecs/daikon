@@ -1776,7 +1776,7 @@ public class DCInstrument24 {
       MethodGen24.MInfo24 minfo,
       List<CodeElement> instructions) {
 
-    List<CodeElement> newCode = createTagFrame(mgen);
+    List<CodeElement> newCode = create_tag_frame(mgen);
 
     // The start of the list of CodeElements looks as follows:
     //   LocalVariable declarations (if any)
@@ -2090,7 +2090,7 @@ public class DCInstrument24 {
    * @param mgen describes the given method
    * @return instruction list for tag_frame setup code
    */
-  private List<CodeElement> createTagFrame(MethodGen24 mgen) {
+  private List<CodeElement> create_tag_frame(MethodGen24 mgen) {
 
     ClassDesc paramTypes[] = mgen.getParameterTypes();
 
