@@ -75,7 +75,7 @@ Daikon:
 
 Bug fixes and implementation details:
 
-* Update bcel util to version 1.1.15 (Support for Groovy objects and
+* Update bcel-util to version 1.1.15 (support for Groovy objects and
   improvements to local variable table generation).
 
 ## Version 5.8.10 (November 1, 2021)
@@ -3967,5 +3967,7 @@ Added many index entries to manual.
 
 Added linear ternary invariants, of the form "z = ax + by + c".
 
-<!--  LocalWords:  html pdf DAIKONDIR javadoc DtraceDiff
+<!--  LocalWords:  html pdf DAIKONDIR javadoc DtraceDiff markdownlint pyml
+ -->
+<!--  LocalWords:  Binutils Doclets
  -->
