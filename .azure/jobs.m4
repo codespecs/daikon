@@ -23,9 +23,6 @@ misc_job(ubuntu, 21)
 misc_job(ubuntu, 25)
 
 kvasir_job(ubuntu, 8)
-kvasir_job(ubuntu, 11)
-kvasir_job(ubuntu, 17)
-kvasir_job(ubuntu, 21)
 kvasir_job(ubuntu, 25)
 
   ## The Checker Framework cannot be run under Java 8 or 11.
