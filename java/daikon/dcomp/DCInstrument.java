@@ -1080,18 +1080,18 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns true if the specified classname.method_name is the root of JUnit startup code.
+   * Returns true if the specified classname.methodName is the root of JUnit startup code.
    *
    * @param classname class containing the given method
-   * @param method_name method to be checked
+   * @param methodName method to be checked
    * @return true if the given method is a JUnit trigger
    */
-  boolean isJunitTrigger(String classname, @Identifier String method_name) {
-    if (classname.contains("JUnitCommandLineParseResult") && method_name.equals("parse")) {
+  boolean isJunitTrigger(String classname, @Identifier String methodName) {
+    if (classname.contains("JUnitCommandLineParseResult") && methodName.equals("parse")) {
       // JUnit 4
       return true;
     }
-    if (classname.contains("EngineDiscoveryRequestResolution") && method_name.equals("resolve")) {
+    if (classname.contains("EngineDiscoveryRequestResolution") && methodName.equals("resolve")) {
       // JUnit 5
       return true;
     }
@@ -2891,16 +2891,16 @@ public class DCInstrument extends InstructionListUtils {
 
   /**
    * Create the instructions that replace the object eq or ne branch instruction. They are replaced
-   * by a call to the specified compare_method (which returns a boolean) followed by the specified
+   * by a call to the specified compareMethod (which returns a boolean) followed by the specified
    * boolean ifeq or ifne instruction.
    */
   InstructionList object_comparison(
-      BranchInstruction branch, String compare_method, short boolean_if) {
+      BranchInstruction branch, String compareMethod, short boolean_if) {
 
     InstructionList il = new InstructionList();
     il.append(
         ifact.createInvoke(
-            dcompRuntimeClassName, compare_method, CD_boolean, objectObjectSig, INVOKESTATIC));
+            dcompRuntimeClassName, compareMethod, CD_boolean, objectObjectSig, INVOKESTATIC));
     assert branch.getTarget() != null;
     il.append(InstructionFactory.createBranchInstruction(boolean_if, branch.getTarget()));
     return il;

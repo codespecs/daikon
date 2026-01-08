@@ -2214,16 +2214,16 @@ public class DCInstrument24 {
       instructions.add(loadIntegerConstant(line));
     }
 
-    MethodTypeDesc methodArgs;
+    MethodTypeDesc methodParams;
     // Call the specified method.
     if (enterOrExit.equals("exit")) {
-      methodArgs =
+      methodParams =
           MethodTypeDesc.of(
               CD_void, objectArrayCD, CD_Object, CD_int, objectArrayCD, CD_Object, CD_int);
     } else {
-      methodArgs = MethodTypeDesc.of(CD_void, objectArrayCD, CD_Object, CD_int, objectArrayCD);
+      methodParams = MethodTypeDesc.of(CD_void, objectArrayCD, CD_Object, CD_int, objectArrayCD);
     }
-    MethodRefEntry mre = poolBuilder.methodRefEntry(runtimeCD, enterOrExit, methodArgs);
+    MethodRefEntry mre = poolBuilder.methodRefEntry(runtimeCD, enterOrExit, methodParams);
     instructions.add(InvokeInstruction.of(INVOKESTATIC, mre));
 
     return instructions;

@@ -1174,15 +1174,16 @@ public class Instrument24 implements ClassFileTransformer {
     }
 
     ClassDesc objectArrayCD = CD_Object.arrayType(1);
-    MethodTypeDesc methodArgs;
+    MethodTypeDesc methodParams;
     // Call the specified method.
     if (methodToCall.equals("exit")) {
-      methodArgs =
+      methodParams =
           MethodTypeDesc.of(CD_void, CD_Object, CD_int, CD_int, objectArrayCD, CD_Object, CD_int);
     } else {
-      methodArgs = MethodTypeDesc.of(CD_void, CD_Object, CD_int, CD_int, objectArrayCD);
+      methodParams = MethodTypeDesc.of(CD_void, CD_Object, CD_int, CD_int, objectArrayCD);
     }
-    MethodRefEntry mre = mgen.getPoolBuilder().methodRefEntry(runtimeCD, methodToCall, methodArgs);
+    MethodRefEntry mre =
+        mgen.getPoolBuilder().methodRefEntry(runtimeCD, methodToCall, methodParams);
     newCode.add(InvokeInstruction.of(Opcode.INVOKESTATIC, mre));
   }
 
