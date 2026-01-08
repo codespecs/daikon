@@ -41,6 +41,7 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.FieldDescriptor;
 import org.checkerframework.checker.signature.qual.FqBinaryName;
+import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
@@ -1169,6 +1170,26 @@ public final class Runtime {
       }
       return result;
     }
+  }
+
+  /**
+   * Given a class name in internal form, return it as a binary name.
+   *
+   * @param internalForm a class name in internal form
+   * @return the class name as a binary name
+   */
+  public static @BinaryName String internalFormToBinaryName(@InternalForm String internalForm) {
+    return internalForm.replace('/', '.');
+  }
+
+  /**
+   * Given a class name in binary name form, return it in internal form.
+   *
+   * @param binaryName a class name in binary name form
+   * @return the class name in internal form
+   */
+  public static @InternalForm String binaryNameToInternalForm(@BinaryName String binaryName) {
+    return binaryName.replace('.', '/');
   }
 
   // ///////////////////////////////////////////////////////////////////////////

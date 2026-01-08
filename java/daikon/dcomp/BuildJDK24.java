@@ -44,6 +44,7 @@ import java.util.jar.JarFile;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
+import org.checkerframework.checker.signature.qual.InternalForm;
 
 /**
  * Add comparability instrumentation to Java class files, then stores the modified files into a
@@ -195,7 +196,7 @@ public final class BuildJDK24 {
       // Class names are written in internal form.
       try (PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name())) {
         for (String classFileName : class_stream_map.keySet()) {
-          pw.println(classFileName.replace(".class", ""));
+          pw.println(removeSuffix(classFileName, ".class"));
         }
       }
     }
@@ -412,7 +413,8 @@ public final class BuildJDK24 {
         }
 
         @SuppressWarnings("signature:assignment") // string manipulation
-        @BinaryName String classname = classFileName.replace(".class", "").replace('/', '.');
+        @InternalForm String classnameIF = removeSuffix(classFileName, ".class");
+        String classname = Signatures.internalFormToBinaryName(classnameIF);
         if (DynComp.dump) {
           inst24.writeDebugClassFiles(buffer, inst24.debug_uninstrumented_dir, classname);
         }
@@ -534,7 +536,8 @@ public final class BuildJDK24 {
 
     // remove '.class' first
     @SuppressWarnings("signature:assignment") // type conversion
-    @BinaryName String classname = classFileName.replace(".class", "").replace('/', '.');
+    @InternalForm String classnameIF = removeSuffix(classFileName, ".class");
+    String classname = Signatures.internalFormToBinaryName(classnameIF);
     ClassInfo classInfo = new ClassInfo(classname, loader);
     DCInstrument24 dci = new DCInstrument24(classFile, classModel, true);
     byte[] classBytes = dci.instrument_jdk_class(classInfo);
@@ -602,6 +605,21 @@ public final class BuildJDK24 {
       for (String method : known) {
         System.err.printf("  %s%n", method);
       }
+    }
+  }
+
+  /**
+   * Returns the given string, with the suffix removed if it was present.
+   *
+   * @param s a string
+   * @param suffix a suffix
+   * @return {@code s}, with the suffix removed if it was present.
+   */
+  private static String removeSuffix(String s, String suffix) {
+    if (s.endsWith(suffix)) {
+      return s.substring(0, s.length() - suffix.length());
+    } else {
+      return s;
     }
   }
 }
