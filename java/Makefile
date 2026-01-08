@@ -166,6 +166,14 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER = sort
 endif
 
+ifeq (${JAVA8}, 1)
+dummy := $(shell cp -pf daikon/config/InvariantDoclet.java8 daikon/config/InvariantDoclet.java)
+dummy := $(shell cp -pf daikon/config/InvariantDoclet.java8 daikon/config/InvariantDoclet.java)
+else
+dummy := $(shell cp -pf daikon/config/InvariantDoclet.java11 daikon/config/InvariantDoclet.java)
+dummy := $(shell cp -pf daikon/config/ParameterDoclet.java11 daikon/config/ParameterDoclet.java)
+endif
+
 DAIKON_JAVA_FILES := $(shell find daikon/ -name '*.java' -not -name '*\#*' -print | ${SORT_DIRECTORY_ORDER})
 ifeq (${JAVA24}, 0)
   DAIKON_JAVA_FILES :=  $(filter-out %24.java, ${DAIKON_JAVA_FILES})
@@ -2052,22 +2060,6 @@ daikon/derive/unary/SequenceInitialFactory.java: daikon/derive/unary/SequenceIni
 
 daikon/derive/unary/SequenceInitialFactoryFloat.java: daikon/derive/unary/SequenceInitialFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
-
-# .PHONY means regenerate even if the file exists.
-.PHONY: daikon/config/InvariantDoclet.java daikon/config/ParameterDoclet.java
-daikon/config/InvariantDoclet.java:
-ifeq (${JAVA8}, 1)
-	cp -pf daikon/config/InvariantDoclet.java8 daikon/config/InvariantDoclet.java
-else
-	cp -pf daikon/config/InvariantDoclet.java11 daikon/config/InvariantDoclet.java
-endif
-
-daikon/config/ParameterDoclet.java:
-ifeq (${JAVA8}, 1)
-	cp -pf daikon/config/ParameterDoclet.java8 daikon/config/ParameterDoclet.java
-else
-	cp -pf daikon/config/ParameterDoclet.java11 daikon/config/ParameterDoclet.java
-endif
 
 
 ###########################################################################
