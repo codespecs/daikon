@@ -53,6 +53,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.Pure;
+import org.plumelib.util.StringsPlume;
 
 /**
  * Runtime support for DynComp, a comparability front end for Chicory. This class is a collection of
@@ -2261,11 +2262,18 @@ public final class DCRuntime implements ComparabilityProvider {
       Collections.sort(this);
     }
 
+    /**
+     * Returns a multi-line representation of the list of variables.
+     *
+     * @return a multi-line representation of the list of variables
+     */
     String toStringWithIdentityHashCode() {
-      StringJoiner result = new StringJoiner(", ", "[", "]");
+      StringJoiner result = new StringJoiner(System.lineSeparator());
+      result.add("DVSet(");
       for (DaikonVariableInfo dvi : this) {
         result.add(String.format("%s [%s]", dvi, System.identityHashCode(dvi)));
       }
+      result.add("  )");
       return result.toString();
     }
   }
@@ -2310,17 +2318,15 @@ public final class DCRuntime implements ComparabilityProvider {
    * Produce debugging output for a {@code List<DVSet>}.
    *
    * @param dvsets a list of DVSet objects
+   * @param indent how many spaces to indent each line
    * @return a string representation of {@code dvsets}
    */
   static String dvSetsToString(List<DVSet> dvsets, int indent) {
-    // In Java 11, use String::repeat
-    String indentString = new String(new char[indent]).replace("\0", " ");
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     String utf8 = StandardCharsets.UTF_8.name();
     try (PrintStream ps = new PrintStream(baos, true, utf8)) {
       for (DVSet dvset : dvsets) {
-        ps.print(indentString);
-        ps.println(dvset.toStringWithIdentityHashCode());
+        ps.println(StringsPlume.indentLines(indent, dvset.toStringWithIdentityHashCode()));
       }
       return baos.toString(utf8);
     } catch (UnsupportedEncodingException e) {
