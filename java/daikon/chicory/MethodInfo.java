@@ -214,14 +214,17 @@ public class MethodInfo {
   public void init_traversal(int depth) {
 
     traversalEnter = RootInfo.enter_process(this, depth);
-    // System.out.printf("Method %s.%s: %n ", class_info.clazz.getName(),
-    //                    this);
-    // System.out.printf("Enter daikon variable tree%n%s%n",
-    //                    traversalEnter.treeString());
+
+    if (false) {
+      System.out.printf("Method %s.%s: %n ", class_info.clazz.getName(), this);
+      System.out.printf("Enter daikon variable tree%n%s%n", traversalEnter.treeString());
+    }
 
     traversalExit = RootInfo.exit_process(this, depth);
-    // System.out.printf("Exit daikon variable tree%n%s%n",
-    //                    traversalExit.treeString());
+
+    if (false) {
+      System.out.printf("Exit daikon variable tree%n%s%n", traversalExit.treeString());
+    }
   }
 
   @SideEffectFree
