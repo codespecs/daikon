@@ -2322,6 +2322,12 @@ public final class DCRuntime implements ComparabilityProvider {
    * @return a string representation of {@code dvsets}
    */
   static String dvSetsToString(List<DVSet> dvsets, int indent) {
+    // On Java 11, do
+    //   ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    //   try (PrintStream ps = new PrintStream(baos, true, StandardCharsets.UTF_8)) {
+    //   ...
+    //   return baos.toString(StandardCharsets.UTF_8);
+    // and drop the catch clause.
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     String utf8 = StandardCharsets.UTF_8.name();
     try (PrintStream ps = new PrintStream(baos, true, utf8)) {
