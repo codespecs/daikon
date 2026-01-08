@@ -18,6 +18,7 @@ import daikon.chicory.StaticObjInfo;
 import daikon.chicory.StringInfo;
 import daikon.chicory.ThisObjInfo;
 import daikon.plumelib.bcelutil.SimpleLog;
+import daikon.plumelib.util.StringsPlume;
 import daikon.plumelib.util.WeakIdentityHashMap;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -53,7 +54,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.PolyNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.dataflow.qual.Pure;
-import org.plumelib.util.StringsPlume;
 
 /**
  * Runtime support for DynComp, a comparability front end for Chicory. This class is a collection of
