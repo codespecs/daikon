@@ -2231,13 +2231,18 @@ public final class DCRuntime implements ComparabilityProvider {
   private static class DVSet extends ArrayList<DaikonVariableInfo> implements Comparable<DVSet> {
     static final long serialVersionUID = 20050923L;
 
+    /** Creates an empty DVSet. */
     private DVSet() {
       super();
     }
 
-    // Copy constructor
-    private DVSet(Collection<DaikonVariableInfo> arg) {
-      super(arg);
+    /**
+     * Creates a DVSet with that contains the given variables.
+     *
+     * @param variables the variables
+     */
+    private DVSet(Collection<DaikonVariableInfo> variables) {
+      super(variables);
     }
 
     @Pure
