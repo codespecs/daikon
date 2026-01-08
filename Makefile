@@ -738,8 +738,8 @@ showvars::
 	@echo "NEW_RELEASE_NAME =" ${NEW_RELEASE_NAME}
 	${MAKE} -C java showvars
 
-# If .git does not exist, then the directory was created from a Daikon archive file.
 update-libs:        update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-plume-scripts-in-utils update-run-google-java-format
+# If .git does not exist, then the directory was created from a Daikon archive file.
 ifneq ($(shell ls ../.git 2>/dev/null),)
 	${MAKE} -C .. git-hooks
 endif
