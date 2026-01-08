@@ -127,7 +127,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   private static final @InternedDistinct BasicType CD_void = Type.VOID;
 
   /** "java.lang.Object[]". */
-  protected static Type objectArrayCD = new ArrayType(CD_Object, 1);
+  protected static Type CD_Object_array = new ArrayType(CD_Object, 1);
 
   // protected static ObjectType CD_Throwable = new ObjectType("java.lang.Throwable");
 
@@ -1048,12 +1048,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     newCode.append(instFactory.createConstant(paramTypes.length));
     newCode.append(instFactory.createNewArray(CD_Object, (short) 1));
 
-    Type object_arr_typ = new ArrayType("java.lang.Object", 1);
-
     // Put each parameter into the array.
     int param_index = param_offset;
     for (int ii = 0; ii < paramTypes.length; ii++) {
-      newCode.append(InstructionFactory.createDup(object_arr_typ.getSize()));
+      newCode.append(InstructionFactory.createDup(CD_Object_array.getSize()));
       newCode.append(instFactory.createConstant(ii));
       Type at = paramTypes[ii];
       if (at instanceof BasicType) {
@@ -1089,9 +1087,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // Call the specified method.
     Type[] methodParams;
     if (methodToCall.equals("exit")) {
-      methodParams = new Type[] {CD_Object, CD_int, CD_int, object_arr_typ, CD_Object, CD_int};
+      methodParams = new Type[] {CD_Object, CD_int, CD_int, CD_Object_array, CD_Object, CD_int};
     } else {
-      methodParams = new Type[] {CD_Object, CD_int, CD_int, object_arr_typ};
+      methodParams = new Type[] {CD_Object, CD_int, CD_int, CD_Object_array};
     }
     newCode.append(
         instFactory.createInvoke(
