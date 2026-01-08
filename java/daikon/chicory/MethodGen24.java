@@ -1,5 +1,9 @@
 package daikon.chicory;
 
+import static java.lang.constant.ConstantDescs.CD_Object;
+import static java.lang.constant.ConstantDescs.CD_String;
+import static java.lang.constant.ConstantDescs.CD_void;
+
 import java.lang.classfile.Attributes;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassFile;
@@ -9,6 +13,7 @@ import java.lang.classfile.CodeModel;
 import java.lang.classfile.Instruction;
 import java.lang.classfile.Label;
 import java.lang.classfile.MethodModel;
+import java.lang.classfile.TypeKind;
 import java.lang.classfile.attribute.CodeAttribute;
 import java.lang.classfile.attribute.SignatureAttribute;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
@@ -16,25 +21,29 @@ import java.lang.classfile.instruction.LocalVariable;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.checkerframework.checker.initialization.qual.UnderInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.checker.signature.qual.FieldDescriptor;
+import org.checkerframework.checker.signature.qual.FqBinaryName;
 import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.checker.signature.qual.MethodDescriptor;
 
 /**
- * MethodGen24 collects and stores all the relevant information about a method that Instrument24
- * might need. MethodGen24 is analogous to the BCEL MethodGen class. The similarity makes it easier
- * to keep Instrument.java and Instrument24.java in sync.
+ * MethodGen24 represents a method. MethodGen24 is analogous to the BCEL MethodGen class. The
+ * similarity makes it easier to keep Instrument.java and Instrument24.java in sync.
  *
- * <p>MethodGen24 uses Java's ({@code java.lang.classfile}) APIs for reading and modifying .class
+ * <p>MethodGen24 uses Java's {@code java.lang.classfile} APIs for reading and modifying .class
  * files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more complete and robust
  * (no more fiddling with StackMaps) and are always up to date with any .class file changes (since
  * they are part of the JDK). (We will need to continue to support Instrument.java using BCEL, as we
@@ -43,34 +52,43 @@ import org.checkerframework.checker.signature.qual.MethodDescriptor;
 public class MethodGen24 {
 
   /**
-   * Models the body of the method (the Code attribute). A Code attribute is viewed as a sequence of
-   * CodeElements, which is the only way to access Instructions; the order of elements of a code
-   * model is significant. May be null if the method has no code.
+   * Per the CodeModel Javadoc: "Models the body of the method (the Code attribute). A Code
+   * attribute is viewed as a sequence of CodeElements, which is the only way to access
+   * Instructions; the order of elements of a code model is significant." May be null if the method
+   * has no code.
    *
-   * <p>Several fields of CodeModel are declared as fields of MethodGen24 to better correspond to
-   * BCEL's version of MethodGen and to reduce re-computation. Currently we set these fields in the
-   * constructor, but they could be calculated lazily on first reference.
+   * <p>Several fields of MethodModel are cached as fields of MethodGen24 to better correspond to
+   * BCEL's version of MethodGen and to reduce re-computation.
    */
+
+  //
+  // Start of MethodModel items.
+  //
+
   private @Nullable CodeModel code;
 
-  /** The method's access flags as a bit mask. */
+  /** This method's access flags as a bit mask. */
   private final int accessFlagsMask;
 
-  /** The method's name. */
+  /** This method's name. */
   private @Identifier String methodName;
 
   /**
-   * The method's type descriptor. This contains information about the parameters and return type of
-   * the method.
+   * This method's type descriptor. This contains information about the parameters and return type
+   * of this method.
    */
   private MethodTypeDesc mtd;
 
-  /** True if the method is static. */
+  //
+  // End of MethodModel items.
+  //
+
+  /** True if this method is static. */
   private boolean isStatic;
 
   /**
-   * The method's CodeAttribute. This contains information about the bytecodes (instructions) of
-   * this method. May be null if the method has no code.
+   * The method's CodeAttribute. This contains the bytecodes (instructions) of the method as well as
+   * additional information about the bytecodes. May be null if the method has no code.
    *
    * <p>Several fields of CodeAttribute are declared as fields of MethodGen24 to better model BCEL's
    * version of MethodGen and to reduce re-computation. Note that we set these fields in the
@@ -78,11 +96,15 @@ public class MethodGen24 {
    */
   private @Nullable CodeAttribute codeAttribute;
 
-  /** The method's maximum number of locals. */
+  // Start of CodeAttribute items.
+
+  /** The method's maximum number of local slots. */
   private int maxLocals;
 
   /** The method's maximum stack size. */
   private int maxStack;
+
+  // End of CodeAttribute items.
 
   /** The name of the method's enclosing class, in binary name format. */
   private @BinaryName String className;
@@ -104,13 +126,13 @@ public class MethodGen24 {
   /**
    * The method's signature. This is a String that encodes type information about a (possibly
    * generic) method declaration. It describes any type parameters of the method; the (possibly
-   * parameterized) types of any formal parameters; the (possibly parameterized) return type, if
+   * parameterized) types of any formal parameters; and the (possibly parameterized) return type, if
    * any. It is not a true method signature as documented in the Java Virtual Machine Specification
    * as it does not include the types of any exceptions declared in the method's throws clause.
    */
   private @MethodDescriptor String signature;
 
-  // Information extracted from {@code mtd}, the MethodTypeDescriptor.
+  // The next two items are extracted from {@link mtd}, the MethodTypeDescriptor.
   /** The method's parameter types. */
   private ClassDesc[] paramTypes;
 
@@ -127,19 +149,22 @@ public class MethodGen24 {
    * The method's local variable table. Often modified by clients, normally to add additional local
    * variables needed for instrumentation.
    */
-  protected List<LocalVariable> localsTable;
+  public List<LocalVariable> localsTable;
 
   /** ConstantPool builder for entire class. */
   // TODO: Should uses of this be synchronized?
   private ConstantPoolBuilder poolBuilder;
 
-  /** Variables used for processing the current method. */
-  protected static class MInfo24 {
+  /** Information about the current method. */
+  public static class MInfo24 {
 
     /** The index of this method in SharedData.methods. */
     public final int method_info_index;
 
-    /** Next available slot in localsTable, currently always = max locals. */
+    /**
+     * Next available slot in localsTable, user is expected to maintain and update maxLocals as
+     * needed.
+     */
     public int nextLocalIndex;
 
     /**
@@ -153,10 +178,13 @@ public class MethodGen24 {
     /** Label for first byte code of method, used to give new locals method scope. */
     public final Label startLabel;
 
-    /** Label for last byte code of method, used to give new locals method scope. */
+    /** Label for last byte code of method. Used when creating a new method-scope local variable. */
     public final Label endLabel;
 
-    /** Label for start of original code, post insertion of entry instrumentation. */
+    /**
+     * Label for start of original code, post insertion of entry instrumentation. Used when creating
+     * a new method-scope local variable.
+     */
     public Label entryLabel;
 
     /**
@@ -175,7 +203,7 @@ public class MethodGen24 {
      * Creates a MInfo24.
      *
      * @param method_info_index the index of the method in SharedData.methods
-     * @param nextLocalIndex next available slot in localsTable, currently always = max locals
+     * @param nextLocalIndex next available slot in localsTable, user should set to maxLocals
      * @param codeBuilder a CodeBuilder
      */
     public MInfo24(int method_info_index, int nextLocalIndex, CodeBuilder codeBuilder) {
@@ -221,7 +249,7 @@ public class MethodGen24 {
       this.codeList = cl;
     } else {
       this.code = null;
-      this.codeList = new ArrayList<>();
+      this.codeList = Collections.emptyList();
     }
 
     Optional<CodeAttribute> ca = methodModel.findAttribute(Attributes.code());
@@ -239,17 +267,12 @@ public class MethodGen24 {
 
     Optional<SignatureAttribute> sa = methodModel.findAttribute(Attributes.signature());
     if (sa.isPresent()) {
-      @SuppressWarnings("signature") // JDK 24 is not annotated as yet
       @MethodDescriptor String signature1 = sa.get().signature().stringValue();
       signature = signature1;
     } else {
       // If no signature then probably no type arguments, so descriptor will do.
       signature = descriptor;
     }
-
-    mtd = methodModel.methodTypeSymbol();
-    paramTypes = mtd.parameterArray();
-    returnType = mtd.returnType();
 
     // Set up the localsTable.
     localsTable = new ArrayList<>();
@@ -269,20 +292,237 @@ public class MethodGen24 {
     localsTable.sort(Comparator.comparing(LocalVariable::slot));
     origLocalVariables = localsTable.toArray(new LocalVariable[localsTable.size()]);
 
-    // System.out.println("locals:" + Arrays.toString(origLocalVariables));
-    // System.out.println("types:" + Arrays.toString(paramTypes));
-    // System.out.println("length: " + paramTypes.length + ", offset: " + offset);
+    poolBuilder = classBuilder.constantPool();
 
-    paramNames = new String[paramTypes.length];
-    int offset = isStatic ? 0 : 1;
-    for (int i = 0; i < paramTypes.length; i++) {
-      if ((offset + i) < origLocalVariables.length) {
-        @Identifier String paramName = origLocalVariables[offset + i].name().stringValue();
-        paramNames[i] = paramName;
+    // Set up the parameter types and names.
+    mtd = methodModel.methodTypeSymbol();
+    returnType = mtd.returnType();
+    paramTypes = getParamTypes();
+    paramNames = getParamNames();
+  }
+
+  /**
+   * Creates a MethodGen24 object for a new method created by DCInstrument24.
+   *
+   * @param className the containing class, in binary name format
+   * @param classBuilder for the class
+   * @param methodName for the method
+   * @param accessFlagsMask for the method
+   * @param mtd MethodTypeDescriptor for the method
+   * @param instructions instruction list for the method
+   * @param maxStack for the method
+   * @param maxLocals for the method
+   */
+  public MethodGen24(
+      final @BinaryName String className,
+      ClassBuilder classBuilder,
+      final @Identifier String methodName,
+      final int accessFlagsMask,
+      final MethodTypeDesc mtd,
+      List<CodeElement> instructions,
+      int maxStack,
+      int maxLocals) {
+
+    this.className = className;
+    this.accessFlagsMask = accessFlagsMask;
+    this.methodName = methodName;
+    this.mtd = mtd;
+    @MethodDescriptor String descriptor1 = mtd.descriptorString();
+    descriptor = descriptor1;
+    signature = descriptor;
+    code = null;
+    codeList = instructions;
+    codeAttribute = null;
+    this.maxStack = maxStack;
+    this.maxLocals = maxLocals;
+    isStatic = (accessFlagsMask & ClassFile.ACC_STATIC) != 0;
+
+    // Create an empty localsTable. This will be filled in when InstrumentCode calls fixLocals.
+    localsTable = new ArrayList<>();
+    origLocalVariables = localsTable.toArray(new LocalVariable[localsTable.size()]);
+
+    poolBuilder = classBuilder.constantPool();
+
+    returnType = mtd.returnType();
+    paramTypes = getParamTypes();
+    paramNames = getParamNames();
+  }
+
+  /**
+   * Returns the value for the {@link #paramTypes} field. Intended to be called only once, from the
+   * constructor.
+   *
+   * @return the value for the {@link #paramTypes} field
+   */
+  @RequiresNonNull({"mtd", "methodName", "origLocalVariables", "className"})
+  private ClassDesc[] getParamTypes(@UnderInitialization(Object.class) MethodGen24 this) {
+    ClassDesc[] result = mtd.parameterArray();
+
+    // java.lang.classfile seems to be inconsistent with the parameter types
+    // of an inner class constructor. It may optimize away the hidden 'this$0'
+    // parameter, but it does not remove the corresponding entry from the
+    // parameterArray().  In order to correctly derive the names of the
+    // parameters I need to detect this special case and remove the
+    // incorrect entry from the parameterArray(). This check is ugly.
+    if (methodName.equals("<init>") && result.length > 0 && origLocalVariables.length > 1) {
+      int dollarPos = className.lastIndexOf("$");
+      @FieldDescriptor String arg0Fd = result[0].descriptorString();
+      String arg0Type = Instrument24.convertDescriptorToFqBinaryName(arg0Fd);
+      // Note for tests below: first local will always be 'this'.
+      if (dollarPos >= 0
+          &&
+          // see if type of first parameter is classname up to the "$"
+          className.substring(0, dollarPos).equals(arg0Type)
+          &&
+          // don't change if second local is in slot 2
+          !(origLocalVariables[1].slot() == 2)
+          &&
+          // don't change if type of first param matches type of second local
+          !origLocalVariables[1].typeSymbol().equals(result[0])
+          &&
+          // don't change result if 'this$0' is present
+          !origLocalVariables[1].name().stringValue().equals("this$0")) {
+        // some need some don't. what is difference?
+        // remove first param type so consistent with other methods
+        ClassDesc[] newArray = new ClassDesc[result.length - 1];
+        System.arraycopy(result, 1, newArray, 0, result.length - 1);
+        result = newArray;
       }
     }
 
-    poolBuilder = classBuilder.constantPool();
+    return result;
+  }
+
+  /**
+   * Returns the value for the {@link #paramNames} field. Intended to be called only once, from the
+   * constructor.
+   *
+   * @return the value for the {@link #paramNames} field
+   */
+  @RequiresNonNull({"mtd", "paramTypes", "origLocalVariables"})
+  private @Identifier String[] getParamNames(@UnderInitialization(Object.class) MethodGen24 this) {
+
+    // These initial values for {@code paramNames} may be incorrect.  They could
+    // be altered in {@code fixLocals}.
+    @Identifier String[] result = new String[paramTypes.length];
+
+    int pIndex = 0;
+    int lIndex = isStatic ? 0 : 1;
+    int slot = isStatic ? 0 : 1;
+    int lLen = origLocalVariables.length; // we may add dummy param names
+
+    while (pIndex < paramTypes.length) {
+      if ((lIndex >= origLocalVariables.length)
+          || (pIndex >= lLen)
+          || (origLocalVariables[lIndex].slot() != slot)) {
+        result[pIndex] = "param" + slot;
+      } else {
+        // UNDONE: should we assert type of paramTypes[pIndex] == type of
+        // origLocalVariables[lindex]?
+        @Identifier String paramName = origLocalVariables[lIndex].name().stringValue();
+        result[pIndex] = paramName;
+        lIndex++;
+        lLen++; // pretend there is one more local
+      }
+      slot += TypeKind.from(paramTypes[pIndex]).slotSize();
+      pIndex++;
+    }
+
+    return result;
+  }
+
+  /**
+   * Due to Java compiler optimizations, unused parameters may not be included in the local
+   * variables. Some of DynComp's instrumentation requires their presence. This routine makes these
+   * changes, if necessary:
+   *
+   * <ul>
+   *   <li>ensures every parameter has a corresponding LocalVariable with matching slot and name
+   *   <li>may insert dummy alignN entries for 2-slot parameters
+   *   <li>resorts localsTable by slot when modified
+   * </ul>
+   *
+   * @param minfo MInfo24 object for current method
+   * @return true if modified localsTable, false otherwise
+   */
+  public boolean fixLocals(MInfo24 minfo) {
+    boolean modified = false;
+    // If this is a native method the
+    // localsTable may not exist.  We may need to add a 'this' pointer.
+    if ((localsTable.size() == 0) && !isStatic) {
+      ClassDesc thisDesc = ClassDesc.of(className);
+      LocalVariable newVar =
+          LocalVariable.of(0, "this", thisDesc, minfo.startLabel, minfo.endLabel);
+      localsTable.add(newVar);
+      modified = true;
+    }
+
+    int lBase = isStatic ? 0 : 1;
+    int slot = isStatic ? 0 : 1;
+    int pLen = paramTypes.length; // we may add dummy params
+    int lIndex = lBase;
+    for (int pIndex = 0; pIndex < pLen; pIndex++) {
+      if (lIndex >= origLocalVariables.length) {
+        // more parameters than locals; need to add a LocalVariable for this parameter
+        LocalVariable newVar =
+            LocalVariable.of(
+                slot, paramNames[pIndex], paramTypes[pIndex], minfo.startLabel, minfo.endLabel);
+        localsTable.add(newVar);
+        modified = true;
+      } else if (slot != origLocalVariables[lIndex].slot()) {
+        // we have an alignment gap or missing local
+        if ((TypeKind.from(paramTypes[pIndex]).slotSize() == 2)
+            && paramTypes[pIndex].equals(origLocalVariables[lIndex].typeSymbol())) {
+          // has to have length 2 otherwise slot would be equal
+          // we have an alignment gap
+          // insert a dummy entry into the param tables
+          int newLen = paramTypes.length + 1;
+          ClassDesc[] newTypes = new ClassDesc[newLen];
+          @Identifier String[] newNames = new String[newLen];
+          System.arraycopy(paramTypes, 0, newTypes, 0, pIndex);
+          System.arraycopy(paramNames, 0, newNames, 0, pIndex);
+          newTypes[pIndex] = CD_Object; // good as any for dummy
+          newNames[pIndex] = "align" + pIndex;
+          System.arraycopy(paramTypes, pIndex, newTypes, pIndex + 1, paramTypes.length - pIndex);
+          System.arraycopy(paramNames, pIndex, newNames, pIndex + 1, paramTypes.length - pIndex);
+          paramTypes = newTypes;
+          paramNames = newNames;
+          pLen++; // we've added a new param; will create corresponding local below
+        }
+        // create an alignment temp or a local that compiler has optimized out
+        LocalVariable newVar =
+            LocalVariable.of(
+                slot, paramNames[pIndex], paramTypes[pIndex], minfo.startLabel, minfo.endLabel);
+        localsTable.add(newVar);
+        lIndex--; // we've added an alignment local or missing local, we need to visit current local
+        // again
+        modified = true;
+      }
+      slot += TypeKind.from(paramTypes[pIndex]).slotSize();
+      lIndex++;
+    }
+
+    // UNDONE: do we need to check for alignment gaps in locals after the parameters?
+
+    // If we added locals, then table is no longer sorted by slot.
+    if (modified) {
+      localsTable.sort(Comparator.comparing(LocalVariable::slot));
+    }
+
+    // Now that we have updated and/or corrected the locals table, the paramNames
+    // may need to be updated.
+    for (int pIndex = 0; pIndex < paramTypes.length; pIndex++) {
+      lIndex = lBase + pIndex;
+      if (lIndex < localsTable.size()) {
+        @Identifier String localName = localsTable.get(lIndex).name().stringValue();
+        if (!paramNames[pIndex].equals(localName)) {
+          paramNames[pIndex] = localName;
+          modified = true;
+        }
+      }
+    }
+
+    return modified;
   }
 
   /**
@@ -292,6 +532,38 @@ public class MethodGen24 {
    */
   public int getAccessFlagsMask() {
     return accessFlagsMask;
+  }
+
+  /**
+   * Returns true if the method is a constructor.
+   *
+   * @return true iff the method is a constructor
+   */
+  public final boolean isConstructor() {
+    return methodName.equals("<init>");
+  }
+
+  /**
+   * Returns true if the method is a class initializer.
+   *
+   * @return true iff the method is a class initializer
+   */
+  public final boolean isClinit() {
+    return methodName.equals("<clinit>");
+  }
+
+  /**
+   * Returns true if this is a standard main method (static, void, name is "main", and one formal
+   * parameter: a string array).
+   *
+   * @return true iff the method is a main method
+   */
+  public final boolean isMain() {
+    return isStatic
+        && returnType.equals(CD_void)
+        && methodName.equals("main")
+        && (paramTypes.length == 1)
+        && paramTypes[0].equals(CD_String.arrayType(1));
   }
 
   /**
@@ -341,6 +613,16 @@ public class MethodGen24 {
   }
 
   /**
+   * Set the parameter names. The user must ensure that the length of paramNames equals the length
+   * of paramTypes.
+   *
+   * @param paramNames the new paramNames array
+   */
+  public void setParameterNames(final @Identifier String[] paramNames) {
+    this.paramNames = paramNames;
+  }
+
+  /**
    * Returns the type of the ith parameter.
    *
    * @param i which parameter's type is requested
@@ -360,6 +642,16 @@ public class MethodGen24 {
   }
 
   /**
+   * Set the parameter types. The user must ensure that the length of paramNames equals the length
+   * of paramTypes.
+   *
+   * @param paramTypes the new paramTypes array
+   */
+  public void setParameterTypes(final ClassDesc[] paramTypes) {
+    this.paramTypes = paramTypes;
+  }
+
+  /**
    * Returns the original local variable table. In most cases, instrumentation code should use the
    * {@code localsTable} instead.
    *
@@ -367,6 +659,16 @@ public class MethodGen24 {
    */
   public LocalVariable[] getOriginalLocalVariables() {
     return origLocalVariables.clone();
+  }
+
+  /**
+   * Set the original local variable table. This method is only used when DCInstrument24 creates a
+   * new user method.
+   *
+   * @param locals the new original local variable table
+   */
+  public void setOriginalLocalVariables(LocalVariable[] locals) {
+    origLocalVariables = locals.clone();
   }
 
   /**
@@ -398,6 +700,15 @@ public class MethodGen24 {
   }
 
   /**
+   * Set the maximum number of locals.
+   *
+   * @param size the maximum number of locals
+   */
+  public void setMaxLocals(int size) {
+    maxLocals = size;
+  }
+
+  /**
    * Returns the maximum stack size.
    *
    * @return the maximum stack size
@@ -419,7 +730,7 @@ public class MethodGen24 {
   /**
    * Returns the signature for the current method. This is a String that encodes type information
    * about a (possibly generic) method declaration. It describes any type parameters of the method;
-   * the (possibly parameterized) types of any formal parameters; the (possibly parameterized)
+   * the (possibly parameterized) types of any formal parameters; and the (possibly parameterized)
    * return type, if any.
    *
    * @return signature for the current method
@@ -446,37 +757,90 @@ public class MethodGen24 {
     return poolBuilder;
   }
 
-  // Not sure we need this
-  //  public void setInstructionList(List<CodeElement> il) {
-  //     codeList = il;
-  //  }
-
-  // need to fancy up!
-  @Override
-  public final String toString(@GuardSatisfied MethodGen24 this) {
-    return methodName;
+  /**
+   * Set the method's instruction list. Used to add instruction list to our native code wrapper.
+   *
+   * @param il the instruction list
+   */
+  public void setInstructionList(List<CodeElement> il) {
+    codeList = il;
   }
 
-  /*
-     @Override
-     public final String toString() {
-         final String access = Utility.accessToString(super.getAccessFlags());
-         String signature = Type.getMethodSignature(super.getType(), paramTypes);
-         signature = Utility.methodSignatureToString(signature, super.getName(), access, true, getLocalVariableTable(super.getConstantPool()));
-         final StringBuilder buf = new StringBuilder(signature);
-         for (final Attribute a : getAttributes()) {
-             if (!(a instanceof Code || a instanceof ExceptionTable)) {
-                 buf.append(" [").append(a).append("]");
-             }
-         }
+  /**
+   * Returns string representation close to declaration format, 'public static void main(String[])',
+   * e.g.
+   *
+   * @return String representation of the method declaration.
+   */
+  @Override
+  public final String toString(@GuardSatisfied MethodGen24 this) {
+    StringBuilder result = new StringBuilder(getAccess(accessFlagsMask));
+    result.append(returnType.equals(CD_void) ? "void" : convertClassDesc(returnType));
+    result.append(" " + methodName + "(");
+    if (paramTypes.length > 0) {
+      for (int i = 0; i < paramTypes.length; i++) {
+        String paramType = convertClassDesc(paramTypes[i]);
+        if ((accessFlagsMask & ClassFile.ACC_VARARGS) != 0 && (i == (paramTypes.length - 1))) {
+          paramType = paramType.replace("[]", "...");
+        }
+        result.append(paramType + " " + paramNames[i] + ", ");
+      }
+      result.setLength(result.length() - 2); // remove last ", "
+    }
+    result.append(")");
+    return result.toString();
+  }
 
-         if (!throwsList.isEmpty()) {
-             for (final String throwsDescriptor : throwsList) {
-                 buf.append("\n\t\tthrows ").append(throwsDescriptor);
-             }
-         }
-         return buf.toString();
-     }
-  */
+  /**
+   * Returns a string representation of a ClassDesc. It is a fully-qualified binary name, except
+   * that any leading "java.lang." is removed.
+   *
+   * @param type the ClassDesc to translate
+   * @return the class name, without
+   */
+  private @FqBinaryName String convertClassDesc(@GuardSatisfied MethodGen24 this, ClassDesc type) {
+    @FieldDescriptor String arg0Fd = type.descriptorString();
+    String result = daikon.chicory.Instrument24.convertDescriptorToFqBinaryName(arg0Fd);
+    if (result.startsWith("java.lang.")) {
+      @SuppressWarnings("signature:assignment") // string manipulation
+      @FqBinaryName String truncated = result.replace("java.lang.", "");
+      return truncated;
+    }
+    return result;
+  }
 
+  /**
+   * Returns a string representation of a method's access flags.
+   *
+   * @param accessFlagsMask some access flags.
+   * @return a space-separated string of access modifier keywords
+   */
+  private String getAccess(@GuardSatisfied MethodGen24 this, final int accessFlagsMask) {
+    StringBuilder result = new StringBuilder();
+    if ((accessFlagsMask & ClassFile.ACC_PUBLIC) != 0) {
+      result.append("public ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_PRIVATE) != 0) {
+      result.append("private ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_PROTECTED) != 0) {
+      result.append("protected ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_ABSTRACT) != 0) {
+      result.append("abstract ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_STATIC) != 0) {
+      result.append("static ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_FINAL) != 0) {
+      result.append("final ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_SYNCHRONIZED) != 0) {
+      result.append("synchronized ");
+    }
+    if ((accessFlagsMask & ClassFile.ACC_NATIVE) != 0) {
+      result.append("native ");
+    }
+    return result.toString();
+  }
 }
