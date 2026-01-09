@@ -2180,8 +2180,8 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * If on, returns an ArrayList of Strings that converts the usual DVInfo.toString() output to a
-   * more readable form.
+   * Returns an ArrayList of Strings that converts the usual DVInfo.toString() output to a more
+   * readable form.
    *
    * <p>e.g. "daikon.chicory.ParameterInfo:foo" becomes "Parameter foo"
    *
@@ -2199,11 +2199,20 @@ public final class DCRuntime implements ComparabilityProvider {
     return o;
   }
 
+  /**
+   * If {@code on} is false, returns {@code dv.toString()}. If {@code on} is true, returns a more
+   * readable form.
+   *
+   * @param dv a Daikon variable
+   * @param on value of daikon.Daikon.abridger_vars
+   * @return a readable version of {@code dv}
+   */
   private static String skinnyOutput(DaikonVariableInfo dv, boolean on) {
     if (!on) {
       return dv.toString();
     }
     String dvtxt = dv.toString();
+    // TODO: The `toString()` output format has changed; this code might be incorrect now.
     String type = dvtxt.split(":")[0];
     type = type.substring(type.lastIndexOf('.') + 1);
     String name = dvtxt.split(":")[1];
