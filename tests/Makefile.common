@@ -503,7 +503,7 @@ $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-ti
 	@echo
 	@echo "### Run Chicory (${PROJECT_FILE})"
 	@echo
-	comparability_file=$(PROJECT_FILE).decls-DynComp
+	export comparability_file=$(PROJECT_FILE).decls-DynComp && \
 	export LD_LIBRARY_PATH=$(PROJECT) && \
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 	  --dtrace-file=$(PROJECT_FILE).dtrace.gz \
