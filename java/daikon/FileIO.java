@@ -1048,12 +1048,13 @@ public final class FileIO {
         if (dkconfig_continue_after_file_exception) {
           System.out.println();
           System.out.println(
-              "WARNING: Error while processing trace file; remaining records ignored.");
-          System.out.print("Ignored backtrace:");
+              "WARNING: Error while processing trace file %s; remaining records ignored.%n",
+              filename);
+          System.out.println("Ignored backtrace:");
           e.printStackTrace(System.out);
           System.out.println();
         } else {
-          throw e;
+          throw new Error("Error while processing trace file " + filename);
         }
       }
     }
@@ -1367,7 +1368,7 @@ public final class FileIO {
 
       boolean is_url = raw_filename.startsWith("file:") || raw_filename.startsWith("jar:");
 
-      // Do we need to count the lines in the file?
+      // Counting the lines in the file is only for progress messages.
       total_lines = 0;
       boolean count_lines = dkconfig_count_lines;
       if (is_decl_file) {
@@ -1388,7 +1389,11 @@ public final class FileIO {
 
       if (count_lines) {
         Daikon.progress = "Checking size of " + filename;
-        total_lines = FilesPlume.countLines(raw_filename);
+        try {
+          total_lines = FilesPlume.countLines(raw_filename);
+        } catch (Throwable t) {
+          // There is nothing to do, because `total_lines` was already set to 0.
+        }
       } else {
         // System.out.printf("no count %b %d %s %d %d%n", is_decl_file,
         //                    dkconfig_dtrace_line_count, filename,
