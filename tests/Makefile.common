@@ -510,7 +510,7 @@ $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-ti
 	  --comparability-file=$(CWD)/${comparability_file} \
 	  --ppt-select-pattern='$(INST_FILES)' ${JUNIT} ${MAIN_CLASS} ${MAIN_ARGS}
 	if [ ! -s "$comparability_file" ]; then \
-	  echo "File is empty or does not exist: $(CWD)/${COMPARABILITY_FILE}"; \
+	  echo "File is empty or does not exist: $(CWD)/${comparability_file}"; \
 	  false
 	fi
 	touch $(SCRATCH_FOR_DAIKON)/.run-timestamp

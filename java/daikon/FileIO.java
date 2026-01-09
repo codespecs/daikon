@@ -1392,7 +1392,7 @@ public final class FileIO {
         try {
           total_lines = FilesPlume.countLines(raw_filename);
         } catch (Throwable t) {
-          // There is nothing to do, because `total_lines` was already set to 0.
+          // There is no need to set `total_lines`, because it was initialized to 0.
         }
       } else {
         // System.out.printf("no count %b %d %s %d %d%n", is_decl_file,
