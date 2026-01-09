@@ -1054,7 +1054,7 @@ public final class FileIO {
           e.printStackTrace(System.out);
           System.out.println();
         } else {
-          throw new Error("Error while processing trace file " + filename);
+          throw new Error("Error while processing trace file " + filename, e);
         }
       }
     }
@@ -1391,7 +1391,7 @@ public final class FileIO {
         Daikon.progress = "Checking size of " + filename;
         try {
           total_lines = FilesPlume.countLines(raw_filename);
-        } catch (Throwable t) {
+        } catch (IOException t) {
           // There is no need to set `total_lines`, because it was initialized to 0.
         }
       } else {
