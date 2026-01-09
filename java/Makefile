@@ -168,7 +168,7 @@ endif
 
 ifeq (${JAVA8}, 1)
 dummy := $(shell cp -pf daikon/config/InvariantDoclet.java8 daikon/config/InvariantDoclet.java)
-dummy := $(shell cp -pf daikon/config/InvariantDoclet.java8 daikon/config/InvariantDoclet.java)
+dummy := $(shell cp -pf daikon/config/ParameterDoclet.java8 daikon/config/ParameterDoclet.java)
 else
 dummy := $(shell cp -pf daikon/config/InvariantDoclet.java11 daikon/config/InvariantDoclet.java)
 dummy := $(shell cp -pf daikon/config/ParameterDoclet.java11 daikon/config/ParameterDoclet.java)
