@@ -2180,8 +2180,9 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * Returns an ArrayList of Strings that converts the usual DVInfo.toString() output to a more
-   * readable form. Just uses DVInfo.toString if {@code on} is false.
+   * If {@code on} is true, returns an ArrayList of Strings that converts the usual
+   * DVInfo.toString() output to a more readable form. Just uses DVInfo.toString if {@code on} is
+   * false.
    *
    * <p>e.g. "daikon.chicory.ParameterInfo:foo" becomes "Parameter foo"
    *
