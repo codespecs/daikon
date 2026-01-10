@@ -2257,11 +2257,12 @@ public final class DCRuntime implements ComparabilityProvider {
      *
      * @return a multi-line representation of the list of variables
      */
+    @SuppressWarnings("UnusedMethod") // TEMPORARY
     String toStringWithIdentityHashCode() {
       StringJoiner result = new StringJoiner(System.lineSeparator());
       result.add("DVSet(");
       for (DaikonVariableInfo dvi : this) {
-        result.add(String.format("  " + dvi.toStringWithIdentityHashCode()));
+        result.add("  " + dvi.toStringWithIdentityHashCode());
       }
       result.add("  )");
       return result.toString();
