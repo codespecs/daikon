@@ -3987,7 +3987,7 @@ public class PptTopLevel extends Ppt {
   public void merge_invs_one_child() {
 
     if (debugStdout) {
-      System.out.printf("merge_invs_one_child " + this);
+      System.out.println("merge_invs_one_child " + this);
     }
 
     assert views.isEmpty();

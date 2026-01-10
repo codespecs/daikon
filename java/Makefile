@@ -756,8 +756,10 @@ endif
 # See version numbers at https://github.com/google/error-prone/releases
 # and https://errorprone.info/docs/installation.
 # Only run under Java 21+.
-error-prone-version := 2.42.0
-extra-error-prone-args-1 := --should-stop=ifError=FLOW
+error-prone-version := 2.46.0
+# "-XDaddTypeAnnotationsToSymbol=true" is only required under exactly Java 21,
+# but it's harmless (has no effect) on later versions of Java.
+extra-error-prone-args-1 := --should-stop=ifError=FLOW -XDaddTypeAnnotationsToSymbol=true
 
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-${error-prone-version}-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.49.3-eisop1.jar
 
