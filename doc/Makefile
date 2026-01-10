@@ -4,6 +4,7 @@ all-except-pdf: config-options.texinfo invariants-doc.texinfo html-chap html
 TEXI2HTML ?= makeinfo --html
 
 HTMLTOOLS ?= ../utils/html-tools
+CRONIC ?= ../utils/plume-scripts/cronic
 
 daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo
 # Large split size fixes an apparent bug in makeinfo 4.11:
@@ -89,7 +90,7 @@ html-chap: daikon/index.html developer/index.html
 # pathnames become incorrect.  We need to copy them over ourselves.
 daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg ../utils/html-tools
 	rm -rf daikon/*
-	${TEXI2HTML} --split=chapter -o daikon $<
+	${CRONIC} ${TEXI2HTML} --split=chapter -o daikon $<
 	# Fixup 'bad' href(s) inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' daikon/index.html
 	perl -pi -e 's|href="CHANGELOG.md"|href="../CHANGELOG.md"|;' daikon/*.html
@@ -100,7 +101,7 @@ daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 
 developer/index.html: developer.texinfo ../utils/html-tools
 	rm -rf developer/*
-	${TEXI2HTML} --split=chapter -o developer $<
+	${CRONIC} ${TEXI2HTML} --split=chapter -o developer $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' developer/index.html
 	mkdir developer/images
@@ -111,10 +112,10 @@ developer/index.html: developer.texinfo ../utils/html-tools
 pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
 
 daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo
-	makeinfo --pdf $<
+	${CRONIC} makeinfo --pdf $<
 
 developer.pdf: developer.texinfo
-	makeinfo --pdf $<
+	${CRONIC} makeinfo --pdf $<
 
 # Note that the clean target does not remove invariants-doc.texinfo or
 # config-options.texinfo.
