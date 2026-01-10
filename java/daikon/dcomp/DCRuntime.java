@@ -2309,7 +2309,7 @@ public final class DCRuntime implements ComparabilityProvider {
         new IdentityHashMap<DaikonVariableInfo, DVSet>();
 
     for (DaikonVariableInfo dv : root) {
-      add_variable_quietly(sets, dv);
+      add_variable(sets, dv);
     }
     map_info.log("sets size: %d%n", sets.size());
 
@@ -2530,38 +2530,11 @@ public final class DCRuntime implements ComparabilityProvider {
     debug_merge_comp.exdent();
   }
 
-  // TODO: Is this "noisy" version of add_variable useful?  Or should it never be used?  (I suspect
-  // the latter...)
   /**
    * Adds this daikon variable and all of its children into their appropriate sets (those of their
    * leader) in sets.
    */
   static void add_variable(Map<DaikonVariableInfo, DVSet> sets, DaikonVariableInfo dv) {
-    add_variable(sets, dv, false);
-  }
-
-  /**
-   * Adds this daikon variable and all of its children into their appropriate sets (those of their
-   * leader) in sets.
-   *
-   * <p>Does no logging, so can be called in logging code itself.
-   */
-  static void add_variable_quietly(Map<DaikonVariableInfo, DVSet> sets, DaikonVariableInfo dv) {
-    add_variable(sets, dv, true);
-  }
-
-  /**
-   * Adds this daikon variable and all of its children into their appropriate sets (those of their
-   * leader) in sets.
-   */
-  private static void add_variable(
-      Map<DaikonVariableInfo, DVSet> sets, DaikonVariableInfo dv, boolean noLogging) {
-
-    if (!noLogging) {
-      debug_merge_comp.log(
-          "add_variable(%s) declShouldPrint=%s%n",
-          dv.toStringWithIdentityHashCode(), dv.declShouldPrint());
-    }
 
     // Add this variable into the set of its leader
     if (dv.declShouldPrint()) {
@@ -2572,7 +2545,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
     // Process the children
     for (DaikonVariableInfo child : dv) {
-      add_variable(sets, child, noLogging);
+      add_variable(sets, child);
     }
   }
 
