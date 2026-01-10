@@ -2181,7 +2181,7 @@ public final class DCRuntime implements ComparabilityProvider {
 
   /**
    * Returns an ArrayList of Strings that converts the usual DVInfo.toString() output to a more
-   * readable form.
+   * readable form. Just uses DVInfo.toString if {@code on} is false.
    *
    * <p>e.g. "daikon.chicory.ParameterInfo:foo" becomes "Parameter foo"
    *
@@ -2199,9 +2199,10 @@ public final class DCRuntime implements ComparabilityProvider {
     return o;
   }
 
+  // TODO: This should be a method of DaikonVariableInfo.
   /**
    * If {@code on} is false, returns {@code dv.toString()}. If {@code on} is true, returns a more
-   * readable form.
+   * readable and informative string.
    *
    * @param dv a Daikon variable
    * @param on value of daikon.Daikon.abridger_vars
@@ -2211,15 +2212,12 @@ public final class DCRuntime implements ComparabilityProvider {
     if (!on) {
       return dv.toString();
     }
-    String dvtxt = dv.toString();
-    // TODO: The `toString()` output format has changed; this code might be incorrect now.
-    String type = dvtxt.split(":")[0];
-    type = type.substring(type.lastIndexOf('.') + 1);
-    String name = dvtxt.split(":")[1];
+    String type = dv.getClass().getName();
+    String name = dv.getName();
     if (type.equals("ThisObjInfo")) {
-      dvtxt = "this";
+      return "this";
     } else if (type.equals("ReturnInfo")) {
-      dvtxt = "return";
+      return "return";
     } else if (type.endsWith("Info")) {
       type = type.substring(0, type.length() - 4);
       if (name.endsWith(DaikonVariableInfo.class_suffix)) {
@@ -2232,9 +2230,10 @@ public final class DCRuntime implements ComparabilityProvider {
           type = (type + " Field").trim();
         }
       }
-      dvtxt = type + " " + name;
+      return type + " " + name;
+    } else {
+      return type + ":" + name;
     }
-    return dvtxt;
   }
 
   /** Set of Daikon variables. Implements comparable on first DaikonVariable in each set. */

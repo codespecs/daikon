@@ -499,19 +499,19 @@ endif
 
 chicory: $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz
 $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-timestamp \
-									$(INST_LIST_FILE) $(CHICORY_EXEC)
+						$(INST_LIST_FILE) $(CHICORY_EXEC)
 	@echo
 	@echo "### Run Chicory (${PROJECT_FILE})"
 	@echo
+	if [ ! -s "$(CWD)/$(PROJECT_FILE).decls-DynComp" ]; then \
+	  echo "File is empty or does not exist: $(CWD)/$(PROJECT_FILE).decls-DynComp"; \
+	  false; \
+	fi
 	export LD_LIBRARY_PATH=$(PROJECT) && \
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 	  --dtrace-file=$(PROJECT_FILE).dtrace.gz \
 	  --comparability-file=$(CWD)/$(PROJECT_FILE).decls-DynComp \
 	  --ppt-select-pattern='$(INST_FILES)' ${JUNIT} ${MAIN_CLASS} ${MAIN_ARGS}
-	if [ ! -s "$(CWD)/$(PROJECT_FILE).decls-DynComp" ]; then \
-	  echo "File is empty or does not exist: $(CWD)/$(PROJECT_FILE).decls-DynComp"; \
-	  false
-	fi
 	touch $(SCRATCH_FOR_DAIKON)/.run-timestamp
 endif
 # end of "ifeq (generated,${TRACE_SOURCE})"
