@@ -38,6 +38,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -2249,6 +2250,21 @@ public final class DCRuntime implements ComparabilityProvider {
 
     void sort() {
       Collections.sort(this);
+    }
+
+    /**
+     * Returns a multi-line representation of the list of variables.
+     *
+     * @return a multi-line representation of the list of variables
+     */
+    String toStringWithIdentityHashCode() {
+      StringJoiner result = new StringJoiner(System.lineSeparator());
+      result.add("DVSet(");
+      for (DaikonVariableInfo dvi : this) {
+        result.add(String.format("  " + dvi.toStringWithIdentityHashCode()));
+      }
+      result.add("  )");
+      return result.toString();
     }
   }
 
