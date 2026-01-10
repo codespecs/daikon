@@ -208,7 +208,7 @@ public abstract class DaikonVariableInfo
    * @return a string representation of this node and its descandants
    */
   public String treeString() {
-    return getStringBuilder(new StringBuilder("--")).toString();
+    return getStringBuilder("--").toString();
   }
 
   /**
