@@ -1047,13 +1047,14 @@ public final class FileIO {
       } catch (Throwable e) {
         if (dkconfig_continue_after_file_exception) {
           System.out.println();
-          System.out.println(
-              "WARNING: Error while processing trace file; remaining records ignored.");
-          System.out.print("Ignored backtrace:");
+          System.out.printf(
+              "WARNING: Error while processing trace file %s; remaining records ignored.%n",
+              filename);
+          System.out.println("Ignored backtrace:");
           e.printStackTrace(System.out);
           System.out.println();
         } else {
-          throw e;
+          throw new Error("Error while processing trace file " + filename, e);
         }
       }
     }
@@ -1574,9 +1575,10 @@ public final class FileIO {
               throw new Daikon.UserError(e, data_trace_state);
             } else {
               System.out.println();
-              System.out.println(
-                  "WARNING: Error while processing trace file; subsequent records ignored.");
-              System.out.print("Ignored backtrace:");
+              System.out.printf(
+                  "WARNING: Error while processing trace file %s; remaining records ignored.%n",
+                  filename);
+              System.out.println("Ignored backtrace:");
               e.printStackTrace(System.out);
               System.out.println();
             }
