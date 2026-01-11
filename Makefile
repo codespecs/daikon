@@ -322,7 +322,7 @@ nightly-test-except-doc-pdf:
 	${MAKE} junit test
 
 # Code style; defines `style-check` and `style-fix`.
-CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir utils --exclude clustering.html
+CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude-dir .plume-scripts --exclude clustering.html
 ifeq (,$(wildcard .plume-scripts))
 dummy := $(shell git clone -q https://github.com/plume-lib/plume-scripts.git .plume-scripts)
 endif
@@ -624,9 +624,9 @@ daikon.jar: ${DAIKON_JAVA_FILES} $(patsubst %,java/%,${DAIKON_RESOURCE_FILES})
 # could make a distribution even if there were diffs in the current
 # checkout.
 daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
-	make doc-all
+	${MAKE} doc-all
 	# `make doc-all` just did the work, but check that the files exist.
-	make ${DOC_PATHS}
+	${MAKE} ${DOC_PATHS}
 	# keep same TMPDIR value
 	${MAKE} TMPDIR=${TMPDIR} daikon.jar
 
@@ -740,13 +740,13 @@ showvars::
 	@echo "NEW_RELEASE_NAME =" ${NEW_RELEASE_NAME}
 	${MAKE} -C java showvars
 
-update-libs:        update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts-in-utils update-run-google-java-format
+update-libs:        update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-plume-scripts-in-utils update-run-google-java-format
 # If .git does not exist, then the directory was created from a Daikon archive file.
 ifneq ($(shell ls ../.git 2>/dev/null),)
 	${MAKE} -C .. git-hooks
 endif
 
-.PHONY: update-libs update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts-in-utils update-run-google-java-format
+.PHONY: update-libs update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-plume-scripts-in-utils update-run-google-java-format
 
 # Unfortunately, I don't see a way for the below not to output lots of "remote:" lines to the log.
 # But, I can avoid doing local output.

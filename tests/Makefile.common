@@ -285,10 +285,10 @@ goal_name = \
 
 
 $(PRINT_INVARIANTS_CLASS):
-	make -C ${DAIKONDIR}/java
+	${MAKE} -C ${DAIKONDIR}/java
 
 $(CHICORY_EXEC):
-	make -C ${DAIKONDIR}/java
+	${MAKE} -C ${DAIKONDIR}/java
 
 # USER_DAIKON_OPTIONS is sometimes set in a Makefile.
 # PERSONAL_DAIKON_OPTIONS is never set by a checked-in Makefile; a user can
