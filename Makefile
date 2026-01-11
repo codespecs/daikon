@@ -624,9 +624,9 @@ daikon.jar: ${DAIKON_JAVA_FILES} $(patsubst %,java/%,${DAIKON_RESOURCE_FILES})
 # could make a distribution even if there were diffs in the current
 # checkout.
 daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
-	make doc-all
+	${MAKE} doc-all
 	# `make doc-all` just did the work, but check that the files exist.
-	make ${DOC_PATHS}
+	${MAKE} ${DOC_PATHS}
 	# keep same TMPDIR value
 	${MAKE} TMPDIR=${TMPDIR} daikon.jar
 
