@@ -1,6 +1,6 @@
 .PHONY: all default clean
-all default: config.yml
-# TODO: all default: config.yml config-daily.yml
+all default: config.yml validate
+# TODO: all default: config.yml config-daily.yml validate
 
 %: %.m4 defs.m4 ../.azure/jobs.m4
 	@chmod -f +w $@ || true
