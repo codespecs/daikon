@@ -64,10 +64,10 @@ daikon-fast: daikon.texinfo
 
 ## These two rules create the directories if absent but don't update them.
 ../.utils/html-tools:
-	make -C .. update-html-tools
+	${MAKE} -C .. update-html-tools
 
 ../.utils/plume-scripts:
-	make -C .. update-plume-scripts-in-utils
+	${MAKE} -C .. update-plume-scripts-in-utils
 
 .PHONY: daikon-html
 # Does the actual work
