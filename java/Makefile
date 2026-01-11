@@ -639,14 +639,14 @@ dyncomp-jdk-only dcomp-jdk-only :
 
 ## These two rules create the directories if absent but don't update them.
 ../utils/plume-scripts:
-	${MAKE} -C .. update-plume-scripts
+	${MAKE} -C .. update-plume-scripts-in-utils
 
 ../utils/html-tools:
 	${MAKE} -C .. update-html-tools
 
 .PHONY: update-plume-scripts
-update-plume-scripts:
-	${MAKE} -C .. update-plume-scripts
+update-plume-scripts-in-utils:
+	${MAKE} -C .. update-plume-scripts-in-utils
 
 # Checks that daikon.plumelib, rather than plume, is imported by source files
 # that do instrumentation.  Should also check that daikon.plumelib is never
@@ -1321,9 +1321,9 @@ requireJavadoc: ${JAVA_FILES}
 ../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
 	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS} \
-		--texinfo tmpfile \
+		--texinfo $@.tmp \
 		@javadoc-files.txt
-	mv -f tmpfile $@
+	mv -f $@.tmp $@
 	@rm -f javadoc-files.txt
 
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
@@ -1332,10 +1332,10 @@ requireJavadoc: ${JAVA_FILES}
 ../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
 	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS} \
-		--texinfo tmpfile \
+		--texinfo $@.tmp \
 		@javadoc-files.txt
 	perl -pi -e 's/&#64;cindex/\@cindex/g' tmpfile
-	mv -f tmpfile $@
+	mv -f $@.tmp $@
 	@rm -f javadoc-files.txt
 
 daikon/config/InvariantDoclet.class: daikon/config/InvariantDoclet.java

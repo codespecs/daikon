@@ -33,7 +33,7 @@ invariants-doc.texinfo:
 	${MAKE} -C ../java ../doc/invariants-doc.texinfo
 
 # Always remake config-options.texinfo
-# (We delegate to ../java/Makefile, which is more discerning)
+# (We delegate to ../java/Makefile, which is more discerning.)
 .PHONY : config-options.texinfo
 .PHONY : invariants-doc.texinfo
 endif
@@ -68,7 +68,7 @@ daikon-fast: daikon.texinfo
 	make -C .. update-html-tools
 
 ../utils/plume-scripts:
-	make -C .. update-plume-scripts
+	make -C .. update-plume-scripts-in-utils
 
 .PHONY: daikon-html
 # Does the actual work
