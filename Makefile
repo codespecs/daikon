@@ -322,8 +322,11 @@ nightly-test-except-doc-pdf:
 	${MAKE} junit test
 
 # Code style; defines `style-check` and `style-fix`.
-CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude clustering.html
-include ${PLUMESCRIPTS}/code-style.mak
+CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir utils --exclude clustering.html
+ifeq (,$(wildcard .plume-scripts))
+dummy := $(shell git clone -q https://github.com/plume-lib/plume-scripts.git .plume-scripts)
+endif
+include .plume-scripts/code-style.mak
 
 
 ### Tags
@@ -786,7 +789,7 @@ endif
 
 update-plume-scripts-in-utils:
 ifndef NONETWORK
-	if test -d ${PLUMESCRIPTS/.git ; then \
+	if test -d ${PLUMESCRIPTS}/.git ; then \
 	  (cd ${PLUMESCRIPTS} && (git pull -q || (sleep 1m && (git pull || true)))) \
 	elif ! test -d ${PLUMESCRIPTS} ; then \
 	  mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git ${PLUMESCRIPTS} || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git ${PLUMESCRIPTS})) \
