@@ -2213,12 +2213,14 @@ public final class DCRuntime implements ComparabilityProvider {
     if (!on) {
       return dv.toString();
     }
-    String type = dv.getClass().getName();
-    String name = dv.getName();
+    String dvtxt = dv.toString();
+    String type = dvtxt.split(":")[0];
+    type = type.substring(type.lastIndexOf('.') + 1);
+    String name = dvtxt.split(":")[1];
     if (type.equals("ThisObjInfo")) {
-      return "this";
+      dvtxt = "this";
     } else if (type.equals("ReturnInfo")) {
-      return "return";
+      dvtxt = "return";
     } else if (type.endsWith("Info")) {
       type = type.substring(0, type.length() - 4);
       if (name.endsWith(DaikonVariableInfo.class_suffix)) {
@@ -2231,10 +2233,9 @@ public final class DCRuntime implements ComparabilityProvider {
           type = (type + " Field").trim();
         }
       }
-      return type + " " + name;
-    } else {
-      return type + ":" + name;
+      dvtxt = type + " " + name;
     }
+    return dvtxt;
   }
 
   /** Set of Daikon variables. Implements comparable on first DaikonVariable in each set. */

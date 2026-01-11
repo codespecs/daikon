@@ -203,17 +203,7 @@ public abstract class DaikonVariableInfo
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied DaikonVariableInfo this) {
-    return name;
-  }
-
-  /**
-   * Returns a string representation of this node, with its identity hash code
-   *
-   * <p>This implementation returns its run-time class and its name.
-   */
-  @SideEffectFree
-  public String toStringWithIdentityHashCode(@GuardSatisfied DaikonVariableInfo this) {
-    return name + " [" + System.identityHashCode(this) + " " + getClass().getSimpleName() + "]";
+    return getClass().getName() + ":" + getName();
   }
 
   /**
