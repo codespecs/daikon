@@ -323,10 +323,7 @@ nightly-test-except-doc-pdf:
 
 # Code style; defines `style-check` and `style-fix`.
 CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude clustering.html
-ifeq (,$(wildcard .plume-scripts))
-dummy := $(shell git clone -q https://github.com/plume-lib/plume-scripts.git .plume-scripts)
-endif
-include .plume-scripts/code-style.mak
+include ${PLUMESCRIPTS}/code-style.mak
 
 
 ### Tags
@@ -376,7 +373,7 @@ test-staged-dist: ${STAGING_DIR}
 	(cd ${DISTTESTDIR}; mv ${NEW_RELEASE_NAME} daikon)
 	cd  ${MAKE} -C ${DISTTESTDIR}/daikon/java && junit
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
-	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print0 | xargs -0 -n 1 ../.utils/plume-scripts/classfile_check_version 52)
+	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print0 | xargs -0 -n 1 ${PLUMESCRIPTS}/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
 	(cd ${DISTTESTDIRJAVA}/daikon; rm `find . -name '*.class'`; ${MAKE} all_javac)
 	## Test that these new .class files work properly.
@@ -740,13 +737,13 @@ showvars::
 	@echo "NEW_RELEASE_NAME =" ${NEW_RELEASE_NAME}
 	${MAKE} -C java showvars
 
-update-libs:        update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-plume-scripts-in-utils update-run-google-java-format
+update-libs:        update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts-in-utils update-run-google-java-format
 # If .git does not exist, then the directory was created from a Daikon archive file.
 ifneq ($(shell ls ../.git 2>/dev/null),)
 	${MAKE} -C .. git-hooks
 endif
 
-.PHONY: update-libs update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-plume-scripts-in-utils update-run-google-java-format
+.PHONY: update-libs update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts-in-utils update-run-google-java-format
 
 # Unfortunately, I don't see a way for the below not to output lots of "remote:" lines to the log.
 # But, I can avoid doing local output.
@@ -780,19 +777,19 @@ endif
 
 update-html-tools:
 ifndef NONETWORK
-	if test -d .utils/html-tools/.git ; then \
-	  (cd .utils/html-tools && (git pull -q || (sleep 1m && (git pull || true)))) \
-	elif ! test -d .utils/html-tools ; then \
-	  (mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/html-tools.git .utils/html-tools || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/html-tools.git .utils/html-tools))) \
+	if test -d ${HTMLTOOLS}/.git ; then \
+	  (cd ${HTMLTOOLS} && (git pull -q || (sleep 1m && (git pull || true)))) \
+	elif ! test -d ${HTMLTOOLS} ; then \
+	  (mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/html-tools.git ${HTMLTOOLS} || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/html-tools.git ${HTMLTOOLS}))) \
 	fi
 endif
 
 update-plume-scripts-in-utils:
 ifndef NONETWORK
-	if test -d .utils/plume-scripts/.git ; then \
-	  (cd .utils/plume-scripts && (git pull -q || (sleep 1m && (git pull || true)))) \
-	elif ! test -d .utils/plume-scripts ; then \
-	  mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git .utils/plume-scripts || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git .utils/plume-scripts)) \
+	if test -d ${PLUMESCRIPTS/.git ; then \
+	  (cd ${PLUMESCRIPTS} && (git pull -q || (sleep 1m && (git pull || true)))) \
+	elif ! test -d ${PLUMESCRIPTS} ; then \
+	  mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git ${PLUMESCRIPTS} || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git ${PLUMESCRIPTS})) \
 	fi
 endif
 
