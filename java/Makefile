@@ -644,7 +644,7 @@ dyncomp-jdk-only dcomp-jdk-only :
 ../utils/html-tools:
 	${MAKE} -C .. update-html-tools
 
-.PHONY: update-plume-scripts
+.PHONY: update-plume-scripts-in-utils
 update-plume-scripts-in-utils:
 	${MAKE} -C .. update-plume-scripts-in-utils
 
