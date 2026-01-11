@@ -2296,8 +2296,6 @@ public final class DCRuntime implements ComparabilityProvider {
    *
    * <p>The sets are calculated by processing each daikon variable and adding it to a list
    * associated with the leader of that set.
-   *
-   * <p>This routine is only used for diagnostics.
    */
   static @Nullable List<DVSet> get_comparable(RootInfo root) {
 
