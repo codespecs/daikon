@@ -639,14 +639,14 @@ dyncomp-jdk-only dcomp-jdk-only :
 
 ## These two rules create the directories if absent but don't update them.
 ../.utils/plume-scripts:
-	${MAKE} -C .. update-plume-scripts
+	${MAKE} -C .. update-plume-scripts-in-utils
 
 ../.utils/html-tools:
 	${MAKE} -C .. update-html-tools
 
-.PHONY: update-plume-scripts
-update-plume-scripts:
-	${MAKE} -C .. update-plume-scripts
+.PHONY: update-plume-scripts-in-utils
+update-plume-scripts-in-utils:
+	${MAKE} -C .. update-plume-scripts-in-utils
 
 # Checks that daikon.plumelib, rather than plume, is imported by source files
 # that do instrumentation.  Should also check that daikon.plumelib is never
