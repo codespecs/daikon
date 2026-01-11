@@ -6,7 +6,7 @@
 //
 {
   $HOME = getenv ("HOME");
-  include "$HOME/phplib/utils.php";
+  include "$HOME/phplib/.utils.php";
 
   $debug = false;
   $target = "";

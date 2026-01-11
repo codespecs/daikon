@@ -65,8 +65,8 @@ java/daikon/chicory/ChicoryTest.log
 java/daikon/chicory/debug/
 
 # Obtained via Git
-utils
 .plume-scripts
+.utils
 
 # Documentation (including WWW pages and the manual)
 doc/.fix-dev-menu
