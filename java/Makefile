@@ -1334,7 +1334,7 @@ requireJavadoc: ${JAVA_FILES}
 	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS} \
 		--texinfo $@.tmp \
 		@javadoc-files.txt
-	perl -pi -e 's/&#64;cindex/\@cindex/g' tmpfile
+	perl -pi -e 's/&#64;cindex/\@cindex/g' $@.tmp
 	mv -f $@.tmp $@
 	@rm -f javadoc-files.txt
 
