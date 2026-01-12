@@ -56,7 +56,7 @@ define([misc_job], [dnl
       - image: mdernst/daikon-$1-jdk$2-plus
 circleci_boilerplate(full)
       - run:
-          command: ./scripts/test-misc.sh
+          command: export COMSPEC="" && ./scripts/test-misc.sh
           no_output_timeout: 20m])dnl
 dnl
 define([kvasir_job], [dnl
