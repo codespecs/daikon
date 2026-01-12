@@ -68,6 +68,7 @@ daikon-fast: daikon.texinfo
 ../.utils/html-tools:
 	${MAKE} -C .. update-html-tools
 
+${CRONIC}: ../.utils/plume-scripts
 ../.utils/plume-scripts:
 	${MAKE} -C .. update-plume-scripts-in-utils
 
@@ -100,7 +101,7 @@ daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 	cp images/*.jpg daikon/images
 	cd daikon && ../${HTMLTOOLS}/html-add-favicon . ../daikon-favicon.png
 
-developer/index.html: developer.texinfo ../.utils/html-tools ../.utils/plume-scripts
+developer/index.html: developer.texinfo ../.utils/html-tools ${CRONIC}
 	rm -rf developer/*
 	${CRONIC} ${TEXI2HTML} --split=chapter -o developer $<
 	# Fixup 'bad' href inserted by makeinfo.
@@ -112,10 +113,10 @@ developer/index.html: developer.texinfo ../.utils/html-tools ../.utils/plume-scr
 
 pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
 
-daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo ../.utils/plume-scripts
+daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo ${CRONIC}
 	${CRONIC} makeinfo --pdf $<
 
-developer.pdf: developer.texinfo ../.utils/plume-scripts
+developer.pdf: developer.texinfo ${CRONIC}
 	${CRONIC} makeinfo --pdf $<
 
 # Note that the clean target does not remove invariants-doc.texinfo or
