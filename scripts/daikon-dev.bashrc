@@ -5,7 +5,7 @@ export LC_ALL=${LC_ALL:-en_US}
 DAIKONDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )../" && pwd )"
 
 export DAIKONSCRIPTS=${DAIKONDIR}/scripts
-export PLUMESCRIPTS=${DAIKONDIR}/utils/plume-scripts
+export PLUMESCRIPTS=${DAIKONDIR}/.utils/plume-scripts
 export DAIKONCLASS_SOURCES=1
 export PAG=/afs/csail.mit.edu/group/pag
 export pag=${PAG}
