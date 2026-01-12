@@ -374,7 +374,7 @@ test-staged-dist: ${STAGING_DIR}
 	mkdir -p ${DISTTESTDIR}
 	(cd ${DISTTESTDIR}; tar xzf ${STAGING_DIR}/download/${NEW_RELEASE_NAME}.tar.gz)
 	(cd ${DISTTESTDIR}; mv ${NEW_RELEASE_NAME} daikon)
-	cd  ${MAKE} -C ${DISTTESTDIR}/daikon/java && junit
+	${MAKE} -C ${DISTTESTDIR}/daikon/java junit
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
 	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print0 | xargs -0 -n 1 ${PLUMESCRIPTS}/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
