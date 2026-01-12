@@ -4,6 +4,7 @@ all-except-pdf: config-options.texinfo invariants-doc.texinfo html-chap html
 TEXI2HTML ?= makeinfo --html
 
 HTMLTOOLS ?= ../.utils/html-tools
+# `cronic` suppresses output unless the wrapped command fails.
 CRONIC ?= ../.utils/plume-scripts/cronic
 
 daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo
