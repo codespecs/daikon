@@ -65,8 +65,10 @@ java/daikon/chicory/ChicoryTest.log
 java/daikon/chicory/debug/
 
 # Obtained via Git
-utils
 .plume-scripts
+.utils
+# temporary; "utils/" is an old name for ".utils/".
+utils
 
 # Documentation (including WWW pages and the manual)
 doc/.fix-dev-menu
