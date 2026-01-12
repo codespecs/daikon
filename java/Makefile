@@ -9,8 +9,8 @@ DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))..)
 
 DAIKONSCRIPTS ?= ${DAIKONDIR}/scripts
 
-PLUMESCRIPTS ?= ${DAIKONDIR}/.plume-scripts
-HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
+PLUMESCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 
 USER ?= daikonbuild
 
@@ -638,15 +638,15 @@ dyncomp-jdk-only dcomp-jdk-only :
 	fi
 
 ## These two rules create the directories if absent but don't update them.
-../utils/plume-scripts:
-	${MAKE} -C .. update-plume-scripts
+../.utils/plume-scripts:
+	${MAKE} -C .. update-plume-scripts-in-utils
 
-../utils/html-tools:
+../.utils/html-tools:
 	${MAKE} -C .. update-html-tools
 
-.PHONY: update-plume-scripts
-update-plume-scripts:
-	${MAKE} -C .. update-plume-scripts
+.PHONY: update-plume-scripts-in-utils
+update-plume-scripts-in-utils:
+	${MAKE} -C .. update-plume-scripts-in-utils
 
 # Checks that daikon.plumelib, rather than plume, is imported by source files
 # that do instrumentation.  Should also check that daikon.plumelib is never
@@ -668,7 +668,7 @@ plume-import-check :
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON := $(subst ./daikon/Daikon.java,,${JAVA_FILES})
-all_except_daikon: ../utils/plume-scripts ${AUTO_GENERATED_FILES}
+all_except_daikon: ../.utils/plume-scripts ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod a-w ${AUTO_GENERATED_FILES}
@@ -733,7 +733,7 @@ endif
 TAGS:	tags
 .PHONY: etags tags
 etags:	tags
-tags: ../utils/plume-scripts
+tags: ../.utils/plume-scripts
 ifndef ETAGS
 	$(error etags is not available, please install it)
 endif
@@ -749,7 +749,7 @@ tags-without-generated-files: clean-generated-files
 	${MAKE} compile
 
 # A TAGS file that does not contain jtb-generated files.
-tags-nojtb: ../utils/plume-scripts
+tags-nojtb: ../.utils/plume-scripts
 ifndef ETAGS
 	$(error etags is not available, please install it)
 endif
@@ -836,7 +836,7 @@ findbugs-cat:
 
 .PHONY: jar
 jar: ../daikon.jar
-../daikon.jar: ../utils/plume-scripts ${AUTO_GENERATED_FILES} compile
+../daikon.jar: ../.utils/plume-scripts ${AUTO_GENERATED_FILES} compile
 	${MAKE} -C .. daikon.jar
 
 jlint:
@@ -857,7 +857,7 @@ ifeq (${JAVA17}, 0)
 	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format
-	@../utils/run-google-java-format/run-google-java-format.py \
+	@../.utils/run-google-java-format/run-google-java-format.py \
 	  ${JAVA_FILES_FOR_FORMAT}
 endif
 
@@ -866,7 +866,7 @@ ifeq (${JAVA17}, 0)
 	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format
-	@../utils/run-google-java-format/check-google-java-format.py \
+	@../.utils/run-google-java-format/check-google-java-format.py \
 	  ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && /bin/false)
 endif
 
@@ -1255,7 +1255,7 @@ endif
 # Build javadoc using the daikon package and all subpackages of daikon.
 javadoc: api
 .PHONY: api
-api: ../utils/plume-scripts ../utils/html-tools ${AUTO_GENERATED_FILES}
+api: ../.utils/plume-scripts ../.utils/html-tools ${AUTO_GENERATED_FILES}
 ifeq (${SKIP_JAVADOC},1)
 	java -version
 	@echo SKIP_JAVADOC=${SKIP_JAVADOC}
@@ -1274,7 +1274,7 @@ endif
 # Run Javadoc on each file individually, to determine which one is crashing Javadoc.
 # Search the *-javadoc-output.txt files to find out which one contains the crash log.
 # Then, you need to do binary search on that file.
-api-test-each: ../utils/plume-scripts ../utils/html-tools ${AUTO_GENERATED_FILES}
+api-test-each: ../.utils/plume-scripts ../.utils/html-tools ${AUTO_GENERATED_FILES}
 ifeq (${SKIP_JAVADOC},1)
 	java -version
 	@echo SKIP_JAVADOC=${SKIP_JAVADOC}
@@ -1288,7 +1288,7 @@ endif
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
-api-private: ../utils/plume-scripts ${AUTO_GENERATED_FILES}
+api-private: ../.utils/plume-scripts ${AUTO_GENERATED_FILES}
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 8; echo $$?),0)
 	@echo "Skipping api-private target under Java 8"
 else
@@ -1318,24 +1318,24 @@ requireJavadoc: ${JAVA_FILES}
 	    ${DAIKON_JAVA_FILES} ; \
 	fi
 
-../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/invariants-doc.texinfo: ../.utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
 	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS} \
-		--texinfo $@.tmpfile \
+		--texinfo $@.tmp \
 		@javadoc-files.txt
-	mv -f $@.tmpfile $@
+	mv -f $@.tmp $@
 	@rm -f javadoc-files.txt
 
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
 # resulting in a duplicate class warning.
 
-../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/config-options.texinfo: ../.utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
 	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS} \
-		--texinfo $@.tmpfile \
+		--texinfo $@.tmp \
 		@javadoc-files.txt
-	perl -pi -e 's/&#64;cindex/\@cindex/g' $@.tmpfile
-	mv -f $@.tmpfile $@
+	perl -pi -e 's/&#64;cindex/\@cindex/g' $@.tmp
+	mv -f $@.tmp $@
 	@rm -f javadoc-files.txt
 
 daikon/config/InvariantDoclet.class: daikon/config/InvariantDoclet.java
@@ -1430,7 +1430,7 @@ ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
 
 # Create the auto-generated files with jpp
 .PHONY: jpp
-jpp: ../utils/plume-scripts ${AUTO_GENERATED_FILES}
+jpp: ../.utils/plume-scripts ${AUTO_GENERATED_FILES}
 
 # Use this rule if you do not have cpp or for some other reason do not want
 # to refresh the automatically generated .java files.  You should not do

@@ -48,7 +48,7 @@ if [ -z "$DAIKONSCRIPTS" ]; then
 fi
 
 if [ -z "$PLUMESCRIPTS" ]; then
-  export PLUMESCRIPTS=${DAIKONDIR}/utils/plume-scripts
+  export PLUMESCRIPTS=${DAIKONDIR}/.utils/plume-scripts
 fi
 
 DAIKON_CLASSPATH=${DAIKONDIR}/daikon.jar:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar

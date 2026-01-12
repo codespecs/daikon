@@ -18,17 +18,23 @@ import daikon.chicory.StaticObjInfo;
 import daikon.chicory.StringInfo;
 import daikon.chicory.ThisObjInfo;
 import daikon.plumelib.bcelutil.SimpleLog;
+import daikon.plumelib.util.StringsPlume;
 import daikon.plumelib.util.WeakIdentityHashMap;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
@@ -2236,6 +2242,20 @@ public final class DCRuntime implements ComparabilityProvider {
   private static class DVSet extends ArrayList<DaikonVariableInfo> implements Comparable<DVSet> {
     static final long serialVersionUID = 20050923L;
 
+    /** Creates an empty DVSet. */
+    private DVSet() {
+      super();
+    }
+
+    /**
+     * Creates a DVSet with that contains the given variables.
+     *
+     * @param variables the variables
+     */
+    private DVSet(Collection<DaikonVariableInfo> variables) {
+      super(variables);
+    }
+
     @Pure
     @Override
     public int compareTo(@GuardSatisfied DVSet this, DVSet s1) {
@@ -2257,7 +2277,6 @@ public final class DCRuntime implements ComparabilityProvider {
      *
      * @return a multi-line representation of the list of variables
      */
-    @SuppressWarnings("UnusedMethod") // TEMPORARY
     String toStringWithIdentityHashCode() {
       StringJoiner result = new StringJoiner(System.lineSeparator());
       result.add("DVSet(");
@@ -2270,8 +2289,8 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * Gets a list of comparability sets of Daikon variables. If the method has never been executed
-   * returns null (it would probably be better to return each variable in a separate set, but I
+   * Gets a list of comparability sets of Daikon variables. Returns null if the method has never
+   * been executed (it would probably be better to return each variable in a separate set, but I
    * wanted to differentiate this case for now).
    *
    * <p>The sets are calculated by processing each daikon variable and adding it to a list
@@ -2303,6 +2322,32 @@ public final class DCRuntime implements ComparabilityProvider {
     Collections.sort(set_list);
 
     return set_list;
+  }
+
+  /**
+   * Produce debugging output for a {@code List<DVSet>}.
+   *
+   * @param dvsets a list of DVSet objects
+   * @param indent how many spaces to indent each line
+   * @return a string representation of {@code dvsets}
+   */
+  static String dvSetsToString(List<DVSet> dvsets, int indent) {
+    // On Java 11, do
+    //   ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    //   try (PrintStream ps = new PrintStream(baos, true, StandardCharsets.UTF_8)) {
+    //   ...
+    //   return baos.toString(StandardCharsets.UTF_8);
+    // and drop the catch clause.
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    String utf8 = StandardCharsets.UTF_8.name();
+    try (PrintStream ps = new PrintStream(baos, true, utf8)) {
+      for (DVSet dvset : dvsets) {
+        ps.println(StringsPlume.indentLines(indent, dvset.toStringWithIdentityHashCode()));
+      }
+      return baos.toString(utf8);
+    } catch (UnsupportedEncodingException e) {
+      throw new Error(e);
+    }
   }
 
   /**
@@ -2421,6 +2466,13 @@ public final class DCRuntime implements ComparabilityProvider {
    */
   static void merge_dv_comparability(RootInfo src, RootInfo dest, String debuginfo) {
 
+    // TODO: Why does this take a RootInfo?  A RootInfo contains many more variables than we are
+    // interested in.
+    // What is a better way to obtain just the relevant DaikonVariableInfo objects for a given
+    // program point?
+
+    // TODO: We should never merge across different program points.
+
     debug_merge_comp.log("merge_dv_comparability: %s%n", debuginfo);
 
     debug_merge_comp.indent();
@@ -2428,7 +2480,23 @@ public final class DCRuntime implements ComparabilityProvider {
     // Create a map relating destination names to their variables
     Map<String, DaikonVariableInfo> dest_map = new LinkedHashMap<>();
     for (DaikonVariableInfo dest_var : varlist(dest)) {
-      dest_map.put(dest_var.getName(), dest_var);
+      String dest_var_name = dest_var.getName();
+      if (false) { // temporarily commented out because it is failing
+        if (dest_map.containsKey(dest_var_name)) {
+          DaikonVariableInfo old_dest_var = dest_map.get(dest_var_name);
+          String msg =
+              String.format(
+                  "duplicate var name %s%n from old_dest_var = %s%n and dest_var = %s%n" + " in %s",
+                  dest_var_name,
+                  old_dest_var.toStringWithIdentityHashCode(),
+                  dest_var.toStringWithIdentityHashCode(),
+                  new DVSet(varlist(dest)).toStringWithIdentityHashCode());
+          System.out.println(msg);
+          System.err.println(msg);
+          throw new Error(msg);
+        }
+      }
+      dest_map.put(dest_var_name, dest_var);
     }
 
     // Get the variable sets for the source
