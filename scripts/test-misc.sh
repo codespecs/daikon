@@ -4,6 +4,7 @@
 
 # Halt on error
 set -e
+
 set -o pipefail
 export SHELLOPTS
 
@@ -43,8 +44,6 @@ if [ -n "${SKIP_JAVADOC+x}" ]; then
   exit
 else
 
-  # Texinfo dies when run under "set -e".
-  set +e
   if ! make javadoc doc-all; then
     exit 1
   fi
