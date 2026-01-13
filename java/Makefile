@@ -9,8 +9,8 @@ DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))..)
 
 DAIKONSCRIPTS ?= ${DAIKONDIR}/scripts
 
-PLUMESCRIPTS ?= ${DAIKONDIR}/.plume-scripts
-HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
+PLUMESCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 
 USER ?= daikonbuild
 
@@ -103,11 +103,6 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 
 ### end of user customizations
 
-# Not := because DAIKON_CLASSPATH is set later in this file.
-JAVADOC_COMMAND = ${JAVADOC} -cp ${DAIKON_CLASSPATH}
-JAVAC_COMMAND = ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
-JAVA_COMMAND = ${JAVA} -cp ${DAIKON_CLASSPATH}
-
 
 ###########################################################################
 ### Variables
@@ -147,6 +142,10 @@ ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
   DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar
 endif
 
+JAVADOC_COMMAND := ${JAVADOC} -cp ${DAIKON_CLASSPATH}
+JAVAC_COMMAND := ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
+JAVA_COMMAND := ${JAVA} -cp ${DAIKON_CLASSPATH}
+
 DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):${DAIKONDIR}/java/lib/daikon-plumelib.jar
 
 DOCLET_FLAGS :=
@@ -163,10 +162,18 @@ endif
 # find command will get run multiple times.  USE AUTO_GENERATED_FILES instead.
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
 # " | perl -pi -e 's/^\.\///g'" to remove leading "./"
-SORT_DIRECTORY_ORDER = ${PLUMESCRIPTS}/sort-directory-order
+SORT_DIRECTORY_ORDER := ${PLUMESCRIPTS}/sort-directory-order
 ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   # Until "make ../plume-scripts" has been run, sort-directory-order is not available.
-  SORT_DIRECTORY_ORDER = sort
+  SORT_DIRECTORY_ORDER := sort
+endif
+
+ifeq (${JAVA8}, 1)
+dummy := $(shell cp -pf daikon/config/InvariantDoclet.java8 daikon/config/InvariantDoclet.java)
+dummy := $(shell cp -pf daikon/config/ParameterDoclet.java8 daikon/config/ParameterDoclet.java)
+else
+dummy := $(shell cp -pf daikon/config/InvariantDoclet.java11 daikon/config/InvariantDoclet.java)
+dummy := $(shell cp -pf daikon/config/ParameterDoclet.java11 daikon/config/ParameterDoclet.java)
 endif
 
 DAIKON_JAVA_FILES := $(shell find daikon/ -name '*.java' -not -name '*\#*' -print | ${SORT_DIRECTORY_ORDER})
@@ -634,15 +641,15 @@ dyncomp-jdk-only dcomp-jdk-only :
 	fi
 
 ## These two rules create the directories if absent but don't update them.
-../utils/plume-scripts:
-	${MAKE} -C .. update-plume-scripts
+../.utils/plume-scripts:
+	${MAKE} -C .. update-plume-scripts-in-utils
 
-../utils/html-tools:
+../.utils/html-tools:
 	${MAKE} -C .. update-html-tools
 
-.PHONY: update-plume-scripts
-update-plume-scripts:
-	${MAKE} -C .. update-plume-scripts
+.PHONY: update-plume-scripts-in-utils
+update-plume-scripts-in-utils:
+	${MAKE} -C .. update-plume-scripts-in-utils
 
 # Checks that daikon.plumelib, rather than plume, is imported by source files
 # that do instrumentation.  Should also check that daikon.plumelib is never
@@ -663,11 +670,8 @@ plume-import-check :
 	fi
 
 ## Use this when you don't want $inv/tests makefiles to restart
-JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
-ifeq (${JAVA24}, 0)
-JAVA_FILES_EXCEPT_DAIKON := $(filter-out %24.java, ${JAVA_FILES_EXCEPT_DAIKON})
-endif
-all_except_daikon: ../utils/plume-scripts ${AUTO_GENERATED_FILES}
+JAVA_FILES_EXCEPT_DAIKON := $(subst ./daikon/Daikon.java,,${JAVA_FILES})
+all_except_daikon: ../.utils/plume-scripts ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod a-w ${AUTO_GENERATED_FILES}
@@ -712,7 +716,7 @@ very-clean: clean clean-generated-files
 	-rm -rf api/
 	-rm -rf daikon/chicory/ChicoryTest.inv.out
 	-rm -rf daikon/chicory/debug/
-	-rm -rf daikon/dcomp/DcompTest.log
+	-rm -rf daikon/dcomp/DcompTest.decls-DynComp daikon/dcomp/DcompTest.log
 	-rm -rf daikon/dcomp/debug/
 	-rm -rf daikon/dcomp/std_dcomp_out.diff daikon/dcomp/std_dcomp_out.txt
 	-rm -rf dcomp_premain.jar dcomp_rt.jar ${DCOMP_RT}
@@ -732,7 +736,7 @@ endif
 TAGS:	tags
 .PHONY: etags tags
 etags:	tags
-tags: ../utils/plume-scripts
+tags: ../.utils/plume-scripts
 ifndef ETAGS
 	$(error etags is not available, please install it)
 endif
@@ -748,7 +752,7 @@ tags-without-generated-files: clean-generated-files
 	${MAKE} compile
 
 # A TAGS file that does not contain jtb-generated files.
-tags-nojtb: ../utils/plume-scripts
+tags-nojtb: ../.utils/plume-scripts
 ifndef ETAGS
 	$(error etags is not available, please install it)
 endif
@@ -763,8 +767,10 @@ endif
 # See version numbers at https://github.com/google/error-prone/releases
 # and https://errorprone.info/docs/installation.
 # Only run under Java 21+.
-error-prone-version = 2.42.0
-extra-error-prone-args-1 = --should-stop=ifError=FLOW
+error-prone-version := 2.46.0
+# "-XDaddTypeAnnotationsToSymbol=true" is only required under exactly Java 21,
+# but it's harmless (has no effect) on later versions of Java.
+extra-error-prone-args-1 := --should-stop=ifError=FLOW -XDaddTypeAnnotationsToSymbol=true
 
 ERRORPRONE_PROCESSOR_PATH := ${DAIKONDIR}/java/lib/error-prone/error_prone_core-${error-prone-version}-with-dependencies.jar:${DAIKONDIR}/java/lib/error-prone/dataflow-errorprone-3.49.3-eisop1.jar
 
@@ -833,7 +839,7 @@ findbugs-cat:
 
 .PHONY: jar
 jar: ../daikon.jar
-../daikon.jar: ../utils/plume-scripts ${AUTO_GENERATED_FILES} compile
+../daikon.jar: ../.utils/plume-scripts ${AUTO_GENERATED_FILES} compile
 	${MAKE} -C .. daikon.jar
 
 jlint:
@@ -854,7 +860,7 @@ ifeq (${JAVA17}, 0)
 	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format
-	@../utils/run-google-java-format/run-google-java-format.py \
+	@../.utils/run-google-java-format/run-google-java-format.py \
 	  ${JAVA_FILES_FOR_FORMAT}
 endif
 
@@ -863,7 +869,7 @@ ifeq (${JAVA17}, 0)
 	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format
-	@../utils/run-google-java-format/check-google-java-format.py \
+	@../.utils/run-google-java-format/check-google-java-format.py \
 	  ${JAVA_FILES_FOR_FORMAT} || (echo "Try running:  make reformat" && /bin/false)
 endif
 
@@ -889,42 +895,43 @@ endif
 
 ## All of the following targets need to depend on "compile".
 
+## Code in dcomp directory is not called directly; annotations would be useless.
+INDEX_SKIPDEFS := ^daikon\.dcomp\|^jtb\.
+INTERNING_SKIPDEFS := ^daikon\.dcomp\|^jtb\.
+ALLSYSTEMS_SKIPDEFS := ^jtb\.
+
 # Just check that the Index Checker doesn't crash -- -AsuppressWarnings="index"
 # command-line argument suppresses all type-checking errors.
-JAVAC_RESOURCELEAK_ARGS = -processor org.checkerframework.checker.resourceleak.ResourceLeakChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}' -ApermitStaticOwning -ApermitInitializationLeak
-JAVAC_FORMATTER_ARGS = -processor org.checkerframework.checker.formatter.FormatterChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_INDEX_ARGS = -processor org.checkerframework.checker.index.IndexChecker -implicit:class -Xlint:-processing -AskipDefs='${INDEX_SKIPDEFS}' -AassumeAssertionsAreEnabled -AsuppressWarnings="index"
-# JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -implicit:class -Xlint:-processing
-JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'
-JAVAC_NULLNESS_ARGS = -processor org.checkerframework.checker.nullness.NullnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_PROTOTYPE_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
-JAVAC_REGEX_ARGS = -processor org.checkerframework.checker.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_REGEX_QUAL_ARGS = -processor org.checkerframework.checker.experimental.regex_qual.RegexCheckerAdapter -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_SIGNATURE_ARGS = -processor org.checkerframework.checker.signature.SignatureChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_SIGNEDNESS_ARGS = -processor org.checkerframework.checker.signedness.SignednessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
+JAVAC_RESOURCELEAK_ARGS := -processor org.checkerframework.checker.resourceleak.ResourceLeakChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}' -ApermitStaticOwning -ApermitInitializationLeak
+JAVAC_FORMATTER_ARGS := -processor org.checkerframework.checker.formatter.FormatterChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_INDEX_ARGS := -processor org.checkerframework.checker.index.IndexChecker -implicit:class -Xlint:-processing -AskipDefs='${INDEX_SKIPDEFS}' -AassumeAssertionsAreEnabled -AsuppressWarnings="index"
+# JAVAC_INTERNING_ARGS := -processor org.checkerframework.checker.interning.InterningChecker -implicit:class -Xlint:-processing
+JAVAC_INTERNING_ARGS := -processor org.checkerframework.checker.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'
+JAVAC_NULLNESS_ARGS := -processor org.checkerframework.checker.nullness.NullnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_PROTOTYPE_ARGS := -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
+JAVAC_REGEX_ARGS := -processor org.checkerframework.checker.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_REGEX_QUAL_ARGS := -processor org.checkerframework.checker.experimental.regex_qual.RegexCheckerAdapter -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_SIGNATURE_ARGS := -processor org.checkerframework.checker.signature.SignatureChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_SIGNEDNESS_ARGS := -processor org.checkerframework.checker.signedness.SignednessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_VINDEX_ARGS := -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
 # -AsuppressWarnings=lock:method.guarantee.violated,lock:override.sideeffect is temporary.
 # Once the Purity Checker and -AsuggestPureMethods are fixed, they can be run on plume-lib
 # and Daikon and this can be removed. The method.guarantee.violated warning is issued by
 # the Lock Checker when a method calls another method with a weaker side effect guarantee.
 # The override.sideeffect warning is issued by the Lock Checker when the side effect
 # annotation on the overridder method is weaker than that on the overridden method.
-JAVAC_LOCK_ARGS = -processor org.checkerframework.checker.lock.LockChecker -AsuppressWarnings=lock:method.guarantee.violated,lock:override.sideeffect -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_JAVARI_ARGS = -processor org.checkerframework.checker.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_IGJ_ARGS = -processor org.checkerframework.checker.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-## Code in dcomp directory is not called directly; annotations would be useless.
-INDEX_SKIPDEFS = ^daikon\.dcomp\|^jtb\.
-INTERNING_SKIPDEFS = ^daikon\.dcomp\|^jtb\.
-ALLSYSTEMS_SKIPDEFS=^jtb\.
-INDEX_JAVA_FILES = ${DAIKON_JAVA_FILES}
+JAVAC_LOCK_ARGS := -processor org.checkerframework.checker.lock.LockChecker -AsuppressWarnings=lock:method.guarantee.violated,lock:override.sideeffect -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_JAVARI_ARGS := -processor org.checkerframework.checker.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_IGJ_ARGS := -processor org.checkerframework.checker.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+INDEX_JAVA_FILES := ${DAIKON_JAVA_FILES}
 # Intern.java implements interning and so has very many annotations.  VarInfoName
 # is obsolescent, retained for backward compatibility only; it is of flawed design
 # and has 60 @Interned annotations and quite a few SuppressWarnings.
-INTERNING_JAVA_FILES_SKIP_COUNTS = Intern.java\|VarInfoName.java\|daikon/dcomp
+INTERNING_JAVA_FILES_SKIP_COUNTS := Intern.java\|VarInfoName.java\|daikon/dcomp
 ## Which files to check.
-INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES}
+INTERNING_JAVA_FILES := ${DAIKON_JAVA_FILES}
 INTERNING_JAVA_FILES_COUNTS := $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | ${SORT_DIRECTORY_ORDER})
-NULLNESS_JAVA_FILES = ${DAIKON_JAVA_FILES}
+NULLNESS_JAVA_FILES := ${DAIKON_JAVA_FILES}
 
 #  $(shell find daikon -name '*.java' -a -exec grep -L "^@SuppressWarnings.*nullness" {} \; | sort)
 #   $(shell find typequals/ -name '*.java')
@@ -1087,8 +1094,8 @@ typecheck-vindex-nocompile:
 	@echo ${JAVAC_COMMAND} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
-TYPEQUALS_JAVA_FILES = $(wildcard typequals/*.java)
-TYPEQUALS_CLASSES = $(subst .java,.class,${TYPEQUALS_JAVA_FILES})
+TYPEQUALS_JAVA_FILES := $(wildcard typequals/*.java)
+TYPEQUALS_CLASSES := $(subst .java,.class,${TYPEQUALS_JAVA_FILES})
 
 compile-typequals: ${TYPEQUALS_CLASSES}
 ${TYPEQUALS_CLASSES}: ${TYPEQUALS_JAVA_FILES}
@@ -1144,7 +1151,7 @@ nullness-counts:
 
 
 # Count the total possible locations at which a type annotation could be written.
-JAVAC_COUNT_ARGS = -processor org.checkerframework.common.util.count.Locations -implicit:class -Xlint:-processing
+JAVAC_COUNT_ARGS := -processor org.checkerframework.common.util.count.Locations -implicit:class -Xlint:-processing
 possible-annos: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
@@ -1214,18 +1221,18 @@ clover: all_directly
 ### Documentation
 ###
 
-JAVADOC_DEST = api
+JAVADOC_DEST := api
 # ${DAIKONDIR}/java should not be in classpath, to avoid Javadoc error
 # "Multiple sources of package comments found for package".
 # It also keeps javadoc from finding "*24.java"
 # Removed "-source 8" because it causes a crash under JDK 11:  https://bugzilla.redhat.com/show_bug.cgi?id=1874672
-JAVADOC_FLAGS_COMMON = -breakiterator -quiet -linksource -noqualifier all \
+JAVADOC_FLAGS_COMMON := -breakiterator -quiet -linksource -noqualifier all \
                 -Xmaxerrs 100000 -Xmaxwarns 100000 \
                 -d ${JAVADOC_DEST} \
                 -linkoffline ${LINKOFFLINE} ${LINKOFFLINE} \
 		-notimestamp \
                 -classpath "$(subst *:${DAIKONDIR}/java,*,${DAIKON_CLASSPATH})"
-JAVADOC_FLAGS = ${JAVADOC_FLAGS_COMMON} \
+JAVADOC_FLAGS := ${JAVADOC_FLAGS_COMMON} \
                 -docletpath "${DOCLETPATH}"
 
 # Daikon packages except for util (which is just a copy of plume), plume,
@@ -1251,7 +1258,7 @@ endif
 # Build javadoc using the daikon package and all subpackages of daikon.
 javadoc: api
 .PHONY: api
-api: ../utils/plume-scripts ../utils/html-tools ${AUTO_GENERATED_FILES}
+api: ../.utils/plume-scripts ../.utils/html-tools ${AUTO_GENERATED_FILES}
 ifeq (${SKIP_JAVADOC},1)
 	java -version
 	@echo SKIP_JAVADOC=${SKIP_JAVADOC}
@@ -1270,7 +1277,7 @@ endif
 # Run Javadoc on each file individually, to determine which one is crashing Javadoc.
 # Search the *-javadoc-output.txt files to find out which one contains the crash log.
 # Then, you need to do binary search on that file.
-api-test-each: ../utils/plume-scripts ../utils/html-tools ${AUTO_GENERATED_FILES}
+api-test-each: ../.utils/plume-scripts ../.utils/html-tools ${AUTO_GENERATED_FILES}
 ifeq (${SKIP_JAVADOC},1)
 	java -version
 	@echo SKIP_JAVADOC=${SKIP_JAVADOC}
@@ -1284,7 +1291,7 @@ endif
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
-api-private: ../utils/plume-scripts ${AUTO_GENERATED_FILES}
+api-private: ../.utils/plume-scripts ${AUTO_GENERATED_FILES}
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 8; echo $$?),0)
 	@echo "Skipping api-private target under Java 8"
 else
@@ -1314,24 +1321,24 @@ requireJavadoc: ${JAVA_FILES}
 	    ${DAIKON_JAVA_FILES} ; \
 	fi
 
-../doc/invariants-doc.texinfo: ../utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/invariants-doc.texinfo: ../.utils/plume-scripts daikon/config/InvariantDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
 	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.InvariantDoclet ${DOCLET_FLAGS} \
-		--texinfo tmpfile \
+		--texinfo $@.tmp \
 		@javadoc-files.txt
-	mv -f tmpfile $@
+	mv -f $@.tmp $@
 	@rm -f javadoc-files.txt
 
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
 # resulting in a duplicate class warning.
 
-../doc/config-options.texinfo: ../utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
+../doc/config-options.texinfo: ../.utils/plume-scripts daikon/config/ParameterDoclet.class daikon/config/HtmlToTexinfo.class
 	@make javadoc-files.txt
 	${JAVADOC_COMMAND} ${extra-javadoc-args} -J-Xmx7g -J-ea -docletpath "${DOCLETPATH}" -classpath "${DAIKON_CLASSPATH}" -doclet daikon.config.ParameterDoclet ${DOCLET_FLAGS} \
-		--texinfo tmpfile \
+		--texinfo $@.tmp \
 		@javadoc-files.txt
-	perl -pi -e 's/&#64;cindex/\@cindex/g' tmpfile
-	mv -f tmpfile $@
+	perl -pi -e 's/&#64;cindex/\@cindex/g' $@.tmp
+	mv -f $@.tmp $@
 	@rm -f javadoc-files.txt
 
 daikon/config/InvariantDoclet.class: daikon/config/InvariantDoclet.java
@@ -1426,7 +1433,7 @@ ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
 
 # Create the auto-generated files with jpp
 .PHONY: jpp
-jpp: ../utils/plume-scripts ${AUTO_GENERATED_FILES}
+jpp: ../.utils/plume-scripts ${AUTO_GENERATED_FILES}
 
 # Use this rule if you do not have cpp or for some other reason do not want
 # to refresh the automatically generated .java files.  You should not do
@@ -2055,22 +2062,6 @@ daikon/derive/unary/SequenceInitialFactory.java: daikon/derive/unary/SequenceIni
 
 daikon/derive/unary/SequenceInitialFactoryFloat.java: daikon/derive/unary/SequenceInitialFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
-
-# .PHONY means regenerate even if the file exists.
-.PHONY: daikon/config/InvariantDoclet.java daikon/config/ParameterDoclet.java
-daikon/config/InvariantDoclet.java:
-ifeq (${JAVA8}, 1)
-	cp -pf daikon/config/InvariantDoclet.java8 daikon/config/InvariantDoclet.java
-else
-	cp -pf daikon/config/InvariantDoclet.java11 daikon/config/InvariantDoclet.java
-endif
-
-daikon/config/ParameterDoclet.java:
-ifeq (${JAVA8}, 1)
-	cp -pf daikon/config/ParameterDoclet.java8 daikon/config/ParameterDoclet.java
-else
-	cp -pf daikon/config/ParameterDoclet.java11 daikon/config/ParameterDoclet.java
-endif
 
 
 ###########################################################################

@@ -38,6 +38,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -2063,7 +2064,7 @@ public final class DCRuntime implements ComparabilityProvider {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        List<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
+        List<String> stuff = skinnyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         pw.printf("  [%d] %s%n", stuff.size(), stuff);
       }
@@ -2078,7 +2079,7 @@ public final class DCRuntime implements ComparabilityProvider {
         if ((set.size() == 1) && (set.get(0) instanceof StaticObjInfo)) {
           continue;
         }
-        List<String> stuff = skinyOutput(set, daikon.DynComp.abridged_vars);
+        List<String> stuff = skinnyOutput(set, daikon.DynComp.abridged_vars);
         // To see "daikon.chicory.FooInfo:variable", change true to false
         pw.printf("  [%d] %s%n", stuff.size(), stuff);
       }
@@ -2145,7 +2146,7 @@ public final class DCRuntime implements ComparabilityProvider {
      */
 
     if (depth == 0) {
-      pw.printf("%s%n", skinyOutput(node, daikon.DynComp.abridged_vars));
+      pw.printf("%s%n", skinnyOutput(node, daikon.DynComp.abridged_vars));
       if (tree.get(node) == null) {
         return;
       }
@@ -2160,7 +2161,7 @@ public final class DCRuntime implements ComparabilityProvider {
       }
       pw.printf(
           "%s (%s)%n",
-          skinyOutput(node, daikon.DynComp.abridged_vars), TagEntry.get_line_trace(node));
+          skinnyOutput(node, daikon.DynComp.abridged_vars), TagEntry.get_line_trace(node));
       if (tree.get(node) == null) {
         return;
       }
@@ -2173,8 +2174,9 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * If on, returns an ArrayList of Strings that converts the usual DVInfo.toString() output to a
-   * more readable form
+   * If {@code on} is true, returns an ArrayList of Strings that converts the usual
+   * DVInfo.toString() output to a more readable form. Just uses DVInfo.toString if {@code on} is
+   * false.
    *
    * <p>e.g. "daikon.chicory.ParameterInfo:foo" becomes "Parameter foo"
    *
@@ -2184,15 +2186,24 @@ public final class DCRuntime implements ComparabilityProvider {
    * @param on value of daikon.Daikon.abridger_vars
    * @return a readable version of {@code l}
    */
-  private static List<String> skinyOutput(DVSet l, boolean on) {
+  private static List<String> skinnyOutput(DVSet l, boolean on) {
     List<String> o = new ArrayList<>();
     for (DaikonVariableInfo dvi : l) {
-      o.add(skinyOutput(dvi, on));
+      o.add(skinnyOutput(dvi, on));
     }
     return o;
   }
 
-  private static String skinyOutput(DaikonVariableInfo dv, boolean on) {
+  // TODO: This should be a method of DaikonVariableInfo.
+  /**
+   * If {@code on} is false, returns {@code dv.toString()}. If {@code on} is true, returns a more
+   * readable and informative string.
+   *
+   * @param dv a Daikon variable
+   * @param on value of daikon.Daikon.abridger_vars
+   * @return a readable version of {@code dv}
+   */
+  private static String skinnyOutput(DaikonVariableInfo dv, boolean on) {
     if (!on) {
       return dv.toString();
     }
@@ -2239,6 +2250,22 @@ public final class DCRuntime implements ComparabilityProvider {
 
     void sort() {
       Collections.sort(this);
+    }
+
+    /**
+     * Returns a multi-line representation of the list of variables.
+     *
+     * @return a multi-line representation of the list of variables
+     */
+    @SuppressWarnings("UnusedMethod") // TEMPORARY
+    String toStringWithIdentityHashCode() {
+      StringJoiner result = new StringJoiner(System.lineSeparator());
+      result.add("DVSet(");
+      for (DaikonVariableInfo dvi : this) {
+        result.add("  " + dvi.toStringWithIdentityHashCode());
+      }
+      result.add("  )");
+      return result.toString();
     }
   }
 

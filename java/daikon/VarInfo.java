@@ -472,8 +472,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     if (vardef.valid_values != null) {
       auxstrs.add(VarInfoAux.VALID_VALUES + "=" + vardef.valid_values);
     }
-    // Sadly, String.join is only available from Java 8:
-    // https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#join-java.lang.CharSequence-java.lang.Iterable-
     final String auxstr = String.join(", ", auxstrs);
 
     try {

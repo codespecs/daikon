@@ -203,12 +203,22 @@ public abstract class DaikonVariableInfo
   }
 
   /**
+   * Returns a string representation of this node, with its identity hash code
+   *
+   * <p>This implementation returns its run-time class and its name.
+   */
+  @SideEffectFree
+  public String toStringWithIdentityHashCode(@GuardSatisfied DaikonVariableInfo this) {
+    return name + " [" + System.identityHashCode(this) + " " + getClass().getSimpleName() + "]";
+  }
+
+  /**
    * Returns a string representation of this node and its descandants.
    *
    * @return a string representation of this node and its descandants
    */
   public String treeString() {
-    return getStringBuilder(new StringBuilder("--")).toString();
+    return getStringBuilder("--").toString();
   }
 
   /**
@@ -218,14 +228,12 @@ public abstract class DaikonVariableInfo
    * @param offset the offset to begin each line with
    * @return StringBuilder that contains all children of this node
    */
-  private StringBuilder getStringBuilder(StringBuilder offset) {
+  private StringBuilder getStringBuilder(CharSequence offset) {
     StringBuilder theBuf = new StringBuilder();
 
-    theBuf.append(
-        offset + name + " [" + System.identityHashCode(this) + "]" + DaikonWriter.lineSep);
+    theBuf.append("" + offset + this.toStringWithIdentityHashCode() + DaikonWriter.lineSep);
 
-    StringBuilder childOffset = new StringBuilder(offset);
-    childOffset.append("--");
+    CharSequence childOffset = offset + "--";
     for (DaikonVariableInfo info : children) {
       theBuf.append(info.getStringBuilder(childOffset));
     }
