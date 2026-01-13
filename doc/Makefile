@@ -3,7 +3,7 @@ all-except-pdf: config-options.texinfo invariants-doc.texinfo html-chap html
 
 TEXI2HTML ?= makeinfo --html
 
-HTMLTOOLS ?= ../utils/html-tools
+HTMLTOOLS ?= ../.utils/html-tools
 
 daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo
 # Large split size fixes an apparent bug in makeinfo 4.11:
@@ -63,21 +63,21 @@ daikon-fast: daikon.texinfo
 	${MAKE} daikon-html
 
 ## These two rules create the directories if absent but don't update them.
-../utils/html-tools:
-	make -C .. update-html-tools
+../.utils/html-tools:
+	${MAKE} -C .. update-html-tools
 
-../utils/plume-scripts:
-	make -C .. update-plume-scripts
+../.utils/plume-scripts:
+	${MAKE} -C .. update-plume-scripts-in-utils
 
 .PHONY: daikon-html
 # Does the actual work
-daikon-html: ../utils/html-tools
+daikon-html: ../.utils/html-tools
 	${TEXI2HTML} --no-split daikon.texinfo
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' daikon.html
 	${HTMLTOOLS}/html-add-favicon . daikon-favicon.png
 
-developer.html: developer.texinfo ../utils/html-tools
+developer.html: developer.texinfo ../.utils/html-tools
 	${TEXI2HTML} --no-split $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' $@
@@ -87,7 +87,7 @@ html-chap: daikon/index.html developer/index.html
 
 # The "subdir" flag does not copy over images, so the
 # pathnames become incorrect.  We need to copy them over ourselves.
-daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg ../utils/html-tools
+daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg ../.utils/html-tools
 	rm -rf daikon/*
 	${TEXI2HTML} --split=chapter -o daikon $<
 	# Fixup 'bad' href(s) inserted by makeinfo.
@@ -98,7 +98,7 @@ daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 	cp images/*.jpg daikon/images
 	cd daikon && ../${HTMLTOOLS}/html-add-favicon . ../daikon-favicon.png
 
-developer/index.html: developer.texinfo ../utils/html-tools
+developer/index.html: developer.texinfo ../.utils/html-tools
 	rm -rf developer/*
 	${TEXI2HTML} --split=chapter -o developer $<
 	# Fixup 'bad' href inserted by makeinfo.

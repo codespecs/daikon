@@ -4,10 +4,10 @@
 
 DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST})))
 
-HTMLTOOLS ?= ${DAIKONDIR}/utils/html-tools
-CHECKLINK ?= ${DAIKONDIR}/utils/checklink
+HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
+CHECKLINK ?= ${DAIKONDIR}/.utils/checklink
 
-PLUMESCRIPTS ?= ${DAIKONDIR}/utils/plume-scripts
+PLUMESCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 SORT_DIRECTORY_ORDER = ${PLUMESCRIPTS}/sort-directory-order
 ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   # Until "make ../plume-scripts" has been run, sort-directory-order is not available.
@@ -190,6 +190,8 @@ very-clean:
 	-rm -rf examples/java-examples/StackAr/DataStructures/*.class
 	-rm -rf tests/sources/DataStructures/*.class
 	-rm -rf daikon-*.tar daikon-*.zip
+	-rm -rf .utils
+# "utils/" is an old name for ".utils/".
 	-rm -rf utils
 
 clean-java:
@@ -320,7 +322,7 @@ nightly-test-except-doc-pdf:
 	${MAKE} junit test
 
 # Code style; defines `style-check` and `style-fix`.
-CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir utils --exclude clustering.html
+CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude clustering.html
 ifeq (,$(wildcard .plume-scripts))
 dummy := $(shell git clone -q https://github.com/plume-lib/plume-scripts.git .plume-scripts)
 endif
@@ -372,9 +374,9 @@ test-staged-dist: ${STAGING_DIR}
 	mkdir -p ${DISTTESTDIR}
 	(cd ${DISTTESTDIR}; tar xzf ${STAGING_DIR}/download/${NEW_RELEASE_NAME}.tar.gz)
 	(cd ${DISTTESTDIR}; mv ${NEW_RELEASE_NAME} daikon)
-	cd  ${MAKE} -C ${DISTTESTDIR}/daikon/java && junit
+	${MAKE} -C ${DISTTESTDIR}/daikon/java junit
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
-	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print0 | xargs -0 -n 1 ../utils/plume-scripts/classfile_check_version 52)
+	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print0 | xargs -0 -n 1 ${PLUMESCRIPTS}/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
 	(cd ${DISTTESTDIRJAVA}/daikon; rm `find . -name '*.class'`; ${MAKE} all_javac)
 	## Test that these new .class files work properly.
@@ -622,9 +624,9 @@ daikon.jar: ${DAIKON_JAVA_FILES} $(patsubst %,java/%,${DAIKON_RESOURCE_FILES})
 # could make a distribution even if there were diffs in the current
 # checkout.
 daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
-	make doc-all
+	${MAKE} doc-all
 	# `make doc-all` just did the work, but check that the files exist.
-	make ${DOC_PATHS}
+	${MAKE} ${DOC_PATHS}
 	# keep same TMPDIR value
 	${MAKE} TMPDIR=${TMPDIR} daikon.jar
 
@@ -644,8 +646,8 @@ daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
 	cp -pR doc/www ${TMPDIR}/daikon/doc
 
 	# Utility libraries
-	mkdir ${TMPDIR}/daikon/utils
-	(cd utils/plume-scripts; git archive --prefix=plume-scripts/ HEAD | (cd ${TMPDIR}/daikon/utils/ && tar xf -))
+	mkdir ${TMPDIR}/daikon/.utils
+	(cd .utils/plume-scripts; git archive --prefix=plume-scripts/ HEAD | (cd ${TMPDIR}/daikon/.utils/ && tar xf -))
 
 	# Auxiliary programs
 	mkdir ${TMPDIR}/daikon/scripts
@@ -738,68 +740,68 @@ showvars::
 	@echo "NEW_RELEASE_NAME =" ${NEW_RELEASE_NAME}
 	${MAKE} -C java showvars
 
-update-libs:        update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-plume-scripts-in-utils update-run-google-java-format
+update-libs:        update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts-in-utils update-run-google-java-format
 # If .git does not exist, then the directory was created from a Daikon archive file.
 ifneq ($(shell ls ../.git 2>/dev/null),)
 	${MAKE} -C .. git-hooks
 endif
 
-.PHONY: update-libs update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-plume-scripts-in-utils update-run-google-java-format
+.PHONY: update-libs update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts-in-utils update-run-google-java-format
 
 # Unfortunately, I don't see a way for the below not to output lots of "remote:" lines to the log.
 # But, I can avoid doing local output.
 
 update-bibtex2web:
 ifndef NONETWORK
-	if test -d utils/bibtex2web/.git ; then \
-	  (cd utils/bibtex2web && (git pull -q || (sleep 1m && (git pull || true)))) \
-	elif ! test -d utils/bibtex2web ; then \
-	  (mkdir -p utils && (git clone -q --depth=1 https://github.com/mernst/bibtex2web.git utils/bibtex2web || (sleep 1m && git clone -q --depth=1 https://github.com/mernst/bibtex2web.git utils/bibtex2web))) \
+	if test -d .utils/bibtex2web/.git ; then \
+	  (cd .utils/bibtex2web && (git pull -q || (sleep 1m && (git pull || true)))) \
+	elif ! test -d .utils/bibtex2web ; then \
+	  (mkdir -p .utils && (git clone -q --depth=1 https://github.com/mernst/bibtex2web.git .utils/bibtex2web || (sleep 1m && git clone -q --depth=1 https://github.com/mernst/bibtex2web.git .utils/bibtex2web))) \
 	fi
 endif
 
 update-checklink:
 ifndef NONETWORK
-	if test -d utils/checklink/.git ; then \
-	  (cd utils/checklink && (git pull -q || (sleep 1m && (git pull || true)))) \
-	elif ! test -d utils/checklink ; then \
-	  (mkdir -p utils && (git clone -q --depth=1 https://github.com/plume-lib/checklink.git utils/checklink || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/checklink.git utils/checklink))) \
+	if test -d .utils/checklink/.git ; then \
+	  (cd .utils/checklink && (git pull -q || (sleep 1m && (git pull || true)))) \
+	elif ! test -d .utils/checklink ; then \
+	  (mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/checklink.git .utils/checklink || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/checklink.git .utils/checklink))) \
 	fi
 endif
 
 update-git-scripts:
 ifndef NONETWORK
-	if test -d utils/git-scripts/.git ; then \
-	  (cd utils/git-scripts && (git pull -q || (sleep 1m && (git pull || true)))) \
-	elif ! test -d utils/git-scripts ; then \
-	  (mkdir -p utils && (git clone -q --depth=1 https://github.com/plume-lib/git-scripts.git utils/git-scripts || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/git-scripts.git utils/git-scripts))) \
+	if test -d .utils/git-scripts/.git ; then \
+	  (cd .utils/git-scripts && (git pull -q || (sleep 1m && (git pull || true)))) \
+	elif ! test -d .utils/git-scripts ; then \
+	  (mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/git-scripts.git .utils/git-scripts || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/git-scripts.git .utils/git-scripts))) \
 	fi
 endif
 
 update-html-tools:
 ifndef NONETWORK
-	if test -d utils/html-tools/.git ; then \
-	  (cd utils/html-tools && (git pull -q || (sleep 1m && (git pull || true)))) \
-	elif ! test -d utils/html-tools ; then \
-	  (mkdir -p utils && (git clone -q --depth=1 https://github.com/plume-lib/html-tools.git utils/html-tools || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/html-tools.git utils/html-tools))) \
+	if test -d ${HTMLTOOLS}/.git ; then \
+	  (cd ${HTMLTOOLS} && (git pull -q || (sleep 1m && (git pull || true)))) \
+	elif ! test -d ${HTMLTOOLS} ; then \
+	  (mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/html-tools.git ${HTMLTOOLS} || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/html-tools.git ${HTMLTOOLS}))) \
 	fi
 endif
 
 update-plume-scripts-in-utils:
 ifndef NONETWORK
-	if test -d utils/plume-scripts/.git ; then \
-	  (cd utils/plume-scripts && (git pull -q || (sleep 1m && (git pull || true)))) \
-	elif ! test -d utils/plume-scripts ; then \
-	  mkdir -p utils && (git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git utils/plume-scripts)) \
+	if test -d ${PLUMESCRIPTS}/.git ; then \
+	  (cd ${PLUMESCRIPTS} && (git pull -q || (sleep 1m && (git pull || true)))) \
+	elif ! test -d ${PLUMESCRIPTS} ; then \
+	  mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git ${PLUMESCRIPTS} || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git ${PLUMESCRIPTS})) \
 	fi
 endif
 
 update-run-google-java-format:
 ifndef NONETWORK
-	if test -d utils/run-google-java-format/.git ; then \
-	  (cd utils/run-google-java-format && (git pull -q || (sleep 1m && (git pull || true)))) \
-	elif ! test -d utils/run-google-java-format ; then \
-	  (mkdir -p utils && (git clone -q --depth=1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/run-google-java-format.git utils/run-google-java-format))) \
+	if test -d .utils/run-google-java-format/.git ; then \
+	  (cd .utils/run-google-java-format && (git pull -q || (sleep 1m && (git pull || true)))) \
+	elif ! test -d .utils/run-google-java-format ; then \
+	  (mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/run-google-java-format.git .utils/run-google-java-format || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/run-google-java-format.git .utils/run-google-java-format))) \
 	fi
 endif
 
