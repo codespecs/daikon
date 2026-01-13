@@ -44,9 +44,7 @@ if [ -n "${SKIP_JAVADOC+x}" ]; then
   exit
 else
 
-  if ! make javadoc doc-all; then
-    exit 1
-  fi
+  make javadoc doc-all
 
   # For refactorings that touch a lot of code that you don't understand, create
   # top-level file SKIP-REQUIRE-JAVADOC.  Delete it after the pull request is merged.
