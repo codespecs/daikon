@@ -114,10 +114,10 @@ developer/index.html: developer.texinfo ../.utils/html-tools ${CRONIC}
 pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
 
 daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo ${CRONIC}
-	makeinfo --pdf $<
+	${CRONIC} makeinfo --pdf $<
 
 developer.pdf: developer.texinfo ${CRONIC}
-	makeinfo --pdf $<
+	${CRONIC} makeinfo --pdf $<
 
 # Note that the clean target does not remove invariants-doc.texinfo or
 # config-options.texinfo.
