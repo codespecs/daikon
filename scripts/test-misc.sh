@@ -43,13 +43,11 @@ if [ -n "${SKIP_JAVADOC+x}" ]; then
   exit
 else
 
-  make javadoc
   # Texinfo dies when run under "set -e".
   set +e
-  if ! make doc-all; then
+  if ! make javadoc doc-all; then
     exit 1
   fi
-  set -e
 
   # For refactorings that touch a lot of code that you don't understand, create
   # top-level file SKIP-REQUIRE-JAVADOC.  Delete it after the pull request is merged.
