@@ -1040,7 +1040,7 @@ ampval(struct charac * p1, struct charac ** pp2,
 
 	error = ampunit(curr_ptr, amp_unit_ptr);
 #ifdef DEBUG5
-	printf("Unit‡ di misura guadagno trovata amp_unit=%d\n", *amp_unit_ptr);
+	printf("Unit√† di misura guadagno trovata amp_unit=%d\n", *amp_unit_ptr);
 #endif
 	if (error != 0)
 		*amp_unit_ptr = LINEAR_UNIT;
@@ -1153,7 +1153,7 @@ angledir(struct charac * p1, struct charac ** pp2,
 	};
 
 #ifdef DEBUG5
-	printf("Unit‡ di misura trovata angle_unit=%d\n", *angle_unit_ptr);
+	printf("Unit√† di misura trovata angle_unit=%d\n", *angle_unit_ptr);
 #endif
 
 
@@ -1217,7 +1217,7 @@ anglerot(struct charac * p1, struct charac ** pp2,
 	};
 
 #ifdef DEBUG5
-	printf("Unit‡ di misura trovata *angle_unit_ptr=%d\n", *angle_unit_ptr);
+	printf("Unit√† di misura trovata *angle_unit_ptr=%d\n", *angle_unit_ptr);
 #endif
 
 
@@ -1348,7 +1348,7 @@ angval(struct charac * p1, struct charac ** pp2,
 
 	error = angunit(*curr_ptr, curr_ptr, angle_unit_ptr);
 #ifdef DEBUG5
-	printf("Unit‡ di misura angolo trovata *angle_unit_ptr=%d\n", *angle_unit_ptr);
+	printf("Unit√† di misura angolo trovata *angle_unit_ptr=%d\n", *angle_unit_ptr);
 #endif
 	if (error != 0)
 		*angle_unit_ptr = DEGREES;
@@ -1647,7 +1647,7 @@ circspec(struct charac * p1, struct charac ** pp2,
 
 	error = lenunit(curr_ptr, radius_unit_ptr);
 #ifdef DEBUG5
-	printf("Unit‡ di misura trovata %d", *radius_unit_ptr);
+	printf("Unit√† di misura trovata %d", *radius_unit_ptr);
 #endif
 	if (error != 0)
 		*radius_unit_ptr = 0;
@@ -2981,7 +2981,7 @@ gainval(struct charac * p1, struct charac ** pp2,
 
 	error = gainunit(*curr_ptr, curr_ptr, gain_unit_ptr);
 #ifdef DEBUG5
-	printf("Unit‡ di misura guadagno trovata gain_unit=%d\n", *gain_unit_ptr);
+	printf("Unit√† di misura guadagno trovata gain_unit=%d\n", *gain_unit_ptr);
 #endif
 	if (error != 0)
 		*gain_unit_ptr = DB_UNIT;
@@ -3052,7 +3052,7 @@ gaussel(struct charac * p1, struct charac ** pp2,
 
 	error = angunit(*curr_ptr, curr_ptr, angle_unit_ptr);
 #ifdef DEBUG5
-	printf("Unit‡ di misura angolo trovata angle_unit=%d\n", *angle_unit_ptr);
+	printf("Unit√† di misura angolo trovata angle_unit=%d\n", *angle_unit_ptr);
 #endif
 	if (error != 0)
 		*angle_unit_ptr = 0;
@@ -3087,7 +3087,7 @@ gaussel(struct charac * p1, struct charac ** pp2,
 
 	error = ampunit(curr_ptr, taper_unit_ptr);
 #ifdef DEBUG5
-	printf("Unit‡ di misura angolo trovata angle_unit=%d\n", *angle_unit_ptr);
+	printf("Unit√† di misura angolo trovata angle_unit=%d\n", *angle_unit_ptr);
 #endif
 	if (error != 0)
 		*taper_unit_ptr = 0;
@@ -6856,7 +6856,7 @@ recspec(struct charac * p1, struct charac ** pp2,
 
 	error = lenunit(curr_ptr, pqdim_unit_ptr);
 #ifdef DEBUG5
-	printf("Unit‡ di misura trovata %d", *pqdim_unit_ptr);
+	printf("Unit√† di misura trovata %d", *pqdim_unit_ptr);
 #endif
 	if (error != 0)
 		*pqdim_unit_ptr = 0;
