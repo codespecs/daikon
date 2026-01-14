@@ -4,6 +4,8 @@ all-except-pdf: config-options.texinfo invariants-doc.texinfo html-chap html
 TEXI2HTML ?= makeinfo --html
 
 HTMLTOOLS ?= ../.utils/html-tools
+# `cronic` suppresses output unless the wrapped command fails.
+CRONIC ?= ../.utils/plume-scripts/cronic
 
 daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo
 # Large split size fixes an apparent bug in makeinfo 4.11:
@@ -32,7 +34,7 @@ invariants-doc.texinfo:
 	${MAKE} -C ../java ../doc/invariants-doc.texinfo
 
 # Always remake config-options.texinfo
-# (We delegate to ../java/Makefile, which is more discerning)
+# (We delegate to ../java/Makefile, which is more discerning.)
 .PHONY : config-options.texinfo
 .PHONY : invariants-doc.texinfo
 endif
@@ -66,6 +68,7 @@ daikon-fast: daikon.texinfo
 ../.utils/html-tools:
 	${MAKE} -C .. update-html-tools
 
+${CRONIC}: ../.utils/plume-scripts
 ../.utils/plume-scripts:
 	${MAKE} -C .. update-plume-scripts-in-utils
 
@@ -87,9 +90,9 @@ html-chap: daikon/index.html developer/index.html
 
 # The "subdir" flag does not copy over images, so the
 # pathnames become incorrect.  We need to copy them over ourselves.
-daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg ../.utils/html-tools
+daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg ../.utils/html-tools ${CRONIC}
 	rm -rf daikon/*
-	${TEXI2HTML} --split=chapter -o daikon $<
+	${CRONIC} ${TEXI2HTML} --split=chapter -o daikon $<
 	# Fixup 'bad' href(s) inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' daikon/index.html
 	perl -pi -e 's|href="CHANGELOG.md"|href="../CHANGELOG.md"|;' daikon/*.html
@@ -98,9 +101,9 @@ daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 	cp images/*.jpg daikon/images
 	cd daikon && ../${HTMLTOOLS}/html-add-favicon . ../daikon-favicon.png
 
-developer/index.html: developer.texinfo ../.utils/html-tools
+developer/index.html: developer.texinfo ../.utils/html-tools ${CRONIC}
 	rm -rf developer/*
-	${TEXI2HTML} --split=chapter -o developer $<
+	${CRONIC} ${TEXI2HTML} --split=chapter -o developer $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' developer/index.html
 	mkdir developer/images
@@ -110,6 +113,8 @@ developer/index.html: developer.texinfo ../.utils/html-tools
 
 pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
 
+# Under Rocky Linux, trying to use `cronic` with `makeinfo` leads to errors
+# because of undefined variables:  COMSPEC, ComSpec, BIBINPUTS, BSTINPUTS, ...
 daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo
 	makeinfo --pdf $<
 
