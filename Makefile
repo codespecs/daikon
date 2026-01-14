@@ -322,7 +322,8 @@ nightly-test-except-doc-pdf:
 	${MAKE} junit test
 
 # Code style; defines `style-check` and `style-fix`.
-CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude clustering.html
+# "utils" is temporary; it was changed to ".utils"
+CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude-dir utils --exclude clustering.html
 ifeq (,$(wildcard .plume-scripts))
 dummy := $(shell git clone -q https://github.com/plume-lib/plume-scripts.git .plume-scripts)
 endif
