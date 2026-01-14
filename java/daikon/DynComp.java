@@ -304,6 +304,10 @@ public class DynComp {
       // allow DCRuntime to make reflective access to java.land.Object.clone() without a warning
       cmdlist.add("--add-opens");
       cmdlist.add("java.base/java.lang=ALL-UNNAMED");
+      if (Runtime.isJava24orLater()) {
+        // needed to eliminate warning for JNI access to native code
+        cmdlist.add("--enable-native-access=ALL-UNNAMED");
+      }
       if (!no_jdk) {
         // If we are processing JDK classes, then we need our code on the boot classpath as well.
         // Otherwise, references to DCRuntime from the JDK would fail.
