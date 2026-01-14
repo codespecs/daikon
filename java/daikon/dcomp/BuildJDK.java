@@ -185,7 +185,7 @@ public final class BuildJDK {
       // Class names are written in internal form.
       try (PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name())) {
         for (String classFileName : class_stream_map.keySet()) {
-          pw.println(classFileName.replace(".class", ""));
+          pw.println(removeSuffix(classFileName, ".class"));
         }
       }
     }
@@ -545,6 +545,21 @@ public final class BuildJDK {
       for (String method : known) {
         System.err.printf("  %s%n", method);
       }
+    }
+  }
+
+  /**
+   * Returns the given string, with the suffix removed if it was present.
+   *
+   * @param s a string
+   * @param suffix a suffix
+   * @return {@code s}, with the suffix removed if it was present.
+   */
+  private static String removeSuffix(String s, String suffix) {
+    if (s.endsWith(suffix)) {
+      return s.substring(0, s.length() - suffix.length());
+    } else {
+      return s;
     }
   }
 }
