@@ -119,6 +119,7 @@ public class TestResult extends Object {
 	/**
 	 * Runs a TestCase.
 	 */
+        @SuppressWarnings("removal")
 	public void runProtected(final Test test, Protectable p) {
 		try {
 			p.protect();
