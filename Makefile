@@ -724,7 +724,9 @@ daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
 	cp -pf ${TMPDIR}/${NEW_RELEASE_NAME}.zip .
 
 
-java/ChicoryPremain.jar: java/daikon/Chicory.class java/daikon/chicory/manifest.txt
+# Always delegate to the other Makefile.
+.PHONY: java/ChicoryPremain.jar
+java/ChicoryPremain.jar:
 	${MAKE} -C java ChicoryPremain.jar
 
 ### Front end binaries
