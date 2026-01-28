@@ -2,7 +2,9 @@
 
 # This is the "misc" job of the pull request.
 
+# Halt on error
 set -e
+
 set -o pipefail
 export SHELLOPTS
 

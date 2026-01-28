@@ -37,17 +37,19 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   which
 
 ## Install the JDK.
-# RUN dnf -q -y upgrade && dnf -q -y install \
-#   java-25-openjdk \
-#   java-25-openjdk-devel
+RUN dnf -q -y upgrade && dnf -q -y install \
+  java-25-openjdk \
+  java-25-openjdk-devel
+ENV JAVA25_HOME=/usr/lib/jvm/java-25-openjdk
+
 ## Use this when the java-25-openjdk* packages don't yet exist.
-# RUN curl --silent -o jdk-25_linux-x64_bin.tar.gz https://download.oracle.com/java/25/latest/jdk-25_linux-x64_bin.tar.gz \
-RUN curl --silent -o jdk-25_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk25/bd75d5f9689641da8e1daabeccb5528b/36/GPL/openjdk-25_linux-x64_bin.tar.gz \
-&& tar xzf jdk-25_linux-x64_bin.tar.gz
-ENV PATH="/jdk-25/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-ENV JAVA25_HOME=/jdk-25
-RUN chmod og+rx /root \
-&& chmod og+r /root/*
+# # RUN curl --silent -o jdk-25_linux-x64_bin.tar.gz https://download.oracle.com/java/25/latest/jdk-25_linux-x64_bin.tar.gz \
+# RUN curl --silent -o jdk-25_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk25/bd75d5f9689641da8e1daabeccb5528b/36/GPL/openjdk-25_linux-x64_bin.tar.gz \
+# && tar xzf jdk-25_linux-x64_bin.tar.gz
+# ENV PATH="/jdk-25/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+# ENV JAVA25_HOME=/jdk-25
+# RUN chmod og+rx /root \
+# && chmod og+r /root/*
 
 RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \

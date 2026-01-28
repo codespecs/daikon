@@ -51,8 +51,6 @@ ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 24; echo $$?),0)
 endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 25; echo $$?),0)
   JAVA25 := 1
-endif
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 25; echo $$?),0)
   ifndef JAVA25_HOME
     JAVA25_HOME := ${JAVA_HOME}
   endif
@@ -65,11 +63,13 @@ endif
 OS_ID := $(shell sed -n -e 's/^NAME="\(.*\)"/\1/p' /etc/os-release)
 OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
 
+## TODO: It would be better to use "-target 8" for all files EXCEPT those ending in "24.java".
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
 # Use "--source 25 --target 25" because Java 25 is an LTS version.
 ifeq (${JAVA25}, 1)
   ifndef JAVA25_HOME
-    $(error JAVA25_HOME is not set)
+    # If this happens, $JAVA_HOME must also be empty.
+    $(error JAVA25_HOME is not set; JAVA_HOME=${JAVA_HOME})
   endif
   JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}
 else ifeq (${JAVA24}, 1)
