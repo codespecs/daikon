@@ -185,7 +185,7 @@ public class BuildJDK {
       // Class names are written in internal form.
       try (PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name())) {
         for (String classFileName : class_stream_map.keySet()) {
-          pw.println(classFileName.replace(".class", ""));
+          pw.println(removeSuffix(classFileName, ".class"));
         }
       }
     }
@@ -219,7 +219,7 @@ public class BuildJDK {
     try {
       jrt = jrt.getCanonicalFile();
     } catch (Exception e) {
-      System.err.printf("Error geting canonical file for %s: %s", jrt, e.getMessage());
+      System.err.printf("Error getting canonical file for %s: %s%n", jrt, e.getMessage());
       System.exit(1);
     }
 
@@ -284,7 +284,7 @@ public class BuildJDK {
     Path modules = fs.getPath("/modules");
     // The path java_home+/lib/modules is the file in the host file system that
     // corresponds to the modules file in the jrt: file system.
-    System.out.printf("using modules directory %s%n", java_home + "/lib/modules");
+    System.out.printf("using modules directory %s/lib/modules%n", java_home);
     try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(modules, "java.base*")) {
       for (Path moduleDir : directoryStream) {
         gather_runtime_from_modules_directory(
@@ -331,7 +331,7 @@ public class BuildJDK {
   }
 
   /**
-   * Instrument each of the classes indentified by the class_stream_map argument.
+   * Instrument each of the classes identified by the class_stream_map argument.
    *
    * @param dest_dir where to store the instrumented classes
    * @param class_stream_map maps from class file name to an input stream on that file
@@ -407,7 +407,7 @@ public class BuildJDK {
     // Create the DcompMarker class which is used to identify instrumented calls.
     createDCompClass(destDir, "DCompMarker", false);
 
-    // The remainer of the generated classes are needed for JDK 9+ only.
+    // The remainder of the generated classes are needed for JDK 9+ only.
     if (Runtime.isJava9orLater()) {
       createDCompClass(destDir, "DCompInstrumented", true);
       createDCompClass(destDir, "DCompClone", false);
@@ -502,7 +502,7 @@ public class BuildJDK {
     _numFilesProcessed++;
     if (((_numFilesProcessed % 100) == 0) && (System.console() != null)) {
       System.out.printf(
-          "Processed %d/%d classes at %s%n",
+          "Note: Processed %d/%d classes at %s%n",
           _numFilesProcessed,
           classTotal,
           LocalDateTime.now(ZoneId.systemDefault()).format(timeFormatter));
@@ -543,6 +543,21 @@ public class BuildJDK {
       for (String method : known) {
         System.err.printf("  %s%n", method);
       }
+    }
+  }
+
+  /**
+   * Returns the given string, with the suffix removed if it was present.
+   *
+   * @param s a string
+   * @param suffix a suffix
+   * @return {@code s}, with the suffix removed if it was present.
+   */
+  private static String removeSuffix(String s, String suffix) {
+    if (s.endsWith(suffix)) {
+      return s.substring(0, s.length() - suffix.length());
+    } else {
+      return s;
     }
   }
 }

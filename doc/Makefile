@@ -90,7 +90,7 @@ html-chap: daikon/index.html developer/index.html
 
 # The "subdir" flag does not copy over images, so the
 # pathnames become incorrect.  We need to copy them over ourselves.
-daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg ../.utils/html-tools ../.utils/plume-scripts
+daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg ../.utils/html-tools ${CRONIC}
 	rm -rf daikon/*
 	${CRONIC} ${TEXI2HTML} --split=chapter -o daikon $<
 	# Fixup 'bad' href(s) inserted by makeinfo.
@@ -113,8 +113,10 @@ developer/index.html: developer.texinfo ../.utils/html-tools ${CRONIC}
 
 pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
 
-daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo ${CRONIC}
-	${CRONIC} makeinfo --pdf $<
+# Under Rocky Linux, trying to use `cronic` with `makeinfo` leads to errors
+# because of undefined variables:  COMSPEC, ComSpec, BIBINPUTS, BSTINPUTS, ...
+daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo
+	makeinfo --pdf $<
 
 developer.pdf: developer.texinfo ${CRONIC}
 	${CRONIC} makeinfo --pdf $<
