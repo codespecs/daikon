@@ -504,7 +504,7 @@ public final class BuildJDK {
     _numFilesProcessed++;
     if (((_numFilesProcessed % 100) == 0) && (System.console() != null)) {
       System.out.printf(
-          "Processed %d/%d classes at %s%n",
+          "Note: Processed %d/%d classes at %s%n",
           _numFilesProcessed,
           classTotal,
           LocalDateTime.now(ZoneId.systemDefault()).format(timeFormatter));

@@ -322,7 +322,8 @@ nightly-test-except-doc-pdf:
 	${MAKE} junit test
 
 # Code style; defines `style-check` and `style-fix`.
-CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude clustering.html
+# "utils" is temporary; it was changed to ".utils"
+CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude-dir utils --exclude clustering.html
 ifeq (,$(wildcard .plume-scripts))
 dummy := $(shell git clone -q https://github.com/plume-lib/plume-scripts.git .plume-scripts)
 endif
@@ -722,6 +723,11 @@ daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
 	(cd ${TMPDIR}; zip -r ${NEW_RELEASE_NAME}.zip ${NEW_RELEASE_NAME})
 	cp -pf ${TMPDIR}/${NEW_RELEASE_NAME}.zip .
 
+
+# Always delegate to the other Makefile.
+.PHONY: java/ChicoryPremain.jar
+java/ChicoryPremain.jar:
+	${MAKE} -C java ChicoryPremain.jar
 
 ### Front end binaries
 
