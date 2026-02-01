@@ -477,8 +477,8 @@ public final class BuildJDK24 {
                   ClassDesc.of(Signatures.addPackage("java.lang", className)),
                   classBuilder -> finishCreateDCompClass(classBuilder, dcompInstrumented));
       // Write the byte array to a .class file.
-      File outputFile = new File(new File(new File(destDir, "java"), "lang"), className + ".class");
-      Files.write(outputFile.toPath(), classBytes);
+      Path outputPath = Path.of(destDir.toString(), "java", "lang", className + ".class");
+      Files.write(outputPath, classBytes);
     } catch (Exception e) {
       throw new Error(e);
     }

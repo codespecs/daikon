@@ -49,6 +49,7 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.List;
 import java.util.Set;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.FieldDescriptor;
 
 /**
  * This class calculates the state of the operand stack via simulation.
@@ -961,7 +962,7 @@ public final class CalcStack24 {
    * @return a String containing the element type descriptor
    * @throws DynCompError if we don't recognize the type of {@code npai}
    */
-  static String npaiToElementTypeDescriptor(NewPrimitiveArrayInstruction npai) {
+  static @FieldDescriptor String npaiToElementTypeDescriptor(NewPrimitiveArrayInstruction npai) {
     return switch (npai.typeKind()) {
       case BOOLEAN -> "Z";
       case BYTE -> "B";

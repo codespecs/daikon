@@ -47,22 +47,6 @@ public class Instrument implements ClassFileTransformer {
    */
   protected static final SimpleLog debug_transform = new SimpleLog(false);
 
-  /** Create an instrumenter. Setup debug directories, if needed. */
-  public Instrument() {
-    debug_transform.enabled =
-        DynComp.debug || DynComp.debug_transform || Premain.debug_dcinstrument || DynComp.verbose;
-    daikon.chicory.Instrument.debug_ppt_omit.enabled = DynComp.debug;
-
-    debug_dir = DynComp.debug_dir;
-    debug_instrumented_dir = new File(debug_dir, "instrumented");
-    debug_uninstrumented_dir = new File(debug_dir, "uninstrumented");
-
-    if (DynComp.dump) {
-      debug_instrumented_dir.mkdirs();
-      debug_uninstrumented_dir.mkdirs();
-    }
-  }
-
   /** Debug code for printing the current run-time call stack. */
   public static void print_call_stack() {
     StackTraceElement[] stack_trace;
@@ -76,7 +60,7 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Output a .class file and a .bcel version of the class file.
+   * Output a .class file and a .bcel version of it.
    *
    * @param c the Java class to output
    * @param directory output location for the files
@@ -102,6 +86,22 @@ public class Instrument implements ClassFileTransformer {
   //
   // End of diagnostics.
   //
+
+  /** Create an instrumenter. Setup debug directories, if needed. */
+  public Instrument() {
+    debug_transform.enabled =
+        DynComp.debug || DynComp.debug_transform || Premain.debug_dcinstrument || DynComp.verbose;
+    daikon.chicory.Instrument.debug_ppt_omit.enabled = DynComp.debug;
+
+    debug_dir = DynComp.debug_dir;
+    debug_instrumented_dir = new File(debug_dir, "instrumented");
+    debug_uninstrumented_dir = new File(debug_dir, "uninstrumented");
+
+    if (DynComp.dump) {
+      debug_instrumented_dir.mkdirs();
+      debug_uninstrumented_dir.mkdirs();
+    }
+  }
 
   /**
    * Given a class, return a transformed version of the class that contains instrumentation code.
@@ -300,7 +300,7 @@ public class Instrument implements ClassFileTransformer {
    * @return true if className is a known transformer
    */
   @Pure
-  protected static boolean is_transformer(String className) {
+  protected static boolean is_transformer(@InternalForm String className) {
 
     if (className.startsWith("org/codehaus/groovy")) {
       return true;

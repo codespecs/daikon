@@ -1083,6 +1083,9 @@ public final class Runtime {
   // From class SignaturesUtil
   //
 
+  // Eventually the code should use the library rather than copying its code.
+  // (As of 2026-01-10, I'm having trouble with the shadowJar plugin.)
+
   /** A map from field descriptor (sach as "I") to Java primitive type (such as "int"). */
   private static HashMap<String, String> fieldDescriptorToPrimitive = new HashMap<>(8);
 

@@ -15,6 +15,7 @@ import java.util.Optional;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.checker.signature.qual.MethodDescriptor;
 
 /**
@@ -117,7 +118,8 @@ public class ClassGen24 {
    * @param descriptor the method's type descriptor
    * @return the MethodModel if found, null otherwise
    */
-  public @Nullable MethodModel containsMethod(String name, @MethodDescriptor String descriptor) {
+  public @Nullable MethodModel containsMethod(
+      @Identifier String name, @MethodDescriptor String descriptor) {
     for (MethodModel mm : classModel.methods()) {
       if (mm.methodName().stringValue().equals(name)
           && mm.methodType().stringValue().equals(descriptor)) {

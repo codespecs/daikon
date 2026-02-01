@@ -61,22 +61,6 @@ public class Instrument24 implements ClassFileTransformer {
    */
   protected static final SimpleLog debug_transform = new SimpleLog(false);
 
-  /** Create an instrumenter. Setup debug directories, if needed. */
-  public Instrument24() {
-    debug_transform.enabled =
-        DynComp.debug || DynComp.debug_transform || Premain.debug_dcinstrument || DynComp.verbose;
-    daikon.chicory.Instrument24.debug_ppt_omit.enabled = DynComp.debug;
-
-    debug_dir = DynComp.debug_dir;
-    debug_instrumented_dir = new File(debug_dir, "instrumented");
-    debug_uninstrumented_dir = new File(debug_dir, "uninstrumented");
-
-    if (DynComp.dump) {
-      debug_instrumented_dir.mkdirs();
-      debug_uninstrumented_dir.mkdirs();
-    }
-  }
-
   /** Debug code for printing the current run-time call stack. */
   public static void print_call_stack() {
     StackTraceElement[] stack_trace;
@@ -90,7 +74,7 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Output a .class file and a .bcel version of the class file.
+   * Output a .class file and a .bcel version of it.
    *
    * @param classBytes a byte array of the class file to output
    * @param directory output location for the files
@@ -133,6 +117,22 @@ public class Instrument24 implements ClassFileTransformer {
   //
   // End of diagnostics.
   //
+
+  /** Create an instrumenter. Setup debug directories, if needed. */
+  public Instrument24() {
+    debug_transform.enabled =
+        DynComp.debug || DynComp.debug_transform || Premain.debug_dcinstrument || DynComp.verbose;
+    daikon.chicory.Instrument24.debug_ppt_omit.enabled = DynComp.debug;
+
+    debug_dir = DynComp.debug_dir;
+    debug_instrumented_dir = new File(debug_dir, "instrumented");
+    debug_uninstrumented_dir = new File(debug_dir, "uninstrumented");
+
+    if (DynComp.dump) {
+      debug_instrumented_dir.mkdirs();
+      debug_uninstrumented_dir.mkdirs();
+    }
+  }
 
   /**
    * Given a class, return a transformed version of the class that contains instrumentation code.
@@ -280,7 +280,7 @@ public class Instrument24 implements ClassFileTransformer {
       }
     }
 
-    // As {@code instrumentation_interface} is a static field, we initialize it here rather than
+    // As `instrumentation_interface` is a static field, we initialize it here rather than
     // in the DCInstrument24 constructor.
     if (Premain.jdk_instrumented && Runtime.isJava9orLater()) {
       dcompPrefix = "java.lang";

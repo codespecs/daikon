@@ -42,19 +42,18 @@ public final class StackMapUtils24 {
    *   * the offset of a byte code from the start of a method's byte codes
    *   * the offset of a variable from the start of a method's stack frame
    *
-   *     The Java Virtual Machine Specification uses
-   *     'index into the local variable array of the current frame'
-   *     or 'slot number' to describe this second case.
+   *     The Java Virtual Machine Specification uses 'index into the local variable
+   *     array of the current frame' or 'slot number' to describe this second case.
    */
 
   /**
    * Add {@code size} (1 or 2) to the slot number of each Instruction that references a local that
-   * is equal or higher in the local map than {@code offsetFirstLocalToBeMoved}. Size should be the
-   * size of the new local that was just inserted at {@code offsetFirstLocalToBeMoved}.
+   * is equal or higher in the local map than {@code offsetFirstLocalToBeMoved}.
    *
    * @param mgen MethodGen to be modified
    * @param offsetFirstLocalToBeMoved original offset of first local moved "up"
-   * @param size size of new local added (1 or 2)
+   * @param size the size (1 or 2) of of the new local that was just inserted at {@code
+   *     offsetFirstLocalToBeMoved}
    */
   static void adjustCodeForLocalsChange(MethodGen24 mgen, int offsetFirstLocalToBeMoved, int size) {
 
@@ -102,7 +101,7 @@ public final class StackMapUtils24 {
    * Add a new local variable to the method. This will be inserted after any parameters and before
    * any existing local variables. If there are existing local variables this will have the side
    * effect of rewritting the method byte codes to adjust the slot numbers for the existing local
-   * variables - see below for details.
+   * variables.
    *
    * <p>DCInstrument24 uses this routine for two special variables:
    *
@@ -145,7 +144,7 @@ public final class StackMapUtils24 {
     if (paramTypes.length > 0) {
       LocalVariable lastArg;
       newIndex = newIndex + paramTypes.length;
-      // newIndex is now positive, because paramTypes.length is
+      // `newIndex` is now strictly positive, because `paramTypes.length` is.
       lastArg = locals.get(newIndex - 1);
       newOffset = lastArg.slot() + TypeKind.from(lastArg.typeSymbol()).slotSize();
     }
@@ -180,10 +179,9 @@ public final class StackMapUtils24 {
                 lv.slot() + argSize, lv.name(), lv.type(), lv.startScope(), lv.endScope()));
       }
 
-      // Now process the instruction list, adding one to the offset
-      // within each LocalVariableInstruction that references a
-      // local that is 'higher' in the local map than new local
-      // we just inserted.
+      // Now process the instruction list, adding 1 or 2 to the offset within each
+      // LocalVariableInstruction that references a local that is 'higher' in the
+      // local map than the new local we just inserted.
       adjustCodeForLocalsChange(mgen, newOffset, argSize);
 
       // DCInstrument24.debugInstrument.log("New LocalVariableTable:%n%s%n", mgen.localsTable);

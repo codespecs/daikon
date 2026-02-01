@@ -28,11 +28,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
- * This is a modified version of BCEL's OperandStack. We assume that the class file has been
- * previously verified, so we check very few error conditions.
+ * This class implements a stack used for symbolic JVM stack simulation. (It's used as an operand
+ * stack substitute.) Elements of this stack are {@link ClassDesc} objects.
  *
- * <p>This class implements a stack used for symbolic JVM stack simulation. [It's used as an operand
- * stack substitute.] Elements of this stack are {@link ClassDesc} objects.
+ * <p>This is a modified version of BCEL's OperandStack. We assume that the class file has been
+ * previously verified, so we check very few error conditions.
  */
 public class OperandStack24 implements Cloneable {
 
