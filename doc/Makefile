@@ -117,21 +117,29 @@ pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
 # because of undefined variables:  COMSPEC, ComSpec, BIBINPUTS, BSTINPUTS, ...
 daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo
 	if [ -f /etc/os-release ]; then \
-	    . /etc/os-release \
-	    if [ "$ID" == "rocky" && "$VERSION_ID" != "${VERSION_ID#9}" ]; then \
-	        CRONIC="" \
+	    . /etc/os-release; \
+	    if [ "$$ID" == "rocky" && "$$VERSION_ID" != "$${VERSION_ID#9}" ]; then \
+	        NO_CRONIC="yes" \
 	    fi \
 	fi
-	${CRONIC} makeinfo --pdf $<
+	if [ -n $$NO_CRONIC ] ; then
+	  makeinfo --pdf $<
+	else
+	  ${CRONIC} makeinfo --pdf $<
+	fi
 
 developer.pdf: developer.texinfo ${CRONIC}
 	if [ -f /etc/os-release ]; then \
-	    . /etc/os-release \
-	    if [ "$ID" == "rocky" ] && [ "$VERSION_ID" != "${VERSION_ID#9}" ]; then \
-	        CRONIC="" \
+	    . /etc/os-release; \
+	    if [ "$$ID" == "rocky" && "$$VERSION_ID" != "$${VERSION_ID#9}" ]; then \
+	        NO_CRONIC="yes" \
 	    fi \
 	fi
-	${CRONIC} makeinfo --pdf $<
+	if [ -n $$NO_CRONIC ] ; then
+	  makeinfo --pdf $<
+	else
+	  ${CRONIC} makeinfo --pdf $<
+	fi
 
 # Note that the clean target does not remove invariants-doc.texinfo or
 # config-options.texinfo.
