@@ -342,7 +342,7 @@ public final @Interned class ProglangType implements Serializable {
     } else {
       long val;
       if ((value.length() > 2) && (value.charAt(0) == '0') && (value.charAt(1) == 'x')) {
-        val = Long.parseLong(value.substring(2), 16);
+        val = Long.parseUnsignedLong(value.substring(2), 16);
       } else {
         val = Long.parseLong(value);
       }
