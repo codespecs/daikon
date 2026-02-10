@@ -151,7 +151,7 @@ export LC_ALL=C
 ###
 
 ### Default tag
-help:
+help default:
 	@echo
 	@echo "Targets:"
 	@echo " compile compile-java     -- compile Java files"
