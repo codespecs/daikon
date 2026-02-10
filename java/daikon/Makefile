@@ -1,5 +1,5 @@
 default:
-	${MAKE} -C .. default
+	${MAKE} -C ..
 
 .PHONY: chicory
 chicory:
