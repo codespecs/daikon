@@ -13,6 +13,7 @@ import java.util.List;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.Signed;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
@@ -342,7 +343,9 @@ public final @Interned class ProglangType implements Serializable {
     } else {
       long val;
       if ((value.length() > 2) && (value.charAt(0) == '0') && (value.charAt(1) == 'x')) {
-        val = Long.parseLong(value.substring(2), 16);
+        @SuppressWarnings("signedness:assignment")
+        @Signed long temp = Long.parseUnsignedLong(value.substring(2), 16);
+        val = temp;
       } else {
         val = Long.parseLong(value);
       }
