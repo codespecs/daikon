@@ -1,7 +1,10 @@
 NAME := pthread-test
 LIBS := -lpthread
-# This test runs two threads and their order is non-deterministic.
-SKIP_DTRACE_DIFF := 1
-SKIP_OUT_DIFF := 1
+# This test creates and runs two threads. There may or may not be
+# diffs in the .dtrace and .out files depending on the order the
+# threads are run. If there are diffs, you should verify that
+# it is just the order of Thread 1 and Thread 2.
+#SKIP_DTRACE_DIFF := 1
+#SKIP_OUT_DIFF := 1
 
 include ../Makefile.common

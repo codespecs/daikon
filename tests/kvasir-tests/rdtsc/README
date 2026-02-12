@@ -1,3 +1,2 @@
 This test uses the rdtsc machine instruction to read the timer. This
-causes the output to vary from run to run.  We use COUNTS_ONLY 
-in the Makefile to suppress the .dtrace and .invs results.
+causes the output to vary from run to run. We suppress the .dtrace and .invs results.
