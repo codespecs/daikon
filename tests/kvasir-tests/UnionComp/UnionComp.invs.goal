@@ -40,7 +40,7 @@
 ::comp_test_ptr has only one value
 ::comp_test_ptr[] contains no nulls and has only one value, of length 1
 ::comp_test_ptr[].comp contains no nulls and has only one value, of length 1
-::comp_test_ptr[].comp.name == [ð¯Ã]
+::comp_test_ptr[].comp.name == [�_�]
 ::comp_test_ptr[].comp.next contains no nulls and has only one value, of length 1
 ::comp_test_ptr[].comp.next->next[0] contains no nulls and has only one value, of length 1
 ::comp_test_ptr[].comp.next[0] contains no nulls and has only one value, of length 1
