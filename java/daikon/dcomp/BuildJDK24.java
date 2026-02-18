@@ -1,8 +1,11 @@
 package daikon.dcomp;
 
+import static java.lang.constant.ConstantDescs.CD_Object;
+import static java.lang.constant.ConstantDescs.CD_boolean;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.DynComp;
+import daikon.chicory.ClassInfo;
 import daikon.chicory.Runtime;
 import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.options.Options;
@@ -14,6 +17,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
+import java.lang.classfile.ClassBuilder;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.ClassHierarchyResolver;
+import java.lang.classfile.ClassModel;
+import java.lang.classfile.attribute.SourceFileAttribute;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
 import java.net.URI;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileSystem;
@@ -31,14 +41,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import org.apache.bcel.Const;
-import org.apache.bcel.classfile.ClassParser;
-import org.apache.bcel.classfile.JavaClass;
-import org.apache.bcel.generic.ClassGen;
-import org.apache.bcel.generic.MethodGen;
-import org.apache.bcel.generic.Type;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
+import org.checkerframework.checker.signature.qual.InternalForm;
 
 /**
  * Add comparability instrumentation to Java class files, then stores the modified files into a
@@ -53,10 +59,10 @@ import org.checkerframework.checker.signature.qual.BinaryName;
   "mustcall:type.argument",
   "mustcall:type.arguments.not.inferred"
 }) // assignments into owning collection
-public final class BuildJDK {
+public final class BuildJDK24 {
 
   /** Do not instantiate from external code; only instantiate in {@link #main}. */
-  private BuildJDK() {}
+  private BuildJDK24() {}
 
   /**
    * The "java.home" system property. Note that there is also a JAVA_HOME variable that contains
@@ -73,14 +79,18 @@ public final class BuildJDK {
   /** Name of file in output jar containing the static-fields map. */
   private static String static_field_id_filename = "dcomp_jdk_static_field_id";
 
+  /** Allow BuildJDK24 to access outputDebugFiles. */
+  @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO
+  private static daikon.dcomp.Instrument24 inst24;
+
   /**
-   * Collects names of all methods that DCInstrument could not process. Should be empty. Format is
+   * Collects names of all methods that DCInstrument24 could not process. Should be empty. Format is
    * {@code <fully-qualified class name>.<method name>}.
    */
   private static List<String> skipped_methods = new ArrayList<>();
 
   /**
-   * A list of methods known to cause DCInstrument to fail. This is used to remove known problems
+   * A list of methods known to cause DCInstrument24 to fail. This is used to remove known problems
    * from the list of failures displayed at the end of BuildJDK's execution. Format is
    * &lt;fully-qualified class name&gt;.&lt;method name&gt;
    */
@@ -105,15 +115,15 @@ public final class BuildJDK {
   @SuppressWarnings("builder:required.method.not.called") // assignment into collection of @Owning
   public static void main(String[] args) throws IOException {
 
-    System.out.println("BuildJDK starting at " + LocalDateTime.now(ZoneId.systemDefault()));
+    System.out.println("BuildJDK24 starting at " + LocalDateTime.now(ZoneId.systemDefault()));
 
-    BuildJDK build = new BuildJDK();
+    BuildJDK24 build = new BuildJDK24();
 
     Options options =
         new Options(
-            "daikon.BuildJDK [options] dest_dir [classfiles...]",
+            "daikon.BuildJDK24 [options] dest_dir [classfiles...]",
             DynComp.class,
-            DCInstrument.class);
+            DCInstrument24.class);
     String[] cl_args = options.parse(true, args);
     if (cl_args.length < 1) {
       System.err.println("must specify destination dir");
@@ -121,6 +131,7 @@ public final class BuildJDK {
       System.exit(1);
     }
     verbose = DynComp.verbose;
+    inst24 = new daikon.dcomp.Instrument24();
 
     File dest_dir = new File(cl_args[0]);
 
@@ -142,9 +153,9 @@ public final class BuildJDK {
       // But if we're using it to fix a broken classfile, then we need
       // to restore the static-fields map from when our runtime jar was originally
       // built.  We assume it is in the destination directory.
-      DCInstrument.restore_static_field_id(new File(dest_dir, static_field_id_filename));
+      DCInstrument24.restore_static_field_id(new File(dest_dir, static_field_id_filename));
       System.out.printf(
-          "Restored %d entries in static map.%n", DCInstrument.static_field_id.size());
+          "Restored %d entries in static map.%n", DCInstrument24.static_field_id.size());
 
       class_stream_map = new HashMap<>();
       for (String classFileName : class_files) {
@@ -173,11 +184,11 @@ public final class BuildJDK {
 
       // We've finished instrumenting all the class files. Now we create some
       // abstract interface classes for use by the DynComp runtime.
-      build.addInterfaceClasses(dest_dir.getName());
+      build.addInterfaceClasses(dest_dir);
 
       // Write out the file containing the static-fields map.
-      System.out.printf("Found %d static fields.%n", DCInstrument.static_field_id.size());
-      DCInstrument.save_static_field_id(new File(dest_dir, static_field_id_filename));
+      System.out.printf("Found %d static fields.%n", DCInstrument24.static_field_id.size());
+      DCInstrument24.save_static_field_id(new File(dest_dir, static_field_id_filename));
 
       // Write out the list of all classes in the jar file
       File jdk_classes_file = new File(dest_dir, "java/lang/jdk_classes.txt");
@@ -193,7 +204,7 @@ public final class BuildJDK {
     // Print out any methods that could not be instrumented
     print_skipped_methods();
 
-    System.out.println("BuildJDK done at " + LocalDateTime.now(ZoneId.systemDefault()));
+    System.out.println("BuildJDK24 done at " + LocalDateTime.now(ZoneId.systemDefault()));
   }
 
   /** Verify that java.home and JAVA_HOME match. Exits the JVM if there is an error. */
@@ -322,6 +333,11 @@ public final class BuildJDK {
       }
     } else {
       String entryName = path.toString().substring(modulePrefixLength + 1);
+      if (!entryName.endsWith(".class") || entryName.equals("java/lang/Object.class")) {
+        // For JDK 9+ we do not process non-.class files and Object.class.
+        return;
+      }
+      // System.out.printf("processing entry %s%n", entryName);
       try {
         // Get the InputStream for this file
         InputStream is = Files.newInputStream(path);
@@ -340,6 +356,14 @@ public final class BuildJDK {
    */
   void instrument_classes(File dest_dir, Map<String, InputStream> class_stream_map) {
 
+    @DotSeparatedIdentifiers String dcompPrefix;
+
+    // Get our ClassLoader.
+    ClassLoader loader = BuildJDK24.class.getClassLoader();
+    if (loader == null) {
+      loader = ClassLoader.getSystemClassLoader();
+    }
+
     try {
       // Create the destination directory
       dest_dir.mkdirs();
@@ -356,14 +380,8 @@ public final class BuildJDK {
         }
 
         // Handle non-.class files and Object.class.  In JDK 8, copy them unchanged.
-        // For JDK 9+ we do not copy as these items will be loaded from the original module file.
+        // For JDK 9+ they have not been added to class_stream_map.
         if (!classFileName.endsWith(".class") || classFileName.equals("java/lang/Object.class")) {
-          if (Runtime.isJava9orLater()) {
-            if (verbose) {
-              System.out.printf("Skipping file %s%n", classFileName);
-            }
-            continue;
-          }
           // This File constructor ignores dest_dir if classFileName is absolute.
           File classFile = new File(dest_dir, classFileName);
           if (classFile.getParentFile() == null) {
@@ -379,18 +397,42 @@ public final class BuildJDK {
           continue;
         }
 
-        // Get the binary for this class
-        JavaClass jc;
+        ClassFile classFile =
+            ClassFile.of(
+                ClassFile.ClassHierarchyResolverOption.of(
+                    ClassHierarchyResolver.ofResourceParsing(loader)));
+        ClassModel classModel;
+        byte[] buffer;
+
+        // Parse the bytes of the classfile, die on any errors.
         try (InputStream is = class_stream_map.get(classFileName)) {
-          ClassParser parser = new ClassParser(is, classFileName);
-          jc = parser.parse();
+          buffer = is.readAllBytes();
+          classModel = classFile.parse(buffer);
         } catch (Throwable e) {
           throw new Error("Failed to parse classfile " + classFileName, e);
         }
 
+        @SuppressWarnings("signature:assignment") // string manipulation
+        @InternalForm String classnameIF = removeSuffix(classFileName, ".class");
+        String classname = Signatures.internalFormToBinaryName(classnameIF);
+        if (DynComp.dump) {
+          inst24.writeDebugClassFiles(buffer, inst24.debug_uninstrumented_dir, classname);
+        }
+
+        // As `instrumentation_interface` is a static field, we initialize it here rather than
+        // in the DCInstrument24 constructor.
+        if (Premain.jdk_instrumented && Runtime.isJava9orLater()) {
+          dcompPrefix = "java.lang";
+        } else {
+          dcompPrefix = "daikon.dcomp";
+        }
+        DCRuntime.instrumentation_interface =
+            Signatures.addPackage(dcompPrefix, "DCompInstrumented");
+
         // Instrument the class file.
         try {
-          instrumentClassFile(jc, dest_dir, classFileName, class_stream_map.size());
+          instrumentClassFile(
+              classFile, classModel, loader, dest_dir, classFileName, class_stream_map.size());
         } catch (Throwable e) {
           throw new Error("Couldn't instrument " + classFileName, e);
         }
@@ -405,7 +447,7 @@ public final class BuildJDK {
    *
    * @param destDir where to store the interface classes
    */
-  private void addInterfaceClasses(String destDir) {
+  private void addInterfaceClasses(File destDir) {
     // Create the DcompMarker class which is used to identify instrumented calls.
     createDCompClass(destDir, "DCompMarker", false);
 
@@ -425,53 +467,55 @@ public final class BuildJDK {
    * @param dcompInstrumented if true, add equals_dcomp_instrumented method to class
    */
   private void createDCompClass(
-      String destDir, @BinaryName String className, boolean dcompInstrumented) {
+      File destDir, @BinaryName String className, boolean dcompInstrumented) {
+    byte[] classBytes;
+
     try {
-      ClassGen dcomp_class =
-          new ClassGen(
-              Signatures.addPackage("java.lang", className),
-              "java.lang.Object",
-              "daikon.dcomp.BuildJDK tool",
-              Const.ACC_INTERFACE | Const.ACC_PUBLIC | Const.ACC_ABSTRACT,
-              new @BinaryName String[0]);
-      dcomp_class.setMinor(0);
-      // Convert from JDK version number to ClassFile major_version.
-      // A bit of a hack, but seems OK.
-      dcomp_class.setMajor(BcelUtil.javaVersion + 44);
-
-      if (dcompInstrumented) {
-        @SuppressWarnings("nullness:argument") // null instruction list is ok for abstract
-        MethodGen mgen =
-            new MethodGen(
-                Const.ACC_PUBLIC | Const.ACC_ABSTRACT,
-                Type.BOOLEAN,
-                new Type[] {Type.OBJECT},
-                new String[] {"o"},
-                "equals_dcomp_instrumented",
-                dcomp_class.getClassName(),
-                null,
-                dcomp_class.getConstantPool());
-        dcomp_class.addMethod(mgen.getMethod());
-      }
-
-      dcomp_class
-          .getJavaClass()
-          .dump(
-              // Path.of exists in Java 11 and later.
-              new File(new File(new File(destDir, "java"), "lang"), className + ".class"));
+      classBytes =
+          ClassFile.of()
+              .build(
+                  ClassDesc.of(Signatures.addPackage("java.lang", className)),
+                  classBuilder -> finishCreateDCompClass(classBuilder, dcompInstrumented));
+      // Write the byte array to a .class file.
+      Path outputPath = Path.of(destDir.toString(), "java", "lang", className + ".class");
+      Files.write(outputPath, classBytes);
     } catch (Exception e) {
       throw new Error(e);
     }
   }
 
-  /** Formats just the time part of a DateTime. */
+  /**
+   * Create an abstract interface class for use by the DynComp runtime.
+   *
+   * @param classBuilder for the class
+   * @param dcompInstrumented if true, add equals_dcomp_instrumented method to class
+   */
+  private void finishCreateDCompClass(ClassBuilder classBuilder, boolean dcompInstrumented) {
+    classBuilder.withSuperclass(ClassDesc.of("java.lang.Object"));
+    classBuilder.withFlags(ClassFile.ACC_INTERFACE | ClassFile.ACC_PUBLIC | ClassFile.ACC_ABSTRACT);
+    // Convert from JDK version number to ClassFile major_version.
+    classBuilder.withVersion(BcelUtil.javaVersion + 44, 0);
+    classBuilder.with(SourceFileAttribute.of("daikon.dcomp.BuildJDK24 tool"));
+
+    if (dcompInstrumented) {
+      classBuilder.withMethod(
+          "equals_dcomp_instrumented",
+          MethodTypeDesc.of(CD_boolean, CD_Object),
+          ClassFile.ACC_PUBLIC | ClassFile.ACC_ABSTRACT,
+          methodBuilder -> {});
+    }
+  }
+
+  /** Formats just the time part of a DateTime, for progress diagnostics. */
   private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
   /**
    * Instruments the JavaClass {@code jc} (whose name is {@code classFileName}). Writes the
    * resulting class to its corresponding location in the directory outputDir.
    *
-   * @param jc JavaClass to be instrumented
+   * @param classFile ClassFile of class to be instrumented
+   * @param classModel ClassModel of class to be instrumented
+   * @param loader ClassLoader of class to be instrumented
    * @param outputDir output directory for instrumented class
    * @param classFileName name of class to be instrumented (in internal form)
    * @param classTotal total number of classes to be processed; used for progress display
@@ -479,14 +523,30 @@ public final class BuildJDK {
    */
   @SuppressWarnings("SystemConsoleNull") // https://errorprone.info/bugpattern/SystemConsoleNull
   private void instrumentClassFile(
-      JavaClass jc, File outputDir, String classFileName, int classTotal)
-      throws java.io.IOException {
+      ClassFile classFile,
+      ClassModel classModel,
+      ClassLoader loader,
+      File outputDir,
+      String classFileName,
+      int classTotal)
+      throws IOException {
     if (verbose) {
       System.out.printf("processing target %s%n", classFileName);
     }
-    DCInstrument dci = new DCInstrument(jc, true, null);
-    JavaClass inst_jc;
-    inst_jc = dci.instrument_jdk_class();
+
+    // remove '.class' first
+    @SuppressWarnings("signature:assignment") // type conversion
+    @InternalForm String classnameIF = removeSuffix(classFileName, ".class");
+    String classname = Signatures.internalFormToBinaryName(classnameIF);
+    ClassInfo classInfo = new ClassInfo(classname, loader);
+    DCInstrument24 dci = new DCInstrument24(classFile, classModel, true);
+    byte[] classBytes = dci.instrument_jdk_class(classInfo);
+    if (classBytes == null) {
+      throw new Error("Instrumentation failed: " + classFile);
+    }
+    if (DynComp.dump) {
+      inst24.writeDebugClassFiles(classBytes, inst24.debug_instrumented_dir, classname);
+    }
     skipped_methods.addAll(dci.get_skipped_methods());
     File classfile = new File(classFileName);
     File dir;
@@ -500,11 +560,11 @@ public final class BuildJDK {
     if (verbose) {
       System.out.printf("writing to file %s%n", classpath);
     }
-    inst_jc.dump(classpath);
+    Files.write(classpath.toPath(), classBytes);
     _numFilesProcessed++;
     if (((_numFilesProcessed % 100) == 0) && (System.console() != null)) {
       System.out.printf(
-          "Note: Processed %d/%d classes at %s%n",
+          "Processed %d/%d classes at %s%n",
           _numFilesProcessed,
           classTotal,
           LocalDateTime.now(ZoneId.systemDefault()).format(timeFormatter));
@@ -513,7 +573,7 @@ public final class BuildJDK {
 
   /**
    * Print information about methods that were not instrumented. This happens when a method fails
-   * BCEL's verifier (which is more strict than Java's).
+   * the ClassFile API's verifier.
    */
   private static void print_skipped_methods() {
 

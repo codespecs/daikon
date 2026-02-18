@@ -41,6 +41,7 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.FieldDescriptor;
 import org.checkerframework.checker.signature.qual.FqBinaryName;
+import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
@@ -535,12 +536,12 @@ public final class Runtime {
       // System.out.println("Attempting to connect to Daikon on port --- " + port);
       daikonSocket.connect(new InetSocketAddress(InetAddress.getLocalHost(), port), 5000);
     } catch (UnknownHostException e) {
-      System.out.println(
+      System.err.println(
           "UnknownHostException connecting to Daikon : " + e.getMessage() + ". Exiting");
       System.exit(1);
       throw new Error("Unreachable control flow");
     } catch (IOException e) {
-      System.out.println(
+      System.err.println(
           "IOException, could not connect to Daikon : " + e.getMessage() + ". Exiting");
       System.exit(1);
       throw new Error("Unreachable control flow");
@@ -551,7 +552,7 @@ public final class Runtime {
           new PrintWriter(
               new BufferedWriter(new OutputStreamWriter(daikonSocket.getOutputStream(), UTF_8)));
     } catch (IOException e) {
-      System.out.println("IOException connecting to Daikon : " + e.getMessage() + ". Exiting");
+      System.err.println("IOException connecting to Daikon : " + e.getMessage() + ". Exiting");
       System.exit(1);
     }
 
@@ -1082,6 +1083,9 @@ public final class Runtime {
   // From class SignaturesUtil
   //
 
+  // Eventually the code should use the library rather than copying its code.
+  // (As of 2026-01-10, I'm having trouble with the shadowJar plugin.)
+
   /** A map from field descriptor (sach as "I") to Java primitive type (such as "int"). */
   private static HashMap<String, String> fieldDescriptorToPrimitive = new HashMap<>(8);
 
@@ -1169,6 +1173,26 @@ public final class Runtime {
       }
       return result;
     }
+  }
+
+  /**
+   * Given a class name in internal form, return it as a binary name.
+   *
+   * @param internalForm a class name in internal form
+   * @return the class name as a binary name
+   */
+  public static @BinaryName String internalFormToBinaryName(@InternalForm String internalForm) {
+    return internalForm.replace('/', '.');
+  }
+
+  /**
+   * Given a class name in binary name form, return it in internal form.
+   *
+   * @param binaryName a class name in binary name form
+   * @return the class name in internal form
+   */
+  public static @InternalForm String binaryNameToInternalForm(@BinaryName String binaryName) {
+    return binaryName.replace('.', '/');
   }
 
   // ///////////////////////////////////////////////////////////////////////////

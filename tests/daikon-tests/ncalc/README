@@ -23,4 +23,4 @@ For Daikon testing we do this by adding the line:
   export LD_LIBRARY_PATH=$(PROJECT) && \
 in tests/Makefile.common. This is inserted prior to every use of DynComp or Chicory. Note
 that this means it is set for every test case, but that should not be a problem as no other
-test uses 'loadLibary'.
+test uses 'loadLibrary'.
