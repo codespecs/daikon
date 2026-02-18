@@ -151,7 +151,7 @@ export LC_ALL=C
 ###
 
 ### Default tag
-help:
+help default:
 	@echo
 	@echo "Targets:"
 	@echo " compile compile-java     -- compile Java files"
@@ -325,7 +325,7 @@ nightly-test-except-doc-pdf:
 # "utils" is temporary; it was changed to ".utils"
 CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude-dir utils --exclude clustering.html
 ifeq (,$(wildcard .plume-scripts))
-dummy := $(shell git clone -q https://github.com/plume-lib/plume-scripts.git .plume-scripts)
+dummy := $(shell git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git .plume-scripts)
 endif
 include .plume-scripts/code-style.mak
 
