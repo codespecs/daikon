@@ -1,0 +1,38 @@
+To temporarily eliminate a goal file difference, I haved committed an
+'incorrect' md5.dtrace.goal-Ubuntu.
+markro 2/17/2026
+
+md5.dtrace.goal fails (Ubuntu only) due to the compiler generating 
+stack probes. These are produced when you allocate large amounts on the
+stack (typically >4KB) because the OS needs to know you're actually
+using those pages. The probe touches each page so the OS can:
+  allocate physical memory
+  detect stack overflows
+  properly set up guard pages
+Without the probe, you could blow past your stack limit without the OS
+noticing until you actually access the memory - then crash mysteriously.
+
+These probes break our heuristic for determining where the function's
+prologue ends. I think I know how to fix this, but it will require a
+significant amount of work in Kvasir.
+
+--- md5.dtrace.goal     2023-12-15 10:19:52.036466277 -0800
++++ md5.dtrace.goal-Ubuntu      2026-02-17 15:48:42.407186281 -0800
+@@ -5,16 +5,16 @@
+ ..main():::ENTER
+ this_invocation_nonce
+ 0
+ argc
++nonsensical
+ 2
+-1
+ argv
+-<STACK_ADDR>
+-1
++nonsensical
++2
+ argv[..]
+-[ "./md5" ]
+-1
++nonsensical
++2
