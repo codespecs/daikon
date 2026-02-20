@@ -323,7 +323,7 @@ nightly-test-except-doc-pdf:
 
 # Code style; defines `style-check` and `style-fix`.
 # "utils" is temporary; it was changed to ".utils"
-CODE_STYLE_EXCLUSIONS_USER := --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude-dir utils --exclude clustering.html
+CODE_STYLE_EXCLUSIONS_USER := ${CODE_STYLE_EXCLUSIONS_USER} --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude-dir utils --exclude clustering.html --exclude=’*.log’
 ifeq (,$(wildcard .plume-scripts))
 dummy := $(shell git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git .plume-scripts)
 endif
