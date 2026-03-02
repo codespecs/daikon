@@ -464,7 +464,8 @@ export DAIKONDIR
 ### Test targets
 ###
 
-.PHONY: all
+.PHONY: default all
+default: daikon
 all: daikon
 
 .PHONY: daikon

@@ -7,6 +7,4 @@ KVASIR_OPTIONS := --ignore-globals --func-disambig-ptrs
 DEFINES := -I. -DHAVE_CONFIG_H
 PROGRAM_ARGS := -l pi.b
 
-default: summary
-
 include ../Makefile.common

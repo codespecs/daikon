@@ -12,9 +12,17 @@ else
 VALGRIND_ARCH := x86
 endif
 
+CC := clang
 CC := gcc
+
+CXX := clang++
 CXX := g++
-CFLAGS += -gdwarf-2
+
+# CFLAGS += -gdwarf-2
+CFLAGS += -gdwarf-3
+
+# clang sets -Wreturn-mismatch
+CFLAGS += -Wno-return-mismatch
 
 # Ubuntu sets -fstack-protector-strong on by default
 # we turn if back off to get baseline results to match Fedora.
@@ -36,7 +44,6 @@ REMOVE_TIMING := ../remove-timing.pl
 REMOVE_VARIABLE_COUNT := ../remove-variable-count.pl
 DECLS_2_COMP ?= ${DAIKONDIR}/scripts/decls2comp.py
 RUN_MANY := ../run-many.pl
-DTRACE_DIFF ?= dtrace-diff.pl
 SORT_DTRACE_INPLACE := perl -Si ${DAIKONDIR}/scripts/sort-dtrace.pl
 SORT_DECLS := ${DAIKONDIR}/scripts/sort-decls-2.py
 INCLUDES ?=
@@ -140,9 +147,13 @@ goal_name = $(if $(shell if [ -f $(1).$(GOAL) ] ; then echo true; fi), \
 				) \
 			)
 
+# Define the strict whitelist
+SUPPORTED_OS := Fedora Rocky Ubuntu
+
 show-os:
 	@echo OS_ID=$(OS_ID) OS_REL=$(OS_REL)
 
+# currently unused
 ifdef COMPRESS_DTRACE
 export DTRACEGZIP := 1
 DTRACE_EXT := .dtrace.gz

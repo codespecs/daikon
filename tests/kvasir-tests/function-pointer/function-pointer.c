@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int apply(int (*fp)(const char *, ...), int val) {
-    (*fp)("%d\n", val);
+    return (*fp)("%d\n", val);
 }
 
 int main() {

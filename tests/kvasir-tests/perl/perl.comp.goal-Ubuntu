@@ -37370,8 +37370,8 @@ sv[..].sv_refcnt
 ..Perl_magic_get():::ENTER
 mg
 mg[..]
-mg[..].mg_flags
-mg[..].mg_len
+mg[..].mg_flags mg[..].mg_private
+mg[..].mg_len mg[..].mg_obj mg[..].mg_obj->sv_any mg[..].mg_obj->sv_flags mg[..].mg_obj->sv_refcnt mg[..].mg_ptr sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 mg[..].mg_moremagic
 mg[..].mg_moremagic->mg_flags
 mg[..].mg_moremagic->mg_len
@@ -37385,14 +37385,8 @@ mg[..].mg_moremagic->mg_type
 mg[..].mg_moremagic->mg_virtual
 mg[..].mg_moremagic->mg_virtual[0]
 mg[..].mg_moremagic[0]
-mg[..].mg_obj
-mg[..].mg_obj->sv_any
 mg[..].mg_obj->sv_any[0]
-mg[..].mg_obj->sv_flags
-mg[..].mg_obj->sv_refcnt
 mg[..].mg_obj[0]
-mg[..].mg_private
-mg[..].mg_ptr
 mg[..].mg_type
 mg[..].mg_virtual
 mg[..].mg_virtual->svt_clear
@@ -37412,16 +37406,13 @@ mg[..].mg_virtual->svt_set[0]
 mg[..].mg_virtual[0]
 sv
 sv[..]
-sv[..].sv_any
 sv[..].sv_any[0]
-sv[..].sv_flags
-sv[..].sv_refcnt
 
 ..Perl_magic_get():::EXIT0
 mg
 mg[..]
-mg[..].mg_flags
-mg[..].mg_len
+mg[..].mg_flags mg[..].mg_private
+mg[..].mg_len mg[..].mg_obj mg[..].mg_obj->sv_any mg[..].mg_obj->sv_flags mg[..].mg_obj->sv_refcnt mg[..].mg_ptr sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 mg[..].mg_moremagic
 mg[..].mg_moremagic->mg_flags
 mg[..].mg_moremagic->mg_len
@@ -37435,14 +37426,8 @@ mg[..].mg_moremagic->mg_type
 mg[..].mg_moremagic->mg_virtual
 mg[..].mg_moremagic->mg_virtual[0]
 mg[..].mg_moremagic[0]
-mg[..].mg_obj
-mg[..].mg_obj->sv_any
 mg[..].mg_obj->sv_any[0]
-mg[..].mg_obj->sv_flags
-mg[..].mg_obj->sv_refcnt
 mg[..].mg_obj[0]
-mg[..].mg_private
-mg[..].mg_ptr
 mg[..].mg_type
 mg[..].mg_virtual
 mg[..].mg_virtual->svt_clear
@@ -37463,10 +37448,7 @@ mg[..].mg_virtual[0]
 return
 sv
 sv[..]
-sv[..].sv_any
 sv[..].sv_any[0]
-sv[..].sv_flags
-sv[..].sv_refcnt
 
 ..Perl_magic_getarylen():::ENTER
 mg
@@ -39336,8 +39318,8 @@ return[..].sv_refcnt
 ..Perl_magic_set():::ENTER
 mg
 mg[..]
-mg[..].mg_flags
-mg[..].mg_len
+mg[..].mg_flags mg[..].mg_private
+mg[..].mg_len mg[..].mg_obj mg[..].mg_obj->sv_any mg[..].mg_obj->sv_flags mg[..].mg_obj->sv_refcnt mg[..].mg_ptr sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 mg[..].mg_moremagic
 mg[..].mg_moremagic->mg_flags
 mg[..].mg_moremagic->mg_len
@@ -39351,14 +39333,8 @@ mg[..].mg_moremagic->mg_type
 mg[..].mg_moremagic->mg_virtual
 mg[..].mg_moremagic->mg_virtual[0]
 mg[..].mg_moremagic[0]
-mg[..].mg_obj
-mg[..].mg_obj->sv_any
 mg[..].mg_obj->sv_any[0]
-mg[..].mg_obj->sv_flags
-mg[..].mg_obj->sv_refcnt
 mg[..].mg_obj[0]
-mg[..].mg_private
-mg[..].mg_ptr
 mg[..].mg_type
 mg[..].mg_virtual
 mg[..].mg_virtual->svt_clear
@@ -39378,16 +39354,13 @@ mg[..].mg_virtual->svt_set[0]
 mg[..].mg_virtual[0]
 sv
 sv[..]
-sv[..].sv_any
 sv[..].sv_any[0]
-sv[..].sv_flags
-sv[..].sv_refcnt
 
 ..Perl_magic_set():::EXIT0
 mg
 mg[..]
-mg[..].mg_flags
-mg[..].mg_len
+mg[..].mg_flags mg[..].mg_private
+mg[..].mg_len mg[..].mg_obj mg[..].mg_obj->sv_any mg[..].mg_obj->sv_flags mg[..].mg_obj->sv_refcnt mg[..].mg_ptr sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 mg[..].mg_moremagic
 mg[..].mg_moremagic->mg_flags
 mg[..].mg_moremagic->mg_len
@@ -39401,14 +39374,8 @@ mg[..].mg_moremagic->mg_type
 mg[..].mg_moremagic->mg_virtual
 mg[..].mg_moremagic->mg_virtual[0]
 mg[..].mg_moremagic[0]
-mg[..].mg_obj
-mg[..].mg_obj->sv_any
 mg[..].mg_obj->sv_any[0]
-mg[..].mg_obj->sv_flags
-mg[..].mg_obj->sv_refcnt
 mg[..].mg_obj[0]
-mg[..].mg_private
-mg[..].mg_ptr
 mg[..].mg_type
 mg[..].mg_virtual
 mg[..].mg_virtual->svt_clear
@@ -39429,10 +39396,7 @@ mg[..].mg_virtual[0]
 return
 sv
 sv[..]
-sv[..].sv_any
 sv[..].sv_any[0]
-sv[..].sv_flags
-sv[..].sv_refcnt
 
 ..Perl_magic_set_all_env():::ENTER
 mg

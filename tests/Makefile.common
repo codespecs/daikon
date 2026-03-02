@@ -499,7 +499,7 @@ endif
 
 chicory: $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz
 $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-timestamp \
-									$(INST_LIST_FILE) $(CHICORY_EXEC)
+						$(INST_LIST_FILE) $(CHICORY_EXEC)
 	@echo
 	@echo "### Run Chicory (${PROJECT_FILE})"
 	@echo

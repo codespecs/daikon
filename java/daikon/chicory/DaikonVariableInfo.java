@@ -195,7 +195,11 @@ public abstract class DaikonVariableInfo
     children.add(info);
   }
 
-  /** Returns a string representation of this node. */
+  /**
+   * Returns a string representation of this node.
+   *
+   * <p>This implementation returns its run-time class and its name.
+   */
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied DaikonVariableInfo this) {
@@ -1390,6 +1394,9 @@ public abstract class DaikonVariableInfo
    * @return true if this DaikonVariableInfo should be ignored (should not be printed)
    */
   private boolean check_for_dup_names() {
+
+    // TODO: It seems wrong to choose the first occurrence of the variable, which could be a nested
+    // occurrence rather than the canonical top-level occurrence.
 
     if (ppt_statics.contains(name)) {
       debug_vars.log("ignoring already included variable %s [%s]", name, getClass());

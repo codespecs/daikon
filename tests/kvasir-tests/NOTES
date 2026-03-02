@@ -12,18 +12,16 @@ Examples include: ArrayTest, IntTest, GlobalTest, etc.
 The actual applications are a small set of actual C/C++ applications that we run
 through Kvasir. We test the following applications.
 
-A reference implementation of the rijndael encryption algorithm.
-bzip2
 bc
+bzip2
 flex (A special single-file version, as well as a pristine copy)
+gtest
 gzip
 md5
 perl
+rijndael
+tcas
 wordplay
-
-Of the test, we only produce .dtrace files for bc, md5, and wordplay as the other
-programs would produce dtraces of a size that would be unfeasible for nightly
-testing.
 
 ------------------------------------------------------------------------------
 NOTES
@@ -64,6 +62,8 @@ version with differences. Currently this is not a problem, but if the amount of
 different goal file sets we need to maintain becomes large, it may be more prudent
 to keep one canonical goal file set and maintain the rest as diffs (or possibly utilize
 some other scheme)
+
+- We do not currently run the povray test. See its README for details.
 
 ------------------------------------------------------------------------------
 DYNCOMP ARCHITECTURAL ISSUES

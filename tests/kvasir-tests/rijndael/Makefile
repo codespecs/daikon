@@ -4,8 +4,6 @@ DEFINES := -DMCT_ITERATIONS_OUTER=2 -DMCT_ITERATIONS_INNER=2 -DVARIABLE_TEST_SKI
 SOURCES := rijndaeltest-ref.c rijndael-api-ref.c rijndael-alg-ref.c
 EXTRA_OUTPUTS := cbc_d_m.txt cbc_e_m.txt ecb_d_m.txt ecb_e_m.txt ecb_iv.txt \
                  ecb_tbl.txt ecb_vk.txt ecb_vt.txt
-DTRACE_DIFF := dtrace-diff-fast.pl
-COUNTS_ONLY := 1
 
 # This test seems to be non-deterministic on Ubuntu 22.10 with JDK 19.
 
@@ -23,7 +21,7 @@ OS_REL := $(shell sed -n -e 's/^VERSION_ID="(.*)"/\1/' /etc/os-release)
 ifeq (${OS_ID},Ubuntu)
 ifeq (${OS_REL},22.10)
 ifeq (${JAVA19_OR_NEWER},1)
-SKIP_COMP_DIFF := 1
+#SKIP_COMP_DIFF := 1
 endif
 endif
 endif
