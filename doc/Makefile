@@ -119,7 +119,7 @@ daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo ${CRONI
 	if [ -f /etc/os-release ]; then \
 	    . /etc/os-release; \
 	    if [ "$$ID" = "rocky" ] && [ "$$VERSION_ID" != "$${VERSION_ID#9}" ]; then \
-	        CRONIC="; \
+	        CRONIC=""; \
 	    fi; \
 	fi; \
 	${CRONIC} makeinfo --pdf $<
