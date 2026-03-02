@@ -329,7 +329,7 @@ jobs:
           paths:
             - ".git"
       - run:
-          command: export COMSPEC="" && export ComSpec="" && ./scripts/test-misc.sh
+          command: ./scripts/test-misc.sh
           no_output_timeout: 20m
   misc-ubuntu-jdk11:
     docker:
@@ -351,7 +351,7 @@ jobs:
           paths:
             - ".git"
       - run:
-          command: export COMSPEC="" && export ComSpec="" && ./scripts/test-misc.sh
+          command: ./scripts/test-misc.sh
           no_output_timeout: 20m
   misc-ubuntu-jdk17:
     docker:
@@ -373,7 +373,7 @@ jobs:
           paths:
             - ".git"
       - run:
-          command: export COMSPEC="" && export ComSpec="" && ./scripts/test-misc.sh
+          command: ./scripts/test-misc.sh
           no_output_timeout: 20m
   misc-ubuntu-jdk21:
     docker:
@@ -395,7 +395,7 @@ jobs:
           paths:
             - ".git"
       - run:
-          command: export COMSPEC="" && export ComSpec="" && ./scripts/test-misc.sh
+          command: ./scripts/test-misc.sh
           no_output_timeout: 20m
   misc-ubuntu-jdk25:
     docker:
@@ -417,7 +417,7 @@ jobs:
           paths:
             - ".git"
       - run:
-          command: export COMSPEC="" && export ComSpec="" && ./scripts/test-misc.sh
+          command: ./scripts/test-misc.sh
           no_output_timeout: 20m
 
   kvasir-ubuntu-jdk8:
@@ -939,7 +939,7 @@ jobs:
           paths:
             - ".git"
       - run:
-          command: export COMSPEC="" && export ComSpec="" && ./scripts/test-misc.sh
+          command: ./scripts/test-misc.sh
           no_output_timeout: 20m
   misc-rockylinux-jdk25:
     docker:
@@ -961,7 +961,7 @@ jobs:
           paths:
             - ".git"
       - run:
-          command: export COMSPEC="" && export ComSpec="" && ./scripts/test-misc.sh
+          command: ./scripts/test-misc.sh
           no_output_timeout: 20m
 
   kvasir-rockylinux-jdk8:
