@@ -226,6 +226,11 @@ public class SplitterFactoryTestUpdater {
     ps.println("  // java files it produces, changing the order that the setUpTests");
     ps.println("  // commands are run will cause the tests to fail.");
     ps.println();
+    ps.println("  /** Do not instantiate. */");
+    ps.println("  private SplitterFactoryTest() {");
+    ps.println("    throw new Error(\"Do not instantiate\");");
+    ps.println("  }");
+    ps.println();
     ps.println("  private static String targetDir = \"" + targetDir + "\";");
     ps.println();
     ps.println("  private static @Nullable String tempDir = null;");

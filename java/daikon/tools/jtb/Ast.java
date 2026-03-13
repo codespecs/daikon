@@ -34,6 +34,11 @@ import org.plumelib.util.StringsPlume;
 @SuppressWarnings({"rawtypes", "nullness"}) // not generics-correct
 public class Ast {
 
+  /** Do not instantiate. */
+  private Ast() {
+    throw new Error("Do not instantiate");
+  }
+
   /** The line separator. */
   private static final String lineSep = System.lineSeparator();
 

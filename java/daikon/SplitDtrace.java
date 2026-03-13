@@ -28,6 +28,12 @@ import org.checkerframework.dataflow.qual.Pure;
  * contains 99-100%.
  */
 public final class SplitDtrace {
+
+  /** Do not instantiate. */
+  private SplitDtrace() {
+    throw new Error("Do not instantiate");
+  }
+
   /**
    * Entry point for SplitDtrace, which splits a trace file into 100 parts.
    *

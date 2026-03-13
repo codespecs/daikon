@@ -11,6 +11,11 @@ import org.checkerframework.checker.lock.qual.GuardedBy;
 @SuppressWarnings("JavaLangClash")
 public class Runtime {
 
+  /** Do not instantiate. */
+  private Runtime() {
+    throw new Error("Do not instantiate");
+  }
+
   /** A list of throwables seen when attempting to evaluate properties. */
   public static List<Throwable> internalInvariantEvaluationErrors = new ArrayList<>();
 

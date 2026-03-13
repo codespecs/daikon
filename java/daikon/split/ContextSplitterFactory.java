@@ -25,6 +25,12 @@ import org.plumelib.util.EntryReader;
  * the caller (i.e., which static callgraph edge was taken).
  */
 public class ContextSplitterFactory {
+
+  /** Do not instantiate. */
+  private ContextSplitterFactory() {
+    throw new Error("Do not instantiate");
+  }
+
   /** Debug tracer. */
   public static final Logger debug = Logger.getLogger("daikon.split.ContextSplitterFactory");
 

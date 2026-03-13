@@ -40,6 +40,11 @@ import org.checkerframework.dataflow.qual.Pure;
 @SuppressWarnings("nullness") // not actively maintained
 public class DaikonSimple {
 
+  /** Do not instantiate. */
+  private DaikonSimple() {
+    throw new Error("Do not instantiate");
+  }
+
   // logging information
   public static final Logger debug = Logger.getLogger("daikon.DaikonSimple");
 

@@ -36,6 +36,11 @@ import org.plumelib.util.StringsPlume;
  */
 public class DtraceDiff {
 
+  /** Do not instantiate. */
+  private DtraceDiff() {
+    throw new Error("Do not instantiate");
+  }
+
   /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(

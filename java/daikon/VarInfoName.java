@@ -3329,6 +3329,11 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
    */
   public static class QuantHelper {
 
+    /** Do not instantiate. */
+    private QuantHelper() {
+      throw new Error("Do not instantiate");
+    }
+
     /** Debug tracer. */
     public static final Logger debug = Logger.getLogger("daikon.inv.Invariant.print.QuantHelper");
 

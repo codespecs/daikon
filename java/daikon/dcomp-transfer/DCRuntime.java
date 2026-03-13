@@ -20,6 +20,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public final class DCRuntime {
 
+  /** Do not instantiate. */
+  private DCRuntime() {
+    throw new Error("Do not instantiate");
+  }
+
   public static boolean dcomp_equals(Object o1, Object o2) {
     return daikon.dcomp.DCRuntime.dcomp_equals(o1, o2);
   }

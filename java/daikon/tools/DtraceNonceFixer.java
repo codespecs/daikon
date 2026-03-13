@@ -22,6 +22,11 @@ import org.plumelib.util.StringsPlume;
  */
 public class DtraceNonceFixer {
 
+  /** Do not instantiate. */
+  private DtraceNonceFixer() {
+    throw new Error("Do not instantiate");
+  }
+
   /** The system-specific line separator. */
   private static final String lineSep = System.lineSeparator();
 

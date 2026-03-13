@@ -26,6 +26,11 @@ import java.util.StringTokenizer;
 @SuppressWarnings("nullness") // testing code
 public class VarInfoNameDriver {
 
+  /** Do not instantiate. */
+  private VarInfoNameDriver() {
+    throw new Error("Do not instantiate");
+  }
+
   /**
    * Convenience entry point for TraceSelect.
    *

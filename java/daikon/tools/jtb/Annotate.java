@@ -29,6 +29,11 @@ import org.plumelib.util.StringsPlume;
  */
 public class Annotate {
 
+  /** Do not instantiate. */
+  private Annotate() {
+    throw new Error("Do not instantiate");
+  }
+
   // ESC format: Invariants are inserted as follows:
   //  * invariants at method entry become "requires"
   //  * invariants at method exit become "ensures".

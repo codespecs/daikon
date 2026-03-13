@@ -43,8 +43,10 @@ import typequals.prototype.qual.Prototype;
 //
 
 /** Main class for non-instantiating suppression. Handles setup and other overall functions. */
+@SuppressWarnings("PMD.UseUtilityClass") // Bug in PMD: this class has a no-arg constructor.
 public class NIS {
 
+  /** Do not instantiate. */
   @SuppressWarnings("initialization.fields.uninitialized") // never instantiated
   public NIS() {
     throw new Error("Do not instantiate");

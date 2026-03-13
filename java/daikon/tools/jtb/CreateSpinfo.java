@@ -48,6 +48,11 @@ public class CreateSpinfo {
   //  The method printSpinfoFile prints out these expressions and
   //  replace statements in splitter info file format.
 
+  /** Do not instantiate. */
+  private CreateSpinfo() {
+    throw new Error("Do not instantiate");
+  }
+
   /** Debug logger. */
   public static final Logger debug = Logger.getLogger("daikon.tools.jtb.CreateSpinfo");
 

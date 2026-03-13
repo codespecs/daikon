@@ -31,6 +31,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class Premain {
 
+  /** Do not instantiate. */
+  private Premain() {
+    throw new Error("Do not instantiate");
+  }
+
   // These command-line options cannot be accessed from DynComp.  These are internal debugging
   // options that may be used when Premain is invoked directly from the command line.
 

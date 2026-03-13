@@ -32,6 +32,11 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
  */
 public class ReadTrace {
 
+  /** Do not instantiate. */
+  private ReadTrace() {
+    throw new Error("Do not instantiate");
+  }
+
   /**
    * The entry point for ReadTrace.
    *

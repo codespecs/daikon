@@ -24,6 +24,11 @@ import org.plumelib.util.StringsPlume;
  */
 public class TraceSelect {
 
+  /** Do not instantiate. */
+  private TraceSelect() {
+    throw new Error("Do not instantiate");
+  }
+
   public static boolean CLEAN = true;
   public static boolean INCLUDE_UNRETURNED = false;
   public static boolean DO_DIFFS = false;

@@ -7,6 +7,11 @@ import org.checkerframework.checker.regex.qual.Regex;
 /** Supplies a static method htmlToTexinfo that converts HTML to Texinfo format. */
 public class HtmlToTexinfo {
 
+  /** Do not instantiate. */
+  private HtmlToTexinfo() {
+    throw new Error("Do not instantiate");
+  }
+
   private static final String lineSep = System.lineSeparator();
 
   public static @Regex(1) Pattern javadocAtCode;

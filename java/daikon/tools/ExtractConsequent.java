@@ -44,6 +44,11 @@ import org.plumelib.util.StringsPlume;
  */
 public class ExtractConsequent {
 
+  /** Do not instantiate. */
+  private ExtractConsequent() {
+    throw new Error("Do not instantiate");
+  }
+
   public static final Logger debug = Logger.getLogger("daikon.ExtractConsequent");
   private static final String lineSep = Global.lineSep;
 

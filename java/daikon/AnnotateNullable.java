@@ -31,6 +31,11 @@ import org.plumelib.reflection.Signatures;
  */
 public class AnnotateNullable {
 
+  /** Do not instantiate. */
+  private AnnotateNullable() {
+    throw new Error("Do not instantiate");
+  }
+
   // Why is this variable static?
   static PptMap ppts = new PptMap(); // dummy value, to satisfy Nullness Checker
 

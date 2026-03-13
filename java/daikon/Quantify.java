@@ -15,8 +15,13 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 @SuppressWarnings("UnusedVariable") // messy code, need to investigate later
 public class Quantify {
 
+  /** Do not instantiate. */
+  private Quantify() {
+    throw new Error("Do not instantiate");
+  }
+
   /** Flags describing how quantifications are to be built. */
-  public enum QuantFlags {
+  public static enum QuantFlags {
     /** two indices where they refer to corresponding positions. */
     ELEMENT_WISE,
     /** two indices where the second is one more than the first. */

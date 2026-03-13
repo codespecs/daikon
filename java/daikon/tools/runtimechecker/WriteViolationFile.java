@@ -21,6 +21,11 @@ import org.checkerframework.checker.signature.qual.BinaryName;
  */
 class WriteViolationFile {
 
+  /** Do not instantiate. */
+  private WriteViolationFile() {
+    throw new Error("Do not instantiate");
+  }
+
   public static void usage() {
     System.out.println("Usage:  java WriteViolationFile CLASS ARGS");
     System.out.println("  CLASS and ARGS are just as they would be when being run directly,");
