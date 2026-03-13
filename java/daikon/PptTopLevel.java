@@ -839,7 +839,8 @@ public class PptTopLevel extends Ppt {
       // consideration.
       // target1 indicates whether the first variable is under consideration.
       boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
-      int i2_min, i2_limit;
+      int i2_min;
+      int i2_limit;
       if (target1) {
         i2_min = i1 + 1;
         i2_limit = var_infos.length;
@@ -905,7 +906,8 @@ public class PptTopLevel extends Ppt {
       // consideration.
       // target1 indicates whether the first variable is under consideration.
       boolean target1 = (i1 >= vi_index_min) && (i1 < vi_index_limit);
-      int i2_min, i2_limit;
+      int i2_min;
+      int i2_limit;
       if (target1) {
         i2_min = i1 + 1;
         i2_limit = var_infos.length;
@@ -935,7 +937,8 @@ public class PptTopLevel extends Ppt {
           continue;
         }
         boolean target2 = (i2 >= vi_index_min) && (i2 < vi_index_limit);
-        int i3_min, i3_limit;
+        int i3_min;
+        int i3_limit;
         if (target1 || target2) {
           i3_min = i2 + 1;
           i3_limit = var_infos.length;

@@ -490,7 +490,8 @@ public class Quantify {
       QuantifyReturn[] qrets = quantify(vars);
 
       // build the forall predicate
-      StringJoiner int_list, conditions;
+      StringJoiner int_list;
+      StringJoiner conditions;
       {
         // "i j ..."
         int_list = new StringJoiner(" ");

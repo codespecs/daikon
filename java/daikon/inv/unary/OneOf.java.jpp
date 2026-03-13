@@ -1344,7 +1344,8 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
             }
             k--;
             String index_name = VarInfo.get_simplify_free_index(var());
-            String cond_left, cond_right;
+            String cond_left;
+            String cond_right;
             if (offset == null) {
               cond_left  = "(<= " + j + " " + index_name + ")";
               cond_right = "(<= " + index_name + " " + k + ")";

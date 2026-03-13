@@ -1962,7 +1962,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         if (this.equals(lb.var2()) && (post != lb.var1().isPrestate())) {
 
           // a * v1 + b * this + c = 0 or this == (-a/b) * v1 - c/b
-          double a = lb.core.a, b = lb.core.b, c = lb.core.c;
+          double a = lb.core.a;
+          double b = lb.core.b;
+          double c = lb.core.c;
           // if (a == 1) {  // match } for vim
           if (-a / b == 1) {
             // this = v1 - c/b
@@ -1975,7 +1977,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         if (this.equals(lb.var1()) && (post != lb.var2().isPrestate())) {
           // v2 = a * this + b <-- not true anymore
           // a * this + b * v2 + c == 0 or v2 == (-a/b) * this - c/b
-          double a = lb.core.a, b = lb.core.b, c = lb.core.c;
+          double a = lb.core.a;
+          double b = lb.core.b;
+          double c = lb.core.c;
           // if (a == 1) {  // match } for vim
           if (-a / b == 1) {
             // this = v2 + c/b

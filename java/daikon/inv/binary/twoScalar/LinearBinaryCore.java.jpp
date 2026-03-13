@@ -46,10 +46,20 @@ public final class CLASSNAME implements Serializable, Cloneable {
     Logger.getLogger("daikon.inv.binary.twoScalar." + CLASSSTRING);
 
   /** This invariant represents ax + by + c = 0; the first argument is x, second is y. */
-  public double a = 0, b = 0, c = 0;
+  public double a = 0;
+  public double b = 0;
+  public double c = 0;
 
-  public PRIMITIVE min_x, min_y, max_x, max_y;
-  public double min_a, max_a, min_b, max_b, min_c, max_c;
+  public PRIMITIVE min_x;
+  public PRIMITIVE min_y;
+  public PRIMITIVE max_x;
+  public PRIMITIVE max_y;
+  public double min_a;
+  public double max_a;
+  public double min_b;
+  public double max_b;
+  public double min_c;
+  public double max_c;
 
   public Invariant wrapper;
 
@@ -543,7 +553,9 @@ public final class CLASSNAME implements Serializable, Cloneable {
       int ib = (int) b;
       int ic = (int) c;
 
-      String str_a, str_b, str_c;
+      String str_a;
+      String str_b;
+      String str_c;
       if (ia == a && ib == b && ic == c) {
         // integer
         str_a = Invariant.simplify_format_long(ia);

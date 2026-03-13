@@ -303,8 +303,10 @@ public class ExtractConsequent {
 
         Invariant consequent = maybe.consequent();
         Invariant predicate = maybe.predicate();
-        Invariant inv, cluster_inv;
-        boolean cons_uses_cluster = false, pred_uses_cluster = false;
+        Invariant inv;
+        Invariant cluster_inv;
+        boolean cons_uses_cluster = false;
+        boolean pred_uses_cluster = false;
         // extract the consequent (predicate) if the predicate
         // (consequent) uses the variable "cluster".  Ignore if they
         // both depend on "cluster"
@@ -472,9 +474,16 @@ public class ExtractConsequent {
     return m.find() && !m.find();
   }
 
-  static Pattern orig_pattern, dot_class_pattern, non_word_pattern;
-  static Pattern gteq_pattern, lteq_pattern, neq_pattern, inequality_pattern;
-  static Pattern contradict_inv_pattern, useless_inv_pattern_1, useless_inv_pattern_2;
+  static Pattern orig_pattern;
+  static Pattern dot_class_pattern;
+  static Pattern non_word_pattern;
+  static Pattern gteq_pattern;
+  static Pattern lteq_pattern;
+  static Pattern neq_pattern;
+  static Pattern inequality_pattern;
+  static Pattern contradict_inv_pattern;
+  static Pattern useless_inv_pattern_1;
+  static Pattern useless_inv_pattern_2;
 
   static {
     try {

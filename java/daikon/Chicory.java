@@ -356,9 +356,8 @@ public class Chicory {
       System.exit(1);
     }
 
-    String dtraceLim, terminate;
-    dtraceLim = System.getProperty(traceLimString);
-    terminate = System.getProperty(traceLimTermString);
+    String dtraceLim = System.getProperty(traceLimString);
+    String terminate = System.getProperty(traceLimTermString);
 
     // Run Daikon if we're in online mode
     StreamRedirectThread daikon_err = null;

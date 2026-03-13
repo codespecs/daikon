@@ -598,7 +598,8 @@ public class LogicalCompare {
             System.err.println("Must specify PPT_NAME before giving a formula");
             throw new Error();
           }
-          String formula, comment;
+          String formula;
+          String comment;
           // XXX This should really read a balanced Simplify
           // expression, then look for a comment after that. But that
           // would involve counting parens and vertical bars and

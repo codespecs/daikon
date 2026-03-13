@@ -331,7 +331,8 @@ public class SUBSET extends TWOSEQUENCE {
       return di;
     }
 
-    VarInfo subvar, supervar;
+    VarInfo subvar;
+    VarInfo supervar;
     #if (defined(SUB) || defined(SUBFLOAT))
     subvar = var1;
     supervar = var2;

@@ -86,8 +86,18 @@ public final class CLASSNAME implements Serializable, Cloneable {
   // Although the coefficients are guaranteed to be integers, we use doubles to
   // store the values because regression tests have shown that a long is
   // not sufficient
-  public double a = 0, b = 0, c = 0, d = 0;
-  public double min_a, max_a, min_b, max_b, min_c, max_c, min_d, max_d;
+  public double a = 0;
+  public double b = 0;
+  public double c = 0;
+  public double d = 0;
+  public double min_a;
+  public double max_a;
+  public double min_b;
+  public double max_b;
+  public double min_c;
+  public double max_c;
+  public double min_d;
+  public double max_d;
   public double separation = 0;
 
   // coefficients for the invariant in 3D space
@@ -1190,7 +1200,10 @@ public final class CLASSNAME implements Serializable, Cloneable {
     int ic = (int) dc;
     int id = (int) dd;
 
-    String str_a, str_b, str_c, str_d;
+    String str_a;
+    String str_b;
+    String str_c;
+    String str_d;
     if (ia != da || ib != db || ic != dc || id != dd) {
       // floating point
 

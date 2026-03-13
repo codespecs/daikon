@@ -189,7 +189,8 @@ public final class CLASSNAME extends SEQUENCESCALAR {
       // at the end.
       VarInfo seq_left_index = null;
       VarInfo seq_right_index = null;
-      int seq_left_shift = 0, seq_right_shift = 0;
+      int seq_left_shift = 0;
+      int seq_right_shift = 0;
       if (seqvar.derived instanceof SEQ_SUBSEQUENCE) {
         // the sequence is B[0..J-1] or similar.  Get information about it.
         SEQ_SUBSEQUENCE seqsss = (SEQ_SUBSEQUENCE) seqvar.derived;
@@ -220,7 +221,8 @@ public final class CLASSNAME extends SEQUENCESCALAR {
 
         // determine if the scalar index is statically included in the
         // left/right sequence
-        boolean left_included = false, right_included = false;
+        boolean left_included = false;
+        boolean right_included = false;
         if (seq_left_index == null) {
           left_included = true;
         }

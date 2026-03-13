@@ -547,7 +547,9 @@ public class Instrument24 implements ClassFileTransformer {
             ClassDesc[] paramTypes = mgen.getParameterTypes();
             String[] paramNames = mgen.getParameterNames();
             LocalVariable[] local_vars = mgen.getOriginalLocalVariables();
-            String types = "", names = "", locals = "";
+            String types = "";
+            String names = "";
+            String locals = "";
 
             for (int j = 0; j < paramTypes.length; j++) {
               @FieldDescriptor String paramFD = paramTypes[j].descriptorString();

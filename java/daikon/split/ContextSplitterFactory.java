@@ -136,9 +136,15 @@ public class ContextSplitterFactory {
         // 0x85c2e8c PC.RPStack get [PC/RPStack.java:156:29] -> "getCons" [(I)LPC/Cons;] PC.RP meth
         // where this ^ is a tab and the rest are single spaces
         long id;
-        String fromclass, frommeth, fromfile;
-        long fromline, fromcol;
-        String toexpr, toargs, toclass, tometh;
+        String fromclass;
+        String frommeth;
+        String fromfile;
+        long fromline;
+        long fromcol;
+        String toexpr;
+        String toargs;
+        String toclass;
+        String tometh;
 
         int tab = line.indexOf('\t');
         int arrow = line.indexOf(" -> ");

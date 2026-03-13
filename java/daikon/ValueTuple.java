@@ -206,7 +206,8 @@ public final class ValueTuple implements Cloneable {
   public static final int[] tuplemod_modified_not_missing = new int[TUPLEMOD_VALUES / 4];
 
   static {
-    int i1 = 0, i2 = 0;
+    int i1 = 0;
+    int i2 = 0;
     for (int tm = 0; tm < TUPLEMOD_VALUES; tm++) {
       if (!tuplemodHasMissingFlow(tm) && !tuplemodHasMissingNonsensical(tm)) {
         tuplemod_not_missing[i1] = tm;

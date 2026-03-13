@@ -540,7 +540,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             Type[] paramTypes = mgen.getArgumentTypes();
             String[] paramNames = mgen.getArgumentNames();
             LocalVariableGen[] local_vars = mgen.getLocalVariables();
-            String types = "", names = "", locals = "";
+            String types = "";
+            String names = "";
+            String locals = "";
 
             for (int j = 0; j < paramTypes.length; j++) {
               types = types + paramTypes[j] + " ";

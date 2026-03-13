@@ -130,7 +130,8 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE extends TernaryDerivation 
     // Note that the resulting array
     // is a[begin_inclusive..end_exclusive-1],
     // not a[begin_inclusive..end_exclusive].
-    int begin_inclusive, end_exclusive;
+    int begin_inclusive;
+    int end_exclusive;
     if (left_closed) {
       begin_inclusive = val2;
     } else {

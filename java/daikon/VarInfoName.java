@@ -2231,7 +2231,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     static final long serialVersionUID = 20020130L;
 
     public final Elements sequence;
-    public final VarInfoName i, j;
+    public final VarInfoName i;
+    public final VarInfoName j;
 
     public Slice(Elements sequence, VarInfoName i, VarInfoName j) {
       assert sequence != null;
@@ -3386,7 +3387,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       // Figure out what to replace needy with, and the appropriate
       // bounds to use
       VarInfoName replace_with;
-      VarInfoName lower, upper;
+      VarInfoName lower;
+      VarInfoName upper;
       if (needy instanceof Elements) {
         Elements sequence = (Elements) needy;
         replace_with = sequence.getSubscript(index);
@@ -3864,7 +3866,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       // build the forall predicate
       String[] result = new String[(includeIndex ? 2 : 1) * roots.length + 2];
 
-      StringJoiner int_list, conditions;
+      StringJoiner int_list;
+      StringJoiner conditions;
       {
         // "i j ..."
         int_list = new StringJoiner(" ");
@@ -3873,13 +3876,16 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         conditions = new StringJoiner(" ");
         for (int i = 0; i < qret.bound_vars.size(); i++) {
           VarInfoName[] boundv = qret.bound_vars.get(i);
-          VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
+          VarInfoName idx = boundv[0];
+          VarInfoName low = boundv[1];
+          VarInfoName high = boundv[2];
           int_list.add(idx.simplify_name());
           conditions.add("(<= " + low.simplify_name() + " " + idx.simplify_name() + ")");
           conditions.add("(<= " + idx.simplify_name() + " " + high.simplify_name() + ")");
           if (elementwise && (i >= 1)) {
             VarInfoName[] _boundv = qret.bound_vars.get(i - 1);
-            VarInfoName _idx = _boundv[0], _low = _boundv[1];
+            VarInfoName _idx = _boundv[0];
+            VarInfoName _low = _boundv[1];
             if (_low.simplify_name().equals(low.simplify_name())) {
               conditions.add("(EQ " + _idx.simplify_name() + " " + idx.simplify_name() + ")");
             } else {
@@ -4000,7 +4006,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         QuantifyReturn qret, boolean elementwise, boolean forall, OutputFormat format) {
       // build the "\forall ..." predicate
       String[] result = new String[qret.root_primes.length + 2];
-      StringBuilder int_list, conditions, closing;
+      StringBuilder int_list;
+      StringBuilder conditions;
+      StringBuilder closing;
       {
         // "i, j, ..."
         int_list = new StringBuilder();
@@ -4010,7 +4018,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         closing = new StringBuilder();
         for (int i = 0; i < qret.bound_vars.size(); i++) {
           VarInfoName[] boundv = qret.bound_vars.get(i);
-          VarInfoName idx = boundv[0], low = boundv[1], high = boundv[2];
+          VarInfoName idx = boundv[0];
+          VarInfoName low = boundv[1];
+          VarInfoName high = boundv[2];
           if (i != 0) {
             int_list.append(", ");
             conditions.append(" && ");
@@ -4022,7 +4032,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
           if (elementwise && (i >= 1)) {
             VarInfoName[] _boundv = qret.bound_vars.get(i - 1);
-            VarInfoName _idx = _boundv[0], _low = _boundv[1];
+            VarInfoName _idx = _boundv[0];
+            VarInfoName _low = _boundv[1];
             if (format == OutputFormat.JAVA) {
               conditions.append(" || ");
             } else {
