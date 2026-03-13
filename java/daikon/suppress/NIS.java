@@ -48,7 +48,7 @@ public class NIS {
 
   /** Do not instantiate. */
   @SuppressWarnings("initialization.fields.uninitialized") // never instantiated
-  public NIS() {
+  private NIS() {
     throw new Error("Do not instantiate");
   }
 
