@@ -109,7 +109,7 @@ public class Annotation {
    * @param methodSignature the signature of the method
    * @param kind the kind of this annotation
    * @param invRep representation of this annotation (the format depends on which output format was
-   *     used to create the annotation in Daikon; it's one of JAVA, JML, ESC or DBC).
+   *     used to create the annotation in Daikon; it's one of JAVA, JML, ESC or DBC)
    * @param daikonClass the Daikon class name that this invariant represents an instance of
    */
   private Annotation(

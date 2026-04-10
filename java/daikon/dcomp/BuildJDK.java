@@ -551,7 +551,7 @@ public class BuildJDK {
    *
    * @param s a string
    * @param suffix a suffix
-   * @return {@code s}, with the suffix removed if it was present.
+   * @return {@code s}, with the suffix removed if it was present
    */
   private static String removeSuffix(String s, String suffix) {
     if (s.endsWith(suffix)) {

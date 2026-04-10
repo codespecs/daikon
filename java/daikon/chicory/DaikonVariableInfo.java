@@ -207,7 +207,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Returns a string representation of this node, with its identity hash code
+   * Returns a string representation of this node, with its identity hash code.
    *
    * <p>This implementation returns its run-time class and its name.
    */
