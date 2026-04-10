@@ -648,7 +648,7 @@ public class InvariantDoclet implements Doclet {
     }
 
     /**
-     * Creates a new DocletOption with an aliased name
+     * Creates a new DocletOption with an aliased name.
      *
      * @param name the option's name, starting with "-" or "--"
      * @param alias the option's alias, starting with "-" or "--"

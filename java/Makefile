@@ -1,5 +1,7 @@
 ### User customizations
 
+default: daikon
+
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
