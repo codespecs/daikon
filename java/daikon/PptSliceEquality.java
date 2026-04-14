@@ -230,7 +230,10 @@ public class PptSliceEquality extends PptSlice {
       if (v.equalitySet != null) {
         continue;
       }
-      List<VarInfo> vlist = varmap.computeIfAbsent(v, Collections::singletonList);
+      List<VarInfo> vlist = varmap.get(v);
+      if (vlist == null) {
+        vlist = Collections.singletonList(v);
+      }
       Equality eq = new Equality(vlist, this);
       Integer sample_cnt = sample_cnt_map.get(v);
       if (sample_cnt != null) {
