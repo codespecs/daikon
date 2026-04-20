@@ -110,7 +110,7 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 ## Classpath
 
 ## Daikon compiled files
-  DAIKON_CLASSPATH := ${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
+DAIKON_CLASSPATH := ${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
 
 ## Add tools.jar and rt.jar, if they exist
 ifeq ($(shell uname), Darwin)
