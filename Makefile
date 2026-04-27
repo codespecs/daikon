@@ -322,8 +322,9 @@ nightly-test-except-doc-pdf:
 	${MAKE} junit test
 
 # Code style; defines `style-check` and `style-fix`.
-# "utils" is temporary; it was changed to ".utils"
+# Excluding "utils" is temporary; it was changed to ".utils"
 CODE_STYLE_EXCLUSIONS_USER := ${CODE_STYLE_EXCLUSIONS_USER} --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude-dir utils --exclude clustering.html --exclude=’*.log’
+CODE_STYLE_FILTER_OUT_USER := ${CODE_STYLE_FILTER_OUT_USER} ./doc/daikon/% ./doc/developer/%
 ifeq (,$(wildcard .plume-scripts))
 dummy := $(shell git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git .plume-scripts)
 endif
