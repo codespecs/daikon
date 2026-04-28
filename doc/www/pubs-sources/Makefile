@@ -2,7 +2,7 @@
 DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
 CHECKLINK ?= ${DAIKONDIR}/.utils/checklink
 HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
-PLUMESCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 BPHOME ?= ${DAIKONDIR}/.utils/bibtex2web/lib
 export BPHOME
 BWBIN = ${BPHOME}/../bin

@@ -47,8 +47,8 @@ if [ -z "$DAIKONSCRIPTS" ]; then
   fi
 fi
 
-if [ -z "$PLUMESCRIPTS" ]; then
-  export PLUMESCRIPTS=${DAIKONDIR}/.utils/plume-scripts
+if [ -z "$PLUME_SCRIPTS" ]; then
+  export PLUME_SCRIPTS=${DAIKONDIR}/.utils/plume-scripts
 fi
 
 DAIKON_CLASSPATH=${DAIKONDIR}/daikon.jar:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
@@ -58,14 +58,14 @@ if [ -d ${DAIKONDIR}/java ]; then
 fi
 export DAIKON_CLASSPATH
 
-export PATH=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${PATH}:${JAVA_HOME}/bin
+export PATH=${DAIKONSCRIPTS}:${PLUME_SCRIPTS}:${PATH}:${JAVA_HOME}/bin
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if [ $PERL5LIB ]; then
-  export PERL5LIB=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${PERL5LIB}
+  export PERL5LIB=${DAIKONSCRIPTS}:${PLUME_SCRIPTS}:${PERL5LIB}
 fi
 if [ $PERLLIB ]; then
-  export PERLLIB=${DAIKONSCRIPTS}:${PLUMESCRIPTS}:${PERLLIB}
+  export PERLLIB=${DAIKONSCRIPTS}:${PLUME_SCRIPTS}:${PERLLIB}
 else
-  export PERLLIB=${DAIKONSCRIPTS}:${PLUMESCRIPTS}
+  export PERLLIB=${DAIKONSCRIPTS}:${PLUME_SCRIPTS}
 fi

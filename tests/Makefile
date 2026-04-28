@@ -34,6 +34,8 @@ else
   MPARG ?=
 endif
 
+PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+
 all diffs: txt-diff non-txt-diff dyncomp-tests results
 
 # These do not use DynComp
@@ -50,7 +52,7 @@ txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
 	${MAKE} pat-daikon-tests-$@
 pat-daikon-tests-%:
 # Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-	if [ -n "$("${DAIKONDIR}"/.plume-scripts/is-ci.sh)" ]; then \
+	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} -C daikon-tests --jobs=1 ${MPARG} $*; \
 	else \
 	  ${MAKE} -C daikon-tests --jobs=4 ${MPARG} $*; \

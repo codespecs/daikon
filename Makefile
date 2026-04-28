@@ -7,12 +7,12 @@ DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST})))
 HTMLTOOLS ?= ${DAIKONDIR}/.utils/html-tools
 CHECKLINK ?= ${DAIKONDIR}/.utils/checklink
 
-PLUMESCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
-SORT_DIRECTORY_ORDER = ${PLUMESCRIPTS}/sort-directory-order
-ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
-  # Until "make ../plume-scripts" has been run, sort-directory-order is not available.
-  SORT_DIRECTORY_ORDER = sort
+PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+
+ifeq (,$(wildcard ${PLUME_SCRIPTS}))
+  dummy := $(shell mkdir ${DAIKONDIR}/.utils && git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS})
 endif
+SORT_DIRECTORY_ORDER := ${PLUME_SCRIPTS}/sort-directory-order
 
 JAVA_RELEASE_NUMBER := $(shell java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//')
 
@@ -325,10 +325,7 @@ nightly-test-except-doc-pdf:
 # Excluding "utils" is temporary; it was changed to ".utils"
 CODE_STYLE_EXCLUSIONS_USER := ${CODE_STYLE_EXCLUSIONS_USER} --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude-dir utils --exclude clustering.html --exclude=’*.log’
 CODE_STYLE_FILTER_OUT_USER := ${CODE_STYLE_FILTER_OUT_USER} ./doc/daikon/% ./doc/developer/%
-ifeq (,$(wildcard .plume-scripts))
-dummy := $(shell git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git .plume-scripts)
-endif
-include .plume-scripts/code-style.mak
+include ${PLUME_SCRIPTS}/code-style.mak
 
 
 ### Tags
@@ -378,7 +375,7 @@ test-staged-dist: ${STAGING_DIR}
 	(cd ${DISTTESTDIR}; mv ${NEW_RELEASE_NAME} daikon)
 	${MAKE} -C ${DISTTESTDIR}/daikon/java junit
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
-	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print0 | xargs -0 -n 1 ${PLUMESCRIPTS}/classfile_check_version 52)
+	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print0 | xargs -0 -n 1 ${PLUME_SCRIPTS}/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
 	(cd ${DISTTESTDIRJAVA}/daikon; rm `find . -name '*.class'`; ${MAKE} all_javac)
 	## Test that these new .class files work properly.
@@ -796,10 +793,10 @@ endif
 
 update-plume-scripts-in-utils:
 ifndef NONETWORK
-	if test -d ${PLUMESCRIPTS}/.git ; then \
-	  (cd ${PLUMESCRIPTS} && (git pull -q || (sleep 1m && (git pull || true)))) \
-	elif ! test -d ${PLUMESCRIPTS} ; then \
-	  mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git ${PLUMESCRIPTS} || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git ${PLUMESCRIPTS})) \
+	if test -d ${PLUME_SCRIPTS}/.git ; then \
+	  (cd ${PLUME_SCRIPTS} && (git pull -q || (sleep 1m && (git pull || true)))) \
+	elif ! test -d ${PLUME_SCRIPTS} ; then \
+	  mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS} || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS})) \
 	fi
 endif
 
