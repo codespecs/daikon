@@ -68,16 +68,17 @@ if [[ "${GROUP}" == "misc" || "${GROUP}" == "all" ]]; then
   # Documentation
   make javadoc doc-all
 
-  if [ -d "/tmp/plume-scripts" ]; then
-    (cd /tmp/plume-scripts && git pull -q) > /dev/null 2>&1
+  PLUME_SCRIPTS="${PLUME_SCRIPTS:-.utils/plume-scripts}"
+  if [ -d "${PLUME_SCRIPTS}" ]; then
+    (git -C "${PLUME_SCRIPTS}" pull -q) > /dev/null 2>&1
   else
-    (cd /tmp && (git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git || (sleep 1m && git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git)))
+    (git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git "${PLUME_SCRIPTS}" || (sleep 1m && git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git "${PLUME_SCRIPTS}"))
   fi
   # For refactorings that touch a lot of code that you don't understand, create
   # top-level file SKIP-REQUIRE-JAVADOC.  Delete it after the pull request is merged.
   if [ ! -f SKIP-REQUIRE-JAVADOC ]; then
     (make -C java requireJavadoc > /tmp/warnings.txt 2>&1) || true
-    /tmp/plume-scripts/ci-lint-diff /tmp/warnings.txt
+    "${PLUME_SCRIPTS}"/ci-lint-diff /tmp/warnings.txt
   fi
 fi
 
