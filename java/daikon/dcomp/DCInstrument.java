@@ -13,6 +13,9 @@ import daikon.plumelib.options.Option;
 import daikon.plumelib.reflection.Signatures;
 import daikon.plumelib.util.ArraysPlume;
 import daikon.plumelib.util.EntryReader;
+import daikon.plumelib.util.EntryReader.CommentFormat;
+import daikon.plumelib.util.EntryReader.EntryFormat;
+import daikon.plumelib.util.FilesPlume;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -4244,7 +4247,14 @@ public class DCInstrument extends InstructionListUtils {
    * @see #save_static_field_id(File)
    */
   static void restore_static_field_id(File file) throws IOException {
-    try (EntryReader er = new EntryReader(file, "UTF-8")) {
+    try (EntryReader er =
+        new EntryReader(
+            FilesPlume.newFileInputStream(file),
+            "UTF-8",
+            file.toString(),
+            EntryFormat.DEFAULT,
+            CommentFormat.NONE,
+            null)) {
       for (String line : er) {
         String[] key_val = line.split("  *");
         assert !static_field_id.containsKey(key_val[0]) : key_val[0] + " " + key_val[1];
