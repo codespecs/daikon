@@ -45,7 +45,7 @@ daikon-plumelib.jar : Contains bcel-util, options, hashmap-util,
   plume-util, and reflection-util, but in package "daikon.plumelib".
   # Note that you must be using JDK17+ and gradle 8.11+.
   # First, adjust version numbers in file `build.gradle`.  (TODO: make that unnecessary.)
-  gradle shadowjar
+  gradle shadowJar
   mv -f build/libs/daikon-plumelib.jar .
   rm -rf build
 
@@ -89,9 +89,9 @@ options-1.0.6.jar : https://central.sonatype.com/artifact/org.plumelib/options
   wget https://repo.maven.apache.org/maven2/org/plumelib/options/1.0.6/options-1.0.6.jar
   When you update this, remove the old daikon-plumelib.jar then remake it (see above).
 
-plume-util-1.12.3.jar : https://central.sonatype.com/artifact/org.plumelib/plume-util/versions
+plume-util-1.14.0.jar : https://central.sonatype.com/artifact/org.plumelib/plume-util/versions
   rm plume-util-*.jar
-  VER=1.12.3 && wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/${VER}/plume-util-${VER}.jar
+  VER=1.14.0 && wget https://repo.maven.apache.org/maven2/org/plumelib/plume-util/${VER}/plume-util-${VER}.jar
   rm -f daikon-plumelib.jar
   When you update this, remove the old daikon-plumelib.jar then remake it.
 
