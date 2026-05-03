@@ -76,7 +76,7 @@ public final class MergeInvariants {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    *
    * @param args the command-line arguments
    * @throws FileNotFoundException if a file cannot be found

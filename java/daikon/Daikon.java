@@ -719,7 +719,7 @@ public final class Daikon {
 
   /**
    * This does the work of {@link #main}, but it never calls System.exit, so it is appropriate to be
-   * called progrmmatically.
+   * called programmatically.
    *
    * @param args the command-line arguments
    */
