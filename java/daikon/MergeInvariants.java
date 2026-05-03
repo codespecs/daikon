@@ -433,7 +433,7 @@ public final class MergeInvariants {
   }
 
   /**
-   * Ses up the specified relation beteween each of the conditionals in ppt and the matching
+   * Ses up the specified relation between each of the conditionals in ppt and the matching
    * conditionals in child. Each must have the same number of splitters setup in the same order. The
    * splitter match can't be checked because splitters can't be read back in.
    */

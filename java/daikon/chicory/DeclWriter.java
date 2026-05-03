@@ -589,7 +589,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
   }
 
   /**
-   * Returns the caparability value for a varaible.
+   * Returns the caparability value for a variable.
    *
    * @param var variable whose value is desired
    * @param compare_ppt ppt with compare value if comparability-file present, null otherwise
@@ -693,7 +693,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
   }
 
   /**
-   * Looks for all of the object-user ppt/variable hiearchy relations beginning at var. Once a
+   * Looks for all of the object-user ppt/variable hierarchy relations beginning at var. Once a
    * relation is found, no more relations are looked for under that variable. In most cases, it
    * would be expected that only one relation will be found (either var is a class with a
    * corresponding object ppt or it is not). However, depending on what classes are being

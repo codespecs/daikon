@@ -2897,7 +2897,7 @@ public class PptTopLevel extends Ppt {
     for (PptSlice oPivoted : pivoted) {
       addSlice(oPivoted); // Make the key right again
       if (debugEqualTo.isLoggable(Level.FINE)) {
-        debugEqualTo.fine("  Readded: " + oPivoted);
+        debugEqualTo.fine("  Re-added: " + oPivoted);
       }
     }
 

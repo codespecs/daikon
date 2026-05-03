@@ -629,7 +629,7 @@ public class LOWERBOUND extends SINGLESCALAR {
     VarInfo var = vis[0];
     if ((var.derived instanceof SequenceLength)
          && (((SequenceLength) var.derived).shift != 0)) {
-      return new DiscardInfo(this, DiscardCode.obvious, "Bounds are preferrable over sequence lengths with no shift");
+      return new DiscardInfo(this, DiscardCode.obvious, "Bounds are preferable over sequence lengths with no shift");
     }
 
     #if defined(LOWER) || defined(LOWERFLOAT) || defined(UPPER) || defined(UPPERFLOAT)

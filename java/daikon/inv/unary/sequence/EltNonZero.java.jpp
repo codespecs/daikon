@@ -170,7 +170,7 @@ public final class CLASSNAME extends SUPERCLASS {
       VarInfo term = var().get_enclosing_var();
       String esc_name;
       if (term == null) {
-        // Only happenes in internal format tests
+        // Only happens in internal format tests
         esc_name = var().name().replace("[]", "");
       } else {
         // System.out.printf("term = %s, var = %s%n", term.name, var().name);

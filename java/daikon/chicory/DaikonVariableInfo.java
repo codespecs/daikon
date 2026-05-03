@@ -407,7 +407,7 @@ public abstract class DaikonVariableInfo
   }
 
   //
-  // Building the tre
+  // Building the tree
   //
 
   /**

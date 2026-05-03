@@ -9,7 +9,7 @@
 # Given a txt-esc file, and some number of (possibly-annotated) source
 # files, produces ESC/Java output from processing the original source
 # files, except uses as many of the annotations from the txt-esc file
-# as possible to aid the verfication.  This script attempts to mimic
+# as possible to aid the verification.  This script attempts to mimic
 # the behavior of the Houdini tool from Compaq SRC.
 
 use Carp;
@@ -89,7 +89,7 @@ sub notdir {
 }
 
 sub reltmp {
-    # returns the non-dir part of the filname, with $tmpdir prepended
+    # returns the non-dir part of the filename, with $tmpdir prepended
     my $name = shift;
     return $tmpdir . "/" . join(' ', notdir($name));
 }

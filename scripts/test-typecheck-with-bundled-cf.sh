@@ -2,7 +2,7 @@
 # Use bash, not sh, because of `set -o pipefail`.
 
 # This is the "typecheck" job of the pull request.
-# It uses the bundled version of the Checker Framework: the one commited to the Daikon repostiory.
+# It uses the bundled version of the Checker Framework: the one committed to the Daikon repository.
 
 # The optional first argument is "part1", "part2", or "part3", indicating which
 # part of the type-checking job to run.

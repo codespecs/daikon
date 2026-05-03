@@ -113,7 +113,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
       // Added to get rid of constants other than -1, 0, 1 in the
       // invariant's format_java() string... this change was made to
-      // filter out targets that could never really be achived
+      // filter out targets that could never really be achieved
       // example:   num >= 10378
 
       if (filterOut(inv1) || filterOut(inv2)) {

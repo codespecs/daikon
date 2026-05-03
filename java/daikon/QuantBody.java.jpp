@@ -2114,7 +2114,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 #endif
 
-  // Deferencing (accessing) fields
+  // Dereferencing (accessing) fields
 
   /**
    * COLLECT_TYPE accepts an object and a list of fields (one of which is of array type, and the

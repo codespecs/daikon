@@ -126,7 +126,7 @@ public class Lemma implements Comparable<Lemma> {
     // ;;    (IMPLIES (AND (<= i k) (<= ip kp) (EQ k j) (< kp jp)
     // ;;            (|lexical-==| a i k b ip kp))
     // ;;       (|lexical-<| a i j b ip jp))))
-    //  A simplifed version of the above, specialized to matching indexes
+    //  A simplified version of the above, specialized to matching indexes
     new Lemma(
         "comparison with a strict prefix (matching indexes)",
         "(FORALL (a i j b jp) (IMPLIES (AND (< jp (arrayLength b)) (< j jp) (|lexical-==| a i j b"

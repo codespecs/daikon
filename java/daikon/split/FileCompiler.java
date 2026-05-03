@@ -267,7 +267,7 @@ public final class FileCompiler {
     int index = sourceFilePath.lastIndexOf('.');
     if (index == -1) {
       throw new IllegalArgumentException(
-          "sourceFilePath: " + sourceFilePath + " must end with an extention.");
+          "sourceFilePath: " + sourceFilePath + " must end with an extension.");
     }
     return sourceFilePath.substring(0, index) + ".class";
   }

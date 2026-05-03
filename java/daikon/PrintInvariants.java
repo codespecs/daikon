@@ -155,7 +155,7 @@ public final class PrintInvariants {
    * If true, remove as many variables as possible that need to be indicated as 'post'. Post
    * variables occur when the subscript for a derived variable with an orig sequence is not orig.
    * For example: orig(a[post(i)]) An equivalent expression involving only orig variables is
-   * substitued for the post variable when one exists.
+   * substituted for the post variable when one exists.
    */
   public static boolean dkconfig_remove_post_vars = false;
 
@@ -168,7 +168,7 @@ public final class PrintInvariants {
   /**
    * This enables a different way of treating static constant variables. They are not created into
    * invariants into slices. Instead, they are examined during print time. If a unary invariant
-   * contains a value which matches the value of a static constant varible, the value will be
+   * contains a value which matches the value of a static constant variable, the value will be
    * replaced by the name of the variable, "if it makes sense". For example, if there is a static
    * constant variable a = 1. And if there exists an invariant x &le; 1, x &le; a would be the
    * result printed.
@@ -269,7 +269,7 @@ public final class PrintInvariants {
   private static @MonotonicNonNull String discVars = null;
 
   /**
-   * Output discard reasons for this program point. If null, output discard reasons fro all program
+   * Output discard reasons for this program point. If null, output discard reasons for all program
    * points.
    */
   private static @MonotonicNonNull String discPpt = null;
@@ -1107,7 +1107,7 @@ public final class PrintInvariants {
       }
     }
 
-    // Addditional information about C# (C Sharp) contracts.
+    // Additional information about C# (C Sharp) contracts.
     if (Daikon.output_format == OutputFormat.CSHARPCONTRACT) {
 
       String csharp = inv.format_using(OutputFormat.CSHARPCONTRACT);

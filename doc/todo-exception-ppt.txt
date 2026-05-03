@@ -117,7 +117,7 @@ Jeff's Proposal:
 
   Its also possible to extend this approach to non-declared exceptions
   as well. I tend to think this is not worth it.  Though it could indicate
-  places where someone was assumming that that invariants were maintained and
+  places where someone was assuming that that invariants were maintained and
   they were not.
 
 

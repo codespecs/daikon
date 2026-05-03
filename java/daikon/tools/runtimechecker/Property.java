@@ -30,7 +30,7 @@ public class Property implements Serializable {
     return methodSignature;
   }
 
-  // The kind of proerty (enter, exit or objectInvariant).
+  // The kind of property (enter, exit or objectInvariant).
   private final Kind kind;
 
   /** The kind of property (enter, exit or objectInvariant). */
@@ -228,8 +228,8 @@ public class Property implements Serializable {
   }
 
   /**
-   * XML representation. May be diferent from the String used to parse the property; only those tags
-   * that were parsed by the get() method will be output here.
+   * XML representation. May be different from the String used to parse the property; only those
+   * tags that were parsed by the get() method will be output here.
    */
   public String xmlString() {
     return "<INVINFO> "

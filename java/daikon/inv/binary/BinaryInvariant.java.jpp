@@ -89,7 +89,7 @@ import typequals.prototype.qual.Prototype;
  * <p>Non-symmetric invariants must instantiate two objects (one for each argument order). This is
  * tracked by the variable swap. They must always access their variables via the methods var1() and
  * var2() which return the correct variable (based on the swap setting). No other work is necessary,
- * all permuations and resurrection is handled here.
+ * all permutations and resurrection is handled here.
  *
  * <p>Symmetric invariants should define symmetric() to return true or override
  * resurrect_done_swapped to do nothing. Non-symmetric invariants that use converse operations (eg,

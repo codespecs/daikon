@@ -87,7 +87,7 @@ public final class Runtime {
   // Setups that control what information is written
   //
 
-  /** Depth to wich to examine structure components. */
+  /** Depth to which to examine structure components. */
   static int nesting_depth = 2;
 
   //
@@ -373,7 +373,7 @@ public final class Runtime {
         }
       }
 
-      // Write out the infromation for this method
+      // Write out the information for this method
       synchronized (SharedData.methods) {
         mi = SharedData.methods.get(mi_index);
       }
