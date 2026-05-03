@@ -1733,10 +1733,10 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Searches for all of the invariants that that provide an exact value for v. Intuitively those
-   * are invariants of the form 'v = equation'. For example: 'v = 63' or 'v = x * y' The
-   * implementation is a little iffy -- each invariant over v is examined and it matches iff it is
-   * exact and its daikon format starts with 'v ='.
+   * Searches for all of the invariants that provide an exact value for v. Intuitively those are
+   * invariants of the form 'v = equation'. For example: 'v = 63' or 'v = x * y' The implementation
+   * is a little iffy -- each invariant over v is examined and it matches iff it is exact and its
+   * daikon format starts with 'v ='.
    *
    * @return list of matching invariants or null if no matching invariants are found
    */

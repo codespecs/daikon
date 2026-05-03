@@ -36,7 +36,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Class that implements dynamic constants optimization. This optimization doesn't instantiate
- * invariants over constant variables (i.e., that that have only seen one value). When the variable
+ * invariants over constant variables (i.e., those that have only seen one value). When the variable
  * receives a second value, invariants are instantiated and are given the sample representing the
  * previous constant value. Each DynamicConstants object is associated with a single program point,
  * ppt.
@@ -55,7 +55,7 @@ public class DynamicConstants implements Serializable {
 
   /**
    * If true, use the dynamic constants optimization. This optimization doesn't instantiate
-   * invariants over constant variables (i.e., that that have only seen one value). When the
+   * invariants over constant variables (i.e., those that have only seen one value). When the
    * variable receives a second value, invariants are instantiated and are given the sample
    * representing the previous constant value.
    */
