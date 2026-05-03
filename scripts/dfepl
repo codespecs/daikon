@@ -265,8 +265,7 @@ if (!defined($types_style) and defined($decls_style)) {
 } elsif (!defined($types_style) and !defined($decls_style)) {
     $types_style = $decls_style = "tree";
 } elsif ($types_style ne $decls_style) {
-    die "Distinct types-style '$types_style' and decls-style '$decls_style'";
-    die " aren't currently supported.";
+    die "Distinct types-style '$types_style' and decls-style '$decls_style' aren't currently supported.";
 }
 
 unless ($types_style =~ /^tree|flat|combined\z/) {

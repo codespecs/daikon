@@ -589,7 +589,7 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
   }
 
   /**
-   * Returns the caparability value for a variable.
+   * Returns the comparability value for a variable.
    *
    * @param var variable whose value is desired
    * @param compare_ppt ppt with compare value if comparability-file present, null otherwise

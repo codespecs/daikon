@@ -500,7 +500,7 @@ sub is_arg_assign {
     my $self = shift;
     my($op) = @_;
     # only assignments count
-    return 0 if $op->name ne "sassign" and $op->name ne "assign";
+    return 0 if $op->name ne "sassign" and $op->name ne "aassign";
     my $rhs = $op->first;
     my $lhs = $rhs->sibling;
     return 1 if $rhs->name eq "shift"; # my $self = shift;

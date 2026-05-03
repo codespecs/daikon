@@ -144,8 +144,8 @@ public abstract class Derivation implements Serializable, Cloneable {
 
   /**
    * Returns true iff other and this represent the same derivation (modulo the variable they are
-   * applied to). Default implementation will just checks run-time type, but subclasses with state
-   * (e.g. SequenceInitial index) should match that, too.
+   * applied to). Default implementation just checks run-time type, but subclasses with state (e.g.
+   * SequenceInitial index) should match that, too.
    *
    * @param other the Derivation to compare to
    * @return true iff other and this represent the same derivation
