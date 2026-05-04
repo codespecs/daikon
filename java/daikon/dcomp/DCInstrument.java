@@ -832,7 +832,7 @@ public class DCInstrument extends InstructionListUtils {
     int i = classname.lastIndexOf('.');
     if (i > 0) {
       // Don't instrument problem packages.
-      // See Premain.java for a list and explainations.
+      // See Premain.java for a list and explanations.
       String packageName = classname.substring(0, i);
       if (Premain.problem_packages.contains(packageName)) {
         debug_transform.log("Skipping problem package %s%n", packageName);
@@ -842,7 +842,7 @@ public class DCInstrument extends InstructionListUtils {
 
     if (Runtime.isJava9orLater()) {
       // Don't instrument problem classes.
-      // See Premain.java for a list and explainations.
+      // See Premain.java for a list and explanations.
       if (Premain.problem_classes.contains(classname)) {
         debug_transform.log("Skipping problem class %s%n", classname);
         return gen.getJavaClass().copy();
@@ -1027,7 +1027,7 @@ public class DCInstrument extends InstructionListUtils {
     // Because the tag_frame_local is active for the entire method
     // and its creation will change the state of the locals layout,
     // we need to insert the code to initialize it now so that the
-    // stack anaylsis we are about to do is correct for potential
+    // stack analysis we are about to do is correct for potential
     // code replacements we might make later.
     InstructionHandle orig_start = mgen.getInstructionList().getStart();
     add_create_tag_frame(mgen);
@@ -1048,8 +1048,8 @@ public class DCInstrument extends InstructionListUtils {
     // method was written out.  Hence, it could be used as the
     // index into stack_types.  To support StackMaps we need to
     // update the position field as we modify the code bytes.  So
-    // we need a mapping from InstructionHandle to orignal offset.
-    // I beleive we always visit the InstructionHandle nodes of
+    // we need a mapping from InstructionHandle to original offset.
+    // I believe we always visit the InstructionHandle nodes of
     // the method's InstructionList in order - hence, we will use
     // a simple array for now.  If this turns out to not be the
     // case we will need to use a hash map.
@@ -1262,13 +1262,13 @@ public class DCInstrument extends InstructionListUtils {
 
     // Get existing StackMapTable (if present)
     if (stackMapTable.length > 0) {
-      // Each stack map frame specifies (explicity or implicitly) an
+      // Each stack map frame specifies (explicitly or implicitly) an
       // offset_delta that is used to calculate the actual bytecode
-      // offset at which the frame applies.  This is caluclated by
+      // offset at which the frame applies.  This is calculated by
       // by adding offset_delta + 1 to the bytecode offset of the
       // previous frame, unless the previous frame is the initial
       // frame of the method, in which case the bytecode offset is
-      // offset_delta. (From the Java Virual Machine Specification,
+      // offset_delta. (From the Java Virtual Machine Specification,
       // Java SE 7 Edition, section 4.7.4)
 
       // Since we are inserting a new stack map frame at the
@@ -2414,7 +2414,7 @@ public class DCInstrument extends InstructionListUtils {
       return false;
     }
 
-    // If using the instrumented JDK, then everthing but object is instrumented
+    // If using the instrumented JDK, then everything but object is instrumented
     if (Premain.jdk_instrumented && !classname.equals("java.lang.Object")) {
       return true;
     }
@@ -2958,7 +2958,7 @@ public class DCInstrument extends InstructionListUtils {
 
     // Duplicate the array ref and index and pass them to DCRuntime
     // which will make the index comparable with the array.  In the case
-    // of primtives it will also get the tag for the primitive and push
+    // of primitives it will also get the tag for the primitive and push
     // it on the tag stack.
     il.append(new DUP2());
     String method = "primitive_array_load";
@@ -3920,7 +3920,7 @@ public class DCInstrument extends InstructionListUtils {
 
   /**
    * Creates a set tag method for field f. The tag on the top of the tag stack will be popped off
-   * and placed in the tag storeage corresponding to field
+   * and placed in the tag storage corresponding to field
    *
    * <pre>{@code
    * void <field>_<class>__$set_tag() {

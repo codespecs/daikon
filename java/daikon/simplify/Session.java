@@ -135,7 +135,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
       String expect = ">\t";
       byte[] buf = new byte[expect.length()];
       int pos = is.read(buf);
-      assert pos != -1 : "Prompt exected, stream ended";
+      assert pos != -1 : "Prompt expected, stream ended";
       String actual = new String(buf, 0, pos, UTF_8);
       assert expect.equals(actual) : "Prompt expected, got '" + actual + "'";
 

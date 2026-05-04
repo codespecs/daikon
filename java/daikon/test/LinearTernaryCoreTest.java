@@ -35,7 +35,7 @@ public class LinearTernaryCoreTest {
     try {
       coef = ltc.calc_tri_linear(ltc.def_points);
     } catch (ArithmeticException e) {
-      // In the future, we should perhaps test triples that that don't
+      // In the future, we should perhaps test triples that don't
       // determine a plane; but none of the current ones do.
       throw new Error("Not reached");
       // throw new Error();

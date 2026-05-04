@@ -504,7 +504,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     // Check for invariant specific obvious checks.  The obvious_checks
     // method returns an array of arrays of antecedents.  If all of the
-    // antecedents in an array are true, then the invariant is obvoius.
+    // antecedents in an array are true, then the invariant is obvious.
     InvDef[][] obvious_arr = obvious_checks(vis);
     obvious_loop:
     for (int i = 0; i < obvious_arr.length; i++) {

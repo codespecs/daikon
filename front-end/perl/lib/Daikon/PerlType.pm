@@ -3,7 +3,7 @@ package Daikon::PerlType;
 # Routines to handle our slightly contrived notion of "types" for Perl
 # values. We can guess a type for a particular runtime value by
 # examining it, take the lub of two such types, or convert between the
-# internal form and a string representaion.
+# internal form and a string representation.
 
 # This file is part of the Daikon distribution. It may be used and
 # redistributed under the same terms as the rest of Daikon or, at your
@@ -105,7 +105,7 @@ sub set_limits {
 
 # (T1,T2,...,Ti,T*) is the type of a list whose first i elements have
 # types T1, T2, ..., Ti, and remaining elements have type T. Lists
-# only exist trasiently during expression evaluation, so they can't
+# only exist transiently during expression evaluation, so they can't
 # appear inside any other values. If you lub lists with different
 # numbers of fixed elements (different values of "i"), the result has
 # the smaller number, and all the extras are lub in at the end. This
@@ -117,7 +117,7 @@ sub set_limits {
 
 # ------------------------------------------------------------------
 
-# Internally, types are repesented in a subset of perl values
+# Internally, types are represented in a subset of perl values
 # isomorphic to Lisp s-expressions: array references whose elements
 # are either other array references or one of a few strings. For instance,
 # \{int=>\num} is represented as
@@ -125,7 +125,7 @@ sub set_limits {
 # ['ref', ['hash', 'int', ['ref', 'num']]]
 
 # As an exception, object types use a hash table to store the type
-# corresponding to a particular field key. The full correspondance:
+# corresponding to a particular field key. The full correspondence:
 
 # bottom                  'bottom'
 # bool                    'bool'
@@ -509,7 +509,7 @@ sub guess_type_hash {
         return ['maybe', 'bottom'] if not defined $s; # nothing
         if (ref $s) {
             if ($depth > DEPTH_LIMIT) {
-                # Botttom out by remaining ignorant about what this is
+                # Bottom out by remaining ignorant about what this is
                 # a reference to.
                 return ['ref', 'top'];
             } else {
@@ -523,7 +523,7 @@ sub guess_type_hash {
         # The way we recognize numbers is a little tricky, since we're
         # trying to reintroduce a distinction that Perl deliberately
         # abstracts away. This also works slightly differently than it
-        # used to, since on futher consideration I've decided that a
+        # used to, since on further consideration I've decided that a
         # float followed by other junk should count as a 'str', not a
         # 'num'. This means we can't use the compare-to-zero trick,
         # and instead must resort to defining the set of legal numeric
@@ -610,7 +610,7 @@ sub is_zero {
 # these together, in a fake program point named
 # "...foo():::UNION". For the sake of "return", we also merge all the
 # scalar :::EXIT PPTs into a "...foo_s():::EXIT" PPT, and similarly
-# for all the list exit points. (Note that this combinining isn't
+# for all the list exit points. (Note that this combining isn't
 # related to the combining of numbered exit points into a single
 # ":::EXIT" program point that Daikon itself does, except that we use
 # the same name).

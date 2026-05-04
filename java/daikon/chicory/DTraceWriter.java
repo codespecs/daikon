@@ -168,7 +168,7 @@ public class DTraceWriter extends DaikonWriter {
    *
    * @param mi the method whose program point we are printing
    * @param root the root of the program point's tree
-   * @param args the arguments to the method corrsponding to mi. Must be in the same order as the
+   * @param args the arguments to the method corresponding to mi. Must be in the same order as the
    *     .decls info is in (which is the declared order in the source code).
    * @param thisObj the value of the "this" object at this point in the execution
    * @param ret_val the value returned from this method, only used for exit program points
@@ -364,7 +364,7 @@ public class DTraceWriter extends DaikonWriter {
   }
 
   /**
-   * Returns a List derived from an aray.
+   * Returns a List derived from an array.
    *
    * @param arrayVal must be an array type
    * @return a List (with correct primitive wrappers) corresponding to the array

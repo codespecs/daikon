@@ -104,7 +104,7 @@ public class ExtractConsequent {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
    * @throws IOException if there is trouble reading the file
@@ -449,11 +449,11 @@ public class ExtractConsequent {
   }
 
   /**
-   * Prevents the occurence of "equivalent" inequalities, or inequalities which produce the same
+   * Prevents the occurrence of "equivalent" inequalities, or inequalities which produce the same
    * pair of splits at a program point, for example "x &le; y" and "x &gt; y". Replaces "&ge;" with
-   * "&lt;", "&le;" with "&gt;", and "!=" with "==" so that the occurence of equivalent inequalities
-   * can be detected. However it tries not to be smart ... If there is more than one inequality in
-   * the expression, it doesn't perform a substitution.
+   * "&lt;", "&le;" with "&gt;", and "!=" with "==" so that the occurrence of equivalent
+   * inequalities can be detected. However it tries not to be smart ... If there is more than one
+   * inequality in the expression, it doesn't perform a substitution.
    *
    * @param condition a boolean equation
    * @return the condition, with some equalities canonicalized

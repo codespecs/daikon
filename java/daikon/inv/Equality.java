@@ -561,7 +561,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       }
       // if we got here, this is the "all other things being equal" case
       else if (var.complexity() < newLeader.complexity()) {
-        // System.out.printf("%s greater comlexity, %s is leader%n",
+        // System.out.printf("%s greater complexity, %s is leader%n",
         //                   newLeader, var);
         newLeader = var;
       }

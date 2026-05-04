@@ -2,7 +2,7 @@
 
 # extract_vars.pl - Extract variable values from a dtrace file and write
 # them out in one of various input formats for different clustering
-# algoritm implementations.  For each program point found in the decls
+# algorithm implementations.  For each program point found in the decls
 # file(s), this program creates a new file containing the variable values.
 # These files are formatted for input into an implementation of a
 # clustering algorithm (e.g., see the subroutines 'output_xmeans()',
@@ -31,7 +31,7 @@ sub usage () {
 	"Reads compressed (gzipped) or uncompressed dtrace files\n",
 	"Options:\n",
 	" -a, --algorithm ALG\n",
-	"        ALG specifies an implemtation of a clustering algorithm.\n",
+	"        ALG specifies an implementation of a clustering algorithm.\n",
 	"        Current options are 'km' (for kmeans), 'hierarchical',\n",
 	"        and 'xm' (for xmeans). Default is xmeans.\n",
 	;

@@ -296,7 +296,7 @@ public class ParameterDoclet {
               new String[] {
                 "@cindex Output, quantity of",
                 "The configuration options in this section make Daikon print more or less output.",
-                "They do not affect which invariants Daikon computes, only how it ouputs them.",
+                "They do not affect which invariants Daikon computes, only how it outputs them.",
                 "Also see the following section."
               }),
           new DocCategory(

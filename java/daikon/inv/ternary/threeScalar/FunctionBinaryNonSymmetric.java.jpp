@@ -10,7 +10,7 @@
 #undef SYMMETRIC
 #define NON_SYMMETRIC 1
 
-  // default is that it is not this function, overriden in the subclass
+  // default is that it is not this function, overridden in the subclass
   @Pure
   public boolean is ## FUNCTION() {
     return false;
@@ -35,7 +35,7 @@
 #include "daikon/inv/ternary/threeScalar/FunctionBinaryGeneric.java.jpp"
 
 #if 0
-  // Make sure all arguments are not inadvertantly passed to the next user
+  // Make sure all arguments are not inadvertently passed to the next user
 #endif
 
 #undef ARG1_BOUND

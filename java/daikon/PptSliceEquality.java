@@ -317,7 +317,7 @@ public class PptSliceEquality extends PptSlice {
   }
 
   /**
-   * Dummy value that's incomparable to everything else to indicate missings in createEqualityInvs.
+   * Dummy value that's incomparable to everything else to indicate missing in createEqualityInvs.
    */
   private static final Object dummyMissing = new Object();
 

@@ -120,7 +120,7 @@ public class Annotate {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    */
   public static void mainHelper(final String[] args) throws Exception {
     boolean slashslash = false;

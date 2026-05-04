@@ -7,7 +7,7 @@ BPHOME ?= ${DAIKONDIR}/.utils/bibtex2web/lib
 export BPHOME
 BWBIN = ${BPHOME}/../bin
 BIBDIR ?= ~/bib
-# This should include every file with "usesDaikon" or "\"Invariant dectection\""
+# This should include every file with "usesDaikon" or "\"Invariant detection\""
 BIBFILES = ${BIBDIR}/bibstring-unabbrev.bib ${BIBDIR}/ernst.bib ${BIBDIR}/invariants.bib ${BIBDIR}/pag.bib ${BIBDIR}/soft-eng.bib ${BIBDIR}/testing.bib ${BIBDIR}/types.bib ${BIBDIR}/crossrefs.bib
 ###########################################################################
 

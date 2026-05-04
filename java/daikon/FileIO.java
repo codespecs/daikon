@@ -1885,7 +1885,7 @@ public final class FileIO {
       // Rather than defining leaves as :::EXIT54 (numbered exit)
       // program points define them as everything except
       // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT, ::GLOBAL
-      //  and :::CLASS program points.  This scheme ensures that arbitrarly
+      //  and :::CLASS program points.  This scheme ensures that arbitrarily
       //  named program points such as :::POINT (used by convertcsv.pl)
       //  will be treated as leaves.
 
@@ -2950,7 +2950,7 @@ public final class FileIO {
       // System.out.printf("flags for %s are %s%n", name, flags);
     }
 
-    /** Parse the langauge specific flags record. Multiple flags can be specified. */
+    /** Parse the language-specific flags record. Multiple flags can be specified. */
     public void parse_lang_flags(Scanner scanner) {
 
       lang_flags.add(parse_enum_val(scanner, LangFlags.class, "Language Specific Flag"));
