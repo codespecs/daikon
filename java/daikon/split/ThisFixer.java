@@ -11,8 +11,8 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 /**
  * ThisFixer is a visitor for a jtb syntax tree that changes all instances of "this." to "this_".
  * For example "this.x" would go to "this_x". It also finds unqualified member variables and inserts
- * a preceeding "this_". These two changes allow splitter expressions that contain a parameter and
- * an unqualified member variable with the same name to compile correctly.
+ * a preceding "this_". These two changes allow splitter expressions that contain a parameter and an
+ * unqualified member variable with the same name to compile correctly.
  */
 class ThisFixer extends DepthFirstVisitor {
   // Note: the instances of "this." are not really being removed; instead,
@@ -61,8 +61,8 @@ class ThisFixer extends DepthFirstVisitor {
 
   /**
    * This method should not be directly used by users of this class. Replaces the token image of "."
-   * with "_" if was preceeded by "this", or adds "this_" to the token image of an unqualified
-   * member variable.
+   * with "_" if was preceded by "this", or adds "this_" to the token image of an unqualified member
+   * variable.
    */
   @Override
   public void visit(NodeToken n) {

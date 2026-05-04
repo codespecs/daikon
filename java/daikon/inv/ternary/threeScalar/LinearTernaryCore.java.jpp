@@ -1020,7 +1020,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
    * Calculates the coefficients (a, b, c) and constant (d) for the equation ax + by + cz + d = 0
    * using the first three points in points.
    *
-   * @param points array of points to use to calculate the coefficents. Only the first three points
+   * @param points array of points to use to calculate the coefficients. Only the first three points
    *     (all of which must be non-null) are used.
    *
    * @return a four element array where a is the first element, b the second, c the third, and d is
@@ -1082,7 +1082,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
       wrapper.log("GCD: %s", myGCD);
     }
 
-    // Ensure postive x coefficient by negating if "x" term is negative.
+    // Ensure positive x coefficient by negating if "x" term is negative.
     if (i_var < 0) {
       standard_i_var = - standard_i_var;
       standard_j_var = - standard_j_var;

@@ -274,7 +274,7 @@ class StatementReplacer extends DepthFirstVisitor {
 
   /**
    * Returns the argument with parens placed around it unless there are already parens the argument.
-   * For example, "x" would yield "(x)", "x + 1" would yeild "(x + 1)", and "(x+1)" would yield no
+   * For example, "x" would yield "(x)", "x + 1" would yield "(x + 1)", and "(x+1)" would yield no
    * change.
    */
   public static String addParens(String arg) {

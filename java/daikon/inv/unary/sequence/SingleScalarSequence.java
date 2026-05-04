@@ -33,7 +33,7 @@ public abstract class SingleScalarSequence extends SingleSequence {
     return valid_types_static(vis);
   }
 
-  // Identical to superclass definition, and therefore gratuitious
+  // Identical to superclass definition, and therefore gratuitous
   @Override
   public VarInfo var(
       @GuardSatisfied @UnknownInitialization(SingleSequence.class) SingleScalarSequence this) {

@@ -5,8 +5,8 @@ import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
 /**
- * OrigModifier is a visitor that places "orig()" around varible names and correspondingly corrects
- * positioning fields of all the tokens in tree to accomodate the change. For example, the
+ * OrigModifier is a visitor that places "orig()" around variable names and correspondingly corrects
+ * positioning fields of all the tokens in tree to accommodate the change. For example, the
  * expression get(this.x) would be changed to get(orig(this.x)).
  */
 public class OrigModifier extends DepthFirstVisitor {
@@ -14,7 +14,7 @@ public class OrigModifier extends DepthFirstVisitor {
   private int columnshift = 0;
   private int columnshiftline = -1;
 
-  // columnshifting only applies to a single line, then is turned off agian.
+  // columnshifting only applies to a single line, then is turned off again.
   // States for the variables:
   // columnshift == 0, columnshiftline == -1:
   //    no column shifting needed

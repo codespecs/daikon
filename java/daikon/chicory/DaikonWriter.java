@@ -19,7 +19,7 @@ public abstract class DaikonWriter {
 
   /** Create a new DaikonWriter. */
   protected DaikonWriter() {
-    // This constructor is intentially empty.
+    // This constructor is intentionally empty.
   }
 
   /**

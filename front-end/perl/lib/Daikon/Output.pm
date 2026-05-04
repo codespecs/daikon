@@ -101,7 +101,7 @@ sub output_string {
 # &output is a sub to convert the value (passed by reference) into a
 # string. Because Perl has pretty high subroutine call overhead, the
 # use of closures to represent the output code isn't especially fast:
-# peformance could perhaps be improved, at the expense of elegance, by
+# performance could perhaps be improved, at the expense of elegance, by
 # generating textual code and eval-ing it.
 
 # If the $single argument is true, this output is already going to go

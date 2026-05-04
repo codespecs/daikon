@@ -567,7 +567,7 @@ public class CLASSNAME extends SUPERCLASS {
     // the invariant is true.
     if (!subvar.aux.hasOrder()
         || !supervar.aux.hasOrder()) {
-      // Doesn't make sense to consider subsequence if order doens't matter
+      // Doesn't make sense to consider subsequence if order doesn't matter
       return new DiscardInfo(this, DiscardCode.obvious,
                     "Order doesn't matter, so subsequence is meaningless");
     }

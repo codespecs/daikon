@@ -681,12 +681,12 @@ all_except_daikon: ${PLUME_SCRIPTS} ${AUTO_GENERATED_FILES}
 # The (slight) downside is that the regenerated .class files might cause some
 # Make rules to unnecessarily re-run, if the code hasn't actually changed.
 clean_class_files:
-# remove 'bin' and 'orig' after versions stablize
+# remove 'bin' and 'orig' after versions stabilize
 	-rm -f `find . -path "*/debug*/bin" -prune -o -path "*/debug*/orig" -prune -o -path "*/debug*/instrumented" -prune -o -path "*/debug*/uninstrumented" -prune -o -name "*.class" -print`
 	# java/daikon might be a symbolic link; the alternative is to pass
 	# "-follow" to the above find command, but I don't necessarily
 	# want to remove everything reachable through symbolic links.
-# remove 'bin' and 'orig' after versions stablize
+# remove 'bin' and 'orig' after versions stabilize
 	-rm -f `find daikon -follow -path "*/debug*/bin" -prune -o -path "*/debug*/orig" -prune -o -path "*/debug*/instrumented" -prune -o -path "*/debug*/uninstrumented" -prune -o -name "*.class" -print`
 	-rm -f ${OLD_AUTO_GENERATED_FILES}
 
@@ -1162,7 +1162,7 @@ daikon-tests: smoke-test
 check-serialize:
 #	for each non-gui class, run serialver
 #	accept only "is not Serializable" or "UID = 200#####" as output
-# TODO: This produces ouput in nondeterministic order
+# TODO: This produces output in nondeterministic order
 	@find daikon -follow -name 'gui' -prune -o -name '*.class' -print | perl -ne 's|\.class\n$$||; s|/|.|g; print "Checking $$_... \t"; $$_ =~ s|\$$|\\\$$|g; $$msg =`serialver -J-Djava.compiler=NONE $$_ 2>&1`; if ($$msg =~ m/is not Serializable/) { print "ok (not serialized)\n"; next; } if ($$msg =~m/UID = (200\d[01]\d[0123]\d)L;/) { print "ok ($$1)\n"; next; }  print "WARNING: incorrect: $$msg";'
 
 
@@ -1428,7 +1428,7 @@ jpp: ${PLUME_SCRIPTS} ${AUTO_GENERATED_FILES}
 # Use this rule if you do not have cpp or for some other reason do not want
 # to refresh the automatically generated .java files.  You should not do
 # this if those files are not up-to-date (that is, if you have modified the
-# .jpp files).  It is safe to do this with a distrubution that you have
+# .jpp files).  It is safe to do this with a distribution that you have
 # just unpacked.
 avoid-jpp:
 	@echo "Any recent changes in the .jpp files will not get propagated."

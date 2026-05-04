@@ -161,7 +161,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * boot classes have the null loader, but some generated classes (such as those in sun.reflect)
    * will have a non-null loader. Some of these have a null parent loader, but some do not. The
    * check for the sun.reflect package is a hack to catch all of these. A more consistent mechanism
-   * to determine boot classes would be preferrable.
+   * to determine boot classes would be preferable.
    *
    * @param className class name to be checked
    * @param loader the class loader for the class
@@ -584,7 +584,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           // to code modification and expansion.
           // The offsets point to 'new' instructions; since we do
           // not modify these, their Instruction Handles will remain
-          // unchanged throught the instrumentaion process.
+          // unchanged throughout the instrumentation process.
           buildUninitializedNewMap(il);
 
           method_infos.add(curMethodInfo);
@@ -884,13 +884,13 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     // Modify existing StackMapTable (if present)
     if (stackMapTable.length > 0) {
-      // Each stack map frame specifies (explicity or implicitly) an
+      // Each stack map frame specifies (explicitly or implicitly) an
       // offset_delta that is used to calculate the actual bytecode
-      // offset at which the frame applies.  This is caluclated by
+      // offset at which the frame applies.  This is calculated by
       // by adding offset_delta + 1 to the bytecode offset of the
       // previous frame, unless the previous frame is the initial
       // frame of the method, in which case the bytecode offset is
-      // offset_delta. (From the Java Virual Machine Specification,
+      // offset_delta. (From the Java Virtual Machine Specification,
       // Java SE 7 Edition, section 4.7.4)
 
       // Since we are inserting (1 or 2) new stack map frames at the

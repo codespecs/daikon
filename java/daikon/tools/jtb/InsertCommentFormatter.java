@@ -7,7 +7,7 @@ import org.plumelib.util.StringsPlume;
 
 /**
  * InsertCommentFormatter is a visitor that does not actually insert comments, but instead corrects
- * positioning fields of all the tokens in the tree to accomodate already-inserted comments, while
+ * positioning fields of all the tokens in the tree to accommodate already-inserted comments, while
  * modifying the formatting as little as possible. (It edits the {begin,end}{Line,Column} fields.)
  *
  * <p>Each inserted comment either affects only the rest of its line -- by shifting all subsequent

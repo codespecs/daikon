@@ -76,7 +76,7 @@ public final class MergeInvariants {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    *
    * @param args the command-line arguments
    * @throws FileNotFoundException if a file cannot be found
@@ -433,7 +433,7 @@ public final class MergeInvariants {
   }
 
   /**
-   * Ses up the specified relation beteween each of the conditionals in ppt and the matching
+   * Sets up the specified relation between each of the conditionals in ppt and the matching
    * conditionals in child. Each must have the same number of splitters setup in the same order. The
    * splitter match can't be checked because splitters can't be read back in.
    */

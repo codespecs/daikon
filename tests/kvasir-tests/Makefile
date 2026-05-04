@@ -155,7 +155,7 @@ do-%:
 
 # removes fields before the size (ie, permissions, owner, group).
 PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.*)\s+(\S+)$$/; if ($$1 > 0) { $$failure++; print "$$1\t$$2\t$$3\n";} END { if ($$failure == 1) { print "1 test failed.\n"; exit 1; } elsif ($$failure) { print "$$failure tests failed.\n"; exit 1; } else { print "All tests succeeded.\n"; } }'
-# args to 'find' program, to find files containg results
+# args to 'find' program, to find files containing results
 RESULTS_PATTERN :=    -name '*.diff'
 
 results_header:

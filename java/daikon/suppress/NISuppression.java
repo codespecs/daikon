@@ -526,7 +526,7 @@ public class NISuppression {
    */
   public static boolean vis_compatible(VarInfo[] vis) {
 
-    // Unary vis are always compatble
+    // Unary vis are always compatible
     if (vis.length == 1) {
       return true;
     }
