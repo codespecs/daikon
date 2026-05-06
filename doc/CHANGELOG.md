@@ -21,6 +21,15 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
+## Version 5.8.24 (May 6, 2026)
+
+All Daikon tools now work with Java 8-25.
+
+Bug fixes and implementation details:
+
+* Kvasir now supports DWARF-3 in addition to DWARF-2.
+* fixed Daikon issue 618
+
 ## Version 5.8.22 (June 3, 2025)
 
 All Daikon tools now work with Java 8-24.
