@@ -377,7 +377,7 @@ test-staged-dist: ${STAGING_DIR}
 	## Make sure that all of the class files are 1.8 (version 52) or earlier.
 	(cd ${DISTTESTDIRJAVA} && find . \( -name '*.class' \) -print0 | xargs -0 -n 1 ${PLUME_SCRIPTS}/classfile_check_version 52)
 	## Test that we can rebuild the .class files from the .java files.
-	(cd ${DISTTESTDIRJAVA}/daikon; rm `find . -name '*.class'`; ${MAKE} all_javac)
+	(cd ${DISTTESTDIRJAVA}/daikon/java; rm `find . -name '*.class'`; ${MAKE} JAVAC='javac' compile)
 	## Test that these new .class files work properly.
 	${MAKE} -C ${DISTTESTDIR}/daikon/java junit
 	## Test the main target of the makefile.

@@ -223,10 +223,10 @@ public final class Daikon {
   public static int dkconfig_progress_delay = 1000;
 
   /** The current version of Daikon. */
-  public static final String release_version = "5.8.23";
+  public static final String release_version = "5.8.24";
 
   /** The date for the current version of Daikon. */
-  public static final String release_date = "June 4, 2025";
+  public static final String release_date = "May 6, 2026";
 
   /** A description of the Daikon release (version number, date, and URL). */
   public static final String release_string =
