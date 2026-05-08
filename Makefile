@@ -286,6 +286,9 @@ clean-kvasir:
 ### Testing the code
 # Note that these do NOT compile the code, even if compilation is necessary.
 
+smoke-test:
+	${MAKE} -C java smoke-test
+
 test:
 	${MAKE} -C tests all
 
