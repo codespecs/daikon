@@ -2,7 +2,6 @@
 
 # Download the distribution and run "make distribution-check".
 
-
 # Fail the whole script if any command fails
 set -e
 # Fail if any command in a pipeline fails; requires bash, not sh.
