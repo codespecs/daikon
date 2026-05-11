@@ -71,7 +71,7 @@ daikon-fast: daikon.texinfo
 
 ${CRONIC}: ${PLUME_SCRIPTS}
 ${PLUME_SCRIPTS}:
-	${MAKE} -C .. update-plume-scripts-in-utils
+	${MAKE} -C .. update-plume-scripts
 
 .PHONY: daikon-html
 # Does the actual work
