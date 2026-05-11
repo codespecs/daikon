@@ -8,7 +8,6 @@ jobs:
       - image: 'cimg/base:2025.09'
     resource_class: small
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - run: /bin/true
@@ -18,7 +17,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk8
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -38,7 +36,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk11
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -58,7 +55,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -78,7 +74,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -98,7 +93,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -118,7 +112,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk8
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -138,7 +131,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk11
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -158,7 +150,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -178,7 +169,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -198,7 +188,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -218,7 +207,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk8
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -237,7 +225,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk11
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -256,7 +243,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -275,7 +261,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -294,7 +279,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -314,7 +298,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk8-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -336,7 +319,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk11-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -358,7 +340,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -380,7 +361,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -402,7 +382,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -425,7 +404,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk8-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -447,7 +425,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -474,7 +451,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -496,7 +472,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -518,7 +493,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -540,7 +514,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -562,7 +535,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -584,7 +556,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -606,7 +577,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -628,7 +598,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -650,7 +619,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -672,7 +640,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -694,7 +661,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -716,7 +682,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -738,7 +703,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -760,7 +724,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -782,7 +745,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -805,7 +767,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk8
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -825,7 +786,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -845,7 +805,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk8
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -865,7 +824,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -885,7 +843,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk8
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -904,7 +861,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -924,7 +880,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk8-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -946,7 +901,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk25-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -969,7 +923,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk8-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -991,7 +944,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk25-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
