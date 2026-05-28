@@ -514,7 +514,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // Convert vardef.function_args, which is a list of Strings,
     // into this.function_args, which is a list of VarInfos.
     if (vardef.function_args != null) {
-      function_args = new ArrayList<VarInfo>(vardef.function_args.size());
+      List<VarInfo> temp_function_args = new ArrayList<VarInfo>(vardef.function_args.size());
       for (String varname : vardef.function_args) {
         VarInfo vi = ppt.find_var_by_name(varname);
         if (vi == null) {
@@ -523,8 +523,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
                   "function argument '%s' for variable '%s'  in ppt '%s' cannot be found",
                   varname, vardef.name, ppt.name));
         }
-        function_args.add(vi);
+        temp_function_args.add(vi);
       }
+      function_args = temp_function_args;
     }
 
     // do something appropriate with the ppt/var hierarchy.  It may be
