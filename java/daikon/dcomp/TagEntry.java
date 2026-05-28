@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.StringJoiner;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -350,9 +349,7 @@ class TagEntry extends WeakReference<Object> {
 
     StringJoiner result = new StringJoiner(System.lineSeparator());
     result.add(String.format("%d objects in object_map", object_map.size()));
-    for (Map.Entry<Object, List<Object>> entry : sets.entrySet()) {
-      Object rep = entry.getKey();
-      List<Object> set = entry.getValue();
+    for (List<Object> set : sets.values()) {
       StringJoiner line = new StringJoiner(", ");
       for (Object setElt : set) {
         if (setElt instanceof DaikonVariableInfo) {
