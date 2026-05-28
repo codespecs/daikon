@@ -307,9 +307,10 @@ public class Chicory {
               + RegexUtil.regexError(File.pathSeparator));
     }
 
+    String[] cpath = cp.split(File.pathSeparator);
+
     // Look for ChicoryPremain.jar along the classpath
     if (premain == null) {
-      String[] cpath = cp.split(File.pathSeparator);
       for (String path : cpath) {
         File poss_premain = new File(path, "ChicoryPremain.jar");
         if (poss_premain.canRead()) {
@@ -332,7 +333,7 @@ public class Chicory {
 
     // If not found, try the daikon.jar file itself
     if (premain == null) {
-      for (String path : cp.split(File.pathSeparator)) {
+      for (String path : cpath) {
         File poss_premain = new File(path);
         if (poss_premain.getName().equals("daikon.jar")) {
           if (poss_premain.canRead()) {

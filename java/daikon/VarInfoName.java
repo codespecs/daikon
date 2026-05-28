@@ -1399,7 +1399,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         return "no format when testCall.";
       }
 
-      if (term.name().indexOf("..") != -1) {
+      String termName = term.name();
+      if (termName.indexOf("..") != -1) {
         // We cannot translate arr[i..].x because this translates into
         //
         //    "daikon.Quant.collect(daikon.Quant.slice(arr,i,arr.length),"x")"
@@ -1414,7 +1415,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
             + "])";
       }
 
-      boolean hasBrackets = (term.name().indexOf("[]") != -1);
+      boolean hasBrackets = (termName.indexOf("[]") != -1);
 
       if (format == OutputFormat.JAVA) {
         assert !hasBrackets || v.type.dimensions() > 0
@@ -1455,7 +1456,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
             + "])";
       }
 
-      String term_name_no_brackets = term.name().replaceAll("\\[\\]", "") + "." + field;
+      String term_name_no_brackets = termName.replaceAll("\\[\\]", "") + "." + field;
 
       @SuppressWarnings("keyfor") // PACKAGE_NAME is always a key
       String packageName = v.aux.getValue(VarInfoAux.PACKAGE_NAME);
