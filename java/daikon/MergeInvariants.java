@@ -181,14 +181,15 @@ public final class MergeInvariants {
       if (!file.exists()) {
         throw new Daikon.UserError("File " + file + " not found.");
       }
-      if (file.toString().indexOf(".inv") != -1) {
+      String fileString = file.toString();
+      if (fileString.indexOf(".inv") != -1) {
         inv_files.add(file);
-      } else if (file.toString().indexOf(".decls") != -1) {
+      } else if (fileString.indexOf(".decls") != -1) {
         if (decl_file != null) {
           throw new Daikon.UserError("Only one decl file may be specified");
         }
         decl_file = file;
-      } else if (file.toString().indexOf(".spinfo") != -1) {
+      } else if (fileString.indexOf(".spinfo") != -1) {
         splitter_files.add(file);
       } else {
         throw new Daikon.UserError("Unrecognized file type: " + file);
