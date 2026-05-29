@@ -1016,6 +1016,9 @@ public final class FileIO {
    * Reads data from {@code .dtrace} files. For each record in the files, calls the appropriate
    * callback in the processor.
    *
+   * @param files the list of {@code .dtrace} files to read. If {@link Daikon#server_dir} is
+   *     non-null, this list may be appended to.
+   * @param all_ppts the set of all program points; may be increased by this method
    * @see #read_data_trace_files(Collection,PptMap,Processor,boolean)
    * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
    */
@@ -1030,6 +1033,10 @@ public final class FileIO {
    * Reads data from {@code .dtrace} files. Calls {@link
    * #read_data_trace_file(String,PptMap,Processor,boolean,boolean)} for each element of filenames.
    *
+   * @param files the list of {@code .dtrace} files to read. If {@link Daikon#server_dir} is
+   *     non-null, this list may be appended to.
+   * @param all_ppts the set of all program points; may be increased by this method
+   * @param processor the function that processes dtrace entries
    * @param ppts_may_be_new true if declarations of ppts read from the data trace file are new (and
    *     thus are not in all_ppts). false if the ppts may already be there.
    * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
