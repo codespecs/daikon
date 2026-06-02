@@ -69,6 +69,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.bcel.classfile.ClassParser;
@@ -554,8 +555,8 @@ public class Instrument24 implements ClassFileTransformer {
             }
             String names = String.join(" ", paramNames);
             StringJoiner locals = new StringJoiner(" ");
-            for (int j = 0; j < local_vars.length; j++) {
-              locals.add(local_vars[j].name().stringValue());
+            for (LocalVariable local_var : local_vars) {
+              locals.add(local_var.name().stringValue());
             }
 
             debugInstrument.log("%nMethod = %s%n", mgen);

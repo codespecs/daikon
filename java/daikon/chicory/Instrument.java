@@ -543,11 +543,12 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             String[] paramNames = mgen.getArgumentNames();
             LocalVariableGen[] local_vars = mgen.getLocalVariables();
             String types = StringsPlume.join(" ", paramTypes);
-            String names = StringsPlume.join(" ", paramNames);
+            String names = String.join(" ", paramNames);
             StringJoiner locals = new StringJoiner(" ");
             for (LocalVariableGen local_var : local_vars) {
               locals.add(local_var.getName());
             }
+
             debugInstrument.log("%nMethod = %s%n", mgen);
             debugInstrument.log("paramTypes(%d): %s%n", paramTypes.length, types);
             debugInstrument.log("paramNames(%d): %s%n", paramNames.length, names);
