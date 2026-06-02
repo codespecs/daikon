@@ -14,9 +14,8 @@ arg
 arg[..]
 
 ..thread1():::EXIT0
-arg
+arg return
 arg[..]
-return
 return[..]
 
 ..thread2():::ENTER
@@ -24,8 +23,7 @@ arg
 arg[..]
 
 ..thread2():::EXIT0
-arg
+arg return
 arg[..]
-return
 return[..]
 

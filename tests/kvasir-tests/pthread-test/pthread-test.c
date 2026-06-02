@@ -13,6 +13,7 @@ void *thread1(void *arg)
   printf("Thread 1 Sleeping for 2 seconds\n");
   sleep(2);
   printf("Thread 1 woken up and exiting\n");
+  return arg;
 }
 
 
@@ -22,6 +23,7 @@ void *thread2(void *arg)
   printf("Thread 2 Sleeping for 4 seconds\n");
   sleep(4);
   printf("Thread 2 woken up and exiting\n");
+  return arg;
 }
 
 

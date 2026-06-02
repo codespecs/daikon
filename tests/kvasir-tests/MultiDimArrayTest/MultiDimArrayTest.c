@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-const int DIM1 = 10;
-const int DIM2 = 20;
+#define DIM1 10
+#define DIM2 20
 
 struct boo {
   int a;
