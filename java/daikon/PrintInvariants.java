@@ -48,6 +48,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.logging.Logger;
@@ -705,10 +706,12 @@ public final class PrintInvariants {
         throw new IllegalArgumentException("Too many brackets" + lineSep + usage);
       StringTokenizer vars = new StringTokenizer(parenTokens.nextToken(), ",");
       if (vars.hasMoreTokens()) {
-        discVars = vars.nextToken();
-        while (vars.hasMoreTokens()) discVars += "," + vars.nextToken();
+        StringJoiner discVarsJoiner = new StringJoiner(",");
+        while (vars.hasMoreTokens()) {
+          discVarsJoiner.add(vars.nextToken());
+        }
         // Get rid of *all* spaces since we know varnames can't have them
-        discVars = discVars.replaceAll(" ", "");
+        discVars = discVarsJoiner.toString().replaceAll(" ", "");
       }
       if (temp.endsWith(">")) {
         return;
@@ -1119,19 +1122,9 @@ public final class PrintInvariants {
 
       if (!postAndOrig) {
         Set<String> sortedVariables = new HashSet<>();
-        String sortedVars = "";
-        Set<String> variables = new HashSet<>();
-        String vars = "";
-
         get_csharp_invariant_variables(inv, sortedVariables, true);
+        Set<String> variables = new HashSet<>();
         get_csharp_invariant_variables(inv, variables, false);
-
-        for (String s : sortedVariables) {
-          sortedVars += s + " ";
-        }
-        for (String s : variables) {
-          vars += s + " ";
-        }
 
         out.println(csharp);
 
@@ -1139,8 +1132,8 @@ public final class PrintInvariants {
         if (PrintInvariants.print_csharp_metadata) {
           out.println(daikon);
           out.println(invType);
-          out.println(sortedVars);
-          out.println(vars);
+          out.println(String.join(" ", sortedVariables));
+          out.println(String.join(" ", variables));
           out.println("*");
         }
       }
@@ -1556,12 +1549,13 @@ public final class PrintInvariants {
         }
         VarInfo[] vis = slice.var_infos;
 
-        String var_str = "";
-        for (int i = 0; i < vis.length; i++) {
-          var_str += vis[i].name() + " ";
-          if (ppt.is_constant(vis[i])) {
-            var_str += "[" + Debug.toString(ppt.constants.constant_value(vis[i])) + "] ";
+        StringJoiner var_str = new StringJoiner(" ");
+        for (VarInfo vi : vis) {
+          String name = vi.name();
+          if (ppt.is_constant(vi)) {
+            name += " [" + Debug.toString(ppt.constants.constant_value(vi)) + "]";
           }
+          var_str.add(name);
         }
         System.out.printf("  Slice %s - %d invariants%n", var_str, slice.invs.size());
 

@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 import org.checkerframework.checker.initialization.qual.Initialized;
 import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -48,12 +49,12 @@ public class PureMethodInfo extends DaikonVariableInfo {
     this.args = args;
 
     // Update function_args
-    function_args = receiverName;
-    if (this.args.length != 0) {
-      for (int i = 0; i < args.length; i++) {
-        function_args += " " + args[i].getName();
-      }
+    StringJoiner function_args_joiner = new StringJoiner(" ");
+    function_args_joiner.add(receiverName);
+    for (DaikonVariableInfo arg : args) {
+      function_args_joiner.add(arg.getName());
     }
+    function_args = function_args_joiner.toString();
   }
 
   /** Invokes this pure method on the given parentVal. This is safe because the method is pure! */

@@ -992,11 +992,11 @@ public class PptTopLevel extends Ppt {
     if (Global.debugDerive.isLoggable(Level.FINE)) {
       Global.debugDerive.fine(
           "Number of derived variables at program point " + this.name + ": " + result.size());
-      String derived_vars = "Derived:";
-      for (Iterator<Derivation> itor = result.iterator(); itor.hasNext(); ) {
-        derived_vars += " " + itor.next().getVarInfo().name();
+      StringJoiner derived_vars = new StringJoiner(" ", "Derived: ", "");
+      for (Derivation deriv : result) {
+        derived_vars.add(deriv.getVarInfo().name());
       }
-      Global.debugDerive.fine(derived_vars);
+      Global.debugDerive.fine(derived_vars.toString());
     }
     Derivation[] result_array = result.toArray(new Derivation[0]);
     return result_array;
@@ -4515,13 +4515,12 @@ public class PptTopLevel extends Ppt {
       if (show_tern_slices) {
         for (Iterator<PptSlice> j = ppt.views_iterator(); j.hasNext(); ) {
           PptSlice slice = j.next();
-          StringBuilder sb = new StringBuilder();
+          StringJoiner sj = new StringJoiner(" ");
           for (int k = 0; k < slice.arity(); k++) {
             VarInfo v = slice.var_infos[k];
-            sb.append(
-                v.name() + "/" + v.equalitySet.getVars().size() + "/" + v.file_rep_type + " ");
+            sj.add(v.name() + "/" + v.equalitySet.getVars().size() + "/" + v.file_rep_type);
           }
-          log.fine(": " + sb.toString() + ": " + slice.invs.size());
+          log.fine(": " + sj + ": " + slice.invs.size());
         }
       }
     }

@@ -547,20 +547,17 @@ public class Instrument24 implements ClassFileTransformer {
             ClassDesc[] paramTypes = mgen.getParameterTypes();
             String[] paramNames = mgen.getParameterNames();
             LocalVariable[] local_vars = mgen.getOriginalLocalVariables();
-            String types = "";
-            String names = "";
-            String locals = "";
-
+            StringJoiner types = new StringJoiner(" ");
             for (int j = 0; j < paramTypes.length; j++) {
               @FieldDescriptor String paramFD = paramTypes[j].descriptorString();
-              types = types + convertDescriptorToFqBinaryName(paramFD) + " ";
+              types.add(convertDescriptorToFqBinaryName(paramFD));
             }
-            for (int j = 0; j < paramNames.length; j++) {
-              names = names + paramNames[j] + " ";
-            }
+            String names = String.join(" ", paramNames);
+            StringJoiner locals = new StringJoiner(" ");
             for (int j = 0; j < local_vars.length; j++) {
-              locals = locals + local_vars[j].name().stringValue() + " ";
+              locals.add(local_vars[j].name().stringValue());
             }
+
             debugInstrument.log("%nMethod = %s%n", mgen);
             debugInstrument.log("paramTypes(%d): %s%n", paramTypes.length, types);
             debugInstrument.log("paramNames(%d): %s%n", paramNames.length, names);

@@ -161,15 +161,12 @@ public abstract class DaikonWriter {
       fullname = declaring_class.getName() + "." + declaring_class.getSimpleName();
       params = constructor.getParameterTypes();
     }
-    String param_str = "";
+    StringJoiner param_str = new StringJoiner(", ");
     for (Class<?> param : params) {
-      if (param_str.length() > 0) {
-        param_str += ", ";
-      }
       if (param.isArray()) {
-        param_str += Runtime.classGetNameToBinaryName(param.getName());
+        param_str.add(Runtime.classGetNameToBinaryName(param.getName()));
       } else {
-        param_str += param.getName();
+        param_str.add(param.getName());
       }
     }
     return String.format("%s(%s):::%s", fullname, param_str, point);
