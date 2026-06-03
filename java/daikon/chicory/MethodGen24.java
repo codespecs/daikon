@@ -203,7 +203,6 @@ public class MethodGen24 {
     @SuppressWarnings("signature:assignment") // This particular Utf8Entry is an identifier.
     @Identifier String methodNameTmp = methodModel.methodName().stringValue();
     methodName = methodNameTmp;
-    @SuppressWarnings("signature") // JDK 24 is not annotated as yet
     @MethodDescriptor String descriptor1 = methodModel.methodType().stringValue();
     descriptor = descriptor1;
     this.className = className;
