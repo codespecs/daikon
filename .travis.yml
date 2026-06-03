@@ -21,28 +21,20 @@ env:
     - THIS_REPO=daikon
     - DOCKERTESTING=
   matrix:
-    - OS=ubuntu JDKVER=jdk8 GROUP=quick-txt-diff
     - OS=ubuntu JDKVER=jdk11 GROUP=quick-txt-diff
     - OS=ubuntu JDKVER=jdk17 GROUP=quick-txt-diff
-    - OS=ubuntu JDKVER=jdk8 GROUP=nonquick-txt-diff
     - OS=ubuntu JDKVER=jdk11 GROUP=nonquick-txt-diff
     - OS=ubuntu JDKVER=jdk17 GROUP=nonquick-txt-diff
-    - OS=ubuntu JDKVER=jdk8 GROUP=non-txt-diff
     - OS=ubuntu JDKVER=jdk11 GROUP=non-txt-diff
     - OS=ubuntu JDKVER=jdk17 GROUP=non-txt-diff
-    - OS=ubuntu JDKVER=jdk8-plus GROUP=misc
     - OS=ubuntu JDKVER=jdk11-plus GROUP=misc
     - OS=ubuntu JDKVER=jdk17-plus GROUP=misc
-    - OS=ubuntu JDKVER=jdk8-plus GROUP=kvasir
     - OS=ubuntu JDKVER=jdk11-plus GROUP=kvasir
     - OS=ubuntu JDKVER=jdk17-plus GROUP=kvasir
-    - OS=rockylinux JDKVER=jdk8 GROUP=nonquick-txt-diff
     - OS=rockylinux JDKVER=jdk11 GROUP=nonquick-txt-diff
     - OS=rockylinux JDKVER=jdk17 GROUP=nonquick-txt-diff
-    - OS=rockylinux JDKVER=jdk8-plus GROUP=misc
     - OS=rockylinux JDKVER=jdk11-plus GROUP=misc
     - OS=rockylinux JDKVER=jdk17-plus GROUP=misc
-    - OS=rockylinux JDKVER=jdk8-plus GROUP=kvasir
     - OS=rockylinux JDKVER=jdk11-plus GROUP=kvasir
     - OS=rockylinux JDKVER=jdk17-plus GROUP=kvasir
 
