@@ -65,6 +65,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && apt -qqy install \
   devscripts \
   g++ \
+  gradle \
   graphviz \
   libc6-dbg \
   netpbm \

@@ -64,6 +64,12 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   texlive \
   yamllint
 
+# Install gradle (needed for building daikon-plumelib.jar).
+RUN wget -q https://services.gradle.org/distributions/gradle-9.5.1-bin.zip \
+&& unzip -d /opt/gradle gradle-9.5.1-bin.zip \
+&& rm gradle-9.5.1-bin.zip
+ENV PATH=$PATH:/opt/gradle/gradle-9.5.1/bin
+
 # Alternately, run: dnf --enablerepo=crb install PACKAGENAME
 RUN dnf config-manager --set-enabled crb \
 && dnf -y install \
