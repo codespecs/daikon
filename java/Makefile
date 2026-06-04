@@ -23,6 +23,18 @@ JAVAC ?= javac
 JAVADOC ?= javadoc
 JAR ?= jar
 
+ifeq ($(shell uname), Darwin)
+  JAVA_HOME ?= $(shell /usr/libexec/java_home)
+else
+ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
+  JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
+else
+  $(info Failure: Here is the output of: which javac)
+  $(info $(shell which javac))
+  $(error 'which javac' had exit status 1)
+endif
+endif
+
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
 JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
@@ -32,6 +44,7 @@ ifneq (,$(findstring start1.8,start${JAVA_VERSION_STRING}))
   JAVA21 := 0
   JAVA24 := 0
   JAVA25 := 0
+  JAVA26 := 0
   JAVA_RELEASE_NUMBER := 8
 else
   JAVA8 := 0
@@ -39,6 +52,7 @@ else
   JAVA21 := 0
   JAVA24 := 0
   JAVA25 := 0
+  JAVA26 := 0
   JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]*\)\..*/\1/')
 endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 17; echo $$?),0)
@@ -47,14 +61,22 @@ endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 21; echo $$?),0)
   JAVA21 := 1
 endif
-# Temporary, since Java 24 is not a LTS release.
+# JDK 24 isn't an LTS version, but we need it to know whether to compile Instrument24.java.
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 24; echo $$?),0)
   JAVA24 := 1
 endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 25; echo $$?),0)
   JAVA25 := 1
+endif
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 25; echo $$?),0)
   ifndef JAVA25_HOME
     JAVA25_HOME := ${JAVA_HOME}
+  endif
+endif
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 26; echo $$?),0)
+  JAVA26 := 1
+  ifndef JAVA26_HOME
+    JAVA26_HOME := ${JAVA_HOME}
   endif
 endif
 
@@ -69,13 +91,16 @@ OS_REL := $(shell sed -n -e 's/^VERSION_ID="\(.*\)"/\1/p' /etc/os-release)
 # Users can set JAVAC_TARGET_FLAGS, taking precedence over these settings.
 # Use "--source 25 --target 25" because Java 25 is an LTS version.
 ifeq (${JAVA25}, 1)
-  ifndef JAVA25_HOME
+  ifdef JAVA25_HOME
+    JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}
+  else
+  ifdef JAVA26_HOME
+    JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA26_HOME}
+  else
     # If this happens, $JAVA_HOME must also be empty.
-    $(error JAVA25_HOME is not set; JAVA_HOME=${JAVA_HOME})
+    $(error JAVA25_HOME and JAVA26_HOME are not set; JAVA_HOME=${JAVA_HOME})
   endif
-  JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}
-else ifeq (${JAVA24}, 1)
-  JAVAC_TARGET_FLAGS ?= -source 24 -target 24
+  endif
 else
   JAVAC_TARGET_FLAGS ?= -source 8 -target 8
 endif
@@ -110,20 +135,19 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 ## Classpath
 
 ## Daikon compiled files
-DAIKON_CLASSPATH := ${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
+ifeq "$(wildcard ${DAIKONDIR}/java/lib/daikon-plumelib.jar)" "${DAIKONDIR}/java/lib/daikon-plumelib.jar"
+  # Add jar files that only exist for the development version, not the
+  # distributed version, of Daikon.  The if clause avoids a (harmless but
+  # annoying) javac error message that they don't exist.
+  # This classpath is a problem, because CHECKERFRAMEWORK_JAR may have
+  # a different version of a plume-lib library than java/lib/* does.
+  # One (unclean) approach is to update them simultaneously.  Does that even work?
+  DAIKON_CLASSPATH := ${CHECKERFRAMEWORK_JAR}:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
+else
+  DAIKON_CLASSPATH := ${DAIKONDIR}/java
+endif
 
 ## Add tools.jar and rt.jar, if they exist
-ifeq ($(shell uname), Darwin)
-  JAVA_HOME ?= $(/usr/libexec/java_home)
-else
-ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
-  JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
-else
-  $(info Failure: Here is the output of: which javac)
-  $(info $(shell which javac))
-  $(error 'which javac' had exit status 1)
-endif
-endif
 ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
   DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${JAVA_HOME}/lib/tools.jar
 endif
