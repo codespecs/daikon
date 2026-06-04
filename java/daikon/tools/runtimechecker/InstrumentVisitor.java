@@ -1156,7 +1156,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   /**
-   * Add checker methods with empty bodies for all public methods and constuctors not explicitly
+   * Add checker methods with empty bodies for all public methods and constructors not explicitly
    * declared.
    */
   public void add_checkers_for_nondeclared_members() {

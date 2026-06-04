@@ -217,7 +217,7 @@ public class NIS {
     suppressor_proto_invs = new ArrayList<@Prototype Invariant>();
 
     // This should be the first statement in the method, but put it after the
-    // field initalizations so that the Initialization Checker doesn't complain.
+    // field initializations so that the Initialization Checker doesn't complain.
     if (!dkconfig_enabled) {
       return;
     }
@@ -728,7 +728,7 @@ public class NIS {
    * Also removes the always-comparable set of antecedents as a separate set (since it is now merged
    * into each of the other sets). Updates comp_ants accordingly.
    *
-   * <p>In general, in implicit comparability, the variables at a program point are partioned into
+   * <p>In general, in implicit comparability, the variables at a program point are partitioned into
    * disjoint sets of comparable variables. However, implicit comparability also allows some
    * variables to be comparable to all others (always-comparable). An invariant is always-comparable
    * if all of its variables are always-comparable. Since always-comparable invariants can form
@@ -927,7 +927,7 @@ public class NIS {
 
   /**
    * Class used to describe invariants without instantiating the invariant. The invariant is defined
-   * by its NISuppressee and variables (Its ppt is also stored, but not used in comparisions, its
+   * by its NISuppressee and variables (Its ppt is also stored, but not used in comparisons, its
    * presumed that only SupInvs from the same ppt will every be compared.)
    */
   static class SupInv {
@@ -1151,22 +1151,23 @@ public class NIS {
     @Override
     public String toString(@GuardSatisfied Antecedents this) {
 
-      String out = "Comparability " + comparability + " : ";
+      StringBuilder out = new StringBuilder();
+      out.append("Comparability " + comparability + " : ");
 
       for (Class<? extends Invariant> iclass : antecedent_map.keySet()) {
-        out += iclass.getSimpleName() + " : ";
+        out.append(iclass.getSimpleName() + " : ");
         List<Invariant> ilist = antecedent_map.get(iclass);
         for (Invariant inv : ilist) {
           if (inv.is_false()) {
-            out += inv.format() + "[FALSE] ";
+            out.append(inv.format() + "[FALSE] ");
           } else {
-            out += inv.format() + " ";
+            out.append(inv.format() + " ");
           }
         }
-        out += " : ";
+        out.append(" : ");
       }
 
-      return out;
+      return out.toString();
     }
   }
 

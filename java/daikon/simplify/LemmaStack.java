@@ -392,7 +392,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
       result = minimizeAssumptions(lemmaAry, str);
       assumeAll(lemmas);
     } catch (TimeoutException e) {
-      System.err.println("Minimzation timed out");
+      System.err.println("Minimization timed out");
       restartProver();
       return lemmas;
     }
@@ -540,7 +540,8 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
   }
 
   /** Releases resources held by this. */
-  @SuppressWarnings("builder:contracts.postcondition") // performed on a local alias, not the field
+  @SuppressWarnings(
+      "calledmethods:contracts.postcondition") // performed on a local alias, not the field
   @EnsuresCalledMethods(value = "session", methods = "close")
   @Override
   public void close(@GuardSatisfied LemmaStack this) {

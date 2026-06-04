@@ -27,7 +27,7 @@ import org.plumelib.util.StringsPlume;
 // I could also consider using Class; however:
 //  * that ties this to a Java front end, as Class can't represent types of
 //    (say) C variables.  (not a compelling problem)
-//  * that loads the class, which requies that all classes available at
+//  * that loads the class, which requires that all classes available at
 //    run time be available at inference time.  (not a compelling problem)
 //  * Class does not represent inheritance (but I can do that myself);
 //    and see isAssignableFrom, which might do all I need.

@@ -42,13 +42,13 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.8.23
+@center Daikon version 5.8.25
 
 @sp 1
 
 @c The following comment is needed to help perl edit the release date.
-@c Print out the Daikon version 5.8.23 release date
-@center June 4, 2025
+@c Print out the Daikon version 5.8.25 release date
+@center May 7, 2026
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -85,7 +85,7 @@ Copyright @copyright{} 1998-2025
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.23, released June 4, 2025.
+It describes Daikon version 5.8.25, released May 7, 2026.
 
 @menu
 * Introduction::
@@ -527,7 +527,7 @@ the bytecode instrumentation.)
 Daikon comes with a front end for the C language:  Kvasir
 (@pxref{Kvasir,,,daikon,Daikon User Manual}).
 Kvasir only works under the Linux operating system, and it works only on
-``x86'' (Intel 386, 486, 586, 686 compatible) and ``x86-64'' (AMD64, EM64T
+``x86-64'' (AMD64, EM64T
 compatible) processors.
 
 You may wish to infer invariants over C programs running on other
@@ -1664,7 +1664,7 @@ and also
 
 Just run the command @command{eclipse} at the command shell.
 
-There is one big catch:  take note of where you launch Eclipse and
+There is one big catch: take note of where you launch Eclipse and
 @b{always} launch Eclipse from the same location. For example, you might
 want to alias @command{run-eclipse} to @command{cd; eclipse}.
 For convenience, this is already done for you if you source the
@@ -2281,6 +2281,9 @@ export TODAY='November 1, 2013'
 @need 1000
 Now, update the appropriate files with the date and version number
 of the release and commit these changes back to the repository:
+(WARNING: This step uses a tool that is no longer supported on JDK 8.
+You must switch to a different bash shell running at least JDK 17 for
+this step only. Switch back to your original bash shell afterwards.)
 
 @example
 make update-run-google-java-format && make update-and-commit-version

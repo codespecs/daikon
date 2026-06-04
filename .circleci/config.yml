@@ -8,37 +8,15 @@ jobs:
       - image: 'cimg/base:2025.09'
     resource_class: small
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - run: /bin/true
-
-  quick-txt-diff-ubuntu-jdk8:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk8
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
 
   quick-txt-diff-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -58,7 +36,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -78,7 +55,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -98,7 +74,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -118,7 +93,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk26
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -133,32 +107,11 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
-  nonquick-txt-diff-ubuntu-jdk8:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk8
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
-
   nonquick-txt-diff-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -178,7 +131,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -198,7 +150,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -218,7 +169,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -238,7 +188,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk26
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -253,31 +202,11 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
-  non-txt-diff-ubuntu-jdk8:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk8
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
   non-txt-diff-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -296,7 +225,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -315,7 +243,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -334,7 +261,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -353,7 +279,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk26
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -368,34 +293,11 @@ jobs:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
 
-  misc-ubuntu-jdk8:
-    docker:
-      - image: mdernst/daikon-ubuntu-jdk8-plus
-    resource_class: large
-    environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
-      - checkout:
-          method: full
-      - save_cache:
-          key: *sourcefull-cache
-          paths:
-            - ".git"
-      - run:
-          command: ./scripts/test-misc.sh
-          no_output_timeout: 20m
   misc-ubuntu-jdk11:
     docker:
       - image: mdernst/daikon-ubuntu-jdk11-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -417,7 +319,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -439,7 +340,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -461,7 +361,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -483,7 +382,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk26-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -501,12 +399,11 @@ jobs:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
 
-  kvasir-ubuntu-jdk8:
+  kvasir-ubuntu-jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk8-plus
+      - image: mdernst/daikon-ubuntu-jdk11-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -528,7 +425,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -550,7 +446,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk26-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -577,7 +472,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -599,7 +493,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -621,7 +514,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -643,7 +535,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -665,7 +556,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -687,7 +577,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -709,7 +598,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -731,7 +619,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -753,7 +640,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -775,7 +661,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -797,7 +682,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -819,7 +703,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -841,7 +724,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -863,7 +745,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -885,7 +766,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -907,7 +787,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk26
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -929,7 +808,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk26
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -951,7 +829,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk26
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -973,7 +850,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk26
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -995,7 +871,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk26
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1017,7 +892,6 @@ jobs:
       - image: mdernst/daikon-ubuntu-jdk26
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1035,12 +909,11 @@ jobs:
           command: scripts/test-typecheck-with-latest-cf.sh part3
           no_output_timeout: 30m
 
-  quick-txt-diff-rockylinux-jdk8:
+  quick-txt-diff-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk8
+      - image: mdernst/daikon-rockylinux-jdk11
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1060,7 +933,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1080,7 +952,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk26
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1095,12 +966,11 @@ jobs:
             - ".git"
       - run: ./scripts/test-quick-txt-diff.sh
 
-  nonquick-txt-diff-rockylinux-jdk8:
+  nonquick-txt-diff-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk8
+      - image: mdernst/daikon-rockylinux-jdk11
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1120,7 +990,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1140,7 +1009,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk26
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1155,12 +1023,11 @@ jobs:
             - ".git"
       - run: ./scripts/test-nonquick-txt-diff.sh
 
-  non-txt-diff-rockylinux-jdk8:
+  non-txt-diff-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk8
+      - image: mdernst/daikon-rockylinux-jdk11
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1179,7 +1046,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk25
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1198,7 +1064,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk26
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1213,12 +1078,11 @@ jobs:
             - ".git"
       - run: ./scripts/test-non-txt-diff.sh
 
-  misc-rockylinux-jdk8:
+  misc-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk8-plus
+      - image: mdernst/daikon-rockylinux-jdk11-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1240,7 +1104,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk25-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1262,7 +1125,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk26-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1280,12 +1142,11 @@ jobs:
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
 
-  kvasir-rockylinux-jdk8:
+  kvasir-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk8-plus
+      - image: mdernst/daikon-rockylinux-jdk11-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1307,7 +1168,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk25-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1329,7 +1189,6 @@ jobs:
       - image: mdernst/daikon-rockylinux-jdk26-plus
     resource_class: large
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - restore_cache:
@@ -1362,11 +1221,6 @@ workflows:
             - typecheck-bundled-part1-ubuntu-jdk25
             - typecheck-bundled-part2-ubuntu-jdk25
             - typecheck-bundled-part3-ubuntu-jdk25
-      - quick-txt-diff-ubuntu-jdk8:
-          requires:
-            - canary-jobs
-            - quick-txt-diff-ubuntu-jdk25
-
       - quick-txt-diff-ubuntu-jdk11:
           requires:
             - canary-jobs
@@ -1387,11 +1241,6 @@ workflows:
           requires:
             - canary-jobs
             - quick-txt-diff-ubuntu-jdk25
-
-      - nonquick-txt-diff-ubuntu-jdk8:
-          requires:
-            - canary-jobs
-            - nonquick-txt-diff-ubuntu-jdk25
 
       - nonquick-txt-diff-ubuntu-jdk11:
           requires:
@@ -1414,11 +1263,6 @@ workflows:
             - canary-jobs
             - nonquick-txt-diff-ubuntu-jdk25
 
-      - non-txt-diff-ubuntu-jdk8:
-          requires:
-            - canary-jobs
-            - non-txt-diff-ubuntu-jdk25
-
       - non-txt-diff-ubuntu-jdk11:
           requires:
             - canary-jobs
@@ -1439,11 +1283,6 @@ workflows:
           requires:
             - canary-jobs
             - non-txt-diff-ubuntu-jdk25
-
-      - misc-ubuntu-jdk8:
-          requires:
-            - canary-jobs
-            - misc-ubuntu-jdk25
 
       - misc-ubuntu-jdk11:
           requires:
@@ -1466,7 +1305,7 @@ workflows:
             - canary-jobs
             - misc-ubuntu-jdk25
 
-      - kvasir-ubuntu-jdk8:
+      - kvasir-ubuntu-jdk11:
           requires:
             - canary-jobs
             - kvasir-ubuntu-jdk25
@@ -1562,11 +1401,11 @@ workflows:
             - canary-jobs
             - typecheck-bundled-part3-ubuntu-jdk25
 
-      - quick-txt-diff-rockylinux-jdk8:
+      - quick-txt-diff-rockylinux-jdk11:
           requires:
             - canary-jobs
             - quick-txt-diff-rockylinux-jdk25
-            - quick-txt-diff-ubuntu-jdk8
+            - quick-txt-diff-ubuntu-jdk11
 
       - quick-txt-diff-rockylinux-jdk25:
           requires:
@@ -1579,11 +1418,11 @@ workflows:
             - quick-txt-diff-rockylinux-jdk25
             - quick-txt-diff-ubuntu-jdk26
 
-      - nonquick-txt-diff-rockylinux-jdk8:
+      - nonquick-txt-diff-rockylinux-jdk11:
           requires:
             - canary-jobs
             - nonquick-txt-diff-rockylinux-jdk25
-            - nonquick-txt-diff-ubuntu-jdk8
+            - nonquick-txt-diff-ubuntu-jdk11
 
       - nonquick-txt-diff-rockylinux-jdk25:
           requires:
@@ -1596,11 +1435,11 @@ workflows:
             - nonquick-txt-diff-rockylinux-jdk25
             - nonquick-txt-diff-ubuntu-jdk26
 
-      - non-txt-diff-rockylinux-jdk8:
+      - non-txt-diff-rockylinux-jdk11:
           requires:
             - canary-jobs
             - non-txt-diff-rockylinux-jdk25
-            - non-txt-diff-ubuntu-jdk8
+            - non-txt-diff-ubuntu-jdk11
 
       - non-txt-diff-rockylinux-jdk25:
           requires:
@@ -1613,11 +1452,11 @@ workflows:
             - non-txt-diff-rockylinux-jdk25
             - non-txt-diff-ubuntu-jdk26
 
-      - misc-rockylinux-jdk8:
+      - misc-rockylinux-jdk11:
           requires:
             - canary-jobs
             - misc-rockylinux-jdk25
-            - misc-ubuntu-jdk8
+            - misc-ubuntu-jdk11
 
       - misc-rockylinux-jdk25:
           requires:
@@ -1630,11 +1469,11 @@ workflows:
             - misc-rockylinux-jdk25
             - misc-ubuntu-jdk26
 
-      - kvasir-rockylinux-jdk8:
+      - kvasir-rockylinux-jdk11:
           requires:
             - canary-jobs
             - kvasir-rockylinux-jdk25
-            - kvasir-ubuntu-jdk8
+            - kvasir-ubuntu-jdk11
 
       - kvasir-rockylinux-jdk25:
           requires:

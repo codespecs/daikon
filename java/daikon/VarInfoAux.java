@@ -154,7 +154,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
    * <p>x = a, "a key" = "a value"
    *
    * <p>Parse allow for quoted elements. White space to the left and right of keys and values do not
-   * matter, but inbetween does.
+   * matter, but in between does.
    */
   public static @Interned VarInfoAux parse(String inString) throws IOException {
     Reader inStringReader = new StringReader(inString);

@@ -23,7 +23,17 @@ Further documentation can be found in:
 
 ## Version ??
 
-All Daikon tools now work with Java 8-26.
+All Daikon tools now work with Java 26.
+Running under Java 8 is no longer supported.
+
+## Version 5.8.24 (May 6, 2026)
+
+All Daikon tools now work with Java 8-25.
+
+Bug fixes and implementation details:
+
+* Kvasir now supports DWARF-3 in addition to DWARF-2.
+* fixed Daikon issue 618
 
 ## Version 5.8.22 (June 3, 2025)
 

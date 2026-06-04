@@ -34,6 +34,8 @@ else
   MPARG ?=
 endif
 
+PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+
 all diffs: txt-diff non-txt-diff dyncomp-tests results
 
 # These do not use DynComp
@@ -42,7 +44,7 @@ non-txt-diff: diff-tests chicory-tests merge-invariants-tests parser-tests
 
 quick: quick-txt-diff diff-tests results
 
-# targets that descend to child direcories
+# targets that descend to child directories
 quick-txt-diff nonquick-txt-diff txt-diff update-goals merge spinfo-static txt-suppress inv-checker-diff \
 txt-daikon txt-chicory cross-checker chicory chicory-diff \
 esc jml inv txt-daikon-diff txt-esc-diff txt-jml-diff txt-csharpcontract-diff txt-merge-diff \
@@ -50,7 +52,7 @@ txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
 	${MAKE} pat-daikon-tests-$@
 pat-daikon-tests-%:
 # Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-	if [ -n "$("${DAIKONDIR}"/.plume-scripts/is-ci.sh)" ]; then \
+	if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then \
 	  ${MAKE} -C daikon-tests --jobs=1 ${MPARG} $*; \
 	else \
 	  ${MAKE} -C daikon-tests --jobs=4 ${MPARG} $*; \
@@ -94,7 +96,7 @@ very-clean: clean
 BASE?=chicory-tests daikon-tests diff-tests merge-invariants-tests parser-tests dyncomp-tests
 # removes fields before the size (ie, permissions, owner, group).
 PERL_CLEANUP_LS_OUTPUT = perl -ne 'BEGIN { $$failure=0; } /^\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+(.*)\s+(\S+)$$/; print "$$1\t$$2\t$$3\n"; if ($$1 > 0) { $$failure++; } END { if ($$failure == 1) { print "1 test failed.\n"; exit 1; } elsif ($$failure) { print "$$failure tests failed.\n"; exit 1; } else { print "All tests succeeded.\n"; } }'
-# args to 'find' program, to find files containg results
+# args to 'find' program, to find files containing results
 RESULTS_PATTERN :=    -name '*.txt-*.diff' \
                    -o -name '*.checker.diff' \
                    -o -name '*.spinfo-static.diff' \

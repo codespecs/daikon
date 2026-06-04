@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -332,14 +333,13 @@ public class AnnotateNullable {
 
     // Print out the method declaration
     if (stub_format) {
-      System.out.printf(" %s %s(", return_annotation, ppt.ppt_name.getMethodName());
+      System.out.printf(" %s %s", return_annotation, ppt.ppt_name.getMethodName());
+      StringJoiner sj = new StringJoiner(", ", "(", ")");
       for (int i = 0; i < params.size(); i++) {
-        if (i != 0) {
-          System.out.printf(" ,");
-        }
-        System.out.printf("%s %s %s", annos.get(i), "type-goes-here", names.get(i));
+        sj.add(String.format("%s %s %s", annos.get(i), "type-goes-here", names.get(i)));
       }
-      System.out.printf("); // %d samples%n", ppt.num_samples());
+      System.out.printf("%s", sj);
+      System.out.printf("; // %d samples%n", ppt.num_samples());
     } else {
       System.out.printf("  method %s : // %d samples%n", jvm_signature(ppt), ppt.num_samples());
       System.out.printf("    return:%s%n", return_annotation);

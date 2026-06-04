@@ -223,10 +223,10 @@ public final class Daikon {
   public static int dkconfig_progress_delay = 1000;
 
   /** The current version of Daikon. */
-  public static final String release_version = "5.8.23";
+  public static final String release_version = "5.8.25";
 
   /** The date for the current version of Daikon. */
-  public static final String release_date = "June 4, 2025";
+  public static final String release_date = "May 7, 2026";
 
   /** A description of the Daikon release (version number, date, and URL). */
   public static final String release_string =
@@ -719,7 +719,7 @@ public final class Daikon {
 
   /**
    * This does the work of {@link #main}, but it never calls System.exit, so it is appropriate to be
-   * called progrmmatically.
+   * called programmatically.
    *
    * @param args the command-line arguments
    */
@@ -1544,9 +1544,9 @@ public final class Daikon {
       proto_invs.add(CompleteOneOfString.get_proto());
       proto_invs.add(CompleteOneOfScalar.get_proto());
 
-      // Positive (x > 0) (Postive.java).  Positive is a sample invariant
+      // Positive (x > 0) (Positive.java).  Positive is a sample invariant
       // that is only included as an example.
-      // proto_invs.add (Postive.get_proto());
+      // proto_invs.add (Positive.get_proto());
     }
 
     // Unary sequence invariants
@@ -2233,7 +2233,7 @@ public final class Daikon {
       if (dkconfig_progress_delay == -1) {
         return;
       }
-      // "display("");" is wrong becuase it leaves the timestamp and writes
+      // "display("");" is wrong because it leaves the timestamp and writes
       // spaces across the screen.
       String status = StringsPlume.rpad("", dkconfig_progress_display_width - 1);
       System.out.print("\r" + status);
@@ -2589,7 +2589,7 @@ public final class Daikon {
       // Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered
       // exit), we define them as everything except
       // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT
-      //  and :::CLASS program points.  This scheme ensures that arbitrarly
+      //  and :::CLASS program points.  This scheme ensures that arbitrarily
       //  named program points such as :::POINT (used by convertcsv.pl)
       //  will be treated as leaves.
       if (p.ppt_name.isCombinedExitPoint()

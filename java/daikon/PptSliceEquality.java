@@ -230,7 +230,10 @@ public class PptSliceEquality extends PptSlice {
       if (v.equalitySet != null) {
         continue;
       }
-      List<VarInfo> vlist = varmap.computeIfAbsent(v, Collections::singletonList);
+      List<VarInfo> vlist = varmap.get(v);
+      if (vlist == null) {
+        vlist = Collections.singletonList(v);
+      }
       Equality eq = new Equality(vlist, this);
       Integer sample_cnt = sample_cnt_map.get(v);
       if (sample_cnt != null) {
@@ -314,7 +317,7 @@ public class PptSliceEquality extends PptSlice {
   }
 
   /**
-   * Dummy value that's incomparable to everything else to indicate missings in createEqualityInvs.
+   * Dummy value that's incomparable to everything else to indicate missing in createEqualityInvs.
    */
   private static final Object dummyMissing = new Object();
 

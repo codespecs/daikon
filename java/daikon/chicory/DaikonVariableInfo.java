@@ -207,7 +207,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Returns a string representation of this node, with its identity hash code
+   * Returns a string representation of this node, with its identity hash code.
    *
    * <p>This implementation returns its run-time class and its name.
    */
@@ -407,7 +407,7 @@ public abstract class DaikonVariableInfo
   }
 
   //
-  // Building the tre
+  // Building the tree
   //
 
   /**
@@ -717,16 +717,10 @@ public abstract class DaikonVariableInfo
     Class<?> type = meth.getReturnType();
     assert type != null;
 
-    String theName = meth.getName() + "(";
-    if (args.length > 0) {
-      theName += args[0].getName();
+    StringJoiner theName = new StringJoiner(", ", meth.getName() + "(", ")");
+    for (DaikonVariableInfo arg : args) {
+      theName.add(arg.getName());
     }
-    if (args.length > 1) {
-      for (int i = 1; i < args.length - 1; i++) {
-        theName += ", " + args[i].getName();
-      }
-    }
-    theName += ")";
 
     if (offset.length() > 0) {
       // offset already starts with "this"
@@ -748,7 +742,7 @@ public abstract class DaikonVariableInfo
 
     addChild(newPure);
 
-    newPure.checkForDerivedVariables(type, theName, offset);
+    newPure.checkForDerivedVariables(type, theName.toString(), offset);
 
     buf.append(offset);
 

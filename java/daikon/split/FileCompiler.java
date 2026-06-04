@@ -156,7 +156,6 @@ public final class FileCompiler {
 
     cmdLine = new CommandLine(compiler[0]); // constructor requires executable name
     // add rest of compiler command arguments
-    @SuppressWarnings("nullness") // arguments are in range, so result array contains no nulls
     @NonNull String[] args = Arrays.copyOfRange(compiler, 1, compiler.length);
     cmdLine.addArguments(args);
     // add file name arguments
@@ -267,7 +266,7 @@ public final class FileCompiler {
     int index = sourceFilePath.lastIndexOf('.');
     if (index == -1) {
       throw new IllegalArgumentException(
-          "sourceFilePath: " + sourceFilePath + " must end with an extention.");
+          "sourceFilePath: " + sourceFilePath + " must end with an extension.");
     }
     return sourceFilePath.substring(0, index) + ".class";
   }

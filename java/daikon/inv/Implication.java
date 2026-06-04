@@ -186,7 +186,7 @@ public class Implication extends Joiner {
    * variables are statically obvious. For example, if a == b, and f(a) is obvious, then so is f(b).
    * We use the someInEquality (or least interesting) method during printing so we only print an
    * invariant if all its variables are interesting, since a single, static, non interesting
-   * occurance means all the equality combinations aren't interesting.
+   * occurrence means all the equality combinations aren't interesting.
    *
    * <p>This must be overridden for Implication because the right side is the invariant of interest.
    * The standard version passes the vis from the slice containing the implication itself (slice 0).
@@ -210,7 +210,7 @@ public class Implication extends Joiner {
    * Returns true if the rightr side of the implication some equality combinations of its member
    * variables are dynamically obvious. For example, a == b, and f(a) is obvious, so is f(b). We use
    * the someInEquality (or least interesting) method during printing so we only print an invariant
-   * if all its variables are interesting, since a single, dynamic, non interesting occurance means
+   * if all its variables are interesting, since a single, dynamic, non interesting occurrence means
    * all the equality combinations aren't interesting.
    *
    * <p>This must be overridden for Implication because the right side is the invariant of interest.
