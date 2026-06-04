@@ -33,6 +33,7 @@ else
   $(info $(shell which javac))
   $(error 'which javac' had exit status 1)
 endif
+endif
 
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
 JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
@@ -144,7 +145,6 @@ else
 endif
 
 ## Add tools.jar and rt.jar, if they exist
-endif
 ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
   DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${JAVA_HOME}/lib/tools.jar
 endif
