@@ -24,7 +24,7 @@ JAVADOC ?= javadoc
 JAR ?= jar
 
 ifeq ($(shell uname), Darwin)
-  JAVA_HOME ?= $(/usr/libexec/java_home)
+  JAVA_HOME ?= $(shell /usr/libexec/java_home)
 else
 ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
   JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
@@ -75,6 +75,9 @@ ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 25; echo $$?),0)
 endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 26; echo $$?),0)
   JAVA26 := 1
+  ifndef JAVA26_HOME
+    JAVA26_HOME := ${JAVA_HOME}
+  endif
 endif
 
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -gt 20; echo $$?),0)
