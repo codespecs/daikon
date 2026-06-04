@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
@@ -118,15 +119,14 @@ public class InvMap implements Serializable {
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied InvMap this) {
-    String result = "";
+    StringJoiner result = new StringJoiner(Global.lineSep);
     for (PptTopLevel ppt : pptIterable()) {
-      result += ppt.name() + Global.lineSep;
-      List<Invariant> invs = get(ppt);
-      for (Invariant inv : invs) {
-        result += "  " + inv.format() + Global.lineSep;
+      result.add(ppt.name());
+      for (Invariant inv : get(ppt)) {
+        result.add("  " + inv.format());
       }
     }
-    return result;
+    return result.toString();
   }
 
   @Pure

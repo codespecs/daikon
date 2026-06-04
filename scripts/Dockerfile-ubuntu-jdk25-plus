@@ -49,9 +49,9 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt -qqy update \
 && apt -qqy install \
-  openjdk-25-jdk \
-&& update-java-alternatives --set java-1.25.0-openjdk-amd64
-ENV JAVA25_HOME=/usr/lib/jvm/java-25-openjdk-amd64
+  openjdk-26-jdk \
+&& update-java-alternatives --set java-1.26.0-openjdk-amd64
+ENV JAVA26_HOME=/usr/lib/jvm/java-26-openjdk-amd64
 
 # These are needed to build the Checker Framework, used by the "typecheck" job in CI.
 RUN export DEBIAN_FRONTEND=noninteractive \

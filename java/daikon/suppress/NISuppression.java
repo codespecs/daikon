@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -624,15 +625,14 @@ public class NISuppression {
   /** Returns a string describing each of the antecedents for each suppressor. */
   public String antecedents_for_suppression(List<Invariant> antecedents[]) {
 
-    String sep = Global.lineSep;
-
-    String out = "suppression " + this + sep;
+    StringJoiner out = new StringJoiner(Global.lineSep);
+    out.add("suppression " + this);
     for (int i = 0; i < antecedents.length; i++) {
-      out += "antecedents for suppressor " + i + sep;
+      out.add("antecedents for suppressor " + i);
       for (Invariant inv : antecedents[i]) {
-        out += "    " + inv.format() + (inv.is_false() ? " [false]" : " t") + sep;
+        out.add("    " + inv.format() + (inv.is_false() ? " [false]" : " t"));
       }
     }
-    return out;
+    return out.toString();
   }
 }

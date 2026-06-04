@@ -32,6 +32,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import org.apache.bcel.Const;
@@ -3677,17 +3678,14 @@ public class DCInstrument extends InstructionListUtils {
    * @return string describing the top max_items on the operand stack
    */
   static String stack_contents(OperandStack stack, int max_items) {
-    String contents = "";
+    StringJoiner contents = new StringJoiner(", ");
     if (max_items >= stack.size()) {
       max_items = stack.size() - 1;
     }
     for (int ii = max_items; ii >= 0; ii--) {
-      if (contents.length() != 0) {
-        contents += ", ";
-      }
-      contents += stack.peek(ii);
+      contents.add(String.valueOf(stack.peek(ii)));
     }
-    return contents;
+    return contents.toString();
   }
 
   /**

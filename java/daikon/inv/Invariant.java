@@ -1374,12 +1374,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       int position) {
     if (position == vis.length) {
       if (debugIsObvious.isLoggable(Level.FINE)) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("  isObviousStatically_SomeInEquality: ");
+        StringJoiner sj = new StringJoiner(" ", "  isObviousStatically_SomeInEquality: ", "");
         for (int i = 0; i < vis.length; i++) {
-          sb.append(assigned[i].name() + " ");
+          sj.add(assigned[i].name());
         }
-        debugIsObvious.fine(sb.toString());
+        debugIsObvious.fine(sj.toString());
       }
 
       assigned = castNonNullDeep(assigned); // https://tinyurl.com/cfissue/986
@@ -1515,12 +1514,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     if (position == vis.length) {
       // base case
       if (debugIsObvious.isLoggable(Level.FINE)) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("  isObviousDynamically_SomeInEquality: ");
+        StringJoiner sj = new StringJoiner(" ", "  isObviousDynamically_SomeInEquality: ", "");
         for (int i = 0; i < vis.length; i++) {
-          sb.append(assigned[i].name() + " ");
+          sj.add(assigned[i].name());
         }
-        debugIsObvious.fine(sb.toString());
+        debugIsObvious.fine(sj.toString());
       }
       return isObviousDynamically(assigned);
     } else {

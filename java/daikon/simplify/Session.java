@@ -101,11 +101,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
       String[] envArray = newEnv.toArray(new String[] {});
       SessionManager.debugln("Session: exec");
       // -nosc: don't compute or print invalid context
+      String simplifyPathProp = System.getProperty("simplify.path");
       String simplifyPath;
-      if (System.getProperty("simplify.path") == null) {
+      if (simplifyPathProp == null) {
         simplifyPath = "Simplify";
       } else {
-        simplifyPath = System.getProperty("simplify.path");
+        simplifyPath = simplifyPathProp;
       }
       process = java.lang.Runtime.getRuntime().exec(new String[] {simplifyPath, "-nosc"}, envArray);
       SessionManager.debugln("Session: exec ok");

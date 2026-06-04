@@ -794,14 +794,8 @@ ifndef NONETWORK
 	fi
 endif
 
-update-plume-scripts:
-ifndef NONETWORK
-	if test -d ${PLUME_SCRIPTS}/.git ; then \
-	  (cd ${PLUME_SCRIPTS} && (git pull -q || (sleep 1m && (git pull || true)))) \
-	elif ! test -d ${PLUME_SCRIPTS} ; then \
-	  mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS} || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS})) \
-	fi
-endif
+# update-plume-scripts is defined in .utils/plume-scripts/code-style.mak which
+# is included by this Makefile.
 
 update-run-google-java-format:
 ifndef NONETWORK

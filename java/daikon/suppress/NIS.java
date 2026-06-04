@@ -1151,22 +1151,23 @@ public class NIS {
     @Override
     public String toString(@GuardSatisfied Antecedents this) {
 
-      String out = "Comparability " + comparability + " : ";
+      StringBuilder out = new StringBuilder();
+      out.append("Comparability " + comparability + " : ");
 
       for (Class<? extends Invariant> iclass : antecedent_map.keySet()) {
-        out += iclass.getSimpleName() + " : ";
+        out.append(iclass.getSimpleName() + " : ");
         List<Invariant> ilist = antecedent_map.get(iclass);
         for (Invariant inv : ilist) {
           if (inv.is_false()) {
-            out += inv.format() + "[FALSE] ";
+            out.append(inv.format() + "[FALSE] ");
           } else {
-            out += inv.format() + " ";
+            out.append(inv.format() + " ");
           }
         }
-        out += " : ";
+        out.append(" : ");
       }
 
-      return out;
+      return out.toString();
     }
   }
 
