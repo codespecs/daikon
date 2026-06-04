@@ -24,9 +24,10 @@ make compile daikon.jar
 make -C java error-prone
 make -C java check-format || (make -C java reformat && git --no-pager diff && /bin/false)
 
+PLUME_SCRIPTS="${PLUME_SCRIPTS:-.utils/plume-scripts}"
 make plume-scripts-update || true
 # Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-if [ -n "$(.plume-scripts/is-ci.sh)" ]; then
+if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then
   num_jobs=1
 else
   num_jobs="$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1)"
@@ -61,13 +62,13 @@ else
     reason=""
     # The `grep -v` prevents the make target failure from throwing off prefix guessing.
     (make -C java api-private 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'api-private' failed" > "/tmp/$USER/ap-warnings.txt") || true
-    if ! ".plume-scripts/ci-lint-diff" "/tmp/$USER/ap-warnings.txt"; then
+    if ! "${PLUME_SCRIPTS}/ci-lint-diff" "/tmp/$USER/ap-warnings.txt"; then
       status=1
       reason="$reason
 target 'api-private' failed"
     fi
     (make -C java requireJavadoc 2>&1 | grep -v "^Makefile:[0-9]*: recipe for target 'requireJavadoc' failed" > "/tmp/$USER/rj-warnings.txt") || true
-    if ! ".plume-scripts/ci-lint-diff" "/tmp/$USER/rj-warnings.txt"; then
+    if ! "${PLUME_SCRIPTS}/ci-lint-diff" "/tmp/$USER/rj-warnings.txt"; then
       status=1
       reason="$reason
 target 'requireJavadoc' failed"

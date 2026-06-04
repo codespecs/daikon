@@ -198,7 +198,7 @@ my @isNumber;                   # type:  true if numeric, false if string
 my %variableArray;
 
 
-# Now parse the input file and create the declartions and dtrace files.
+# Now parse the input file and create the declarations and dtrace files.
 my $csv = Text::CSV->new();
 
 # Captures the variable names in the global variable @csv_varnames.
@@ -364,7 +364,7 @@ while (<CSVHANDLE>) {
 
   my $csvstatus = $csv->parse($_); # parse a CSV string into fields
   if (!$csvstatus) {
-    die("Unparseable line in csv file $inputfilename: $_");
+    die("Unparsable line in csv file $inputfilename: $_");
   }
   my @sample = $csv->fields();  # get the parsed fields
 

@@ -5,6 +5,8 @@
 # Fail if any command fails
 set -e
 
+make update-plume-scripts
+
 # "make -C java check-format" would check every file; on commit we only need to
 # check files that changed.
 CHANGED_JAVA_FILES=$(git --no-pager diff --staged --name-only --diff-filter=ACM | grep '\.java$' | grep '^java/' | grep -v '^java/jtb/' || true)

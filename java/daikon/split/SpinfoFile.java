@@ -19,7 +19,7 @@ import org.plumelib.util.FilesPlume;
  * SpinfoFile stores information parsed from a {@code .spinfo} file. The constructor parses the
  * file; then clients can make calls to retrieve the parsed information.
  *
- * <p>This file uses the term "ppt section" and "replace section" to describe what is refered to as
+ * <p>This file uses the term "ppt section" and "replace section" to describe what is referred to as
  * a "Program Point Section" and "replacement sections" in the Daikon User Manual, respectively. A
  * "ppt statement" is a single line from a "ppt section".
  */

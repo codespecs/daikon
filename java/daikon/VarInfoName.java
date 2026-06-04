@@ -604,7 +604,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     Replacer r = new Replacer(node, replacement);
 
     // This code used to loop as long as node was in result, but this isn't
-    // necessary -- all occurances are replaced by replacer.
+    // necessary -- all occurrences are replaced by replacer.
 
     VarInfoName result = r.replace(this).intern();
     return result;
@@ -685,7 +685,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
   }
 
   // ============================================================
-  // Static inner classes that form the expression langugage
+  // Static inner classes that form the expression language
 
   /** A simple identifier like "a", etc. */
   public static @Interned class Simple extends VarInfoName {
@@ -841,7 +841,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
       // If this is orig, replace the elems with sizeof, leaving orig
       // where it is.  If it is not orig, simply return the sizeof the
-      // elems (ignoring anthing outside of the elems (like additional
+      // elems (ignoring anything outside of the elems (like additional
       // fields or typeof)).  This allows this code to work correctly
       // for variables such as a[].b.c (returns size(a[])) or
       // a[].getClass().getName() (returns size(a[]))
@@ -1399,7 +1399,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         return "no format when testCall.";
       }
 
-      if (term.name().indexOf("..") != -1) {
+      String termName = term.name();
+      if (termName.indexOf("..") != -1) {
         // We cannot translate arr[i..].x because this translates into
         //
         //    "daikon.Quant.collect(daikon.Quant.slice(arr,i,arr.length),"x")"
@@ -1414,7 +1415,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
             + "])";
       }
 
-      boolean hasBrackets = (term.name().indexOf("[]") != -1);
+      boolean hasBrackets = (termName.indexOf("[]") != -1);
 
       if (format == OutputFormat.JAVA) {
         assert !hasBrackets || v.type.dimensions() > 0
@@ -1455,7 +1456,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
             + "])";
       }
 
-      String term_name_no_brackets = term.name().replaceAll("\\[\\]", "") + "." + field;
+      String term_name_no_brackets = termName.replaceAll("\\[\\]", "") + "." + field;
 
       @SuppressWarnings("keyfor") // PACKAGE_NAME is always a key
       String packageName = v.aux.getValue(VarInfoAux.PACKAGE_NAME);
@@ -3649,7 +3650,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
      * implementation (commented out below), quantification was
      * expressed as a for-loop, which does not return boolean
      * values. An alternative solution would be to use Jtest's $forall
-     * and $exists constrcuts, but testing showed that Jtest does not
+     * and $exists constructs, but testing showed that Jtest does not
      * allow these constructs in @post annotations (!). The current
      * implementation uses helper methods defined in a separate class
      * daikon.Quant (not currently included with Daikon's
@@ -3829,7 +3830,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
      * other elements are simplify-named strings for the provided roots (with sequences subscripted
      * by one of the new bound variables).
      *
-     * <p>If elementwise is true, include the additional contraint that the indices (there must be
+     * <p>If elementwise is true, include the additional constraint that the indices (there must be
      * exactly two in this case) refer to corresponding positions. If adjacent is true, include the
      * additional constraint that the second index be one more than the first. If distinct is true,
      * include the constraint that the two indices are different. If includeIndex is true, return
@@ -3997,7 +3998,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
       return format_java_style(qret, elementwise, forall, format);
     }
 
-    // This form allows the indicies and bounds to be modified before quantification
+    // This form allows the indices and bounds to be modified before quantification
     protected static String[] format_java_style(QuantifyReturn qret, OutputFormat format) {
       return format_java_style(qret, false, true, format);
     }
@@ -4085,9 +4086,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         return "";
       } else {
         if (i != 0) {
-          return (", " + idx.esc_name() + "++");
+          return ", " + idx.esc_name() + "++";
         } else {
-          return (idx.esc_name() + "++");
+          return idx.esc_name() + "++";
         }
       }
     }
@@ -4175,8 +4176,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     /**
-     * This function returns a string representing how to format the first seperation in the
-     * quantification, that is, the one between the intial condition and the execution condition.
+     * This function returns a string representing how to format the first separation in the
+     * quantification, that is, the one between the initial condition and the execution condition.
      */
     protected static String quant_separator1(OutputFormat format) {
       if (format == OutputFormat.JML) {
@@ -4187,7 +4188,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     /**
-     * This function returns a string representing how to format the second seperation in the
+     * This function returns a string representing how to format the second separation in the
      * quantification, that is, the one between the execution condition and the assertion.
      */
     protected static String quant_separator2(OutputFormat format) {
@@ -4199,7 +4200,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
     }
 
     /**
-     * This function returns a string representing how to format the final seperation in the
+     * This function returns a string representing how to format the final separation in the
      * quantification, that is, the one between the assertion and any closing symbols.
      */
     protected static String quant_step_terminator(OutputFormat format) {

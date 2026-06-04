@@ -192,7 +192,7 @@ sub unescape_comments ( $ ) {
     s/([^ \t\n] ) +/$1/g;
     s/JAVACPP_WHITESPACE_SEPARATOR//og;
 
-    # Perform string contatenation required by use of -traditional cpp flag.
+    # Perform string concatenation required by use of -traditional cpp flag.
     s/(\w) \#\# (\w)/$1$2/g;
     # Perform stringization, but not just after "@link" or "@see".
     s/(?!\@link)(.(?!\@see).... )\#(\w+)/$1"$2"/g;

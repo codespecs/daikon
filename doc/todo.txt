@@ -206,7 +206,7 @@ PPT hierarchy
       - Daikon currently supports a program point hierarchy.  Invariants
         are dynamically determined at the leaves of the hierarchy (eg,
         exit program points).  Higher points (such as classes) are
-        calulated by merging the invariants from each child (an invariant
+        calculated by merging the invariants from each child (an invariant
         must be true at each child in order to be true at the parent).
 
       - This approach both optimizes run time (by only processing the data

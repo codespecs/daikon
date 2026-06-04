@@ -318,7 +318,14 @@ public final /*(at)Interned*/ class Equality extends Invariant {
         String[] form = VarInfo.simplify_quantify(QuantFlags.element_wise(), leader, var);
         String a = format_elt(form[1]);
         String b = format_elt(form[2]);
-        result.append(" " + form[0] + "(EQ " + a + " " + b + ")" + form[3]);
+        result.append(" ");
+        result.append(form[0]);
+        result.append("(EQ ");
+        result.append(a);
+        result.append(" ");
+        result.append(b);
+        result.append(")");
+        result.append(form[3]);
       }
     } else {
       for (VarInfo var : vars) {
@@ -561,7 +568,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       }
       // if we got here, this is the "all other things being equal" case
       else if (var.complexity() < newLeader.complexity()) {
-        // System.out.printf("%s greater comlexity, %s is leader%n",
+        // System.out.printf("%s greater complexity, %s is leader%n",
         //                   newLeader, var);
         newLeader = var;
       }

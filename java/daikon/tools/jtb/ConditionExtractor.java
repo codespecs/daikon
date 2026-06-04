@@ -83,7 +83,7 @@ class ConditionExtractor extends DepthFirstVisitor {
   @Override
   public void visit(ClassOrInterfaceDeclaration n) {
 
-    if (!Ast.isInterface(n)) { // Not sure if this is needed; added during JTB udpate.
+    if (!Ast.isInterface(n)) { // Not sure if this is needed; added during JTB update.
       className = Ast.format(n.f1);
     }
     super.visit(n);
