@@ -4086,9 +4086,9 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
         return "";
       } else {
         if (i != 0) {
-          return (", " + idx.esc_name() + "++");
+          return ", " + idx.esc_name() + "++";
         } else {
-          return (idx.esc_name() + "++");
+          return idx.esc_name() + "++";
         }
       }
     }
