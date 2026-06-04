@@ -23,6 +23,17 @@ JAVAC ?= javac
 JAVADOC ?= javadoc
 JAR ?= jar
 
+ifeq ($(shell uname), Darwin)
+  JAVA_HOME ?= $(/usr/libexec/java_home)
+else
+ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
+  JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
+else
+  $(info Failure: Here is the output of: which javac)
+  $(info $(shell which javac))
+  $(error 'which javac' had exit status 1)
+endif
+
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
 JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
@@ -133,16 +144,6 @@ else
 endif
 
 ## Add tools.jar and rt.jar, if they exist
-ifeq ($(shell uname), Darwin)
-  JAVA_HOME ?= $(/usr/libexec/java_home)
-else
-ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
-  JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
-else
-  $(info Failure: Here is the output of: which javac)
-  $(info $(shell which javac))
-  $(error 'which javac' had exit status 1)
-endif
 endif
 ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
   DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${JAVA_HOME}/lib/tools.jar
