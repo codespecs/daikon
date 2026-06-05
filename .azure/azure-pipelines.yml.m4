@@ -11,12 +11,10 @@ pr:
     include:
       - '*'
 
-# variables:
-# - name: testingSuffix
-#   value: -testing
 variables:
   - name: testingSuffix
     value:
+#    value: -testing
 
 jobs:
 

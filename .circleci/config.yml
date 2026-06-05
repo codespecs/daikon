@@ -1,5 +1,11 @@
 version: 2.1
 
+parameters:
+  testing-suffix:
+    type: string
+    default: ""
+    # default: "-testing"
+
 jobs:
 
   # Only proceed to other jobs if canary-jobs passes.
@@ -14,7 +20,7 @@ jobs:
 
   quick-txt-diff-ubuntu-jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk11
+      - image: mdernst/daikon-ubuntu-jdk11<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -33,7 +39,7 @@ jobs:
 
   quick-txt-diff-ubuntu-jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17
+      - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -52,7 +58,7 @@ jobs:
 
   quick-txt-diff-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21
+      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -71,7 +77,7 @@ jobs:
 
   quick-txt-diff-ubuntu-jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25
+      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -109,7 +115,7 @@ jobs:
 
   nonquick-txt-diff-ubuntu-jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk11
+      - image: mdernst/daikon-ubuntu-jdk11<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -128,7 +134,7 @@ jobs:
 
   nonquick-txt-diff-ubuntu-jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17
+      - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -147,7 +153,7 @@ jobs:
 
   nonquick-txt-diff-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21
+      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -166,7 +172,7 @@ jobs:
 
   nonquick-txt-diff-ubuntu-jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25
+      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -204,7 +210,7 @@ jobs:
 
   non-txt-diff-ubuntu-jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk11
+      - image: mdernst/daikon-ubuntu-jdk11<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -222,7 +228,7 @@ jobs:
       - run: ./scripts/test-non-txt-diff.sh
   non-txt-diff-ubuntu-jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17
+      - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -240,7 +246,7 @@ jobs:
       - run: ./scripts/test-non-txt-diff.sh
   non-txt-diff-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21
+      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -258,7 +264,7 @@ jobs:
       - run: ./scripts/test-non-txt-diff.sh
   non-txt-diff-ubuntu-jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25
+      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -295,7 +301,7 @@ jobs:
 
   misc-ubuntu-jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk11-plus
+      - image: mdernst/daikon-ubuntu-jdk11-plus<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -316,7 +322,7 @@ jobs:
           no_output_timeout: 20m
   misc-ubuntu-jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17-plus
+      - image: mdernst/daikon-ubuntu-jdk17-plus<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -337,7 +343,7 @@ jobs:
           no_output_timeout: 20m
   misc-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21-plus
+      - image: mdernst/daikon-ubuntu-jdk21-plus<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -358,7 +364,7 @@ jobs:
           no_output_timeout: 20m
   misc-ubuntu-jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25-plus
+      - image: mdernst/daikon-ubuntu-jdk25-plus<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -401,7 +407,7 @@ jobs:
 
   kvasir-ubuntu-jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk11-plus
+      - image: mdernst/daikon-ubuntu-jdk11-plus<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -422,7 +428,7 @@ jobs:
           no_output_timeout: 20m
   kvasir-ubuntu-jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25-plus
+      - image: mdernst/daikon-ubuntu-jdk25-plus<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -469,7 +475,7 @@ jobs:
   ## Thus, there is no typecheck_latest_ubuntu_jdk{8,11,17} job.
   typecheck-bundled-part1-ubuntu-jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17
+      - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -490,7 +496,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-bundled-part2-ubuntu-jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17
+      - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -511,7 +517,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-bundled-part3-ubuntu-jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17
+      - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -532,7 +538,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-bundled-part1-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21
+      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -553,7 +559,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-bundled-part2-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21
+      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -574,7 +580,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-bundled-part3-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21
+      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -595,7 +601,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-latest-part1-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21
+      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -616,7 +622,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-latest-part2-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21
+      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -637,7 +643,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-latest-part3-ubuntu-jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21
+      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -658,7 +664,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-bundled-part1-ubuntu-jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25
+      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -679,7 +685,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-bundled-part2-ubuntu-jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25
+      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -700,7 +706,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-bundled-part3-ubuntu-jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25
+      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -721,7 +727,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-latest-part1-ubuntu-jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25
+      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -742,7 +748,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-latest-part2-ubuntu-jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25
+      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -763,7 +769,7 @@ jobs:
           no_output_timeout: 30m
   typecheck-latest-part3-ubuntu-jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25
+      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -911,7 +917,7 @@ jobs:
 
   quick-txt-diff-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk11
+      - image: mdernst/daikon-rockylinux-jdk11<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -930,7 +936,7 @@ jobs:
 
   quick-txt-diff-rockylinux-jdk25:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk25
+      - image: mdernst/daikon-rockylinux-jdk25<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -968,7 +974,7 @@ jobs:
 
   nonquick-txt-diff-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk11
+      - image: mdernst/daikon-rockylinux-jdk11<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -987,7 +993,7 @@ jobs:
 
   nonquick-txt-diff-rockylinux-jdk25:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk25
+      - image: mdernst/daikon-rockylinux-jdk25<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -1025,7 +1031,7 @@ jobs:
 
   non-txt-diff-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk11
+      - image: mdernst/daikon-rockylinux-jdk11<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -1043,7 +1049,7 @@ jobs:
       - run: ./scripts/test-non-txt-diff.sh
   non-txt-diff-rockylinux-jdk25:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk25
+      - image: mdernst/daikon-rockylinux-jdk25<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -1080,7 +1086,7 @@ jobs:
 
   misc-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk11-plus
+      - image: mdernst/daikon-rockylinux-jdk11-plus<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -1101,7 +1107,7 @@ jobs:
           no_output_timeout: 20m
   misc-rockylinux-jdk25:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk25-plus
+      - image: mdernst/daikon-rockylinux-jdk25-plus<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -1144,7 +1150,7 @@ jobs:
 
   kvasir-rockylinux-jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk11-plus
+      - image: mdernst/daikon-rockylinux-jdk11-plus<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb
@@ -1165,7 +1171,7 @@ jobs:
           no_output_timeout: 20m
   kvasir-rockylinux-jdk25:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk25-plus
+      - image: mdernst/daikon-rockylinux-jdk25-plus<< pipeline.parameters.testing-suffix >>
     resource_class: large
     environment:
       TERM: dumb

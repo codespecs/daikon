@@ -4,6 +4,12 @@ changecom([], [disable comments, that is, expand within them])dnl
 include([defs.m4])dnl
 version: 2.1
 
+parameters:
+  testing-suffix:
+    type: string
+    default: ""
+    # default: "-testing"
+
 jobs:
 
   # Only proceed to other jobs if canary-jobs passes.
