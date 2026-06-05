@@ -16,6 +16,8 @@ export SHELLOPTS
 
 echo "HEAD=$(git rev-parse HEAD)"
 
+(cd java/lib && gradle shadowJar --stacktrace)
+
 make compile daikon.jar
 
 # Code style & quality
