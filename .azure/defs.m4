@@ -5,6 +5,7 @@ ifelse([the built-in "dnl" macro means "discard to next line"])dnl
 define([canary_os], [ubuntu])dnl
 define([canary_version], [25])dnl
 define([canary_test], [canary_os[]canary_version])dnl
+define([docker_userid], [mdernst])
 ifelse([each macro takes two arguments, the OS name and the JDK version])dnl
 dnl
 define([quick_job], [dnl
@@ -18,7 +19,7 @@ ifelse($1,canary_os,,[      - quick_[]canary_os[]_jdk$2
 ])dnl
     pool:
       vmImage: 'ubuntu-latest'
-    container: mdernst/daikon-$1-jdk$2${{ variables.testingSuffix }}:latest
+    container: docker_userid/daikon-$1-jdk$2${{ variables.testingSuffix }}:latest
     steps:
       - checkout: self
         fetchDepth: 25
@@ -36,7 +37,7 @@ ifelse($1,canary_os,,[      - nonquick_[]canary_os[]_jdk$2
 ])dnl
     pool:
       vmImage: 'ubuntu-latest'
-    container: mdernst/daikon-$1-jdk$2${{ variables.testingSuffix }}:latest
+    container: docker_userid/daikon-$1-jdk$2${{ variables.testingSuffix }}:latest
     steps:
       - checkout: self
         fetchDepth: 25
@@ -54,7 +55,7 @@ ifelse($1,canary_os,,[      - nontxt_[]canary_os[]_jdk$2
 ])dnl
     pool:
       vmImage: 'ubuntu-latest'
-    container: mdernst/daikon-$1-jdk$2${{ variables.testingSuffix }}:latest
+    container: docker_userid/daikon-$1-jdk$2${{ variables.testingSuffix }}:latest
     steps:
       - checkout: self
         fetchDepth: 25
@@ -72,7 +73,7 @@ ifelse($1,canary_os,,[      - misc_[]canary_os[]_jdk$2
 ])dnl
     pool:
       vmImage: 'ubuntu-latest'
-    container: mdernst/daikon-$1-jdk$2-plus${{ variables.testingSuffix }}:latest
+    container: docker_userid/daikon-$1-jdk$2-plus${{ variables.testingSuffix }}:latest
     steps:
       - checkout: self
         fetchDepth: 25
@@ -92,7 +93,7 @@ ifelse($1,canary_os,,[      - kvasir_[]canary_os[]_jdk$2
 ])dnl
     pool:
       vmImage: 'ubuntu-latest'
-    container: mdernst/daikon-$1-jdk$2-plus${{ variables.testingSuffix }}:latest
+    container: docker_userid/daikon-$1-jdk$2-plus${{ variables.testingSuffix }}:latest
     steps:
       - checkout: self
         fetchDepth: 25
@@ -111,7 +112,7 @@ ifelse($1,canary_os,,[      - typecheck_$3_[]canary_os[]_jdk$2
 ])dnl
     pool:
       vmImage: 'ubuntu-latest'
-    container: mdernst/daikon-$1-jdk$2-plus${{ variables.testingSuffix }}:latest
+    container: docker_userid/daikon-$1-jdk$2-plus${{ variables.testingSuffix }}:latest
     timeoutInMinutes: 80
     steps:
       - checkout: self
@@ -138,7 +139,7 @@ ifelse($1,canary_os,,[      - typecheck_$3_$4_[]canary_os[]_jdk$2
 ])dnl
     pool:
       vmImage: 'ubuntu-latest'
-    container: mdernst/daikon-$1-jdk$2-plus${{ variables.testingSuffix }}:latest
+    container: docker_userid/daikon-$1-jdk$2-plus${{ variables.testingSuffix }}:latest
     timeoutInMinutes: 40
     steps:
       - checkout: self
