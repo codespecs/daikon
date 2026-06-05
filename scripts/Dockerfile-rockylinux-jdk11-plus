@@ -26,6 +26,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   gcc \
   git \
   jq \
+  libxcrypt-devel \
   m4 \
   make \
   perl-English \
@@ -77,6 +78,12 @@ RUN dnf -q -y install \
   pipx \
 && PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install mypy \
 && PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install ruff
+
+# Install gradle (needed for building daikon-plumelib.jar).
+RUN wget -q https://services.gradle.org/distributions/gradle-9.5.1-bin.zip \
+&& unzip -d /opt/gradle gradle-9.5.1-bin.zip \
+&& rm gradle-9.5.1-bin.zip
+ENV PATH=$PATH:/opt/gradle/gradle-9.5.1/bin
 
 # Install uv (manages Python dependencies).
 RUN echo "installing uv" \
