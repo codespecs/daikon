@@ -55,10 +55,10 @@ ENV JAVA26_HOME=/usr/lib/jvm/java-26-openjdk
 # Need zip to install SDKMAN, need SDKMAN to install gradle.
 # However, SDKMAN requires bash, which would prevent the Docker container from
 # testing that Daikon runs under POSIX sh.
-RUN wget -q https://services.gradle.org/distributions/gradle-9.4.1-bin.zip \
-&& unzip -d /opt/gradle gradle-9.4.1-bin.zip \
-&& rm gradle-9.4.1-bin.zip
-ENV PATH=$PATH:/opt/gradle/gradle-9.4.1/bin
+RUN wget -q https://services.gradle.org/distributions/gradle-9.5.1-bin.zip \
+&& unzip -d /opt/gradle gradle-9.5.1-bin.zip \
+&& rm gradle-9.5.1-bin.zip
+ENV PATH=$PATH:/opt/gradle/gradle-9.5.1/bin
 
 RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \
