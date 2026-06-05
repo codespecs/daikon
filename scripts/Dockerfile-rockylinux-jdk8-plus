@@ -26,6 +26,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   gcc \
   git \
   jq \
+  libxcrypt-devel \
   m4 \
   make \
   perl-English \
