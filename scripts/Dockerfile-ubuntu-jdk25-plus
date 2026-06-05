@@ -50,9 +50,9 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 RUN export DEBIAN_FRONTEND=noninteractive \
 && apt -qqy update \
 && apt -qqy install \
-  openjdk-26-jdk \
-&& update-java-alternatives --set java-1.26.0-openjdk-amd64
-ENV JAVA26_HOME=/usr/lib/jvm/java-26-openjdk-amd64
+  openjdk-25-jdk \
+&& update-java-alternatives --set java-1.25.0-openjdk-amd64
+ENV JAVA25_HOME=/usr/lib/jvm/java-25-openjdk-amd64
 
 # Need zip to install SDKMAN, need SDKMAN to install gradle.
 # However, SDKMAN requires bash, which would prevent the Docker container from
