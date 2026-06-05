@@ -514,7 +514,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // Convert vardef.function_args, which is a list of Strings,
     // into this.function_args, which is a list of VarInfos.
     if (vardef.function_args != null) {
-      function_args = new ArrayList<VarInfo>(vardef.function_args.size());
+      List<VarInfo> temp_function_args = new ArrayList<VarInfo>(vardef.function_args.size());
       for (String varname : vardef.function_args) {
         VarInfo vi = ppt.find_var_by_name(varname);
         if (vi == null) {
@@ -523,8 +523,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
                   "function argument '%s' for variable '%s'  in ppt '%s' cannot be found",
                   varname, vardef.name, ppt.name));
         }
-        function_args.add(vi);
+        temp_function_args.add(vi);
       }
+      function_args = temp_function_args;
     }
 
     // do something appropriate with the ppt/var hierarchy.  It may be
@@ -2225,7 +2226,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     // debug_print_once ("types %s and %s are comparable",
     //                  var1.type, var2.type);
 
-    // System.out.printf("comparableByType: fallthough return true%n");
+    // System.out.printf("comparableByType: fallthrough return true%n");
     return true;
   }
 
@@ -2363,7 +2364,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * <p>For example, if this VarInfo is "a.b.c", then the guarding list consists of the variables
    * "a" and "a.b". If "a" is null or "a.b" is null, then "a.b.c" is missing (does not exist).
    *
-   * @return a list of varables that must be guarded
+   * @return a list of variables that must be guarded
    */
   public List<VarInfo> getGuardingList() {
 
@@ -2393,7 +2394,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         }
         if (Daikon.dkconfig_guardNulls == "missing") { // interned
           VarInfo vi = ppt.find_var_by_name(applyPreMaybe(viname).name());
-          // Don't guard variables that don't exist.  This happends when
+          // Don't guard variables that don't exist.  This happens when
           // we incorrectly parse static variable package names as field names
           if (Invariant.debugGuarding.isLoggable(Level.FINE)) {
             Invariant.debugGuarding.fine(
@@ -2593,7 +2594,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         VarInfo vi = ppt.find_var_by_name(applyPreMaybe(vin).name());
         // vi could be null because some variable's prefix is not a
         // variable.  Example: for static variable "Class.staticvar",
-        // "Class" is not a varible, even though for variable "a.b.c",
+        // "Class" is not a variable, even though for variable "a.b.c",
         // typically "a" and "a.b" are also variables.
         if (vi == null) {
           // String message =
@@ -2910,7 +2911,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
   /**
    * Adds a subscript (or sequence) to an array variable. This should really just just substitute
-   * for '..', but the dots are currently removed for back compatability.
+   * for '..', but the dots are currently removed for back compatibility.
    */
   public String apply_subscript(String subscript) {
     if (FileIO.new_decl_format) {
@@ -3488,7 +3489,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the name of the size variable that correponds to this array variable in simplify
+   * Returns the name of the size variable that corresponds to this array variable in simplify
    * format. Returns null if this variable is not an array or the size name can't be constructed for
    * other reasons. Note that isArray seems to distinguish between actual arrays and other sequences
    * (such as java.util.list). Simplify uses (it seems) the same length approach for both, so we
@@ -3787,7 +3788,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * contains the quantification, indexed form of each variable, optionally the index itself, and
    * the closer.
    *
-   * <p>If elementwise is true, include the additional contraint that the indices (there must be
+   * <p>If elementwise is true, include the additional constraint that the indices (there must be
    * exactly two in this case) refer to corresponding positions. If adjacent is true, include the
    * additional constraint that the second index be one more than the first. If distinct is true,
    * include the constraint that the two indices are different. If includeIndex is true, return
@@ -3961,7 +3962,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return (derived instanceof SequenceLength);
   }
 
-  /** Returns wehther or not this variable is a field. */
+  /** Returns whether or not this variable is a field. */
   @Pure
   public boolean is_field() {
     return (var_info_name instanceof VarInfoName.Field);
@@ -4159,7 +4160,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns the name to use for vi inside of a array reference. If the array reference is orig,
-   * then orig is implied. This removes orig from orig variales and adds post to post variables.
+   * then orig is implied. This removes orig from orig variables and adds post to post variables.
    */
   private static String inside_name(@Nullable VarInfo vi, boolean in_orig, int shift) {
     if (vi == null) {

@@ -7,7 +7,7 @@
   //    PRIMITIVE
 #endif
 
-  // default is that it is not this function, overriden in the subclass
+  // default is that it is not this function, overridden in the subclass
   @Pure
   public boolean is ## FUNCTION() {
     return false;
@@ -26,7 +26,7 @@
 #include "daikon/inv/ternary/threeScalar/FunctionBinaryGeneric.java.jpp"
 
 #if 0
-  // Make sure all arguments are not inadvertantly passed to the next use
+  // Make sure all arguments are not inadvertently passed to the next use
 #endif
 
 #undef ARG1_BOUND

@@ -2,7 +2,7 @@
 # Use bash, not sh, because of `set -o pipefail`.
 
 # This is the "typecheck" job of the pull request.
-# It uses the bundled version of the Checker Framework: the one commited to the Daikon repostiory.
+# It uses the bundled version of the Checker Framework: the one committed to the Daikon repository.
 
 # The optional first argument is "part1", "part2", or "part3", indicating which
 # part of the type-checking job to run.
@@ -27,7 +27,7 @@ make compile daikon.jar
 unset CHECKERFRAMEWORK
 
 # Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-if [ -n "$(.plume-scripts/is-ci.sh)" ]; then
+if [ -n "$("${PLUME_SCRIPTS:-.utils/plume-scripts}"/is-ci.sh)" ]; then
   num_jobs=1
 else
   num_jobs="$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1)"

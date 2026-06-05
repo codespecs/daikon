@@ -799,11 +799,11 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
       // format   \typeof(other) = "package.SomeClass;"
       //   as     \typeof(other) == \type(package.SomeClass)
 
-      result = "";
+      StringJoiner resultSj = new StringJoiner(" || ");
       for (int i = 0; i < num_elts; i++) {
-        if (i != 0) { result += " || "; }
-        result += varname + " == " + format_esc_string2type(elts[i]);
+        resultSj.add(varname + " == " + format_esc_string2type(elts[i]));
       }
+      result = resultSj.toString();
     }
 #elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
   #if defined(SCALAR) || defined(ELT)
@@ -836,11 +836,11 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
     } else
   #endif
     {
-      result = "";
+      StringJoiner resultSj = new StringJoiner(" || ");
       for (int i = 0; i < num_elts; i++) {
-        if (i != 0) { result += " || "; }
-        result += varname + " == " + TOSTRING(elts[i]);
+        resultSj.add(varname + " == " + TOSTRING(elts[i]));
       }
+      result = resultSj.toString();
     }
 #elif defined(IS_SEQUENCE_NUMERIC)
     String length = null;
@@ -1073,19 +1073,15 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
 
     // Constructing the array that unary val will be compared against
   #if defined(ELT)
-    String oneOfArray = "new long[] { ";
+    StringJoiner oneOfArray = new StringJoiner(", ", "new long[] { ", " }");
   #elif defined(ELTFLOAT)
-    String oneOfArray = "new double[] { ";
+    StringJoiner oneOfArray = new StringJoiner(", ", "new double[] { ", " }");
   #elif defined(ELTSTRING)
-    String oneOfArray = "new String[] { ";
+    StringJoiner oneOfArray = new StringJoiner(", ", "new String[] { ", " }");
   #endif
     for (int i = 0 ; i < num_elts ; i++) {
-      if (i != 0) {
-        oneOfArray += ", ";
-      }
-      oneOfArray = oneOfArray + TOSTRING(elts[i]);
+      oneOfArray.add(TOSTRING(elts[i]));
     }
-    oneOfArray += " }";
 
     // Calling quantification method
     if (num_elts == 1) {
@@ -1136,35 +1132,29 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     #endif
 
     {
-      result = "";
+      StringJoiner resultSj = new StringJoiner(" || ");
       for (int i = 0; i < num_elts; i++) {
-        if (i != 0) {
-          result += " || ";
-        }
-
         #if defined(FLOAT)
-        result += "daikon.Quant.fuzzy.eq(" + varname + ", " + TOSTRING(elts[i]) + ")";
+        resultSj.add("daikon.Quant.fuzzy.eq(" + varname + ", " + TOSTRING(elts[i]) + ")");
         #else
-        result += varname + " == " + TOSTRING(elts[i]);
+        resultSj.add(varname + " == " + TOSTRING(elts[i]));
         #endif
       }
+      result = resultSj.toString();
     }
 
   #elif defined(STRING)
 
-    result = "";
+    StringJoiner resultSj = new StringJoiner(" || ");
     boolean is_type = is_type();
     for (int i = 0; i < num_elts; i++) {
-      if (i != 0) {
-        result += " || ";
-      }
       String str = elts[i];
       if (!is_type) {
-        result += varname + JAVA_EQUALS_STRING(TOSTRING(str));
+        resultSj.add(varname + JAVA_EQUALS_STRING(TOSTRING(str)));
       } else {
         // It's a type
         if ((str == null) || "null".equals(str)) {
-          result += varname + " == null";
+          resultSj.add(varname + " == null");
         } else {
           if (str.startsWith("[")) {
             @SuppressWarnings("signature")
@@ -1174,10 +1164,11 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
           // ".class" (which is a suffix for a type name) and not
           // getClassSuffix (which is a suffix for an expression).
           // we need ".class.getName()" to make result a string
-          result += varname + " == " + str + ".class.getName()";
+          resultSj.add(varname + " == " + str + ".class.getName()");
         }
       }
     }
+    result = resultSj.toString();
 
   #endif
 
@@ -1189,25 +1180,20 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
 
   #else
 
-    result = "";
+    StringJoiner resultSj = new StringJoiner(" || ");
     for (int i = 0; i < num_elts; i++) {
-      if (i != 0) {
-        result += " || ";
-      }
-
     #if defined(STRINGSEQUENCE)
-      String seq = "new String[] { ";
+      StringJoiner seq = new StringJoiner(", ", "new String[] { ", " }");
     #elif defined(FLOATSEQUENCE)
-      String seq = "new double[] { ";
+      StringJoiner seq = new StringJoiner(", ", "new double[] { ", " }");
     #endif
       for (int j = 0 ; j < elts[i].length ; j++) {
-        if (j != 0) { seq += ", "; }
-        seq = seq + TOSTRINGELEMENT(elts[i][j]);
+        seq.add(TOSTRINGELEMENT(elts[i][j]));
       }
-      seq += " }";
 
-      result += "daikon.Quant.pairwiseEqual(" + varname + ", " + seq + ")";
+      resultSj.add("daikon.Quant.pairwiseEqual(" + varname + ", " + seq + ")");
     }
+    result = resultSj.toString();
   #endif
 
 #endif
@@ -1230,7 +1216,7 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
 #endif
     String result;
 #if defined(STRING) || defined(ELTSTRING)
-    result = "";
+    StringJoiner eqs = new StringJoiner(" ");
     boolean is_type = is_type();
     for (int i = 0; i < num_elts; i++) {
       String value = elts[i];
@@ -1248,14 +1234,13 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
       } else {
         value = TOSTRING_SIMPLIFY(value);
       }
-      result += " (EQ " + varname + " " + value + ")";
+      eqs.add("(EQ " + varname + " " + value + ")");
     }
     if (num_elts > 1) {
-      result = "(OR" + result + ")";
+      result = "(OR " + eqs + ")";
     } else if (num_elts == 1) {
-      // chop leading space
-      result = result.substring(1);
-    } else if (num_elts == 0) {
+      result = eqs.toString();
+    } else { // num_elts == 0
       return format_too_few_samples(OutputFormat.SIMPLIFY, null);
     }
 #elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
@@ -1285,15 +1270,14 @@ public String format_csharp_contract(@GuardSatisfied ONEOFSCALAR this) {
     } else
   #endif
     {
-      result = "";
+      StringJoiner eqs = new StringJoiner(" ");
       for (int i = 0; i < num_elts; i++) {
-        result += " (EQ " + varname + " " + TOSTRING_SIMPLIFY(elts[i]) + ")";
+        eqs.add("(EQ " + varname + " " + TOSTRING_SIMPLIFY(elts[i]) + ")");
       }
       if (num_elts > 1) {
-        result = "(OR" + result + ")";
+        result = "(OR " + eqs + ")";
       } else if (num_elts == 1) {
-        // chop leading space
-        result = result.substring(1);
+        result = eqs.toString();
       } else {
         // Haven't actually seen any data, so we're vacuously true
         return format_too_few_samples(OutputFormat.SIMPLIFY, null);

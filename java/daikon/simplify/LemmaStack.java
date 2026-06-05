@@ -392,7 +392,7 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
       result = minimizeAssumptions(lemmaAry, str);
       assumeAll(lemmas);
     } catch (TimeoutException e) {
-      System.err.println("Minimzation timed out");
+      System.err.println("Minimization timed out");
       restartProver();
       return lemmas;
     }

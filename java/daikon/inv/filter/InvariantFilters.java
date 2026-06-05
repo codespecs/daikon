@@ -10,6 +10,7 @@ import daikon.inv.OutputFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
@@ -73,7 +74,7 @@ public class InvariantFilters {
     }
 
     // Filter out invariants that contain certain types of derived variables
-    // By default, all derived variales are accepted.
+    // By default, all derived variables are accepted.
     addPropertyFilter(new DerivedVariableFilter());
 
     addPropertyFilter(new ReadonlyPrestateFilter());
@@ -282,13 +283,9 @@ public class InvariantFilters {
 
   // For debugging (not very efficient)
   static String reprVarInfoList(List<VarInfo> vis) {
-    String result = "";
-    for (int i = 0; i < vis.size(); i++) {
-      if (i != 0) {
-        result += " ";
-      }
-      VarInfo vi = vis.get(i);
-      result += vi.name();
+    StringJoiner result = new StringJoiner(" ");
+    for (VarInfo vi : vis) {
+      result.add(vi.name());
     }
     return "[ " + result + " ]";
   }

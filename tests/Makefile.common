@@ -265,7 +265,7 @@ endif
 # Reasons for different behavior between Java versions include:
 # - javac versions 8 & 9 sometimes generate dummy field accessor methods
 #   that javac 11 does not
-# - string concatenation of variables sometimes caused the varaibles to be
+# - string concatenation of variables sometimes caused the variables to be
 #   associated in Java 8 but not in Java 11. (This is an improvement.)
 #
 # This goal_name does not apply to kvasir-tests which
@@ -383,7 +383,7 @@ ifeq (generated,${TRACE_SOURCE})
 endif
 
 # Perhaps, if "PRESERVE_DECLS" is set, this should not blow away the old
-# .decls file.  Or maybe that .decls file shoudl be stored elsewhere, to
+# .decls file.  Or maybe that .decls file should be stored elsewhere, to
 # protect it from such action.  Then there would have to be some target
 # that would really remove the .decls file, however.
 clean-scratch:
@@ -1149,7 +1149,7 @@ ifdef ESC_ON
 ${PROJECT_FILE}.txt-merge-esc: merged/.merged-esc
 	(cd merged && cat `cat ${INST_LIST_FILE}`) > ${PROJECT_FILE}.txt-merge-esc
 merged/.merged-esc: ${INV_FILE} ${DAIKON_CLASS} ${MERGE_ESC_CLASS} ${MERGE_ESC_VISITOR_CLASS}
-	@[ ! -e merged/.nomerge ] || (echo "Merging diasabled; rm merged/.nomerge if you want to enable it." && false)
+	@[ ! -e merged/.nomerge ] || (echo "Merging disabled; rm merged/.nomerge if you want to enable it." && false)
 	@echo
 	@echo "### create merge-esc (${PROJECT_FILE})"
 	@echo
@@ -1176,7 +1176,7 @@ ${PROJECT_FILE}.txt-merge-jml: merged/.merged-jml
 	rm -f ${PROJECT_FILE}.txt-merge-jml
 	(cd merged && cat `cat ${INST_LIST_FILE}`) > ${PROJECT_FILE}.txt-merge-jml
 merged/.merged-jml: ${INV_FILE} ${DAIKON_CLASS} ${MERGE_ESC_CLASS} ${MERGE_ESC_VISITOR_CLASS}
-	@[ ! -e merged/.nomerge ] || (echo "Merging diasabled; rm merged/.nomerge if you want to enable it." && false)
+	@[ ! -e merged/.nomerge ] || (echo "Merging disabled; rm merged/.nomerge if you want to enable it." && false)
 	@echo
 	@echo "### create merge-jml (${PROJECT_FILE})"
 	@echo

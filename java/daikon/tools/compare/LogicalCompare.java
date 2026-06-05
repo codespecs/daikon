@@ -463,7 +463,7 @@ public class LogicalCompare {
     lemmas = new LemmaStack();
   }
 
-  // Comparare the invariants for enter and exit points between two
+  // Compare the invariants for enter and exit points between two
   // methods (usually two sets of invariants for methods of the same
   // name).
   // For historical reasons, one set of invariants is called the app
@@ -644,7 +644,7 @@ public class LogicalCompare {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
    */

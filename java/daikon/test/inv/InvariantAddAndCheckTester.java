@@ -105,7 +105,7 @@ public class InvariantAddAndCheckTester {
   private static final String lineSep = Global.lineSep;
 
   /**
-   * This function produces the format list for intialization of the static format list variable.
+   * This function produces the format list for initialization of the static format list variable.
    */
   static List<String> getTestFormatList() {
     List<String> result = new ArrayList<>();
@@ -272,7 +272,7 @@ public class InvariantAddAndCheckTester {
    * Determines whether a line is a comment or not.
    *
    * @param line the line in question
-   * @return true if the line is a comment (that is, not to be interpretted as a command); false
+   * @return true if the line is a comment (that is, not to be interpreted as a command); false
    *     otherwise
    */
   @Pure

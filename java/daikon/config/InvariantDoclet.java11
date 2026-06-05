@@ -81,7 +81,7 @@ public class InvariantDoclet implements Doclet {
   /** If true, then output format is Texinfo. */
   private boolean formatTexinfo = false;
 
-  /** The DocTrees instance assocated with the DocletEnvironment. */
+  /** The DocTrees instance associated with the DocletEnvironment. */
   private DocTrees docTrees;
 
   /** Used to report errors. */

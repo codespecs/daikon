@@ -101,11 +101,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
       String[] envArray = newEnv.toArray(new String[] {});
       SessionManager.debugln("Session: exec");
       // -nosc: don't compute or print invalid context
+      String simplifyPathProp = System.getProperty("simplify.path");
       String simplifyPath;
-      if (System.getProperty("simplify.path") == null) {
+      if (simplifyPathProp == null) {
         simplifyPath = "Simplify";
       } else {
-        simplifyPath = System.getProperty("simplify.path");
+        simplifyPath = simplifyPathProp;
       }
       process = java.lang.Runtime.getRuntime().exec(new String[] {simplifyPath, "-nosc"}, envArray);
       SessionManager.debugln("Session: exec ok");
@@ -135,7 +136,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
       String expect = ">\t";
       byte[] buf = new byte[expect.length()];
       int pos = is.read(buf);
-      assert pos != -1 : "Prompt exected, stream ended";
+      assert pos != -1 : "Prompt expected, stream ended";
       String actual = new String(buf, 0, pos, UTF_8);
       assert expect.equals(actual) : "Prompt expected, got '" + actual + "'";
 

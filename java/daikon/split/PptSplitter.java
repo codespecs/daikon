@@ -96,8 +96,8 @@ public class PptSplitter implements Serializable {
   private static final Comparator<Invariant> icfp = new Invariant.InvariantComparatorForPrinting();
 
   /**
-   * Create a binary PptSplitter with the specied splitter for the specified PptTopLevel parent. The
-   * parent should be a leaf (i.e., a numbered exit point).
+   * Create a binary PptSplitter with the specified splitter for the specified PptTopLevel parent.
+   * The parent should be a leaf (i.e., a numbered exit point).
    */
   public PptSplitter(PptTopLevel parent, Splitter splitter) {
 

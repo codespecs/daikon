@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -307,9 +308,10 @@ public class Chicory {
               + RegexUtil.regexError(File.pathSeparator));
     }
 
+    String[] cpath = cp.split(File.pathSeparator);
+
     // Look for ChicoryPremain.jar along the classpath
     if (premain == null) {
-      String[] cpath = cp.split(File.pathSeparator);
       for (String path : cpath) {
         File poss_premain = new File(path, "ChicoryPremain.jar");
         if (poss_premain.canRead()) {
@@ -332,7 +334,7 @@ public class Chicory {
 
     // If not found, try the daikon.jar file itself
     if (premain == null) {
-      for (String path : cp.split(File.pathSeparator)) {
+      for (String path : cpath) {
         File poss_premain = new File(path);
         if (poss_premain.getName().equals("daikon.jar")) {
           if (poss_premain.canRead()) {
@@ -450,7 +452,7 @@ public class Chicory {
       cmdlist.add(target_arg);
     }
     if (verbose) {
-      System.out.printf("%nExecuting target program: %s%n", args_to_string(cmdlist));
+      System.out.printf("%nExecuting target program: %s%n", argsToString(cmdlist));
     }
     String[] cmdline = cmdlist.toArray(new String[0]);
 
@@ -636,15 +638,26 @@ public class Chicory {
     return System.currentTimeMillis() - start;
   }
 
-  /** Convert a list of arguments into a command-line string. Only used for debugging output. */
-  public String args_to_string(List<String> args) {
-    String str = "";
+  /**
+   * Convert a list of arguments into a command-line string. Only used for debugging output.
+   *
+   * @param args the list of arguments
+   * @return argument string
+   */
+  public static String argsToString(List<String> args) {
+    StringJoiner result = new StringJoiner(" ");
     for (String arg : args) {
       if (arg.indexOf(' ') != -1) {
-        str = "'" + str + "'";
+        if (arg.indexOf('\'') == -1) {
+          arg = "'" + arg + "'";
+        } else if (arg.indexOf('\"') == -1) {
+          arg = "\"" + arg + "\"";
+        } else {
+          throw new Error("Cannot quote: " + arg);
+        }
       }
-      str += arg + " ";
+      result.add(arg);
     }
-    return str.trim();
+    return result.toString();
   }
 }
