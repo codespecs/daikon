@@ -83,6 +83,9 @@ ifeq ($(OS_ID),Rocky)
 endif
 
 ifeq ($(OS_ID),Ubuntu)
+ifeq ($(OS_REL),26.04)
+	GOAL := goal-Ubuntu2604
+endif
 ifeq ($(OS_REL),25.10)
 	GOAL := goal-Ubuntu2510
 endif
