@@ -30,7 +30,7 @@ dnl
 define([quick_job], [dnl
   quick-txt-diff-$1-jdk$2:
     docker:
-      - image: docker_userid/daikon-$1-jdk$2
+      - image: docker_userid/daikon-$1-jdk$2<< pipeline.parameters.testing-suffix >>
 circleci_boilerplate
       - run: ./scripts/test-quick-txt-diff.sh
 ])dnl
@@ -38,7 +38,7 @@ dnl
 define([nonquick_job], [dnl
   nonquick-txt-diff-$1-jdk$2:
     docker:
-      - image: docker_userid/daikon-$1-jdk$2
+      - image: docker_userid/daikon-$1-jdk$2<< pipeline.parameters.testing-suffix >>
 circleci_boilerplate
       - run: ./scripts/test-nonquick-txt-diff.sh
 ])dnl
@@ -46,14 +46,14 @@ dnl
 define([nontxt_job], [dnl
   non-txt-diff-$1-jdk$2:
     docker:
-      - image: docker_userid/daikon-$1-jdk$2
+      - image: docker_userid/daikon-$1-jdk$2<< pipeline.parameters.testing-suffix >>
 circleci_boilerplate
       - run: ./scripts/test-non-txt-diff.sh])dnl
 dnl
 define([misc_job], [dnl
   misc-$1-jdk$2:
     docker:
-      - image: docker_userid/daikon-$1-jdk$2-plus
+      - image: docker_userid/daikon-$1-jdk$2-plus<< pipeline.parameters.testing-suffix >>
 circleci_boilerplate(full)
       - run:
           command: ./scripts/test-misc.sh
@@ -62,7 +62,7 @@ dnl
 define([kvasir_job], [dnl
   kvasir-$1-jdk$2:
     docker:
-      - image: docker_userid/daikon-$1-jdk$2-plus
+      - image: docker_userid/daikon-$1-jdk$2-plus<< pipeline.parameters.testing-suffix >>
 circleci_boilerplate
       - run:
           name: Test Kvasir
@@ -73,7 +73,7 @@ ifelse([argument 3 is "latest" or "bundled"])dnl
 define([typecheck_job], [dnl
   typecheck-$3-$1-jdk$2:
     docker:
-      - image: docker_userid/daikon-$1-jdk$2
+      - image: docker_userid/daikon-$1-jdk$2<< pipeline.parameters.testing-suffix >>
 circleci_boilerplate
       - run: env
       - run:
@@ -88,7 +88,7 @@ ifelse([argument 3 is "latest" or "bundled", argument 4 is "part1", "part2", or 
 define([typecheck_job_part], [dnl
   typecheck-$3-$4-$1-jdk$2:
     docker:
-      - image: docker_userid/daikon-$1-jdk$2
+      - image: docker_userid/daikon-$1-jdk$2<< pipeline.parameters.testing-suffix >>
 circleci_boilerplate
       - run: env
       - run:

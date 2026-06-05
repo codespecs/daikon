@@ -62,7 +62,7 @@ Also, update the version number in java/Makefile .
 hashmap-util-0.0.1.jar : https://central.sonatype.com/search?q=hashmap-util
   VER=0.0.1
   rm -f hashmap-util-*.jar
-  wget https://repo.maven.apache.org/maven2/org/plumelib/hashmap-util/0.0.1/hashmap-util-0.0.1.jar
+  wget https://repo.maven.apache.org/maven2/org/plumelib/hashmap-util/$VER/hashmap-util-$VER.jar
   rm -f daikon-plumelib.jar
   Then, make daikon-plumelib.jar.
 
@@ -91,7 +91,7 @@ options-1.0.6.jar : https://central.sonatype.com/artifact/org.plumelib/options
   Options version 2 requires Java 11.
   VER=1.0.6
   rm -f options-*.jar
-  wget https://repo.maven.apache.org/maven2/org/plumelib/options/1.0.6/options-1.0.6.jar
+  wget https://repo.maven.apache.org/maven2/org/plumelib/options/$VER/options-$VER.jar
   rm -f daikon-plumelib.jar
   Then, make daikon-plumelib.jar.
 
