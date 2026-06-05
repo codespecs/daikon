@@ -13,8 +13,8 @@ pr:
 
 variables:
   - name: testingSuffix
-#    value:
-    value: -testing
+    value:
+#    value: -testing
 
 jobs:
 
