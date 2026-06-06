@@ -5,12 +5,6 @@ var-comparability none
 ..main():::ENTER
 this_invocation_nonce
 0
-::DIM1
-10
-1
-::DIM2
-20
-1
 ::globalBoo
 <STATIC_ADDR>
 1
@@ -36,12 +30,6 @@ nonsensical
 ..fint():::ENTER
 this_invocation_nonce
 1
-::DIM1
-10
-1
-::DIM2
-20
-1
 ::globalBoo
 <STATIC_ADDR>
 1
@@ -67,7 +55,7 @@ param
 <STACK_ADDR>
 1
 param[..]
-[ 0x0 ]
+[ 0x0 0x0 0x0 0x0 0x0 ]
 1
 param[..][0]
 nonsensical
@@ -76,12 +64,6 @@ nonsensical
 ..fint():::EXIT0
 this_invocation_nonce
 1
-::DIM1
-10
-1
-::DIM2
-20
-1
 ::globalBoo
 <STATIC_ADDR>
 1
@@ -107,7 +89,7 @@ param
 <STACK_ADDR>
 1
 param[..]
-[ 0x0 ]
+[ 0x0 0x0 0x0 0x0 0x0 ]
 1
 param[..][0]
 nonsensical
@@ -116,12 +98,6 @@ nonsensical
 ..fcrashint():::ENTER
 this_invocation_nonce
 2
-::DIM1
-10
-1
-::DIM2
-20
-1
 ::globalBoo
 <STATIC_ADDR>
 1
@@ -168,7 +144,7 @@ param
 <STACK_ADDR>
 1
 param[..]
-[ 0x0 ]
+[ 0x0 0x0 0x0 0x0 0x0 ]
 1
 param[..][0]
 nonsensical
@@ -177,12 +153,6 @@ nonsensical
 ..fcrashint():::EXIT0
 this_invocation_nonce
 2
-::DIM1
-10
-1
-::DIM2
-20
-1
 ::globalBoo
 <STATIC_ADDR>
 1
@@ -229,7 +199,7 @@ param
 <STACK_ADDR>
 1
 param[..]
-[ 0x0 ]
+[ 0x0 0x0 0x0 0x0 0x0 ]
 1
 param[..][0]
 nonsensical
@@ -238,12 +208,6 @@ nonsensical
 ..main():::EXIT0
 this_invocation_nonce
 0
-::DIM1
-10
-1
-::DIM2
-20
-1
 ::globalBoo
 <STATIC_ADDR>
 1

@@ -32,6 +32,6 @@ static int is_num_constant();
 static int is_str_constant();
 static int is_identifier();
 static int is_spec_symbol();
-static int unget_error();
+static void unget_error();
 static void print_spec_symbol();
 

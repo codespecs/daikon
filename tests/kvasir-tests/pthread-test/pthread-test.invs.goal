@@ -12,10 +12,12 @@ return == 0
 arg has only one value
 ===========================================================================
 ..thread1():::EXIT
+return == orig(arg)
 return has only one value
 ===========================================================================
 ..thread2():::ENTER
 arg has only one value
 ===========================================================================
 ..thread2():::EXIT
+return == orig(arg)
 return has only one value

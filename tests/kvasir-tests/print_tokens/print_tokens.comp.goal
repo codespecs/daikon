@@ -216,7 +216,7 @@ stream_ptr[..].stream
 ::check[..] ::default1[..] ::next[..]
 ::default1
 ::next
-return stream_ptr stream_ptr[..].stream_ind
+stream_ptr stream_ptr[..].stream_ind
 stream_ptr[..]
 stream_ptr[..].fp
 stream_ptr[..].fp[0]
@@ -314,7 +314,7 @@ print_tokens.c.get_actual_token():::EXIT0
 ::base
 ::base[..] token_str
 ::check
-::check[..] ::default1[..] ::next[..] return token_ind
+::check[..] ::default1[..] ::next[..] token_ind
 ::default1
 ::next
 
@@ -404,7 +404,7 @@ stream_ptr[..].stream
 
 print_tokens.c.skip():::EXIT0
 ::base
-::base[..] return
+::base[..]
 ::check
 ::check[..] ::default1[..] ::next[..]
 ::default1
