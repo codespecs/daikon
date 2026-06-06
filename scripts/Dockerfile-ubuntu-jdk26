@@ -7,12 +7,12 @@ LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>
 
 # According to
 # https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
-#  * Put "apt update" and "apt install" in the same RUN command.
-#  * Do not run "apt upgrade"; instead get upstream to update.
+#  * Put "apt-get update" and "apt-get install" in the same RUN command.
+#  * Do not run "apt-get upgrade"; instead get upstream to update.
 
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy update \
-&& apt -qqy install locales \
+&& apt-get -qqy update \
+&& apt-get -qqy install locales \
 && rm -rf /var/lib/apt/lists/* \
 && locale-gen "en_US.UTF-8"
 ENV LANG=en_US.UTF-8 \
@@ -20,13 +20,13 @@ ENV LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy update \
-&& apt -qqy install \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
   apt-utils
 
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy update \
-&& apt -qqy install \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
   autoconf \
   automake \
   bc \
@@ -45,14 +45,14 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 
 # Install the JDK.
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy update \
-&& apt -qqy install \
-  openjdk-25-jdk \
-&& update-java-alternatives --set java-1.25.0-openjdk-amd64
-ENV JAVA25_HOME=/usr/lib/jvm/java-25-openjdk-amd64
+&& apt-get -qqy update \
+&& apt-get -qqy install \
+  openjdk-26-jdk \
+&& update-java-alternatives --set java-1.26.0-openjdk-amd64
+ENV JAVA26_HOME=/usr/lib/jvm/java-26-openjdk-amd64
 
 # Clean up.
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy autoremove \
-&& apt clean \
+&& apt-get -qqy autoremove \
+&& apt-get clean \
 && rm -rf /var/lib/apt/lists/*
