@@ -10,12 +10,12 @@ LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>
 
 # According to
 # https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
-#  * Put "apt update" and "apt install" in the same RUN command.
-#  * Do not run "apt upgrade"; instead get upstream to update.
+#  * Put "apt-get update" and "apt-get install" in the same RUN command.
+#  * Do not run "apt-get upgrade"; instead get upstream to update.
 
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy update \
-&& apt -qqy install locales \
+&& apt-get -qqy update \
+&& apt-get -qqy install locales \
 && rm -rf /var/lib/apt/lists/* \
 && locale-gen "en_US.UTF-8"
 ENV LANG=en_US.UTF-8 \
@@ -23,13 +23,13 @@ ENV LANG=en_US.UTF-8 \
     LC_ALL=en_US.UTF-8
 
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy update \
-&& apt -qqy install \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
   apt-utils
 
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy update \
-&& apt -qqy install \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
   autoconf \
   automake \
   bc \
@@ -38,6 +38,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   gcc \
   git \
   jq \
+  libcrypt-dev \
   lsb-release \
   m4 \
   make \
@@ -47,22 +48,22 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 
 # Install the JDK.
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy update \
-&& apt -qqy install \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
   openjdk-11-jdk \
 && update-java-alternatives --set java-1.11.0-openjdk-amd64
 
 # These are needed to build the Checker Framework, used by the "typecheck" job in CI.
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy update \
-&& apt -qqy install \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
   ant \
   maven \
   python3
 
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy update \
-&& apt -qqy install \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
   devscripts \
   g++ \
   graphviz \
@@ -84,22 +85,34 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 # Azure creates a new user and runs jobs as it.
 # So, install into /usr/local/bin which is already on every user's path.
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy update \
-&& apt -y install \
+&& apt-get -qqy update \
+&& apt-get -qqy install \
   pipx \
 && PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install mypy \
 && PIPX_HOME=/opt/pipx PIPX_BIN_DIR=/usr/local/bin pipx install ruff
 
 # Install uv (manages Python dependencies).
 RUN export DEBIAN_FRONTEND=noninteractive \
+&& echo "installing uv" \
 && wget -qO- https://astral.sh/uv/install.sh | sh \
 && find /root -exec chmod +r {} \; \
 && find /root -type d -exec chmod +x {} \; \
 && find /root/.local/bin -type f -exec chmod +x {} \;
 ENV PATH=/root/.local/bin:$PATH
 
+## `apt` installs a very old version of gradle (see `apt-cache policy gradle`).
+## `snap` does not work under docker.
+# Need zip to install SDKMAN, need SDKMAN to install gradle.
+# However, SDKMAN requires bash, which would prevent the Docker container from
+# testing that Daikon runs under POSIX sh.
+RUN export DEBIAN_FRONTEND=noninteractive \
+&& wget -q https://services.gradle.org/distributions/gradle-9.5.1-bin.zip \
+&& unzip -q -d /opt/gradle gradle-9.5.1-bin.zip \
+&& rm gradle-9.5.1-bin.zip
+ENV PATH=$PATH:/opt/gradle/gradle-9.5.1/bin
+
 # Clean up.
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& apt -qqy autoremove \
-&& apt clean \
+&& apt-get -qqy autoremove \
+&& apt-get clean \
 && rm -rf /var/lib/apt/lists/*
