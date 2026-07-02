@@ -43,7 +43,7 @@ for line in all_lines:
     # (Ignore blank lines) ... we hit a space-delimited list of
     # comparable variables
     elif line:
-        # Size of comparability set for that line (mostly gonna be 1)
+        # Size of comparability set for that line (usually 1)
         cur_ppt_set_sizes.append(len(line.split()))
 
 

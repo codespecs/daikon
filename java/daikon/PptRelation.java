@@ -738,7 +738,7 @@ public class PptRelation implements Serializable {
       // variables.
       //
       // For example, consider class A with fields x and y and method
-      // B.foo (A arg1, A arg2).  We will setup two relations to this
+      // B.foo (A arg1, A arg2).  We will set up two relations to this
       // ppt -- one from A to b.foo.arg1 and one from A to b.foo.arg2.
       // in each we will equate A.x with arg.x and A.y with arg.y.
       //

@@ -13,7 +13,7 @@
  * point 1 dimension N
  * point 2 id
  * point 2 dimension 1
- * point 2 dimention 2
+ * point 2 dimension 2
  *       .
  *       .
  *       .

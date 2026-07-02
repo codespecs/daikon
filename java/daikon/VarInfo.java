@@ -4159,7 +4159,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the name to use for vi inside of a array reference. If the array reference is orig,
+   * Returns the name to use for vi inside of an array reference. If the array reference is orig,
    * then orig is implied. This removes orig from orig variables and adds post to post variables.
    */
   private static String inside_name(@Nullable VarInfo vi, boolean in_orig, int shift) {

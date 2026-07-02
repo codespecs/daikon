@@ -2504,7 +2504,7 @@ public final class FileIO {
   }
 
   /**
-   * Read either a serialized PptMap or a InvMap and return a PptMap. If an InvMap is specified, it
+   * Read either a serialized PptMap or an InvMap and return a PptMap. If an InvMap is specified, it
    * is converted to a PptMap.
    *
    * @param file the input file

@@ -125,7 +125,7 @@ for line in all_lines:
     elif my_state == DeclState.CompNum:
         cur_var_list[-1].append(line)
 
-        # Assume we are gonna read another variable.
+        # Assume we are going to read another variable.
         # When we actually read the subsequent line,
         # we'll branch according to whether it's a real
         # variable or another thing

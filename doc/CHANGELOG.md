@@ -1489,7 +1489,7 @@ User-visible changes
   Bug-fixes
 
 * Fixed a problem with clone where the instrumentation incorrectly added a
-    call to a instrumented version of clone where it did not exist.
+    call to an instrumented version of clone where it did not exist.
 
 * Fixed some problems with the instrumentation of equals.
 
@@ -2540,7 +2540,7 @@ a Bugzilla database.
 
 ### General
 
-  Daikon problems are now tracked in the Bugzilla database at at:
+  Daikon problems are now tracked in the Bugzilla database at:
   <http://pag.csail.mit.edu/bugzilla/>.  There are separate products for
   Daikon and Kvasir.  Problems with Chicory and other front ends
   should be submitted against the Daikon product.

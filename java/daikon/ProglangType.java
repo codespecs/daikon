@@ -766,7 +766,7 @@ public final @Interned class ProglangType implements Serializable {
 
   /**
    * Returns true if these two types can be sensibly compared to one another, and if non-integral,
-   * whether this could be a superclass of other. A List is comparableOrSuperclassOf to a ArrayList,
+   * whether this could be a superclass of other. A List is comparableOrSuperclassOf to an ArrayList,
    * but not the other way around. This is a transitive method, but not reflexive.
    */
   public boolean comparableOrSuperclassOf(ProglangType other) {
