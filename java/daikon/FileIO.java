@@ -1049,7 +1049,7 @@ public final class FileIO {
       // System.out.printf("processing filename %s%n", filename);
       try {
         read_data_trace_file(filename, all_ppts, processor, false, ppts_may_be_new);
-      } catch (Daikon.NormalTermination e) {
+      } catch (Daikon.NormalTermination | Daikon.UserError e) {
         throw e;
       } catch (Throwable e) {
         if (dkconfig_continue_after_file_exception) {
@@ -2128,6 +2128,17 @@ public final class FileIO {
       if (line == null) {
         throw new Daikon.UserError(
             "Unexpected end of file at "
+                + data_trace_state.filename
+                + " line "
+                + reader.getLineNumber()
+                + lineSep
+                + "  Expected to find variable name"
+                + " for program point "
+                + ppt.name());
+      }
+      if (line.isEmpty()) {
+        throw new Daikon.UserError(
+            "Unexpected end of dtrace record at "
                 + data_trace_state.filename
                 + " line "
                 + reader.getLineNumber()
