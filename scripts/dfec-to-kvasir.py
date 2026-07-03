@@ -274,7 +274,7 @@ for line in dfec_all_lines:
         # e.g. '217[337]' should become '217'
         cur_var_map[cur_var_name] = strip_comp_number(line)
 
-        # Assume we are gonna read another variable.
+        # Assume we are going to read another variable.
         # When we actually read the subsequent line,
         # we'll branch according to whether it's a real
         # variable or another thing
@@ -333,7 +333,7 @@ for line in kvasir_all_lines:
     elif my_state == DeclState.CompNum:
         cur_var_list[-1].append(line)
 
-        # Assume we are gonna read another variable.
+        # Assume we are going to read another variable.
         # When we actually read the subsequent line,
         # we'll branch according to whether it's a real
         # variable or another thing

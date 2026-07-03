@@ -1,4 +1,4 @@
-;# Tests for printing esc forall statments
+;# Tests for printing esc forall statements
 
 ;# orig(a[0..x])
 parse a a

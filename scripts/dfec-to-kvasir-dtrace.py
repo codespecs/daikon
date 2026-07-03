@@ -240,7 +240,7 @@ for line in kvasir_decls_all_lines:
     elif my_state == DeclsState.CompNum:
         #        cur_var_list[-1].append(line)
 
-        # Assume we are gonna read another variable.
+        # Assume we are going to read another variable.
         # When we actually read the subsequent line,
         # we'll branch according to whether it's a real
         # variable or another thing
@@ -257,8 +257,8 @@ def process_ppt(ppt_name: str, var_info: dict[str, list[str]]) -> None:
     if stripped in kvasir_ppt_map:
         print(kvasir_ppt_map[stripped][0])
 
-        # Iterate thru all variables in .decls file (to preserve
-        # order) and print ut the corresponding entries in the .dtrace
+        # Iterate through all variables in .decls file (to preserve
+        # order) and print out the corresponding entries in the .dtrace
         # file:
         var_list = kvasir_ppt_map[stripped][1]
         for var_entry in var_list:

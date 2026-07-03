@@ -191,7 +191,7 @@ public class Annotate {
           insert_inexpressible = true;
           break;
         // case 'r':
-        //   // Should do this witout calling out to the system.  (There must be
+        //   // Should do this without calling out to the system.  (There must be
         //   // an easy way to do this in Java.)
         //   Process p = System.exec("find . -type f -name '*.java' -print");
         //   p.waitFor();
@@ -561,11 +561,11 @@ public class Annotate {
 //    To enforce this:
 //
 // - When checking the @pre condition, the pre-condition contract is assumed to
-//   succeed if any of the @pre conditions of the chain of overridded methods
+//   succeed if any of the @pre conditions of the chain of overridden methods
 //   succeeds. I.e. the preconditions are ORed.
 //
 // - When checking the @post condition, the post-condition contract is assumed
-//   to succeed if all the @post conditions of the chain of overridded methods
+//   to succeed if all the @post conditions of the chain of overridden methods
 //   succeed. I.e. the postconditions are ANDed.
 //
 //    Note that if there are multiple @pre conditions for a given method, the
@@ -663,7 +663,7 @@ public class Annotate {
 //    method's class.
 //
 // 7) Contracts that appear in the body of a method should be thought of as
-//    normal statements.  Thus the following example would have undesireable
+//    normal statements.  Thus the following example would have undesirable
 //    behavior:
 //
 //        if (a) /** @assert (a) */

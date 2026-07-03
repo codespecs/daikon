@@ -49,7 +49,7 @@ public class ListInfo extends DaikonVariableInfo {
         // thus should return Nonsensical.
         // Possibly, this should be extended to all exceptions.
         System.err.println(
-            "Detected a InvocationTargetException in: " + listType.getName() + " " + getName());
+            "Detected an InvocationTargetException in: " + listType.getName() + " " + getName());
         arrayVal = NonsensicalObject.getInstance();
       }
     } else {
