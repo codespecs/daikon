@@ -82,8 +82,8 @@ public final class DiscardInfo {
   }
 
   /**
-   * Adds an equality string to the discardString for each variable in in vis which is different
-   * from the leader.
+   * Adds an equality string to the discardString for each variable in vis which is different from
+   * the leader.
    */
   public void add_implied_vis(VarInfo[] vis) {
     for (int i = 0; i < vis.length; i++) {

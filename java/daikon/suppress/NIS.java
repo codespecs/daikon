@@ -1019,10 +1019,10 @@ public class NIS {
     }
 
     /**
-     * Returns the invariant if it already exists, or null otherwise. Unary and and ternary
-     * invariant must match by class (there are no permutations for unary invariants and ternary
-     * invariants handle permutations as different classes). Binary invariants must match the class
-     * and if there is an internal swap variable for variable order, that must match as well.
+     * Returns the invariant if it already exists, or null otherwise. Unary and ternary invariant
+     * must match by class (there are no permutations for unary invariants and ternary invariants
+     * handle permutations as different classes). Binary invariants must match the class and if
+     * there is an internal swap variable for variable order, that must match as well.
      */
     public @Nullable Invariant already_exists() {
       Invariant cinv = ppt.find_inv_by_class(vis, suppressee.sup_class);

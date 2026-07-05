@@ -1485,7 +1485,7 @@ public class DCInstrument extends InstructionListUtils {
 
       // Replace the object comparison instructions with a call to
       // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
-      // return a boolean which is used in a ifeq/ifne instruction
+      // return a boolean which is used in an ifeq/ifne instruction
       case Const.IF_ACMPEQ:
         return object_comparison((BranchInstruction) inst, "object_eq", Const.IFNE);
       case Const.IF_ACMPNE:
@@ -3023,7 +3023,7 @@ public class DCInstrument extends InstructionListUtils {
   /**
    * Creates code to make the declared length of a new array comparable to its index.
    *
-   * @param inst a anewarray or newarray instruction
+   * @param inst an anewarray or newarray instruction
    * @return instruction list that calls the runtime to handle the newarray instruction
    */
   InstructionList new_array(Instruction inst) {
