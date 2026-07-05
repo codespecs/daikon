@@ -1240,7 +1240,7 @@ public class DCInstrument extends InstructionListUtils {
     InstructionList nl = create_tag_frame(mgen, tag_frame_local);
 
     // We add a temporary NOP at the end of the create_tag_frame
-    // code that we will replace with runtime initization code
+    // code that we will replace with runtime initialization code
     // later.  We do this so that any existing stack map at
     // instruction offset 0 is not replaced by the one we are
     // about to add for initializing the tag_frame variable.
@@ -2424,7 +2424,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Given a classname return it's superclass name. Note that BCEL reports that the superclass of
+   * Given a classname return its superclass name. Note that BCEL reports that the superclass of
    * 'java.lang.Object' is 'java.lang.Object' rather than saying there is no superclass.
    *
    * @param classname the fully-qualified name of the class in binary form. E.g., "java.util.List"

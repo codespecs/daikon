@@ -145,7 +145,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   }
 
   /**
-   * LinearBinary can't be flowed because it keeps samples to build the line. These sample can't be
+   * LinearBinary can't be flowed because it keeps samples to build the line. These samples can't be
    * flowed from ppt to ppt (since they probably didn't occur at the lower ppt).
    */
   @Pure

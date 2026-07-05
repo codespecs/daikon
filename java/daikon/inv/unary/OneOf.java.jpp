@@ -288,7 +288,7 @@ public final class ONEOFSCALAR extends SINGLESCALAR implements OneOf {
 #ifdef BASE_INT
   /**
    * Boolean. If true, invariants describing hashcode-typed variables as having any particular value
-   * will have an artificial value substituted for the exact hashhode values. The artificial values
+   * will have an artificial value substituted for the exact hashcode values. The artificial values
    * will stay the same from run to run even if the actual hashcode values change (as long as the
    * OneOf invariants remain the same). If false, hashcodes will be formatted as the application of
    * a hashcode uninterpreted function to an integer representing the bit pattern of the hashcode.

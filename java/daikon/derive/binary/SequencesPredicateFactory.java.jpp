@@ -52,7 +52,7 @@ public final class CLASSNAME extends BinaryDerivationFactory {
     }
 
     if (!var1.aux.hasOrder() || !var2.aux.hasOrder()) {
-      // Order doesn't matter, then predication is meaningless
+      // If order doesn't matter, then predication is meaningless
       return null;
     }
 

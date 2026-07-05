@@ -449,9 +449,9 @@ public class Annotate {
 // the contract violation. Jcontract provides several Runtime Handlers, the
 // default one uses a GUI Monitor that shows the program progress and what
 // contracts are violated. The user can also write its own RuntimeHandlers,
-// for more information see {isntalldir}\docs\runtime.txt.
+// for more information see {installdir}\docs\runtime.txt.
 //
-//    With the Moninor Runtime Handlers provided by Jcontract program execution
+//    With the Monitor Runtime Handlers provided by Jcontract program execution
 // continues as if nothing had happened when a contract is violated, i.e. even
 // if a @pre contract is violated, the method will still be executed.
 //    This option makes the DbC enabled and non DbC enabled versions of the

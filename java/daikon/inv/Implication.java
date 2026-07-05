@@ -207,7 +207,7 @@ public class Implication extends Joiner {
   }
 
   /**
-   * Returns true if the rightr side of the implication some equality combinations of its member
+   * Returns true if the right side of the implication and some equality combinations of its member
    * variables are dynamically obvious. For example, a == b, and f(a) is obvious, so is f(b). We use
    * the someInEquality (or least interesting) method during printing so we only print an invariant
    * if all its variables are interesting, since a single, dynamic, non interesting occurrence means

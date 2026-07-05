@@ -301,7 +301,7 @@ public class BuildJDK {
    * directory tree, selects the classes we want to instrument, creates an InputStream for each of
    * these classes, and adds this information to the {@code class_stream_map} argument.
    *
-   * @param path module file, which might be subdirectory
+   * @param path module file, which might be a subdirectory
    * @param modulePrefixLength length of "/module/..." path prefix before start of actual member
    *     path
    * @param class_stream_map a map from class file name to InputStream that collects the results

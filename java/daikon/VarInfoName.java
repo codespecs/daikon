@@ -3326,8 +3326,8 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
   /**
    * Helper for writing parts of quantification expressions. Formatting methods in invariants call
-   * the formatting methods in this class to get commonly-used parts, like how universal
-   * quanitifiers look in the different formatting schemes.
+   * the formatting methods in this class to get commonly-used parts, like how universal quantifiers
+   * look in the different formatting schemes.
    */
   public static class QuantHelper {
 

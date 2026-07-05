@@ -108,7 +108,7 @@ public class SUBSET extends TWOSEQUENCE {
 
     #if 0
       // JHP: This code is removed because these sorts of static checks
-      // can't be reliability performed with equality sets (just because
+      // can't be reliably performed with equality sets (just because
       // the leaders are obvious subsets, does not imply that all members
       // are.  Eventually this should be moved to isObviousStatically()
 
