@@ -3613,7 +3613,7 @@ public abstract @Interned class VarInfoName implements Serializable, Comparable<
 
     // <root*> -> <string string* string>
     /**
-     * Given a list of roots, return a String array where the first element is a ESC-style
+     * Given a list of roots, return a String array where the first element is an ESC-style
      * quantification over newly-introduced bound variables, the last element is a closer, and the
      * other elements are esc-named strings for the provided roots (with sequences subscripted by
      * one of the new bound variables).

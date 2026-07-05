@@ -12,7 +12,7 @@ import org.plumelib.util.IPair;
  *
  * @param <CONTENT> half of the type of the objects stored in this node, which are {@code
  *     IPair<CONTENT,CONTENT>}
- * @param <CHILD> the type of the children; it is is ignored if there are no children
+ * @param <CHILD> the type of the children; it is ignored if there are no children
  */
 public abstract class Node<CONTENT extends @Nullable Object, CHILD> {
 

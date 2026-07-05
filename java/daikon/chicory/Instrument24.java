@@ -642,8 +642,8 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Copy the given method from the input class file to the output output class with no changes.
-   * Uses {@code copyMethod} to perform the actual copy.
+   * Copy the given method from the input class file to the output class with no changes. Uses
+   * {@code copyMethod} to perform the actual copy.
    *
    * @param classBuilder for the output class
    * @param mm MethodModel describes the input method
@@ -658,7 +658,7 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Copy the given method from the input class file to the output output class with no changes.
+   * Copy the given method from the input class file to the output class with no changes.
    *
    * @param methodBuilder for the output class
    * @param methodModel describes the input method

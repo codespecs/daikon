@@ -1459,7 +1459,7 @@ More assertions can easily be added to @file{SampleTester.java} as required.
 @node          Example file
 @subsubsection Example file
 
-The following is an simple example of sample testing.
+The following is a simple example of sample testing.
 @example
 decl: daikon/test/SampleTesters.decls
 

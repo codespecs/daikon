@@ -386,7 +386,7 @@ omatch(lin, i, pat, j)
 }
 
 
-patsize(pat, n)
+int patsize(pat, n)
 	char*	pat;
 	int	n;
 {
@@ -518,7 +518,7 @@ char *pat, *sub;
     }
 }
 
-main(argc, argv)
+int main(argc, argv)
 int	argc;
 char	*argv[];
 {

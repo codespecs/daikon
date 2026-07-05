@@ -1488,7 +1488,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return ((Long) raw).longValue();
   }
 
-  /** Returns the value of an long[] variable. */
+  /** Returns the value of a long[] variable. */
   public long[] getIntArrayValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
@@ -2370,7 +2370,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
     // The list returned by this visitor always includes the argument itself (if it is testable
     // against null; for example, derived variables are not). If the caller does not want the
-    // argument to be in the list, the caller must must remove the argument.
+    // argument to be in the list, the caller must remove the argument.
 
     // Inner class because it uses the "ppt" variable.
     // Basic structure of each visitor:
@@ -2910,8 +2910,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Adds a subscript (or sequence) to an array variable. This should really just just substitute
-   * for '..', but the dots are currently removed for back compatibility.
+   * Adds a subscript (or sequence) to an array variable. This should really just substitute for
+   * '..', but the dots are currently removed for back compatibility.
    */
   public String apply_subscript(String subscript) {
     if (FileIO.new_decl_format) {
@@ -3159,7 +3159,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /**
    * Returns the name of this variable as a valid C# Code Contract.
    *
-   * @param index an an array index. Must be null for a non-array variable.
+   * @param index an array index. Must be null for a non-array variable.
    * @return the name of this variable as a valid C# Code Contract
    */
   @SideEffectFree
@@ -4159,7 +4159,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns the name to use for vi inside of a array reference. If the array reference is orig,
+   * Returns the name to use for vi inside of an array reference. If the array reference is orig,
    * then orig is implied. This removes orig from orig variables and adds post to post variables.
    */
   private static String inside_name(@Nullable VarInfo vi, boolean in_orig, int shift) {

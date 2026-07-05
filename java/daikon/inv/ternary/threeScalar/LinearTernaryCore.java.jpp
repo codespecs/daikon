@@ -108,7 +108,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   // constant (constant variables indicate that the 'plane' is
   // parallel to that axis).  For example, XY_CONSTANT means that the
   // so far, the x and y values have all been constant and only z has
-  // been varying so so the plane is actually a line.
+  // been varying so the plane is actually a line.
   // NO_CONSTANT_VARIABLES indicates that the values have not been
   // constant but do for a plane between variables.
   public enum Flag {NO_LINE, XY_CONSTANT, XZ_CONSTANT, YZ_CONSTANT,
@@ -832,7 +832,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
 
   /**
    *  Calculates new coefficients that for the new point. Uses the
-   *  new coefficients if they are relatively close to to the previous
+   *  new coefficients if they are relatively close to the previous
    *  ones. Kills off the invariant if they are not.
    *
    *  @return true if the new equation worked, false otherwise

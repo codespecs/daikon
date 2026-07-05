@@ -2131,7 +2131,7 @@ public class PptTopLevel extends Ppt {
 
   /**
    * Returns true if v1 is known to be a subsequence of v2. This is true if the subsequence
-   * invariant exists or if it it suppressed.
+   * invariant exists or if it is suppressed.
    */
   @Pure
   public boolean is_subsequence(VarInfo v1, VarInfo v2) {

@@ -19,12 +19,12 @@ static token error_or_eof_case();
 static int check_delimiter();
 static int keyword(int state);
 static int special(int state);
-static skip(character_stream stream_ptr);
+static void skip(character_stream stream_ptr);
 static int constant(int state,char token_str[],int token_ind);
 static int next_state();
-static get_actual_token(char token_str[],int token_ind);
+static void get_actual_token(char token_str[],int token_ind);
 
-main(argc,argv)
+int main(argc,argv)
 int argc;
 char *argv[];
 {
@@ -130,7 +130,7 @@ character_stream stream_ptr;
                    to unget the character then it returns
  * ******************************************************************* */
 
-unget_char(ch,stream_ptr)
+void unget_char(ch,stream_ptr)
 CHARACTER ch;
 character_stream stream_ptr;
 {
@@ -190,7 +190,7 @@ token_stream tstream_ptr;
       token_ptr=(token)(malloc(sizeof(struct token_type)));
       ch=get_char(tstream_ptr->ch_stream);
       cu_state=token_ind=token_found=0;
-      while(!token_found)
+      while(1)
       {
 	  if(token_ind < 80) /* ADDED ERROR CHECK - hf */
 	  {
@@ -409,7 +409,7 @@ int state;
                    end_of_character_stream.                   
  * ******************************************************************* */
 
-static skip(stream_ptr)
+static void skip(stream_ptr)
 character_stream stream_ptr;
 {
         char c;
@@ -440,6 +440,7 @@ char token_str[];
          case 29 : token_str[token_ind-2]=' '; return(CHARACTER_CONSTANT);
          default : break;
      }
+     return 99;
 }
 
 
@@ -546,7 +547,7 @@ token token_ptr;
                    the leading and trailing  spaces and prints the token.
  * ****************************************************************** */
 
-static get_actual_token(token_str,token_ind)
+static void get_actual_token(token_str,token_ind)
 int token_ind;
 char token_str[];
 {

@@ -25,7 +25,7 @@ public class DTraceWriter extends DaikonWriter {
   //      - traceMethodVars: prints out this and arguments of method
   //        - traceLocalVars: prints arguments
   //          - traceLocalVar: prints one argument
-  //          - checkForVarRecursion: recursive check on on argument
+  //          - checkForVarRecursion: recursive check on argument
   //        - traceClassVars: prints fields in a class
 
   /** instance of a nonsensical value. */

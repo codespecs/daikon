@@ -162,9 +162,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
     return this.splitter;
   }
 
-  /**
-   * Set the error message of this this SplitterObject. This indicates the status of the Splitter.
-   */
+  /** Set the error message of this SplitterObject. This indicates the status of the Splitter. */
   public void setError(String errorMessage) {
     this.errorMessage = errorMessage;
   }

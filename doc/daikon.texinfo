@@ -4209,7 +4209,7 @@ Exception in thread "main" java.lang.AbstractMethodError:
 @end example
 
 @noindent
-probably means that @code{sayHello} is the method of an functional
+probably means that @code{sayHello} is the method of a functional
 interface that has not been annotated with @code{@@FunctionalInterface}.
 
 
@@ -4237,7 +4237,7 @@ about the JUnit library, which are almost always uninteresting.
 
 @item
 @c The manual should be more specific about how a user can know this is the
-@c problem and and what the user should do about it?  Also, what is the
+@c problem and what the user should do about it?  Also, what is the
 @c underlying problem?
 Instrumentation of the @code{clone()} method may fail on particular
 invocations within private classes in the JDK@.
@@ -7335,7 +7335,7 @@ set is implied by some combination of postconditions in the
 
 If no other regular arguments besides the two @file{.inv} files are supplied,
 all the method or function program points that exist in both files
-will be compared, with a exception message reported for each method
+will be compared, with an exception message reported for each method
 that exists in the ``weaker'' set but not the ``stronger''.
 Alternatively, one or two additional arguments may be supplied, which name an
 @code{:::ENTER} program point and an @code{:::EXIT} program point to examine
@@ -8044,7 +8044,7 @@ Obtain Simplify from
 and unzip the zip file.
 
 Either place the appropriate binary on your path, named @command{Simplify},
-or set set the @code{simplify.path} property to its absolute pathname.
+or set the @code{simplify.path} property to its absolute pathname.
 
 Note:  Older versions of the @command{Z3} theorem
 prover (@uref{https://github.com/Z3Prover/z3})
