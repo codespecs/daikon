@@ -2323,7 +2323,7 @@ invariant @emph{will} be displayed.
 @item SimplifyFilter:  eliminate redundant invariants using Simplify
 
 Daikon contains built-in tests that remove most redundant (logically
-implied) invariants from its output; see
+implied) invariants from its output.
 
 Daikon can use the Simplify theorem-prover to eliminate even more
 implied invariants than Daikon's built-in tests are able to eliminate.
