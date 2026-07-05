@@ -54,13 +54,13 @@ import typequals.prototype.qual.NonPrototype;
 import typequals.prototype.qual.Prototype;
 
 /**
- * The LinearTernaryCore class is acts as the backend for the invariant (ax + by + cz + d = 0) by
+ * The LinearTernaryCore class acts as the backend for the invariant (ax + by + cz + d = 0) by
  * processing samples and computing coefficients. The resulting coefficients a, b, c, and d are
  * mutually relatively prime, and the coefficient a is always p.
  */
 
 // Originally, LinearTernaryCore code was not dealing with degenerate
-// linear ternary invariants correct, namely when the plane
+// linear ternary invariants correctly, namely when the plane
 // (ax+by+cz+d=0) is parallel to one of the axes, so one of the
 // coefficients was 0.  In this case, the invariant can be described
 // by a binary invariant (eliminate the 0 coefficient variable).
@@ -103,14 +103,14 @@ public final class CLASSNAME implements Serializable, Cloneable {
   // coefficients for the invariant in 3D space
   public double[] coefficients = new double[4];
 
-  // The values of the flags determine indicate whether a line exists
+  // The values of the flags indicate whether a line exists
   // with the current samples (NO_LINE) and which variables are
   // constant (constant variables indicate that the 'plane' is
   // parallel to that axis).  For example, XY_CONSTANT means that the
   // so far, the x and y values have all been constant and only z has
   // been varying so the plane is actually a line.
   // NO_CONSTANT_VARIABLES indicates that the values have not been
-  // constant but do for a plane between variables.
+  // constant but do form a plane between variables.
   public enum Flag {NO_LINE, XY_CONSTANT, XZ_CONSTANT, YZ_CONSTANT,
                     X_CONSTANT, Y_CONSTANT, Z_CONSTANT, NO_CONSTANT_VARIABLES};
 
@@ -253,7 +253,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     // Assert that caches sync with a,b,c?
     // This would be a good sanity check, but it would be nontrivial
     // because we don't keep track of when a, b, and c are really
-    // valid for all the of the points we've cached. If we were
+    // valid for all of the points we've cached. If we were
     // falsified and then resurrected, we might have samples that
     // didn't fit even before the permutation. -smcc
   }
@@ -389,8 +389,8 @@ public final class CLASSNAME implements Serializable, Cloneable {
    * line, attempts to define the plane (to hopefully get at least some spread between the points,
    * so that small errors don't get magnified). Once the equation for the plane is found, each
    * subsequent point is compared to it. If the point does not match the point is examined to see if
-   * it would is maximally separated when compared to the points originally used to define the
-   * plane. If it is, it is used to recalcalulate the coefficients (a, b, c). If those
+   * it is maximally separated when compared to the points originally used to define the
+   * plane. If it is, it is used to recalculate the coefficients (a, b, c). If those
    * coefficients are relatively close to the original coefficients (within the ratio defined by
    * Global.fuzzy) then the new coefficients are used.
    *
@@ -424,8 +424,8 @@ public final class CLASSNAME implements Serializable, Cloneable {
       if (values_seen == MINTRIPLES) {
 
         // Try to fit the points to a line first.
-        // The points may form a degenerate linear ternary invariants
-        // especially if one of the variable is constant
+        // The points may form a degenerate linear ternary invariant
+        // especially if one of the variables is constant
         linearIntervention(def_points);
 
         // if line can not be formed, try to form a plane
@@ -730,7 +730,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   //
   //  the line can fall under 3 categories
   //
-  //  1. parallel to an axis which means that 2 of the following is true
+  //  1. parallel to an axis which means that 2 of the following are true
   //  x = A
   //  y = B
   //  z = C
@@ -744,7 +744,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   //  y = B
   //  z = C
   //
-  //  and the line is just a line in the non-constacoefficientble plane projected
+  //  and the line is just a line in the non-constant variable plane projected
   //  onto the third dimension
   //  and the equation for that line is:
   //  x = A [suppose that x is the constant one]
@@ -831,7 +831,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   }
 
   /**
-   *  Calculates new coefficients that for the new point. Uses the
+   *  Calculates new coefficients for the new point. Uses the
    *  new coefficients if they are relatively close to the previous
    *  ones. Kills off the invariant if they are not.
    *
@@ -1336,7 +1336,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
       }
     }
 
-    // If no active planes were found, created an empty core
+    // If no active planes were found, create an empty core
     if (first == null) {
       first = new CLASSNAME(wrapper);
     } else {

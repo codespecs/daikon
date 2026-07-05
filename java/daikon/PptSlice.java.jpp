@@ -497,7 +497,7 @@ public final class PPTSLICE1 extends PptSlice {
     // assert invariant.ppt == this;
 
     if (Debug.dkconfig_internal_check) {
-      // Don't add a check here to ensure that the invairant is not suppressed
+      // Don't add a check here to ensure that the invariant is not suppressed
       // in some cases (see NIS.apply_samples), a suppressed invariant is
       // added and them later removed when the suppression is found
       // if (invariant.is_ni_suppressed()) {

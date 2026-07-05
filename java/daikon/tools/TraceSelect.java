@@ -133,7 +133,7 @@ public class TraceSelect {
       // or dtrace file will be the first of the Daikon arguments,
       // marking the end of the TraceSelect arguments.  That is
       // not necessarily true, especially in cases when someone
-      // uses a Daikon argument such as "--noheirarchy" or "--format java"
+      // uses a Daikon argument such as "--nohierarchy" or "--format java"
       // and the manual examples place the arguments before any dtrace
       // or decls arguments.
 
@@ -331,7 +331,7 @@ class InvocationComparator implements Comparator<String> {
     int nonce2 = getNonce(s2);
     int type1 = getType(s1);
     int type2 = getType(s2);
-    // This makes sure nounce takes priority, ties are broken
+    // This makes sure nonce takes priority, ties are broken
     // so that ENTER comes before EXIT for the same program point
     return 3 * (nonce1 - nonce2) + (type1 - type2);
   }

@@ -427,7 +427,7 @@ public class DtraceDiff {
 
   /**
    * Compare two VarInfos for equality. Note there are many fields not compared: comparability,
-   * constant, exclosing-var and parent, for example.
+   * constant, enclosing-var and parent, for example.
    *
    * @param vi1 a VarInfo to compare
    * @param vi2 a VarInfo to compare
@@ -457,7 +457,7 @@ public class DtraceDiff {
 
   /**
    * Used for debugging -- prints some of a VarInfo fields. Note there are many fields not printed:
-   * comparability, constant, exclosing-var and parent, for example.
+   * comparability, constant, enclosing-var and parent, for example.
    *
    * @param vi the VarInfo to print
    */

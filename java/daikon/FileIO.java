@@ -2675,7 +2675,7 @@ public final class FileIO {
           break;
         case '\\':
           // This is not in the default case because the search would find
-          // the quoted backslash.  Here we incluce the first backslash in
+          // the quoted backslash.  Here we include the first backslash in
           // the output, but not the first.
           sb.append(orig.substring(post_esc, this_esc + 1));
           post_esc = this_esc + 2;

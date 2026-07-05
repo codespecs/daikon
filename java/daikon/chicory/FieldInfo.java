@@ -11,7 +11,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
- * The OjbectInfo class is a subtype of DaikonVariableInfo used for variable types which are class
+ * The ObjectInfo class is a subtype of DaikonVariableInfo used for variable types which are class
  * fields.
  */
 public class FieldInfo extends DaikonVariableInfo {

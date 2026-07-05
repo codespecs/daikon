@@ -632,7 +632,7 @@ public final class Diff {
 
   /**
    * Takes a pair of corresponding top-level program points and maps, and returns a tree of the
-   * corresponding invariants. Either of the program points may be null. If includeUnjustied is
+   * corresponding invariants. Either of the program points may be null. If includeUnjustified is
    * true, the unjustified invariants are included.
    */
   private PptNode diffPptTopLevel(

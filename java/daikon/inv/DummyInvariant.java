@@ -45,7 +45,7 @@ public class DummyInvariant extends Invariant {
 
   private boolean negated = false;
 
-  // Pre-instatiate(), set to true if we have reason to believe the user
+  // Pre-instantiate(), set to true if we have reason to believe the user
   // explicitly wanted this invariant to appear in the output.
   // [What evidence is required, and when does the evidence show the user
   // didn't want it?  Does the fact that this is a DummyInvariant indicate

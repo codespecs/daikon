@@ -321,7 +321,7 @@ public class PAIRWISEINTEQUAL extends SUPERCLASS {
     // Don't instantiate if the variables can't have order
     if (!var1.aux.hasOrder() || !var2.aux.hasOrder()) {
       if (debug.isLoggable(Level.FINE)) {
-        debug.fine("Not instantitating for because order has no meaning: "
+        debug.fine("Not instantiating because order has no meaning: "
                      + var1.name() + " and " + var2.name());
       }
       return new DiscardInfo(this, DiscardCode.obvious, "Obvious statically since order has no meaning");

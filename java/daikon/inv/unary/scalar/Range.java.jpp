@@ -204,7 +204,7 @@ public abstract class RANGE extends SUPERCLASS {
   }
 
   /**
-   * All range invariants except Even and PowerOfTwo are obvious since they represented by some
+   * All range invariants except Even and PowerOfTwo are obvious since they are represented by some
    * version of OneOf or Bound.
    */
   @Pure
@@ -618,7 +618,7 @@ public abstract class RANGE extends SUPERCLASS {
     /**
      * Returns true if x is a power of 2 (has one bit on). The check is to and x with itself -
      * 1. The theory is that if there are multiple bits turned on, at least one of those bits is
-     * unmodified by a subtract operation and thus the bitwise-and be non-zero. There is probably a
+     * unmodified by a subtract operation and thus the bitwise-and will be non-zero. There is probably a
      * more elegant way to do this.
      */
     @Override

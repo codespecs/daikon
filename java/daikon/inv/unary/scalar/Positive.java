@@ -81,7 +81,7 @@ public class Positive extends SingleScalar {
   @Override
   protected double computeConfidence() {
     // Assume that every variable has a .5 chance of being positive by
-    // chance.  Then a set of n values have a have (.5)^n chance of all
+    // chance.  Then a set of n values have a (.5)^n chance of all
     // being positive by chance.
     return 1 - Math.pow(.5, ppt.num_samples());
   }

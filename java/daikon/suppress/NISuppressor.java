@@ -202,7 +202,7 @@ public class NISuppressor {
    * <p>For example consider the suppressor {1, 2, IntLessEqual} and a vis of {x, y, z}. The
    * suppressor is true if the IntLessEqual invariant exists in the slice {y, z}. This allows
    * ternary invariants to specify exactly the suppressor required for their particular permutation
-   * ofarguments. Invariants that have an internal permute variable must match that as well.
+   * of arguments. Invariants that have an internal permute variable must match that as well.
    *
    * @param ppt the top level program point
    * @param vis the slice of the suppressee. Thus, if the suppressee is ternary, vis, should specify
@@ -241,7 +241,7 @@ public class NISuppressor {
 
       VarInfo v1 = vis[v1_index];
 
-      // If the underlying inariant can't be instantiated over these variables,
+      // If the underlying invariant can't be instantiated over these variables,
       // this can't possibly be true
       if (!instantiate_ok(new VarInfo[] {v1})) {
         // System.out.printf("suppressor %s invalid over variable %s%n",
@@ -322,7 +322,7 @@ public class NISuppressor {
       VarInfo v1 = vis[v1_index];
       VarInfo v2 = vis[v2_index];
 
-      // If the underlying inariant can't be instantiated over these variables,
+      // If the underlying invariant can't be instantiated over these variables,
       // this can't possibly be true
       if (!instantiate_ok(new VarInfo[] {v1, v2})) {
         // System.out.printf("suppressor %s invalid over variables %s & %s%n",
