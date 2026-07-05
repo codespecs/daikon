@@ -469,7 +469,7 @@ public abstract class DaikonVariableInfo
 
     DaikonVariableInfo thisInfo; // DaikonVariableInfo corresponding to the "this" object
     if (!dontPrintInstanceVars && topLevelCall) {
-      // "this" variable; must must be at the first level of recursion (not lower) to print it
+      // "this" variable; must be at the first level of recursion (not lower) to print it
       thisInfo = new ThisObjInfo(type);
       addChild(thisInfo);
 

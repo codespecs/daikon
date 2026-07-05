@@ -4209,7 +4209,7 @@ Exception in thread "main" java.lang.AbstractMethodError:
 @end example
 
 @noindent
-probably means that @code{sayHello} is the method of an functional
+probably means that @code{sayHello} is the method of a functional
 interface that has not been annotated with @code{@@FunctionalInterface}.
 
 

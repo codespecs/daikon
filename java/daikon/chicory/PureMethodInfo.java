@@ -179,7 +179,7 @@ public class PureMethodInfo extends DaikonVariableInfo {
 
   /**
    * Convert standard wrapped (boxed) Objects (i.e., Integers) to Chicory wrappers (ie,
-   * Runtime.IntWrap). Should not be called if the Object was not auto-boxed from from a primitive!
+   * Runtime.IntWrap). Should not be called if the Object was not auto-boxed from a primitive!
    */
   public static @Nullable Object convertWrapper(@Nullable Object obj) {
     if (obj == null || obj instanceof NonsensicalObject || obj instanceof NonsensicalList) {

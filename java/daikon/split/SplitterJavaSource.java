@@ -667,9 +667,9 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /**
    * requires: condition is a string representation of a conditional
    *
-   * @return a list of all possible variable variable names in condition. This attempts not to
-   *     return method names nor the base names of qualified names (why not the latter?). Arrays
-   *     appear with "[]" at the end if their elements or accessed in the condition.
+   * @return a list of all possible variable names in condition. This attempts not to return method
+   *     names nor the base names of qualified names (why not the latter?). Arrays appear with "[]"
+   *     at the end if their elements or accessed in the condition.
    */
   private static List<String> findPossibleClassVariables(String condition) throws ParseException {
 

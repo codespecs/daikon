@@ -38,10 +38,10 @@ import org.junit.Test;
 import typequals.prototype.qual.Prototype;
 
 /**
- * This is a tester for the results of adding or checking an sample to an invariant. It can test
- * practically any invariant in the Daikon system given the appropriate commands. The test are
+ * This is a tester for the results of adding or checking a sample to an invariant. It can test
+ * practically any invariant in the Daikon system given the appropriate commands. The tests are
  * configured from the {@code InvariantTest.commands} file and errors that occur are written to the
- * InvariantTest.diffs file. For conveince a partcailly complete file InvariantTest.input can be
+ * InvariantTest.diffs file. For convenience a partially complete file InvariantTest.input can be
  * used to generate a complete commands file. To generate InvariantTest.commands from
  * InvariantTest.input run this class's main method with option "--generate_goals".
  *

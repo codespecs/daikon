@@ -15,7 +15,7 @@ import typequals.prototype.qual.Prototype;
 /**
  * IsPointer is an invariant that heuristically determines whether an integer represents a pointer
  * (a 32-bit memory address). Since both a 32-bit integer and an address have the same
- * representation, sometimes a a pointer can be mistaken for an integer. When this happens, several
+ * representation, sometimes a pointer can be mistaken for an integer. When this happens, several
  * scalar invariants are computed for integer variables. Most of them would not make any sense for
  * pointers. Determining whether a 32-bit variable is a pointer can thus spare the computation of
  * many irrelevant invariants.

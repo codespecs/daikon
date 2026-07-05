@@ -521,7 +521,7 @@ public final class FileIO {
     return pr;
   }
 
-  /** Parses a program point flag record. Adds any specified flags to to flags. */
+  /** Parses a program point flag record. Adds any specified flags to flags. */
   private static void parse_ppt_flags(ParseState state, Scanner scanner, EnumSet<PptFlags> flags) {
 
     flags.add(parse_enum_val(state, scanner, PptFlags.class, "ppt flags"));
@@ -3078,7 +3078,7 @@ public final class FileIO {
 
     /**
      * Looks up the next token as a member of enum_class. Throws Daikon.UserError if there is no
-     * token or if it is not valid member of the class. Enums are presumed to be in in upper case.
+     * token or if it is not a valid member of the class. Enums are presumed to be in upper case.
      */
     public <E extends Enum<E>> E parse_enum_val(
         Scanner scanner, Class<E> enum_class, String descr) {
@@ -3106,7 +3106,7 @@ public final class FileIO {
 
   /**
    * Looks up the next token as a member of enum_class. Throws Daikon.UserError if there is no token
-   * or if it is not valid member of the class. Enums are presumed to be in in upper case.
+   * or if it is not a valid member of the class. Enums are presumed to be in upper case.
    */
   public static <E extends Enum<E>> E parse_enum_val(
       ParseState state, Scanner scanner, Class<E> enum_class, String descr) {

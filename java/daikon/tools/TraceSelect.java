@@ -119,7 +119,7 @@ public class TraceSelect {
         daikonArgStart = i + 1;
       }
 
-      // DO_DIFFS will create an spinfo file for generating
+      // DO_DIFFS will create a spinfo file for generating
       // conditional invariants and implications by running
       // daikon.diff.Diff over each of the samples and finding
       // properties that appear in some but not all of the

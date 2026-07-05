@@ -245,7 +245,7 @@ public abstract class Derivation implements Serializable, Cloneable {
   /**
    * Returns the complexity of this derivation. This is only for the derivation itself and not for
    * the variables included in the derivation. The default implementation returns 1 (which is the
-   * added complexity of an derivation). Subclasses that add additional complexity (such as an
+   * added complexity of a derivation). Subclasses that add additional complexity (such as an
    * offset) should override.
    */
   public int complexity() {

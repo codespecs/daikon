@@ -419,7 +419,7 @@ public class PptRelation implements Serializable {
 
     PptRelation rel = new PptRelation(parent, child, PptRelationType.USER);
 
-    // Connect each each field in arg between parent and child.  Do this
+    // Connect each field in arg between parent and child.  Do this
     // by substituting args name for this in the parent and then looking
     // for a name match in the child
     for (VarInfo vp : parent.var_infos) {
@@ -581,7 +581,7 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns a an artificial relation in the Program point hierarchy between the same ppt in two
+   * Returns an artificial relation in the Program point hierarchy between the same ppt in two
    * different PptMaps. Used to merge invariants between different data sets. The parent and the
    * child should have exactly the same variables.
    */

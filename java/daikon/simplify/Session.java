@@ -57,9 +57,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
    * will be printed when each invariant is passed to Simplify, and then replaced by a {@code T} if
    * the invariant was redundant, {@code F} if it was not found to be, and {@code ?} if Simplify
    * gave up because of a time limit. If the value is 2 or higher, a {@code <} or {@code >} will
-   * also be printed for each invariant that is pushed onto or popped from from Simplify's
-   * assumption stack. This option is mainly intended for debugging purposes, but can also provide
-   * something to watch when Simplify takes a long time.
+   * also be printed for each invariant that is pushed onto or popped from Simplify's assumption
+   * stack. This option is mainly intended for debugging purposes, but can also provide something to
+   * watch when Simplify takes a long time.
    */
   public static int dkconfig_verbose_progress = 0;
 

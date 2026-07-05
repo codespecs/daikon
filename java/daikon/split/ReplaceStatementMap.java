@@ -8,8 +8,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
- * ReplaceStatementMap is a immutable ADT for holding ReplaceStatements that need to be looked-up by
- * their method names.
+ * ReplaceStatementMap is an immutable ADT for holding ReplaceStatements that need to be looked-up
+ * by their method names.
  */
 class ReplaceStatementMap {
 

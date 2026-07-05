@@ -14,7 +14,7 @@ import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
- * OrigFixer is a visitor for a jtb syntax tree that replaces instances of of "orig()" with "orig_".
+ * OrigFixer is a visitor for a jtb syntax tree that replaces instances of "orig()" with "orig_".
  * For example, {@code orig(x) < y} would yield {@code orig_x < y}.
  */
 class OrigFixer extends DepthFirstVisitor {
