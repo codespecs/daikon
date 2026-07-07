@@ -268,7 +268,7 @@ public class DCInstrument extends InstructionListUtils {
           "Ljdk/internal/vm/annotation/IntrinsicCandidate;", // new with JDK 26
 
           // Project Leyden AOT optimization hooks (New in Java 26):
-          // These annotations are part of the changes to improve Java’s startup time
+          // These annotations are part of the changes to improve Java's startup time
           // and memory footprint through Ahead-of-Time (AOT) caching. These new
           // annotations will cause a java/lang/ClassFormatError during initialization
           // of the Java VM if they are not removed from our instrumented methods.
