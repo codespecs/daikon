@@ -254,29 +254,28 @@ public class DCInstrument extends InstructionListUtils {
       };
 
   /**
-   * A list of annotations that must be removed from our instrumented copy of the
-   * original method.
+   * A list of annotations that must be removed from our instrumented copy of the original method.
    */
-  private static final Set<String> BLACKLISTED_ANNOTATIONS = Set.of(
-    // Intrinsic processing hooks:
-    // We do not want to copy the IntrinsicCandidate annotations from
-    // the original method to our instrumented method as the signature will
-    // not match anything in the JVM's list.  This won't cause an execution
-    // problem but will produce a potentially large number of warnings.
-    "Ljdk/internal/HotSpotIntrinsicCandidate;",        // legacy from JDK 9
-    "Ljava/lang/annotation/IntrinsicCandidate;",       // legacy from JDK 16
-    "Ljdk/internal/vm/annotation/IntrinsicCandidate;", // new with JDK 26
+  private static final Set<String> BLACKLISTED_ANNOTATIONS =
+      Set.of(
+          // Intrinsic processing hooks:
+          // We do not want to copy the IntrinsicCandidate annotations from
+          // the original method to our instrumented method as the signature will
+          // not match anything in the JVM's list.  This won't cause an execution
+          // problem but will produce a potentially large number of warnings.
+          "Ljdk/internal/HotSpotIntrinsicCandidate;", // legacy from JDK 9
+          "Ljava/lang/annotation/IntrinsicCandidate;", // legacy from JDK 16
+          "Ljdk/internal/vm/annotation/IntrinsicCandidate;", // new with JDK 26
 
-    // Project Leyden AOT optimization hooks (New in Java 26):
-    // These annotations are part of the changes to improve Java’s startup time
-    // and memory footprint through Ahead-of-Time (AOT) caching. These new
-    // annotations will cause a java/lang/ClassFormatError during initialization
-    // of the Java VM if they are not removed from our instrumented methods.
-    // (Technically, these annotations are only a problem when we instrument a
-    // JDK method, but to be thorough we do it for all methods.)
-    "Ljdk/internal/vm/annotation/AOTRuntimeSetup;",
-    "Ljdk/internal/vm/annotation/AOTSafeClassInitializer;"
-  );
+          // Project Leyden AOT optimization hooks (New in Java 26):
+          // These annotations are part of the changes to improve Java’s startup time
+          // and memory footprint through Ahead-of-Time (AOT) caching. These new
+          // annotations will cause a java/lang/ClassFormatError during initialization
+          // of the Java VM if they are not removed from our instrumented methods.
+          // (Technically, these annotations are only a problem when we instrument a
+          // JDK method, but to be thorough we do it for all methods.)
+          "Ljdk/internal/vm/annotation/AOTRuntimeSetup;",
+          "Ljdk/internal/vm/annotation/AOTSafeClassInitializer;");
 
   /**
    * List of Object methods. Since we can't instrument Object, none of these can be instrumented,
