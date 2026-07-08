@@ -112,7 +112,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.StringsPlume;
 import typequals.prototype.qual.Prototype;
@@ -432,13 +431,6 @@ public class PptTopLevel extends Ppt {
   /** Restore/Create interns when reading serialized object. */
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
-    if (name != null) {
-      try {
-        ReflectionPlume.setFinalField(this, "name", name.intern());
-      } catch (Exception e) {
-        throw new Error("Error setting name", e);
-      }
-    }
   }
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.

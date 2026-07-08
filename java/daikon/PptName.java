@@ -44,7 +44,8 @@ public class PptName implements Serializable {
   private @Nullable @Interned String cls;
 
   /** Method signature, including types. */
-  private final @Nullable @Interned String methodSignature;
+  // Non-final only so that the `readObject()` method can set it.
+  private @Nullable @Interned String methodSignature;
 
   // Representation invariant:
   //
@@ -543,8 +544,7 @@ public class PptName implements Serializable {
         cls = cls.intern();
       }
       if (methodSignature != null) {
-        // methodSignature = methodSignature.intern();
-        ReflectionPlume.setFinalField(this, "methodSignature", methodSignature.intern());
+        methodSignature = methodSignature.intern();
       }
       if (point != null) {
         point = point.intern();
