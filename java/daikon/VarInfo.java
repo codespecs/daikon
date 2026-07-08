@@ -1538,7 +1538,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     return (String) getValue(vt);
   }
 
-  /** Reteurn the value of a String[] array variable. */
+  /** Return the value of a String[] array variable. */
   public String[] getStringArrayValue(ValueTuple vt) {
     Object raw = getValue(vt);
     if (raw == null) {
@@ -3639,8 +3639,8 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns a string in simplify format that will seclect the (index_base + index_off)-th element
-   * of the sequence specified by this variable.
+   * Returns a string in simplify format that will select the (index_base + index_off)-th element of
+   * the sequence specified by this variable.
    *
    * @param simplify_index_name name of the index. If free is false, this must be a number or null
    *     (null implies an index of 0).
@@ -3691,7 +3691,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns a string in simplify format that will seclect the index_off element in a sequence that
+   * Returns a string in simplify format that will select the index_off element in a sequence that
    * has a lower bound.
    *
    * @param index_off offset from the index

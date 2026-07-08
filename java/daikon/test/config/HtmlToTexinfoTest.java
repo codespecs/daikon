@@ -36,7 +36,7 @@ public class HtmlToTexinfoTest {
         "The <code>--conf_limit</code> command-line option to Daikon",
         "The @code{--conf_limit} command-line option to Daikon");
 
-    // Additional test casess
+    // Additional test cases
     testJavadocHtmlToTexinfoHelper(
         "Split bi-implications {@code a <==> b} into two separate implications {@code a ==> b} and"
             + " {@code b ==> a})",

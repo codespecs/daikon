@@ -723,10 +723,10 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Insert the our instrumentation code into the instruction list for the given method. This
-   * includes adding instrumentation code at the entry and at each return from the method. In
-   * addition, it changes each return statement to first place the value being returned into a local
-   * and then return.
+   * Insert our instrumentation code into the instruction list for the given method. This includes
+   * adding instrumentation code at the entry and at each return from the method. In addition, it
+   * changes each return statement to first place the value being returned into a local and then
+   * return.
    *
    * @param instructions instruction list for method
    * @param mgen describes the given method
@@ -1552,7 +1552,7 @@ public class Instrument24 implements ClassFileTransformer {
 
   /**
    * Format a field descriptor for output. The main difference between a descriptor and a signature
-   * is that the latter may contain type arguments. This routine was orginaly written for
+   * is that the latter may contain type arguments. This routine was originally written for
    * descriptors, but some support for type arguments has been added.
    *
    * <p>The output format is an extension of binary name format that includes primitives and arrays.

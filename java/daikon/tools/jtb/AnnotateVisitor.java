@@ -614,7 +614,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
 
     if (!(modifiesString.startsWith("modifies") || modifiesString.startsWith("assignable"))) {
-      // Doesn't look ilke a modifies clause.
+      // Doesn't look like a modifies clause.
       return false;
     }
 

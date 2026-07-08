@@ -281,7 +281,7 @@ public class InvariantAddAndCheckTester {
   }
 
   /**
-   * Determines whether a given line is made only of whitespcae.
+   * Determines whether a given line is made only of whitespace.
    *
    * @param line the line in question
    * @return true if the line is made up only of whitespace, false otherwise

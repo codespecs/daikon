@@ -254,6 +254,30 @@ public class DCInstrument extends InstructionListUtils {
       };
 
   /**
+   * A list of annotations that must be removed from our instrumented copy of the original method.
+   */
+  private static final Set<String> BLACKLISTED_ANNOTATIONS =
+      Set.of(
+          // Intrinsic processing hooks:
+          // We do not want to copy the IntrinsicCandidate annotations from
+          // the original method to our instrumented method as the signature will
+          // not match anything in the JVM's list.  This won't cause an execution
+          // problem but will produce a potentially large number of warnings.
+          "Ljdk/internal/HotSpotIntrinsicCandidate;", // legacy from JDK 9
+          "Ljava/lang/annotation/IntrinsicCandidate;", // legacy from JDK 16
+          "Ljdk/internal/vm/annotation/IntrinsicCandidate;", // new with JDK 26
+
+          // Project Leyden AOT optimization hooks (New in Java 26):
+          // These annotations are part of the changes to improve Java's startup time
+          // and memory footprint through Ahead-of-Time (AOT) caching. These new
+          // annotations will cause a java/lang/ClassFormatError during initialization
+          // of the Java VM if they are not removed from our instrumented methods.
+          // (Technically, these annotations are only a problem when we instrument a
+          // JDK method, but to be thorough we do it for all methods.)
+          "Ljdk/internal/vm/annotation/AOTRuntimeSetup;",
+          "Ljdk/internal/vm/annotation/AOTSafeClassInitializer;");
+
+  /**
    * List of Object methods. Since we can't instrument Object, none of these can be instrumented,
    * and most of them don't provide useful comparability information anyway. The equals method and
    * the clone method are special-cased in the {@link #handleInvoke} routine.
@@ -663,16 +687,12 @@ public class DCInstrument extends InstructionListUtils {
 
         remove_local_variable_type_table(mgen);
 
-        // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
-        // the original method to our instrumented method as the signature will
-        // not match anything in the JVM's list.  This won't cause an execution
-        // problem but will produce a massive number of warnings.
-        // JDK 11: @HotSpotIntrinsicCandidate
-        // JDK 17: @IntrinsicCandidate
+        // Do not copy any problematic annotations from the original
+        // method to our instrumented method.
         AnnotationEntryGen[] aes = mgen.getAnnotationEntries();
         for (AnnotationEntryGen item : aes) {
           String type = item.getTypeName();
-          if (type.endsWith("IntrinsicCandidate;")) {
+          if (BLACKLISTED_ANNOTATIONS.contains(type)) {
             mgen.removeAnnotationEntry(item);
           }
         }
@@ -937,16 +957,12 @@ public class DCInstrument extends InstructionListUtils {
 
         remove_local_variable_type_table(mgen);
 
-        // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
-        // the original method to our instrumented method as the signature will
-        // not match anything in the JVM's list.  This won't cause an execution
-        // problem but will produce a massive number of warnings.
-        // JDK 11: @HotSpotIntrinsicCandidate
-        // JDK 17: @IntrinsicCandidate
+        // Do not copy any problematic annotations from the original
+        // method to our instrumented method.
         AnnotationEntryGen[] aes = mgen.getAnnotationEntries();
         for (AnnotationEntryGen item : aes) {
           String type = item.getTypeName();
-          if (type.endsWith("IntrinsicCandidate;")) {
+          if (BLACKLISTED_ANNOTATIONS.contains(type)) {
             mgen.removeAnnotationEntry(item);
           }
         }
@@ -1240,7 +1256,7 @@ public class DCInstrument extends InstructionListUtils {
     InstructionList nl = create_tag_frame(mgen, tag_frame_local);
 
     // We add a temporary NOP at the end of the create_tag_frame
-    // code that we will replace with runtime initization code
+    // code that we will replace with runtime initialization code
     // later.  We do this so that any existing stack map at
     // instruction offset 0 is not replaced by the one we are
     // about to add for initializing the tag_frame variable.
@@ -2424,7 +2440,7 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Given a classname return it's superclass name. Note that BCEL reports that the superclass of
+   * Given a classname return its superclass name. Note that BCEL reports that the superclass of
    * 'java.lang.Object' is 'java.lang.Object' rather than saying there is no superclass.
    *
    * @param classname the fully-qualified name of the class in binary form. E.g., "java.util.List"

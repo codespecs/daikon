@@ -320,7 +320,7 @@ public class LOWERBOUNDCORE implements Serializable, Cloneable {
 
   // used by computeConfidence
   public double computeProbability() {
-    // The bound is justified if both of two conditions is satisfied:
+    // The bound is justified if both of two conditions are satisfied:
     //  1. there are at least required_samples_at_bound samples at the bound
     //  2. one of the following holds:
     //      2a. the bound has five times the expected number of samples (the

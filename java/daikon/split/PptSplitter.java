@@ -247,7 +247,7 @@ public class PptSplitter implements Serializable {
    *   <li>the "different" invariants: all other invariants.
    * </ol>
    *
-   * The "exclusive" invariants (a subset of the "different" inviariants) are true at one program
+   * The "exclusive" invariants (a subset of the "different" invariants) are true at one program
    * point, and their negation is true at the other program point.
    *
    * <p>At the first program point, for each exclusive invariant and each different invariant,

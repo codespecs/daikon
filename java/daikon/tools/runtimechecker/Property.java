@@ -535,7 +535,7 @@ public class Property implements Serializable {
   }
 
   // [[ TODO: first, you need to check that immutability and
-  // uniqueness even hold. Then, you need to figoure out a better
+  // uniqueness even hold. Then, you need to figure out a better
   // way to do the stuff below (it seems to me like jmlRep,
   // daikonClass and confidence should be given to the constructor
   // of the object). ]]

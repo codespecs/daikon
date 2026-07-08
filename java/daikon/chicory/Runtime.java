@@ -729,7 +729,7 @@ public final class Runtime {
   // Used to distinguish wrappers created by user code
   // from wrappers created by Chicory.
 
-  /** A wrapper for a pritive class. */
+  /** A wrapper for a primitive class. */
   public static interface PrimitiveWrapper {
     // returns corresponding java.lang wrapper
     public Object getJavaWrapper();
@@ -1082,7 +1082,7 @@ public final class Runtime {
   // From class SignaturesUtil
   //
 
-  /** A map from field descriptor (sach as "I") to Java primitive type (such as "int"). */
+  /** A map from field descriptor (such as "I") to Java primitive type (such as "int"). */
   private static HashMap<String, String> fieldDescriptorToPrimitive = new HashMap<>(8);
 
   static {

@@ -82,7 +82,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
   /**
    * Since the order is determined from the vars and the sequence is always first, no permute is
-   * necesesary. Subclasses can override if necessary.
+   * necessary. Subclasses can override if necessary.
    */
   protected Invariant resurrect_done_swapped() {
     return this;

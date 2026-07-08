@@ -185,7 +185,7 @@ class FormatTestCase {
 
   // End of SingleOutputTestCase
 
-  /** Prefix to each goal line in the file for identitication. */
+  /** Prefix to each goal line in the file for identification. */
   private static final String GOAL_PREFIX = "Goal";
 
   /**

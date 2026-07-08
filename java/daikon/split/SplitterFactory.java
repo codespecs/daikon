@@ -302,7 +302,7 @@ public class SplitterFactory {
    * Cleans str by replacing all characters that are not valid java identifier parts with "_".
    *
    * @param str the string to be cleaned
-   * @return str with all non-Java-indentifier parts replaced with "_"
+   * @return str with all non-Java-identifier parts replaced with "_"
    */
   private static String clean(String str) {
     char[] cleaned = str.toCharArray();

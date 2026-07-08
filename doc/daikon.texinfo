@@ -1406,7 +1406,7 @@ the @code{ListImplementors} section of the @file{.decls} file.
 See @ref{ListImplementors declaration,,,developer,Daikon Developer Manual}.
 
 @item --user-defined-invariant @var{classname}
-Use a user-defined invariant that not built into Daikon but
+Use a user-defined invariant that is not built into Daikon but
 is defined in the given class.
 The @var{classname} should be in the fully-qualified format expected by
 @uref{https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html#getName--,,@code{Class.getName()}},
@@ -1682,7 +1682,7 @@ There are two exceptions.  Method exit invariants that refer to
 \old(x) + 1}.  Method exit invariants that refer to the return value of
 the method, such as @samp{return == x + y}, are output with the tag
 @samp{\result} in place of the return value (e.g. @samp{\result == x + y}).
-These expression are obviously not valid Java code.
+These expressions are obviously not valid Java code.
 
 @c This implementation detail not relevant to users
 @c The Java output format makes extensive use of helper methods defined
@@ -2009,7 +2009,7 @@ The dummy procedure's @nospellcheck{pre} and postconditions will be identical an
 represent the invariants at the point of call.
 
 
-The array introduction operator @code{[]} can made Daikon variables look
+The array introduction operator @code{[]} can make Daikon variables look
 slightly odd, but it is intended to assist in interpreting the variables
 and to provide an indication that the variable name cannot be
 substituted directly in a program as an expression.
@@ -2306,7 +2306,7 @@ A controlled invariant is an invariant that is ``controlled'' --- or
 implied --- by a parent program point in the dataflow hierarchy.
 For example, for Java instrumented
 code each class is associated with an object program point, which
-contain invariants that are found at the entry and exit of all public
+contains invariants that are found at the entry and exit of all public
 methods.  So in addition to the usual program points such as
 @code{StackAr.StackAr(int):::ENTER} and
 @code{StackAr.isEmpty():::EXIT48}, Daikon outputs invariants for the
@@ -2322,8 +2322,8 @@ invariant @emph{will} be displayed.
 @cindex SimplifyFilter
 @item SimplifyFilter:  eliminate redundant invariants using Simplify
 
-Daikon contains built-in test that remove most redundant (logically
-implied) invariants from its output; see
+Daikon contains built-in tests that remove most redundant (logically
+implied) invariants from its output.
 
 Daikon can use the Simplify theorem-prover to eliminate even more
 implied invariants than Daikon's built-in tests are able to eliminate.
@@ -3433,7 +3433,7 @@ enrich the set of expressions in Daikon's output.
 @cindex observer methods, as synonym for pure methods
 File @var{pure-methods-file} lists the pure methods (sometimes called
 observer methods; one type of observer is @nospellcheck{getter} methods)
- in a Java program.  Pure methods have no externally
+ in a Java program.  Pure methods have no external
 side effects, such as setting variables or producing output.  For
 example, most implementations of the @code{hashCode()},
 @code{toString()}, and @code{equals()} methods are pure.
@@ -3894,7 +3894,7 @@ interacted with @code{d2} on line 11 of the @code{compute} method of the @code{Y
 class.
 
 Duplicate values in this list represent the results of separate calls to
-another method which each of the relevant variables.  For example, if we modify
+another method with each of the relevant variables.  For example, if we modify
 the sample to use global variables instead of locals and add an additional call
 to @code{compute}:
 
@@ -4095,7 +4095,7 @@ class name, the method name, or the program point name matches
 @var{regex}.  The behavior of this switch is the same as in Chicory (see
 @ref{Program points in Chicory output}).
 
-This option can be specified multiple times, any may be used in
+This option can be specified multiple times, and may be used in
 conjunction with @option{--ppt-select-pattern}.  If a program point
 matches both a select pattern and an omit pattern, it is omitted.
 
@@ -4320,7 +4320,7 @@ programs,,,developer,Daikon Developer Manual}.
 @node       Using Kvasir
 @subsection Using Kvasir
 
-Before using Kvasir, you must compile your program compile and link your
+Before using Kvasir, you must compile and link your
 program normally, with two exceptions:
 @itemize
 @item
@@ -4330,7 +4330,7 @@ and any flags that affect calling conventions, such as
 @option{-fomit-frame-pointer}.
 @item
 Include debugging information, by supplying the @option{-g} flag.
-The debugging information must be in either the DWARF-2 or DWARf-3 format.
+The debugging information must be in either the DWARF-2 or DWARF-3 format.
 Note that starting with version 11, the @command{gcc} default DWARF output level is now 5.
 Therefore, you must supply the @option{-gdwarf-2} or @option{-gdwarf-3} command line option.
 @item
@@ -5295,7 +5295,7 @@ fields, then there will be no @code{usertype} section for it in the
 @file{.disambig} file.  In that case, try different names for the struct
 if necessary until Kvasir accepts the name (names are all one word long;
 you will never have to write @code{struct foo}).  There should only be
-at most a few choices to make.  If the coercion if successful, Kvasir
+at most a few choices to make.  If the coercion is successful, Kvasir
 prints out a message in the following form while it is processing the
 @file{.disambig} file:
 
@@ -6158,7 +6158,7 @@ extension @file{.types}), by default to the @file{daikon-instrumented}
 directory.  When @command{dfepl} is rerun with this type information, it
 produces type-aware instrumented code in the
 @file{daikon-instrumented} directory, which when run produces
-execution traces in files with the extension @file{.dtrace} in the a
+execution traces in files with the extension @file{.dtrace} in the
 directory @file{daikon-output}.
 
 @menu
@@ -6300,7 +6300,7 @@ subroutines return a list of values, each value may have a distinct
 meaning, or the list may be homogeneous.  When trying to assign types
 to the elements of a list, the Daikon Perl trace runtime will try
 making separate guesses about the types of the elements of a short
-list, but it would be inefficient to make retain this distinction for
+list, but it would be inefficient to retain this distinction for
 many elements.  This parameter controls how many elements of a list
 will be examined individually; all the others will be treated
 uniformly.
@@ -6323,7 +6323,7 @@ back end (a module named @code{B::DeparseDaikon}), rather than the
 version of Perl under which @command{dfepl} itself is running, which
 is probably the first @command{perl} that occurs on your path.  For
 instance, if the first version of @command{perl} on your path isn't
-version 5.8 or later, you should this option to specify another
+version 5.8 or later, you should use this option to specify another
 @command{perl} program that is.
 
 @item --nesting-depth=@var{num}
@@ -7189,7 +7189,7 @@ instrumented class:
 
 @itemize @bullet
 @item
-@code{isDaikonInstrumented()}.  Returns true (you could calling
+@code{isDaikonInstrumented()}.  Returns true (you could call
 this method to see if the class has been instrumented).
 
 @item
@@ -7392,7 +7392,7 @@ passes through every filter).
 Discard upper-bound and lower-bound invariants
 (such as @samp{x <= c} and @samp{x >= c} for a
 constant c), when Daikon considers the constant to be uninteresting.
-Currently, Daikon has a configurable range of interesting constant: by
+Currently, Daikon has a configurable range of interesting constants: by
 default, -1, 0, 1, and 2 are interesting, and no other numbers are.
 
 @item B
@@ -7910,7 +7910,7 @@ illegal, and so should not be factored into the method preconditions.
 In some cases, exceptional exit from a procedure can cause procedure
 entries and exits (in the trace file) to be incorrectly matched up; if
 they are incorrectly matched, then the @code{orig(@var{x})} values may
-be incorrect.  Daikon has two techniques for associate procedure exits
+be incorrect.  Daikon has two techniques for associating procedure exits
 with entries --- the nonce technique and the stack technique.  If a
 @file{.dtrace} file uses the nonce technique, @code{orig(@var{x})}
 values are guaranteed to be correct.  If a @file{.dtrace} file uses
@@ -8244,7 +8244,7 @@ true in the longer ones.
 The second execution may report @strong{more} invariants, because the first
 execution did not report some invariants that were true.  @ref{True
 invariants are not reported due to output filters} describes reasons that
-Daikon might not report this invariants that are true --- for example,
+Daikon might not report these invariants that are true --- for example,
 because they were not statistically justified.
 
 Another reason that the second execution might report more invariants is
