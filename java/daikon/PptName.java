@@ -532,25 +532,21 @@ public class PptName implements Serializable {
   // Interning is lost when an object is serialized and deserialized.
   // Manually re-intern any interned fields upon deserialization.
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-    try {
-      in.defaultReadObject();
-      if (fullname != null) {
-        fullname = fullname.intern();
-      }
-      if (fn_name != null) {
-        fn_name = fn_name.intern();
-      }
-      if (cls != null) {
-        cls = cls.intern();
-      }
-      if (methodSignature != null) {
-        methodSignature = methodSignature.intern();
-      }
-      if (point != null) {
-        point = point.intern();
-      }
-    } catch (NoSuchFieldException e) {
-      throw new Error(e);
+    in.defaultReadObject();
+    if (fullname != null) {
+      fullname = fullname.intern();
+    }
+    if (fn_name != null) {
+      fn_name = fn_name.intern();
+    }
+    if (cls != null) {
+      cls = cls.intern();
+    }
+    if (methodSignature != null) {
+      methodSignature = methodSignature.intern();
+    }
+    if (point != null) {
+      point = point.intern();
     }
   }
 }
