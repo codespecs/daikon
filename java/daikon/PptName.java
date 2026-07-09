@@ -6,6 +6,7 @@ import java.io.Serializable;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.dataflow.qual.Pure;
@@ -43,9 +44,9 @@ public class PptName implements Serializable {
   /** Fully-qualified class name. */
   private @Nullable @Interned String cls;
 
-  /** Method signature, including types. */
+  /** Method signature, including types. Null if fn_name contains no '(' character. */
   // Non-final only so that the `readObject()` method can set it.
-  private @Nullable @Interned String methodSignature;
+  private @MonotonicNonNull @Interned String methodSignature;
 
   // Representation invariant:
   //
@@ -401,35 +402,35 @@ public class PptName implements Serializable {
   @Pure
   public boolean isConstructor() {
 
-    if (methodSignature != null) {
+    if (methodSignature == null) {
+      return false;
+    }
 
-      if (methodSignature.startsWith("<init>")) {
-        return true;
-      }
+    if (methodSignature.startsWith("<init>")) {
+      return true;
+    }
 
-      if (cls == null) {
-        return false;
-      }
+    if (cls == null) {
+      return false;
+    }
 
-      @SuppressWarnings("signature") // cls is allowed to be arbitrary, especially for non-Java code
-      String class_name = ReflectionPlume.fullyQualifiedNameToSimpleName(cls);
-      assert methodSignature != null; // for nullness checker
-      int arg_start = methodSignature.indexOf('(');
-      String method_name = methodSignature;
-      if (arg_start != -1) {
-        method_name = methodSignature.substring(0, arg_start);
-      }
+    @SuppressWarnings("signature") // cls is allowed to be arbitrary, especially for non-Java code
+    String class_name = ReflectionPlume.fullyQualifiedNameToSimpleName(cls);
+    int arg_start = methodSignature.indexOf('(');
+    String method_name = methodSignature;
+    if (arg_start != -1) {
+      method_name = methodSignature.substring(0, arg_start);
+    }
 
-      // System.out.println ("fullname = " + fullname);
-      // System.out.println ("fn_name = " + fn_name);
-      // System.out.println ("methodSignature = " + methodSignature);
-      // System.out.println ("cls = " + cls);
-      // System.out.println ("class_name = " + class_name);
-      // System.out.println ("method_name = " + method_name);
+    // System.out.println ("fullname = " + fullname);
+    // System.out.println ("fn_name = " + fn_name);
+    // System.out.println ("methodSignature = " + methodSignature);
+    // System.out.println ("cls = " + cls);
+    // System.out.println ("class_name = " + class_name);
+    // System.out.println ("method_name = " + method_name);
 
-      if (class_name.equals(method_name)) {
-        return true;
-      }
+    if (class_name.equals(method_name)) {
+      return true;
     }
 
     return false;
