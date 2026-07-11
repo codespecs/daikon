@@ -77,7 +77,13 @@ import org.checkerframework.checker.nullness.qual.Nullable;
   /** A unique identifier for creating unique filenames for trace files. */
   private static int trace_count = 0;
 
-  /* package */ @Owning final Process process;
+  @SuppressWarnings({
+    "resourceleak:required.method.not.called",
+    "resourceleak:unneeded.suppression"
+  }) // `Process.close()` exists in Java 26+.
+  /* package */ @Owning
+  final Process process;
+
   private final PrintStream input;
   private final BufferedReader output;
 
@@ -86,7 +92,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
    * Initializes the simplify environment for interaction. Use {@code Cmd} objects to interact with
    * this Session.
    */
-  @SuppressWarnings("AssignmentExpression") // for "while ((f = new File ..."
+  @SuppressWarnings({
+    "AssignmentExpression", // for "while ((f = new File ..."
+    "resourceleak:required.method.not.called" // `Process.close()` exists only in Java 26+.
+  })
   public Session() {
     // Note that this local variable shadows `this.trace_file`.
     PrintStream trace_file = null;
@@ -171,6 +180,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
   }
 
   /** Releases the resources held by this. */
+  @SuppressWarnings({
+    "resourceleak:required.method.not.called"
+  }) // `Process.close()` exists in Java 26+.
   @EnsuresCalledMethods(value = "trace_file", methods = "close")
   @Override
   public void close(@GuardSatisfied Session this) {
