@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.mustcall.qual.InheritableMustCall;
 import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
@@ -667,7 +668,7 @@ public class Chicory implements AutoCloseable {
   }
 
   @Override
-  public void close() {
+  public void close(@GuardSatisfied Chicory this) {
     // In Java 26, `Process` implements `AutoCloseable`.
     // daikon_proc.close();
   }
