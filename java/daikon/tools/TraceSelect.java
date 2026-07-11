@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -225,11 +226,7 @@ public class TraceSelect {
 
         // Clean up the mess.  A failed cleanup is not fatal.
         if (CLEAN) {
-          try {
-            Files.deleteIfExists(Path.of(filePrefix));
-          } catch (IOException e) {
-            System.out.println("Warning: could not delete " + filePrefix + ": " + e.getMessage());
-          }
+          deleteQuietly(filePrefix);
         }
 
         num_reps--;
@@ -247,17 +244,26 @@ public class TraceSelect {
       // Start at index 1: sampleNames[0] is the "-p" sentinel, not a file.
       if (CLEAN) {
         for (int j = 1; j < sampleNames.length; j++) {
-          try {
-            Files.deleteIfExists(Path.of(sampleNames[j]));
-          } catch (IOException e) {
-            System.out.println(
-                "Warning: could not delete " + sampleNames[j] + ": " + e.getMessage());
-          }
+          deleteQuietly(sampleNames[j]);
         }
       }
 
     } catch (Exception e) {
       throw new Error(e);
+    }
+  }
+
+  /**
+   * Deletes the file with the given name, if it exists. A failed deletion is not fatal; it produces
+   * a warning on standard output. Tolerates a name that is not a legal file path.
+   *
+   * @param fileName the name of the file to delete
+   */
+  private static void deleteQuietly(String fileName) {
+    try {
+      Files.deleteIfExists(Path.of(fileName));
+    } catch (IOException | InvalidPathException e) {
+      System.out.println("Warning: could not delete " + fileName + ": " + e.getMessage());
     }
   }
 

@@ -72,7 +72,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
 ##    from testing that Daikon runs under POSIX sh.
 # Install gradle (needed for building daikon-plumelib.jar).
 RUN wget -q https://services.gradle.org/distributions/gradle-9.6.1-bin.zip \
-&& unzip -d /opt/gradle gradle-9.6.1-bin.zip \
+&& unzip -q -d /opt/gradle gradle-9.6.1-bin.zip \
 && rm gradle-9.6.1-bin.zip
 ENV PATH=$PATH:/opt/gradle/gradle-9.6.1/bin
 
