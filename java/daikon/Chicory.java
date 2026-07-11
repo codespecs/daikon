@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.regex.Pattern;
-import org.checkerframework.checker.mustcall.qual.MustCall;
+import org.checkerframework.checker.mustcall.qual.InheritableMustCall;
 import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -32,7 +32,8 @@ import org.checkerframework.dataflow.qual.Pure;
  * instrumented as they are loaded). This class parses the command line arguments, starts java with
  * the javaagent switch on the target program and if requested starts Daikon on the result.
  */
-@MustCall("close") public class Chicory {
+@InheritableMustCall("close")
+public class Chicory {
 
   /** Display usage information. */
   @Option("-h Display usage information")
