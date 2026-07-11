@@ -111,7 +111,7 @@ public class Instrument24 implements ClassFileTransformer {
   /** Debug information about which classes and/or methods are transformed and why. */
   protected static final SimpleLog debug_transform = new SimpleLog(false);
 
-  // Public so can be enabled from daikon.dcomp.Instrument24.
+  // Public so it can be enabled from daikon.dcomp.Instrument24.
   /** Debug information about ppt-omit and ppt-select. */
   public static final SimpleLog debug_ppt_omit = new SimpleLog(false);
 

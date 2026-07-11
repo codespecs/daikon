@@ -41,7 +41,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
 RUN dnf -q -y upgrade && dnf -q -y install \
   java-26-openjdk \
   java-26-openjdk-devel
-ENV JAVA26_HOME=/usr/lib/jvm/java-26-openjdk
+ENV JAVA26_HOME=/usr/lib/jvm/java-26
 
 ## Use this when the java-26-openjdk* packages don't yet exist.
 # # RUN curl --silent -o jdk-26_linux-x64_bin.tar.gz https://download.oracle.com/java/26/latest/jdk-26_linux-x64_bin.tar.gz \
@@ -65,11 +65,16 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   texlive \
   yamllint
 
+## Other ways to install gradle:
+##  * The `dnf` package repository has a very old version of gradle.
+##  * Need zip to install SDKMAN, need SDKMAN to install gradle.
+##    However, SDKMAN requires bash, which would prevent the Docker container
+##    from testing that Daikon runs under POSIX sh.
 # Install gradle (needed for building daikon-plumelib.jar).
-RUN wget -q https://services.gradle.org/distributions/gradle-9.5.1-bin.zip \
-&& unzip -d /opt/gradle gradle-9.5.1-bin.zip \
-&& rm gradle-9.5.1-bin.zip
-ENV PATH=$PATH:/opt/gradle/gradle-9.5.1/bin
+RUN wget -q https://services.gradle.org/distributions/gradle-9.6.1-bin.zip \
+&& unzip -d /opt/gradle gradle-9.6.1-bin.zip \
+&& rm gradle-9.6.1-bin.zip
+ENV PATH=$PATH:/opt/gradle/gradle-9.6.1/bin
 
 # Alternately, run: dnf --enablerepo=crb install PACKAGENAME
 RUN dnf config-manager --set-enabled crb \
@@ -101,15 +106,6 @@ RUN echo "installing uv" \
 && find /root -type d -exec chmod +x {} \; \
 && find /root/.local/bin -type f -exec chmod +x {} \;
 ENV PATH=/root/.local/bin:$PATH
-
-## The `dnf` package repository has a very old version of gradle.
-# Need zip to install SDKMAN, need SDKMAN to install gradle.
-# However, SDKMAN requires bash, which would prevent the Docker container from
-# testing that Daikon runs under POSIX sh.
-RUN wget -q https://services.gradle.org/distributions/gradle-9.5.1-bin.zip \
-&& unzip -q -d /opt/gradle gradle-9.5.1-bin.zip \
-&& rm gradle-9.5.1-bin.zip
-ENV PATH=$PATH:/opt/gradle/gradle-9.5.1/bin
 
 # Clean up.
 RUN dnf -q clean all

@@ -21,6 +21,11 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
+## Version ??
+
+All Daikon tools now work with Java 26.
+Running under Java 8 is no longer supported.
+
 ## Version 5.8.24 (May 6, 2026)
 
 All Daikon tools now work with Java 8-25.

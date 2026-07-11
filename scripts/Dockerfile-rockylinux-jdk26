@@ -38,7 +38,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
 RUN dnf -q -y upgrade && dnf -q -y install \
   java-26-openjdk \
   java-26-openjdk-devel
-ENV JAVA26_HOME=/usr/lib/jvm/java-26-openjdk
+ENV JAVA26_HOME=/usr/lib/jvm/java-26
 
 ## Use this when the java-26-openjdk* packages don't yet exist.
 # # RUN curl --silent -o jdk-26_linux-x64_bin.tar.gz https://download.oracle.com/java/26/latest/jdk-26_linux-x64_bin.tar.gz \

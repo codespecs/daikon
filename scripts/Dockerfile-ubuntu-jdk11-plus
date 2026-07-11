@@ -106,10 +106,10 @@ ENV PATH=/root/.local/bin:$PATH
 # However, SDKMAN requires bash, which would prevent the Docker container from
 # testing that Daikon runs under POSIX sh.
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& wget -q https://services.gradle.org/distributions/gradle-9.5.1-bin.zip \
-&& unzip -q -d /opt/gradle gradle-9.5.1-bin.zip \
-&& rm gradle-9.5.1-bin.zip
-ENV PATH=$PATH:/opt/gradle/gradle-9.5.1/bin
+&& wget -q https://services.gradle.org/distributions/gradle-9.6.1-bin.zip \
+&& unzip -q -d /opt/gradle gradle-9.6.1-bin.zip \
+&& rm gradle-9.6.1-bin.zip
+ENV PATH=$PATH:/opt/gradle/gradle-9.6.1/bin
 
 # Clean up.
 RUN export DEBIAN_FRONTEND=noninteractive \
