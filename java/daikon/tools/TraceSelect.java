@@ -4,6 +4,8 @@ package daikon.tools;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -221,9 +223,9 @@ public class TraceSelect {
 
         invokeDaikon(filePrefix);
 
-        // cleanup the mess
+        // Clean up the mess.
         if (CLEAN) {
-          Runtime.getRuntime().exec(new String[] {"rm", filePrefix});
+          Files.deleteIfExists(Path.of(filePrefix));
         }
 
         num_reps--;
@@ -237,10 +239,10 @@ public class TraceSelect {
         daikon.diff.MultiDiff.main(sampleNames);
       }
 
-      // cleanup the mess!
-      for (int j = 0; j < sampleNames.length; j++) {
-        if (CLEAN) {
-          Runtime.getRuntime().exec(new String[] {"rm", sampleNames[j]});
+      // Clean up the mess!
+      if (CLEAN) {
+        for (int j = 0; j < sampleNames.length; j++) {
+          Files.deleteIfExists(Path.of(sampleNames[j]));
         }
       }
 
@@ -278,6 +280,11 @@ public class TraceSelect {
     // Run: java daikon.PrintInvariants dtraceName.inv > dtraceName.txt
     ProcessBuilder pb = new ProcessBuilder("java", "daikon.PrintInvariants", dtraceName + ".inv");
     pb.redirectOutput(new File(dtraceName + ".txt"));
+    // In Java 26, `Process` implements `AutoCloseable`.
+    @SuppressWarnings({
+      "resourceleak:required.method.not.called",
+      "resourceleak:unneeded.suppression"
+    })
     Process p = pb.start();
     try {
       p.waitFor();

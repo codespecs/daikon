@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.mustcall.qual.MustCall;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -30,7 +32,7 @@ import org.checkerframework.dataflow.qual.Pure;
  * instrumented as they are loaded). This class parses the command line arguments, starts java with
  * the javaagent switch on the target program and if requested starts Daikon on the result.
  */
-public class Chicory {
+@MustCall("close") public class Chicory {
 
   /** Display usage information. */
   @Option("-h Display usage information")
@@ -182,7 +184,7 @@ public class Chicory {
 
   /** daikon process for {@code --daikon} command-line option. */
   // non-null if either daikon==true or daikon_online==true
-  public static @MonotonicNonNull Process daikon_proc;
+  public static @Owning @MonotonicNonNull Process daikon_proc;
 
   private static final String traceLimTermString = "DTRACELIMITTERMINATE";
   private static final String traceLimString = "DTRACELIMIT";
@@ -456,18 +458,21 @@ public class Chicory {
     }
     String[] cmdline = cmdlist.toArray(new String[0]);
 
+    int targetResult;
     // Execute the command, sending all output to our streams
-    java.lang.Runtime rt = java.lang.Runtime.getRuntime();
-    Process chicory_proc;
+    // In Java 26, `Process` implements `AutoCloseable`.
     try {
-      chicory_proc = rt.exec(cmdline);
+      @SuppressWarnings({
+        "resourceleak:required.method.not.called",
+        "resourceleak:unneeded.suppression"
+      })
+      Process chicory_proc = java.lang.Runtime.getRuntime().exec(cmdline);
+      targetResult = redirect_wait(chicory_proc);
     } catch (Exception e) {
       System.out.printf("Exception '%s' while executing '%s'%n", e, cmdline);
       System.exit(1);
       throw new Error("Unreachable control flow");
     }
-
-    int targetResult = redirect_wait(chicory_proc);
 
     if (daikon) {
       // Terminate if target didn't end properly
@@ -528,8 +533,6 @@ public class Chicory {
   @EnsuresNonNull("daikon_proc")
   public void runDaikon() {
 
-    java.lang.Runtime rt = java.lang.Runtime.getRuntime();
-
     // Get the current classpath
     String cp = System.getProperty("java.class.path");
     if (cp == null) {
@@ -561,7 +564,7 @@ public class Chicory {
     }
 
     try {
-      daikon_proc = rt.exec(cmd.toArray(new String[0]));
+      daikon_proc = java.lang.Runtime.getRuntime().exec(cmd.toArray(new String[0]));
     } catch (Exception e) {
       System.out.printf("Exception '%s' while executing '%s'%n", e, cmd);
       System.exit(1);
@@ -660,4 +663,10 @@ public class Chicory {
     }
     return result.toString();
   }
+
+  // In Java 26, `Process` implements `AutoCloseable`.
+  // @Override
+  // public void close() {
+  //   daikon_proc.close();
+  // }
 }

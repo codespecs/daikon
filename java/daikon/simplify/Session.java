@@ -77,7 +77,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
   /** A unique identifier for creating unique filenames for trace files. */
   private static int trace_count = 0;
 
-  /* package */ final Process process;
+  /* package */ @Owning final Process process;
   private final PrintStream input;
   private final BufferedReader output;
 
@@ -174,7 +174,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
   @EnsuresCalledMethods(value = "trace_file", methods = "close")
   @Override
   public void close(@GuardSatisfied Session this) {
-    process.destroy();
+    process.destroyForcibly();
+    // In Java 26, `Process` implements `AutoCloseable`.
+    // process.close();
     assert dkconfig_trace_input == (trace_file != null)
         : "@AssumeAssertion(nullness): conditional: trace_file is non-null if"
             + " dkconfig_trace_input==true";
