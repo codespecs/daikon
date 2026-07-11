@@ -33,7 +33,7 @@ import org.checkerframework.dataflow.qual.Pure;
  * the javaagent switch on the target program and if requested starts Daikon on the result.
  */
 @InheritableMustCall("close")
-public class Chicory {
+public class Chicory implements AutoCloseable {
 
   /** Display usage information. */
   @Option("-h Display usage information")
@@ -224,8 +224,9 @@ public class Chicory {
     // Start the target.  Pass the same options to the premain as
     // were passed here.
 
-    Chicory chicory = new Chicory();
-    chicory.start_target(options.getOptionsString(), target_args);
+    try (Chicory chicory = new Chicory()) {
+      chicory.start_target(options.getOptionsString(), target_args);
+    }
   }
 
   /**
@@ -665,6 +666,7 @@ public class Chicory {
     return result.toString();
   }
 
+  @Override
   public void close() {
     // In Java 26, `Process` implements `AutoCloseable`.
     // daikon_proc.close();
