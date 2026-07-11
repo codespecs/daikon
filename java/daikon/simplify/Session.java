@@ -94,7 +94,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
    */
   @SuppressWarnings({
     "AssignmentExpression", // for "while ((f = new File ..."
-    "resourceleak:required.method.not.called" // `Process.close()` exists only in Java 26+.
+    "resourceleak:required.method.not.called", // `Process.close()` exists only in Java 26+.
+    "resourceleak:unneeded.suppression" // `Process.close()` exists only in Java 26+.
   })
   public Session() {
     // Note that this local variable shadows `this.trace_file`.
@@ -181,7 +182,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
   /** Releases the resources held by this. */
   @SuppressWarnings({
-    "resourceleak:required.method.not.called"
+    "resourceleak:required.method.not.called",
+    "resourceleak:unneeded.suppression"
   }) // `Process.close()` exists in Java 26+.
   @EnsuresCalledMethods(value = "trace_file", methods = "close")
   @Override
