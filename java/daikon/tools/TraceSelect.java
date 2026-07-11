@@ -4,6 +4,9 @@ package daikon.tools;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -221,9 +224,9 @@ public class TraceSelect {
 
         invokeDaikon(filePrefix);
 
-        // cleanup the mess
+        // Clean up the mess.  A failed cleanup is not fatal.
         if (CLEAN) {
-          Runtime.getRuntime().exec(new String[] {"rm", filePrefix});
+          deleteQuietly(filePrefix);
         }
 
         num_reps--;
@@ -237,15 +240,30 @@ public class TraceSelect {
         daikon.diff.MultiDiff.main(sampleNames);
       }
 
-      // cleanup the mess!
-      for (int j = 0; j < sampleNames.length; j++) {
-        if (CLEAN) {
-          Runtime.getRuntime().exec(new String[] {"rm", sampleNames[j]});
+      // Clean up the mess!  A failed cleanup is not fatal.
+      // Start at index 1: sampleNames[0] is the "-p" sentinel, not a file.
+      if (CLEAN) {
+        for (int j = 1; j < sampleNames.length; j++) {
+          deleteQuietly(sampleNames[j]);
         }
       }
 
     } catch (Exception e) {
       throw new Error(e);
+    }
+  }
+
+  /**
+   * Deletes the file with the given name, if it exists. A failed deletion is not fatal; it produces
+   * a warning on standard output. Tolerates a name that is not a legal file path.
+   *
+   * @param fileName the name of the file to delete
+   */
+  private static void deleteQuietly(String fileName) {
+    try {
+      Files.deleteIfExists(Path.of(fileName));
+    } catch (IOException | InvalidPathException e) {
+      System.out.println("Warning: could not delete " + fileName + ": " + e.getMessage());
     }
   }
 
@@ -278,6 +296,11 @@ public class TraceSelect {
     // Run: java daikon.PrintInvariants dtraceName.inv > dtraceName.txt
     ProcessBuilder pb = new ProcessBuilder("java", "daikon.PrintInvariants", dtraceName + ".inv");
     pb.redirectOutput(new File(dtraceName + ".txt"));
+    // In Java 26, `Process` implements `AutoCloseable`, so use try-with-resources.
+    @SuppressWarnings({
+      "resourceleak:required.method.not.called",
+      "resourceleak:unneeded.suppression"
+    })
     Process p = pb.start();
     try {
       p.waitFor();
