@@ -461,10 +461,10 @@ public class Chicory implements AutoCloseable {
     }
     String[] cmdline = cmdlist.toArray(new String[0]);
 
+    // Execute the command, sending all output to our streams.
     int targetResult;
-    // Execute the command, sending all output to our streams
-    // In Java 26, `Process` implements `AutoCloseable`.
     try {
+      // In Java 26, `Process` implements `AutoCloseable`, so use try-with-resources.
       @SuppressWarnings({
         "resourceleak:required.method.not.called",
         "resourceleak:unneeded.suppression"
@@ -472,7 +472,7 @@ public class Chicory implements AutoCloseable {
       Process chicory_proc = java.lang.Runtime.getRuntime().exec(cmdline);
       targetResult = redirect_wait(chicory_proc);
     } catch (Exception e) {
-      System.out.printf("Exception '%s' while executing '%s'%n", e, cmdline);
+      System.out.printf("Exception '%s' while executing '%s'%n", e, Arrays.toString(cmdline));
       System.exit(1);
       throw new Error("Unreachable control flow");
     }
@@ -669,7 +669,12 @@ public class Chicory implements AutoCloseable {
 
   @Override
   public void close(@GuardSatisfied Chicory this) {
-    // In Java 26, `Process` implements `AutoCloseable`.
-    // daikon_proc.close();
+    // Release the daikon process if it was started.  In the normal control flow, `start_target`
+    // always calls `System.exit`, so this method is only reached on an exceptional exit; destroying
+    // an already-terminated process is harmless.
+    // In Java 26, `Process` implements `AutoCloseable`, so this could be `daikon_proc.close()`.
+    if (daikon_proc != null) {
+      daikon_proc.destroy();
+    }
   }
 }

@@ -223,9 +223,13 @@ public class TraceSelect {
 
         invokeDaikon(filePrefix);
 
-        // Clean up the mess.
+        // Clean up the mess.  A failed cleanup is not fatal.
         if (CLEAN) {
-          Files.deleteIfExists(Path.of(filePrefix));
+          try {
+            Files.deleteIfExists(Path.of(filePrefix));
+          } catch (IOException e) {
+            System.out.println("Warning: could not delete " + filePrefix + ": " + e.getMessage());
+          }
         }
 
         num_reps--;
@@ -239,10 +243,16 @@ public class TraceSelect {
         daikon.diff.MultiDiff.main(sampleNames);
       }
 
-      // Clean up the mess!
+      // Clean up the mess!  A failed cleanup is not fatal.
+      // Start at index 1: sampleNames[0] is the "-p" sentinel, not a file.
       if (CLEAN) {
-        for (int j = 0; j < sampleNames.length; j++) {
-          Files.deleteIfExists(Path.of(sampleNames[j]));
+        for (int j = 1; j < sampleNames.length; j++) {
+          try {
+            Files.deleteIfExists(Path.of(sampleNames[j]));
+          } catch (IOException e) {
+            System.out.println(
+                "Warning: could not delete " + sampleNames[j] + ": " + e.getMessage());
+          }
         }
       }
 
@@ -280,7 +290,7 @@ public class TraceSelect {
     // Run: java daikon.PrintInvariants dtraceName.inv > dtraceName.txt
     ProcessBuilder pb = new ProcessBuilder("java", "daikon.PrintInvariants", dtraceName + ".inv");
     pb.redirectOutput(new File(dtraceName + ".txt"));
-    // In Java 26, `Process` implements `AutoCloseable`.
+    // In Java 26, `Process` implements `AutoCloseable`, so use try-with-resources.
     @SuppressWarnings({
       "resourceleak:required.method.not.called",
       "resourceleak:unneeded.suppression"

@@ -175,7 +175,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
   @Override
   public void close(@GuardSatisfied Session this) {
     process.destroyForcibly();
-    // In Java 26, `Process` implements `AutoCloseable`.
+    // In Java 26, `Process` implements `AutoCloseable`, so uncomment `process.close()`.
     // process.close();
     assert dkconfig_trace_input == (trace_file != null)
         : "@AssumeAssertion(nullness): conditional: trace_file is non-null if"
