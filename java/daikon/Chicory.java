@@ -665,9 +665,8 @@ public class Chicory {
     return result.toString();
   }
 
-  // In Java 26, `Process` implements `AutoCloseable`.
-  // @Override
-  // public void close() {
-  //   daikon_proc.close();
-  // }
+  public void close() {
+    // In Java 26, `Process` implements `AutoCloseable`.
+    // daikon_proc.close();
+  }
 }
