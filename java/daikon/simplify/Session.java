@@ -57,9 +57,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
    * will be printed when each invariant is passed to Simplify, and then replaced by a {@code T} if
    * the invariant was redundant, {@code F} if it was not found to be, and {@code ?} if Simplify
    * gave up because of a time limit. If the value is 2 or higher, a {@code <} or {@code >} will
-   * also be printed for each invariant that is pushed onto or popped from from Simplify's
-   * assumption stack. This option is mainly intended for debugging purposes, but can also provide
-   * something to watch when Simplify takes a long time.
+   * also be printed for each invariant that is pushed onto or popped from Simplify's assumption
+   * stack. This option is mainly intended for debugging purposes, but can also provide something to
+   * watch when Simplify takes a long time.
    */
   public static int dkconfig_verbose_progress = 0;
 
@@ -77,7 +77,13 @@ import org.checkerframework.checker.nullness.qual.Nullable;
   /** A unique identifier for creating unique filenames for trace files. */
   private static int trace_count = 0;
 
-  /* package */ final Process process;
+  @SuppressWarnings({
+    "resourceleak:required.method.not.called",
+    "resourceleak:unneeded.suppression"
+  }) // `Process.close()` exists in Java 26+.
+  /* package */ @Owning
+  final Process process;
+
   private final PrintStream input;
   private final BufferedReader output;
 
@@ -86,7 +92,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
    * Initializes the simplify environment for interaction. Use {@code Cmd} objects to interact with
    * this Session.
    */
-  @SuppressWarnings("AssignmentExpression") // for "while ((f = new File ..."
+  @SuppressWarnings({
+    "AssignmentExpression", // for "while ((f = new File ..."
+    "resourceleak:required.method.not.called", // `Process.close()` exists only in Java 26+.
+    "resourceleak:unneeded.suppression" // `Process.close()` exists only in Java 26+.
+  })
   public Session() {
     // Note that this local variable shadows `this.trace_file`.
     PrintStream trace_file = null;
@@ -101,11 +111,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
       String[] envArray = newEnv.toArray(new String[] {});
       SessionManager.debugln("Session: exec");
       // -nosc: don't compute or print invalid context
+      String simplifyPathProp = System.getProperty("simplify.path");
       String simplifyPath;
-      if (System.getProperty("simplify.path") == null) {
+      if (simplifyPathProp == null) {
         simplifyPath = "Simplify";
       } else {
-        simplifyPath = System.getProperty("simplify.path");
+        simplifyPath = simplifyPathProp;
       }
       process = java.lang.Runtime.getRuntime().exec(new String[] {simplifyPath, "-nosc"}, envArray);
       SessionManager.debugln("Session: exec ok");
@@ -135,7 +146,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
       String expect = ">\t";
       byte[] buf = new byte[expect.length()];
       int pos = is.read(buf);
-      assert pos != -1 : "Prompt exected, stream ended";
+      assert pos != -1 : "Prompt expected, stream ended";
       String actual = new String(buf, 0, pos, UTF_8);
       assert expect.equals(actual) : "Prompt expected, got '" + actual + "'";
 
@@ -170,10 +181,16 @@ import org.checkerframework.checker.nullness.qual.Nullable;
   }
 
   /** Releases the resources held by this. */
+  @SuppressWarnings({
+    "resourceleak:required.method.not.called",
+    "resourceleak:unneeded.suppression"
+  }) // `Process.close()` exists in Java 26+.
   @EnsuresCalledMethods(value = "trace_file", methods = "close")
   @Override
   public void close(@GuardSatisfied Session this) {
-    process.destroy();
+    process.destroyForcibly();
+    // In Java 26, `Process` implements `AutoCloseable`, so uncomment `process.close()`.
+    // process.close();
     assert dkconfig_trace_input == (trace_file != null)
         : "@AssumeAssertion(nullness): conditional: trace_file is non-null if"
             + " dkconfig_trace_input==true";

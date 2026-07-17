@@ -47,7 +47,7 @@ find . -type d -name CVS -print0 | xargs -0 rm -rf
 #exit;
 
 # apply the parts of the old patch you want to keep,
-# make any futher changes to valgrind/, and then do
+# make any further changes to valgrind/, and then do
 # diff -ur valgrind-kvasir valgrind \
 #   >$DAIKONDIR/kvasir/fjalar/notes/fjalar-release.patch
 

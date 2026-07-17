@@ -45,11 +45,11 @@ public class ListInfo extends DaikonVariableInfo {
         throw new Error(e1);
       } catch (InvocationTargetException e1) {
         // We used to check for java.util.ConcurrentModificationException, but
-        // now beleive than any InvocationTargetException should not fail and
+        // now believe that any InvocationTargetException should not fail and
         // thus should return Nonsensical.
         // Possibly, this should be extended to all exceptions.
         System.err.println(
-            "Detected a InvocationTargetException in: " + listType.getName() + " " + getName());
+            "Detected an InvocationTargetException in: " + listType.getName() + " " + getName());
         arrayVal = NonsensicalObject.getInstance();
       }
     } else {

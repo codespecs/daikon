@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.interning.qual.Interned;
@@ -36,7 +37,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Class that implements dynamic constants optimization. This optimization doesn't instantiate
- * invariants over constant variables (i.e., that that have only seen one value). When the variable
+ * invariants over constant variables (i.e., those that have only seen one value). When the variable
  * receives a second value, invariants are instantiated and are given the sample representing the
  * previous constant value. Each DynamicConstants object is associated with a single program point,
  * ppt.
@@ -55,7 +56,7 @@ public class DynamicConstants implements Serializable {
 
   /**
    * If true, use the dynamic constants optimization. This optimization doesn't instantiate
-   * invariants over constant variables (i.e., that that have only seen one value). When the
+   * invariants over constant variables (i.e., those that have only seen one value). When the
    * variable receives a second value, invariants are instantiated and are given the sample
    * representing the previous constant value.
    */
@@ -692,9 +693,9 @@ public class DynamicConstants implements Serializable {
           if (!inv.is_false()) {
             true_inv_cnt[slice.arity()]++;
           } else {
-            String vals = "";
+            StringJoiner vals = new StringJoiner(" ");
             for (VarInfo vi : slice.var_infos) {
-              vals += vi.name() + "=" + Debug.toString(constant_value(vi)) + " ";
+              vals.add(vi.name() + "=" + Debug.toString(constant_value(vi)));
             }
             inv.log("Invariant %s destroyed by constant values %s", inv.format(), vals);
           }
@@ -754,7 +755,8 @@ public class DynamicConstants implements Serializable {
               + "): "
               + leader2_cnt
               + " leader2 ints ("
-              + leader2_str);
+              + leader2_str
+              + ")");
     }
 
     // Remove any falsified invariants from the new views.  Don't

@@ -339,7 +339,7 @@ class TagEntry extends WeakReference<Object> {
 
     LinkedHashMap<Object, List<Object>> sets = new LinkedHashMap<>();
 
-    // Fill sets from object_map by placing every object in an ArrayList
+    // Fill `sets` from `object_map` by placing every object in an ArrayList
     // whose key is its root.
     for (Object obj : object_map.keySet()) {
       Object rep = find(obj);
@@ -349,17 +349,16 @@ class TagEntry extends WeakReference<Object> {
 
     StringJoiner result = new StringJoiner(System.lineSeparator());
     result.add(String.format("%d objects in object_map", object_map.size()));
-    for (Object rep : sets.keySet()) {
-      List<Object> set = sets.get(rep);
+    for (List<Object> set : sets.values()) {
       StringJoiner line = new StringJoiner(", ");
-      for (Object entry : set) {
-        if (entry instanceof DaikonVariableInfo) {
-          line.add(String.format("%s ", ((DaikonVariableInfo) entry).getName()));
+      for (Object setElt : set) {
+        if (setElt instanceof DaikonVariableInfo) {
+          line.add(String.format("%s ", ((DaikonVariableInfo) setElt).getName()));
         } else {
-          line.add(String.format("%s [%s]", entry.getClass(), entry));
+          line.add(String.format("%s [%s]", setElt.getClass(), setElt));
         }
       }
-      result.add(String.format("%s%n", line));
+      result.add(line.toString());
     }
     return result.toString();
   }

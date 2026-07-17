@@ -145,7 +145,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
   }
 
   /**
-   * LinearBinary can't be flowed because it keeps samples to build the line. These sample can't be
+   * LinearBinary can't be flowed because it keeps samples to build the line. These samples can't be
    * flowed from ppt to ppt (since they probably didn't occur at the lower ppt).
    */
   @Pure
@@ -420,7 +420,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
     double standard_j_var = j_var / myGCD;
     double standard_Stand_const = Stand_const / myGCD;
 
-    // Ensure postive x coefficient by negating if "x" term is negative.
+    // Ensure positive x coefficient by negating if "x" term is negative.
     if (i_var < 0) {
       standard_i_var = -standard_i_var;
       standard_j_var = -standard_j_var;

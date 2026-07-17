@@ -299,10 +299,10 @@ public class SplitterFactory {
   }
 
   /**
-   * Cleans str by replacing all characters that are not valid java indentifier parts with "_".
+   * Cleans str by replacing all characters that are not valid java identifier parts with "_".
    *
    * @param str the string to be cleaned
-   * @return str with all non-Java-indentifier parts replaced with "_"
+   * @return str with all non-Java-identifier parts replaced with "_"
    */
   private static String clean(String str) {
     char[] cleaned = str.toCharArray();
@@ -317,7 +317,7 @@ public class SplitterFactory {
 
   /**
    * Creates the temporary directory in which splitter files will be stored. The return value
-   * includes a trailing file separtor (e.g., "/"), unless the return value is "".
+   * includes a trailing file separator (e.g., "/"), unless the return value is "".
    *
    * @return the name of the temporary directory. This is where the Splitters are created.
    */

@@ -8,6 +8,7 @@ import daikon.plumelib.bcelutil.InstructionListUtils;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.reflection.Signatures;
 import daikon.plumelib.util.ArraysPlume;
+import daikon.plumelib.util.StringsPlume;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.security.ProtectionDomain;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.bcel.Const;
@@ -593,19 +595,13 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             Type[] paramTypes = mgen.getArgumentTypes();
             String[] paramNames = mgen.getArgumentNames();
             LocalVariableGen[] local_vars = mgen.getLocalVariables();
-            String types = "";
-            String names = "";
-            String locals = "";
+            String types = StringsPlume.join(" ", paramTypes);
+            String names = String.join(" ", paramNames);
+            StringJoiner locals = new StringJoiner(" ");
+            for (LocalVariableGen local_var : local_vars) {
+              locals.add(local_var.getName());
+            }
 
-            for (int j = 0; j < paramTypes.length; j++) {
-              types = types + paramTypes[j] + " ";
-            }
-            for (int j = 0; j < paramNames.length; j++) {
-              names = names + paramNames[j] + " ";
-            }
-            for (int j = 0; j < local_vars.length; j++) {
-              locals = locals + local_vars[j].getName() + " ";
-            }
             debugInstrument.log("%nMethod = %s%n", mgen);
             debugInstrument.log("paramTypes(%d): %s%n", paramTypes.length, types);
             debugInstrument.log("paramNames(%d): %s%n", paramNames.length, names);
@@ -637,7 +633,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           // to code modification and expansion.
           // The offsets point to 'new' instructions; since we do
           // not modify these, their Instruction Handles will remain
-          // unchanged throught the instrumentaion process.
+          // unchanged throughout the instrumentation process.
           buildUninitializedNewMap(il);
 
           method_infos.add(curMethodInfo);
@@ -948,13 +944,13 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     // Modify existing StackMapTable (if present).
     if (stackMapTable.length > 0) {
-      // Each stack map frame specifies (explicity or implicitly) an
+      // Each stack map frame specifies (explicitly or implicitly) an
       // offset_delta that is used to calculate the actual bytecode
-      // offset at which the frame applies.  This is caluclated by
+      // offset at which the frame applies.  This is calculated by
       // by adding offset_delta + 1 to the bytecode offset of the
       // previous frame, unless the previous frame is the initial
       // frame of the method, in which case the bytecode offset is
-      // offset_delta. (From the Java Virual Machine Specification,
+      // offset_delta. (From the Java Virtual Machine Specification,
       // Java SE 7 Edition, section 4.7.4.)
 
       // Since we are inserting (1 or 2) new stack map frames at the

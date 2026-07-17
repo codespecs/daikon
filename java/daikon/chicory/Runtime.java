@@ -88,7 +88,7 @@ public final class Runtime {
   // Setups that control what information is written
   //
 
-  /** Depth to wich to examine structure components. */
+  /** Depth to which to examine structure components. */
   static int nesting_depth = 2;
 
   //
@@ -374,7 +374,7 @@ public final class Runtime {
         }
       }
 
-      // Write out the infromation for this method
+      // Write out the information for this method
       synchronized (SharedData.methods) {
         mi = SharedData.methods.get(mi_index);
       }
@@ -730,7 +730,7 @@ public final class Runtime {
   // Used to distinguish wrappers created by user code
   // from wrappers created by Chicory.
 
-  /** A wrapper for a pritive class. */
+  /** A wrapper for a primitive class. */
   public static interface PrimitiveWrapper {
     // returns corresponding java.lang wrapper
     public Object getJavaWrapper();
@@ -1086,7 +1086,7 @@ public final class Runtime {
   // Eventually the code should use the library rather than copying its code.
   // (As of 2026-01-10, I'm having trouble with the shadowJar plugin.)
 
-  /** A map from field descriptor (sach as "I") to Java primitive type (such as "int"). */
+  /** A map from field descriptor (such as "I") to Java primitive type (such as "int"). */
   private static HashMap<String, String> fieldDescriptorToPrimitive = new HashMap<>(8);
 
   static {

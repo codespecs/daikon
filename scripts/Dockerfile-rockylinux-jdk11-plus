@@ -8,8 +8,8 @@ LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>
 
 # According to
 # https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
-#  * Put "apt update" and "apt install" in the same RUN command.
-#  * Do not run "apt upgrade"; instead get upstream to update.
+#  * Put "apt-get update" and "apt-get install" in the same RUN command.
+#  * Do not run "apt-get upgrade"; instead get upstream to update.
 
 # The EPEL repository contains certain packages.
 RUN dnf -q -y upgrade && dnf -q -y install \
@@ -26,6 +26,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   gcc \
   git \
   jq \
+  libxcrypt-devel \
   m4 \
   make \
   perl-English \
@@ -52,8 +53,18 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   python3-distutils-extra \
   ShellCheck \
   texlive \
-  wget \
   yamllint
+
+## Other ways to install gradle:
+##  * The `dnf` package repository has a very old version of gradle.
+##  * Need zip to install SDKMAN, need SDKMAN to install gradle.
+##    However, SDKMAN requires bash, which would prevent the Docker container
+##    from testing that Daikon runs under POSIX sh.
+# Install gradle (needed for building daikon-plumelib.jar).
+RUN wget -q https://services.gradle.org/distributions/gradle-9.6.1-bin.zip \
+&& unzip -d /opt/gradle gradle-9.6.1-bin.zip \
+&& rm gradle-9.6.1-bin.zip
+ENV PATH=$PATH:/opt/gradle/gradle-9.6.1/bin
 
 # Alternately, run: dnf --enablerepo=crb install PACKAGENAME
 RUN dnf config-manager --set-enabled crb \

@@ -42,13 +42,13 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.8.23
+@center Daikon version 5.8.25
 
 @sp 1
 
 @c The following comment is needed to help perl edit the release date.
-@c Print out the Daikon version 5.8.23 release date
-@center June 4, 2025
+@c Print out the Daikon version 5.8.25 release date
+@center May 7, 2026
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -85,7 +85,7 @@ Copyright @copyright{} 1998-2025
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.23, released June 4, 2025.
+It describes Daikon version 5.8.25, released May 7, 2026.
 
 @menu
 * Introduction::
@@ -345,7 +345,7 @@ of invariant detection.  For instance, if there exists an array
 variable @samp{a[i]}.  This permits detection of invariants over this
 quantity.
 
-(Describing how to create new variety of derived variable is still to
+(Describing how to create a new variety of derived variable is still to
 be written.  For now, see the derived variables that appear in the Java
 files in directory @file{$@{DAIKONDIR@}/java/daikon/derive/}.)
 
@@ -527,7 +527,7 @@ the bytecode instrumentation.)
 Daikon comes with a front end for the C language:  Kvasir
 (@pxref{Kvasir,,,daikon,Daikon User Manual}).
 Kvasir only works under the Linux operating system, and it works only on
-``x86'' (Intel 386, 486, 586, 686 compatible) and ``x86-64'' (AMD64, EM64T
+``x86-64'' (AMD64, EM64T
 compatible) processors.
 
 You may wish to infer invariants over C programs running on other
@@ -1041,7 +1041,7 @@ non-printing.
 the invariant's truth value is statically obvious (from the semantics
 of the programming language), no matter what values may be seen at run
 time.  Two examples are @samp{A[i] is an element of A[]} and @samp{size(A[])
->= 0}.  Non-instantiation is implemented by the by the
+>= 0}.  Non-instantiation is implemented by the
 @code{isObviousStatically} method.
 With the equality sets optimization (@pxref{Equality optimization}),
 non-instantiation can only happen if all equality permutations are
@@ -1061,7 +1061,7 @@ Suppression also cannot use relationships between variables.  For
 example, it cannot suppress @samp{x[i] = y[j]} by @samp{(x[] = y[]) ^ (i =
 j)}.  Suppressor invariants can only use variables that are also in the
 invariant that is being suppressed.  In this example, only invariants
-using the variables @samp{x[i]} and @samp{y[i]} can be used as a suppressors.
+using the variables @samp{x[i]} and @samp{y[i]} can be used as suppressors.
 See @ref{New suppressors} for more information.
 
 @dfn{Non-printing} is a post-pass that throws out any invariants that
@@ -1279,7 +1279,7 @@ A type string must consist of one or more of the following literals:
 @samp{int}, @samp{double}, @samp{string}, @samp{int_array},
 @samp{double_array}, or @samp{string_array}, separated by spaces.
 This string represents the
-types that an invariant is supposed to compare For instance, a binary
+types that an invariant is supposed to compare.  For instance, a binary
 integer comparison would have type string @samp{int int}.  A pairwise
 sequence comparison would have type string @samp{int_array int_array}.
 
@@ -1379,7 +1379,7 @@ except to generate goal files.
 
 Furthermore, this framework cannot parse complex types from files
 unless they contain a @code{public Object valueOf(String s)}
-function. Otherwise the program has no was of knowing how to create
+function. Otherwise the program has no way of knowing how to create
 such an object from a string. All primitives and the String type are
 already recognized.
 
@@ -1459,7 +1459,7 @@ More assertions can easily be added to @file{SampleTester.java} as required.
 @node          Example file
 @subsubsection Example file
 
-The following is an simple example of sample testing.
+The following is a simple example of sample testing.
 @example
 decl: daikon/test/SampleTesters.decls
 
@@ -1491,7 +1491,7 @@ As when you install or compile Daikon, when you run the tests
 environment variable @env{DAIKONDIR}
 should be set.
 
-You should generally run the regression tests before checking it a
+You should generally run the regression tests before checking in a
 change (especially any non-trivial change).  If any of the regression
 test diffs has a non-zero size, then your edits have changed Daikon's
 output and you should not check in without carefully determining that
@@ -1523,7 +1523,7 @@ because it controls so many types of tests.
 The Kvasir (Daikon C front-end) tests appear in the
 @file{$@{DAIKONDIR@}/tests/kvasir-tests} directory. These tests run Daikon to ensure
 that the Kvasir output is valid Daikon input. To run them, go to
-@file{$@{DAIKONDIR@}/tests/kvasir-tests} or of its sub-directories and run
+@file{$@{DAIKONDIR@}/tests/kvasir-tests} or one of its sub-directories and run
 @command{make summary-w-daikon}. If any tests return @samp{FAILED}, then
 you should look at the appropriate @file{.diff} file. If you feel that the
 failure was actually a result of your Daikon changes and should be in fact
@@ -1664,7 +1664,7 @@ and also
 
 Just run the command @command{eclipse} at the command shell.
 
-There is one big catch:  take note of where you launch Eclipse and
+There is one big catch: take note of where you launch Eclipse and
 @b{always} launch Eclipse from the same location. For example, you might
 want to alias @command{run-eclipse} to @command{cd; eclipse}.
 For convenience, this is already done for you if you source the
@@ -2087,7 +2087,7 @@ diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
 @end smallexample
 
 @need 1000
-Another good source of information are the repository logs since the
+Another good source of information is the repository logs since the
 last release:
 
 @smallexample
@@ -2117,7 +2117,7 @@ DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION
 git log v$@{DAIKONVERSION@}..HEAD
 @end smallexample
 
-When you have competed your updates, commit and push the changes.
+When you have completed your updates, commit and push the changes.
 
 [Time: a few minutes]
 
@@ -2266,7 +2266,7 @@ make update-dist-version-file
 @end itemize
 
 Note that if a new feature has been added, or if some change has made
-the current version incompatible from the previous release (such as a
+the current version incompatible with the previous release (such as a
 change in the dtrace file format or revised names for tool options),
 then you should manually edit the VERSION file to increment the minor
 version number and reset the revision number to zero.
@@ -2281,6 +2281,9 @@ export TODAY='November 1, 2013'
 @need 1000
 Now, update the appropriate files with the date and version number
 of the release and commit these changes back to the repository:
+(WARNING: This step uses a tool that is no longer supported on JDK 8.
+You must switch to a different bash shell running at least JDK 17 for
+this step only. Switch back to your original bash shell afterwards.)
 
 @example
 make update-run-google-java-format && make update-and-commit-version
@@ -2682,9 +2685,9 @@ In early January 2002 (or perhaps in late 2001), we created the
 the Daikon CVS repository.  Primary development continued along the CVS
 branch @samp{ENGINE_V2_PATCHES}, which we called
 ``Daikon version @c trick version updater
-2''  We
+2''.  We
 called the CVS trunk ``Daikon version @c trick version updater
-3'' it was experimental, and very
+3''.  It was experimental, and very
 few people ran its code or performed development on it.  Periodically,
 all changes made to the branch would be merged into the trunk, as one
 large checkin on the trunk.  Later, development on version 3 became more
@@ -2729,7 +2732,7 @@ trunk (respectively, the branch).
 @cindex file formats
 
 This chapter contains information about the file format of Daikon's
-input files.  It is of most information to those who wish to write a
+input files.  It is of most interest to those who wish to write a
 front end, also known as an instrumenter
 (@pxref{Front ends and instrumentation,,,daikon,Daikon User Manual}).
 A new front end enables Daikon to detect
@@ -3024,7 +3027,7 @@ by Daikon, but the only one output to the data files is @code{parent}.
 @c types are: parent, user, enter-exit, exit-exitnn, merge-child and ppt-pptcond
 A @code{parent} relationship is one where the program points themselves
 are explicitly related, such as an enter and an exit point.  All of the
-variables at one of the points exists at the other.  A @code{user}
+variables at one of the points exist at the other.  A @code{user}
 relation is one where a class is used at another point, such as at an
 enter point.  For example, if a reference to class A were passed to
 routine @samp{r1}, the values found at enter and exit of @samp{r1} could

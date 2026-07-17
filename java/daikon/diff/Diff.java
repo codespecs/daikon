@@ -82,7 +82,7 @@ public final class Diff {
 
   /**
    * Comparators to sort the sets of invs, and to combine the two sets into the pair tree. Can be
-   * overriden by command-line options.
+   * overridden by command-line options.
    */
   private Comparator<Invariant> invSortComparator1;
 
@@ -153,7 +153,7 @@ public final class Diff {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    */
   public static void mainHelper(final String[] args)
       throws FileNotFoundException,
@@ -369,7 +369,7 @@ public final class Diff {
             .equals(diff.invPairComparator.getClass().toString())) {
       System.out.println("You are using different comparators to sort or pair up invariants.");
       System.out.println("This may cause misalignment of invariants and may cause Diff to");
-      System.out.println("work incorectly.  Make sure you know what you are doing!");
+      System.out.println("work incorrectly.  Make sure you know what you are doing!");
     }
 
     // The index of the first non-option argument -- the name of the
@@ -596,7 +596,7 @@ public final class Diff {
   }
 
   /**
-   * Diffs two PptMaps by converting them to InvMaps. Provided for compatibiliy with legacy code.
+   * Diffs two PptMaps by converting them to InvMaps. Provided for compatibility with legacy code.
    * Calls diffPptMap and asks to include all invariants.
    */
   public RootNode diffPptMap(PptMap pptMap1, PptMap pptMap2) {
@@ -604,8 +604,8 @@ public final class Diff {
   }
 
   /**
-   * Diffs two PptMaps by converting them to InvMaps. Provided for compatibiliy with legacy code. If
-   * includeUnjustified is true, the unjustified invariants are included.
+   * Diffs two PptMaps by converting them to InvMaps. Provided for compatibility with legacy code.
+   * If includeUnjustified is true, the unjustified invariants are included.
    */
   public RootNode diffPptMap(PptMap pptMap1, PptMap pptMap2, boolean includeUnjustified) {
     InvMap map1 = convertToInvMap(pptMap1);
@@ -632,7 +632,7 @@ public final class Diff {
 
   /**
    * Takes a pair of corresponding top-level program points and maps, and returns a tree of the
-   * corresponding invariants. Either of the program points may be null. If includeUnjustied is
+   * corresponding invariants. Either of the program points may be null. If includeUnjustified is
    * true, the unjustified invariants are included.
    */
   private PptNode diffPptTopLevel(

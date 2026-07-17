@@ -69,7 +69,7 @@ hg push https://daikon.googlecode.com/hg
 # If that failed, do the following:
 # #!/bin/bash
 # REPO_URL=https://daikon.googlecode.com/hg
-# # Compute last revision number with with "hg tip":
+# # Compute last revision number with "hg tip":
 # NUM_OF_REVS=9079
 # for rev in {1..${NUM_OF_REVS}}
 # do

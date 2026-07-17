@@ -8,8 +8,8 @@ LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>
 
 # According to
 # https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/:
-#  * Put "apt update" and "apt install" in the same RUN command.
-#  * Do not run "apt upgrade"; instead get upstream to update.
+#  * Put "apt-get update" and "apt-get install" in the same RUN command.
+#  * Do not run "apt-get upgrade"; instead get upstream to update.
 
 # The EPEL repository contains certain packages.
 RUN dnf -q -y upgrade && dnf -q -y install \
@@ -26,6 +26,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   gcc \
   git \
   jq \
+  libxcrypt-devel \
   m4 \
   make \
   perl-English \
@@ -38,8 +39,18 @@ RUN dnf -q -y upgrade && dnf -q -y install \
 
 # Install the JDK.
 RUN dnf -q -y upgrade && dnf -q -y install \
-  java-1.8.0-openjdk \
-  java-1.8.0-openjdk-devel
+  java-26-openjdk \
+  java-26-openjdk-devel
+ENV JAVA26_HOME=/usr/lib/jvm/java-26
+
+## Use this when the java-26-openjdk* packages don't yet exist.
+# # RUN curl --silent -o jdk-26_linux-x64_bin.tar.gz https://download.oracle.com/java/26/latest/jdk-26_linux-x64_bin.tar.gz \
+# RUN curl --silent -o jdk-26_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk26/bd75d5f9689641da8e1daabeccb5528b/36/GPL/openjdk-26_linux-x64_bin.tar.gz \
+# && tar xzf jdk-26_linux-x64_bin.tar.gz
+# ENV PATH="/jdk-26/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+# ENV JAVA26_HOME=/jdk-26
+# RUN chmod og+rx /root \
+# && chmod og+r /root/*
 
 RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \
@@ -53,6 +64,17 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   ShellCheck \
   texlive \
   yamllint
+
+## Other ways to install gradle:
+##  * The `dnf` package repository has a very old version of gradle.
+##  * Need zip to install SDKMAN, need SDKMAN to install gradle.
+##    However, SDKMAN requires bash, which would prevent the Docker container
+##    from testing that Daikon runs under POSIX sh.
+# Install gradle (needed for building daikon-plumelib.jar).
+RUN wget -q https://services.gradle.org/distributions/gradle-9.6.1-bin.zip \
+&& unzip -q -d /opt/gradle gradle-9.6.1-bin.zip \
+&& rm gradle-9.6.1-bin.zip
+ENV PATH=$PATH:/opt/gradle/gradle-9.6.1/bin
 
 # Alternately, run: dnf --enablerepo=crb install PACKAGENAME
 RUN dnf config-manager --set-enabled crb \

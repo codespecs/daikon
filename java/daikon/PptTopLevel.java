@@ -112,7 +112,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
-import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.StringsPlume;
 import typequals.prototype.qual.Prototype;
@@ -432,13 +431,6 @@ public class PptTopLevel extends Ppt {
   /** Restore/Create interns when reading serialized object. */
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
-    if (name != null) {
-      try {
-        ReflectionPlume.setFinalField(this, "name", name.intern());
-      } catch (Exception e) {
-        throw new Error("Error setting name", e);
-      }
-    }
   }
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
@@ -992,11 +984,11 @@ public class PptTopLevel extends Ppt {
     if (Global.debugDerive.isLoggable(Level.FINE)) {
       Global.debugDerive.fine(
           "Number of derived variables at program point " + this.name + ": " + result.size());
-      String derived_vars = "Derived:";
-      for (Iterator<Derivation> itor = result.iterator(); itor.hasNext(); ) {
-        derived_vars += " " + itor.next().getVarInfo().name();
+      StringJoiner derived_vars = new StringJoiner(" ", "Derived: ", "");
+      for (Derivation deriv : result) {
+        derived_vars.add(deriv.getVarInfo().name());
       }
-      Global.debugDerive.fine(derived_vars);
+      Global.debugDerive.fine(derived_vars.toString());
     }
     Derivation[] result_array = result.toArray(new Derivation[0]);
     return result_array;
@@ -1733,10 +1725,10 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Searches for all of the invariants that that provide an exact value for v. Intuitively those
-   * are invariants of the form 'v = equation'. For example: 'v = 63' or 'v = x * y' The
-   * implementation is a little iffy -- each invariant over v is examined and it matches iff it is
-   * exact and its daikon format starts with 'v ='.
+   * Searches for all of the invariants that provide an exact value for v. Intuitively those are
+   * invariants of the form 'v = equation'. For example: 'v = 63' or 'v = x * y' The implementation
+   * is a little iffy -- each invariant over v is examined and it matches iff it is exact and its
+   * daikon format starts with 'v ='.
    *
    * @return list of matching invariants or null if no matching invariants are found
    */
@@ -2131,7 +2123,7 @@ public class PptTopLevel extends Ppt {
 
   /**
    * Returns true if v1 is known to be a subsequence of v2. This is true if the subsequence
-   * invariant exists or if it it suppressed.
+   * invariant exists or if it is suppressed.
    */
   @Pure
   public boolean is_subsequence(VarInfo v1, VarInfo v2) {
@@ -2897,7 +2889,7 @@ public class PptTopLevel extends Ppt {
     for (PptSlice oPivoted : pivoted) {
       addSlice(oPivoted); // Make the key right again
       if (debugEqualTo.isLoggable(Level.FINE)) {
-        debugEqualTo.fine("  Readded: " + oPivoted);
+        debugEqualTo.fine("  Re-added: " + oPivoted);
       }
     }
 
@@ -4515,13 +4507,12 @@ public class PptTopLevel extends Ppt {
       if (show_tern_slices) {
         for (Iterator<PptSlice> j = ppt.views_iterator(); j.hasNext(); ) {
           PptSlice slice = j.next();
-          StringBuilder sb = new StringBuilder();
+          StringJoiner sj = new StringJoiner(" ");
           for (int k = 0; k < slice.arity(); k++) {
             VarInfo v = slice.var_infos[k];
-            sb.append(
-                v.name() + "/" + v.equalitySet.getVars().size() + "/" + v.file_rep_type + " ");
+            sj.add(v.name() + "/" + v.equalitySet.getVars().size() + "/" + v.file_rep_type);
           }
-          log.fine(": " + sb.toString() + ": " + slice.invs.size());
+          log.fine(": " + sj + ": " + slice.invs.size());
         }
       }
     }

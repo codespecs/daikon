@@ -32,7 +32,7 @@ CHECKERFRAMEWORK=$(realpath ../checker-framework)
 export CHECKERFRAMEWORK
 
 # Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-if [ -n "$(.plume-scripts/is-ci.sh)" ]; then
+if [ -n "$("${PLUME_SCRIPTS:-.utils/plume-scripts}"/is-ci.sh)" ]; then
   num_jobs=1
 else
   num_jobs="$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1)"

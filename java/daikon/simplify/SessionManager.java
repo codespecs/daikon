@@ -154,7 +154,7 @@ public class SessionManager implements Closeable {
 
   public static int prover_instantiate_count = 0;
 
-  // Start up simplify, and send the universal backgound.
+  // Start up simplify, and send the universal background.
   // Is successful exactly when return != null.
   public static @Nullable SessionManager attemptProverStartup() {
     SessionManager prover;
@@ -183,7 +183,7 @@ public class SessionManager implements Closeable {
 
   /** Helper thread which interacts with a Session, according to the enclosing manager. */
   @MustCall("close") private class Worker extends Thread implements Closeable {
-    /** The session mananger. */
+    /** The session manager. */
     private final SessionManager mgr = SessionManager.this; // just sugar
 
     /** The associated session, or null if the thread should shutdown. */

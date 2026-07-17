@@ -663,7 +663,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Merge the invariants in invs to form a new invariant. This implementation merely returns a
    * clone of the first invariant in the list. This is correct for simple invariants whose equation
-   * or statistics don't depend on the actual samples seen. It should be overriden for more complex
+   * or statistics don't depend on the actual samples seen. It should be overridden for more complex
    * invariants (eg, bound, oneof, linearbinary, etc).
    *
    * @param invs list of invariants to merge. The invariants must all be of the same type and should
@@ -816,11 +816,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       @GuardSatisfied @NonPrototype Invariant this, OutputFormat format);
 
   /**
-   * Returns a conjuction of mapping the same function of our expresssions's VarInfos, in general.
+   * Returns a conjunction of mapping the same function of our expresssions's VarInfos, in general.
    * Subclasses may override if they are able to handle generally-inexpressible properties in
    * special-case ways.
    *
-   * @return conjuction of mapping the same function of our expresssions's VarInfos
+   * @return conjunction of mapping the same function of our expresssions's VarInfos
    * @see VarInfo#isValidEscExpression
    */
   @Pure
@@ -944,7 +944,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Conver a long integer value into a format that Simplify can use. If the value is too big, we
+   * Convert a long integer value into a format that Simplify can use. If the value is too big, we
    * have to print it in a weird way, then tell Simplify about its properties specially.
    *
    * @param l the number to print
@@ -1347,7 +1347,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Returns true if this invariant and some equality combinations of its member variables are
    * statically obvious. For example, if a == b, and f(a) is obvious, then so is f(b). We use the
    * someInEquality (or least interesting) method during printing so we only print an invariant if
-   * all its variables are interesting, since a single, static, non interesting occurance means all
+   * all its variables are interesting, since a single, static, non interesting occurrence means all
    * the equality combinations aren't interesting.
    *
    * @return the VarInfo array that contains the VarInfos that showed this invariant to be obvious.
@@ -1374,12 +1374,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
       int position) {
     if (position == vis.length) {
       if (debugIsObvious.isLoggable(Level.FINE)) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("  isObviousStatically_SomeInEquality: ");
+        StringJoiner sj = new StringJoiner(" ", "  isObviousStatically_SomeInEquality: ", "");
         for (int i = 0; i < vis.length; i++) {
-          sb.append(assigned[i].name() + " ");
+          sj.add(assigned[i].name());
         }
-        debugIsObvious.fine(sb.toString());
+        debugIsObvious.fine(sj.toString());
       }
 
       assigned = castNonNullDeep(assigned); // https://tinyurl.com/cfissue/986
@@ -1399,7 +1398,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Returns true if this invariant is necessarily true from a fact that can be determined
    * statically (i.e., the decls files) or dynamically (after checking data). Intended not to be
-   * overriden, because sub-classes should override isObviousStatically or isObviousDynamically.
+   * overridden, because sub-classes should override isObviousStatically or isObviousDynamically.
    * Wherever possible, suppression, rather than this, should do the dynamic checking.
    */
   @Pure
@@ -1435,9 +1434,9 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Returns non-null if this invariant is necessarily true from a fact that can be determined
    * dynamically (after checking data) -- for the given varInfos rather than the varInfos of this.
    * Conceptually, this means, "Is this invariant dynamically obvious if its VarInfos were switched
-   * with vis?" Intended to be overriden by subclasses so they can filter invariants after checking;
-   * the overriding method should first call "super.isObviousDynamically(vis)". Since this method is
-   * dynamic, it should only be called after all processing.
+   * with vis?" Intended to be overridden by subclasses so they can filter invariants after
+   * checking; the overriding method should first call "super.isObviousDynamically(vis)". Since this
+   * method is dynamic, it should only be called after all processing.
    */
   public @Nullable DiscardInfo isObviousDynamically(@NonPrototype Invariant this, VarInfo[] vis) {
     assert !Daikon.isInferencing;
@@ -1487,8 +1486,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Returns true if this invariant and some equality combinations of its member variables are
    * dynamically obvious. For example, a == b, and f(a) is obvious, so is f(b). We use the
    * someInEquality (or least interesting) method during printing so we only print an invariant if
-   * all its variables are interesting, since a single, dynamic, non interesting occurance means all
-   * the equality combinations aren't interesting.
+   * all its variables are interesting, since a single, dynamic, non interesting occurrence means
+   * all the equality combinations aren't interesting.
    *
    * @return the VarInfo array that contains the VarInfos that showed this invariant to be obvious.
    *     The contains variables that are elementwise in the same equality set as this.ppt.var_infos.
@@ -1515,12 +1514,11 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
     if (position == vis.length) {
       // base case
       if (debugIsObvious.isLoggable(Level.FINE)) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("  isObviousDynamically_SomeInEquality: ");
+        StringJoiner sj = new StringJoiner(" ", "  isObviousDynamically_SomeInEquality: ", "");
         for (int i = 0; i < vis.length; i++) {
-          sb.append(assigned[i].name() + " ");
+          sj.add(assigned[i].name());
         }
-        debugIsObvious.fine(sb.toString());
+        debugIsObvious.fine(sj.toString());
       }
       return isObviousDynamically(assigned);
     } else {
@@ -1729,8 +1727,8 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   }
 
   /**
-   * Returns true if the invariant matches the specified state. Must be overriden by subclasses that
-   * support this. Otherwise, it returns true only if the state is null.
+   * Returns true if the invariant matches the specified state. Must be overridden by subclasses
+   * that support this. Otherwise, it returns true only if the state is null.
    */
   public boolean state_match(@NonPrototype Invariant this, Object state) {
     return (state == null);
@@ -2001,7 +1999,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * Returns true if the invariant is currently active. This is used to identify those invariants
    * that require a certain number of points before they actually do computation (eg, LinearBinary)
    *
-   * <p>This is used during suppresion. Any invariant that is not active cannot suppress another
+   * <p>This is used during suppression. Any invariant that is not active cannot suppress another
    * invariant.
    *
    * @return true if this invariant is currently active
@@ -2064,7 +2062,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}.
    *
    * @param format a format string
-   * @param args the argumnts to the format string
+   * @param args the arguments to the format string
    * @return true if it logged anything
    */
   @FormatMethod

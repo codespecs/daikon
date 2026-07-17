@@ -95,15 +95,15 @@ public final class DCRuntime implements ComparabilityProvider {
 
   /**
    * Object used to mark procedure entries in the tag stack. It is pushed on the stack at entry and
-   * checked on exit to make sure it is in on the top of the stack. That allows us to determine
-   * which method caused a tag stack problem.
+   * checked on exit to make sure it is on the top of the stack. That allows us to determine which
+   * method caused a tag stack problem.
    */
   public static Object method_marker = new Object();
 
   /** Control debug printing. */
   public static boolean debug = false;
 
-  /** Log comparability tage stack operations. */
+  /** Log comparability tag stack operations. */
   public static boolean debug_tag_frame = false;
 
   /** Log object compare operations. */
@@ -121,13 +121,13 @@ public final class DCRuntime implements ComparabilityProvider {
   /** Log comparability merges. */
   public static SimpleLog debug_merge_comp = new SimpleLog(false);
 
-  /** Log excution time. */
+  /** Log execution time. */
   public static SimpleLog debug_timing = new SimpleLog(false);
 
   /** Log decl output. */
   public static SimpleLog debug_decl_print = new SimpleLog(false);
 
-  /** Log excution time. */
+  /** Log execution time. */
   public static SimpleLog time_decl = new SimpleLog(false);
 
   /** Log internal data structure sizes. */
@@ -448,7 +448,7 @@ public final class DCRuntime implements ComparabilityProvider {
             System.out.println("NoSuchMethod " + target_class.getName());
           }
 
-          // Should never reach top of class heirarchy without finding a clone() method.
+          // Should never reach top of class hierarchy without finding a clone() method.
           assert !target_class.getName().equals("java.lang.Object");
 
           // We didn't find a clone method, get next higher super and try again.
@@ -522,7 +522,7 @@ public final class DCRuntime implements ComparabilityProvider {
             System.out.println("NoSuchMethod " + target_class.getName());
           }
 
-          // Should never reach top of class heirarchy without finding a clone() method.
+          // Should never reach top of class hierarchy without finding a clone() method.
           assert !target_class.getName().equals("java.lang.Object");
 
           // We didn't find a clone method, get next higher super and try again.
@@ -1023,7 +1023,7 @@ public final class DCRuntime implements ComparabilityProvider {
       debug_primitive.log("array store %s[%d] = %s%n", obj_str(arr_ref), index, obj_tags[index]);
     }
 
-    // Mark the arry and its index as comparable
+    // Mark the array and its index as comparable
     assert td.tag_stack.peek() != method_marker;
     Object index_tag = td.tag_stack.pop();
     if (debug_arr_index.enabled()) {
@@ -1061,7 +1061,7 @@ public final class DCRuntime implements ComparabilityProvider {
    * verification in Java 7 we can no longer use the same runtime routine for both data types.
    * Hence, the addition of zastore below for boolean.
    *
-   * <p>Execute an bastore instruction and manipulate the tags accordingly. The tag at the top of
+   * <p>Execute a bastore instruction and manipulate the tags accordingly. The tag at the top of
    * stack is stored into the tag storage for the array.
    */
   public static void bastore(byte[] arr, int index, byte val) {
@@ -1085,7 +1085,7 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * Execute an castore instruction and manipulate the tags accordingly. The tag at the top of stack
+   * Execute a castore instruction and manipulate the tags accordingly. The tag at the top of stack
    * is stored into the tag storage for the array.
    */
   public static void castore(char[] arr, int index, char val) {
@@ -1099,7 +1099,7 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * Execute an dastore instruction and manipulate the tags accordingly. The tag at the top of stack
+   * Execute a dastore instruction and manipulate the tags accordingly. The tag at the top of stack
    * is stored into the tag storage for the array.
    */
   public static void dastore(double[] arr, int index, double val) {
@@ -1113,7 +1113,7 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * Execute an fastore instruction and manipulate the tags accordingly. The tag at the top of stack
+   * Execute a fastore instruction and manipulate the tags accordingly. The tag at the top of stack
    * is stored into the tag storage for the array.
    */
   public static void fastore(float[] arr, int index, float val) {
@@ -1141,7 +1141,7 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * Execute an lastore instruction and manipulate the tags accordingly. The tag at the top of stack
+   * Execute a lastore instruction and manipulate the tags accordingly. The tag at the top of stack
    * is stored into the tag storage for the array.
    */
   public static void lastore(long[] arr, int index, long val) {
@@ -1155,7 +1155,7 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * Execute an sastore instruction and manipulate the tags accordingly. The tag at the top of stack
+   * Execute a sastore instruction and manipulate the tags accordingly. The tag at the top of stack
    * is stored into the tag storage for the array.
    */
   public static void sastore(short[] arr, int index, short val) {
@@ -1323,7 +1323,7 @@ public final class DCRuntime implements ComparabilityProvider {
     merge_dv.log("this: %s%n", obj_str(obj));
 
     // For some reason the following line causes DynComp to behave incorrectly.
-    // I have not take the time to investigate.
+    // I have not taken the time to investigate.
     // merge_dv.log("arguments: %s%n", Arrays.toString(args));
 
     // Map from an Object to the Daikon variable that currently holds
@@ -1841,12 +1841,12 @@ public final class DCRuntime implements ComparabilityProvider {
   // static Stopwatch watch = new Stopwatch();
 
   /**
-   * Prints a decl ENTER/EXIT records with comparability. Returns the list of comparabile DVSets for
+   * Prints a decl ENTER/EXIT records with comparability. Returns the list of comparable DVSets for
    * the exit.
    *
    * @param pw where to produce output
    * @param mi the class to output
-   * @return the list of comparabile DVSets for the exit
+   * @return the list of comparable DVSets for the exit
    */
   public static List<DVSet> printMethod(PrintWriter pw, MethodInfo mi) {
 
@@ -2028,7 +2028,7 @@ public final class DCRuntime implements ComparabilityProvider {
     String comp_str = Integer.toString(comp);
     if (dv.isArray()) {
       String name = dv.getName();
-      // If we an array of CLASSNAME or TO_STRING get the index
+      // If we have an array of CLASSNAME or TO_STRING get the index
       // comparability from the base array.
       if (name.endsWith(DaikonVariableInfo.class_suffix)) {
         name = name.substring(0, name.length() - DaikonVariableInfo.class_suffix.length());
@@ -2134,8 +2134,8 @@ public final class DCRuntime implements ComparabilityProvider {
 
   /**
    * Prints to [stream] the segment of the tree that starts at [node], interpreting [node] as
-   * [depth] steps from the root. Requires a Map [tree] that represents a tree though key-value sets
-   * of the form {@code <}parent, set of children{@code >}.
+   * [depth] steps from the root. Requires a Map [tree] that represents a tree through key-value
+   * sets of the form {@code <}parent, set of children{@code >}.
    *
    * @param pw where to write output
    * @param tree map parents to children
@@ -2214,9 +2214,10 @@ public final class DCRuntime implements ComparabilityProvider {
       return dv.toString();
     }
     String dvtxt = dv.toString();
-    String type = dvtxt.split(":")[0];
+    String[] dvparts = dvtxt.split(":");
+    String type = dvparts[0];
     type = type.substring(type.lastIndexOf('.') + 1);
-    String name = dvtxt.split(":")[1];
+    String name = dvparts[1];
     if (type.equals("ThisObjInfo")) {
       dvtxt = "this";
     } else if (type.equals("ReturnInfo")) {
@@ -2248,7 +2249,7 @@ public final class DCRuntime implements ComparabilityProvider {
     }
 
     /**
-     * Creates a DVSet with that contains the given variables.
+     * Creates a DVSet that contains the given variables.
      *
      * @param variables the variables
      */
@@ -2903,7 +2904,7 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
-   * Handles the aaload instruction. The arry and its index are made comparable. The tag for the
+   * Handles the aaload instruction. The array and its index are made comparable. The tag for the
    * index is removed from the tag stack.
    *
    * @param arr_ref array reference

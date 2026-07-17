@@ -229,10 +229,10 @@ while (<>) {
             if ($cur_state eq NORMAL) {
                 print "} ";
             } elsif ($cur_state eq SKIPPING_TO_BRACE) {
-                if ($#state_stack < 0) { die "Missmatched \'{}\', stopped"; }
+                if ($#state_stack < 0) { die "Mismatched \'{}\', stopped"; }
                 $cur_state = pop @state_stack;
             } elsif ($cur_state eq PRINTING_TO_BRACE) {
-                if ($#state_stack < 0) { die "Missmatched \'{}\', stopped"; }
+                if ($#state_stack < 0) { die "Mismatched \'{}\', stopped"; }
                 $cur_state = pop @state_stack;
             }
         } elsif ($tokens[$index] =~ /^@/) {

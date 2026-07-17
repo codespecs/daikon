@@ -521,7 +521,7 @@ public final class FileIO {
     return pr;
   }
 
-  /** Parses a program point flag record. Adds any specified flags to to flags. */
+  /** Parses a program point flag record. Adds any specified flags to flags. */
   private static void parse_ppt_flags(ParseState state, Scanner scanner, EnumSet<PptFlags> flags) {
 
     flags.add(parse_enum_val(state, scanner, PptFlags.class, "ppt flags"));
@@ -1016,6 +1016,9 @@ public final class FileIO {
    * Reads data from {@code .dtrace} files. For each record in the files, calls the appropriate
    * callback in the processor.
    *
+   * @param files the list of {@code .dtrace} files to read. If {@link Daikon#server_dir} is
+   *     non-null, this list may be appended to.
+   * @param all_ppts the set of all program points; may be increased by this method
    * @see #read_data_trace_files(Collection,PptMap,Processor,boolean)
    * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
    */
@@ -1030,6 +1033,10 @@ public final class FileIO {
    * Reads data from {@code .dtrace} files. Calls {@link
    * #read_data_trace_file(String,PptMap,Processor,boolean,boolean)} for each element of filenames.
    *
+   * @param files the list of {@code .dtrace} files to read. If {@link Daikon#server_dir} is
+   *     non-null, this list may be appended to.
+   * @param all_ppts the set of all program points; may be increased by this method
+   * @param processor the function that processes dtrace entries
    * @param ppts_may_be_new true if declarations of ppts read from the data trace file are new (and
    *     thus are not in all_ppts). false if the ppts may already be there.
    * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
@@ -1042,7 +1049,7 @@ public final class FileIO {
       // System.out.printf("processing filename %s%n", filename);
       try {
         read_data_trace_file(filename, all_ppts, processor, false, ppts_may_be_new);
-      } catch (Daikon.NormalTermination e) {
+      } catch (Daikon.NormalTermination | Daikon.UserError e) {
         throw e;
       } catch (Throwable e) {
         if (dkconfig_continue_after_file_exception) {
@@ -1885,7 +1892,7 @@ public final class FileIO {
       // Rather than defining leaves as :::EXIT54 (numbered exit)
       // program points define them as everything except
       // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT, ::GLOBAL
-      //  and :::CLASS program points.  This scheme ensures that arbitrarly
+      //  and :::CLASS program points.  This scheme ensures that arbitrarily
       //  named program points such as :::POINT (used by convertcsv.pl)
       //  will be treated as leaves.
 
@@ -2121,6 +2128,17 @@ public final class FileIO {
       if (line == null) {
         throw new Daikon.UserError(
             "Unexpected end of file at "
+                + data_trace_state.filename
+                + " line "
+                + reader.getLineNumber()
+                + lineSep
+                + "  Expected to find variable name"
+                + " for program point "
+                + ppt.name());
+      }
+      if (line.isEmpty()) {
+        throw new Daikon.UserError(
+            "Unexpected end of dtrace record at "
                 + data_trace_state.filename
                 + " line "
                 + reader.getLineNumber()
@@ -2497,7 +2515,7 @@ public final class FileIO {
   }
 
   /**
-   * Read either a serialized PptMap or a InvMap and return a PptMap. If an InvMap is specified, it
+   * Read either a serialized PptMap or an InvMap and return a PptMap. If an InvMap is specified, it
    * is converted to a PptMap.
    *
    * @param file the input file
@@ -2656,9 +2674,8 @@ public final class FileIO {
           post_esc = this_esc + 2;
           break;
         case '\\':
-          // This is not in the default case because the search would find
-          // the quoted backslash.  Here we incluce the first backslash in
-          // the output, but not the first.
+          // This is not in the default case because the search would find the quoted backslash.
+          // This code puts just one of the two backslashes in the output.
           sb.append(orig.substring(post_esc, this_esc + 1));
           post_esc = this_esc + 2;
           break;
@@ -2950,7 +2967,7 @@ public final class FileIO {
       // System.out.printf("flags for %s are %s%n", name, flags);
     }
 
-    /** Parse the langauge specific flags record. Multiple flags can be specified. */
+    /** Parse the language-specific flags record. Multiple flags can be specified. */
     public void parse_lang_flags(Scanner scanner) {
 
       lang_flags.add(parse_enum_val(scanner, LangFlags.class, "Language Specific Flag"));
@@ -3060,7 +3077,7 @@ public final class FileIO {
 
     /**
      * Looks up the next token as a member of enum_class. Throws Daikon.UserError if there is no
-     * token or if it is not valid member of the class. Enums are presumed to be in in upper case.
+     * token or if it is not a valid member of the class. Enums are presumed to be in upper case.
      */
     public <E extends Enum<E>> E parse_enum_val(
         Scanner scanner, Class<E> enum_class, String descr) {
@@ -3088,7 +3105,7 @@ public final class FileIO {
 
   /**
    * Looks up the next token as a member of enum_class. Throws Daikon.UserError if there is no token
-   * or if it is not valid member of the class. Enums are presumed to be in in upper case.
+   * or if it is not a valid member of the class. Enums are presumed to be in upper case.
    */
   public static <E extends Enum<E>> E parse_enum_val(
       ParseState state, Scanner scanner, Class<E> enum_class, String descr) {

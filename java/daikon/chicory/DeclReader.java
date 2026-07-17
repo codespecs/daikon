@@ -1,6 +1,9 @@
 package daikon.chicory;
 
 import daikon.plumelib.util.EntryReader;
+import daikon.plumelib.util.EntryReader.CommentFormat;
+import daikon.plumelib.util.EntryReader.EntryFormat;
+import daikon.plumelib.util.FilesPlume;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -210,7 +213,13 @@ public class DeclReader {
 
     // have caller deal with FileNotFound
 
-    try (EntryReader decl_file = new EntryReader(pathname, false, "^(//|#).*", null)) {
+    try (EntryReader decl_file =
+        new EntryReader(
+            FilesPlume.newFileReader(pathname),
+            pathname.toString(),
+            EntryFormat.DEFAULT,
+            new CommentFormat("^(//|#).*"),
+            null)) {
       for (String line = decl_file.readLine(); line != null; line = decl_file.readLine()) {
         // Skip all input until we find a ppt.
         if (!line.startsWith("ppt ")) {

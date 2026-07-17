@@ -15,7 +15,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
+import org.checkerframework.checker.mustcall.qual.InheritableMustCall;
+import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -29,7 +33,8 @@ import org.checkerframework.dataflow.qual.Pure;
  * instrumented as they are loaded). This class parses the command line arguments, starts java with
  * the javaagent switch on the target program and if requested starts Daikon on the result.
  */
-public class Chicory {
+@InheritableMustCall("close")
+public class Chicory implements AutoCloseable {
 
   /** Display usage information. */
   @Option("-h Display usage information")
@@ -181,7 +186,7 @@ public class Chicory {
 
   /** daikon process for {@code --daikon} command-line option. */
   // non-null if either daikon==true or daikon_online==true
-  public static @MonotonicNonNull Process daikon_proc;
+  public static @Owning @MonotonicNonNull Process daikon_proc;
 
   private static final String traceLimTermString = "DTRACELIMITTERMINATE";
   private static final String traceLimString = "DTRACELIMIT";
@@ -220,8 +225,9 @@ public class Chicory {
     // Start the target.  Pass the same options to the premain as
     // were passed here.
 
-    Chicory chicory = new Chicory();
-    chicory.start_target(options.getOptionsString(), target_args);
+    try (Chicory chicory = new Chicory()) {
+      chicory.start_target(options.getOptionsString(), target_args);
+    }
   }
 
   /**
@@ -307,9 +313,10 @@ public class Chicory {
               + RegexUtil.regexError(File.pathSeparator));
     }
 
+    String[] cpath = cp.split(File.pathSeparator);
+
     // Look for ChicoryPremain.jar along the classpath
     if (premain == null) {
-      String[] cpath = cp.split(File.pathSeparator);
       for (String path : cpath) {
         File poss_premain = new File(path, "ChicoryPremain.jar");
         if (poss_premain.canRead()) {
@@ -332,7 +339,7 @@ public class Chicory {
 
     // If not found, try the daikon.jar file itself
     if (premain == null) {
-      for (String path : cp.split(File.pathSeparator)) {
+      for (String path : cpath) {
         File poss_premain = new File(path);
         if (poss_premain.getName().equals("daikon.jar")) {
           if (poss_premain.canRead()) {
@@ -450,22 +457,25 @@ public class Chicory {
       cmdlist.add(target_arg);
     }
     if (verbose) {
-      System.out.printf("%nExecuting target program: %s%n", args_to_string(cmdlist));
+      System.out.printf("%nExecuting target program: %s%n", argsToString(cmdlist));
     }
     String[] cmdline = cmdlist.toArray(new String[0]);
 
-    // Execute the command, sending all output to our streams
-    java.lang.Runtime rt = java.lang.Runtime.getRuntime();
-    Process chicory_proc;
+    // Execute the command, sending all output to our streams.
+    int targetResult;
     try {
-      chicory_proc = rt.exec(cmdline);
+      // In Java 26, `Process` implements `AutoCloseable`, so use try-with-resources.
+      @SuppressWarnings({
+        "resourceleak:required.method.not.called",
+        "resourceleak:unneeded.suppression"
+      })
+      Process chicory_proc = java.lang.Runtime.getRuntime().exec(cmdline);
+      targetResult = redirect_wait(chicory_proc);
     } catch (Exception e) {
-      System.out.printf("Exception '%s' while executing '%s'%n", e, cmdline);
+      System.out.printf("Exception '%s' while executing '%s'%n", e, Arrays.toString(cmdline));
       System.exit(1);
       throw new Error("Unreachable control flow");
     }
-
-    int targetResult = redirect_wait(chicory_proc);
 
     if (daikon) {
       // Terminate if target didn't end properly
@@ -526,8 +536,6 @@ public class Chicory {
   @EnsuresNonNull("daikon_proc")
   public void runDaikon() {
 
-    java.lang.Runtime rt = java.lang.Runtime.getRuntime();
-
     // Get the current classpath
     String cp = System.getProperty("java.class.path");
     if (cp == null) {
@@ -559,7 +567,7 @@ public class Chicory {
     }
 
     try {
-      daikon_proc = rt.exec(cmd.toArray(new String[0]));
+      daikon_proc = java.lang.Runtime.getRuntime().exec(cmd.toArray(new String[0]));
     } catch (Exception e) {
       System.out.printf("Exception '%s' while executing '%s'%n", e, cmd);
       System.exit(1);
@@ -636,15 +644,37 @@ public class Chicory {
     return System.currentTimeMillis() - start;
   }
 
-  /** Convert a list of arguments into a command-line string. Only used for debugging output. */
-  public String args_to_string(List<String> args) {
-    String str = "";
+  /**
+   * Convert a list of arguments into a command-line string. Only used for debugging output.
+   *
+   * @param args the list of arguments
+   * @return argument string
+   */
+  public static String argsToString(List<String> args) {
+    StringJoiner result = new StringJoiner(" ");
     for (String arg : args) {
       if (arg.indexOf(' ') != -1) {
-        str = "'" + str + "'";
+        if (arg.indexOf('\'') == -1) {
+          arg = "'" + arg + "'";
+        } else if (arg.indexOf('\"') == -1) {
+          arg = "\"" + arg + "\"";
+        } else {
+          throw new Error("Cannot quote: " + arg);
+        }
       }
-      str += arg + " ";
+      result.add(arg);
     }
-    return str.trim();
+    return result.toString();
+  }
+
+  @Override
+  public void close(@GuardSatisfied Chicory this) {
+    // Release the daikon process if it was started.  In the normal control flow, `start_target`
+    // always calls `System.exit`, so this method is only reached on an exceptional exit; destroying
+    // an already-terminated process is harmless.
+    // In Java 26, `Process` implements `AutoCloseable`, so this could be `daikon_proc.close()`.
+    if (daikon_proc != null) {
+      daikon_proc.destroy();
+    }
   }
 }

@@ -4,6 +4,9 @@ package daikon.tools;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -78,7 +81,7 @@ public class TraceSelect {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
    */
@@ -119,7 +122,7 @@ public class TraceSelect {
         daikonArgStart = i + 1;
       }
 
-      // DO_DIFFS will create an spinfo file for generating
+      // DO_DIFFS will create a spinfo file for generating
       // conditional invariants and implications by running
       // daikon.diff.Diff over each of the samples and finding
       // properties that appear in some but not all of the
@@ -133,7 +136,7 @@ public class TraceSelect {
       // or dtrace file will be the first of the Daikon arguments,
       // marking the end of the TraceSelect arguments.  That is
       // not necessarily true, especially in cases when someone
-      // uses a Daikon argument such as "--noheirarchy" or "--format java"
+      // uses a Daikon argument such as "--nohierarchy" or "--format java"
       // and the manual examples place the arguments before any dtrace
       // or decls arguments.
 
@@ -208,7 +211,7 @@ public class TraceSelect {
 
         String filePrefix = calcOut(fileName);
 
-        // gotta do num_reps - 1 because of "off by one"
+        // must do num_reps - 1 because of "off by one"
         // but now add a '-p' in the front so it's all good
         sampleNames[num_reps] = filePrefix + ".inv";
 
@@ -221,9 +224,9 @@ public class TraceSelect {
 
         invokeDaikon(filePrefix);
 
-        // cleanup the mess
+        // Clean up the mess.  A failed cleanup is not fatal.
         if (CLEAN) {
-          Runtime.getRuntime().exec(new String[] {"rm", filePrefix});
+          deleteQuietly(filePrefix);
         }
 
         num_reps--;
@@ -237,15 +240,30 @@ public class TraceSelect {
         daikon.diff.MultiDiff.main(sampleNames);
       }
 
-      // cleanup the mess!
-      for (int j = 0; j < sampleNames.length; j++) {
-        if (CLEAN) {
-          Runtime.getRuntime().exec(new String[] {"rm", sampleNames[j]});
+      // Clean up the mess!  A failed cleanup is not fatal.
+      // Start at index 1: sampleNames[0] is the "-p" sentinel, not a file.
+      if (CLEAN) {
+        for (int j = 1; j < sampleNames.length; j++) {
+          deleteQuietly(sampleNames[j]);
         }
       }
 
     } catch (Exception e) {
       throw new Error(e);
+    }
+  }
+
+  /**
+   * Deletes the file with the given name, if it exists. A failed deletion is not fatal; it produces
+   * a warning on standard output. Tolerates a name that is not a legal file path.
+   *
+   * @param fileName the name of the file to delete
+   */
+  private static void deleteQuietly(String fileName) {
+    try {
+      Files.deleteIfExists(Path.of(fileName));
+    } catch (IOException | InvalidPathException e) {
+      System.out.println("Warning: could not delete " + fileName + ": " + e.getMessage());
     }
   }
 
@@ -278,6 +296,11 @@ public class TraceSelect {
     // Run: java daikon.PrintInvariants dtraceName.inv > dtraceName.txt
     ProcessBuilder pb = new ProcessBuilder("java", "daikon.PrintInvariants", dtraceName + ".inv");
     pb.redirectOutput(new File(dtraceName + ".txt"));
+    // In Java 26, `Process` implements `AutoCloseable`, so use try-with-resources.
+    @SuppressWarnings({
+      "resourceleak:required.method.not.called",
+      "resourceleak:unneeded.suppression"
+    })
     Process p = pb.start();
     try {
       p.waitFor();
@@ -331,7 +354,7 @@ class InvocationComparator implements Comparator<String> {
     int nonce2 = getNonce(s2);
     int type1 = getType(s1);
     int type2 = getType(s2);
-    // This makes sure nounce takes priority, ties are broken
+    // This makes sure nonce takes priority, ties are broken
     // so that ENTER comes before EXIT for the same program point
     return 3 * (nonce1 - nonce2) + (type1 - type2);
   }

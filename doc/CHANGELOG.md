@@ -21,6 +21,20 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
+## Version ??
+
+All Daikon tools now work with Java 26.
+Running under Java 8 is no longer supported.
+
+## Version 5.8.24 (May 6, 2026)
+
+All Daikon tools now work with Java 8-25.
+
+Bug fixes and implementation details:
+
+* Kvasir now supports DWARF-3 in addition to DWARF-2.
+* fixed Daikon issue 618
+
 ## Version 5.8.22 (June 3, 2025)
 
 All Daikon tools now work with Java 8-24.
@@ -1480,7 +1494,7 @@ User-visible changes
   Bug-fixes
 
 * Fixed a problem with clone where the instrumentation incorrectly added a
-    call to a instrumented version of clone where it did not exist.
+    call to an instrumented version of clone where it did not exist.
 
 * Fixed some problems with the instrumentation of equals.
 
@@ -2531,7 +2545,7 @@ a Bugzilla database.
 
 ### General
 
-  Daikon problems are now tracked in the Bugzilla database at at:
+  Daikon problems are now tracked in the Bugzilla database at:
   <http://pag.csail.mit.edu/bugzilla/>.  There are separate products for
   Daikon and Kvasir.  Problems with Chicory and other front ends
   should be submitted against the Daikon product.

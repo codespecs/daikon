@@ -30,7 +30,7 @@ public class Property implements Serializable {
     return methodSignature;
   }
 
-  // The kind of proerty (enter, exit or objectInvariant).
+  // The kind of property (enter, exit or objectInvariant).
   private final Kind kind;
 
   /** The kind of property (enter, exit or objectInvariant). */
@@ -82,7 +82,7 @@ public class Property implements Serializable {
   }
 
   /**
-   * A class representing the kind of an property. An invariant is either {@code Kind.enter}, {@code
+   * A class representing the kind of a property. An invariant is either {@code Kind.enter}, {@code
    * Kind.exit}, or {@code Kind.objectInvariant}.
    */
   // This should be an enum.
@@ -168,7 +168,7 @@ public class Property implements Serializable {
 
   /**
    * Parse a String and return the property that it represents. An example of the String
-   * representation of an property is:
+   * representation of a property is:
    *
    * <pre>{@code
    * <INVINFO>
@@ -228,8 +228,8 @@ public class Property implements Serializable {
   }
 
   /**
-   * XML representation. May be diferent from the String used to parse the property; only those tags
-   * that were parsed by the get() method will be output here.
+   * XML representation. May be different from the String used to parse the property; only those
+   * tags that were parsed by the get() method will be output here.
    */
   public String xmlString() {
     return "<INVINFO> "
@@ -360,7 +360,7 @@ public class Property implements Serializable {
 
   /**
    * A heuristic technique that takes into account several factors when calculating the confidence
-   * of an property, among them:
+   * of a property, among them:
    *
    * <ul>
    *   <li>The values of {@code property.kind()}.
@@ -535,7 +535,7 @@ public class Property implements Serializable {
   }
 
   // [[ TODO: first, you need to check that immutability and
-  // uniqueness even hold. Then, you need to figoure out a better
+  // uniqueness even hold. Then, you need to figure out a better
   // way to do the stuff below (it seems to me like jmlRep,
   // daikonClass and confidence should be given to the constructor
   // of the object). ]]

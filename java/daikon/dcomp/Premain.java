@@ -243,7 +243,7 @@ public class Premain {
     inst.addTransformer(transformer, true);
 
     // See the "General Java Runtime instrumentation strategy" comments in DCInstrument.java
-    // for an explaination of how we deal with instrumenting the JDK 11 runtime.
+    // for an explanation of how we deal with instrumenting the JDK 11 runtime.
     //
     // At this point in DynComp start up, we use java.lang.instrument.redefineClasses to replace the
     // dummy java.lang.DCRuntime with a version where each method calls the corresponding method in

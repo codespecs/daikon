@@ -76,7 +76,7 @@ public final class MergeInvariants {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    *
    * @param args the command-line arguments
    * @throws FileNotFoundException if a file cannot be found
@@ -181,14 +181,15 @@ public final class MergeInvariants {
       if (!file.exists()) {
         throw new Daikon.UserError("File " + file + " not found.");
       }
-      if (file.toString().indexOf(".inv") != -1) {
+      String fileString = file.toString();
+      if (fileString.indexOf(".inv") != -1) {
         inv_files.add(file);
-      } else if (file.toString().indexOf(".decls") != -1) {
+      } else if (fileString.indexOf(".decls") != -1) {
         if (decl_file != null) {
           throw new Daikon.UserError("Only one decl file may be specified");
         }
         decl_file = file;
-      } else if (file.toString().indexOf(".spinfo") != -1) {
+      } else if (fileString.indexOf(".spinfo") != -1) {
         splitter_files.add(file);
       } else {
         throw new Daikon.UserError("Unrecognized file type: " + file);
@@ -433,7 +434,7 @@ public final class MergeInvariants {
   }
 
   /**
-   * Ses up the specified relation beteween each of the conditionals in ppt and the matching
+   * Sets up the specified relation between each of the conditionals in ppt and the matching
    * conditionals in child. Each must have the same number of splitters setup in the same order. The
    * splitter match can't be checked because splitters can't be read back in.
    */

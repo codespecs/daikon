@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringJoiner;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
@@ -250,14 +251,11 @@ public class MethodInfo {
     if (class_info != null) {
       out = class_info.class_name + ".";
     }
-    out += method_name + "(";
+    StringJoiner args = new StringJoiner(", ", "(", ")");
     for (int ii = 0; ii < arg_names.length; ii++) {
-      if (ii > 0) {
-        out += ", ";
-      }
-      out += arg_type_strings[ii] + " " + arg_names[ii];
+      args.add(arg_type_strings[ii] + " " + arg_names[ii]);
     }
-    return (out + ")");
+    return out + method_name + args;
   }
 
   public boolean isPure() {

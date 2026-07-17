@@ -6,7 +6,7 @@ package daikon.derive;
  * Derivation[] using instantiate(). DerivationFactory chooses how many (if any) Derivations to
  * instantiate (so calling classes don't have to decide).
  *
- * <p>This class contains no methods because UnaryDervationFactory and BinaryDerivationFactory have
+ * <p>This class contains no methods because UnaryDerivationFactory and BinaryDerivationFactory have
  * instantiate() methods that take a different number of arguments.
  */
 public interface DerivationFactory {}

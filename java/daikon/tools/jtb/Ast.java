@@ -63,7 +63,7 @@ public class Ast {
   }
 
   // Reads an AST from the input stream, applies the visitor to the AST,
-  // completely reformats the Ast (losing previous formating), and writes
+  // completely reformats the Ast (losing previous formatting), and writes
   // the resulting AST to the output stream.
   public static void applyVisitorReformat(Reader input, Writer output, Visitor visitor) {
     JavaParser parser = new JavaParser(input);
@@ -650,7 +650,7 @@ public class Ast {
     }
     // After the traversal, the "nextNodeToken" slot contains the token
     // visited immediately after "predecessor".  ("predecessor" should be a
-    // descendant of the token from whcih traversal starts.)
+    // descendant of the token from which traversal starts.)
     class NextNodeTokenVisitor extends DepthFirstVisitor {
       private boolean seenPredecessor = false;
       NodeToken nextNodeToken;

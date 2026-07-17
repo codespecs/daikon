@@ -166,7 +166,7 @@ basicTypesStruct readBasicTypesStruct(basicTypesStruct a, basicTypesStruct b, in
 }
 */
 
-basicTypesStruct readStruct(basicTypesStruct a)
+void readStruct(basicTypesStruct a)
 {
 
 }

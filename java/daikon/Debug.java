@@ -4,6 +4,7 @@ import daikon.inv.Invariant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
@@ -825,7 +826,7 @@ public final class Debug {
    * <pre>{@code class|class|...<var,var,var>@ppt}</pre>
    *
    * As shown, multiple class arguments can be specified separated by pipe symbols (|). The
-   * variables are specified in angle brackets ({@code <>}) and the program point is preceeded by an
+   * variables are specified in angle brackets ({@code <>}) and the program point is preceded by an
    * at sign (@). Each is optional and can be left out. The add_track routine can be called multiple
    * times. An invariant that matches any of the specifications will be tracked.
    */
@@ -883,9 +884,9 @@ public final class Debug {
     System.out.println();
     debugTrack.fine("After --track: " + def);
     debugTrack.fine("Track Classes: " + ArraysPlume.toString(debugTrackClass, false));
-    String vars_out = "";
-    for (int ii = 0; ii < debugTrackVars.length; ii++) {
-      vars_out += Arrays.toString(debugTrackVars[ii]) + " ";
+    StringJoiner vars_out = new StringJoiner(" ");
+    for (String[] cv : debugTrackVars) {
+      vars_out.add(Arrays.toString(cv));
     }
     debugTrack.fine("Track Vars: " + vars_out);
     debugTrack.fine("Track Ppts: " + ArraysPlume.toString(debugTrackPpt, false));

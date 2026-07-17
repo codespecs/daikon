@@ -478,12 +478,6 @@ a.int_val
 a.short_val
 a.uchar_val
 a.ushort_val
-return
-return.char_val
-return.int_val
-return.short_val
-return.uchar_val
-return.ushort_val
 
 ..returnWeekday():::ENTER
 ::cpg

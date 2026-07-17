@@ -11,18 +11,16 @@ pr:
     include:
       - '*'
 
-# variables:
-# - name: testingSuffix
-#   value: -testing
 variables:
   - name: testingSuffix
     value:
+#    value: -testing
 
 jobs:
 
   # The dependsOn clauses (in this file and in .circleci/config.yml) are:
   #  * Everything not *_ubuntu_jdk[]canary_version or typecheck_*_jdk[]canary_version depends on canary_jobs.
-  #  * Anything *_jdk8 or *_jdk11 or *_jdk17 or *_jdk21 depends on *_jdk25.
+  #  * Anything *_jdk8 or *_jdk11 or *_jdk17 or *_jdk21 or *_jdk26 depends on *_jdk25.
   #  * Anything *_rockylinux_* depends on *_ubuntu_*.
   # The remainder of jobs are run only if the canary_jobs pass.
   - job: canary_jobs

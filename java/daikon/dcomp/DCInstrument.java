@@ -227,6 +227,9 @@ import daikon.plumelib.options.Option;
 import daikon.plumelib.reflection.Signatures;
 import daikon.plumelib.util.ArraysPlume;
 import daikon.plumelib.util.EntryReader;
+import daikon.plumelib.util.EntryReader.CommentFormat;
+import daikon.plumelib.util.EntryReader.EntryFormat;
+import daikon.plumelib.util.FilesPlume;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -244,6 +247,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import org.apache.bcel.classfile.AnnotationEntry;
@@ -534,6 +538,30 @@ public class DCInstrument extends InstructionListUtils {
     "java.lang.StringBuilder",
     "java.lang.AbstractStringBuilder",
   };
+
+  /**
+   * A list of annotations that must be removed from our instrumented copy of the original method.
+   */
+  private static final Set<String> BLACKLISTED_ANNOTATIONS =
+      Set.of(
+          // Intrinsic processing hooks:
+          // We do not want to copy the IntrinsicCandidate annotations from
+          // the original method to our instrumented method as the signature will
+          // not match anything in the JVM's list.  This won't cause an execution
+          // problem but will produce a potentially large number of warnings.
+          "Ljdk/internal/HotSpotIntrinsicCandidate;", // legacy from JDK 9
+          "Ljava/lang/annotation/IntrinsicCandidate;", // legacy from JDK 16
+          "Ljdk/internal/vm/annotation/IntrinsicCandidate;", // new with JDK 26
+
+          // Project Leyden AOT optimization hooks (New in Java 26):
+          // These annotations are part of the changes to improve Java's startup time
+          // and memory footprint through Ahead-of-Time (AOT) caching. These new
+          // annotations will cause a java/lang/ClassFormatError during initialization
+          // of the Java VM if they are not removed from our instrumented methods.
+          // (Technically, these annotations are only a problem when we instrument a
+          // JDK method, but to be thorough we do it for all methods.)
+          "Ljdk/internal/vm/annotation/AOTRuntimeSetup;",
+          "Ljdk/internal/vm/annotation/AOTSafeClassInitializer;");
 
   /**
    * List of Object methods. Since we can't instrument Object, none of these can be instrumented,
@@ -973,16 +1001,12 @@ public class DCInstrument extends InstructionListUtils {
 
         remove_local_variable_type_table(mgen);
 
-        // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
-        // the original method to our instrumented method as the signature will
-        // not match anything in the JVM's list.  This won't cause an execution
-        // problem but will produce a number of warnings.
-        // JDK 11: @HotSpotIntrinsicCandidate
-        // JDK 17: @IntrinsicCandidate
+        // Do not copy any problematic annotations from the original
+        // method to our instrumented method.
         AnnotationEntryGen[] aes = mgen.getAnnotationEntries();
         for (AnnotationEntryGen item : aes) {
           String type = item.getTypeName();
-          if (type.endsWith("IntrinsicCandidate;")) {
+          if (BLACKLISTED_ANNOTATIONS.contains(type)) {
             mgen.removeAnnotationEntry(item);
           }
         }
@@ -1261,16 +1285,12 @@ public class DCInstrument extends InstructionListUtils {
 
         remove_local_variable_type_table(mgen);
 
-        // We do not want to copy the @HotSpotIntrinsicCandidate annotations from
-        // the original method to our instrumented method as the signature will
-        // not match anything in the JVM's list.  This won't cause an execution
-        // problem but will produce a massive number of warnings.
-        // JDK 11: @HotSpotIntrinsicCandidate
-        // JDK 17: @IntrinsicCandidate
+        // Do not copy any problematic annotations from the original
+        // method to our instrumented method.
         AnnotationEntryGen[] aes = mgen.getAnnotationEntries();
         for (AnnotationEntryGen item : aes) {
           String type = item.getTypeName();
-          if (type.endsWith("IntrinsicCandidate;")) {
+          if (BLACKLISTED_ANNOTATIONS.contains(type)) {
             mgen.removeAnnotationEntry(item);
           }
         }
@@ -1360,7 +1380,7 @@ public class DCInstrument extends InstructionListUtils {
     // Because the tagFrameLocal is active for the entire method
     // and its creation will change the state of the locals layout,
     // we need to insert the code to initialize it now so that the
-    // stack anaylsis we are about to do is correct for potential
+    // stack analysis we are about to do is correct for potential
     // code replacements we might make later.
     InstructionHandle orig_start = mgen.getInstructionList().getStart();
     add_create_tag_frame(mgen);
@@ -1381,8 +1401,8 @@ public class DCInstrument extends InstructionListUtils {
     // method was written out.  Hence, it could be used as the
     // index into stack_types.  To support StackMaps we need to
     // update the position field as we modify the code bytes.  So
-    // we need a mapping from InstructionHandle to orignal offset.
-    // I beleive we always visit the InstructionHandle nodes of
+    // we need a mapping from InstructionHandle to original offset.
+    // I believe we always visit the InstructionHandle nodes of
     // the method's InstructionList in order - hence, we will use
     // a simple array for now.  If this turns out to not be the
     // case we will need to use a hash map.
@@ -1584,7 +1604,7 @@ public class DCInstrument extends InstructionListUtils {
     InstructionList nl = create_tag_frame(mgen, tagFrameLocal);
 
     // We add a temporary NOP at the end of the create_tag_frame
-    // code that we will replace with runtime initization code
+    // code that we will replace with runtime initialization code
     // later.  We do this so that any existing stack map at
     // instruction offset 0 is not replaced by the one we are
     // about to add for initializing the tag_frame variable.
@@ -1607,13 +1627,13 @@ public class DCInstrument extends InstructionListUtils {
 
     // Get existing StackMapTable (if present)
     if (stackMapTable.length > 0) {
-      // Each stack map frame specifies (explicity or implicitly) an
+      // Each stack map frame specifies (explicitly or implicitly) an
       // offset_delta that is used to calculate the actual bytecode
-      // offset at which the frame applies.  This is caluclated by
+      // offset at which the frame applies.  This is calculated by
       // by adding offset_delta + 1 to the bytecode offset of the
       // previous frame, unless the previous frame is the initial
       // frame of the method, in which case the bytecode offset is
-      // offset_delta. (From the Java Virual Machine Specification,
+      // offset_delta. (From the Java Virtual Machine Specification,
       // Java SE 7 Edition, section 4.7.4)
 
       // Since we are inserting a new stack map frame at the
@@ -1834,7 +1854,7 @@ public class DCInstrument extends InstructionListUtils {
 
       // Replace the object comparison instructions with a call to
       // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
-      // return a boolean which is used in a ifeq/ifne instruction.
+      // Return a boolean which is used in an ifeq/ifne instruction.
       case IF_ACMPEQ:
         return object_comparison((BranchInstruction) inst, "object_eq", IFNE);
       case IF_ACMPNE:
@@ -2745,7 +2765,7 @@ public class DCInstrument extends InstructionListUtils {
       return false;
     }
 
-    // If using the instrumented JDK, then everthing but object is instrumented.
+    // If using the instrumented JDK, then everything but object is instrumented.
     if (Premain.jdk_instrumented && !classname.equals("java.lang.Object")) {
       return true;
     }
@@ -3286,7 +3306,7 @@ public class DCInstrument extends InstructionListUtils {
 
     // Duplicate the array ref and index and pass them to DCRuntime
     // which will make the index comparable with the array.  In the case
-    // of primtives it will also get the tag for the primitive and push
+    // of primitives it will also get the tag for the primitive and push
     // it on the tag stack.
     il.append(new DUP2());
     String method = "primitive_array_load";
@@ -3349,7 +3369,7 @@ public class DCInstrument extends InstructionListUtils {
   /**
    * Creates code to make the declared length of a new array comparable to its index.
    *
-   * @param inst a anewarray or newarray instruction
+   * @param inst an anewarray or newarray instruction
    * @return instruction list that calls the runtime to handle the newarray instruction
    */
   InstructionList new_array(Instruction inst) {
@@ -4007,17 +4027,14 @@ public class DCInstrument extends InstructionListUtils {
    * @return string describing the top max_items on the operand stack
    */
   static String stack_contents(OperandStack stack, int max_items) {
-    String contents = "";
+    StringJoiner contents = new StringJoiner(", ");
     if (max_items >= stack.size()) {
       max_items = stack.size() - 1;
     }
     for (int ii = max_items; ii >= 0; ii--) {
-      if (contents.length() != 0) {
-        contents += ", ";
-      }
-      contents += stack.peek(ii);
+      contents.add(String.valueOf(stack.peek(ii)));
     }
-    return contents;
+    return contents.toString();
   }
 
   /**
@@ -4239,7 +4256,7 @@ public class DCInstrument extends InstructionListUtils {
 
   /**
    * Creates a set tag method for field f. The tag on the top of the tag stack will be popped off
-   * and placed in the tag storeage corresponding to field
+   * and placed in the tag storage corresponding to field
    *
    * <pre>{@code
    * void <field>_<class>__$set_tag() {
@@ -4557,7 +4574,14 @@ public class DCInstrument extends InstructionListUtils {
    * @see #save_static_field_id(File)
    */
   static void restore_static_field_id(File file) throws IOException {
-    try (EntryReader er = new EntryReader(file, "UTF-8")) {
+    try (EntryReader er =
+        new EntryReader(
+            FilesPlume.newFileInputStream(file),
+            "UTF-8",
+            file.toString(),
+            EntryFormat.DEFAULT,
+            CommentFormat.NONE,
+            null)) {
       for (String line : er) {
         String[] key_val = line.split("  *");
         assert !static_field_id.containsKey(key_val[0]) : key_val[0] + " " + key_val[1];

@@ -475,7 +475,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
 
   #if 0
     // JHP: This code is also removed because these sorts of static checks
-    // can't be reliability performed with equality sets (just because
+    // can't be reliably performed with equality sets (just because
     // the leader is size-1 doesn't imply that each member is size-1
 
     { // Tests involving sequence lengths.
@@ -1133,7 +1133,7 @@ public final class INTEQUAL extends SUPERCLASS IMPLEMENTSCOMPARISON {
         } else if ((sl2 != null) && (sl2.shift == -1)) {
           // "x > size(a)-1"  ("x >= size(a)" would be more informative)
           String discardString =
-              "Invariants of the form x > size(a)-1 are suppressed sinec x >= size(a) is preferred";
+              "Invariants of the form x > size(a)-1 are suppressed since x >= size(a) is preferred";
           return new DiscardInfo(this, DiscardCode.obvious, discardString);
         }
       #endif

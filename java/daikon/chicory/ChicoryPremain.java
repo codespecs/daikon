@@ -309,13 +309,13 @@ public class ChicoryPremain {
    * <ul>
    *   <li>the original 5.2 version
    *   <li>an interim 6.0 version
-   *   <li>the offical 6.0 release version
-   *   <li>the offical 6.1 release version
+   *   <li>the official 6.0 release version
+   *   <li>the official 6.1 release version
    *   <li>the PLSE 6.1 release version (includes LocalVariableGen fix)
-   *   <li>the offical 6.2 release version (includes LocalVariableGen fix)
-   *   <li>the offical 6.3 release version
-   *   <li>the offical 6.3.1 release version
-   *   <li>the offical 6.4.1 release version
+   *   <li>the official 6.2 release version (includes LocalVariableGen fix)
+   *   <li>the official 6.3 release version
+   *   <li>the official 6.3.1 release version
+   *   <li>the official 6.4.1 release version
    *   <li>the PLSE 6.4.1.1 release version (includes JDK 11 support)
    * </ul>
    *
@@ -423,7 +423,7 @@ public class ChicoryPremain {
     private static String extract_jar_path(URL url) {
       assert url.getProtocol().equals("jar") : url.toString();
 
-      // Remove the preceeding 'file:' and trailing '!filename'
+      // Remove the preceding 'file:' and trailing '!filename'
       String path = url.getFile();
       path = path.replaceFirst("^[^:]*:", "");
       path = path.replaceFirst("![^!]*$", "");

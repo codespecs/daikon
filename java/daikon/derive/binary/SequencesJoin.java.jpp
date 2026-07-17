@@ -83,7 +83,7 @@ public final class CLASSNAME extends BinaryDerivation {
     Object val2 = var2().getValue(full_vt);
 
     int length1 = -1;
-    int length2 = -2; // They must equal in the end
+    int length2 = -2; // They must be equal in the end
 
     if (val1 == null) {
       length1 = 0;

@@ -4,6 +4,12 @@ changecom([], [disable comments, that is, expand within them])dnl
 include([defs.m4])dnl
 version: 2.1
 
+parameters:
+  testing-suffix:
+    type: string
+    default: ""
+    # default: "-testing"
+
 jobs:
 
   # Only proceed to other jobs if canary-jobs passes.
@@ -12,7 +18,6 @@ jobs:
       - image: 'cimg/base:2025.09'
     resource_class: small
     environment:
-      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
       TERM: dumb
     steps:
       - run: /bin/true
@@ -34,28 +39,29 @@ workflows:
             - typecheck-bundled-part1-ubuntu-jdk[]canary_version
             - typecheck-bundled-part2-ubuntu-jdk[]canary_version
             - typecheck-bundled-part3-ubuntu-jdk[]canary_version
-job_dependences(ubuntu, 8, quick-txt-diff)
 job_dependences(ubuntu, 11, quick-txt-diff)
 job_dependences(ubuntu, 17, quick-txt-diff)
 job_dependences(ubuntu, 21, quick-txt-diff)
 job_dependences(ubuntu, 25, quick-txt-diff)
-job_dependences(ubuntu, 8, nonquick-txt-diff)
+job_dependences(ubuntu, 26, quick-txt-diff)
 job_dependences(ubuntu, 11, nonquick-txt-diff)
 job_dependences(ubuntu, 17, nonquick-txt-diff)
 job_dependences(ubuntu, 21, nonquick-txt-diff)
 job_dependences(ubuntu, 25, nonquick-txt-diff)
-job_dependences(ubuntu, 8, non-txt-diff)
+job_dependences(ubuntu, 26, nonquick-txt-diff)
 job_dependences(ubuntu, 11, non-txt-diff)
 job_dependences(ubuntu, 17, non-txt-diff)
 job_dependences(ubuntu, 21, non-txt-diff)
 job_dependences(ubuntu, 25, non-txt-diff)
-job_dependences(ubuntu, 8, misc)
+job_dependences(ubuntu, 26, non-txt-diff)
 job_dependences(ubuntu, 11, misc)
 job_dependences(ubuntu, 17, misc)
 job_dependences(ubuntu, 21, misc)
 job_dependences(ubuntu, 25, misc)
-job_dependences(ubuntu, 8, kvasir)
+job_dependences(ubuntu, 26, misc)
+job_dependences(ubuntu, 11, kvasir)
 job_dependences(ubuntu, 25, kvasir)
+job_dependences(ubuntu, 26, kvasir)
       ## The Checker Framework cannot be built under Java 8, 11 or 17.
       ## Thus, there is no typecheck_latest_ubuntu_jdk{8,11,17} job.
       ## The Checker Framework cannot be run under Java 8 or 11.
@@ -75,13 +81,24 @@ job_dependences_part(ubuntu, 25, typecheck-latest, part3)
 job_dependences_part(ubuntu, 25, typecheck-bundled, part1)
 job_dependences_part(ubuntu, 25, typecheck-bundled, part2)
 job_dependences_part(ubuntu, 25, typecheck-bundled, part3)
-job_dependences(rockylinux, 8, quick-txt-diff)
+job_dependences_part(ubuntu, 26, typecheck-latest, part1)
+job_dependences_part(ubuntu, 26, typecheck-latest, part2)
+job_dependences_part(ubuntu, 26, typecheck-latest, part3)
+job_dependences_part(ubuntu, 26, typecheck-bundled, part1)
+job_dependences_part(ubuntu, 26, typecheck-bundled, part2)
+job_dependences_part(ubuntu, 26, typecheck-bundled, part3)
+job_dependences(rockylinux, 11, quick-txt-diff)
 job_dependences(rockylinux, 25, quick-txt-diff)
-job_dependences(rockylinux, 8, nonquick-txt-diff)
+job_dependences(rockylinux, 26, quick-txt-diff)
+job_dependences(rockylinux, 11, nonquick-txt-diff)
 job_dependences(rockylinux, 25, nonquick-txt-diff)
-job_dependences(rockylinux, 8, non-txt-diff)
+job_dependences(rockylinux, 26, nonquick-txt-diff)
+job_dependences(rockylinux, 11, non-txt-diff)
 job_dependences(rockylinux, 25, non-txt-diff)
-job_dependences(rockylinux, 8, misc)
+job_dependences(rockylinux, 26, non-txt-diff)
+job_dependences(rockylinux, 11, misc)
 job_dependences(rockylinux, 25, misc)
-job_dependences(rockylinux, 8, kvasir)
+job_dependences(rockylinux, 26, misc)
+job_dependences(rockylinux, 11, kvasir)
 job_dependences(rockylinux, 25, kvasir)
+job_dependences(rockylinux, 26, kvasir)

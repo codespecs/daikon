@@ -3263,35 +3263,6 @@ ppt ..readStruct():::EXIT0
     enclosing-var a
     rep-type int
     dec-type unsigned\_short
-  variable return
-    var-kind variable
-    rep-type hashcode
-    dec-type _basicTypesStruct
-  variable return.char_val
-    var-kind field char_val
-    enclosing-var return
-    rep-type int
-    dec-type char
-  variable return.int_val
-    var-kind field int_val
-    enclosing-var return
-    rep-type int
-    dec-type int
-  variable return.short_val
-    var-kind field short_val
-    enclosing-var return
-    rep-type int
-    dec-type short
-  variable return.uchar_val
-    var-kind field uchar_val
-    enclosing-var return
-    rep-type int
-    dec-type unsigned\_char
-  variable return.ushort_val
-    var-kind field ushort_val
-    enclosing-var return
-    rep-type int
-    dec-type unsigned\_short
 
 ppt ..returnWeekday():::ENTER
   ppt-type enter
