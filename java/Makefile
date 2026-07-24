@@ -38,8 +38,6 @@ endif
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
 JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)
 JAVA_VERSION_STRING := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2 | sed 's/-ea//')
-# debugging
-$(info JAVA_VERSION_STRING is: ${JAVA_VERSION_STRING})
 ifneq (,$(findstring start1.8,start${JAVA_VERSION_STRING}))
   JAVA8 := 1
   JAVA17 := 0
