@@ -58,7 +58,7 @@ total_vars = 0
 
 total_square_vars_no_comp = 0
 
-for ppt, comp_set_sizes_at_ppt in ppt_info_dict.items():  # noqa: B007 PERF102
+for ppt, comp_set_sizes_at_ppt in ppt_info_dict.items():  # ruff:ignore[unused-loop-control-variable, incorrect-dict-iterator]
     total_vars_at_ppt = sum(comp_set_sizes_at_ppt)
     square_vars_at_ppt = sum((i * i) for i in comp_set_sizes_at_ppt)
 
