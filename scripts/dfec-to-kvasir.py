@@ -47,13 +47,13 @@ with Path(sys.argv[1]).open() as dfec_f:
 with Path(sys.argv[2]).open() as kvasir_f:
     kvasir_all_lines = [line.strip() for line in kvasir_f]
 
-output_lackwit_decls_f = Path(sys.argv[3]).open("w")  # noqa: SIM115
-output_dyn_comp_decls_f = Path(sys.argv[4]).open("w")  # noqa: SIM115
+output_lackwit_decls_f = Path(sys.argv[3]).open("w")  # ruff:ignore[open-file-with-context-handler]
+output_dyn_comp_decls_f = Path(sys.argv[4]).open("w")  # ruff:ignore[open-file-with-context-handler]
 
-output_dec_types_decls_f = Path(sys.argv[5]).open("w")  # noqa: SIM115
-output_no_comp_decls_f = Path(sys.argv[6]).open("w")  # noqa: SIM115
+output_dec_types_decls_f = Path(sys.argv[5]).open("w")  # ruff:ignore[open-file-with-context-handler]
+output_no_comp_decls_f = Path(sys.argv[6]).open("w")  # ruff:ignore[open-file-with-context-handler]
 
-output_vars_f = Path(sys.argv[7]).open("w")  # noqa: SIM115
+output_vars_f = Path(sys.argv[7]).open("w")  # ruff:ignore[open-file-with-context-handler]
 
 
 DfecGlobalRE = re.compile(r"^::")
