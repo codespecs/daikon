@@ -2,10 +2,10 @@
  * @(#)Iterator.java	1.14 00/02/02
  *
  * Copyright 1997-2000 Sun Microsystems, Inc. All Rights Reserved.
- * 
- * This software is the proprietary information of Sun Microsystems, Inc.  
+ *
+ * This software is the proprietary information of Sun Microsystems, Inc.
  * Use is subject to license terms.
- * 
+ *
  */
 
 package javautil;
@@ -46,7 +46,7 @@ public interface Iterator13 {
     Object next();
 
     /**
-     * 
+     *
      * Removes from the underlying collection the last element returned by the
      * iterator (optional operation).  This method can be called only once per
      * call to <tt>next</tt>.  The behavior of an iterator is unspecified if
@@ -55,7 +55,7 @@ public interface Iterator13 {
      *
      * @exception UnsupportedOperationException if the <tt>remove</tt>
      *		  operation is not supported by this Iterator.
-     
+
      * @exception IllegalStateException if the <tt>next</tt> method has not
      *		  yet been called, or the <tt>remove</tt> method has already
      *		  been called after the last call to the <tt>next</tt>

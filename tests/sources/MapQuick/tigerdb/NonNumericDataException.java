@@ -10,9 +10,9 @@ package MapQuick.tigerdb;
  */
 
 public class NonNumericDataException extends BadRecordException {
-    
+
   public NonNumericDataException(String o) {
     super("non-numeric data", o);
   }
-    
+
 } // NonNumericDataException

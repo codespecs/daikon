@@ -11,14 +11,14 @@ import junit.runner.*;
  * A view that shows a stack trace of a failure
  */
 public class DefaultFailureDetailView implements FailureDetailView {
-	JList fList;  
-	
+	JList fList;
+
 	/**
 	 * A ListModel representing the scanned failure stack trace.
 	 */
 	static class StackTraceListModel extends AbstractListModel {
 		private Vector fLines= new Vector(20);
-		
+
 		public Object getElementAt(int index) {
 			return fLines.elementAt(index);
 		}
@@ -26,32 +26,32 @@ public class DefaultFailureDetailView implements FailureDetailView {
 		public int getSize() {
 			return fLines.size();
 		}
-		
+
 		public void setTrace(String trace) {
 			scan(trace);
 			fireContentsChanged(this, 0, fLines.size());
 		}
-		
+
 		public void clear() {
 			fLines.removeAllElements();
 			fireContentsChanged(this, 0, fLines.size());
 		}
-		
+
 		private void scan(String trace) {
 			fLines.removeAllElements();
      		StringTokenizer st= new StringTokenizer(trace, "\n\r", false);
-	    	while (st.hasMoreTokens()) 
+	    	while (st.hasMoreTokens())
  				fLines.add(st.nextToken());
 		}
 	}
-	
+
 	/**
 	 * Renderer for stack entries
 	 */
 	static class StackEntryRenderer extends DefaultListCellRenderer {
-						
+
 		public Component getListCellRendererComponent(
-				JList list, Object value, int modelIndex, 
+				JList list, Object value, int modelIndex,
 				boolean isSelected, boolean cellHasFocus) {
 			String text= ((String)value).replace('\t', ' ');
 		    Component c= super.getListCellRendererComponent(list, text, modelIndex, isSelected, cellHasFocus);
@@ -60,7 +60,7 @@ public class DefaultFailureDetailView implements FailureDetailView {
 			return c;
 		}
 	}
-	
+
 	/**
 	 * Returns the component used to present the trace
 	 */
@@ -74,7 +74,7 @@ public class DefaultFailureDetailView implements FailureDetailView {
 		}
 		return fList;
 	}
-	
+
 	/**
 	 * Shows a TestFailure
 	 */
@@ -87,7 +87,7 @@ public class DefaultFailureDetailView implements FailureDetailView {
 	public void clear() {
 		getModel().clear();
 	}
-	
+
 	private StackTraceListModel getModel() {
 		return 	(StackTraceListModel)fList.getModel();
 	}

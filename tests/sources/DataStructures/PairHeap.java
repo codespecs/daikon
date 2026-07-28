@@ -97,7 +97,7 @@
                     p.prev.leftChild = p.nextSibling;
                 else
                     p.prev.nextSibling = p.nextSibling;
- 
+
                 p.nextSibling = null;
                 root = compareAndLink( root, p );
             }
@@ -173,7 +173,7 @@
             }
             return array;
         }
-       
+
             // The tree array for combineSiblings
         private PairNode [ ] treeArray = new PairNode[ 5 ];
 
@@ -238,7 +238,7 @@
             for( i = 0, j = numItems / 2; i < numItems; i++, j =(j+71)%numItems )
                 p[ j ] = h.insert( new MyInteger( j + numItems ) );
             for( i = 0, j = numItems / 2; i < numItems; i++, j =(j+53)%numItems )
-                h.decreaseKey( p[ j ], new MyInteger( 
+                h.decreaseKey( p[ j ], new MyInteger(
                          ((MyInteger)p[ j ].element).intValue( ) - numItems ) );
             i = -1;
             while( !h.isEmpty( ) )

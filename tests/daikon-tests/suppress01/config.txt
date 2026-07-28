@@ -75,9 +75,9 @@ daikon.inv.binary.twoSequence.PairwiseNumericInt.BitwiseAndZero.enabled = 0
 daikon.inv.binary.twoSequence.PairwiseNumericInt.BitwiseComplement.enabled = 0
 daikon.inv.binary.twoSequence.PairwiseNumericInt.BitwiseSubset.enabled = 0
 daikon.inv.binary.twoSequence.PairwiseNumericInt.Divides.enabled = 0
-daikon.inv.binary.twoSequence.PairwiseNumericInt.ShiftZero.enabled = 0 
+daikon.inv.binary.twoSequence.PairwiseNumericInt.ShiftZero.enabled = 0
 daikon.inv.binary.twoSequence.PairwiseNumericInt.Square.enabled = 0
-daikon.inv.binary.twoSequence.PairwiseNumericInt.ZeroTrack.enabled = 0 
+daikon.inv.binary.twoSequence.PairwiseNumericInt.ZeroTrack.enabled = 0
 
 daikon.inv.binary.twoSequence.PairwiseNumericFloat.Divides.enabled = 0
 daikon.inv.binary.twoSequence.PairwiseNumericFloat.Square.enabled = 0

@@ -261,7 +261,7 @@
          * Places the kth smallest item in a[k-1].
          * @param a an array of Comparable items.
          * @param k the desired rank (1 is minimum) in the entire array.
-         */     
+         */
         public static void quickSelect( Comparable [ ] a, int k )
         {
             quickSelect( a, 0, a.length - 1, k );

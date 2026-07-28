@@ -15,11 +15,11 @@ public class HuffmanTree {
   // Representation invariant
   //    (symbol != null && left == null && right == null) ||
   //    (symbol == null && left != null && right != null)
-  
+
   /**
    * @requires: symbol != null
    * @effects: creates a new HuffmanTree with only one leaf node
-   * containing <code>symbol</code>.  
+   * containing <code>symbol</code>.
    */
   public HuffmanTree(HuffmanSymbol symbol) {
     if (symbol == null) {
@@ -44,7 +44,7 @@ public class HuffmanTree {
 
   /**
    * @return the total frequency of all HuffmanSymbols in this tree
-   * (including all children).  
+   * (including all children).
    */
   public int frequency() {
     if (symbol != null) {
@@ -52,11 +52,11 @@ public class HuffmanTree {
     } else {
       return left.frequency() + right.frequency();
     }
-  }	
+  }
 
   /**
    * @return the symbol which is located at this node or null of this
-   * node is not a leaf of the tree.  
+   * node is not a leaf of the tree.
    */
   public Object symbol() {
     if (symbol == null) {
@@ -68,7 +68,7 @@ public class HuffmanTree {
 
   /**
    * @return the left subtree of this tree.  If no such subtree exists
-   * (it is already a leaf node) returns null.  
+   * (it is already a leaf node) returns null.
    */
   public HuffmanTree left() {
     return left;
@@ -76,7 +76,7 @@ public class HuffmanTree {
 
   /**
    * @return the right subtree of this tree.  If no such subtree exists
-   * (it is already a leaf node) returns null.  
+   * (it is already a leaf node) returns null.
    */
   public HuffmanTree right() {
     return right;

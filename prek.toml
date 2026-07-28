@@ -73,10 +73,10 @@ hooks = [
     "**/*.ps",
     "**/*.ps-*",
     "**/*.svg",
+    "**/expected*",
     "**/tests/squeeze-blank-lines-test/**",
     ".aspell.en.prepl",
     ".aspell.en.pws",
-    "java/jtb/**",
     "bugs/BUGS.to-do",
     "bugs/bug-mew",
     "bugs/jikes-patches/*",
@@ -87,6 +87,8 @@ hooks = [
     "emacs/bug/crypted.UUE",
     "en_US_apostrophe.aff",
     "enscript.st",
+    "java/jtb/**",
+    "tests/kvasir-tests/**",
   ] } },
 ]
 

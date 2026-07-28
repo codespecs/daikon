@@ -1,5 +1,5 @@
 /**
- * A single point of the k-means algorithm. Represented by an id/name and 
+ * A single point of the k-means algorithm. Represented by an id/name and
  * a value for each dimension of the point
  */
 
@@ -58,7 +58,7 @@ Point* Point::copy() {
   for(int j = 0; j < dimensions; j++) {
     q->data[j] = data[j];
   }
-  
+
   q->setClusterNum(clusterNum);
   return q;
 }
@@ -72,7 +72,7 @@ float Point::distanceSquared(Point *p) {
     printf("Error: points don't have the same dimension \n");
     exit(0);
   }
-  
+
   float sumsq = 0;
   float *otherdata = p->getData();
   for (int i = 0; i < dimensions; i++) {

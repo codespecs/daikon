@@ -16,7 +16,7 @@ class DFADTTestCase extends DFAnyTestCase
   {
     testProgADT();
   }
-  
+
   /**
    * Runs the test against getDirections(Address x 2)
    */
@@ -83,7 +83,7 @@ class DFADTTestCase extends DFAnyTestCase
       Iterator result_dirs = result.getDirections();
       assertEquals("getDirections(Address x 2) " + useful_name,
 		   query_dirs, result_dirs);
-      
+
     } catch (InvalidAddressException e) {
       fail("Unexpected exception on " + useful_name + ": " + e.toString());
     } catch (NoPathException e) {

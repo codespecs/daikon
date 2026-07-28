@@ -5,7 +5,7 @@ import java.util.*;
 
 public class RouteIterator implements java.util.Iterator{
   private Enumeration e;
-  
+
   public RouteIterator(Vector v){
     e = v.elements();
   }

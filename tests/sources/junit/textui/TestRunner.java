@@ -12,19 +12,19 @@ import junit.runner.*;
  * java junit.textui.TestRunner [-wait] TestCaseClass
  * </pre>
  * TestRunner expects the name of a TestCase class as argument.
- * If this class defines a static <code>suite</code> method it 
- * will be invoked and the returned test is run. Otherwise all 
+ * If this class defines a static <code>suite</code> method it
+ * will be invoked and the returned test is run. Otherwise all
  * the methods starting with "test" having no arguments are run.
  * <p>
  * When the wait command line argument is given TestRunner
  * waits until the users types RETURN.
  * <p>
  * TestRunner prints a trace as the tests are executed followed by a
- * summary at the end. 
+ * summary at the end.
  */
 public class TestRunner extends BaseTestRunner {
 	private ResultPrinter fPrinter;
-	
+
 	public static final int SUCCESS_EXIT= 0;
 	public static final int FAILURE_EXIT= 1;
 	public static final int EXCEPTION_EXIT= 2;
@@ -42,14 +42,14 @@ public class TestRunner extends BaseTestRunner {
 	public TestRunner(PrintStream writer) {
 		this(new ResultPrinter(writer));
 	}
-	
+
 	/**
 	 * Constructs a TestRunner using the given ResultPrinter all the output
 	 */
 	public TestRunner(ResultPrinter printer) {
 		fPrinter= printer;
 	}
-	
+
 	/**
 	 * Runs a suite extracted from a TestCase subclass.
 	 */
@@ -91,10 +91,10 @@ public class TestRunner extends BaseTestRunner {
 
 	public void testFailed(int status, Test test, Throwable t) {
 	}
-	
+
 	public void testStarted(String testName) {
 	}
-	
+
 	public void testEnded(String testName) {
 	}
 
@@ -104,11 +104,11 @@ public class TestRunner extends BaseTestRunner {
 	protected TestResult createTestResult() {
 		return new TestResult();
 	}
-	
+
 	public TestResult doRun(Test test) {
 		return doRun(test, false);
 	}
-	
+
 	public TestResult doRun(Test suite, boolean wait) {
 		TestResult result= createTestResult();
 		result.addListener(fPrinter);
@@ -131,12 +131,12 @@ public class TestRunner extends BaseTestRunner {
 		catch(Exception e) {
 		}
 	}
-	
+
 	public static void main(String args[]) {
 		TestRunner aTestRunner= new TestRunner();
 		try {
 			TestResult r= aTestRunner.start(args);
-			if (!r.wasSuccessful()) 
+			if (!r.wasSuccessful())
 				System.exit(FAILURE_EXIT);
 			System.exit(SUCCESS_EXIT);
 		} catch(Exception e) {
@@ -152,19 +152,19 @@ public class TestRunner extends BaseTestRunner {
 	protected TestResult start(String args[]) throws Exception {
 		String testCase= "";
 		boolean wait= false;
-		
+
 		for (int i= 0; i < args.length; i++) {
 			if (args[i].equals("-wait"))
 				wait= true;
-			else if (args[i].equals("-c")) 
+			else if (args[i].equals("-c"))
 				testCase= extractClassName(args[++i]);
 			else if (args[i].equals("-v"))
 				System.err.println("JUnit "+Version.id()+" by Kent Beck and Erich Gamma");
 			else
 				testCase= args[i];
 		}
-		
-		if (testCase.equals("")) 
+
+		if (testCase.equals(""))
 			throw new Exception("Usage: TestRunner [-wait] testCaseName, where name is the name of the TestCase class");
 
 		try {
@@ -175,15 +175,15 @@ public class TestRunner extends BaseTestRunner {
 			throw new Exception("Could not create and run test suite: "+e);
 		}
 	}
-		
+
 	protected void runFailed(String message) {
 		System.err.println(message);
 		System.exit(FAILURE_EXIT);
 	}
-	
+
 	public void setPrinter(ResultPrinter printer) {
 		fPrinter= printer;
 	}
-		
-	
+
+
 }
