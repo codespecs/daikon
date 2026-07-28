@@ -175,17 +175,18 @@ hooks = [
   ] } },
 ]
 
-[[repos]]
-repo = "https://github.com/Yelp/detect-secrets"
-rev = "v1.5.0"
-hooks = [
-  { id = "detect-secrets", exclude = { glob = [
-    "**/*.ps",
-    "**/AdjacentTest*",
-    "_layouts/schedule.html",
-    "_posts/2025-05-29-managing-research-data.md",
-  ] } },
-]
+## This is very slow.  (I stopped it after 8 minutes, when running on Daikon.)
+# [[repos]]
+# repo = "https://github.com/Yelp/detect-secrets"
+# rev = "v1.5.0"
+# hooks = [
+#   { id = "detect-secrets", exclude = { glob = [
+#     "**/*.ps",
+#     "**/AdjacentTest*",
+#     "_layouts/schedule.html",
+#     "_posts/2025-05-29-managing-research-data.md",
+#   ] } },
+# ]
 
 ## Shell scripts
 
