@@ -8,11 +8,16 @@ hooks = [
   { id = "check-added-large-files" },
   { id = "check-case-conflict" },
   { id = "check-executables-have-shebangs", exclude = { glob = [
+    "scripts/*.pl",
+    "scripts/trace-untruncate",
     "search",
+    "tests/kvasir-tests/**",
   ] } },
   { id = "check-json" },
   { id = "check-merge-conflict" },
-  { id = "check-shebang-scripts-are-executable" },
+  { id = "check-shebang-scripts-are-executable", exclude = { glob = [
+    "tests/kvasir-tests/povray/source/**",
+  ] } },
   { id = "check-symlinks", exclude = { glob = [
     ".subversion/auth",
     "dots/.subversion/auth",
@@ -56,6 +61,7 @@ hooks = [
   { id = "mixed-line-ending", exclude = { glob = [
     "**/*.ps",
     "**/*.ps-*",
+    "**/*.goal",
   ] } },
   { id = "trailing-whitespace", exclude = { glob = [
     "**/*.diff",
@@ -107,9 +113,11 @@ rev = "1.3.10"
 hooks = [
   { id = "validate-html", exclude = { glob = [
     "**/bytopic-headfoot.html",
-    "google04aaa4eb05fd668b.html",
-    "**/pubs-bytopic-underreview-headfoot.html",
     "**/pubs-bytopic-headfoot.html",
+    "**/pubs-bytopic-underreview-headfoot.html",
+    "google04aaa4eb05fd668b.html",
+    "tests/sources/six170/huffman.html",
+    "tools/hierarchical/clustering.html",
   ] } },
 ]
 
@@ -123,6 +131,7 @@ hooks = [
     "--format={{.FileName}}:{{.LineNumber}}:0: {{.Rule}}: {{.Violation}}\n",
   ], exclude = { glob = [
     "code-style.Makefile",
+    "tests/kvasir-tests/povray/*",
   ] } },
 ]
 
@@ -204,8 +213,15 @@ hooks = [
     "share/print-mail",
     "share/javapp",
     "share/myxapps",
+    "scripts/eps2png-mono-alpha.zsh",
+    "scripts/browser_emacs",
+    "scripts/find-dtrace",
+    "tests/kvasir-tests/tcas/tests.sh",
+    "tests/kvasir-tests/flex-pristine/mkskel.sh",
+    "tests/kvasir-tests/tot_info/tests.sh",
     "cronic-orig",
     "classfile_check_version",
+    "tests/kvasir-tests/povray/**/*",
   ] } },
 ]
 

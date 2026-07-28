@@ -1,3 +1,5 @@
+#!/bin/sh
+
 make -C BinaryTree CHICORY_USER_FLAGS='--std-visibility'  clean rtc
 make -C CursorList CHICORY_USER_FLAGS='--std-visibility'  clean rtc
 make -C LinkedList CHICORY_USER_FLAGS='--std-visibility'  clean rtc

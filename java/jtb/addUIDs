@@ -1,3 +1,4 @@
+#!/bin/sh
 perl add-UID.pl <syntaxtree/AdditiveExpression.java   >temp/AdditiveExpression.java
 perl add-UID.pl <syntaxtree/AllocationExpression.java   >temp/AllocationExpression.java
 perl add-UID.pl <syntaxtree/AndExpression.java   >temp/AndExpression.java
