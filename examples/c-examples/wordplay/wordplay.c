@@ -1122,4 +1122,3 @@ int intmask (char *s)
 
   return (mask);
 }
-

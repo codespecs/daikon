@@ -37,4 +37,3 @@ class Suppress02 extends Object {
   }
 
 }
-

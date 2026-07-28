@@ -16,4 +16,3 @@ public class PS2PrivateTest extends TestSuite
     }
 
 }
-

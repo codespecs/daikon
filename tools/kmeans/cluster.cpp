@@ -107,4 +107,3 @@ void Cluster::print(void) {
     printf("%i\n", points[i]->getId());
   }
 }
-

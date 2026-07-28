@@ -631,4 +631,3 @@ ppt ..InfoTbl():::EXIT0
     var-kind variable
     rep-type double
     dec-type double
-

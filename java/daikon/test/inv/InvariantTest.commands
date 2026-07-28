@@ -298,4 +298,3 @@ add: [ 14 15 -10 ]; [14 -10 15 23 ]; no_change; a[] is a subset of b[]
 add: [ 10 9 -23 ]; [9 10 -23 ]; no_change; a[] is a subset of b[]
 add: [ 11 1 14 ]; [11 1 13 19 ]; falsified; a[] is a subset of b[]
 end
-
