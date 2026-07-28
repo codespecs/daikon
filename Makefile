@@ -812,3 +812,8 @@ git-hooks: .git/hooks/pre-commit .git/hooks/post-merge
 	(cd .git/hooks && ln -s ../../scripts/daikon.pre-commit pre-commit)
 .git/hooks/post-merge: scripts/daikon.post-merge
 	(cd .git/hooks && ln -s ../../scripts/daikon.post-merge post-merge)
+
+
+.PHONY: all test clean
+all: default
+clean: very-clean

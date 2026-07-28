@@ -120,6 +120,7 @@ test_d2:
 
 update-goals:
 
+.PHONY: clean
 clean:
 	/bin/rm -rf *.inv.gz *.diff *.txt
 

@@ -189,3 +189,5 @@ spell-check:
 # 4+ spaces (assumed to be literal code or commands.  Permit some failures.
 	@echo "The following command is allowed to have some failures not in daikon.dict"
 	head -100 CHANGELOG.md | sed 's/^    .*/ /' | hunspell -u -p daikon.dict
+
+.PHONY: all test clean

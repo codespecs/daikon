@@ -47,3 +47,6 @@ ${KMDIR}/kmeans:
 
 checkargs.pm:
 	wget https://raw.githubusercontent.com/plume-lib/html-tools/master/checkargs.pm
+
+.PHONY: test
+test: all
