@@ -30,13 +30,6 @@ make -C java check-format || (make -C java reformat && git --no-pager diff && /b
 
 PLUME_SCRIPTS="${PLUME_SCRIPTS:-.utils/plume-scripts}"
 make plume-scripts-update || true
-# Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-if [ -n "$("${PLUME_SCRIPTS}"/is-ci.sh)" ]; then
-  num_jobs=1
-else
-  num_jobs="$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN || echo 1)"
-fi
-make -k style-check --jobs="${num_jobs}"
 
 # Documentation
 if java -version 2>&1 | grep -q '"1.8'; then

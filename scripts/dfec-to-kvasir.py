@@ -240,7 +240,8 @@ my_state = DeclState.Uninit
 # values are comparability numbers
 dfec_ppt_map: dict[tuple[str, str], dict[str, str]] = {}
 
-cur_var_map: dict[str, str] = {}  # The current variable map, which is a value in dfec_ppt_map.
+# The current variable map, which is a value in dfec_ppt_map.
+cur_var_map: dict[str, str] = {}
 cur_var_name = "DUMMY VAR NAME"
 
 for line in dfec_all_lines:

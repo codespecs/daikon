@@ -4,7 +4,7 @@ dummy1 := $(shell mkdir -p $(dirname ${PLUME_SCRIPTS}))
 dummy2 := $(shell git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS})
 endif
 
-.PHONY: all default clean
+.PHONY: default all test clean
 
 all default: azure-pipelines.yml
 # TODO: all default: azure-pipelines.yml azure-pipelines-daily.yml
@@ -17,3 +17,4 @@ all default: azure-pipelines.yml
 
 clean:
 	rm -f azure-pipelines.yml
+test:
