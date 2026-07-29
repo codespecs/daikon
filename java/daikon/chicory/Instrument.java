@@ -54,29 +54,29 @@ import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
- * This class is responsible for modifying another class's bytecodes. Specifically, its main task is
- * to add calls into the Chicory runtime at method entries and exits for instrumentation purposes.
- * These added calls are sometimes referred to as "hooks".
+ * This class modifies another class's bytecodes. It adds calls into the Chicory runtime at method
+ * entries and exits for instrumentation purposes. These added calls are sometimes referred to as
+ * "hooks".
  *
  * <p>This class is loaded by ChicoryPremain at startup. It is a ClassFileTransformer which means
- * that its {@code transform} method gets called each time the JVM loads a class.
+ * that its {@link #transform} method gets called each time the JVM loads a class.
  */
 public class Instrument extends InstructionListUtils implements ClassFileTransformer {
 
-  /** The location of the runtime support class. */
+  /** The name of the Chicory runtime support class. */
   private static final String runtime_classname = "daikon.chicory.Runtime";
 
-  /** Debug information about which classes and/or methods are transformed and why. */
+  /** A log for debug information about which classes and/or methods are transformed and why. */
   protected static final SimpleLog debug_transform = new SimpleLog(false);
 
-  // Public so can be enabled from daikon.dcomp.Instrument.
-  /** Debug information about ppt-omit and ppt-select. */
+  // Public so daikon.dcomp.Instrument can enable it.
+  /** A log for debug information about ppt-omit and ppt-select. */
   public static final SimpleLog debug_ppt_omit = new SimpleLog(false);
 
   /** Directory for debug output. */
   final File debug_dir;
 
-  /** Directory into which to dump debug-instrumented classes. */
+  /** Directory into which to dump instrumented classes. */
   final File debug_instrumented_dir;
 
   /** Directory into which to dump original classes. */
@@ -91,9 +91,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /** Create an instrumenter. Setup debug directories, if needed. */
   @SuppressWarnings("nullness:initialization")
   public Instrument() {
-    super();
     debug_transform.enabled = Chicory.debug_transform || Chicory.debug || Chicory.verbose;
-    debug_ppt_omit.enabled = debugInstrument.enabled = Chicory.debug;
+    debug_ppt_omit.enabled = Chicory.debug;
+    debugInstrument.enabled = Chicory.debug;
 
     debug_dir = Chicory.debug_dir;
     debug_instrumented_dir = new File(debug_dir, "instrumented");
@@ -108,7 +108,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /**
    * Returns true if the given ppt should be ignored. Uses the patterns in {@link
    * daikon.chicory.Runtime#ppt_omit_pattern} and {@link daikon.chicory.Runtime#ppt_select_pattern}.
-   * This method is used by both Chicory and Dyncomp.
+   * This method is called by both Chicory and DynComp.
    *
    * @param className class name to be checked
    * @param methodName method name to be checked
@@ -118,14 +118,12 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   public static boolean shouldIgnore(
       @BinaryName String className, @Identifier String methodName, String pptName) {
 
+    // Because this comes first, exclusion takes precedence.
     // Don't instrument the class if it matches an excluded regular expression.
     for (Pattern pattern : Runtime.ppt_omit_pattern) {
-
-      Matcher mPpt = pattern.matcher(pptName);
-      Matcher mClass = pattern.matcher(className);
-      Matcher mMethod = pattern.matcher(methodName);
-
-      if (mPpt.find() || mClass.find() || mMethod.find()) {
+      if (pattern.matcher(pptName).find()
+          || pattern.matcher(className).find()
+          || pattern.matcher(methodName).find()) {
         debug_ppt_omit.log("ignoring %s, it matches ppt_omit regex %s%n", pptName, pattern);
         return true;
       }
@@ -134,19 +132,16 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // If any include regular expressions are specified, only instrument
     // classes that match them.
     for (Pattern pattern : Runtime.ppt_select_pattern) {
-
-      Matcher mPpt = pattern.matcher(pptName);
-      Matcher mClass = pattern.matcher(className);
-      Matcher mMethod = pattern.matcher(methodName);
-
-      if (mPpt.find() || mClass.find() || mMethod.find()) {
+      if (pattern.matcher(pptName).find()
+          || pattern.matcher(className).find()
+          || pattern.matcher(methodName).find()) {
         debug_ppt_omit.log("including %s, it matches ppt_select regex %s%n", pptName, pattern);
         return false;
       }
     }
 
-    // If we're here, this ppt is not explicitly included or excluded,
-    // so keep unless there were items in the "include only" list.
+    // If we're here, this ppt is not explicitly included or excluded.
+    // Keep unless there were items in the "include only" list.
     if (!Runtime.ppt_select_pattern.isEmpty()) {
       debug_ppt_omit.log("ignoring %s, not included in ppt_select patterns%n", pptName);
       return true;
@@ -157,19 +152,20 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Don't instrument boot classes. They are uninteresting and will not be able to access
-   * daikon.chicory.Runtime (because it is not on the boot classpath). Previously this code skipped
-   * classes that started with java, com, javax, or sun, but this is not correct in many cases. Most
-   * boot classes have the null loader, but some generated classes (such as those in sun.reflect)
-   * will have a non-null loader. Some of these have a null parent loader, but some do not. The
-   * check for the sun.reflect package is a hack to catch all of these. A more consistent mechanism
-   * to determine boot classes would be preferable.
+   * Don't instrument boot classes. They are not relevant to the user and cannot access
+   * daikon.chicory.Runtime (because it is not on the boot classpath).
+   *
+   * <p>Most boot classes have the null loader, but some generated classes (such as those in
+   * sun.reflect) will have a non-null loader. Some of these have a null parent loader, but some do
+   * not. The check for the sun.reflect package is a hack to catch all of these. A more consistent
+   * mechanism to determine boot classes would be preferable.
    *
    * @param className class name to be checked
    * @param loader the class loader for the class
    * @return true if this is a boot class
    */
   private boolean isBootClass(@BinaryName String className, @Nullable ClassLoader loader) {
+    // Chicory.boot_classes is extra classes specified by the user.
     if (Chicory.boot_classes != null) {
       Matcher matcher = Chicory.boot_classes.matcher(className);
       if (matcher.find()) {
@@ -182,10 +178,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     } else if (loader.getParent() == null) {
       debug_transform.log("Ignoring system class %s, parent loader == null%n", className);
       return true;
-    } else if (className.startsWith("sun.reflect")) {
+    } else if (className.startsWith("sun.reflect.")) {
       debug_transform.log("Ignoring system class %s, in sun.reflect package%n", className);
       return true;
-    } else if (className.startsWith("jdk.internal.reflect")) {
+    } else if (className.startsWith("jdk.internal.reflect.")) {
       // Starting with Java 9 sun.reflect => jdk.internal.reflect.
       debug_transform.log("Ignoring system class %s, in jdk.internal.reflect package", className);
       return true;
@@ -194,7 +190,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Output a .class file and a .bcel version of the class file.
+   * Write a .class file and a .bcel version of the class file.
    *
    * @param c the Java class to output
    * @param directory output location for the files
@@ -211,7 +207,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     } catch (Throwable t) {
       System.err.printf("Error %s writing debug files for: %s%n", t, className);
       t.printStackTrace();
-      // ignore the error, it shouldn't affect the instrumentation
+      // Ignore the error, it shouldn't affect the instrumentation.
     }
   }
 
@@ -231,10 +227,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    // for debugging
+    // For debugging.
     // new Throwable().printStackTrace();
 
-    debug_transform.log("Entering chicory.Instrument.transform(): class = %s%n", className);
+    debug_transform.log("%nEntering chicory.Instrument.transform(): class = %s%n", className);
 
     @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
@@ -256,11 +252,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     ClassLoader cfLoader;
     if (loader == null) {
       cfLoader = ClassLoader.getSystemClassLoader();
-      debug_transform.log("Transforming class %s, loader %s - %s%n", className, loader, cfLoader);
+      debug_transform.log("Transforming class %s, loaders %s, %s%n", className, loader, cfLoader);
     } else {
       cfLoader = loader;
       debug_transform.log(
-          "Transforming class %s, loader %s - %s%n", className, loader, loader.getParent());
+          "Transforming class %s, loaders %s, %s%n", className, loader, loader.getParent());
     }
 
     // Parse the bytes of the classfile, die on any errors.
@@ -271,7 +267,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     } catch (Throwable t) {
       System.err.printf("Error %s while reading %s%n", t, binaryClassName);
       t.printStackTrace();
-      // No changes to the bytecodes
+      // No changes to the bytecodes.
       return null;
     }
 
@@ -279,11 +275,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       outputDebugFiles(c, debug_uninstrumented_dir, binaryClassName);
     }
 
-    // Instrument the classfile, die on any errors
+    // Instrument the classfile, die on any errors.
     ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
     JavaClass njc;
     try {
-      // Get the class information
+      // Get the class information.
       ClassGen cg = new ClassGen(c);
       instrumentClass(cg, classInfo);
       njc = cg.getJavaClass();
@@ -301,7 +297,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       return njc.getBytes();
     } else {
       debug_transform.log("Didn't instrument %s%n", binaryClassName);
-      // No changes to the bytecodes
+      // No changes to the bytecodes.
       return null;
     }
   }
@@ -319,7 +315,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // Modify each non-void method to save its result in a local variable before returning.
     instrument_all_methods(cg, classInfo);
 
-    // Remember any constant static fields.
+    // Store constant static fields in `classInfo`.
+    // This ought to be a method of ClassInfo,
+    // but that wouldn't work with both Instrument.java and Instrument24.java.
     Field[] fields = cg.getFields();
     for (Field field : fields) {
       if (field.isFinal() && field.isStatic() && (field.getType() instanceof BasicType)) {
@@ -348,8 +346,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Adds a call (or calls) to the Chicory Runtime {@code initNotify} method prior to each return in
-   * the given method. Clients pass the class static initializer {@code <clinit>} as the method.
+   * Adds a call to the Chicory Runtime {@code initNotify} method prior to each return in the given
+   * method. Clients pass the class static initializer {@code <clinit>} as the method.
    *
    * @param cg a class
    * @param mgen the method to modify, typically the class static initializer {@code <clinit>}
@@ -365,23 +363,23 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       for (InstructionHandle ih = il.getStart(); ih != null; ) {
         Instruction inst = ih.getInstruction();
 
-        // Get the translation for this instruction (if any)
+        // Get the translation for this instruction (if any).
         InstructionList new_il = xform_clinit(cg, classInfo, inst);
 
-        // Remember the next instruction to process
+        // Remember the next instruction to process.
         InstructionHandle next_ih = ih.getNext();
 
-        // will do nothing if new_il == null
+        // Will do nothing if new_il == null.
         insertBeforeHandle(mgen, ih, new_il, false);
 
-        // Go on to the next instruction in the list
+        // Go on to the next instruction in the list.
         ih = next_ih;
       }
 
       remove_local_variable_type_table(mgen);
       createNewStackMapAttribute(mgen);
 
-      // Update the max stack and Max Locals
+      // Update the max stack and Max Locals.
       mgen.setMaxLocals();
       mgen.setMaxStack();
       mgen.update();
@@ -447,7 +445,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             cg.getConstantPool());
     newMethGen.update();
 
-    // Update the max stack and Max Locals
+    // Update the max stack and Max Locals.
     newMethGen.setMaxLocals();
     newMethGen.setMaxStack();
     newMethGen.update();
@@ -491,28 +489,31 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   private void instrument_all_methods(ClassGen cg, ClassInfo classInfo) {
 
     if (cg.getMajor() < Const.MAJOR_1_6) {
-      System.out.printf(
-          "Chicory warning: ClassFile: %s - classfile version (%d) is out of date and may not be"
-              + " processed correctly.%n",
-          classInfo.class_name, cg.getMajor());
+      String output =
+          String.format(
+              "Chicory warning: ClassFile: %s - classfile version (%d) is out of date and may not"
+                  + " be processed correctly.",
+              classInfo.class_name, cg.getMajor());
+      System.out.printf("%s%n", output);
+      debugInstrument.log("%s%n", output);
     }
 
-    List<MethodInfo> method_infos = new ArrayList<>();
-
+    Method[] methods = cg.getMethods();
+    List<MethodInfo> method_infos = new ArrayList<>(methods.length);
     boolean shouldInclude = false;
 
     try {
       for (Method m : cg.getMethods()) {
 
-        // The class data in StackMapUtils is not thread safe,
-        // allow only one method at a time to be instrumented.
+        // The class data in StackMapUtils is not thread safe.
+        // Allow only one method at a time to be instrumented.
         // DynComp does this by creating a new instrumentation object
         // for each class - probably a cleaner solution.
         synchronized (this) {
           pool = cg.getConstantPool();
           MethodGen mgen = new MethodGen(m, cg.getClassName(), pool);
 
-          // check for the class static initializer method
+          // Check for the class static initializer method.
           if (mgen.getName().equals("<clinit>")) {
             classInfo.hasClinit = true;
             if (Chicory.checkStaticInit) {
@@ -526,12 +527,12 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           }
 
           // If method is synthetic... (default constructors and <clinit> are not synthetic).
-          if ((Const.ACC_SYNTHETIC & mgen.getAccessFlags()) > 0) {
+          if ((ACC_SYNTHETIC & mgen.getAccessFlags()) > 0) {
             // We are not going to instrument this method.
             continue;
           }
 
-          // Get the instruction list and skip methods with no instructions.
+          // Skip methods with no instructions.
           InstructionList il = mgen.getInstructionList();
           if (il == null) {
             // We are not going to instrument this method.
@@ -557,7 +558,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             debugInstrument.log("%n");
           }
 
-          // Get existing StackMapTable (if present)
+          // Get existing StackMapTable (if present).
           setCurrentStackMapTable(mgen, cg.getMajor());
           fixLocalVariableTable(mgen);
 
@@ -590,7 +591,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
             SharedData.methods.add(curMethodInfo);
           }
 
-          // Add nonce local to matchup enter/exits
+          // Add nonce local that matches up enter/exits.
           addInstrumentationAtEntry(il, mgen);
 
           printStackMapTable("After addInstrumentationAtEntry");
@@ -605,43 +606,43 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           Iterator<Boolean> shouldIncludeIter = curMethodInfo.is_included.iterator();
           Iterator<Integer> exitLocationIter = curMethodInfo.exit_locations.iterator();
 
-          // Loop through each instruction looking for the return(s)
+          // Loop through each instruction looking for the return(s).
           for (InstructionHandle ih = il.getStart(); ih != null; ) {
             Instruction inst = ih.getInstruction();
 
-            // If this is a return instruction, insert method exit instrumentation
+            // If this is a return instruction, insert method exit instrumentation.
             InstructionList new_il =
                 generate_return_instrumentation(inst, mgen, shouldIncludeIter, exitLocationIter);
 
-            // Remember the next instruction to process
+            // Remember the next instruction to process.
             InstructionHandle next_ih = ih.getNext();
 
             // If this instruction was modified, replace it with the new
             // instruction list. If this instruction was the target of any
-            // jumps, replace it with the first instruction in the new list
+            // jumps, replace it with the first instruction in the new list.
             insertBeforeHandle(mgen, ih, new_il, true);
 
-            // Go on to the next instruction in the list
+            // Go on to the next instruction in the list.
             ih = next_ih;
           }
 
-          // Update the Uninitialized_variable_info offsets before
-          // we write out the new StackMapTable.
+          // Update the Uninitialized_variable_info offsets before we write out the new
+          // StackMapTable.
           updateUninitializedNewOffsets(il);
 
           createNewStackMapAttribute(mgen);
 
           remove_local_variable_type_table(mgen);
 
-          // Update the instruction list
+          // Update the instruction list.
           mgen.setInstructionList(il);
           mgen.update();
 
-          // Update the max stack
+          // Update the max stack.
           mgen.setMaxStack();
           mgen.update();
 
-          // Update the method in the class
+          // Update the method in the class.
           try {
             cg.replaceMethod(m, mgen.getMethod());
           } catch (Exception e) {
@@ -665,7 +666,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         }
       }
     } catch (Exception e) {
-      System.out.printf("Unexpected exception encountered: %s", e);
+      System.err.printf("Exception encountered: %s", e);
       e.printStackTrace();
     }
 
@@ -719,6 +720,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         return null;
     }
 
+    // There is a single boolean element on shouldIncludeIter for every return in the method. Its
+    // value was calculated by {@link #shouldIgnore} and indicates whether or not that return should
+    // be instrumented. If the value is true the next exitLocationIter element contains the source
+    // line number for the return in question.
+
     if (!shouldIncludeIter.hasNext()) {
       throw new RuntimeException("Not enough entries in shouldIncludeIter");
     }
@@ -749,13 +755,13 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * Returns the local variable used to store the return result. If it is not present, creates it
    * with the specified type. If the variable is known to already exist, the type can be null.
    *
-   * @param mgen describes the given method
+   * @param mgen describes a method
    * @param returnType the type of the return; may be null if the variable is known to already exist
    * @return a local variable to save the return value
    */
   private LocalVariableGen getReturnLocal(MethodGen mgen, @Nullable Type returnType) {
 
-    // Find the local used for the return value
+    // Find the local used for the return value.
     LocalVariableGen returnLocal = null;
     for (LocalVariableGen lv : mgen.getLocalVariables()) {
       if (lv.getName().equals("return__$trace2_val")) {
@@ -786,12 +792,12 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /**
    * Finds the nonce local variable. Returns null if not present.
    *
-   * @param mgen describes the given method
+   * @param mgen describes a method
    * @return a local variable to save the nonce value, or null
    */
   private @Nullable LocalVariableGen get_nonce_local(MethodGen mgen) {
 
-    // Find the local used for the nonce value
+    // Find the local used for the nonce value.
     for (LocalVariableGen lv : mgen.getLocalVariables()) {
       if (lv.getName().equals("this_invocation_nonce")) {
         return lv;
@@ -804,11 +810,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   /**
    * Inserts instrumentation code at the start of the method. This includes adding a local variable
    * (this_invocation_nonce) that is initialized to Runtime.nonce++. This provides a unique id on
-   * each method entry/exit that allows them to be matched up from the dtrace file. Inserts code to
-   * call daikon.chicory.Runtime.enter().
+   * each method entry/exit that allows them to be matched up from the dtrace file. Also inserts
+   * code to call daikon.chicory.Runtime.enter().
    *
-   * @param instructions instruction list for method
-   * @param mgen describes the given method
+   * @param instructions instruction list for the method
+   * @param mgen describes the method
    * @throws IOException if there is trouble with I/O
    */
   @SuppressWarnings({
@@ -823,7 +829,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     InstructionList newCode = new InstructionList();
 
-    // create the nonce local variable
+    // Create the nonce local variable.
     LocalVariableGen nonce_lv = create_method_scope_local(mgen, "this_invocation_nonce", Type.INT);
 
     printStackMapTable("After cln");
@@ -851,7 +857,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     InstructionHandle end = newCode.getEnd();
     int len_part1 = end.getPosition() + end.getInstruction().getLength();
 
-    // call Runtime.enter()
+    // Call Runtime.enter().
     newCode.append(callEnterOrExit(mgen, "enter", -1));
 
     newCode.setPositions();
@@ -878,7 +884,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     boolean skipFirst = false;
 
-    // Modify existing StackMapTable (if present)
+    // Modify existing StackMapTable (if present).
     if (stackMapTable.length > 0) {
       // Each stack map frame specifies (explicitly or implicitly) an
       // offset_delta that is used to calculate the actual bytecode
@@ -887,7 +893,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       // previous frame, unless the previous frame is the initial
       // frame of the method, in which case the bytecode offset is
       // offset_delta. (From the Java Virtual Machine Specification,
-      // Java SE 7 Edition, section 4.7.4)
+      // Java SE 7 Edition, section 4.7.4.)
 
       // Since we are inserting (1 or 2) new stack map frames at the
       // beginning of the stack map table, we need to adjust the
@@ -938,11 +944,11 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
   /**
    * Pushes the object, nonce, parameters, and return value on the stack and calls the specified
-   * method (normally enter or exit) in daikon.chicory.Runtime. The parameters are passed as an
-   * array of objects. Any primitive values are wrapped in the appropriate daikon.chicory.Runtime
-   * wrapper (IntWrap, FloatWrap, etc).
+   * method (either enter or exit) in daikon.chicory.Runtime. The parameters are passed as an array
+   * of objects. Any primitive values are wrapped in the appropriate daikon.chicory.Runtime wrapper
+   * (IntWrap, FloatWrap, etc).
    *
-   * @param mgen describes the given method
+   * @param mgen describes the method to be instrumented
    * @param methodToCall either "enter" or "exit"
    * @param line source line number if this is an exit
    * @return instruction list for instrumenting the enter or exit of the method
@@ -953,10 +959,12 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     Type[] paramTypes = mgen.getArgumentTypes();
 
     // aload
-    // Push the object.  Push null if this is a static method or a constructor.
+    // Push the object.
     if (mgen.isStatic() || (methodToCall.equals("enter") && isConstructor(mgen))) {
+      // Push null if this is a static method or a constructor.
       newCode.append(new ACONST_NULL());
-    } else { // must be an instance method
+    } else {
+      // Must be an instance method.
       newCode.append(InstructionFactory.createLoad(Type.OBJECT, 0));
     }
 
@@ -1012,22 +1020,22 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
         }
       }
 
-      // push line number
+      // Push the line number.
       // System.out.println(mgen.getName() + " --> " + line);
       newCode.append(instFactory.createConstant(line));
     }
 
-    // Call the specified method
-    Type[] methodArgs;
+    // Call the specified method.
+    Type[] methodParams;
     if (methodToCall.equals("exit")) {
-      methodArgs =
+      methodParams =
           new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ, Type.OBJECT, Type.INT};
     } else {
-      methodArgs = new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ};
+      methodParams = new Type[] {Type.OBJECT, Type.INT, Type.INT, object_arr_typ};
     }
     newCode.append(
         instFactory.createInvoke(
-            runtime_classname, methodToCall, Type.VOID, methodArgs, Const.INVOKESTATIC));
+            runtime_classname, methodToCall, Type.VOID, methodParams, Const.INVOKESTATIC));
 
     return newCode;
   }
@@ -1104,8 +1112,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Returns an array of strings, each corresponding to mgen's parameter types as a fully qualified
-   * name: how a type is represented in Java source code.
+   * Returns an array of fully qualified names, one for each of mgen's parameter types.
    *
    * @param mgen describes the given method
    * @return an array of strings, each corresponding to mgen's parameter types
@@ -1130,10 +1137,10 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
   }
 
   /**
-   * Creates a MethodInfo struct corresponding to {@code mgen}.
+   * Creates a MethodInfo corresponding to {@code mgen}.
    *
-   * @param classInfo a class
-   * @param mgen describes the given method
+   * @param classInfo class containing the method
+   * @param mgen method to inspect
    * @return a new MethodInfo for the method, or null if the method should not be instrumented
    */
   @SuppressWarnings("unchecked")
@@ -1162,7 +1169,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       String arg0Name = mgen.getArgumentType(0).toString();
       if (dollarPos >= 0
           &&
-          // type of first parameter is classname up to the "$"
+          // Type of first parameter is classname up to the "$".
           mgen.getClassName().substring(0, dollarPos).equals(arg0Name)) {
         // As a further check, for javac-generated classfiles, the
         // constant pool index #1 is "this$0", and the first 5 bytes of

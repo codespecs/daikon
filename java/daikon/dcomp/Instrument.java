@@ -27,10 +27,14 @@ import org.checkerframework.dataflow.qual.Pure;
  */
 public class Instrument implements ClassFileTransformer {
 
+  //
+  // Start of diagnostics.
+  //
+
   /** Directory for debug output. */
   final File debug_dir;
 
-  /** Directory into which to dump debug-instrumented classes. */
+  /** Directory into which to dump instrumented classes. */
   final File debug_instrumented_dir;
 
   /** Directory into which to dump original classes. */
@@ -74,7 +78,7 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Output a .class file and a .bcel version of the class file.
+   * Output a .class file and a .bcel version of it.
    *
    * @param c the Java class to output
    * @param directory output location for the files
@@ -111,28 +115,15 @@ public class Instrument implements ClassFileTransformer {
       byte[] classfileBuffer)
       throws IllegalClassFormatException {
 
-    // for debugging
+    // For debugging.
     // new Throwable().printStackTrace();
 
-    debug_transform.log("Entering dcomp.Instrument.transform(): class = %s%n", className);
+    debug_transform.log("%nEntering dcomp.Instrument.transform(): class = %s%n", className);
 
     @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
 
     if (className == null) {
-      /*
-      // debug code to display unnamed class
-      try {
-        // Parse the bytes of the classfile, die on any errors
-        ClassParser parser = new ClassParser(new ByteArrayInputStream(classfileBuffer), className);
-        JavaClass c = parser.parse();
-        System.out.println(c.toString());
-      } catch (Throwable e) {
-        System.out.printf("Error: %s%n", e);
-        e.printStackTrace();
-        throw new RuntimeException("Error", e);
-      }
-      */
-      // most likely a lambda related class
+      // most likely a lambda-related class
       return null;
     }
 
@@ -142,8 +133,8 @@ public class Instrument implements ClassFileTransformer {
       return null;
     }
 
-    // If already instrumented, nothing to do
-    // (This set will be empty if Premain.jdk_instrumented is false)
+    // If already instrumented, there is nothing to do.
+    // (This set will be empty if Premain.jdk_instrumented is false.)
     if (Premain.pre_instrumented.contains(className)) {
       debug_transform.log("Skipping pre_instrumented JDK class %s%n", binaryClassName);
       return null;
@@ -189,8 +180,8 @@ public class Instrument implements ClassFileTransformer {
       debug_transform.log("Instrumenting JDK class %s%n", binaryClassName);
     } else {
 
-      // We're not in a JDK class
-      // Don't instrument our own classes
+      // We're not in a JDK class.
+      // Don't instrument our own classes.
       if (is_dcomp(className)) {
         debug_transform.log("Skipping is_dcomp class %s%n", binaryClassName);
         return null;
@@ -214,11 +205,11 @@ public class Instrument implements ClassFileTransformer {
     ClassLoader cfLoader;
     if (loader == null) {
       cfLoader = ClassLoader.getSystemClassLoader();
-      debug_transform.log("Transforming class %s, loader %s - %s%n", className, loader, cfLoader);
+      debug_transform.log("Transforming class %s, loaders %s, %s%n", className, loader, cfLoader);
     } else {
       cfLoader = loader;
       debug_transform.log(
-          "Transforming class %s, loader %s - %s%n", className, loader, loader.getParent());
+          "Transforming class %s, loaders %s, %s%n", className, loader, loader.getParent());
     }
 
     // Parse the bytes of the classfile, die on any errors.
@@ -229,7 +220,7 @@ public class Instrument implements ClassFileTransformer {
     } catch (Throwable t) {
       System.err.printf("Error %s while reading %s%n", t, binaryClassName);
       t.printStackTrace();
-      // No changes to the bytecodes
+      // No changes to the bytecodes.
       return null;
     }
 
@@ -237,11 +228,11 @@ public class Instrument implements ClassFileTransformer {
       outputDebugFiles(c, debug_uninstrumented_dir, binaryClassName);
     }
 
-    // Instrument the classfile, die on any errors
-    JavaClass njc;
+    // Instrument the classfile, die on any errors.
+    JavaClass newJavaClass;
     try {
       DCInstrument dci = new DCInstrument(c, in_jdk, loader);
-      njc = dci.instrument();
+      newJavaClass = dci.instrument();
     } catch (Throwable t) {
       RuntimeException re =
           new RuntimeException(String.format("Error %s in transform of %s", t, binaryClassName), t);
@@ -249,14 +240,14 @@ public class Instrument implements ClassFileTransformer {
       throw re;
     }
 
-    if (njc != null) {
+    if (newJavaClass != null) {
       if (DynComp.dump) {
-        outputDebugFiles(njc, debug_instrumented_dir, binaryClassName);
+        outputDebugFiles(newJavaClass, debug_instrumented_dir, binaryClassName);
       }
-      return njc.getBytes();
+      return newJavaClass.getBytes();
     } else {
       debug_transform.log("Didn't instrument %s%n", binaryClassName);
-      // No changes to the bytecodes
+      // No changes to the bytecodes.
       return null;
     }
   }
@@ -265,23 +256,23 @@ public class Instrument implements ClassFileTransformer {
    * Returns true if the specified class is part of dcomp itself (and thus should not be
    * instrumented). Some Daikon classes that are used by DynComp are included here as well.
    *
-   * @param classname class to be checked
-   * @return true if classname is a part of DynComp
+   * @param className class to be checked
+   * @return true if className is a part of DynComp
    */
   @Pure
-  private static boolean is_dcomp(String classname) {
+  private static boolean is_dcomp(String className) {
 
-    if (classname.startsWith("daikon/dcomp/") && !classname.startsWith("daikon/dcomp/DcompTest")) {
+    if (className.startsWith("daikon/dcomp/") && !className.startsWith("daikon/dcomp/DcompTest")) {
       return true;
     }
-    if (classname.startsWith("daikon/chicory/")
-        && !classname.equals("daikon/chicory/ChicoryTest")) {
+    if (className.startsWith("daikon/chicory/")
+        && !className.equals("daikon/chicory/ChicoryTest")) {
       return true;
     }
-    if (classname.equals("daikon/PptTopLevel$PptType")) {
+    if (className.equals("daikon/PptTopLevel$PptType")) {
       return true;
     }
-    if (classname.startsWith("daikon/plumelib")) {
+    if (className.startsWith("daikon/plumelib")) {
       return true;
     }
     return false;
@@ -291,25 +282,25 @@ public class Instrument implements ClassFileTransformer {
    * Returns true if the specified class is part of a tool known to do Java byte code
    * transformation. We need to warn the user that this may not work correctly.
    *
-   * @param classname class to be checked
-   * @return true if classname is a known transformer
+   * @param className class to be checked
+   * @return true if className is a known transformer
    */
   @Pure
-  protected static boolean is_transformer(String classname) {
+  protected static boolean is_transformer(String className) {
 
-    if (classname.startsWith("org/codehaus/groovy")) {
+    if (className.startsWith("org/codehaus/groovy")) {
       return true;
     }
-    if (classname.startsWith("groovy/lang")) {
+    if (className.startsWith("groovy/lang")) {
       return true;
     }
-    if (classname.startsWith("org/mockito")) {
+    if (className.startsWith("org/mockito")) {
       return true;
     }
-    if (classname.startsWith("org/objenesis")) {
+    if (className.startsWith("org/objenesis")) {
       return true;
     }
-    if (classname.contains("ByMockito")) {
+    if (className.contains("ByMockito")) {
       return true;
     }
     return false;
