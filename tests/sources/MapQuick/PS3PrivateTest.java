@@ -20,4 +20,3 @@ public class PS3PrivateTest
 	return PS3TestSuite.suite();
     }
 }
-

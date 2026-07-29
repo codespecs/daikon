@@ -284,4 +284,3 @@ sub swap_lineno_file ( $$ ) {
   my $count = $class2count{$class};
   return swap_lineno($count, $reported_line);
 }
-

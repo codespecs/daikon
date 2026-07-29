@@ -14,7 +14,7 @@ public class StackArTesterPlus {
 
   public static void again(int size) {
     StackAr s = new StackAr(size);
-    
+
     try {
       for( int i = 0; i < size; i++ ) {
 	s.push( ((i & 1) == 0) ? new Object() : new MyInteger(i) );
@@ -22,7 +22,7 @@ public class StackArTesterPlus {
     } catch( Overflow e ) {
       System.out.println( "Unexpected overflow" );
     }
-    
+
     while( !s.isEmpty() ) {
       s.topAndPop();
     }

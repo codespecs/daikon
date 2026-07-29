@@ -116,7 +116,3 @@ Assert.assertNotNull(gp);
   }
 
 } // GeoPoint
-
-
-
-

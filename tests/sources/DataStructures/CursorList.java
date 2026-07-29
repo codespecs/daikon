@@ -182,6 +182,6 @@ public class CursorList
     for( int i = 0; i < SPACE_SIZE; i++ )
       cursorSpace[ i ] = new CursorNode( null, i + 1 );
     cursorSpace[ SPACE_SIZE - 1 ].next = 0;
-  } 
+  }
 
 }

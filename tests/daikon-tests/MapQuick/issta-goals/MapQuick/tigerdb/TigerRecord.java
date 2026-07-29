@@ -1,5 +1,5 @@
 package MapQuick.tigerdb;
- 
+
 import java.io.Serializable;
 import java.util.HashMap;
 import MapQuick2.GeoPoint;
@@ -16,9 +16,9 @@ import MapQuick2.GeoPoint;
 public class TigerRecord implements Serializable {
 
   private static final HashMap internGP = null; // new HashMap();
-  protected static GeoPoint makeGP(int lng, int lat) { 
+  protected static GeoPoint makeGP(int lng, int lat) {
     GeoPoint gp = new GeoPoint(lat, lng);
-    if (true) return gp; 
+    if (true) return gp;
     if (!internGP.containsKey(gp)) {
       internGP.put(gp, gp);
     }
@@ -26,8 +26,8 @@ public class TigerRecord implements Serializable {
   }
 
   /** Special ctor to work around predefined record length (Record
-   * Type C seems to be flawed. 
-   */ 
+   * Type C seems to be flawed.
+   */
   public TigerRecord() { }
 
   public TigerRecord(String s, int recordSize) {
@@ -35,7 +35,7 @@ public class TigerRecord implements Serializable {
       die("length must be "+recordSize+
 	  ", not "+s.length());
   }
-    
+
   protected void die(String reason) {throw new RuntimeException(reason);}
 
   /** Parses `s' as an int, with the following additions to the
@@ -49,8 +49,8 @@ public class TigerRecord implements Serializable {
     String sorig = s;
     s = s.trim();
     if (s.length() == 0) throw new NoInt();
-    if (s.charAt(0) == '+') {  
-      if (false && s.length()==5) 
+    if (s.charAt(0) == '+') {
+      if (false && s.length()==5)
 	System.out.println("Saw + in "+s);
       s = s.substring(1);
     }
@@ -69,12 +69,12 @@ public class TigerRecord implements Serializable {
     try {
       int fraddl = toInt(frStr);
       int toaddl = toInt(toStr);
-      if ((fraddl % 2) != (toaddl % 2)) 
+      if ((fraddl % 2) != (toaddl % 2))
 	throw new BadRecordException
 	  ("bad left address ["+fraddl+","+toaddl+"]",frStr+toStr);
       int low =  Math.min(fraddl, toaddl);
       int high = Math.max(fraddl, toaddl);
-	    
+
       boolean b = (fraddl < toaddl);
       IntSet s = new IntSet(low, high);
       return new DirectedStreetNumberRange(s, b);

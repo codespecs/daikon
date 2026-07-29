@@ -16,7 +16,7 @@ public class StreetSegment extends GeoSegment
   private String rightZip;
   private StreetClassification streetClass;
   private boolean increasingAddresses;
-  
+
   /**
    * Creates a new StreetSegment from the given arguments.
    *
@@ -41,7 +41,7 @@ public class StreetSegment extends GeoSegment
     throw new
       RuntimeException("Street Segment must be created with address info.");
   }
-  
+
   public StreetSegment(GeoPoint p1, GeoPoint p2, String name,
                        StreetNumberSet leftNumbers,
                        StreetNumberSet rightNumbers,
@@ -58,7 +58,7 @@ public class StreetSegment extends GeoSegment
   }
 
 
-  
+
   /** Assuming that street numbers on this street are evenly spaced apart,
    * returns the fraction of the distance that the street number sn is
    * from p1.  The return value is a number strictly between 0 and 1.
@@ -98,7 +98,7 @@ public class StreetSegment extends GeoSegment
   public String leftZip() {
     return leftZip;
   }
-    
+
   /** @return the ZIP code on the right side of the street. */
   public String rightZip() {
     return rightZip;
@@ -115,17 +115,17 @@ public class StreetSegment extends GeoSegment
   }
 
   /** @return true if num is on the left side of this, false otherwise. */
-  public boolean isOnLeft(int num) 
+  public boolean isOnLeft(int num)
   {
     return leftNumbers.contains(num);
   }
-    
+
   /** @return true if num is on the right side of this, false otherwise. */
   public boolean isOnRight(int num)
   {
     return rightNumbers.contains(num);
   }
-  
+
   public String toString()
   {
     return "Street{" +

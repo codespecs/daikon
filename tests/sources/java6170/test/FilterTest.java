@@ -27,10 +27,10 @@ public class FilterTest extends TestCase
 	assertNotNull(mainClass);
 	assertNotNull(testInput);
 	assertNotNull(expected);
-	
+
 	_testInput = testInput;
 	_expected = new BufferedReader(expected);
-	
+
 	// grab the "main" method from mainClass
 	try {
 	    _mainMethod = mainClass.getMethod
@@ -38,12 +38,12 @@ public class FilterTest extends TestCase
 	} catch (NoSuchMethodException e) {
 	    throw new IllegalArgumentException
 		(mainClass.getName()+" does not define main()");
-	} 
+	}
 	if (!Modifier.isPublic(_mainMethod.getModifiers())
 	    || !Modifier.isStatic(_mainMethod.getModifiers()))
 	    throw new IllegalArgumentException
 		(mainClass.getName()+" main() is not public and static");
-	    
+
     }
 
     /**
@@ -84,7 +84,7 @@ public class FilterTest extends TestCase
 	// flush streams
 	System.out.flush();
 	System.err.flush();
-	
+
 	// compare actual output to expected
 	BufferedReader actual = new BufferedReader
 	    (new StringReader(outBuffer.toString()));
@@ -97,10 +97,10 @@ public class FilterTest extends TestCase
 	    assertLineMatch(lineNumber, expectedLine, actualLine);
 	    lineNumber++;
 	} while (expectedLine != null);
-	
+
 	// compare actual error to expected
 	// XXX IGNORED
-	
+
 	// restore the old streams
 	System.setIn(savedSystemIn);
 	System.setOut(savedSystemOut);
@@ -131,7 +131,7 @@ public class FilterTest extends TestCase
 	     +": expected "+expected
 	     +", but was "+actual);
     }
-    
+
     /**
        Compares expected and actual output lines.  Asserts that lines are
        equal and reports the line number, expected, and actual values

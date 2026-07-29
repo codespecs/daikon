@@ -100,4 +100,3 @@ daikon.derive.binary.SequenceStringUnion.enabled = 0
 # daikon.split.SplitterFactory.delete_splitters_on_exit
 # daikon.split.SplitterList.all_splitters
 # daikon.split.TimedProcess.compile_timeout
-

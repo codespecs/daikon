@@ -6,8 +6,8 @@ package MapQuick;
  */
 public final class ValidateQueries
 {
-  
-  public static final TestRecord test52WauwinetTo64Wauwinet = 
+
+  public static final TestRecord test52WauwinetTo64Wauwinet =
     TestRecord.makeDirections(new Address(52, "Wauwinet Rd", "02554"),
 			      new Address(64, "Wauwinet Rd", "02554"),
 			      new String[] {
@@ -15,8 +15,8 @@ public final class ValidateQueries
 				"64 Wauwinet Rd 02554 is on your left",
 			      },
 			      0.15474957);
-  
-  public static final TestRecord test32WauwinetTo64Wauwinet = 
+
+  public static final TestRecord test32WauwinetTo64Wauwinet =
     TestRecord.makeDirections(new Address(32, "Wauwinet Rd", "02554"),
 			      new Address(64, "Wauwinet Rd", "02554"),
 			      new String[] {
@@ -24,8 +24,8 @@ public final class ValidateQueries
 				"64 Wauwinet Rd 02554 is on your left",
 			      },
 			      0.66725347);
-  
-  public static final TestRecord test44MillbrookTo200Madaket = 
+
+  public static final TestRecord test44MillbrookTo200Madaket =
     TestRecord.makeDirections(new Address(44, "Millbrook Rd", "02554"),
 			      new Address(200, "Madaket Rd", "02554"),
 			      new String[] {
@@ -36,7 +36,7 @@ public final class ValidateQueries
 			      },
 			      4.02566169);
 
-  public static final TestRecord test111SomersetTo48EelPoint = 
+  public static final TestRecord test111SomersetTo48EelPoint =
     TestRecord.makeDirections(new Address(111, "Somerset Rd", "02554"),
 			      new Address(48, "Eel Point Rd", "02554"),
 			      new String[] {
@@ -62,7 +62,7 @@ public final class ValidateQueries
 			      new Address(52, "AllYourBase Rd", "02554"),
 			      "No such street: 52 AllYourBase Rd 02554");
 
-  public static final TestRecord testBadNum = 
+  public static final TestRecord testBadNum =
     TestRecord.makeBadAddress(new Address(66666, "Wauwinet Rd", "02554"),
 			      new Address(66666, "Wauwinet Rd", "02554"),
 			      "No such number: 66666 Wauwinet Rd 02554");

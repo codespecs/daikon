@@ -257,7 +257,7 @@ int main (int argc, char *argv [])
 	    }
         cl [groups [j]].group [0] = n + 1;
         cl [groups [j]].group [1] = j + 1;
-        groups [n] = (cl [groups [j]].node [0] == CLS) ? cl [groups [j]].n [0].cluster : INT_MAX; 
+        groups [n] = (cl [groups [j]].node [0] == CLS) ? cl [groups [j]].n [0].cluster : INT_MAX;
         groups [j] = (cl [groups [j]].node [1] == CLS) ? cl [groups [j]].n [1].cluster : INT_MAX;
 	setclgroups (groups [n], n + 1);
     }
@@ -272,7 +272,7 @@ int main (int argc, char *argv [])
 		leaf [n++].group = indexed ? cl [i].group [j] : - cl [i].group [j];
 	    }
     qsort (leaf, used + 1, sizeof (LEAF), lcmp);
-    
+
     if (! indexed) {
 	g2 = 0;
 	for (i = 0; i <= used; i++)
@@ -529,7 +529,7 @@ void get_programname (char const *argv0)
         programname = strdup (p + 1);
     else
         programname = strdup (argv0);
-#endif    
+#endif
 }
 
 void syntax (int err)

@@ -1,5 +1,5 @@
 # internal check on
-daikon.Debug.internal_check=true 
+daikon.Debug.internal_check=true
 
 # invariants
 daikon.inv.binary.sequenceScalar.Member.enabled = 1
@@ -170,7 +170,7 @@ daikon.derive.binary.SequenceStringSubsequence.enabled = 1
 # at the bottom have to be disabled or crashes result.
 #
 # we just recently change the default on these to off, leave them
-# on for testing 
+# on for testing
 daikon.derive.binary.SequenceFloatSubsequence.enabled = 1
 daikon.derive.binary.SequenceScalarSubsequence.enabled = 1
 daikon.derive.binary.SequenceStringSubsequence.enabled = 1

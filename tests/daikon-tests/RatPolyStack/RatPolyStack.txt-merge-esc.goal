@@ -225,7 +225,7 @@ public class RatPolyStack {
     /*@ ensures this.polys.tail.tail == null; */
     /*@ ensures this.size == 1 || this.size == 2; */
     /** Adds the top two elements of this, placing the result on top
-	of the stack. 
+	of the stack.
         @requires: size-of(this) >= 2
 	@modifies: this
 	@effects:  If this = [p1, p2]:S
@@ -239,7 +239,7 @@ public class RatPolyStack {
         RatPoly r3 = r2.add(r1);
         push(r3);
     }
-    
+
     /*@ requires this.size == 2 || this.size == 3 || this.size == 4; */
     /*@ modifies this.polys, this.polys.head, this.polys.tail, this.polys.tail.head, this.polys.tail.tail, this.size; */
     /*@ ensures this.polys.tail == \old(this.polys.tail.tail); */
@@ -266,7 +266,7 @@ public class RatPolyStack {
     /*@ ensures this.polys.tail.tail == null; */
     /*@ ensures this.size == 1 || this.size == 2; */
     /** Multiplies top two elements of this, placing the result on
-	top of the stack. 
+	top of the stack.
 	@requires: size-of(this) >= 2
 	@modifies: this
 	@effects:  If this = [p1, p2]:S

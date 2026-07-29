@@ -64,7 +64,7 @@ public abstract class Route {
     last = gs;
     length = r.length + gs.length();
   }
-  
+
   // Observers
 
   /** @return this.start */
@@ -164,6 +164,3 @@ public abstract class Route {
 
 
 } // Route
-
-
-

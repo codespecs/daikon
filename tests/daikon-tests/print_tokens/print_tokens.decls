@@ -8,7 +8,7 @@ ppt ..main():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -20,7 +20,7 @@ ppt ..main():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -32,7 +32,7 @@ ppt ..main():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -44,7 +44,7 @@ ppt ..main():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -56,12 +56,12 @@ ppt ..main():::ENTER
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable argv
     var-kind variable
     rep-type hashcode
     dec-type char**
-    flags is_param 
+    flags is_param
   variable argv[..]
     var-kind array
     enclosing-var argv
@@ -75,7 +75,7 @@ ppt ..main():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -87,7 +87,7 @@ ppt ..main():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -99,7 +99,7 @@ ppt ..main():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -111,7 +111,7 @@ ppt ..main():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -123,12 +123,12 @@ ppt ..main():::EXIT0
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable argv
     var-kind variable
     rep-type hashcode
     dec-type char**
-    flags is_param 
+    flags is_param
   variable argv[..]
     var-kind array
     enclosing-var argv
@@ -146,7 +146,7 @@ ppt ..open_character_stream():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -158,7 +158,7 @@ ppt ..open_character_stream():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -170,7 +170,7 @@ ppt ..open_character_stream():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -182,7 +182,7 @@ ppt ..open_character_stream():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -194,7 +194,7 @@ ppt ..open_character_stream():::ENTER
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
+    flags is_param
 
 ppt ..open_character_stream():::EXIT0
   ppt-type subexit
@@ -202,7 +202,7 @@ ppt ..open_character_stream():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -214,7 +214,7 @@ ppt ..open_character_stream():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -226,7 +226,7 @@ ppt ..open_character_stream():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -238,7 +238,7 @@ ppt ..open_character_stream():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -250,7 +250,7 @@ ppt ..open_character_stream():::EXIT0
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type hashcode
@@ -293,7 +293,7 @@ ppt ..get_char():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -305,7 +305,7 @@ ppt ..get_char():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -317,7 +317,7 @@ ppt ..get_char():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -329,7 +329,7 @@ ppt ..get_char():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -341,7 +341,7 @@ ppt ..get_char():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type stream_type*
-    flags is_param 
+    flags is_param
   variable stream_ptr[..]
     var-kind array
     enclosing-var stream_ptr
@@ -380,7 +380,7 @@ ppt ..get_char():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -392,7 +392,7 @@ ppt ..get_char():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -404,7 +404,7 @@ ppt ..get_char():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -416,7 +416,7 @@ ppt ..get_char():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -428,7 +428,7 @@ ppt ..get_char():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type stream_type*
-    flags is_param 
+    flags is_param
   variable stream_ptr[..]
     var-kind array
     enclosing-var stream_ptr
@@ -471,7 +471,7 @@ ppt ..is_end_of_character_stream():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -483,7 +483,7 @@ ppt ..is_end_of_character_stream():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -495,7 +495,7 @@ ppt ..is_end_of_character_stream():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -507,7 +507,7 @@ ppt ..is_end_of_character_stream():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -519,7 +519,7 @@ ppt ..is_end_of_character_stream():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type stream_type*
-    flags is_param 
+    flags is_param
   variable stream_ptr[..]
     var-kind array
     enclosing-var stream_ptr
@@ -558,7 +558,7 @@ ppt ..is_end_of_character_stream():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -570,7 +570,7 @@ ppt ..is_end_of_character_stream():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -582,7 +582,7 @@ ppt ..is_end_of_character_stream():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -594,7 +594,7 @@ ppt ..is_end_of_character_stream():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -606,7 +606,7 @@ ppt ..is_end_of_character_stream():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type stream_type*
-    flags is_param 
+    flags is_param
   variable stream_ptr[..]
     var-kind array
     enclosing-var stream_ptr
@@ -649,7 +649,7 @@ ppt ..unget_char():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -661,7 +661,7 @@ ppt ..unget_char():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -673,7 +673,7 @@ ppt ..unget_char():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -685,7 +685,7 @@ ppt ..unget_char():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -697,12 +697,12 @@ ppt ..unget_char():::ENTER
     var-kind variable
     rep-type int
     dec-type char
-    flags is_param 
+    flags is_param
   variable stream_ptr
     var-kind variable
     rep-type hashcode
     dec-type stream_type*
-    flags is_param 
+    flags is_param
   variable stream_ptr[..]
     var-kind array
     enclosing-var stream_ptr
@@ -741,7 +741,7 @@ ppt ..unget_char():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -753,7 +753,7 @@ ppt ..unget_char():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -765,7 +765,7 @@ ppt ..unget_char():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -777,7 +777,7 @@ ppt ..unget_char():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -789,12 +789,12 @@ ppt ..unget_char():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
-    flags is_param 
+    flags is_param
   variable stream_ptr
     var-kind variable
     rep-type hashcode
     dec-type stream_type*
-    flags is_param 
+    flags is_param
   variable stream_ptr[..]
     var-kind array
     enclosing-var stream_ptr
@@ -837,7 +837,7 @@ ppt ..open_token_stream():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -849,7 +849,7 @@ ppt ..open_token_stream():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -861,7 +861,7 @@ ppt ..open_token_stream():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -873,7 +873,7 @@ ppt ..open_token_stream():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -885,7 +885,7 @@ ppt ..open_token_stream():::ENTER
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
+    flags is_param
 
 ppt ..open_token_stream():::EXIT0
   ppt-type subexit
@@ -893,7 +893,7 @@ ppt ..open_token_stream():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -905,7 +905,7 @@ ppt ..open_token_stream():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -917,7 +917,7 @@ ppt ..open_token_stream():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -929,7 +929,7 @@ ppt ..open_token_stream():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -941,7 +941,7 @@ ppt ..open_token_stream():::EXIT0
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type hashcode
@@ -996,7 +996,7 @@ ppt ..get_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -1008,7 +1008,7 @@ ppt ..get_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -1020,7 +1020,7 @@ ppt ..get_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -1032,7 +1032,7 @@ ppt ..get_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -1044,7 +1044,7 @@ ppt ..get_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type token_stream_type*
-    flags is_param 
+    flags is_param
   variable tstream_ptr[..]
     var-kind array
     enclosing-var tstream_ptr
@@ -1095,7 +1095,7 @@ ppt ..get_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -1107,7 +1107,7 @@ ppt ..get_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -1119,7 +1119,7 @@ ppt ..get_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -1131,7 +1131,7 @@ ppt ..get_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -1143,7 +1143,7 @@ ppt ..get_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type token_stream_type*
-    flags is_param 
+    flags is_param
   variable tstream_ptr[..]
     var-kind array
     enclosing-var tstream_ptr
@@ -1217,7 +1217,7 @@ ppt print_tokens.c.numeric_case():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -1229,7 +1229,7 @@ ppt print_tokens.c.numeric_case():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -1241,7 +1241,7 @@ ppt print_tokens.c.numeric_case():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -1253,7 +1253,7 @@ ppt print_tokens.c.numeric_case():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -1265,7 +1265,7 @@ ppt print_tokens.c.numeric_case():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type token_stream_type*
-    flags is_param 
+    flags is_param
   variable tstream_ptr[..]
     var-kind array
     enclosing-var tstream_ptr
@@ -1313,7 +1313,7 @@ ppt print_tokens.c.numeric_case():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type token_type*
-    flags is_param 
+    flags is_param
   variable token_ptr[..]
     var-kind array
     enclosing-var token_ptr
@@ -1337,17 +1337,17 @@ ppt print_tokens.c.numeric_case():::ENTER
     var-kind variable
     rep-type int
     dec-type char
-    flags is_param 
+    flags is_param
   variable token_str
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
+    flags is_param
   variable token_ind
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
 
 ppt print_tokens.c.numeric_case():::EXIT0
   ppt-type subexit
@@ -1355,7 +1355,7 @@ ppt print_tokens.c.numeric_case():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -1367,7 +1367,7 @@ ppt print_tokens.c.numeric_case():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -1379,7 +1379,7 @@ ppt print_tokens.c.numeric_case():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -1391,7 +1391,7 @@ ppt print_tokens.c.numeric_case():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -1403,7 +1403,7 @@ ppt print_tokens.c.numeric_case():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type token_stream_type*
-    flags is_param 
+    flags is_param
   variable tstream_ptr[..]
     var-kind array
     enclosing-var tstream_ptr
@@ -1451,7 +1451,7 @@ ppt print_tokens.c.numeric_case():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type token_type*
-    flags is_param 
+    flags is_param
   variable token_ptr[..]
     var-kind array
     enclosing-var token_ptr
@@ -1475,17 +1475,17 @@ ppt print_tokens.c.numeric_case():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
-    flags is_param 
+    flags is_param
   variable token_str
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
+    flags is_param
   variable token_ind
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type hashcode
@@ -1516,7 +1516,7 @@ ppt print_tokens.c.error_or_eof_case():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -1528,7 +1528,7 @@ ppt print_tokens.c.error_or_eof_case():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -1540,7 +1540,7 @@ ppt print_tokens.c.error_or_eof_case():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -1552,7 +1552,7 @@ ppt print_tokens.c.error_or_eof_case():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -1564,7 +1564,7 @@ ppt print_tokens.c.error_or_eof_case():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type token_stream_type*
-    flags is_param 
+    flags is_param
   variable tstream_ptr[..]
     var-kind array
     enclosing-var tstream_ptr
@@ -1612,7 +1612,7 @@ ppt print_tokens.c.error_or_eof_case():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type token_type*
-    flags is_param 
+    flags is_param
   variable token_ptr[..]
     var-kind array
     enclosing-var token_ptr
@@ -1636,22 +1636,22 @@ ppt print_tokens.c.error_or_eof_case():::ENTER
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable token_str
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
+    flags is_param
   variable token_ind
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable ch
     var-kind variable
     rep-type int
     dec-type char
-    flags is_param 
+    flags is_param
 
 ppt print_tokens.c.error_or_eof_case():::EXIT0
   ppt-type subexit
@@ -1659,7 +1659,7 @@ ppt print_tokens.c.error_or_eof_case():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -1671,7 +1671,7 @@ ppt print_tokens.c.error_or_eof_case():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -1683,7 +1683,7 @@ ppt print_tokens.c.error_or_eof_case():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -1695,7 +1695,7 @@ ppt print_tokens.c.error_or_eof_case():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -1707,7 +1707,7 @@ ppt print_tokens.c.error_or_eof_case():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type token_stream_type*
-    flags is_param 
+    flags is_param
   variable tstream_ptr[..]
     var-kind array
     enclosing-var tstream_ptr
@@ -1755,7 +1755,7 @@ ppt print_tokens.c.error_or_eof_case():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type token_type*
-    flags is_param 
+    flags is_param
   variable token_ptr[..]
     var-kind array
     enclosing-var token_ptr
@@ -1779,22 +1779,22 @@ ppt print_tokens.c.error_or_eof_case():::EXIT0
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable token_str
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
+    flags is_param
   variable token_ind
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable ch
     var-kind variable
     rep-type int
     dec-type char
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type hashcode
@@ -1825,7 +1825,7 @@ ppt print_tokens.c.check_delimiter():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -1837,7 +1837,7 @@ ppt print_tokens.c.check_delimiter():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -1849,7 +1849,7 @@ ppt print_tokens.c.check_delimiter():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -1861,7 +1861,7 @@ ppt print_tokens.c.check_delimiter():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -1873,7 +1873,7 @@ ppt print_tokens.c.check_delimiter():::ENTER
     var-kind variable
     rep-type int
     dec-type char
-    flags is_param 
+    flags is_param
 
 ppt print_tokens.c.check_delimiter():::EXIT0
   ppt-type subexit
@@ -1881,7 +1881,7 @@ ppt print_tokens.c.check_delimiter():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -1893,7 +1893,7 @@ ppt print_tokens.c.check_delimiter():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -1905,7 +1905,7 @@ ppt print_tokens.c.check_delimiter():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -1917,7 +1917,7 @@ ppt print_tokens.c.check_delimiter():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -1929,7 +1929,7 @@ ppt print_tokens.c.check_delimiter():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type int
@@ -1941,7 +1941,7 @@ ppt print_tokens.c.keyword():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -1953,7 +1953,7 @@ ppt print_tokens.c.keyword():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -1965,7 +1965,7 @@ ppt print_tokens.c.keyword():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -1977,7 +1977,7 @@ ppt print_tokens.c.keyword():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -1989,7 +1989,7 @@ ppt print_tokens.c.keyword():::ENTER
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
 
 ppt print_tokens.c.keyword():::EXIT0
   ppt-type subexit
@@ -1997,7 +1997,7 @@ ppt print_tokens.c.keyword():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2009,7 +2009,7 @@ ppt print_tokens.c.keyword():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2021,7 +2021,7 @@ ppt print_tokens.c.keyword():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2033,7 +2033,7 @@ ppt print_tokens.c.keyword():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2045,7 +2045,7 @@ ppt print_tokens.c.keyword():::EXIT0
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type int
@@ -2057,7 +2057,7 @@ ppt print_tokens.c.special():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2069,7 +2069,7 @@ ppt print_tokens.c.special():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2081,7 +2081,7 @@ ppt print_tokens.c.special():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2093,7 +2093,7 @@ ppt print_tokens.c.special():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2105,7 +2105,7 @@ ppt print_tokens.c.special():::ENTER
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
 
 ppt print_tokens.c.special():::EXIT0
   ppt-type subexit
@@ -2113,7 +2113,7 @@ ppt print_tokens.c.special():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2125,7 +2125,7 @@ ppt print_tokens.c.special():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2137,7 +2137,7 @@ ppt print_tokens.c.special():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2149,7 +2149,7 @@ ppt print_tokens.c.special():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2161,7 +2161,7 @@ ppt print_tokens.c.special():::EXIT0
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type int
@@ -2173,7 +2173,7 @@ ppt print_tokens.c.skip():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2185,7 +2185,7 @@ ppt print_tokens.c.skip():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2197,7 +2197,7 @@ ppt print_tokens.c.skip():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2209,7 +2209,7 @@ ppt print_tokens.c.skip():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2221,7 +2221,7 @@ ppt print_tokens.c.skip():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type stream_type*
-    flags is_param 
+    flags is_param
   variable stream_ptr[..]
     var-kind array
     enclosing-var stream_ptr
@@ -2260,7 +2260,7 @@ ppt print_tokens.c.skip():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2272,7 +2272,7 @@ ppt print_tokens.c.skip():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2284,7 +2284,7 @@ ppt print_tokens.c.skip():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2296,7 +2296,7 @@ ppt print_tokens.c.skip():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2308,7 +2308,7 @@ ppt print_tokens.c.skip():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type stream_type*
-    flags is_param 
+    flags is_param
   variable stream_ptr[..]
     var-kind array
     enclosing-var stream_ptr
@@ -2351,7 +2351,7 @@ ppt print_tokens.c.constant():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2363,7 +2363,7 @@ ppt print_tokens.c.constant():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2375,7 +2375,7 @@ ppt print_tokens.c.constant():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2387,7 +2387,7 @@ ppt print_tokens.c.constant():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2399,17 +2399,17 @@ ppt print_tokens.c.constant():::ENTER
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable token_str
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
+    flags is_param
   variable token_ind
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
 
 ppt print_tokens.c.constant():::EXIT0
   ppt-type subexit
@@ -2417,7 +2417,7 @@ ppt print_tokens.c.constant():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2429,7 +2429,7 @@ ppt print_tokens.c.constant():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2441,7 +2441,7 @@ ppt print_tokens.c.constant():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2453,7 +2453,7 @@ ppt print_tokens.c.constant():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2465,17 +2465,17 @@ ppt print_tokens.c.constant():::EXIT0
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable token_str
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
+    flags is_param
   variable token_ind
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type int
@@ -2487,7 +2487,7 @@ ppt print_tokens.c.next_state():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2499,7 +2499,7 @@ ppt print_tokens.c.next_state():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2511,7 +2511,7 @@ ppt print_tokens.c.next_state():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2523,7 +2523,7 @@ ppt print_tokens.c.next_state():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2535,12 +2535,12 @@ ppt print_tokens.c.next_state():::ENTER
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable ch
     var-kind variable
     rep-type int
     dec-type char
-    flags is_param 
+    flags is_param
 
 ppt print_tokens.c.next_state():::EXIT0
   ppt-type subexit
@@ -2548,7 +2548,7 @@ ppt print_tokens.c.next_state():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2560,7 +2560,7 @@ ppt print_tokens.c.next_state():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2572,7 +2572,7 @@ ppt print_tokens.c.next_state():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2584,7 +2584,7 @@ ppt print_tokens.c.next_state():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2596,12 +2596,12 @@ ppt print_tokens.c.next_state():::EXIT0
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable ch
     var-kind variable
     rep-type int
     dec-type char
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type int
@@ -2613,7 +2613,7 @@ ppt ..is_eof_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2625,7 +2625,7 @@ ppt ..is_eof_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2637,7 +2637,7 @@ ppt ..is_eof_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2649,7 +2649,7 @@ ppt ..is_eof_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2661,7 +2661,7 @@ ppt ..is_eof_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type token_type*
-    flags is_param 
+    flags is_param
   variable t[..]
     var-kind array
     enclosing-var t
@@ -2688,7 +2688,7 @@ ppt ..is_eof_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2700,7 +2700,7 @@ ppt ..is_eof_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2712,7 +2712,7 @@ ppt ..is_eof_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2724,7 +2724,7 @@ ppt ..is_eof_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2736,7 +2736,7 @@ ppt ..is_eof_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type token_type*
-    flags is_param 
+    flags is_param
   variable t[..]
     var-kind array
     enclosing-var t
@@ -2767,7 +2767,7 @@ ppt ..print_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2779,7 +2779,7 @@ ppt ..print_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2791,7 +2791,7 @@ ppt ..print_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2803,7 +2803,7 @@ ppt ..print_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2815,7 +2815,7 @@ ppt ..print_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type token_type*
-    flags is_param 
+    flags is_param
   variable token_ptr[..]
     var-kind array
     enclosing-var token_ptr
@@ -2842,7 +2842,7 @@ ppt ..print_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2854,7 +2854,7 @@ ppt ..print_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2866,7 +2866,7 @@ ppt ..print_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2878,7 +2878,7 @@ ppt ..print_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2890,7 +2890,7 @@ ppt ..print_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type token_type*
-    flags is_param 
+    flags is_param
   variable token_ptr[..]
     var-kind array
     enclosing-var token_ptr
@@ -2921,7 +2921,7 @@ ppt print_tokens.c.get_actual_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2933,7 +2933,7 @@ ppt print_tokens.c.get_actual_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -2945,7 +2945,7 @@ ppt print_tokens.c.get_actual_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -2957,7 +2957,7 @@ ppt print_tokens.c.get_actual_token():::ENTER
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -2969,12 +2969,12 @@ ppt print_tokens.c.get_actual_token():::ENTER
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
+    flags is_param
   variable token_ind
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
 
 ppt print_tokens.c.get_actual_token():::EXIT0
   ppt-type subexit
@@ -2982,7 +2982,7 @@ ppt print_tokens.c.get_actual_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::default1[..]
     var-kind array
     enclosing-var ::default1
@@ -2994,7 +2994,7 @@ ppt print_tokens.c.get_actual_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::base[..]
     var-kind array
     enclosing-var ::base
@@ -3006,7 +3006,7 @@ ppt print_tokens.c.get_actual_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::next[..]
     var-kind array
     enclosing-var ::next
@@ -3018,7 +3018,7 @@ ppt print_tokens.c.get_actual_token():::EXIT0
     var-kind variable
     rep-type hashcode
     dec-type int*
-    flags non_null 
+    flags non_null
   variable ::check[..]
     var-kind array
     enclosing-var ::check
@@ -3030,14 +3030,13 @@ ppt print_tokens.c.get_actual_token():::EXIT0
     var-kind variable
     rep-type string
     dec-type char*
-    flags is_param 
+    flags is_param
   variable token_ind
     var-kind variable
     rep-type int
     dec-type int
-    flags is_param 
+    flags is_param
   variable return
     var-kind variable
     rep-type int
     dec-type int
-

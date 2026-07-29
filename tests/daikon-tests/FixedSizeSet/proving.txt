@@ -10,4 +10,3 @@ simplify to remove these and/or ESC to accept them.
 
 TODO: OneOf formatting could be updated so Simplify would remove one
 invariant.
-

@@ -25,4 +25,4 @@ public interface Directions {
 
     /** @return this.end */
     public Address getEnd ();
-} 
+}

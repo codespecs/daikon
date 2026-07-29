@@ -18,5 +18,5 @@ public class BadRecordException extends Exception {
 
   public String reason() { return r; }
   public String originalData() { return o; }
-    
+
 } // BadRecordException

@@ -4,11 +4,11 @@ CreateNode n3 1
 CreateGraph A
 AddNode A n1
 CreateNode n2 10
-AddNode A n2 
+AddNode A n2
 CreateGraph B
 ListNodes B
 AddNode A n3
-AddEdge A n3 n1 
+AddEdge A n3 n1
 AddNode B n1
 AddNode B n2
 AddEdge B n2 n1

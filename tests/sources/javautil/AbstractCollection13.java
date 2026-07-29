@@ -2,10 +2,10 @@
  * @(#)AbstractCollection.java	1.16 00/02/02
  *
  * Copyright 1997-2000 Sun Microsystems, Inc. All Rights Reserved.
- * 
- * This software is the proprietary information of Sun Microsystems, Inc.  
+ *
+ * This software is the proprietary information of Sun Microsystems, Inc.
  * Use is subject to license terms.
- * 
+ *
  */
 
 package javautil;
@@ -155,9 +155,9 @@ public abstract class AbstractCollection13 implements Collection13 {
      * 	       be stored, if it is big enough; otherwise, a new array of the
      * 	       same runtime type is allocated for this purpose.
      * @return an array containing the elements of the collection.
-     * 
+     *
      * @throws NullPointerException if the specified array is <tt>null</tt>.
-     * 
+     *
      * @throws ArrayStoreException if the runtime type of the specified array
      *         is not a supertype of the runtime type of every element in this
      *         collection.
@@ -197,17 +197,17 @@ public abstract class AbstractCollection13 implements Collection13 {
      *
      * @param o element whose presence in this collection is to be ensured.
      * @return <tt>true</tt> if the collection changed as a result of the call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>add</tt> method is not
      *		  supported by this collection.
-     * 
+     *
      * @throws NullPointerException if this collection does not permit
      * 		  <tt>null</tt> elements, and the specified element is
      * 		  <tt>null</tt>.
-     * 
+     *
      * @throws ClassCastException if the class of the specified element
      * 		  prevents it from being added to this collection.
-     * 
+     *
      * @throws IllegalArgumentException if some aspect of this element
      *            prevents it from being added to this collection.
      */
@@ -236,7 +236,7 @@ public abstract class AbstractCollection13 implements Collection13 {
      * @param o element to be removed from this collection, if present.
      * @return <tt>true</tt> if the collection contained the specified
      *         element.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>remove</tt> method is
      * 		  not supported by this collection.
      */
@@ -275,7 +275,7 @@ public abstract class AbstractCollection13 implements Collection13 {
      * @param c collection to be checked for containment in this collection.
      * @return <tt>true</tt> if this collection contains all of the elements
      * 	       in the specified collection.
-     * 
+     *
      * @see #contains(Object)
      */
     public boolean containsAll(Collection13 c) {
@@ -307,7 +307,7 @@ public abstract class AbstractCollection13 implements Collection13 {
      * call.
      * @throws UnsupportedOperationException if the <tt>addAll</tt> method is
      * 		  not supported by this collection.
-     * 
+     *
      * @see #add(Object)
      */
     public boolean addAll(Collection13 c) {
@@ -336,10 +336,10 @@ public abstract class AbstractCollection13 implements Collection13 {
      * @param c elements to be removed from this collection.
      * @return <tt>true</tt> if this collection changed as a result of the
      * call.
-     * 
+     *
      * @throws    UnsupportedOperationException removeAll is not supported
      * 		  by this collection.
-     * 
+     *
      * @see #remove(Object)
      * @see #contains(Object)
      */
@@ -373,10 +373,10 @@ public abstract class AbstractCollection13 implements Collection13 {
      * @param c elements to be retained in this collection.
      * @return <tt>true</tt> if this collection changed as a result of the
      *         call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>retainAll</tt> method
      * 		  is not supported by this collection.
-     * 
+     *
      * @see #remove(Object)
      * @see #contains(Object)
      */
@@ -435,7 +435,7 @@ public abstract class AbstractCollection13 implements Collection13 {
      * except the last, the string <tt>", "</tt> is appended.  Finally a right
      * bracket is appended.  A string is obtained from the string buffer, and
      * returned.
-     * 
+     *
      * @return a string representation of this collection.
      */
     public String toString() {

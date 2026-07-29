@@ -89,7 +89,7 @@ public class DFAnyTestCase
       Object expected_next = expected.next();
       fail(message + ": expected had '" + expected_next + "' but actual had no more elements");
     }
-    
+
     // if just one is exhausted, we fail
     if (!expected_hasnext && actual_hasnext) {
       Object actual_next = actual.next();
@@ -106,13 +106,3 @@ public class DFAnyTestCase
     assertEquals(message, expected, actual);
   }
 }
-
-
-
-
-
-
-
-
-
-

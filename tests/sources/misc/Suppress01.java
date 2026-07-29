@@ -17,7 +17,7 @@ class Suppress01 extends Object {
 
   public static void main(String[] args) {
     Suppress01 p = new Suppress01();
-    
+
     for (int i = 0; i < 25; i++) {
       p.f();
     }
@@ -43,4 +43,3 @@ class Suppress01 extends Object {
   }
 
 }
-

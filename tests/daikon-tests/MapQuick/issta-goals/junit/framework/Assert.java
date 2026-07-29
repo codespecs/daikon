@@ -31,14 +31,14 @@ public class Assert {
   }
 
   /**
-   * Fails a test with the given message. 
+   * Fails a test with the given message.
    */
   static public void fail(String message) {
     throw new AssertionFailedError(message);
   }
 
   /**
-   * Fails a test with no message. 
+   * Fails a test with no message.
    */
   static public void fail() {
     fail(null);
@@ -193,7 +193,7 @@ public class Assert {
   //@ensures (object != null)
   static public void assertNotNull(String message, Object object)
   {
-    assert(message, object != null); 
+    assert(message, object != null);
   }
 
   /**
@@ -207,7 +207,7 @@ public class Assert {
    * Asserts that an object is null.
    */
   static public void assertNull(String message, Object object) {
-    assert(message, object == null); 
+    assert(message, object == null);
   }
 
   /**

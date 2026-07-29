@@ -7,9 +7,9 @@ import java.util.StringTokenizer;
  * StreetNumberSet is immutible.
  */
 public class StreetNumberSet {
-  
+
   private final SimpleParitySet[] sets;
-  
+
   /**
    * Creates a StreetNumberSet containing the numbers indicated in the
    * argument.
@@ -28,7 +28,7 @@ public class StreetNumberSet {
     sets = new SimpleParitySet[items.countTokens()];
 
     int index = 0;
-    
+
     while (items.hasMoreTokens()) {
       String item = items.nextToken();
       int dashLoc = item.indexOf('-');
@@ -80,7 +80,7 @@ public class StreetNumberSet {
     }
     return result;
   }
-  
+
   /**
    * @requires numbers be well formed as in the constructor.
    * @return a new StreetNumberSet which is the union
@@ -129,8 +129,8 @@ public class StreetNumberSet {
     }
     return result;
   }
-    
-  
+
+
   class SimpleParitySet {
     /**
      * @specfield: low  // lowest value in this
@@ -142,7 +142,7 @@ public class StreetNumberSet {
      * all of the odd numbers from low to high.  Low and high must either
      * both be even, or both be odd.
      */
-    
+
     public final int low;
     public final int high;
 
@@ -156,23 +156,23 @@ public class StreetNumberSet {
       this.low = low;
       this.high = high;
     }
-    
+
     /** @return true iff i is in this */
     public boolean contains(int i) {
       if ((low & 1) != (i & 1)) return false;
       if (i > high) return false;
       if (i < low) return false;
-      
+
       return true;
     }
-    
+
     /** @return the number of elements less than i in this */
     public int orderStatistic(int i) {
       if (i <= low) return 0;
       if (i > high) return (high - low) / 2 + 1;
       return ((i - low + 1) >> 1);
     }
-    
+
     /** @return the number of elements in this */
     public int size() {
       return ((high-low) >> 1) + 1;
@@ -180,12 +180,11 @@ public class StreetNumberSet {
 
     private void checkRep() {
     }
- 
+
     public String toString() {
       return "" + low + "-" + high;
     }
-    
-    
+
+
   }
 }
-
