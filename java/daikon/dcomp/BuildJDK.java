@@ -41,7 +41,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 
 /**
- * Add comparability instrumentation to Java class files, then stores the modified files into a
+ * Adds comparability instrumentation to Java class files, then stores the modified files into a
  * directory identified by a (required) command line argument.
  *
  * <p>Duplicates each method of a class file. The new methods are distinguished by the addition of a

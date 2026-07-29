@@ -534,7 +534,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * Instruments all the methods in a class. For each method, adds instrumentation code at the entry
    * and at each return from the method. In addition, changes each return statement to first place
    * the value being returned into a local and then return. Note that {@link #callEnterOrExit}
-   * special cases the instrumentation for constructor entry.
+   * special-cases the instrumentation for constructor entry.
    *
    * @param cg ClassGen for current class
    * @param classInfo for the given class
@@ -684,8 +684,8 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           assert !shouldIncludeIter.hasNext();
           assert !exitLocationIter.hasNext();
 
-          // Update the Uninitialized_variable_info offsets before.
-          // we write out the new StackMapTable.
+          // Update the Uninitialized_variable_info offsets before we write out the new
+          // StackMapTable.
           updateUninitializedNewOffsets(il);
 
           createNewStackMapAttribute(mgen);
@@ -899,7 +899,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
     // The following implements:
     //     this_invocation_nonce = Runtime.nonce++;
 
-    // getstatic Runtime.nonce (load reference to AtomicInteger daikon.chicory.Runtime.nonce).
+    // getstatic Runtime.nonce (load reference to AtomicInteger daikon.chicory.Runtime.nonce)
     newCode.append(instFactory.createGetStatic(runtime_classname, "nonce", atomic_int_type));
 
     // Do an atomic get and increment of nonce value.

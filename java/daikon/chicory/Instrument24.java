@@ -523,7 +523,7 @@ public class Instrument24 implements ClassFileTransformer {
    * Instruments all the methods in a class. For each method, adds instrumentation code at the entry
    * and at each return from the method. In addition, changes each return statement to first place
    * the value being returned into a local and then return. Note that {@link #callEnterOrExit}
-   * special cases the instrumentation for constructor entry.
+   * special-cases the instrumentation for constructor entry.
    *
    * @param classModel for current class
    * @param classBuilder for current class
@@ -713,7 +713,7 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Instrument a method using {@link #instrumentCode}.
+   * Instrument the given method using {@link #instrumentCode}.
    *
    * @param methodBuilder for the given method
    * @param methodModel for the given method
@@ -1620,7 +1620,6 @@ public class Instrument24 implements ClassFileTransformer {
         throw new IllegalArgumentException("Invalid descriptor: " + descriptor);
     }
 
-    // Append array brackets if applicable.
     for (int i = 0; i < arrayDimensions; i++) {
       result.append("[]");
     }
