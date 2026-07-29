@@ -3,8 +3,12 @@
 OPT = -s -Wall
 XOPT = -L/usr/X11/lib
 
+.PHONY: all test clean
+
 # all: difftbl cluster den denxview clgroup
 all: difftbl cluster den clgroup
+
+test:
 
 clean:
 	rm -f difftbl cluster den clgroup

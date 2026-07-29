@@ -470,7 +470,7 @@ export DAIKONDIR
 ### Test targets
 ###
 
-.PHONY: default all
+.PHONY: all test clean default
 default: daikon
 all: daikon
 

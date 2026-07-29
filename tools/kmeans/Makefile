@@ -3,7 +3,11 @@ CC = g++
 
 OBJS = kmeans.o point.o cluster.o main.o
 
+.PHONY: all test clean
+
 all: kmeans
+
+test:
 
 clean:
 	rm -f ${OBJS} kmeans

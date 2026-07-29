@@ -324,13 +324,6 @@ nightly-test-except-doc-pdf:
 	${MAKE} dyncomp-jdk
 	${MAKE} junit test
 
-# Code style; defines `style-check` and `style-fix`.
-# Excluding "utils" is temporary; it was changed to ".utils"
-CODE_STYLE_EXCLUSIONS_USER := ${CODE_STYLE_EXCLUSIONS_USER} --exclude-dir kvasir-tests --exclude-dir six170 --exclude-dir .utils --exclude-dir utils --exclude clustering.html --exclude=’*.log’
-CODE_STYLE_FILTER_OUT_USER := ${CODE_STYLE_FILTER_OUT_USER} ./doc/daikon/% ./doc/developer/%
-include ${PLUME_SCRIPTS}/code-style.mak
-
-
 ### Tags
 
 # To make a TAGS table that does not include generated files, run:
@@ -801,3 +794,7 @@ ifndef NONETWORK
 	  (mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/run-google-java-format.git .utils/run-google-java-format || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/run-google-java-format.git .utils/run-google-java-format))) \
 	fi
 endif
+
+.PHONY: all test clean
+all: default
+clean: very-clean
