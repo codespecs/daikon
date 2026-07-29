@@ -370,8 +370,6 @@ public class LinkedListItr
   // ListNode current;    // Current position
   /*@ spec_public */ protected ListNode current;    // Current position
 }
-
-
 package DataStructures;
 
 // Basic node stored in a linked list
@@ -426,4 +424,3 @@ class ListNode
   /*@ spec_public */ Object   element;
   /*@ spec_public */ ListNode next;
 }
-
