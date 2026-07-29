@@ -10,5 +10,3 @@ Also, we might consider fixing up the Bound.jpp invariants to use a
 different statistical test, if test suite additions don't fix things.
 
 FIXED: Parse needs a non-null argument (string pointer dfej fixed).
-
-

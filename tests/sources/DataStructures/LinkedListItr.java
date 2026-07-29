@@ -59,5 +59,3 @@ public class LinkedListItr
   // ListNode current;    // Current position
   protected ListNode current;    // Current position
 }
-
-

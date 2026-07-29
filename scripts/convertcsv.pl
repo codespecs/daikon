@@ -450,5 +450,3 @@ if ($missingaction =~ /interpolate/) {
 }
 
 exit();
-
-

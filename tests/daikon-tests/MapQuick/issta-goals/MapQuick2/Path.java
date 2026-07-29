@@ -48,5 +48,3 @@ public interface Path {
     double cost();
 
 } // Path
-
-

@@ -83,4 +83,3 @@ class DFStringTestCase extends DFAnyTestCase
 		 actual);
   }
 }
-

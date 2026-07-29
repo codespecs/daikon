@@ -748,10 +748,6 @@ showvars::
 	${MAKE} -C java showvars
 
 update-libs:        update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-run-google-java-format
-# If .git does not exist, then the directory was created from a Daikon archive file.
-ifneq ($(shell ls ../.git 2>/dev/null),)
-	${MAKE} -C .. git-hooks
-endif
 
 .PHONY: update-libs update-bibtex2web update-checklink update-git-scripts update-html-tools update-plume-scripts update-run-google-java-format
 
@@ -805,10 +801,3 @@ ifndef NONETWORK
 	  (mkdir -p .utils && (git clone -q --depth=1 https://github.com/plume-lib/run-google-java-format.git .utils/run-google-java-format || (sleep 1m && git clone -q --depth=1 https://github.com/plume-lib/run-google-java-format.git .utils/run-google-java-format))) \
 	fi
 endif
-
-.PHONY: git-hooks
-git-hooks: .git/hooks/pre-commit .git/hooks/post-merge
-.git/hooks/pre-commit: scripts/daikon.pre-commit
-	(cd .git/hooks && ln -s ../../scripts/daikon.pre-commit pre-commit)
-.git/hooks/post-merge: scripts/daikon.post-merge
-	(cd .git/hooks && ln -s ../../scripts/daikon.post-merge post-merge)

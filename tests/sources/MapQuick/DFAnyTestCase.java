@@ -106,13 +106,3 @@ public class DFAnyTestCase
     assertEquals(message, expected, actual);
   }
 }
-
-
-
-
-
-
-
-
-
-

@@ -43,4 +43,3 @@ class Suppress01 extends Object {
   }
 
 }
-

@@ -14,4 +14,3 @@ public class PS4PrivateTest extends TestSuite
     }
 
 }
-

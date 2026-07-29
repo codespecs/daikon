@@ -121,4 +121,3 @@ class StaticInteresting2 {
     inner[x] = outer[y];    
   }
 }
-

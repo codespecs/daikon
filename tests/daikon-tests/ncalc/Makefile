@@ -10,4 +10,3 @@ NO_JML=1
 SOURCES:=$(shell pwd)
 
 include ../../Makefile.common
-

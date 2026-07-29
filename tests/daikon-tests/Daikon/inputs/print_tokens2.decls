@@ -681,4 +681,3 @@ ppt print_tokens2.c.is_spec_symbol():::EXIT0
     var-kind variable
     rep-type int
     dec-type int
-

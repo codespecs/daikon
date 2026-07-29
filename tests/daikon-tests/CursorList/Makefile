@@ -8,4 +8,3 @@ include ../../Makefile.common
 
 instrument-files-revise:
 	echo "DataStructures/CursorList.java DataStructures/CursorListItr.java DataStructures/CursorNode.java" >| ${INST_LIST_FILE}
-

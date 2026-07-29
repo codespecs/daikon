@@ -12,6 +12,3 @@ quantify_esc_name o_prefix
 slice suffix a x null
 prestate o_suffix suffix
 quantify_esc_name o_suffix suffix
-
-
-
