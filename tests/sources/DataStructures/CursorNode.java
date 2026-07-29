@@ -11,13 +11,13 @@ class CursorNode
   {
     this( theElement, 0 );
   }
-  
+
   CursorNode( Object theElement, int n )
   {
     element = theElement;
     next    = n;
   }
-  
+
   // // Friendly data; accessible by other package routines
   // Made public because merge-esc.pl isn't very smart
   public Object   element;

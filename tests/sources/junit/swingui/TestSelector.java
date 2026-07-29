@@ -18,54 +18,54 @@ class TestSelector extends JDialog {
 	private JScrollPane fScrolledList;
 	private JLabel fDescription;
 	private String fSelectedItem;
-	
+
 	/**
 	 * Renders TestFailures in a JList
 	 */
 	static class TestCellRenderer extends DefaultListCellRenderer {
 		Icon fLeafIcon;
 		Icon fSuiteIcon;
-		
+
 		public TestCellRenderer() {
 			fLeafIcon= UIManager.getIcon("Tree.leafIcon");
 			fSuiteIcon= UIManager.getIcon("Tree.closedIcon");
 		}
-		
+
 		public Component getListCellRendererComponent(
-				JList list, Object value, int modelIndex, 
+				JList list, Object value, int modelIndex,
 				boolean isSelected, boolean cellHasFocus) {
 			Component c= super.getListCellRendererComponent(list, value, modelIndex, isSelected, cellHasFocus);
 			String displayString= displayString((String)value);
-			
+
 			if (displayString.startsWith("AllTests"))
 				setIcon(fSuiteIcon);
 			else
 				setIcon(fLeafIcon);
-				
+
 			setText(displayString);
 		    	return c;
 		}
-		
+
 		public static String displayString(String className) {
 			int typeIndex= className.lastIndexOf('.');
-    			if (typeIndex < 0) 
+    			if (typeIndex < 0)
     				return className;
     			return className.substring(typeIndex+1) + " - " + className.substring(0, typeIndex);
 		}
-		
+
 		public static boolean matchesKey(String s, char ch) {
     			return ch == Character.toUpperCase(s.charAt(typeIndex(s)));
 		}
-		
+
 		private static int typeIndex(String s) {
 			int typeIndex= s.lastIndexOf('.');
 			int i= 0;
-    			if (typeIndex > 0) 
+    			if (typeIndex > 0)
     				i= typeIndex+1;
     			return i;
 		}
 	}
-	
+
 	protected class DoubleClickListener extends MouseAdapter {
 		public void mouseClicked(MouseEvent e) {
 	    		if (e.getClickCount() == 2) {
@@ -73,7 +73,7 @@ class TestSelector extends JDialog {
 	    		}
 	      }
 	}
-	
+
 	protected class KeySelectListener extends KeyAdapter {
 		public void keyTyped(KeyEvent e) {
 			keySelectTestClass(e.getKeyChar());
@@ -91,7 +91,7 @@ class TestSelector extends JDialog {
 			centerWindow(this);
 		}
 		setTitle("Test Selector");
-		
+
 		Vector list= null;
 		try {
 			parent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -109,7 +109,7 @@ class TestSelector extends JDialog {
 		fOk= new JButton("OK");
 		fOk.setEnabled(false);
 		getRootPane().setDefaultButton(fOk);
-		
+
 		defineLayout();
 		addListeners();
 	}
@@ -119,7 +119,7 @@ class TestSelector extends JDialog {
 		Dimension screenSize= c.getToolkit().getScreenSize();
 		c.setLocation((screenSize.width-paneSize.width)/2, (screenSize.height-paneSize.height)/2);
 	}
-	
+
 	private void addListeners() {
 		fCancel.addActionListener(
 			new ActionListener() {
@@ -128,7 +128,7 @@ class TestSelector extends JDialog {
 				}
 			}
 		);
-		
+
 		fOk.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -155,7 +155,7 @@ class TestSelector extends JDialog {
 			}
 		);
 	}
-	
+
 	private void defineLayout() {
 		getContentPane().setLayout(new GridBagLayout());
 		GridBagConstraints labelConstraints = new GridBagConstraints();
@@ -177,7 +177,7 @@ class TestSelector extends JDialog {
 		listConstraints.weighty= 1.0;
 		listConstraints.insets= new Insets(8, 8, 8, 8);
 		getContentPane().add(fScrolledList, listConstraints);
-		
+
 		GridBagConstraints okConstraints= new GridBagConstraints();
 		okConstraints.gridx= 2; okConstraints.gridy= 2;
 		okConstraints.gridwidth= 1; okConstraints.gridheight= 1;
@@ -193,20 +193,20 @@ class TestSelector extends JDialog {
 		cancelConstraints.insets= new Insets(0, 8, 8, 8);
 		getContentPane().add(fCancel, cancelConstraints);
 	}
-	
+
 	public void checkEnableOK(ListSelectionEvent e) {
 		fOk.setEnabled(fList.getSelectedIndex() != -1);
 	}
-	
+
 	public void okSelected() {
 		fSelectedItem= (String)fList.getSelectedValue();
 		dispose();
 	}
-	
+
 	public boolean isEmpty() {
 		return fList.getModel().getSize() == 0;
 	}
-	
+
 	public void keySelectTestClass(char ch) {
 		ListModel model= fList.getModel();
 		if (!Character.isJavaIdentifierStart(ch))
@@ -221,7 +221,7 @@ class TestSelector extends JDialog {
 		}
 		Toolkit.getDefaultToolkit().beep();
 	}
-	
+
 	public String getSelectedItem() {
 		return fSelectedItem;
 	}
@@ -239,20 +239,20 @@ class TestSelector extends JDialog {
     			Sorter.sortStrings(displayVector, 0, displayVector.size()-1, new ParallelSwapper(v));
     		return v;
 	}
-	
+
 	private class ParallelSwapper implements Sorter.Swapper {
 		Vector fOther;
-		
+
 		ParallelSwapper(Vector other) {
 			fOther= other;
 		}
 		public void swap(Vector values, int left, int right) {
-			Object tmp= values.elementAt(left); 
-			values.setElementAt(values.elementAt(right), left); 
+			Object tmp= values.elementAt(left);
+			values.setElementAt(values.elementAt(right), left);
 			values.setElementAt(tmp, right);
 			Object tmp2= fOther.elementAt(left);
 			fOther.setElementAt(fOther.elementAt(right), left);
 			fOther.setElementAt(tmp2, right);
-		}			
+		}
 	}
 }

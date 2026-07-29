@@ -77,12 +77,12 @@ class RouteDirections implements Directions
     {
         return route.length();
     }
-    
+
     public Iterator getDirections()
     {
         // Build up a list with the actual directions.
         List directions = new LinkedList();
-        
+
         // Get a start direction.
         double startDir = firstSeg.heading();
         // If the start address is on the left, add 90, else subtract 90.
@@ -116,13 +116,13 @@ class RouteDirections implements Directions
         // Return an iterator over the results.
         return Collections.unmodifiableList(directions).iterator();
     }
-    
+
     /** @return the starting address of the route */
     public Address getStart()
     {
         return start;
     }
-    
+
     /** @return the ending address of the route */
     public Address getEnd()
     {

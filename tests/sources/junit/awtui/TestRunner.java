@@ -295,11 +295,11 @@ import junit.runner.*;
 			new Label("Runs:"),
 			0, 0, 1, 1, 0.0, 0.0,
           	GridBagConstraints.CENTER, GridBagConstraints.NONE,
-          	new Insets(0, 0, 0, 0) 
-		);	
+          	new Insets(0, 0, 0, 0)
+		);
 		addToCounterPanel(
 			numbersPanel,
-			fNumberOfRuns, 
+			fNumberOfRuns,
           	1, 0, 1, 1, 0.33, 0.0,
           	GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
           	new Insets(0, 8, 0, 40)
@@ -324,13 +324,13 @@ import junit.runner.*;
           	4, 0, 1, 1, 0.0, 0.0,
           	GridBagConstraints.CENTER, GridBagConstraints.NONE,
           	new Insets(0, 8, 0, 0)
-		);	
+		);
 		addToCounterPanel(
 			numbersPanel,
 			fNumberOfFailures,
           	5, 0, 1, 1, 0.33, 0.0,
           	GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
-          	new Insets(0, 8, 0, 0) 
+          	new Insets(0, 8, 0, 0)
 		);
 		return numbersPanel;
 	}
@@ -340,7 +340,7 @@ import junit.runner.*;
 			double weightx, double weighty,
 			int anchor, int fill,
 			Insets insets) {
-		
+
 		GridBagConstraints constraints= new GridBagConstraints();
 		constraints.gridx= gridx;
 		constraints.gridy= gridy;
@@ -404,7 +404,7 @@ import junit.runner.*;
 		Test reloadedTest= null;
 		TestCase rerunTest= (TestCase)test;
 		try {
-			Class reloadedTestClass= getLoader().reload(test.getClass()); 
+			Class reloadedTestClass= getLoader().reload(test.getClass());
 			reloadedTest= TestSuite.createTest(reloadedTestClass, rerunTest.getName());
 		} catch(Exception e) {
 			showInfo("Could not reload "+ test.toString());

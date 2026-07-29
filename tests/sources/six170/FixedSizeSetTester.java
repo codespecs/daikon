@@ -1,6 +1,6 @@
 package six170;
 
-public class FixedSizeSetTester {  
+public class FixedSizeSetTester {
 
   private static FixedSizeSet s, t;
 
@@ -27,8 +27,8 @@ public class FixedSizeSetTester {
     for (int x=0; x<200; x++) {
       add(num());
       add(num());
-      remove(num()); 
-    }    
+      remove(num());
+    }
     for (int x=0; x<50; x++) {
       init();
       for (int y=0; y < num() * 2; y++) {

@@ -133,7 +133,7 @@ char
 	"4 8 {< bf5f5fbfef5f5fef >}",
 	"5 4 {< 9f6f6fff         >}",
 	"6 6 {< af27ff27afff     >}",
-	"8 8 {< df99fdf7dfccfd7f >}" 
+	"8 8 {< df99fdf7dfccfd7f >}"
     },
     *sym [] = {
 	"    Symsize -2 div dup rmoveto\n"
@@ -1466,7 +1466,7 @@ void process (int i)
                 if (first)
                     first = FALSE;
                 else
-                    fprintf (fp_out, "nl\n"); 
+                    fprintf (fp_out, "nl\n");
 		if (colorlabel || colorlink || patterns || symbols || numbers)
 		    fprintf (fp_out, "%s%i col\n", numbers ? "" : "c", currentgroup);
                 labelcount = 0;
@@ -1694,7 +1694,7 @@ void get_programname (char const *argv0)
         programname = strdup (p + 1);
     else
         programname = strdup (argv0);
-#endif    
+#endif
 }
 
 void process_args ()

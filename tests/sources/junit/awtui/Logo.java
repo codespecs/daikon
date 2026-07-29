@@ -10,7 +10,7 @@ public class Logo extends Canvas {
 	private Image fImage;
 	private int fWidth;
 	private int fHeight;
-	
+
 	public Logo() {
 		fImage= loadImage("logo.gif");
 		MediaTracker tracker= new MediaTracker(this);
@@ -29,7 +29,7 @@ public class Logo extends Canvas {
 		}
 		setSize(fWidth, fHeight);
 	}
-	
+
 	public Image loadImage(String name) {
 		Toolkit toolkit= Toolkit.getDefaultToolkit();
 		try {
@@ -39,13 +39,13 @@ public class Logo extends Canvas {
 		}
 		return null;
 	}
-	
+
 	public void paint(Graphics g) {
 		paintBackground(g);
 		if (fImage != null)
 			g.drawImage(fImage, 0, 0, fWidth, fHeight, this);
 	}
-	
+
 	public void paintBackground( java.awt.Graphics g) {
 		g.setColor(SystemColor.control);
 		g.fillRect(0, 0, getBounds().width, getBounds().height);

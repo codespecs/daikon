@@ -22,7 +22,7 @@ public class FixedSizeSet {
    * @effects Creates a new, empty FixedSizeSet (this.elements_post = {})
    */
   public FixedSizeSet() {
-    this.bits = new boolean[8]; 
+    this.bits = new boolean[8];
   }
 
   /**

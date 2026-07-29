@@ -2,10 +2,10 @@
  * @(#)List.java	1.32 00/02/02
  *
  * Copyright 1997-2000 Sun Microsystems, Inc. All Rights Reserved.
- * 
- * This software is the proprietary information of Sun Microsystems, Inc.  
+ *
+ * This software is the proprietary information of Sun Microsystems, Inc.
  * Use is subject to license terms.
- * 
+ *
  */
 
 package javautil;
@@ -91,7 +91,7 @@ public interface List13 extends Collection13 {
     boolean isEmpty();
 
     /**
-     * 
+     *
      * Returns <tt>true</tt> if this list contains the specified element.
      * More formally, returns <tt>true</tt> if and only if this list contains
      * at least one element <tt>e</tt> such that
@@ -130,7 +130,7 @@ public interface List13 extends Collection13 {
      *		be stored, if it is big enough; otherwise, a new array of the
      * 		same runtime type is allocated for this purpose.
      * @return  an array containing the elements of this list.
-     * 
+     *
      * @throws ArrayStoreException if the runtime type of the specified array
      * 		  is not a supertype of the runtime type of every element in
      * 		  this list.
@@ -154,7 +154,7 @@ public interface List13 extends Collection13 {
      * @param o element to be appended to this list.
      * @return <tt>true</tt> (as per the general contract of the
      *            <tt>Collection.add</tt> method).
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>add</tt> method is not
      * 		  supported by this list.
      * @throws ClassCastException if the class of the specified element
@@ -165,7 +165,7 @@ public interface List13 extends Collection13 {
     boolean add(Object o);
 
     /**
-     * Removes the first occurrence in this list of the specified element 
+     * Removes the first occurrence in this list of the specified element
      * (optional operation).  If this list does not contain the element, it is
      * unchanged.  More formally, removes the element with the lowest index i
      * such that <tt>(o==null ? get(i)==null : o.equals(get(i)))</tt> (if
@@ -173,7 +173,7 @@ public interface List13 extends Collection13 {
      *
      * @param o element to be removed from this list, if present.
      * @return <tt>true</tt> if this list contained the specified element.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>remove</tt> method is
      *		  not supported by this list.
      */
@@ -183,14 +183,14 @@ public interface List13 extends Collection13 {
     // Bulk Modification Operations
 
     /**
-     * 
+     *
      * Returns <tt>true</tt> if this list contains all of the elements of the
      * specified collection.
      *
      * @param c collection to be checked for containment in this list.
      * @return <tt>true</tt> if this list contains all of the elements of the
      * 	       specified collection.
-     * 
+     *
      * @see #contains(Object)
      */
     boolean containsAll(Collection13 c);
@@ -205,17 +205,17 @@ public interface List13 extends Collection13 {
      *
      * @param c collection whose elements are to be added to this list.
      * @return <tt>true</tt> if this list changed as a result of the call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>addAll</tt> method is
      *         not supported by this list.
-     * 
+     *
      * @throws ClassCastException if the class of an element in the specified
      * 	       collection prevents it from being added to this list.
-     * 
+     *
      * @throws IllegalArgumentException if some aspect of an element in the
      *         specified collection prevents it from being added to this
      *         list.
-     * 
+     *
      * @see #add(Object)
      */
     boolean addAll(Collection13 c);
@@ -235,7 +235,7 @@ public interface List13 extends Collection13 {
      *	            collection.
      * @param c elements to be inserted into this list.
      * @return <tt>true</tt> if this list changed as a result of the call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>addAll</tt> method is
      *		  not supported by this list.
      * @throws ClassCastException if the class of one of elements of the
@@ -256,10 +256,10 @@ public interface List13 extends Collection13 {
      * @param c collection that defines which elements will be removed from
      *          this list.
      * @return <tt>true</tt> if this list changed as a result of the call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>removeAll</tt> method
      * 		  is not supported by this list.
-     * 
+     *
      * @see #remove(Object)
      * @see #contains(Object)
      */
@@ -272,12 +272,12 @@ public interface List13 extends Collection13 {
      * collection.
      *
      * @param c collection that defines which elements this set will retain.
-     * 
+     *
      * @return <tt>true</tt> if this list changed as a result of the call.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>retainAll</tt> method
      * 		  is not supported by this list.
-     * 
+     *
      * @see #remove(Object)
      * @see #contains(Object)
      */
@@ -343,7 +343,7 @@ public interface List13 extends Collection13 {
      *
      * @param index index of element to return.
      * @return the element at the specified position in this list.
-     * 
+     *
      * @throws IndexOutOfBoundsException if the index is out of range (index
      * 		  &lt; 0 || index &gt;= size()).
      */
@@ -356,7 +356,7 @@ public interface List13 extends Collection13 {
      * @param index index of element to replace.
      * @param element element to be stored at the specified position.
      * @return the element previously at the specified position.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>set</tt> method is not
      *		  supported by this list.
      * @throws    ClassCastException if the class of the specified element
@@ -375,7 +375,7 @@ public interface List13 extends Collection13 {
      *
      * @param index index at which the specified element is to be inserted.
      * @param element element to be inserted.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>add</tt> method is not
      *		  supported by this list.
      * @throws    ClassCastException if the class of the specified element
@@ -395,10 +395,10 @@ public interface List13 extends Collection13 {
      *
      * @param index the index of the element to removed.
      * @return the element previously at the specified position.
-     * 
+     *
      * @throws UnsupportedOperationException if the <tt>remove</tt> method is
      *		  not supported by this list.
-     * 
+     *
      * @throws IndexOutOfBoundsException if the index is out of range (index
      *            &lt; 0 || index &gt;= size()).
      */
@@ -494,7 +494,7 @@ public interface List13 extends Collection13 {
      * @param fromIndex low endpoint (inclusive) of the subList.
      * @param toIndex high endpoint (exclusive) of the subList.
      * @return a view of the specified range within this list.
-     * 
+     *
      * @throws IndexOutOfBoundsException for an illegal endpoint index value
      *     (fromIndex &lt; 0 || toIndex &gt; size || fromIndex &gt; toIndex).
      */
