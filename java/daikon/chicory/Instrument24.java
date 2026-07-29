@@ -452,7 +452,7 @@ public class Instrument24 implements ClassFileTransformer {
     classBuilder.withMethod(
         "<clinit>",
         MethodTypeDesc.of(CD_void),
-        ACC_STATIC,
+        ClassFile.ACC_STATIC,
         methodBuilder ->
             methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, instructions)));
   }
@@ -527,7 +527,7 @@ public class Instrument24 implements ClassFileTransformer {
           }
 
           // If method is synthetic... (default constructors and <clinit> are not synthetic).
-          if ((mgen.getAccessFlagsMask() & ACC_SYNTHETIC) != 0) {
+          if ((mgen.getAccessFlagsMask() & ClassFile.ACC_SYNTHETIC) != 0) {
             // We are not going to instrument this method.
             // We need to copy it to the output class.
             outputMethodUnchanged(classBuilder, mm, mgen);

@@ -527,7 +527,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           }
 
           // If method is synthetic... (default constructors and <clinit> are not synthetic).
-          if ((ACC_SYNTHETIC & mgen.getAccessFlags()) > 0) {
+          if ((Const.ACC_SYNTHETIC & mgen.getAccessFlags()) > 0) {
             // We are not going to instrument this method.
             continue;
           }
