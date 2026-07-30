@@ -8,7 +8,7 @@ endif
 all default: config.yml validate
 # TODO: all default: config.yml config-daily.yml validate
 
-%: %.m4 defs.m4 ../.azure/jobs.m4
+%: %.m4 defs.m4 ../.azure/defs-common.m4 ../.azure/jobs.m4
 	@chmod -f +w $@ || true
 	m4 $< > $@
 	${PLUME_SCRIPTS}/squeeze-blank-lines $@

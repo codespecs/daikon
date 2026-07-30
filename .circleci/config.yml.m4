@@ -1,6 +1,7 @@
 changequote
 changequote(`[',`]')dnl
 changecom([], [disable comments, that is, expand within them])dnl
+include([../.azure/defs-common.m4])dnl
 include([defs.m4])dnl
 version: 2.1
 

@@ -9,7 +9,7 @@ endif
 all default: azure-pipelines.yml
 # TODO: all default: azure-pipelines.yml azure-pipelines-daily.yml
 
-%: %.m4 defs.m4 jobs.m4
+%: %.m4 defs.m4 defs-common.m4 jobs.m4
 	@chmod -f +w $@ || true
 	m4 $< > $@
 	${PLUME_SCRIPTS}/squeeze-blank-lines $@
