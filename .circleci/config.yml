@@ -35,7 +35,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
+      - run:
+          name: test-quick
+          command: ./scripts/test-quick-txt-diff.sh
 
   quick-txt-diff-ubuntu-jdk17:
     docker:
@@ -54,7 +56,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
+      - run:
+          name: test-quick
+          command: ./scripts/test-quick-txt-diff.sh
 
   quick-txt-diff-ubuntu-jdk21:
     docker:
@@ -73,7 +77,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
+      - run:
+          name: test-quick
+          command: ./scripts/test-quick-txt-diff.sh
 
   quick-txt-diff-ubuntu-jdk25:
     docker:
@@ -92,7 +98,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
+      - run:
+          name: test-quick
+          command: ./scripts/test-quick-txt-diff.sh
 
   quick-txt-diff-ubuntu-jdk26:
     docker:
@@ -111,7 +119,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
+      - run:
+          name: test-quick
+          command: ./scripts/test-quick-txt-diff.sh
 
   nonquick-txt-diff-ubuntu-jdk11:
     docker:
@@ -130,7 +140,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
+      - run:
+          name: test-nonquick
+          command: ./scripts/test-nonquick-txt-diff.sh
 
   nonquick-txt-diff-ubuntu-jdk17:
     docker:
@@ -149,7 +161,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
+      - run:
+          name: test-nonquick
+          command: ./scripts/test-nonquick-txt-diff.sh
 
   nonquick-txt-diff-ubuntu-jdk21:
     docker:
@@ -168,7 +182,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
+      - run:
+          name: test-nonquick
+          command: ./scripts/test-nonquick-txt-diff.sh
 
   nonquick-txt-diff-ubuntu-jdk25:
     docker:
@@ -187,7 +203,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
+      - run:
+          name: test-nonquick
+          command: ./scripts/test-nonquick-txt-diff.sh
 
   nonquick-txt-diff-ubuntu-jdk26:
     docker:
@@ -206,7 +224,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
+      - run:
+          name: test-nonquick
+          command: ./scripts/test-nonquick-txt-diff.sh
 
   non-txt-diff-ubuntu-jdk11:
     docker:
@@ -225,7 +245,10 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
+      - run:
+          name: test-nontxt
+          command: ./scripts/test-non-txt-diff.sh
+
   non-txt-diff-ubuntu-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
@@ -243,7 +266,10 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
+      - run:
+          name: test-nontxt
+          command: ./scripts/test-non-txt-diff.sh
+
   non-txt-diff-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
@@ -261,7 +287,10 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
+      - run:
+          name: test-nontxt
+          command: ./scripts/test-non-txt-diff.sh
+
   non-txt-diff-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
@@ -279,7 +308,10 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
+      - run:
+          name: test-nontxt
+          command: ./scripts/test-non-txt-diff.sh
+
   non-txt-diff-ubuntu-jdk26:
     docker:
       - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
@@ -297,7 +329,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
+      - run:
+          name: test-nontxt
+          command: ./scripts/test-non-txt-diff.sh
 
   misc-ubuntu-jdk11:
     docker:
@@ -308,18 +342,20 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
       - checkout:
           method: full
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
+          name: test-misc
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
+
   misc-ubuntu-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk17-plus<< pipeline.parameters.testing-suffix >>
@@ -329,18 +365,20 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
       - checkout:
           method: full
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
+          name: test-misc
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
+
   misc-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21-plus<< pipeline.parameters.testing-suffix >>
@@ -350,18 +388,20 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
       - checkout:
           method: full
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
+          name: test-misc
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
+
   misc-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25-plus<< pipeline.parameters.testing-suffix >>
@@ -371,18 +411,20 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
       - checkout:
           method: full
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
+          name: test-misc
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
+
   misc-ubuntu-jdk26:
     docker:
       - image: mdernst/daikon-ubuntu-jdk26-plus<< pipeline.parameters.testing-suffix >>
@@ -392,16 +434,17 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
       - checkout:
           method: full
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
+          name: test-misc
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
 
@@ -426,6 +469,7 @@ jobs:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
+
   kvasir-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25-plus<< pipeline.parameters.testing-suffix >>
@@ -447,6 +491,7 @@ jobs:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
+
   kvasir-ubuntu-jdk26:
     docker:
       - image: mdernst/daikon-ubuntu-jdk26-plus<< pipeline.parameters.testing-suffix >>
@@ -490,10 +535,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck bundled
           command: scripts/test-typecheck-with-bundled-cf.sh part1
           no_output_timeout: 30m
+
   typecheck-bundled-part2-ubuntu-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
@@ -511,10 +557,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck bundled
           command: scripts/test-typecheck-with-bundled-cf.sh part2
           no_output_timeout: 30m
+
   typecheck-bundled-part3-ubuntu-jdk17:
     docker:
       - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
@@ -532,10 +579,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck bundled
           command: scripts/test-typecheck-with-bundled-cf.sh part3
           no_output_timeout: 30m
+
   typecheck-bundled-part1-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
@@ -553,10 +601,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck bundled
           command: scripts/test-typecheck-with-bundled-cf.sh part1
           no_output_timeout: 30m
+
   typecheck-bundled-part2-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
@@ -574,10 +623,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck bundled
           command: scripts/test-typecheck-with-bundled-cf.sh part2
           no_output_timeout: 30m
+
   typecheck-bundled-part3-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
@@ -595,10 +645,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck bundled
           command: scripts/test-typecheck-with-bundled-cf.sh part3
           no_output_timeout: 30m
+
   typecheck-latest-part1-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
@@ -616,10 +667,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck latest
           command: scripts/test-typecheck-with-latest-cf.sh part1
           no_output_timeout: 30m
+
   typecheck-latest-part2-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
@@ -637,10 +689,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck latest
           command: scripts/test-typecheck-with-latest-cf.sh part2
           no_output_timeout: 30m
+
   typecheck-latest-part3-ubuntu-jdk21:
     docker:
       - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
@@ -658,10 +711,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck latest
           command: scripts/test-typecheck-with-latest-cf.sh part3
           no_output_timeout: 30m
+
   typecheck-bundled-part1-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
@@ -679,10 +733,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck bundled
           command: scripts/test-typecheck-with-bundled-cf.sh part1
           no_output_timeout: 30m
+
   typecheck-bundled-part2-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
@@ -700,10 +755,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck bundled
           command: scripts/test-typecheck-with-bundled-cf.sh part2
           no_output_timeout: 30m
+
   typecheck-bundled-part3-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
@@ -721,10 +777,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck bundled
           command: scripts/test-typecheck-with-bundled-cf.sh part3
           no_output_timeout: 30m
+
   typecheck-latest-part1-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
@@ -742,10 +799,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck latest
           command: scripts/test-typecheck-with-latest-cf.sh part1
           no_output_timeout: 30m
+
   typecheck-latest-part2-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
@@ -763,10 +821,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck latest
           command: scripts/test-typecheck-with-latest-cf.sh part2
           no_output_timeout: 30m
+
   typecheck-latest-part3-ubuntu-jdk25:
     docker:
       - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
@@ -784,10 +843,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck latest
           command: scripts/test-typecheck-with-latest-cf.sh part3
           no_output_timeout: 30m
+
   typecheck-bundled-part1-ubuntu-jdk26:
     docker:
       - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
@@ -805,10 +865,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck bundled
           command: scripts/test-typecheck-with-bundled-cf.sh part1
           no_output_timeout: 30m
+
   typecheck-bundled-part2-ubuntu-jdk26:
     docker:
       - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
@@ -826,10 +887,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck bundled
           command: scripts/test-typecheck-with-bundled-cf.sh part2
           no_output_timeout: 30m
+
   typecheck-bundled-part3-ubuntu-jdk26:
     docker:
       - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
@@ -847,10 +909,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck bundled
           command: scripts/test-typecheck-with-bundled-cf.sh part3
           no_output_timeout: 30m
+
   typecheck-latest-part1-ubuntu-jdk26:
     docker:
       - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
@@ -868,10 +931,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck latest
           command: scripts/test-typecheck-with-latest-cf.sh part1
           no_output_timeout: 30m
+
   typecheck-latest-part2-ubuntu-jdk26:
     docker:
       - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
@@ -889,10 +953,11 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck latest
           command: scripts/test-typecheck-with-latest-cf.sh part2
           no_output_timeout: 30m
+
   typecheck-latest-part3-ubuntu-jdk26:
     docker:
       - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
@@ -910,8 +975,8 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: env
       - run:
+          name: typecheck latest
           command: scripts/test-typecheck-with-latest-cf.sh part3
           no_output_timeout: 30m
 
@@ -932,7 +997,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
+      - run:
+          name: test-quick
+          command: ./scripts/test-quick-txt-diff.sh
 
   quick-txt-diff-rockylinux-jdk25:
     docker:
@@ -951,7 +1018,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
+      - run:
+          name: test-quick
+          command: ./scripts/test-quick-txt-diff.sh
 
   quick-txt-diff-rockylinux-jdk26:
     docker:
@@ -970,7 +1039,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-quick-txt-diff.sh
+      - run:
+          name: test-quick
+          command: ./scripts/test-quick-txt-diff.sh
 
   nonquick-txt-diff-rockylinux-jdk11:
     docker:
@@ -989,7 +1060,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
+      - run:
+          name: test-nonquick
+          command: ./scripts/test-nonquick-txt-diff.sh
 
   nonquick-txt-diff-rockylinux-jdk25:
     docker:
@@ -1008,7 +1081,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
+      - run:
+          name: test-nonquick
+          command: ./scripts/test-nonquick-txt-diff.sh
 
   nonquick-txt-diff-rockylinux-jdk26:
     docker:
@@ -1027,7 +1102,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-nonquick-txt-diff.sh
+      - run:
+          name: test-nonquick
+          command: ./scripts/test-nonquick-txt-diff.sh
 
   non-txt-diff-rockylinux-jdk11:
     docker:
@@ -1046,7 +1123,10 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
+      - run:
+          name: test-nontxt
+          command: ./scripts/test-non-txt-diff.sh
+
   non-txt-diff-rockylinux-jdk25:
     docker:
       - image: mdernst/daikon-rockylinux-jdk25<< pipeline.parameters.testing-suffix >>
@@ -1064,7 +1144,10 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
+      - run:
+          name: test-nontxt
+          command: ./scripts/test-non-txt-diff.sh
+
   non-txt-diff-rockylinux-jdk26:
     docker:
       - image: mdernst/daikon-rockylinux-jdk26<< pipeline.parameters.testing-suffix >>
@@ -1082,7 +1165,9 @@ jobs:
           key: *source-cache
           paths:
             - ".git"
-      - run: ./scripts/test-non-txt-diff.sh
+      - run:
+          name: test-nontxt
+          command: ./scripts/test-non-txt-diff.sh
 
   misc-rockylinux-jdk11:
     docker:
@@ -1093,18 +1178,20 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
       - checkout:
           method: full
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
+          name: test-misc
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
+
   misc-rockylinux-jdk25:
     docker:
       - image: mdernst/daikon-rockylinux-jdk25-plus<< pipeline.parameters.testing-suffix >>
@@ -1114,18 +1201,20 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
       - checkout:
           method: full
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
+          name: test-misc
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
+
   misc-rockylinux-jdk26:
     docker:
       - image: mdernst/daikon-rockylinux-jdk26-plus<< pipeline.parameters.testing-suffix >>
@@ -1135,16 +1224,17 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
       - checkout:
           method: full
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
+          name: test-misc
           command: ./scripts/test-misc.sh
           no_output_timeout: 20m
 
@@ -1169,6 +1259,7 @@ jobs:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
+
   kvasir-rockylinux-jdk25:
     docker:
       - image: mdernst/daikon-rockylinux-jdk25-plus<< pipeline.parameters.testing-suffix >>
@@ -1190,6 +1281,7 @@ jobs:
           name: Test Kvasir
           command: ./scripts/test-kvasir.sh
           no_output_timeout: 20m
+
   kvasir-rockylinux-jdk26:
     docker:
       - image: mdernst/daikon-rockylinux-jdk26-plus<< pipeline.parameters.testing-suffix >>
