@@ -1,6 +1,5 @@
 # DO NOT EDIT ci.yml. Edit ci.yml.m4 and defs.m4 instead.
 
-
 name: CI
 
 "on":
@@ -61,7 +60,6 @@ jobs:
       - uses: actions/checkout@v7
         with:
           set-safe-directory: true
-          # Unlimited history for contributors.tex generation.
           fetch-depth: 0
       - name: clone_plume_scripts
         run: git clone https://github.com/plume-lib/plume-scripts.git /tmp/plume-scripts
@@ -320,8 +318,8 @@ jobs:
       - uses: actions/checkout@v7
         with:
           set-safe-directory: true
-          fetch-depth: 25
-      - name: FULL CHECKOUT test-misc
+          fetch-depth: 0
+      - name: test-misc
         run: ./scripts/test-misc.sh
 
   misc_ubuntu_jdk17:
@@ -336,8 +334,8 @@ jobs:
       - uses: actions/checkout@v7
         with:
           set-safe-directory: true
-          fetch-depth: 25
-      - name: FULL CHECKOUT test-misc
+          fetch-depth: 0
+      - name: test-misc
         run: ./scripts/test-misc.sh
 
   misc_ubuntu_jdk21:
@@ -352,8 +350,8 @@ jobs:
       - uses: actions/checkout@v7
         with:
           set-safe-directory: true
-          fetch-depth: 25
-      - name: FULL CHECKOUT test-misc
+          fetch-depth: 0
+      - name: test-misc
         run: ./scripts/test-misc.sh
 
   misc_ubuntu_jdk25:
@@ -368,8 +366,8 @@ jobs:
       - uses: actions/checkout@v7
         with:
           set-safe-directory: true
-          fetch-depth: 25
-      - name: FULL CHECKOUT test-misc
+          fetch-depth: 0
+      - name: test-misc
         run: ./scripts/test-misc.sh
 
   misc_ubuntu_jdk26:
@@ -384,8 +382,8 @@ jobs:
       - uses: actions/checkout@v7
         with:
           set-safe-directory: true
-          fetch-depth: 25
-      - name: FULL CHECKOUT test-misc
+          fetch-depth: 0
+      - name: test-misc
         run: ./scripts/test-misc.sh
 
   kvasir_ubuntu_jdk11:
@@ -604,8 +602,8 @@ typecheck_job_parts(ubuntu, 26, latest)
       - uses: actions/checkout@v7
         with:
           set-safe-directory: true
-          fetch-depth: 25
-      - name: FULL CHECKOUT test-misc
+          fetch-depth: 0
+      - name: test-misc
         run: ./scripts/test-misc.sh
 
   misc_rockylinux_jdk25:
@@ -620,8 +618,8 @@ typecheck_job_parts(ubuntu, 26, latest)
       - uses: actions/checkout@v7
         with:
           set-safe-directory: true
-          fetch-depth: 25
-      - name: FULL CHECKOUT test-misc
+          fetch-depth: 0
+      - name: test-misc
         run: ./scripts/test-misc.sh
 
   misc_rockylinux_jdk26:
@@ -636,8 +634,8 @@ typecheck_job_parts(ubuntu, 26, latest)
       - uses: actions/checkout@v7
         with:
           set-safe-directory: true
-          fetch-depth: 25
-      - name: FULL CHECKOUT test-misc
+          fetch-depth: 0
+      - name: test-misc
         run: ./scripts/test-misc.sh
 
   kvasir_rockylinux_jdk11:

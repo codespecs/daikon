@@ -1,4 +1,4 @@
-        changequote
+changequote
 changequote(`[',`]')dnl
 changecom([], [disable comments, that is, expand within them])dnl
 ifelse([The built-in "dnl" m4 macro means "discard to next line".])dnl
@@ -13,7 +13,7 @@ define([boilerplate], [dnl
       - uses: actions/checkout@v7
         with:
           set-safe-directory: true
-          fetch-depth: 25
+          fetch-depth: ifelse($2,test-misc,0,25)
       - name: $2
         run: $3
 ])dnl
@@ -53,7 +53,7 @@ ifelse($1,canary_version,,[    needs:
       - canary_jobs
       - misc_jdk[]canary_version
 ])dnl
-boilerplate(docker_userid/daikon-jdk$2[]docker_testing:latest, FULL CHECKOUT test-misc, ./scripts/test-misc.sh)
+boilerplate(docker_userid/daikon-jdk$2[]docker_testing:latest, test-misc, ./scripts/test-misc.sh)
 ])dnl
 dnl
 define([kvasir_job], [dnl

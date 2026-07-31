@@ -64,7 +64,6 @@ jobs:
       - uses: actions/checkout@v7
         with:
           set-safe-directory: true
-          # Unlimited history for contributors.tex generation.
           fetch-depth: 0
       - name: clone_plume_scripts
         run: git clone https://github.com/plume-lib/plume-scripts.git /tmp/plume-scripts
