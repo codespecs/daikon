@@ -1,8 +1,4 @@
 PLUME_SCRIPTS ?= ../.utils/plume-scripts
-ifeq (,$(wildcard ${PLUME_SCRIPTS}))
-dummy1 := $(shell mkdir -p $(dirname ${PLUME_SCRIPTS}))
-dummy2 := $(shell git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS})
-endif
 
 .PHONY: default all test clean
 
@@ -14,6 +10,10 @@ all default: azure-pipelines.yml
 	m4 $< > $@
 	${PLUME_SCRIPTS}/squeeze-blank-lines $@
 	@chmod -w $@
+
+${PLUME_SCRIPTS}:
+	mkdir -p $(dirname ${PLUME_SCRIPTS})
+	git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS}
 
 clean:
 	rm -f azure-pipelines.yml
