@@ -308,13 +308,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
-      - checkout:
-          method: full
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -329,13 +328,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
-      - checkout:
-          method: full
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -350,13 +348,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
-      - checkout:
-          method: full
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -371,13 +368,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
-      - checkout:
-          method: full
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -392,13 +388,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
-      - checkout:
-          method: full
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1093,13 +1088,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
-      - checkout:
-          method: full
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1114,13 +1108,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
-      - checkout:
-          method: full
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
@@ -1135,13 +1128,12 @@ jobs:
     steps:
       - restore_cache:
           keys:
-            - &sourcefull-cache sourcefull-v1full-{{ .Branch }}-{{ .Revision }}
-            - sourcefull-v1full-{{ .Branch }}-
-            - sourcefull-v1full-
-      - checkout:
-          method: full
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
       - save_cache:
-          key: *sourcefull-cache
+          key: *source-cache
           paths:
             - ".git"
       - run:
