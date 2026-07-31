@@ -7,11 +7,14 @@ tests :=  AbstractList17.java AnAbstractClass.java ConstructorTest.java Failure3
 
 results := $(tests:.java=.java-parsed)
 
+.PHONY: all test clean
+
 all:
 	 ${MAKE} clean
 	 ${MAKE} run-tests
 
 run-tests: ${results}
+test: run-tests
 
 clean:
 	rm -f *.java-parsed *.diff *.log

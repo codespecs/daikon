@@ -9,6 +9,9 @@ all: birthday.inv standalone.inv
 clean:
 	rm -rf birthday.inv standalone.inv daikon-untyped daikon-instrumented daikon-output
 
+.PHONY: test
+test: all
+
 birthday.inv: daikon-output/Birthday.decls daikon-output/test_bday-combined.dtrace
 	${DAIKON} $^ -o $@
 

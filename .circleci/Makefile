@@ -4,7 +4,7 @@ dummy1 := $(shell mkdir -p $(dirname ${PLUME_SCRIPTS}))
 dummy2 := $(shell git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS})
 endif
 
-.PHONY: all default clean
+.PHONY: all test clean default
 all default: config.yml validate
 # TODO: all default: config.yml config-daily.yml validate
 
@@ -19,3 +19,4 @@ validate: config.yml
 
 clean:
 	rm -f config.yml
+test:

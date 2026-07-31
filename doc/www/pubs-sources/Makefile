@@ -78,3 +78,5 @@ abstracts-testsubject:
 	rm abstracts-unsplit.html
 
 .PHONY: abstracts html HTML clean-abstracts writable-abstracts
+
+.PHONY: all test clean
