@@ -6,3 +6,4 @@ define([canary_os], [ubuntu])dnl
 define([canary_version], [25])dnl
 define([canary_test], [canary_os[]canary_version])dnl
 define([docker_userid], [mdernst])
+define([docker_testing], [])

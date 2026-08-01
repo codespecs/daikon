@@ -33,7 +33,7 @@ Create the Docker image:
 
 # Alias to create the Docker image, in an empty directory, and upload to Docker Hub.
 DOCKERTESTING=""
-# When DOCKERTESTING is enabled, also update the value of `testingSuffix` in file .azure/azure-pipelines.yml.m4 .
+# When DOCKERTESTING is enabled, also update the value of `docker_testing` in file .azure/defs-common.m4 .
 # DOCKERTESTING="-testing"
 # Arguments: project, OS, JDK version
 function create_upload_docker_image {

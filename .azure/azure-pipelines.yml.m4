@@ -13,11 +13,6 @@ pr:
     include:
       - '*'
 
-variables:
-  - name: testingSuffix
-    value:
-#    value: -testing
-
 jobs:
 
   # The dependsOn clauses (in this file and in .circleci/config.yml) are:
@@ -50,7 +45,7 @@ include([jobs.m4])dnl
 #   - job: typecheck_onefile_jdk21
 #     pool:
 #       vmImage: 'ubuntu-latest'
-#     container: mdernst/daikon-ubuntu-jdk21-plus${{ variables.testingSuffix }}:latest
+#     container: mdernst/daikon-ubuntu-jdk21-plus:latest
 #     timeoutInMinutes: 70
 #     steps:
 #       - checkout: self

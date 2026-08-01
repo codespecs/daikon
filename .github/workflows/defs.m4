@@ -3,73 +3,83 @@ changequote(`[',`]')dnl
 changecom([], [disable comments, that is, expand within them])dnl
 ifelse([The built-in "dnl" m4 macro means "discard to next line".])dnl
 dnl
-ifelse([Arguments are container, name, command line.])dnl
+ifelse([Arguments are OS, JDK, name, command line.])dnl
 define([boilerplate], [dnl
     runs-on: ubuntu-latest
     container:
-      image: $1
+      image: docker_userid/daikon-$1-jdk$2[]ifelse(test-misc.sh,$3,-plus,test-kvasir.sh,$3,-plus,typecheck bundled,$3,-plus,typecheck bundled part1,$3,-plus,typecheck bundled part2,$3,-plus,typecheck bundled part3,$3,-plus,typecheck latest,$3,-plus,typecheck latest part1,$3,-plus,typecheck latest part2,$3,-plus,typecheck latest part3,$3,-plus)[]docker_testing:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
         with:
           set-safe-directory: true
-          fetch-depth: ifelse($2,test-misc,0,25)
-      - name: $2
-        run: $3
+          fetch-depth: ifelse($3,test-misc,0,25)
+      - name: $3
+        run: $4
 ])dnl
 dnl
 ifelse([Each macro takes two arguments, the OS name and the JDK version.])dnl
 dnl
 define([quick_job], [dnl
   quick_$1_jdk$2:
-ifelse($1,canary_version,,[    needs:
+ifelse($1,canary_version,,[dnl
+    needs:
       - canary_jobs
-      - junit_part1_jdk[]canary_version
+      - quick_$1_jdk[]canary_version
 ])dnl
-boilerplate(docker_userid/daikon-jdk$2[]docker_testing:latest, test-quick, ./scripts/test-quick-txt-diff.sh)
+ifelse($1,canary_os,,[      - quick_[]canary_os[]_jdk$2
+])dnl
+boilerplate($1, $2, test-quick, ./scripts/test-quick-txt-diff.sh)[]dnl
 ])dnl
 dnl
 define([nonquick_job], [dnl
   nonquick_$1_jdk$2:
-ifelse($1,canary_version,,[    needs:
+ifelse($1,canary_version,,[dnl
+    needs:
       - canary_jobs
-      - junit_part1_jdk[]canary_version
+ifelse($2,canary_version,,[      - nonquick_$1_jdk[]canary_version
 ])dnl
-boilerplate(docker_userid/daikon-jdk$2[]docker_testing:latest, test-nonquick, ./scripts/test-nonquick-txt-diff.sh)
+ifelse($1,canary_os,,[      - nonquick_[]canary_os[]_jdk$2
+])dnl
+])dnl
+boilerplate($1, $2, test-nonquick, ./scripts/test-nonquick-txt-diff.sh)[]dnl
 ])dnl
 dnl
 define([nontxt_job], [dnl
   nontxt_$1_jdk$2:
-ifelse($1,canary_version,,[    needs:
+ifelse($1,canary_version,,[dnl
+    needs:
       - canary_jobs
-      - junit_part1_jdk[]canary_version
+      - nontxt_$1_jdk[]canary_version
 ])dnl
-boilerplate(docker_userid/daikon-jdk$2[]docker_testing:latest, test-nontxt, ./scripts/test-non-txt-diff.sh)
+boilerplate($1, $2, test-nontxt, ./scripts/test-non-txt-diff.sh)[]dnl
 ])dnl
 dnl
 define([misc_job], [dnl
   misc_$1_jdk$2:
-ifelse($1,canary_version,,[    needs:
+ifelse($1,canary_version,,[dnl
+    needs:
       - canary_jobs
       - misc_jdk[]canary_version
 ])dnl
-boilerplate(docker_userid/daikon-jdk$2[]docker_testing:latest, test-misc, ./scripts/test-misc.sh)
+boilerplate($1, $2, test-misc, ./scripts/test-misc.sh)[]dnl
 ])dnl
 dnl
 define([kvasir_job], [dnl
   kvasir_$1_jdk$2:
-ifelse($1,canary_version,,[    needs:
+ifelse($1,canary_version,,[dnl
+    needs:
       - canary_jobs
-      - kvasir_jdk[]canary_version
+      - kvasir_$1_jdk[]canary_version
 ])dnl
-boilerplate(docker_userid/daikon-jdk$2[]docker_testing:latest, Test Kvasir, ./scripts/test-kvasir.sh)
+boilerplate($1, $2, Test Kvasir, ./scripts/test-kvasir.sh)[]dnl
 ])dnl
 dnl
 ifelse([argument 3 is "latest" or "bundled"])dnl
 define([typecheck_job], [dnl
 ifelse($1,canary_version,[dnl
-  typecheck_part1_$1_jdk$2:
-boilerplate(docker_userid/daikon-jdk$2[]docker_testing:latest, typecheck-$3, scripts/test-typecheck-with-$3-cf.sh)
+  typecheck_$1_jdk$2:
+boilerplate($1, $2, typecheck $3, scripts/test-typecheck-with-$3-cf.sh)[]dnl
 ])
 define([typecheck_job_parts], [dnl
 typecheck_job_part($1, $2, $3, part1)
@@ -78,14 +88,14 @@ typecheck_job_part($1, $2, $3, part3)])dnl
 ifelse([argument 3 is "latest" or "bundled", argument 4 is "part1", "part2", or "part3"])dnl
 define([typecheck_job_part], [dnl
   typecheck_part2_$1_jdk$2:
-boilerplate(docker_userid/daikon-jdk$2[]docker_testing:latest, test-cftests-typecheck-part2.sh, ./checker/bin-devel/test-cftests-typecheck-part2.sh)
+boilerplate($1, $2, test-cftests-typecheck-part2.sh, ./checker/bin-devel/test-cftests-typecheck-part2.sh)[]dnl
 ],[dnl
   typecheck_$1_jdk$2:
     needs:
       - canary_jobs
-      - typecheck_part1_jdk[]canary_version
+      - typecheck_$1_jdk[]canary_version
       - typecheck_part2_jdk[]canary_version
-boilerplate(docker_userid/daikon-jdk$2[]docker_testing:latest, test-cftests-typecheck.sh, ./checker/bin-devel/test-cftests-typecheck.sh)
+boilerplate($1, $2o, test-cftests-typecheck.sh, ./checker/bin-devel/test-cftests-typecheck.sh)
 ])dnl
 ])dnl
 dnl

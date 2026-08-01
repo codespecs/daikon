@@ -69,10 +69,10 @@ jobs:
   quick_ubuntu_jdk11:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - quick_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk11docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk11:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -85,10 +85,10 @@ jobs:
   quick_ubuntu_jdk17:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - quick_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk17docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk17:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -101,10 +101,10 @@ jobs:
   quick_ubuntu_jdk21:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - quick_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk21docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk21:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -117,10 +117,10 @@ jobs:
   quick_ubuntu_jdk25:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - quick_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk25docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk25:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -133,10 +133,10 @@ jobs:
   quick_ubuntu_jdk26:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - quick_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk26docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk26:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -149,10 +149,10 @@ jobs:
   nonquick_ubuntu_jdk11:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nonquick_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk11docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk11:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -165,10 +165,10 @@ jobs:
   nonquick_ubuntu_jdk17:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nonquick_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk17docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk17:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -181,10 +181,10 @@ jobs:
   nonquick_ubuntu_jdk21:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nonquick_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk21docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk21:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -197,10 +197,9 @@ jobs:
   nonquick_ubuntu_jdk25:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk25docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk25:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -213,10 +212,10 @@ jobs:
   nonquick_ubuntu_jdk26:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nonquick_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk26docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk26:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -229,10 +228,10 @@ jobs:
   nontxt_ubuntu_jdk11:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nontxt_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk11docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk11:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -245,10 +244,10 @@ jobs:
   nontxt_ubuntu_jdk17:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nontxt_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk17docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk17:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -261,10 +260,10 @@ jobs:
   nontxt_ubuntu_jdk21:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nontxt_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk21docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk21:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -277,10 +276,10 @@ jobs:
   nontxt_ubuntu_jdk25:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nontxt_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk25docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk25:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -293,10 +292,10 @@ jobs:
   nontxt_ubuntu_jdk26:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nontxt_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk26docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk26:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -312,7 +311,7 @@ jobs:
       - misc_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk11docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk11:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -328,7 +327,7 @@ jobs:
       - misc_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk17docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk17:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -344,7 +343,7 @@ jobs:
       - misc_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk21docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk21:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -360,7 +359,7 @@ jobs:
       - misc_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk25docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk25:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -376,7 +375,7 @@ jobs:
       - misc_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk26docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk26:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -389,10 +388,10 @@ jobs:
   kvasir_ubuntu_jdk11:
     needs:
       - canary_jobs
-      - kvasir_jdk25
+      - kvasir_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk11docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk11:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -405,10 +404,10 @@ jobs:
   kvasir_ubuntu_jdk25:
     needs:
       - canary_jobs
-      - kvasir_jdk25
+      - kvasir_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk25docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk25:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -421,10 +420,10 @@ jobs:
   kvasir_ubuntu_jdk26:
     needs:
       - canary_jobs
-      - kvasir_jdk25
+      - kvasir_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk26docker_testing:latest
+      image: mdernst/daikon-ubuntu-jdk26:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -449,10 +448,11 @@ typecheck_job_parts(ubuntu, 26, latest)
   quick_rockylinux_jdk11:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - quick_rockylinux_jdk25
+      - quick_ubuntu_jdk11
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk11docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk11:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -465,10 +465,11 @@ typecheck_job_parts(ubuntu, 26, latest)
   quick_rockylinux_jdk25:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - quick_rockylinux_jdk25
+      - quick_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk25docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk25:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -481,10 +482,11 @@ typecheck_job_parts(ubuntu, 26, latest)
   quick_rockylinux_jdk26:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - quick_rockylinux_jdk25
+      - quick_ubuntu_jdk26
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk26docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk26:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -497,10 +499,11 @@ typecheck_job_parts(ubuntu, 26, latest)
   nonquick_rockylinux_jdk11:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nonquick_rockylinux_jdk25
+      - nonquick_ubuntu_jdk11
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk11docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk11:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -513,10 +516,10 @@ typecheck_job_parts(ubuntu, 26, latest)
   nonquick_rockylinux_jdk25:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nonquick_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk25docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk25:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -529,10 +532,11 @@ typecheck_job_parts(ubuntu, 26, latest)
   nonquick_rockylinux_jdk26:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nonquick_rockylinux_jdk25
+      - nonquick_ubuntu_jdk26
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk26docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk26:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -545,10 +549,10 @@ typecheck_job_parts(ubuntu, 26, latest)
   nontxt_rockylinux_jdk11:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nontxt_rockylinux_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk11docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk11:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -561,10 +565,10 @@ typecheck_job_parts(ubuntu, 26, latest)
   nontxt_rockylinux_jdk25:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nontxt_rockylinux_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk25docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk25:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -577,10 +581,10 @@ typecheck_job_parts(ubuntu, 26, latest)
   nontxt_rockylinux_jdk26:
     needs:
       - canary_jobs
-      - junit_part1_jdk25
+      - nontxt_rockylinux_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk26docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk26:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -596,7 +600,7 @@ typecheck_job_parts(ubuntu, 26, latest)
       - misc_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk11docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk11:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -612,7 +616,7 @@ typecheck_job_parts(ubuntu, 26, latest)
       - misc_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk25docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk25:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -628,7 +632,7 @@ typecheck_job_parts(ubuntu, 26, latest)
       - misc_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk26docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk26:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -641,10 +645,10 @@ typecheck_job_parts(ubuntu, 26, latest)
   kvasir_rockylinux_jdk11:
     needs:
       - canary_jobs
-      - kvasir_jdk25
+      - kvasir_rockylinux_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk11docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk11:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -657,10 +661,10 @@ typecheck_job_parts(ubuntu, 26, latest)
   kvasir_rockylinux_jdk25:
     needs:
       - canary_jobs
-      - kvasir_jdk25
+      - kvasir_rockylinux_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk25docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk25:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -673,10 +677,10 @@ typecheck_job_parts(ubuntu, 26, latest)
   kvasir_rockylinux_jdk26:
     needs:
       - canary_jobs
-      - kvasir_jdk25
+      - kvasir_rockylinux_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-jdk26docker_testing:latest
+      image: mdernst/daikon-rockylinux-jdk26:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
