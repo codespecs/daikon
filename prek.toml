@@ -59,6 +59,7 @@ hooks = [
     "**/tests/squeeze-blank-lines-test/**",
     "bugs/jikes-patches/*",
     "java/jtb/**",
+    "src/main/resources/specifications/jdk",
     "tests/kvasir-tests/**",
   ] } },
   { id = "file-contents-sorter", files = { glob = [
