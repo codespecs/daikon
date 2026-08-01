@@ -1,8 +1,8 @@
 changequote
 changequote(`[',`]')dnl
 changecom([], [disable comments, that is, expand within them])dnl
-ifelse([the built-in "dnl" macro means "discard to next line"])dnl
-ifelse([each macro takes two arguments, the OS name and the JDK version])dnl
+ifelse([The built-in "dnl" m4 macro means "discard to next line".])dnl
+ifelse([Each macro takes two arguments, the OS name and the JDK version.])dnl
 dnl
 define([quick_job], [dnl
   - job: quick_$1_jdk$2
