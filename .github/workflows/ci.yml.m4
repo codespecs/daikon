@@ -31,12 +31,6 @@ env:
   GIT_CONFIG_KEY_0: safe.directory
   GIT_CONFIG_VALUE_0: ${{ github.workspace }}
 
-parameters:
-  testing-suffix:
-    type: string
-    default: ""
-    # default: "-testing"
-
 jobs:
 
   # The needs clauses are:
@@ -45,14 +39,14 @@ jobs:
 
   canary_jobs:
     needs:
-      - junit_part1_jdk[]canary_version
-      - junit_part2_jdk[]canary_version
-      - nonjunit_jdk[]canary_version
-      - inference_part1_jdk[]canary_version
-      - inference_part2_jdk[]canary_version
-      - typecheck_part1_jdk[]canary_version
-      - typecheck_part2_jdk[]canary_version
-      - misc_jdk[]canary_version
+      - junit_part1_jdk[]canary_jdk
+      - junit_part2_jdk[]canary_jdk
+      - nonjunit_jdk[]canary_jdk
+      - inference_part1_jdk[]canary_jdk
+      - inference_part2_jdk[]canary_jdk
+      - typecheck_part1_jdk[]canary_jdk
+      - typecheck_part2_jdk[]canary_jdk
+      - misc_jdk[]canary_jdk
       - misc_jdk[]latest_version
     runs-on: ubuntu-latest
     steps:

@@ -1,11 +1,5 @@
 version: 2.1
 
-parameters:
-  testing-suffix:
-    type: string
-    default: ""
-    # default: "-testing"
-
 jobs:
 
   # Only proceed to other jobs if canary-jobs passes.
@@ -18,9 +12,9 @@ jobs:
     steps:
       - run: /bin/true
 
-  quick-txt-diff-ubuntu-jdk11:
+  quick_ubuntu_jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk11<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk11
     resource_class: large
     environment:
       TERM: dumb
@@ -37,11 +31,11 @@ jobs:
             - ".git"
       - run:
           name: test-quick
-          command: ./scripts/test-quick-txt-diff.sh
+          command: scripts/test-quick-txt-diff.sh
 
-  quick-txt-diff-ubuntu-jdk17:
+  quick_ubuntu_jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
       TERM: dumb
@@ -58,11 +52,11 @@ jobs:
             - ".git"
       - run:
           name: test-quick
-          command: ./scripts/test-quick-txt-diff.sh
+          command: scripts/test-quick-txt-diff.sh
 
-  quick-txt-diff-ubuntu-jdk21:
+  quick_ubuntu_jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
       TERM: dumb
@@ -79,11 +73,11 @@ jobs:
             - ".git"
       - run:
           name: test-quick
-          command: ./scripts/test-quick-txt-diff.sh
+          command: scripts/test-quick-txt-diff.sh
 
-  quick-txt-diff-ubuntu-jdk25:
+  quick_ubuntu_jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
       TERM: dumb
@@ -100,11 +94,11 @@ jobs:
             - ".git"
       - run:
           name: test-quick
-          command: ./scripts/test-quick-txt-diff.sh
+          command: scripts/test-quick-txt-diff.sh
 
-  quick-txt-diff-ubuntu-jdk26:
+  quick_ubuntu_jdk26:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk26
     resource_class: large
     environment:
       TERM: dumb
@@ -121,11 +115,11 @@ jobs:
             - ".git"
       - run:
           name: test-quick
-          command: ./scripts/test-quick-txt-diff.sh
+          command: scripts/test-quick-txt-diff.sh
 
-  nonquick-txt-diff-ubuntu-jdk11:
+  nonquick_ubuntu_jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk11<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk11
     resource_class: large
     environment:
       TERM: dumb
@@ -142,11 +136,11 @@ jobs:
             - ".git"
       - run:
           name: test-nonquick
-          command: ./scripts/test-nonquick-txt-diff.sh
+          command: scripts/test-nonquick-txt-diff.sh
 
-  nonquick-txt-diff-ubuntu-jdk17:
+  nonquick_ubuntu_jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
       TERM: dumb
@@ -163,11 +157,11 @@ jobs:
             - ".git"
       - run:
           name: test-nonquick
-          command: ./scripts/test-nonquick-txt-diff.sh
+          command: scripts/test-nonquick-txt-diff.sh
 
-  nonquick-txt-diff-ubuntu-jdk21:
+  nonquick_ubuntu_jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
       TERM: dumb
@@ -184,11 +178,11 @@ jobs:
             - ".git"
       - run:
           name: test-nonquick
-          command: ./scripts/test-nonquick-txt-diff.sh
+          command: scripts/test-nonquick-txt-diff.sh
 
-  nonquick-txt-diff-ubuntu-jdk25:
+  nonquick_ubuntu_jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
       TERM: dumb
@@ -205,11 +199,11 @@ jobs:
             - ".git"
       - run:
           name: test-nonquick
-          command: ./scripts/test-nonquick-txt-diff.sh
+          command: scripts/test-nonquick-txt-diff.sh
 
-  nonquick-txt-diff-ubuntu-jdk26:
+  nonquick_ubuntu_jdk26:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk26
     resource_class: large
     environment:
       TERM: dumb
@@ -226,11 +220,11 @@ jobs:
             - ".git"
       - run:
           name: test-nonquick
-          command: ./scripts/test-nonquick-txt-diff.sh
+          command: scripts/test-nonquick-txt-diff.sh
 
-  non-txt-diff-ubuntu-jdk11:
+  nontxt_ubuntu_jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk11<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk11
     resource_class: large
     environment:
       TERM: dumb
@@ -247,11 +241,11 @@ jobs:
             - ".git"
       - run:
           name: test-nontxt
-          command: ./scripts/test-non-txt-diff.sh
+          command: scripts/test-non-txt-diff.sh
 
-  non-txt-diff-ubuntu-jdk17:
+  nontxt_ubuntu_jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk17
     resource_class: large
     environment:
       TERM: dumb
@@ -268,11 +262,11 @@ jobs:
             - ".git"
       - run:
           name: test-nontxt
-          command: ./scripts/test-non-txt-diff.sh
+          command: scripts/test-non-txt-diff.sh
 
-  non-txt-diff-ubuntu-jdk21:
+  nontxt_ubuntu_jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk21
     resource_class: large
     environment:
       TERM: dumb
@@ -289,11 +283,11 @@ jobs:
             - ".git"
       - run:
           name: test-nontxt
-          command: ./scripts/test-non-txt-diff.sh
+          command: scripts/test-non-txt-diff.sh
 
-  non-txt-diff-ubuntu-jdk25:
+  nontxt_ubuntu_jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk25
     resource_class: large
     environment:
       TERM: dumb
@@ -310,11 +304,11 @@ jobs:
             - ".git"
       - run:
           name: test-nontxt
-          command: ./scripts/test-non-txt-diff.sh
+          command: scripts/test-non-txt-diff.sh
 
-  non-txt-diff-ubuntu-jdk26:
+  nontxt_ubuntu_jdk26:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk26
     resource_class: large
     environment:
       TERM: dumb
@@ -331,11 +325,11 @@ jobs:
             - ".git"
       - run:
           name: test-nontxt
-          command: ./scripts/test-non-txt-diff.sh
+          command: scripts/test-non-txt-diff.sh
 
-  misc-ubuntu-jdk11:
+  misc_ubuntu_jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk11-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk11-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -352,13 +346,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: test-misc
-          command: ./scripts/test-misc.sh
+          name: test-misc.sh
+          command: make showvars && scripts/test-misc.sh
           no_output_timeout: 20m
 
-  misc-ubuntu-jdk17:
+  misc_ubuntu_jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk17-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -375,13 +369,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: test-misc
-          command: ./scripts/test-misc.sh
+          name: test-misc.sh
+          command: make showvars && scripts/test-misc.sh
           no_output_timeout: 20m
 
-  misc-ubuntu-jdk21:
+  misc_ubuntu_jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk21-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -398,13 +392,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: test-misc
-          command: ./scripts/test-misc.sh
+          name: test-misc.sh
+          command: make showvars && scripts/test-misc.sh
           no_output_timeout: 20m
 
-  misc-ubuntu-jdk25:
+  misc_ubuntu_jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk25-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -421,13 +415,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: test-misc
-          command: ./scripts/test-misc.sh
+          name: test-misc.sh
+          command: make showvars && scripts/test-misc.sh
           no_output_timeout: 20m
 
-  misc-ubuntu-jdk26:
+  misc_ubuntu_jdk26:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk26-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -444,13 +438,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: test-misc
-          command: ./scripts/test-misc.sh
+          name: test-misc.sh
+          command: make showvars && scripts/test-misc.sh
           no_output_timeout: 20m
 
-  kvasir-ubuntu-jdk11:
+  kvasir_ubuntu_jdk11:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk11-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk11-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -466,13 +460,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: Test Kvasir
-          command: ./scripts/test-kvasir.sh
+          name: test-kvasir.sh
+          command: scripts/test-kvasir.sh
           no_output_timeout: 20m
 
-  kvasir-ubuntu-jdk25:
+  kvasir_ubuntu_jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk25-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -488,13 +482,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: Test Kvasir
-          command: ./scripts/test-kvasir.sh
+          name: test-kvasir.sh
+          command: scripts/test-kvasir.sh
           no_output_timeout: 20m
 
-  kvasir-ubuntu-jdk26:
+  kvasir_ubuntu_jdk26:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk26-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -510,17 +504,17 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: Test Kvasir
-          command: ./scripts/test-kvasir.sh
+          name: test-kvasir.sh
+          command: scripts/test-kvasir.sh
           no_output_timeout: 20m
 
   ## The Checker Framework cannot be run under Java 8 or 11.
   ## Thus, there is no typecheck_bundled_ubuntu_jdk{8,11} job.
   ## The Checker Framework cannot be built under Java 8, 11 or 17.
   ## Thus, there is no typecheck_latest_ubuntu_jdk{8,11,17} job.
-  typecheck-bundled-part1-ubuntu-jdk17:
+  typecheck_bundled_part1_ubuntu_jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk17-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -536,13 +530,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck bundled
+          name: typecheck bundled part1
           command: scripts/test-typecheck-with-bundled-cf.sh part1
-          no_output_timeout: 30m
+          no_output_timeout: 20m
 
-  typecheck-bundled-part2-ubuntu-jdk17:
+  typecheck_bundled_part2_ubuntu_jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk17-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -558,13 +552,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck bundled
+          name: typecheck bundled part2
           command: scripts/test-typecheck-with-bundled-cf.sh part2
-          no_output_timeout: 30m
+          no_output_timeout: 20m
 
-  typecheck-bundled-part3-ubuntu-jdk17:
+  typecheck_bundled_part3_ubuntu_jdk17:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk17<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk17-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -580,13 +574,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck bundled
+          name: typecheck bundled part3
           command: scripts/test-typecheck-with-bundled-cf.sh part3
           no_output_timeout: 30m
 
-  typecheck-bundled-part1-ubuntu-jdk21:
+  typecheck_bundled_part1_ubuntu_jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk21-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -602,13 +596,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck bundled
+          name: typecheck bundled part1
           command: scripts/test-typecheck-with-bundled-cf.sh part1
-          no_output_timeout: 30m
+          no_output_timeout: 20m
 
-  typecheck-bundled-part2-ubuntu-jdk21:
+  typecheck_bundled_part2_ubuntu_jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk21-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -624,13 +618,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck bundled
+          name: typecheck bundled part2
           command: scripts/test-typecheck-with-bundled-cf.sh part2
-          no_output_timeout: 30m
+          no_output_timeout: 20m
 
-  typecheck-bundled-part3-ubuntu-jdk21:
+  typecheck_bundled_part3_ubuntu_jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk21-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -646,13 +640,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck bundled
+          name: typecheck bundled part3
           command: scripts/test-typecheck-with-bundled-cf.sh part3
           no_output_timeout: 30m
 
-  typecheck-latest-part1-ubuntu-jdk21:
+  typecheck_latest_part1_ubuntu_jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk21-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -668,13 +662,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck latest
+          name: typecheck latest part1
           command: scripts/test-typecheck-with-latest-cf.sh part1
           no_output_timeout: 30m
 
-  typecheck-latest-part2-ubuntu-jdk21:
+  typecheck_latest_part2_ubuntu_jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk21-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -690,13 +684,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck latest
+          name: typecheck latest part2
           command: scripts/test-typecheck-with-latest-cf.sh part2
           no_output_timeout: 30m
 
-  typecheck-latest-part3-ubuntu-jdk21:
+  typecheck_latest_part3_ubuntu_jdk21:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk21<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk21-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -712,13 +706,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck latest
+          name: typecheck latest part3
           command: scripts/test-typecheck-with-latest-cf.sh part3
           no_output_timeout: 30m
 
-  typecheck-bundled-part1-ubuntu-jdk25:
+  typecheck_bundled_part1_ubuntu_jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk25-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -734,13 +728,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck bundled
+          name: typecheck bundled part1
           command: scripts/test-typecheck-with-bundled-cf.sh part1
-          no_output_timeout: 30m
+          no_output_timeout: 20m
 
-  typecheck-bundled-part2-ubuntu-jdk25:
+  typecheck_bundled_part2_ubuntu_jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk25-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -756,13 +750,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck bundled
+          name: typecheck bundled part2
           command: scripts/test-typecheck-with-bundled-cf.sh part2
-          no_output_timeout: 30m
+          no_output_timeout: 20m
 
-  typecheck-bundled-part3-ubuntu-jdk25:
+  typecheck_bundled_part3_ubuntu_jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk25-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -778,13 +772,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck bundled
+          name: typecheck bundled part3
           command: scripts/test-typecheck-with-bundled-cf.sh part3
           no_output_timeout: 30m
 
-  typecheck-latest-part1-ubuntu-jdk25:
+  typecheck_latest_part1_ubuntu_jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk25-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -800,13 +794,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck latest
+          name: typecheck latest part1
           command: scripts/test-typecheck-with-latest-cf.sh part1
           no_output_timeout: 30m
 
-  typecheck-latest-part2-ubuntu-jdk25:
+  typecheck_latest_part2_ubuntu_jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk25-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -822,13 +816,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck latest
+          name: typecheck latest part2
           command: scripts/test-typecheck-with-latest-cf.sh part2
           no_output_timeout: 30m
 
-  typecheck-latest-part3-ubuntu-jdk25:
+  typecheck_latest_part3_ubuntu_jdk25:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk25<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk25-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -844,13 +838,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck latest
+          name: typecheck latest part3
           command: scripts/test-typecheck-with-latest-cf.sh part3
           no_output_timeout: 30m
 
-  typecheck-bundled-part1-ubuntu-jdk26:
+  typecheck_bundled_part1_ubuntu_jdk26:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk26-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -866,13 +860,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck bundled
+          name: typecheck bundled part1
           command: scripts/test-typecheck-with-bundled-cf.sh part1
-          no_output_timeout: 30m
+          no_output_timeout: 20m
 
-  typecheck-bundled-part2-ubuntu-jdk26:
+  typecheck_bundled_part2_ubuntu_jdk26:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk26-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -888,13 +882,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck bundled
+          name: typecheck bundled part2
           command: scripts/test-typecheck-with-bundled-cf.sh part2
-          no_output_timeout: 30m
+          no_output_timeout: 20m
 
-  typecheck-bundled-part3-ubuntu-jdk26:
+  typecheck_bundled_part3_ubuntu_jdk26:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk26-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -910,13 +904,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck bundled
+          name: typecheck bundled part3
           command: scripts/test-typecheck-with-bundled-cf.sh part3
           no_output_timeout: 30m
 
-  typecheck-latest-part1-ubuntu-jdk26:
+  typecheck_latest_part1_ubuntu_jdk26:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk26-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -932,13 +926,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck latest
+          name: typecheck latest part1
           command: scripts/test-typecheck-with-latest-cf.sh part1
           no_output_timeout: 30m
 
-  typecheck-latest-part2-ubuntu-jdk26:
+  typecheck_latest_part2_ubuntu_jdk26:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk26-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -954,13 +948,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck latest
+          name: typecheck latest part2
           command: scripts/test-typecheck-with-latest-cf.sh part2
           no_output_timeout: 30m
 
-  typecheck-latest-part3-ubuntu-jdk26:
+  typecheck_latest_part3_ubuntu_jdk26:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-ubuntu-jdk26-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -976,13 +970,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: typecheck latest
+          name: typecheck latest part3
           command: scripts/test-typecheck-with-latest-cf.sh part3
           no_output_timeout: 30m
 
-  quick-txt-diff-rockylinux-jdk11:
+  quick_rockylinux_jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk11<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk11
     resource_class: large
     environment:
       TERM: dumb
@@ -999,11 +993,11 @@ jobs:
             - ".git"
       - run:
           name: test-quick
-          command: ./scripts/test-quick-txt-diff.sh
+          command: scripts/test-quick-txt-diff.sh
 
-  quick-txt-diff-rockylinux-jdk25:
+  quick_rockylinux_jdk25:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk25<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk25
     resource_class: large
     environment:
       TERM: dumb
@@ -1020,11 +1014,11 @@ jobs:
             - ".git"
       - run:
           name: test-quick
-          command: ./scripts/test-quick-txt-diff.sh
+          command: scripts/test-quick-txt-diff.sh
 
-  quick-txt-diff-rockylinux-jdk26:
+  quick_rockylinux_jdk26:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk26<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk26
     resource_class: large
     environment:
       TERM: dumb
@@ -1041,11 +1035,11 @@ jobs:
             - ".git"
       - run:
           name: test-quick
-          command: ./scripts/test-quick-txt-diff.sh
+          command: scripts/test-quick-txt-diff.sh
 
-  nonquick-txt-diff-rockylinux-jdk11:
+  nonquick_rockylinux_jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk11<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk11
     resource_class: large
     environment:
       TERM: dumb
@@ -1062,11 +1056,11 @@ jobs:
             - ".git"
       - run:
           name: test-nonquick
-          command: ./scripts/test-nonquick-txt-diff.sh
+          command: scripts/test-nonquick-txt-diff.sh
 
-  nonquick-txt-diff-rockylinux-jdk25:
+  nonquick_rockylinux_jdk25:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk25<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk25
     resource_class: large
     environment:
       TERM: dumb
@@ -1083,11 +1077,11 @@ jobs:
             - ".git"
       - run:
           name: test-nonquick
-          command: ./scripts/test-nonquick-txt-diff.sh
+          command: scripts/test-nonquick-txt-diff.sh
 
-  nonquick-txt-diff-rockylinux-jdk26:
+  nonquick_rockylinux_jdk26:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk26<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk26
     resource_class: large
     environment:
       TERM: dumb
@@ -1104,11 +1098,11 @@ jobs:
             - ".git"
       - run:
           name: test-nonquick
-          command: ./scripts/test-nonquick-txt-diff.sh
+          command: scripts/test-nonquick-txt-diff.sh
 
-  non-txt-diff-rockylinux-jdk11:
+  nontxt_rockylinux_jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk11<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk11
     resource_class: large
     environment:
       TERM: dumb
@@ -1125,11 +1119,11 @@ jobs:
             - ".git"
       - run:
           name: test-nontxt
-          command: ./scripts/test-non-txt-diff.sh
+          command: scripts/test-non-txt-diff.sh
 
-  non-txt-diff-rockylinux-jdk25:
+  nontxt_rockylinux_jdk25:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk25<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk25
     resource_class: large
     environment:
       TERM: dumb
@@ -1146,11 +1140,11 @@ jobs:
             - ".git"
       - run:
           name: test-nontxt
-          command: ./scripts/test-non-txt-diff.sh
+          command: scripts/test-non-txt-diff.sh
 
-  non-txt-diff-rockylinux-jdk26:
+  nontxt_rockylinux_jdk26:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk26<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk26
     resource_class: large
     environment:
       TERM: dumb
@@ -1167,11 +1161,11 @@ jobs:
             - ".git"
       - run:
           name: test-nontxt
-          command: ./scripts/test-non-txt-diff.sh
+          command: scripts/test-non-txt-diff.sh
 
-  misc-rockylinux-jdk11:
+  misc_rockylinux_jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk11-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk11-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -1188,13 +1182,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: test-misc
-          command: ./scripts/test-misc.sh
+          name: test-misc.sh
+          command: make showvars && scripts/test-misc.sh
           no_output_timeout: 20m
 
-  misc-rockylinux-jdk25:
+  misc_rockylinux_jdk25:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk25-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk25-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -1211,13 +1205,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: test-misc
-          command: ./scripts/test-misc.sh
+          name: test-misc.sh
+          command: make showvars && scripts/test-misc.sh
           no_output_timeout: 20m
 
-  misc-rockylinux-jdk26:
+  misc_rockylinux_jdk26:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk26-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk26-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -1234,13 +1228,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: test-misc
-          command: ./scripts/test-misc.sh
+          name: test-misc.sh
+          command: make showvars && scripts/test-misc.sh
           no_output_timeout: 20m
 
-  kvasir-rockylinux-jdk11:
+  kvasir_rockylinux_jdk11:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk11-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk11-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -1256,13 +1250,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: Test Kvasir
-          command: ./scripts/test-kvasir.sh
+          name: test-kvasir.sh
+          command: scripts/test-kvasir.sh
           no_output_timeout: 20m
 
-  kvasir-rockylinux-jdk25:
+  kvasir_rockylinux_jdk25:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk25-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk25-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -1278,13 +1272,13 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: Test Kvasir
-          command: ./scripts/test-kvasir.sh
+          name: test-kvasir.sh
+          command: scripts/test-kvasir.sh
           no_output_timeout: 20m
 
-  kvasir-rockylinux-jdk26:
+  kvasir_rockylinux_jdk26:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk26-plus<< pipeline.parameters.testing-suffix >>
+      - image: mdernst/daikon-rockylinux-jdk26-plus
     resource_class: large
     environment:
       TERM: dumb
@@ -1300,8 +1294,8 @@ jobs:
           paths:
             - ".git"
       - run:
-          name: Test Kvasir
-          command: ./scripts/test-kvasir.sh
+          name: test-kvasir.sh
+          command: scripts/test-kvasir.sh
           no_output_timeout: 20m
 
 # For an explanation of the dependence logic, see ../.azure/azure-pipelines.yml .
@@ -1311,14 +1305,17 @@ workflows:
     jobs:
       - canary-jobs:
           requires:
-            - quick-txt-diff-ubuntu-jdk25
-            - nonquick-txt-diff-ubuntu-jdk25
-            - non-txt-diff-ubuntu-jdk25
-            - misc-ubuntu-jdk25
-            - kvasir-ubuntu-jdk25
-            - typecheck-bundled-part1-ubuntu-jdk25
-            - typecheck-bundled-part2-ubuntu-jdk25
-            - typecheck-bundled-part3-ubuntu-jdk25
+            - quick_ubuntu_jdk25
+            - nonquick_ubuntu_jdk25
+            - nontxt_ubuntu_jdk25
+            - misc_ubuntu_jdk25
+            - kvasir_ubuntu_jdk25
+            - typecheck_latest_part1_ubuntu_jdk25
+            - typecheck_latest_part2_ubuntu_jdk25
+            - typecheck_latest_part3_ubuntu_jdk25
+            - typecheck_bundled_part1_ubuntu_jdk25
+            - typecheck_bundled_part2_ubuntu_jdk25
+            - typecheck_bundled_part3_ubuntu_jdk25
       - quick-txt-diff-ubuntu-jdk11:
           requires:
             - canary-jobs

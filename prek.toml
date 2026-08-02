@@ -329,3 +329,8 @@ hooks = [{ id = "yamllint" }]
 repo = "https://github.com/rhysd/actionlint"
 rev = "v1.7.12"
 hooks = [{ id = "actionlint" }]
+
+[[repos]]
+repo = "https://github.com/zahorniak/pre-commit-circleci"
+rev = "v1.3.0"
+hooks = [{ id = "circleci_validate" }]

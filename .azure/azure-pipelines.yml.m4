@@ -16,23 +16,23 @@ pr:
 jobs:
 
   # The dependsOn clauses (in this file and in .circleci/config.yml) are:
-  #  * Everything not *_ubuntu_jdk[]canary_version or typecheck_*_jdk[]canary_version depends on canary_jobs.
+  #  * Everything not *_ubuntu_jdk[]canary_jdk or typecheck_*_jdk[]canary_jdk depends on canary_jobs.
   #  * Anything *_jdk8 or *_jdk11 or *_jdk17 or *_jdk21 or *_jdk26 depends on *_jdk25.
   #  * Anything *_rockylinux_* depends on *_ubuntu_*.
   # The remainder of jobs are run only if the canary_jobs pass.
   - job: canary_jobs
     dependsOn:
-      - quick_[]canary_os[]_jdk[]canary_version
-      - nonquick_[]canary_os[]_jdk[]canary_version
-      - nontxt_[]canary_os[]_jdk[]canary_version
-      - misc_[]canary_os[]_jdk[]canary_version
-      - kvasir_[]canary_os[]_jdk[]canary_version
-      - typecheck_latest_part1_[]canary_os[]_jdk[]canary_version
-      - typecheck_latest_part2_[]canary_os[]_jdk[]canary_version
-      - typecheck_latest_part3_[]canary_os[]_jdk[]canary_version
-      - typecheck_bundled_part1_[]canary_os[]_jdk[]canary_version
-      - typecheck_bundled_part2_[]canary_os[]_jdk[]canary_version
-      - typecheck_bundled_part3_[]canary_os[]_jdk[]canary_version
+      - quick_[]canary_os[]_jdk[]canary_jdk
+      - nonquick_[]canary_os[]_jdk[]canary_jdk
+      - nontxt_[]canary_os[]_jdk[]canary_jdk
+      - misc_[]canary_os[]_jdk[]canary_jdk
+      - kvasir_[]canary_os[]_jdk[]canary_jdk
+      - typecheck_latest_part1_[]canary_os[]_jdk[]canary_jdk
+      - typecheck_latest_part2_[]canary_os[]_jdk[]canary_jdk
+      - typecheck_latest_part3_[]canary_os[]_jdk[]canary_jdk
+      - typecheck_bundled_part1_[]canary_os[]_jdk[]canary_jdk
+      - typecheck_bundled_part2_[]canary_os[]_jdk[]canary_jdk
+      - typecheck_bundled_part3_[]canary_os[]_jdk[]canary_jdk
     pool:
       vmImage: 'ubuntu-latest'
     steps:
@@ -54,5 +54,5 @@ include([jobs.m4])dnl
 #           java -version
 #           javac -version
 #         displayName: show Java version
-#       - bash: ./scripts/test-typecheck-onefile.sh
+#       - bash: scripts/test-typecheck-onefile.sh
 #         displayName: test-typecheck-onefile.sh
