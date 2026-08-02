@@ -330,6 +330,8 @@ repo = "https://github.com/rhysd/actionlint"
 rev = "v1.7.12"
 hooks = [{ id = "actionlint" }]
 
+# This doesn't install the tool!  It fails with "Circleci CLI could
+# not be found." unless you have done `sudo snap install circleci`.
 [[repos]]
 repo = "https://github.com/zahorniak/pre-commit-circleci"
 rev = "v1.3.0"
