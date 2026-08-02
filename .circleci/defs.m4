@@ -7,7 +7,7 @@ define(job_name, [$1:])
 ifelse([Arguments are OS, JDK version number, name, command line.])dnl
 define([boilerplate], [dnl
     docker:
-      - image: docker_userid/daikon-$1-jdk$2[]ifelse(test-misc.sh,$3,-plus,test-kvasir.sh,$3,-plus,typecheck bundled,$3,-plus,typecheck bundled part1,$3,-plus,typecheck bundled part2,$3,-plus,typecheck bundled part3,$3,-plus,typecheck latest,$3,-plus,typecheck latest part1,$3,-plus,typecheck latest part2,$3,-plus,typecheck latest part3,$3,-plus)[]docker_testing
+      - image: docker_image($1, $2, $3)
     resource_class: large
     environment:
       TERM: dumb
