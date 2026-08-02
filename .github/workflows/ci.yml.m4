@@ -39,15 +39,17 @@ jobs:
 
   canary_jobs:
     needs:
-      - junit_part1_jdk[]canary_jdk
-      - junit_part2_jdk[]canary_jdk
-      - nonjunit_jdk[]canary_jdk
-      - inference_part1_jdk[]canary_jdk
-      - inference_part2_jdk[]canary_jdk
-      - typecheck_part1_jdk[]canary_jdk
-      - typecheck_part2_jdk[]canary_jdk
-      - misc_jdk[]canary_jdk
-      - misc_jdk[]latest_version
+      - quick_[]canary_os[]_jdk[]canary_jdk
+      - nonquick_[]canary_os[]_jdk[]canary_jdk
+      - nontxt_[]canary_os[]_jdk[]canary_jdk
+      - misc_[]canary_os[]_jdk[]canary_jdk
+      - kvasir_[]canary_os[]_jdk[]canary_jdk
+      - typecheck_latest_part1_[]canary_os[]_jdk[]canary_jdk
+      - typecheck_latest_part2_[]canary_os[]_jdk[]canary_jdk
+      - typecheck_latest_part3_[]canary_os[]_jdk[]canary_jdk
+      - typecheck_bundled_part1_[]canary_os[]_jdk[]canary_jdk
+      - typecheck_bundled_part2_[]canary_os[]_jdk[]canary_jdk
+      - typecheck_bundled_part3_[]canary_os[]_jdk[]canary_jdk
     runs-on: ubuntu-latest
     steps:
       - name: canary_jobs

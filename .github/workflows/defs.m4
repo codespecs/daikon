@@ -5,7 +5,7 @@ ifelse([The built-in "dnl" m4 macro means "discard to next line".])dnl
 dnl
 define(job_name, [$1:])
 define(dependsOn, needs)
-ifelse([Arguments are OS, JDK, name, command line.])dnl
+ifelse([Arguments are OS, JDK version number, name, command line.])dnl
 define([boilerplate], [dnl
     runs-on: ubuntu-latest
     container:
@@ -24,19 +24,20 @@ ifelse([Each macro takes two arguments, the OS name and the JDK version.])dnl
 dnl
 define([quick_job], [dnl
   job_name(quick_$1_jdk$2)
-ifelse($1,canary_jdk,,[dnl
+ifelse($1_jdk$2,canary_version,,[dnl
     dependsOn:
       - canary_jobs
-      - quick_$1_jdk[]canary_jdk
 ])dnl
 ifelse($1,canary_os,,[      - quick_[]canary_os[]_jdk$2
+])dnl
+ifelse($2,canary_jdk,,[      - quick_$1_jdk[]canary_jdk
 ])dnl
 boilerplate($1, $2, test-quick, scripts/test-quick-txt-diff.sh)[]dnl
 ])dnl
 dnl
 define([nonquick_job], [dnl
   job_name(nonquick_$1_jdk$2)
-ifelse($1,canary_jdk,,[dnl
+ifelse($1_jdk$2,canary_version,,[dnl
     dependsOn:
       - canary_jobs
 ifelse($2,canary_jdk,,[      - nonquick_$1_jdk[]canary_jdk
@@ -49,30 +50,39 @@ boilerplate($1, $2, test-nonquick, scripts/test-nonquick-txt-diff.sh)[]dnl
 dnl
 define([nontxt_job], [dnl
   job_name(nontxt_$1_jdk$2)
-ifelse($1,canary_jdk,,[dnl
+ifelse($1_jdk$2,canary_version,,[dnl
     dependsOn:
       - canary_jobs
-      - nontxt_$1_jdk[]canary_jdk
+ifelse($2,canary_jdk,,[      - nontxt_$1_jdk[]canary_jdk
+])dnl
+ifelse($1,canary_os,,[      - nontxt_[]canary_os[]_jdk$2
+])dnl
 ])dnl
 boilerplate($1, $2, test-nontxt, scripts/test-non-txt-diff.sh)[]dnl
 ])dnl
 dnl
 define([misc_job], [dnl
   job_name(misc_$1_jdk$2)
-ifelse($1,canary_jdk,,[dnl
+ifelse($1_jdk$2,canary_version,,[dnl
     dependsOn:
       - canary_jobs
-      - misc_jdk[]canary_jdk
+ifelse($2,canary_jdk,,[      - misc_$1_jdk[]canary_jdk
+])dnl
+ifelse($1,canary_os,,[      - misc_[]canary_os[]_jdk$2
+])dnl
 ])dnl
 boilerplate($1, $2, test-misc.sh, make showvars && scripts/test-misc.sh)[]dnl
 ])dnl
 dnl
 define([kvasir_job], [dnl
   job_name(kvasir_$1_jdk$2)
-ifelse($1,canary_jdk,,[dnl
+ifelse($1_jdk$2,canary_version,,[dnl
     dependsOn:
       - canary_jobs
-      - kvasir_$1_jdk[]canary_jdk
+ifelse($2,canary_jdk,,[      - kvasir_$1_jdk[]canary_jdk
+])dnl
+ifelse($1,canary_os,,[      - kvasir_[]canary_os[]_jdk$2
+])dnl
 ])dnl
 boilerplate($1, $2, test-kvasir.sh, scripts/test-kvasir.sh)[]dnl
 ])dnl
