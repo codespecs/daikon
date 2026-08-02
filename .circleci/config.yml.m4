@@ -1,14 +1,9 @@
 changequote
 changequote(`[',`]')dnl
 changecom([], [disable comments, that is, expand within them])dnl
+include([../.azure/defs-common.m4])dnl
 include([defs.m4])dnl
 version: 2.1
-
-parameters:
-  testing-suffix:
-    type: string
-    default: ""
-    # default: "-testing"
 
 jobs:
 
@@ -31,14 +26,17 @@ workflows:
     jobs:
       - canary-jobs:
           requires:
-            - quick-txt-diff-ubuntu-jdk[]canary_version
-            - nonquick-txt-diff-ubuntu-jdk[]canary_version
-            - non-txt-diff-ubuntu-jdk[]canary_version
-            - misc-ubuntu-jdk[]canary_version
-            - kvasir-ubuntu-jdk[]canary_version
-            - typecheck-bundled-part1-ubuntu-jdk[]canary_version
-            - typecheck-bundled-part2-ubuntu-jdk[]canary_version
-            - typecheck-bundled-part3-ubuntu-jdk[]canary_version
+            - quick_[]canary_os[]_jdk[]canary_jdk
+            - nonquick_[]canary_os[]_jdk[]canary_jdk
+            - nontxt_[]canary_os[]_jdk[]canary_jdk
+            - misc_[]canary_os[]_jdk[]canary_jdk
+            - kvasir_[]canary_os[]_jdk[]canary_jdk
+            - typecheck_latest_part1_[]canary_os[]_jdk[]canary_jdk
+            - typecheck_latest_part2_[]canary_os[]_jdk[]canary_jdk
+            - typecheck_latest_part3_[]canary_os[]_jdk[]canary_jdk
+            - typecheck_bundled_part1_[]canary_os[]_jdk[]canary_jdk
+            - typecheck_bundled_part2_[]canary_os[]_jdk[]canary_jdk
+            - typecheck_bundled_part3_[]canary_os[]_jdk[]canary_jdk
 job_dependences(ubuntu, 11, quick-txt-diff)
 job_dependences(ubuntu, 17, quick-txt-diff)
 job_dependences(ubuntu, 21, quick-txt-diff)

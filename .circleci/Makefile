@@ -1,14 +1,10 @@
 PLUME_SCRIPTS ?= ../.utils/plume-scripts
-ifeq (,$(wildcard ${PLUME_SCRIPTS}))
-dummy1 := $(shell mkdir -p $(dirname ${PLUME_SCRIPTS}))
-dummy2 := $(shell git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS})
-endif
 
 .PHONY: all test clean default
 all default: config.yml validate
 # TODO: all default: config.yml config-daily.yml validate
 
-%: %.m4 defs.m4 ../.azure/jobs.m4
+%: %.m4 defs.m4 ../.azure/defs-common.m4 ../.azure/jobs.m4
 	@chmod -f +w $@ || true
 	m4 $< > $@
 	${PLUME_SCRIPTS}/squeeze-blank-lines $@
@@ -16,6 +12,10 @@ all default: config.yml validate
 
 validate: config.yml
 	cd .. && circleci config validate
+
+${PLUME_SCRIPTS}:
+	mkdir -p $(dirname ${PLUME_SCRIPTS})
+	git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS}
 
 clean:
 	rm -f config.yml
