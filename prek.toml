@@ -123,7 +123,7 @@ hooks = [
 ## Makefiles
 
 [[repos]]
-repo = "https://github.com/checkmake/checkmake.git"
+repo = "https://github.com/checkmake/checkmake"
 rev = "0.2.2"
 hooks = [
   { id = "checkmake", args = [
@@ -321,6 +321,16 @@ hooks = [
 ]
 
 [[repos]]
-repo = "https://github.com/adrienverge/yamllint.git"
+repo = "https://github.com/adrienverge/yamllint"
 rev = "v1.29.0"
 hooks = [{ id = "yamllint" }]
+
+[[repos]]
+repo = "https://github.com/rhysd/actionlint"
+rev = "v1.7.12"
+hooks = [{ id = "actionlint" }]
+
+[[repos]]
+repo = "https://github.com/zahorniak/pre-commit-circleci"
+rev = "v1.3.0"
+hooks = [{ id = "circleci_validate" }]

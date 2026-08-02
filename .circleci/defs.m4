@@ -82,28 +82,28 @@ boilerplate($1, $2, typecheck $3 $4, scripts/test-typecheck-with-$3-cf.sh $4)[]d
 ])dnl
 dnl
 define([job_dependences], [dnl
-      - $3-$1-jdk$2[]dnl
+      - $3_$1_jdk$2[]dnl
 ifelse($1_jdk$2,canary_version,,[:
           requires:
-            - canary-jobs
+            - canary_jobs
 ifelse($2,canary_jdk,,[dnl
-            - $3-$1-jdk[]canary_jdk
+            - $3_$1_jdk[]canary_jdk
 ])dnl
 ifelse($1,canary_os,,[dnl
-            - $3-canary_os[]-jdk$2
+            - $3_[]canary_os[]_jdk$2
 ])dnl
 ])dnl
 ])dnl
 define([job_dependences_part], [dnl
-      - $3-$4-$1-jdk$2[]dnl
+      - $3_$4_$1_jdk$2[]dnl
 ifelse($1_jdk$2,canary_version,,[:
           requires:
-            - canary-jobs
+            - canary_jobs
 ifelse($2,canary_jdk,,[dnl
-            - $3-$4-$1-jdk[]canary_jdk
+            - $3_$4_$1_jdk[]canary_jdk
 ])dnl
 ifelse($1,canary_os,,[dnl
-            - $3-$4-canary_os[]-jdk$2
+            - $3_$4_[]canary_os[]_jdk$2
 ])dnl
 ])dnl
 ])dnl
