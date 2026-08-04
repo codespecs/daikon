@@ -5,8 +5,10 @@
 MAIN_CLASS:=ncalc
 NO_MERGE=1
 NO_JML=1
+EXTRA_TARGET=1
 
 # Override sources to draw from "."
 SOURCES:=$(shell pwd)
 
 include ../../Makefile.common
+
