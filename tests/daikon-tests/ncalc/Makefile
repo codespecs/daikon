@@ -12,8 +12,9 @@ SOURCES:=$(shell pwd)
 
 include ../../Makefile.common
 
+.PHONY: extra-target
 extra-target:
 	 rm -f libcalculator.so ncalc.h
-	 javac -h . ncalc.java
+	 ${JAVAC} -h . ncalc.java
 	 rm -f ncalc.class
 	 gcc -fPIC -I"${JAVA_HOME}/include" -I"${JAVA_HOME}/include/linux" -shared -o libcalculator.so ncalc.c
