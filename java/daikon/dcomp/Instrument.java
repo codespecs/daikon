@@ -95,7 +95,7 @@ public class Instrument implements ClassFileTransformer {
     } catch (Throwable t) {
       System.err.printf("Error %s writing debug files for: %s%n", t, className);
       t.printStackTrace();
-      // ignore the error, it shouldn't affect the instrumentation
+      // Ignore the error, it shouldn't affect the instrumentation.
     }
   }
 

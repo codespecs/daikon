@@ -112,7 +112,7 @@ public class Instrument24 implements ClassFileTransformer {
   protected static final SimpleLog debug_transform = new SimpleLog(false);
 
   // Public so daikon.dcomp.Instrument24 can enable it.
-  /** Debug information about ppt-omit and ppt-select. */
+  /** A log for debug information about ppt-omit and ppt-select. */
   public static final SimpleLog debug_ppt_omit = new SimpleLog(false);
 
   /** A log to which to print debugging information about program instrumentation. */
@@ -258,7 +258,7 @@ public class Instrument24 implements ClassFileTransformer {
     } catch (Throwable t) {
       System.err.printf("Error %s writing debug files for: %s%n", t, className);
       t.printStackTrace();
-      // ignore the error, it shouldn't affect the instrumentation
+      // Ignore the error, it shouldn't affect the instrumentation.
     }
   }
 

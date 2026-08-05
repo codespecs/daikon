@@ -277,12 +277,12 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     // Instrument the classfile, die on any errors.
     ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
-    JavaClass njc;
+    JavaClass newJavaClass;
     try {
       // Get the class information.
       ClassGen cg = new ClassGen(c);
       instrumentClass(cg, classInfo);
-      njc = cg.getJavaClass();
+      newJavaClass = cg.getJavaClass();
     } catch (Throwable t) {
       RuntimeException re =
           new RuntimeException(String.format("Error %s in transform of %s", t, binaryClassName), t);
@@ -292,9 +292,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
 
     if (classInfo.shouldInclude) {
       if (Chicory.dump) {
-        outputDebugFiles(njc, debug_instrumented_dir, binaryClassName);
+        outputDebugFiles(newJavaClass, debug_instrumented_dir, binaryClassName);
       }
-      return njc.getBytes();
+      return newJavaClass.getBytes();
     } else {
       debug_transform.log("Didn't instrument %s%n", binaryClassName);
       // No changes to the bytecodes.
@@ -1183,9 +1183,9 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       }
     }
 
-    for (int ii = lv_start; ii < paramNames.length; ii++) {
-      if ((ii + param_offset) < lvs.length) {
-        paramNames[ii] = lvs[ii + param_offset].getName();
+    for (int i = lv_start; i < paramNames.length; i++) {
+      if ((i + param_offset) < lvs.length) {
+        paramNames[i] = lvs[i + param_offset].getName();
       }
     }
 
@@ -1312,20 +1312,20 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
    * Returns true if the specified class is part of Chicory itself (and thus should not be
    * instrumented). Some Daikon classes that are used by Chicory are included here as well.
    *
-   * @param classname the name of the class to test, in internal form
+   * @param className the name of the class to test, in internal form
    * @return true if the given class is part of Chicory itself
    */
   @Pure
-  private static boolean isChicory(@InternalForm String classname) {
+  private static boolean isChicory(@InternalForm String className) {
 
-    if (classname.startsWith("daikon/chicory/")
-        && !classname.equals("daikon/chicory/ChicoryTest")) {
+    if (className.startsWith("daikon/chicory/")
+        && !className.equals("daikon/chicory/ChicoryTest")) {
       return true;
     }
-    if (classname.equals("daikon/PptTopLevel$PptType")) {
+    if (className.equals("daikon/PptTopLevel$PptType")) {
       return true;
     }
-    if (classname.startsWith("daikon/plumelib/")) {
+    if (className.startsWith("daikon/plumelib/")) {
       return true;
     }
     return false;
