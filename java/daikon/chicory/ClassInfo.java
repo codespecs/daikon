@@ -29,8 +29,7 @@ public class ClassInfo {
   /** reflection object for this class. */
   public @MonotonicNonNull Class<?> clazz;
 
-  // Does not include class initializers, so each element's .member field
-  // is non-null.
+  // Does not include class initializers, so each element's .member field is non-null.
   /** list of methods in the class. */
   public List<MethodInfo> method_infos = new ArrayList<>();
 
@@ -47,9 +46,8 @@ public class ClassInfo {
   /** True if any methods in this class were instrumented. */
   public boolean shouldInclude = false;
 
-  /** Mapping from field name to string representation of its value* */
-  // only for static final primitives
-  // which are declared by a CONSTANT VALUE in the code
+  /** Mapping from field name to string representation of its value. */
+  // Only for static final primitives which are declared by a CONSTANT VALUE in the code.
   public Map<String, String> staticMap = new HashMap<>();
 
   /** Create ClassInfo with specified name. */
