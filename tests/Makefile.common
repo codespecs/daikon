@@ -562,6 +562,8 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
 	@echo
 #	@echo inst_Files: '$(INST_FILES)'
 	rm -f $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset
+	# Calls the sub-make only if the variable EXTRA_TARGET is not empty
+	if [ -n "${EXTRA_TARGET}" ]; then ${MAKE} -C ${CWD} extra-target; fi
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
 	export LD_LIBRARY_PATH=$(PROJECT) && \
 	$(RUN_JAVA) daikon.DynComp $(DCOMP_ARGS) ${JUNIT} $(MAIN_CLASS) $(MAIN_ARGS)
