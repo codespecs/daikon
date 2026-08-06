@@ -8,6 +8,7 @@ jobs:
       - run: sudo snap install circleci
       - run: whoami
       - run: echo "HOME=$HOME"
+      - run: echo "USER=$USER"
       - run: ls -al "$HOME"
       - run: ls -al /home
       - run: ls -al /home/runner
@@ -15,7 +16,7 @@ jobs:
       - run: ls -al /home/runner/.config/circleci || true
         #      - run: sudo mkdir /home/runner/.config/circleci
       - run: sudo mkdir -p /home/runner/.config/circleci
-      - run: export NONSUDO="$USER" && sudo chown "$NONSUDO" /home/runner/.config
+      - run: export NONSUDO="$USER" && sudo chown -R "$NONSUDO" /home/runner/.config
       - run: ls -al /home/runner/.config
       - run: ls -al /home/runner/.config/circleci
       - uses: j178/prek-action@v2
