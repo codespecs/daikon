@@ -16,6 +16,7 @@ import java.lang.classfile.instruction.LocalVariable;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -30,11 +31,10 @@ import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.checker.signature.qual.MethodDescriptor;
 
 /**
- * MethodGen24 collects and stores all the relevant information about a method that Instrument24
- * might need. MethodGen24 is analogous to the BCEL MethodGen class. The similarity makes it easier
- * to keep Instrument.java and Instrument24.java in sync.
+ * MethodGen24 represents a method. MethodGen24 is analogous to the BCEL MethodGen class. The
+ * similarity makes it easier to keep Instrument.java and Instrument24.java in sync.
  *
- * <p>MethodGen24 uses Java's ({@code java.lang.classfile}) APIs for reading and modifying .class
+ * <p>MethodGen24 uses Java's {@code java.lang.classfile} APIs for reading and modifying .class
  * files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more complete and robust
  * (no more fiddling with StackMaps) and are always up to date with any .class file changes (since
  * they are part of the JDK). (We will need to continue to support Instrument.java using BCEL, as we
@@ -53,24 +53,24 @@ public class MethodGen24 {
    */
   private @Nullable CodeModel code;
 
-  /** The method's access flags as a bit mask. */
+  /** This method's access flags as a bit mask. */
   private final int accessFlagsMask;
 
-  /** The method's name. */
+  /** This method's name. */
   private @Identifier String methodName;
 
   /**
-   * The method's type descriptor. This contains information about the parameters and return type of
-   * the method.
+   * This method's type descriptor. This contains information about the parameters and return type
+   * of this method.
    */
   private MethodTypeDesc mtd;
 
-  /** True if the method is static. */
+  /** True if this method is static. */
   private boolean isStatic;
 
   /**
-   * The method's CodeAttribute. This contains information about the bytecodes (instructions) of
-   * this method. May be null if the method has no code.
+   * The method's CodeAttribute. This contains the bytecodes (instructions) of the method as well as
+   * additional information about the bytecodes. May be null if the method has no code.
    *
    * <p>Several fields of CodeAttribute are declared as fields of MethodGen24 to better model BCEL's
    * version of MethodGen and to reduce re-computation. Note that we set these fields in the
@@ -104,13 +104,13 @@ public class MethodGen24 {
   /**
    * The method's signature. This is a String that encodes type information about a (possibly
    * generic) method declaration. It describes any type parameters of the method; the (possibly
-   * parameterized) types of any formal parameters; the (possibly parameterized) return type, if
+   * parameterized) types of any formal parameters; and the (possibly parameterized) return type, if
    * any. It is not a true method signature as documented in the Java Virtual Machine Specification
    * as it does not include the types of any exceptions declared in the method's throws clause.
    */
   private @MethodDescriptor String signature;
 
-  // Information extracted from {@code mtd}, the MethodTypeDescriptor.
+  // The next two items are extracted from {@link mtd}, the MethodTypeDescriptor.
   /** The method's parameter types. */
   private ClassDesc[] paramTypes;
 
@@ -133,7 +133,7 @@ public class MethodGen24 {
   // TODO: Should uses of this be synchronized?
   private ConstantPoolBuilder poolBuilder;
 
-  /** Variables used for processing the current method. */
+  /** Information about the current method. */
   protected static class MInfo24 {
 
     /** The index of this method in SharedData.methods. */
@@ -221,7 +221,7 @@ public class MethodGen24 {
       this.codeList = cl;
     } else {
       this.code = null;
-      this.codeList = new ArrayList<>();
+      this.codeList = Collections.emptyList();
     }
 
     Optional<CodeAttribute> ca = methodModel.findAttribute(Attributes.code());
@@ -418,7 +418,7 @@ public class MethodGen24 {
   /**
    * Returns the signature for the current method. This is a String that encodes type information
    * about a (possibly generic) method declaration. It describes any type parameters of the method;
-   * the (possibly parameterized) types of any formal parameters; the (possibly parameterized)
+   * the (possibly parameterized) types of any formal parameters; and the (possibly parameterized)
    * return type, if any.
    *
    * @return signature for the current method
