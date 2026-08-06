@@ -6,10 +6,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - run: sudo snap install circleci
+      - run: whoami
       - run: echo "HOME=$HOME"
       - run: ls -al "$HOME"
       - run: ls -al /home
       - run: ls -al /home/runner
       - run: ls -al /home/runner/.config
-      - run: ls -al /home/runner/.config/circleci
+      - run: ls -al /home/runner/.config/circleci || true
       - uses: j178/prek-action@v2
