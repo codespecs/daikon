@@ -13,4 +13,8 @@ jobs:
       - run: ls -al /home/runner
       - run: ls -al /home/runner/.config
       - run: ls -al /home/runner/.config/circleci || true
+      - run: sudo mkdir /home/runner/.config/circleci
+      - run: sudo chown "$USER" /home/runner/
+      - run: sudo chown "$USER" /home/runner/.config
+      - run: sudo chown "$USER" /home/runner/.config/circleci
       - uses: j178/prek-action@v2
