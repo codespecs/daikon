@@ -66,6 +66,7 @@ public final class DCInstrumentConcurrencyTest24 {
     CyclicBarrier barrier = new CyclicBarrier(threadCount);
     List<Thread> threads = new ArrayList<>();
     for (int i = 0; i < threadCount; i++) {
+      @SuppressWarnings("AssertionFailureIgnored") // saved in the `failures` variable
       Thread thread =
           new Thread(
               () -> {
@@ -186,6 +187,7 @@ public final class DCInstrumentConcurrencyTest24 {
     private final int[] data = new int[16];
 
     /** How many times a method of this class has been called. */
+    @SuppressWarnings("UnusedVariable") // the code contains a variety of control flow
     private int counter;
 
     /**
