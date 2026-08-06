@@ -16,7 +16,9 @@ jobs:
       - run: ls -al /home/runner/.config/circleci || true
         #      - run: sudo mkdir /home/runner/.config/circleci
       - run: sudo mkdir -p /home/runner/.config/circleci
-      - run: export NONSUDO="$USER" && sudo chown -R "$NONSUDO" /home/runner/.config
+      - run: sudo chown -R runner /home/runner/.config
+      - run: sudo chgrp -R runner /home/runner/.config
+      - run: sudo chmod -R +w /home/runner/.config
       - run: ls -al /home/runner/.config
       - run: ls -al /home/runner/.config/circleci
       - uses: j178/prek-action@v2
