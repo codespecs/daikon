@@ -21,4 +21,6 @@ jobs:
         run: |
           mkdir -p /home/runner/.config/circleci
           sudo chown -R runner:docker /home/runner/.config/circleci
+      - run: ls -al /home/runner/.config
+      - run: ls -al /home/runner/.config/circleci
       - uses: j178/prek-action@v2
