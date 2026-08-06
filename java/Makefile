@@ -1188,6 +1188,12 @@ check-serialize:
 junit: daikon/Daikon.class
 	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite
+# Tests of the JDK 24 instrumentation are run separately, because AllTestsSuite
+# must compile even when the "*24.java" files are not compiled.
+ifeq (${JAVA24}, 1)
+	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore \
+	  daikon.test.dcomp.DCInstrumentConcurrencyTest24
+endif
 
 ## TODO:  This target is never used!!!
 junit-all: junit

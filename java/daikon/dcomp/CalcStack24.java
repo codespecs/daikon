@@ -54,8 +54,8 @@ import org.checkerframework.checker.signature.qual.FieldDescriptor;
 /**
  * This class calculates the state of the operand stack via simulation.
  *
- * <p>During this process, it may modify the state of DCInstrument24.locals and
- * DCInstrument24.stacks.
+ * <p>During this process, it may modify the state of the {@code locals} and {@code stacks} fields
+ * of the DCInstrument24 that is instrumenting the method.
  */
 public final class CalcStack24 {
 
@@ -74,6 +74,7 @@ public final class CalcStack24 {
    * Calculates changes in the operand stack based on the symbolic execution of a CodeElement. Note
    * that we assume the class file is valid and make no attempt to verify the code's correctness.
    *
+   * @param dci the instrumenter for the method's class; its simulation state is side-effected
    * @param mgen method containing the instruction (currently unused)
    * @param minfo for the given method's code (currently unused)
    * @param ce CodeElement to be interpreted
@@ -84,6 +85,7 @@ public final class CalcStack24 {
    * @throws DynCompError if we don't recognize {@code ce}
    */
   static boolean simulateCodeElement(
+      DCInstrument24 dci,
       MethodGen24 mgen,
       MethodGen24.MInfo24 minfo,
       CodeElement ce,
@@ -95,7 +97,7 @@ public final class CalcStack24 {
     }
     switch (ce) {
       case Instruction inst -> {
-        return simulateInstruction(inst, instIndex, stack);
+        return simulateInstruction(dci, inst, instIndex, stack);
       }
 
       // We ignore most PseudoInstructions.
@@ -107,17 +109,17 @@ public final class CalcStack24 {
 
       // Technically, a Classfile element, not a PseudoInstruction.
       case Label l -> {
-        if (DCInstrument24.stacks[instIndex] != null) {
+        if (dci.stacks[instIndex] != null) {
           // We've seen this label before.
-          DCInstrument24.verifyOperandStackMatches(l, DCInstrument24.stacks[instIndex], stack);
+          DCInstrument24.verifyOperandStackMatches(l, dci.stacks[instIndex], stack);
           // Stacks match; we're done with this worklist.
           return false;
         } else {
           // We have not seen this label before; remember the operand stack.
-          DCInstrument24.stacks[instIndex] = stack.getClone();
+          dci.stacks[instIndex] = stack.getClone();
           if (DCInstrument24.debugOperandStack) {
             System.out.println("save stack state at: " + l);
-            System.out.println("  " + instIndex + ", " + DCInstrument24.stacks[instIndex]);
+            System.out.println("  " + instIndex + ", " + dci.stacks[instIndex]);
           }
           return true;
         }
@@ -139,6 +141,7 @@ public final class CalcStack24 {
    * instruction. Note that we assume the class file is valid and make no attempt to verify the
    * code's correctness.
    *
+   * @param dci the instrumenter for the method's class; its simulation state is side-effected
    * @param inst instruction to be interpreted
    * @param instIndex index of inst in code element list
    * @param stack current state of operand stack; is side-effected
@@ -147,15 +150,15 @@ public final class CalcStack24 {
    * @throws DynCompError if there is an error during the instruction simulation
    */
   @SuppressWarnings("fallthrough")
-  static boolean simulateInstruction(Instruction inst, int instIndex, OperandStack24 stack) {
-    if (DCInstrument24.stacks[instIndex] != null) {
+  static boolean simulateInstruction(
+      DCInstrument24 dci, Instruction inst, int instIndex, OperandStack24 stack) {
+    if (dci.stacks[instIndex] != null) {
       throw new DynCompError("instruction revisited at index " + instIndex + ": " + inst);
     } else {
-      DCInstrument24.stacks[instIndex] = stack.getClone();
+      dci.stacks[instIndex] = stack.getClone();
     }
     if (DCInstrument24.debugOperandStack) {
-      System.out.println(
-          "save stack state at: " + instIndex + ", " + DCInstrument24.stacks[instIndex]);
+      System.out.println("save stack state at: " + instIndex + ", " + dci.stacks[instIndex]);
       System.out.println("opcode: " + inst.opcode());
     }
     // calculate stack changes
@@ -209,7 +212,7 @@ public final class CalcStack24 {
       case Opcode.ALOAD_3:
       case Opcode.ALOAD_W:
         LoadInstruction li = (LoadInstruction) inst;
-        stack.push(DCInstrument24.locals[li.slot()]);
+        stack.push(dci.locals[li.slot()]);
         return true;
 
       // operand stack before: ..., count
@@ -273,7 +276,7 @@ public final class CalcStack24 {
       case Opcode.LSTORE_W:
         StoreInstruction si = (StoreInstruction) inst;
         // We assume code is correct and do not verify that si.typeKind() matches stack.pop().
-        DCInstrument24.locals[si.slot()] = stack.pop();
+        dci.locals[si.slot()] = stack.pop();
         return true;
 
       // operand stack before: ..., objectref
@@ -613,7 +616,7 @@ public final class CalcStack24 {
       case Opcode.GOTO_W:
         {
           BranchInstruction bi = (BranchInstruction) inst;
-          addLabelsToWorklist(bi.target(), null, stack);
+          addLabelsToWorklist(dci, bi.target(), null, stack);
           return false;
         }
 
@@ -660,7 +663,7 @@ public final class CalcStack24 {
         {
           stack.pop(2); // discard the values
           BranchInstruction bi = (BranchInstruction) inst;
-          addLabelsToWorklist(bi.target(), null, stack);
+          addLabelsToWorklist(dci, bi.target(), null, stack);
           return true;
         }
 
@@ -676,7 +679,7 @@ public final class CalcStack24 {
       case Opcode.IFNULL:
         stack.pop(); // discard the value
         BranchInstruction bi = (BranchInstruction) inst;
-        addLabelsToWorklist(bi.target(), null, stack);
+        addLabelsToWorklist(dci, bi.target(), null, stack);
         return true;
 
       // operand stack: no change
@@ -781,7 +784,7 @@ public final class CalcStack24 {
       case Opcode.LOOKUPSWITCH:
         stack.pop(); // discard the value
         LookupSwitchInstruction lsi = (LookupSwitchInstruction) inst;
-        addLabelsToWorklist(lsi.defaultTarget(), lsi.cases(), stack);
+        addLabelsToWorklist(dci, lsi.defaultTarget(), lsi.cases(), stack);
         return false;
 
       // operand stack before: ..., objectref
@@ -864,7 +867,7 @@ public final class CalcStack24 {
       case Opcode.TABLESWITCH:
         stack.pop(); // discard the index
         TableSwitchInstruction tsi = (TableSwitchInstruction) inst;
-        addLabelsToWorklist(tsi.defaultTarget(), tsi.cases(), stack);
+        addLabelsToWorklist(dci, tsi.defaultTarget(), tsi.cases(), stack);
         return false;
 
       // operand stack before: ..., objectref, [arg1, [arg2 ...]]
@@ -998,20 +1001,21 @@ public final class CalcStack24 {
   }
 
   /**
-   * Calls DCInstrument24.addLabelToWorklist to create a set of worklist items.
+   * Calls {@link DCInstrument24#addLabelToWorklist} to create a set of worklist items.
    *
+   * @param dci the instrumenter for the method's class; its worklist is side-effected
    * @param target label where to start operand stack simulation
    * @param cases a set of case statement labels; additional start points for simulation
    * @param stack state of operand stack at target and case labels
    */
   static void addLabelsToWorklist(
-      Label target, @Nullable List<SwitchCase> cases, OperandStack24 stack) {
-    DCInstrument24.addLabelToWorklist(target, stack);
+      DCInstrument24 dci, Label target, @Nullable List<SwitchCase> cases, OperandStack24 stack) {
+    dci.addLabelToWorklist(target, stack);
     if (cases == null) {
       return;
     }
     for (SwitchCase item : cases) {
-      DCInstrument24.addLabelToWorklist(item.target(), stack);
+      dci.addLabelToWorklist(item.target(), stack);
     }
   }
 }
