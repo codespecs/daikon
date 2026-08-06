@@ -115,7 +115,7 @@ public class Instrument24 implements ClassFileTransformer {
   protected static final SimpleLog debug_transform = new SimpleLog(false);
 
   // Public so daikon.dcomp.Instrument24 can enable it.
-  /** Debug information about ppt-omit and ppt-select. */
+  /** A log for debug information about ppt-omit and ppt-select. */
   public static final SimpleLog debug_ppt_omit = new SimpleLog(false);
 
   /** A log to which to print debugging information about program instrumentation. */
@@ -858,9 +858,9 @@ public class Instrument24 implements ClassFileTransformer {
   }
 
   /**
-   * Inserts instrumentation code at the start of the method. This includes adding a local variable
-   * (this_invocation_nonce) that is initialized to Runtime.nonce++. This provides a unique id on
-   * each method entry/exit that allows them to be matched up from the dtrace file. Also inserts
+   * Inserts the given instrumentation code at the start of the method. This includes adding a local
+   * variable (this_invocation_nonce) that is initialized to Runtime.nonce++. This provides a unique
+   * id on each method entry/exit that allows them to be matched up from the dtrace file. Inserts
    * code to call daikon.chicory.Runtime.enter().
    *
    * @param instructions instruction list for method
