@@ -1873,6 +1873,11 @@ public class DCInstrument24 {
 
       // Create a worklist of instruction locations and operand stacks.
 
+      // The loop below drains the worklist, but if the simulation of a previous method threw an
+      // exception, then items remain in the worklist.  Each such stale item contains an index into
+      // a different method's instruction list, so it must be discarded.
+      worklist.clear();
+
       // Create a work item for start of user's code.
       if (oldStartLabel != null) {
         addLabelToWorklist(oldStartLabel, new OperandStack24(mgen.getMaxStack()));
