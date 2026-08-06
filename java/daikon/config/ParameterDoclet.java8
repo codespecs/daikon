@@ -169,7 +169,7 @@ public class ParameterDoclet {
     }
 
     /**
-     * Return true if the given variable (that represents a configuration option) should be included
+     * Returns true if the given variable (that represents a configuration option) should be included
      * in this section.
      *
      * @param fullConfigName the fully-qualified name of a Daikon configuration variable (no
