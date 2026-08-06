@@ -5,20 +5,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - run: sudo snap install circleci
-      - run: whoami
-      - run: echo "HOME=$HOME"
-      - run: echo "USER=$USER"
-      - run: ls -al "$HOME"
-      - run: ls -al /home
-      - run: ls -al /home/runner
-      - run: ls -al /home/runner/.config
-      - run: ls -al /home/runner/.config/circleci || true
-        #      - run: sudo mkdir /home/runner/.config/circleci
-      - run: sudo mkdir -p /home/runner/.config/circleci
-      - run: sudo chown -R runner /home/runner/.config
-      - run: sudo chgrp -R runner /home/runner/.config
-      - run: sudo chmod -R ugo+w /home/runner/.config
-      - run: ls -al /home/runner/.config
-      - run: ls -al /home/runner/.config/circleci
+      - run: curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/main/install.sh | sudo bash
       - uses: j178/prek-action@v2

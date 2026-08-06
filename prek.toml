@@ -18,9 +18,10 @@ exclude = { glob = [
   "**/*.ps",
   "**/*.ps-*",
   "**/*.svg",
-  "**/COPYING",
   "**/*expected*",
+  "**/COPYING",
   "src/main/resources/specifications/jdk/*",
+  "tests/kvasir-tests/povray/*",
 ] }
 
 [[repos]]
@@ -36,9 +37,7 @@ hooks = [
   ] } },
   { id = "check-json" },
   { id = "check-merge-conflict" },
-  { id = "check-shebang-scripts-are-executable", exclude = { glob = [
-    "tests/kvasir-tests/povray/source/**",
-  ] } },
+  { id = "check-shebang-scripts-are-executable" },
   { id = "check-symlinks", exclude = { glob = [
     ".subversion/auth",
     "dots/.subversion/auth",
@@ -59,7 +58,6 @@ hooks = [
     "**/tests/squeeze-blank-lines-test/**",
     "bugs/jikes-patches/*",
     "java/jtb/**",
-    "src/main/resources/specifications/jdk",
     "tests/kvasir-tests/**",
   ] } },
   { id = "file-contents-sorter", files = { glob = [
@@ -86,6 +84,17 @@ hooks = [
     "tests/kvasir-tests/**",
   ] } },
 ]
+
+## CircleCI
+
+# This doesn't install the tool!  It fails with "Circleci CLI could not be
+# found." unless you have installed the CircleCI CLI.  Using `snap` to install
+# leads to permission problems due to snap confirement.  To install:
+# - run: curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/main/install.sh | sudo bash
+[[repos]]
+repo = "https://github.com/zahorniak/pre-commit-circleci"
+rev = "v1.3.0"
+hooks = [{ id = "circleci_validate" }]
 
 ## GitHub Actions
 
@@ -214,7 +223,6 @@ hooks = [
     "tests/kvasir-tests/tot_info/tests.sh",
     "cronic-orig",
     "classfile_check_version",
-    "tests/kvasir-tests/povray/**/*",
   ] } },
 ]
 
@@ -324,15 +332,3 @@ hooks = [
 repo = "https://github.com/adrienverge/yamllint"
 rev = "v1.38.0"
 hooks = [{ id = "yamllint" }]
-
-[[repos]]
-repo = "https://github.com/rhysd/actionlint"
-rev = "v1.7.12"
-hooks = [{ id = "actionlint" }]
-
-# This doesn't install the tool!  It fails with "Circleci CLI could
-# not be found." unless you have done `sudo snap install circleci`.
-[[repos]]
-repo = "https://github.com/zahorniak/pre-commit-circleci"
-rev = "v1.3.0"
-hooks = [{ id = "circleci_validate" }]
