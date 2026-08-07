@@ -1,0 +1,238 @@
+package daikon.test.dcomp;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import daikon.dcomp.Instrument24;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.ClassModel;
+import java.lang.classfile.ClassTransform;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.CodeElement;
+import java.lang.classfile.CodeTransform;
+import java.lang.classfile.MethodModel;
+import java.lang.classfile.attribute.CodeAttribute;
+import java.lang.classfile.instruction.ConstantInstruction;
+import java.lang.classfile.instruction.InvokeInstruction;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.ConstantDescs;
+import java.lang.constant.MethodTypeDesc;
+import java.lang.instrument.IllegalClassFormatException;
+import java.lang.reflect.Field;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+/**
+ * Tests the size of the tag frame that {@link daikon.dcomp.DCInstrument24} creates. The tag frame
+ * holds one tag per local variable slot, plus one slot in which {@code DCRuntime.create_tag_frame}
+ * records the call depth. The tag frame size is encoded as a single character of a string, so a
+ * method whose tag frame would be too large cannot be instrumented; an oversized tag frame would
+ * therefore make DynComp reject methods that it can instrument.
+ */
+@SuppressWarnings("nullness") // testing code
+public class TagFrameTest24 {
+
+  /** Creates a TagFrameTest24. */
+  public TagFrameTest24() {}
+
+  /** The class that the tests instrument. */
+  public static class Sample {
+
+    /** Creates a Sample. */
+    public Sample() {}
+
+    /**
+     * The method that the tests instrument. Each test rewrites the body to use a given number of
+     * local variable slots.
+     */
+    public static void manyLocals() {}
+  }
+
+  /** The name, in internal form, of the class that the tests instrument. */
+  private static final String sampleInternalName = Sample.class.getName().replace('.', '/');
+
+  /** The name of the sample method. */
+  private static final String sampleMethodName = "manyLocals";
+
+  /**
+   * The descriptor of the instrumented sample method: the descriptor of {@link Sample#manyLocals}
+   * plus the {@code DCompMarker} parameter that instrumentation adds.
+   */
+  private static final MethodTypeDesc instrumentedSampleMethodType =
+      MethodTypeDesc.of(ConstantDescs.CD_void, ClassDesc.of("daikon.dcomp.DCompMarker"));
+
+  /**
+   * The largest tag frame that {@code DCInstrument24.create_tag_frame} accepts. The tag frame size
+   * is passed to {@code DCRuntime.create_tag_frame} as a character obtained by adding the size to
+   * '0' (decimal 48), and an unsigned byte holds at most 255.
+   */
+  private static final int maxTagFrameSize = 206;
+
+  /**
+   * The largest number of local variable slots that a method may use and still be instrumented.
+   * Before the tag frame is created, instrumentation adds two locals to the method: the {@code
+   * DCompMarker} parameter and the tag frame itself. The tag frame has one more slot than the
+   * method has locals, for the call depth.
+   */
+  private static final int maxOriginalLocals = maxTagFrameSize - 3;
+
+  /**
+   * Instruments for an uninstrumented JDK, so that the references that DCInstrument24 emits to
+   * {@code DCompMarker}, {@code DCRuntime}, and {@code DCompInstrumented} are the {@code
+   * daikon.dcomp} versions, which are on this test's classpath. Uses reflection because the field
+   * is not visible in this package.
+   *
+   * @throws ReflectiveOperationException if {@code Premain.jdk_instrumented} does not exist
+   */
+  @BeforeClass
+  public static void useUninstrumentedJdk() throws ReflectiveOperationException {
+    Field jdkInstrumented =
+        Class.forName("daikon.dcomp.Premain").getDeclaredField("jdk_instrumented");
+    jdkInstrumented.setAccessible(true);
+    jdkInstrumented.setBoolean(null, false);
+  }
+
+  /**
+   * Tests that the tag frame has exactly one more slot than the instrumented method has local
+   * variable slots. A smaller tag frame would be indexed out of bounds at run time; a larger one
+   * both wastes space and needlessly reduces the number of locals that a method may have.
+   *
+   * <p>The comparison uses the instrumented method's {@code maxLocals}, which is the value that the
+   * tag frame is sized from. That is valid because {@link Sample#manyLocals} returns void and
+   * accesses no field, so instrumentation creates no local variable after creating the tag frame.
+   */
+  @Test
+  public void tagFrameHasOneSlotPerLocalPlusOne() {
+    byte[] instrumented = instrument(withLocals(sampleClassFile(), 10));
+    assertNotNull("instrumentation of the sample failed", instrumented);
+    CodeAttribute code = instrumentedSampleCode(instrumented);
+    assertEquals("tag frame size", code.maxLocals() + 1, tagFrameSize(instrumented));
+  }
+
+  /**
+   * Tests that a method that uses the largest permitted number of local variable slots is
+   * instrumented rather than rejected as too large.
+   */
+  @Test
+  public void maximumLocalsIsInstrumented() {
+    byte[] instrumented = instrument(withLocals(sampleClassFile(), maxOriginalLocals));
+    assertNotNull(
+        "instrumentation of a method with " + maxOriginalLocals + " locals failed", instrumented);
+    assertEquals("tag frame size", maxTagFrameSize, tagFrameSize(instrumented));
+  }
+
+  /**
+   * Returns the class file of {@link Sample}.
+   *
+   * @return the class file of the sample class
+   */
+  private static byte[] sampleClassFile() {
+    String resource = sampleInternalName + ".class";
+    try (InputStream inputStream = Sample.class.getClassLoader().getResourceAsStream(resource)) {
+      assertNotNull("cannot find " + resource, inputStream);
+      return inputStream.readAllBytes();
+    } catch (IOException e) {
+      throw new Error(e);
+    }
+  }
+
+  /**
+   * Rewrites {@link Sample#manyLocals} to use the given number of local variable slots, by storing
+   * zero into each of them. The stores are dead code, but they force the method's {@code maxLocals}
+   * to the given value.
+   *
+   * @param classFile the class file to rewrite
+   * @param slots the number of local variable slots the sample method should use
+   * @return the rewritten class file
+   */
+  private static byte[] withLocals(byte[] classFile, int slots) {
+    CodeTransform useLocals =
+        new CodeTransform() {
+          @Override
+          public void atStart(CodeBuilder codeBuilder) {
+            for (int slot = 0; slot < slots; slot++) {
+              codeBuilder.iconst_0();
+              codeBuilder.istore(slot);
+            }
+          }
+
+          @Override
+          public void accept(CodeBuilder codeBuilder, CodeElement codeElement) {
+            codeBuilder.with(codeElement);
+          }
+        };
+    ClassFile cf = ClassFile.of();
+    return cf.transformClass(
+        cf.parse(classFile),
+        ClassTransform.transformingMethodBodies(
+            methodModel -> methodModel.methodName().equalsString(sampleMethodName), useLocals));
+  }
+
+  /**
+   * Instruments the given class file, exactly as the DynComp javaagent would.
+   *
+   * @param classFile the class file to instrument
+   * @return the instrumented class file, or null if instrumentation failed
+   */
+  private static byte @Nullable [] instrument(byte[] classFile) {
+    try {
+      return new Instrument24()
+          .transform(
+              Sample.class.getClassLoader(),
+              sampleInternalName,
+              null,
+              Sample.class.getProtectionDomain(),
+              classFile);
+    } catch (IllegalClassFormatException e) {
+      throw new Error(e);
+    }
+  }
+
+  /**
+   * Returns the code of the instrumented version of the sample method.
+   *
+   * @param classFile an instrumented class file
+   * @return the code of the instrumented sample method
+   */
+  private static CodeAttribute instrumentedSampleCode(byte[] classFile) {
+    ClassModel classModel = ClassFile.of().parse(classFile);
+    for (MethodModel methodModel : classModel.methods()) {
+      if (methodModel.methodName().equalsString(sampleMethodName)
+          && methodModel.methodTypeSymbol().equals(instrumentedSampleMethodType)) {
+        return (CodeAttribute) methodModel.code().get();
+      }
+    }
+    throw new Error("no instrumented " + sampleMethodName + " in " + classModel.thisClass());
+  }
+
+  /**
+   * Returns the size of the tag frame that the instrumented sample method creates. That is the
+   * first character of the string that the method passes to {@code DCRuntime.create_tag_frame}.
+   *
+   * @param classFile an instrumented class file
+   * @return the size of the sample method's tag frame
+   */
+  private static int tagFrameSize(byte[] classFile) {
+    String constant = null;
+    for (CodeElement codeElement : instrumentedSampleCode(classFile)) {
+      switch (codeElement) {
+        case ConstantInstruction ci -> {
+          if (ci.constantValue() instanceof String s) {
+            constant = s;
+          }
+        }
+        case InvokeInstruction invoke -> {
+          if (invoke.name().equalsString("create_tag_frame")) {
+            assertNotNull("no string constant before create_tag_frame", constant);
+            return constant.charAt(0) - '0';
+          }
+        }
+        default -> {}
+      }
+    }
+    throw new Error("no call to create_tag_frame in " + sampleMethodName);
+  }
+}
