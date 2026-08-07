@@ -1188,6 +1188,9 @@ check-serialize:
 junit: daikon/Daikon.class
 	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite
+ifeq (${JAVA24}, 1)
+	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite24
+endif
 
 ## TODO:  This target is never used!!!
 junit-all: junit
