@@ -12,8 +12,8 @@ test: all
 	@chmod -w $@
 
 ${PLUME_SCRIPTS}:
-	mkdir -p $$(dirname $<)
-	git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS}
+	mkdir -p $$(dirname $@)
+	git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git $@
 
 clean:
 	@rm -f ci.yml
