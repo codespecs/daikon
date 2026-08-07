@@ -18,10 +18,12 @@ name: CI
 #   group: ${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.head_ref || github.ref_name }}
 #   cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
-# Cancel in-progress jobs that originate from a fork.
+# Cancel in-progress jobs.
+# For a pull request, "github.ref" is "refs/pull/NUMBER/merge", which is unique
+# per pull request even when the pull request originates from a fork.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.head.repo.fork && github.event.pull_request.head.ref || github.ref }}
-  cancel-in-progress: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -53,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: canary_jobs
-        run: true
+        run: "true"
   ci_info:
     runs-on: ubuntu-latest
     steps:

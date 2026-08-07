@@ -27,10 +27,10 @@ define([quick_job], [dnl
 ifelse($1_jdk$2,canary_version,,[dnl
     dependsOn:
       - canary_jobs
+ifelse($2,canary_jdk,,[      - quick_$1_jdk[]canary_jdk
 ])dnl
 ifelse($1,canary_os,,[      - quick_[]canary_os[]_jdk$2
 ])dnl
-ifelse($2,canary_jdk,,[      - quick_$1_jdk[]canary_jdk
 ])dnl
 boilerplate($1, $2, test-quick, scripts/test-quick-txt-diff.sh)[]dnl
 ])dnl

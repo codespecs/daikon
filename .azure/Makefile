@@ -12,7 +12,7 @@ all default: azure-pipelines.yml
 	@chmod -w $@
 
 ${PLUME_SCRIPTS}:
-	mkdir -p $<
+	mkdir -p $$(dirname $<)
 	git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git $<
 
 clean:
