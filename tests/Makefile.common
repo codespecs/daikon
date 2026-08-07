@@ -159,12 +159,13 @@ endif
 # SOURCES is where all of the source code to be examined is located
 SOURCES?=$(COMMON_HERE)/sources
 
-# PROJECT is the relative directory for the project resides
-# (e.g. esc-experiments/StackAr or daikon-tests/QueueAr)
+# CWD is the absolute directory in which the project resides.
 CWD:=$(shell pwd)
-# Why is this command echoed in the Travis job output?
-PROJECT_VIA_COMMAND:=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[678]-)?daikon[^/]*/(workspace/)?tests(\.ver[23])?/||;')
-PROJECT?=${PROJECT_VIA_COMMAND}
+# PROJECT is the directory in which the project resides, relative to
+# ${COMMON_HERE} (e.g. esc-experiments/StackAr or daikon-tests/QueueAr).
+# Both operands are canonicalized, so that the prefix matches even if the
+# clone is reached through a symbolic link.
+PROJECT?=$(patsubst $(realpath ${COMMON_HERE})/%,%,$(realpath ${CWD}))
 
 # This is the name for the output files ($.inv.gz $.txt-daikon ...)
 # Default is the last name on the path to the project; most projects
@@ -507,7 +508,7 @@ $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-ti
 	  echo "File is empty or does not exist: $(CWD)/$(PROJECT_FILE).decls-DynComp"; \
 	  false; \
 	fi
-	export LD_LIBRARY_PATH=$(PROJECT) && \
+	export LD_LIBRARY_PATH="${CWD}" && \
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 	  --dtrace-file=$(PROJECT_FILE).dtrace.gz \
 	  --comparability-file=$(CWD)/$(PROJECT_FILE).decls-DynComp \
@@ -563,11 +564,11 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
 #	@echo inst_Files: '$(INST_FILES)'
 	rm -f $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset
 	# Calls the sub-make only if the variable EXTRA_TARGET is not empty
-	if [ -n "${EXTRA_TARGET}" ]; then ${MAKE} -C ${PROJECT} extra-target; fi
+	if [ -n "${EXTRA_TARGET}" ]; then ${MAKE} -C "${CWD}" extra-target; fi
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
-	export LD_LIBRARY_PATH=$(PROJECT) && \
+	export LD_LIBRARY_PATH="${CWD}" && \
 	$(RUN_JAVA) daikon.DynComp $(DCOMP_ARGS) ${JUNIT} $(MAIN_CLASS) $(MAIN_ARGS)
-	export LD_LIBRARY_PATH=$(PROJECT) && \
+	export LD_LIBRARY_PATH="${CWD}" && \
 	$(RUN_JAVA) daikon.DynComp '--ppt-select-pattern=$(INST_FILES)' \
 		--comparability-file=$(PROJECT_FILE).txt-cset-nojdk \
 		--decl_file $(PROJECT_FILE).decls-DynComp-nojdk \
@@ -663,7 +664,7 @@ ${SPINFO_INV_FILE}: ${PROJECT_FILE}.decls-DynComp ${PROJECT_FILE}.spinfo-static 
 	@echo
 	@echo "### run Chicory with DynComp input (${PROJECT_FILE})"
 	@echo
-	export LD_LIBRARY_PATH=$(PROJECT) && \
+	export LD_LIBRARY_PATH="${CWD}" && \
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 		--dtrace-file=$(PROJECT_FILE)-dyncomp.dtrace.gz \
 		--comparability-file=${CWD}/$(PROJECT_FILE).decls-DynComp \
