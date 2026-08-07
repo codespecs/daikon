@@ -314,7 +314,6 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
-import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
@@ -546,9 +545,6 @@ public class DCInstrument24 {
    */
   protected @DotSeparatedIdentifiers String dcompRuntimePrefix;
 
-  /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
-  private @BinaryName String dcompRuntimeClassName;
-
   /** The ClassDesc for the DynComp runtime support class. */
   private ClassDesc runtimeCD;
 
@@ -720,7 +716,7 @@ public class DCInstrument24 {
     if (BcelUtil.javaVersion == 8) {
       dcompRuntimePrefix = "daikon.dcomp";
     }
-    setDcompRuntimeClassName(Signatures.addPackage(dcompRuntimePrefix, "DCRuntime"));
+    runtimeCD = ClassDesc.of(Signatures.addPackage(dcompRuntimePrefix, "DCRuntime"));
 
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
@@ -737,18 +733,6 @@ public class DCInstrument24 {
       // Reassign System.err to the new PrintStream.
       System.setErr(newErr);
     }
-  }
-
-  /**
-   * Sets the DynComp runtime support class that instrumented code will call. Keeps {@link
-   * #runtimeCD} consistent with {@link #dcompRuntimeClassName}.
-   *
-   * @param className the binary name of the DynComp runtime support class
-   */
-  private void setDcompRuntimeClassName(
-      @UnknownInitialization DCInstrument24 this, @BinaryName String className) {
-    dcompRuntimeClassName = className;
-    runtimeCD = ClassDesc.of(className);
   }
 
   /**
@@ -1773,7 +1757,7 @@ public class DCInstrument24 {
         // Return class file unmodified.
         return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
       }
-      setDcompRuntimeClassName("java.lang.DCRuntime");
+      runtimeCD = ClassDesc.of("java.lang.DCRuntime");
     }
 
     try {
