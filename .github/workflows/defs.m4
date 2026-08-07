@@ -3,27 +3,22 @@ changequote(`[',`]')dnl
 changecom([], [disable comments, that is, expand within them])dnl
 ifelse([The built-in "dnl" m4 macro means "discard to next line".])dnl
 dnl
-define(job_name, [- job: $1])
-dnl
+define(job_name, [$1:])
+define(dependsOn, needs)
 ifelse([Arguments are OS, JDK version number, name, command line.])dnl
 define([boilerplate], [dnl
-    pool:
-      vmImage: 'ubuntu-latest'
-    container: docker_image($1, $2, $3)
-ifelse(typecheck bundled,$3,[    timeoutInMinutes: 40
-],typecheck bundled part1,$3,[    timeoutInMinutes: 40
-],typecheck bundled part2,$3,[    timeoutInMinutes: 40
-],typecheck bundled part3,$3,[    timeoutInMinutes: 40
-],typecheck latest,$3,[    timeoutInMinutes: 40
-],typecheck latest part1,$3,[    timeoutInMinutes: 40
-],typecheck latest part2,$3,[    timeoutInMinutes: 40
-],typecheck latest part3,$3,[    timeoutInMinutes: 40
-])dnl
+    runs-on: ubuntu-latest
+    container:
+      image: docker_userid/daikon-$1-jdk$2[]ifelse(test-misc.sh,$3,-plus,test-kvasir.sh,$3,-plus,typecheck bundled,$3,-plus,typecheck bundled part1,$3,-plus,typecheck bundled part2,$3,-plus,typecheck bundled part3,$3,-plus,typecheck latest,$3,-plus,typecheck latest part1,$3,-plus,typecheck latest part2,$3,-plus,typecheck latest part3,$3,-plus)[]docker_testing:latest
+    timeout-minutes: 70
     steps:
-      - checkout: self
-        fetchDepth: 25
-      - bash: $4
-        displayName: $3])dnl
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: ifelse($3,test-misc.sh,0,25)
+      - name: $3
+        run: $4
+])dnl
 dnl
 ifelse([Each macro takes two arguments, the OS name and the JDK version.])dnl
 dnl
@@ -32,8 +27,7 @@ define([quick_job], [dnl
 ifelse($1_jdk$2,canary_version,,[dnl
     dependsOn:
       - canary_jobs
-ifelse($2,canary_jdk,,[dnl
-      - quick_$1_jdk[]canary_jdk
+ifelse($2,canary_jdk,,[      - quick_$1_jdk[]canary_jdk
 ])dnl
 ifelse($1,canary_os,,[      - quick_[]canary_os[]_jdk$2
 ])dnl
@@ -59,8 +53,7 @@ define([nontxt_job], [dnl
 ifelse($1_jdk$2,canary_version,,[dnl
     dependsOn:
       - canary_jobs
-ifelse($2,canary_jdk,,[
-      - nontxt_$1_jdk[]canary_jdk
+ifelse($2,canary_jdk,,[      - nontxt_$1_jdk[]canary_jdk
 ])dnl
 ifelse($1,canary_os,,[      - nontxt_[]canary_os[]_jdk$2
 ])dnl
@@ -86,11 +79,9 @@ define([kvasir_job], [dnl
 ifelse($1_jdk$2,canary_version,,[dnl
     dependsOn:
       - canary_jobs
-ifelse($2,canary_jdk,,[dnl
-      - kvasir_$1_jdk[]canary_jdk
+ifelse($2,canary_jdk,,[      - kvasir_$1_jdk[]canary_jdk
 ])dnl
-ifelse($1,canary_os,,[dnl
-      - kvasir_[]canary_os[]_jdk$2
+ifelse($1,canary_os,,[      - kvasir_[]canary_os[]_jdk$2
 ])dnl
 ])dnl
 boilerplate($1, $2, test-kvasir.sh, scripts/test-kvasir.sh)[]dnl
@@ -109,7 +100,6 @@ ifelse($1,canary_os,,[      - typecheck_$3_[]canary_os[]_jdk$2
 ])dnl
 boilerplate($1, $2, typecheck $3, scripts/test-typecheck-with-$3-cf.sh)[]dnl
 ])dnl
-dnl
 define([typecheck_job_parts], [dnl
 typecheck_job_part($1, $2, $3, part1)
 typecheck_job_part($1, $2, $3, part2)
@@ -127,6 +117,7 @@ ifelse($1,canary_os,,[      - typecheck_$3_$4_[]canary_os[]_jdk$2
 ])dnl
 boilerplate($1, $2, typecheck $3 $4, scripts/test-typecheck-with-$3-cf.sh $4)[]dnl
 ])dnl
+dnl
 dnl
 ifelse([
 Local Variables:

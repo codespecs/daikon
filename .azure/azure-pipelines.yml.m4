@@ -1,3 +1,4 @@
+# DO NOT EDIT azure-pipelines.yml.  Edit azure-pipelines.yml.m4 and defs.m4 instead.
 changequote
 changequote(`[',`]')dnl
 changecom([], [disable comments, that is, expand within them])dnl
@@ -15,11 +16,10 @@ pr:
 
 jobs:
 
-  # The dependsOn clauses (in this file and in .circleci/config.yml) are:
-  #  * Everything not *_ubuntu_jdk[]canary_jdk or typecheck_*_jdk[]canary_jdk depends on canary_jobs.
-  #  * Anything *_jdk8 or *_jdk11 or *_jdk17 or *_jdk21 or *_jdk26 depends on *_jdk25.
+  # The dependsOn clauses are:
+  #  * Everything depends on the canary jobs (the main jdk25 jobs), except those jobs themselves.
+  #  * Any *_jdkNN job (NN != 25) depends on the corresponding *_jdk25 job.
   #  * Anything *_rockylinux_* depends on *_ubuntu_*.
-  # The remainder of jobs are run only if the canary_jobs pass.
   - job: canary_jobs
     dependsOn:
       - quick_[]canary_os[]_jdk[]canary_jdk
@@ -38,6 +38,7 @@ jobs:
     steps:
       - checkout: none
       - bash: true
+        displayName: canary_jobs
 
 include([jobs.m4])dnl
 

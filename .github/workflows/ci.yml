@@ -1,0 +1,990 @@
+# DO NOT EDIT ci.yml. Edit ci.yml.m4 and defs.m4 instead.
+
+name: CI
+
+"on":
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.head_ref || github.ref_name }}
+#   cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+# Cancel in-progress jobs.
+# For a pull request, "github.ref" is "refs/pull/NUMBER/merge", which is unique
+# per pull request even when the pull request originates from a fork.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  GIT_CONFIG_COUNT: "1"
+  GIT_CONFIG_KEY_0: safe.directory
+  GIT_CONFIG_VALUE_0: ${{ github.workspace }}
+
+jobs:
+
+  # The needs clauses are:
+  #  * Everything depends on the canary jobs (the main jdk25 jobs), except those jobs themselves.
+  #  * Any other *_jdkNN job depends on the corresponding *_jdk25 job.
+
+  canary_jobs:
+    needs:
+      - quick_ubuntu_jdk25
+      - nonquick_ubuntu_jdk25
+      - nontxt_ubuntu_jdk25
+      - misc_ubuntu_jdk25
+      - kvasir_ubuntu_jdk25
+      - typecheck_latest_part1_ubuntu_jdk25
+      - typecheck_latest_part2_ubuntu_jdk25
+      - typecheck_latest_part3_ubuntu_jdk25
+      - typecheck_bundled_part1_ubuntu_jdk25
+      - typecheck_bundled_part2_ubuntu_jdk25
+      - typecheck_bundled_part3_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    steps:
+      - name: canary_jobs
+        run: "true"
+  ci_info:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 0
+      - name: clone_plume_scripts
+        run: git clone https://github.com/plume-lib/plume-scripts.git /tmp/plume-scripts
+      - name: ci_info
+        run: /tmp/plume-scripts/ci-info --debug
+
+  quick_ubuntu_jdk11:
+    needs:
+      - canary_jobs
+      - quick_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk11:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-quick
+        run: scripts/test-quick-txt-diff.sh
+
+  quick_ubuntu_jdk17:
+    needs:
+      - canary_jobs
+      - quick_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk17:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-quick
+        run: scripts/test-quick-txt-diff.sh
+
+  quick_ubuntu_jdk21:
+    needs:
+      - canary_jobs
+      - quick_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk21:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-quick
+        run: scripts/test-quick-txt-diff.sh
+
+  quick_ubuntu_jdk25:
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk25:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-quick
+        run: scripts/test-quick-txt-diff.sh
+
+  quick_ubuntu_jdk26:
+    needs:
+      - canary_jobs
+      - quick_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk26:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-quick
+        run: scripts/test-quick-txt-diff.sh
+
+  nonquick_ubuntu_jdk11:
+    needs:
+      - canary_jobs
+      - nonquick_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk11:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nonquick
+        run: scripts/test-nonquick-txt-diff.sh
+
+  nonquick_ubuntu_jdk17:
+    needs:
+      - canary_jobs
+      - nonquick_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk17:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nonquick
+        run: scripts/test-nonquick-txt-diff.sh
+
+  nonquick_ubuntu_jdk21:
+    needs:
+      - canary_jobs
+      - nonquick_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk21:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nonquick
+        run: scripts/test-nonquick-txt-diff.sh
+
+  nonquick_ubuntu_jdk25:
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk25:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nonquick
+        run: scripts/test-nonquick-txt-diff.sh
+
+  nonquick_ubuntu_jdk26:
+    needs:
+      - canary_jobs
+      - nonquick_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk26:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nonquick
+        run: scripts/test-nonquick-txt-diff.sh
+
+  nontxt_ubuntu_jdk11:
+    needs:
+      - canary_jobs
+      - nontxt_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk11:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nontxt
+        run: scripts/test-non-txt-diff.sh
+
+  nontxt_ubuntu_jdk17:
+    needs:
+      - canary_jobs
+      - nontxt_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk17:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nontxt
+        run: scripts/test-non-txt-diff.sh
+
+  nontxt_ubuntu_jdk21:
+    needs:
+      - canary_jobs
+      - nontxt_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk21:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nontxt
+        run: scripts/test-non-txt-diff.sh
+
+  nontxt_ubuntu_jdk25:
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk25:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nontxt
+        run: scripts/test-non-txt-diff.sh
+
+  nontxt_ubuntu_jdk26:
+    needs:
+      - canary_jobs
+      - nontxt_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk26:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nontxt
+        run: scripts/test-non-txt-diff.sh
+
+  misc_ubuntu_jdk11:
+    needs:
+      - canary_jobs
+      - misc_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk11-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 0
+      - name: test-misc.sh
+        run: make showvars && scripts/test-misc.sh
+
+  misc_ubuntu_jdk17:
+    needs:
+      - canary_jobs
+      - misc_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk17-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 0
+      - name: test-misc.sh
+        run: make showvars && scripts/test-misc.sh
+
+  misc_ubuntu_jdk21:
+    needs:
+      - canary_jobs
+      - misc_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk21-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 0
+      - name: test-misc.sh
+        run: make showvars && scripts/test-misc.sh
+
+  misc_ubuntu_jdk25:
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk25-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 0
+      - name: test-misc.sh
+        run: make showvars && scripts/test-misc.sh
+
+  misc_ubuntu_jdk26:
+    needs:
+      - canary_jobs
+      - misc_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 0
+      - name: test-misc.sh
+        run: make showvars && scripts/test-misc.sh
+
+  kvasir_ubuntu_jdk11:
+    needs:
+      - canary_jobs
+      - kvasir_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk11-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-kvasir.sh
+        run: scripts/test-kvasir.sh
+
+  kvasir_ubuntu_jdk25:
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk25-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-kvasir.sh
+        run: scripts/test-kvasir.sh
+
+  kvasir_ubuntu_jdk26:
+    needs:
+      - canary_jobs
+      - kvasir_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-kvasir.sh
+        run: scripts/test-kvasir.sh
+
+  ## The Checker Framework cannot be run under Java 8 or 11.
+  ## Thus, there is no typecheck_bundled_ubuntu_jdk{8,11} job.
+  ## The Checker Framework cannot be built under Java 8, 11 or 17.
+  ## Thus, there is no typecheck_latest_ubuntu_jdk{8,11,17} job.
+  typecheck_bundled_part1_ubuntu_jdk17:
+    needs:
+      - canary_jobs
+      - typecheck_bundled_part1_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk17-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck bundled part1
+        run: scripts/test-typecheck-with-bundled-cf.sh part1
+
+  typecheck_bundled_part2_ubuntu_jdk17:
+    needs:
+      - canary_jobs
+      - typecheck_bundled_part2_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk17-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck bundled part2
+        run: scripts/test-typecheck-with-bundled-cf.sh part2
+
+  typecheck_bundled_part3_ubuntu_jdk17:
+    needs:
+      - canary_jobs
+      - typecheck_bundled_part3_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk17-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck bundled part3
+        run: scripts/test-typecheck-with-bundled-cf.sh part3
+
+  typecheck_bundled_part1_ubuntu_jdk21:
+    needs:
+      - canary_jobs
+      - typecheck_bundled_part1_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk21-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck bundled part1
+        run: scripts/test-typecheck-with-bundled-cf.sh part1
+
+  typecheck_bundled_part2_ubuntu_jdk21:
+    needs:
+      - canary_jobs
+      - typecheck_bundled_part2_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk21-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck bundled part2
+        run: scripts/test-typecheck-with-bundled-cf.sh part2
+
+  typecheck_bundled_part3_ubuntu_jdk21:
+    needs:
+      - canary_jobs
+      - typecheck_bundled_part3_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk21-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck bundled part3
+        run: scripts/test-typecheck-with-bundled-cf.sh part3
+
+  typecheck_latest_part1_ubuntu_jdk21:
+    needs:
+      - canary_jobs
+      - typecheck_latest_part1_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk21-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck latest part1
+        run: scripts/test-typecheck-with-latest-cf.sh part1
+
+  typecheck_latest_part2_ubuntu_jdk21:
+    needs:
+      - canary_jobs
+      - typecheck_latest_part2_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk21-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck latest part2
+        run: scripts/test-typecheck-with-latest-cf.sh part2
+
+  typecheck_latest_part3_ubuntu_jdk21:
+    needs:
+      - canary_jobs
+      - typecheck_latest_part3_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk21-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck latest part3
+        run: scripts/test-typecheck-with-latest-cf.sh part3
+
+  typecheck_bundled_part1_ubuntu_jdk25:
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk25-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck bundled part1
+        run: scripts/test-typecheck-with-bundled-cf.sh part1
+
+  typecheck_bundled_part2_ubuntu_jdk25:
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk25-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck bundled part2
+        run: scripts/test-typecheck-with-bundled-cf.sh part2
+
+  typecheck_bundled_part3_ubuntu_jdk25:
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk25-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck bundled part3
+        run: scripts/test-typecheck-with-bundled-cf.sh part3
+
+  typecheck_latest_part1_ubuntu_jdk25:
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk25-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck latest part1
+        run: scripts/test-typecheck-with-latest-cf.sh part1
+
+  typecheck_latest_part2_ubuntu_jdk25:
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk25-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck latest part2
+        run: scripts/test-typecheck-with-latest-cf.sh part2
+
+  typecheck_latest_part3_ubuntu_jdk25:
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk25-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck latest part3
+        run: scripts/test-typecheck-with-latest-cf.sh part3
+
+  typecheck_bundled_part1_ubuntu_jdk26:
+    needs:
+      - canary_jobs
+      - typecheck_bundled_part1_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck bundled part1
+        run: scripts/test-typecheck-with-bundled-cf.sh part1
+
+  typecheck_bundled_part2_ubuntu_jdk26:
+    needs:
+      - canary_jobs
+      - typecheck_bundled_part2_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck bundled part2
+        run: scripts/test-typecheck-with-bundled-cf.sh part2
+
+  typecheck_bundled_part3_ubuntu_jdk26:
+    needs:
+      - canary_jobs
+      - typecheck_bundled_part3_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck bundled part3
+        run: scripts/test-typecheck-with-bundled-cf.sh part3
+
+  typecheck_latest_part1_ubuntu_jdk26:
+    needs:
+      - canary_jobs
+      - typecheck_latest_part1_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck latest part1
+        run: scripts/test-typecheck-with-latest-cf.sh part1
+
+  typecheck_latest_part2_ubuntu_jdk26:
+    needs:
+      - canary_jobs
+      - typecheck_latest_part2_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck latest part2
+        run: scripts/test-typecheck-with-latest-cf.sh part2
+
+  typecheck_latest_part3_ubuntu_jdk26:
+    needs:
+      - canary_jobs
+      - typecheck_latest_part3_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: typecheck latest part3
+        run: scripts/test-typecheck-with-latest-cf.sh part3
+
+  quick_rockylinux_jdk11:
+    needs:
+      - canary_jobs
+      - quick_rockylinux_jdk25
+      - quick_ubuntu_jdk11
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk11:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-quick
+        run: scripts/test-quick-txt-diff.sh
+
+  quick_rockylinux_jdk25:
+    needs:
+      - canary_jobs
+      - quick_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk25:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-quick
+        run: scripts/test-quick-txt-diff.sh
+
+  quick_rockylinux_jdk26:
+    needs:
+      - canary_jobs
+      - quick_rockylinux_jdk25
+      - quick_ubuntu_jdk26
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk26:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-quick
+        run: scripts/test-quick-txt-diff.sh
+
+  nonquick_rockylinux_jdk11:
+    needs:
+      - canary_jobs
+      - nonquick_rockylinux_jdk25
+      - nonquick_ubuntu_jdk11
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk11:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nonquick
+        run: scripts/test-nonquick-txt-diff.sh
+
+  nonquick_rockylinux_jdk25:
+    needs:
+      - canary_jobs
+      - nonquick_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk25:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nonquick
+        run: scripts/test-nonquick-txt-diff.sh
+
+  nonquick_rockylinux_jdk26:
+    needs:
+      - canary_jobs
+      - nonquick_rockylinux_jdk25
+      - nonquick_ubuntu_jdk26
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk26:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nonquick
+        run: scripts/test-nonquick-txt-diff.sh
+
+  nontxt_rockylinux_jdk11:
+    needs:
+      - canary_jobs
+      - nontxt_rockylinux_jdk25
+      - nontxt_ubuntu_jdk11
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk11:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nontxt
+        run: scripts/test-non-txt-diff.sh
+
+  nontxt_rockylinux_jdk25:
+    needs:
+      - canary_jobs
+      - nontxt_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk25:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nontxt
+        run: scripts/test-non-txt-diff.sh
+
+  nontxt_rockylinux_jdk26:
+    needs:
+      - canary_jobs
+      - nontxt_rockylinux_jdk25
+      - nontxt_ubuntu_jdk26
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk26:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-nontxt
+        run: scripts/test-non-txt-diff.sh
+
+  misc_rockylinux_jdk11:
+    needs:
+      - canary_jobs
+      - misc_rockylinux_jdk25
+      - misc_ubuntu_jdk11
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk11-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 0
+      - name: test-misc.sh
+        run: make showvars && scripts/test-misc.sh
+
+  misc_rockylinux_jdk25:
+    needs:
+      - canary_jobs
+      - misc_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk25-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 0
+      - name: test-misc.sh
+        run: make showvars && scripts/test-misc.sh
+
+  misc_rockylinux_jdk26:
+    needs:
+      - canary_jobs
+      - misc_rockylinux_jdk25
+      - misc_ubuntu_jdk26
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk26-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 0
+      - name: test-misc.sh
+        run: make showvars && scripts/test-misc.sh
+
+  kvasir_rockylinux_jdk11:
+    needs:
+      - canary_jobs
+      - kvasir_rockylinux_jdk25
+      - kvasir_ubuntu_jdk11
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk11-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-kvasir.sh
+        run: scripts/test-kvasir.sh
+
+  kvasir_rockylinux_jdk25:
+    needs:
+      - canary_jobs
+      - kvasir_ubuntu_jdk25
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk25-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-kvasir.sh
+        run: scripts/test-kvasir.sh
+
+  kvasir_rockylinux_jdk26:
+    needs:
+      - canary_jobs
+      - kvasir_rockylinux_jdk25
+      - kvasir_ubuntu_jdk26
+    runs-on: ubuntu-latest
+    container:
+      image: mdernst/daikon-rockylinux-jdk26-plus:latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          set-safe-directory: true
+          fetch-depth: 25
+      - name: test-kvasir.sh
+        run: scripts/test-kvasir.sh
