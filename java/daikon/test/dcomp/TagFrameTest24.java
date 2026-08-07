@@ -22,6 +22,7 @@ import java.lang.constant.MethodTypeDesc;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.reflect.Field;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.InternalForm;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -52,7 +53,9 @@ public class TagFrameTest24 {
   }
 
   /** The name, in internal form, of the class that the tests instrument. */
-  private static final String sampleInternalName = Sample.class.getName().replace('.', '/');
+  @SuppressWarnings("signature:assignment")
+  private static final @InternalForm String sampleInternalName =
+      Sample.class.getName().replace('.', '/');
 
   /** The name of the sample method. */
   private static final String sampleMethodName = "manyLocals";
