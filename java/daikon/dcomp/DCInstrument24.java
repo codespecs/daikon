@@ -1602,15 +1602,16 @@ public class DCInstrument24 {
       // CodeModel label at the start of the byte codes, if there is one. If there isn't, that is
       // okay as it means the original code did not reference byte code offset 0 so inserting our
       // instrumentation code at that point will not cause a problem.
-      @SuppressWarnings("nullness:assignment") // can't have gotten here if CodeAttribute is null
-      @NonNull CodeAttribute ca = mgen.getCodeAttribute();
+      // ca is null if DCInstrument24 generated the method, in which case there is no byte code
+      // offset information and hence no start label to save.
+      CodeAttribute ca = mgen.getCodeAttribute();
       for (CodeElement ce : mgen.getInstructionList()) {
         debugInstrument.log("CodeElement: %s%n", ce);
         switch (ce) {
           case LocalVariable lv -> {} // we have alreay processed these
           case LocalVariableType lvt -> {} // we can discard local variable types
           case LabelTarget l -> {
-            if (ca.labelToBci(l.label()) == 0) {
+            if (ca != null && ca.labelToBci(l.label()) == 0) {
               oldStartLabel = l.label();
             }
             codeList.add(ce);
