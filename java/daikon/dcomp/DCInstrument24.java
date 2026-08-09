@@ -545,9 +545,6 @@ public class DCInstrument24 {
    */
   protected @DotSeparatedIdentifiers String dcompRuntimePrefix;
 
-  /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
-  private @BinaryName String dcompRuntimeClassName;
-
   /** The ClassDesc for the DynComp runtime support class. */
   private ClassDesc runtimeCD;
 
@@ -719,8 +716,7 @@ public class DCInstrument24 {
     if (BcelUtil.javaVersion == 8) {
       dcompRuntimePrefix = "daikon.dcomp";
     }
-    dcompRuntimeClassName = Signatures.addPackage(dcompRuntimePrefix, "DCRuntime");
-    runtimeCD = ClassDesc.of(dcompRuntimeClassName);
+    runtimeCD = ClassDesc.of(Signatures.addPackage(dcompRuntimePrefix, "DCRuntime"));
 
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
@@ -1762,7 +1758,7 @@ public class DCInstrument24 {
         // Return class file unmodified.
         return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
       }
-      dcompRuntimeClassName = "java.lang.DCRuntime";
+      runtimeCD = ClassDesc.of("java.lang.DCRuntime");
     }
 
     try {

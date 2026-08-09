@@ -1188,6 +1188,11 @@ check-serialize:
 junit: daikon/Daikon.class
 	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite
+# AllTestsSuite cannot name the tests of the Java 24 code, because those tests do not exist
+# (are not compiled) when running under an earlier version of Java.
+ifeq (${JAVA24}, 1)
+	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.dcomp.DCInstrumentTest24
+endif
 
 ## TODO:  This target is never used!!!
 junit-all: junit
