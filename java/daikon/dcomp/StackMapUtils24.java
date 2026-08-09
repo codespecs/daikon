@@ -127,10 +127,8 @@ public final class StackMapUtils24 {
       boolean isParam) {
 
     LocalVariable varNew;
-    // get a copy of the locals before modification
-    List<LocalVariable> locals = mgen.localsTable;
     ClassDesc[] paramTypes = mgen.getParameterTypes();
-    int newIndex = 0; // index into `locals`
+    int newIndex = 0; // index into `mgen.localsTable`
     int newOffset = 0; // current local slot number
 
     int argSize = TypeKind.from(varType).slotSize();
@@ -145,7 +143,7 @@ public final class StackMapUtils24 {
       LocalVariable lastArg;
       newIndex = newIndex + paramTypes.length;
       // `newIndex` is now strictly positive, because `paramTypes.length` is.
-      lastArg = locals.get(newIndex - 1);
+      lastArg = mgen.localsTable.get(newIndex - 1);
       newOffset = lastArg.slot() + TypeKind.from(lastArg.typeSymbol()).slotSize();
     }
 
@@ -170,10 +168,11 @@ public final class StackMapUtils24 {
 
     boolean hasCode = !mgen.getInstructionList().isEmpty();
     if (hasCode) {
-      // Adjust the offset of any locals after our insertion.
-      for (int i = newIndex + 1; i < locals.size(); i++) {
-        LocalVariable lv = locals.get(i);
-        locals.set(
+      // Adjust the offset of any locals after our insertion.  The locals that were shifted by the
+      // insertion above are now at indices `newIndex + 1` and higher.
+      for (int i = newIndex + 1; i < mgen.localsTable.size(); i++) {
+        LocalVariable lv = mgen.localsTable.get(i);
+        mgen.localsTable.set(
             i,
             LocalVariable.of(
                 lv.slot() + argSize, lv.name(), lv.type(), lv.startScope(), lv.endScope()));

@@ -545,9 +545,6 @@ public class DCInstrument24 {
    */
   protected @DotSeparatedIdentifiers String dcompRuntimePrefix;
 
-  /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
-  private @BinaryName String dcompRuntimeClassName;
-
   /** The ClassDesc for the DynComp runtime support class. */
   private ClassDesc runtimeCD;
 
@@ -719,8 +716,7 @@ public class DCInstrument24 {
     if (BcelUtil.javaVersion == 8) {
       dcompRuntimePrefix = "daikon.dcomp";
     }
-    dcompRuntimeClassName = Signatures.addPackage(dcompRuntimePrefix, "DCRuntime");
-    runtimeCD = ClassDesc.of(dcompRuntimeClassName);
+    runtimeCD = ClassDesc.of(Signatures.addPackage(dcompRuntimePrefix, "DCRuntime"));
 
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
@@ -1602,15 +1598,16 @@ public class DCInstrument24 {
       // CodeModel label at the start of the byte codes, if there is one. If there isn't, that is
       // okay as it means the original code did not reference byte code offset 0 so inserting our
       // instrumentation code at that point will not cause a problem.
-      @SuppressWarnings("nullness:assignment") // can't have gotten here if CodeAttribute is null
-      @NonNull CodeAttribute ca = mgen.getCodeAttribute();
+      // ca is null if DCInstrument24 generated the method, in which case there is no byte code
+      // offset information and hence no start label to save.
+      CodeAttribute ca = mgen.getCodeAttribute();
       for (CodeElement ce : mgen.getInstructionList()) {
         debugInstrument.log("CodeElement: %s%n", ce);
         switch (ce) {
           case LocalVariable lv -> {} // we have alreay processed these
           case LocalVariableType lvt -> {} // we can discard local variable types
           case LabelTarget l -> {
-            if (ca.labelToBci(l.label()) == 0) {
+            if (ca != null && ca.labelToBci(l.label()) == 0) {
               oldStartLabel = l.label();
             }
             codeList.add(ce);
@@ -1761,7 +1758,7 @@ public class DCInstrument24 {
         // Return class file unmodified.
         return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
       }
-      dcompRuntimeClassName = "java.lang.DCRuntime";
+      runtimeCD = ClassDesc.of("java.lang.DCRuntime");
     }
 
     try {

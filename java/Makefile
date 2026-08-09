@@ -1189,9 +1189,10 @@ junit: daikon/Daikon.class
 	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite
 ifeq (${JAVA24}, 1)
-	@# This test is not in AllTestsSuite, because AllTestsSuite must compile
+	@# These tests are not in AllTestsSuite, because AllTestsSuite must compile
 	@# under versions of Java that do not have java.lang.classfile.
 	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.dcomp.TagFrameTest24
+	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.dcomp.DCInstrumentTest24
 endif
 
 ## TODO:  This target is never used!!!
