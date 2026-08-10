@@ -4485,7 +4485,10 @@ public class PptTopLevel extends Ppt {
       if (cnt_inv_classes) {
         assert inv_map != null : "@AssumeAssertion(nullness) : dependent: cnt_inv_classes is true";
         for (Class<? extends Invariant> inv_class : inv_map.keySet()) {
-          @SuppressWarnings("nullness") // limited side effects don't affect inv_map field
+          @SuppressWarnings({
+            "nullness:unneeded.suppression", // TODO: eliminate
+            "nullness" // limited side effects don't affect inv_map field
+          })
           Cnt cnt = inv_map.get(inv_class);
           log.fine(" : " + inv_class + ": " + cnt.cnt);
         }
