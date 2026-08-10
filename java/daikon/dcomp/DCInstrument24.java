@@ -2114,8 +2114,9 @@ public class DCInstrument24 {
     // Determine the offset of the first argument in the frame.
     int offset = mgen.isStatic() ? 0 : 1;
 
-    // allocate an extra slot to save the tag frame depth for debugging
-    int frame_size = mgen.getMaxLocals() + 2;
+    // One slot per local variable, plus an extra slot in which DCRuntime.create_tag_frame
+    // saves the tag frame depth for debugging.
+    int frame_size = mgen.getMaxLocals() + 1;
 
     // unsigned byte max = 255.  minus the character '0' (decimal 48)
     // Largest frame size noted so far is 123.
