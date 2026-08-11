@@ -10,8 +10,8 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-  daikon.test.dcomp.CalcStackTest24.class,
-  daikon.test.dcomp.DCInstrumentTest24.class,
+  daikon.dcomp.CalcStackTest24.class,
+  daikon.dcomp.DCInstrumentTest24.class,
   daikon.test.dcomp.TagFrameTest24.class,
 })
 public final class AllTestsSuite24 {}

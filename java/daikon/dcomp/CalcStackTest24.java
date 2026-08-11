@@ -11,7 +11,12 @@ import java.lang.constant.ClassDesc;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Test;
 
-/** Tests of {@link CalcStack24}, the operand stack simulator used by {@link DCInstrument24}. */
+/**
+ * Tests of {@link CalcStack24}, the operand stack simulator used by {@link DCInstrument24}.
+ *
+ * Note that this test must be located in daikon.dcomp rather than daikon.test.dcomp as it
+ * needs to access protected fields of DCInstrument24.
+ */
 public class CalcStackTest24 {
 
   /**
