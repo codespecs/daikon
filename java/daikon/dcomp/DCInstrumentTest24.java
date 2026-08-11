@@ -160,7 +160,7 @@ public final class DCInstrumentTest24 {
    *
    * @throws IOException if a class file cannot be read
    */
-  @SuppressWarnings("nullness:argument") // bug in CF?
+  @SuppressWarnings({"nullness:argument", "nullness:unneeded.suppression"}) // TODO: bug in CF?
   @Test
   public void staleWorklistDoesNotAffectLaterClasses() throws IOException {
     boolean savedJdkInstrumented = Premain.jdk_instrumented;
