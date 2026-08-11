@@ -23,11 +23,16 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.junit.Test;
 
-/** Tests for {@link DCInstrument24}. */
-public final class DCInstrumentTest24 {
+/**
+ * Unit tests for {@link DCInstrument24}.
+ *
+ * <p>Note that this test must be located in daikon.dcomp rather than daikon.test.dcomp as it needs
+ * to access protected fields of DCRuntime and Premain.
+ */
+public final class DCInstrumentTest24a {
 
-  /** Create a new DCInstrumentTest24. */
-  public DCInstrumentTest24() {}
+  /** Create a new DCInstrumentTest24a. */
+  public DCInstrumentTest24a() {}
 
   /** A class that DCInstrument24 can instrument without error. */
   static class SimpleClass {
@@ -113,7 +118,7 @@ public final class DCInstrumentTest24 {
    * @return the class loader of this class
    */
   private static ClassLoader classLoader() {
-    ClassLoader loader = DCInstrumentTest24.class.getClassLoader();
+    ClassLoader loader = DCInstrumentTest24a.class.getClassLoader();
     assert loader != null : "@AssumeAssertion(nullness): this class is not in the boot classpath";
     return loader;
   }
@@ -173,7 +178,7 @@ public final class DCInstrumentTest24 {
       Premain.jdk_instrumented = false;
       DCRuntime.instrumentation_interface = "daikon.dcomp.DCompInstrumented";
 
-      @BinaryName String simpleName = "daikon.dcomp.DCInstrumentTest24$SimpleClass";
+      @BinaryName String simpleName = "daikon.dcomp.DCInstrumentTest24a$SimpleClass";
       byte[] simpleBytes = classBytes(simpleName);
       assertNotNull("cannot instrument " + simpleName, instrument(simpleBytes, simpleName));
 

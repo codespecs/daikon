@@ -400,9 +400,12 @@ public class DCInstrument24 {
    * The type of each parameter and local variable of the method being simulated. This value is
    * often unchanged during the method execution, but may differ when the compiler allocates more
    * than one local variable at the same offset.
+   *
+   * <p>An element is null if the type of that slot is not (yet) known: the method has no {@code
+   * LocalVariableTable} entry for the slot and no simulated store has written to it.
    */
   @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO: method-local
-  protected static ClassDesc[] locals;
+  protected static @Nullable ClassDesc[] locals;
 
   /**
    * Record containing a work item for the operand stack calculation. The instructionIndex is an
@@ -544,9 +547,6 @@ public class DCInstrument24 {
    * otherwise, "daikon.dcomp".
    */
   protected @DotSeparatedIdentifiers String dcompRuntimePrefix;
-
-  /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
-  private @BinaryName String dcompRuntimeClassName;
 
   /** The ClassDesc for the DynComp runtime support class. */
   private ClassDesc runtimeCD;
@@ -719,8 +719,7 @@ public class DCInstrument24 {
     if (BcelUtil.javaVersion == 8) {
       dcompRuntimePrefix = "daikon.dcomp";
     }
-    dcompRuntimeClassName = Signatures.addPackage(dcompRuntimePrefix, "DCRuntime");
-    runtimeCD = ClassDesc.of(dcompRuntimeClassName);
+    runtimeCD = ClassDesc.of(Signatures.addPackage(dcompRuntimePrefix, "DCRuntime"));
 
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
@@ -1602,15 +1601,16 @@ public class DCInstrument24 {
       // CodeModel label at the start of the byte codes, if there is one. If there isn't, that is
       // okay as it means the original code did not reference byte code offset 0 so inserting our
       // instrumentation code at that point will not cause a problem.
-      @SuppressWarnings("nullness:assignment") // can't have gotten here if CodeAttribute is null
-      @NonNull CodeAttribute ca = mgen.getCodeAttribute();
+      // ca is null if DCInstrument24 generated the method, in which case there is no byte code
+      // offset information and hence no start label to save.
+      CodeAttribute ca = mgen.getCodeAttribute();
       for (CodeElement ce : mgen.getInstructionList()) {
         debugInstrument.log("CodeElement: %s%n", ce);
         switch (ce) {
           case LocalVariable lv -> {} // we have alreay processed these
           case LocalVariableType lvt -> {} // we can discard local variable types
           case LabelTarget l -> {
-            if (ca.labelToBci(l.label()) == 0) {
+            if (ca != null && ca.labelToBci(l.label()) == 0) {
               oldStartLabel = l.label();
             }
             codeList.add(ce);
@@ -1761,7 +1761,7 @@ public class DCInstrument24 {
         // Return class file unmodified.
         return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
       }
-      dcompRuntimeClassName = "java.lang.DCRuntime";
+      runtimeCD = ClassDesc.of("java.lang.DCRuntime");
     }
 
     try {
@@ -1862,7 +1862,7 @@ public class DCInstrument24 {
       // This will be indexed by the local variable's slot number. Note that a
       // variable of type long or double takes two slots; hence, there may
       // be unused entries in the locals table.
-      locals = new ClassDesc[mgen.getMaxLocals()];
+      locals = new @Nullable ClassDesc[mgen.getMaxLocals()];
       // UNDONE: Should we init locals for 'this' and params only?
       for (final LocalVariable lv : mgen.localsTable) {
         // System.out.printf("local(%d): %s%n", lv.slot(), lv.typeSymbol());
@@ -2122,8 +2122,9 @@ public class DCInstrument24 {
     // Determine the offset of the first argument in the frame.
     int offset = mgen.isStatic() ? 0 : 1;
 
-    // allocate an extra slot to save the tag frame depth for debugging
-    int frame_size = mgen.getMaxLocals() + 2;
+    // One slot per local variable, plus an extra slot in which DCRuntime.create_tag_frame
+    // saves the tag frame depth for debugging.
+    int frame_size = mgen.getMaxLocals() + 1;
 
     // unsigned byte max = 255.  minus the character '0' (decimal 48)
     // Largest frame size noted so far is 123.
