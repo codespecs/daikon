@@ -400,9 +400,12 @@ public class DCInstrument24 {
    * The type of each parameter and local variable of the method being simulated. This value is
    * often unchanged during the method execution, but may differ when the compiler allocates more
    * than one local variable at the same offset.
+   *
+   * <p>An element is null if the type of that slot is not (yet) known: the method has no {@code
+   * LocalVariableTable} entry for the slot and no simulated store has written to it.
    */
   @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO: method-local
-  protected static ClassDesc[] locals;
+  protected static @Nullable ClassDesc[] locals;
 
   /**
    * Record containing a work item for the operand stack calculation. The instructionIndex is an
@@ -1859,7 +1862,7 @@ public class DCInstrument24 {
       // This will be indexed by the local variable's slot number. Note that a
       // variable of type long or double takes two slots; hence, there may
       // be unused entries in the locals table.
-      locals = new ClassDesc[mgen.getMaxLocals()];
+      locals = new @Nullable ClassDesc[mgen.getMaxLocals()];
       // UNDONE: Should we init locals for 'this' and params only?
       for (final LocalVariable lv : mgen.localsTable) {
         // System.out.printf("local(%d): %s%n", lv.slot(), lv.typeSymbol());

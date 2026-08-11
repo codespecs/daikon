@@ -1191,8 +1191,7 @@ junit: daikon/Daikon.class
 ifeq (${JAVA24}, 1)
 	@# These tests are not in AllTestsSuite, because AllTestsSuite must compile
 	@# under versions of Java that do not have java.lang.classfile.
-	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.dcomp.TagFrameTest24
-	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.dcomp.DCInstrumentTest24
+	LC_ALL=en_US.UTF-8 ${JAVA_COMMAND} org.junit.runner.JUnitCore daikon.test.AllTestsSuite24
 endif
 
 ## TODO:  This target is never used!!!

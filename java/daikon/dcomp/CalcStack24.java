@@ -208,9 +208,20 @@ public final class CalcStack24 {
       case Opcode.ALOAD_2:
       case Opcode.ALOAD_3:
       case Opcode.ALOAD_W:
-        LoadInstruction li = (LoadInstruction) inst;
-        stack.push(DCInstrument24.locals[li.slot()]);
-        return true;
+        {
+          final LoadInstruction li = (LoadInstruction) inst;
+          final ClassDesc t = DCInstrument24.locals[li.slot()];
+          if (t == null) {
+            // The type of the local variable is unknown: the class has no LocalVariableTable
+            // entry for this slot and no simulated store has written to it.  ALOAD always loads a
+            // reference, so NULL_CD describes it accurately enough: it is not a primitive, and it
+            // matches any array or class.
+            stack.push(NULL_CD);
+          } else {
+            stack.push(t);
+          }
+          return true;
+        }
 
       // operand stack before: ..., count
       // operand stack after:  ..., arrayref
