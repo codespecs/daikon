@@ -33,7 +33,7 @@ import org.junit.Test;
  * method whose tag frame would be too large cannot be instrumented; an oversized tag frame would
  * therefore make DynComp reject methods that it can instrument.
  *
- * Note that this test must be located in daikon.test.dcomp rather than daikon.dcomp as it calls
+ * <p>Note that this test must be located in daikon.test.dcomp rather than daikon.dcomp as it calls
  * Instrument24.transform which would ignore the test thinking it was part of the DynComp tool.
  */
 @SuppressWarnings("nullness") // testing code

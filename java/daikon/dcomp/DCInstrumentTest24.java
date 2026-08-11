@@ -18,8 +18,8 @@ import org.junit.Test;
 /**
  * Unit tests for {@link DCInstrument24}.
  *
- * Note that this test must be located in daikon.dcomp rather than daikon.test.dcomp as it
- * needs to access protected fields of DCRuntime and Premain.
+ * <p>Note that this test must be located in daikon.dcomp rather than daikon.test.dcomp as it needs
+ * to access protected fields of DCRuntime and Premain.
  */
 public final class DCInstrumentTest24 {
 
