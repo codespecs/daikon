@@ -32,6 +32,9 @@ import org.junit.Test;
  * records the call depth. The tag frame size is encoded as a single character of a string, so a
  * method whose tag frame would be too large cannot be instrumented; an oversized tag frame would
  * therefore make DynComp reject methods that it can instrument.
+ *
+ * <p>Note that this test must be located in daikon.test.dcomp rather than daikon.dcomp as it calls
+ * Instrument24.transform which would ignore the test thinking it was part of the DynComp tool.
  */
 @SuppressWarnings("nullness") // testing code
 public class TagFrameTest24 {

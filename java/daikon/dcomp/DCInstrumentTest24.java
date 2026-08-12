@@ -15,7 +15,12 @@ import java.util.Set;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.junit.Test;
 
-/** Unit tests for {@link DCInstrument24}. */
+/**
+ * Unit tests for {@link DCInstrument24}.
+ *
+ * <p>Note that this test must be located in daikon.dcomp rather than daikon.test.dcomp as it needs
+ * to access protected fields of DCRuntime and Premain.
+ */
 public final class DCInstrumentTest24 {
 
   /** Creates a new DCInstrumentTest24. */
