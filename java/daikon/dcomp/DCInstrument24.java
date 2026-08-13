@@ -16,6 +16,7 @@ import static java.lang.classfile.Opcode.ALOAD_0;
 import static java.lang.classfile.Opcode.ALOAD_1;
 import static java.lang.classfile.Opcode.ALOAD_2;
 import static java.lang.classfile.Opcode.ALOAD_3;
+import static java.lang.classfile.Opcode.ALOAD_W;
 import static java.lang.classfile.Opcode.ANEWARRAY;
 import static java.lang.classfile.Opcode.ARETURN;
 import static java.lang.classfile.Opcode.ARRAYLENGTH;
@@ -24,6 +25,7 @@ import static java.lang.classfile.Opcode.ASTORE_0;
 import static java.lang.classfile.Opcode.ASTORE_1;
 import static java.lang.classfile.Opcode.ASTORE_2;
 import static java.lang.classfile.Opcode.ASTORE_3;
+import static java.lang.classfile.Opcode.ASTORE_W;
 import static java.lang.classfile.Opcode.ATHROW;
 import static java.lang.classfile.Opcode.BALOAD;
 import static java.lang.classfile.Opcode.BASTORE;
@@ -47,6 +49,7 @@ import static java.lang.classfile.Opcode.DLOAD_0;
 import static java.lang.classfile.Opcode.DLOAD_1;
 import static java.lang.classfile.Opcode.DLOAD_2;
 import static java.lang.classfile.Opcode.DLOAD_3;
+import static java.lang.classfile.Opcode.DLOAD_W;
 import static java.lang.classfile.Opcode.DMUL;
 import static java.lang.classfile.Opcode.DNEG;
 import static java.lang.classfile.Opcode.DREM;
@@ -56,6 +59,7 @@ import static java.lang.classfile.Opcode.DSTORE_0;
 import static java.lang.classfile.Opcode.DSTORE_1;
 import static java.lang.classfile.Opcode.DSTORE_2;
 import static java.lang.classfile.Opcode.DSTORE_3;
+import static java.lang.classfile.Opcode.DSTORE_W;
 import static java.lang.classfile.Opcode.DSUB;
 import static java.lang.classfile.Opcode.DUP;
 import static java.lang.classfile.Opcode.DUP2;
@@ -80,6 +84,7 @@ import static java.lang.classfile.Opcode.FLOAD_0;
 import static java.lang.classfile.Opcode.FLOAD_1;
 import static java.lang.classfile.Opcode.FLOAD_2;
 import static java.lang.classfile.Opcode.FLOAD_3;
+import static java.lang.classfile.Opcode.FLOAD_W;
 import static java.lang.classfile.Opcode.FMUL;
 import static java.lang.classfile.Opcode.FNEG;
 import static java.lang.classfile.Opcode.FREM;
@@ -89,6 +94,7 @@ import static java.lang.classfile.Opcode.FSTORE_0;
 import static java.lang.classfile.Opcode.FSTORE_1;
 import static java.lang.classfile.Opcode.FSTORE_2;
 import static java.lang.classfile.Opcode.FSTORE_3;
+import static java.lang.classfile.Opcode.FSTORE_W;
 import static java.lang.classfile.Opcode.FSUB;
 import static java.lang.classfile.Opcode.GETFIELD;
 import static java.lang.classfile.Opcode.GETSTATIC;
@@ -134,6 +140,7 @@ import static java.lang.classfile.Opcode.ILOAD_0;
 import static java.lang.classfile.Opcode.ILOAD_1;
 import static java.lang.classfile.Opcode.ILOAD_2;
 import static java.lang.classfile.Opcode.ILOAD_3;
+import static java.lang.classfile.Opcode.ILOAD_W;
 import static java.lang.classfile.Opcode.IMUL;
 import static java.lang.classfile.Opcode.INEG;
 import static java.lang.classfile.Opcode.INSTANCEOF;
@@ -152,6 +159,7 @@ import static java.lang.classfile.Opcode.ISTORE_0;
 import static java.lang.classfile.Opcode.ISTORE_1;
 import static java.lang.classfile.Opcode.ISTORE_2;
 import static java.lang.classfile.Opcode.ISTORE_3;
+import static java.lang.classfile.Opcode.ISTORE_W;
 import static java.lang.classfile.Opcode.ISUB;
 import static java.lang.classfile.Opcode.IUSHR;
 import static java.lang.classfile.Opcode.IXOR;
@@ -176,6 +184,7 @@ import static java.lang.classfile.Opcode.LLOAD_0;
 import static java.lang.classfile.Opcode.LLOAD_1;
 import static java.lang.classfile.Opcode.LLOAD_2;
 import static java.lang.classfile.Opcode.LLOAD_3;
+import static java.lang.classfile.Opcode.LLOAD_W;
 import static java.lang.classfile.Opcode.LMUL;
 import static java.lang.classfile.Opcode.LNEG;
 import static java.lang.classfile.Opcode.LOOKUPSWITCH;
@@ -189,6 +198,7 @@ import static java.lang.classfile.Opcode.LSTORE_0;
 import static java.lang.classfile.Opcode.LSTORE_1;
 import static java.lang.classfile.Opcode.LSTORE_2;
 import static java.lang.classfile.Opcode.LSTORE_3;
+import static java.lang.classfile.Opcode.LSTORE_W;
 import static java.lang.classfile.Opcode.LSUB;
 import static java.lang.classfile.Opcode.LUSHR;
 import static java.lang.classfile.Opcode.LXOR;
@@ -2377,21 +2387,25 @@ public class DCInstrument24 {
           case DLOAD_1:
           case DLOAD_2:
           case DLOAD_3:
+          case DLOAD_W:
           case FLOAD:
           case FLOAD_0:
           case FLOAD_1:
           case FLOAD_2:
           case FLOAD_3:
+          case FLOAD_W:
           case ILOAD:
           case ILOAD_0:
           case ILOAD_1:
           case ILOAD_2:
           case ILOAD_3:
+          case ILOAD_W:
           case LLOAD:
           case LLOAD_0:
           case LLOAD_1:
           case LLOAD_2:
           case LLOAD_3:
+          case LLOAD_W:
             {
               return load_local((LoadInstruction) inst, tagFrameLocal, "push_local_tag");
             }
@@ -2401,21 +2415,25 @@ public class DCInstrument24 {
           case DSTORE_1:
           case DSTORE_2:
           case DSTORE_3:
+          case DSTORE_W:
           case FSTORE:
           case FSTORE_0:
           case FSTORE_1:
           case FSTORE_2:
           case FSTORE_3:
+          case FSTORE_W:
           case ISTORE:
           case ISTORE_0:
           case ISTORE_1:
           case ISTORE_2:
           case ISTORE_3:
+          case ISTORE_W:
           case LSTORE:
           case LSTORE_0:
           case LSTORE_1:
           case LSTORE_2:
           case LSTORE_3:
+          case LSTORE_W:
             {
               return store_local((StoreInstruction) inst, tagFrameLocal, "pop_local_tag");
             }
@@ -2562,11 +2580,13 @@ public class DCInstrument24 {
           case ALOAD_1:
           case ALOAD_2:
           case ALOAD_3:
+          case ALOAD_W:
           case ASTORE:
           case ASTORE_0:
           case ASTORE_1:
           case ASTORE_2:
           case ASTORE_3:
+          case ASTORE_W:
           case CHECKCAST:
           case D2F: // double to float
           case D2I: // double to integer
