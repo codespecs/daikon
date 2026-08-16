@@ -8,6 +8,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import daikon.chicory.ClassInfo;
+import daikon.chicory.Runtime;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,9 +23,11 @@ import java.lang.classfile.constantpool.ClassEntry;
 import java.lang.classfile.constantpool.PoolEntry;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
+import java.lang.reflect.AccessFlag;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.junit.Test;
@@ -207,6 +210,79 @@ public final class DCInstrumentTest24 {
           instrument(simpleBytes, simpleName));
     } finally {
       Premain.jdk_instrumented = savedJdkInstrumented;
+      DCRuntime.instrumentation_interface = savedInstrumentationInterface;
+    }
+  }
+
+  /**
+   * A package-private class with a tracked method ({@link #increment}) followed by an untracked
+   * method ({@link #notTracked}, excluded via {@link daikon.chicory.Runtime#ppt_omit_pattern} in
+   * {@link #trackedMethodPromotionSurvivesLaterUntrackedMethod}). Used to verify that once tracking
+   * one method promotes the class to public, processing a later untracked method does not revert
+   * that promotion.
+   */
+  static class MixedTrackingClass {
+    /** A field. */
+    int field;
+
+    /** Create a new MixedTrackingClass. */
+    MixedTrackingClass() {}
+
+    /**
+     * A tracked method whose processing should promote the class to public.
+     *
+     * @param x the value to add to the field
+     * @return the sum of {@code x} and the field
+     */
+    int increment(int x) {
+      return x + field;
+    }
+
+    /**
+     * An untracked method, processed after {@link #increment}.
+     *
+     * @param x the value to subtract from the field
+     * @return the difference of the field and {@code x}
+     */
+    int notTracked(int x) {
+      return field - x;
+    }
+  }
+
+  /**
+   * Tests that once processing a tracked method promotes a package-private class to public,
+   * processing a later, untracked method does not revert the class back to package-private. In
+   * {@link MixedTrackingClass}, {@link MixedTrackingClass#increment} is tracked and {@link
+   * MixedTrackingClass#notTracked} is not (excluded here via {@link
+   * daikon.chicory.Runtime#ppt_omit_pattern}); {@code notTracked} is declared last so it is
+   * processed last.
+   *
+   * @throws IOException if the class file for {@link MixedTrackingClass} cannot be read
+   */
+  @Test
+  public void trackedMethodPromotionSurvivesLaterUntrackedMethod() throws IOException {
+    List<Pattern> savedOmitPattern = Runtime.ppt_omit_pattern;
+    @BinaryName String savedInstrumentationInterface = DCRuntime.instrumentation_interface;
+    try {
+      Runtime.ppt_omit_pattern = List.of(Pattern.compile("notTracked"));
+      DCRuntime.instrumentation_interface = "daikon.dcomp.DCompInstrumented";
+
+      @BinaryName String classname = "daikon.dcomp.DCInstrumentTest24$MixedTrackingClass";
+      byte[] original = classBytes(classname);
+      ClassModel originalModel = ClassFile.of().parse(original);
+      assertFalse(
+          classname + " must not already be public for this test to be meaningful",
+          originalModel.flags().has(AccessFlag.PUBLIC));
+
+      byte[] instrumented = instrument(original, classname);
+      assertNotNull("cannot instrument " + classname, instrumented);
+
+      ClassModel instrumentedModel = ClassFile.of().parse(instrumented);
+      assertTrue(
+          classname + " should be public after instrumentation because it has a tracked method",
+          instrumentedModel.flags().has(AccessFlag.PUBLIC));
+    } finally {
+      Runtime.ppt_omit_pattern = savedOmitPattern;
       DCRuntime.instrumentation_interface = savedInstrumentationInterface;
     }
   }
