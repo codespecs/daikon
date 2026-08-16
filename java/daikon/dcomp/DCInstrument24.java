@@ -1143,8 +1143,11 @@ public class DCInstrument24 {
   private void processAllMethods(
       ClassModel classModel, ClassBuilder classBuilder, ClassInfo classInfo) {
     access_flags = classModel.flags().flagsMask();
+    // Copy flags to output class. Note that {@link #processMethod} might modify
+    // the class's flags, promoting the class to public if needed.
+    classBuilder.withFlags(access_flags);
     for (MethodModel mm : classModel.methods()) {
-      processMethod(mm, classModel, classBuilder, classInfo);
+      processMethod(mm, classBuilder, classInfo);
     }
   }
 
@@ -1183,15 +1186,11 @@ public class DCInstrument24 {
    * likely intended to represent.
    *
    * @param methodModel for current method
-   * @param classModel for current class
    * @param classBuilder for current class
    * @param classInfo for the given class
    */
   private void processMethod(
-      MethodModel methodModel,
-      ClassModel classModel,
-      ClassBuilder classBuilder,
-      ClassInfo classInfo) {
+      MethodModel methodModel, ClassBuilder classBuilder, ClassInfo classInfo) {
 
     @BinaryName String classname = classInfo.class_name;
 
