@@ -333,10 +333,18 @@ public final class BuildJDK24 {
       }
     } else {
       String entryName = path.toString().substring(modulePrefixLength + 1);
-      if (!entryName.endsWith(".class") || entryName.equals("java/lang/Object.class")) {
-        // For JDK 9+ we do not process non-.class files and Object.class.
+      if (!entryName.endsWith(".class")) {
+        // For JDK 9+ we do not process non-.class files.
         return;
       }
+      // Note: java/lang/Object.class is added to class_stream_map
+      // so that it is included in the jdk_classes.txt list of pre-instrumented classes written out
+      // at the end of build(). Due to the way the JVM is loaded, we cannot instrument Object.class
+      // in {@link #instrument_classes()}. However, we need it included in the
+      // pre-instrumented class list so that {@link Instrument24#transform} will not
+      // attempt to instrument it live.
+      //
+      // <p>debugging code:
       // System.out.printf("processing entry %s%n", entryName);
       try {
         // Get the InputStream for this file
@@ -380,8 +388,15 @@ public final class BuildJDK24 {
         }
 
         // Handle non-.class files and Object.class.  In JDK 8, copy them unchanged.
-        // For JDK 9+ they have not been added to class_stream_map.
+        // For JDK 9+ we do not copy them as these items will be loaded from the original module
+        // file. See {@link gather_runtime_from_modules_directory} for more details.
         if (!classFileName.endsWith(".class") || classFileName.equals("java/lang/Object.class")) {
+          if (Runtime.isJava9orLater()) {
+            if (verbose) {
+              System.out.printf("Skipping file %s%n", classFileName);
+            }
+            continue;
+          }
           // This File constructor ignores dest_dir if classFileName is absolute.
           File classFile = new File(dest_dir, classFileName);
           if (classFile.getParentFile() == null) {
