@@ -277,6 +277,8 @@ public final class DCInstrumentTest24 {
       byte[] instrumented = instrument(original, classname);
       assertNotNull("cannot instrument " + classname, instrumented);
 
+      assert instrumented != null : "@AssumeAssertion(nullness): just verified with assertNotNulll";
+
       ClassModel instrumentedModel = ClassFile.of().parse(instrumented);
       assertTrue(
           classname + " should be public after instrumentation because it has a tracked method",
