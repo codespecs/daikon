@@ -442,7 +442,7 @@ public final class BuildJDK24 {
           dcompPrefix = "daikon.dcomp";
         }
         DCRuntime.instrumentation_interface =
-            Signatures.addPackage(dcompPrefix, "DCompInstrumented");
+            Signatures.addPackage(dcompPrefix, "DCompInstrumented").intern();
 
         // Instrument the class file.
         try {

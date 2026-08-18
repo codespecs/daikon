@@ -287,7 +287,8 @@ public class Instrument24 implements ClassFileTransformer {
     } else {
       dcompPrefix = "daikon.dcomp";
     }
-    DCRuntime.instrumentation_interface = Signatures.addPackage(dcompPrefix, "DCompInstrumented");
+    DCRuntime.instrumentation_interface =
+        Signatures.addPackage(dcompPrefix, "DCompInstrumented").intern();
 
     // Instrument the classfile, die on any errors.
     ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
