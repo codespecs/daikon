@@ -550,6 +550,9 @@ ChicoryPremain.jar : daikon/Daikon.class daikon/chicory/manifest.txt
 	${JAR} cfm ChicoryPremain.jar daikon/chicory/manifest.txt \
 	  daikon/chicory/ChicoryPremain.class
 
+.PHONY: chicory
+chicory: ChicoryPremain.jar
+
 .PHONY: chicory-test
 chicory-test: daikon/chicory/inv_out.diff
 daikon/chicory/inv_out.diff: ChicoryPremain.jar

@@ -2,6 +2,7 @@ package daikon.test.dcomp;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import daikon.dcomp.Instrument24;
 import java.io.IOException;
@@ -21,8 +22,10 @@ import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.reflect.Field;
+import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.InternalForm;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -85,20 +88,57 @@ public class TagFrameTest24 {
    */
   private static final int maxOriginalLocals = maxTagFrameSize - 3;
 
+  /** The value of {@code Premain.jdk_instrumented} before this test class ran. */
+  private static boolean savedJdkInstrumented;
+
+  /** The value of {@code DCRuntime.instrumentation_interface} before this test class ran. */
+  private static @Nullable @Interned String savedInstrumentationInterface;
+
   /**
    * Instruments for an uninstrumented JDK, so that the references that DCInstrument24 emits to
    * {@code DCompMarker}, {@code DCRuntime}, and {@code DCompInstrumented} are the {@code
-   * daikon.dcomp} versions, which are on this test's classpath. Uses reflection because the field
-   * is not visible in this package.
+   * daikon.dcomp} versions, which are on this test's classpath. Saves the runtime state that this
+   * test class changes, directly or via {@code Instrument24.transform}.
    *
-   * @throws ReflectiveOperationException if {@code Premain.jdk_instrumented} does not exist
+   * @throws ReflectiveOperationException if the fields do not exist
    */
+  @SuppressWarnings("interning:cast.unsafe") // field is interned
   @BeforeClass
   public static void useUninstrumentedJdk() throws ReflectiveOperationException {
-    Field jdkInstrumented =
-        Class.forName("daikon.dcomp.Premain").getDeclaredField("jdk_instrumented");
-    jdkInstrumented.setAccessible(true);
+    Field jdkInstrumented = dcompField("Premain", "jdk_instrumented");
+    savedJdkInstrumented = jdkInstrumented.getBoolean(null);
+    savedInstrumentationInterface =
+        (@Interned String) dcompField("DCRuntime", "instrumentation_interface").get(null);
     jdkInstrumented.setBoolean(null, false);
+  }
+
+  /**
+   * Restores the runtime state that {@link #useUninstrumentedJdk} saved, so that this test class
+   * does not affect tests that run after it in the same JVM.
+   *
+   * @throws ReflectiveOperationException if the fields do not exist
+   */
+  @AfterClass
+  public static void restoreJdkInstrumented() throws ReflectiveOperationException {
+    dcompField("Premain", "jdk_instrumented").setBoolean(null, savedJdkInstrumented);
+    dcompField("DCRuntime", "instrumentation_interface").set(null, savedInstrumentationInterface);
+  }
+
+  /**
+   * Returns the given static field of the given class in package {@code daikon.dcomp}, made
+   * accessible. Uses reflection because the fields are not visible in this package.
+   *
+   * @param className the simple name of a class in package {@code daikon.dcomp}
+   * @param fieldName the name of a static field of that class
+   * @return the field, made accessible
+   * @throws ReflectiveOperationException if the field does not exist
+   */
+  private static Field dcompField(String className, String fieldName)
+      throws ReflectiveOperationException {
+    @SuppressWarnings("signature:argument") // string concatenation
+    Field field = Class.forName("daikon.dcomp." + className).getDeclaredField(fieldName);
+    field.setAccessible(true);
+    return field;
   }
 
   /**
@@ -120,7 +160,8 @@ public class TagFrameTest24 {
 
   /**
    * Tests that a method that uses the largest permitted number of local variable slots is
-   * instrumented rather than rejected as too large.
+   * instrumented rather than rejected as too large, and that a method with one more local variable
+   * slot is rejected. Rejecting a class makes DCInstrument24 print a warning to standard error.
    */
   @Test
   public void maximumLocalsIsInstrumented() {
@@ -128,6 +169,12 @@ public class TagFrameTest24 {
     assertNotNull(
         "instrumentation of a method with " + maxOriginalLocals + " locals failed", instrumented);
     assertEquals("tag frame size", maxTagFrameSize, tagFrameSize(instrumented));
+
+    assertNull(
+        "instrumentation of a method with "
+            + (maxOriginalLocals + 1)
+            + " locals should have failed",
+        instrument(withLocals(sampleClassFile(), maxOriginalLocals + 1)));
   }
 
   /**

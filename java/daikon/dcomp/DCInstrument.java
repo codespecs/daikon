@@ -663,7 +663,7 @@ public class DCInstrument extends InstructionListUtils {
       dcompRuntimePrefix = "daikon.dcomp";
     }
     DCRuntime.instrumentation_interface =
-        Signatures.addPackage(dcompRuntimePrefix, "DCompInstrumented");
+        Signatures.addPackage(dcompRuntimePrefix, "DCompInstrumented").intern();
 
     // Turn on some of the logging based on debug option.
     debugInstrument.enabled = DynComp.debug || Premain.debug_dcinstrument;
