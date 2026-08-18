@@ -1,9 +1,9 @@
 package daikon.test.dcomp;
 
 /**
- * Test data for {@link DCInstrumentTest24}. Its {@link #localVariableAccesses} method loads and
- * stores a local variable of every type. The test rewrites those instructions into their wide
- * (two-byte operand) forms, which javac never emits for so few local variables.
+ * Test data for {@link daikon.dcomp.DCInstrumentTest24}. Its {@link #localVariableAccesses} method
+ * loads and stores a local variable of every type. The test rewrites those instructions into their
+ * wide (two-byte operand) forms, which javac never emits for so few local variables.
  */
 public class WideOpcodeSample24 {
 
