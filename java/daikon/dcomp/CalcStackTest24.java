@@ -10,6 +10,7 @@ import java.lang.classfile.TypeKind;
 import java.lang.classfile.instruction.LoadInstruction;
 import java.lang.classfile.instruction.StoreInstruction;
 import java.lang.constant.ClassDesc;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Test;
 
@@ -22,7 +23,7 @@ import org.junit.Test;
 public class CalcStackTest24 {
 
   /** An instance of DCInstrument24 for testing. */
-  DCInstrument24 dci;
+  @MonotonicNonNull DCInstrument24 dci;
 
   /**
    * Sets up the per-method simulation state that {@link CalcStack24} reads and writes, for a method
@@ -38,9 +39,9 @@ public class CalcStackTest24 {
         ClassFile.of(
             ClassFile.ClassHierarchyResolverOption.of(
                 ClassHierarchyResolver.ofResourceParsing(loader)));
-    // As we are only going to call CalcStack24.simulateInstruction,
-    // we do not need a ClassModel.
-    dci = new DCInstrument24(classFile, null, false);
+    @SuppressWarnings("nullness:argument") // Will only call CalcStack24.simulateInstruction.
+    DCInstrument24 dci_tmp = new DCInstrument24(classFile, null, false);
+    dci = dci_tmp;
     dci.stacks = new OperandStack24[codeElementCount];
     dci.locals = new @Nullable ClassDesc[maxLocals];
   }
