@@ -10,6 +10,7 @@ import java.lang.classfile.TypeKind;
 import java.lang.classfile.instruction.LoadInstruction;
 import java.lang.classfile.instruction.StoreInstruction;
 import java.lang.constant.ClassDesc;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Test;
@@ -32,6 +33,7 @@ public class CalcStackTest24 {
    * @param codeElementCount the number of code elements in the simulated method
    * @param maxLocals the number of local variable slots in the simulated method
    */
+  @EnsuresNonNull("dci")
   private void initializeSimulationState(int codeElementCount, int maxLocals) {
     ClassLoader loader = DCInstrumentTest24.class.getClassLoader();
     assert loader != null : "@AssumeAssertion(nullness): this class is not in the boot classpath";
