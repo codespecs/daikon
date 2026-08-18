@@ -250,6 +250,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.lang.classfile.AccessFlags;
 import java.lang.classfile.Annotation;
 import java.lang.classfile.Attribute;
 import java.lang.classfile.ClassBuilder;
@@ -450,6 +451,9 @@ public class DCInstrument24 {
 
   /** True if we are tracking any variables in any methods of the current class. */
   private boolean trackClass = false;
+
+  /** Access flags for the current class; may be promoted to public as methods are processed. */
+  private int access_flags;
 
   /** ClassGen for the current class. */
   protected ClassGen24 classGen;
@@ -1024,6 +1028,9 @@ public class DCInstrument24 {
       switch (ce) {
         case MethodModel mm -> {}
         case Interfaces i -> {}
+        // Skip the original AccessFlags; processMethod (via processAllMethods, above) has
+        // already set the class's flags, promoting the class to public if needed.
+        case AccessFlags af -> {}
         // Copy all other ClassElements to output class unchanged.
         default -> classBuilder.with(ce);
       }
@@ -1133,8 +1140,12 @@ public class DCInstrument24 {
    */
   private void processAllMethods(
       ClassModel classModel, ClassBuilder classBuilder, ClassInfo classInfo) {
+    access_flags = classModel.flags().flagsMask();
+    // Copy flags to output class. Note that {@link #processMethod} might modify
+    // the class's flags, promoting the class to public if needed.
+    classBuilder.withFlags(access_flags);
     for (MethodModel mm : classModel.methods()) {
-      processMethod(mm, classModel, classBuilder, classInfo);
+      processMethod(mm, classBuilder, classInfo);
     }
   }
 
@@ -1173,15 +1184,11 @@ public class DCInstrument24 {
    * likely intended to represent.
    *
    * @param methodModel for current method
-   * @param classModel for current class
    * @param classBuilder for current class
    * @param classInfo for the given class
    */
   private void processMethod(
-      MethodModel methodModel,
-      ClassModel classModel,
-      ClassBuilder classBuilder,
-      ClassInfo classInfo) {
+      MethodModel methodModel, ClassBuilder classBuilder, ClassInfo classInfo) {
 
     @BinaryName String classname = classInfo.class_name;
 
@@ -1238,7 +1245,6 @@ public class DCInstrument24 {
         }
 
         // If we are tracking variables, make sure the class is public
-        int access_flags = classModel.flags().flagsMask();
         if (track && (access_flags & ACC_PUBLIC) == 0) {
           access_flags |= ACC_PUBLIC;
           access_flags &= ~ACC_PROTECTED;
