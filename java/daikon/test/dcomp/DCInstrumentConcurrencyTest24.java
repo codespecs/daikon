@@ -6,6 +6,8 @@ import static org.junit.Assert.fail;
 import daikon.dcomp.Instrument24;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.ClassModel;
 import java.lang.classfile.CodeElement;
@@ -43,6 +45,12 @@ public final class DCInstrumentConcurrencyTest24 {
 
   /** The number of times each thread instruments {@link Input}. */
   private static final int iterationCount = 25;
+
+  /**
+   * How long, in milliseconds, to wait for all the threads to finish. If instrumentation deadlocks,
+   * the test fails after this long rather than hanging forever.
+   */
+  private static final long joinTimeoutMillis = 120_000;
 
   /**
    * Instruments {@link Input} on several threads at once, and checks that every thread produces the
@@ -88,11 +96,26 @@ public final class DCInstrumentConcurrencyTest24 {
                   failures.add(t);
                 }
               });
+      thread.setDaemon(true);
       threads.add(thread);
       thread.start();
     }
+    long deadline = System.currentTimeMillis() + joinTimeoutMillis;
+    int unfinishedCount = 0;
     for (Thread thread : threads) {
-      thread.join();
+      thread.join(Math.max(1, deadline - System.currentTimeMillis()));
+      if (thread.isAlive()) {
+        unfinishedCount++;
+      }
+    }
+    if (unfinishedCount > 0) {
+      fail(
+          unfinishedCount
+              + " of "
+              + threadCount
+              + " threads did not finish within "
+              + joinTimeoutMillis
+              + "ms; instrumentation may deadlock");
     }
 
     if (!failures.isEmpty()) {
@@ -101,6 +124,12 @@ public final class DCInstrumentConcurrencyTest24 {
       for (Throwable t : failures) {
         message.append(System.lineSeparator() + t);
       }
+      message.append(System.lineSeparator() + "Stack trace of the first failure:");
+      StringWriter stackTrace = new StringWriter();
+      try (PrintWriter stackTraceWriter = new PrintWriter(stackTrace)) {
+        failures.get(0).printStackTrace(stackTraceWriter);
+      }
+      message.append(System.lineSeparator() + stackTrace);
       fail(message.toString());
     }
   }
@@ -124,7 +153,11 @@ public final class DCInstrumentConcurrencyTest24 {
           }
         }
       }
-      result.put(method.methodName().stringValue() + method.methodType().stringValue(), count);
+      String key = method.methodName().stringValue() + method.methodType().stringValue();
+      Integer previous = result.put(key, count);
+      if (previous != null) {
+        throw new AssertionError("duplicate method " + key);
+      }
     }
     return result;
   }
