@@ -4,10 +4,14 @@ import static java.lang.constant.ConstantDescs.CD_String;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.ClassHierarchyResolver;
 import java.lang.classfile.TypeKind;
 import java.lang.classfile.instruction.LoadInstruction;
 import java.lang.classfile.instruction.StoreInstruction;
 import java.lang.constant.ClassDesc;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Test;
 
@@ -19,6 +23,9 @@ import org.junit.Test;
  */
 public class CalcStackTest24 {
 
+  /** An instance of DCInstrument24 for testing. */
+  @MonotonicNonNull DCInstrument24 dci;
+
   /**
    * Sets up the per-method simulation state that {@link CalcStack24} reads and writes, for a method
    * with {@code maxLocals} local variable slots, none of whose types are known.
@@ -26,9 +33,19 @@ public class CalcStackTest24 {
    * @param codeElementCount the number of code elements in the simulated method
    * @param maxLocals the number of local variable slots in the simulated method
    */
+  @EnsuresNonNull("dci")
   private void initializeSimulationState(int codeElementCount, int maxLocals) {
-    DCInstrument24.stacks = new OperandStack24[codeElementCount];
-    DCInstrument24.locals = new @Nullable ClassDesc[maxLocals];
+    ClassLoader loader = DCInstrumentTest24.class.getClassLoader();
+    assert loader != null : "@AssumeAssertion(nullness): this class is not in the boot classpath";
+    ClassFile classFile =
+        ClassFile.of(
+            ClassFile.ClassHierarchyResolverOption.of(
+                ClassHierarchyResolver.ofResourceParsing(loader)));
+    @SuppressWarnings("nullness:argument") // Will only call CalcStack24.simulateInstruction.
+    DCInstrument24 dci_tmp = new DCInstrument24(classFile, null, false);
+    dci = dci_tmp;
+    dci.stacks = new OperandStack24[codeElementCount];
+    dci.locals = new @Nullable ClassDesc[maxLocals];
   }
 
   /**
@@ -42,7 +59,7 @@ public class CalcStackTest24 {
     initializeSimulationState(1, 2);
     OperandStack24 stack = new OperandStack24(1);
 
-    CalcStack24.simulateInstruction(LoadInstruction.of(TypeKind.REFERENCE, 1), 0, stack);
+    CalcStack24.simulateInstruction(dci, LoadInstruction.of(TypeKind.REFERENCE, 1), 0, stack);
 
     assertEquals(1, stack.size());
     assertEquals(CalcStack24.NULL_CD, stack.peek());
@@ -53,10 +70,10 @@ public class CalcStackTest24 {
   @Test
   public void testAloadOfLocalWithKnownType() {
     initializeSimulationState(1, 2);
-    DCInstrument24.locals[1] = CD_String;
+    dci.locals[1] = CD_String;
     OperandStack24 stack = new OperandStack24(1);
 
-    CalcStack24.simulateInstruction(LoadInstruction.of(TypeKind.REFERENCE, 1), 0, stack);
+    CalcStack24.simulateInstruction(dci, LoadInstruction.of(TypeKind.REFERENCE, 1), 0, stack);
 
     assertEquals(1, stack.size());
     assertEquals(CD_String, stack.peek());
@@ -72,10 +89,10 @@ public class CalcStackTest24 {
     OperandStack24 stack = new OperandStack24(1);
     stack.push(CD_String);
 
-    CalcStack24.simulateInstruction(StoreInstruction.of(TypeKind.REFERENCE, 1), 0, stack);
+    CalcStack24.simulateInstruction(dci, StoreInstruction.of(TypeKind.REFERENCE, 1), 0, stack);
     assertEquals(0, stack.size());
 
-    CalcStack24.simulateInstruction(LoadInstruction.of(TypeKind.REFERENCE, 1), 1, stack);
+    CalcStack24.simulateInstruction(dci, LoadInstruction.of(TypeKind.REFERENCE, 1), 1, stack);
     assertEquals(1, stack.size());
     assertEquals(CD_String, stack.peek());
   }

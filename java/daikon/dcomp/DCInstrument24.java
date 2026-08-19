@@ -385,27 +385,26 @@ public class DCInstrument24 {
 
   // Variables used for calculating the state of a method's operand stack via simulation.
 
-  // TODO: The following four variables are redefined for each method instrumented.
-  // Rather than being global variables, they should be wrapped in a data structure that is passed
-  // to the places that need it.
+  // TODO: The following five variables are redefined for each method instrumented.
+  // Rather than being fields of DCInstrument24, they should be wrapped in a data structure that is
+  // passed to the places that need it.  They must not be static: the JVM runs
+  // daikon.dcomp.Instrument24.transform on whichever thread triggers a class load, so a
+  // multithreaded target program instruments classes concurrently, one DCInstrument24 per thread.
 
   /** Mapping from a label to its index into the method's codeList. */
-  @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO: method-local
-  protected static Map<Label, Integer> labelIndexMap;
+  protected Map<Label, Integer> labelIndexMap = new HashMap<>();
 
   /**
    * Mapping from a label to its operand stack. This is the state of the operand stack at the label,
    * prior to the execution of any instruction at that label.
    */
-  @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO: method-local
-  protected static Map<Label, OperandStack24> labelOperandStackMap;
+  protected Map<Label, OperandStack24> labelOperandStackMap = new HashMap<>();
 
   /**
    * The state of operand stack prior to each byte code instruction of the method being simulated.
    * There is a unique array entry for each instruction.
    */
-  @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO: method-local
-  protected static OperandStack24[] stacks;
+  protected OperandStack24[] stacks = new OperandStack24[0];
 
   /**
    * The type of each parameter and local variable of the method being simulated. This value is
@@ -415,8 +414,7 @@ public class DCInstrument24 {
    * <p>An element is null if the type of that slot is not (yet) known: the method has no {@code
    * LocalVariableTable} entry for the slot and no simulated store has written to it.
    */
-  @SuppressWarnings("nullness:initialization.static.field.uninitialized") // TODO: method-local
-  protected static @Nullable ClassDesc[] locals;
+  protected @Nullable ClassDesc[] locals = new ClassDesc[0];
 
   /**
    * Record containing a work item for the operand stack calculation. The instructionIndex is an
@@ -438,7 +436,7 @@ public class DCInstrument24 {
       };
 
   /** Queue of items for a method's operand stack calculation. */
-  protected static SortedSet<WorkItem> worklist = new TreeSet<>(indexComparator);
+  protected SortedSet<WorkItem> worklist = new TreeSet<>(indexComparator);
 
   // Variables used for the entire class.
 
@@ -1939,7 +1937,7 @@ public class DCInstrument24 {
             System.out.println("instIndex: " + instIndex);
             System.out.println("Operand Stack in: " + stack);
           }
-          proceed = CalcStack24.simulateCodeElement(mgen, minfo, inst, instIndex, stack);
+          proceed = CalcStack24.simulateCodeElement(this, mgen, minfo, inst, instIndex, stack);
           if (debugOperandStack) {
             System.out.println("Operand Stack out: " + stack);
             System.out.println("proceed: " + proceed);
@@ -1990,7 +1988,7 @@ public class DCInstrument24 {
    * @param target label where to start operand stack simulation
    * @param stack state of operand stack at target
    */
-  protected static void addLabelToWorklist(Label target, OperandStack24 stack) {
+  protected void addLabelToWorklist(Label target, OperandStack24 stack) {
     OperandStack24 existing = labelOperandStackMap.get(target);
     if (existing == null) {
       if (debugOperandStack) {

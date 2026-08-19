@@ -12,6 +12,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
   daikon.dcomp.CalcStackTest24.class,
   daikon.dcomp.DCInstrumentTest24.class,
+  daikon.test.dcomp.DCInstrumentConcurrencyTest24.class,
   daikon.test.dcomp.TagFrameTest24.class,
 })
 public final class AllTestsSuite24 {}
