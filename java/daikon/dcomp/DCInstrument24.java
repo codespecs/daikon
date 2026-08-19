@@ -601,7 +601,8 @@ public class DCInstrument24 {
    * per thread, this map is synchronized. Allocating an id is a compound operation, so it is
    * additionally performed while holding this map's lock, as is any iteration over the map.
    */
-  static Map<String, Integer> static_field_id = Collections.synchronizedMap(new LinkedHashMap<>());
+  static final Map<String, Integer> static_field_id =
+      Collections.synchronizedMap(new LinkedHashMap<>());
 
   /**
    * Map from binary class name to its access_flags. Used to cache the results of the lookup done in
