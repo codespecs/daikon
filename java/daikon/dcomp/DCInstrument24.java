@@ -307,6 +307,7 @@ import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
@@ -402,9 +403,10 @@ public class DCInstrument24 {
 
   /**
    * The state of operand stack prior to each byte code instruction of the method being simulated.
-   * There is a unique array entry for each instruction.
+   * There is a unique array entry for each instruction. An entry is null if the simulation never
+   * reached that instruction; that is, the instruction is unreachable bytecode.
    */
-  protected OperandStack24[] stacks = new OperandStack24[0];
+  protected @Nullable OperandStack24[] stacks = new OperandStack24[0];
 
   /**
    * The type of each parameter and local variable of the method being simulated. This value is
@@ -563,8 +565,11 @@ public class DCInstrument24 {
   /** The ClassDesc for the DynComp runtime support class. */
   private ClassDesc runtimeCD;
 
-  /** Set of JUnit test classes. */
-  protected static Set<String> junitTestClasses = new HashSet<>();
+  /**
+   * Set of JUnit test classes. This is thread-safe because a multithreaded target program
+   * instruments classes concurrently, one DCInstrument24 per thread.
+   */
+  protected static Set<String> junitTestClasses = ConcurrentHashMap.newKeySet();
 
   /** Possible states of JUnit test discovery. */
   protected enum JunitState {
@@ -591,15 +596,20 @@ public class DCInstrument24 {
    * tag accessor methods must be added in each subclass and each should return the id of the field
    * in the superclass. This map is populated in {@link build_field_to_offset_map} and used in
    * {@link create_tag_accessors}.
+   *
+   * <p>Because a multithreaded target program instruments classes concurrently, one DCInstrument24
+   * per thread, this map is synchronized. Allocating an id is a compound operation, so it is
+   * additionally performed while holding this map's lock, as is any iteration over the map.
    */
-  static Map<String, Integer> static_field_id = new LinkedHashMap<>();
+  static Map<String, Integer> static_field_id = Collections.synchronizedMap(new LinkedHashMap<>());
 
   /**
    * Map from binary class name to its access_flags. Used to cache the results of the lookup done in
    * {@link #getAccessFlags}. If a class is marked ACC_ANNOTATION then it will not have been
-   * instrumented.
+   * instrumented. This map is thread-safe because a multithreaded target program instruments
+   * classes concurrently, one DCInstrument24 per thread.
    */
-  static Map<String, Integer> accessFlags = new HashMap<>();
+  static Map<String, Integer> accessFlags = new ConcurrentHashMap<>();
 
   /** Integer constant of access_flag value of ACC_ANNOTATION. */
   static Integer Integer_ACC_ANNOTATION = Integer.valueOf(ACC_ANNOTATION);
@@ -922,9 +932,12 @@ public class DCInstrument24 {
         String super_class;
         String this_class = classname;
         while (true) {
-          super_class = getSuperclassName(this_class);
-          if (super_class == null) {
-            // something has gone wrong
+          try {
+            super_class = getSuperclassName(this_class);
+          } catch (SuperclassNameError e) {
+            if (debugJunitAnalysis) {
+              System.out.printf("Unable to get superclass for: %s%n", this_class);
+            }
             break;
           }
           if (debugJunitAnalysis) {
@@ -1870,7 +1883,7 @@ public class DCInstrument24 {
 
       // Create an array to hold the calculated operand stack
       // prior to each byte code instruction.
-      stacks = new OperandStack24[instructions.size()];
+      stacks = new @Nullable OperandStack24[instructions.size()];
 
       // Create an array containing the type of each local variable.
       // This will be indexed by the local variable's slot number. Note that a
@@ -1961,8 +1974,15 @@ public class DCInstrument24 {
           System.out.println("code element in: " + inst);
           System.out.println("current stack: " + stacks[instIndex]);
         }
+        OperandStack24 instStack = stacks[instIndex];
+        if (instStack == null) {
+          // The operand stack simulation never reached this code element, so it is unreachable
+          // bytecode.  Leave it as is; there is no run-time behavior to instrument.
+          instIndex++;
+          continue;
+        }
         // Get the translation for this instruction (if any)
-        List<CodeElement> new_il = instrumentInstruction(mgen, minfo, inst, stacks[instIndex]);
+        List<CodeElement> new_il = instrumentInstruction(mgen, minfo, inst, instStack);
         if (new_il != null) {
           li.remove(); // remove the instruction we instrumented
           for (CodeElement ce : new_il) {
@@ -2648,13 +2668,12 @@ public class DCInstrument24 {
             return array_store(inst, "aastore", CD_Object);
           case BASTORE:
             // The JVM uses bastore for both byte and boolean.
-            // We need to differentiate.
+            // We need to differentiate.  If the simulated type of the array reference is not an
+            // array (for instance, it is CalcStack24.NULL_CD because the reference type is not
+            // known), then componentType() returns null and we assume byte.
             ClassDesc arrayref = stack.peek(2);
             ClassDesc ct = arrayref.componentType();
-            if (ct == null) {
-              throw new Error("stack item not an arrayref: " + inst);
-            }
-            if (ct.equals(CD_boolean)) {
+            if (ct != null && ct.equals(CD_boolean)) {
               return array_store(inst, "zastore", CD_boolean);
             } else {
               return array_store(inst, "bastore", CD_byte);
@@ -4588,21 +4607,25 @@ public class DCInstrument24 {
         continue;
       }
       if (fm.flags().has(AccessFlag.STATIC)) {
-        if (!in_jdk) {
-          int min_size = static_field_id.size() + DCRuntime.max_jdk_static;
-          while (DCRuntime.static_tags.size() <= min_size) {
-            DCRuntime.static_tags.add(null);
-          }
-          static_field_id.put(full_name(classModel, fm), min_size);
-        } else { // building jdk
-          String full_name = full_name(classModel, fm);
-          if (static_field_id.containsKey(full_name)) {
-            // System.out.printf("Reusing static field %s value %d%n",
-            //                    full_name, static_field_id.get(full_name));
-          } else {
-            // System.out.printf("Allocating new static field %s%n",
-            //                    full_name);
-            static_field_id.put(full_name, static_field_id.size() + 1);
+        // Allocating an id reads the map's size and then writes to it, so hold the map's lock for
+        // the whole operation; concurrent instrumentation would otherwise assign duplicate ids.
+        synchronized (static_field_id) {
+          if (!in_jdk) {
+            int min_size = static_field_id.size() + DCRuntime.max_jdk_static;
+            while (DCRuntime.static_tags.size() <= min_size) {
+              DCRuntime.static_tags.add(null);
+            }
+            static_field_id.put(full_name(classModel, fm), min_size);
+          } else { // building jdk
+            String full_name = full_name(classModel, fm);
+            if (static_field_id.containsKey(full_name)) {
+              // System.out.printf("Reusing static field %s value %d%n",
+              //                    full_name, static_field_id.get(full_name));
+            } else {
+              // System.out.printf("Allocating new static field %s%n",
+              //                    full_name);
+              static_field_id.put(full_name, static_field_id.size() + 1);
+            }
           }
         }
       } else {
@@ -5077,8 +5100,12 @@ public class DCInstrument24 {
   static void save_static_field_id(File file) throws IOException {
 
     PrintStream ps = new PrintStream(file, UTF_8);
-    for (Map.Entry<@KeyFor("static_field_id") String, Integer> entry : static_field_id.entrySet()) {
-      ps.printf("%s  %d%n", entry.getKey(), entry.getValue());
+    // Iterating over a synchronized map requires holding its lock.
+    synchronized (static_field_id) {
+      for (Map.Entry<@KeyFor("static_field_id") String, Integer> entry :
+          static_field_id.entrySet()) {
+        ps.printf("%s  %d%n", entry.getKey(), entry.getValue());
+      }
     }
     ps.close();
   }

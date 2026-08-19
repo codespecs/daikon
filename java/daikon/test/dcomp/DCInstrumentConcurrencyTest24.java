@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.TimeUnit;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.InternalForm;
 import org.junit.Test;
@@ -100,10 +101,13 @@ public final class DCInstrumentConcurrencyTest24 {
       threads.add(thread);
       thread.start();
     }
-    long deadline = System.currentTimeMillis() + joinTimeoutMillis;
+    // Use nanoTime, not currentTimeMillis, because nanoTime is monotonic:  the deadline is not
+    // affected by a change to the system clock while the test is running.
+    long deadlineNanos = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(joinTimeoutMillis);
     int unfinishedCount = 0;
     for (Thread thread : threads) {
-      thread.join(Math.max(1, deadline - System.currentTimeMillis()));
+      long remainingNanos = deadlineNanos - System.nanoTime();
+      thread.join(Math.max(1, TimeUnit.NANOSECONDS.toMillis(remainingNanos)));
       if (thread.isAlive()) {
         unfinishedCount++;
       }

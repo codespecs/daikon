@@ -150,13 +150,8 @@ public class OperandStack24 implements Cloneable {
     } else if (thisItem.isPrimitive() && !otherItem.isPrimitive()) {
       return false;
     }
-    // Both operands are primitives - they better match.
-    if (thisItem.equals(otherItem)) {
-      return true;
-    } else {
-      throw new DynCompError(
-          "Operand stack primitives don't match: " + thisItem + ", " + otherItem);
-    }
+    // Both operands are primitives - they match only if they are the same primitive.
+    return thisItem.equals(otherItem);
   }
 
   /**
