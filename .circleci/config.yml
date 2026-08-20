@@ -974,6 +974,72 @@ jobs:
           command: scripts/test-typecheck-with-latest-cf.sh part3
           no_output_timeout: 30m
 
+  typecheck_bundled_part1_rockylinux_jdk25:
+    docker:
+      - image: mdernst/daikon-rockylinux-jdk25-plus:latest
+    resource_class: large
+    environment:
+      TERM: dumb
+    steps:
+      - restore_cache:
+          keys:
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: *source-cache
+          paths:
+            - ".git"
+      - run:
+          name: typecheck bundled part1
+          command: scripts/test-typecheck-with-bundled-cf.sh part1
+          no_output_timeout: 20m
+
+  typecheck_bundled_part2_rockylinux_jdk25:
+    docker:
+      - image: mdernst/daikon-rockylinux-jdk25-plus:latest
+    resource_class: large
+    environment:
+      TERM: dumb
+    steps:
+      - restore_cache:
+          keys:
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: *source-cache
+          paths:
+            - ".git"
+      - run:
+          name: typecheck bundled part2
+          command: scripts/test-typecheck-with-bundled-cf.sh part2
+          no_output_timeout: 20m
+
+  typecheck_bundled_part3_rockylinux_jdk25:
+    docker:
+      - image: mdernst/daikon-rockylinux-jdk25-plus:latest
+    resource_class: large
+    environment:
+      TERM: dumb
+    steps:
+      - restore_cache:
+          keys:
+            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v1-
+      - checkout
+      - save_cache:
+          key: *source-cache
+          paths:
+            - ".git"
+      - run:
+          name: typecheck bundled part3
+          command: scripts/test-typecheck-with-bundled-cf.sh part3
+          no_output_timeout: 30m
+
   quick_rockylinux_jdk11:
     docker:
       - image: mdernst/daikon-rockylinux-jdk11:latest
@@ -1314,6 +1380,7 @@ workflows:
             - typecheck_latest_part2_ubuntu_jdk25
             - typecheck_latest_part3_ubuntu_jdk25
             - typecheck_bundled_part1_ubuntu_jdk25
+            - typecheck_bundled_part1_rockylinux_jdk25
             - typecheck_bundled_part2_ubuntu_jdk25
             - typecheck_bundled_part3_ubuntu_jdk25
       - quick_ubuntu_jdk11:
@@ -1464,6 +1531,7 @@ workflows:
       - typecheck_latest_part2_ubuntu_jdk25
       - typecheck_latest_part3_ubuntu_jdk25
       - typecheck_bundled_part1_ubuntu_jdk25
+      - typecheck_bundled_part1_rockylinux_jdk25
       - typecheck_bundled_part2_ubuntu_jdk25
       - typecheck_bundled_part3_ubuntu_jdk25
       - typecheck_latest_part1_ubuntu_jdk26:
@@ -1492,6 +1560,16 @@ workflows:
             - typecheck_bundled_part2_ubuntu_jdk25
 
       - typecheck_bundled_part3_ubuntu_jdk26:
+          requires:
+            - canary_jobs
+            - typecheck_bundled_part3_ubuntu_jdk25
+
+      - typecheck_bundled_part2_rockylinux_jdk25:
+          requires:
+            - canary_jobs
+            - typecheck_bundled_part2_ubuntu_jdk25
+
+      - typecheck_bundled_part3_rockylinux_jdk25:
           requires:
             - canary_jobs
             - typecheck_bundled_part3_ubuntu_jdk25

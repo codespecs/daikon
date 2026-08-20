@@ -19,7 +19,7 @@ echo "HEAD=$(git rev-parse HEAD)"
 # Gradle requires Java 17.
 JAVA_VER=$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//')
 if [ "$JAVA_VER" -ge "17" ]; then
-  (cd java/lib && gradle shadowJar --stacktrace)
+  (cd java/lib && gradle shadowJar)
 fi
 
 make compile daikon.jar
