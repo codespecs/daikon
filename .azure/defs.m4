@@ -4,6 +4,7 @@ changecom([], [disable comments, that is, expand within them])dnl
 ifelse([The built-in "dnl" m4 macro means "discard to next line".])dnl
 dnl
 define(job_name, [- job: $1])
+dnl
 ifelse([Arguments are OS, JDK version number, name, command line.])dnl
 define([boilerplate], [dnl
     pool:

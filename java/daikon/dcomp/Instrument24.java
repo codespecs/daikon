@@ -1,0 +1,376 @@
+package daikon.dcomp;
+
+import daikon.DynComp;
+import daikon.chicory.ClassInfo;
+import daikon.chicory.Runtime;
+import daikon.plumelib.bcelutil.BcelUtil;
+import daikon.plumelib.bcelutil.SimpleLog;
+import daikon.plumelib.reflection.Signatures;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.ClassHierarchyResolver;
+import java.lang.classfile.ClassModel;
+import java.lang.classfile.ClassTransform;
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.IllegalClassFormatException;
+import java.nio.file.Files;
+import java.security.ProtectionDomain;
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.JavaClass;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
+import org.checkerframework.checker.signature.qual.InternalForm;
+import org.checkerframework.dataflow.qual.Pure;
+
+/**
+ * This class is loaded by Premain at startup. It is a {@link ClassFileTransformer} which means that
+ * its {@link #transform} method gets called each time the JVM loads a class. This method then
+ * decides if the class should be instrumented or not. If it should, it calls DCInstrument24 to do
+ * the instrumentation.
+ *
+ * <p>Instrument24 and DCInstrument24 use Java's ({@code java.lang.classfile}) APIs for reading and
+ * modifying .class files. Those APIs were added in JDK 24. Compared to BCEL, these APIs are more
+ * complete and robust (no more fiddling with StackMaps) and are always up to date with any .class
+ * file changes (since they are part of the JDK). (We will need to continue to support
+ * Instrument.java using BCEL, as we anticipate our clients using JDK 21 or less for quite some
+ * time.)
+ */
+public class Instrument24 implements ClassFileTransformer {
+
+  //
+  // Start of diagnostics.
+  //
+
+  /** Directory for debug output. */
+  final File debug_dir;
+
+  /** Directory into which to dump instrumented classes. */
+  final File debug_instrumented_dir;
+
+  /** Directory into which to dump original classes. */
+  final File debug_uninstrumented_dir;
+
+  /** Have we seen a class member of a known transformer? */
+  private static boolean transformer_seen = false;
+
+  /**
+   * Debug information about which classes and/or methods are transformed and why. Use
+   * debugInstrument for actual instrumentation details.
+   */
+  protected static final SimpleLog debug_transform = new SimpleLog(false);
+
+  /** Debug code for printing the current run-time call stack. */
+  public static void print_call_stack() {
+    StackTraceElement[] stack_trace;
+    stack_trace = Thread.currentThread().getStackTrace();
+    // [0] is getStackTrace
+    // [1] is print_call_stack
+    for (int i = 2; i < stack_trace.length; i++) {
+      System.out.printf("call stack: %s%n", stack_trace[i]);
+    }
+    System.out.println();
+  }
+
+  /**
+   * Output a .class file and a .bcel version of it.
+   *
+   * @param classBytes a byte array of the class file to output
+   * @param directory output location for the files
+   * @param className the current class
+   */
+  public void writeDebugClassFiles(
+      byte[] classBytes, File directory, @BinaryName String className) {
+    // UNDONE: Should we stop using bcel and use classModel.toDebugString() instead?
+    // Convert the classBytes to a BCEL JavaClass
+    JavaClass c = null;
+    try (ByteArrayInputStream bais = new ByteArrayInputStream(classBytes)) {
+      ClassParser parser = new ClassParser(bais, className);
+      c = parser.parse();
+    } catch (Throwable t) {
+      System.err.printf("Error %s while parsing the bytes of %s%n", t, className);
+      if (debug_transform.enabled) {
+        t.printStackTrace();
+      }
+      // Ignore the error, it shouldn't affect the instrumentation.
+    }
+
+    try {
+      debug_transform.log("Dumping .class and .bcel for %s to %s%n", className, directory);
+      // Write the byte array to a .class file.
+      File outputFile = new File(directory, className + ".class");
+      Files.write(outputFile.toPath(), classBytes);
+      // Write a BCEL-like file.
+      if (c != null) {
+        BcelUtil.dump(c, directory);
+      }
+    } catch (Throwable t) {
+      System.err.printf("Error %s writing debug files for: %s%n", t, className);
+      if (debug_transform.enabled) {
+        t.printStackTrace();
+      }
+      // Ignore the error, it shouldn't affect the instrumentation.
+    }
+  }
+
+  //
+  // End of diagnostics.
+  //
+
+  /** Create an instrumenter. Setup debug directories, if needed. */
+  public Instrument24() {
+    debug_transform.enabled =
+        DynComp.debug || DynComp.debug_transform || Premain.debug_dcinstrument || DynComp.verbose;
+    daikon.chicory.Instrument24.debug_ppt_omit.enabled = DynComp.debug;
+
+    debug_dir = DynComp.debug_dir;
+    debug_instrumented_dir = new File(debug_dir, "instrumented");
+    debug_uninstrumented_dir = new File(debug_dir, "uninstrumented");
+
+    if (DynComp.dump) {
+      debug_instrumented_dir.mkdirs();
+      debug_uninstrumented_dir.mkdirs();
+    }
+  }
+
+  /**
+   * Given a class, return a transformed version of the class that contains instrumentation code.
+   * Because DynComp is invoked as a javaagent, the transform method is called by the Java runtime
+   * each time a new class is loaded. A return value of null leaves the byte codes unchanged.
+   *
+   * <p>{@inheritDoc}
+   */
+  @Override
+  public byte @Nullable [] transform(
+      @Nullable ClassLoader loader,
+      @InternalForm String className,
+      @Nullable Class<?> classBeingRedefined,
+      ProtectionDomain protectionDomain,
+      byte[] classfileBuffer)
+      throws IllegalClassFormatException {
+
+    // For debugging.
+    // new Throwable().printStackTrace();
+
+    debug_transform.log("%nEntering dcomp.Instrument24.transform(): class = %s%n", className);
+
+    if (className == null) {
+      // most likely a lambda-related class
+      return null;
+    }
+
+    @BinaryName String binaryClassName = Signatures.internalFormToBinaryName(className);
+    @DotSeparatedIdentifiers String dcompPrefix;
+
+    // See comments in Premain.java about meaning and use of in_shutdown.
+    if (Premain.in_shutdown) {
+      debug_transform.log("Skipping in_shutdown class %s%n", binaryClassName);
+      return null;
+    }
+
+    // If already instrumented, there is nothing to do.
+    // (This set will be empty if Premain.jdk_instrumented is false.)
+    if (Premain.pre_instrumented.contains(className)) {
+      debug_transform.log("Skipping pre_instrumented JDK class %s%n", binaryClassName);
+      return null;
+    }
+
+    boolean in_jdk = false;
+
+    // Check if class is in JDK
+    if (BcelUtil.inJdkInternalform(className)) {
+      // If we are not using an instrumented JDK, then skip this class.
+      if (!Premain.jdk_instrumented) {
+        debug_transform.log("Skipping JDK class %s%n", binaryClassName);
+        return null;
+      }
+
+      int lastSlashPos = className.lastIndexOf('/');
+      if (lastSlashPos > 0) {
+        String packageName = className.substring(0, lastSlashPos).replace('/', '.');
+        if (Premain.problem_packages.contains(packageName)) {
+          debug_transform.log("Skipping problem package %s%n", packageName);
+          return null;
+        }
+      }
+
+      if (Runtime.isJava9orLater() && Premain.problem_classes.contains(binaryClassName)) {
+        debug_transform.log("Skipping problem class %s%n", binaryClassName);
+        return null;
+      }
+
+      if (className.contains("/$Proxy")) {
+        debug_transform.log("Skipping proxy class %s%n", binaryClassName);
+        return null;
+      }
+
+      if (className.startsWith("java/lang/instrument/")) {
+        debug_transform.log("Skipping java instrumentation class %s%n", binaryClassName);
+        return null;
+      }
+
+      if (className.equals("java/lang/DCRuntime")) {
+        debug_transform.log("Skipping special DynComp runtime class %s%n", binaryClassName);
+        return null;
+      }
+
+      in_jdk = true;
+      debug_transform.log("Instrumenting JDK class %s%n", binaryClassName);
+    } else {
+
+      // We're not in a JDK class.
+      // Don't instrument our own classes.
+      if (is_dcomp(className)) {
+        debug_transform.log("Skipping is_dcomp class %s%n", binaryClassName);
+        return null;
+      }
+
+      // Don't instrument other byte code transformers
+      if (is_transformer(className)) {
+        debug_transform.log("Skipping is_transformer class %s%n", binaryClassName);
+        if (!transformer_seen) {
+          transformer_seen = true;
+          System.err.printf(
+              "DynComp warning: This program uses a Java byte code transformer: %s%n",
+              binaryClassName);
+          System.err.printf(
+              "This may interfere with the DynComp transformer and cause DynComp to fail.%n");
+        }
+        return null;
+      }
+    }
+
+    ClassLoader cfLoader;
+    if (loader == null) {
+      cfLoader = ClassLoader.getSystemClassLoader();
+      debug_transform.log("Transforming class %s, loaders %s, %s%n", className, loader, cfLoader);
+    } else {
+      cfLoader = loader;
+      debug_transform.log(
+          "Transforming class %s, loaders %s, %s%n", className, loader, loader.getParent());
+    }
+
+    // Parse the bytes of the classfile, die on any errors.
+    ClassFile classFile =
+        ClassFile.of(
+            ClassFile.ClassHierarchyResolverOption.of(
+                ClassHierarchyResolver.ofResourceParsing(cfLoader)));
+
+    ClassModel classModel;
+    try {
+      classModel = classFile.parse(classfileBuffer);
+    } catch (Throwable t) {
+      System.err.printf("Error %s while parsing bytes of %s%n", t, binaryClassName);
+      if (debug_transform.enabled) {
+        t.printStackTrace();
+      }
+      // No changes to the bytecodes.
+      return null;
+    }
+
+    if (DynComp.dump) {
+      try {
+        writeDebugClassFiles(
+            classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL),
+            debug_uninstrumented_dir,
+            binaryClassName);
+      } catch (Throwable t) {
+        debug_transform.log("Failed to dump uninstrumented class %s: %s%n", binaryClassName, t);
+      }
+    }
+
+    // As `instrumentation_interface` is a static field, we initialize it here rather than
+    // in the DCInstrument24 constructor.
+    if (Premain.jdk_instrumented && Runtime.isJava9orLater()) {
+      dcompPrefix = "java.lang";
+    } else {
+      dcompPrefix = "daikon.dcomp";
+    }
+    DCRuntime.instrumentation_interface =
+        Signatures.addPackage(dcompPrefix, "DCompInstrumented").intern();
+
+    // Instrument the classfile, die on any errors.
+    ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
+    DCInstrument24 dci = new DCInstrument24(classFile, classModel, in_jdk);
+    byte @Nullable [] newBytes;
+    try {
+      newBytes = dci.instrument(classInfo);
+    } catch (Throwable t) {
+      System.err.printf("Error %s in transform of %s%n", t, binaryClassName);
+      if (debug_transform.enabled) {
+        t.printStackTrace();
+      }
+      // No changes to the bytecodes.
+      return null;
+    }
+
+    if (newBytes != null) {
+      if (DynComp.dump) {
+        writeDebugClassFiles(newBytes, debug_instrumented_dir, binaryClassName);
+      }
+      return newBytes;
+    } else {
+      debug_transform.log("Didn't instrument %s%n", binaryClassName);
+      // No changes to the bytecodes.
+      return null;
+    }
+  }
+
+  /**
+   * Returns true if the specified class is part of dcomp itself (and thus should not be
+   * instrumented). Some Daikon classes that are used by DynComp are included here as well.
+   *
+   * @param className class to be checked
+   * @return true if className is a part of DynComp
+   */
+  @Pure
+  private static boolean is_dcomp(@InternalForm String className) {
+
+    if (className.startsWith("daikon/dcomp/") && !className.startsWith("daikon/dcomp/DcompTest")) {
+      return true;
+    }
+    if (className.startsWith("daikon/chicory/")
+        && !className.equals("daikon/chicory/ChicoryTest")) {
+      return true;
+    }
+    if (className.equals("daikon/Chicory")) {
+      return true;
+    }
+    if (className.equals("daikon/PptTopLevel$PptType")) {
+      return true;
+    }
+    if (className.startsWith("daikon/plumelib")) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the specified class is part of a tool known to do Java byte code
+   * transformation. We need to warn the user that this may not work correctly.
+   *
+   * @param className class to be checked
+   * @return true if className is a known transformer
+   */
+  @Pure
+  protected static boolean is_transformer(@InternalForm String className) {
+
+    if (className.startsWith("org/codehaus/groovy")) {
+      return true;
+    }
+    if (className.startsWith("groovy/lang")) {
+      return true;
+    }
+    if (className.startsWith("org/mockito")) {
+      return true;
+    }
+    if (className.startsWith("org/objenesis")) {
+      return true;
+    }
+    if (className.contains("ByMockito")) {
+      return true;
+    }
+    return false;
+  }
+}

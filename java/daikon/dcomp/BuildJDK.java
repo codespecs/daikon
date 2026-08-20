@@ -41,21 +41,21 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.signature.qual.BinaryName;
 
 /**
- * BuildJDK uses {@link DCInstrument} to add comparability instrumentation to Java class files, then
- * stores the modified files into a directory identified by a (required) command line argument.
+ * Adds comparability instrumentation to Java class files, then stores the modified files into a
+ * directory identified by a (required) command line argument.
  *
- * <p>DCInstrument duplicates each method of a class file. The new methods are distinguished by the
- * addition of a final parameter of type DCompMarker and are instrumented to track comparability.
- * Based on its invocation arguments, DynComp will decide whether to call the instrumented or
- * uninstrumented version of a method.
+ * <p>Duplicates each method of a class file. The new methods are distinguished by the addition of a
+ * final parameter of type DCompMarker and are instrumented to track comparability. Based on its
+ * invocation arguments, DynComp will decide whether to call the instrumented or uninstrumented
+ * version of a method.
  */
 @SuppressWarnings({
   "mustcall:type.argument",
   "mustcall:type.arguments.not.inferred"
 }) // assignments into owning collection
-public class BuildJDK {
+public final class BuildJDK {
 
-  /** Creates a new BuildJDK. */
+  /** Do not instantiate from external code; only instantiate in {@link #main}. */
   private BuildJDK() {}
 
   /**
@@ -75,7 +75,7 @@ public class BuildJDK {
 
   /**
    * Collects names of all methods that DCInstrument could not process. Should be empty. Format is
-   * &lt;fully-qualified class name&gt;.&lt;method name&gt;
+   * {@code <fully-qualified class name>.<method name>}.
    */
   private static List<String> skipped_methods = new ArrayList<>();
 
@@ -129,8 +129,8 @@ public class BuildJDK {
     // <p>We want to share code to read and instrument the Java class file members of a jar file
     // (JDK 8) or a module file (JDK 9+). However, jar files and module files are located in two
     // completely different file systems. So we open an InputStream for each class file we wish to
-    // instrument and save it in the class_stream_map with the file name as the key. From that point
-    // the code to instrument a class file can be shared.
+    // instrument and save it in the class_stream_map with the file name as the key. From that
+    // point the code to instrument a class file can be shared.
     Map<String, InputStream> class_stream_map;
 
     if (cl_args.length > 1) {
@@ -247,6 +247,8 @@ public class BuildJDK {
     Map<String, InputStream> class_stream_map = new HashMap<>();
     String jar_name = java_home + "/lib/rt.jar";
     System.out.printf("using jar file %s%n", jar_name);
+    // We intentionally do not close the jar file as we save
+    // input streams into it to be read later.
     try {
       JarFile jfile = new JarFile(jar_name);
       // Get each class to be instrumented and store it away
@@ -272,8 +274,8 @@ public class BuildJDK {
   /**
    * For Java 9+ the Java runtime is located in a series of modules. At this time, we are only
    * pre-instrumenting the java.base module. This method initializes the DirectoryStream used to
-   * explore java.base. It calls gather_runtime_from_modules_directory to process the directory
-   * structure.
+   * explore java.base. It calls {@link #gather_runtime_from_modules_directory} to process the
+   * directory structure.
    *
    * @return a map from class file name to the associated InputStream
    */
@@ -463,7 +465,7 @@ public class BuildJDK {
   }
 
   /** Formats just the time part of a DateTime. */
-  private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+  private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
   /**
    * Instruments the JavaClass {@code jc} (whose name is {@code classFileName}). Writes the
@@ -471,7 +473,7 @@ public class BuildJDK {
    *
    * @param jc JavaClass to be instrumented
    * @param outputDir output directory for instrumented class
-   * @param classFileName name of class to be instrumented
+   * @param classFileName name of class to be instrumented (in internal form)
    * @param classTotal total number of classes to be processed; used for progress display
    * @throws IOException if unable to write out instrumented class
    */
@@ -484,7 +486,7 @@ public class BuildJDK {
     }
     DCInstrument dci = new DCInstrument(jc, true, null);
     JavaClass inst_jc;
-    inst_jc = dci.instrument_jdk();
+    inst_jc = dci.instrument_jdk_class();
     skipped_methods.addAll(dci.get_skipped_methods());
     File classfile = new File(classFileName);
     File dir;

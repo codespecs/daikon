@@ -14,6 +14,7 @@ bcel-util-1.2.4.jar : https://repo.maven.apache.org/maven2/org/plumelib/bcel-uti
   Then, make daikon-plumelib.jar.
 
 checker-framework/ and checker-qual.jar : https://github.com/typetools/checker-framework/releases
+  # Upgrading this may require dropping support for Java 11.
   VER=4.2.0
   wget -q https://github.com/typetools/checker-framework/releases/download/checker-framework-$VER/checker-framework-$VER.zip
   unzip -q checker-framework-$VER.zip
@@ -46,8 +47,8 @@ daikon-plumelib.jar : Contains bcel-util, options, hashmap-util,
   plume-util, and reflection-util, but in package "daikon.plumelib".
   # Note that you must be using JDK17+ and gradle 8.11+.
   # First, adjust version numbers in file `build.gradle`.  (TODO: make that unnecessary.)
-  gradle shadowJar
-  mv -f build/libs/daikon-plumelib.jar .
+  gradle shadowJar && \
+  mv -f build/libs/daikon-plumelib.jar . && \
   rm -rf build
 
 error-prone/ : https://repo1.maven.org/maven2/com/google/errorprone/error_prone_core/
