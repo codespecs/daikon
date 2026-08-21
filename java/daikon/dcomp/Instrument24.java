@@ -251,7 +251,7 @@ public class Instrument24 implements ClassFileTransformer {
           "Transforming class %s, loaders %s, %s%n", className, loader, loader.getParent());
     }
 
-    // Parse the bytes of the classfile, die on any errors.
+    // Parse the bytes of the classfile. If any errors, return the class unchanged.
     ClassFile classFile =
         ClassFile.of(
             ClassFile.ClassHierarchyResolverOption.of(
@@ -290,7 +290,7 @@ public class Instrument24 implements ClassFileTransformer {
     DCRuntime.instrumentation_interface =
         Signatures.addPackage(dcompPrefix, "DCompInstrumented").intern();
 
-    // Instrument the classfile, die on any errors.
+    // Instrument the classfile. If any errors, return the class unchanged.
     ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
     DCInstrument24 dci = new DCInstrument24(classFile, classModel, in_jdk);
     byte @Nullable [] newBytes;
