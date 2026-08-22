@@ -317,6 +317,47 @@ public final class DCInstrumentTest24 {
   }
 
   /**
+   * A superclass with a parameterized constructor, so that {@link TwoConstructors} can read a field
+   * in the argument expression of its {@code super()} call -- that is, before the superclass
+   * constructor has run.
+   */
+  public static class Base {
+
+    /** An arbitrary value. */
+    int base;
+
+    /**
+     * Creates a new Base.
+     *
+     * @param base the value to store
+     */
+    public Base(int base) {
+      this.base = base;
+    }
+  }
+
+  /**
+   * A class with two constructors, the second of which reads a field before calling its superclass
+   * constructor. Used by {@link #constructorInitializedStateDoesNotLeakBetweenMethods}.
+   */
+  public static class TwoConstructors extends Base {
+
+    /** Creates a new TwoConstructors. This constructor reads no fields before {@code super()}. */
+    public TwoConstructors() {
+      super(0);
+    }
+
+    /**
+     * Creates a new TwoConstructors, reading {@code s.value} before {@code super()} runs.
+     *
+     * @param s supplies the value to store
+     */
+    public TwoConstructors(Sample s) {
+      super(s.value);
+    }
+  }
+
+  /**
    * Tests that a class instrumented by {@link DCInstrument24#instrument_jdk_class} calls the shadow
    * runtime class {@code java.lang.DCRuntime} rather than {@code daikon.dcomp.DCRuntime}. A class
    * in a pre-instrumented {@code java.base} module may not refer to anything outside {@code
@@ -498,6 +539,79 @@ public final class DCInstrumentTest24 {
     } catch (Throwable t) {
       // Expected: the error propagates so that BuildJDK24 halts.
     }
+  }
+
+  /**
+   * Tests that {@code constructor_is_initialized} does not leak from one method to the next.
+   *
+   * <p>The flag records whether the superclass constructor call has been seen in the method being
+   * instrumented. Until it has, a constructor must not touch tag fields, because {@code this} is
+   * not yet initialized; {@link DCInstrument24#tag_fields_ok} enforces that. The flag was set when
+   * a constructor reached its {@code super()} call but never cleared, so in a class with more than
+   * one constructor every constructor after the first was treated as initialized from its very
+   * first instruction. {@link DCInstrument24#instrument_jdk_class} made this worse: it may rebuild
+   * a class with the same instance, so a value left over from an abandoned attempt would make the
+   * retry emit different code than the first attempt.
+   *
+   * <p>{@link TwoConstructors} reads {@code Sample.value} in the argument to its {@code super()}
+   * call, so the read happens while {@code this} is still uninitialized and must use the {@code
+   * push_const} path rather than the field's tag accessor.
+   *
+   * @throws IOException if the class file for {@link TwoConstructors} cannot be read
+   */
+  @Test
+  public void constructorInitializedStateDoesNotLeakBetweenMethods() throws IOException {
+    @SuppressWarnings("signature:assignment") // the name of a nested class
+    @BinaryName String binaryName = TwoConstructors.class.getName();
+    byte[] instrumented = instrument(classBytes(binaryName), binaryName);
+    assertNotNull("class was not instrumented", instrumented);
+
+    ClassModel classModel = ClassFile.of().parse(instrumented);
+    Set<String> calls = constructorCalls(classModel, ClassDesc.of(sampleClassName()));
+
+    // The uninitialized-this path pushes a constant tag instead of reading the field's tag.
+    assertTrue(
+        "constructor did not use the uninitialized-this path: " + calls,
+        calls.contains("push_const"));
+    assertFalse(
+        "constructor read a tag field before its super() call: " + calls,
+        calls.contains(Premain.tag_method_name(Premain.GET_TAG, sampleClassName(), "value")));
+  }
+
+  /**
+   * Returns the methods invoked by the instrumented copy of the constructor whose first parameter
+   * has the given type. Selecting on the parameter type distinguishes the constructors of a class
+   * that has several, since they all have the same name.
+   *
+   * @param classModel an instrumented class
+   * @param firstParam the type of the constructor's first parameter
+   * @return the names of the methods that the instrumented constructor invokes
+   */
+  private static Set<String> constructorCalls(ClassModel classModel, ClassDesc firstParam) {
+    Set<String> result = new HashSet<>();
+    for (MethodModel method : classModel.methods()) {
+      if (!method.methodName().stringValue().equals("<init>")) {
+        continue;
+      }
+      List<ClassDesc> params = method.methodTypeSymbol().parameterList();
+      if (params.size() < 2
+          || !params.get(0).equals(firstParam)
+          || !params.get(params.size() - 1).displayName().equals("DCompMarker")) {
+        // Either a different constructor, or the uninstrumented copy of this one.
+        continue;
+      }
+      method
+          .code()
+          .ifPresent(
+              code -> {
+                for (CodeElement element : code) {
+                  if (element instanceof InvokeInstruction invoke) {
+                    result.add(invoke.name().stringValue());
+                  }
+                }
+              });
+    }
+    return result;
   }
 
   /**

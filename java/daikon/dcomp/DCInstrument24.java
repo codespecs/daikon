@@ -1464,6 +1464,14 @@ public class DCInstrument24 {
       ClassInfo classInfo,
       boolean trackMethod) {
 
+    // Per-method state: constructor_is_initialized records whether the super constructor call
+    // has been seen in the method now being instrumented, and must start false for every method.
+    // Without this reset it stays set once any constructor in the class reaches its super() call,
+    // so a later constructor would be treated as initialized from its first instruction; and
+    // because instrument_jdk_class may rebuild the class with this same instance, a value left
+    // over from an abandoned attempt would make the retry differ from the first attempt.
+    constructor_is_initialized = false;
+
     try {
       boolean codeModelSeen = false;
       for (MethodElement me : methodModel) {
