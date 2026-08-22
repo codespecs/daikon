@@ -1,5 +1,6 @@
 package daikon.dcomp;
 
+import static java.lang.constant.ConstantDescs.CD_int;
 import static java.lang.constant.ConstantDescs.CD_void;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertFalse;
@@ -16,6 +17,7 @@ import java.io.PrintStream;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.ClassHierarchyResolver;
 import java.lang.classfile.ClassModel;
+import java.lang.classfile.ClassTransform;
 import java.lang.classfile.CodeElement;
 import java.lang.classfile.CodeModel;
 import java.lang.classfile.Label;
@@ -29,6 +31,7 @@ import java.lang.reflect.AccessFlag;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -367,11 +370,209 @@ public final class DCInstrumentTest24 {
     ClassModel classModel = classFile.parse(original);
     ClassInfo classInfo = new ClassInfo(classname, DCInstrumentTest24.class.getClassLoader());
     DCInstrument24 dci = new DCInstrument24(classFile, classModel, true);
-    byte[] instrumented = dci.instrument_jdk_class(classInfo);
-    if (instrumented == null) {
-      throw new Error("instrumentation of " + classname + " failed");
+    // instrument_jdk_class throws rather than returning null if it cannot instrument the class.
+    return dci.instrument_jdk_class(classInfo);
+  }
+
+  /** Name of the method that {@link #oversizedClassBytes} adds to {@link Sample}. */
+  private static final String OVERSIZED_METHOD = "tooBig";
+
+  /** Name of the {@link Sample} method that instruments normally. */
+  private static final String SMALL_METHOD = "add";
+
+  /**
+   * Number of {@code iload_0; iconst_1; iadd; istore_0} groups in {@link #OVERSIZED_METHOD}. Each
+   * group is 4 bytes, so the uninstrumented method is well under the JVM's 64K code-size limit, but
+   * instrumentation adds several DCRuntime calls per group, which pushes the instrumented form over
+   * it.
+   */
+  private static final int OVERSIZED_GROUPS = 6000;
+
+  /**
+   * Returns the bytes of {@link Sample} with an added method, {@link #OVERSIZED_METHOD}, whose
+   * instrumented form exceeds the JVM's 64K code-size limit. The method is added to a real class
+   * rather than a synthetic one because DCInstrument24 resolves the class being instrumented, and
+   * its superclasses, from the classpath.
+   *
+   * @return the bytes of {@link Sample} plus a method that is too large to instrument
+   * @throws IOException if the class file for {@link Sample} cannot be read
+   */
+  private static byte[] oversizedClassBytes() throws IOException {
+    ClassFile classFile = ClassFile.of();
+    ClassModel classModel = classFile.parse(classBytes(sampleClassName()));
+    return classFile.transformClass(
+        classModel,
+        ClassTransform.endHandler(
+            classBuilder ->
+                classBuilder.withMethodBody(
+                    OVERSIZED_METHOD,
+                    MethodTypeDesc.of(CD_int, CD_int),
+                    ClassFile.ACC_PUBLIC | ClassFile.ACC_STATIC,
+                    codeBuilder -> {
+                      for (int i = 0; i < OVERSIZED_GROUPS; i++) {
+                        codeBuilder.iload(0);
+                        codeBuilder.iconst_1();
+                        codeBuilder.iadd();
+                        codeBuilder.istore(0);
+                      }
+                      codeBuilder.iload(0);
+                      codeBuilder.ireturn();
+                    })));
+  }
+
+  /**
+   * Returns the binary name of {@link Sample}.
+   *
+   * @return the binary name of {@link Sample}
+   */
+  @SuppressWarnings("signature:return") // the name of a nested class
+  private static @BinaryName String sampleClassName() {
+    return Sample.class.getName();
+  }
+
+  /**
+   * Tests that a method whose instrumented form exceeds the JVM's 64K code-size limit is emitted
+   * without instrumentation, rather than causing the whole class to be abandoned. {@code
+   * java.lang.classfile} does not report the oversized method until it serializes the class, so
+   * {@link DCInstrument24#instrument_jdk_class} has to rebuild the class from scratch; this test
+   * checks that the rebuild leaves the rest of the class instrumented, and that the oversized
+   * method is not reported as skipped.
+   */
+  @Test
+  public void testOversizedMethodIsSkipped() throws IOException {
+    byte[] original = oversizedClassBytes();
+    ClassFile classFile = ClassFile.of();
+    ClassModel originalModel = classFile.parse(original);
+    // The premise of this test is that only the *instrumented* method is too large.
+    assertTrue(
+        "uninstrumented " + OVERSIZED_METHOD + " is already over the code-size limit",
+        codeLength(originalModel, OVERSIZED_METHOD) < 65536);
+
+    ClassInfo classInfo = new ClassInfo(sampleClassName(), classLoader());
+    DCInstrument24 dci = new DCInstrument24(classFile, classFile.parse(original), true);
+    @BinaryName String savedInstrumentationInterface = DCRuntime.instrumentation_interface;
+    // BuildJDK24 sets this static field before each class it instruments.
+    DCRuntime.instrumentation_interface = "daikon.dcomp.DCompInstrumented";
+    byte[] instrumented;
+    try {
+      // Skipping the oversized method prints a warning; discard it.
+      instrumented = withDiagnosticsDiscarded(() -> dci.instrument_jdk_class(classInfo));
+    } finally {
+      DCRuntime.instrumentation_interface = savedInstrumentationInterface;
     }
-    return instrumented;
+
+    // The method is emitted with the DCompMarker signature, so it is still callable and does not
+    // belong on the skipped_methods list, which names methods that are missing from the
+    // instrumented class. DCInstrument treats oversized methods the same way.
+    assertFalse(
+        "oversized method reported as skipped: " + dci.get_skipped_methods(),
+        dci.get_skipped_methods().stream().anyMatch(m -> m.contains(OVERSIZED_METHOD)));
+
+    ClassModel instrumentedModel = classFile.parse(instrumented);
+    assertTrue(
+        "oversized method was instrumented",
+        runtimeCalls(instrumentedModel, OVERSIZED_METHOD).isEmpty());
+    assertFalse(
+        "rest of the class was not instrumented",
+        runtimeCalls(instrumentedModel, SMALL_METHOD).isEmpty());
+  }
+
+  /**
+   * Tests that an instrumentation error other than an oversized method is fatal when building the
+   * instrumented JDK. Such an error implies a bug in the instrumentor, and returning the class
+   * uninstrumented would write a broken class into the prebuilt JDK, where it would fail much later
+   * and far from the cause.
+   */
+  @Test
+  public void testJdkInstrumentationErrorIsFatal() {
+    ClassFile classFile = ClassFile.of();
+    byte[] bad = badClassBytes();
+    ClassInfo classInfo = new ClassInfo("BadStackMerge", classLoader());
+    DCInstrument24 dci = new DCInstrument24(classFile, classFile.parse(bad), true);
+    try {
+      // Discard the diagnostics about the expected failure.
+      withDiagnosticsDiscarded(() -> dci.instrument_jdk_class(classInfo));
+      throw new AssertionError("instrument_jdk_class silently returned an uninstrumented class");
+    } catch (AssertionError e) {
+      throw e;
+    } catch (Throwable t) {
+      // Expected: the error propagates so that BuildJDK24 halts.
+    }
+  }
+
+  /**
+   * Runs the given action with {@code System.out} and {@code System.err} discarded, restoring them
+   * afterward. The tests that deliberately trigger an instrumentation failure use this to keep the
+   * diagnostics that the failure prints out of the test output, so that a passing test run stays
+   * quiet.
+   *
+   * @param <T> the type the action returns
+   * @param action the code to run
+   * @return whatever {@code action} returns
+   */
+  private static <T> T withDiagnosticsDiscarded(Supplier<T> action) {
+    PrintStream savedOut = System.out;
+    PrintStream savedErr = System.err;
+    PrintStream discard = new PrintStream(new ByteArrayOutputStream(), false, UTF_8);
+    System.setOut(discard);
+    System.setErr(discard);
+    try {
+      return action.get();
+    } finally {
+      System.setOut(savedOut);
+      System.setErr(savedErr);
+    }
+  }
+
+  /**
+   * Returns the length, in bytes, of the code of the named method.
+   *
+   * @param classModel the class containing the method
+   * @param methodName the name of the method
+   * @return the code length of the named method
+   */
+  private static int codeLength(ClassModel classModel, String methodName) {
+    for (MethodModel method : classModel.methods()) {
+      if (method.methodName().stringValue().equals(methodName)) {
+        return method.code().orElseThrow().elementList().size();
+      }
+    }
+    throw new Error("no method named " + methodName);
+  }
+
+  /**
+   * Returns the DCRuntime methods invoked by the instrumented copy of the named method, that is,
+   * the copy that has a DCompMarker parameter. An empty result means the method was emitted without
+   * instrumentation.
+   *
+   * @param classModel an instrumented class
+   * @param methodName the name of the method to examine
+   * @return the names of the DCRuntime methods that the instrumented copy invokes
+   */
+  private static Set<String> runtimeCalls(ClassModel classModel, String methodName) {
+    Set<String> result = new HashSet<>();
+    for (MethodModel method : classModel.methods()) {
+      if (!method.methodName().stringValue().equals(methodName)) {
+        continue;
+      }
+      List<ClassDesc> params = method.methodTypeSymbol().parameterList();
+      if (params.isEmpty() || !params.get(params.size() - 1).displayName().equals("DCompMarker")) {
+        // This is the uninstrumented copy of the method, which has no DCompMarker parameter.
+        continue;
+      }
+      method
+          .code()
+          .ifPresent(
+              code -> {
+                for (CodeElement element : code) {
+                  if (element instanceof InvokeInstruction invoke
+                      && invoke.owner().asInternalName().endsWith("/DCRuntime")) {
+                    result.add(invoke.name().stringValue());
+                  }
+                }
+              });
+    }
+    return result;
   }
 
   /**
