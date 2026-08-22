@@ -70,8 +70,10 @@ public final class DCRuntime implements ComparabilityProvider {
    * unsigned byte holds at most 255. This is unrelated to the JVM's 64K limit on a method's
    * bytecode length. Largest frame size noted so far is 123.
    *
-   * <p>Both instrumenters, {@link DCInstrument} and {@link DCInstrument24}, enforce this limit; it
-   * is defined here because it is a property of {@code create_tag_frame}'s encoding.
+   * <p>Both instrumenters, {@link DCInstrument} and {@code DCInstrument24}, enforce this limit; it
+   * is defined here because it is a property of {@code create_tag_frame}'s encoding. {@code
+   * DCInstrument24} is not linked, because it is compiled only under JDK 24 and later while this
+   * class is compiled everywhere.
    */
   public static final int MAX_TAG_FRAME_SIZE = 206;
 
