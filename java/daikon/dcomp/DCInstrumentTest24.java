@@ -542,6 +542,33 @@ public final class DCInstrumentTest24 {
   }
 
   /**
+   * A class whose second constructor delegates with {@code this(...)} and then writes a field --
+   * the shape of {@code six170.Hanoi.Hanoi(int, boolean)} in the daikon-tests suite. After a {@code
+   * this(...)} call the receiver is fully initialized, so the field write must use the field's tag
+   * accessor.
+   */
+  public static class DelegatingConstructor extends Base {
+
+    /** An arbitrary value. */
+    int flag;
+
+    /** Creates a new DelegatingConstructor. */
+    public DelegatingConstructor() {
+      super(0);
+    }
+
+    /**
+     * Creates a new DelegatingConstructor by delegating to {@link #DelegatingConstructor()}.
+     *
+     * @param flag the value to store
+     */
+    public DelegatingConstructor(int flag) {
+      this();
+      this.flag = flag;
+    }
+  }
+
+  /**
    * Tests that {@code constructor_is_initialized} does not leak from one method to the next.
    *
    * <p>The flag records whether the superclass constructor call has been seen in the method being
@@ -564,7 +591,7 @@ public final class DCInstrumentTest24 {
     @SuppressWarnings("signature:assignment") // the name of a nested class
     @BinaryName String binaryName = TwoConstructors.class.getName();
     byte[] instrumented = instrument(classBytes(binaryName), binaryName);
-    assertNotNull("class was not instrumented", instrumented);
+    assert instrumented != null : "@AssumeAssertion(nullness)";
 
     ClassModel classModel = ClassFile.of().parse(instrumented);
     Set<String> calls = constructorCalls(classModel, ClassDesc.of(sampleClassName()));
@@ -576,6 +603,37 @@ public final class DCInstrumentTest24 {
     assertFalse(
         "constructor read a tag field before its super() call: " + calls,
         calls.contains(Premain.tag_method_name(Premain.GET_TAG, sampleClassName(), "value")));
+  }
+
+  /**
+   * Tests that a constructor which delegates with {@code this(...)} treats the receiver as
+   * initialized afterward.
+   *
+   * <p>A {@code this(...)} call initializes the receiver just as {@code super(...)} does -- the
+   * delegated-to constructor runs the superclass constructor itself. A field written after that
+   * call must therefore use the field's tag accessor, so that the field and the parameter assigned
+   * to it end up in the same comparability set. Emitting {@code discard_tag} instead silently
+   * splits them, which is visible in the daikon-tests suite as {@code Hanoi.noOutput} moving out of
+   * its parameter's comparability set.
+   *
+   * @throws IOException if the class file for {@link DelegatingConstructor} cannot be read
+   */
+  @Test
+  public void delegatingConstructorInitializesReceiver() throws IOException {
+    @SuppressWarnings("signature:assignment") // the name of a nested class
+    @BinaryName String binaryName = DelegatingConstructor.class.getName();
+    byte[] instrumented = instrument(classBytes(binaryName), binaryName);
+    assert instrumented != null : "@AssumeAssertion(nullness)";
+
+    ClassModel classModel = ClassFile.of().parse(instrumented);
+    Set<String> calls = constructorCalls(classModel, CD_int);
+
+    assertTrue(
+        "field written after this(...) did not use its tag accessor: " + calls,
+        calls.contains(Premain.tag_method_name(Premain.SET_TAG, binaryName, "flag")));
+    assertFalse(
+        "field written after this(...) was treated as uninitialized: " + calls,
+        calls.contains("discard_tag"));
   }
 
   /**

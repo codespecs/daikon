@@ -2649,7 +2649,13 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     if (invoke instanceof INVOKESPECIAL) {
-      if (classname.equals(classGen.getSuperclassName()) && methodName.equals("<init>")) {
+      // A call to the superclass constructor (super(...)) or to another constructor of this
+      // class (this(...)) both leave the receiver initialized: the delegated-to constructor runs
+      // the superclass constructor itself. Until one of them has been seen, `this` is
+      // uninitialized and tag fields must not be touched; see tag_fields_ok.
+      if (methodName.equals("<init>")
+          && (classname.equals(classGen.getSuperclassName())
+              || classname.equals(classGen.getClassName()))) {
         this.constructor_is_initialized = true;
       }
     }
