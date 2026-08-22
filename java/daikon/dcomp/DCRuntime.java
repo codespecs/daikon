@@ -63,6 +63,20 @@ import org.checkerframework.dataflow.qual.Pure;
 @SuppressWarnings({"nullness", "interning"}) // tricky code, skip for now
 public final class DCRuntime implements ComparabilityProvider {
 
+  /**
+   * The largest tag frame that {@link #create_tag_frame} accepts, and therefore the largest number
+   * of local variable slots an instrumented method may use. The frame size is passed to {@code
+   * create_tag_frame} as a character obtained by adding the size to '0' (decimal 48), and an
+   * unsigned byte holds at most 255. This is unrelated to the JVM's 64K limit on a method's
+   * bytecode length. Largest frame size noted so far is 123.
+   *
+   * <p>Both instrumenters, {@link DCInstrument} and {@code DCInstrument24}, enforce this limit; it
+   * is defined here because it is a property of {@code create_tag_frame}'s encoding. {@code
+   * DCInstrument24} is not linked, because it is compiled only under JDK 24 and later while this
+   * class is compiled everywhere.
+   */
+  public static final int MAX_TAG_FRAME_SIZE = 206;
+
   /** List of all instrumented methods. */
   public static final List<MethodInfo> methods = new ArrayList<>();
 
