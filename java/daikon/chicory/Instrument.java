@@ -311,7 +311,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
           "Transforming class %s, loaders %s, %s%n", className, loader, loader.getParent());
     }
 
-    // Parse the bytes of the classfile, die on any errors.
+    // Parse the bytes of the classfile. If any errors, return the class unchanged.
     JavaClass c;
     try (ByteArrayInputStream bais = new ByteArrayInputStream(classfileBuffer)) {
       ClassParser parser = new ClassParser(bais, className);
@@ -329,7 +329,7 @@ public class Instrument extends InstructionListUtils implements ClassFileTransfo
       writeDebugClassFiles(c, debug_uninstrumented_dir, binaryClassName);
     }
 
-    // Instrument the classfile, die on any errors.
+    // Instrument the classfile. If any errors, return the class unchanged.
     ClassInfo classInfo = new ClassInfo(binaryClassName, cfLoader);
     JavaClass newJavaClass;
     try {
