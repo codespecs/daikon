@@ -340,15 +340,6 @@ public class DCInstrument extends InstructionListUtils {
   @Option("Halt if an instrumentation error occurs")
   public static boolean quit_if_error = true;
 
-  /**
-   * The largest tag frame that {@code DCRuntime.create_tag_frame} accepts, and therefore the
-   * largest number of local variable slots an instrumented method may use. The frame size is passed
-   * to {@code create_tag_frame} as a character obtained by adding the size to '0' (decimal 48), and
-   * an unsigned byte holds at most 255. This is unrelated to {@code MAX_CODE_SIZE}, which limits a
-   * method's bytecode length. Largest frame size noted so far is 123.
-   */
-  public static final int MAX_TAG_FRAME_SIZE = 206;
-
   /** The loader that loaded the Class to instrument. */
   protected @Nullable ClassLoader loader;
 
@@ -1717,7 +1708,7 @@ public class DCInstrument extends InstructionListUtils {
     // allocate an extra slot to save the tag frame depth for debugging
     int frame_size = mgen.getMaxLocals() + 1;
 
-    if (frame_size > MAX_TAG_FRAME_SIZE) {
+    if (frame_size > DCRuntime.MAX_TAG_FRAME_SIZE) {
       throw new DynCompError(
           "method "
               + mgen.getClassName()
@@ -1726,7 +1717,7 @@ public class DCInstrument extends InstructionListUtils {
               + " has too many local variables to instrument: it needs a tag frame of "
               + frame_size
               + " slots, but the maximum is "
-              + MAX_TAG_FRAME_SIZE);
+              + DCRuntime.MAX_TAG_FRAME_SIZE);
     }
     String params = Character.toString((char) (frame_size + '0'));
     // Character.forDigit (frame_size, Character.MAX_RADIX);
