@@ -21,10 +21,17 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
-## Version ??
+## Version 5.9.0 (???, 2026)
 
-All Daikon tools now work with Java 26.
-Running under Java 8 is no longer supported.
+(THIS SECTION IS NOT COMPLETE)
+
+- Do we say anything about DynComp for Java 24+, or is that just an implementation detail?
+- Do we say anything about Rust support?
+- Instead of saying you must compile with Java 11 (instead of 8) do we want to go to 17?
+
+- All Daikon tools now work with Java 8-26.
+- Compiling Daikon with Java 8 is no longer supported.
+- Kvasir now supports DWARF-4 (in addition to 2 & 3).
 
 ## Version 5.8.24 (May 6, 2026)
 

@@ -284,12 +284,14 @@ You may customize them by setting environment variables, or by adding a
 automatically read at the beginning of the main Makefile, and prevents
 you from having to edit the main Makefile directly).
 
+
 @item
 Compile Daikon and build other tools.
 (Strictly speaking, this step is optional, but it is highly recommended:
 some parts of
 this are required in order to infer invariants in Java programs,
 and other parts are needed in order to infer invariants in C programs.)
+
 First, make sure that you have satisfied the requirements in
 @ref{Requirements for compiling Daikon,,,developer,Daikon Developer Manual}.
 Then, run:
@@ -305,7 +307,7 @@ make -C $@{DAIKONDIR@} rebuild-everything
 
 @noindent
 This builds the various executables used by Daikon, such as the
-C/C++ front end Kvasir (@pxref{Installing Kvasir}) and the
+C/C++ front end Kvasir (@pxref{Installing Kvasir}) and an instrumented
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
 If you need more
 information about compiling Daikon, see
@@ -325,7 +327,6 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 @c # Here are commands that install Daikon from its distribution, in a
 @c #  subdirectory of the current directory, on Ubuntu.  If you run `docker run
 @c # -it ubuntu` then type the following, it will install Daikon successfully.
-@c # If desired, you can use openjdk-8-jdk instead of openjdk-11-jdk.
 @c
 @c apt update
 @c apt -qqy install openjdk-11-jdk
@@ -789,7 +790,7 @@ cd $@{DAIKONDIR@}/examples/c-examples/wordplay
 @end example
 
 @item
-Compile the program with DWARF-2 or DWARF-3 debugging information enabled
+Compile the program with DWARF-2, DWARF-3 or DWARF-4 debugging information enabled
 (and all optimizations disabled).
 @example
 gcc -gdwarf-3 -no-pie wordplay.c -o wordplay
@@ -4261,7 +4262,7 @@ It is built upon the Fjalar dynamic analysis framework for C and C++ programs
 (available at @uref{http://groups.csail.mit.edu/pag/fjalar/}, but already
 included in the Daikon distribution).
 
-To use Kvasir, first compile your program using either the DWARF-2 or DWARF-3 debugging
+To use Kvasir, first compile your program using either the DWARF-2, DWARF-3 or DWARF-4 debugging
 format (e.g., supply the @option{-gdwarf-3} option to @command{gcc}) and
 without optimizations (e.g., supply the @option{-O0} option to @command{gcc}).
 Also, some versions of @command{gcc} now output position independent code by default.
@@ -4330,9 +4331,9 @@ and any flags that affect calling conventions, such as
 @option{-fomit-frame-pointer}.
 @item
 Include debugging information, by supplying the @option{-g} flag.
-The debugging information must be in either the DWARF-2 or DWARF-3 format.
+The debugging information must be in either the DWARF-2, DWARF-3 or DWARF-4 format.
 Note that starting with version 11, the @command{gcc} default DWARF output level is now 5.
-Therefore, you must supply the @option{-gdwarf-2} or @option{-gdwarf-3} command line option.
+Therefore, you must supply the @option{-gdwarf-2}, @option{-gdwarf-3} or @option{-gdwarf-4} command line option.
 @item
 Kvasir cannot properly process position independent binaries.
 You must add the @option{-no-pie} option to disable this feature.
@@ -4754,8 +4755,8 @@ report.
 
 This pauses the program's execution in an infinite loop during
 initialization.  You can attach a debugger such as @command{gdb} to the
-running process by running @command{gdb} on @file{inst/lib/valgrind/fjalar-amd64-linux} under
-the Kvasir directory and using the @command{attach} command.
+running process by running @command{gdb} on @file{valgrind/inst/libexec/valgrind/fjalar-amd64-linux} under
+your $@{DAIKONDIR@} directory and using the @command{attach} command.
 
 @item --kvasir-debug
 @itemx --fjalar-debug
@@ -5878,7 +5879,7 @@ running under a Linux kernel in 64-bit mode.
 The Itanium or IA-64 architecture is not supported.
 
 Kvasir requires that your program have debugging
-information available in the DWARF-2 or DWARF-3 format.
+information available in the DWARF-2, DWARF-3 or DWARF-4 format.
 (@xref{Using Kvasir} for details.)
 For the best results, the programs used by Kvasir should be
 compiled without optimization.
