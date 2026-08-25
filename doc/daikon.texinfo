@@ -4755,7 +4755,7 @@ report.
 
 This pauses the program's execution in an infinite loop during
 initialization.  You can attach a debugger such as @command{gdb} to the
-running process by running @command{gdb} on @file{valgrind/inst/libexec/valgrind/fjalar-amd64-linux} under
+running process by running @command{gdb} on @file{fjalar/valgrind/inst/libexec/valgrind/fjalar-amd64-linux} under
 your $@{DAIKONDIR@} directory and using the @command{attach} command.
 
 @item --kvasir-debug

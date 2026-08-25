@@ -175,8 +175,7 @@ For more information about compiling Daikon, see the comments in the Makefiles.
 @subsection Requirements for compiling Daikon
 
 Note that Daikon can both execute on and process programs built on systems
-with a Java 8 JDK. However, if you wish to compile Daikon you must have a Java 11 (or later)
-JDK installed on your system.
+with a Java 8 JDK. However, if you wish to compile Daikon you must use Java 11 (or later).
 
 Before compiling Daikon, you need to install some dependencies (that is,
 software used to build Daikon).  For
