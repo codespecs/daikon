@@ -25,13 +25,13 @@ Further documentation can be found in:
 
 (THIS SECTION IS NOT COMPLETE)
 
-- Do we say anything about DynComp for Java 24+, or is that just an implementation detail?
-- Do we say anything about Rust support?
-- Instead of saying you must compile with Java 11 (instead of 8) do we want to go to 17?
+* Do we say anything about DynComp for Java 24+, or is that just an implementation detail?
+* Do we say anything about Rust support?
+* Instead of saying you must compile with Java 11 (instead of 8) do we want to go to 17?
 
-- All Daikon tools now work with Java 8-26.
-- Compiling Daikon with Java 8 is no longer supported.
-- Kvasir now supports DWARF-4 (in addition to 2 & 3).
+* All Daikon tools now work with Java 8-26.
+* Compiling Daikon with Java 8 is no longer supported.
+* Kvasir now supports DWARF-4 (in addition to 2 & 3).
 
 ## Version 5.8.24 (May 6, 2026)
 
