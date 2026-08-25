@@ -33,6 +33,7 @@ Further documentation can be found in:
 * Compiling Daikon with Java 8 is no longer supported.
 
 DynComp:
+
 * Fixed intrumentation problem in some methods with multiple constructors.
 
 Fjalar/Kvasir:
