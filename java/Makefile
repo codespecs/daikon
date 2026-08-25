@@ -865,9 +865,10 @@ audit:
 
 .PHONY: reformat check-format
 
+# google-java-format requires JDK 21 or later.
 format: reformat
 reformat:
-ifeq (${JAVA17}, 0)
+ifeq (${JAVA21}, 0)
 	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format
@@ -876,7 +877,7 @@ else
 endif
 
 check-format:
-ifeq (${JAVA17}, 0)
+ifeq (${JAVA21}, 0)
 	echo "Formatting is not run under Java ${JAVA_VERSION_STRING}"
 else
 	${MAKE} -C .. update-run-google-java-format

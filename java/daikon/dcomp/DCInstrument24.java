@@ -553,6 +553,16 @@ public class DCInstrument24 {
   /** Keeps track of the methods that were not successfully instrumented. */
   protected List<String> skipped_methods = new ArrayList<>();
 
+  /**
+   * Methods whose instrumented form exceeds the JVM's 64K code-size limit and must therefore be
+   * emitted without instrumentation. Each element is a method name followed by the {@link
+   * MethodTypeDesc#displayDescriptor} of the method as emitted (that is, including the DCompMarker
+   * parameter if one was added), which is the form {@code java.lang.classfile} uses when it reports
+   * the error. Populated by {@link #instrument_jdk_class} between build attempts and consulted by
+   * {@link #processMethod}.
+   */
+  private Set<String> oversizedMethods = new HashSet<>();
+
   /** If we're using an instrumented JDK, then "java.lang"; otherwise, "daikon.dcomp". */
   protected @DotSeparatedIdentifiers String dcompMarkerPrefix;
 
@@ -1323,6 +1333,27 @@ public class DCInstrument24 {
         paramList.add(dcomp_marker);
         mtd = MethodTypeDesc.of(mtd.returnType(), paramList);
       }
+
+      // If an earlier build attempt found that this method's instrumented form exceeds the JVM's
+      // 64K code-size limit, emit it with the original (uninstrumented) body. The method must
+      // still be emitted with the DCompMarker parameter, because callers of the instrumented
+      // version look it up by that signature; it simply does no comparability tracking.
+      // See instrument_jdk_class for how this set is populated.
+      if (oversizedMethods.contains(
+          oversizedMethodKey(methodModel.methodName().stringValue(), mtd))) {
+        debugInstrument.log("Copying oversized method: %s%n", mgen.getName());
+        debugInstrument.indent();
+        classBuilder.withMethod(
+            methodModel.methodName().stringValue(),
+            mtd,
+            methodModel.flags().flagsMask(),
+            methodBuilder -> copyMethod(methodBuilder, methodModel, mgen));
+        debugInstrument.exdent();
+        debugInstrument.log("End of copy%n");
+        debug_transform.exdent();
+        return;
+      }
+
       classBuilder.withMethod(
           methodModel.methodName().stringValue(),
           mtd,
@@ -1432,6 +1463,14 @@ public class DCInstrument24 {
       MethodGen24 mgen,
       ClassInfo classInfo,
       boolean trackMethod) {
+
+    // Per-method state: constructor_is_initialized records whether the super constructor call
+    // has been seen in the method now being instrumented, and must start false for every method.
+    // Without this reset it stays set once any constructor in the class reaches its super() call,
+    // so a later constructor would be treated as initialized from its first instruction; and
+    // because instrument_jdk_class may rebuild the class with this same instance, a value left
+    // over from an abandoned attempt would make the retry differ from the first attempt.
+    constructor_is_initialized = false;
 
     try {
       boolean codeModelSeen = false;
@@ -1753,9 +1792,10 @@ public class DCInstrument24 {
    * A second version of each method in the class is created which is instrumented for
    * comparability.
    *
-   * @return the modified JavaClass
+   * @return the modified JavaClass; never null, as any error that prevents instrumentation is
+   *     thrown rather than reported by returning null
    */
-  public byte @Nullable [] instrument_jdk_class(ClassInfo classInfo) {
+  public byte[] instrument_jdk_class(ClassInfo classInfo) {
 
     @BinaryName String classname = classInfo.class_name;
 
@@ -1792,21 +1832,94 @@ public class DCInstrument24 {
       runtimeCD = ClassDesc.of("java.lang.DCRuntime");
     }
 
-    try {
-      return classFile.build(
-          classModel.thisClass().asSymbol(),
-          classBuilder -> instrumentClass(classBuilder, classModel, classInfo));
-    } catch (Throwable t) {
-      if (debugInstrument.enabled) {
-        t.printStackTrace();
+    // An error while building the instrumented JDK is fatal: it implies a bug in the instrumentor,
+    // and silently emitting an uninstrumented class here would produce a JDK that fails later, far
+    // from the cause. The one tolerable failure is a method whose instrumented form exceeds the
+    // JVM's 64K code-size limit; that method is emitted uninstrumented and the rest of the class is
+    // instrumented normally.
+    //
+    // Detecting the oversized method is awkward because java.lang.classfile does not report it
+    // until it serializes the class, long after the offending method's builder has been discarded,
+    // and a ClassBuilder is append-only -- a partially written method cannot be removed. So we
+    // follow the strategy the JDK itself uses for short-jump overflow (see
+    // jdk.internal.classfile.impl.DirectCodeBuilder.build): throw the whole builder away and start
+    // over, this time emitting the offending method unchanged. Each attempt identifies at most one
+    // oversized method, so bound the number of attempts by the number of methods in the class.
+    oversizedMethods.clear();
+    int skippedMethodsMark = skipped_methods.size();
+    int maxAttempts = classModel.methods().size() + 1;
+
+    for (int attempt = 0; attempt < maxAttempts; attempt++) {
+      try {
+        byte[] classBytes =
+            classFile.build(
+                classModel.thisClass().asSymbol(),
+                classBuilder -> instrumentClass(classBuilder, classModel, classInfo));
+        // An oversized method is deliberately not added to skipped_methods. That list names
+        // methods that are missing from the instrumented class, so that a call to one throws
+        // NoSuchMethodException; an oversized method is still emitted with the DCompMarker
+        // signature and remains callable, it merely does no comparability tracking. DCInstrument
+        // treats oversized methods the same way.
+        return classBytes;
+      } catch (IllegalArgumentException e) {
+        // java.lang.classfile throws IllegalArgumentException for dozens of unrelated problems and
+        // provides no distinct exception type for an oversized method, so oversizedMethodName has
+        // to identify this one case by matching the text of the exception's message. It returns
+        // null for any message it does not recognize, which is treated as a real error below.
+        String method = oversizedMethodName(e);
+        if (method == null || !oversizedMethods.add(method)) {
+          // Either this is not the oversized-method error, or we already emitted this method
+          // uninstrumented and it still does not fit. Both indicate a bug in the instrumentor.
+          throw e;
+        }
+        System.err.printf(
+            "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument and is"
+                + " being skipped.%n",
+            classname, method);
+        // Discard anything the abandoned attempt recorded; the retry starts from scratch.
+        skipped_methods.subList(skippedMethodsMark, skipped_methods.size()).clear();
       }
-      System.err.printf(
-          "DynComp warning: Class %s is being skipped due to the following:%n",
-          classInfo.class_name);
-      System.err.printf("%s.%n", t);
-      // Return class file unmodified.
-      return classFile.transformClass(classModel, ClassTransform.ACCEPT_ALL);
     }
+    throw new DynCompError(
+        "Unable to instrument " + classname + " after " + maxAttempts + " attempts");
+  }
+
+  /**
+   * Returns the key used to identify a method in {@link #oversizedMethods}. This must match the way
+   * {@code java.lang.classfile} names a method when it reports that the method's code array is too
+   * large; see {@link #oversizedMethodName}.
+   *
+   * @param methodName the method's name
+   * @param mtd the method's type, as emitted (including DCompMarker, if one was added)
+   * @return a key identifying the method
+   */
+  private static String oversizedMethodKey(String methodName, MethodTypeDesc mtd) {
+    return methodName + mtd.displayDescriptor();
+  }
+
+  /**
+   * If the given exception is {@code java.lang.classfile} reporting that a method's code array
+   * exceeds the JVM's 64K limit, returns the offending method in the form produced by {@link
+   * #oversizedMethodKey}. Returns null for any other exception, including a message this code does
+   * not recognize -- an unrecognized message is treated as a genuine error rather than guessed at.
+   *
+   * @param e an exception thrown while serializing the instrumented class
+   * @return the oversized method, or null if {@code e} does not report an oversized method
+   */
+  private static @Nullable String oversizedMethodName(IllegalArgumentException e) {
+    // jdk.internal.classfile.impl.DirectCodeBuilder writes:
+    //   "Code length %d is outside the allowed range in %s%s"
+    // where the trailing two arguments are the method's name and its MethodTypeDesc
+    // displayDescriptor.
+    String message = e.getMessage();
+    if (message == null || !message.startsWith("Code length ")) {
+      return null;
+    }
+    int index = message.indexOf(" in ");
+    if (index < 0) {
+      return null;
+    }
+    return message.substring(index + " in ".length());
   }
 
   /**
@@ -2161,16 +2274,16 @@ public class DCInstrument24 {
     // saves the tag frame depth for debugging.
     int frame_size = mgen.getMaxLocals() + 1;
 
-    // unsigned byte max = 255.  minus the character '0' (decimal 48)
-    // Largest frame size noted so far is 123.
-    if (frame_size > 206) {
+    if (frame_size > DCRuntime.MAX_TAG_FRAME_SIZE) {
       throw new DynCompError(
-          "method too large ("
-              + frame_size
-              + ") to instrument: "
+          "method "
               + mgen.getClassName()
               + "."
-              + mgen.getName());
+              + mgen.getName()
+              + " has too many local variables to instrument: it needs a tag frame of "
+              + frame_size
+              + " slots, but the maximum is "
+              + DCRuntime.MAX_TAG_FRAME_SIZE);
     }
     String params = Character.toString((char) (frame_size + '0'));
     // Character.forDigit (frame_size, Character.MAX_RADIX);
@@ -3189,7 +3302,13 @@ public class DCInstrument24 {
     }
 
     if (op.equals(INVOKESPECIAL)) {
-      if (classname.equals(classGen.getSuperclassName()) && methodName.equals("<init>")) {
+      // A call to the superclass constructor (super(...)) or to another constructor of this
+      // class (this(...)) both leave the receiver initialized: the delegated-to constructor runs
+      // the superclass constructor itself. Until one of them has been seen, `this` is
+      // uninitialized and tag fields must not be touched; see tag_fields_ok.
+      if (methodName.equals("<init>")
+          && (classname.equals(classGen.getSuperclassName())
+              || classname.equals(classGen.getClassName()))) {
         this.constructor_is_initialized = true;
       }
     }
