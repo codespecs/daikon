@@ -3974,11 +3974,11 @@ make -C $@{DAIKONDIR@}/java dcomp_rt.jar
 Either the @env{JAVA_HOME} environment variable must be set, or
 @code{javac} must be on the execution path.
 This command instruments the classes in the
-@file{rt.jar} file of the JDK, and creates a new file,
+@file{jmods} directory of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.
 
 @noindent
-Building @file{dcomp_rt} requires 10-30 minutes to complete and uses 1024 MB of
+Building @file{dcomp_rt} requires 10-20 minutes to complete and uses 1024 MB of
 memory.  Regular progress indicators are printed to standard output.
 
 You can ignore warnings issued during the instrumentation process, so

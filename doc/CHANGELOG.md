@@ -31,7 +31,15 @@ Further documentation can be found in:
 
 * All Daikon tools now work with Java 8-26.
 * Compiling Daikon with Java 8 is no longer supported.
+
+DynComp:
+* Fixed intrumentation problem in some methods with multiple constructors.
+
+Fjalar/Kvasir:
+
+* Improved support for clang compiler.
 * Kvasir now supports DWARF-4 (in addition to 2 & 3).
+* Fixed problem with multi-dimensional array support.
 
 ## Version 5.8.24 (May 6, 2026)
 
