@@ -6538,7 +6538,7 @@ Hynger, is distributed separately; see
 @cindex instrumentation, of Input/Output Automata programs
 
 A front end for the IOA (Input/Output Automata) programming language is distributed separately;
-see @uref{http://groups.csail.mit.edu/tds/ioa.html}.
+see @uref{https://groups.csail.mit.edu/tds/ioa.html}.
 
 @cindex front end for Lisp
 @cindex Lisp front end
