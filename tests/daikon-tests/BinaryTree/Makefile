@@ -23,11 +23,3 @@ include ../../Makefile.common
 
 instrument-files-revise:
 	echo "DataStructures/BinarySearchTree.java" >| ${INST_LIST_FILE}
-
-.PHONY: all test clean
-all:
-	${MAKE} -C .. all
-test:
-	${MAKE} -C .. test
-clean:
-	${MAKE} -C .. clean
