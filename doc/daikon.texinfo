@@ -4258,7 +4258,7 @@ data trace (@file{.dtrace}) files of variables and their values by
 examining the operation of the binary at
 run time.  Kvasir is named after the Norse god of knowledge and beet juice.
 It is built upon the Fjalar dynamic analysis framework for C and C++ programs
-(available at @uref{http://groups.csail.mit.edu/pag/fjalar/}, but already
+(available at @uref{https://groups.csail.mit.edu/pag/fjalar/}, but already
 included in the Daikon distribution).
 
 To use Kvasir, first compile your program using either the DWARF-2 or DWARF-3 debugging
