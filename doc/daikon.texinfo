@@ -284,7 +284,6 @@ You may customize them by setting environment variables, or by adding a
 automatically read at the beginning of the main Makefile, and prevents
 you from having to edit the main Makefile directly).
 
-
 @item
 Compile Daikon and build other tools.
 (Strictly speaking, this step is optional, but it is highly recommended:
