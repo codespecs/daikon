@@ -21,10 +21,23 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
-## Version ??
+## Version 5.9.0 (???, 2026)
 
-All Daikon tools now work with Java 26.
-Running under Java 8 is no longer supported.
+(THIS SECTION IS NOT COMPLETE)
+
+* All Daikon tools now work with Java 8-26.
+* Compiling Daikon with Java 8 is no longer supported.
+
+DynComp:
+
+* Fixed intrumentation problem in some methods with multiple constructors.
+
+Fjalar/Kvasir:
+
+* Fixed problem with multi-dimensional array support.
+* Improved support for clang compiler.
+* Support for DWARF-4 binary format (in addition to 2 & 3).
+* Initial support for Rust programs.
 
 ## Version 5.8.24 (May 6, 2026)
 
