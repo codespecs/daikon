@@ -3964,7 +3964,11 @@ turned on with @option{--abridged-vars}.
 
 If you did not already do so when installing Daikon
 (@pxref{Installing Daikon}), follow the instructions here to build an
-instrumented copy of the JDK@.  Use the following command:
+instrumented copy of the JDK@.  Note that this process is a subset of
+compiling Daikon (@pxref{Compiling Daikon,,,developer,Daikon Developer Manual})
+and is no longer supported on JDK 8.
+
+Use the following command:
 
 @example
 make -C $@{DAIKONDIR@}/java dcomp_rt.jar
