@@ -219,7 +219,7 @@ public class Instrument implements ClassFileTransformer {
           "Transforming class %s, loaders %s, %s%n", className, loader, loader.getParent());
     }
 
-    // Parse the bytes of the classfile, die on any errors.
+    // Parse the bytes of the classfile. If any errors, return the class unchanged.
     JavaClass c;
     try (ByteArrayInputStream bais = new ByteArrayInputStream(classfileBuffer)) {
       ClassParser parser = new ClassParser(bais, className);
@@ -237,7 +237,7 @@ public class Instrument implements ClassFileTransformer {
       writeDebugClassFiles(c, debug_uninstrumented_dir, binaryClassName);
     }
 
-    // Instrument the classfile, die on any errors.
+    // Instrument the classfile. If any errors, return the class unchanged.
     JavaClass newJavaClass;
     try {
       DCInstrument dci = new DCInstrument(c, in_jdk, loader);

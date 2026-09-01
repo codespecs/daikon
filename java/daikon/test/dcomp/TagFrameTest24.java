@@ -1,12 +1,16 @@
 package daikon.test.dcomp;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import daikon.dcomp.Instrument24;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.ClassModel;
 import java.lang.classfile.ClassTransform;
@@ -170,11 +174,27 @@ public class TagFrameTest24 {
         "instrumentation of a method with " + maxOriginalLocals + " locals failed", instrumented);
     assertEquals("tag frame size", maxTagFrameSize, tagFrameSize(instrumented));
 
+    // Instrumentation returns null for many unrelated reasons: the class is filtered out by name,
+    // its bytes do not parse, instrumentation throws. So check the diagnostic too, to be sure the
+    // method was rejected because its tag frame is too large.
+    ByteArrayOutputStream diagnostics = new ByteArrayOutputStream();
+    PrintStream savedErr = System.err;
+    byte[] tooManyLocals;
+    try {
+      System.setErr(new PrintStream(diagnostics, true, UTF_8));
+      tooManyLocals = instrument(withLocals(sampleClassFile(), maxOriginalLocals + 1));
+    } finally {
+      System.setErr(savedErr);
+    }
     assertNull(
         "instrumentation of a method with "
             + (maxOriginalLocals + 1)
             + " locals should have failed",
-        instrument(withLocals(sampleClassFile(), maxOriginalLocals + 1)));
+        tooManyLocals);
+    String message = diagnostics.toString(UTF_8);
+    assertTrue(
+        "expected a \"too many local variables\" diagnostic, but got: " + message,
+        message.contains("too many local variables"));
   }
 
   /**

@@ -42,13 +42,13 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.8.25
+@center Daikon version 5.9.1
 
 @sp 1
 
 @c The following comment is needed to help perl edit the release date.
-@c Print out the Daikon version 5.8.25 release date
-@center May 7, 2026
+@c Print out the Daikon version 5.9.1 release date
+@center September 1, 2026
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -85,7 +85,7 @@ Copyright @copyright{} 1998-2025
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.25, released May 7, 2026.
+It describes Daikon version 5.9.1, released September 1, 2026.
 
 @menu
 * Introduction::
@@ -173,6 +173,9 @@ For more information about compiling Daikon, see the comments in the Makefiles.
 
 @node    Requirements for compiling Daikon
 @subsection Requirements for compiling Daikon
+
+Note that Daikon can both execute on and process programs built on systems
+with a Java 8 JDK. However, if you wish to compile Daikon you must use Java 11 (or later).
 
 Before compiling Daikon, you need to install some dependencies (that is,
 software used to build Daikon).  For
@@ -513,7 +516,7 @@ class Example @{
 instrumentation into the Java source code of your program.  Rather, it
 instruments the bytecode as it is loaded into the JVM.  This is more
 efficient, and it avoids making any changes to your @file{.java} or
-@file{.class} files.  We have shown an example of  Java source code
+@file{.class} files.  We have shown an example of Java source code
 instrumentation because that is  simpler to explain and understand than
 the bytecode instrumentation.)
 
@@ -1981,13 +1984,9 @@ A clone of
 
 @item
 Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
-For now, this should be a current version of JDK 8. If the default JDK on your
-system is not JDK 8, you will also need to add @file{$@{JAVA_HOME@}/bin} to your @env{PATH}.
+For now, this should be a current version of JDK 11. If the default JDK on your
+system is not JDK 11, you will also need to add @file{$@{JAVA_HOME@}/bin} to your @env{PATH}.
 See the example in the next section.
-@c This is necessary as daikon/java/Makefile will set JAVA_HOME to the machine's default
-@c JDK if it is not currently set. Currently, the machine default is often JDK 11 and we
-@c want to build with JDK 8.
-@c Example:  export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 
 @item
 Optionally, set environment variable @env{BIBDIR} to a clone of
@@ -2004,14 +2003,14 @@ Optionally, set environment variable @env{BIBDIR} to a clone of
 @need 1000
 Get a fresh copy of your Bash shell (e.g., log out and log back in), then
 run the following bash commands.  Note that your system may no longer have
-JDK 8 installed at @file{/usr/lib/jvm-1.8.0}. If you do not have a local
-copy, one can be found at @file{/homes/gws/markro/jdk1.8.0_401}.
+JDK 11 installed. If you do not have a local
+copy, one can be found at @file{/homes/gws/markro/jdk-11.0.22}.
 In any case, adjust environment variables below as necessary.
 @c DAIKONDIR is necessary only for the instructions in this file.
 @c Maybe use a different environment variable?
 @example
 export DAIKONDIR=$inv/daikon
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0
+export JAVA_HOME=/usr/lib/jvm/java-11
 export PATH=$@{JAVA_HOME@}/bin:$@{PATH@}
 unset CHECKERFRAMEWORK
 @end example
@@ -2280,8 +2279,8 @@ export TODAY='November 1, 2013'
 
 @need 1000
 Now, update the appropriate files with the date and version number
-of the release and commit these changes back to the repository:
-(WARNING: This step uses a tool that is no longer supported on JDK 8.
+of the release and commit these changes back to the repository: @*
+(WARNING: This step uses a tool that is no longer supported on JDK 11.
 You must switch to a different bash shell running at least JDK 17 for
 this step only. Switch back to your original bash shell afterwards.)
 
@@ -2319,7 +2318,7 @@ cd /tmp/$@{USER@}/stage-daikon
 git clone --depth=1 https://github.com/codespecs/daikon
 cd daikon
 export DAIKONDIR=`pwd`
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0
+export JAVA_HOME=/usr/lib/jvm/java-11
 export PATH=$@{JAVA_HOME@}/bin:$@{PATH@}
 unset CHECKERFRAMEWORK
 make compile && make staging
@@ -2524,7 +2523,10 @@ Success is indicated by invariant output being written to the screen.
 
 @need 1000
 @item
-Commit changes back to the repository:
+Commit changes back to the repository: @*
+(WARNING: This step uses a tool that is no longer supported on JDK 11.
+You must switch to a different bash shell running at least JDK 17 for
+this step only. Switch back to your original bash shell afterwards.)
 
 @example
 cd $@{DAIKONDIR@}

@@ -555,10 +555,8 @@ public final class BuildJDK24 {
     String classname = Signatures.internalFormToBinaryName(classnameIF);
     ClassInfo classInfo = new ClassInfo(classname, loader);
     DCInstrument24 dci = new DCInstrument24(classFile, classModel, true);
+    // instrument_jdk_class throws rather than returning null if it cannot instrument the class.
     byte[] classBytes = dci.instrument_jdk_class(classInfo);
-    if (classBytes == null) {
-      throw new Error("Instrumentation failed: " + classFile);
-    }
     if (DynComp.dump) {
       inst24.writeDebugClassFiles(classBytes, inst24.debug_instrumented_dir, classname);
     }

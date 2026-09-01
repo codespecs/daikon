@@ -1040,8 +1040,8 @@ public class DCInstrument extends InstructionListUtils {
           if (s.startsWith("Branch target offset too large")
               || s.startsWith("Code array too big")) {
             System.err.printf(
-                "DynComp warning: ClassFile: %s - method %s is too large to instrument and is"
-                    + " being skipped.%n",
+                "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument"
+                    + " and is being skipped.%n",
                 classname, mgen.getName());
             // Build a dummy instrumented method that has DCompMarker
             // parameter and no instrumentation.
@@ -1314,8 +1314,8 @@ public class DCInstrument extends InstructionListUtils {
           if (s.startsWith("Branch target offset too large")
               || s.startsWith("Code array too big")) {
             System.err.printf(
-                "DynComp warning: ClassFile: %s - method %s is too large to instrument and is"
-                    + " being skipped.%n",
+                "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument"
+                    + " and is being skipped.%n",
                 classname, mgen.getName());
             // Build a dummy instrumented method that has DCompMarker
             // parameter and no instrumentation.
@@ -1376,6 +1376,12 @@ public class DCInstrument extends InstructionListUtils {
   @RequiresNonNull({"stackMapTable", "tagFrameLocal"})
   @EnsuresNonNull("insertion_placeholder")
   public void instrumentMethod(MethodGen mgen) {
+
+    // Per-method state: constructor_is_initialized records whether the super constructor call
+    // has been seen in the method now being instrumented, and must start false for every method.
+    // Without this reset it stays set once any constructor in the class reaches its super() call,
+    // so a later constructor would be treated as initialized from its first instruction.
+    constructor_is_initialized = false;
 
     // Because the tagFrameLocal is active for the entire method
     // and its creation will change the state of the locals layout,
@@ -1708,16 +1714,16 @@ public class DCInstrument extends InstructionListUtils {
     // allocate an extra slot to save the tag frame depth for debugging
     int frame_size = mgen.getMaxLocals() + 1;
 
-    // unsigned byte max = 255.  minus the character '0' (decimal 48)
-    // Largest frame size noted so far is 123.
-    if (frame_size > 206) {
+    if (frame_size > DCRuntime.MAX_TAG_FRAME_SIZE) {
       throw new DynCompError(
-          "method too large ("
-              + frame_size
-              + ") to instrument: "
+          "method "
               + mgen.getClassName()
               + "."
-              + mgen.getName());
+              + mgen.getName()
+              + " has too many local variables to instrument: it needs a tag frame of "
+              + frame_size
+              + " slots, but the maximum is "
+              + DCRuntime.MAX_TAG_FRAME_SIZE);
     }
     String params = Character.toString((char) (frame_size + '0'));
     // Character.forDigit (frame_size, Character.MAX_RADIX);
@@ -2643,7 +2649,13 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     if (invoke instanceof INVOKESPECIAL) {
-      if (classname.equals(classGen.getSuperclassName()) && methodName.equals("<init>")) {
+      // A call to the superclass constructor (super(...)) or to another constructor of this
+      // class (this(...)) both leave the receiver initialized: the delegated-to constructor runs
+      // the superclass constructor itself. Until one of them has been seen, `this` is
+      // uninitialized and tag fields must not be touched; see tag_fields_ok.
+      if (methodName.equals("<init>")
+          && (classname.equals(classGen.getSuperclassName())
+              || classname.equals(classGen.getClassName()))) {
         this.constructor_is_initialized = true;
       }
     }

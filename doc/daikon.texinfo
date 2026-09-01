@@ -56,13 +56,13 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.8.25
+@center Daikon version 5.9.1
 
 @sp 1
 
 @c The following comment is needed to help perl edit the release date.
-@c Print out the Daikon version 5.8.25 release date
-@center May 7, 2026
+@c Print out the Daikon version 5.9.1 release date
+@center September 1, 2026
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -99,7 +99,7 @@ Copyright @copyright{} 1998-2025
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.8.25, released May 7, 2026.
+It describes Daikon version 5.9.1, released September 1, 2026.
 
 @menu
 * Introduction::
@@ -249,12 +249,12 @@ unpack Daikon.
 
 @example
 cd @var{daikonparent}
-wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.25.tar.gz
-tar zxf daikon-5.8.25.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon-5.9.1.tar.gz
+tar zxf daikon-5.9.1.tar.gz
 @end example
 
 @noindent
-This creates a @file{@var{daikonparent}/daikon-5.8.25/} subdirectory.
+This creates a @file{@var{daikonparent}/daikon-5.9.1/} subdirectory.
 
 @item
 Place two commands in your shell initialization file:
@@ -266,7 +266,7 @@ We will assume that you are using the bash shell or one of its variants.
 Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # "daikonparentpath" is the absolute path to the directory that contains Daikon.
-export DAIKONDIR=@var{daikonparentpath}/daikon-5.8.25
+export DAIKONDIR=@var{daikonparentpath}/daikon-5.9.1
 source $@{DAIKONDIR@}/scripts/daikon.bashrc
 @end example
 
@@ -290,6 +290,7 @@ Compile Daikon and build other tools.
 some parts of
 this are required in order to infer invariants in Java programs,
 and other parts are needed in order to infer invariants in C programs.)
+
 First, make sure that you have satisfied the requirements in
 @ref{Requirements for compiling Daikon,,,developer,Daikon Developer Manual}.
 Then, run:
@@ -305,7 +306,7 @@ make -C $@{DAIKONDIR@} rebuild-everything
 
 @noindent
 This builds the various executables used by Daikon, such as the
-C/C++ front end Kvasir (@pxref{Installing Kvasir}) and the
+C/C++ front end Kvasir (@pxref{Installing Kvasir}) and an instrumented
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
 If you need more
 information about compiling Daikon, see
@@ -325,17 +326,16 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 @c # Here are commands that install Daikon from its distribution, in a
 @c #  subdirectory of the current directory, on Ubuntu.  If you run `docker run
 @c # -it ubuntu` then type the following, it will install Daikon successfully.
-@c # If desired, you can use openjdk-8-jdk instead of openjdk-11-jdk.
 @c
 @c apt update
 @c apt -qqy install openjdk-11-jdk
 @c
 @c apt -qqy install wget
 @c
-@c wget http://plse.cs.washington.edu/daikon/download/daikon-5.8.25.tar.gz
-@c tar zxf daikon-5.8.25.tar.gz
+@c wget http://plse.cs.washington.edu/daikon/download/daikon-5.9.1.tar.gz
+@c tar zxf daikon-5.9.1.tar.gz
 @c
-@c export DAIKONDIR=$(cd daikon-5.8.25 && pwd)
+@c export DAIKONDIR=$(cd daikon-5.9.1 && pwd)
 @c source $@{DAIKONDIR@}/scripts/daikon.bashrc
 @c
 @c apt -qqy install openjdk-11-jdk gcc ctags git graphviz make netpbm \
@@ -789,7 +789,7 @@ cd $@{DAIKONDIR@}/examples/c-examples/wordplay
 @end example
 
 @item
-Compile the program with DWARF-2 or DWARF-3 debugging information enabled
+Compile the program with DWARF-2, DWARF-3 or DWARF-4 debugging information enabled
 (and all optimizations disabled).
 @example
 gcc -gdwarf-3 -no-pie wordplay.c -o wordplay
@@ -3620,7 +3620,7 @@ itself (if a file named @file{daikon.jar} appears in the classpath).  If
 the Daikon jar file is not named @file{daikon.jar}, you can use this
 switch to specify its name.  For example:
 @example
---premain=C:\lib\daikon-5.8.25.jar
+--premain=C:\lib\daikon-5.9.1.jar
 @end example
 
 @end table
@@ -3964,7 +3964,11 @@ turned on with @option{--abridged-vars}.
 
 If you did not already do so when installing Daikon
 (@pxref{Installing Daikon}), follow the instructions here to build an
-instrumented copy of the JDK@.  Use the following command:
+instrumented copy of the JDK@.  Note that this process is a subset of
+compiling Daikon (@pxref{Compiling Daikon,,,developer,Daikon Developer Manual})
+and is no longer supported on JDK 8.
+
+Use the following command:
 
 @example
 make -C $@{DAIKONDIR@}/java dcomp_rt.jar
@@ -3973,11 +3977,11 @@ make -C $@{DAIKONDIR@}/java dcomp_rt.jar
 Either the @env{JAVA_HOME} environment variable must be set, or
 @code{javac} must be on the execution path.
 This command instruments the classes in the
-@file{rt.jar} file of the JDK, and creates a new file,
+@file{jmods} directory of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.
 
 @noindent
-Building @file{dcomp_rt} requires 10-30 minutes to complete and uses 1024 MB of
+Building @file{dcomp_rt} requires 10-20 minutes to complete and uses 1024 MB of
 memory.  Regular progress indicators are printed to standard output.
 
 You can ignore warnings issued during the instrumentation process, so
@@ -4136,7 +4140,7 @@ itself (if a file named @file{daikon.jar} appears in the classpath).  If
 the Daikon jar file is not named @file{daikon.jar}, you can use this
 switch to specify its name.  For example:
 @example
---premain=C:\lib\daikon-5.8.25.jar
+--premain=C:\lib\daikon-5.9.1.jar
 @end example
 
 @end table
@@ -4258,10 +4262,10 @@ data trace (@file{.dtrace}) files of variables and their values by
 examining the operation of the binary at
 run time.  Kvasir is named after the Norse god of knowledge and beet juice.
 It is built upon the Fjalar dynamic analysis framework for C and C++ programs
-(available at @uref{http://groups.csail.mit.edu/pag/fjalar/}, but already
+(available at @uref{https://groups.csail.mit.edu/pag/fjalar/}, but already
 included in the Daikon distribution).
 
-To use Kvasir, first compile your program using either the DWARF-2 or DWARF-3 debugging
+To use Kvasir, first compile your program using either the DWARF-2, DWARF-3 or DWARF-4 debugging
 format (e.g., supply the @option{-gdwarf-3} option to @command{gcc}) and
 without optimizations (e.g., supply the @option{-O0} option to @command{gcc}).
 Also, some versions of @command{gcc} now output position independent code by default.
@@ -4330,9 +4334,9 @@ and any flags that affect calling conventions, such as
 @option{-fomit-frame-pointer}.
 @item
 Include debugging information, by supplying the @option{-g} flag.
-The debugging information must be in either the DWARF-2 or DWARF-3 format.
+The debugging information must be in either the DWARF-2, DWARF-3 or DWARF-4 format.
 Note that starting with version 11, the @command{gcc} default DWARF output level is now 5.
-Therefore, you must supply the @option{-gdwarf-2} or @option{-gdwarf-3} command line option.
+Therefore, you must supply the @option{-gdwarf-2}, @option{-gdwarf-3} or @option{-gdwarf-4} command line option.
 @item
 Kvasir cannot properly process position independent binaries.
 You must add the @option{-no-pie} option to disable this feature.
@@ -4754,8 +4758,8 @@ report.
 
 This pauses the program's execution in an infinite loop during
 initialization.  You can attach a debugger such as @command{gdb} to the
-running process by running @command{gdb} on @file{inst/lib/valgrind/fjalar-amd64-linux} under
-the Kvasir directory and using the @command{attach} command.
+running process by running @command{gdb} on @file{fjalar/valgrind/inst/libexec/valgrind/fjalar-amd64-linux} under
+your $@{DAIKONDIR@} directory and using the @command{attach} command.
 
 @item --kvasir-debug
 @itemx --fjalar-debug
@@ -5878,7 +5882,7 @@ running under a Linux kernel in 64-bit mode.
 The Itanium or IA-64 architecture is not supported.
 
 Kvasir requires that your program have debugging
-information available in the DWARF-2 or DWARF-3 format.
+information available in the DWARF-2, DWARF-3 or DWARF-4 format.
 (@xref{Using Kvasir} for details.)
 For the best results, the programs used by Kvasir should be
 compiled without optimization.
@@ -6538,7 +6542,7 @@ Hynger, is distributed separately; see
 @cindex instrumentation, of Input/Output Automata programs
 
 A front end for the IOA (Input/Output Automata) programming language is distributed separately;
-see @uref{http://groups.csail.mit.edu/tds/ioa.html}.
+see @uref{https://groups.csail.mit.edu/tds/ioa.html}.
 
 @cindex front end for Lisp
 @cindex Lisp front end
@@ -8750,7 +8754,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.8.25, released May 7, 2026.
+This manual describes Daikon version 5.9.1, released September 1, 2026.
 A more detailed list of revisions since mid-2001 can be found in file
 @url{CHANGELOG.md,,@file{doc/CHANGELOG.md}}
 in the distribution; this section gives a
@@ -8765,7 +8769,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.8.25
+@cindex Daikon version 5.9.1
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited
