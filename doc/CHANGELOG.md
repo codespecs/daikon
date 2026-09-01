@@ -28,7 +28,7 @@ Further documentation can be found in:
 
 DynComp:
 
-* Fixed intrumentation problem in some methods with multiple constructors.
+* Fixed instrumentation problem in some methods with multiple constructors.
 
 Fjalar/Kvasir:
 
