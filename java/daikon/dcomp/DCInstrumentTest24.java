@@ -3,6 +3,7 @@ package daikon.dcomp;
 import static java.lang.constant.ConstantDescs.CD_int;
 import static java.lang.constant.ConstantDescs.CD_void;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -478,9 +479,15 @@ public final class DCInstrumentTest24 {
    * {@link DCInstrument24#instrument_jdk_class} has to rebuild the class from scratch; this test
    * checks that the rebuild leaves the rest of the class instrumented, and that the oversized
    * method is not reported as skipped.
+   *
+   * <p>Also checks that the emitted method still maintains the tag stack. It carries the
+   * DCompMarker parameter, so its callers use the calling convention for an instrumented method,
+   * and the emitted method must honor that convention even though it does no comparability
+   * tracking: it forwards to its uninstrumented copy, discarding the tag pushed for the primitive
+   * argument and pushing one for the primitive result.
    */
   @Test
-  public void testOversizedMethodIsSkipped() throws IOException {
+  public void testOversizedMethodForwardsToOriginal() throws IOException {
     byte[] original = oversizedClassBytes();
     ClassFile classFile = ClassFile.of();
     ClassModel originalModel = classFile.parse(original);
@@ -510,12 +517,53 @@ public final class DCInstrumentTest24 {
         dci.get_skipped_methods().stream().anyMatch(m -> m.contains(OVERSIZED_METHOD)));
 
     ClassModel instrumentedModel = classFile.parse(instrumented);
+    // Exactly the tag-stack bookkeeping, and none of the instrumentation proper: no
+    // create_tag_frame, no enter/exit.  OVERSIZED_METHOD takes one primitive argument and returns
+    // a primitive, so it owes the caller one discarded argument tag and one pushed result tag.
+    assertEquals(
+        "oversized method does not maintain the tag stack",
+        Set.of("discard_tag", "push_const"),
+        runtimeCalls(instrumentedModel, OVERSIZED_METHOD));
     assertTrue(
-        "oversized method was instrumented",
-        runtimeCalls(instrumentedModel, OVERSIZED_METHOD).isEmpty());
+        "oversized method does not forward to its uninstrumented copy",
+        callsOwnMethod(instrumentedModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int)));
     assertFalse(
         "rest of the class was not instrumented",
         runtimeCalls(instrumentedModel, SMALL_METHOD).isEmpty());
+  }
+
+  /**
+   * Returns true if the instrumented copy of the named method -- the copy with a DCompMarker
+   * parameter -- invokes a method of its own class with the same name and the given descriptor.
+   * Used to check that an oversized method forwards to its uninstrumented copy.
+   *
+   * @param classModel an instrumented class
+   * @param methodName the name of the method to examine
+   * @param target the descriptor of the method it should invoke
+   * @return true if the instrumented copy invokes that method
+   */
+  private static boolean callsOwnMethod(
+      ClassModel classModel, String methodName, MethodTypeDesc target) {
+    String ownName = classModel.thisClass().asInternalName();
+    for (MethodModel method : classModel.methods()) {
+      if (!method.methodName().stringValue().equals(methodName)) {
+        continue;
+      }
+      List<ClassDesc> params = method.methodTypeSymbol().parameterList();
+      if (params.isEmpty() || !params.get(params.size() - 1).displayName().equals("DCompMarker")) {
+        // This is the uninstrumented copy of the method.
+        continue;
+      }
+      for (CodeElement element : method.code().orElseThrow()) {
+        if (element instanceof InvokeInstruction invoke
+            && invoke.owner().asInternalName().equals(ownName)
+            && invoke.name().stringValue().equals(methodName)
+            && invoke.typeSymbol().equals(target)) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   /**

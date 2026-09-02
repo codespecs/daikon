@@ -1048,23 +1048,37 @@ public class DCInstrument extends InstructionListUtils {
                 "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument"
                     + " and is being skipped.%n",
                 classname, mgen.getName());
-            // Build a dummy instrumented method that has DCompMarker
-            // parameter and no instrumentation.
-            // first, restore unmodified method
-            mgen = new MethodGen(m, classname, pool);
-            // restore StackMapTable
-            setCurrentStackMapTable(mgen, classGen.getMajor());
-            // Add the DCompMarker parameter
-            add_dcomp_param(mgen);
-            remove_local_variable_type_table(mgen);
-            // try again
+            // First, restore the unmodified method, to recover its original signature.
+            MethodGen original = new MethodGen(m, classname, pool);
             if (replacingMethod) {
+              // The method is replaced rather than duplicated and (except for a JUnit test class)
+              // keeps its own signature, so there is no uninstrumented copy to forward to and its
+              // callers use the uninstrumented calling convention.  Emitting the original body,
+              // with the DCompMarker parameter added as before, is then correct.
+              debugInstrument.log(
+                  "Copying oversized method without instrumentation: %s%n", original.getName());
+              debugInstrument.indent();
+              mgen = original;
+              setCurrentStackMapTable(mgen, classGen.getMajor());
+              add_dcomp_param(mgen);
+              remove_local_variable_type_table(mgen);
               classGen.replaceMethod(m, mgen.getMethod());
               if (BcelUtil.isMain(mgen)) {
                 classGen.addMethod(create_dcomp_stub(mgen).getMethod());
               }
+              debugInstrument.exdent();
+              debugInstrument.log("End of copy%n");
             } else {
-              classGen.addMethod(mgen.getMethod());
+              // Emit a method with the DCompMarker parameter that forwards to the uninstrumented
+              // copy of this method and maintains the tag stack; see
+              // create_oversized_method_stub.
+              debugInstrument.log(
+                  "Oversized method, creating stub that forwards to uninstrumented version: %s%n",
+                  original.getName());
+              debugInstrument.indent();
+              classGen.addMethod(create_oversized_method_stub(original).getMethod());
+              debugInstrument.exdent();
+              debugInstrument.log("End of stub%n");
             }
           } else {
             throw e;
@@ -1322,17 +1336,17 @@ public class DCInstrument extends InstructionListUtils {
                 "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument"
                     + " and is being skipped.%n",
                 classname, mgen.getName());
-            // Build a dummy instrumented method that has DCompMarker
-            // parameter and no instrumentation.
-            // first, restore unmodified method
+            // Emit a method with the DCompMarker parameter that forwards to the uninstrumented
+            // copy of this method and maintains the tag stack; see create_oversized_method_stub.
+            // First, restore the unmodified method, to recover its original signature.
             mgen = new MethodGen(m, classname, pool);
-            // restore StackMapTable
-            setCurrentStackMapTable(mgen, classGen.getMajor());
-            // Add the DCompMarker parameter
-            add_dcomp_param(mgen);
-            remove_local_variable_type_table(mgen);
-            // try again
-            classGen.addMethod(mgen.getMethod());
+            debugInstrument.log(
+                "Oversized method, creating stub that forwards to uninstrumented version: %s%n",
+                mgen.getName());
+            debugInstrument.indent();
+            classGen.addMethod(create_oversized_method_stub(mgen).getMethod());
+            debugInstrument.exdent();
+            debugInstrument.log("End of stub%n");
           } else {
             throw e;
           }
@@ -4518,6 +4532,92 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     return false;
+  }
+
+  /**
+   * Returns a method, with the DCompMarker parameter added, whose body forwards to the
+   * uninstrumented copy of {@code mgen} and maintains the tag stack. Used for a method whose
+   * instrumented form would exceed the JVM's 64K code-size limit.
+   *
+   * <p>Such a method is still emitted with the DCompMarker parameter, so its callers use the
+   * calling convention for an instrumented method: they leave a tag on the tag stack for each
+   * primitive argument, expecting {@code DCRuntime.create_tag_frame} to pop them, and they expect a
+   * tag for a primitive result to have been pushed by the time it returns. A copy of the original
+   * body honors neither half of that contract -- the argument tags accumulate, and a caller of a
+   * primitive-returning method pops a tag that nobody pushed.
+   *
+   * <p>This is {@link #cleanInvokeTagStack} turned inside out: there, the caller discards the
+   * argument tags and pushes the result tag because the callee will not; here, the callee does it
+   * because the caller assumes it will. Compare {@link #fix_native}, which does the same for a
+   * native method.
+   *
+   * @param mgen the unmodified method, with its original signature
+   * @return a method with the DCompMarker parameter that forwards to {@code mgen}
+   */
+  MethodGen create_oversized_method_stub(MethodGen mgen) {
+
+    InstructionList il = new InstructionList();
+    Type[] paramTypes = mgen.getArgumentTypes();
+    Type returnType = mgen.getReturnType();
+
+    // Discard the tag the caller pushed for each primitive argument; create_tag_frame would
+    // otherwise have popped them into the tag frame.
+    int primitive_cnt = 0;
+    for (Type paramType : paramTypes) {
+      if (paramType instanceof BasicType) {
+        primitive_cnt++;
+      }
+    }
+    if (primitive_cnt > 0) {
+      il.append(discard_tag_code(new NOP(), primitive_cnt));
+    }
+
+    // Load the receiver, if any, and then the original arguments.  The DCompMarker parameter is
+    // last, so the original arguments keep their slots and the marker is simply never loaded.
+    int offset = 0;
+    if (!mgen.isStatic()) {
+      il.append(InstructionFactory.createThis());
+      offset = 1;
+    }
+    for (Type paramType : paramTypes) {
+      il.append(InstructionFactory.createLoad(paramType, offset));
+      offset += paramType.getSize();
+    }
+
+    // Call the uninstrumented copy of this method.  INVOKESPECIAL rather than INVOKEVIRTUAL: we
+    // want this class's own copy, not an override in a subclass, which would run a different
+    // method's body -- and, if the subclass's copy is oversized too, would recur without bound.
+    il.append(
+        ifact.createInvoke(
+            mgen.getClassName(),
+            mgen.getName(),
+            returnType,
+            paramTypes,
+            mgen.isStatic() ? INVOKESTATIC : INVOKESPECIAL));
+
+    // Push the tag for a primitive result that the instrumented body would have pushed on exit.
+    // Unlike fix_native and cleanInvokeTagStack, this is done after the call rather than before it,
+    // so that a call that throws does not leave a tag behind: this stub has no exception handler to
+    // clean one up.
+    if (is_primitive(returnType)) {
+      il.append(dcr_call("push_const", CD_void, noArgsSig));
+    }
+    il.append(InstructionFactory.createReturn(returnType));
+
+    MethodGen stub =
+        new MethodGen(
+            mgen.getAccessFlags(),
+            returnType,
+            ArraysPlume.append(paramTypes, dcomp_marker),
+            ArraysPlume.append(mgen.getArgumentNames(), "marker"),
+            mgen.getName(),
+            mgen.getClassName(),
+            il,
+            pool);
+    stub.setMaxLocals();
+    stub.setMaxStack();
+
+    return stub;
   }
 
   /**

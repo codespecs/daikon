@@ -275,6 +275,7 @@ import java.lang.classfile.attribute.RuntimeVisibleAnnotationsAttribute;
 import java.lang.classfile.constantpool.ClassEntry;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.LoadableConstantEntry;
+import java.lang.classfile.constantpool.MemberRefEntry;
 import java.lang.classfile.constantpool.MethodRefEntry;
 import java.lang.classfile.constantpool.NameAndTypeEntry;
 import java.lang.classfile.instruction.ArrayLoadInstruction;
@@ -1346,15 +1347,35 @@ public class DCInstrument24 {
       // See instrument_jdk_class for how this set is populated.
       if (oversizedMethods.contains(
           oversizedMethodKey(methodModel.methodName().stringValue(), mtd))) {
-        debugInstrument.log("Copying oversized method: %s%n", mgen.getName());
-        debugInstrument.indent();
-        classBuilder.withMethod(
-            methodModel.methodName().stringValue(),
-            mtd,
-            methodModel.flags().flagsMask(),
-            methodBuilder -> copyMethod(methodBuilder, methodModel, mgen));
-        debugInstrument.exdent();
-        debugInstrument.log("End of copy%n");
+        if (addingDcompArg) {
+          debugInstrument.log(
+              "Oversized method, creating stub that forwards to uninstrumented version: %s%n",
+              mgen.getName());
+          debugInstrument.indent();
+          final List<CodeElement> stub = createOversizedMethodStub(mgen);
+          classBuilder.withMethod(
+              methodModel.methodName().stringValue(),
+              mtd,
+              methodModel.flags().flagsMask(),
+              methodBuilder ->
+                  methodBuilder.withCode(codeBuilder -> copyCode(codeBuilder, stub, null)));
+          debugInstrument.exdent();
+          debugInstrument.log("End of stub%n");
+        } else {
+          // No DCompMarker was added, so there is no separate uninstrumented copy to forward to,
+          // and callers use the uninstrumented calling convention (they discard the argument tags
+          // themselves).  Emitting the original body is then correct.
+          debugInstrument.log(
+              "Copying oversized method without instrumentation: %s%n", mgen.getName());
+          debugInstrument.indent();
+          classBuilder.withMethod(
+              methodModel.methodName().stringValue(),
+              mtd,
+              methodModel.flags().flagsMask(),
+              methodBuilder -> copyMethod(methodBuilder, methodModel, mgen));
+          debugInstrument.exdent();
+          debugInstrument.log("End of copy%n");
+        }
         debug_transform.exdent();
         return;
       }
@@ -1399,6 +1420,75 @@ public class DCInstrument24 {
         mm.methodTypeSymbol(),
         mm.flags().flagsMask(),
         methodBuilder -> copyMethod(methodBuilder, mm, mgen));
+  }
+
+  /**
+   * Returns the body for the DCompMarker version of a method whose instrumented form is too large
+   * to fit in the JVM's 64K code-size limit.
+   *
+   * <p>The method is still emitted with the DCompMarker parameter, so its callers use the calling
+   * convention for an instrumented method: they leave a tag on the tag stack for each primitive
+   * argument, expecting {@code DCRuntime.create_tag_frame} to pop them, and they expect a tag for a
+   * primitive result to have been pushed by the time it returns. A copy of the original body honors
+   * neither half of that contract -- the argument tags accumulate, and a caller of a
+   * primitive-returning method pops a tag that nobody pushed.
+   *
+   * <p>So rather than copy the body, forward to the uninstrumented copy of the method that {@link
+   * #outputMethodUnchanged} emitted alongside this one, and do the tag-stack bookkeeping the
+   * instrumented body would have done. This is {@link #cleanInvokeTagStack} turned inside out:
+   * there, the caller discards the argument tags and pushes the result tag because the callee will
+   * not; here, the callee does it because the caller assumes it will.
+   *
+   * @param mgen describes the method, with its original (pre-DCompMarker) signature
+   * @return the instruction list for the forwarding body
+   */
+  private List<CodeElement> createOversizedMethodStub(MethodGen24 mgen) {
+    List<CodeElement> il = new ArrayList<>();
+    ClassDesc[] paramTypes = mgen.getParameterTypes();
+
+    // Discard the tag the caller pushed for each primitive argument; create_tag_frame would
+    // otherwise have popped them into the tag frame.
+    int primitiveCount = 0;
+    for (ClassDesc paramType : paramTypes) {
+      if (is_primitive(paramType)) {
+        primitiveCount++;
+      }
+    }
+    if (primitiveCount > 0) {
+      il.addAll(discard_tag_code(null, primitiveCount));
+    }
+
+    // Load the receiver, if any, and then the original arguments.  The DCompMarker parameter is
+    // last, so the original arguments keep their slots and the marker is simply never loaded.
+    int slot = 0;
+    if (!mgen.isStatic()) {
+      il.add(LoadInstruction.of(TypeKind.REFERENCE, slot));
+      slot++;
+    }
+    for (ClassDesc paramType : paramTypes) {
+      TypeKind typeKind = TypeKind.from(paramType).asLoadable();
+      il.add(LoadInstruction.of(typeKind, slot));
+      slot += typeKind.slotSize();
+    }
+
+    // Call the uninstrumented copy of this method.  INVOKESPECIAL rather than INVOKEVIRTUAL: we
+    // want this class's own copy, not an override in a subclass, which would run a different
+    // method's body -- and, if the subclass's copy is oversized too, would recur without bound.
+    ClassDesc owner = classModel.thisClass().asSymbol();
+    MethodTypeDesc originalMtd = MethodTypeDesc.of(mgen.getReturnType(), paramTypes);
+    MemberRefEntry mre =
+        classGen.isInterface()
+            ? poolBuilder.interfaceMethodRefEntry(owner, mgen.getName(), originalMtd)
+            : poolBuilder.methodRefEntry(owner, mgen.getName(), originalMtd);
+    il.add(InvokeInstruction.of(mgen.isStatic() ? INVOKESTATIC : INVOKESPECIAL, mre));
+
+    // Push the tag for a primitive result that the instrumented body would have pushed on exit.
+    ClassDesc returnType = mgen.getReturnType();
+    if (is_primitive(returnType)) {
+      il.add(dcr_call("push_const", CD_void, noArgsSig));
+    }
+    il.add(ReturnInstruction.of(TypeKind.from(returnType).asLoadable()));
+    return il;
   }
 
   /**
