@@ -2915,11 +2915,12 @@ public class DCInstrument24 {
       }
       ClassModel cm;
       try {
-        @SuppressWarnings("nullness:assignment")
-        @NonNull ClassModel cmTmp = getClassModel(interfaceName);
-        cm = cmTmp;
+        cm = getClassModel(interfaceName);
       } catch (Throwable t) {
         throw new DynCompError(String.format("Unable to load class: %s", interfaceName), t);
+      }
+      if (cm == null) {
+        throw new DynCompError(String.format("Unable to find class: %s", interfaceName));
       }
       for (MethodModel jm : cm.methods()) {
         String jmName = jm.methodName().stringValue();
