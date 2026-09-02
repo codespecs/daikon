@@ -1343,10 +1343,7 @@ public class DCInstrument extends InstructionListUtils {
         if (debugInstrument.enabled) {
           t.printStackTrace();
         }
-        // TODO: Is it guaranteed that mgen is non-null by the time control reaches here?
-        if (mgen != null) {
-          skip_method(mgen);
-        }
+        skip_method(classname, m.getName());
         if (quit_if_error) {
           throw new Error("Error processing " + classname + "." + m.getName(), t);
         } else {
@@ -1477,7 +1474,19 @@ public class DCInstrument extends InstructionListUtils {
    * @param m method to add to skipped_methods list
    */
   void skip_method(MethodGen m) {
-    skipped_methods.add(m.getClassName() + "." + m.getName());
+    skip_method(m.getClassName(), m.getName());
+  }
+
+  /**
+   * Adds the method name and containing class name to {@code skip_methods}, the list of
+   * uninstrumented methods. Use this overload where instrumentation may have failed before the
+   * method's {@link MethodGen} was built.
+   *
+   * @param classname the class that contains the method
+   * @param methodName the name of the method
+   */
+  void skip_method(String classname, String methodName) {
+    skipped_methods.add(classname + "." + methodName);
   }
 
   /**
