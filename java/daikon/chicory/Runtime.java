@@ -939,9 +939,11 @@ public final class Runtime {
     }
   }
 
+  /** The major version of the running JVM: 8 for Java 8, 24 for Java 24, and so on. */
+  private static final int javaMajorVersion = javaMajorVersion(System.getProperty("java.version"));
+
   /** True if the running JVM is for Java 9 or later. */
-  private static final boolean isJava9orLater =
-      !System.getProperty("java.version").startsWith("1.");
+  private static final boolean isJava9orLater = javaMajorVersion >= 9;
 
   /**
    * Returns true if the running JVM is for Java 9 or later.
@@ -953,10 +955,7 @@ public final class Runtime {
   }
 
   /** True if the running JVM is for Java 24 or later. */
-  private static final boolean isJava24orLater =
-      !System.getProperty("java.version").startsWith("1.")
-          && !System.getProperty("java.version").startsWith("9.")
-          && Integer.parseInt(System.getProperty("java.version").substring(0, 2)) >= 24;
+  private static final boolean isJava24orLater = javaMajorVersion >= 24;
 
   /**
    * Returns true if the running JVM is for Java 24 or later.
@@ -965,6 +964,36 @@ public final class Runtime {
    */
   public static boolean isJava24orLater() {
     return isJava24orLater;
+  }
+
+  /**
+   * Returns the major version encoded in a {@code java.version} property value: 8 for Java 8, 24
+   * for Java 24, and so on.
+   *
+   * <p>Both version schemes are accepted: the pre-Java-9 {@code "1.8.0_432"} form, whose major
+   * version is its second component, and the Java 9 and later {@code "24"}, {@code "24.0.1"}, and
+   * {@code "24-ea"} forms, whose major version is the first. In the latter scheme the major version
+   * may stand alone with no separator at all, as it does for a GA release such as {@code "9"}.
+   *
+   * @param version the value of the {@code java.version} system property
+   * @return the major version it encodes
+   */
+  // Package-private rather than private so that RuntimeTest can exercise it directly; the value
+  // derived from the running JVM is fixed at class-initialization time and cannot be varied.
+  static int javaMajorVersion(String version) {
+    // Java 8 and earlier report "1.N.…"; the major version is the second component.
+    String rest = version.startsWith("1.") ? version.substring(2) : version;
+    // The major version is the leading run of digits.  What follows it is "." for a release with
+    // minor components, "-" or "+" for a pre-release or build identifier, and nothing at all for a
+    // bare GA release such as "9".
+    int end = 0;
+    while (end < rest.length() && Character.isDigit(rest.charAt(end))) {
+      end++;
+    }
+    if (end == 0) {
+      throw new IllegalArgumentException("Cannot parse java.version: " + version);
+    }
+    return Integer.parseInt(rest.substring(0, end));
   }
 
   // ///////////////////////////////////////////////////////////////////////////
