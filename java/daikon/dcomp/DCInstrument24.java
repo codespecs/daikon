@@ -854,6 +854,11 @@ public class DCInstrument24 {
 
     boolean junit_test_class = false;
 
+    // Skipped for JDK classes.  A JDK class is never a JUnit test class: the check below confirms
+    // one only by a junit.framework.TestCase superclass or an org/junit/Test annotation.  Skipping
+    // them loses no state transition -- STARTING and TEST_DISCOVERY are re-evaluated on the next
+    // class load, and the test classes themselves are never in the JDK -- and it keeps a
+    // getStackTrace, plus TEST_DISCOVERY's superclass walk, off the JDK class-loading path.
     if (!in_jdk) {
       // A very tricky special case: If JUnit is running and the current
       // class has been passed to JUnit on the command line, then this
