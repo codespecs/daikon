@@ -4546,10 +4546,10 @@ public class DCInstrument extends InstructionListUtils {
    * body honors neither half of that contract -- the argument tags accumulate, and a caller of a
    * primitive-returning method pops a tag that nobody pushed.
    *
-   * <p>This is {@link #cleanInvokeTagStack} turned inside out: there, the caller discards the
-   * argument tags and pushes the result tag because the callee will not; here, the callee does it
-   * because the caller assumes it will. Compare {@link #fix_native}, which does the same for a
-   * native method.
+   * <p>This is the "not instrumented" branch of {@link #handleInvoke} turned inside out: there, the
+   * caller discards the argument tags (via {@link #discard_primitive_tags}) and pushes the result
+   * tag because the callee will not; here, the callee does it because the caller assumes it will.
+   * Compare {@link #fix_native}, which does the same for a native method.
    *
    * @param mgen the unmodified method, with its original signature
    * @return a method with the DCompMarker parameter that forwards to {@code mgen}
@@ -4596,7 +4596,7 @@ public class DCInstrument extends InstructionListUtils {
             mgen.isStatic() ? INVOKESTATIC : INVOKESPECIAL));
 
     // Push the tag for a primitive result that the instrumented body would have pushed on exit.
-    // Unlike fix_native and cleanInvokeTagStack, this is done after the call rather than before it,
+    // Unlike fix_native and handleInvoke, this is done after the call rather than before it,
     // so that a call that throws does not leave a tag behind: this stub has no exception handler to
     // clean one up.
     if (is_primitive(returnType)) {
