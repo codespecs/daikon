@@ -104,8 +104,8 @@ plume-util-1.14.0.jar : https://central.sonatype.com/artifact/org.plumelib/plume
   rm -f daikon-plumelib.jar
   Then, make daikon-plumelib.jar.
 
-reflection-util-1.1.5.jar : https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/
-  VER=1.1.5
+reflection-util-1.1.6.jar : https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/
+  VER=1.1.6
   rm -f reflection-util-*.jar
   wget https://repo.maven.apache.org/maven2/org/plumelib/reflection-util/$VER/reflection-util-$VER.jar
   rm -f daikon-plumelib.jar
