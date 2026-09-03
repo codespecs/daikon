@@ -34,6 +34,9 @@ public class RuntimeTest {
     assertEquals(26, Runtime.javaMajorVersion("26-ea"));
     assertEquals(26, Runtime.javaMajorVersion("26+11"));
 
+    // Trailing junk after the major version is ignored rather than rejected; this is deliberate,
+    // and javaMajorVersion's javadoc says why.  A value with no leading digits still throws.
+    assertEquals(9, Runtime.javaMajorVersion("9foo"));
     assertThrows(IllegalArgumentException.class, () -> Runtime.javaMajorVersion("bogus"));
   }
 

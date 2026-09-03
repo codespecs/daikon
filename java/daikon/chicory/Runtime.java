@@ -975,6 +975,13 @@ public final class Runtime {
    * {@code "24-ea"} forms, whose major version is the first. In the latter scheme the major version
    * may stand alone with no separator at all, as it does for a GA release such as {@code "9"}.
    *
+   * <p>Only the leading digits are examined; anything after them is ignored rather than rejected,
+   * so {@code "9foo"} yields 9. That is deliberate. This runs from a static initializer, so
+   * throwing on an unrecognized suffix would turn an unanticipated vendor version string into an
+   * ExceptionInInitializerError inside an instrumented program, which is the failure this method
+   * exists to prevent. Ignoring the suffix instead yields the right major version for any string
+   * that begins with one. A value with no leading digits at all is still rejected.
+   *
    * @param version the value of the {@code java.version} system property
    * @return the major version it encodes
    */

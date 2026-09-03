@@ -1051,16 +1051,18 @@ public class DCInstrument extends InstructionListUtils {
             // First, restore the unmodified method, to recover its original signature.
             MethodGen original = new MethodGen(m, classname, pool);
             if (replacingMethod) {
-              // The method is replaced rather than duplicated and (except for a JUnit test class)
-              // keeps its own signature, so there is no uninstrumented copy to forward to and its
-              // callers use the uninstrumented calling convention.  Emitting the original body,
-              // with the DCompMarker parameter added as before, is then correct.
+              // The method is replaced rather than duplicated and keeps its own signature, so
+              // there is no uninstrumented copy to forward to and its callers use the
+              // uninstrumented calling convention.  Emitting the original body is then correct.
               debugInstrument.log(
                   "Copying oversized method without instrumentation: %s%n", original.getName());
               debugInstrument.indent();
               mgen = original;
               setCurrentStackMapTable(mgen, classGen.getMajor());
-              add_dcomp_param(mgen);
+              // No add_dcomp_param call here: it would be a no-op anyway, because it returns early
+              // for both main and <clinit>, and for the remaining case -- a JUnit test class -- the
+              // method must keep its own descriptor so that JUnit can still find the test.  That
+              // matches the normal path above, which adds the marker only if !junit_test_class.
               remove_local_variable_type_table(mgen);
               classGen.replaceMethod(m, mgen.getMethod());
               if (BcelUtil.isMain(mgen)) {
