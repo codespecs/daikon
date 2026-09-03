@@ -6,6 +6,7 @@ import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
 import daikon.chicory.DeclWriter;
 import daikon.plumelib.bcelutil.BcelUtil;
+import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
 import java.io.BufferedReader;
@@ -23,7 +24,12 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.checker.signature.qual.Identifier;
+import org.checkerframework.checker.signature.qual.InternalForm;
 
 /**
  * This class is the entry point for the DynComp instrumentation agent. It is the only code in
@@ -418,5 +424,147 @@ public class Premain {
    */
   static String tag_method_name(String type, String classname, String fname) {
     return fname + "_" + classname.replace('.', '_') + "__$" + type;
+  }
+
+  /**
+   * Set of JUnit test classes, as discovered by whichever instrumenter is running. Shared rather
+   * than held per instrumenter: it describes the target program, not the instrumentation strategy,
+   * and only one instrumenter is active in a JVM. Thread-safe because a multithreaded target
+   * program instruments classes concurrently.
+   */
+  protected static Set<String> junitTestClasses = ConcurrentHashMap.newKeySet();
+
+  /**
+   * Returns true if the given class is one that transforms other classes, and so must not itself be
+   * instrumented.
+   *
+   * @param className the class to check, in internal form
+   * @return true if the class transforms other classes
+   */
+  protected static boolean is_transformer(@InternalForm String className) {
+
+    if (className.startsWith("org/codehaus/groovy")) {
+      return true;
+    }
+    if (className.startsWith("groovy/lang")) {
+      return true;
+    }
+    if (className.startsWith("org/mockito")) {
+      return true;
+    }
+    if (className.startsWith("org/objenesis")) {
+      return true;
+    }
+    if (className.contains("ByMockito")) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the given method's class is instrumented, so that a caller should invoke the
+   * instrumented version of the method.
+   *
+   * <p>Shared by {@code DCInstrument} and {@code DCInstrument24}, which must agree: an exclusion
+   * added to only one of them would silently change comparability depending on which instrumenter
+   * ran. It lives here because most of what it consults -- {@link #problem_packages}, {@link
+   * #problem_classes}, {@link #jdk_instrumented}, {@link #junitTestClasses} -- lives here, and
+   * because this class is compiled on every supported JDK, whereas {@code DCInstrument24} is not.
+   *
+   * <p>The {@code classname} parameter is a {@code @ClassGetName}, which accepts a
+   * {@code @BinaryName} as well, since the latter is a subtype. The two instrumenters hold the name
+   * in those two different forms, and every test below behaves identically for both on the
+   * non-array class names this sees.
+   *
+   * @param classname the class to check
+   * @param methodName the method being invoked; used only by the {@code set_class_initialized} rule
+   *     and for debugging output
+   * @param debug the caller's {@code debugHandleInvoke} flag
+   * @param log the caller's {@code debugInstrument} log
+   * @return true if the class is instrumented
+   */
+  protected static boolean isClassnameInstrumented(
+      @ClassGetName String classname, @Identifier String methodName, boolean debug, SimpleLog log) {
+
+    if (debug) {
+      System.out.printf("Checking callee instrumented on %s.%s%n", classname, methodName);
+    }
+
+    // Our copy of daikon.plumelib is not instrumented.  It would be odd, though,
+    // to see calls to this.
+    if (classname.startsWith("daikon.plumelib")) {
+      return false;
+    }
+
+    // When a class contains an existing <clinit>, it will be instrumented. Thus, we need to mark
+    // our added call to 'DCRuntime.set_class_initialized' as not instrumented.  This can only
+    // arise under DCInstrument24, which adds that call before it walks the method body;
+    // DCInstrument adds it to the already-instrumented <clinit>, so its handleInvoke never sees
+    // the call.  The rule is inert, not wrong, for DCInstrument.
+    if (classname.endsWith("DCRuntime") && methodName.equals("set_class_initialized")) {
+      return false;
+    }
+
+    // Special-case JUnit test classes.
+    if (junitTestClasses.contains(classname)) {
+      return false;
+    }
+
+    @SuppressWarnings("signature:assignment") // string conversion
+    @InternalForm String internalName = classname.replace('.', '/');
+    if (is_transformer(internalName)) {
+      return false;
+    }
+
+    // Special-case the execution trace tool.
+    if (classname.startsWith("minst.Minst")) {
+      return false;
+    }
+
+    // We should probably change the interface to include method name
+    // and use "classname.methodname" as arg to pattern matcher.
+    // If any of the omit patterns match, use the uninstrumented version of the method
+    for (Pattern p : DynComp.ppt_omit_pattern) {
+      if (p.matcher(classname).find()) {
+        if (debug) {
+          System.out.printf("callee instrumented = false: %s.%s%n", classname, methodName);
+        }
+        return false;
+      }
+    }
+
+    // If it's not a JDK class, presume it's instrumented.
+    if (!BcelUtil.inJdk(classname)) {
+      return true;
+    }
+
+    int i = classname.lastIndexOf('.');
+    if (i > 0 && problem_packages.contains(classname.substring(0, i))) {
+      log.log("Don't call instrumented member of problem package %s%n", classname.substring(0, i));
+      return false;
+    }
+
+    if (problem_classes.contains(classname)) {
+      log.log("Don't call instrumented member of problem class %s%n", classname);
+      return false;
+    }
+
+    // We have decided not to use the instrumented version of Random as
+    // the method generates values based on an initial seed value.
+    // (Typical of random() algorithms.) Instrumentation would have the undesirable side
+    // effect of putting all the generated values in the same comparison
+    // set when they should be distinct.
+    // Note: If we find other classes that should not use the instrumented
+    // versions, we should consider making this a searchable list.
+    if (classname.equals("java.util.Random")) {
+      return false;
+    }
+
+    // If using the instrumented JDK, then everything but object is instrumented.
+    if (jdk_instrumented && !classname.equals("java.lang.Object")) {
+      return true;
+    }
+
+    return false;
   }
 }
