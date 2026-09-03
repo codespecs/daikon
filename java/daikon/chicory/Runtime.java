@@ -981,7 +981,7 @@ public final class Runtime {
   // Package-private rather than private so that RuntimeTest can exercise it directly; the value
   // derived from the running JVM is fixed at class-initialization time and cannot be varied.
   static int javaMajorVersion(String version) {
-    // Java 8 and earlier report "1.N.…"; the major version is the second component.
+    // Java 8 and earlier report "1.N..."; the major version is the second component.
     String rest = version.startsWith("1.") ? version.substring(2) : version;
     // The major version is the leading run of digits.  What follows it is "." for a release with
     // minor components, "-" or "+" for a pre-release or build identifier, and nothing at all for a
