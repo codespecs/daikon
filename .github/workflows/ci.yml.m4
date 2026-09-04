@@ -63,6 +63,8 @@ jobs:
         with:
           set-safe-directory: true
           fetch-depth: 0
+          show-progress: false
+          persist-credentials: false
       - name: clone_plume_scripts
         run: git clone https://github.com/plume-lib/plume-scripts.git /tmp/plume-scripts
       - name: ci_info
