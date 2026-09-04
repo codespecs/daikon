@@ -19,17 +19,14 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPOutputStream;
-import org.checkerframework.checker.index.qual.IndexOrHigh;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.lock.qual.GuardedBy;
 import org.checkerframework.checker.lock.qual.Holding;
@@ -37,11 +34,6 @@ import org.checkerframework.checker.mustcall.qual.Owning;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.signature.qual.BinaryName;
-import org.checkerframework.checker.signature.qual.ClassGetName;
-import org.checkerframework.checker.signature.qual.FieldDescriptor;
-import org.checkerframework.checker.signature.qual.FqBinaryName;
-import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
@@ -966,237 +958,4 @@ public final class Runtime {
   public static boolean isJava24orLater() {
     return isJava24orLater;
   }
-
-  // ///////////////////////////////////////////////////////////////////////////
-  // Copied code
-  //
-
-  // This code is copied from elsewhere to make this class self-contained.
-
-  //
-  // From class StringsPlume
-  //
-
-  /**
-   * Escapes a String so that it is expressible in a string literal in Java source code. By
-   * surrounding the return value with double quote marks, the result will be a Java string literal
-   * denoting the original string.
-   *
-   * <p>Returns a new string only if any modifications were necessary.
-   *
-   * <p>Compared to the `escapeJava` method in Apache Commons Text StringEscapeUtils, this one
-   * correctly handles non-printable ASCII characters.
-   *
-   * @param orig string to quote
-   * @return quoted version of orig
-   */
-  @SideEffectFree
-  public static String escapeJava(String orig) {
-    StringBuilder sb = new StringBuilder();
-    // The previous escape character was seen right before this position.
-    @IndexOrHigh("orig") int postEsc = 0;
-    int origLen = orig.length();
-    for (int i = 0; i < origLen; i++) {
-      char c = orig.charAt(i);
-      switch (c) {
-        case '\"':
-          if (postEsc < i) {
-            sb.append(orig.substring(postEsc, i));
-          }
-          sb.append("\\\"");
-          postEsc = i + 1;
-          break;
-        case '\\':
-          if (postEsc < i) {
-            sb.append(orig.substring(postEsc, i));
-          }
-          sb.append("\\\\");
-          postEsc = i + 1;
-          break;
-        case '\b':
-          if (postEsc < i) {
-            sb.append(orig.substring(postEsc, i));
-          }
-          sb.append("\\b");
-          postEsc = i + 1;
-          break;
-        case '\f':
-          if (postEsc < i) {
-            sb.append(orig.substring(postEsc, i));
-          }
-          sb.append("\\f");
-          postEsc = i + 1;
-          break;
-        case '\n': // not lineSep
-          if (postEsc < i) {
-            sb.append(orig.substring(postEsc, i));
-          }
-          sb.append("\\n"); // not lineSep
-          postEsc = i + 1;
-          break;
-        case '\r':
-          if (postEsc < i) {
-            sb.append(orig.substring(postEsc, i));
-          }
-          sb.append("\\r");
-          postEsc = i + 1;
-          break;
-        case '\t':
-          if (postEsc < i) {
-            sb.append(orig.substring(postEsc, i));
-          }
-          sb.append("\\t");
-          postEsc = i + 1;
-          break;
-
-        default:
-          if (c >= ' ' && c <= '~') {
-            // Nothing to do: i gets incremented
-          } else if (c <= '\377') {
-            if (postEsc < i) {
-              sb.append(orig.substring(postEsc, i));
-            }
-            sb.append('\\');
-            int cAsInt = (int) c;
-            sb.append(String.format("%03o", cAsInt));
-            postEsc = i + 1;
-            break;
-          } else {
-            if (postEsc < i) {
-              sb.append(orig.substring(postEsc, i));
-            }
-            sb.append("\\u");
-            sb.append(String.format("%04x", (int) c));
-            postEsc = i + 1;
-            break;
-          }
-      }
-    }
-    if (sb.length() == 0) {
-      return orig;
-    }
-    sb.append(orig.substring(postEsc));
-    return sb.toString();
-  }
-
-  //
-  // From class SignaturesUtil
-  //
-
-  // Eventually the code should use the library rather than copying its code.
-  // (As of 2026-01-10, I'm having trouble with the shadowJar plugin.)
-
-  /** A map from field descriptor (such as "I") to Java primitive type (such as "int"). */
-  private static HashMap<String, String> fieldDescriptorToPrimitive = new HashMap<>(8);
-
-  static {
-    fieldDescriptorToPrimitive.put("Z", "boolean");
-    fieldDescriptorToPrimitive.put("B", "byte");
-    fieldDescriptorToPrimitive.put("C", "char");
-    fieldDescriptorToPrimitive.put("D", "double");
-    fieldDescriptorToPrimitive.put("F", "float");
-    fieldDescriptorToPrimitive.put("I", "int");
-    fieldDescriptorToPrimitive.put("J", "long");
-    fieldDescriptorToPrimitive.put("S", "short");
-  }
-
-  /** Matches the "[[[" prefix of a field descriptor for an array. */
-  private static Pattern fdArrayBracketsPattern = Pattern.compile("^\\[+");
-
-  // does not convert "V" to "void".  Should it?
-  /**
-   * Convert a field descriptor to a binary name. For example, convert "Ljava/util/Map$Entry;" to
-   * "java.util.Map$Entry".
-   *
-   * <p>Strictly speaking, there is no binary name for primitives and arrays. In those cases, the
-   * result is a "fully-qualified binary name" ({@code @}{@link FqBinaryName}). For example, this
-   * method converts "[Ljava/util/Map$Entry;" to "java.util.Map$Entry[]" and converts "I" to "int".
-   *
-   * @param typename a field descriptor (the name of a type in JVML format)
-   * @return the corresponding binary name
-   */
-  @SuppressWarnings("signature") // conversion routine
-  public static @BinaryName String fieldDescriptorToBinaryName(@FieldDescriptor String typename) {
-    if (typename.equals("")) {
-      throw new Error("Empty string passed to fieldDescriptorToBinaryName");
-    }
-    Matcher m = fdArrayBracketsPattern.matcher(typename);
-    String classname = m.replaceFirst("");
-    int dimensions = typename.length() - classname.length();
-    String result;
-    if (classname.startsWith("L") && classname.endsWith(";")) {
-      result = classname.substring(1, classname.length() - 1);
-    } else {
-      result = fieldDescriptorToPrimitive.get(classname);
-      if (result == null) {
-        throw new Error(
-            "Malformed field descriptor should be \"L...;\" or a primitive: " + classname);
-      }
-    }
-    for (int i = 0; i < dimensions; i++) {
-      result += "[]";
-    }
-    return result.replace('/', '.');
-  }
-
-  /**
-   * Convert a name in Class.getName format to a binary name. For example, convert
-   * "[Ljava.util.Map$Entry;" to "java.util.Map$Entry[]".
-   *
-   * @param typename a name in Class.getName format
-   * @return the corresponding binary name
-   */
-  @SuppressWarnings("signature") // conversion routine
-  public static @BinaryName String classGetNameToBinaryName(@ClassGetName String typename) {
-    if (typename.equals("")) {
-      throw new Error("Empty string passed to classGetNameToBinaryName");
-    }
-    Matcher m = fdArrayBracketsPattern.matcher(typename);
-    String classname = m.replaceFirst("");
-    int dimensions = typename.length() - classname.length();
-    String result;
-    if (dimensions == 0) {
-      return classname;
-    } else {
-      if (classname.startsWith("L") && classname.endsWith(";")) {
-        result = classname.substring(1, classname.length() - 1);
-      } else {
-        result = fieldDescriptorToPrimitive.get(classname);
-        if (result == null) {
-          throw new Error(
-              "Malformed Class.getName array base type should be \"L...;\" or a primitive: "
-                  + classname);
-        }
-      }
-      for (int i = 0; i < dimensions; i++) {
-        result += "[]";
-      }
-      return result;
-    }
-  }
-
-  /**
-   * Given a class name in internal form, return it as a binary name.
-   *
-   * @param internalForm a class name in internal form
-   * @return the class name as a binary name
-   */
-  public static @BinaryName String internalFormToBinaryName(@InternalForm String internalForm) {
-    return internalForm.replace('/', '.');
-  }
-
-  /**
-   * Given a class name in binary name form, return it in internal form.
-   *
-   * @param binaryName a class name in binary name form
-   * @return the class name in internal form
-   */
-  public static @InternalForm String binaryNameToInternalForm(@BinaryName String binaryName) {
-    return binaryName.replace('.', '/');
-  }
-
-  // ///////////////////////////////////////////////////////////////////////////
-  // end of copied code
-  //
-
 }

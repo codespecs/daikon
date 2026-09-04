@@ -1,5 +1,6 @@
 package daikon.chicory;
 
+import daikon.plumelib.util.StringsPlume;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
@@ -67,7 +68,7 @@ public class StringInfo extends DaikonVariableInfo {
       if (str == null) {
         buf.add("null");
       } else if (str instanceof String) {
-        buf.add("\"" + Runtime.escapeJava((String) str) + "\"");
+        buf.add("\"" + StringsPlume.escapeJava((String) str) + "\"");
       } else if (str instanceof NonsensicalObject || str instanceof NonsensicalList) {
         buf.add("nonsensical");
       } else {
@@ -111,7 +112,7 @@ public class StringInfo extends DaikonVariableInfo {
    * @return the quoted string
    */
   private String getString(String stringRef) {
-    return "\"" + Runtime.escapeJava(stringRef) + "\"";
+    return "\"" + StringsPlume.escapeJava(stringRef) + "\"";
   }
 
   /** toString is a function. */

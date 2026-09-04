@@ -1,6 +1,7 @@
 package daikon.chicory;
 
 import daikon.Chicory;
+import daikon.plumelib.reflection.Signatures;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -164,7 +165,7 @@ public abstract class DaikonWriter {
     StringJoiner param_str = new StringJoiner(", ");
     for (Class<?> param : params) {
       if (param.isArray()) {
-        param_str.add(Runtime.classGetNameToBinaryName(param.getName()));
+        param_str.add(Signatures.classGetNameToBinaryName(param.getName()));
       } else {
         param_str.add(param.getName());
       }
@@ -187,7 +188,7 @@ public abstract class DaikonWriter {
    * classes).
    */
   public static @BinaryName String stdClassName(Class<?> type) {
-    return Runtime.classGetNameToBinaryName(type.getName());
+    return Signatures.classGetNameToBinaryName(type.getName());
   }
 
   /** Escapes blanks and backslashes in names written to the decl/dtrace files. */

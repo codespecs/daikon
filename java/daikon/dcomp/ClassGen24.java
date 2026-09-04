@@ -1,6 +1,5 @@
 package daikon.dcomp;
 
-import daikon.chicory.Runtime;
 import daikon.plumelib.reflection.Signatures;
 import java.lang.classfile.AccessFlags;
 import java.lang.classfile.ClassBuilder;
@@ -100,7 +99,7 @@ public class ClassGen24 {
    * @param name the interface name, in binary format
    */
   public void addInterface(@BinaryName String name) {
-    String internalName = Runtime.binaryNameToInternalForm(name);
+    String internalName = Signatures.binaryNameToInternalForm(name);
     for (ClassEntry existing : interfaceList) {
       if (existing.asInternalName().equals(internalName)) {
         return;
@@ -197,7 +196,7 @@ public class ClassGen24 {
   public static @BinaryName String getSuperclassName(ClassModel classModel) {
     Optional<ClassEntry> ce = classModel.superclass();
     if (ce.isPresent()) {
-      return Runtime.internalFormToBinaryName(ce.get().asInternalName());
+      return Signatures.internalFormToBinaryName(ce.get().asInternalName());
     } else {
       return "java.lang.Object";
     }
