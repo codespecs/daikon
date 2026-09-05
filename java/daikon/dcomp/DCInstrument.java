@@ -4595,7 +4595,8 @@ public class DCInstrument extends InstructionListUtils {
             mgen.getName(),
             returnType,
             paramTypes,
-            mgen.isStatic() ? INVOKESTATIC : INVOKESPECIAL));
+            mgen.isStatic() ? INVOKESTATIC : INVOKESPECIAL,
+            classGen.isInterface()));
 
     // Push the tag for a primitive result that the instrumented body would have pushed on exit.
     // Unlike fix_native and handleInvoke, this is done after the call rather than before it,
