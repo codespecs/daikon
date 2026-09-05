@@ -483,11 +483,12 @@ public final class DCInstrumentTest24 {
    * <p>Also checks that the emitted method still maintains the tag stack. It carries the
    * DCompMarker parameter, so its callers use the calling convention for an instrumented method,
    * and the emitted method must honor that convention even though it does no comparability
-   * tracking: it forwards to its uninstrumented copy, discarding the tag pushed for the primitive
-   * argument and pushing one for the primitive result.
+   * tracking: it discards the tag pushed for the primitive argument and pushes one for the
+   * primitive result. The method retains its original body to avoid adding an observable forwarding
+   * frame.
    */
   @Test
-  public void testOversizedMethodForwardsToOriginal() throws IOException {
+  public void testOversizedMethodUsesOriginalBody() throws IOException {
     byte[] original = oversizedClassBytes();
     ClassFile classFile = ClassFile.of();
     ClassModel originalModel = classFile.parse(original);
@@ -524,8 +525,8 @@ public final class DCInstrumentTest24 {
         "oversized method does not maintain the tag stack",
         Set.of("discard_tag", "push_const"),
         runtimeCalls(instrumentedModel, OVERSIZED_METHOD));
-    assertTrue(
-        "oversized method does not forward to its uninstrumented copy",
+    assertFalse(
+        "oversized method adds an observable forwarding frame",
         callsOwnMethod(instrumentedModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int)));
     assertFalse(
         "rest of the class was not instrumented",
@@ -535,7 +536,7 @@ public final class DCInstrumentTest24 {
   /**
    * Returns true if the instrumented copy of the named method -- the copy with a DCompMarker
    * parameter -- invokes a method of its own class with the same name and the given descriptor.
-   * Used to check that an oversized method forwards to its uninstrumented copy.
+   * Used to check that an oversized method does not add a forwarding frame.
    *
    * @param classModel an instrumented class
    * @param methodName the name of the method to examine
