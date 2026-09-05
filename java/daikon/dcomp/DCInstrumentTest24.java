@@ -3,6 +3,7 @@ package daikon.dcomp;
 import static java.lang.constant.ConstantDescs.CD_int;
 import static java.lang.constant.ConstantDescs.CD_void;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -22,6 +23,7 @@ import java.lang.classfile.CodeElement;
 import java.lang.classfile.CodeModel;
 import java.lang.classfile.Label;
 import java.lang.classfile.MethodModel;
+import java.lang.classfile.attribute.CodeAttribute;
 import java.lang.classfile.attribute.StackMapFrameInfo;
 import java.lang.classfile.attribute.StackMapTableAttribute;
 import java.lang.classfile.instruction.InvokeInstruction;
@@ -430,15 +432,24 @@ public final class DCInstrumentTest24 {
   private static final int OVERSIZED_GROUPS = 6000;
 
   /**
+   * Number of {@code iload_0; iconst_1; iadd; istore_0} groups in {@link #OVERSIZED_METHOD} for
+   * {@link #testHugeMethodIsEmittedWithoutTagCode}. The method is 4 * HUGE_GROUPS + 2 bytes long,
+   * which is just under the JVM's 64K code-size limit -- so close that even the handful of bytes of
+   * tag-stack bookkeeping that an oversized method is given does not fit.
+   */
+  private static final int HUGE_GROUPS = 16382;
+
+  /**
    * Returns the bytes of {@link Sample} with an added method, {@link #OVERSIZED_METHOD}, whose
    * instrumented form exceeds the JVM's 64K code-size limit. The method is added to a real class
    * rather than a synthetic one because DCInstrument24 resolves the class being instrumented, and
    * its superclasses, from the classpath.
    *
+   * @param groups the number of 4-byte instruction groups in the added method
    * @return the bytes of {@link Sample} plus a method that is too large to instrument
    * @throws IOException if the class file for {@link Sample} cannot be read
    */
-  private static byte[] oversizedClassBytes() throws IOException {
+  private static byte[] oversizedClassBytes(int groups) throws IOException {
     ClassFile classFile = ClassFile.of();
     ClassModel classModel = classFile.parse(classBytes(sampleClassName()));
     return classFile.transformClass(
@@ -450,7 +461,7 @@ public final class DCInstrumentTest24 {
                     MethodTypeDesc.of(CD_int, CD_int),
                     ClassFile.ACC_PUBLIC | ClassFile.ACC_STATIC,
                     codeBuilder -> {
-                      for (int i = 0; i < OVERSIZED_GROUPS; i++) {
+                      for (int i = 0; i < groups; i++) {
                         codeBuilder.iload(0);
                         codeBuilder.iconst_1();
                         codeBuilder.iadd();
@@ -478,10 +489,17 @@ public final class DCInstrumentTest24 {
    * {@link DCInstrument24#instrument_jdk_class} has to rebuild the class from scratch; this test
    * checks that the rebuild leaves the rest of the class instrumented, and that the oversized
    * method is not reported as skipped.
+   *
+   * <p>Also checks that the emitted method still maintains the tag stack. It carries the
+   * DCompMarker parameter, so its callers use the calling convention for an instrumented method,
+   * and the emitted method must honor that convention even though it does no comparability
+   * tracking: it discards the tag pushed for the primitive argument and pushes one for the
+   * primitive result. The method retains its original body to avoid adding an observable forwarding
+   * frame.
    */
   @Test
-  public void testOversizedMethodIsSkipped() throws IOException {
-    byte[] original = oversizedClassBytes();
+  public void testOversizedMethodUsesOriginalBody() throws IOException {
+    byte[] original = oversizedClassBytes(OVERSIZED_GROUPS);
     ClassFile classFile = ClassFile.of();
     ClassModel originalModel = classFile.parse(original);
     // The premise of this test is that only the *instrumented* method is too large.
@@ -510,9 +528,120 @@ public final class DCInstrumentTest24 {
         dci.get_skipped_methods().stream().anyMatch(m -> m.contains(OVERSIZED_METHOD)));
 
     ClassModel instrumentedModel = classFile.parse(instrumented);
+    // Exactly the tag-stack bookkeeping, and none of the instrumentation proper: no
+    // create_tag_frame, no enter/exit.  OVERSIZED_METHOD takes one primitive argument and returns
+    // a primitive, so it owes the caller one discarded argument tag and one pushed result tag.
+    assertEquals(
+        "oversized method does not maintain the tag stack",
+        Set.of("discard_tag", "push_const"),
+        runtimeCalls(instrumentedModel, OVERSIZED_METHOD));
+    assertFalse(
+        "oversized method adds an observable forwarding frame",
+        callsOwnMethod(instrumentedModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int)));
+    assertFalse(
+        "rest of the class was not instrumented",
+        runtimeCalls(instrumentedModel, SMALL_METHOD).isEmpty());
+  }
+
+  /**
+   * Returns true if the instrumented copy of the named method -- the copy with a DCompMarker
+   * parameter -- invokes a method of its own class with the same name and the given descriptor.
+   * Used to check that an oversized method does not add a forwarding frame.
+   *
+   * @param classModel an instrumented class
+   * @param methodName the name of the method to examine
+   * @param target the descriptor of the method it should invoke
+   * @return true if the instrumented copy invokes that method
+   */
+  private static boolean callsOwnMethod(
+      ClassModel classModel, String methodName, MethodTypeDesc target) {
+    String ownName = classModel.thisClass().asInternalName();
+    for (CodeElement element : instrumentedCopy(classModel, methodName).code().orElseThrow()) {
+      if (element instanceof InvokeInstruction invoke
+          && invoke.owner().asInternalName().equals(ownName)
+          && invoke.name().stringValue().equals(methodName)
+          && invoke.typeSymbol().equals(target)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Returns the instrumented copy of the named method, that is, the copy that has a DCompMarker
+   * parameter.
+   *
+   * @param classModel an instrumented class
+   * @param methodName the name of the method
+   * @return the instrumented copy of the named method
+   */
+  private static MethodModel instrumentedCopy(ClassModel classModel, String methodName) {
+    for (MethodModel method : classModel.methods()) {
+      if (!method.methodName().stringValue().equals(methodName)) {
+        continue;
+      }
+      List<ClassDesc> params = method.methodTypeSymbol().parameterList();
+      if (!params.isEmpty() && params.get(params.size() - 1).displayName().equals("DCompMarker")) {
+        return method;
+      }
+    }
+    throw new Error("no instrumented copy of " + methodName);
+  }
+
+  /**
+   * Tests that a method that is too large for even the minimal tag-stack bookkeeping is emitted
+   * with no bookkeeping at all, rather than aborting the class. The bookkeeping is only a few bytes
+   * long, but the method that needs it is by definition close to the JVM's 64K code-size limit, so
+   * the copy that {@link DCInstrument24#copyOversizedMethod} makes can exceed the limit too.
+   *
+   * <p>The method is still emitted with the DCompMarker parameter, because its callers look it up
+   * by that signature. Its callers therefore push and pop tags that it neither consumes nor
+   * produces, which leaves the tag stack unbalanced; that is less bad than failing to instrument
+   * the class at all.
+   *
+   * @throws IOException if the class file for {@link Sample} cannot be read
+   */
+  @Test
+  public void testHugeMethodIsEmittedWithoutTagCode() throws IOException {
+    byte[] original = oversizedClassBytes(HUGE_GROUPS);
+    ClassFile classFile = ClassFile.of();
+    ClassModel originalModel = classFile.parse(original);
+    // The premise of this test is that the uninstrumented method fits, but only just: adding the
+    // tag-stack bookkeeping to it would not.
+    int length = codeLength(originalModel, OVERSIZED_METHOD);
+    assertTrue("uninstrumented " + OVERSIZED_METHOD + " does not fit: " + length, length <= 65535);
     assertTrue(
-        "oversized method was instrumented",
-        runtimeCalls(instrumentedModel, OVERSIZED_METHOD).isEmpty());
+        "uninstrumented " + OVERSIZED_METHOD + " has room for the bookkeeping: " + length,
+        length > 65535 - 8);
+
+    ClassInfo classInfo = new ClassInfo(sampleClassName(), classLoader());
+    DCInstrument24 dci = new DCInstrument24(classFile, classFile.parse(original), true);
+    @BinaryName String savedInstrumentationInterface = DCRuntime.instrumentation_interface;
+    // BuildJDK24 sets this static field before each class it instruments.
+    DCRuntime.instrumentation_interface = "daikon.dcomp.DCompInstrumented";
+    byte[] instrumented;
+    try {
+      // Skipping the oversized method prints a warning; discard it.
+      instrumented = withDiagnosticsDiscarded(() -> dci.instrument_jdk_class(classInfo));
+    } finally {
+      DCRuntime.instrumentation_interface = savedInstrumentationInterface;
+    }
+
+    ClassModel instrumentedModel = classFile.parse(instrumented);
+    assertEquals(
+        "huge method was given tag-stack bookkeeping that does not fit",
+        Set.of(),
+        runtimeCalls(instrumentedModel, OVERSIZED_METHOD));
+    // The instrumented copy exists -- its callers look the method up by that signature -- and its
+    // body is the original one, unchanged.
+    assertEquals(
+        "huge method's body was changed",
+        length,
+        ((CodeAttribute) instrumentedCopy(instrumentedModel, OVERSIZED_METHOD).code().orElseThrow())
+            .codeLength());
+    assertFalse(
+        "huge method reported as skipped: " + dci.get_skipped_methods(),
+        dci.get_skipped_methods().stream().anyMatch(m -> m.contains(OVERSIZED_METHOD)));
     assertFalse(
         "rest of the class was not instrumented",
         runtimeCalls(instrumentedModel, SMALL_METHOD).isEmpty());
@@ -706,7 +835,9 @@ public final class DCInstrumentTest24 {
   private static int codeLength(ClassModel classModel, String methodName) {
     for (MethodModel method : classModel.methods()) {
       if (method.methodName().stringValue().equals(methodName)) {
-        return method.code().orElseThrow().elementList().size();
+        // A CodeModel that was parsed from a class file, as opposed to one being built, is a
+        // CodeAttribute, which knows the length of the code array.
+        return ((CodeAttribute) method.code().orElseThrow()).codeLength();
       }
     }
     throw new Error("no method named " + methodName);
@@ -723,27 +854,17 @@ public final class DCInstrumentTest24 {
    */
   private static Set<String> runtimeCalls(ClassModel classModel, String methodName) {
     Set<String> result = new HashSet<>();
-    for (MethodModel method : classModel.methods()) {
-      if (!method.methodName().stringValue().equals(methodName)) {
-        continue;
-      }
-      List<ClassDesc> params = method.methodTypeSymbol().parameterList();
-      if (params.isEmpty() || !params.get(params.size() - 1).displayName().equals("DCompMarker")) {
-        // This is the uninstrumented copy of the method, which has no DCompMarker parameter.
-        continue;
-      }
-      method
-          .code()
-          .ifPresent(
-              code -> {
-                for (CodeElement element : code) {
-                  if (element instanceof InvokeInstruction invoke
-                      && invoke.owner().asInternalName().endsWith("/DCRuntime")) {
-                    result.add(invoke.name().stringValue());
-                  }
+    instrumentedCopy(classModel, methodName)
+        .code()
+        .ifPresent(
+            code -> {
+              for (CodeElement element : code) {
+                if (element instanceof InvokeInstruction invoke
+                    && invoke.owner().asInternalName().endsWith("/DCRuntime")) {
+                  result.add(invoke.name().stringValue());
                 }
-              });
-    }
+              }
+            });
     return result;
   }
 

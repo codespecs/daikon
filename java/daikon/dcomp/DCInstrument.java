@@ -734,6 +734,11 @@ public class DCInstrument extends InstructionListUtils {
 
     boolean junit_test_class = false;
 
+    // Skipped for JDK classes.  A JDK class is never a JUnit test class: the check below confirms
+    // one only by a junit.framework.TestCase superclass or an org/junit/Test annotation.  Skipping
+    // them loses no state transition -- STARTING and TEST_DISCOVERY are re-evaluated on the next
+    // class load, and the test classes themselves are never in the JDK -- and it keeps a
+    // getStackTrace, plus TEST_DISCOVERY's superclass walk, off the JDK class-loading path.
     if (!in_jdk) {
       // A very tricky special case: If JUnit is running and the current
       // class has been passed to JUnit on the command line, then this
@@ -1001,29 +1006,13 @@ public class DCInstrument extends InstructionListUtils {
 
         remove_local_variable_type_table(mgen);
 
-        // Do not copy any problematic annotations from the original
-        // method to our instrumented method.
-        AnnotationEntryGen[] aes = mgen.getAnnotationEntries();
-        for (AnnotationEntryGen item : aes) {
-          String type = item.getTypeName();
-          if (BLACKLISTED_ANNOTATIONS.contains(type)) {
-            mgen.removeAnnotationEntry(item);
-          }
-        }
+        remove_blacklisted_annotations(mgen);
 
         // Can't duplicate "main" or "clinit" or a JUnit test.
         boolean replacingMethod =
             BcelUtil.isMain(mgen) || BcelUtil.isClinit(mgen) || junit_test_class;
         try {
-          if (has_code) {
-            il = mgen.getInstructionList();
-            InstructionHandle end = il.getEnd();
-            int length = end.getPosition() + end.getInstruction().getLength();
-            if (length >= MAX_CODE_SIZE) {
-              throw new ClassGenException(
-                  "Code array too big: must be smaller than " + MAX_CODE_SIZE + " bytes.");
-            }
-          }
+          check_code_size(mgen);
           if (replacingMethod) {
             classGen.replaceMethod(m, mgen.getMethod());
             if (BcelUtil.isMain(mgen)) {
@@ -1033,36 +1022,46 @@ public class DCInstrument extends InstructionListUtils {
             classGen.addMethod(mgen.getMethod());
           }
         } catch (Exception e) {
-          String s = e.getMessage();
-          if (s == null) {
+          if (!is_code_size_error(e)) {
             throw e;
           }
-          if (s.startsWith("Branch target offset too large")
-              || s.startsWith("Code array too big")) {
-            System.err.printf(
-                "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument"
-                    + " and is being skipped.%n",
-                classname, mgen.getName());
-            // Build a dummy instrumented method that has DCompMarker
-            // parameter and no instrumentation.
-            // first, restore unmodified method
-            mgen = new MethodGen(m, classname, pool);
-            // restore StackMapTable
-            setCurrentStackMapTable(mgen, classGen.getMajor());
-            // Add the DCompMarker parameter
-            add_dcomp_param(mgen);
-            remove_local_variable_type_table(mgen);
-            // try again
-            if (replacingMethod) {
-              classGen.replaceMethod(m, mgen.getMethod());
-              if (BcelUtil.isMain(mgen)) {
-                classGen.addMethod(create_dcomp_stub(mgen).getMethod());
-              }
+          System.err.printf(
+              "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument and"
+                  + " is being skipped.%n",
+              classname, m.getName());
+          // Restore the unmodified method, to recover its original signature.
+          MethodGen original = new MethodGen(m, classname, pool);
+          if (replacingMethod) {
+            // A JUnit method keeps its original descriptor, but its instrumented callers leave
+            // primitive argument tags for it to consume. Main and <clinit> use the ordinary
+            // uninstrumented calling convention, so they are emitted unchanged.
+            debugInstrument.log(
+                "Copying oversized method without instrumentation: %s%n", original.getName());
+            debugInstrument.indent();
+            // No add_dcomp_param call here: it returns early for main and <clinit>.  For the
+            // remaining case -- a JUnit test class -- it would append the marker and alter the
+            // descriptor, so omit the call to preserve JUnit discovery.  That matches the normal
+            // path above, which adds the marker only if !junit_test_class.
+            if (junit_test_class) {
+              classGen.replaceMethod(m, create_oversized_method(m, false));
             } else {
-              classGen.addMethod(mgen.getMethod());
+              remove_local_variable_type_table(original);
+              classGen.replaceMethod(m, original.getMethod());
             }
+            if (BcelUtil.isMain(original)) {
+              classGen.addMethod(create_dcomp_stub(original).getMethod());
+            }
+            debugInstrument.exdent();
+            debugInstrument.log("End of copy%n");
           } else {
-            throw e;
+            // Emit a minimally instrumented copy with the DCompMarker parameter that maintains
+            // the tag stack; see create_oversized_method.
+            debugInstrument.log(
+                "Oversized method, creating minimally instrumented copy: %s%n", original.getName());
+            debugInstrument.indent();
+            classGen.addMethod(create_oversized_method(m, true));
+            debugInstrument.exdent();
+            debugInstrument.log("End of copy%n");
           }
         }
         debug_transform.exdent();
@@ -1285,52 +1284,27 @@ public class DCInstrument extends InstructionListUtils {
 
         remove_local_variable_type_table(mgen);
 
-        // Do not copy any problematic annotations from the original
-        // method to our instrumented method.
-        AnnotationEntryGen[] aes = mgen.getAnnotationEntries();
-        for (AnnotationEntryGen item : aes) {
-          String type = item.getTypeName();
-          if (BLACKLISTED_ANNOTATIONS.contains(type)) {
-            mgen.removeAnnotationEntry(item);
-          }
-        }
+        remove_blacklisted_annotations(mgen);
 
         try {
-          if (has_code) {
-            il = mgen.getInstructionList();
-            InstructionHandle end = il.getEnd();
-            int length = end.getPosition() + end.getInstruction().getLength();
-            if (length >= MAX_CODE_SIZE) {
-              throw new ClassGenException(
-                  "Code array too big: must be smaller than " + MAX_CODE_SIZE + " bytes.");
-            }
-          }
+          check_code_size(mgen);
           classGen.addMethod(mgen.getMethod());
         } catch (Exception e) {
-          String s = e.getMessage();
-          if (s == null) {
+          if (!is_code_size_error(e)) {
             throw e;
           }
-          if (s.startsWith("Branch target offset too large")
-              || s.startsWith("Code array too big")) {
-            System.err.printf(
-                "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument"
-                    + " and is being skipped.%n",
-                classname, mgen.getName());
-            // Build a dummy instrumented method that has DCompMarker
-            // parameter and no instrumentation.
-            // first, restore unmodified method
-            mgen = new MethodGen(m, classname, pool);
-            // restore StackMapTable
-            setCurrentStackMapTable(mgen, classGen.getMajor());
-            // Add the DCompMarker parameter
-            add_dcomp_param(mgen);
-            remove_local_variable_type_table(mgen);
-            // try again
-            classGen.addMethod(mgen.getMethod());
-          } else {
-            throw e;
-          }
+          System.err.printf(
+              "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument and"
+                  + " is being skipped.%n",
+              classname, m.getName());
+          // Emit a minimally instrumented copy with the DCompMarker parameter that maintains the
+          // tag stack; see create_oversized_method.
+          debugInstrument.log(
+              "Oversized method, creating minimally instrumented copy: %s%n", m.getName());
+          debugInstrument.indent();
+          classGen.addMethod(create_oversized_method(m, true));
+          debugInstrument.exdent();
+          debugInstrument.log("End of copy%n");
         }
 
         debug_transform.exdent();
@@ -1338,10 +1312,7 @@ public class DCInstrument extends InstructionListUtils {
         if (debugInstrument.enabled) {
           t.printStackTrace();
         }
-        // TODO: Is it guaranteed that mgen is non-null by the time control reaches here?
-        if (mgen != null) {
-          skip_method(mgen);
-        }
+        skip_method(classname, m.getName());
         if (quit_if_error) {
           throw new Error("Error processing " + classname + "." + m.getName(), t);
         } else {
@@ -1472,7 +1443,19 @@ public class DCInstrument extends InstructionListUtils {
    * @param m method to add to skipped_methods list
    */
   void skip_method(MethodGen m) {
-    skipped_methods.add(m.getClassName() + "." + m.getName());
+    skip_method(m.getClassName(), m.getName());
+  }
+
+  /**
+   * Adds the method name and containing class name to {@code skip_methods}, the list of
+   * uninstrumented methods. Use this overload where instrumentation may have failed before the
+   * method's {@link MethodGen} was built.
+   *
+   * @param classname the class that contains the method
+   * @param methodName the name of the method
+   */
+  void skip_method(String classname, String methodName) {
+    skipped_methods.add(classname + "." + methodName);
   }
 
   /**
@@ -4504,6 +4487,168 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     return false;
+  }
+
+  /**
+   * Returns a minimally instrumented copy of a method whose fully instrumented form would exceed
+   * the JVM's 64K code-size limit. The copy retains the original body rather than forwarding to
+   * another method, which preserves caller-sensitive and exception-stack semantics.
+   *
+   * <p>The caller leaves a tag on the tag stack for each primitive argument, so this method
+   * discards those tags on entry. If {@code addDcompMarker} is true, the caller also expects the
+   * method to produce a tag for a primitive result, so this method pushes one immediately before
+   * each primitive return. A JUnit method has no marker and enters with a caller-produced result
+   * tag above its argument tags; the entry code preserves that result tag while discarding the
+   * arguments.
+   *
+   * @param mgen the unmodified method, with its original signature
+   * @param addDcompMarker whether to append the DCompMarker parameter
+   * @return a minimally instrumented copy of {@code mgen}
+   */
+  MethodGen create_oversized_method_copy(MethodGen mgen, boolean addDcompMarker)
+      throws IOException {
+
+    InstructionList il = mgen.getInstructionList();
+    if (il == null) {
+      // Only a method with code can be oversized.  Returning mgen unchanged would ignore
+      // addDcompMarker, and the caller would add a method whose descriptor is already in use.
+      throw new ClassGenException("No instruction list for oversized method " + mgen.getName());
+    }
+
+    setCurrentStackMapTable(mgen, classGen.getMajor());
+    buildUninitializedNewMap(il);
+
+    Type[] paramTypes = mgen.getArgumentTypes();
+    if (addDcompMarker) {
+      fixLocalVariableTable(mgen);
+      add_dcomp_param(mgen);
+    }
+
+    int primitiveCount = 0;
+    for (Type paramType : paramTypes) {
+      if (is_primitive(paramType)) {
+        primitiveCount++;
+      }
+    }
+    if (primitiveCount > 0) {
+      boolean preserveCallerResultTag = !addDcompMarker && is_primitive(mgen.getReturnType());
+      InstructionList entryCode = new InstructionList();
+      entryCode.append(ifact.createConstant(primitiveCount + (preserveCallerResultTag ? 1 : 0)));
+      entryCode.append(dcr_call("discard_tag", CD_void, intSig));
+      if (preserveCallerResultTag) {
+        entryCode.append(dcr_call("push_const", CD_void, noArgsSig));
+      }
+      insertAtMethodStart(mgen, entryCode);
+    }
+
+    if (addDcompMarker && is_primitive(mgen.getReturnType())) {
+      for (InstructionHandle ih = il.getStart(); ih != null; ) {
+        InstructionHandle next = ih.getNext();
+        Instruction instruction = ih.getInstruction();
+        if (instruction instanceof ReturnInstruction) {
+          InstructionList returnCode = new InstructionList();
+          returnCode.append(dcr_call("push_const", CD_void, noArgsSig));
+          returnCode.append(instruction);
+          replaceInstructions(mgen, il, ih, returnCode);
+        }
+        ih = next;
+      }
+    }
+
+    updateUninitializedNewOffsets(il);
+    createNewStackMapAttribute(mgen);
+    remove_blacklisted_annotations(mgen);
+    remove_local_variable_type_table(mgen);
+    mgen.setMaxLocals();
+    mgen.setMaxStack();
+    return mgen;
+  }
+
+  /**
+   * Returns a minimally instrumented copy of a method whose fully instrumented form exceeds the
+   * JVM's 64K code-size limit; see {@link #create_oversized_method_copy}. The tag-stack bookkeeping
+   * that copy adds is only a few bytes long, but the method is already near the limit, so the copy
+   * can exceed the limit too. If it does, this method emits the original body with no bookkeeping
+   * at all. The callers of such a method push and pop tags that it neither consumes nor produces,
+   * which leaves the tag stack unbalanced; that is less bad than failing to instrument the class.
+   *
+   * @param m the unmodified method, with its original signature
+   * @param addDcompMarker whether to append the DCompMarker parameter
+   * @return a minimally instrumented copy of {@code m}
+   * @throws IOException if the method cannot be built
+   */
+  Method create_oversized_method(Method m, boolean addDcompMarker) throws IOException {
+
+    String classname = classGen.getClassName();
+    try {
+      MethodGen copy =
+          create_oversized_method_copy(new MethodGen(m, classname, pool), addDcompMarker);
+      check_code_size(copy);
+      return copy.getMethod();
+    } catch (Exception e) {
+      if (!is_code_size_error(e)) {
+        throw e;
+      }
+      System.err.printf(
+          "DynComp warning: ClassFile: %s - method %s is too large even for the minimal"
+              + " instrumentation; its tag stack bookkeeping is being omitted.%n",
+          classname, m.getName());
+    }
+
+    MethodGen mgen = new MethodGen(m, classname, pool);
+    setCurrentStackMapTable(mgen, classGen.getMajor());
+    if (addDcompMarker) {
+      add_dcomp_param(mgen);
+    }
+    remove_blacklisted_annotations(mgen);
+    remove_local_variable_type_table(mgen);
+    return mgen.getMethod();
+  }
+
+  /**
+   * Throws an exception if the method's code array exceeds the JVM's 64K code-size limit.
+   *
+   * @param mgen the method to check
+   */
+  void check_code_size(MethodGen mgen) {
+    InstructionList il = mgen.getInstructionList();
+    if (il == null) {
+      return;
+    }
+    InstructionHandle end = il.getEnd();
+    int length = end.getPosition() + end.getInstruction().getLength();
+    if (length >= MAX_CODE_SIZE) {
+      throw new ClassGenException(
+          "Code array too big: must be smaller than " + MAX_CODE_SIZE + " bytes.");
+    }
+  }
+
+  /**
+   * Returns true if the exception reports that a method's code array or one of its branch offsets
+   * is too large for the class file format.
+   *
+   * @param e an exception thrown while building an instrumented method
+   * @return true if {@code e} reports that a method is too large
+   */
+  static boolean is_code_size_error(Exception e) {
+    String message = e.getMessage();
+    return message != null
+        && (message.startsWith("Branch target offset too large")
+            || message.startsWith("Code array too big"));
+  }
+
+  /**
+   * Removes from the given method any annotation that must not appear on an instrumented method;
+   * see {@link #BLACKLISTED_ANNOTATIONS}.
+   *
+   * @param mgen the method to remove annotations from
+   */
+  void remove_blacklisted_annotations(MethodGen mgen) {
+    for (AnnotationEntryGen item : mgen.getAnnotationEntries()) {
+      if (BLACKLISTED_ANNOTATIONS.contains(item.getTypeName())) {
+        mgen.removeAnnotationEntry(item);
+      }
+    }
   }
 
   /**

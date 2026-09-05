@@ -10,9 +10,13 @@ CHECKLINK ?= ${DAIKONDIR}/.utils/checklink
 PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 
 ifeq (,$(wildcard ${PLUME_SCRIPTS}))
-  dummy := $(shell mkdir ${DAIKONDIR}/.utils && git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS})
+  dummy := $(shell mkdir -p ${DAIKONDIR}/.utils && git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git ${PLUME_SCRIPTS})
 endif
 SORT_DIRECTORY_ORDER := ${PLUME_SCRIPTS}/sort-directory-order
+ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
+  # The clone above did not happen or did not succeed, so sort-directory-order is not available.
+  SORT_DIRECTORY_ORDER := sort
+endif
 
 JAVA_RELEASE_NUMBER := $(shell java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 | sed 's/-ea//')
 
