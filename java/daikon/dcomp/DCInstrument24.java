@@ -563,6 +563,15 @@ public class DCInstrument24 {
    */
   private Set<String> oversizedMethods = new HashSet<>();
 
+  /**
+   * The subset of {@link #oversizedMethods} that exceeds the JVM's 64K code-size limit even with
+   * the minimal tag-stack bookkeeping that {@link #copyOversizedMethod} adds. Such a method is
+   * emitted with no bookkeeping at all, so its callers push and pop tags that it neither consumes
+   * nor produces. That leaves the tag stack unbalanced, but it is less bad than failing to
+   * instrument the class at all. Uses the same keys as {@link #oversizedMethods}.
+   */
+  private Set<String> oversizedMethodsWithoutTagCode = new HashSet<>();
+
   /** If we're using an instrumented JDK, then "java.lang"; otherwise, "daikon.dcomp". */
   protected @DotSeparatedIdentifiers String dcompMarkerPrefix;
 
@@ -1344,13 +1353,19 @@ public class DCInstrument24 {
       // by its callers. The method must still have the DCompMarker parameter when addingDcompArg is
       // true, because callers of the instrumented version look it up by that signature. See
       // instrument_jdk_class for how this set is populated.
-      if (oversizedMethods.contains(
-          oversizedMethodKey(methodModel.methodName().stringValue(), mtd))) {
+      String oversizedKey = oversizedMethodKey(methodModel.methodName().stringValue(), mtd);
+      if (oversizedMethods.contains(oversizedKey)) {
+        // The bookkeeping is a few bytes long, but the method is already at the limit, so it can
+        // overflow too; a method that did is emitted with no bookkeeping at all.
+        boolean addTagCode = !oversizedMethodsWithoutTagCode.contains(oversizedKey);
         debugInstrument.log(
-            "Oversized method, creating minimally instrumented copy: %s%n", mgen.getName());
+            "Oversized method, creating %s copy: %s%n",
+            addTagCode ? "minimally instrumented" : "uninstrumented", mgen.getName());
         debugInstrument.indent();
         final boolean addMarker = addingDcompArg;
-        final boolean discardArgumentTags = addingDcompArg || classInfo.isJunitTestClass;
+        final boolean discardArgumentTags =
+            addTagCode && (addingDcompArg || classInfo.isJunitTestClass);
+        final boolean pushResultTag = addTagCode && addingDcompArg;
         classBuilder.withMethod(
             methodModel.methodName().stringValue(),
             mtd,
@@ -1362,7 +1377,7 @@ public class DCInstrument24 {
                     mgen,
                     addMarker,
                     discardArgumentTags,
-                    addMarker));
+                    pushResultTag));
         debugInstrument.exdent();
         debugInstrument.log("End of copy%n");
         debug_transform.exdent();
@@ -1463,8 +1478,7 @@ public class DCInstrument24 {
                     if (primitiveCount > 0) {
                       boolean preserveCallerResultTag =
                           !pushResultTag && is_primitive(mgen.getReturnType());
-                      int discardCount =
-                          primitiveCount + (preserveCallerResultTag ? 1 : 0);
+                      int discardCount = primitiveCount + (preserveCallerResultTag ? 1 : 0);
                       for (CodeElement ce : discard_tag_code(null, discardCount)) {
                         codeBuilder.with(ce);
                       }
@@ -1474,8 +1488,7 @@ public class DCInstrument24 {
                     }
                   }
 
-                  boolean primitiveResult =
-                      pushResultTag && is_primitive(mgen.getReturnType());
+                  boolean primitiveResult = pushResultTag && is_primitive(mgen.getReturnType());
                   for (CodeElement ce : mgen.getInstructionList()) {
                     if (ce instanceof LocalVariable || ce instanceof LocalVariableType) {
                       continue;
@@ -1487,8 +1500,33 @@ public class DCInstrument24 {
                   }
                 });
 
+        case RuntimeVisibleAnnotationsAttribute rvaa -> copyAnnotations(methodBuilder, rvaa);
+
         default -> methodBuilder.with(me);
       }
+    }
+  }
+
+  /**
+   * Copies the given annotations from the original method to our instrumented method, unless any of
+   * them is one that must not appear on an instrumented method; see {@link
+   * #BLACKLISTED_ANNOTATIONS}.
+   *
+   * @param methodBuilder for the output method
+   * @param rvaa the annotations of the input method
+   */
+  private void copyAnnotations(
+      MethodBuilder methodBuilder, RuntimeVisibleAnnotationsAttribute rvaa) {
+    boolean output = true;
+    for (final Annotation item : rvaa.annotations()) {
+      String description = item.className().stringValue();
+      if (BLACKLISTED_ANNOTATIONS.contains(description)) {
+        output = false;
+        debugInstrument.log("Annotation not copied: %s%n", description);
+      }
+    }
+    if (output) {
+      methodBuilder.with(rvaa);
     }
   }
 
@@ -1579,21 +1617,7 @@ public class DCInstrument24 {
                 codeBuilder ->
                     instrumentCode(codeBuilder, codeModel, null, mgen, classInfo, trackMethod));
           }
-          case RuntimeVisibleAnnotationsAttribute rvaa -> {
-            // Do not copy any problematic annotations from the original
-            // method to our instrumented method.
-            boolean output = true;
-            for (final Annotation item : rvaa.annotations()) {
-              String description = item.className().stringValue();
-              if (BLACKLISTED_ANNOTATIONS.contains(description)) {
-                output = false;
-                debugInstrument.log("Annotation not copied: %s%n", description);
-              }
-            }
-            if (output) {
-              methodBuilder.with(me);
-            }
-          }
+          case RuntimeVisibleAnnotationsAttribute rvaa -> copyAnnotations(methodBuilder, rvaa);
           // copy all other MethodElements to output class (unchanged)
           default -> methodBuilder.with(me);
         }
@@ -1941,9 +1965,12 @@ public class DCInstrument24 {
     // jdk.internal.classfile.impl.DirectCodeBuilder.build): throw the whole builder away and start
     // over, this time emitting the offending method unchanged. Each attempt identifies at most one
     // oversized method, so bound the number of attempts by the number of methods in the class.
+    // A method that is still oversized with that bookkeeping is emitted with none at all, so a
+    // single method can cost two attempts.
     oversizedMethods.clear();
+    oversizedMethodsWithoutTagCode.clear();
     int skippedMethodsMark = skipped_methods.size();
-    int maxAttempts = classModel.methods().size() + 1;
+    int maxAttempts = 2 * classModel.methods().size() + 1;
 
     for (int attempt = 0; attempt < maxAttempts; attempt++) {
       try {
@@ -1963,15 +1990,32 @@ public class DCInstrument24 {
         // to identify this one case by matching the text of the exception's message. It returns
         // null for any message it does not recognize, which is treated as a real error below.
         String method = oversizedMethodName(e);
-        if (method == null || !oversizedMethods.add(method)) {
-          // Either this is not the oversized-method error, or we already emitted this method
-          // uninstrumented and it still does not fit. Both indicate a bug in the instrumentor.
+        if (method == null) {
+          // This is not the oversized-method error; it indicates a bug in the instrumentor.
           throw e;
         }
-        System.err.printf(
-            "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument and is"
-                + " being skipped.%n",
-            classname, method);
+        if (oversizedMethods.add(method)) {
+          System.err.printf(
+              "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument and"
+                  + " is being skipped.%n",
+              classname, method);
+        } else if (oversizedMethodsWithoutTagCode.add(method)) {
+          System.err.printf(
+              "DynComp warning: ClassFile: %s - method %s is too large even for the minimal"
+                  + " instrumentation; its tag stack bookkeeping is being omitted.%n",
+              classname, method);
+        } else {
+          // The method does not fit even with no instrumentation beyond the DCompMarker parameter,
+          // which shifts the local variables and so can lengthen the code by a byte per access.
+          // There is nothing smaller to fall back to.
+          throw new DynCompError(
+              "Method "
+                  + classname
+                  + "."
+                  + method
+                  + " exceeds the JVM's 64K code-size limit even without instrumentation",
+              e);
+        }
         // Discard anything the abandoned attempt recorded; the retry starts from scratch.
         skipped_methods.subList(skippedMethodsMark, skipped_methods.size()).clear();
       }
