@@ -1059,10 +1059,10 @@ public class DCInstrument extends InstructionListUtils {
               debugInstrument.indent();
               mgen = original;
               setCurrentStackMapTable(mgen, classGen.getMajor());
-              // No add_dcomp_param call here: it would be a no-op anyway, because it returns early
-              // for both main and <clinit>, and for the remaining case -- a JUnit test class -- the
-              // method must keep its own descriptor so that JUnit can still find the test.  That
-              // matches the normal path above, which adds the marker only if !junit_test_class.
+              // No add_dcomp_param call here: it returns early for main and <clinit>.  For the
+              // remaining case -- a JUnit test class -- it would append the marker and alter the
+              // descriptor, so omit the call to preserve JUnit discovery.  That matches the normal
+              // path above, which adds the marker only if !junit_test_class.
               remove_local_variable_type_table(mgen);
               classGen.replaceMethod(m, mgen.getMethod());
               if (BcelUtil.isMain(mgen)) {
