@@ -4498,8 +4498,8 @@ public class DCInstrument extends InstructionListUtils {
    * discards those tags on entry. If {@code addDcompMarker} is true, the caller also expects the
    * method to produce a tag for a primitive result, so this method pushes one immediately before
    * each primitive return. A JUnit method has no marker and enters with a caller-produced result
-   * tag above its argument tags; the entry code preserves that result tag while discarding the
-   * arguments.
+   * tag above its argument tags; the entry code discards that result tag and the argument tags,
+   * then pushes a replacement result tag.
    *
    * @param mgen the unmodified method, with its original signature
    * @param addDcompMarker whether to append the DCompMarker parameter
@@ -4531,11 +4531,11 @@ public class DCInstrument extends InstructionListUtils {
       }
     }
     if (primitiveCount > 0) {
-      boolean preserveCallerResultTag = !addDcompMarker && is_primitive(mgen.getReturnType());
+      boolean replaceCallerResultTag = !addDcompMarker && is_primitive(mgen.getReturnType());
       InstructionList entryCode = new InstructionList();
-      entryCode.append(ifact.createConstant(primitiveCount + (preserveCallerResultTag ? 1 : 0)));
+      entryCode.append(ifact.createConstant(primitiveCount + (replaceCallerResultTag ? 1 : 0)));
       entryCode.append(dcr_call("discard_tag", CD_void, intSig));
-      if (preserveCallerResultTag) {
+      if (replaceCallerResultTag) {
         entryCode.append(dcr_call("push_const", CD_void, noArgsSig));
       }
       insertAtMethodStart(mgen, entryCode);
@@ -4568,9 +4568,8 @@ public class DCInstrument extends InstructionListUtils {
    * Returns a minimally instrumented copy of a method whose fully instrumented form exceeds the
    * JVM's 64K code-size limit; see {@link #create_oversized_method_copy}. The tag-stack bookkeeping
    * that copy adds is only a few bytes long, but the method is already near the limit, so the copy
-   * can exceed the limit too. If it does, this method emits the original body with no bookkeeping
-   * at all. The callers of such a method push and pop tags that it neither consumes nor produces,
-   * which leaves the tag stack unbalanced; that is less bad than failing to instrument the class.
+   * can exceed the limit too. If it does, this method emits a small forwarding stub that performs
+   * the bookkeeping and calls the unchanged original method.
    *
    * @param m the unmodified method, with its original signature
    * @param addDcompMarker whether to append the DCompMarker parameter
@@ -4591,18 +4590,81 @@ public class DCInstrument extends InstructionListUtils {
       }
       System.err.printf(
           "DynComp warning: ClassFile: %s - method %s is too large even for the minimal"
-              + " instrumentation; its tag stack bookkeeping is being omitted.%n",
+              + " instrumentation; a forwarding stub is being used.%n",
           classname, m.getName());
+    }
+
+    if (addDcompMarker) {
+      return create_oversized_method_stub(new MethodGen(m, classname, pool)).getMethod();
     }
 
     MethodGen mgen = new MethodGen(m, classname, pool);
     setCurrentStackMapTable(mgen, classGen.getMajor());
-    if (addDcompMarker) {
-      add_dcomp_param(mgen);
-    }
     remove_blacklisted_annotations(mgen);
     remove_local_variable_type_table(mgen);
     return mgen.getMethod();
+  }
+
+  /**
+   * Returns a DCompMarker overload that maintains the tag-stack calling convention and forwards to
+   * the unchanged original method. This is the final fallback when adding bookkeeping directly to
+   * an oversized method would itself exceed the JVM's code-size limit.
+   *
+   * @param mgen the unmodified method, with its original signature
+   * @return a forwarding stub with a DCompMarker parameter
+   */
+  MethodGen create_oversized_method_stub(MethodGen mgen) {
+    Type[] paramTypes = mgen.getArgumentTypes();
+    Type returnType = mgen.getReturnType();
+    InstructionList il = discard_primitive_tags(paramTypes);
+
+    int offset = 0;
+    if (!mgen.isStatic()) {
+      il.append(InstructionFactory.createThis());
+      offset = 1;
+    }
+    for (Type paramType : paramTypes) {
+      il.append(InstructionFactory.createLoad(paramType, offset));
+      offset += paramType.getSize();
+    }
+
+    short kind;
+    if (mgen.isStatic()) {
+      kind = INVOKESTATIC;
+    } else if (mgen.isPrivate() || mgen.getName().equals("<init>")) {
+      kind = INVOKESPECIAL;
+    } else if (classGen.isInterface()) {
+      kind = INVOKEINTERFACE;
+    } else {
+      kind = INVOKEVIRTUAL;
+    }
+    il.append(
+        ifact.createInvoke(
+            mgen.getClassName(),
+            mgen.getName(),
+            returnType,
+            paramTypes,
+            kind,
+            classGen.isInterface()));
+
+    if (is_primitive(returnType)) {
+      il.append(dcr_call("push_const", CD_void, noArgsSig));
+    }
+    il.append(InstructionFactory.createReturn(returnType));
+
+    MethodGen stub =
+        new MethodGen(
+            mgen.getAccessFlags(),
+            returnType,
+            ArraysPlume.append(paramTypes, dcomp_marker),
+            ArraysPlume.append(mgen.getArgumentNames(), "marker"),
+            mgen.getName(),
+            mgen.getClassName(),
+            il,
+            pool);
+    stub.setMaxLocals();
+    stub.setMaxStack();
+    return stub;
   }
 
   /**

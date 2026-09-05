@@ -1,5 +1,6 @@
 package daikon.dcomp;
 
+import static java.lang.classfile.Opcode.INVOKEVIRTUAL;
 import static java.lang.constant.ConstantDescs.CD_int;
 import static java.lang.constant.ConstantDescs.CD_void;
 import static java.nio.charset.StandardCharsets.UTF_8;
@@ -15,6 +16,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.lang.classfile.Annotation;
+import java.lang.classfile.Attribute;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.ClassHierarchyResolver;
 import java.lang.classfile.ClassModel;
@@ -23,7 +26,9 @@ import java.lang.classfile.CodeElement;
 import java.lang.classfile.CodeModel;
 import java.lang.classfile.Label;
 import java.lang.classfile.MethodModel;
+import java.lang.classfile.MethodTransform;
 import java.lang.classfile.attribute.CodeAttribute;
+import java.lang.classfile.attribute.RuntimeVisibleAnnotationsAttribute;
 import java.lang.classfile.attribute.StackMapFrameInfo;
 import java.lang.classfile.attribute.StackMapTableAttribute;
 import java.lang.classfile.instruction.InvokeInstruction;
@@ -32,6 +37,7 @@ import java.lang.constant.MethodTypeDesc;
 import java.lang.reflect.AccessFlag;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -409,12 +415,61 @@ public final class DCInstrumentTest24 {
     try (InputStream is = sampleStream) {
       original = is.readAllBytes();
     }
+    return instrumentAsJdkClass(original);
+  }
+
+  /**
+   * Instruments the given definition of {@link Sample} as if it were a JDK class.
+   *
+   * @param original the class-file bytes to instrument
+   * @return the instrumented bytes
+   */
+  private byte[] instrumentAsJdkClass(byte[] original) {
     ClassFile classFile = ClassFile.of();
     ClassModel classModel = classFile.parse(original);
-    ClassInfo classInfo = new ClassInfo(classname, DCInstrumentTest24.class.getClassLoader());
+    ClassInfo classInfo = new ClassInfo(sampleClassName(), classLoader());
     DCInstrument24 dci = new DCInstrument24(classFile, classModel, true);
     // instrument_jdk_class throws rather than returning null if it cannot instrument the class.
     return dci.instrument_jdk_class(classInfo);
+  }
+
+  /** Tests that removing a blacklisted annotation does not remove its permitted siblings. */
+  @Test
+  public void preservesAnnotationsThatAreNotBlacklisted() throws IOException {
+    @BinaryName String savedInstrumentationInterface = DCRuntime.instrumentation_interface;
+    try {
+      DCRuntime.instrumentation_interface = "daikon.dcomp.DCompInstrumented";
+      ClassFile classFile = ClassFile.of();
+      ClassModel sample = classFile.parse(classBytes(sampleClassName()));
+      byte[] annotated =
+          classFile.transformClass(
+              sample,
+              ClassTransform.transformingMethods(
+                  method -> method.methodName().stringValue().equals(SMALL_METHOD),
+                  MethodTransform.endHandler(
+                      methodBuilder -> {
+                        methodBuilder.with(
+                            RuntimeVisibleAnnotationsAttribute.of(
+                                Annotation.of(ClassDesc.of("java.lang.Deprecated")),
+                                Annotation.of(
+                                    ClassDesc.of(
+                                        "jdk.internal.vm.annotation.IntrinsicCandidate"))));
+                      })));
+
+      MethodModel instrumentedMethod =
+          instrumentedCopy(classFile.parse(instrumentAsJdkClass(annotated)), SMALL_METHOD);
+      Set<String> annotations = new HashSet<>();
+      for (Attribute<?> attribute : instrumentedMethod.attributes()) {
+        if (attribute instanceof RuntimeVisibleAnnotationsAttribute rvaa) {
+          for (Annotation annotation : rvaa.annotations()) {
+            annotations.add(annotation.className().stringValue());
+          }
+        }
+      }
+      assertEquals(Set.of("Ljava/lang/Deprecated;"), annotations);
+    } finally {
+      DCRuntime.instrumentation_interface = savedInstrumentationInterface;
+    }
   }
 
   /** Name of the method that {@link #oversizedClassBytes} adds to {@link Sample}. */
@@ -424,7 +479,7 @@ public final class DCInstrumentTest24 {
   private static final String SMALL_METHOD = "add";
 
   /**
-   * Number of {@code iload_0; iconst_1; iadd; istore_0} groups in {@link #OVERSIZED_METHOD}. Each
+   * Number of {@code iload_1; iconst_1; iadd; istore_1} groups in {@link #OVERSIZED_METHOD}. Each
    * group is 4 bytes, so the uninstrumented method is well under the JVM's 64K code-size limit, but
    * instrumentation adds several DCRuntime calls per group, which pushes the instrumented form over
    * it.
@@ -432,8 +487,8 @@ public final class DCInstrumentTest24 {
   private static final int OVERSIZED_GROUPS = 6000;
 
   /**
-   * Number of {@code iload_0; iconst_1; iadd; istore_0} groups in {@link #OVERSIZED_METHOD} for
-   * {@link #testHugeMethodIsEmittedWithoutTagCode}. The method is 4 * HUGE_GROUPS + 2 bytes long,
+   * Number of {@code iload_1; iconst_1; iadd; istore_1} groups in {@link #OVERSIZED_METHOD} for
+   * {@link #testHugeMethodUsesForwardingStub}. The method is 4 * HUGE_GROUPS + 2 bytes long,
    * which is just under the JVM's 64K code-size limit -- so close that even the handful of bytes of
    * tag-stack bookkeeping that an oversized method is given does not fit.
    */
@@ -459,15 +514,15 @@ public final class DCInstrumentTest24 {
                 classBuilder.withMethodBody(
                     OVERSIZED_METHOD,
                     MethodTypeDesc.of(CD_int, CD_int),
-                    ClassFile.ACC_PUBLIC | ClassFile.ACC_STATIC,
+                    ClassFile.ACC_PUBLIC,
                     codeBuilder -> {
                       for (int i = 0; i < groups; i++) {
-                        codeBuilder.iload(0);
+                        codeBuilder.iload(1);
                         codeBuilder.iconst_1();
                         codeBuilder.iadd();
-                        codeBuilder.istore(0);
+                        codeBuilder.istore(1);
                       }
-                      codeBuilder.iload(0);
+                      codeBuilder.iload(1);
                       codeBuilder.ireturn();
                     })));
   }
@@ -589,20 +644,20 @@ public final class DCInstrumentTest24 {
   }
 
   /**
-   * Tests that a method that is too large for even the minimal tag-stack bookkeeping is emitted
-   * with no bookkeeping at all, rather than aborting the class. The bookkeeping is only a few bytes
-   * long, but the method that needs it is by definition close to the JVM's 64K code-size limit, so
-   * the copy that {@link DCInstrument24#copyOversizedMethod} makes can exceed the limit too.
+   * Tests that a method that is too large for even the minimal tag-stack bookkeeping is emitted as
+   * a forwarding stub, rather than aborting the class. The bookkeeping is only a few bytes long,
+   * but the method that needs it is by definition close to the JVM's 64K code-size limit, so the
+   * copy that {@link DCInstrument24#copyOversizedMethod} makes can exceed the limit too.
    *
-   * <p>The method is still emitted with the DCompMarker parameter, because its callers look it up
-   * by that signature. Its callers therefore push and pop tags that it neither consumes nor
-   * produces, which leaves the tag stack unbalanced; that is less bad than failing to instrument
-   * the class at all.
+   * <p>The forwarding stub has the DCompMarker signature its callers expect, discards primitive
+   * argument tags, invokes the unchanged original body with virtual dispatch, and produces the
+   * primitive result tag.
    *
    * @throws IOException if the class file for {@link Sample} cannot be read
+   * @throws ReflectiveOperationException if the generated classes cannot be loaded or invoked
    */
   @Test
-  public void testHugeMethodIsEmittedWithoutTagCode() throws IOException {
+  public void testHugeMethodUsesForwardingStub() throws IOException, ReflectiveOperationException {
     byte[] original = oversizedClassBytes(HUGE_GROUPS);
     ClassFile classFile = ClassFile.of();
     ClassModel originalModel = classFile.parse(original);
@@ -615,36 +670,139 @@ public final class DCInstrumentTest24 {
         length > 65535 - 8);
 
     ClassInfo classInfo = new ClassInfo(sampleClassName(), classLoader());
-    DCInstrument24 dci = new DCInstrument24(classFile, classFile.parse(original), true);
+    boolean savedJdkInstrumented = Premain.jdk_instrumented;
     @BinaryName String savedInstrumentationInterface = DCRuntime.instrumentation_interface;
     // BuildJDK24 sets this static field before each class it instruments.
+    Premain.jdk_instrumented = false;
     DCRuntime.instrumentation_interface = "daikon.dcomp.DCompInstrumented";
+    DCInstrument24 dci = new DCInstrument24(classFile, classFile.parse(original), true);
     byte[] instrumented;
     try {
       // Skipping the oversized method prints a warning; discard it.
       instrumented = withDiagnosticsDiscarded(() -> dci.instrument_jdk_class(classInfo));
     } finally {
+      Premain.jdk_instrumented = savedJdkInstrumented;
       DCRuntime.instrumentation_interface = savedInstrumentationInterface;
     }
 
     ClassModel instrumentedModel = classFile.parse(instrumented);
     assertEquals(
-        "huge method was given tag-stack bookkeeping that does not fit",
-        Set.of(),
+        "huge method's forwarding stub does not maintain the tag stack",
+        Set.of("discard_tag", "push_const"),
         runtimeCalls(instrumentedModel, OVERSIZED_METHOD));
-    // The instrumented copy exists -- its callers look the method up by that signature -- and its
-    // body is the original one, unchanged.
+    assertTrue(
+        "huge method has no forwarding stub",
+        callsOwnMethod(instrumentedModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int)));
+    assertEquals(
+        "huge method's forwarding stub does not preserve virtual dispatch",
+        INVOKEVIRTUAL,
+        ownMethodCallOpcode(
+            instrumentedModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int)));
+    // The unchanged original body remains alongside the small DCompMarker forwarding overload.
     assertEquals(
         "huge method's body was changed",
         length,
-        ((CodeAttribute) instrumentedCopy(instrumentedModel, OVERSIZED_METHOD).code().orElseThrow())
-            .codeLength());
+        codeLength(instrumentedModel, OVERSIZED_METHOD));
     assertFalse(
         "huge method reported as skipped: " + dci.get_skipped_methods(),
         dci.get_skipped_methods().stream().anyMatch(m -> m.contains(OVERSIZED_METHOD)));
     assertFalse(
         "rest of the class was not instrumented",
         runtimeCalls(instrumentedModel, SMALL_METHOD).isEmpty());
+
+    // Make the pre-instrumented-JDK class executable in this test JVM by redirecting its shadow
+    // runtime calls to the ordinary DynComp runtime.
+    ClassDesc runtimeClass = ClassDesc.of("daikon.dcomp.DCRuntime");
+    byte[] executable =
+        classFile.transformClass(
+            instrumentedModel,
+            ClassTransform.transformingMethodBodies(
+                (codeBuilder, element) -> {
+                  if (element instanceof InvokeInstruction invoke
+                      && invoke.owner().asInternalName().equals("java/lang/DCRuntime")) {
+                    codeBuilder.invoke(
+                        invoke.opcode(),
+                        runtimeClass,
+                        invoke.name().stringValue(),
+                        invoke.typeSymbol(),
+                        false);
+                  } else {
+                    codeBuilder.with(element);
+                  }
+                }));
+
+    String superclassName = sampleClassName();
+    String subclassName = superclassName + "$DispatchOverride";
+    byte[] subclass =
+        classFile.build(
+            ClassDesc.of(subclassName),
+            classBuilder -> {
+              classBuilder.withFlags(ClassFile.ACC_PUBLIC | ClassFile.ACC_SUPER);
+              classBuilder.withSuperclass(ClassDesc.of(superclassName));
+              classBuilder.withMethodBody(
+                  "<init>",
+                  MethodTypeDesc.of(CD_void),
+                  ClassFile.ACC_PUBLIC,
+                  codeBuilder -> {
+                    codeBuilder.aload(0);
+                    codeBuilder.invokespecial(
+                        ClassDesc.of(superclassName), "<init>", MethodTypeDesc.of(CD_void));
+                    codeBuilder.return_();
+                  });
+              classBuilder.withMethodBody(
+                  OVERSIZED_METHOD,
+                  MethodTypeDesc.of(CD_int, CD_int),
+                  ClassFile.ACC_PUBLIC,
+                  codeBuilder -> {
+                    codeBuilder.bipush(42);
+                    codeBuilder.ireturn();
+                  });
+            });
+    ClassLoader loader = byteArrayClassLoader(Map.of(superclassName, executable, subclassName, subclass));
+    Class<?> superclass = loader.loadClass(superclassName);
+    Object receiver = loader.loadClass(subclassName).getConstructor().newInstance();
+
+    Object[] tagFrame = DCRuntime.create_tag_frame("1");
+    try {
+      DCRuntime.push_const();
+      Object result =
+          superclass
+              .getMethod(OVERSIZED_METHOD, int.class, DCompMarker.class)
+              .invoke(receiver, 1, null);
+      assertEquals("forwarding stub bypassed the subclass override", 42, result);
+      DCRuntime.discard_tag(1);
+    } finally {
+      DCRuntime.normal_exit(tagFrame);
+    }
+  }
+
+  /**
+   * Returns a child-first class loader for the given class definitions.
+   *
+   * @param definitions maps binary class names to class-file bytes
+   * @return the class loader
+   */
+  private static ClassLoader byteArrayClassLoader(Map<String, byte[]> definitions) {
+    return new ClassLoader(classLoader()) {
+      @Override
+      protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        if (!definitions.containsKey(name)) {
+          return super.loadClass(name, resolve);
+        }
+        synchronized (getClassLoadingLock(name)) {
+          Class<?> result = findLoadedClass(name);
+          if (result == null) {
+            byte[] bytes = definitions.get(name);
+            assert bytes != null : "@AssumeAssertion(definitions.containsKey(name))";
+            result = defineClass(name, bytes, 0, bytes.length);
+          }
+          if (resolve) {
+            resolveClass(result);
+          }
+          return result;
+        }
+      }
+    };
   }
 
   /**
@@ -866,6 +1024,28 @@ public final class DCInstrumentTest24 {
               }
             });
     return result;
+  }
+
+  /**
+   * Returns the opcode used by the instrumented copy's call to its own original overload.
+   *
+   * @param classModel an instrumented class
+   * @param methodName the method to examine
+   * @param target the original overload's descriptor
+   * @return the invocation opcode
+   */
+  private static java.lang.classfile.Opcode ownMethodCallOpcode(
+      ClassModel classModel, String methodName, MethodTypeDesc target) {
+    String ownName = classModel.thisClass().asInternalName();
+    for (CodeElement element : instrumentedCopy(classModel, methodName).code().orElseThrow()) {
+      if (element instanceof InvokeInstruction invoke
+          && invoke.owner().asInternalName().equals(ownName)
+          && invoke.name().stringValue().equals(methodName)
+          && invoke.typeSymbol().equals(target)) {
+        return invoke.opcode();
+      }
+    }
+    throw new AssertionError("no call to the original " + methodName + " overload");
   }
 
   /**

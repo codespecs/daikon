@@ -566,11 +566,10 @@ public class DCInstrument24 {
   /**
    * The subset of {@link #oversizedMethods} that exceeds the JVM's 64K code-size limit even with
    * the minimal tag-stack bookkeeping that {@link #copyOversizedMethod} adds. Such a method is
-   * emitted with no bookkeeping at all, so its callers push and pop tags that it neither consumes
-   * nor produces. That leaves the tag stack unbalanced, but it is less bad than failing to
-   * instrument the class at all. Uses the same keys as {@link #oversizedMethods}.
+   * emitted as a small forwarding stub that performs the bookkeeping and calls the unchanged
+   * original method. Uses the same keys as {@link #oversizedMethods}.
    */
-  private Set<String> oversizedMethodsWithoutTagCode = new HashSet<>();
+  private Set<String> oversizedMethodsRequiringStub = new HashSet<>();
 
   /** If we're using an instrumented JDK, then "java.lang"; otherwise, "daikon.dcomp". */
   protected @DotSeparatedIdentifiers String dcompMarkerPrefix;
@@ -1356,28 +1355,33 @@ public class DCInstrument24 {
       String oversizedKey = oversizedMethodKey(methodModel.methodName().stringValue(), mtd);
       if (oversizedMethods.contains(oversizedKey)) {
         // The bookkeeping is a few bytes long, but the method is already at the limit, so it can
-        // overflow too; a method that did is emitted with no bookkeeping at all.
-        boolean addTagCode = !oversizedMethodsWithoutTagCode.contains(oversizedKey);
+        // overflow too; a method that did is emitted as a small forwarding stub.
+        boolean copyOriginalBody = !oversizedMethodsRequiringStub.contains(oversizedKey);
         debugInstrument.log(
-            "Oversized method, creating %s copy: %s%n",
-            addTagCode ? "minimally instrumented" : "uninstrumented", mgen.getName());
+            "Oversized method, creating %s: %s%n",
+            copyOriginalBody ? "minimally instrumented copy" : "forwarding stub", mgen.getName());
         debugInstrument.indent();
         final boolean addMarker = addingDcompArg;
         final boolean discardArgumentTags =
-            addTagCode && (addingDcompArg || classInfo.isJunitTestClass);
-        final boolean pushResultTag = addTagCode && addingDcompArg;
+            copyOriginalBody && (addingDcompArg || classInfo.isJunitTestClass);
+        final boolean pushResultTag = copyOriginalBody && addingDcompArg;
         classBuilder.withMethod(
             methodModel.methodName().stringValue(),
             mtd,
             methodModel.flags().flagsMask(),
-            methodBuilder ->
+            methodBuilder -> {
+              if (copyOriginalBody) {
                 copyOversizedMethod(
                     methodBuilder,
                     methodModel,
                     mgen,
                     addMarker,
                     discardArgumentTags,
-                    pushResultTag));
+                    pushResultTag);
+              } else {
+                createOversizedMethodStub(methodBuilder, methodModel, mgen);
+              }
+            });
         debugInstrument.exdent();
         debugInstrument.log("End of copy%n");
         debug_transform.exdent();
@@ -1476,13 +1480,13 @@ public class DCInstrument24 {
                       }
                     }
                     if (primitiveCount > 0) {
-                      boolean preserveCallerResultTag =
+                      boolean replaceCallerResultTag =
                           !pushResultTag && is_primitive(mgen.getReturnType());
-                      int discardCount = primitiveCount + (preserveCallerResultTag ? 1 : 0);
+                      int discardCount = primitiveCount + (replaceCallerResultTag ? 1 : 0);
                       for (CodeElement ce : discard_tag_code(null, discardCount)) {
                         codeBuilder.with(ce);
                       }
-                      if (preserveCallerResultTag) {
+                      if (replaceCallerResultTag) {
                         codeBuilder.with(dcr_call("push_const", CD_void, noArgsSig));
                       }
                     }
@@ -1508,6 +1512,68 @@ public class DCInstrument24 {
   }
 
   /**
+   * Builds a DCompMarker overload that maintains the tag-stack calling convention and forwards to
+   * the unchanged original method. This is the final fallback when adding bookkeeping directly to
+   * an oversized method would itself exceed the JVM's code-size limit.
+   *
+   * @param methodBuilder for the output method
+   * @param methodModel describes the input method
+   * @param mgen describes the output method
+   */
+  private void createOversizedMethodStub(
+      MethodBuilder methodBuilder, MethodModel methodModel, MethodGen24 mgen) {
+    for (MethodElement me : methodModel) {
+      switch (me) {
+        case CodeModel codeModel ->
+            methodBuilder.withCode(
+                codeBuilder -> {
+                  for (CodeElement ce : discard_primitive_tags(mgen.getParameterTypes())) {
+                    codeBuilder.with(ce);
+                  }
+
+                  int localIndex = 0;
+                  if (!mgen.isStatic()) {
+                    codeBuilder.with(LoadInstruction.of(TypeKind.REFERENCE, localIndex++));
+                  }
+                  for (ClassDesc paramType : mgen.getParameterTypes()) {
+                    TypeKind typeKind = TypeKind.from(paramType);
+                    codeBuilder.with(LoadInstruction.of(typeKind, localIndex));
+                    localIndex += typeKind.slotSize();
+                  }
+
+                  Opcode opcode;
+                  if (mgen.isStatic()) {
+                    opcode = INVOKESTATIC;
+                  } else if (mgen.isConstructor()
+                      || (mgen.getAccessFlagsMask() & ACC_PRIVATE) != 0) {
+                    opcode = INVOKESPECIAL;
+                  } else if (classGen.isInterface()) {
+                    opcode = INVOKEINTERFACE;
+                  } else {
+                    opcode = INVOKEVIRTUAL;
+                  }
+                  ClassEntry owner = poolBuilder.classEntry(ClassDesc.of(mgen.getClassName()));
+                  NameAndTypeEntry nameAndType =
+                      poolBuilder.nameAndTypeEntry(
+                          mgen.getName(),
+                          MethodTypeDesc.of(mgen.getReturnType(), mgen.getParameterTypes()));
+                  codeBuilder.with(
+                      InvokeInstruction.of(opcode, owner, nameAndType, classGen.isInterface()));
+
+                  if (is_primitive(mgen.getReturnType())) {
+                    codeBuilder.with(dcr_call("push_const", CD_void, noArgsSig));
+                  }
+                  codeBuilder.with(ReturnInstruction.of(TypeKind.from(mgen.getReturnType())));
+                });
+
+        case RuntimeVisibleAnnotationsAttribute rvaa -> copyAnnotations(methodBuilder, rvaa);
+
+        default -> methodBuilder.with(me);
+      }
+    }
+  }
+
+  /**
    * Copies the given annotations from the original method to our instrumented method, unless any of
    * them is one that must not appear on an instrumented method; see {@link
    * #BLACKLISTED_ANNOTATIONS}.
@@ -1517,16 +1583,17 @@ public class DCInstrument24 {
    */
   private void copyAnnotations(
       MethodBuilder methodBuilder, RuntimeVisibleAnnotationsAttribute rvaa) {
-    boolean output = true;
+    List<Annotation> filteredAnnotations = new ArrayList<>();
     for (final Annotation item : rvaa.annotations()) {
       String description = item.className().stringValue();
       if (BLACKLISTED_ANNOTATIONS.contains(description)) {
-        output = false;
         debugInstrument.log("Annotation not copied: %s%n", description);
+      } else {
+        filteredAnnotations.add(item);
       }
     }
-    if (output) {
-      methodBuilder.with(rvaa);
+    if (!filteredAnnotations.isEmpty()) {
+      methodBuilder.with(RuntimeVisibleAnnotationsAttribute.of(filteredAnnotations));
     }
   }
 
@@ -1965,10 +2032,10 @@ public class DCInstrument24 {
     // jdk.internal.classfile.impl.DirectCodeBuilder.build): throw the whole builder away and start
     // over, this time emitting the offending method unchanged. Each attempt identifies at most one
     // oversized method, so bound the number of attempts by the number of methods in the class.
-    // A method that is still oversized with that bookkeeping is emitted with none at all, so a
-    // single method can cost two attempts.
+    // A method that is still oversized with that bookkeeping is emitted as a forwarding stub, so
+    // a single method can cost two attempts.
     oversizedMethods.clear();
-    oversizedMethodsWithoutTagCode.clear();
+    oversizedMethodsRequiringStub.clear();
     int skippedMethodsMark = skipped_methods.size();
     int maxAttempts = 2 * classModel.methods().size() + 1;
 
@@ -1999,15 +2066,14 @@ public class DCInstrument24 {
               "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument and"
                   + " is being skipped.%n",
               classname, method);
-        } else if (oversizedMethodsWithoutTagCode.add(method)) {
+        } else if (oversizedMethodsRequiringStub.add(method)) {
           System.err.printf(
               "DynComp warning: ClassFile: %s - method %s is too large even for the minimal"
-                  + " instrumentation; its tag stack bookkeeping is being omitted.%n",
+                  + " instrumentation; a forwarding stub is being used.%n",
               classname, method);
         } else {
-          // The method does not fit even with no instrumentation beyond the DCompMarker parameter,
-          // which shifts the local variables and so can lengthen the code by a byte per access.
-          // There is nothing smaller to fall back to.
+          // Even the small forwarding stub failed the code-size check. This should be impossible
+          // unless its construction is broken.
           throw new DynCompError(
               "Method "
                   + classname
