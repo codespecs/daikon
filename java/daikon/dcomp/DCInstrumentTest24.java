@@ -1029,7 +1029,8 @@ public final class DCInstrumentTest24 {
         if (!definitions.containsKey(name)) {
           return super.loadClass(name, resolve);
         }
-        synchronized (getClassLoadingLock(name)) {
+        Object lock = getClassLoadingLock(name);
+        synchronized (lock) {
           Class<?> result = findLoadedClass(name);
           if (result == null) {
             byte[] bytes = definitions.get(name);
