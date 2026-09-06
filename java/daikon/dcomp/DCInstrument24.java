@@ -1356,7 +1356,14 @@ public class DCInstrument24 {
       if (oversizedMethods.contains(oversizedKey)) {
         // The bookkeeping is a few bytes long, but the method is already at the limit, so it can
         // overflow too; a method that did is emitted as a small forwarding stub.
-        boolean copyOriginalBody = !oversizedMethodsRequiringStub.contains(oversizedKey);
+        //
+        // The stub forwards to the unchanged original, which is emitted under its own descriptor
+        // only when a DCompMarker parameter is added.  Without the marker there is nothing to
+        // forward to: the stub's call would resolve to the stub itself.  Only instrument_jdk_class
+        // populates oversizedMethods, so the only method that gets here without the marker is
+        // main, whose copy adds no bookkeeping at all and therefore cannot overflow.
+        boolean copyOriginalBody =
+            !addingDcompArg || !oversizedMethodsRequiringStub.contains(oversizedKey);
         debugInstrument.log(
             "Oversized method, creating %s: %s%n",
             copyOriginalBody ? "minimally instrumented copy" : "forwarding stub", mgen.getName());
@@ -1515,6 +1522,10 @@ public class DCInstrument24 {
    * Builds a DCompMarker overload that maintains the tag-stack calling convention and forwards to
    * the unchanged original method. This is the final fallback when adding bookkeeping directly to
    * an oversized method would itself exceed the JVM's code-size limit.
+   *
+   * <p>The caller must be emitting the method with an added DCompMarker parameter; the stub calls
+   * the original descriptor, which is the unchanged original method only in that case. See {@code
+   * processMethod}, which uses {@link #copyOversizedMethod} instead when no marker is added.
    *
    * @param methodBuilder for the output method
    * @param methodModel describes the input method

@@ -1042,7 +1042,12 @@ public class DCInstrument extends InstructionListUtils {
             // remaining case -- a JUnit test class -- it would append the marker and alter the
             // descriptor, so omit the call to preserve JUnit discovery.  That matches the normal
             // path above, which adds the marker only if !junit_test_class.
-            if (junit_test_class) {
+            //
+            // junit_test_class is a property of the class, not of the method, so main and <clinit>
+            // are excluded explicitly: they use the uninstrumented calling convention even in a
+            // JUnit test class, and create_oversized_method cannot give them the DCompMarker
+            // overload that its fallback stub forwards to.
+            if (junit_test_class && !BcelUtil.isMain(original) && !BcelUtil.isClinit(original)) {
               classGen.replaceMethod(m, create_oversized_method(m, false));
             } else {
               remove_local_variable_type_table(original);
@@ -4504,6 +4509,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param mgen the unmodified method, with its original signature
    * @param addDcompMarker whether to append the DCompMarker parameter
    * @return a minimally instrumented copy of {@code mgen}
+   * @throws IOException if the method cannot be built
    */
   MethodGen create_oversized_method_copy(MethodGen mgen, boolean addDcompMarker)
       throws IOException {
@@ -4604,8 +4610,19 @@ public class DCInstrument extends InstructionListUtils {
     // and stub then agree about every primitive argument and result tag even when the original body
     // has no room for a single additional instruction.
     MethodGen body = new MethodGen(m, classname, pool);
+    InstructionList bodyIl = body.getInstructionList();
+    assert bodyIl != null
+        : "@AssumeAssertion(nullness): create_oversized_method_copy rejects a method with no code,"
+            + " and that rejection is not a code-size error, so it was rethrown above";
+    // add_dcomp_param renumbers the locals that follow the new parameter, and may widen the
+    // instructions that reference them, so the stack map has to be rebuilt from the original.
+    // This also discards the stale stackMapTable left behind by the abandoned attempt above.
+    setCurrentStackMapTable(body, classGen.getMajor());
+    buildUninitializedNewMap(bodyIl);
     fixLocalVariableTable(body);
     add_dcomp_param(body);
+    updateUninitializedNewOffsets(bodyIl);
+    createNewStackMapAttribute(body);
     body.isPublic(false);
     body.isProtected(false);
     body.isPrivate(true);

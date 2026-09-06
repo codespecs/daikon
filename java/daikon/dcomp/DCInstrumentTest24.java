@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.io.UncheckedIOException;
 import java.lang.classfile.Annotation;
 import java.lang.classfile.Attribute;
 import java.lang.classfile.ClassFile;
@@ -44,6 +45,7 @@ import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.Method;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
@@ -498,6 +500,15 @@ public final class DCInstrumentTest24 {
   private static final int HUGE_GROUPS = 16382;
 
   /**
+   * Number of {@code iload_1; iconst_1; iadd; istore_1} groups in {@link #OVERSIZED_METHOD} for
+   * {@link #testOversizedJunitFallbackRebuildsStackMap}, which uses the {@code branching} form of
+   * {@link #oversizedClassBytes}. That form adds 16 bytes, so the method is 4 *
+   * HUGE_BRANCHING_GROUPS + 16 bytes long: just under the JVM's 64K code-size limit, and too close
+   * to it for the handful of bytes of tag-stack bookkeeping that an oversized method is given.
+   */
+  private static final int HUGE_BRANCHING_GROUPS = 16379;
+
+  /**
    * Returns the bytes of {@link Sample} with an added method, {@link #OVERSIZED_METHOD}, whose
    * instrumented form exceeds the JVM's 64K code-size limit. The method is added to a real class
    * rather than a synthetic one because DCInstrument24 resolves the class being instrumented, and
@@ -508,6 +519,24 @@ public final class DCInstrumentTest24 {
    * @throws IOException if the class file for {@link Sample} cannot be read
    */
   private static byte[] oversizedClassBytes(int groups) throws IOException {
+    return oversizedClassBytes(groups, false);
+  }
+
+  /**
+   * Returns the bytes of {@link Sample} with an added method, {@link #OVERSIZED_METHOD}, whose
+   * instrumented form exceeds the JVM's 64K code-size limit. The method is added to a real class
+   * rather than a synthetic one because DCInstrument24 resolves the class being instrumented, and
+   * its superclasses, from the classpath.
+   *
+   * @param groups the number of 4-byte instruction groups in the added method
+   * @param branching if true, the added method uses locals beyond its parameters and contains a
+   *     branch, so it has a StackMapTable and its instructions must be widened when a DCompMarker
+   *     parameter displaces those locals; if false, the method is straight-line code that uses no
+   *     local beyond its parameter
+   * @return the bytes of {@link Sample} plus a method that is too large to instrument
+   * @throws IOException if the class file for {@link Sample} cannot be read
+   */
+  private static byte[] oversizedClassBytes(int groups, boolean branching) throws IOException {
     ClassFile classFile = ClassFile.of();
     ClassModel classModel = classFile.parse(classBytes(sampleClassName()));
     return classFile.transformClass(
@@ -519,6 +548,37 @@ public final class DCInstrumentTest24 {
                     MethodTypeDesc.of(CD_int, CD_int),
                     ClassFile.ACC_PUBLIC,
                     codeBuilder -> {
+                      if (branching) {
+                        // Locals 2 and 3 are referenced by one-byte instructions; adding a
+                        // DCompMarker parameter moves them to 3 and 4, which widens those
+                        // instructions and thus shifts every later bytecode offset.  The branch
+                        // target needs a stack map frame, whose offset therefore shifts too.
+                        //
+                        // All of this precedes the groups, and the branch skips only a few bytes,
+                        // because BCEL cannot represent a branch offset or a stack map offset
+                        // beyond 32767.
+                        Label target = codeBuilder.newLabel();
+                        codeBuilder.iconst_0();
+                        codeBuilder.istore(2);
+                        codeBuilder.iconst_0();
+                        codeBuilder.istore(3);
+                        codeBuilder.iload(3);
+                        codeBuilder.ifge(target);
+                        codeBuilder.iinc(3, 1);
+                        codeBuilder.iinc(2, 1);
+                        codeBuilder.labelBinding(target);
+                        // Declare every local, including "this" and the parameter.  Without a
+                        // complete LocalVariableTable, BCEL's fixLocalVariableTable runs the stack
+                        // verifier over the whole method to infer the live range of each
+                        // undeclared local, which takes minutes on a method this large.
+                        Label start = codeBuilder.startLabel();
+                        Label end = codeBuilder.endLabel();
+                        codeBuilder.localVariable(
+                            0, "this", ClassDesc.of(sampleClassName()), start, end);
+                        codeBuilder.localVariable(1, "arg", CD_int, start, end);
+                        codeBuilder.localVariable(2, "local2", CD_int, start, end);
+                        codeBuilder.localVariable(3, "local3", CD_int, start, end);
+                      }
                       for (int i = 0; i < groups; i++) {
                         codeBuilder.iload(1);
                         codeBuilder.iconst_1();
@@ -790,6 +850,7 @@ public final class DCInstrumentTest24 {
    * @throws IOException if the generated class cannot be parsed
    * @throws ReflectiveOperationException if the generated class cannot be loaded or invoked
    */
+  @SuppressWarnings({"nullness:argument", "signedness:argument"}) // TODO
   @Test
   public void testHugeJunitMethodUsesForwardingStub()
       throws IOException, ReflectiveOperationException {
@@ -854,7 +915,7 @@ public final class DCInstrumentTest24 {
       DCRuntime.push_const(); // primitive argument tag
       DCRuntime.push_const(); // caller-produced primitive result tag
       Object result = generatedClass.getMethod(OVERSIZED_METHOD, int.class).invoke(receiver, 1);
-      assertEquals("forwarding stub returned the wrong value", 16383, result);
+      assertEquals("forwarding stub returned the wrong value", HUGE_GROUPS + 1, result);
 
       DCRuntime.discard_tag(1);
       boolean rejectedExtraDiscard = false;
@@ -864,6 +925,91 @@ public final class DCInstrumentTest24 {
         rejectedExtraDiscard = true;
       }
       assertTrue("forwarding stub left a stale tag", rejectedExtraDiscard);
+    } finally {
+      DCRuntime.normal_exit(tagFrame);
+    }
+  }
+
+  /**
+   * Tests that the JUnit oversized-method fallback rebuilds the stack map of the body it moves to
+   * the private marker overload. Adding the DCompMarker parameter renumbers every local that
+   * follows the parameters, which widens the instructions that reference them and thereby shifts
+   * the bytecode offsets that the stack map records. If the body keeps the stack map it was parsed
+   * with, the class fails verification when it is loaded below.
+   *
+   * <p>This calls {@link DCInstrument#create_oversized_method} directly rather than instrumenting
+   * the class. Fully instrumenting a 64K method that has a stack map takes minutes, because BCEL
+   * rescans the instruction list for each instruction it rewrites, and the fully instrumented form
+   * is discarded as oversized anyway.
+   *
+   * @throws IOException if the generated class cannot be parsed
+   * @throws ReflectiveOperationException if the generated class cannot be loaded or invoked
+   */
+  @SuppressWarnings({"nullness:argument", "signedness:argument"}) // TODO
+  @Test
+  public void testOversizedJunitFallbackRebuildsStackMap()
+      throws IOException, ReflectiveOperationException {
+    ClassFile classFile = ClassFile.of();
+    byte[] original = oversizedClassBytes(HUGE_BRANCHING_GROUPS, true);
+    // The premise of this test is that the uninstrumented method fits, but only just: adding the
+    // tag-stack bookkeeping to it would not, so the fallback is used.
+    int originalLength = codeLength(classFile.parse(original), OVERSIZED_METHOD);
+    assertTrue(
+        "uninstrumented " + OVERSIZED_METHOD + " does not fit: " + originalLength,
+        originalLength <= 65535);
+    assertTrue(
+        "uninstrumented " + OVERSIZED_METHOD + " has room for the bookkeeping: " + originalLength,
+        originalLength > 65535 - 7);
+
+    @BinaryName String className = sampleClassName();
+    JavaClass parsed = new ClassParser(new ByteArrayInputStream(original), className).parse();
+    boolean savedJdkInstrumented = Premain.jdk_instrumented;
+    JavaClass instrumented;
+    try {
+      Premain.jdk_instrumented = false;
+      DCInstrument dci = new DCInstrument(parsed, false, classLoader());
+      Method huge = dci.classGen.containsMethod(OVERSIZED_METHOD, "(I)I");
+      assert huge != null : "@AssumeAssertion(nullness): oversizedClassBytes added this method";
+      // A JUnit method keeps its original descriptor, so no DCompMarker is added to it.
+      Method wrapper =
+          withDiagnosticsDiscarded(
+              () -> {
+                try {
+                  return dci.create_oversized_method(huge, false);
+                } catch (IOException e) {
+                  throw new UncheckedIOException(e);
+                }
+              });
+      dci.classGen.replaceMethod(huge, wrapper);
+      instrumented = dci.classGen.getJavaClass();
+    } finally {
+      Premain.jdk_instrumented = savedJdkInstrumented;
+    }
+
+    ClassModel instrumentedModel = classFile.parse(instrumented.getBytes());
+    MethodModel body =
+        methodWithType(
+            instrumentedModel,
+            OVERSIZED_METHOD,
+            MethodTypeDesc.of(CD_int, CD_int, ClassDesc.of("daikon.dcomp.DCompMarker")));
+    // The body is unchanged except that the DCompMarker parameter displaces locals 2 and 3, which
+    // widens the two one-byte instructions that end up referencing slot 4.
+    assertEquals(
+        "oversized body was changed beyond renumbering its locals",
+        originalLength + 2,
+        ((CodeAttribute) body.code().orElseThrow()).codeLength());
+
+    // Loading the class verifies it, which is what checks the rebuilt stack map.
+    Class<?> generatedClass =
+        byteArrayClassLoader(Map.of(className, instrumented.getBytes())).loadClass(className);
+    Object receiver = generatedClass.getConstructor().newInstance();
+    Object[] tagFrame = DCRuntime.create_tag_frame("1");
+    try {
+      DCRuntime.push_const(); // primitive argument tag
+      DCRuntime.push_const(); // caller-produced primitive result tag
+      Object result = generatedClass.getMethod(OVERSIZED_METHOD, int.class).invoke(receiver, 1);
+      assertEquals("forwarding stub returned the wrong value", HUGE_BRANCHING_GROUPS + 1, result);
+      DCRuntime.discard_tag(1);
     } finally {
       DCRuntime.normal_exit(tagFrame);
     }
