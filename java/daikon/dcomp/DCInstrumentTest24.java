@@ -659,6 +659,7 @@ public final class DCInstrumentTest24 {
    * @throws IOException if the class file for {@link Sample} cannot be read
    * @throws ReflectiveOperationException if the generated classes cannot be loaded or invoked
    */
+  @SuppressWarnings({"nullness:argument", "signedness:argument"}) // TODO
   @Test
   public void testHugeMethodUsesForwardingStub() throws IOException, ReflectiveOperationException {
     byte[] original = oversizedClassBytes(HUGE_GROUPS);
