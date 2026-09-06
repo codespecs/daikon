@@ -4594,15 +4594,88 @@ public class DCInstrument extends InstructionListUtils {
           classname, m.getName());
     }
 
+    MethodGen mgen = new MethodGen(m, classname, pool);
     if (addDcompMarker) {
-      return create_oversized_method_stub(new MethodGen(m, classname, pool)).getMethod();
+      return create_oversized_method_stub(mgen).getMethod();
     }
 
-    MethodGen mgen = new MethodGen(m, classname, pool);
-    setCurrentStackMapTable(mgen, classGen.getMajor());
+    // A JUnit method must retain its original descriptor, so use that descriptor for the small
+    // bookkeeping stub and put the unchanged body in a private DCompMarker overload.  The caller
+    // and stub then agree about every primitive argument and result tag even when the original body
+    // has no room for a single additional instruction.
+    MethodGen body = new MethodGen(m, classname, pool);
+    fixLocalVariableTable(body);
+    add_dcomp_param(body);
+    body.isPublic(false);
+    body.isProtected(false);
+    body.isPrivate(true);
+    body.isSynchronized(false);
+    body.isSynthetic(true);
+    body.removeAnnotationEntries();
+    remove_local_variable_type_table(body);
+    body.setMaxLocals();
+    classGen.addMethod(body.getMethod());
+    return create_oversized_junit_method_stub(mgen).getMethod();
+  }
+
+  /**
+   * Returns a JUnit-visible wrapper that maintains the tag-stack calling convention and invokes an
+   * unchanged private DCompMarker overload. This is the final fallback when the bookkeeping does
+   * not fit in the original method body.
+   *
+   * @param mgen the unmodified method, with its original signature
+   * @return a forwarding stub with the original signature
+   */
+  MethodGen create_oversized_junit_method_stub(MethodGen mgen) {
+    Type[] paramTypes = mgen.getArgumentTypes();
+    Type returnType = mgen.getReturnType();
+
+    int primitiveCount = 0;
+    for (Type paramType : paramTypes) {
+      if (is_primitive(paramType)) {
+        primitiveCount++;
+      }
+    }
+
+    InstructionList il = new InstructionList();
+    if (primitiveCount > 0) {
+      boolean replaceCallerResultTag = is_primitive(returnType);
+      il.append(ifact.createConstant(primitiveCount + (replaceCallerResultTag ? 1 : 0)));
+      il.append(dcr_call("discard_tag", CD_void, intSig));
+      if (replaceCallerResultTag) {
+        il.append(dcr_call("push_const", CD_void, noArgsSig));
+      }
+    }
+
+    int offset = 0;
+    if (!mgen.isStatic()) {
+      il.append(InstructionFactory.createThis());
+      offset = 1;
+    }
+    for (Type paramType : paramTypes) {
+      il.append(InstructionFactory.createLoad(paramType, offset));
+      offset += paramType.getSize();
+    }
+    il.append(new ACONST_NULL());
+    il.append(
+        ifact.createInvoke(
+            mgen.getClassName(),
+            mgen.getName(),
+            returnType,
+            ArraysPlume.append(paramTypes, dcomp_marker),
+            mgen.isStatic() ? INVOKESTATIC : INVOKESPECIAL,
+            classGen.isInterface()));
+    il.append(InstructionFactory.createReturn(returnType));
+
+    mgen.setInstructionList(il);
+    mgen.removeExceptionHandlers();
+    mgen.removeLineNumbers();
+    mgen.removeLocalVariables();
+    mgen.removeCodeAttributes();
     remove_blacklisted_annotations(mgen);
-    remove_local_variable_type_table(mgen);
-    return mgen.getMethod();
+    mgen.setMaxLocals();
+    mgen.setMaxStack();
+    return mgen;
   }
 
   /**

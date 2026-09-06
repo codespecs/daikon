@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import daikon.chicory.ClassInfo;
 import daikon.chicory.Runtime;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +42,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.JavaClass;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
@@ -488,8 +491,8 @@ public final class DCInstrumentTest24 {
 
   /**
    * Number of {@code iload_1; iconst_1; iadd; istore_1} groups in {@link #OVERSIZED_METHOD} for
-   * {@link #testHugeMethodUsesForwardingStub}. The method is 4 * HUGE_GROUPS + 2 bytes long,
-   * which is just under the JVM's 64K code-size limit -- so close that even the handful of bytes of
+   * {@link #testHugeMethodUsesForwardingStub}. The method is 4 * HUGE_GROUPS + 2 bytes long, which
+   * is just under the JVM's 64K code-size limit -- so close that even the handful of bytes of
    * tag-stack bookkeeping that an oversized method is given does not fit.
    */
   private static final int HUGE_GROUPS = 16382;
@@ -700,9 +703,7 @@ public final class DCInstrumentTest24 {
             instrumentedModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int)));
     // The unchanged original body remains alongside the small DCompMarker forwarding overload.
     assertEquals(
-        "huge method's body was changed",
-        length,
-        codeLength(instrumentedModel, OVERSIZED_METHOD));
+        "huge method's body was changed", length, codeLength(instrumentedModel, OVERSIZED_METHOD));
     assertFalse(
         "huge method reported as skipped: " + dci.get_skipped_methods(),
         dci.get_skipped_methods().stream().anyMatch(m -> m.contains(OVERSIZED_METHOD)));
@@ -731,8 +732,9 @@ public final class DCInstrumentTest24 {
                   }
                 }));
 
-    String superclassName = sampleClassName();
-    String subclassName = superclassName + "$DispatchOverride";
+    @BinaryName String superclassName = sampleClassName();
+    @SuppressWarnings("signature:assignment") // Appending a nested-class suffix preserves format.
+    @BinaryName String subclassName = superclassName + "$DispatchOverride";
     byte[] subclass =
         classFile.build(
             ClassDesc.of(subclassName),
@@ -758,19 +760,109 @@ public final class DCInstrumentTest24 {
                     codeBuilder.ireturn();
                   });
             });
-    ClassLoader loader = byteArrayClassLoader(Map.of(superclassName, executable, subclassName, subclass));
+    ClassLoader loader =
+        byteArrayClassLoader(Map.of(superclassName, executable, subclassName, subclass));
     Class<?> superclass = loader.loadClass(superclassName);
     Object receiver = loader.loadClass(subclassName).getConstructor().newInstance();
 
     Object[] tagFrame = DCRuntime.create_tag_frame("1");
     try {
       DCRuntime.push_const();
+      @SuppressWarnings("nullness:argument") // The DCompMarker argument is always null.
       Object result =
           superclass
               .getMethod(OVERSIZED_METHOD, int.class, DCompMarker.class)
               .invoke(receiver, 1, null);
+      assertNotNull("forwarding stub returned null", result);
       assertEquals("forwarding stub bypassed the subclass override", 42, result);
       DCRuntime.discard_tag(1);
+    } finally {
+      DCRuntime.normal_exit(tagFrame);
+    }
+  }
+
+  /**
+   * Tests the final oversized-method fallback for a JUnit class in the legacy BCEL instrumenter. A
+   * JUnit method retains its original descriptor, so the fallback must put the bookkeeping in a
+   * wrapper with that descriptor and move the unchanged body to a private marker overload.
+   *
+   * @throws IOException if the generated class cannot be parsed
+   * @throws ReflectiveOperationException if the generated class cannot be loaded or invoked
+   */
+  @Test
+  public void testHugeJunitMethodUsesForwardingStub()
+      throws IOException, ReflectiveOperationException {
+    ClassFile classFile = ClassFile.of();
+    byte[] original = oversizedClassBytes(HUGE_GROUPS);
+    byte[] junitClass =
+        classFile.transformClass(
+            classFile.parse(original),
+            ClassTransform.transformingMethods(
+                method -> method.methodName().stringValue().equals(OVERSIZED_METHOD),
+                MethodTransform.endHandler(
+                    methodBuilder ->
+                        methodBuilder.with(
+                            RuntimeVisibleAnnotationsAttribute.of(
+                                Annotation.of(ClassDesc.of("org.junit.Test")))))));
+
+    @BinaryName String className = sampleClassName();
+    JavaClass parsed = new ClassParser(new ByteArrayInputStream(junitClass), className).parse();
+    boolean wasJunitClass = DCInstrument.junitTestClasses.contains(className);
+    boolean savedJdkInstrumented = Premain.jdk_instrumented;
+    List<Pattern> savedOmitPattern = Runtime.ppt_omit_pattern;
+    JavaClass instrumented;
+    try {
+      Premain.jdk_instrumented = false;
+      Runtime.ppt_omit_pattern = List.of(Pattern.compile(Pattern.quote(className)));
+      DCInstrument dci = new DCInstrument(parsed, false, classLoader());
+      instrumented = withDiagnosticsDiscarded(dci::instrument);
+    } finally {
+      Premain.jdk_instrumented = savedJdkInstrumented;
+      Runtime.ppt_omit_pattern = savedOmitPattern;
+      if (!wasJunitClass) {
+        DCInstrument.junitTestClasses.remove(className);
+      }
+    }
+
+    ClassModel instrumentedModel = classFile.parse(instrumented.getBytes());
+    MethodModel wrapper =
+        methodWithType(instrumentedModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int));
+    MethodModel body =
+        methodWithType(
+            instrumentedModel,
+            OVERSIZED_METHOD,
+            MethodTypeDesc.of(CD_int, CD_int, ClassDesc.of("daikon.dcomp.DCompMarker")));
+
+    assertEquals(
+        "JUnit forwarding stub does not maintain the tag stack",
+        Set.of("discard_tag", "push_const"),
+        runtimeCalls(wrapper));
+    assertEquals("unchanged body contains runtime calls", Set.of(), runtimeCalls(body));
+    assertEquals(
+        "oversized body was changed",
+        codeLength(classFile.parse(original), OVERSIZED_METHOD),
+        ((CodeAttribute) body.code().orElseThrow()).codeLength());
+    assertTrue("oversized body is not private", body.flags().has(AccessFlag.PRIVATE));
+    assertTrue("oversized body is not synthetic", body.flags().has(AccessFlag.SYNTHETIC));
+
+    Class<?> generatedClass =
+        byteArrayClassLoader(Map.of(className, instrumented.getBytes())).loadClass(className);
+    Object receiver = generatedClass.getConstructor().newInstance();
+    Object[] tagFrame = DCRuntime.create_tag_frame("1");
+    try {
+      DCRuntime.push_const(); // primitive argument tag
+      DCRuntime.push_const(); // caller-produced primitive result tag
+      Object result = generatedClass.getMethod(OVERSIZED_METHOD, int.class).invoke(receiver, 1);
+      assertEquals("forwarding stub returned the wrong value", 16383, result);
+
+      DCRuntime.discard_tag(1);
+      boolean rejectedExtraDiscard = false;
+      try {
+        DCRuntime.discard_tag(1);
+      } catch (AssertionError expected) {
+        rejectedExtraDiscard = true;
+      }
+      assertTrue("forwarding stub left a stale tag", rejectedExtraDiscard);
     } finally {
       DCRuntime.normal_exit(tagFrame);
     }
@@ -782,10 +874,11 @@ public final class DCInstrumentTest24 {
    * @param definitions maps binary class names to class-file bytes
    * @return the class loader
    */
-  private static ClassLoader byteArrayClassLoader(Map<String, byte[]> definitions) {
+  private static ClassLoader byteArrayClassLoader(Map<@BinaryName String, byte[]> definitions) {
     return new ClassLoader(classLoader()) {
       @Override
-      protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+      protected Class<?> loadClass(@BinaryName String name, boolean resolve)
+          throws ClassNotFoundException {
         if (!definitions.containsKey(name)) {
           return super.loadClass(name, resolve);
         }
@@ -1011,8 +1104,18 @@ public final class DCInstrumentTest24 {
    * @return the names of the DCRuntime methods that the instrumented copy invokes
    */
   private static Set<String> runtimeCalls(ClassModel classModel, String methodName) {
+    return runtimeCalls(instrumentedCopy(classModel, methodName));
+  }
+
+  /**
+   * Returns the DCRuntime methods invoked by the given method.
+   *
+   * @param method the method to examine
+   * @return the names of the DCRuntime methods that the method invokes
+   */
+  private static Set<String> runtimeCalls(MethodModel method) {
     Set<String> result = new HashSet<>();
-    instrumentedCopy(classModel, methodName)
+    method
         .code()
         .ifPresent(
             code -> {
@@ -1024,6 +1127,25 @@ public final class DCInstrumentTest24 {
               }
             });
     return result;
+  }
+
+  /**
+   * Returns the method with the given name and type.
+   *
+   * @param classModel the class containing the method
+   * @param methodName the method name
+   * @param methodType the method type
+   * @return the matching method
+   */
+  private static MethodModel methodWithType(
+      ClassModel classModel, String methodName, MethodTypeDesc methodType) {
+    for (MethodModel method : classModel.methods()) {
+      if (method.methodName().stringValue().equals(methodName)
+          && method.methodTypeSymbol().equals(methodType)) {
+        return method;
+      }
+    }
+    throw new AssertionError("no method named " + methodName + " with type " + methodType);
   }
 
   /**
