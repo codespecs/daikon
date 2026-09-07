@@ -467,6 +467,16 @@ public class DCInstrument24 {
   protected boolean constructor_is_initialized;
 
   /**
+   * The MethodInfo that {@link #instrumentCode} registered for the method it is emitting, or null
+   * if it has not registered one. Read only by a rerun of {@code instrumentCode} for that same
+   * method; see {@link MethodGen24#resetForCodeBuilder}.
+   */
+  private @Nullable MethodInfo currentMethodInfo;
+
+  /** The index of {@link #currentMethodInfo} in {@code DCRuntime.methods}. */
+  private int currentMethodInfoIndex;
+
+  /**
    * Record used to describe a new LocalVariable. When instrumentation wants to create a new method,
    * it creates a list containing one of these records for each local variable of the method. This
    * list is passed to {@link #copyCode} and {@link #instrumentCode} where the new variables are
@@ -1463,6 +1473,8 @@ public class DCInstrument24 {
         case CodeModel codeModel ->
             methodBuilder.withCode(
                 codeBuilder -> {
+                  // This handler modifies mgen, and may be run more than once.
+                  mgen.resetForCodeBuilder();
                   MethodGen24.MInfo24 minfo =
                       new MethodGen24.MInfo24(0, mgen.getMaxLocals(), codeBuilder);
                   mgen.fixLocals(minfo);
@@ -1745,6 +1757,9 @@ public class DCInstrument24 {
       ClassInfo classInfo,
       boolean trackMethod) {
 
+    // This handler modifies mgen, and may be run more than once.
+    boolean firstRun = mgen.resetForCodeBuilder();
+
     // method_info_index is not used at this point in DCInstrument
     MethodGen24.MInfo24 minfo = new MethodGen24.MInfo24(0, mgen.getMaxLocals(), codeBuilder);
     debugInstrument.log("nextLocalIndex: %d%n", minfo.nextLocalIndex);
@@ -1835,11 +1850,21 @@ public class DCInstrument24 {
       // and add it to the list for this class.
       MethodInfo mi = null;
       if (trackMethod && !in_jdk) {
-        @SuppressWarnings("nullness:assignment") // the method exists
-        @NonNull MethodInfo miTmp = create_method_info_if_instrumented(classInfo, mgen);
-        mi = miTmp;
-        classInfo.method_infos.add(mi);
-        DCRuntime.methods.add(mi);
+        if (firstRun) {
+          @SuppressWarnings("nullness:assignment") // the method exists
+          @NonNull MethodInfo miTmp = create_method_info_if_instrumented(classInfo, mgen);
+          mi = miTmp;
+          classInfo.method_infos.add(mi);
+          DCRuntime.methods.add(mi);
+          currentMethodInfo = mi;
+          currentMethodInfoIndex = DCRuntime.methods.size() - 1;
+        } else {
+          // This is a rerun of the handler for the method that the previous run registered; reuse
+          // that MethodInfo rather than registering the method a second time.
+          assert currentMethodInfo != null
+              : "@AssumeAssertion(nullness): set by the first run, under the same conditions";
+          mi = currentMethodInfo;
+        }
       }
 
       @SuppressWarnings("JdkObsolete")
@@ -1892,8 +1917,8 @@ public class DCInstrument24 {
 
       if (trackMethod && !in_jdk) {
         assert mi != null : "@AssumeAssertion(nullness): mi was assigned under same conditions";
-        add_enter(mgen, minfo, codeList, DCRuntime.methods.size() - 1);
-        add_exit(mgen, mi, minfo, codeList, DCRuntime.methods.size() - 1);
+        add_enter(mgen, minfo, codeList, currentMethodInfoIndex);
+        add_exit(mgen, mi, minfo, codeList, currentMethodInfoIndex);
       }
 
       // Copy the modified local variable table to the output class.

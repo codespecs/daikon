@@ -34,6 +34,7 @@ import java.lang.classfile.attribute.RuntimeVisibleAnnotationsAttribute;
 import java.lang.classfile.attribute.StackMapFrameInfo;
 import java.lang.classfile.attribute.StackMapTableAttribute;
 import java.lang.classfile.instruction.InvokeInstruction;
+import java.lang.classfile.instruction.LocalVariable;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.lang.reflect.AccessFlag;
@@ -509,6 +510,18 @@ public final class DCInstrumentTest24 {
   private static final int HUGE_BRANCHING_GROUPS = 16379;
 
   /**
+   * Number of {@code iload_3; iconst_1; iadd; istore_3} groups that {@link
+   * #widenedBranchClassBytes} places between a branch and its target. Each group is 4 bytes, so the
+   * branch spans 4 * WIDENING_GROUPS bytes, which fits in the 2-byte operand of a branch
+   * instruction. Adding a DCompMarker parameter moves local 3 to slot 4, which widens the two
+   * one-byte instructions of each group to two bytes apiece; the branch then spans 6 *
+   * WIDENING_GROUPS bytes, which does not fit. This is also enough groups that the fully
+   * instrumented method exceeds the JVM's 64K code-size limit, so the method is emitted by {@code
+   * copyOversizedMethod}.
+   */
+  private static final int WIDENING_GROUPS = 6000;
+
+  /**
    * Returns the bytes of {@link Sample} with an added method, {@link #OVERSIZED_METHOD}, whose
    * instrumented form exceeds the JVM's 64K code-size limit. The method is added to a real class
    * rather than a synthetic one because DCInstrument24 resolves the class being instrumented, and
@@ -591,6 +604,53 @@ public final class DCInstrumentTest24 {
   }
 
   /**
+   * Returns the bytes of {@link Sample} with an added method, {@link #OVERSIZED_METHOD}, whose
+   * instrumented form exceeds the JVM's 64K code-size limit and whose branch fits in a 2-byte
+   * operand only until a DCompMarker parameter renumbers the locals it jumps over. See {@link
+   * #WIDENING_GROUPS}.
+   *
+   * @return the bytes of {@link Sample} plus that method
+   * @throws IOException if the class file for {@link Sample} cannot be read
+   */
+  private static byte[] widenedBranchClassBytes() throws IOException {
+    ClassFile classFile = ClassFile.of();
+    ClassModel classModel = classFile.parse(classBytes(sampleClassName()));
+    return classFile.transformClass(
+        classModel,
+        ClassTransform.endHandler(
+            classBuilder ->
+                classBuilder.withMethodBody(
+                    OVERSIZED_METHOD,
+                    MethodTypeDesc.of(CD_int, CD_int),
+                    ClassFile.ACC_PUBLIC,
+                    codeBuilder -> {
+                      // The branch is always taken, so the groups it jumps over are dead at run
+                      // time; they exist to put the branch target out of reach once the
+                      // instructions between here and there are widened.
+                      Label target = codeBuilder.newLabel();
+                      codeBuilder.iconst_0();
+                      codeBuilder.istore(3);
+                      codeBuilder.iload(3);
+                      codeBuilder.ifge(target);
+                      for (int i = 0; i < WIDENING_GROUPS; i++) {
+                        codeBuilder.iload(3);
+                        codeBuilder.iconst_1();
+                        codeBuilder.iadd();
+                        codeBuilder.istore(3);
+                      }
+                      codeBuilder.labelBinding(target);
+                      codeBuilder.iload(1);
+                      codeBuilder.ireturn();
+                      Label start = codeBuilder.startLabel();
+                      Label end = codeBuilder.endLabel();
+                      codeBuilder.localVariable(
+                          0, "this", ClassDesc.of(sampleClassName()), start, end);
+                      codeBuilder.localVariable(1, "arg", CD_int, start, end);
+                      codeBuilder.localVariable(3, "local3", CD_int, start, end);
+                    })));
+  }
+
+  /**
    * Returns the binary name of {@link Sample}.
    *
    * @return the binary name of {@link Sample}
@@ -659,6 +719,98 @@ public final class DCInstrumentTest24 {
     assertFalse(
         "rest of the class was not instrumented",
         runtimeCalls(instrumentedModel, SMALL_METHOD).isEmpty());
+  }
+
+  /**
+   * Tests that an oversized method whose branch has to be widened gets exactly one DCompMarker
+   * parameter.
+   *
+   * <p>java.lang.classfile runs a code-building handler a second time when the code the first run
+   * built contains a branch whose target does not fit in the branch instruction's 2-byte operand:
+   * it discards that code and runs the handler again, this time widening the branch. {@code
+   * copyOversizedMethod} adds the DCompMarker parameter from inside that handler, and for the
+   * method here it is adding the parameter -- which moves local 3 to slot 4 and so widens every
+   * instruction that references it -- that puts the branch target out of reach. The second run
+   * therefore starts from a MethodGen24 that already has the parameter. Adding it again would
+   * append a second DCompMarker to the parameter list and shift the locals a second time, emitting
+   * a body whose locals are a slot higher than the method's descriptor provides, which fails
+   * verification when the class is loaded below.
+   *
+   * @throws IOException if the class file for {@link Sample} cannot be read
+   * @throws ReflectiveOperationException if the generated class cannot be loaded or invoked
+   */
+  @Test
+  public void testOversizedMethodWithWidenedBranch()
+      throws IOException, ReflectiveOperationException {
+    byte[] original = widenedBranchClassBytes();
+    ClassFile classFile = ClassFile.of();
+    ClassInfo classInfo = new ClassInfo(sampleClassName(), classLoader());
+    boolean savedJdkInstrumented = Premain.jdk_instrumented;
+    @BinaryName String savedInstrumentationInterface = DCRuntime.instrumentation_interface;
+    // BuildJDK24 sets these before each class it instruments.
+    Premain.jdk_instrumented = false;
+    DCRuntime.instrumentation_interface = "daikon.dcomp.DCompInstrumented";
+    DCInstrument24 dci = new DCInstrument24(classFile, classFile.parse(original), true);
+    byte[] instrumented;
+    try {
+      // Skipping the oversized method prints a warning; discard it.
+      instrumented = withDiagnosticsDiscarded(() -> dci.instrument_jdk_class(classInfo));
+    } finally {
+      Premain.jdk_instrumented = savedJdkInstrumented;
+      DCRuntime.instrumentation_interface = savedInstrumentationInterface;
+    }
+
+    ClassModel instrumentedModel = classFile.parse(instrumented);
+    // The premise of this test: the method kept its original body plus the tag-stack bookkeeping,
+    // rather than being fully instrumented or replaced by a forwarding stub.
+    assertEquals(
+        "oversized method does not maintain the tag stack",
+        Set.of("discard_tag", "push_const"),
+        runtimeCalls(instrumentedModel, OVERSIZED_METHOD));
+    assertFalse(
+        "oversized method adds an observable forwarding frame",
+        callsOwnMethod(instrumentedModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int)));
+
+    MethodModel body = instrumentedCopy(instrumentedModel, OVERSIZED_METHOD);
+    assertEquals(
+        "oversized method has the wrong parameters",
+        MethodTypeDesc.of(CD_int, CD_int, ClassDesc.of("daikon.dcomp.DCompMarker")),
+        body.methodTypeSymbol());
+    long markerLocals =
+        body.code()
+            .orElseThrow()
+            .elementStream()
+            .filter(e -> e instanceof LocalVariable lv && lv.name().stringValue().equals("marker"))
+            .count();
+    assertEquals("oversized method has the wrong number of marker locals", 1, markerLocals);
+
+    // Loading the class runs the verifier over the emitted body.
+    @BinaryName String className = sampleClassName();
+    Class<?> generatedClass =
+        byteArrayClassLoader(Map.of(className, withShadowRuntimeRedirected(instrumentedModel)))
+            .loadClass(className);
+    Object receiver = generatedClass.getConstructor().newInstance();
+    Object[] tagFrame = DCRuntime.create_tag_frame("1");
+    try {
+      // The tag stack now holds only this method's marker.
+      int markerOnlySize = DCRuntime.tag_stack_size();
+      DCRuntime.push_const(); // primitive argument tag
+      @SuppressWarnings("nullness:argument") // The DCompMarker argument is always null.
+      Object result =
+          generatedClass
+              .getMethod(OVERSIZED_METHOD, int.class, DCompMarker.class)
+              .invoke(receiver, 1, null);
+      assertEquals("oversized method returned the wrong value", 1, result);
+      // It consumed the argument tag and left exactly the result tag.
+      assertEquals(
+          "oversized method did not leave exactly the result tag",
+          markerOnlySize + 1,
+          DCRuntime.tag_stack_size());
+      DCRuntime.discard_tag(1);
+      assertEquals("oversized method left a stale tag", markerOnlySize, DCRuntime.tag_stack_size());
+    } finally {
+      DCRuntime.normal_exit(tagFrame);
+    }
   }
 
   /**
@@ -772,26 +924,7 @@ public final class DCInstrumentTest24 {
         "rest of the class was not instrumented",
         runtimeCalls(instrumentedModel, SMALL_METHOD).isEmpty());
 
-    // Make the pre-instrumented-JDK class executable in this test JVM by redirecting its shadow
-    // runtime calls to the ordinary DynComp runtime.
-    ClassDesc runtimeClass = ClassDesc.of("daikon.dcomp.DCRuntime");
-    byte[] executable =
-        classFile.transformClass(
-            instrumentedModel,
-            ClassTransform.transformingMethodBodies(
-                (codeBuilder, element) -> {
-                  if (element instanceof InvokeInstruction invoke
-                      && invoke.owner().asInternalName().equals("java/lang/DCRuntime")) {
-                    codeBuilder.invoke(
-                        invoke.opcode(),
-                        runtimeClass,
-                        invoke.name().stringValue(),
-                        invoke.typeSymbol(),
-                        false);
-                  } else {
-                    codeBuilder.with(element);
-                  }
-                }));
+    byte[] executable = withShadowRuntimeRedirected(instrumentedModel);
 
     @BinaryName String superclassName = sampleClassName();
     @SuppressWarnings("signature:assignment") // Appending a nested-class suffix preserves format.
@@ -912,19 +1045,20 @@ public final class DCInstrumentTest24 {
     Object receiver = generatedClass.getConstructor().newInstance();
     Object[] tagFrame = DCRuntime.create_tag_frame("1");
     try {
+      // The tag stack now holds only this method's marker.
+      int markerOnlySize = DCRuntime.tag_stack_size();
       DCRuntime.push_const(); // primitive argument tag
       DCRuntime.push_const(); // caller-produced primitive result tag
       Object result = generatedClass.getMethod(OVERSIZED_METHOD, int.class).invoke(receiver, 1);
       assertEquals("forwarding stub returned the wrong value", HUGE_GROUPS + 1, result);
 
+      // The stub consumed the argument tag and left exactly the result tag.
+      assertEquals(
+          "forwarding stub did not leave exactly the result tag",
+          markerOnlySize + 1,
+          DCRuntime.tag_stack_size());
       DCRuntime.discard_tag(1);
-      boolean rejectedExtraDiscard = false;
-      try {
-        DCRuntime.discard_tag(1);
-      } catch (AssertionError expected) {
-        rejectedExtraDiscard = true;
-      }
-      assertTrue("forwarding stub left a stale tag", rejectedExtraDiscard);
+      assertEquals("forwarding stub left a stale tag", markerOnlySize, DCRuntime.tag_stack_size());
     } finally {
       DCRuntime.normal_exit(tagFrame);
     }
@@ -1013,6 +1147,34 @@ public final class DCInstrumentTest24 {
     } finally {
       DCRuntime.normal_exit(tagFrame);
     }
+  }
+
+  /**
+   * Returns the given pre-instrumented-JDK class, made executable in this test JVM by redirecting
+   * its shadow runtime calls to the ordinary DynComp runtime.
+   *
+   * @param classModel a class instrumented by {@code instrument_jdk_class}
+   * @return the bytes of that class, calling {@code daikon.dcomp.DCRuntime}
+   */
+  private static byte[] withShadowRuntimeRedirected(ClassModel classModel) {
+    ClassDesc runtimeClass = ClassDesc.of("daikon.dcomp.DCRuntime");
+    return ClassFile.of()
+        .transformClass(
+            classModel,
+            ClassTransform.transformingMethodBodies(
+                (codeBuilder, element) -> {
+                  if (element instanceof InvokeInstruction invoke
+                      && invoke.owner().asInternalName().equals("java/lang/DCRuntime")) {
+                    codeBuilder.invoke(
+                        invoke.opcode(),
+                        runtimeClass,
+                        invoke.name().stringValue(),
+                        invoke.typeSymbol(),
+                        false);
+                  } else {
+                    codeBuilder.with(element);
+                  }
+                }));
   }
 
   /**

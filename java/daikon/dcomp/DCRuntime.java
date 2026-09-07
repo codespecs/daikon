@@ -1004,6 +1004,18 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /**
+   * Returns the number of entries on the current thread's tag stack, counting the method markers.
+   * Intended for tests, which use it to verify that instrumented code leaves the tag stack as its
+   * callers expect.
+   *
+   * @return the size of the current thread's tag stack
+   */
+  static int tag_stack_size() {
+    ThreadData td = thread_to_data.get(Thread.currentThread());
+    return td == null ? 0 : td.tag_stack.size();
+  }
+
+  /**
    * Manipulate the tags for an array store instruction. The tag at the top of stack is stored into
    * the tag storage for the array. Mark the array and the index as comparable.
    *

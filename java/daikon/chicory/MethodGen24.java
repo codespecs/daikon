@@ -155,6 +155,12 @@ public class MethodGen24 {
   // TODO: Should uses of this be synchronized?
   private ConstantPoolBuilder poolBuilder;
 
+  /**
+   * The mutable state of this method, as recorded by the first call to {@link
+   * #resetForCodeBuilder}. Null until then.
+   */
+  private @Nullable State savedState;
+
   /** Information about the current method. */
   public static class MInfo24 {
 
@@ -764,6 +770,70 @@ public class MethodGen24 {
    */
   public void setInstructionList(List<CodeElement> il) {
     codeList = il;
+  }
+
+  /**
+   * A copy of the mutable state of a MethodGen24; see {@link MethodGen24#resetForCodeBuilder}.
+   * These are the fields that instrumentation modifies. The arrays and lists are copies, so that a
+   * State is unaffected by later modifications to the MethodGen24 it was made from.
+   *
+   * @param codeList a copy of {@link MethodGen24#codeList}
+   * @param localsTable a copy of {@link MethodGen24#localsTable}
+   * @param maxLocals the value of {@link MethodGen24#maxLocals}
+   * @param paramTypes a copy of {@link MethodGen24#paramTypes}
+   * @param paramNames a copy of {@link MethodGen24#paramNames}
+   * @param origLocalVariables a copy of {@link MethodGen24#origLocalVariables}
+   */
+  private record State(
+      List<CodeElement> codeList,
+      List<LocalVariable> localsTable,
+      int maxLocals,
+      ClassDesc[] paramTypes,
+      @Identifier String[] paramNames,
+      LocalVariable[] origLocalVariables) {}
+
+  /**
+   * Undoes every modification made to this MethodGen24 since the first call to this method, and
+   * returns true if this is that first call.
+   *
+   * <p>Call this at the top of every {@code CodeBuilder} handler that modifies this MethodGen24.
+   * The java.lang.classfile implementation may run such a handler more than once: if the code the
+   * handler built contains a branch whose target does not fit in the branch instruction's 2-byte
+   * operand, the implementation discards what was built and runs the handler again, this time
+   * widening those branches. The second run starts from a fresh CodeBuilder, but not from a fresh
+   * MethodGen24, so without this call the handler's modifications -- adding the DCompMarker
+   * parameter and renumbering the locals that follow it, for instance -- would be applied a second
+   * time to a MethodGen24 that already has them.
+   *
+   * <p>A handler that has other side effects must use the return value to perform them only once.
+   *
+   * @return true if this is the first call to this method on this MethodGen24
+   */
+  public boolean resetForCodeBuilder() {
+    State state = savedState;
+    if (state == null) {
+      savedState =
+          new State(
+              new ArrayList<>(codeList),
+              new ArrayList<>(localsTable),
+              maxLocals,
+              paramTypes.clone(),
+              paramNames.clone(),
+              origLocalVariables.clone());
+      return true;
+    }
+    // As in the constructor, a LinkedList is the right choice for codeList.
+    @SuppressWarnings("JdkObsolete")
+    List<CodeElement> cl = new LinkedList<CodeElement>(state.codeList());
+    codeList = cl;
+    // Modify localsTable in place, because clients hold references to it.
+    localsTable.clear();
+    localsTable.addAll(state.localsTable());
+    maxLocals = state.maxLocals();
+    paramTypes = state.paramTypes().clone();
+    paramNames = state.paramNames().clone();
+    origLocalVariables = state.origLocalVariables().clone();
+    return false;
   }
 
   /**
