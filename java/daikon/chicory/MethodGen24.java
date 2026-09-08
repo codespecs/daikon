@@ -784,6 +784,7 @@ public class MethodGen24 {
    * @param paramNames a copy of {@link MethodGen24#paramNames}
    * @param origLocalVariables a copy of {@link MethodGen24#origLocalVariables}
    */
+  @SuppressWarnings("ArrayRecordComponent") // defensive copies previent mutation of array fields
   private record State(
       List<CodeElement> codeList,
       List<LocalVariable> localsTable,

@@ -795,11 +795,15 @@ public final class DCInstrumentTest24 {
       // The tag stack now holds only this method's marker.
       int markerOnlySize = DCRuntime.tag_stack_size();
       DCRuntime.push_const(); // primitive argument tag
-      @SuppressWarnings("nullness:argument") // The DCompMarker argument is always null.
+      @SuppressWarnings({
+        "nullness:argument", // The DCompMarker argument is always null.
+        "signedness:argument" // TODO
+      })
       Object result =
           generatedClass
               .getMethod(OVERSIZED_METHOD, int.class, DCompMarker.class)
               .invoke(receiver, 1, null);
+      assertNotNull("oversized method returned null", result);
       assertEquals("oversized method returned the wrong value", 1, result);
       // It consumed the argument tag and left exactly the result tag.
       assertEquals(
@@ -871,7 +875,7 @@ public final class DCInstrumentTest24 {
    * @throws IOException if the class file for {@link Sample} cannot be read
    * @throws ReflectiveOperationException if the generated classes cannot be loaded or invoked
    */
-  @SuppressWarnings({"nullness:argument", "signedness:argument"}) // TODO
+  @SuppressWarnings("signedness:argument") // TODO
   @Test
   public void testHugeMethodUsesForwardingStub() throws IOException, ReflectiveOperationException {
     byte[] original = oversizedClassBytes(HUGE_GROUPS);
@@ -983,7 +987,7 @@ public final class DCInstrumentTest24 {
    * @throws IOException if the generated class cannot be parsed
    * @throws ReflectiveOperationException if the generated class cannot be loaded or invoked
    */
-  @SuppressWarnings({"nullness:argument", "signedness:argument"}) // TODO
+  @SuppressWarnings("signedness:argument") // TODO
   @Test
   public void testHugeJunitMethodUsesForwardingStub()
       throws IOException, ReflectiveOperationException {
@@ -1079,7 +1083,7 @@ public final class DCInstrumentTest24 {
    * @throws IOException if the generated class cannot be parsed
    * @throws ReflectiveOperationException if the generated class cannot be loaded or invoked
    */
-  @SuppressWarnings({"nullness:argument", "signedness:argument"}) // TODO
+  @SuppressWarnings("signedness:argument") // TODO
   @Test
   public void testOversizedJunitFallbackRebuildsStackMap()
       throws IOException, ReflectiveOperationException {
