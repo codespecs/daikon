@@ -38,6 +38,7 @@ import java.lang.classfile.instruction.LocalVariable;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.lang.reflect.AccessFlag;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -524,6 +525,15 @@ public final class DCInstrumentTest24 {
   private static final int HUGE_BRANCHING_GROUPS = 16379;
 
   /**
+   * Number of {@code iload_1; iconst_1; iadd; istore_1} groups in {@link #OVERSIZED_METHOD} for
+   * {@link #testHugeThrowingJunitMethodCleansUpTagStackOnException}, which uses {@link
+   * #throwingClassBytes}. That form adds {@link #THROWING_FIXED_BYTES} bytes, so the method is just
+   * under the JVM's 64K code-size limit, and too close to it for the handful of bytes of tag-stack
+   * bookkeeping that an oversized method is given.
+   */
+  private static final int HUGE_THROWING_GROUPS = 16378;
+
+  /**
    * Number of {@code iload_3; iconst_1; iadd; istore_3} groups that {@link
    * #widenedBranchClassBytes} places between a branch and its target. Each group is 4 bytes, so the
    * branch spans 4 * WIDENING_GROUPS bytes, which fits in the 2-byte operand of a branch
@@ -704,6 +714,78 @@ public final class DCInstrumentTest24 {
                       }
                       codeBuilder.iload(1);
                       codeBuilder.ireturn();
+                      // Declare every local; see oversizedClassBytes for why.
+                      Label start = codeBuilder.startLabel();
+                      Label end = codeBuilder.endLabel();
+                      codeBuilder.localVariable(
+                          0, "this", ClassDesc.of(sampleClassName()), start, end);
+                      codeBuilder.localVariable(1, "arg", CD_int, start, end);
+                    })));
+  }
+
+  /** The exception that the method built by {@link #throwingClassBytes} throws. */
+  private static final ClassDesc THROWN_EXCEPTION = ClassDesc.of("java.lang.IllegalStateException");
+
+  /**
+   * The number of bytes of {@link #OVERSIZED_METHOD}, as built by {@link #throwingClassBytes}, that
+   * are not part of one of its 4-byte groups.
+   */
+  private static final int THROWING_FIXED_BYTES = 21;
+
+  /**
+   * Returns the bytes of {@link Sample} with an added method, {@link #OVERSIZED_METHOD}, that
+   * throws {@link #THROWN_EXCEPTION} when its argument is nonzero and returns normally when its
+   * argument is zero, and whose instrumented form exceeds the JVM's 64K code-size limit.
+   *
+   * <p>Before throwing, the method calls {@link #SIBLING_METHOD} and discards its result. When the
+   * sibling is instrumented, that call leaves a result tag on the tag stack that the uninstrumented
+   * body never pops, so the throw leaves both that tag and the body's marker for the
+   * exceptional-exit cleanup to remove.
+   *
+   * <p>The method is {@code 4 * groups} plus {@link #THROWING_FIXED_BYTES} bytes long.
+   *
+   * @param groups the number of 4-byte instruction groups in the added method
+   * @return the bytes of {@link Sample} plus that method
+   * @throws IOException if the class file for {@link Sample} cannot be read
+   */
+  private static byte[] throwingClassBytes(int groups) throws IOException {
+    ClassFile classFile = ClassFile.of();
+    ClassModel classModel = classFile.parse(classBytes(sampleClassName()));
+    return classFile.transformClass(
+        classModel,
+        ClassTransform.endHandler(
+            classBuilder ->
+                classBuilder.withMethodBody(
+                    OVERSIZED_METHOD,
+                    MethodTypeDesc.of(CD_int, CD_int),
+                    ClassFile.ACC_PUBLIC,
+                    codeBuilder -> {
+                      // if (arg != 0) { combine(arg, 1); throw new IllegalStateException(); }
+                      Label normal = codeBuilder.newLabel();
+                      codeBuilder.iload(1); // 1 byte
+                      codeBuilder.ifeq(normal); // 3 bytes
+                      codeBuilder.aload(0); // 1 byte
+                      codeBuilder.iload(1); // 1 byte
+                      codeBuilder.iconst_1(); // 1 byte
+                      codeBuilder.invokevirtual( // 3 bytes
+                          ClassDesc.of(sampleClassName()),
+                          SIBLING_METHOD,
+                          MethodTypeDesc.of(CD_int, CD_int, CD_int));
+                      codeBuilder.pop(); // 1 byte
+                      codeBuilder.new_(THROWN_EXCEPTION); // 3 bytes
+                      codeBuilder.dup(); // 1 byte
+                      codeBuilder.invokespecial( // 3 bytes
+                          THROWN_EXCEPTION, "<init>", MethodTypeDesc.of(CD_void));
+                      codeBuilder.athrow(); // 1 byte
+                      codeBuilder.labelBinding(normal);
+                      for (int i = 0; i < groups; i++) {
+                        codeBuilder.iload(1);
+                        codeBuilder.iconst_1();
+                        codeBuilder.iadd();
+                        codeBuilder.istore(1);
+                      }
+                      codeBuilder.iload(1); // 1 byte
+                      codeBuilder.ireturn(); // 1 byte
                       // Declare every local; see oversizedClassBytes for why.
                       Label start = codeBuilder.startLabel();
                       Label end = codeBuilder.endLabel();
@@ -1153,7 +1235,9 @@ public final class DCInstrumentTest24 {
 
     assertEquals(
         "JUnit forwarding stub does not maintain the tag stack",
-        Set.of("uninstrumented_enter", "uninstrumented_exit_primitive"),
+        // uninstrumented_exit is the catch-all handler's call; see
+        // testHugeThrowingJunitMethodCleansUpTagStackOnException.
+        Set.of("uninstrumented_enter", "uninstrumented_exit_primitive", "uninstrumented_exit"),
         runtimeCalls(wrapper));
     assertEquals("unchanged body contains runtime calls", Set.of(), runtimeCalls(body));
     assertEquals(
@@ -1242,7 +1326,9 @@ public final class DCInstrumentTest24 {
     // original body, bracketed by the uninstrumented-body bookkeeping and nothing else.
     assertEquals(
         "oversized method does not bracket its uninstrumented body",
-        Set.of("uninstrumented_enter", "uninstrumented_exit_primitive"),
+        // uninstrumented_exit is the catch-all handler's call; see
+        // testOversizedJunitMethodCleansUpTagStackOnException.
+        Set.of("uninstrumented_enter", "uninstrumented_exit_primitive", "uninstrumented_exit"),
         runtimeCalls(oversized));
     // The sibling it calls was instrumented, so it pops a tag for each of its two parameters.
     assertFalse("sibling method was not instrumented", runtimeCalls(sibling).isEmpty());
@@ -1462,6 +1548,385 @@ public final class DCInstrumentTest24 {
     } finally {
       DCRuntime.normal_exit(tagFrame);
     }
+  }
+
+  /**
+   * Returns the given class with an added method whose name is the one that the JUnit
+   * oversized-method fallback derives for the body it moves, {@link
+   * DCInstrument#oversized_body_name}, and whose descriptor is that of {@link #OVERSIZED_METHOD}.
+   * The added method returns -1, which distinguishes it from the moved body.
+   *
+   * @param classBytes the bytes of a class that has an {@link #OVERSIZED_METHOD} method
+   * @return the same class, plus a method that collides with the derived body name
+   */
+  private static byte[] withBodyNameCollision(byte[] classBytes) {
+    ClassFile classFile = ClassFile.of();
+    return classFile.transformClass(
+        classFile.parse(classBytes),
+        ClassTransform.endHandler(
+            classBuilder ->
+                classBuilder.withMethodBody(
+                    DCInstrument.oversized_body_name(OVERSIZED_METHOD),
+                    MethodTypeDesc.of(CD_int, CD_int),
+                    ClassFile.ACC_PUBLIC,
+                    codeBuilder -> {
+                      codeBuilder.iconst_m1();
+                      codeBuilder.ireturn();
+                    })));
+  }
+
+  /**
+   * Tests that the last-resort JUnit oversized-method fallback does not emit a body whose name and
+   * descriptor duplicate those of a method the class already has.
+   *
+   * <p>That fallback distinguishes the body from its wrapper by name alone, so the body keeps the
+   * original method's descriptor; and in a JUnit test class every other method keeps its original
+   * descriptor too. A class that happens to declare a method with the derived name would therefore
+   * end up with two methods of the same name and descriptor, which {@code ClassGen.addMethod} does
+   * not check for and which makes the class unloadable.
+   *
+   * <p>Like {@link #testOversizedJunitFallbackRenamesBodyThatCannotTakeTheMarker}, this calls
+   * {@link DCInstrument#create_oversized_method} directly rather than instrumenting the class,
+   * because fully instrumenting a 64K method with a stack map takes minutes and its instrumented
+   * form is discarded as oversized anyway.
+   *
+   * @throws IOException if the generated class cannot be parsed
+   * @throws ReflectiveOperationException if the generated class cannot be loaded or invoked
+   */
+  @SuppressWarnings("signedness:argument") // TODO
+  @Test
+  public void testOversizedJunitFallbackAvoidsBodyNameCollision()
+      throws IOException, ReflectiveOperationException {
+    ClassFile classFile = ClassFile.of();
+    // Two bytes of padding put the method close enough to the limit that the DCompMarker parameter
+    // does not fit, which is what forces the fallback that renames the body; see
+    // testOversizedJunitFallbackRenamesBodyThatCannotTakeTheMarker.
+    byte[] original = withBodyNameCollision(oversizedClassBytes(HUGE_BRANCHING_GROUPS, true, 2));
+    int originalLength = codeLength(classFile.parse(original), OVERSIZED_METHOD);
+    assertTrue(
+        "uninstrumented " + OVERSIZED_METHOD + " does not fit: " + originalLength,
+        originalLength <= 65535);
+    assertTrue(
+        "the DCompMarker parameter still fits in " + OVERSIZED_METHOD + ": " + originalLength,
+        originalLength + 2 > 65535);
+
+    @BinaryName String className = sampleClassName();
+    JavaClass parsed = new ClassParser(new ByteArrayInputStream(original), className).parse();
+    boolean savedJdkInstrumented = Premain.jdk_instrumented;
+    JavaClass instrumented;
+    @Identifier String bodyName;
+    try {
+      Premain.jdk_instrumented = false;
+      DCInstrument dci = new DCInstrument(parsed, false, classLoader());
+      Method huge = dci.classGen.containsMethod(OVERSIZED_METHOD, "(I)I");
+      assert huge != null : "@AssumeAssertion(nullness): oversizedClassBytes added this method";
+      // Ask for the body name now, while the class holds only the colliding method, so that the
+      // test does not depend on how the collision is resolved.
+      bodyName = dci.unused_oversized_body_name(OVERSIZED_METHOD, "(I)I");
+      // A JUnit method keeps its original descriptor, so no DCompMarker is added to it.
+      Method wrapper =
+          withDiagnosticsDiscarded(
+              () -> {
+                try {
+                  return dci.create_oversized_method(huge, false);
+                } catch (IOException e) {
+                  throw new UncheckedIOException(e);
+                }
+              });
+      dci.classGen.replaceMethod(huge, wrapper);
+      instrumented = dci.classGen.getJavaClass();
+    } finally {
+      Premain.jdk_instrumented = savedJdkInstrumented;
+    }
+
+    @Identifier String collidingName = DCInstrument.oversized_body_name(OVERSIZED_METHOD);
+    assertFalse(
+        "the derived body name was reused even though it was taken: " + bodyName,
+        bodyName.equals(collidingName));
+
+    ClassModel instrumentedModel = classFile.parse(instrumented.getBytes());
+    // The body kept its original descriptor and its code array; only its name changed.
+    MethodModel body =
+        methodWithType(instrumentedModel, bodyName, MethodTypeDesc.of(CD_int, CD_int));
+    assertEquals(
+        "oversized body was changed",
+        originalLength,
+        ((CodeAttribute) body.code().orElseThrow()).codeLength());
+    assertTrue("oversized body is not private", body.flags().has(AccessFlag.PRIVATE));
+    assertTrue("oversized body is not synthetic", body.flags().has(AccessFlag.SYNTHETIC));
+    // The method that the derived name collided with is still there, and is still its own body.
+    assertEquals(
+        "the colliding method was displaced", 2, codeLength(instrumentedModel, collidingName));
+
+    // Defining the class is what rejects two methods with the same name and descriptor.
+    Class<?> generatedClass =
+        byteArrayClassLoader(Map.of(className, instrumented.getBytes())).loadClass(className);
+    Object receiver = generatedClass.getConstructor().newInstance();
+    Object[] tagFrame = DCRuntime.create_tag_frame("1");
+    try {
+      DCRuntime.push_const(); // primitive argument tag
+      DCRuntime.push_const(); // caller-produced primitive result tag
+      Object result =
+          nonNullResult(
+              "forwarding stub returned null",
+              generatedClass.getMethod(OVERSIZED_METHOD, int.class).invoke(receiver, 1));
+      assertEquals("forwarding stub returned the wrong value", HUGE_BRANCHING_GROUPS + 1, result);
+      DCRuntime.discard_tag(1);
+      assertEquals(
+          "the colliding method no longer returns its own value",
+          -1,
+          nonNullResult(
+              "colliding method returned null",
+              generatedClass.getMethod(collidingName, int.class).invoke(receiver, 1)));
+    } finally {
+      DCRuntime.normal_exit(tagFrame);
+    }
+  }
+
+  /**
+   * Tests that an oversized JUnit method whose body throws leaves the tag stack as it found it and
+   * propagates the original throwable.
+   *
+   * <p>The emitted method brackets its retained body with {@code DCRuntime.uninstrumented_enter}
+   * and {@code DCRuntime.uninstrumented_exit}, but the exit call sits before each return, so a
+   * throw would skip it. The method's caller is JUnit's reflective invocation, which maintains no
+   * tag stack, so nothing else would remove the marker that {@code uninstrumented_enter} pushed or
+   * the tags that the body's calls left above it, and a later method would consume that garbage as
+   * its own argument tags.
+   *
+   * @throws IOException if the generated class cannot be parsed
+   * @throws ReflectiveOperationException if the generated class cannot be loaded or invoked
+   */
+  @SuppressWarnings("signedness:argument") // TODO
+  @Test
+  public void testOversizedJunitMethodCleansUpTagStackOnException()
+      throws IOException, ReflectiveOperationException {
+    ClassFile classFile = ClassFile.of();
+    byte[] junitClass = withJunitTestAnnotation(throwingClassBytes(OVERSIZED_GROUPS));
+
+    @BinaryName String className = sampleClassName();
+    JavaClass parsed = new ClassParser(new ByteArrayInputStream(junitClass), className).parse();
+    boolean wasJunitClass = DCInstrument.junitTestClasses.contains(className);
+    boolean savedJdkInstrumented = Premain.jdk_instrumented;
+    List<Pattern> savedOmitPattern = Runtime.ppt_omit_pattern;
+    JavaClass instrumented;
+    try {
+      Premain.jdk_instrumented = false;
+      Runtime.ppt_omit_pattern = List.of(Pattern.compile(Pattern.quote(className)));
+      DCInstrument dci = new DCInstrument(parsed, false, classLoader());
+      instrumented = withDiagnosticsDiscarded(dci::instrument);
+    } finally {
+      Premain.jdk_instrumented = savedJdkInstrumented;
+      Runtime.ppt_omit_pattern = savedOmitPattern;
+      if (!wasJunitClass) {
+        DCInstrument.junitTestClasses.remove(className);
+      }
+    }
+
+    ClassModel instrumentedModel = classFile.parse(instrumented.getBytes());
+    // A JUnit method keeps its original descriptor, so there is no DCompMarker copy to look up.
+    MethodModel oversized =
+        methodWithType(instrumentedModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int));
+    MethodModel sibling =
+        methodWithType(
+            instrumentedModel, SIBLING_METHOD, MethodTypeDesc.of(CD_int, CD_int, CD_int));
+    // The premise of this test is that the method was too large to instrument, so it kept its
+    // original body, bracketed on both its normal and its exceptional exit and nothing else.
+    assertEquals(
+        "oversized method does not bracket both exits from its uninstrumented body",
+        Set.of("uninstrumented_enter", "uninstrumented_exit_primitive", "uninstrumented_exit"),
+        runtimeCalls(oversized));
+    // The sibling that the body calls before throwing was instrumented, so it leaves a result tag
+    // that the uninstrumented body never pops.
+    assertFalse("sibling method was not instrumented", runtimeCalls(sibling).isEmpty());
+
+    Class<?> generatedClass =
+        byteArrayClassLoader(Map.of(className, instrumented.getBytes())).loadClass(className);
+    Object receiver = generatedClass.getConstructor().newInstance();
+    java.lang.reflect.Method oversizedMethod =
+        generatedClass.getMethod(OVERSIZED_METHOD, int.class);
+    Object[] tagFrame = DCRuntime.create_tag_frame("1");
+    try {
+      // The tag stack now holds only this method's marker.
+      int markerOnlySize = DCRuntime.tag_stack_size();
+
+      // An argument of zero returns normally, which the exceptional-exit handling must not change.
+      DCRuntime.push_const(); // primitive argument tag
+      DCRuntime.push_const(); // caller-produced primitive result tag
+      Object result =
+          nonNullResult("oversized method returned null", oversizedMethod.invoke(receiver, 0));
+      assertEquals("oversized method returned the wrong value", OVERSIZED_GROUPS, result);
+      assertEquals(
+          "oversized method did not leave exactly the result tag",
+          markerOnlySize + 1,
+          DCRuntime.tag_stack_size());
+      DCRuntime.discard_tag(1);
+      assertEquals("oversized method left a stale tag", markerOnlySize, DCRuntime.tag_stack_size());
+
+      // A nonzero argument throws, after a call that leaves a tag above the body's marker.
+      DCRuntime.push_const(); // primitive argument tag
+      DCRuntime.push_const(); // caller-produced primitive result tag
+      assertEquals(
+          "oversized method threw the wrong exception",
+          IllegalStateException.class,
+          thrownCause(oversizedMethod, receiver, 1).getClass());
+      // A throwing method produces no result tag, so the tag stack is back where it started.
+      assertEquals(
+          "exceptional exit from the oversized method left the tag stack dirty",
+          markerOnlySize,
+          DCRuntime.tag_stack_size());
+    } finally {
+      DCRuntime.normal_exit(tagFrame);
+    }
+  }
+
+  /**
+   * Tests that the JUnit oversized-method forwarding stub leaves the tag stack as it found it and
+   * propagates the original throwable when the body it forwards to throws. The stub's {@code
+   * DCRuntime.uninstrumented_exit_primitive} call sits after the invocation of the body, so a throw
+   * would skip it; see {@link #testOversizedJunitMethodCleansUpTagStackOnException} for why nothing
+   * else would clean up.
+   *
+   * <p>Like {@link #testOversizedJunitFallbackRebuildsStackMap}, this calls {@link
+   * DCInstrument#create_oversized_method} directly rather than instrumenting the class, because
+   * fully instrumenting a 64K method with a stack map takes minutes and its instrumented form is
+   * discarded as oversized anyway. The sibling that the body calls is therefore uninstrumented and
+   * leaves no tag behind, so what this checks is the removal of the stub's own marker.
+   *
+   * @throws IOException if the generated class cannot be parsed
+   * @throws ReflectiveOperationException if the generated class cannot be loaded or invoked
+   */
+  @SuppressWarnings("signedness:argument") // TODO
+  @Test
+  public void testHugeThrowingJunitMethodCleansUpTagStackOnException()
+      throws IOException, ReflectiveOperationException {
+    ClassFile classFile = ClassFile.of();
+    byte[] original = throwingClassBytes(HUGE_THROWING_GROUPS);
+    int originalLength = codeLength(classFile.parse(original), OVERSIZED_METHOD);
+    assertEquals(
+        "unexpected length for " + OVERSIZED_METHOD,
+        4 * HUGE_THROWING_GROUPS + THROWING_FIXED_BYTES,
+        originalLength);
+    // The premise of this test is that the uninstrumented method fits, but only just: adding the
+    // tag-stack bookkeeping to it would not, so the forwarding stub is used.
+    assertTrue(
+        "uninstrumented " + OVERSIZED_METHOD + " does not fit: " + originalLength,
+        originalLength <= 65535);
+    assertTrue(
+        "uninstrumented " + OVERSIZED_METHOD + " has room for the bookkeeping: " + originalLength,
+        originalLength > 65535 - 11);
+
+    @BinaryName String className = sampleClassName();
+    JavaClass parsed = new ClassParser(new ByteArrayInputStream(original), className).parse();
+    boolean savedJdkInstrumented = Premain.jdk_instrumented;
+    JavaClass instrumented;
+    try {
+      Premain.jdk_instrumented = false;
+      DCInstrument dci = new DCInstrument(parsed, false, classLoader());
+      Method huge = dci.classGen.containsMethod(OVERSIZED_METHOD, "(I)I");
+      assert huge != null : "@AssumeAssertion(nullness): throwingClassBytes added this method";
+      // A JUnit method keeps its original descriptor, so no DCompMarker is added to it.
+      Method wrapper =
+          withDiagnosticsDiscarded(
+              () -> {
+                try {
+                  return dci.create_oversized_method(huge, false);
+                } catch (IOException e) {
+                  throw new UncheckedIOException(e);
+                }
+              });
+      dci.classGen.replaceMethod(huge, wrapper);
+      instrumented = dci.classGen.getJavaClass();
+    } finally {
+      Premain.jdk_instrumented = savedJdkInstrumented;
+    }
+
+    ClassModel instrumentedModel = classFile.parse(instrumented.getBytes());
+    MethodModel stub =
+        methodWithType(instrumentedModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int));
+    MethodModel body =
+        methodWithType(
+            instrumentedModel,
+            OVERSIZED_METHOD,
+            MethodTypeDesc.of(CD_int, CD_int, ClassDesc.of("daikon.dcomp.DCompMarker")));
+    assertEquals(
+        "JUnit forwarding stub does not maintain the tag stack on both exits",
+        Set.of("uninstrumented_enter", "uninstrumented_exit_primitive", "uninstrumented_exit"),
+        runtimeCalls(stub));
+    assertEquals("unchanged body contains runtime calls", Set.of(), runtimeCalls(body));
+
+    // Loading the class verifies it, which is what checks the stack map frame that the stub's new
+    // exception handler needs.
+    Class<?> generatedClass =
+        byteArrayClassLoader(Map.of(className, instrumented.getBytes())).loadClass(className);
+    Object receiver = generatedClass.getConstructor().newInstance();
+    java.lang.reflect.Method oversizedMethod =
+        generatedClass.getMethod(OVERSIZED_METHOD, int.class);
+    Object[] tagFrame = DCRuntime.create_tag_frame("1");
+    try {
+      // The tag stack now holds only this method's marker.
+      int markerOnlySize = DCRuntime.tag_stack_size();
+
+      // An argument of zero returns normally, which the exceptional-exit handling must not change.
+      DCRuntime.push_const(); // primitive argument tag
+      DCRuntime.push_const(); // caller-produced primitive result tag
+      Object result =
+          nonNullResult("forwarding stub returned null", oversizedMethod.invoke(receiver, 0));
+      assertEquals("forwarding stub returned the wrong value", HUGE_THROWING_GROUPS, result);
+      assertEquals(
+          "forwarding stub did not leave exactly the result tag",
+          markerOnlySize + 1,
+          DCRuntime.tag_stack_size());
+      DCRuntime.discard_tag(1);
+      assertEquals("forwarding stub left a stale tag", markerOnlySize, DCRuntime.tag_stack_size());
+
+      // A nonzero argument throws out of the body that the stub forwards to.
+      DCRuntime.push_const(); // primitive argument tag
+      DCRuntime.push_const(); // caller-produced primitive result tag
+      assertEquals(
+          "forwarding stub threw the wrong exception",
+          IllegalStateException.class,
+          thrownCause(oversizedMethod, receiver, 1).getClass());
+      // A throwing method produces no result tag, so the tag stack is back where it started.
+      assertEquals(
+          "exceptional exit from the forwarding stub left the tag stack dirty",
+          markerOnlySize,
+          DCRuntime.tag_stack_size());
+    } finally {
+      DCRuntime.normal_exit(tagFrame);
+    }
+  }
+
+  /**
+   * Invokes the given method, which is expected to throw, and returns what it threw.
+   *
+   * @param method the method to invoke
+   * @param receiver the receiver to invoke it on
+   * @param arg the argument to pass
+   * @return the throwable that the method threw
+   * @throws ReflectiveOperationException if the method cannot be invoked
+   */
+  private static Throwable thrownCause(java.lang.reflect.Method method, Object receiver, int arg)
+      throws ReflectiveOperationException {
+    try {
+      Object result = method.invoke(receiver, arg);
+      throw new AssertionError(method.getName() + " returned " + result + " instead of throwing");
+    } catch (InvocationTargetException e) {
+      return nonNullThrowable(e.getCause());
+    }
+  }
+
+  /**
+   * Returns its argument, which must be non-null.
+   *
+   * @param cause the throwable that an invocation threw
+   * @return {@code cause}
+   */
+  private static Throwable nonNullThrowable(@Nullable Throwable cause) {
+    if (cause == null) {
+      throw new AssertionError("the invocation failed with no cause");
+    }
+    return cause;
   }
 
   /**

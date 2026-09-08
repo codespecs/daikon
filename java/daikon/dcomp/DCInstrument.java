@@ -1495,6 +1495,22 @@ public class DCInstrument extends InstructionListUtils {
 
   /** Adds a try/catch block around the entire method. */
   public void add_exception_handler(MethodGen mgen, InstructionList catch_il) {
+    InstructionList cur_il = mgen.getInstructionList();
+    add_exception_handler(mgen, catch_il, cur_il.getStart(), cur_il.getEnd());
+  }
+
+  /**
+   * Adds a try/catch block around the given range of the method. Use this overload where the
+   * handler must not cover the whole method, such as when the method's first instructions establish
+   * the state that the handler undoes.
+   *
+   * @param mgen the method to add the handler to
+   * @param catch_il the code of the handler, which is entered with the throwable on the stack
+   * @param start the first instruction the handler covers
+   * @param end the last instruction the handler covers
+   */
+  public void add_exception_handler(
+      MethodGen mgen, InstructionList catch_il, InstructionHandle start, InstructionHandle end) {
 
     // <init> methods (constructors) are problematic
     // for adding a whole-method exception handler.  The start of
@@ -1508,10 +1524,6 @@ public class DCInstrument extends InstructionListUtils {
         return;
       }
     }
-
-    InstructionList cur_il = mgen.getInstructionList();
-    InstructionHandle start = cur_il.getStart();
-    InstructionHandle end = cur_il.getEnd();
 
     // This is just a temporary handler to get the start and end
     // address tracked as we make code modifications.
@@ -4511,7 +4523,8 @@ public class DCInstrument extends InstructionListUtils {
    * class does consume them. So the body is bracketed by {@code DCRuntime.uninstrumented_enter} and
    * {@code DCRuntime.uninstrumented_exit}, which discard the caller's tags, keep the body's calls
    * from consuming tags that belong to an outer frame, and push the replacement result tag on the
-   * way out.
+   * way out. A catch-all handler performs the same cleanup when the body throws; see {@link
+   * #uninstrumented_catch_il}.
    *
    * @param mgen the unmodified method, with its original signature
    * @param addDcompMarker whether to append the DCompMarker parameter
@@ -4573,6 +4586,10 @@ public class DCInstrument extends InstructionListUtils {
       InstructionList entryCode = new InstructionList();
       entryCode.append(ifact.createConstant(primitiveCount + (primitiveResult ? 1 : 0)));
       entryCode.append(dcr_call("uninstrumented_enter", CD_void, intSig));
+      // The body must be bracketed on an exceptional exit as well as on a return.  Record the
+      // handler's range before the entry code is inserted, so that the range starts after
+      // uninstrumented_enter rather than covering it.
+      add_exception_handler(mgen, uninstrumented_catch_il(), il.getStart(), il.getEnd());
       insertAtMethodStart(mgen, entryCode);
 
       String exitMethod = primitiveResult ? "uninstrumented_exit_primitive" : "uninstrumented_exit";
@@ -4587,6 +4604,9 @@ public class DCInstrument extends InstructionListUtils {
         }
         ih = next;
       }
+      assert stackMapTable != null
+          : "@AssumeAssertion(nullness): set by setCurrentStackMapTable above";
+      install_exception_handler(mgen);
     }
 
     updateUninitializedNewOffsets(il);
@@ -4676,7 +4696,7 @@ public class DCInstrument extends InstructionListUtils {
       // Distinguish the body by name rather than by descriptor.  That leaves the code array
       // byte-for-byte unchanged, so unlike the DCompMarker parameter it cannot overflow.
       body = new MethodGen(m, classname, pool);
-      body.setName(oversized_body_name(m.getName()));
+      body.setName(unused_oversized_body_name(m.getName(), m.getSignature()));
       bodyHasMarker = false;
     }
     body.isPublic(false);
@@ -4699,6 +4719,9 @@ public class DCInstrument extends InstructionListUtils {
    * method; see {@link #create_oversized_method}. It is used only when the body cannot be
    * distinguished from its forwarding stub by adding the DCompMarker parameter.
    *
+   * <p>The name may already be in use; use {@link #unused_oversized_body_name} to obtain a name
+   * that can actually be added to the class being generated.
+   *
    * @param methodName the name of the original method
    * @return the name to give the method that holds the original body
    */
@@ -4707,18 +4730,64 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
+   * Returns {@link #oversized_body_name}, made unique by appending a decimal suffix if some method
+   * of the class being generated already has that name and the given descriptor.
+   *
+   * <p>The body of an oversized JUnit method keeps the original method's descriptor, so its name
+   * must not be the name of any other method that has that descriptor: {@code classGen.addMethod}
+   * does not check, and a class with two methods of the same name and descriptor does not load. A
+   * collision is unlikely but possible, because the class may declare a method with the derived
+   * name itself, and in a JUnit test class that method keeps its original descriptor.
+   *
+   * @param methodName the name of the original method
+   * @param signature the descriptor of the original method, which the body retains
+   * @return a name for the method that holds the original body, unused in the generated class
+   */
+  @Identifier String unused_oversized_body_name(@Identifier String methodName, String signature) {
+    @Identifier String base = oversized_body_name(methodName);
+    @Identifier String candidate = base;
+    for (int suffix = 2; classGen.containsMethod(candidate, signature) != null; suffix++) {
+      candidate = base + suffix;
+    }
+    return candidate;
+  }
+
+  /**
+   * Returns the code for a catch-all handler that undoes the tag-stack bookkeeping of {@code
+   * DCRuntime.uninstrumented_enter} and rethrows the original throwable; see {@link
+   * #create_oversized_method_copy}. Without it, an exception out of an uninstrumented body would
+   * leave that body's marker, and the tags its calls pushed above the marker, on the tag stack: the
+   * body belongs to a JUnit test method, whose caller is JUnit's reflective invocation, so no
+   * enclosing instrumented frame would clean up after it.
+   *
+   * <p>The handler calls {@code uninstrumented_exit} even for a primitive result, because a
+   * throwing method produces no result tag for its caller to consume.
+   *
+   * @return the code of a catch-all handler that cleans up the tag stack and rethrows
+   */
+  InstructionList uninstrumented_catch_il() {
+    InstructionList il = new InstructionList();
+    // The throwable that the handler was entered with is left on the stack for the athrow.
+    il.append(dcr_call("uninstrumented_exit", CD_void, noArgsSig));
+    il.append(new ATHROW());
+    return il;
+  }
+
+  /**
    * Returns a JUnit-visible wrapper that maintains the tag-stack calling convention and invokes the
    * private method that holds the unchanged original body. This is the final fallback when the
-   * bookkeeping does not fit in the original method body.
+   * bookkeeping does not fit in the original method body. A catch-all handler performs the exit
+   * bookkeeping when the body throws; see {@link #uninstrumented_catch_il}.
    *
    * @param mgen the unmodified method, with its original signature
    * @param bodyName the name of the private method that holds the original body
    * @param bodyHasMarker true if that method has an added DCompMarker parameter, false if it is
    *     distinguished by its name alone
    * @return a forwarding stub with the original signature
+   * @throws IOException if the stub's stack map cannot be built
    */
   MethodGen create_oversized_junit_method_stub(
-      MethodGen mgen, String bodyName, boolean bodyHasMarker) {
+      MethodGen mgen, String bodyName, boolean bodyHasMarker) throws IOException {
     Type[] paramTypes = mgen.getArgumentTypes();
     Type returnType = mgen.getReturnType();
 
@@ -4735,7 +4804,7 @@ public class DCInstrument extends InstructionListUtils {
     // calls it makes even though a method of a JUnit test class consumes them; see
     // create_oversized_method_copy.
     il.append(ifact.createConstant(primitiveCount + (primitiveResult ? 1 : 0)));
-    il.append(dcr_call("uninstrumented_enter", CD_void, intSig));
+    InstructionHandle enterHandle = il.append(dcr_call("uninstrumented_enter", CD_void, intSig));
 
     int offset = 0;
     if (!mgen.isStatic()) {
@@ -4764,7 +4833,7 @@ public class DCInstrument extends InstructionListUtils {
             primitiveResult ? "uninstrumented_exit_primitive" : "uninstrumented_exit",
             CD_void,
             noArgsSig));
-    il.append(InstructionFactory.createReturn(returnType));
+    InstructionHandle returnHandle = il.append(InstructionFactory.createReturn(returnType));
 
     mgen.setInstructionList(il);
     mgen.removeExceptionHandlers();
@@ -4772,6 +4841,20 @@ public class DCInstrument extends InstructionListUtils {
     mgen.removeLocalVariables();
     mgen.removeCodeAttributes();
     remove_blacklisted_annotations(mgen);
+    // The body this forwards to can throw, and then the uninstrumented_exit* call above does not
+    // run.  Clean up on that path too; see uninstrumented_catch_il.  The handler's range starts
+    // after uninstrumented_enter, which establishes the state that the handler undoes.
+    //
+    // removeCodeAttributes above discarded the original method's stack map, so this reads back an
+    // empty one; the handler is a branch target, so it needs a stack map frame of its own.
+    setCurrentStackMapTable(mgen, classGen.getMajor());
+    InstructionHandle tryStart = enterHandle.getNext();
+    assert tryStart != null : "@AssumeAssertion(nullness): the invocation of the body follows";
+    add_exception_handler(mgen, uninstrumented_catch_il(), tryStart, returnHandle);
+    assert stackMapTable != null
+        : "@AssumeAssertion(nullness): set by setCurrentStackMapTable above";
+    install_exception_handler(mgen);
+    createNewStackMapAttribute(mgen);
     mgen.setMaxLocals();
     mgen.setMaxStack();
     return mgen;

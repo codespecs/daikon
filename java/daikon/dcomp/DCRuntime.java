@@ -881,9 +881,11 @@ public final class DCRuntime implements ComparabilityProvider {
    * marker matters because an uninstrumented body pushes no argument tags for the calls it makes:
    * without it, a callee that does maintain the tag stack would consume tags belonging to an outer
    * frame. {@link #create_tag_frame} sees the marker and creates fresh tags instead. {@link
-   * #uninstrumented_exit} and {@link #uninstrumented_exit_primitive} remove the marker; if an
-   * exception propagates out of the body instead, the enclosing method's {@code normal_exit}
-   * discards it, as it does for any other frame left behind by an exception.
+   * #uninstrumented_exit} and {@link #uninstrumented_exit_primitive} remove the marker. If an
+   * exception propagates out of the body instead, a catch-all handler that DCInstrument added
+   * around the body calls {@code uninstrumented_exit} and rethrows; the enclosing method's {@code
+   * normal_exit} would not do it, because the body belongs to a JUnit test method whose caller is
+   * JUnit's reflective invocation rather than an instrumented frame.
    *
    * @param tagCount the number of tags the caller left on the tag stack for this call
    */
