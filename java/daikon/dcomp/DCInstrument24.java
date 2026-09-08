@@ -1688,14 +1688,6 @@ public class DCInstrument24 {
       ClassInfo classInfo,
       boolean trackMethod) {
 
-    // Per-method state: constructor_is_initialized records whether the super constructor call
-    // has been seen in the method now being instrumented, and must start false for every method.
-    // Without this reset it stays set once any constructor in the class reaches its super() call,
-    // so a later constructor would be treated as initialized from its first instruction; and
-    // because instrument_jdk_class may rebuild the class with this same instance, a value left
-    // over from an abandoned attempt would make the retry differ from the first attempt.
-    constructor_is_initialized = false;
-
     try {
       boolean codeModelSeen = false;
       for (MethodElement me : methodModel) {
@@ -1759,6 +1751,16 @@ public class DCInstrument24 {
 
     // This handler modifies mgen, and may be run more than once.
     boolean firstRun = mgen.resetForCodeBuilder();
+
+    // Per-method state: constructor_is_initialized records whether the super constructor call has
+    // been seen in the method now being instrumented, and must start false for every run of this
+    // handler.  Without this reset it stays set once any constructor in the class reaches its
+    // super() call, so a later constructor would be treated as initialized from its first
+    // instruction.  It must be reset here rather than in instrumentMethod because the code builder
+    // may run this handler more than once (see resetForCodeBuilder): a value left over from an
+    // earlier run would make a later run emit different code, and would make a field access that
+    // precedes the super() call use the field's tag accessor on an uninitialized `this`.
+    constructor_is_initialized = false;
 
     // method_info_index is not used at this point in DCInstrument
     MethodGen24.MInfo24 minfo = new MethodGen24.MInfo24(0, mgen.getMaxLocals(), codeBuilder);

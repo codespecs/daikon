@@ -4502,9 +4502,16 @@ public class DCInstrument extends InstructionListUtils {
    * <p>The caller leaves a tag on the tag stack for each primitive argument, so this method
    * discards those tags on entry. If {@code addDcompMarker} is true, the caller also expects the
    * method to produce a tag for a primitive result, so this method pushes one immediately before
-   * each primitive return. A JUnit method has no marker and enters with a caller-produced result
-   * tag above its argument tags; the entry code discards that result tag and the argument tags,
-   * then pushes a replacement result tag.
+   * each primitive return.
+   *
+   * <p>A JUnit method has no marker, so its original descriptor is the one its callers use and this
+   * copy replaces the instrumented version altogether; see {@link #create_oversized_method}. Such a
+   * method enters with a caller-produced result tag above its argument tags, and the body it
+   * retains pushes no argument tags for the calls it makes, even though a method of a JUnit test
+   * class does consume them. So the body is bracketed by {@code DCRuntime.uninstrumented_enter} and
+   * {@code DCRuntime.uninstrumented_exit}, which discard the caller's tags, keep the body's calls
+   * from consuming tags that belong to an outer frame, and push the replacement result tag on the
+   * way out.
    *
    * @param mgen the unmodified method, with its original signature
    * @param addDcompMarker whether to append the DCompMarker parameter
@@ -4536,24 +4543,45 @@ public class DCInstrument extends InstructionListUtils {
         primitiveCount++;
       }
     }
-    if (primitiveCount > 0) {
-      boolean replaceCallerResultTag = !addDcompMarker && is_primitive(mgen.getReturnType());
-      InstructionList entryCode = new InstructionList();
-      entryCode.append(ifact.createConstant(primitiveCount + (replaceCallerResultTag ? 1 : 0)));
-      entryCode.append(dcr_call("discard_tag", CD_void, intSig));
-      if (replaceCallerResultTag) {
-        entryCode.append(dcr_call("push_const", CD_void, noArgsSig));
+    boolean primitiveResult = is_primitive(mgen.getReturnType());
+    if (addDcompMarker) {
+      // The uninstrumented body's calls use the original descriptors, which name the
+      // uninstrumented methods, so nothing it calls touches the tag stack.
+      if (primitiveCount > 0) {
+        InstructionList entryCode = new InstructionList();
+        entryCode.append(ifact.createConstant(primitiveCount));
+        entryCode.append(dcr_call("discard_tag", CD_void, intSig));
+        insertAtMethodStart(mgen, entryCode);
       }
+      if (primitiveResult) {
+        for (InstructionHandle ih = il.getStart(); ih != null; ) {
+          InstructionHandle next = ih.getNext();
+          Instruction instruction = ih.getInstruction();
+          if (instruction instanceof ReturnInstruction) {
+            InstructionList returnCode = new InstructionList();
+            returnCode.append(dcr_call("push_const", CD_void, noArgsSig));
+            returnCode.append(instruction);
+            replaceInstructions(mgen, il, ih, returnCode);
+          }
+          ih = next;
+        }
+      }
+    } else {
+      // A JUnit method replaces the instrumented version, so the calls its uninstrumented body
+      // makes reach instrumented methods that expect argument tags.  Bracket the body; see the
+      // method comment.
+      InstructionList entryCode = new InstructionList();
+      entryCode.append(ifact.createConstant(primitiveCount + (primitiveResult ? 1 : 0)));
+      entryCode.append(dcr_call("uninstrumented_enter", CD_void, intSig));
       insertAtMethodStart(mgen, entryCode);
-    }
 
-    if (addDcompMarker && is_primitive(mgen.getReturnType())) {
+      String exitMethod = primitiveResult ? "uninstrumented_exit_primitive" : "uninstrumented_exit";
       for (InstructionHandle ih = il.getStart(); ih != null; ) {
         InstructionHandle next = ih.getNext();
         Instruction instruction = ih.getInstruction();
         if (instruction instanceof ReturnInstruction) {
           InstructionList returnCode = new InstructionList();
-          returnCode.append(dcr_call("push_const", CD_void, noArgsSig));
+          returnCode.append(dcr_call(exitMethod, CD_void, noArgsSig));
           returnCode.append(instruction);
           replaceInstructions(mgen, il, ih, returnCode);
         }
@@ -4610,19 +4638,47 @@ public class DCInstrument extends InstructionListUtils {
     // and stub then agree about every primitive argument and result tag even when the original body
     // has no room for a single additional instruction.
     MethodGen body = new MethodGen(m, classname, pool);
-    InstructionList bodyIl = body.getInstructionList();
-    assert bodyIl != null
-        : "@AssumeAssertion(nullness): create_oversized_method_copy rejects a method with no code,"
-            + " and that rejection is not a code-size error, so it was rethrown above";
-    // add_dcomp_param renumbers the locals that follow the new parameter, and may widen the
-    // instructions that reference them, so the stack map has to be rebuilt from the original.
-    // This also discards the stale stackMapTable left behind by the abandoned attempt above.
-    setCurrentStackMapTable(body, classGen.getMajor());
-    buildUninitializedNewMap(bodyIl);
-    fixLocalVariableTable(body);
-    add_dcomp_param(body);
-    updateUninitializedNewOffsets(bodyIl);
-    createNewStackMapAttribute(body);
+    boolean bodyHasMarker = true;
+    try {
+      InstructionList bodyIl = body.getInstructionList();
+      assert bodyIl != null
+          : "@AssumeAssertion(nullness): create_oversized_method_copy rejects a method with no"
+              + " code, and that rejection is not a code-size error, so it was rethrown above";
+      // add_dcomp_param renumbers the locals that follow the new parameter, and may widen the
+      // instructions that reference them, so the stack map has to be rebuilt from the original.
+      // This also discards the stale stackMapTable left behind by the abandoned attempt above.
+      setCurrentStackMapTable(body, classGen.getMajor());
+      buildUninitializedNewMap(bodyIl);
+      fixLocalVariableTable(body);
+      add_dcomp_param(body);
+      updateUninitializedNewOffsets(bodyIl);
+      createNewStackMapAttribute(body);
+      // Widening those instructions can push a body that fit over the limit.  BCEL reports that
+      // only if some other u2 field overflows with it; it does not reject an oversized code array
+      // itself, and would emit a class file with a code_length that the JVM refuses to load.
+      check_code_size(body);
+    } catch (Exception e) {
+      if (!is_code_size_error(e)) {
+        throw e;
+      }
+      if (BcelUtil.isConstructor(m)) {
+        // A constructor cannot be distinguished from the stub by name, and its original descriptor
+        // is the one its callers use, so there is nothing left to try.  Emit the original
+        // constructor and leave its argument tags for its caller's normal_exit to discard.
+        System.err.printf(
+            "DynComp warning: ClassFile: %s - constructor %s cannot be given a forwarding stub, so"
+                + " it is emitted unchanged; the comparability of its arguments is not tracked.%n",
+            classname, m.getName());
+        MethodGen original = new MethodGen(m, classname, pool);
+        remove_local_variable_type_table(original);
+        return original.getMethod();
+      }
+      // Distinguish the body by name rather than by descriptor.  That leaves the code array
+      // byte-for-byte unchanged, so unlike the DCompMarker parameter it cannot overflow.
+      body = new MethodGen(m, classname, pool);
+      body.setName(oversized_body_name(m.getName()));
+      bodyHasMarker = false;
+    }
     body.isPublic(false);
     body.isProtected(false);
     body.isPrivate(true);
@@ -4630,20 +4686,39 @@ public class DCInstrument extends InstructionListUtils {
     body.isSynthetic(true);
     body.removeAnnotationEntries();
     remove_local_variable_type_table(body);
-    body.setMaxLocals();
+    if (bodyHasMarker) {
+      // The added parameter occupies a local that the original method did not have.
+      body.setMaxLocals();
+    }
     classGen.addMethod(body.getMethod());
-    return create_oversized_junit_method_stub(mgen).getMethod();
+    return create_oversized_junit_method_stub(mgen, body.getName(), bodyHasMarker).getMethod();
   }
 
   /**
-   * Returns a JUnit-visible wrapper that maintains the tag-stack calling convention and invokes an
-   * unchanged private DCompMarker overload. This is the final fallback when the bookkeeping does
-   * not fit in the original method body.
+   * Returns the name of the private method that holds the unchanged body of an oversized JUnit
+   * method; see {@link #create_oversized_method}. It is used only when the body cannot be
+   * distinguished from its forwarding stub by adding the DCompMarker parameter.
+   *
+   * @param methodName the name of the original method
+   * @return the name to give the method that holds the original body
+   */
+  static String oversized_body_name(String methodName) {
+    return methodName + "__$dcomp_body";
+  }
+
+  /**
+   * Returns a JUnit-visible wrapper that maintains the tag-stack calling convention and invokes the
+   * private method that holds the unchanged original body. This is the final fallback when the
+   * bookkeeping does not fit in the original method body.
    *
    * @param mgen the unmodified method, with its original signature
+   * @param bodyName the name of the private method that holds the original body
+   * @param bodyHasMarker true if that method has an added DCompMarker parameter, false if it is
+   *     distinguished by its name alone
    * @return a forwarding stub with the original signature
    */
-  MethodGen create_oversized_junit_method_stub(MethodGen mgen) {
+  MethodGen create_oversized_junit_method_stub(
+      MethodGen mgen, String bodyName, boolean bodyHasMarker) {
     Type[] paramTypes = mgen.getArgumentTypes();
     Type returnType = mgen.getReturnType();
 
@@ -4654,15 +4729,13 @@ public class DCInstrument extends InstructionListUtils {
       }
     }
 
+    boolean primitiveResult = is_primitive(returnType);
     InstructionList il = new InstructionList();
-    if (primitiveCount > 0) {
-      boolean replaceCallerResultTag = is_primitive(returnType);
-      il.append(ifact.createConstant(primitiveCount + (replaceCallerResultTag ? 1 : 0)));
-      il.append(dcr_call("discard_tag", CD_void, intSig));
-      if (replaceCallerResultTag) {
-        il.append(dcr_call("push_const", CD_void, noArgsSig));
-      }
-    }
+    // The body this forwards to is the unchanged original, which pushes no argument tags for the
+    // calls it makes even though a method of a JUnit test class consumes them; see
+    // create_oversized_method_copy.
+    il.append(ifact.createConstant(primitiveCount + (primitiveResult ? 1 : 0)));
+    il.append(dcr_call("uninstrumented_enter", CD_void, intSig));
 
     int offset = 0;
     if (!mgen.isStatic()) {
@@ -4673,15 +4746,24 @@ public class DCInstrument extends InstructionListUtils {
       il.append(InstructionFactory.createLoad(paramType, offset));
       offset += paramType.getSize();
     }
-    il.append(new ACONST_NULL());
+    Type[] bodyParamTypes = paramTypes;
+    if (bodyHasMarker) {
+      il.append(new ACONST_NULL());
+      bodyParamTypes = ArraysPlume.append(paramTypes, dcomp_marker);
+    }
     il.append(
         ifact.createInvoke(
             mgen.getClassName(),
-            mgen.getName(),
+            bodyName,
             returnType,
-            ArraysPlume.append(paramTypes, dcomp_marker),
+            bodyParamTypes,
             mgen.isStatic() ? INVOKESTATIC : INVOKESPECIAL,
             classGen.isInterface()));
+    il.append(
+        dcr_call(
+            primitiveResult ? "uninstrumented_exit_primitive" : "uninstrumented_exit",
+            CD_void,
+            noArgsSig));
     il.append(InstructionFactory.createReturn(returnType));
 
     mgen.setInstructionList(il);
@@ -4776,8 +4858,8 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns true if the exception reports that a method's code array or one of its branch offsets
-   * is too large for the class file format.
+   * Returns true if the exception reports that a method's code array, one of its branch offsets, or
+   * some other field that the code array's size bounds is too large for the class file format.
    *
    * @param e an exception thrown while building an instrumented method
    * @return true if {@code e} reports that a method is too large
@@ -4786,7 +4868,12 @@ public class DCInstrument extends InstructionListUtils {
     String message = e.getMessage();
     return message != null
         && (message.startsWith("Branch target offset too large")
-            || message.startsWith("Code array too big"));
+            || message.startsWith("Code array too big")
+            // BCEL reports an oversized method indirectly, when some u2 field of the code
+            // attribute overflows along with the code array: a bytecode offset, or the length of a
+            // local's live range.  The name of the field is at the front of the message and the
+            // limit is formatted for the default locale, so match only the fixed text between.
+            || (message.contains("[Value out of range") && message.contains("for type u2:")));
   }
 
   /**
