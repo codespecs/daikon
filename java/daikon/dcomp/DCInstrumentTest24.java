@@ -50,6 +50,7 @@ import org.apache.bcel.classfile.Method;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
+import org.checkerframework.checker.signature.qual.Identifier;
 import org.junit.Test;
 
 /**
@@ -492,7 +493,7 @@ public final class DCInstrumentTest24 {
   }
 
   /** Name of the method that {@link #oversizedClassBytes} adds to {@link Sample}. */
-  private static final String OVERSIZED_METHOD = "tooBig";
+  private static final @Identifier String OVERSIZED_METHOD = "tooBig";
 
   /** Name of the {@link Sample} method that instruments normally. */
   private static final String SMALL_METHOD = "add";
@@ -909,10 +910,11 @@ public final class DCInstrumentTest24 {
         "signedness:argument" // TODO
       })
       Object result =
-          generatedClass
-              .getMethod(OVERSIZED_METHOD, int.class, DCompMarker.class)
-              .invoke(receiver, 1, null);
-      assertNotNull("oversized method returned null", result);
+          nonNullResult(
+              "oversized method returned null",
+              generatedClass
+                  .getMethod(OVERSIZED_METHOD, int.class, DCompMarker.class)
+                  .invoke(receiver, 1, null));
       assertEquals("oversized method returned the wrong value", 1, result);
       // It consumed the argument tag and left exactly the result tag.
       assertEquals(
@@ -924,6 +926,22 @@ public final class DCInstrumentTest24 {
     } finally {
       DCRuntime.normal_exit(tagFrame);
     }
+  }
+
+  /**
+   * Returns the result of a reflective method call, which must not be null. Use this rather than
+   * {@link org.junit.Assert#assertNotNull}, which the Nullness Checker treats as requiring a
+   * non-null argument because JUnit 4 is not annotated.
+   *
+   * @param message the message to use if the result is null
+   * @param result the result of a reflective method call
+   * @return {@code result}
+   */
+  private static Object nonNullResult(String message, @Nullable Object result) {
+    if (result == null) {
+      throw new AssertionError(message);
+    }
+    return result;
   }
 
   /**
@@ -1077,10 +1095,11 @@ public final class DCInstrumentTest24 {
       DCRuntime.push_const();
       @SuppressWarnings("nullness:argument") // The DCompMarker argument is always null.
       Object result =
-          superclass
-              .getMethod(OVERSIZED_METHOD, int.class, DCompMarker.class)
-              .invoke(receiver, 1, null);
-      assertNotNull("forwarding stub returned null", result);
+          nonNullResult(
+              "forwarding stub returned null",
+              superclass
+                  .getMethod(OVERSIZED_METHOD, int.class, DCompMarker.class)
+                  .invoke(receiver, 1, null));
       assertEquals("forwarding stub bypassed the subclass override", 42, result);
       DCRuntime.discard_tag(1);
     } finally {
@@ -1153,7 +1172,10 @@ public final class DCInstrumentTest24 {
       int markerOnlySize = DCRuntime.tag_stack_size();
       DCRuntime.push_const(); // primitive argument tag
       DCRuntime.push_const(); // caller-produced primitive result tag
-      Object result = generatedClass.getMethod(OVERSIZED_METHOD, int.class).invoke(receiver, 1);
+      Object result =
+          nonNullResult(
+              "forwarding stub returned null",
+              generatedClass.getMethod(OVERSIZED_METHOD, int.class).invoke(receiver, 1));
       assertEquals("forwarding stub returned the wrong value", HUGE_GROUPS + 1, result);
 
       // The stub consumed the argument tag and left exactly the result tag.
@@ -1234,7 +1256,10 @@ public final class DCInstrumentTest24 {
       int markerOnlySize = DCRuntime.tag_stack_size();
       DCRuntime.push_const(); // primitive argument tag
       DCRuntime.push_const(); // caller-produced primitive result tag
-      Object result = generatedClass.getMethod(OVERSIZED_METHOD, int.class).invoke(receiver, 1);
+      Object result =
+          nonNullResult(
+              "oversized method returned null",
+              generatedClass.getMethod(OVERSIZED_METHOD, int.class).invoke(receiver, 1));
       // combine(1, 1) returns 2, and each group adds 1 to it.
       assertEquals("oversized method returned the wrong value", OVERSIZED_GROUPS + 2, result);
 
@@ -1328,7 +1353,10 @@ public final class DCInstrumentTest24 {
     try {
       DCRuntime.push_const(); // primitive argument tag
       DCRuntime.push_const(); // caller-produced primitive result tag
-      Object result = generatedClass.getMethod(OVERSIZED_METHOD, int.class).invoke(receiver, 1);
+      Object result =
+          nonNullResult(
+              "forwarding stub returned null",
+              generatedClass.getMethod(OVERSIZED_METHOD, int.class).invoke(receiver, 1));
       assertEquals("forwarding stub returned the wrong value", HUGE_BRANCHING_GROUPS + 1, result);
       DCRuntime.discard_tag(1);
     } finally {
@@ -1421,7 +1449,10 @@ public final class DCInstrumentTest24 {
       int markerOnlySize = DCRuntime.tag_stack_size();
       DCRuntime.push_const(); // primitive argument tag
       DCRuntime.push_const(); // caller-produced primitive result tag
-      Object result = generatedClass.getMethod(OVERSIZED_METHOD, int.class).invoke(receiver, 1);
+      Object result =
+          nonNullResult(
+              "forwarding stub returned null",
+              generatedClass.getMethod(OVERSIZED_METHOD, int.class).invoke(receiver, 1));
       assertEquals("forwarding stub returned the wrong value", HUGE_BRANCHING_GROUPS + 1, result);
       assertEquals(
           "forwarding stub did not leave exactly the result tag",

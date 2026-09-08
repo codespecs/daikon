@@ -54,6 +54,15 @@ public final class DCRuntime {
   public static void normal_exit_primitive(Object[] tag_frame) {
   }
 
+  public static void uninstrumented_enter(int tagCount) {
+  }
+
+  public static void uninstrumented_exit() {
+  }
+
+  public static void uninstrumented_exit_primitive() {
+  }
+
   public static void exception_exit(Object throwable) {
   }
 

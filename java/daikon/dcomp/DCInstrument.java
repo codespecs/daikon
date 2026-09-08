@@ -4702,7 +4702,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param methodName the name of the original method
    * @return the name to give the method that holds the original body
    */
-  static String oversized_body_name(String methodName) {
+  static @Identifier String oversized_body_name(@Identifier String methodName) {
     return methodName + "__$dcomp_body";
   }
 
