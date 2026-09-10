@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.Identifier;
 import org.checkerframework.checker.signature.qual.InternalForm;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * This class is the entry point for the DynComp instrumentation agent. It is the only code in
@@ -441,6 +442,7 @@ public class Premain {
    * @param className the class to check, in internal form
    * @return true if the class transforms other classes
    */
+  @Pure
   protected static boolean is_transformer(@InternalForm String className) {
 
     if (className.startsWith("org/codehaus/groovy")) {
