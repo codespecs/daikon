@@ -875,7 +875,7 @@ public final class DCInstrumentTest24 {
     // The premise of this test is that only the *instrumented* method is too large.
     assertTrue(
         "uninstrumented " + OVERSIZED_METHOD + " is already over the code-size limit",
-        codeLength(originalModel, OVERSIZED_METHOD) < 65536);
+        codeLength(originalModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int)) < 65536);
 
     ClassInfo classInfo = new ClassInfo(sampleClassName(), classLoader());
     DCInstrument24 dci = new DCInstrument24(classFile, classFile.parse(original), true);
@@ -1092,7 +1092,7 @@ public final class DCInstrumentTest24 {
     ClassModel originalModel = classFile.parse(original);
     // The premise of this test is that the uninstrumented method fits, but only just: adding the
     // tag-stack bookkeeping to it would not.
-    int length = codeLength(originalModel, OVERSIZED_METHOD);
+    int length = codeLength(originalModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int));
     assertTrue("uninstrumented " + OVERSIZED_METHOD + " does not fit: " + length, length <= 65535);
     assertTrue(
         "uninstrumented " + OVERSIZED_METHOD + " has room for the bookkeeping: " + length,
@@ -1129,7 +1129,9 @@ public final class DCInstrumentTest24 {
             instrumentedModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int)));
     // The unchanged original body remains alongside the small DCompMarker forwarding overload.
     assertEquals(
-        "huge method's body was changed", length, codeLength(instrumentedModel, OVERSIZED_METHOD));
+        "huge method's body was changed",
+        length,
+        codeLength(instrumentedModel, OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int)));
     assertFalse(
         "huge method reported as skipped: " + dci.get_skipped_methods(),
         dci.get_skipped_methods().stream().anyMatch(m -> m.contains(OVERSIZED_METHOD)));
@@ -1242,7 +1244,7 @@ public final class DCInstrumentTest24 {
     assertEquals("unchanged body contains runtime calls", Set.of(), runtimeCalls(body));
     assertEquals(
         "oversized body was changed",
-        codeLength(classFile.parse(original), OVERSIZED_METHOD),
+        codeLength(classFile.parse(original), OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int)),
         ((CodeAttribute) body.code().orElseThrow()).codeLength());
     assertTrue("oversized body is not private", body.flags().has(AccessFlag.PRIVATE));
     assertTrue("oversized body is not synthetic", body.flags().has(AccessFlag.SYNTHETIC));
@@ -1385,7 +1387,8 @@ public final class DCInstrumentTest24 {
     byte[] original = oversizedClassBytes(HUGE_BRANCHING_GROUPS, true);
     // The premise of this test is that the uninstrumented method fits, but only just: adding the
     // tag-stack bookkeeping to it would not, so the fallback is used.
-    int originalLength = codeLength(classFile.parse(original), OVERSIZED_METHOD);
+    int originalLength =
+        codeLength(classFile.parse(original), OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int));
     assertTrue(
         "uninstrumented " + OVERSIZED_METHOD + " does not fit: " + originalLength,
         originalLength <= 65535);
@@ -1476,7 +1479,8 @@ public final class DCInstrumentTest24 {
     // Two bytes of padding put the method close enough to the limit that the DCompMarker parameter
     // does not fit; a group of four bytes could not.
     byte[] original = oversizedClassBytes(HUGE_BRANCHING_GROUPS, true, 2);
-    int originalLength = codeLength(classFile.parse(original), OVERSIZED_METHOD);
+    int originalLength =
+        codeLength(classFile.parse(original), OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int));
     assertTrue(
         "uninstrumented " + OVERSIZED_METHOD + " does not fit: " + originalLength,
         originalLength <= 65535);
@@ -1602,7 +1606,8 @@ public final class DCInstrumentTest24 {
     // does not fit, which is what forces the fallback that renames the body; see
     // testOversizedJunitFallbackRenamesBodyThatCannotTakeTheMarker.
     byte[] original = withBodyNameCollision(oversizedClassBytes(HUGE_BRANCHING_GROUPS, true, 2));
-    int originalLength = codeLength(classFile.parse(original), OVERSIZED_METHOD);
+    int originalLength =
+        codeLength(classFile.parse(original), OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int));
     assertTrue(
         "uninstrumented " + OVERSIZED_METHOD + " does not fit: " + originalLength,
         originalLength <= 65535);
@@ -1656,7 +1661,9 @@ public final class DCInstrumentTest24 {
     assertTrue("oversized body is not synthetic", body.flags().has(AccessFlag.SYNTHETIC));
     // The method that the derived name collided with is still there, and is still its own body.
     assertEquals(
-        "the colliding method was displaced", 2, codeLength(instrumentedModel, collidingName));
+        "the colliding method was displaced",
+        2,
+        codeLength(instrumentedModel, collidingName, MethodTypeDesc.of(CD_int, CD_int)));
 
     // Defining the class is what rejects two methods with the same name and descriptor.
     Class<?> generatedClass =
@@ -1802,7 +1809,8 @@ public final class DCInstrumentTest24 {
       throws IOException, ReflectiveOperationException {
     ClassFile classFile = ClassFile.of();
     byte[] original = throwingClassBytes(HUGE_THROWING_GROUPS);
-    int originalLength = codeLength(classFile.parse(original), OVERSIZED_METHOD);
+    int originalLength =
+        codeLength(classFile.parse(original), OVERSIZED_METHOD, MethodTypeDesc.of(CD_int, CD_int));
     assertEquals(
         "unexpected length for " + OVERSIZED_METHOD,
         4 * HUGE_THROWING_GROUPS + THROWING_FIXED_BYTES,
@@ -2173,19 +2181,26 @@ public final class DCInstrumentTest24 {
   /**
    * Returns the length, in bytes, of the code of the named method.
    *
+   * <p>An instrumented class can hold two methods of the same name, the unchanged original and the
+   * DCompMarker overload, so the descriptor selects between them rather than relying on the order
+   * in which they were emitted.
+   *
    * @param classModel the class containing the method
    * @param methodName the name of the method
+   * @param descriptor the descriptor of the method
    * @return the code length of the named method
    */
-  private static int codeLength(ClassModel classModel, String methodName) {
+  private static int codeLength(
+      ClassModel classModel, String methodName, MethodTypeDesc descriptor) {
     for (MethodModel method : classModel.methods()) {
-      if (method.methodName().stringValue().equals(methodName)) {
+      if (method.methodName().stringValue().equals(methodName)
+          && method.methodTypeSymbol().equals(descriptor)) {
         // A CodeModel that was parsed from a class file, as opposed to one being built, is a
         // CodeAttribute, which knows the length of the code array.
         return ((CodeAttribute) method.code().orElseThrow()).codeLength();
       }
     }
-    throw new Error("no method named " + methodName);
+    throw new Error("no method " + methodName + descriptor.displayDescriptor());
   }
 
   /**
