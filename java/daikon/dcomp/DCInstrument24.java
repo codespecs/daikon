@@ -1379,8 +1379,10 @@ public class DCInstrument24 {
             copyOriginalBody ? "minimally instrumented copy" : "forwarding stub", mgen.getName());
         debugInstrument.indent();
         final boolean addMarker = addingDcompArg;
-        final boolean discardArgumentTags =
-            copyOriginalBody && (addingDcompArg || classInfo.isJunitTestClass);
+        // A JUnit test class would also leave argument tags for the callee to discard, but as
+        // noted above only instrument_jdk_class populates oversizedMethods, and a JDK class is
+        // never a JUnit test class.  So the marker is the only thing to test here.
+        final boolean discardArgumentTags = copyOriginalBody && addingDcompArg;
         final boolean pushResultTag = copyOriginalBody && addingDcompArg;
         classBuilder.withMethod(
             methodModel.methodName().stringValue(),
