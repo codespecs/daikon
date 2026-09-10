@@ -2090,7 +2090,7 @@ public final class DCInstrumentTest24 {
 
     // instrument() returns null if anything goes wrong, including a method that does not fit; the
     // fixture is sized so that it does.
-    assertNotNull("class was not instrumented", instrumented);
+    assert instrumented != null : "@AssumeAssertion(nullness)";
 
     // The premise of this test: the instrumented method is long enough that a branch spanning it
     // cannot fit in a 2-byte operand, which is what makes the code builder run the handler twice.
