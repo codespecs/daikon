@@ -12,7 +12,7 @@ dependencies {
   implementation(files("hashmap-util-0.0.1.jar"))
   implementation(files("options-1.0.6.jar"))
   implementation(files("plume-util-1.14.0.jar"))
-  implementation(files("reflection-util-1.1.5.jar"))
+  implementation(files("reflection-util-1.1.6.jar"))
 }
 
 tasks.named("shadowJar", com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {

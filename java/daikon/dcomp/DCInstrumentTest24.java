@@ -1262,7 +1262,7 @@ public final class DCInstrumentTest24 {
 
     @BinaryName String className = sampleClassName();
     JavaClass parsed = new ClassParser(new ByteArrayInputStream(junitClass), className).parse();
-    boolean wasJunitClass = DCInstrument.junitTestClasses.contains(className);
+    boolean wasJunitClass = Premain.junitTestClasses.contains(className);
     boolean savedJdkInstrumented = Premain.jdk_instrumented;
     List<Pattern> savedOmitPattern = Runtime.ppt_omit_pattern;
     JavaClass instrumented;
@@ -1275,7 +1275,7 @@ public final class DCInstrumentTest24 {
       Premain.jdk_instrumented = savedJdkInstrumented;
       Runtime.ppt_omit_pattern = savedOmitPattern;
       if (!wasJunitClass) {
-        DCInstrument.junitTestClasses.remove(className);
+        Premain.junitTestClasses.remove(className);
       }
     }
 
@@ -1352,7 +1352,7 @@ public final class DCInstrumentTest24 {
 
     @BinaryName String className = sampleClassName();
     JavaClass parsed = new ClassParser(new ByteArrayInputStream(junitClass), className).parse();
-    boolean wasJunitClass = DCInstrument.junitTestClasses.contains(className);
+    boolean wasJunitClass = Premain.junitTestClasses.contains(className);
     boolean savedJdkInstrumented = Premain.jdk_instrumented;
     List<Pattern> savedOmitPattern = Runtime.ppt_omit_pattern;
     JavaClass instrumented;
@@ -1365,7 +1365,7 @@ public final class DCInstrumentTest24 {
       Premain.jdk_instrumented = savedJdkInstrumented;
       Runtime.ppt_omit_pattern = savedOmitPattern;
       if (!wasJunitClass) {
-        DCInstrument.junitTestClasses.remove(className);
+        Premain.junitTestClasses.remove(className);
       }
     }
 
@@ -1766,7 +1766,7 @@ public final class DCInstrumentTest24 {
 
     @BinaryName String className = sampleClassName();
     JavaClass parsed = new ClassParser(new ByteArrayInputStream(junitClass), className).parse();
-    boolean wasJunitClass = DCInstrument.junitTestClasses.contains(className);
+    boolean wasJunitClass = Premain.junitTestClasses.contains(className);
     boolean savedJdkInstrumented = Premain.jdk_instrumented;
     List<Pattern> savedOmitPattern = Runtime.ppt_omit_pattern;
     JavaClass instrumented;
@@ -1779,7 +1779,7 @@ public final class DCInstrumentTest24 {
       Premain.jdk_instrumented = savedJdkInstrumented;
       Runtime.ppt_omit_pattern = savedOmitPattern;
       if (!wasJunitClass) {
-        DCInstrument.junitTestClasses.remove(className);
+        Premain.junitTestClasses.remove(className);
       }
     }
 
