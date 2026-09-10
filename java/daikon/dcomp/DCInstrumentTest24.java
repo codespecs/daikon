@@ -546,6 +546,18 @@ public final class DCInstrumentTest24 {
   private static final int WIDENING_GROUPS = 6000;
 
   /**
+   * The number of groups in the method that {@link #trackedWidenedBranchClassBytes} builds, which
+   * is instrumented rather than copied. Instrumentation inflates each 4-byte group to about 30
+   * bytes, so this is enough that the branch spans more than the 32767 bytes that fit in its
+   * operand, which makes {@code java.lang.classfile} discard the built code and run the handler a
+   * second time; see {@link daikon.chicory.MethodGen24#resetForCodeBuilder}. It is also few enough
+   * that the fully instrumented method still fits in the JVM's 64K limit, which the non-JDK path
+   * requires: {@link DCInstrument24#instrument} has no oversized-method fallback, so a method that
+   * did not fit would make it abandon the whole class.
+   */
+  private static final int TRACKED_WIDENING_GROUPS = 2000;
+
+  /**
    * Returns the bytes of {@link Sample} with an added method, {@link #OVERSIZED_METHOD}, whose
    * instrumented form exceeds the JVM's 64K code-size limit. The method is added to a real class
    * rather than a synthetic one because DCInstrument24 resolves the class being instrumented, and
@@ -792,6 +804,47 @@ public final class DCInstrumentTest24 {
                       codeBuilder.localVariable(
                           0, "this", ClassDesc.of(sampleClassName()), start, end);
                       codeBuilder.localVariable(1, "arg", CD_int, start, end);
+                    })));
+  }
+
+  /**
+   * Returns {@link Sample} plus a method whose <em>instrumented</em> form contains a branch that
+   * does not fit in its 2-byte operand, so that the code builder runs the handler twice. Unlike
+   * {@link #widenedBranchClassBytes}, the method here is small enough to be instrumented normally,
+   * because this fixture is for the non-JDK path where the method is tracked.
+   *
+   * @return the bytes of {@link Sample} plus that method
+   * @throws IOException if the class file for {@link Sample} cannot be read
+   */
+  private static byte[] trackedWidenedBranchClassBytes() throws IOException {
+    ClassFile classFile = ClassFile.of();
+    ClassModel classModel = classFile.parse(classBytes(sampleClassName()));
+    return classFile.transformClass(
+        classModel,
+        ClassTransform.endHandler(
+            classBuilder ->
+                classBuilder.withMethodBody(
+                    OVERSIZED_METHOD,
+                    MethodTypeDesc.of(CD_int, CD_int),
+                    ClassFile.ACC_PUBLIC,
+                    codeBuilder -> {
+                      // The branch is always taken, so the groups it jumps over are dead at run
+                      // time; they exist to put the branch target out of reach in the instrumented
+                      // code, which is several times longer than what is written here.
+                      Label target = codeBuilder.newLabel();
+                      codeBuilder.iconst_0();
+                      codeBuilder.istore(2);
+                      codeBuilder.iload(2);
+                      codeBuilder.ifge(target);
+                      for (int i = 0; i < TRACKED_WIDENING_GROUPS; i++) {
+                        codeBuilder.iload(2);
+                        codeBuilder.iconst_1();
+                        codeBuilder.iadd();
+                        codeBuilder.istore(2);
+                      }
+                      codeBuilder.labelBinding(target);
+                      codeBuilder.iload(1);
+                      codeBuilder.ireturn();
                     })));
   }
 
@@ -1994,6 +2047,70 @@ public final class DCInstrumentTest24 {
         }
       }
     };
+  }
+
+  /**
+   * Tests that a tracked method whose handler runs twice is registered only once. {@code
+   * java.lang.classfile} discards the code it built and runs the handler again when a branch does
+   * not fit in its 2-byte operand; see {@link daikon.chicory.MethodGen24#resetForCodeBuilder}. The
+   * second run must reuse the {@code MethodInfo} that the first one registered, or the method is
+   * added twice to {@code classInfo.method_infos} and to {@code DCRuntime.methods}, and the indices
+   * that {@code add_enter} and {@code add_exit} emit no longer agree with the runtime's list.
+   *
+   * <p>Registration happens only when {@code trackMethod && !in_jdk}, so this uses {@link
+   * DCInstrument24#instrument} rather than {@code instrument_jdk_class}: the tests that cover
+   * branch widening on the JDK path never reach the code this exercises.
+   *
+   * @throws IOException if the class file for {@link Sample} cannot be read
+   */
+  @Test
+  public void testWidenedBranchRegistersTrackedMethodOnce() throws IOException {
+    byte[] original = trackedWidenedBranchClassBytes();
+    ClassLoader loader = classLoader();
+    ClassFile classFile =
+        ClassFile.of(
+            ClassFile.ClassHierarchyResolverOption.of(
+                ClassHierarchyResolver.ofResourceParsing(loader)));
+    @BinaryName String className = sampleClassName();
+    ClassInfo classInfo = new ClassInfo(className, loader);
+
+    boolean savedJdkInstrumented = Premain.jdk_instrumented;
+    @BinaryName String savedInstrumentationInterface = DCRuntime.instrumentation_interface;
+    Premain.jdk_instrumented = false;
+    DCRuntime.instrumentation_interface = "daikon.dcomp.DCompInstrumented";
+    int methodsBefore = DCRuntime.methods.size();
+    byte[] instrumented;
+    try {
+      DCInstrument24 dci = new DCInstrument24(classFile, classFile.parse(original), false);
+      instrumented = dci.instrument(classInfo);
+    } finally {
+      Premain.jdk_instrumented = savedJdkInstrumented;
+      DCRuntime.instrumentation_interface = savedInstrumentationInterface;
+    }
+
+    // instrument() returns null if anything goes wrong, including a method that does not fit; the
+    // fixture is sized so that it does.
+    assertNotNull("class was not instrumented", instrumented);
+
+    // The premise of this test: the instrumented method is long enough that a branch spanning it
+    // cannot fit in a 2-byte operand, which is what makes the code builder run the handler twice.
+    ClassModel instrumentedModel = classFile.parse(instrumented);
+    int length =
+        ((CodeAttribute) instrumentedCopy(instrumentedModel, OVERSIZED_METHOD).code().orElseThrow())
+            .codeLength();
+    assertTrue(
+        "instrumented " + OVERSIZED_METHOD + " is too short to widen a branch: " + length,
+        length > 32767);
+
+    long registered =
+        classInfo.method_infos.stream()
+            .filter(mi -> mi.method_name.equals(OVERSIZED_METHOD))
+            .count();
+    assertEquals("tracked method was not registered exactly once", 1, registered);
+    assertEquals(
+        "DCRuntime.methods disagrees with classInfo.method_infos",
+        classInfo.method_infos.size(),
+        DCRuntime.methods.size() - methodsBefore);
   }
 
   /**
