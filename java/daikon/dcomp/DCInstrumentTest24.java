@@ -154,6 +154,101 @@ public final class DCInstrumentTest24 {
   }
 
   /**
+   * Instruments the named class, setting the runtime state that {@link DCInstrument24#instrument}
+   * requires. Tests must not depend on an earlier test having set it.
+   *
+   * @param binaryName the class to instrument
+   * @return the instrumented class
+   * @throws IOException if the class file cannot be read
+   */
+  private static byte[] instrumentCaller(@BinaryName String binaryName) throws IOException {
+    @BinaryName String saved = DCRuntime.instrumentation_interface;
+    boolean savedJdkInstrumented = Premain.jdk_instrumented;
+    DCRuntime.instrumentation_interface = "daikon.dcomp.DCompInstrumented";
+    // handleInvoke only resolves the target when the JDK is not instrumented; with an
+    // instrumented JDK every JDK method has an instrumented form and there is nothing to decide.
+    Premain.jdk_instrumented = false;
+    byte @Nullable [] result;
+    try {
+      result = instrument(classBytes(binaryName), binaryName);
+    } finally {
+      Premain.jdk_instrumented = savedJdkInstrumented;
+      DCRuntime.instrumentation_interface = saved;
+    }
+    assert result != null : "@AssumeAssertion(nullness)";
+    return result;
+  }
+
+  /**
+   * Returns true if the instrumented form of {@code caller} invokes {@code methodName} with a
+   * DCompMarker argument, that is, if the instrumenter decided the target was instrumented.
+   *
+   * @param classBytes an instrumented class
+   * @param methodName the name of the invoked method
+   * @return true if the call carries a DCompMarker argument
+   */
+  private static boolean invokesInstrumentedForm(byte[] classBytes, String methodName) {
+    ClassModel classModel = ClassFile.of().parse(classBytes);
+    for (MethodModel method : classModel.methods()) {
+      for (CodeElement element :
+          method.code().orElse(null) == null
+              ? List.<CodeElement>of()
+              : method.code().orElseThrow()) {
+        if (element instanceof InvokeInstruction invoke
+            && invoke.name().stringValue().equals(methodName)) {
+          List<ClassDesc> params = invoke.typeSymbol().parameterList();
+          if (!params.isEmpty()
+              && params.get(params.size() - 1).displayName().equals("DCompMarker")) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Tests that a method declared by a superclass outranks a {@code default} method of an interface.
+   * JVMS 5.4.3.3 resolves a method against the class's own declaration, then the superclass chain,
+   * and only then the superinterfaces.
+   *
+   * <p>{@link IteratorWithSuperclassRemove} inherits {@code remove} from an application superclass
+   * and also implements {@code java.util.Iterator}, which declares {@code remove} as a default. The
+   * superclass implementation is what runs, and it is instrumented, so the call must use the
+   * instrumented form. Consulting the interface first would find the JDK's default and wrongly
+   * treat the call as uninstrumented, losing comparability through it.
+   *
+   * @throws IOException if the class file cannot be read
+   */
+  @Test
+  public void testSuperclassOutranksInterfaceDefault() throws IOException {
+    @SuppressWarnings("signature:assignment") // the name of a nested class
+    @BinaryName String callerName = CallsSuperclassRemove.class.getName();
+    byte[] instrumented = instrumentCaller(callerName);
+    assertTrue(
+        "an interface default outranked the superclass implementation",
+        invokesInstrumentedForm(instrumented, "remove"));
+  }
+
+  /**
+   * Tests that an interface which reabstracts an inherited {@code default} hides it. {@link
+   * ReabstractsRemove} redeclares {@code Iterator.remove} as abstract, so an implementor must
+   * define the method and the JDK's default no longer applies. Searching past the reabstraction and
+   * finding that default would wrongly attribute the method to the JDK.
+   *
+   * @throws IOException if the class file cannot be read
+   */
+  @Test
+  public void testReabstractionHidesInheritedDefault() throws IOException {
+    @SuppressWarnings("signature:assignment") // the name of a nested class
+    @BinaryName String callerName = CallsReabstractedRemove.class.getName();
+    byte[] instrumented = instrumentCaller(callerName);
+    assertTrue(
+        "a reabstracted default was still treated as the JDK's implementation",
+        invokesInstrumentedForm(instrumented, "remove"));
+  }
+
+  /**
    * Instruments the given class, as {@code Instrument24.transform} does.
    *
    * @param bytes the bytes of the class to instrument
@@ -290,6 +385,76 @@ public final class DCInstrumentTest24 {
     } finally {
       Runtime.ppt_omit_pattern = savedOmitPattern;
       DCRuntime.instrumentation_interface = savedInstrumentationInterface;
+    }
+  }
+
+  /**
+   * An application class that implements {@code Iterator.remove}, which the interface supplies as a
+   * default method. Used by {@link #testSuperclassOutranksInterfaceDefault}: JVMS 5.4.3.3 resolves
+   * a method against the superclass chain before the superinterfaces, so a call to {@code remove}
+   * on {@link IteratorWithSuperclassRemove} runs this implementation rather than the interface's
+   * default.
+   */
+  public static class RemoveInSuperclass {
+    /** Does nothing. */
+    public void remove() {}
+  }
+
+  /** A class whose {@code remove} comes from {@link RemoveInSuperclass}, not from the interface. */
+  public static class IteratorWithSuperclassRemove extends RemoveInSuperclass
+      implements java.util.Iterator<Object> {
+    @Override
+    public boolean hasNext() {
+      return false;
+    }
+
+    @Override
+    public Object next() {
+      throw new java.util.NoSuchElementException();
+    }
+  }
+
+  /**
+   * An interface that reabstracts {@code Iterator.remove}. An implementor must define the method,
+   * so the interface's default no longer applies; see {@link
+   * #testReabstractionHidesInheritedDefault}.
+   */
+  public interface ReabstractsRemove extends java.util.Iterator<Object> {
+    @Override
+    void remove();
+  }
+
+  /** An interface that inherits the reabstraction and declares nothing of its own. */
+  public interface InheritsReabstraction extends ReabstractsRemove {}
+
+  /**
+   * An abstract class that declares no {@code remove} of its own, so resolving a call to it reaches
+   * the interfaces. The call site is typed as this class rather than as the interface, because the
+   * resolution being tested runs only for INVOKEVIRTUAL.
+   */
+  public abstract static class AbstractReabstracted implements InheritsReabstraction {}
+
+  /** Calls {@code remove} on a class that inherits it from an application superclass. */
+  public static class CallsSuperclassRemove {
+    /**
+     * Calls {@code remove}.
+     *
+     * @param it the receiver
+     */
+    public void call(IteratorWithSuperclassRemove it) {
+      it.remove();
+    }
+  }
+
+  /** Calls {@code remove} through an interface that reabstracts the JDK's default. */
+  public static class CallsReabstractedRemove {
+    /**
+     * Calls {@code remove}.
+     *
+     * @param it the receiver
+     */
+    public void call(AbstractReabstracted it) {
+      it.remove();
     }
   }
 

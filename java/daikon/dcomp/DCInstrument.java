@@ -2275,6 +2275,18 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
+   * Returns the first argument if it is non-null, otherwise the second.
+   *
+   * @param first the preferred value
+   * @param second the fallback value
+   * @return the first non-null argument, or null if both are null
+   */
+  private static @Nullable @ClassGetName String firstNonNull(
+      @Nullable @ClassGetName String first, @Nullable @ClassGetName String second) {
+    return first != null ? first : second;
+  }
+
+  /**
    * Returns the name of the interface that declares the given method. The interfaces of {@code
    * startClass} are recursively searched.
    *
@@ -2312,18 +2324,28 @@ public class DCInstrument extends InstructionListUtils {
       if (ji == null) {
         throw new Error("Unable to find class: " + interfaceName);
       }
+      boolean reabstracted = false;
       for (Method jm : ji.getMethods()) {
         if (debugGetDeclaringInterface) {
           System.out.println("  " + jm.getName() + Arrays.toString(jm.getArgumentTypes()));
         }
         if (jm.getName().equals(methodName) && Arrays.equals(jm.getArgumentTypes(), paramTypes)) {
-          // We have a match.  A static method is never the target of an INVOKEVIRTUAL, and an
-          // abstract one declares the method without implementing it.
-          if (implementationsOnly && (jm.isAbstract() || jm.isStatic())) {
+          // We have a match.  A static method is never the target of an INVOKEVIRTUAL.
+          if (jm.isStatic()) {
             continue;
+          }
+          if (implementationsOnly && jm.isAbstract()) {
+            // This interface declares the method abstract.  An interface may reabstract a default
+            // it inherits, and an implementor must then define the method, so any default above
+            // this point is hidden: do not search this branch further.
+            reabstracted = true;
+            break;
           }
           return interfaceName;
         }
+      }
+      if (reabstracted) {
+        continue;
       }
       // no match found; does this interface extend other interfaces?
       @ClassGetName String foundAbove = getDeclaringInterface(ji, methodName, paramTypes, implementationsOnly);
@@ -2578,11 +2600,10 @@ public class DCInstrument extends InstructionListUtils {
           }
 
           @ClassGetName String targetClassname = classname;
-          // An abstract interface method is only a declaration, so finding one does not settle
-          // where the method that runs comes from.  JVMS 5.4.3.3 resolves a method against the
-          // superclass chain before the superinterfaces, so hold any such declaration aside and
-          // use it only if the walk up the superclasses finds nothing.
-          @ClassGetName @Nullable String declaringInterface = null;
+          // Interfaces are not consulted in the loop below: JVMS 5.4.3.3 resolves a method
+          // against the class's own declaration, then the superclass chain, and only then the
+          // superinterfaces, so the whole chain is searched first and the interfaces of the
+          // original target class afterwards.
           // Search this class for the target method. If not found, set targetClassname to
           // its superclass and try again.
           mainloop:
@@ -2624,58 +2645,39 @@ public class DCInstrument extends InstructionListUtils {
               }
             }
 
-            {
-              // No declared method matches - search this class's interfaces.  A default method is
-              // an implementation, so finding one settles the question.
+            // Method not found; perhaps inherited from superclass.
+            // Cannot use "targetClass = targetClass.getSuperClass()" because the superclass might
+            // not have been loaded into BCEL yet.
+            if (targetClass.getSuperclassNameIndex() == 0) {
+              // No class in the chain declares the method, so it comes from an interface.  Prefer
+              // a default method, which is an implementation; an abstract declaration only says
+              // where the method is declared, but that is the best available answer.
               @ClassGetName String found;
               try {
-                found = getDeclaringInterface(targetClass, methodName, paramTypes, true);
+                JavaClass origin = getJavaClass(classname);
+                found =
+                    origin == null
+                        ? null
+                        : firstNonNull(
+                            getDeclaringInterface(origin, methodName, paramTypes, true),
+                            getDeclaringInterface(origin, methodName, paramTypes, false));
               } catch (Throwable e) {
                 // We cannot locate or read the .class file, better assume it is not instrumented.
                 targetInstrumented = false;
                 break;
               }
-              if (found != null) {
-                // We have a match.
-                if (debugHandleInvoke) {
-                  System.out.printf("we have a match%n%n");
-                }
-                if (BcelUtil.inJdk(found)) {
-                  targetInstrumented = false;
-                }
-                break;
-              }
-              // Otherwise remember the first abstract declaration and keep walking; see the
-              // comment on declaringInterface above.
-              if (declaringInterface == null) {
-                try {
-                  declaringInterface =
-                      getDeclaringInterface(targetClass, methodName, paramTypes, false);
-                } catch (Throwable e) {
-                  targetInstrumented = false;
-                  break;
-                }
-              }
-            }
-
-            // Method not found; perhaps inherited from superclass.
-            // Cannot use "targetClass = targetClass.getSuperClass()" because the superclass might
-            // not have been loaded into BCEL yet.
-            if (targetClass.getSuperclassNameIndex() == 0) {
-              // The target class is Object; the search completed without finding an
-              // implementation.  Fall back to any abstract declaration seen along the way.
-              if (declaringInterface != null) {
-                if (debugHandleInvoke) {
-                  System.out.printf("only a declaration, in %s%n%n", declaringInterface);
-                }
-                if (BcelUtil.inJdk(declaringInterface)) {
-                  targetInstrumented = false;
-                }
-              } else {
+              if (found == null) {
                 if (debugHandleInvoke) {
                   System.out.printf("Unable to locate method: %s%n%n", methodName);
                 }
                 targetInstrumented = false;
+              } else {
+                if (debugHandleInvoke) {
+                  System.out.printf("declared by interface %s%n%n", found);
+                }
+                if (BcelUtil.inJdk(found)) {
+                  targetInstrumented = false;
+                }
               }
               break;
             }
