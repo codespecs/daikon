@@ -249,7 +249,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
 import org.apache.bcel.classfile.AnnotationEntry;
 import org.apache.bcel.classfile.Annotations;
 import org.apache.bcel.classfile.Attribute;
@@ -321,7 +320,6 @@ import org.checkerframework.checker.signature.qual.BinaryName;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 import org.checkerframework.checker.signature.qual.Identifier;
-import org.checkerframework.checker.signature.qual.InternalForm;
 import org.checkerframework.dataflow.qual.Pure;
 
 /**
@@ -484,9 +482,6 @@ public class DCInstrument extends InstructionListUtils {
 
   /** Either "daikon.dcomp.DCRuntime" or "java.lang.DCRuntime". */
   protected @BinaryName String dcompRuntimeClassName = "daikon.dcomp.DCRuntime";
-
-  /** Set of JUnit test classes. */
-  protected static Set<String> junitTestClasses = new HashSet<>();
 
   /** Possible states of JUnit test discovery. */
   protected enum JunitState {
@@ -839,9 +834,9 @@ public class DCInstrument extends InstructionListUtils {
             // This is a JUnit test class and so are the
             // elements of classnameStack.
             junit_test_class = true;
-            junitTestClasses.add(this_class);
+            Premain.junitTestClasses.add(this_class);
             while (!classnameStack.isEmpty()) {
-              junitTestClasses.add(classnameStack.pop());
+              Premain.junitTestClasses.add(classnameStack.pop());
             }
             break;
           } else if (super_class.equals("java.lang.Object")) {
@@ -877,7 +872,7 @@ public class DCInstrument extends InstructionListUtils {
                     || description.endsWith("org/junit/jupiter/api/Test;") // JUnit 5
                 ) {
                   junit_test_class = true;
-                  junitTestClasses.add(classname);
+                  Premain.junitTestClasses.add(classname);
                   break searchloop;
                 }
               }
@@ -2420,7 +2415,7 @@ public class DCInstrument extends InstructionListUtils {
       // because they do not have the dcomp_marker added to the parameter list, but
       // they actually contain instrumentation code.  So we do not want to discard
       // the primitive tags prior to the call.
-      if (!junitTestClasses.contains(classname)) {
+      if (!Premain.junitTestClasses.contains(classname)) {
         il.append(discard_primitive_tags(paramTypes));
       }
 
@@ -2486,7 +2481,9 @@ public class DCInstrument extends InstructionListUtils {
       targetInstrumented = false;
     } else {
       // At this point, we will never see classname = java.lang.Object.
-      targetInstrumented = isClassnameInstrumented(classname, methodName);
+      targetInstrumented =
+          Premain.isClassnameInstrumented(
+              classname, methodName, debugHandleInvoke, debugInstrument);
 
       if (debugHandleInvoke) {
         System.out.printf("isClassnameInstrumented: %s%n", targetInstrumented);
@@ -2698,91 +2695,6 @@ public class DCInstrument extends InstructionListUtils {
       accessFlags.put(classname, access);
     }
     return access;
-  }
-
-  /**
-   * Returns true if the specified class is instrumented or we presume it will be instrumented by
-   * the time it is executed.
-   *
-   * @param classname class to be checked
-   * @param methodName method to be checked (currently unused)
-   * @return true if classname is instrumented
-   */
-  private boolean isClassnameInstrumented(
-      @ClassGetName String classname, @Identifier String methodName) {
-
-    if (debugHandleInvoke) {
-      System.out.printf("Checking callee instrumented on %s.%s%n", classname, methodName);
-    }
-
-    // Our copy of daikon.plumelib is not instrumented.  It would be odd, though,
-    // to see calls to this.
-    if (classname.startsWith("daikon.plumelib")) {
-      return false;
-    }
-
-    // Special-case JUnit test classes.
-    if (junitTestClasses.contains(classname)) {
-      return false;
-    }
-
-    @SuppressWarnings("signature:assignment") // string conversion
-    @InternalForm String internalName = classname.replace('.', '/');
-    if (daikon.dcomp.Instrument.is_transformer(internalName)) {
-      return false;
-    }
-
-    // Special-case the execution trace tool.
-    if (classname.startsWith("minst.Minst")) {
-      return false;
-    }
-
-    // We should probably change the interface to include method name
-    // and use "classname.methodname" as arg to pattern matcher.
-    // If any of the omit patterns match, use the uninstrumented version of the method
-    for (Pattern p : DynComp.ppt_omit_pattern) {
-      if (p.matcher(classname).find()) {
-        if (debugHandleInvoke) {
-          System.out.printf("callee instrumented = false: %s.%s%n", classname, methodName);
-        }
-        return false;
-      }
-    }
-
-    // If it's not a JDK class, presume it's instrumented.
-    if (!BcelUtil.inJdk(classname)) {
-      return true;
-    }
-
-    int i = classname.lastIndexOf('.');
-    if (i > 0 && Premain.problem_packages.contains(classname.substring(0, i))) {
-      debugInstrument.log(
-          "Don't call instrumented member of problem package %s%n", classname.substring(0, i));
-      return false;
-    }
-
-    if (Premain.problem_classes.contains(classname)) {
-      debugInstrument.log("Don't call instrumented member of problem class %s%n", classname);
-      return false;
-    }
-
-    // We have decided not to use the instrumented version of Random as
-    // the method generates values based on an initial seed value.
-    // (Typical of random() algorithms.) Instrumentation would have the undesirable side
-    // effect of putting all the generated values in the same comparison
-    // set when they should be distinct.
-    // Note: If we find other classes that should not use the instrumented
-    // versions, we should consider making this a searchable list.
-    if (classname.equals("java.util.Random")) {
-      return false;
-    }
-
-    // If using the instrumented JDK, then everything but object is instrumented.
-    if (Premain.jdk_instrumented && !classname.equals("java.lang.Object")) {
-      return true;
-    }
-
-    return false;
   }
 
   /**

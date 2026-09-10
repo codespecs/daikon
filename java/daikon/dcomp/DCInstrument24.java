@@ -325,7 +325,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
@@ -574,12 +573,6 @@ public class DCInstrument24 {
 
   /** The ClassDesc for the DynComp runtime support class. */
   private ClassDesc runtimeCD;
-
-  /**
-   * Set of JUnit test classes. This is thread-safe because a multithreaded target program
-   * instruments classes concurrently, one DCInstrument24 per thread.
-   */
-  protected static Set<String> junitTestClasses = ConcurrentHashMap.newKeySet();
 
   /** Possible states of JUnit test discovery. */
   protected enum JunitState {
@@ -959,9 +952,9 @@ public class DCInstrument24 {
             // This is a JUnit test class and so are the
             // elements of classnameStack.
             junit_test_class = true;
-            junitTestClasses.add(this_class);
+            Premain.junitTestClasses.add(this_class);
             while (!classnameStack.isEmpty()) {
-              junitTestClasses.add(classnameStack.pop());
+              Premain.junitTestClasses.add(classnameStack.pop());
             }
             break;
           } else if (super_class.equals("java.lang.Object")) {
@@ -997,7 +990,7 @@ public class DCInstrument24 {
                     || description.endsWith("org/junit/jupiter/api/Test;") // JUnit 5
                 ) {
                   junit_test_class = true;
-                  junitTestClasses.add(classname);
+                  Premain.junitTestClasses.add(classname);
                   break searchloop;
                 }
               }
@@ -2909,7 +2902,7 @@ public class DCInstrument24 {
       System.out.println("searching interfaces of: " + ClassGen24.getClassName(startClass));
     }
     for (ClassEntry classEntry : startClass.interfaces()) {
-      @BinaryName String interfaceName = Runtime.internalFormToBinaryName(classEntry.asInternalName());
+      @BinaryName String interfaceName = Signatures.internalFormToBinaryName(classEntry.asInternalName());
       if (debugGetDefiningInterface) {
         System.out.println("interface: " + interfaceName);
       }
@@ -2993,7 +2986,7 @@ public class DCInstrument24 {
   private List<CodeElement> handleInvoke(InvokeInstruction invoke, MethodGen24 mgen) {
 
     // Get information about the call.
-    @BinaryName String classname = Runtime.internalFormToBinaryName(invoke.owner().asInternalName());
+    @BinaryName String classname = Signatures.internalFormToBinaryName(invoke.owner().asInternalName());
     String methodName = invoke.name().stringValue();
     MethodTypeDesc mtd = invoke.typeSymbol();
     ClassDesc returnType = mtd.returnType();
@@ -3079,7 +3072,7 @@ public class DCInstrument24 {
     // because they do not have the dcomp_marker added to the parameter list, but
     // they actually contain instrumentation code.  So we do not want to discard
     // the primitive tags prior to the call.
-    if (!junitTestClasses.contains(classname)) {
+    if (!Premain.junitTestClasses.contains(classname)) {
       il = discard_primitive_tags(paramTypes);
     }
 
@@ -3140,7 +3133,9 @@ public class DCInstrument24 {
       targetInstrumented = false;
     } else {
       // At this point, we will never see classname = java.lang.Object.
-      targetInstrumented = isClassnameInstrumented(classname, methodName);
+      targetInstrumented =
+          Premain.isClassnameInstrumented(
+              classname, methodName, debugHandleInvoke, debugInstrument);
 
       if (debugHandleInvoke) {
         System.out.printf("isClassnameInstrumented: %s%n", targetInstrumented);
@@ -3366,95 +3361,6 @@ public class DCInstrument24 {
   }
 
   /**
-   * Returns true if the specified class is instrumented or we presume it will be instrumented by
-   * the time it is executed.
-   *
-   * @param classname class to be checked
-   * @param methodName method to be checked (currently unused)
-   * @return true if classname is instrumented
-   */
-  private boolean isClassnameInstrumented(
-      @BinaryName String classname, @Identifier String methodName) {
-
-    if (debugHandleInvoke) {
-      System.out.printf("Checking callee instrumented on %s.%s%n", classname, methodName);
-    }
-
-    // Our copy of daikon.plumelib is not instrumented.  It would be odd, though,
-    // to see calls to this.
-    if (classname.startsWith("daikon.plumelib")) {
-      return false;
-    }
-
-    // When a class contains an existing <clinit>, it will be instrumented. Thus, we need to mark
-    // our added call to 'DCRuntime.set_class_initialized' as not instrumented.
-    if (classname.endsWith("DCRuntime") && methodName.equals("set_class_initialized")) {
-      return false;
-    }
-
-    // Special-case JUnit test classes.
-    if (junitTestClasses.contains(classname)) {
-      return false;
-    }
-
-    if (daikon.dcomp.Instrument24.is_transformer(classname.replace('.', '/'))) {
-      return false;
-    }
-
-    // Special-case the execution trace tool.
-    if (classname.startsWith("minst.Minst")) {
-      return false;
-    }
-
-    // We should probably change the interface to include method name
-    // and use "classname.methodname" as arg to pattern matcher.
-    // If any of the omit patterns match, use the uninstrumented version of the method
-    for (Pattern p : DynComp.ppt_omit_pattern) {
-      if (p.matcher(classname).find()) {
-        if (debugHandleInvoke) {
-          System.out.printf("callee instrumented = false: %s.%s%n", classname, methodName);
-        }
-        return false;
-      }
-    }
-
-    // If it's not a JDK class, presume it's instrumented.
-    if (!BcelUtil.inJdk(classname)) {
-      return true;
-    }
-
-    int i = classname.lastIndexOf('.');
-    if (i > 0 && Premain.problem_packages.contains(classname.substring(0, i))) {
-      debugInstrument.log(
-          "Don't call instrumented member of problem package %s%n", classname.substring(0, i));
-      return false;
-    }
-
-    if (Premain.problem_classes.contains(classname)) {
-      debugInstrument.log("Don't call instrumented member of problem class %s%n", classname);
-      return false;
-    }
-
-    // We have decided not to use the instrumented version of Random as
-    // the method generates values based on an initial seed value.
-    // (Typical of random() algorithms.) Instrumentation would have the undesirable side
-    // effect of putting all the generated values in the same comparison
-    // set when they should be distinct.
-    // Note: If we find other classes that should not use the instrumented
-    // versions, we should consider making this a searchable list.
-    if (classname.equals("java.util.Random")) {
-      return false;
-    }
-
-    // If using the instrumented JDK, then everthing but object is instrumented.
-    if (Premain.jdk_instrumented && !classname.equals("java.lang.Object")) {
-      return true;
-    }
-
-    return false;
-  }
-
-  /**
    * Returns a list of the superclasses of this class. This class itself is not in the list. The
    * returned list is in ascending order; that is, java.lang.Object is always the last element,
    * unless the argument is java.lang.Object.
@@ -3657,7 +3563,7 @@ public class DCInstrument24 {
     List<CodeElement> il = new ArrayList<>();
     Opcode op = fi.opcode();
     String fieldName = fi.name().stringValue();
-    @BinaryName String owner = Runtime.internalFormToBinaryName(fi.owner().asInternalName());
+    @BinaryName String owner = Signatures.internalFormToBinaryName(fi.owner().asInternalName());
     ClassDesc ownerCD = fi.owner().asSymbol();
 
     // If this class doesn't support tag fields, don't load/store them.
@@ -4710,7 +4616,7 @@ public class DCInstrument24 {
     }
 
     // Get the offsets for each field in the superclass.
-    String superclassName = Runtime.internalFormToBinaryName(ce.get().asInternalName());
+    String superclassName = Signatures.internalFormToBinaryName(ce.get().asInternalName());
     ClassModel super_cm = getClassModel(superclassName);
     if (super_cm == null) {
       throw new DynCompError("Can't get superclass for " + superclassName);

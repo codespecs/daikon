@@ -195,7 +195,7 @@ public class Instrument implements ClassFileTransformer {
       }
 
       // Don't instrument other byte code transformers
-      if (is_transformer(className)) {
+      if (Premain.is_transformer(className)) {
         debug_transform.log("Skipping is_transformer class %s%n", binaryClassName);
         if (!transformer_seen) {
           transformer_seen = true;
@@ -287,34 +287,6 @@ public class Instrument implements ClassFileTransformer {
       return true;
     }
     if (className.startsWith("daikon/plumelib")) {
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * Returns true if the specified class is part of a tool known to do Java byte code
-   * transformation. We need to warn the user that this may not work correctly.
-   *
-   * @param className class to be checked
-   * @return true if className is a known transformer
-   */
-  @Pure
-  protected static boolean is_transformer(@InternalForm String className) {
-
-    if (className.startsWith("org/codehaus/groovy")) {
-      return true;
-    }
-    if (className.startsWith("groovy/lang")) {
-      return true;
-    }
-    if (className.startsWith("org/mockito")) {
-      return true;
-    }
-    if (className.startsWith("org/objenesis")) {
-      return true;
-    }
-    if (className.contains("ByMockito")) {
       return true;
     }
     return false;
