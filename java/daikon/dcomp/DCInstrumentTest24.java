@@ -34,6 +34,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.interning.qual.Interned;
+import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.BinaryName;
 import org.junit.Test;
@@ -404,12 +405,12 @@ public final class DCInstrumentTest24 {
   public static class IteratorWithSuperclassRemove extends RemoveInSuperclass
       implements java.util.Iterator<Object> {
     @Override
-    public boolean hasNext() {
+    public boolean hasNext(@GuardSatisfied IteratorWithSuperclassRemove this) {
       return false;
     }
 
     @Override
-    public Object next() {
+    public Object next(@GuardSatisfied IteratorWithSuperclassRemove this) {
       throw new java.util.NoSuchElementException();
     }
   }
@@ -421,7 +422,7 @@ public final class DCInstrumentTest24 {
    */
   public interface ReabstractsRemove extends java.util.Iterator<Object> {
     @Override
-    void remove();
+    void remove(@GuardSatisfied ReabstractsRemove this);
   }
 
   /** An interface that inherits the reabstraction and declares nothing of its own. */
