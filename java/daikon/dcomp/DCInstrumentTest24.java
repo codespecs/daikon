@@ -232,6 +232,24 @@ public final class DCInstrumentTest24 {
   }
 
   /**
+   * Tests that a private interface method is not treated as declaring the method being resolved.
+   * {@link PrivateThenJdkDefault} lists {@link PrivateRemove} before {@code java.util.Iterator}, so
+   * a search that matches the private {@code remove} stops at an application interface and
+   * concludes the target is instrumented. Skipping it reaches the JDK's default, which is not.
+   *
+   * @throws IOException if the class file cannot be read
+   */
+  @Test
+  public void testPrivateInterfaceMethodIsNotADeclaration() throws IOException {
+    @SuppressWarnings("signature:assignment") // the name of a nested class
+    @BinaryName String callerName = CallsRemoveThroughPrivate.class.getName();
+    byte[] instrumented = instrumentCaller(callerName);
+    assertFalse(
+        "a private interface method was treated as the declaration",
+        invokesInstrumentedForm(instrumented, "remove"));
+  }
+
+  /**
    * Tests that an interface which reabstracts an inherited {@code default} hides it. {@link
    * ReabstractsRemove} redeclares {@code Iterator.remove} as abstract, so an implementor must
    * define the method and the JDK's default no longer applies. Searching past the reabstraction and
@@ -456,6 +474,42 @@ public final class DCInstrumentTest24 {
      */
     public void call(AbstractReabstracted it) {
       it.remove();
+    }
+  }
+
+  /**
+   * An interface with a private {@code remove}, matching the name and descriptor of the {@code
+   * default} that {@code java.util.Iterator} supplies. A private interface method is not inherited
+   * and is never the target of an INVOKEVIRTUAL, so resolution must skip it and go on to the JDK's
+   * default; see {@link #testPrivateInterfaceMethodIsNotADeclaration}.
+   */
+  public interface PrivateRemove {
+    /** Unrelated to any call being resolved; it exists only to occupy the name. */
+    private void remove() {}
+
+    /** Uses the private method, so that it is not flagged as unused. */
+    default void usePrivateRemove() {
+      remove();
+    }
+  }
+
+  /**
+   * Implements the private-method interface first and {@code java.util.Iterator} second, so a
+   * search that does not skip private methods finds the wrong one. Abstract, so that no class in
+   * the chain declares {@code remove} and the search reaches the interfaces.
+   */
+  public abstract static class PrivateThenJdkDefault
+      implements PrivateRemove, java.util.Iterator<Object> {}
+
+  /** Calls {@code remove} on a class whose first interface declares it private. */
+  public static class CallsRemoveThroughPrivate {
+    /**
+     * Calls {@code remove}.
+     *
+     * @param x the receiver
+     */
+    public void call(PrivateThenJdkDefault x) {
+      x.remove();
     }
   }
 

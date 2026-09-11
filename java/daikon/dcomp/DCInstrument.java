@@ -2295,6 +2295,14 @@ public class DCInstrument extends InstructionListUtils {
    * private. Pass true for {@code implementationsOnly} to match only a {@code default} method,
    * which is the one case where the interface really does hold the code that will run.
    *
+   * <p>Limitation: when several interfaces match, this returns the first one reached rather than
+   * the maximally specific one that JVMS 5.4.3.3 selects. A class that implements both an interface
+   * and a subinterface that reabstracts the same method gets the first of the two in declaration
+   * order, which may be the supertype. The consequence is confined to precision: the caller uses
+   * the answer only to decide whether the target is instrumented, and a wrong answer there loses
+   * comparability through the call rather than breaking it, because the uninstrumented overload it
+   * then invokes always exists.
+   *
    * @param startClass the class whose interfaces are to be searched
    * @param methodName the target method to search for
    * @param paramTypes the target method's parameter types
@@ -2330,8 +2338,9 @@ public class DCInstrument extends InstructionListUtils {
           System.out.println("  " + jm.getName() + Arrays.toString(jm.getArgumentTypes()));
         }
         if (jm.getName().equals(methodName) && Arrays.equals(jm.getArgumentTypes(), paramTypes)) {
-          // We have a match.  A static method is never the target of an INVOKEVIRTUAL.
-          if (jm.isStatic()) {
+          // We have a match.  Neither a static nor a private interface method is ever the
+          // target of an INVOKEVIRTUAL: a private one is not even inherited.
+          if (jm.isStatic() || jm.isPrivate()) {
             continue;
           }
           if (implementationsOnly && jm.isAbstract()) {
