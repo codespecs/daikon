@@ -463,8 +463,8 @@ public class DCInstrument extends InstructionListUtils {
   /** If true, enable JUnit analysis debugging. */
   protected static final boolean debugJunitAnalysis = false;
 
-  /** If true, enable {@link #getDefiningInterface} debugging. */
-  protected static final boolean debugGetDefiningInterface = false;
+  /** If true, enable {@link #getDeclaringInterface} debugging. */
+  protected static final boolean debugGetDeclaringInterface = false;
 
   /** If true, enable {@link #handleInvoke} debugging. */
   protected static final boolean debugHandleInvoke = false;
@@ -2275,22 +2275,52 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns the interface class containing the implementation of the given method. The interfaces
-   * of {@code startClass} are recursively searched.
+   * Returns the first argument if it is non-null, otherwise the second.
+   *
+   * @param first the preferred value
+   * @param second the fallback value
+   * @return the first non-null argument, or null if both are null
+   */
+  private static @Nullable @ClassGetName String firstNonNull(
+      @Nullable @ClassGetName String first, @Nullable @ClassGetName String second) {
+    return first != null ? first : second;
+  }
+
+  /**
+   * Returns the name of the interface that declares the given method. The interfaces of {@code
+   * startClass} are recursively searched.
+   *
+   * <p>Note that this finds a <em>declaration</em>, which is usually not an implementation: an
+   * interface method is implicitly abstract unless it is {@code default}, {@code static}, or
+   * private. Pass true for {@code implementationsOnly} to match only a {@code default} method,
+   * which is the one case where the interface really does hold the code that will run.
+   *
+   * <p>Limitation: when several interfaces match, this returns the first one reached rather than
+   * the maximally specific one that JVMS 5.4.3.3 selects. A class that implements both an interface
+   * and a subinterface that reabstracts the same method gets the first of the two in declaration
+   * order, which may be the supertype. The consequence is confined to precision: the caller uses
+   * the answer only to decide whether the target is instrumented, and a wrong answer there loses
+   * comparability through the call rather than breaking it, because the uninstrumented overload it
+   * then invokes always exists.
    *
    * @param startClass the class whose interfaces are to be searched
    * @param methodName the target method to search for
    * @param paramTypes the target method's parameter types
-   * @return the name of the interface class containing target method, or null if not found
+   * @param implementationsOnly if true, match only a {@code default} method; if false, match any
+   *     declaration, abstract ones included
+   * @return the name of the interface that declares the target method, or null if not found
    */
-  private @Nullable @ClassGetName String getDefiningInterface(
-      JavaClass startClass, @Identifier String methodName, Type[] paramTypes) {
+  private @Nullable @ClassGetName String getDeclaringInterface(
+      JavaClass startClass,
+      @Identifier String methodName,
+      Type[] paramTypes,
+      boolean implementationsOnly) {
 
-    if (debugGetDefiningInterface) {
+    if (debugGetDeclaringInterface) {
       System.out.println("searching interfaces of: " + startClass.getClassName());
     }
     for (@ClassGetName String interfaceName : startClass.getInterfaceNames()) {
-      if (debugGetDefiningInterface) {
+      if (debugGetDeclaringInterface) {
         System.out.println("interface: " + interfaceName);
       }
       JavaClass ji;
@@ -2302,17 +2332,32 @@ public class DCInstrument extends InstructionListUtils {
       if (ji == null) {
         throw new Error("Unable to find class: " + interfaceName);
       }
+      boolean reabstracted = false;
       for (Method jm : ji.getMethods()) {
-        if (debugGetDefiningInterface) {
+        if (debugGetDeclaringInterface) {
           System.out.println("  " + jm.getName() + Arrays.toString(jm.getArgumentTypes()));
         }
         if (jm.getName().equals(methodName) && Arrays.equals(jm.getArgumentTypes(), paramTypes)) {
-          // We have a match.
+          // We have a match.  Neither a static nor a private interface method is ever the
+          // target of an INVOKEVIRTUAL: a private one is not even inherited.
+          if (jm.isStatic() || jm.isPrivate()) {
+            continue;
+          }
+          if (implementationsOnly && jm.isAbstract()) {
+            // This interface declares the method abstract.  An interface may reabstract a default
+            // it inherits, and an implementor must then define the method, so any default above
+            // this point is hidden: do not search this branch further.
+            reabstracted = true;
+            break;
+          }
           return interfaceName;
         }
       }
+      if (reabstracted) {
+        continue;
+      }
       // no match found; does this interface extend other interfaces?
-      @ClassGetName String foundAbove = getDefiningInterface(ji, methodName, paramTypes);
+      @ClassGetName String foundAbove = getDeclaringInterface(ji, methodName, paramTypes, implementationsOnly);
       if (foundAbove != null) {
         // We have a match.
         return foundAbove;
@@ -2564,6 +2609,10 @@ public class DCInstrument extends InstructionListUtils {
           }
 
           @ClassGetName String targetClassname = classname;
+          // Interfaces are not consulted in the loop below: JVMS 5.4.3.3 resolves a method
+          // against the class's own declaration, then the superclass chain, and only then the
+          // superinterfaces, so the whole chain is searched first and the interfaces of the
+          // original target class afterwards.
           // Search this class for the target method. If not found, set targetClassname to
           // its superclass and try again.
           mainloop:
@@ -2605,37 +2654,40 @@ public class DCInstrument extends InstructionListUtils {
               }
             }
 
-            {
-              // no methods match - search this class's interfaces
+            // Method not found; perhaps inherited from superclass.
+            // Cannot use "targetClass = targetClass.getSuperClass()" because the superclass might
+            // not have been loaded into BCEL yet.
+            if (targetClass.getSuperclassNameIndex() == 0) {
+              // No class in the chain declares the method, so it comes from an interface.  Prefer
+              // a default method, which is an implementation; an abstract declaration only says
+              // where the method is declared, but that is the best available answer.
               @ClassGetName String found;
               try {
-                found = getDefiningInterface(targetClass, methodName, paramTypes);
+                JavaClass origin = getJavaClass(classname);
+                found =
+                    origin == null
+                        ? null
+                        : firstNonNull(
+                            getDeclaringInterface(origin, methodName, paramTypes, true),
+                            getDeclaringInterface(origin, methodName, paramTypes, false));
               } catch (Throwable e) {
                 // We cannot locate or read the .class file, better assume it is not instrumented.
                 targetInstrumented = false;
                 break;
               }
-              if (found != null) {
-                // We have a match.
+              if (found == null) {
                 if (debugHandleInvoke) {
-                  System.out.printf("we have a match%n%n");
+                  System.out.printf("Unable to locate method: %s%n%n", methodName);
+                }
+                targetInstrumented = false;
+              } else {
+                if (debugHandleInvoke) {
+                  System.out.printf("declared by interface %s%n%n", found);
                 }
                 if (BcelUtil.inJdk(found)) {
                   targetInstrumented = false;
                 }
-                break;
               }
-            }
-
-            // Method not found; perhaps inherited from superclass.
-            // Cannot use "targetClass = targetClass.getSuperClass()" because the superclass might
-            // not have been loaded into BCEL yet.
-            if (targetClass.getSuperclassNameIndex() == 0) {
-              // The target class is Object; the search completed without finding a matching method.
-              if (debugHandleInvoke) {
-                System.out.printf("Unable to locate method: %s%n%n", methodName);
-              }
-              targetInstrumented = false;
               break;
             }
             // Recurse looking in the superclass.
