@@ -1,11 +1,17 @@
-#! /bin/csh -f
+#!/bin/sh
 # prints the full path of the dtrace file for the specified program.
 # Looks first in the $DAIKONDIR/tests/daikon-tests/<prog> directory and then
 # in /scratch/$user/tests/daikon-tests/<prog>_chicory.
-set prog = $1
-if (-e $DAIKONDIR/tests/daikon-tests/$prog/$prog.dtrace.gz) then
-  echo $DAIKONDIR/tests/daikon-tests/$prog/$prog.dtrace.gz \
-    $DAIKONDIR/tests/daikon-tests/$prog/*.decls
+
+prog=$1
+if [ -e "$DAIKONDIR/tests/daikon-tests/$prog/$prog.dtrace.gz" ]; then
+  # Expand the glob, but don't print it if it matches no file.
+  set -- "$DAIKONDIR"/tests/daikon-tests/"$prog"/*.decls
+  if [ -e "$1" ]; then
+    echo "$DAIKONDIR/tests/daikon-tests/$prog/$prog.dtrace.gz" "$@"
+  else
+    echo "$DAIKONDIR/tests/daikon-tests/$prog/$prog.dtrace.gz"
+  fi
 else
-  echo /scratch/$USER/tests/daikon-tests/${prog}_chicory/$prog.dtrace.gz
-endif
+  echo "/scratch/$USER/tests/daikon-tests/${prog}_chicory/$prog.dtrace.gz"
+fi
