@@ -932,7 +932,33 @@ public final class Runtime {
   }
 
   /** The major version of the running JVM: 8 for Java 8, 24 for Java 24, and so on. */
-  private static final int javaMajorVersion = javaMajorVersion(System.getProperty("java.version"));
+  private static final int javaMajorVersion = javaMajorVersionOfThisJvm();
+
+  /**
+   * Returns the major version of the running JVM, or 9 if its {@code java.version} property cannot
+   * be parsed.
+   *
+   * <p>This never throws. It is called from a static initializer, so an exception here would become
+   * an ExceptionInInitializerError in every instrumented program rather than a diagnostic from
+   * Daikon. The fallback is 9 rather than 8 because a {@code java.version} that cannot be parsed is
+   * certainly not a Java 8 one, and 9 is the safest of the later versions to assume: the
+   * command-line options that Daikon passes for Java 9 are accepted by every later JVM, whereas
+   * those it passes for Java 24 are rejected outright by an earlier one.
+   *
+   * @return the major version of the running JVM, or 9 if it cannot be determined
+   */
+  private static int javaMajorVersionOfThisJvm() {
+    String version = System.getProperty("java.version");
+    try {
+      return javaMajorVersion(version);
+    } catch (RuntimeException e) {
+      System.err.println(
+          "Warning: cannot determine the Java version from java.version=\""
+              + version
+              + "\"; assuming 9.");
+      return 9;
+    }
+  }
 
   /** True if the running JVM is for Java 9 or later. */
   private static final boolean isJava9orLater = javaMajorVersion >= 9;
@@ -968,14 +994,15 @@ public final class Runtime {
    * may stand alone with no separator at all, as it does for a GA release such as {@code "9"}.
    *
    * <p>Only the leading digits are examined; anything after them is ignored rather than rejected,
-   * so {@code "9foo"} yields 9. That is deliberate. This runs from a static initializer, so
-   * throwing on an unrecognized suffix would turn an unanticipated vendor version string into an
-   * ExceptionInInitializerError inside an instrumented program, which is the failure this method
-   * exists to prevent. Ignoring the suffix instead yields the right major version for any string
-   * that begins with one. A value with no leading digits at all is still rejected.
+   * so {@code "9foo"} yields 9. That is deliberate: ignoring the suffix yields the right major
+   * version for any string that begins with one, so an unanticipated vendor suffix costs nothing. A
+   * value with no leading digits at all is rejected; {@link #javaMajorVersionOfThisJvm} is what
+   * keeps that rejection from propagating out of a static initializer.
    *
    * @param version the value of the {@code java.version} system property
    * @return the major version it encodes
+   * @throws IllegalArgumentException if {@code version} does not start with a digit, after any
+   *     leading {@code "1."} is removed
    */
   // Package-private rather than private so that RuntimeTest can exercise it directly; the value
   // derived from the running JVM is fixed at class-initialization time and cannot be varied.
