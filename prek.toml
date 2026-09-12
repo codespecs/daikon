@@ -21,8 +21,8 @@ exclude = { glob = [
   "**/*expected*",
   "**/COPYING",
   "src/main/resources/specifications/jdk/*",
-  "src/test/resources/end-to-end/**/*",
-  "tests/kvasir-tests/povray/**/*",
+  "src/test/resources/end-to-end/*",
+  "tests/kvasir-tests/povray/*",
 ] }
 
 [[repos]]
@@ -34,7 +34,7 @@ hooks = [
     "scripts/*.pl",
     "scripts/trace-untruncate",
     "search",
-    "tests/kvasir-tests/**",
+    "tests/kvasir-tests/*",
   ] } },
   { id = "check-json" },
   { id = "check-merge-conflict" },
@@ -54,21 +54,21 @@ hooks = [
   { id = "detect-private-key" },
   { id = "end-of-file-fixer", exclude = { glob = [
     "**/.vscode/settings.json",
-    "**/native-image/**",
+    "**/native-image/*",
     "**/non-conflicted-file-without-terminator.txt",
-    "**/tests/squeeze-blank-lines-test/**",
+    "**/tests/squeeze-blank-lines-test/*",
     "bugs/jikes-patches/*",
-    "java/jtb/**",
-    "tests/kvasir-tests/**",
+    "java/jtb/*",
+    "tests/kvasir-tests/*",
   ] } },
   { id = "file-contents-sorter", files = { glob = [
-    "src/systemTest/resources/test-covgoals/**",
+    "src/systemTest/resources/test-covgoals/*",
   ] } },
   { id = "fix-byte-order-marker" },
   { id = "forbid-new-submodules" },
   { id = "mixed-line-ending" },
   { id = "trailing-whitespace", exclude = { glob = [
-    "**/tests/squeeze-blank-lines-test/**",
+    "**/tests/squeeze-blank-lines-test/*",
     ".aspell.en.prepl",
     ".aspell.en.pws",
     "bugs/BUGS.to-do",
@@ -81,8 +81,8 @@ hooks = [
     "emacs/bug/crypted.UUE",
     "en_US_apostrophe.aff",
     "enscript.st",
-    "java/jtb/**",
-    "tests/kvasir-tests/**",
+    "java/jtb/*",
+    "tests/kvasir-tests/*",
   ] } },
 ]
 
@@ -223,8 +223,6 @@ hooks = [
     "share/javapp",
     "share/myxapps",
     "scripts/eps2png-mono-alpha.zsh",
-    "scripts/browser_emacs",
-    "scripts/find-dtrace",
     "tests/kvasir-tests/tcas/tests.sh",
     "tests/kvasir-tests/flex-pristine/mkskel.sh",
     "tests/kvasir-tests/tot_info/tests.sh",

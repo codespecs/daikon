@@ -9,8 +9,10 @@ CHECKLINK ?= ${DAIKONDIR}/.utils/checklink
 
 PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
 
+ifndef NONETWORK
 ifeq (,$(wildcard ${PLUME_SCRIPTS}))
   dummy := $(shell mkdir -p "$(dir ${PLUME_SCRIPTS})" && git clone --depth=1 -q https://github.com/plume-lib/plume-scripts.git "${PLUME_SCRIPTS}")
+endif
 endif
 SORT_DIRECTORY_ORDER := ${PLUME_SCRIPTS}/sort-directory-order
 ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
