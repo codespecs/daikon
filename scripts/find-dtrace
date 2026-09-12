@@ -5,8 +5,13 @@
 
 prog=$1
 if [ -e "$DAIKONDIR/tests/daikon-tests/$prog/$prog.dtrace.gz" ]; then
-  echo "$DAIKONDIR/tests/daikon-tests/$prog/$prog.dtrace.gz" \
-    "$DAIKONDIR"/tests/daikon-tests/"$prog"/*.decls
+  # Expand the glob, but don't print it if it matches no file.
+  set -- "$DAIKONDIR"/tests/daikon-tests/"$prog"/*.decls
+  if [ -e "$1" ]; then
+    echo "$DAIKONDIR/tests/daikon-tests/$prog/$prog.dtrace.gz" "$@"
+  else
+    echo "$DAIKONDIR/tests/daikon-tests/$prog/$prog.dtrace.gz"
+  fi
 else
   echo "/scratch/$USER/tests/daikon-tests/${prog}_chicory/$prog.dtrace.gz"
 fi
