@@ -934,6 +934,45 @@ public final class Runtime {
   /** The major version of the running JVM: 8 for Java 8, 24 for Java 24, and so on. */
   private static final int javaMajorVersion = javaMajorVersion(System.getProperty("java.version"));
 
+  /**
+   * Returns the major version that the given {@code java.version} string encodes: 8 for Java 8, 24
+   * for Java 24, and so on. The string need not come from the running JVM.
+   *
+   * <p>Both version schemes are accepted: the pre-Java-9 {@code "1.8.0_432"} form, whose major
+   * version is its second component, and the Java 9 and later {@code "24"}, {@code "24.0.1"}, and
+   * {@code "24-ea"} forms, whose major version is the first.
+   *
+   * <p>The major version is the leading run of digits (after optional "1."). Anything after them is
+   * ignored, so {@code "9foo"} yields 9. Thus, this method is robust against an unanticipated
+   * vendor suffix.
+   *
+   * <p>This never throws an exception, so it can be called from a static initializer.
+   *
+   * @param version the value of a {@code java.version} system property, or null
+   * @return the major version it encodes, or 9 if it encodes none
+   */
+  // Package-private rather than private so that RuntimeTest can exercise it directly; the value
+  // derived from the running JVM is fixed at class-initialization time and cannot be varied.
+  static int javaMajorVersion(@Nullable String version) {
+    if (version != null) {
+      // Java 8 and earlier report "1.N..."; the major version is the second component.
+      String rest = version.startsWith("1.") ? version.substring(2) : version;
+      int end = 0;
+      while (end < rest.length() && Character.isDigit(rest.charAt(end))) {
+        end++;
+      }
+      if (end != 0) {
+        try {
+          return Integer.parseInt(rest.substring(0, end));
+        } catch (NumberFormatException e) {
+          // The run of digits does not fit in an int, so it is not a major version.  Fall through.
+        }
+      }
+    }
+
+    return 9;
+  }
+
   /** True if the running JVM is for Java 9 or later. */
   private static final boolean isJava9orLater = javaMajorVersion >= 9;
 
@@ -956,42 +995,5 @@ public final class Runtime {
    */
   public static boolean isJava24orLater() {
     return isJava24orLater;
-  }
-
-  /**
-   * Returns the major version encoded in a {@code java.version} property value: 8 for Java 8, 24
-   * for Java 24, and so on.
-   *
-   * <p>Both version schemes are accepted: the pre-Java-9 {@code "1.8.0_432"} form, whose major
-   * version is its second component, and the Java 9 and later {@code "24"}, {@code "24.0.1"}, and
-   * {@code "24-ea"} forms, whose major version is the first. In the latter scheme the major version
-   * may stand alone with no separator at all, as it does for a GA release such as {@code "9"}.
-   *
-   * <p>Only the leading digits are examined; anything after them is ignored rather than rejected,
-   * so {@code "9foo"} yields 9. That is deliberate. This runs from a static initializer, so
-   * throwing on an unrecognized suffix would turn an unanticipated vendor version string into an
-   * ExceptionInInitializerError inside an instrumented program, which is the failure this method
-   * exists to prevent. Ignoring the suffix instead yields the right major version for any string
-   * that begins with one. A value with no leading digits at all is still rejected.
-   *
-   * @param version the value of the {@code java.version} system property
-   * @return the major version it encodes
-   */
-  // Package-private rather than private so that RuntimeTest can exercise it directly; the value
-  // derived from the running JVM is fixed at class-initialization time and cannot be varied.
-  static int javaMajorVersion(String version) {
-    // Java 8 and earlier report "1.N..."; the major version is the second component.
-    String rest = version.startsWith("1.") ? version.substring(2) : version;
-    // The major version is the leading run of digits.  What follows it is "." for a release with
-    // minor components, "-" or "+" for a pre-release or build identifier, and nothing at all for a
-    // bare GA release such as "9".
-    int end = 0;
-    while (end < rest.length() && Character.isDigit(rest.charAt(end))) {
-      end++;
-    }
-    if (end == 0) {
-      throw new IllegalArgumentException("Cannot parse java.version: " + version);
-    }
-    return Integer.parseInt(rest.substring(0, end));
   }
 }

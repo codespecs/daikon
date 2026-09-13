@@ -1,7 +1,6 @@
 package daikon.chicory;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,9 +34,15 @@ public class RuntimeTest {
     assertEquals(26, Runtime.javaMajorVersion("26+11"));
 
     // Trailing junk after the major version is ignored rather than rejected; this is deliberate,
-    // and javaMajorVersion's javadoc says why.  A value with no leading digits still throws.
+    // and javaMajorVersion's javadoc says why.
     assertEquals(9, Runtime.javaMajorVersion("9foo"));
-    assertThrows(IllegalArgumentException.class, () -> Runtime.javaMajorVersion("bogus"));
+
+    // A string that encodes no major version yields 9 rather than throwing, because
+    // javaMajorVersion is called from a static initializer.  Each of these prints a warning.
+    assertEquals(9, Runtime.javaMajorVersion("bogus"));
+    assertEquals(9, Runtime.javaMajorVersion(""));
+    assertEquals(9, Runtime.javaMajorVersion(null));
+    assertEquals(9, Runtime.javaMajorVersion("99999999999999"));
   }
 
   /** Tests that {@link Runtime#isJava24orLater} agrees with the JVM running the test. */
