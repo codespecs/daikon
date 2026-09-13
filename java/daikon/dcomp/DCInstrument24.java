@@ -470,9 +470,12 @@ public class DCInstrument24 {
    * if it has not registered one. Read only by a rerun of {@code instrumentCode} for that same
    * method; see {@link MethodGen24#resetForCodeBuilder}.
    */
-  private @Nullable MethodInfo currentMethodInfo;
+  private @MonotonicNonNull MethodInfo currentMethodInfo;
 
-  /** The index of {@link #currentMethodInfo} in {@code DCRuntime.methods}. */
+  /**
+   * The index of {@link #currentMethodInfo} in {@code DCRuntime.methods}. Not used if {@code
+   * currentMethodInfo} is null.
+   */
   private int currentMethodInfoIndex;
 
   /**
@@ -574,9 +577,9 @@ public class DCInstrument24 {
 
   /**
    * The subset of {@link #oversizedMethods} that exceeds the JVM's 64K code-size limit even with
-   * the minimal tag-stack bookkeeping that {@link #copyOversizedMethod} adds. Such a method is
-   * emitted as a small forwarding stub that performs the bookkeeping and calls the unchanged
-   * original method. Uses the same keys as {@link #oversizedMethods}.
+   * the minimal tag-stack bookkeeping that {@link #copyMethodWithMinimalInstrumentation} adds. Such
+   * a method is emitted as a small forwarding stub that performs the bookkeeping and calls the
+   * unchanged original method. Uses the same keys as {@link #oversizedMethods}.
    */
   private Set<String> oversizedMethodsRequiringStub = new HashSet<>();
 
@@ -865,11 +868,7 @@ public class DCInstrument24 {
 
     boolean junit_test_class = false;
 
-    // Skipped for JDK classes.  A JDK class is never a JUnit test class: the check below confirms
-    // one only by a junit.framework.TestCase superclass or an org/junit/Test annotation.  Skipping
-    // them loses no state transition -- STARTING and TEST_DISCOVERY are re-evaluated on the next
-    // class load, and the test classes themselves are never in the JDK -- and it keeps a
-    // getStackTrace, plus TEST_DISCOVERY's superclass walk, off the JDK class-loading path.
+    // Skipped for JDK classes.  A JDK class is never a JUnit test class.
     if (!in_jdk) {
       // A very tricky special case: If JUnit is running and the current
       // class has been passed to JUnit on the command line, then this
@@ -1357,12 +1356,14 @@ public class DCInstrument24 {
       // instrument_jdk_class for how this set is populated.
       String oversizedKey = oversizedMethodKey(methodModel.methodName().stringValue(), mtd);
       if (oversizedMethods.contains(oversizedKey)) {
-        // The bookkeeping is a few bytes long, but the method is already at the limit, so it can
-        // overflow too; a method that did is emitted as a small forwarding stub.
+        // The bookkeeping adds only a few bytes to the original body, but that body is already
+        // near the 64K limit, so even those few bytes can push it over.  A method that overflowed
+        // that way on an earlier build attempt is in oversizedMethodsRequiringStub; rather than
+        // copying its body, emit a small forwarding stub that does the bookkeeping and calls the
+        // unchanged original.
         //
         // The stub forwards to the unchanged original, which is emitted under its own descriptor
-        // only when a DCompMarker parameter is added.  Without the marker there is nothing to
-        // forward to: the stub's call would resolve to the stub itself.  Only instrument_jdk_class
+        // only when a DCompMarker parameter is added.  Only instrument_jdk_class
         // populates oversizedMethods, so the only method that gets here without the marker is
         // main, whose copy adds no bookkeeping at all and therefore cannot overflow.
         boolean copyOriginalBody =
@@ -1383,7 +1384,7 @@ public class DCInstrument24 {
             methodModel.flags().flagsMask(),
             methodBuilder -> {
               if (copyOriginalBody) {
-                copyOversizedMethod(
+                copyMethodWithMinimalInstrumentation(
                     methodBuilder,
                     methodModel,
                     mgen,
@@ -1391,7 +1392,7 @@ public class DCInstrument24 {
                     discardArgumentTags,
                     pushResultTag);
               } else {
-                createOversizedMethodStub(methodBuilder, methodModel, mgen);
+                createForwardingStub(methodBuilder, methodModel, mgen);
               }
             });
         debugInstrument.exdent();
@@ -1444,8 +1445,9 @@ public class DCInstrument24 {
 
   /**
    * Copies a method whose fully instrumented form would exceed the JVM's 64K code-size limit,
-   * adding only the bookkeeping required by its callers. Retaining the original body rather than
-   * forwarding to another method preserves caller-sensitive and exception-stack semantics.
+   * adding only the bookkeeping required by its callers, according to the three boolean parameters.
+   * Retaining the original body rather than forwarding to another method preserves caller-sensitive
+   * and exception-stack semantics.
    *
    * @param methodBuilder for the output method
    * @param methodModel describes the input method
@@ -1454,7 +1456,7 @@ public class DCInstrument24 {
    * @param discardArgumentTags whether to discard primitive argument tags on entry
    * @param pushResultTag whether to push a tag before each primitive return
    */
-  private void copyOversizedMethod(
+  private void copyMethodWithMinimalInstrumentation(
       MethodBuilder methodBuilder,
       MethodModel methodModel,
       MethodGen24 mgen,
@@ -1472,7 +1474,7 @@ public class DCInstrument24 {
                   mgen.resetForCodeBuilder();
                   MethodGen24.MInfo24 minfo =
                       new MethodGen24.MInfo24(0, mgen.getMaxLocals(), codeBuilder);
-                  mgen.fixLocals(minfo);
+                  mgen.addMissingParameterLocals(minfo);
                   if (addDcompMarker) {
                     add_dcomp_param(mgen, minfo);
                   }
@@ -1506,12 +1508,13 @@ public class DCInstrument24 {
                     }
                   }
 
-                  boolean primitiveResult = pushResultTag && is_primitive(mgen.getReturnType());
+                  boolean pushPrimitiveResultTag =
+                      pushResultTag && is_primitive(mgen.getReturnType());
                   for (CodeElement ce : mgen.getInstructionList()) {
                     if (ce instanceof LocalVariable || ce instanceof LocalVariableType) {
                       continue;
                     }
-                    if (primitiveResult && ce instanceof ReturnInstruction) {
+                    if (pushPrimitiveResultTag && ce instanceof ReturnInstruction) {
                       codeBuilder.with(dcr_call("push_const", CD_void, noArgsSig));
                     }
                     codeBuilder.with(ce);
@@ -1532,13 +1535,14 @@ public class DCInstrument24 {
    *
    * <p>The caller must be emitting the method with an added DCompMarker parameter; the stub calls
    * the original descriptor, which is the unchanged original method only in that case. See {@code
-   * processMethod}, which uses {@link #copyOversizedMethod} instead when no marker is added.
+   * processMethod}, which uses {@link #copyMethodWithMinimalInstrumentation} instead when no marker
+   * is added.
    *
    * @param methodBuilder for the output method
    * @param methodModel describes the input method
    * @param mgen describes the output method
    */
-  private void createOversizedMethodStub(
+  private void createForwardingStub(
       MethodBuilder methodBuilder, MethodModel methodModel, MethodGen24 mgen) {
     for (MethodElement me : methodModel) {
       switch (me) {
@@ -1749,12 +1753,8 @@ public class DCInstrument24 {
 
     // Per-method state: constructor_is_initialized records whether the super constructor call has
     // been seen in the method now being instrumented, and must start false for every run of this
-    // handler.  Without this reset it stays set once any constructor in the class reaches its
-    // super() call, so a later constructor would be treated as initialized from its first
-    // instruction.  It must be reset here rather than in instrumentMethod because the code builder
-    // may run this handler more than once (see resetForCodeBuilder): a value left over from an
-    // earlier run would make a later run emit different code, and would make a field access that
-    // precedes the super() call use the field's tag accessor on an uninitialized `this`.
+    // handler.  It must be reset here rather than in instrumentMethod because the code builder
+    // may run this handler more than once (see resetForCodeBuilder).
     constructor_is_initialized = false;
 
     // method_info_index is not used at this point in DCInstrument
@@ -1777,7 +1777,7 @@ public class DCInstrument24 {
 
     // Clean up parameter names and add in any unused parameters that the Java compiler has
     // optimized out.
-    if (mgen.fixLocals(minfo)) {
+    if (mgen.addMissingParameterLocals(minfo)) {
       // localsTable was changed
       debugInstrument.log("Revised LocalVariableTable:%n");
       for (LocalVariable lv : mgen.localsTable) {
@@ -2091,7 +2091,6 @@ public class DCInstrument24 {
         // null for any message it does not recognize, which is treated as a real error below.
         String method = oversizedMethodName(e);
         if (method == null) {
-          // This is not the oversized-method error; it indicates a bug in the instrumentor.
           throw e;
         }
         if (oversizedMethods.add(method)) {

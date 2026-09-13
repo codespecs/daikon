@@ -541,7 +541,7 @@ public final class DCInstrumentTest24 {
    * one-byte instructions of each group to two bytes apiece; the branch then spans 6 *
    * WIDENING_GROUPS bytes, which does not fit. This is also enough groups that the fully
    * instrumented method exceeds the JVM's 64K code-size limit, so the method is emitted by {@code
-   * copyOversizedMethod}.
+   * copyMethodWithMinimalInstrumentation}.
    */
   private static final int WIDENING_GROUPS = 6000;
 
@@ -973,13 +973,13 @@ public final class DCInstrumentTest24 {
    * <p>java.lang.classfile runs a code-building handler a second time when the code the first run
    * built contains a branch whose target does not fit in the branch instruction's 2-byte operand:
    * it discards that code and runs the handler again, this time widening the branch. {@code
-   * copyOversizedMethod} adds the DCompMarker parameter from inside that handler, and for the
-   * method here it is adding the parameter -- which moves local 3 to slot 4 and so widens every
-   * instruction that references it -- that puts the branch target out of reach. The second run
-   * therefore starts from a MethodGen24 that already has the parameter. Adding it again would
-   * append a second DCompMarker to the parameter list and shift the locals a second time, emitting
-   * a body whose locals are a slot higher than the method's descriptor provides, which fails
-   * verification when the class is loaded below.
+   * copyMethodWithMinimalInstrumentation} adds the DCompMarker parameter from inside that handler,
+   * and for the method here it is adding the parameter -- which moves local 3 to slot 4 and so
+   * widens every instruction that references it -- that puts the branch target out of reach. The
+   * second run therefore starts from a MethodGen24 that already has the parameter. Adding it again
+   * would append a second DCompMarker to the parameter list and shift the locals a second time,
+   * emitting a body whose locals are a slot higher than the method's descriptor provides, which
+   * fails verification when the class is loaded below.
    *
    * @throws IOException if the class file for {@link Sample} cannot be read
    * @throws ReflectiveOperationException if the generated class cannot be loaded or invoked
@@ -1128,7 +1128,8 @@ public final class DCInstrumentTest24 {
    * Tests that a method that is too large for even the minimal tag-stack bookkeeping is emitted as
    * a forwarding stub, rather than aborting the class. The bookkeeping is only a few bytes long,
    * but the method that needs it is by definition close to the JVM's 64K code-size limit, so the
-   * copy that {@link DCInstrument24#copyOversizedMethod} makes can exceed the limit too.
+   * copy that {@link DCInstrument24#copyMethodWithMinimalInstrumentation} makes can exceed the
+   * limit too.
    *
    * <p>The forwarding stub has the DCompMarker signature its callers expect, discards primitive
    * argument tags, invokes the unchanged original body with virtual dispatch, and produces the

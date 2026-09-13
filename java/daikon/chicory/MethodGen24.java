@@ -159,7 +159,7 @@ public class MethodGen24 {
    * The mutable state of this method, as recorded by the first call to {@link
    * #resetForCodeBuilder}. Null until then.
    */
-  private @Nullable State savedState;
+  private @MonotonicNonNull State savedState;
 
   /** Information about the current method. */
   public static class MInfo24 {
@@ -343,7 +343,8 @@ public class MethodGen24 {
     this.maxLocals = maxLocals;
     isStatic = (accessFlagsMask & ClassFile.ACC_STATIC) != 0;
 
-    // Create an empty localsTable. This will be filled in when InstrumentCode calls fixLocals.
+    // Create an empty localsTable. This will be filled in when InstrumentCode calls
+    // addMissingParameterLocals.
     localsTable = new ArrayList<>();
     origLocalVariables = localsTable.toArray(new LocalVariable[localsTable.size()]);
 
@@ -409,7 +410,7 @@ public class MethodGen24 {
   private @Identifier String[] getParamNames(@UnderInitialization(Object.class) MethodGen24 this) {
 
     // These initial values for {@code paramNames} may be incorrect.  They could
-    // be altered in {@code fixLocals}.
+    // be altered in {@code addMissingParameterLocals}.
     @Identifier String[] result = new String[paramTypes.length];
 
     int pIndex = 0;
@@ -451,7 +452,7 @@ public class MethodGen24 {
    * @param minfo MInfo24 object for current method
    * @return true if modified localsTable, false otherwise
    */
-  public boolean fixLocals(MInfo24 minfo) {
+  public boolean addMissingParameterLocals(MInfo24 minfo) {
     boolean modified = false;
     // If this is a native method the
     // localsTable may not exist.  We may need to add a 'this' pointer.
@@ -784,7 +785,7 @@ public class MethodGen24 {
    * @param paramNames a copy of {@link MethodGen24#paramNames}
    * @param origLocalVariables a copy of {@link MethodGen24#origLocalVariables}
    */
-  @SuppressWarnings("ArrayRecordComponent") // defensive copies previent mutation of array fields
+  @SuppressWarnings("ArrayRecordComponent") // defensive copies at call sites previent mutation
   private record State(
       List<CodeElement> codeList,
       List<LocalVariable> localsTable,
@@ -806,13 +807,13 @@ public class MethodGen24 {
    * parameter and renumbering the locals that follow it, for instance -- would be applied a second
    * time to a MethodGen24 that already has them.
    *
-   * <p>A handler that has other side effects must use the return value to perform them only once.
+   * <p>A handler that has other side effects must use the return value (which indicates whether
+   * this was the first call) to perform them only once.
    *
    * @return true if this is the first call to this method on this MethodGen24
    */
   public boolean resetForCodeBuilder() {
-    State state = savedState;
-    if (state == null) {
+    if (savedState == null) {
       savedState =
           new State(
               new ArrayList<>(codeList),
@@ -823,17 +824,16 @@ public class MethodGen24 {
               origLocalVariables.clone());
       return true;
     }
-    // As in the constructor, a LinkedList is the right choice for codeList.
-    @SuppressWarnings("JdkObsolete")
-    List<CodeElement> cl = new LinkedList<CodeElement>(state.codeList());
+    @SuppressWarnings("JdkObsolete") // As in the constructor, a LinkedList is the right choice.
+    List<CodeElement> cl = new LinkedList<CodeElement>(savedState.codeList());
     codeList = cl;
     // Modify localsTable in place, because clients hold references to it.
     localsTable.clear();
-    localsTable.addAll(state.localsTable());
-    maxLocals = state.maxLocals();
-    paramTypes = state.paramTypes().clone();
-    paramNames = state.paramNames().clone();
-    origLocalVariables = state.origLocalVariables().clone();
+    localsTable.addAll(savedState.localsTable());
+    maxLocals = savedState.maxLocals();
+    paramTypes = savedState.paramTypes().clone();
+    paramNames = savedState.paramNames().clone();
+    origLocalVariables = savedState.origLocalVariables().clone();
     return false;
   }
 
