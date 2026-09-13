@@ -954,22 +954,19 @@ public final class Runtime {
   // Package-private rather than private so that RuntimeTest can exercise it directly; the value
   // derived from the running JVM is fixed at class-initialization time and cannot be varied.
   static int javaMajorVersion(@Nullable String version) {
-    if (version == null) {
-      return 9;
-    }
-
-    // Java 8 and earlier report "1.N..."; the major version is the second component.
-    String rest = version.startsWith("1.") ? version.substring(2) : version;
-    int end = 0;
-    while (end < rest.length() && Character.isDigit(rest.charAt(end))) {
-      end++;
-    }
-    if (end != 0) {
-      try {
-        return Integer.parseInt(rest.substring(0, end));
-      } catch (NumberFormatException e) {
-        // The run of digits does not fit in an int, so it is not a major version.
-        return 9;
+    if (version != null) {
+      // Java 8 and earlier report "1.N..."; the major version is the second component.
+      String rest = version.startsWith("1.") ? version.substring(2) : version;
+      int end = 0;
+      while (end < rest.length() && Character.isDigit(rest.charAt(end))) {
+        end++;
+      }
+      if (end != 0) {
+        try {
+          return Integer.parseInt(rest.substring(0, end));
+        } catch (NumberFormatException e) {
+          // The run of digits does not fit in an int, so it is not a major version.  Fall through.
+        }
       }
     }
 
