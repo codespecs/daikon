@@ -3129,8 +3129,20 @@ public class DCInstrument24 {
     boolean targetInstrumented;
     Opcode op = invoke.opcode();
 
+    if (op.equals(INVOKESPECIAL)) {
+      // A call to the superclass constructor (super(...)) or to another constructor of this
+      // class (this(...)) both leave the receiver initialized: the delegated-to constructor runs
+      // the superclass constructor itself. Until one of them has been seen, `this` is
+      // uninitialized and tag fields must not be touched; see tag_fields_ok.
+      if (methodName.equals("<init>")
+          && (classname.equals(classGen.getSuperclassName())
+              || classname.equals(classGen.getClassName()))) {
+        this.constructor_is_initialized = true;
+      }
+    }
+
     if (is_object_method(methodName, paramTypes)) {
-      targetInstrumented = false;
+      return false;
     } else {
       // At this point, we will never see classname = java.lang.Object.
       targetInstrumented =
@@ -3231,8 +3243,7 @@ public class DCInstrument24 {
               if (debugHandleInvoke) {
                 System.out.printf("Unable to locate class: %s%n%n", targetClassname);
               }
-              targetInstrumented = false;
-              break;
+              return false;
             }
             if (debugHandleInvoke) {
               System.out.println("target class: " + targetClassname);
@@ -3263,8 +3274,7 @@ public class DCInstrument24 {
                 found = getDefiningInterface(targetClass, methodName, paramTypes);
               } catch (Throwable e) {
                 // We cannot locate or read the .class file, better assume it is not instrumented.
-                targetInstrumented = false;
-                break;
+                return false;
               }
               if (found != null) {
                 // We have a match.
@@ -3285,26 +3295,13 @@ public class DCInstrument24 {
               if (debugHandleInvoke) {
                 System.out.printf("Unable to locate method: %s%n%n", methodName);
               }
-              targetInstrumented = false;
-              break;
+              return false;
             }
 
             // Recurse looking in the superclass.
             targetClassname = getSuperclassName(targetClassname);
           }
         }
-      }
-    }
-
-    if (op.equals(INVOKESPECIAL)) {
-      // A call to the superclass constructor (super(...)) or to another constructor of this
-      // class (this(...)) both leave the receiver initialized: the delegated-to constructor runs
-      // the superclass constructor itself. Until one of them has been seen, `this` is
-      // uninitialized and tag fields must not be touched; see tag_fields_ok.
-      if (methodName.equals("<init>")
-          && (classname.equals(classGen.getSuperclassName())
-              || classname.equals(classGen.getClassName()))) {
-        this.constructor_is_initialized = true;
       }
     }
 
