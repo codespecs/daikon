@@ -38,7 +38,7 @@ public class RuntimeTest {
     assertEquals(9, Runtime.javaMajorVersion("9foo"));
 
     // A string that encodes no major version yields 9 rather than throwing, because
-    // javaMajorVersion is called from a static initializer.  Each of these prints a warning.
+    // javaMajorVersion is called from a static initializer.
     assertEquals(9, Runtime.javaMajorVersion("bogus"));
     assertEquals(9, Runtime.javaMajorVersion(""));
     assertEquals(9, Runtime.javaMajorVersion(null));
