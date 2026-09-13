@@ -2278,10 +2278,9 @@ public class DCInstrument extends InstructionListUtils {
    * Returns the name of the interface that declares the given method. The interfaces of {@code
    * startClass} are recursively searched.
    *
-   * <p>Note that this finds a <em>declaration</em>, which is usually not an implementation: an
-   * interface method is implicitly abstract unless it is {@code default}, {@code static}, or
-   * private. Pass true for {@code implementationsOnly} to match only a {@code default} method,
-   * which is the one case where the interface really does hold the code that will run.
+   * <p>Note that this finds a <em>declaration</em>, which is usually not an implementation. Pass
+   * true for {@code implementationsOnly} to match only a {@code default} method, which does hold
+   * the code that will run.
    *
    * <p>Limitation: when several interfaces match, this returns the first one reached rather than
    * the maximally specific one that JVMS 5.4.3.3 selects. A class that implements both an interface
@@ -2294,8 +2293,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param startClass the class whose interfaces are to be searched
    * @param methodName the target method to search for
    * @param paramTypes the target method's parameter types
-   * @param implementationsOnly if true, match only a {@code default} method; if false, match any
-   *     declaration, abstract ones included
+   * @param implementationsOnly if true, match only a {@code default} method
    * @return the name of the interface that declares the target method, or null if not found
    */
   private @Nullable @ClassGetName String getDeclaringInterface(
@@ -2320,15 +2318,17 @@ public class DCInstrument extends InstructionListUtils {
       if (ji == null) {
         throw new Error("Unable to find class: " + interfaceName);
       }
+      // True if a sub-interface overrides a `default` method as `abstract` with no implementation.
       boolean reabstracted = false;
       for (Method jm : ji.getMethods()) {
         if (debugGetDeclaringInterface) {
           System.out.println("  " + jm.getName() + Arrays.toString(jm.getArgumentTypes()));
         }
         if (jm.getName().equals(methodName) && Arrays.equals(jm.getArgumentTypes(), paramTypes)) {
-          // We have a match.  Neither a static nor a private interface method is ever the
-          // target of an INVOKEVIRTUAL: a private one is not even inherited.
+          // We have a match.
           if (jm.isStatic() || jm.isPrivate()) {
+            // Neither a static nor a private interface method is ever the
+            // target of an INVOKEVIRTUAL: a private one is not even inherited.
             continue;
           }
           if (implementationsOnly && jm.isAbstract()) {
@@ -2353,6 +2353,56 @@ public class DCInstrument extends InstructionListUtils {
     }
     // nothing found
     return null;
+  }
+
+  /**
+   * Returns true if the given method, which is declared by no class in {@code chain}, is inherited
+   * from an instrumented interface. Searches the interfaces of every class in {@code chain}, and
+   * their superinterfaces.
+   *
+   * <p>Prefers a {@code default} method, which is an implementation; an abstract declaration only
+   * says where the method is declared, but that is the best available answer. Returns false if no
+   * interface declares the method, or if some interface cannot be read.
+   *
+   * @param chain a class and its superclasses, in that order
+   * @param methodName the target method to search for
+   * @param paramTypes the target method's parameter types
+   * @return true if the target method is inherited from an instrumented interface
+   */
+  private boolean isInterfaceMethodInstrumented(
+      List<JavaClass> chain, @Identifier String methodName, Type[] paramTypes) {
+
+    @ClassGetName String found = null;
+    try {
+      for (JavaClass c : chain) {
+        found = getDeclaringInterface(c, methodName, paramTypes, true);
+        if (found != null) {
+          break;
+        }
+      }
+      if (found == null) {
+        // No interface supplies an implementation; settle for a declaration.
+        for (JavaClass c : chain) {
+          found = getDeclaringInterface(c, methodName, paramTypes, false);
+          if (found != null) {
+            break;
+          }
+        }
+      }
+    } catch (Throwable e) {
+      // We cannot locate or read the .class file, better assume it is not instrumented.
+      return false;
+    }
+    if (found == null) {
+      if (debugHandleInvoke) {
+        System.out.printf("Unable to locate method: %s%n%n", methodName);
+      }
+      return false;
+    }
+    if (debugHandleInvoke) {
+      System.out.printf("declared by interface %s%n%n", found);
+    }
+    return Premain.isClassnameInstrumented(found, methodName, debugHandleInvoke, debugInstrument);
   }
 
   /**
@@ -2629,11 +2679,15 @@ public class DCInstrument extends InstructionListUtils {
               targetClass = null;
             }
             if (targetClass == null) {
-              // We cannot locate or read the .class file, better assume not instrumented.
+              // We cannot locate or read the .class file, so the superclass chain ends here.  The
+              // method may still be declared by an interface of a class already in the chain.
               if (debugHandleInvoke) {
                 System.out.printf("Unable to locate class: %s%n%n", targetClassname);
               }
-              return false;
+              if (!isInterfaceMethodInstrumented(chain, methodName, paramTypes)) {
+                targetInstrumented = false;
+              }
+              break;
             }
             if (debugHandleInvoke) {
               System.out.println("target class: " + targetClassname);
@@ -2659,51 +2713,16 @@ public class DCInstrument extends InstructionListUtils {
             }
 
             // Method not found; perhaps inherited from superclass.
-            // Cannot use "targetClass = targetClass.getSuperClass()" because the superclass might
-            // not have been loaded into BCEL yet.
             if (targetClass.getSuperclassNameIndex() == 0) {
-              // No class in the chain declares the method, so it comes from an interface.  Prefer
-              // a default method, which is an implementation; an abstract declaration only says
-              // where the method is declared, but that is the best available answer.
-              @ClassGetName String found = null;
-              try {
-                for (JavaClass c : chain) {
-                  found = getDeclaringInterface(c, methodName, paramTypes, true);
-                  if (found != null) {
-                    break;
-                  }
-                }
-                if (found == null) {
-                  // No interface supplies an implementation; settle for a declaration.
-                  for (JavaClass c : chain) {
-                    found = getDeclaringInterface(c, methodName, paramTypes, false);
-                    if (found != null) {
-                      break;
-                    }
-                  }
-                }
-              } catch (Throwable e) {
-                // We cannot locate or read the .class file, better assume it is not instrumented.
+              // No class in the chain declares the method, so it comes from an interface.
+              if (!isInterfaceMethodInstrumented(chain, methodName, paramTypes)) {
                 targetInstrumented = false;
-                break;
               }
-              if (found == null) {
-                if (debugHandleInvoke) {
-                  System.out.printf("Unable to locate method: %s%n%n", methodName);
-                }
-                targetInstrumented = false;
-              } else {
-                if (debugHandleInvoke) {
-                  System.out.printf("declared by interface %s%n%n", found);
-                }
-                if (!Premain.isClassnameInstrumented(
-                    found, methodName, debugHandleInvoke, debugInstrument)) {
-                  targetInstrumented = false;
-                }
-              }
-              return false;
+              break;
             }
             // Recurse looking in the superclass.
+            // Cannot use "targetClass = targetClass.getSuperClass()" because the superclass might
+            // not have been loaded into BCEL yet.
             targetClassname = targetClass.getSuperclassName();
           }
         }

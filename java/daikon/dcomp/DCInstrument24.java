@@ -2971,6 +2971,56 @@ public class DCInstrument24 {
   }
 
   /**
+   * Returns true if the given method, which is declared by no class in {@code chain}, is inherited
+   * from an instrumented interface. Searches the interfaces of every class in {@code chain}, and
+   * their superinterfaces.
+   *
+   * <p>Prefers a {@code default} method, which is an implementation; an abstract declaration only
+   * says where the method is declared, but that is the best available answer. Returns false if no
+   * interface declares the method, or if some interface cannot be read.
+   *
+   * @param chain a class and its superclasses, in that order
+   * @param methodName the target method to search for
+   * @param paramTypes the target method's parameter types
+   * @return true if the target method is inherited from an instrumented interface
+   */
+  private boolean isInterfaceMethodInstrumented(
+      List<ClassModel> chain, @Identifier String methodName, ClassDesc[] paramTypes) {
+
+    @BinaryName String found = null;
+    try {
+      for (ClassModel cm : chain) {
+        found = getDeclaringInterface(cm, methodName, paramTypes, true);
+        if (found != null) {
+          break;
+        }
+      }
+      if (found == null) {
+        // No interface supplies an implementation; settle for a declaration.
+        for (ClassModel cm : chain) {
+          found = getDeclaringInterface(cm, methodName, paramTypes, false);
+          if (found != null) {
+            break;
+          }
+        }
+      }
+    } catch (Throwable e) {
+      // We cannot locate or read the .class file, better assume it is not instrumented.
+      return false;
+    }
+    if (found == null) {
+      if (debugHandleInvoke) {
+        System.out.printf("Unable to locate method: %s%n%n", methodName);
+      }
+      return false;
+    }
+    if (debugHandleInvoke) {
+      System.out.printf("declared by interface %s%n%n", found);
+    }
+    return Premain.isClassnameInstrumented(found, methodName, debugHandleInvoke, debugInstrument);
+  }
+
+  /**
    * Process an InvokeDynamic instruction. We don't instrument lambda methods, so just clean up the
    * tag stack.
    *
@@ -3278,11 +3328,15 @@ public class DCInstrument24 {
               targetClass = null;
             }
             if (targetClass == null) {
-              // We cannot locate or read the .class file, better assume not instrumented.
+              // We cannot locate or read the .class file, so the superclass chain ends here.  The
+              // method may still be declared by an interface of a class already in the chain.
               if (debugHandleInvoke) {
                 System.out.printf("Unable to locate class: %s%n%n", targetClassname);
               }
-              return false;
+              if (!isInterfaceMethodInstrumented(chain, methodName, paramTypes)) {
+                targetInstrumented = false;
+              }
+              break;
             }
             if (debugHandleInvoke) {
               System.out.println("target class: " + targetClassname);
@@ -3308,44 +3362,11 @@ public class DCInstrument24 {
               }
             }
 
-            // No class in the chain declares the method, so it comes from an interface.  Prefer
-            // a default method, which is an implementation; an abstract declaration only says
-            // where the method is declared, but that is the best available answer.
+            // Method not found; perhaps inherited from superclass.
             if (targetClassname.equals("java.lang.Object")) {
-              @BinaryName String found = null;
-              try {
-                for (ClassModel cm : chain) {
-                  found = getDeclaringInterface(cm, methodName, paramTypes, true);
-                  if (found != null) {
-                    break;
-                  }
-                }
-                if (found == null) {
-                  // No interface supplies an implementation; settle for a declaration.
-                  for (ClassModel cm : chain) {
-                    found = getDeclaringInterface(cm, methodName, paramTypes, false);
-                    if (found != null) {
-                      break;
-                    }
-                  }
-                }
-              } catch (Throwable e) {
-                // We cannot locate or read the .class file, better assume it is not instrumented.
-                return false;
-              }
-              if (found == null) {
-                if (debugHandleInvoke) {
-                  System.out.printf("Unable to locate method: %s%n%n", methodName);
-                }
+              // No class in the chain declares the method, so it comes from an interface.
+              if (!isInterfaceMethodInstrumented(chain, methodName, paramTypes)) {
                 targetInstrumented = false;
-              } else {
-                if (debugHandleInvoke) {
-                  System.out.printf("declared by interface %s%n%n", found);
-                }
-                if (!Premain.isClassnameInstrumented(
-                    found, methodName, debugHandleInvoke, debugInstrument)) {
-                  targetInstrumented = false;
-                }
               }
               break;
             }
