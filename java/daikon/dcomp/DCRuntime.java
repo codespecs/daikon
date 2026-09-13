@@ -719,10 +719,23 @@ public final class DCRuntime implements ComparabilityProvider {
     for (int ii = 1; ii < params.length(); ii++) {
       int offset = params.charAt(ii) - '0';
       // Character.digit (params.charAt(ii), Character.MAX_RADIX);
-      assert td.tag_stack.peek() != method_marker;
-      tag_frame[offset] = td.tag_stack.pop();
-      if (debug_tag_frame) {
-        System.out.printf("popped %s into tag_frame[%d]%n", tag_frame[offset], offset);
+      if (td.tag_stack.isEmpty() || td.tag_stack.peek() == method_marker) {
+        // The caller left no argument tags on the tag stack.  Either it is an uninstrumented
+        // method body reached through an instrumented calling convention (see
+        // uninstrumented_enter, which pushes the marker that stops this loop) or the call did not
+        // come from Java code at all, as when JUnit invokes a test method reflectively.  Use a
+        // fresh tag, which makes the parameter comparable to nothing else, rather than consuming
+        // a tag that belongs to an outer frame.
+        tag_frame[offset] = new Constant();
+        if (debug_tag_frame) {
+          System.out.printf(
+              "caller left no tag; created %s for tag_frame[%d]%n", tag_frame[offset], offset);
+        }
+      } else {
+        tag_frame[offset] = td.tag_stack.pop();
+        if (debug_tag_frame) {
+          System.out.printf("popped %s into tag_frame[%d]%n", tag_frame[offset], offset);
+        }
       }
     }
 
@@ -855,6 +868,93 @@ public final class DCRuntime implements ComparabilityProvider {
     td.tag_stack.push(ret_tag);
     if (debug_tag_frame) {
       System.out.printf("push return value tag: %s%n", ret_tag);
+      System.out.printf("tag stack size: %d%n", td.tag_stack.size());
+    }
+  }
+
+  /**
+   * Called on entry to an uninstrumented method body that is reached through an instrumented
+   * calling convention. That happens for a method whose instrumented form exceeds the JVM's 64K
+   * code-size limit; see {@code DCInstrument.create_oversized_method}.
+   *
+   * <p>Discards the tags that the caller left for this call, then pushes a method marker. The
+   * marker matters because an uninstrumented body pushes no argument tags for the calls it makes:
+   * without it, a callee that does maintain the tag stack would consume tags belonging to an outer
+   * frame. {@link #create_tag_frame} sees the marker and creates fresh tags instead. {@link
+   * #uninstrumented_exit} and {@link #uninstrumented_exit_primitive} remove the marker. If an
+   * exception propagates out of the body instead, a catch-all handler that DCInstrument added
+   * around the body calls {@code uninstrumented_exit} and rethrows; the enclosing method's {@code
+   * normal_exit} would not do it, because the body belongs to a JUnit test method whose caller is
+   * JUnit's reflective invocation rather than an instrumented frame.
+   *
+   * @param tagCount the number of tags the caller left on the tag stack for this call
+   */
+  public static void uninstrumented_enter(int tagCount) {
+    if (debug) {
+      System.out.printf("%nEnter uninstrumented: %s%n", caller_name());
+    }
+
+    // This may be the first DCRuntime method called on this thread, so the per-thread data map
+    // must be checked, exactly as in create_tag_frame.
+    Thread t = Thread.currentThread();
+    ThreadData td = thread_to_data.computeIfAbsent(t, __ -> new ThreadData());
+
+    while (--tagCount >= 0 && !td.tag_stack.isEmpty() && td.tag_stack.peek() != method_marker) {
+      td.tag_stack.pop();
+    }
+    td.tag_stack.push(method_marker);
+    td.tag_stack_call_depth++;
+    if (debug_tag_frame) {
+      System.out.printf("tag stack call_depth: %d%n", td.tag_stack_call_depth);
+      System.out.printf("tag stack size: %d%n", td.tag_stack.size());
+    }
+  }
+
+  /**
+   * Called on return from an uninstrumented method body whose return type is not primitive; see
+   * {@link #uninstrumented_enter}. Discards everything the body left on the tag stack, including
+   * the marker that {@code uninstrumented_enter} pushed.
+   */
+  public static void uninstrumented_exit() {
+    uninstrumented_exit(false);
+  }
+
+  /**
+   * Called on return from an uninstrumented method body whose return type is primitive; see {@link
+   * #uninstrumented_enter}. Discards everything the body left on the tag stack, including the
+   * marker that {@code uninstrumented_enter} pushed, and then pushes the result tag that this
+   * method's caller expects.
+   */
+  public static void uninstrumented_exit_primitive() {
+    uninstrumented_exit(true);
+  }
+
+  /**
+   * Implements {@link #uninstrumented_exit} and {@link #uninstrumented_exit_primitive}.
+   *
+   * @param primitiveResult true if the method's return type is primitive, in which case a result
+   *     tag is pushed for the caller
+   */
+  private static void uninstrumented_exit(boolean primitiveResult) {
+    if (debug) {
+      System.out.printf("Exit uninstrumented: %s%n", caller_name());
+    }
+
+    ThreadData td = thread_to_data.get(Thread.currentThread());
+    // Discard any tag the body's callees left behind, then the marker itself.  The marker is
+    // missing only if something else has already unwound past it, which normal_exit also tolerates.
+    while (!td.tag_stack.isEmpty() && td.tag_stack.peek() != method_marker) {
+      td.tag_stack.pop();
+    }
+    if (!td.tag_stack.isEmpty()) {
+      td.tag_stack.pop(); // discard marker
+    }
+    td.tag_stack_call_depth--;
+    if (primitiveResult) {
+      push_const();
+    }
+    if (debug_tag_frame) {
+      System.out.printf("tag stack call_depth: %d%n", td.tag_stack_call_depth);
       System.out.printf("tag stack size: %d%n", td.tag_stack.size());
     }
   }
@@ -1001,6 +1101,18 @@ public final class DCRuntime implements ComparabilityProvider {
     if (debug_tag_frame) {
       System.out.printf("tag stack size: %d%n", td.tag_stack.size());
     }
+  }
+
+  /**
+   * Returns the number of entries on the current thread's tag stack, counting the method markers.
+   * Intended for tests, which use it to verify that instrumented code leaves the tag stack as its
+   * callers expect.
+   *
+   * @return the size of the current thread's tag stack
+   */
+  static int tag_stack_size() {
+    ThreadData td = thread_to_data.get(Thread.currentThread());
+    return td == null ? 0 : td.tag_stack.size();
   }
 
   /**
