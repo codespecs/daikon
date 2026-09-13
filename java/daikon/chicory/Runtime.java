@@ -931,9 +931,50 @@ public final class Runtime {
     }
   }
 
+  /** The major version of the running JVM: 8 for Java 8, 24 for Java 24, and so on. */
+  private static final int javaMajorVersion = javaMajorVersion(System.getProperty("java.version"));
+
+  /**
+   * Returns the major version that the given {@code java.version} string encodes: 8 for Java 8, 24
+   * for Java 24, and so on. The string need not come from the running JVM.
+   *
+   * <p>Both version schemes are accepted: the pre-Java-9 {@code "1.8.0_432"} form, whose major
+   * version is its second component, and the Java 9 and later {@code "24"}, {@code "24.0.1"}, and
+   * {@code "24-ea"} forms, whose major version is the first.
+   *
+   * <p>The major version is the leading run of digits (after optional "1."). Anything after them is
+   * ignored, so {@code "9foo"} yields 9. Thus, this method is robust against an unanticipated
+   * vendor suffix.
+   *
+   * <p>This never throws an exception, so it can be called from a static initializer.
+   *
+   * @param version the value of a {@code java.version} system property, or null
+   * @return the major version it encodes, or 9 if it encodes none
+   */
+  // Package-private rather than private so that RuntimeTest can exercise it directly; the value
+  // derived from the running JVM is fixed at class-initialization time and cannot be varied.
+  static int javaMajorVersion(@Nullable String version) {
+    if (version != null) {
+      // Java 8 and earlier report "1.N..."; the major version is the second component.
+      String rest = version.startsWith("1.") ? version.substring(2) : version;
+      int end = 0;
+      while (end < rest.length() && Character.isDigit(rest.charAt(end))) {
+        end++;
+      }
+      if (end != 0) {
+        try {
+          return Integer.parseInt(rest.substring(0, end));
+        } catch (NumberFormatException e) {
+          // The run of digits does not fit in an int, so it is not a major version.  Fall through.
+        }
+      }
+    }
+
+    return 9;
+  }
+
   /** True if the running JVM is for Java 9 or later. */
-  private static final boolean isJava9orLater =
-      !System.getProperty("java.version").startsWith("1.");
+  private static final boolean isJava9orLater = javaMajorVersion >= 9;
 
   /**
    * Returns true if the running JVM is for Java 9 or later.
@@ -945,10 +986,7 @@ public final class Runtime {
   }
 
   /** True if the running JVM is for Java 24 or later. */
-  private static final boolean isJava24orLater =
-      !System.getProperty("java.version").startsWith("1.")
-          && !System.getProperty("java.version").startsWith("9.")
-          && Integer.parseInt(System.getProperty("java.version").substring(0, 2)) >= 24;
+  private static final boolean isJava24orLater = javaMajorVersion >= 24;
 
   /**
    * Returns true if the running JVM is for Java 24 or later.
