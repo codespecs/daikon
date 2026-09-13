@@ -10,5 +10,5 @@ if [ $# -ne 1 ]; then
   exit 2
 fi
 
-cmd=$(cat "$1")
+cmd=$(cat "$1") || exit 1
 eval "$cmd"
