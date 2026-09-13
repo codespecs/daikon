@@ -2501,6 +2501,19 @@ public class DCInstrument extends InstructionListUtils {
       @ClassGetName String classname,
       @Identifier String methodName,
       Type[] paramTypes) {
+
+    if (invoke instanceof INVOKESPECIAL) {
+      // A call to the superclass constructor (super(...)) or to another constructor of this
+      // class (this(...)) both leave the receiver initialized: the delegated-to constructor runs
+      // the superclass constructor itself. Until one of them has been seen, `this` is
+      // uninitialized and tag fields must not be touched; see tag_fields_ok.
+      if (methodName.equals("<init>")
+          && (classname.equals(classGen.getSuperclassName())
+              || classname.equals(classGen.getClassName()))) {
+        this.constructor_is_initialized = true;
+      }
+    }
+
     boolean targetInstrumented;
 
     if (invoke instanceof INVOKEDYNAMIC) {
@@ -2509,9 +2522,9 @@ public class DCInstrument extends InstructionListUtils {
       if (debugHandleInvoke) {
         System.out.printf("invokedynamic NOT the classname: %s%n", classname);
       }
-      targetInstrumented = false;
+      return false;
     } else if (is_object_method(methodName, invoke.getArgumentTypes(pool))) {
-      targetInstrumented = false;
+      return false;
     } else {
       // At this point, we will never see classname = java.lang.Object.
       targetInstrumented =
@@ -2620,8 +2633,7 @@ public class DCInstrument extends InstructionListUtils {
               if (debugHandleInvoke) {
                 System.out.printf("Unable to locate class: %s%n%n", targetClassname);
               }
-              targetInstrumented = false;
-              break;
+              return false;
             }
             if (debugHandleInvoke) {
               System.out.println("target class: " + targetClassname);
@@ -2689,24 +2701,12 @@ public class DCInstrument extends InstructionListUtils {
                   targetInstrumented = false;
                 }
               }
-              break;
+              return false;
             }
             // Recurse looking in the superclass.
             targetClassname = targetClass.getSuperclassName();
           }
         }
-      }
-    }
-
-    if (invoke instanceof INVOKESPECIAL) {
-      // A call to the superclass constructor (super(...)) or to another constructor of this
-      // class (this(...)) both leave the receiver initialized: the delegated-to constructor runs
-      // the superclass constructor itself. Until one of them has been seen, `this` is
-      // uninitialized and tag fields must not be touched; see tag_fields_ok.
-      if (methodName.equals("<init>")
-          && (classname.equals(classGen.getSuperclassName())
-              || classname.equals(classGen.getClassName()))) {
-        this.constructor_is_initialized = true;
       }
     }
 
