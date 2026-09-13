@@ -18,5 +18,7 @@ if [ -e "$DAIKONDIR/tests/daikon-tests/$prog/$prog.dtrace.gz" ]; then
     echo "$DAIKONDIR/tests/daikon-tests/$prog/$prog.dtrace.gz"
   fi
 else
-  echo "/scratch/$USER/tests/daikon-tests/${prog}_chicory/$prog.dtrace.gz"
+  # $USER is not set in all environments (cron, su, containers).
+  user=${USER:-$(id -un)}
+  echo "/scratch/$user/tests/daikon-tests/${prog}_chicory/$prog.dtrace.gz"
 fi
