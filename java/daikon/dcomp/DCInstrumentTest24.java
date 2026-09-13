@@ -232,6 +232,29 @@ public final class DCInstrumentTest24 {
   }
 
   /**
+   * Tests that the interfaces of the superclasses are searched, not just those of the class named
+   * in the invoke instruction. JVMS 5.4.3.3 selects a maximally-specific method from the
+   * superinterfaces of the class <em>and of all its superclasses</em>.
+   *
+   * <p>{@link InheritsDefaultRemove} declares no {@code remove} and implements no interface of its
+   * own; its {@code remove} is the {@code default} of {@link DefaultRemove}, which its superclass
+   * implements. That interface is an application class, so it is instrumented and the call must use
+   * the instrumented form. Searching only the target class's own interfaces finds nothing and
+   * wrongly treats the call as uninstrumented, losing comparability through it.
+   *
+   * @throws IOException if the class file cannot be read
+   */
+  @Test
+  public void testInterfaceOfSuperclassIsSearched() throws IOException {
+    @SuppressWarnings("signature:assignment") // the name of a nested class
+    @BinaryName String callerName = CallsInheritedDefaultRemove.class.getName();
+    byte[] instrumented = instrumentCaller(callerName);
+    assertTrue(
+        "the interfaces of the superclass were not searched",
+        invokesInstrumentedForm(instrumented, "remove"));
+  }
+
+  /**
    * Tests that a private interface method is not treated as declaring the method being resolved.
    * {@link PrivateThenJdkDefault} lists {@link PrivateRemove} before {@code java.util.Iterator}, so
    * a search that matches the private {@code remove} stops at an application interface and
@@ -462,6 +485,36 @@ public final class DCInstrumentTest24 {
      */
     public void call(IteratorWithSuperclassRemove it) {
       it.remove();
+    }
+  }
+
+  /**
+   * An interface that supplies {@code remove} as a {@code default}; see {@link
+   * #testInterfaceOfSuperclassIsSearched}.
+   */
+  public interface DefaultRemove {
+    /** Does nothing. */
+    default void remove() {}
+  }
+
+  /** A class that implements the application interface but declares no {@code remove}. */
+  public static class ImplementsDefaultRemove implements DefaultRemove {}
+
+  /**
+   * A class that neither declares {@code remove} nor implements any interface, so resolving a call
+   * to it must reach the interfaces of its superclass.
+   */
+  public static class InheritsDefaultRemove extends ImplementsDefaultRemove {}
+
+  /** Calls {@code remove} on a class that inherits it from an interface of its superclass. */
+  public static class CallsInheritedDefaultRemove {
+    /**
+     * Calls {@code remove}.
+     *
+     * @param x the receiver
+     */
+    public void call(InheritsDefaultRemove x) {
+      x.remove();
     }
   }
 

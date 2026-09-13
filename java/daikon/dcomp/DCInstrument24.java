@@ -2887,18 +2887,6 @@ public class DCInstrument24 {
   }
 
   /**
-   * Returns the first argument if it is non-null, otherwise the second.
-   *
-   * @param first the preferred value
-   * @param second the fallback value
-   * @return the first non-null argument, or null if both are null
-   */
-  private static @Nullable @BinaryName String firstNonNull(
-      @Nullable @BinaryName String first, @Nullable @BinaryName String second) {
-    return first != null ? first : second;
-  }
-
-  /**
    * Returns the name of the interface that declares the given method. The interfaces of {@code
    * startClass} are recursively searched.
    *
@@ -3261,11 +3249,13 @@ public class DCInstrument24 {
           }
 
           @BinaryName String targetClassname = classname;
+          // The target class and its superclasses, in that order, as far as the loop below got.
+          List<ClassModel> chain = new ArrayList<>();
           // Search this class for the target method. If not found, set targetClassname to
           // its superclass and try again.  Interfaces are not consulted here: JVMS 5.4.3.3
           // resolves a method against the class's own declaration, then the superclass chain,
-          // and only then the superinterfaces, so the whole chain is searched first and the
-          // interfaces of the original target class afterwards.
+          // and only then the superinterfaces of the class and of all its superclasses.  So the
+          // whole chain is searched first, and the interfaces of every class in it afterwards.
           mainloop:
           while (true) {
             // Check that the class exists
@@ -3286,6 +3276,7 @@ public class DCInstrument24 {
             if (debugHandleInvoke) {
               System.out.println("target class: " + targetClassname);
             }
+            chain.add(targetClass);
 
             for (MethodModel jm : targetClass.methods()) {
               String jmName = jm.methodName().stringValue();
@@ -3298,7 +3289,8 @@ public class DCInstrument24 {
                 if (debugHandleInvoke) {
                   System.out.printf("we have a match%n%n");
                 }
-                if (BcelUtil.inJdk(targetClassname)) {
+                if (!Premain.isClassnameInstrumented(
+                    targetClassname, methodName, debugHandleInvoke, debugInstrument)) {
                   targetInstrumented = false;
                 }
                 break mainloop;
@@ -3309,15 +3301,23 @@ public class DCInstrument24 {
             // a default method, which is an implementation; an abstract declaration only says
             // where the method is declared, but that is the best available answer.
             if (targetClassname.equals("java.lang.Object")) {
-              @BinaryName String found;
+              @BinaryName String found = null;
               try {
-                ClassModel origin = getClassModel(classname);
-                found =
-                    origin == null
-                        ? null
-                        : firstNonNull(
-                            getDeclaringInterface(origin, methodName, paramTypes, true),
-                            getDeclaringInterface(origin, methodName, paramTypes, false));
+                for (ClassModel cm : chain) {
+                  found = getDeclaringInterface(cm, methodName, paramTypes, true);
+                  if (found != null) {
+                    break;
+                  }
+                }
+                if (found == null) {
+                  // No interface supplies an implementation; settle for a declaration.
+                  for (ClassModel cm : chain) {
+                    found = getDeclaringInterface(cm, methodName, paramTypes, false);
+                    if (found != null) {
+                      break;
+                    }
+                  }
+                }
               } catch (Throwable e) {
                 // We cannot locate or read the .class file, better assume it is not instrumented.
                 targetInstrumented = false;
@@ -3332,7 +3332,8 @@ public class DCInstrument24 {
                 if (debugHandleInvoke) {
                   System.out.printf("declared by interface %s%n%n", found);
                 }
-                if (BcelUtil.inJdk(found)) {
+                if (!Premain.isClassnameInstrumented(
+                    found, methodName, debugHandleInvoke, debugInstrument)) {
                   targetInstrumented = false;
                 }
               }
