@@ -2686,14 +2686,17 @@ public class DCInstrument extends InstructionListUtils {
               targetClass = null;
             }
             if (targetClass == null) {
-              // We cannot locate or read the .class file, so the superclass chain ends here.  The
-              // method may still be declared by an interface of a class already in the chain.
+              // We cannot locate or read the .class file, so the superclass chain is incomplete.
+              // An interface of a class already in the chain may declare the method, but the
+              // unreadable class may equally define it concretely, and that class was not
+              // instrumented -- calling the DCompMarker overload would then fail, because no such
+              // overload was generated for it.  An incomplete chain cannot settle the question, so
+              // assume the target is not instrumented, as elsewhere when a class file cannot be
+              // read.
               if (debugHandleInvoke) {
                 System.out.printf("Unable to locate class: %s%n%n", targetClassname);
               }
-              if (!isInterfaceMethodInstrumented(chain, methodName, paramTypes)) {
-                targetInstrumented = false;
-              }
+              targetInstrumented = false;
               break;
             }
             if (debugHandleInvoke) {
