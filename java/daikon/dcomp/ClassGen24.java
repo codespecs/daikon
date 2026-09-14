@@ -63,9 +63,6 @@ public class ClassGen24 {
   /** True if this class is an interface. */
   private final boolean isInterface;
 
-  /** True if this class is static. */
-  private final boolean isStatic;
-
   /**
    * Creates a ClassGen24 object.
    *
@@ -84,7 +81,6 @@ public class ClassGen24 {
 
     accessFlags = classModel.flags();
     isInterface = accessFlags.has(AccessFlag.INTERFACE);
-    isStatic = accessFlags.has(AccessFlag.STATIC);
 
     superclassName = getSuperclassName(classModel);
 
@@ -144,15 +140,6 @@ public class ClassGen24 {
    */
   public final boolean isInterface() {
     return isInterface;
-  }
-
-  /**
-   * Returns true if this class is static.
-   *
-   * @return true if this class is static
-   */
-  public final boolean isStatic() {
-    return isStatic;
   }
 
   /**
