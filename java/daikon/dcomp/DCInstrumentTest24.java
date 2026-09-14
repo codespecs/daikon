@@ -291,6 +291,29 @@ public final class DCInstrumentTest24 {
   }
 
   /**
+   * Tests that an abstract declaration in an uninstrumented superclass does not end the search.
+   * JVMS 5.4.3.3 resolves the call to that declaration, but an abstract declaration holds no code,
+   * so it does not say whether the method that will run is instrumented.
+   *
+   * <p>{@link AbstractJdkSized} inherits {@code size} from {@code java.util.AbstractCollection},
+   * which declares it abstract, and also implements {@link AppSized}, an application interface that
+   * declares it. Every class that can supply the code is an implementor of that instrumented
+   * interface, so the call must use the instrumented form. Stopping at the JDK's abstract
+   * declaration wrongly treats the call as uninstrumented, losing comparability through it.
+   *
+   * @throws IOException if the class file cannot be read
+   */
+  @Test
+  public void testAbstractSuperclassDeclarationDoesNotEndSearch() throws IOException {
+    @SuppressWarnings("signature:assignment") // the name of a nested class
+    @BinaryName String callerName = CallsAbstractJdkSize.class.getName();
+    byte[] instrumented = instrumentCaller(callerName);
+    assertTrue(
+        "an abstract declaration in an uninstrumented superclass ended the search",
+        invokesInstrumentedForm(instrumented, "size"));
+  }
+
+  /**
    * Instruments the given class, as {@code Instrument24.transform} does.
    *
    * @param bytes the bytes of the class to instrument
@@ -563,6 +586,40 @@ public final class DCInstrumentTest24 {
      */
     public void call(PrivateThenJdkDefault x) {
       x.remove();
+    }
+  }
+
+  /**
+   * An application interface that declares {@code size}, matching the name and descriptor of the
+   * abstract {@code size} of {@code java.util.AbstractCollection}; see {@link
+   * #testAbstractSuperclassDeclarationDoesNotEndSearch}.
+   */
+  public interface AppSized {
+    /**
+     * Returns a size.
+     *
+     * @return a size
+     */
+    int size();
+  }
+
+  /**
+   * A class whose superclass chain declares {@code size} abstract in an uninstrumented JDK class,
+   * and which also implements an instrumented application interface that declares it. Abstract, so
+   * that no class in the chain implements {@code size}.
+   */
+  public abstract static class AbstractJdkSized extends java.util.AbstractCollection<Object>
+      implements AppSized {}
+
+  /** Calls {@code size} on a class whose superclass declares it abstract. */
+  public static class CallsAbstractJdkSize {
+    /**
+     * Calls {@code size}.
+     *
+     * @param x the receiver
+     */
+    public void call(AbstractJdkSized x) {
+      x.size();
     }
   }
 

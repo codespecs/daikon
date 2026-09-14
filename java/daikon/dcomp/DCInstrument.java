@@ -2280,20 +2280,26 @@ public class DCInstrument extends InstructionListUtils {
    *
    * <p>Note that this finds a <em>declaration</em>, which is usually not an implementation. Pass
    * true for {@code implementationsOnly} to match only a {@code default} method, which does hold
-   * the code that will run.
+   * the code that will run. A {@code static} or private declaration is never matched, in either
+   * mode, because neither can be the target of the call being resolved.
    *
    * <p>Limitation: when several interfaces match, this returns the first one reached rather than
    * the maximally specific one that JVMS 5.4.3.3 selects. A class that implements both an interface
    * and a subinterface that reabstracts the same method gets the first of the two in declaration
-   * order, which may be the supertype. The consequence is confined to precision: the caller uses
-   * the answer only to decide whether the target is instrumented, and a wrong answer there loses
-   * comparability through the call rather than breaking it, because the uninstrumented overload it
-   * then invokes always exists.
+   * order, which may be the supertype. The consequence is confined to precision, in both
+   * directions. The caller uses the answer only to decide whether the target is instrumented. A
+   * wrong "uninstrumented" answer invokes the uninstrumented overload, which always exists. A wrong
+   * "instrumented" answer invokes the {@code DCompMarker} overload, which the returned interface
+   * declares because it is instrumented, and which resolves because that interface is a
+   * superinterface of {@code startClass} and hence of the receiver. Either way, a wrong answer
+   * loses comparability through the call rather than breaking it.
    *
    * @param startClass the class whose interfaces are to be searched
    * @param methodName the target method to search for
    * @param paramTypes the target method's parameter types
-   * @param implementationsOnly if true, match only a {@code default} method
+   * @param implementationsOnly if true, match only a {@code default} method; if false, match any
+   *     declaration, abstract ones included. A {@code static} or private declaration is never
+   *     matched.
    * @return the name of the interface that declares the target method, or null if not found
    */
   private @Nullable @ClassGetName String getDeclaringInterface(
@@ -2356,9 +2362,10 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Returns true if the given method, which is declared by no class in {@code chain}, is inherited
-   * from an instrumented interface. Searches the interfaces of every class in {@code chain}, and
-   * their superinterfaces.
+   * Returns true if the given method, which no class in {@code chain} implements, is inherited from
+   * an instrumented interface. Searches the interfaces of every class in {@code chain}, and their
+   * superinterfaces. A class in the chain may declare the method abstract; such a declaration holds
+   * no code, so the interfaces are consulted in that case too.
    *
    * <p>Prefers a {@code default} method, which is an implementation; an abstract declaration only
    * says where the method is declared, but that is the best available answer. Returns false if no
@@ -2706,7 +2713,14 @@ public class DCInstrument extends InstructionListUtils {
                 }
                 if (!Premain.isClassnameInstrumented(
                     targetClassname, methodName, debugHandleInvoke, debugInstrument)) {
-                  targetInstrumented = false;
+                  // An abstract declaration holds no code, so an uninstrumented class that
+                  // declares the method abstract does not settle the question.  An instrumented
+                  // interface of some class in the chain may declare the method too, and then
+                  // every implementation that can run at this call site is instrumented.
+                  if (!m.isAbstract()
+                      || !isInterfaceMethodInstrumented(chain, methodName, paramTypes)) {
+                    targetInstrumented = false;
+                  }
                 }
                 break mainloop;
               }
