@@ -551,8 +551,8 @@ public class DCInstrument24 {
   /** If true, enable JUnit analysis debugging. */
   protected static final boolean debugJunitAnalysis = false;
 
-  /** If true, enable {@link #getDefiningInterface} debugging. */
-  protected static final boolean debugGetDefiningInterface = false;
+  /** If true, enable {@link #getDeclaringInterface} debugging. */
+  protected static final boolean debugGetDeclaringInterface = false;
 
   /** If true, enable {@link #handleInvoke} debugging. */
   protected static final boolean debugHandleInvoke = false;
@@ -3132,23 +3132,47 @@ public class DCInstrument24 {
   }
 
   /**
-   * Returns the interface class name containing the implementation of the given method. The
-   * interfaces of {@code startClass} are recursively searched.
+   * Returns the name of the interface that declares the given method. The interfaces of {@code
+   * startClass} are recursively searched.
+   *
+   * <p>Note that this finds a <em>declaration</em>, which is usually not an implementation: an
+   * interface method is implicitly abstract unless it is {@code default}, {@code static}, or
+   * private. Pass true for {@code implementationsOnly} to match only a {@code default} method,
+   * which is the one case where the interface really does hold the code that will run. A {@code
+   * static} or private declaration is never matched, in either mode, because neither can be the
+   * target of the call being resolved.
+   *
+   * <p>Limitation: when several interfaces match, this returns the first one reached rather than
+   * the maximally specific one that JVMS 5.4.3.3 selects. A class that implements both an interface
+   * and a subinterface that reabstracts the same method gets the first of the two in declaration
+   * order, which may be the supertype. The consequence is confined to precision, in both
+   * directions. The caller uses the answer only to decide whether the target is instrumented. A
+   * wrong "uninstrumented" answer invokes the uninstrumented overload, which always exists. A wrong
+   * "instrumented" answer invokes the {@code DCompMarker} overload, which the returned interface
+   * declares because it is instrumented, and which resolves because that interface is a
+   * superinterface of {@code startClass} and hence of the receiver. Either way, a wrong answer
+   * loses comparability through the call rather than breaking it.
    *
    * @param startClass the class whose interfaces are to be searched
    * @param methodName the target method to search for
    * @param paramTypes the target method's parameter types
-   * @return the name of the interface class containing target method, or null if not found
+   * @param implementationsOnly if true, match only a {@code default} method; if false, match any
+   *     declaration, abstract ones included. A {@code static} or private declaration is never
+   *     matched.
+   * @return the name of the interface that declares the target method, or null if not found
    */
-  private @Nullable @BinaryName String getDefiningInterface(
-      ClassModel startClass, @Identifier String methodName, ClassDesc[] paramTypes) {
+  private @Nullable @BinaryName String getDeclaringInterface(
+      ClassModel startClass,
+      @Identifier String methodName,
+      ClassDesc[] paramTypes,
+      boolean implementationsOnly) {
 
-    if (debugGetDefiningInterface) {
+    if (debugGetDeclaringInterface) {
       System.out.println("searching interfaces of: " + ClassGen24.getClassName(startClass));
     }
     for (ClassEntry classEntry : startClass.interfaces()) {
       @BinaryName String interfaceName = Signatures.internalFormToBinaryName(classEntry.asInternalName());
-      if (debugGetDefiningInterface) {
+      if (debugGetDeclaringInterface) {
         System.out.println("interface: " + interfaceName);
       }
       ClassModel cm;
@@ -3160,19 +3184,35 @@ public class DCInstrument24 {
       if (cm == null) {
         throw new DynCompError(String.format("Unable to find class: %s", interfaceName));
       }
+      boolean reabstracted = false;
       for (MethodModel jm : cm.methods()) {
         String jmName = jm.methodName().stringValue();
         MethodTypeDesc mtd = jm.methodTypeSymbol();
-        if (debugGetDefiningInterface) {
+        if (debugGetDeclaringInterface) {
           System.out.println("  " + jmName + Arrays.toString(mtd.parameterArray()));
         }
         if (jmName.equals(methodName) && Arrays.equals(mtd.parameterArray(), paramTypes)) {
-          // We have a match.
+          // We have a match.  Neither a static nor a private interface method is ever the
+          // target of an INVOKEVIRTUAL: a private one is not even inherited.
+          AccessFlags jmFlags = jm.flags();
+          if (jmFlags.has(AccessFlag.STATIC) || jmFlags.has(AccessFlag.PRIVATE)) {
+            continue;
+          }
+          if (implementationsOnly && jmFlags.has(AccessFlag.ABSTRACT)) {
+            // This interface declares the method abstract.  An interface may reabstract a default
+            // it inherits, and an implementor must then define the method, so any default above
+            // this point is hidden: do not search this branch further.
+            reabstracted = true;
+            break;
+          }
           return interfaceName;
         }
       }
+      if (reabstracted) {
+        continue;
+      }
       // no match found; does this interface extend other interfaces?
-      @BinaryName String foundAbove = getDefiningInterface(cm, methodName, paramTypes);
+      @BinaryName String foundAbove = getDeclaringInterface(cm, methodName, paramTypes, implementationsOnly);
       if (foundAbove != null) {
         // We have a match.
         return foundAbove;
@@ -3180,6 +3220,57 @@ public class DCInstrument24 {
     }
     // nothing found
     return null;
+  }
+
+  /**
+   * Returns true if the given method, which no class in {@code chain} implements, is inherited from
+   * an instrumented interface. Searches the interfaces of every class in {@code chain}, and their
+   * superinterfaces. A class in the chain may declare the method abstract; such a declaration holds
+   * no code, so the interfaces are consulted in that case too.
+   *
+   * <p>Prefers a {@code default} method, which is an implementation; an abstract declaration only
+   * says where the method is declared, but that is the best available answer. Returns false if no
+   * interface declares the method, or if some interface cannot be read.
+   *
+   * @param chain a class and its superclasses, in that order
+   * @param methodName the target method to search for
+   * @param paramTypes the target method's parameter types
+   * @return true if the target method is inherited from an instrumented interface
+   */
+  private boolean isInterfaceMethodInstrumented(
+      List<ClassModel> chain, @Identifier String methodName, ClassDesc[] paramTypes) {
+
+    @BinaryName String found = null;
+    try {
+      for (ClassModel cm : chain) {
+        found = getDeclaringInterface(cm, methodName, paramTypes, true);
+        if (found != null) {
+          break;
+        }
+      }
+      if (found == null) {
+        // No interface supplies an implementation; settle for a declaration.
+        for (ClassModel cm : chain) {
+          found = getDeclaringInterface(cm, methodName, paramTypes, false);
+          if (found != null) {
+            break;
+          }
+        }
+      }
+    } catch (Throwable e) {
+      // We cannot locate or read the .class file, better assume it is not instrumented.
+      return false;
+    }
+    if (found == null) {
+      if (debugHandleInvoke) {
+        System.out.printf("Unable to locate method: %s%n%n", methodName);
+      }
+      return false;
+    }
+    if (debugHandleInvoke) {
+      System.out.printf("declared by interface %s%n%n", found);
+    }
+    return Premain.isClassnameInstrumented(found, methodName, debugHandleInvoke, debugInstrument);
   }
 
   /**
@@ -3473,8 +3564,13 @@ public class DCInstrument24 {
           }
 
           @BinaryName String targetClassname = classname;
+          // The target class and its superclasses, in that order, as far as the loop below got.
+          List<ClassModel> chain = new ArrayList<>();
           // Search this class for the target method. If not found, set targetClassname to
-          // its superclass and try again.
+          // its superclass and try again.  Interfaces are not consulted here: JVMS 5.4.3.3
+          // resolves a method against the class's own declaration, then the superclass chain,
+          // and only then the superinterfaces of the class and of all its superclasses.  So the
+          // whole chain is searched first, and the interfaces of every class in it afterwards.
           mainloop:
           while (true) {
             // Check that the class exists
@@ -3485,15 +3581,20 @@ public class DCInstrument24 {
               targetClass = null;
             }
             if (targetClass == null) {
-              // We cannot locate or read the .class file, better assume not instrumented.
+              // We cannot locate or read the .class file, so the superclass chain ends here.  The
+              // method may still be declared by an interface of a class already in the chain.
               if (debugHandleInvoke) {
                 System.out.printf("Unable to locate class: %s%n%n", targetClassname);
               }
-              return false;
+              if (!isInterfaceMethodInstrumented(chain, methodName, paramTypes)) {
+                targetInstrumented = false;
+              }
+              break;
             }
             if (debugHandleInvoke) {
               System.out.println("target class: " + targetClassname);
             }
+            chain.add(targetClass);
 
             for (MethodModel jm : targetClass.methods()) {
               String jmName = jm.methodName().stringValue();
@@ -3506,42 +3607,28 @@ public class DCInstrument24 {
                 if (debugHandleInvoke) {
                   System.out.printf("we have a match%n%n");
                 }
-                if (BcelUtil.inJdk(targetClassname)) {
-                  targetInstrumented = false;
+                if (!Premain.isClassnameInstrumented(
+                    targetClassname, methodName, debugHandleInvoke, debugInstrument)) {
+                  // An abstract declaration holds no code, so an uninstrumented class that
+                  // declares the method abstract does not settle the question.  An instrumented
+                  // interface of some class in the chain may declare the method too, and then
+                  // every implementation that can run at this call site is instrumented.
+                  if (!jm.flags().has(AccessFlag.ABSTRACT)
+                      || !isInterfaceMethodInstrumented(chain, methodName, paramTypes)) {
+                    targetInstrumented = false;
+                  }
                 }
                 break mainloop;
               }
             }
 
-            {
-              // no methods match - search this class's interfaces
-              @BinaryName String found;
-              try {
-                found = getDefiningInterface(targetClass, methodName, paramTypes);
-              } catch (Throwable e) {
-                // We cannot locate or read the .class file, better assume it is not instrumented.
-                return false;
-              }
-              if (found != null) {
-                // We have a match.
-                if (debugHandleInvoke) {
-                  System.out.printf("we have a match%n%n");
-                }
-                if (BcelUtil.inJdk(found)) {
-                  targetInstrumented = false;
-                }
-                break;
-              }
-            }
-
             // Method not found; perhaps inherited from superclass.
             if (targetClassname.equals("java.lang.Object")) {
-              // The target class was Object; the search completed without finding a matching
-              // method.
-              if (debugHandleInvoke) {
-                System.out.printf("Unable to locate method: %s%n%n", methodName);
+              // No class in the chain declares the method, so it comes from an interface.
+              if (!isInterfaceMethodInstrumented(chain, methodName, paramTypes)) {
+                targetInstrumented = false;
               }
-              return false;
+              break;
             }
 
             // Recurse looking in the superclass.
