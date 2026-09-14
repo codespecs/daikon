@@ -56,6 +56,18 @@ public final class DCRuntime {
     daikon.dcomp.DCRuntime.normal_exit_primitive(tag_frame);
   }
 
+  public static void uninstrumented_enter(int tagCount) {
+    daikon.dcomp.DCRuntime.uninstrumented_enter(tagCount);
+  }
+
+  public static void uninstrumented_exit() {
+    daikon.dcomp.DCRuntime.uninstrumented_exit();
+  }
+
+  public static void uninstrumented_exit_primitive() {
+    daikon.dcomp.DCRuntime.uninstrumented_exit_primitive();
+  }
+
   public static void exception_exit(Object throwable) {
     daikon.dcomp.DCRuntime.exception_exit(throwable);
   }

@@ -762,6 +762,9 @@ public class Instrument24 implements ClassFileTransformer {
       MethodInfo curMethodInfo,
       int method_info_index) {
 
+    // This handler modifies mgen, and may be run more than once.
+    mgen.resetForCodeBuilder();
+
     MethodGen24.MInfo24 minfo =
         new MethodGen24.MInfo24(method_info_index, mgen.getMaxLocals(), codeBuilder);
 
