@@ -274,6 +274,7 @@ public final class BuildJDK24 {
 
         // Get the InputStream for this file
         InputStream is = jfile.getInputStream(entry);
+        assert is != null : "@AssumeAssertion(nullness): entry was obtained from jfile.entries()";
         class_stream_map.put(entryName, is);
       }
     } catch (Exception e) {
