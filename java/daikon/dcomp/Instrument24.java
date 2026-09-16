@@ -144,7 +144,7 @@ public class Instrument24 implements ClassFileTransformer {
   @Override
   public byte @Nullable [] transform(
       @Nullable ClassLoader loader,
-      @InternalForm String className,
+      @InternalForm @Nullable String className,
       @Nullable Class<?> classBeingRedefined,
       ProtectionDomain protectionDomain,
       byte[] classfileBuffer)

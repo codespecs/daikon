@@ -47,7 +47,7 @@ import org.checkerframework.checker.signature.qual.DotSeparatedIdentifiers;
 import org.checkerframework.checker.signature.qual.InternalForm;
 
 /**
- * Add comparability instrumentation to Java class files, then stores the modified files into a
+ * Adds comparability instrumentation to Java class files, then stores the modified files into a
  * directory identified by a (required) command line argument.
  *
  * <p>Duplicates each method of a class file. The new methods are distinguished by the addition of a
@@ -76,7 +76,14 @@ public final class BuildJDK24 {
   /** Number of class files processed; used for progress display. */
   private int _numFilesProcessed = 0;
 
-  /** Name of file in output jar containing the static-fields map. */
+  /**
+   * Name of file in the output jar containing the static-fields map.
+   *
+   * <p>This is a map from field names to a unique integer id. It is created and used by
+   * DCInstrument24 when creating tag get and set accessor methods for each static field in a class.
+   * If we are rebuilding a instrumented JDK we need to read the map file in and then restore it
+   * after rebuilding the JDK.
+   */
   private static String static_field_id_filename = "dcomp_jdk_static_field_id";
 
   /** Allow BuildJDK24 to access outputDebugFiles. */
@@ -135,7 +142,11 @@ public final class BuildJDK24 {
 
     File dest_dir = new File(cl_args[0]);
 
-    // Key is a class file name, value is a stream that opens that file name.
+    // Note that the name by which a class is identified, be it a file name, jar entry name or
+    // the file name within a jmod archive, is almost always identical to the name of the class
+    // it contains. Thoughout the BuildJDK code we call this the 'classFileName'. We use this
+    // as the key to the class_stream_map and it maps to a FileInputStream that contains
+    // the contents of the class file.
     //
     // <p>We want to share code to read and instrument the Java class file members of a jar file
     // (JDK 8) or a module file (JDK 9+). However, jar files and module files are located in two
@@ -532,7 +543,7 @@ public final class BuildJDK24 {
    * @param classModel ClassModel of class to be instrumented
    * @param loader ClassLoader of class to be instrumented
    * @param outputDir output directory for instrumented class
-   * @param classFileName name of class to be instrumented (in internal form)
+   * @param classFileName name of class to be instrumented
    * @param classTotal total number of classes to be processed; used for progress display
    * @throws IOException if unable to write out instrumented class
    */
@@ -549,7 +560,7 @@ public final class BuildJDK24 {
       System.out.printf("processing target %s%n", classFileName);
     }
 
-    // remove '.class' first
+    // Convert the class filename to a binary class name.
     @SuppressWarnings("signature:assignment") // type conversion
     @InternalForm String classnameIF = removeSuffix(classFileName, ".class");
     String classname = Signatures.internalFormToBinaryName(classnameIF);

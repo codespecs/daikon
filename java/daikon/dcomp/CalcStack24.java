@@ -52,10 +52,17 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.FieldDescriptor;
 
 /**
- * This class calculates the state of the operand stack via simulation.
+ * DCInstrument24 maintains a queue of WorkItems (also known as a worklist) to be used for a
+ * method's operand stack calculation. A WorkItem is a record containing:
  *
- * <p>During this process, it may modify the state of the {@code locals} and {@code stacks} fields
- * of the DCInstrument24 that is instrumenting the method.
+ * <ul>
+ *   <li>an index into the method's instruction list
+ *   <li>the state of the operand stack prior to the execution of that instruction
+ * </ul>
+ *
+ * <p>This class simulates the action of the current instruction. During this process, it may modify
+ * the state of the {@code locals} and {@code stacks} fields of the DCInstrument24 that is
+ * instrumenting the method.
  */
 public final class CalcStack24 {
 
@@ -71,7 +78,7 @@ public final class CalcStack24 {
   static final Set<ClassDesc> INTEGRAL = Set.of(CD_boolean, CD_byte, CD_char, CD_int, CD_short);
 
   /**
-   * Calculates changes in the operand stack based on the symbolic execution of a CodeElement. Note
+   * Calculates changes in the operand stack based on the simulated execution of a CodeElement. Note
    * that we assume the class file is valid and make no attempt to verify the code's correctness.
    *
    * @param dci the instrumenter for the method's class; its simulation state is side-effected
@@ -137,7 +144,7 @@ public final class CalcStack24 {
   }
 
   /**
-   * Calculates changes in the operand stack based on the symbolic execution of a Java bytecode
+   * Calculates changes in the operand stack based on the simulated execution of a Java bytecode
    * instruction. Note that we assume the class file is valid and make no attempt to verify the
    * code's correctness.
    *
@@ -243,7 +250,7 @@ public final class CalcStack24 {
       case Opcode.IRETURN:
       case Opcode.LRETURN:
       case Opcode.RETURN:
-        // execution pump will reset stack
+        // The worklist processing loop in DCInstrument24 will reset the stack.
         return false;
 
       // operand stack before: ..., arrayref
@@ -293,7 +300,7 @@ public final class CalcStack24 {
       // operand stack before: ..., objectref
       // operand stack after:  objectref
       case Opcode.ATHROW:
-        // execution pump will reset stack
+        // The worklist processing loop in DCInstrument24 will reset the stack.
         return false;
 
       // operand stack before: ..., arrayref, index
@@ -886,18 +893,16 @@ public final class CalcStack24 {
       case Opcode.INVOKEINTERFACE:
       case Opcode.INVOKESPECIAL:
       case Opcode.INVOKEVIRTUAL:
-        stack.pop(); // Discard the last argument (which is at the top of the stack),
-      // or the objectref if there are no arguments.
-
-      // may actually be removing an arg, but we'll
-      // account for that when we remove args below
-
-      // fall through is intentional:
-
       // operand stack before: ..., [arg1, [arg2 ...]]
-      // operand stack after:  ...
+      // operand stack after:  ... if void return type, else
+      // operand stack after:  return type
       case Opcode.INVOKESTATIC:
         {
+          if (inst.opcode() != Opcode.INVOKESTATIC) {
+            // Discard the last argument (which is at the top of the stack),
+            // or the objectref if there are no arguments.
+            stack.pop();
+          }
           final InvokeInstruction ii = (InvokeInstruction) inst;
           final MethodTypeDesc mtd = ii.typeSymbol();
           stack.pop(mtd.parameterCount()); // discard the arguments
@@ -909,7 +914,8 @@ public final class CalcStack24 {
         }
 
       // operand stack before: ..., [arg1, [arg2 ...]]
-      // operand stack after:  ...
+      // operand stack after:  ... if void return type, else
+      // operand stack after:  return type
       case Opcode.INVOKEDYNAMIC:
         {
           final InvokeDynamicInstruction idi = (InvokeDynamicInstruction) inst;

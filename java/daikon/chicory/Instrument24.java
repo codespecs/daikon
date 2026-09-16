@@ -282,7 +282,7 @@ public class Instrument24 implements ClassFileTransformer {
   @Override
   public byte @Nullable [] transform(
       @Nullable ClassLoader loader,
-      @InternalForm String className,
+      @InternalForm @Nullable String className,
       @Nullable Class<?> classBeingRedefined,
       ProtectionDomain protectionDomain,
       byte[] classfileBuffer)
@@ -910,6 +910,7 @@ public class Instrument24 implements ClassFileTransformer {
     } catch (Exception e) {
       System.err.printf("Exception encountered: %s", e);
       e.printStackTrace();
+      throw new RuntimeException("Failed to insert method entry instrumentation for " + mgen, e);
     }
   }
 
@@ -1568,7 +1569,7 @@ public class Instrument24 implements ClassFileTransformer {
    * with wildcard bounds.
    *
    * <p>The output format is an extension of binary name format that includes primitives and arrays.
-   * It is the same as a fully qualified name, but using “$” instead of “.” to separate nested
+   * It is the same as a fully qualified name, but using "$" instead of "." to separate nested
    * classes from their enclosing classes.
    *
    * @param descriptor the descriptor to format
