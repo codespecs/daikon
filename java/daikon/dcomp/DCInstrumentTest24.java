@@ -457,8 +457,7 @@ public final class DCInstrumentTest24 {
           originalModel.flags().has(AccessFlag.PUBLIC));
 
       byte @Nullable [] instrumented = instrument(original, classname);
-      assertNotNull("cannot instrument " + classname, instrumented);
-      assert instrumented != null : "@AssumeAssertion(nullness): just checked";
+      assert instrumented != null : "@AssumeAssertion(nullness): cannot instrument " + classname;
 
       ClassModel instrumentedModel = ClassFile.of().parse(instrumented);
       assertTrue(
