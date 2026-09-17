@@ -81,7 +81,7 @@ public final class BuildJDK24 {
    *
    * <p>This is a map from field names to a unique integer id. It is created and used by
    * DCInstrument24 when creating tag get and set accessor methods for each static field in a class.
-   * If we are rebuilding a instrumented JDK we need to read the map file in and then restore it
+   * If we are rebuilding an instrumented JDK we need to read the map file in and then restore it
    * after rebuilding the JDK.
    */
   private static String static_field_id_filename = "dcomp_jdk_static_field_id";
@@ -142,11 +142,10 @@ public final class BuildJDK24 {
 
     File dest_dir = new File(cl_args[0]);
 
-    // Note that the name by which a class is identified, be it a file name, jar entry name or
-    // the file name within a jmod archive, is almost always identical to the name of the class
-    // it contains. Thoughout the BuildJDK code we call this the 'classFileName'. We use this
-    // as the key to the class_stream_map and it maps to an InputStream that supplies
-    // the contents of the class file.
+    // Key is a class file name, jar entry name, or the file name within a jmod archive.  It is
+    // almost always identical to the name of the class it contains. Thoughout the BuildJDK code we
+    // call this the 'classFileName'. We use this as the key to the class_stream_map and it maps to
+    // an InputStream that supplies the contents of the class file.
     //
     // <p>We want to share code to read and instrument the Java class file members of a jar file
     // (JDK 8) or a module file (JDK 9+). However, jar files and module files are located in two

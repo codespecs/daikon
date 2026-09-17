@@ -52,17 +52,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.FieldDescriptor;
 
 /**
- * DCInstrument24 maintains a queue of WorkItems (also known as a worklist) to be used for a
- * method's operand stack calculation. A WorkItem is a record containing:
- *
- * <ul>
- *   <li>an index into the method's instruction list
- *   <li>the state of the operand stack prior to the execution of that instruction
- * </ul>
- *
- * <p>This class simulates the action of the current instruction. During this process, it may modify
+ * This class simulates the action of the current instruction. During this process, it may modify
  * the state of the {@code locals} and {@code stacks} fields of the DCInstrument24 that is
- * instrumenting the method.
+ * instrumenting the method. o
  */
 public final class CalcStack24 {
 
@@ -894,8 +886,8 @@ public final class CalcStack24 {
       case Opcode.INVOKESPECIAL:
       case Opcode.INVOKEVIRTUAL:
       // operand stack before: ..., [arg1, [arg2 ...]]
-      // operand stack after:  ... if void return type, else
-      // operand stack after:  return type
+      // operand stack after:  ...   if void return type, else
+      // operand stack after:  ..., return type
       case Opcode.INVOKESTATIC:
         {
           if (inst.opcode() != Opcode.INVOKESTATIC) {
@@ -914,8 +906,8 @@ public final class CalcStack24 {
         }
 
       // operand stack before: ..., [arg1, [arg2 ...]]
-      // operand stack after:  ... if void return type, else
-      // operand stack after:  return type
+      // operand stack after:  ...   if void return type, else
+      // operand stack after:  ..., return type
       case Opcode.INVOKEDYNAMIC:
         {
           final InvokeDynamicInstruction idi = (InvokeDynamicInstruction) inst;

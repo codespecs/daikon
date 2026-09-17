@@ -131,11 +131,10 @@ public final class BuildJDK {
 
     File dest_dir = new File(cl_args[0]);
 
-    // Note that the name by which a class is identified, be it a file name, jar entry name or
-    // the file name within a jmod archive, is almost always identical to the name of the class
-    // it contains. Thoughout the BuildJDK code we call this the 'classFileName'. We use this
-    // as the key to the class_stream_map and it maps to an InputStream that supplies
-    // the contents of the class file.
+    // Key is a class file name, jar entry name, or the file name within a jmod archive.  It is
+    // almost always identical to the name of the class it contains. Thoughout the BuildJDK code we
+    // call this the 'classFileName'. We use this as the key to the class_stream_map and it maps to
+    // an InputStream that supplies the contents of the class file.
     //
     // <p>We want to share code to read and instrument the Java class file members of a jar file
     // (JDK 8) or a module file (JDK 9+). However, jar files and module files are located in two
@@ -340,7 +339,7 @@ public final class BuildJDK {
       // pre-instrumented class list so that Instrument.transform will not
       // attempt to instrument it live.
       //
-      // <p>debugging code:
+      // Debugging code:
       // System.out.printf("processing entry %s%n", entryName);
       try {
         // Get the InputStream for this file
