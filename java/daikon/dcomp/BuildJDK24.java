@@ -143,7 +143,7 @@ public final class BuildJDK24 {
     File dest_dir = new File(cl_args[0]);
 
     // Key is a class file name, jar entry name, or the file name within a jmod archive.  It is
-    // almost always identical to the name of the class it contains. Thoughout the BuildJDK code we
+    // almost always identical to the name of the class it contains. Throughout the BuildJDK code we
     // call this the 'classFileName'. We use this as the key to the class_stream_map and it maps to
     // an InputStream that supplies the contents of the class file.
     //

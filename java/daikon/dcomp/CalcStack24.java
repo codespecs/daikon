@@ -54,7 +54,7 @@ import org.checkerframework.checker.signature.qual.FieldDescriptor;
 /**
  * This class simulates the action of the current instruction. During this process, it may modify
  * the state of the {@code locals} and {@code stacks} fields of the DCInstrument24 that is
- * instrumenting the method. o
+ * instrumenting the method.
  */
 public final class CalcStack24 {
 

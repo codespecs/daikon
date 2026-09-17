@@ -4002,7 +4002,7 @@ public class DCInstrument extends InstructionListUtils {
 
   /**
    * Returns true if tag fields are used within the specified method of the specified class. We can
-   * safely use class fields except in Object, String, and Class. If checking a class, mgen is null.
+   * safely use class fields except in Object, String, and Class.
    *
    * @param mgen method to check
    * @param classname class containing {@code mgen}
@@ -4492,7 +4492,7 @@ public class DCInstrument extends InstructionListUtils {
   @Pure
   boolean is_object_method(@Identifier String methodName, Type[] paramTypes) {
     // Note: kind of weird we don't check that classname = Object but it's been
-    // that way forever. Just means foo.finialize(), e.g., will be marked uninstrumented.
+    // that way forever. Just means foo.finalize(), e.g., will be marked uninstrumented.
     for (MethodDef md : obj_methods) {
       if (md.equals(methodName, paramTypes)) {
         return true;
