@@ -73,8 +73,8 @@ public final class BuildJDK {
   /**
    * Name of file in the output jar containing the static-fields map.
    *
-   * <p>This is a map from field names to a unique integer id. It is created and used by
-   * DCInstrument24 when creating tag get and set accessor methods for each static field in a class.
+   * <p>This is a map from field names to a unique integer id. It is created and used by {@link
+   * DCInstrument} when creating tag get and set accessor methods for each static field in a class.
    * If we are rebuilding a instrumented JDK we need to read the map file in and then restore it
    * after rebuilding the JDK.
    */
@@ -134,7 +134,7 @@ public final class BuildJDK {
     // Note that the name by which a class is identified, be it a file name, jar entry name or
     // the file name within a jmod archive, is almost always identical to the name of the class
     // it contains. Thoughout the BuildJDK code we call this the 'classFileName'. We use this
-    // as the key to the class_stream_map and it maps to a FileInputStream that contains
+    // as the key to the class_stream_map and it maps to an InputStream that supplies
     // the contents of the class file.
     //
     // <p>We want to share code to read and instrument the Java class file members of a jar file
@@ -336,8 +336,8 @@ public final class BuildJDK {
       // Note: java/lang/Object.class is added to class_stream_map
       // so that it is included in the jdk_classes.txt list of pre-instrumented classes written out
       // at the end of build(). Due to the way the JVM is loaded, we cannot instrument Object.class
-      // in {@link #instrument_classes()}. However, we need it included in the
-      // pre-instrumented class list so that {@link Instrument24#transform} will not
+      // in instrument_classes(). However, we need it included in the
+      // pre-instrumented class list so that Instrument.transform will not
       // attempt to instrument it live.
       //
       // <p>debugging code:
@@ -494,7 +494,7 @@ public final class BuildJDK {
    *
    * @param jc JavaClass to be instrumented
    * @param outputDir output directory for instrumented class
-   * @param classFileName name of class to be instrumented
+   * @param classFileName class-file path or archive/module entry name to be instrumented
    * @param classTotal total number of classes to be processed; used for progress display
    * @throws IOException if unable to write out instrumented class
    */
