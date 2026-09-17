@@ -651,6 +651,12 @@ public class Instrument24 implements ClassFileTransformer {
     } catch (Exception e) {
       System.err.printf("Unexpected exception encountered: %s", e);
       e.printStackTrace();
+      // Do not swallow this.  The loop above has stopped partway through the method list, and
+      // instrumentClass does not copy methods (it skips MethodModel deliberately), so every
+      // method not yet written is missing from the class being built.  Emitting that class would
+      // be worse than not instrumenting at all.  transform catches this and returns null, which
+      // leaves the class unchanged.
+      throw new RuntimeException("Failed to instrument " + classInfo.class_name, e);
     }
 
     classInfo.shouldInclude = shouldInclude;
