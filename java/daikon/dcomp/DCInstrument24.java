@@ -623,6 +623,10 @@ public class DCInstrument24 {
    * <p>Because a multithreaded target program instruments classes concurrently, one DCInstrument24
    * per thread, this map is synchronized. Allocating an id is a compound operation, so it is
    * additionally performed while holding this map's lock, as is any iteration over the map.
+   *
+   * <p>That lock covers this map only. Allocating an id also grows {@link DCRuntime#static_tags},
+   * which is a plain list that instrumented code reads and writes without holding any lock, so that
+   * growth is not made safe by this lock.
    */
   static final Map<String, Integer> static_field_id =
       Collections.synchronizedMap(new LinkedHashMap<>());
@@ -3590,14 +3594,17 @@ public class DCInstrument24 {
               targetClass = null;
             }
             if (targetClass == null) {
-              // We cannot locate or read the .class file, so the superclass chain ends here. The
-              // method may still be declared by an interface of a class already in the chain.
+              // We cannot locate or read the .class file, so the superclass chain is incomplete.
+              // An interface of a class already in the chain may declare the method, but the
+              // unreadable class may equally define it concretely, and that class was not
+              // instrumented -- calling the DCompMarker overload would then fail, because no such
+              // overload was generated for it.  An incomplete chain cannot settle the question, so
+              // assume the target is not instrumented, as elsewhere when a class file cannot be
+              // read.
               if (debugHandleInvoke) {
                 System.out.printf("Unable to locate class: %s%n%n", targetClassname);
               }
-              if (!isInterfaceMethodInstrumented(chain, methodName, paramTypes)) {
-                targetInstrumented = false;
-              }
+              targetInstrumented = false;
               break;
             }
             if (debugHandleInvoke) {
