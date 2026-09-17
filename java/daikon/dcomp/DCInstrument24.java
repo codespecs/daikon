@@ -5399,7 +5399,7 @@ public class DCInstrument24 {
   @Pure
   boolean is_object_method(@Identifier String methodName, ClassDesc[] paramTypes) {
     // Note: kind of weird we don't check that classname = Object but it's been
-    // that way forever. Just means foo.finialize(), e.g., will be marked uninstrumented.
+    // that way forever. Just means foo.finalize(), e.g., will be marked uninstrumented.
     for (MethodDef md : obj_methods) {
       if (md.equals(methodName, paramTypes)) {
         return true;

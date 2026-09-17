@@ -349,7 +349,7 @@ public final class BuildJDK24 {
       }
       // Note: java/lang/Object.class is added to class_stream_map
       // so that it is included in the jdk_classes.txt list of pre-instrumented classes written out
-      // at the end of build(). Due to the way the JVM is loaded, we cannot instrument Object.class
+      // in main. Due to the way the JVM is loaded, we cannot instrument Object.class
       // in instrument_classes(). However, we need it included in the
       // pre-instrumented class list so that Instrument24.transform will not
       // attempt to instrument it live.
