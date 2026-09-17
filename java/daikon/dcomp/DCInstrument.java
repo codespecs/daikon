@@ -4183,9 +4183,17 @@ public class DCInstrument extends InstructionListUtils {
         // the whole operation; concurrent instrumentation would otherwise assign duplicate ids.
         synchronized (static_field_id) {
           if (!in_jdk) {
-            int min_size = static_field_id.size() + DCRuntime.max_jdk_static;
-            while (DCRuntime.static_tags.size() <= min_size) DCRuntime.static_tags.add(null);
-            static_field_id.put(full_name(jc, f), min_size);
+            // This method walks the superclass chain, so a superclass's static fields are
+            // revisited every time one of its subclasses is instrumented.  Allocate an id only
+            // the first time: reallocating would leave the accessors already emitted for the
+            // declaring class pointing at a different DCRuntime.static_tags slot than the ones
+            // emitted for the subclass, splitting one field's tag across two slots.
+            String full_name = full_name(jc, f);
+            if (!static_field_id.containsKey(full_name)) {
+              int min_size = static_field_id.size() + DCRuntime.max_jdk_static;
+              while (DCRuntime.static_tags.size() <= min_size) DCRuntime.static_tags.add(null);
+              static_field_id.put(full_name, min_size);
+            }
           } else { // building jdk
             String full_name = full_name(jc, f);
             if (static_field_id.containsKey(full_name)) {
