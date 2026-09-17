@@ -238,8 +238,8 @@ import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -420,7 +420,9 @@ public class DCInstrument extends InstructionListUtils {
   /** Type array with no parameters. */
   protected static final Type[] noArgsSig = Type.NO_ARGS;
 
-  // Signature descriptors: one parameter
+  // Signature descriptors
+
+  // One parameter
 
   /** Type array with an int. */
   protected static Type[] intSig = {CD_int};
@@ -434,7 +436,7 @@ public class DCInstrument extends InstructionListUtils {
   /** Type array with an object. */
   protected static Type[] object_arg = {CD_Object};
 
-  // Signature descriptors: two parameters
+  // Two parameters
 
   /** Type array with a long and an int. */
   protected static Type[] longIntSig = {CD_long, CD_int};
@@ -508,15 +510,25 @@ public class DCInstrument extends InstructionListUtils {
    * tag accessor methods must be added in each subclass and each should return the id of the field
    * in the superclass. This map is populated in {@link build_field_to_offset_map} and used in
    * {@link create_tag_accessors}.
+   *
+   * <p>Because a multithreaded target program instruments classes concurrently, one DCInstrument
+   * per thread, this map is synchronized. Allocating an id is a compound operation, so it is
+   * additionally performed while holding this map's lock, as is any iteration over the map.
+   *
+   * <p>That lock covers this map only. Allocating an id also grows {@link DCRuntime#static_tags},
+   * which is a plain list that instrumented code reads and writes without holding any lock, so that
+   * growth is not made safe by this lock.
    */
-  static Map<String, Integer> static_field_id = new LinkedHashMap<>();
+  static final Map<String, Integer> static_field_id =
+      Collections.synchronizedMap(new LinkedHashMap<>());
 
   /**
    * Map from binary class name to its access_flags. Used to cache the results of the lookup done in
    * {@link #getAccessFlags}. If a class is marked ACC_ANNOTATION then it will not have been
-   * instrumented.
+   * instrumented. This map is thread-safe because a multithreaded target program instruments
+   * classes concurrently, one DCInstrument24 per thread.
    */
-  static Map<String, Integer> accessFlags = new HashMap<>();
+  static Map<String, Integer> accessFlags = new ConcurrentHashMap<>();
 
   /** Integer constant of access_flag value of ACC_ANNOTATION. */
   static Integer Integer_ACC_ANNOTATION = Integer.valueOf(ACC_ANNOTATION);
@@ -949,7 +961,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param classname name of the class
    * @return true if the class is a JUnit test class
    */
-  private boolean checkForJunitTestClass(@ClassGetName String classname) {
+  private boolean checkForJunitTestClass(@BinaryName String classname) {
     boolean junit_test_class = false;
 
     if (in_jdk) {
@@ -1160,11 +1172,12 @@ public class DCInstrument extends InstructionListUtils {
    * A second version of each method in the class is created which is instrumented for
    * comparability.
    *
-   * @return the modified JavaClass
+   * @return the modified JavaClass; never null, as any error that prevents instrumentation is
+   *     thrown rather than reported by returning null
    */
   public JavaClass instrument_jdk_class() {
 
-    String classname = classGen.getClassName();
+    @BinaryName String classname = classGen.getClassName();
 
     // Don't know where I got this idea.  They are executed.  Don't remember why
     // adding dcomp marker causes problems.
@@ -1470,7 +1483,7 @@ public class DCInstrument extends InstructionListUtils {
    * called first.)
    */
   public List<String> get_skipped_methods() {
-    return new ArrayList<>(skipped_methods);
+    return skipped_methods;
   }
 
   /**
@@ -2214,8 +2227,7 @@ public class DCInstrument extends InstructionListUtils {
       case IINC: // increment local variable by a constant
       case INEG: // negate integer on top of stack
       case JSR: // pushes return address on the stack, but that
-      // is thought of as an object, so we don't need
-      // a tag for it.
+      // is thought of as an object, so we don't need a tag for it.
       case JSR_W:
       case L2D: // long to double
       case L2F: // long to float
@@ -2285,10 +2297,12 @@ public class DCInstrument extends InstructionListUtils {
    * Returns the name of the interface that declares the given method. The interfaces of {@code
    * startClass} are recursively searched.
    *
-   * <p>Note that this finds a <em>declaration</em>, which is usually not an implementation. Pass
-   * true for {@code implementationsOnly} to match only a {@code default} method, which does hold
-   * the code that will run. A {@code static} or private declaration is never matched, in either
-   * mode, because neither can be the target of the call being resolved.
+   * <p>Note that this finds a <em>declaration</em>, which is usually not an implementation: an
+   * interface method is implicitly abstract unless it is {@code default}, {@code static}, or
+   * private. Pass true for {@code implementationsOnly} to match only a {@code default} method,
+   * which is the one case where the interface really does hold the code that will run. A {@code
+   * static} or private declaration is never matched, in either mode, because neither can be the
+   * target of the call being resolved.
    *
    * <p>Limitation: when several interfaces match, this returns the first one reached rather than
    * the maximally specific one that JVMS 5.4.3.3 selects. A class that implements both an interface
@@ -2309,7 +2323,7 @@ public class DCInstrument extends InstructionListUtils {
    *     matched.
    * @return the name of the interface that declares the target method, or null if not found
    */
-  private @Nullable @ClassGetName String getDeclaringInterface(
+  private @Nullable @BinaryName String getDeclaringInterface(
       JavaClass startClass,
       @Identifier String methodName,
       Type[] paramTypes,
@@ -2318,7 +2332,7 @@ public class DCInstrument extends InstructionListUtils {
     if (debugGetDeclaringInterface) {
       System.out.println("searching interfaces of: " + startClass.getClassName());
     }
-    for (@ClassGetName String interfaceName : startClass.getInterfaceNames()) {
+    for (@BinaryName String interfaceName : startClass.getInterfaceNames()) {
       if (debugGetDeclaringInterface) {
         System.out.println("interface: " + interfaceName);
       }
@@ -2358,7 +2372,7 @@ public class DCInstrument extends InstructionListUtils {
         continue;
       }
       // no match found; does this interface extend other interfaces?
-      @ClassGetName String foundAbove = getDeclaringInterface(ji, methodName, paramTypes, implementationsOnly);
+      @BinaryName String foundAbove = getDeclaringInterface(ji, methodName, paramTypes, implementationsOnly);
       if (foundAbove != null) {
         // We have a match.
         return foundAbove;
@@ -2386,7 +2400,7 @@ public class DCInstrument extends InstructionListUtils {
   private boolean isInterfaceMethodInstrumented(
       List<JavaClass> chain, @Identifier String methodName, Type[] paramTypes) {
 
-    @ClassGetName String found = null;
+    @BinaryName String found = null;
     try {
       for (JavaClass c : chain) {
         found = getDeclaringInterface(c, methodName, paramTypes, true);
@@ -2446,7 +2460,8 @@ public class DCInstrument extends InstructionListUtils {
   private InstructionList handleInvoke(InvokeInstruction invoke) {
 
     // Get information about the call
-    @ClassGetName String classname = invoke.getClassName(pool);
+    @SuppressWarnings("signature:assignment") // BCEL incorrectly says @ClassGetName
+    @BinaryName String classname = invoke.getClassName(pool);
     String methodName = invoke.getMethodName(pool);
     // getClassName does not work properly if invoke is INVOKEDYNAMIC.
     // We will deal with this later.
@@ -2544,7 +2559,7 @@ public class DCInstrument extends InstructionListUtils {
       }
     }
     if (primitive_cnt > 0) {
-      return discard_tag_code(new NOP(), primitive_cnt);
+      return discard_tag_code(null, primitive_cnt);
     }
     // Must return a mutable array because some clients mutate it.
     return new InstructionList();
@@ -2562,7 +2577,7 @@ public class DCInstrument extends InstructionListUtils {
   @RequiresNonNull("mgen")
   private boolean isTargetInstrumented(
       InvokeInstruction invoke,
-      @ClassGetName String classname,
+      @BinaryName String classname,
       @Identifier String methodName,
       Type[] paramTypes) {
 
@@ -2673,15 +2688,15 @@ public class DCInstrument extends InstructionListUtils {
             System.out.printf("invoke host: %s.%s%n", classGen.getClassName(), mgen.getName());
           }
 
-          @ClassGetName String targetClassname = classname;
+          @BinaryName String targetClassname = classname;
           // The target class and its superclasses, in that order, as far as the loop below got.
           List<JavaClass> chain = new ArrayList<>();
-          // Interfaces are not consulted in the loop below: JVMS 5.4.3.3 resolves a method
-          // against the class's own declaration, then the superclass chain, and only then the
-          // superinterfaces of the class and of all its superclasses.  So the whole chain is
-          // searched first, and the interfaces of every class in the chain afterwards.
           // Search this class for the target method. If not found, set targetClassname to
-          // its superclass and try again.
+          // its superclass and try again. Interfaces are not consulted in the loop below:
+          // JVMS 5.4.3.3 resolves a method against the class's own declaration, then the
+          // superclass chain, and only then the superinterfaces of the class and of all
+          // its superclasses. So the whole chain is searched first, and the interfaces of
+          // every class in the chain afterwards.
           mainloop:
           while (true) {
             // Check that the class exists
@@ -2689,7 +2704,7 @@ public class DCInstrument extends InstructionListUtils {
             try {
               targetClass = getJavaClass(targetClassname);
             } catch (Throwable e) {
-              System.out.printf("Problem while getting class: %s%n%s%n%n", targetClassname, e);
+              // System.out.printf("Problem while getting class: %s%n%s%n%n", targetClassname, e);
               targetClass = null;
             }
             if (targetClass == null) {
@@ -2744,6 +2759,7 @@ public class DCInstrument extends InstructionListUtils {
               }
               break;
             }
+
             // Recurse looking in the superclass.
             // Cannot use "targetClass = targetClass.getSuperClass()" because the superclass might
             // not have been loaded into BCEL yet.
@@ -3465,13 +3481,7 @@ public class DCInstrument extends InstructionListUtils {
     }
 
     // Call `shouldIgnore` to check ppt-omit-patterns and ppt-select-patterns.
-    boolean shouldIgnore = daikon.chicory.Instrument.shouldIgnore(className, methodName, pptName);
-    if (shouldIgnore) {
-      debug_transform.log("ignoring %s, not included in ppt_select patterns%n", pptName);
-    } else {
-      debug_transform.log("including %s%n", pptName);
-    }
-    return !shouldIgnore;
+    return !daikon.chicory.Instrument.shouldIgnore(className, methodName, pptName);
   }
 
   /**
@@ -3493,13 +3503,7 @@ public class DCInstrument extends InstructionListUtils {
       type_names[ii] = paramTypes[ii].toString();
     }
 
-    // Remove exceptions from the name
-    String full_name = m.toString();
-    full_name = full_name.replaceFirst("\\s*throws.*", "");
-
-    // UNDONE: full_name is not used by DaikonWriter.methodEntryName.
-
-    return DaikonWriter.methodEntryName(fullClassName, type_names, full_name, m.getName());
+    return DaikonWriter.methodEntryName(fullClassName, type_names, "", m.getName());
   }
 
   /**
@@ -3517,17 +3521,20 @@ public class DCInstrument extends InstructionListUtils {
   }
 
   /**
-   * Create the code to call discard_tag(tag_count) and append inst to the end of that code.
+   * Create the code to call discard_tag(tag_count). If inst is not null, append it to the end of
+   * that code.
    *
    * @param inst instruction to be replaced
    * @param tag_count number of tags to discard
    * @return instruction list to discard tag(s)
    */
-  InstructionList discard_tag_code(Instruction inst, int tag_count) {
+  InstructionList discard_tag_code(@Nullable Instruction inst, int tag_count) {
     InstructionList il = new InstructionList();
     il.append(ifact.createConstant(tag_count));
     il.append(dcr_call("discard_tag", CD_void, intSig));
-    append_inst(il, inst);
+    if (inst != null) {
+      append_inst(il, inst);
+    }
     return il;
   }
 
@@ -3933,7 +3940,7 @@ public class DCInstrument extends InstructionListUtils {
       }
     }
     if (primitive_cnt > 0) {
-      il.append(discard_tag_code(new NOP(), primitive_cnt));
+      il.append(discard_tag_code(null, primitive_cnt));
     }
 
     // push a tag if there is a primitive return value
@@ -4008,7 +4015,7 @@ public class DCInstrument extends InstructionListUtils {
    * @param classname class containing {@code mgen}
    * @return true if tag fields may be used in class for method
    */
-  boolean tag_fields_ok(MethodGen mgen, @ClassGetName String classname) {
+  boolean tag_fields_ok(MethodGen mgen, @BinaryName String classname) {
 
     // Prior to Java 8 an interface could not contain any implementations.
     if (classGen.isInterface()) {
@@ -4172,19 +4179,23 @@ public class DCInstrument extends InstructionListUtils {
         continue;
       }
       if (f.isStatic()) {
-        if (!in_jdk) {
-          int min_size = static_field_id.size() + DCRuntime.max_jdk_static;
-          while (DCRuntime.static_tags.size() <= min_size) DCRuntime.static_tags.add(null);
-          static_field_id.put(full_name(jc, f), min_size);
-        } else { // building jdk
-          String full_name = full_name(jc, f);
-          if (static_field_id.containsKey(full_name)) {
-            // System.out.printf("Reusing static field %s value %d%n",
-            //                    full_name, static_field_id.get(full_name));
-          } else {
-            // System.out.printf("Allocating new static field %s%n",
-            //                    full_name);
-            static_field_id.put(full_name, static_field_id.size() + 1);
+        // Allocating an id reads the map's size and then writes to it, so hold the map's lock for
+        // the whole operation; concurrent instrumentation would otherwise assign duplicate ids.
+        synchronized (static_field_id) {
+          if (!in_jdk) {
+            int min_size = static_field_id.size() + DCRuntime.max_jdk_static;
+            while (DCRuntime.static_tags.size() <= min_size) DCRuntime.static_tags.add(null);
+            static_field_id.put(full_name(jc, f), min_size);
+          } else { // building jdk
+            String full_name = full_name(jc, f);
+            if (static_field_id.containsKey(full_name)) {
+              // System.out.printf("Reusing static field %s value %d%n",
+              //                    full_name, static_field_id.get(full_name));
+            } else {
+              // System.out.printf("Allocating new static field %s%n",
+              //                    full_name);
+              static_field_id.put(full_name, static_field_id.size() + 1);
+            }
           }
         }
       } else {
@@ -4487,6 +4498,8 @@ public class DCInstrument extends InstructionListUtils {
    */
   @Pure
   boolean is_object_method(@Identifier String methodName, Type[] paramTypes) {
+    // Note: kind of weird we don't check that classname = Object but it's been
+    // that way forever. Just means foo.finalize(), e.g., will be marked uninstrumented.
     for (MethodDef md : obj_methods) {
       if (md.equals(methodName, paramTypes)) {
         return true;
@@ -5047,8 +5060,12 @@ public class DCInstrument extends InstructionListUtils {
   static void save_static_field_id(File file) throws IOException {
 
     PrintStream ps = new PrintStream(file, "UTF-8"); // in Java 10+, use: StandardCharsets.UTF_8
-    for (Map.Entry<@KeyFor("static_field_id") String, Integer> entry : static_field_id.entrySet()) {
-      ps.printf("%s  %d%n", entry.getKey(), entry.getValue());
+    // Iterating over a synchronized map requires holding its lock.
+    synchronized (static_field_id) {
+      for (Map.Entry<@KeyFor("static_field_id") String, Integer> entry :
+          static_field_id.entrySet()) {
+        ps.printf("%s  %d%n", entry.getKey(), entry.getValue());
+      }
     }
     ps.close();
   }

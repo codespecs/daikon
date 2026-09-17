@@ -70,7 +70,14 @@ public final class BuildJDK {
   /** Number of class files processed; used for progress display. */
   private int _numFilesProcessed = 0;
 
-  /** Name of file in output jar containing the static-fields map. */
+  /**
+   * Name of file in the output jar containing the static-fields map.
+   *
+   * <p>This is a map from field names to a unique integer id. It is created and used by {@link
+   * DCInstrument} when creating tag get and set accessor methods for each static field in a class.
+   * If we are rebuilding a instrumented JDK we need to read the map file in and then restore it
+   * after rebuilding the JDK.
+   */
   private static String static_field_id_filename = "dcomp_jdk_static_field_id";
 
   /**
@@ -124,7 +131,10 @@ public final class BuildJDK {
 
     File dest_dir = new File(cl_args[0]);
 
-    // Key is a class file name, value is a stream that opens that file name.
+    // Key is a class file name, jar entry name, or the file name within a jmod archive.  It is
+    // almost always identical to the name of the class it contains. Throughout the BuildJDK code we
+    // call this the 'classFileName'. We use this as the key to the class_stream_map and it maps to
+    // an InputStream that supplies the contents of the class file.
     //
     // <p>We want to share code to read and instrument the Java class file members of a jar file
     // (JDK 8) or a module file (JDK 9+). However, jar files and module files are located in two
@@ -323,6 +333,15 @@ public final class BuildJDK {
       }
     } else {
       String entryName = path.toString().substring(modulePrefixLength + 1);
+      // Note: java/lang/Object.class is added to class_stream_map
+      // so that it is included in the jdk_classes.txt list of pre-instrumented classes written out
+      // in main. Due to the way the JVM is loaded, we cannot instrument Object.class
+      // in instrument_classes(). However, we need it included in the
+      // pre-instrumented class list so that Instrument.transform will not
+      // attempt to instrument it live.
+      //
+      // Debugging code:
+      // System.out.printf("processing entry %s%n", entryName);
       try {
         // Get the InputStream for this file
         InputStream is = Files.newInputStream(path);
@@ -357,7 +376,8 @@ public final class BuildJDK {
         }
 
         // Handle non-.class files and Object.class.  In JDK 8, copy them unchanged.
-        // For JDK 9+ we do not copy as these items will be loaded from the original module file.
+        // For JDK 9+ we do not copy them as these items will be loaded from the original module
+        // file. See {@link gather_runtime_from_modules_directory} for more details.
         if (!classFileName.endsWith(".class") || classFileName.equals("java/lang/Object.class")) {
           if (Runtime.isJava9orLater()) {
             if (verbose) {
@@ -474,7 +494,7 @@ public final class BuildJDK {
    *
    * @param jc JavaClass to be instrumented
    * @param outputDir output directory for instrumented class
-   * @param classFileName name of class to be instrumented (in internal form)
+   * @param classFileName class-file path or archive/module entry name to be instrumented
    * @param classTotal total number of classes to be processed; used for progress display
    * @throws IOException if unable to write out instrumented class
    */

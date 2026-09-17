@@ -511,6 +511,8 @@ public class DCInstrument24 {
   /** Type array with no parameters. */
   protected static final ClassDesc[] noArgsSig = new ClassDesc[0];
 
+  // Signature descriptors
+
   // One parameter
 
   /** Type array with an int. */
@@ -583,9 +585,6 @@ public class DCInstrument24 {
    */
   private Set<String> oversizedMethodsRequiringStub = new HashSet<>();
 
-  /** If we're using an instrumented JDK, then "java.lang"; otherwise, "daikon.dcomp". */
-  protected @DotSeparatedIdentifiers String dcompMarkerPrefix;
-
   /**
    * If we're using an instrumented JDK and the JDK version is 9 or higher, then "java.lang";
    * otherwise, "daikon.dcomp".
@@ -624,6 +623,10 @@ public class DCInstrument24 {
    * <p>Because a multithreaded target program instruments classes concurrently, one DCInstrument24
    * per thread, this map is synchronized. Allocating an id is a compound operation, so it is
    * additionally performed while holding this map's lock, as is any iteration over the map.
+   *
+   * <p>That lock covers this map only. Allocating an id also grows {@link DCRuntime#static_tags},
+   * which is a plain list that instrumented code reads and writes without holding any lock, so that
+   * growth is not made safe by this lock.
    */
   static final Map<String, Integer> static_field_id =
       Collections.synchronizedMap(new LinkedHashMap<>());
@@ -757,12 +760,11 @@ public class DCInstrument24 {
     this.in_jdk = in_jdk;
     constructor_is_initialized = false;
     if (Premain.jdk_instrumented) {
-      dcompMarkerPrefix = "java.lang";
+      dcompRuntimePrefix = "java.lang";
     } else {
-      dcompMarkerPrefix = "daikon.dcomp";
+      dcompRuntimePrefix = "daikon.dcomp";
     }
-    dcomp_marker = ClassDesc.of(Signatures.addPackage(dcompMarkerPrefix, "DCompMarker"));
-    dcompRuntimePrefix = dcompMarkerPrefix;
+    dcomp_marker = ClassDesc.of(Signatures.addPackage(dcompRuntimePrefix, "DCompMarker"));
     if (BcelUtil.javaVersion == 8) {
       dcompRuntimePrefix = "daikon.dcomp";
     }
@@ -2672,7 +2674,7 @@ public class DCInstrument24 {
 
           // Replace the object comparison instructions with a call to
           // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
-          // return a boolean which is used in a ifeq/ifne instruction.
+          // Return a boolean which is used in an ifeq/ifne instruction.
           case IF_ACMPEQ:
             return object_comparison((BranchInstruction) inst, "object_eq", IFNE);
           case IF_ACMPNE:
@@ -3193,6 +3195,7 @@ public class DCInstrument24 {
       if (cm == null) {
         throw new DynCompError(String.format("Unable to find class: %s", interfaceName));
       }
+      // True if a sub-interface overrides a `default` method as `abstract` with no implementation.
       boolean reabstracted = false;
       for (MethodModel jm : cm.methods()) {
         String jmName = jm.methodName().stringValue();
@@ -3201,7 +3204,7 @@ public class DCInstrument24 {
           System.out.println("  " + jmName + Arrays.toString(mtd.parameterArray()));
         }
         if (jmName.equals(methodName) && Arrays.equals(mtd.parameterArray(), paramTypes)) {
-          // We have a match.  Neither a static nor a private interface method is ever the
+          // We have a match. Neither a static nor a private interface method is ever the
           // target of an INVOKEVIRTUAL: a private one is not even inherited.
           AccessFlags jmFlags = jm.flags();
           if (jmFlags.has(AccessFlag.STATIC) || jmFlags.has(AccessFlag.PRIVATE)) {
@@ -3576,10 +3579,11 @@ public class DCInstrument24 {
           // The target class and its superclasses, in that order, as far as the loop below got.
           List<ClassModel> chain = new ArrayList<>();
           // Search this class for the target method. If not found, set targetClassname to
-          // its superclass and try again.  Interfaces are not consulted here: JVMS 5.4.3.3
-          // resolves a method against the class's own declaration, then the superclass chain,
-          // and only then the superinterfaces of the class and of all its superclasses.  So the
-          // whole chain is searched first, and the interfaces of every class in it afterwards.
+          // its superclass and try again. Interfaces are not consulted in the loop below:
+          // JVMS 5.4.3.3 resolves a method against the class's own declaration, then the
+          // superclass chain, and only then the superinterfaces of the class and of all
+          // its superclasses. So the whole chain is searched first, and the interfaces of
+          // every class in the chain afterwards.
           mainloop:
           while (true) {
             // Check that the class exists
@@ -4181,7 +4185,7 @@ public class DCInstrument24 {
 
     // Duplicate the array ref and index and pass them to DCRuntime
     // which will make the index comparable with the array.  In the case
-    // of primtives it will also get the tag for the primitive and push
+    // of primitives it will also get the tag for the primitive and push
     // it on the tag stack.
     il.add(StackInstruction.of(DUP2));
     String method = "primitive_array_load";
@@ -4309,6 +4313,7 @@ public class DCInstrument24 {
       @BinaryName String className, @Identifier String methodName, String pptName) {
 
     debugInstrument.log("Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
+    debug_transform.log("Consider collecting data for ppt: %s%n", pptName);
 
     // Don't track any JDK classes
     if (BcelUtil.inJdk(className)) {
@@ -5401,7 +5406,7 @@ public class DCInstrument24 {
   @Pure
   boolean is_object_method(@Identifier String methodName, ClassDesc[] paramTypes) {
     // Note: kind of weird we don't check that classname = Object but it's been
-    // that way forever. Just means foo.finialize(), e.g., will be marked uninstrumented.
+    // that way forever. Just means foo.finalize(), e.g., will be marked uninstrumented.
     for (MethodDef md : obj_methods) {
       if (md.equals(methodName, paramTypes)) {
         return true;
