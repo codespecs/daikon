@@ -456,8 +456,8 @@ public final class DCInstrumentTest24 {
           classname + " must not already be public for this test to be meaningful",
           originalModel.flags().has(AccessFlag.PUBLIC));
 
-      byte[] instrumented = instrument(original, classname);
-      assert instrumented != null : "@AssumeAssertion(nullness)";
+      byte @Nullable [] instrumented = instrument(original, classname);
+      assert instrumented != null : "@AssumeAssertion(nullness): cannot instrument " + classname;
 
       ClassModel instrumentedModel = ClassFile.of().parse(instrumented);
       assertTrue(
