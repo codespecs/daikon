@@ -28,5 +28,6 @@ jobs:
           # povray is third-party code that is not maintained here.
           # checkbashisms cannot check zsh scripts.
           sh_checker_exclude: >-
+            gradlew
             tests/kvasir-tests/povray/
             scripts/eps2png-mono-alpha[.]zsh
