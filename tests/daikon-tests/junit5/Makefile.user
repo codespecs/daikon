@@ -13,5 +13,6 @@ endif
 endif
 
 # need junit.jar on classpath to compile all junit references
-JUNIT_CLASSPATH := ${DAIKONDIR}/java/lib/*
+# explicit order is necessary to get versions built with JDK 8 not 5
+JUNIT_CLASSPATH := ${DAIKONDIR}/java/lib/junit-4.13.2-Daikon.jar:${DAIKONDIR}/java/lib/hamcrest-core-1.3-Daikon.jar:${DAIKONDIR}/java/lib/*
 JAVAC := $(JAVA_HOME)/bin/javac -cp .:$(JUNIT_CLASSPATH)
