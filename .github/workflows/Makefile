@@ -6,10 +6,8 @@ all: ci.yml
 test: all
 
 %: %.m4 ../../.azure/defs-common.m4 defs.m4 ../../.azure/jobs.m4 ${PLUME_SCRIPTS}
-	@chmod -f +w $@ || true
 	m4 $< > $@
 	${PLUME_SCRIPTS}/squeeze-blank-lines $@
-	@chmod -w $@
 
 ${PLUME_SCRIPTS}:
 	mkdir -p $$(dirname $@)

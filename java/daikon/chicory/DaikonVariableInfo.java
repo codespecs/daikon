@@ -872,7 +872,7 @@ public abstract class DaikonVariableInfo
    * classes).
    */
   public static @BinaryName String stdClassName(Class<?> type) {
-    return Runtime.classGetNameToBinaryName(type.getName());
+    return Signatures.classGetNameToBinaryName(type.getName());
   }
 
   /**

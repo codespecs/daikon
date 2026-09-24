@@ -1,5 +1,4 @@
 {
-  "$comment": "This file is shared across multiple repositories.  Not all settings are necessarily relevant to the repository where you are reading this comment.",
   "permissions": {
     "allow": [
       "Agent(*)",
@@ -35,7 +34,6 @@
       "Bash(git remote get-url:*)",
       "Bash(git rev-parse:*)",
       "Bash(git show:*)",
-      "Bash(git stash list)",
       "Bash(git stash list:*)",
       "Bash(git stash:*)",
       "Bash(git status:*)",
@@ -81,7 +79,7 @@
       "Skill(*)",
       "TaskCreate(*)",
       "TaskUpdate(*)",
-      "WebFetch(*)",
+      "WebFetch(domain:*)",
       "WebSearch(*)",
       "Write(*)"
     ],
@@ -112,10 +110,10 @@
     "mode": "replace",
     "verbs": ["Thinking", "Processing", "Working"]
   },
-  "theme": "auto",
   "voice": {
     "enabled": true,
     "mode": "hold"
   },
+  "theme": "auto",
   "voiceEnabled": true
 }

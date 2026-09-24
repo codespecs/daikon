@@ -110,7 +110,7 @@ public final class StackMapUtils24 {
    *   <li>the tag frame array - added as a local
    * </ol>
    *
-   * <p>Must call {@link MethodGen24#fixLocals} before calling this routine.
+   * <p>Must call {@link MethodGen24#addMissingParameterLocals} before calling this routine.
    *
    * @param mgen MethodGen to be modified
    * @param minfo for the given method's code
@@ -142,7 +142,14 @@ public final class StackMapUtils24 {
     if (paramTypes.length > 0) {
       LocalVariable lastArg;
       newIndex = newIndex + paramTypes.length;
-      // `newIndex` is now strictly positive, because `paramTypes.length` is.
+      // The localsTable must hold an entry for `this` (if any) and for every parameter.
+      // A table shorter than that means the localsTable disagrees with the method's descriptor.
+      // `newIndex - 1` should be the index to the last parameter.
+      if (mgen.localsTable.size() < newIndex) {
+        throw new DynCompError(
+            String.format(
+                "Incorrect number of locals in %s.%s.%n", mgen.getClassName(), mgen.getName()));
+      }
       lastArg = mgen.localsTable.get(newIndex - 1);
       newOffset = lastArg.slot() + TypeKind.from(lastArg.typeSymbol()).slotSize();
     }

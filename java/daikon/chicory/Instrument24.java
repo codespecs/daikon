@@ -282,7 +282,7 @@ public class Instrument24 implements ClassFileTransformer {
   @Override
   public byte @Nullable [] transform(
       @Nullable ClassLoader loader,
-      @InternalForm String className,
+      @InternalForm @Nullable String className,
       @Nullable Class<?> classBeingRedefined,
       ProtectionDomain protectionDomain,
       byte[] classfileBuffer)
@@ -651,6 +651,9 @@ public class Instrument24 implements ClassFileTransformer {
     } catch (Exception e) {
       System.err.printf("Unexpected exception encountered: %s", e);
       e.printStackTrace();
+      // Every method not yet written is missing from the class being built, so don't emit it.
+      // `transform` catches this exception and returns null, which leaves the class unchanged.
+      throw new RuntimeException("Failed to instrument " + classInfo.class_name, e);
     }
 
     classInfo.shouldInclude = shouldInclude;
@@ -761,6 +764,9 @@ public class Instrument24 implements ClassFileTransformer {
       MethodGen24 mgen,
       MethodInfo curMethodInfo,
       int method_info_index) {
+
+    // This handler modifies mgen, and may be run more than once.
+    mgen.resetForCodeBuilder();
 
     MethodGen24.MInfo24 minfo =
         new MethodGen24.MInfo24(method_info_index, mgen.getMaxLocals(), codeBuilder);
@@ -907,6 +913,7 @@ public class Instrument24 implements ClassFileTransformer {
     } catch (Exception e) {
       System.err.printf("Exception encountered: %s", e);
       e.printStackTrace();
+      throw new RuntimeException("Failed to insert method entry instrumentation for " + mgen, e);
     }
   }
 
@@ -1565,7 +1572,7 @@ public class Instrument24 implements ClassFileTransformer {
    * with wildcard bounds.
    *
    * <p>The output format is an extension of binary name format that includes primitives and arrays.
-   * It is the same as a fully qualified name, but using “$” instead of “.” to separate nested
+   * It is the same as a fully qualified name, but using "$" instead of "." to separate nested
    * classes from their enclosing classes.
    *
    * @param descriptor the descriptor to format

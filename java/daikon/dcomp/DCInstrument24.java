@@ -325,7 +325,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.KeyFor;
@@ -467,6 +466,19 @@ public class DCInstrument24 {
   protected boolean constructor_is_initialized;
 
   /**
+   * The MethodInfo that {@link #instrumentCode} registered for the method it is emitting, or null
+   * if it has not registered one. Read only by a rerun of {@code instrumentCode} for that same
+   * method; see {@link MethodGen24#resetForCodeBuilder}.
+   */
+  private @MonotonicNonNull MethodInfo currentMethodInfo;
+
+  /**
+   * The index of {@link #currentMethodInfo} in {@code DCRuntime.methods}. Not used if {@code
+   * currentMethodInfo} is null.
+   */
+  private int currentMethodInfoIndex;
+
+  /**
    * Record used to describe a new LocalVariable. When instrumentation wants to create a new method,
    * it creates a list containing one of these records for each local variable of the method. This
    * list is passed to {@link #copyCode} and {@link #instrumentCode} where the new variables are
@@ -498,6 +510,8 @@ public class DCInstrument24 {
 
   /** Type array with no parameters. */
   protected static final ClassDesc[] noArgsSig = new ClassDesc[0];
+
+  // Signature descriptors
 
   // One parameter
 
@@ -539,8 +553,8 @@ public class DCInstrument24 {
   /** If true, enable JUnit analysis debugging. */
   protected static final boolean debugJunitAnalysis = false;
 
-  /** If true, enable {@link #getDefiningInterface} debugging. */
-  protected static final boolean debugGetDefiningInterface = false;
+  /** If true, enable {@link #getDeclaringInterface} debugging. */
+  protected static final boolean debugGetDeclaringInterface = false;
 
   /** If true, enable {@link #handleInvoke} debugging. */
   protected static final boolean debugHandleInvoke = false;
@@ -563,8 +577,13 @@ public class DCInstrument24 {
    */
   private Set<String> oversizedMethods = new HashSet<>();
 
-  /** If we're using an instrumented JDK, then "java.lang"; otherwise, "daikon.dcomp". */
-  protected @DotSeparatedIdentifiers String dcompMarkerPrefix;
+  /**
+   * The subset of {@link #oversizedMethods} that exceeds the JVM's 64K code-size limit even with
+   * the minimal tag-stack bookkeeping that {@link #copyMethodWithMinimalInstrumentation} adds. Such
+   * a method is emitted as a small forwarding stub that performs the bookkeeping and calls the
+   * unchanged original method. Uses the same keys as {@link #oversizedMethods}.
+   */
+  private Set<String> oversizedMethodsRequiringStub = new HashSet<>();
 
   /**
    * If we're using an instrumented JDK and the JDK version is 9 or higher, then "java.lang";
@@ -574,12 +593,6 @@ public class DCInstrument24 {
 
   /** The ClassDesc for the DynComp runtime support class. */
   private ClassDesc runtimeCD;
-
-  /**
-   * Set of JUnit test classes. This is thread-safe because a multithreaded target program
-   * instruments classes concurrently, one DCInstrument24 per thread.
-   */
-  protected static Set<String> junitTestClasses = ConcurrentHashMap.newKeySet();
 
   /** Possible states of JUnit test discovery. */
   protected enum JunitState {
@@ -610,6 +623,10 @@ public class DCInstrument24 {
    * <p>Because a multithreaded target program instruments classes concurrently, one DCInstrument24
    * per thread, this map is synchronized. Allocating an id is a compound operation, so it is
    * additionally performed while holding this map's lock, as is any iteration over the map.
+   *
+   * <p>That lock covers this map only. Allocating an id also grows {@link DCRuntime#static_tags},
+   * which is a plain list that instrumented code reads and writes without holding any lock, so that
+   * growth is not made safe by this lock.
    */
   static final Map<String, Integer> static_field_id =
       Collections.synchronizedMap(new LinkedHashMap<>());
@@ -743,12 +760,11 @@ public class DCInstrument24 {
     this.in_jdk = in_jdk;
     constructor_is_initialized = false;
     if (Premain.jdk_instrumented) {
-      dcompMarkerPrefix = "java.lang";
+      dcompRuntimePrefix = "java.lang";
     } else {
-      dcompMarkerPrefix = "daikon.dcomp";
+      dcompRuntimePrefix = "daikon.dcomp";
     }
-    dcomp_marker = ClassDesc.of(Signatures.addPackage(dcompMarkerPrefix, "DCompMarker"));
-    dcompRuntimePrefix = dcompMarkerPrefix;
+    dcomp_marker = ClassDesc.of(Signatures.addPackage(dcompRuntimePrefix, "DCompMarker"));
     if (BcelUtil.javaVersion == 8) {
       dcompRuntimePrefix = "daikon.dcomp";
     }
@@ -852,19 +868,100 @@ public class DCInstrument24 {
     // If so, add the {@code DCompClone} and/or the {@code DCompToString} interface.
     add_clone_and_tostring_interfaces(classGen);
 
+    classInfo.isJunitTestClass = checkForJunitTestClass(classname);
+
+    if (classModel.majorVersion() < ClassFile.JAVA_6_VERSION) {
+      System.out.printf(
+          "DynComp warning: ClassFile: %s - class file version (%d) is out of date and may not be"
+              + " processed correctly.%n",
+          classname, classModel.majorVersion());
+      // throw new DynCompError("Classfile out of date");
+    }
+
+    processAllMethods(classModel, classBuilder, classInfo);
+
+    // Have all top-level classes implement the DCompInstrumented interface.
+    if (classGen.getSuperclassName().equals("java.lang.Object")) {
+      @SuppressWarnings("signature:assignment") // CF needs regex for @MethodDescriptor
+      @MethodDescriptor String objectToBoolean = "(Ljava/lang/Object;)Z";
+      // Add equals method if it doesn't already exist. This ensures
+      // that an instrumented version, equals(Object, DCompMarker),
+      // will be created in this class.
+      MethodModel eq = classGen.containsMethod("equals", objectToBoolean);
+      if (eq == null) {
+        debugInstrument.log("Adding equals method%n");
+        add_equals_method(classBuilder, classGen, classInfo);
+      }
+
+      // Add DCompInstrumented interface and the required
+      // equals_dcomp_instrumented method.
+      add_dcomp_interface(classBuilder, classGen, classInfo);
+    }
+
+    // Add interfaces to the class being built.
+    classBuilder.withInterfaces(classGen.getInterfaceList());
+
+    // Copy all other ClassElements to output class unchanged.
+    for (ClassElement ce : classModel) {
+      debugInstrument.log("ClassElement: %s%n", ce);
+      switch (ce) {
+        case MethodModel mm -> {}
+        case Interfaces i -> {}
+        // Skip the original AccessFlags; processMethod (via processAllMethods, above) has
+        // already set the class's flags, promoting the class to public if needed.
+        case AccessFlags af -> {}
+        // Copy all other ClassElements to output class unchanged.
+        default -> classBuilder.with(ce);
+      }
+    }
+
+    // Add tag accessor methods for each primitive in the class.
+    create_tag_accessors(classGen);
+
+    // We don't need to track class initialization in the JDK because
+    // that is only used when printing comparability which is only done
+    // for client classes.
+    if (!in_jdk) {
+      // If no clinit method, we need to add our own.
+      if (!classInfo.hasClinit) {
+        createClinit(classBuilder, classInfo);
+      }
+
+      // The code that builds the list of daikon variables for each ppt
+      // needs to know what classes are instrumented.  Its looks in the
+      // Chicory runtime for this information.
+      if (trackClass) {
+        debug_transform.log("DCInstrument adding %s to all class list%n", classInfo.class_name);
+        synchronized (daikon.chicory.SharedData.all_classes) {
+          daikon.chicory.SharedData.all_classes.add(classInfo);
+        }
+      }
+    }
+
+    debug_transform.exdent();
+    debug_transform.log("Instrumentation complete: %s%n", classInfo.class_name);
+  }
+
+  /**
+   * Check for a tricky special case: If JUnit is running and the current class has been passed to
+   * JUnit on the command line, then this is a JUnit test class and our normal instrumentation will
+   * cause JUnit to complain about multiple constructors and methods that should have no arguments.
+   * To work around these restrictions, we replace rather than duplicate each method we instrument
+   * and we do not add the dcomp marker parameter. We must also remember the class name so if we see
+   * a subsequent call to one of its methods we do not add the dcomp argument.
+   *
+   * <p>Note that the process of detecting a JUnit test class may be spread across multiple
+   * invocations of DCInstrument24. Hence, junit_state and junit_parse_seen are declared static.
+   *
+   * @param classname name of the class
+   * @return true if the class is a JUnit test class
+   */
+  private boolean checkForJunitTestClass(@BinaryName String classname) {
     boolean junit_test_class = false;
 
-    if (!in_jdk) {
-      // A very tricky special case: If JUnit is running and the current
-      // class has been passed to JUnit on the command line, then this
-      // is a JUnit test class and our normal instrumentation will
-      // cause JUnit to complain about multiple constructors and
-      // methods that should have no arguments. To work around these
-      // restrictions, we replace rather than duplicate each method
-      // we instrument and we do not add the dcomp marker parameter.
-      // We must also remember the class name so if we see a subsequent
-      // call to one of its methods we do not add the dcomp argument.
-
+    if (in_jdk) {
+      // Skipped for JDK classes.  A JDK class is never a JUnit test class.
+    } else {
       debugInstrument.log("junit_state: %s%n", junit_state);
 
       StackTraceElement[] stack_trace;
@@ -959,9 +1056,9 @@ public class DCInstrument24 {
             // This is a JUnit test class and so are the
             // elements of classnameStack.
             junit_test_class = true;
-            junitTestClasses.add(this_class);
+            Premain.junitTestClasses.add(this_class);
             while (!classnameStack.isEmpty()) {
-              junitTestClasses.add(classnameStack.pop());
+              Premain.junitTestClasses.add(classnameStack.pop());
             }
             break;
           } else if (super_class.equals("java.lang.Object")) {
@@ -997,7 +1094,7 @@ public class DCInstrument24 {
                     || description.endsWith("org/junit/jupiter/api/Test;") // JUnit 5
                 ) {
                   junit_test_class = true;
-                  junitTestClasses.add(classname);
+                  Premain.junitTestClasses.add(classname);
                   break searchloop;
                 }
               }
@@ -1005,86 +1102,15 @@ public class DCInstrument24 {
           }
         }
       }
-
-      if (junit_test_class) {
-        debugInstrument.log("JUnit test class: %s%n", classname);
-      } else {
-        debugInstrument.log("Not a JUnit test class: %s%n", classname);
-      }
     }
 
-    classInfo.isJunitTestClass = junit_test_class;
-
-    if (classModel.majorVersion() < ClassFile.JAVA_6_VERSION) {
-      System.out.printf(
-          "DynComp warning: ClassFile: %s - class file version (%d) is out of date and may not be"
-              + " processed correctly.%n",
-          classname, classModel.majorVersion());
-      // throw new DynCompError("Classfile out of date");
+    if (junit_test_class) {
+      debugInstrument.log("JUnit test class: %s%n", classname);
+      return true;
+    } else {
+      debugInstrument.log("Not a JUnit test class: %s%n", classname);
+      return false;
     }
-
-    processAllMethods(classModel, classBuilder, classInfo);
-
-    // Have all top-level classes implement the DCompInstrumented interface.
-    if (classGen.getSuperclassName().equals("java.lang.Object")) {
-      @SuppressWarnings("signature:assignment") // CF needs regex for @MethodDescriptor
-      @MethodDescriptor String objectToBoolean = "(Ljava/lang/Object;)Z";
-      // Add equals method if it doesn't already exist. This ensures
-      // that an instrumented version, equals(Object, DCompMarker),
-      // will be created in this class.
-      MethodModel eq = classGen.containsMethod("equals", objectToBoolean);
-      if (eq == null) {
-        debugInstrument.log("Adding equals method%n");
-        add_equals_method(classBuilder, classGen, classInfo);
-      }
-
-      // Add DCompInstrumented interface and the required
-      // equals_dcomp_instrumented method.
-      add_dcomp_interface(classBuilder, classGen, classInfo);
-    }
-
-    // Add interfaces to the class being built.
-    classBuilder.withInterfaces(classGen.getInterfaceList());
-
-    // Copy all other ClassElements to output class unchanged.
-    for (ClassElement ce : classModel) {
-      debugInstrument.log("ClassElement: %s%n", ce);
-      switch (ce) {
-        case MethodModel mm -> {}
-        case Interfaces i -> {}
-        // Skip the original AccessFlags; processMethod (via processAllMethods, above) has
-        // already set the class's flags, promoting the class to public if needed.
-        case AccessFlags af -> {}
-        // Copy all other ClassElements to output class unchanged.
-        default -> classBuilder.with(ce);
-      }
-    }
-
-    // Add tag accessor methods for each primitive in the class.
-    create_tag_accessors(classGen);
-
-    // We don't need to track class initialization in the JDK because
-    // that is only used when printing comparability which is only done
-    // for client classes.
-    if (!in_jdk) {
-      // If no clinit method, we need to add our own.
-      if (!classInfo.hasClinit) {
-        createClinit(classBuilder, classInfo);
-      }
-
-      // The code that builds the list of daikon variables for each ppt
-      // needs to know what classes are instrumented.  Its looks in the
-      // Chicory runtime for this information.
-      if (trackClass) {
-        debug_transform.log("DCInstrument adding %s to all class list%n", classInfo.class_name);
-        synchronized (daikon.chicory.SharedData.all_classes) {
-          daikon.chicory.SharedData.all_classes.add(classInfo);
-        }
-      }
-    }
-
-    debug_transform.exdent();
-    debug_transform.log("Instrumentation complete: %s%n", classInfo.class_name);
   }
 
   /**
@@ -1335,19 +1361,51 @@ public class DCInstrument24 {
       }
 
       // If an earlier build attempt found that this method's instrumented form exceeds the JVM's
-      // 64K code-size limit, emit it with the original (uninstrumented) body. The method must
-      // still be emitted with the DCompMarker parameter, because callers of the instrumented
-      // version look it up by that signature; it simply does no comparability tracking.
-      // See instrument_jdk_class for how this set is populated.
-      if (oversizedMethods.contains(
-          oversizedMethodKey(methodModel.methodName().stringValue(), mtd))) {
-        debugInstrument.log("Copying oversized method: %s%n", mgen.getName());
+      // 64K code-size limit, emit its original body with only the tag-stack bookkeeping required
+      // by its callers. The method must still have the DCompMarker parameter when addingDcompArg is
+      // true, because callers of the instrumented version look it up by that signature. See
+      // instrument_jdk_class for how this set is populated.
+      String oversizedKey = oversizedMethodKey(methodModel.methodName().stringValue(), mtd);
+      if (oversizedMethods.contains(oversizedKey)) {
+        // The bookkeeping adds only a few bytes to the original body, but that body is already
+        // near the 64K limit, so even those few bytes can push it over.  A method that overflowed
+        // that way on an earlier build attempt is in oversizedMethodsRequiringStub; rather than
+        // copying its body, emit a small forwarding stub that does the bookkeeping and calls the
+        // unchanged original.
+        //
+        // The stub forwards to the unchanged original, which is emitted under its own descriptor
+        // only when a DCompMarker parameter is added.  Only instrument_jdk_class
+        // populates oversizedMethods, so the only method that gets here without the marker is
+        // main, whose copy adds no bookkeeping at all and therefore cannot overflow.
+        boolean copyOriginalBody =
+            !addingDcompArg || !oversizedMethodsRequiringStub.contains(oversizedKey);
+        debugInstrument.log(
+            "Oversized method, creating %s: %s%n",
+            copyOriginalBody ? "minimally instrumented copy" : "forwarding stub", mgen.getName());
         debugInstrument.indent();
+        final boolean addMarker = addingDcompArg;
+        // A JUnit test class would also leave argument tags for the callee to discard, but as
+        // noted above only instrument_jdk_class populates oversizedMethods, and a JDK class is
+        // never a JUnit test class.  So the marker is the only thing to test here.
+        final boolean discardArgumentTags = copyOriginalBody && addingDcompArg;
+        final boolean pushResultTag = copyOriginalBody && addingDcompArg;
         classBuilder.withMethod(
             methodModel.methodName().stringValue(),
             mtd,
             methodModel.flags().flagsMask(),
-            methodBuilder -> copyMethod(methodBuilder, methodModel, mgen));
+            methodBuilder -> {
+              if (copyOriginalBody) {
+                copyMethodWithMinimalInstrumentation(
+                    methodBuilder,
+                    methodModel,
+                    mgen,
+                    addMarker,
+                    discardArgumentTags,
+                    pushResultTag);
+              } else {
+                createForwardingStub(methodBuilder, methodModel, mgen);
+              }
+            });
         debugInstrument.exdent();
         debugInstrument.log("End of copy%n");
         debug_transform.exdent();
@@ -1394,6 +1452,182 @@ public class DCInstrument24 {
         mm.methodTypeSymbol(),
         mm.flags().flagsMask(),
         methodBuilder -> copyMethod(methodBuilder, mm, mgen));
+  }
+
+  /**
+   * Copies a method whose fully instrumented form would exceed the JVM's 64K code-size limit,
+   * adding only the bookkeeping required by its callers, according to the three boolean parameters.
+   * Retaining the original body rather than forwarding to another method preserves caller-sensitive
+   * and exception-stack semantics.
+   *
+   * @param methodBuilder for the output method
+   * @param methodModel describes the input method
+   * @param mgen describes the output method
+   * @param addDcompMarker whether to append the DCompMarker parameter and shift existing locals
+   * @param discardArgumentTags whether to discard primitive argument tags on entry
+   * @param pushResultTag whether to push a tag before each primitive return
+   */
+  private void copyMethodWithMinimalInstrumentation(
+      MethodBuilder methodBuilder,
+      MethodModel methodModel,
+      MethodGen24 mgen,
+      boolean addDcompMarker,
+      boolean discardArgumentTags,
+      boolean pushResultTag) {
+
+    for (MethodElement me : methodModel) {
+      debugInstrument.log("MethodElement: %s%n", me);
+      switch (me) {
+        case CodeModel codeModel ->
+            methodBuilder.withCode(
+                codeBuilder -> {
+                  // This handler modifies mgen, and may be run more than once.
+                  mgen.resetForCodeBuilder();
+                  MethodGen24.MInfo24 minfo =
+                      new MethodGen24.MInfo24(0, mgen.getMaxLocals(), codeBuilder);
+                  mgen.addMissingParameterLocals(minfo);
+                  if (addDcompMarker) {
+                    add_dcomp_param(mgen, minfo);
+                  }
+
+                  for (LocalVariable lv : mgen.localsTable) {
+                    codeBuilder.localVariable(
+                        lv.slot(),
+                        lv.name().stringValue(),
+                        lv.typeSymbol(),
+                        lv.startScope(),
+                        lv.endScope());
+                  }
+
+                  if (discardArgumentTags) {
+                    int primitiveCount = 0;
+                    for (ClassDesc paramType : mgen.getParameterTypes()) {
+                      if (is_primitive(paramType)) {
+                        primitiveCount++;
+                      }
+                    }
+                    if (primitiveCount > 0) {
+                      boolean replaceCallerResultTag =
+                          !pushResultTag && is_primitive(mgen.getReturnType());
+                      int discardCount = primitiveCount + (replaceCallerResultTag ? 1 : 0);
+                      for (CodeElement ce : discard_tag_code(null, discardCount)) {
+                        codeBuilder.with(ce);
+                      }
+                      if (replaceCallerResultTag) {
+                        codeBuilder.with(dcr_call("push_const", CD_void, noArgsSig));
+                      }
+                    }
+                  }
+
+                  boolean pushPrimitiveResultTag =
+                      pushResultTag && is_primitive(mgen.getReturnType());
+                  for (CodeElement ce : mgen.getInstructionList()) {
+                    if (ce instanceof LocalVariable || ce instanceof LocalVariableType) {
+                      continue;
+                    }
+                    if (pushPrimitiveResultTag && ce instanceof ReturnInstruction) {
+                      codeBuilder.with(dcr_call("push_const", CD_void, noArgsSig));
+                    }
+                    codeBuilder.with(ce);
+                  }
+                });
+
+        case RuntimeVisibleAnnotationsAttribute rvaa -> copyAnnotations(methodBuilder, rvaa);
+
+        default -> methodBuilder.with(me);
+      }
+    }
+  }
+
+  /**
+   * Builds a DCompMarker overload that maintains the tag-stack calling convention and forwards to
+   * the unchanged original method. This is the final fallback when adding bookkeeping directly to
+   * an oversized method would itself exceed the JVM's code-size limit.
+   *
+   * <p>The caller must be emitting the method with an added DCompMarker parameter; the stub calls
+   * the original descriptor, which is the unchanged original method only in that case. See {@code
+   * processMethod}, which uses {@link #copyMethodWithMinimalInstrumentation} instead when no marker
+   * is added.
+   *
+   * @param methodBuilder for the output method
+   * @param methodModel describes the input method
+   * @param mgen describes the output method
+   */
+  private void createForwardingStub(
+      MethodBuilder methodBuilder, MethodModel methodModel, MethodGen24 mgen) {
+    for (MethodElement me : methodModel) {
+      switch (me) {
+        case CodeModel codeModel ->
+            methodBuilder.withCode(
+                codeBuilder -> {
+                  for (CodeElement ce : discard_primitive_tags(mgen.getParameterTypes())) {
+                    codeBuilder.with(ce);
+                  }
+
+                  int localIndex = 0;
+                  if (!mgen.isStatic()) {
+                    codeBuilder.with(LoadInstruction.of(TypeKind.REFERENCE, localIndex++));
+                  }
+                  for (ClassDesc paramType : mgen.getParameterTypes()) {
+                    TypeKind typeKind = TypeKind.from(paramType);
+                    codeBuilder.with(LoadInstruction.of(typeKind, localIndex));
+                    localIndex += typeKind.slotSize();
+                  }
+
+                  Opcode opcode;
+                  if (mgen.isStatic()) {
+                    opcode = INVOKESTATIC;
+                  } else if (mgen.isConstructor()
+                      || (mgen.getAccessFlagsMask() & ACC_PRIVATE) != 0) {
+                    opcode = INVOKESPECIAL;
+                  } else if (classGen.isInterface()) {
+                    opcode = INVOKEINTERFACE;
+                  } else {
+                    opcode = INVOKEVIRTUAL;
+                  }
+                  ClassEntry owner = poolBuilder.classEntry(ClassDesc.of(mgen.getClassName()));
+                  NameAndTypeEntry nameAndType =
+                      poolBuilder.nameAndTypeEntry(
+                          mgen.getName(),
+                          MethodTypeDesc.of(mgen.getReturnType(), mgen.getParameterTypes()));
+                  codeBuilder.with(
+                      InvokeInstruction.of(opcode, owner, nameAndType, classGen.isInterface()));
+
+                  if (is_primitive(mgen.getReturnType())) {
+                    codeBuilder.with(dcr_call("push_const", CD_void, noArgsSig));
+                  }
+                  codeBuilder.with(ReturnInstruction.of(TypeKind.from(mgen.getReturnType())));
+                });
+
+        case RuntimeVisibleAnnotationsAttribute rvaa -> copyAnnotations(methodBuilder, rvaa);
+
+        default -> methodBuilder.with(me);
+      }
+    }
+  }
+
+  /**
+   * Copies the given annotations from the original method to our instrumented method, unless any of
+   * them is one that must not appear on an instrumented method; see {@link
+   * #BLACKLISTED_ANNOTATIONS}.
+   *
+   * @param methodBuilder for the output method
+   * @param rvaa the annotations of the input method
+   */
+  private void copyAnnotations(
+      MethodBuilder methodBuilder, RuntimeVisibleAnnotationsAttribute rvaa) {
+    List<Annotation> filteredAnnotations = new ArrayList<>();
+    for (final Annotation item : rvaa.annotations()) {
+      String description = item.className().stringValue();
+      if (BLACKLISTED_ANNOTATIONS.contains(description)) {
+        debugInstrument.log("Annotation not copied: %s%n", description);
+      } else {
+        filteredAnnotations.add(item);
+      }
+    }
+    if (!filteredAnnotations.isEmpty()) {
+      methodBuilder.with(RuntimeVisibleAnnotationsAttribute.of(filteredAnnotations));
+    }
   }
 
   /**
@@ -1464,14 +1698,6 @@ public class DCInstrument24 {
       ClassInfo classInfo,
       boolean trackMethod) {
 
-    // Per-method state: constructor_is_initialized records whether the super constructor call
-    // has been seen in the method now being instrumented, and must start false for every method.
-    // Without this reset it stays set once any constructor in the class reaches its super() call,
-    // so a later constructor would be treated as initialized from its first instruction; and
-    // because instrument_jdk_class may rebuild the class with this same instance, a value left
-    // over from an abandoned attempt would make the retry differ from the first attempt.
-    constructor_is_initialized = false;
-
     try {
       boolean codeModelSeen = false;
       for (MethodElement me : methodModel) {
@@ -1483,21 +1709,7 @@ public class DCInstrument24 {
                 codeBuilder ->
                     instrumentCode(codeBuilder, codeModel, null, mgen, classInfo, trackMethod));
           }
-          case RuntimeVisibleAnnotationsAttribute rvaa -> {
-            // Do not copy any problematic annotations from the original
-            // method to our instrumented method.
-            boolean output = true;
-            for (final Annotation item : rvaa.annotations()) {
-              String description = item.className().stringValue();
-              if (BLACKLISTED_ANNOTATIONS.contains(description)) {
-                output = false;
-                debugInstrument.log("Annotation not copied: %s%n", description);
-              }
-            }
-            if (output) {
-              methodBuilder.with(me);
-            }
-          }
+          case RuntimeVisibleAnnotationsAttribute rvaa -> copyAnnotations(methodBuilder, rvaa);
           // copy all other MethodElements to output class (unchanged)
           default -> methodBuilder.with(me);
         }
@@ -1547,6 +1759,15 @@ public class DCInstrument24 {
       ClassInfo classInfo,
       boolean trackMethod) {
 
+    // This handler modifies mgen, and may be run more than once.
+    boolean firstRun = mgen.resetForCodeBuilder();
+
+    // Per-method state: constructor_is_initialized records whether the super constructor call has
+    // been seen in the method now being instrumented, and must start false for every run of this
+    // handler.  It must be reset here rather than in instrumentMethod because the code builder
+    // may run this handler more than once (see resetForCodeBuilder).
+    constructor_is_initialized = false;
+
     // method_info_index is not used at this point in DCInstrument
     MethodGen24.MInfo24 minfo = new MethodGen24.MInfo24(0, mgen.getMaxLocals(), codeBuilder);
     debugInstrument.log("nextLocalIndex: %d%n", minfo.nextLocalIndex);
@@ -1567,7 +1788,7 @@ public class DCInstrument24 {
 
     // Clean up parameter names and add in any unused parameters that the Java compiler has
     // optimized out.
-    if (mgen.fixLocals(minfo)) {
+    if (mgen.addMissingParameterLocals(minfo)) {
       // localsTable was changed
       debugInstrument.log("Revised LocalVariableTable:%n");
       for (LocalVariable lv : mgen.localsTable) {
@@ -1637,11 +1858,21 @@ public class DCInstrument24 {
       // and add it to the list for this class.
       MethodInfo mi = null;
       if (trackMethod && !in_jdk) {
-        @SuppressWarnings("nullness:assignment") // the method exists
-        @NonNull MethodInfo miTmp = create_method_info_if_instrumented(classInfo, mgen);
-        mi = miTmp;
-        classInfo.method_infos.add(mi);
-        DCRuntime.methods.add(mi);
+        if (firstRun) {
+          @SuppressWarnings("nullness:assignment") // the method exists
+          @NonNull MethodInfo miTmp = create_method_info_if_instrumented(classInfo, mgen);
+          mi = miTmp;
+          classInfo.method_infos.add(mi);
+          DCRuntime.methods.add(mi);
+          currentMethodInfo = mi;
+          currentMethodInfoIndex = DCRuntime.methods.size() - 1;
+        } else {
+          // This is a rerun of the handler for the method that the previous run registered; reuse
+          // that MethodInfo rather than registering the method a second time.
+          assert currentMethodInfo != null
+              : "@AssumeAssertion(nullness): set by the first run, under the same conditions";
+          mi = currentMethodInfo;
+        }
       }
 
       @SuppressWarnings("JdkObsolete")
@@ -1694,8 +1925,8 @@ public class DCInstrument24 {
 
       if (trackMethod && !in_jdk) {
         assert mi != null : "@AssumeAssertion(nullness): mi was assigned under same conditions";
-        add_enter(mgen, minfo, codeList, DCRuntime.methods.size() - 1);
-        add_exit(mgen, mi, minfo, codeList, DCRuntime.methods.size() - 1);
+        add_enter(mgen, minfo, codeList, currentMethodInfoIndex);
+        add_exit(mgen, mi, minfo, codeList, currentMethodInfoIndex);
       }
 
       // Copy the modified local variable table to the output class.
@@ -1845,9 +2076,12 @@ public class DCInstrument24 {
     // jdk.internal.classfile.impl.DirectCodeBuilder.build): throw the whole builder away and start
     // over, this time emitting the offending method unchanged. Each attempt identifies at most one
     // oversized method, so bound the number of attempts by the number of methods in the class.
+    // A method that is still oversized with that bookkeeping is emitted as a forwarding stub, so
+    // a single method can cost two attempts.
     oversizedMethods.clear();
+    oversizedMethodsRequiringStub.clear();
     int skippedMethodsMark = skipped_methods.size();
-    int maxAttempts = classModel.methods().size() + 1;
+    int maxAttempts = 2 * classModel.methods().size() + 1;
 
     for (int attempt = 0; attempt < maxAttempts; attempt++) {
       try {
@@ -1867,15 +2101,30 @@ public class DCInstrument24 {
         // to identify this one case by matching the text of the exception's message. It returns
         // null for any message it does not recognize, which is treated as a real error below.
         String method = oversizedMethodName(e);
-        if (method == null || !oversizedMethods.add(method)) {
-          // Either this is not the oversized-method error, or we already emitted this method
-          // uninstrumented and it still does not fit. Both indicate a bug in the instrumentor.
+        if (method == null) {
           throw e;
         }
-        System.err.printf(
-            "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument and is"
-                + " being skipped.%n",
-            classname, method);
+        if (oversizedMethods.add(method)) {
+          System.err.printf(
+              "DynComp warning: ClassFile: %s - method %s has too many bytecodes to instrument and"
+                  + " is being skipped.%n",
+              classname, method);
+        } else if (oversizedMethodsRequiringStub.add(method)) {
+          System.err.printf(
+              "DynComp warning: ClassFile: %s - method %s is too large even for the minimal"
+                  + " instrumentation; a forwarding stub is being used.%n",
+              classname, method);
+        } else {
+          // Even the small forwarding stub failed the code-size check. This should be impossible
+          // unless its construction is broken.
+          throw new DynCompError(
+              "Method "
+                  + classname
+                  + "."
+                  + method
+                  + " exceeds the JVM's 64K code-size limit even without instrumentation",
+              e);
+        }
         // Discard anything the abandoned attempt recorded; the retry starts from scratch.
         skipped_methods.subList(skippedMethodsMark, skipped_methods.size()).clear();
       }
@@ -2425,7 +2674,7 @@ public class DCInstrument24 {
 
           // Replace the object comparison instructions with a call to
           // DCRuntime.object_eq or DCRuntime.object_ne.  Those methods
-          // return a boolean which is used in a ifeq/ifne instruction.
+          // Return a boolean which is used in an ifeq/ifne instruction.
           case IF_ACMPEQ:
             return object_comparison((BranchInstruction) inst, "object_eq", IFNE);
           case IF_ACMPNE:
@@ -2894,46 +3143,88 @@ public class DCInstrument24 {
   }
 
   /**
-   * Returns the interface class name containing the implementation of the given method. The
-   * interfaces of {@code startClass} are recursively searched.
+   * Returns the name of the interface that declares the given method. The interfaces of {@code
+   * startClass} are recursively searched.
+   *
+   * <p>Note that this finds a <em>declaration</em>, which is usually not an implementation: an
+   * interface method is implicitly abstract unless it is {@code default}, {@code static}, or
+   * private. Pass true for {@code implementationsOnly} to match only a {@code default} method,
+   * which is the one case where the interface really does hold the code that will run. A {@code
+   * static} or private declaration is never matched, in either mode, because neither can be the
+   * target of the call being resolved.
+   *
+   * <p>Limitation: when several interfaces match, this returns the first one reached rather than
+   * the maximally specific one that JVMS 5.4.3.3 selects. A class that implements both an interface
+   * and a subinterface that reabstracts the same method gets the first of the two in declaration
+   * order, which may be the supertype. The consequence is confined to precision, in both
+   * directions. The caller uses the answer only to decide whether the target is instrumented. A
+   * wrong "uninstrumented" answer invokes the uninstrumented overload, which always exists. A wrong
+   * "instrumented" answer invokes the {@code DCompMarker} overload, which the returned interface
+   * declares because it is instrumented, and which resolves because that interface is a
+   * superinterface of {@code startClass} and hence of the receiver. Either way, a wrong answer
+   * loses comparability through the call rather than breaking it.
    *
    * @param startClass the class whose interfaces are to be searched
    * @param methodName the target method to search for
    * @param paramTypes the target method's parameter types
-   * @return the name of the interface class containing target method, or null if not found
+   * @param implementationsOnly if true, match only a {@code default} method; if false, match any
+   *     declaration, abstract ones included. A {@code static} or private declaration is never
+   *     matched.
+   * @return the name of the interface that declares the target method, or null if not found
    */
-  private @Nullable @BinaryName String getDefiningInterface(
-      ClassModel startClass, @Identifier String methodName, ClassDesc[] paramTypes) {
+  private @Nullable @BinaryName String getDeclaringInterface(
+      ClassModel startClass,
+      @Identifier String methodName,
+      ClassDesc[] paramTypes,
+      boolean implementationsOnly) {
 
-    if (debugGetDefiningInterface) {
+    if (debugGetDeclaringInterface) {
       System.out.println("searching interfaces of: " + ClassGen24.getClassName(startClass));
     }
     for (ClassEntry classEntry : startClass.interfaces()) {
-      @BinaryName String interfaceName = Runtime.internalFormToBinaryName(classEntry.asInternalName());
-      if (debugGetDefiningInterface) {
+      @BinaryName String interfaceName = Signatures.internalFormToBinaryName(classEntry.asInternalName());
+      if (debugGetDeclaringInterface) {
         System.out.println("interface: " + interfaceName);
       }
       ClassModel cm;
       try {
-        @SuppressWarnings("nullness:assignment")
-        @NonNull ClassModel cmTmp = getClassModel(interfaceName);
-        cm = cmTmp;
+        cm = getClassModel(interfaceName);
       } catch (Throwable t) {
         throw new DynCompError(String.format("Unable to load class: %s", interfaceName), t);
       }
+      if (cm == null) {
+        throw new DynCompError(String.format("Unable to find class: %s", interfaceName));
+      }
+      // True if a sub-interface overrides a `default` method as `abstract` with no implementation.
+      boolean reabstracted = false;
       for (MethodModel jm : cm.methods()) {
         String jmName = jm.methodName().stringValue();
         MethodTypeDesc mtd = jm.methodTypeSymbol();
-        if (debugGetDefiningInterface) {
+        if (debugGetDeclaringInterface) {
           System.out.println("  " + jmName + Arrays.toString(mtd.parameterArray()));
         }
         if (jmName.equals(methodName) && Arrays.equals(mtd.parameterArray(), paramTypes)) {
-          // We have a match.
+          // We have a match. Neither a static nor a private interface method is ever the
+          // target of an INVOKEVIRTUAL: a private one is not even inherited.
+          AccessFlags jmFlags = jm.flags();
+          if (jmFlags.has(AccessFlag.STATIC) || jmFlags.has(AccessFlag.PRIVATE)) {
+            continue;
+          }
+          if (implementationsOnly && jmFlags.has(AccessFlag.ABSTRACT)) {
+            // This interface declares the method abstract.  An interface may reabstract a default
+            // it inherits, and an implementor must then define the method, so any default above
+            // this point is hidden: do not search this branch further.
+            reabstracted = true;
+            break;
+          }
           return interfaceName;
         }
       }
+      if (reabstracted) {
+        continue;
+      }
       // no match found; does this interface extend other interfaces?
-      @BinaryName String foundAbove = getDefiningInterface(cm, methodName, paramTypes);
+      @BinaryName String foundAbove = getDeclaringInterface(cm, methodName, paramTypes, implementationsOnly);
       if (foundAbove != null) {
         // We have a match.
         return foundAbove;
@@ -2941,6 +3232,57 @@ public class DCInstrument24 {
     }
     // nothing found
     return null;
+  }
+
+  /**
+   * Returns true if the given method, which no class in {@code chain} implements, is inherited from
+   * an instrumented interface. Searches the interfaces of every class in {@code chain}, and their
+   * superinterfaces. A class in the chain may declare the method abstract; such a declaration holds
+   * no code, so the interfaces are consulted in that case too.
+   *
+   * <p>Prefers a {@code default} method, which is an implementation; an abstract declaration only
+   * says where the method is declared, but that is the best available answer. Returns false if no
+   * interface declares the method, or if some interface cannot be read.
+   *
+   * @param chain a class and its superclasses, in that order
+   * @param methodName the target method to search for
+   * @param paramTypes the target method's parameter types
+   * @return true if the target method is inherited from an instrumented interface
+   */
+  private boolean isInterfaceMethodInstrumented(
+      List<ClassModel> chain, @Identifier String methodName, ClassDesc[] paramTypes) {
+
+    @BinaryName String found = null;
+    try {
+      for (ClassModel cm : chain) {
+        found = getDeclaringInterface(cm, methodName, paramTypes, true);
+        if (found != null) {
+          break;
+        }
+      }
+      if (found == null) {
+        // No interface supplies an implementation; settle for a declaration.
+        for (ClassModel cm : chain) {
+          found = getDeclaringInterface(cm, methodName, paramTypes, false);
+          if (found != null) {
+            break;
+          }
+        }
+      }
+    } catch (Throwable e) {
+      // We cannot locate or read the .class file, better assume it is not instrumented.
+      return false;
+    }
+    if (found == null) {
+      if (debugHandleInvoke) {
+        System.out.printf("Unable to locate method: %s%n%n", methodName);
+      }
+      return false;
+    }
+    if (debugHandleInvoke) {
+      System.out.printf("declared by interface %s%n%n", found);
+    }
+    return Premain.isClassnameInstrumented(found, methodName, debugHandleInvoke, debugInstrument);
   }
 
   /**
@@ -2993,7 +3335,7 @@ public class DCInstrument24 {
   private List<CodeElement> handleInvoke(InvokeInstruction invoke, MethodGen24 mgen) {
 
     // Get information about the call.
-    @BinaryName String classname = Runtime.internalFormToBinaryName(invoke.owner().asInternalName());
+    @BinaryName String classname = Signatures.internalFormToBinaryName(invoke.owner().asInternalName());
     String methodName = invoke.name().stringValue();
     MethodTypeDesc mtd = invoke.typeSymbol();
     ClassDesc returnType = mtd.returnType();
@@ -3079,7 +3421,7 @@ public class DCInstrument24 {
     // because they do not have the dcomp_marker added to the parameter list, but
     // they actually contain instrumentation code.  So we do not want to discard
     // the primitive tags prior to the call.
-    if (!junitTestClasses.contains(classname)) {
+    if (!Premain.junitTestClasses.contains(classname)) {
       il = discard_primitive_tags(paramTypes);
     }
 
@@ -3136,11 +3478,25 @@ public class DCInstrument24 {
     boolean targetInstrumented;
     Opcode op = invoke.opcode();
 
+    if (op.equals(INVOKESPECIAL)) {
+      // A call to the superclass constructor (super(...)) or to another constructor of this
+      // class (this(...)) both leave the receiver initialized: the delegated-to constructor runs
+      // the superclass constructor itself. Until one of them has been seen, `this` is
+      // uninitialized and tag fields must not be touched; see tag_fields_ok.
+      if (methodName.equals("<init>")
+          && (classname.equals(classGen.getSuperclassName())
+              || classname.equals(classGen.getClassName()))) {
+        this.constructor_is_initialized = true;
+      }
+    }
+
     if (is_object_method(methodName, paramTypes)) {
-      targetInstrumented = false;
+      return false;
     } else {
       // At this point, we will never see classname = java.lang.Object.
-      targetInstrumented = isClassnameInstrumented(classname, methodName);
+      targetInstrumented =
+          Premain.isClassnameInstrumented(
+              classname, methodName, debugHandleInvoke, debugInstrument);
 
       if (debugHandleInvoke) {
         System.out.printf("isClassnameInstrumented: %s%n", targetInstrumented);
@@ -3220,8 +3576,14 @@ public class DCInstrument24 {
           }
 
           @BinaryName String targetClassname = classname;
+          // The target class and its superclasses, in that order, as far as the loop below got.
+          List<ClassModel> chain = new ArrayList<>();
           // Search this class for the target method. If not found, set targetClassname to
-          // its superclass and try again.
+          // its superclass and try again. Interfaces are not consulted in the loop below:
+          // JVMS 5.4.3.3 resolves a method against the class's own declaration, then the
+          // superclass chain, and only then the superinterfaces of the class and of all
+          // its superclasses. So the whole chain is searched first, and the interfaces of
+          // every class in the chain afterwards.
           mainloop:
           while (true) {
             // Check that the class exists
@@ -3232,7 +3594,13 @@ public class DCInstrument24 {
               targetClass = null;
             }
             if (targetClass == null) {
-              // We cannot locate or read the .class file, better assume not instrumented.
+              // We cannot locate or read the .class file, so the superclass chain is incomplete.
+              // An interface of a class already in the chain may declare the method, but the
+              // unreadable class may equally define it concretely, and that class was not
+              // instrumented -- calling the DCompMarker overload would then fail, because no such
+              // overload was generated for it.  An incomplete chain cannot settle the question, so
+              // assume the target is not instrumented, as elsewhere when a class file cannot be
+              // read.
               if (debugHandleInvoke) {
                 System.out.printf("Unable to locate class: %s%n%n", targetClassname);
               }
@@ -3242,6 +3610,7 @@ public class DCInstrument24 {
             if (debugHandleInvoke) {
               System.out.println("target class: " + targetClassname);
             }
+            chain.add(targetClass);
 
             for (MethodModel jm : targetClass.methods()) {
               String jmName = jm.methodName().stringValue();
@@ -3254,43 +3623,27 @@ public class DCInstrument24 {
                 if (debugHandleInvoke) {
                   System.out.printf("we have a match%n%n");
                 }
-                if (BcelUtil.inJdk(targetClassname)) {
-                  targetInstrumented = false;
+                if (!Premain.isClassnameInstrumented(
+                    targetClassname, methodName, debugHandleInvoke, debugInstrument)) {
+                  // An abstract declaration holds no code, so an uninstrumented class that
+                  // declares the method abstract does not settle the question.  An instrumented
+                  // interface of some class in the chain may declare the method too, and then
+                  // every implementation that can run at this call site is instrumented.
+                  if (!jm.flags().has(AccessFlag.ABSTRACT)
+                      || !isInterfaceMethodInstrumented(chain, methodName, paramTypes)) {
+                    targetInstrumented = false;
+                  }
                 }
                 break mainloop;
               }
             }
 
-            {
-              // no methods match - search this class's interfaces
-              @BinaryName String found;
-              try {
-                found = getDefiningInterface(targetClass, methodName, paramTypes);
-              } catch (Throwable e) {
-                // We cannot locate or read the .class file, better assume it is not instrumented.
-                targetInstrumented = false;
-                break;
-              }
-              if (found != null) {
-                // We have a match.
-                if (debugHandleInvoke) {
-                  System.out.printf("we have a match%n%n");
-                }
-                if (BcelUtil.inJdk(found)) {
-                  targetInstrumented = false;
-                }
-                break;
-              }
-            }
-
             // Method not found; perhaps inherited from superclass.
             if (targetClassname.equals("java.lang.Object")) {
-              // The target class was Object; the search completed without finding a matching
-              // method.
-              if (debugHandleInvoke) {
-                System.out.printf("Unable to locate method: %s%n%n", methodName);
+              // No class in the chain declares the method, so it comes from an interface.
+              if (!isInterfaceMethodInstrumented(chain, methodName, paramTypes)) {
+                targetInstrumented = false;
               }
-              targetInstrumented = false;
               break;
             }
 
@@ -3298,18 +3651,6 @@ public class DCInstrument24 {
             targetClassname = getSuperclassName(targetClassname);
           }
         }
-      }
-    }
-
-    if (op.equals(INVOKESPECIAL)) {
-      // A call to the superclass constructor (super(...)) or to another constructor of this
-      // class (this(...)) both leave the receiver initialized: the delegated-to constructor runs
-      // the superclass constructor itself. Until one of them has been seen, `this` is
-      // uninitialized and tag fields must not be touched; see tag_fields_ok.
-      if (methodName.equals("<init>")
-          && (classname.equals(classGen.getSuperclassName())
-              || classname.equals(classGen.getClassName()))) {
-        this.constructor_is_initialized = true;
       }
     }
 
@@ -3363,95 +3704,6 @@ public class DCInstrument24 {
       accessFlags.put(classname, access);
     }
     return access;
-  }
-
-  /**
-   * Returns true if the specified class is instrumented or we presume it will be instrumented by
-   * the time it is executed.
-   *
-   * @param classname class to be checked
-   * @param methodName method to be checked (currently unused)
-   * @return true if classname is instrumented
-   */
-  private boolean isClassnameInstrumented(
-      @BinaryName String classname, @Identifier String methodName) {
-
-    if (debugHandleInvoke) {
-      System.out.printf("Checking callee instrumented on %s.%s%n", classname, methodName);
-    }
-
-    // Our copy of daikon.plumelib is not instrumented.  It would be odd, though,
-    // to see calls to this.
-    if (classname.startsWith("daikon.plumelib")) {
-      return false;
-    }
-
-    // When a class contains an existing <clinit>, it will be instrumented. Thus, we need to mark
-    // our added call to 'DCRuntime.set_class_initialized' as not instrumented.
-    if (classname.endsWith("DCRuntime") && methodName.equals("set_class_initialized")) {
-      return false;
-    }
-
-    // Special-case JUnit test classes.
-    if (junitTestClasses.contains(classname)) {
-      return false;
-    }
-
-    if (daikon.dcomp.Instrument24.is_transformer(classname.replace('.', '/'))) {
-      return false;
-    }
-
-    // Special-case the execution trace tool.
-    if (classname.startsWith("minst.Minst")) {
-      return false;
-    }
-
-    // We should probably change the interface to include method name
-    // and use "classname.methodname" as arg to pattern matcher.
-    // If any of the omit patterns match, use the uninstrumented version of the method
-    for (Pattern p : DynComp.ppt_omit_pattern) {
-      if (p.matcher(classname).find()) {
-        if (debugHandleInvoke) {
-          System.out.printf("callee instrumented = false: %s.%s%n", classname, methodName);
-        }
-        return false;
-      }
-    }
-
-    // If it's not a JDK class, presume it's instrumented.
-    if (!BcelUtil.inJdk(classname)) {
-      return true;
-    }
-
-    int i = classname.lastIndexOf('.');
-    if (i > 0 && Premain.problem_packages.contains(classname.substring(0, i))) {
-      debugInstrument.log(
-          "Don't call instrumented member of problem package %s%n", classname.substring(0, i));
-      return false;
-    }
-
-    if (Premain.problem_classes.contains(classname)) {
-      debugInstrument.log("Don't call instrumented member of problem class %s%n", classname);
-      return false;
-    }
-
-    // We have decided not to use the instrumented version of Random as
-    // the method generates values based on an initial seed value.
-    // (Typical of random() algorithms.) Instrumentation would have the undesirable side
-    // effect of putting all the generated values in the same comparison
-    // set when they should be distinct.
-    // Note: If we find other classes that should not use the instrumented
-    // versions, we should consider making this a searchable list.
-    if (classname.equals("java.util.Random")) {
-      return false;
-    }
-
-    // If using the instrumented JDK, then everthing but object is instrumented.
-    if (Premain.jdk_instrumented && !classname.equals("java.lang.Object")) {
-      return true;
-    }
-
-    return false;
   }
 
   /**
@@ -3657,7 +3909,7 @@ public class DCInstrument24 {
     List<CodeElement> il = new ArrayList<>();
     Opcode op = fi.opcode();
     String fieldName = fi.name().stringValue();
-    @BinaryName String owner = Runtime.internalFormToBinaryName(fi.owner().asInternalName());
+    @BinaryName String owner = Signatures.internalFormToBinaryName(fi.owner().asInternalName());
     ClassDesc ownerCD = fi.owner().asSymbol();
 
     // If this class doesn't support tag fields, don't load/store them.
@@ -3933,7 +4185,7 @@ public class DCInstrument24 {
 
     // Duplicate the array ref and index and pass them to DCRuntime
     // which will make the index comparable with the array.  In the case
-    // of primtives it will also get the tag for the primitive and push
+    // of primitives it will also get the tag for the primitive and push
     // it on the tag stack.
     il.add(StackInstruction.of(DUP2));
     String method = "primitive_array_load";
@@ -4061,6 +4313,7 @@ public class DCInstrument24 {
       @BinaryName String className, @Identifier String methodName, String pptName) {
 
     debugInstrument.log("Considering tracking ppt: %s, %s, %s%n", className, methodName, pptName);
+    debug_transform.log("Consider collecting data for ppt: %s%n", pptName);
 
     // Don't track any JDK classes
     if (BcelUtil.inJdk(className)) {
@@ -4710,7 +4963,7 @@ public class DCInstrument24 {
     }
 
     // Get the offsets for each field in the superclass.
-    String superclassName = Runtime.internalFormToBinaryName(ce.get().asInternalName());
+    String superclassName = Signatures.internalFormToBinaryName(ce.get().asInternalName());
     ClassModel super_cm = getClassModel(superclassName);
     if (super_cm == null) {
       throw new DynCompError("Can't get superclass for " + superclassName);
@@ -5153,7 +5406,7 @@ public class DCInstrument24 {
   @Pure
   boolean is_object_method(@Identifier String methodName, ClassDesc[] paramTypes) {
     // Note: kind of weird we don't check that classname = Object but it's been
-    // that way forever. Just means foo.finialize(), e.g., will be marked uninstrumented.
+    // that way forever. Just means foo.finalize(), e.g., will be marked uninstrumented.
     for (MethodDef md : obj_methods) {
       if (md.equals(methodName, paramTypes)) {
         return true;
