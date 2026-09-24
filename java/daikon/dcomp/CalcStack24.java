@@ -60,7 +60,7 @@ public final class CalcStack24 {
 
   /** Do not instantiate. */
   private CalcStack24() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   /** Sentinel ClassDesc representing {@code null} on the operand stack (not a real class). */

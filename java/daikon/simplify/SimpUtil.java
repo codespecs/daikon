@@ -3,7 +3,7 @@ package daikon.simplify;
 /** Utility functions for the simplify package. */
 public class SimpUtil {
   private SimpUtil() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   /**

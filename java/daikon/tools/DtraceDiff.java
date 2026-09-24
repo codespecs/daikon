@@ -38,7 +38,7 @@ public class DtraceDiff {
 
   /** Do not instantiate. */
   private DtraceDiff() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   /** The usage message for this program. */

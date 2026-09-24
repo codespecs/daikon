@@ -33,7 +33,7 @@ import org.plumelib.util.StringsPlume;
  */
 public final class MergeInvariants {
   private MergeInvariants() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   /** Debug logger. */

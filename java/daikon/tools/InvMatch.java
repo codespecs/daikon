@@ -35,7 +35,7 @@ public class InvMatch {
 
   /** Do not instantiate. */
   private InvMatch() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   /**

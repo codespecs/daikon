@@ -28,7 +28,7 @@ public class VarInfoNameDriver {
 
   /** Do not instantiate. */
   private VarInfoNameDriver() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   /**

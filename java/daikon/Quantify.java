@@ -17,7 +17,7 @@ public class Quantify {
 
   /** Do not instantiate. */
   private Quantify() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   /** Flags describing how quantifications are to be built. */

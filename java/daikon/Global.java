@@ -28,7 +28,7 @@ public final class Global {
 
   /** Do not instantiate. */
   private Global() {
-    throw new Error("Do not instantiate.");
+    throw new UnsupportedOperationException("Do not instantiate.");
   }
 
   // ///////////////////////////////////////////////////////////////////////////

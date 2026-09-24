@@ -34,7 +34,7 @@ public class AnnotateNullable {
 
   /** Do not instantiate. */
   private AnnotateNullable() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   // Why is this variable static?

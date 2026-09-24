@@ -9,7 +9,7 @@ public class HtmlToTexinfo {
 
   /** Do not instantiate. */
   private HtmlToTexinfo() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   private static final String lineSep = System.lineSeparator();

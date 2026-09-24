@@ -40,7 +40,7 @@ public class ChicoryPremain {
 
   /** Do not instantiate. */
   private ChicoryPremain() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   // These command-line options cannot be accessed from Chicory.  These are internal debugging

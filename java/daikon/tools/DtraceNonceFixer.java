@@ -24,7 +24,7 @@ public class DtraceNonceFixer {
 
   /** Do not instantiate. */
   private DtraceNonceFixer() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   /** The system-specific line separator. */

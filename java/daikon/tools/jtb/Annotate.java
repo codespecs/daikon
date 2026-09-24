@@ -31,7 +31,7 @@ public class Annotate {
 
   /** Do not instantiate. */
   private Annotate() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   // ESC format: Invariants are inserted as follows:

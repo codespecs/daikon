@@ -40,7 +40,7 @@ public class Premain {
 
   /** Do not instantiate. */
   private Premain() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   // These command-line options cannot be accessed from DynComp.  These are internal debugging

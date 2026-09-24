@@ -11,7 +11,7 @@ import java.util.List;
 /** A collection of useful helper methods that are common to many different individual tests. */
 public class Common {
   private Common() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   @SuppressWarnings("interning")
