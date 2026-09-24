@@ -20,7 +20,7 @@ import org.plumelib.util.StringsPlume;
  */
 public final class UnionInvariants {
   private UnionInvariants() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   /** The usage message for this program. */

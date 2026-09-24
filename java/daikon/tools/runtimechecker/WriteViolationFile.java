@@ -23,7 +23,7 @@ class WriteViolationFile {
 
   /** Do not instantiate. */
   private WriteViolationFile() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   public static void usage() {

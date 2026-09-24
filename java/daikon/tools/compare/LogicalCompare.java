@@ -68,7 +68,7 @@ import org.plumelib.util.StringsPlume;
  */
 public class LogicalCompare {
   private LogicalCompare() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   public static final Logger debug = Logger.getLogger("daikon.tools.compare.LogicalCompare");

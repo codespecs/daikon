@@ -213,7 +213,7 @@ import typequals.prototype.qual.Prototype;
 public final class Daikon {
 
   private Daikon() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   /**

@@ -18,7 +18,7 @@ import org.checkerframework.dataflow.qual.Pure;
  */
 class Visitors implements JavaParserConstants {
   private Visitors() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   /**

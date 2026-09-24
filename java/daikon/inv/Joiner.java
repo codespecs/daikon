@@ -17,7 +17,7 @@ public abstract class Joiner extends Invariant {
 
   protected Joiner(PptSlice ppt) {
     super(ppt);
-    throw new Error("Don't instantiate a Joiner this way.");
+    throw new UnsupportedOperationException("Don't instantiate a Joiner this way.");
   }
 
   Joiner(PptSlice ppt, Invariant left, Invariant right) {

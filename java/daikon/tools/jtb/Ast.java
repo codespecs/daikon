@@ -36,7 +36,7 @@ public class Ast {
 
   /** Do not instantiate. */
   private Ast() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   /** The line separator. */

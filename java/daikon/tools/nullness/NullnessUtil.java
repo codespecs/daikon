@@ -31,7 +31,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public final class NullnessUtil {
 
   private NullnessUtil() {
-    throw new AssertionError("shouldn't be instantiated");
+    throw new UnsupportedOperationException("shouldn't be instantiated");
   }
 
   /**

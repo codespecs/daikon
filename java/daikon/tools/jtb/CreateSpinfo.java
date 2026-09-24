@@ -50,7 +50,7 @@ public class CreateSpinfo {
 
   /** Do not instantiate. */
   private CreateSpinfo() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   /** Debug logger. */

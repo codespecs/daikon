@@ -30,7 +30,7 @@ public final class StackMapUtils24 {
 
   /** Do not instantiate. */
   private StackMapUtils24() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   /*

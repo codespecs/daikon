@@ -72,7 +72,7 @@ import org.plumelib.util.StringsPlume;
 public final class PrintInvariants {
 
   private PrintInvariants() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   /**

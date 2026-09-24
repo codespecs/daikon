@@ -25,7 +25,7 @@ import org.plumelib.util.FilesPlume;
  */
 public class SplitterFactory {
   private SplitterFactory() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   public static final Logger debug = Logger.getLogger("daikon.split.SplitterFactory");

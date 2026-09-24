@@ -14,7 +14,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class MultiDiff {
   private MultiDiff() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   public static void main(String[] args)

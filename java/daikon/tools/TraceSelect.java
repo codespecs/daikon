@@ -29,7 +29,7 @@ public class TraceSelect {
 
   /** Do not instantiate. */
   private TraceSelect() {
-    throw new Error("Do not instantiate");
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   public static boolean CLEAN = true;
