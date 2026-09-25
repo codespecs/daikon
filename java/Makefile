@@ -138,7 +138,33 @@ CHECKERFRAMEWORK_JAVAC ?= ${CHECKERFRAMEWORK_JAR_DIR}/javac.jar
 ## Classpath
 
 ## Daikon compiled files
-DAIKON_CLASSPATH := ${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
+##
+## lib/ holds two JUnit distributions, because Daikon needs both versions:
+##   * junit-4.13.2-Daikon.jar is JUnit 4, which Daikon's own unit tests use; `make junit` runs
+##     them with org.junit.runner.JUnitCore.
+##   * junit-platform-console-standalone-1.9.0-Daikon.jar is JUnit 5, used by
+##     tests/daikon-tests/junit5 via org.junit.platform.console.ConsoleLauncher.
+## The second is a "standalone" distribution, so as well as JUnit 5 it bundles complete copies of
+## JUnit 4 and hamcrest -- that is how it runs JUnit 4 tests through the vintage engine.  Those
+## bundled copies are not the ones we want: they are the original Java 5 class files (major
+## version 49), whereas our junit-4 and hamcrest jars are rebuilt as Java 8 (major version 52),
+## and our JUnit 4 is additionally annotated for the Checker Framework -- without those
+## annotations, assertNotNull's second parameter reads as @NonNull and typecheck-part1 fails on
+## code that passes elsewhere.
+##
+## The JVM expands "lib/*" in an unspecified order, so which copy is found first varies from
+## machine to machine.  Name our jars ahead of the wildcard so they always win; the first match on
+## the classpath is the one that is used.  The versions are spelled out rather than globbed:
+## 4.13.2 is the final release of JUnit 4, so that name cannot go stale.  hamcrest-core 1.3 is not
+## the newest release, but Daikon has no plans to move off it -- if it is ever upgraded, change the
+## name here too.  A classpath entry naming a file that does not exist is ignored silently, so a
+## stale name would not fail the build; it would quietly let the bundled copy win again.
+##
+## The daikon.jar rule in the top-level Makefile has long applied the same policy by the opposite
+## mechanism: it extracts lib/*.jar, then hamcrest*.jar, then junit-4*.jar, so the later
+## extractions overwrite the earlier ones.  Last-wins-on-extract and first-wins-on-classpath give
+## the same precedence -- JUnit 4, then hamcrest, then everything else.  Keep the two in step.
+DAIKON_CLASSPATH := ${DAIKONDIR}/java/lib/junit-4.13.2-Daikon.jar:${DAIKONDIR}/java/lib/hamcrest-core-1.3-Daikon.jar:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/java
 
 ## Add tools.jar and rt.jar, if they exist
 ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
