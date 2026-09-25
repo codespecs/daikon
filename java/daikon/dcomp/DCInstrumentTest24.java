@@ -39,7 +39,9 @@ import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.lang.reflect.AccessFlag;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -2758,5 +2760,148 @@ public final class DCInstrumentTest24 {
         result.add(invoke.owner().asInternalName());
       }
     }
+  }
+
+  /**
+   * A superclass with a static primitive field. Used by {@link #superclassStaticFieldKeepsItsId}
+   * and {@link #superclassStaticFieldKeepsItsIdBcel}.
+   */
+  public static class StaticFieldBase {
+
+    /** A static primitive field, so it is allocated an id in {@code static_field_id}. */
+    public static int counter;
+  }
+
+  /**
+   * A subclass of {@link StaticFieldBase} that declares no static field of its own, so that
+   * instrumenting it revisits the superclass's fields and nothing else. Used by {@link
+   * #superclassStaticFieldKeepsItsId} and {@link #superclassStaticFieldKeepsItsIdBcel}.
+   */
+  public static class StaticFieldDerived extends StaticFieldBase {
+
+    /** An instance field, so this class has a primitive field of its own. */
+    public int other;
+  }
+
+  /** Binary name of {@link StaticFieldBase}. */
+  private static final @BinaryName String STATIC_FIELD_BASE =
+      "daikon.dcomp.DCInstrumentTest24$StaticFieldBase";
+
+  /** Binary name of {@link StaticFieldDerived}. */
+  private static final @BinaryName String STATIC_FIELD_DERIVED =
+      "daikon.dcomp.DCInstrumentTest24$StaticFieldDerived";
+
+  /** The key under which {@link StaticFieldBase#counter} is recorded in {@code static_field_id}. */
+  private static final String STATIC_FIELD_KEY = STATIC_FIELD_BASE + ".counter";
+
+  /**
+   * Tests that instrumenting a subclass does not reallocate the tag id of a static field declared
+   * in its superclass.
+   *
+   * <p>{@code build_field_to_offset_map} walks the superclass chain, so it revisits a superclass's
+   * static fields once for every subclass that is instrumented. Allocating a new id on each visit
+   * would leave the accessors already emitted for the declaring class reading a different {@code
+   * DCRuntime.static_tags} slot than those emitted for the subclass, so one field's tag would be
+   * split across two slots and comparability through it would depend on which symbolic owner the
+   * access used.
+   *
+   * @throws IOException if a class file cannot be read
+   */
+  @Test
+  public void superclassStaticFieldKeepsItsId() throws IOException {
+    @BinaryName String saved = DCRuntime.instrumentation_interface;
+    boolean savedJdkInstrumented = Premain.jdk_instrumented;
+    // Instrumenting allocates ids and grows the tag array, both of which are global.  Snapshot
+    // them so this test neither observes nor leaks allocation state, and start from empty so the
+    // ids do not depend on what other tests have already allocated.
+    Map<String, Integer> savedIds = new LinkedHashMap<>(DCInstrument24.static_field_id);
+    List<@Nullable Object> savedTags = new ArrayList<>(DCRuntime.static_tags);
+    try {
+      DCRuntime.instrumentation_interface = "daikon.dcomp.DCompInstrumented";
+      Premain.jdk_instrumented = false;
+      DCInstrument24.static_field_id.clear();
+
+      assert instrument(classBytes(STATIC_FIELD_BASE), STATIC_FIELD_BASE) != null
+          : "@AssumeAssertion(nullness): cannot instrument " + STATIC_FIELD_BASE;
+      Integer idAfterBase = DCInstrument24.static_field_id.get(STATIC_FIELD_KEY);
+      // Do not use assertNotNull on a @Nullable value: whether it accepts one depends on which
+      // copy of org.junit.Assert the classpath supplies.  See the comment in
+      // trackedMethodPromotionSurvivesLaterUntrackedMethod.
+      assert idAfterBase != null
+          : "@AssumeAssertion(nullness): no id was allocated for " + STATIC_FIELD_KEY;
+
+      assert instrument(classBytes(STATIC_FIELD_DERIVED), STATIC_FIELD_DERIVED) != null
+          : "@AssumeAssertion(nullness): cannot instrument " + STATIC_FIELD_DERIVED;
+      Integer idAfterDerived = DCInstrument24.static_field_id.get(STATIC_FIELD_KEY);
+      assert idAfterDerived != null
+          : "@AssumeAssertion(nullness): id vanished for " + STATIC_FIELD_KEY;
+
+      // Compare as int, so this uses assertEquals(String, long, long) rather than the Object
+      // overload, whose annotations vary with the classpath in the same way.
+      assertEquals(
+          "instrumenting a subclass reallocated the superclass's static field id",
+          (int) idAfterBase,
+          (int) idAfterDerived);
+    } finally {
+      Premain.jdk_instrumented = savedJdkInstrumented;
+      DCRuntime.instrumentation_interface = saved;
+      DCInstrument24.static_field_id.clear();
+      DCInstrument24.static_field_id.putAll(savedIds);
+      DCRuntime.static_tags.clear();
+      DCRuntime.static_tags.addAll(savedTags);
+    }
+  }
+
+  /**
+   * The same check as {@link #superclassStaticFieldKeepsItsId}, against the BCEL instrumenter.
+   * {@code DCInstrument} has its own copy of both the allocation logic and the map, so a regression
+   * in one implementation would not be caught by a test of the other.
+   *
+   * @throws IOException if a class file cannot be read
+   */
+  @Test
+  public void superclassStaticFieldKeepsItsIdBcel() throws IOException {
+    boolean savedJdkInstrumented = Premain.jdk_instrumented;
+    Map<String, Integer> savedIds = new LinkedHashMap<>(DCInstrument.static_field_id);
+    List<@Nullable Object> savedTags = new ArrayList<>(DCRuntime.static_tags);
+    try {
+      Premain.jdk_instrumented = false;
+      DCInstrument.static_field_id.clear();
+
+      instrumentWithBcel(STATIC_FIELD_BASE);
+      Integer idAfterBase = DCInstrument.static_field_id.get(STATIC_FIELD_KEY);
+      assert idAfterBase != null
+          : "@AssumeAssertion(nullness): no id was allocated for " + STATIC_FIELD_KEY;
+
+      instrumentWithBcel(STATIC_FIELD_DERIVED);
+      Integer idAfterDerived = DCInstrument.static_field_id.get(STATIC_FIELD_KEY);
+      assert idAfterDerived != null
+          : "@AssumeAssertion(nullness): id vanished for " + STATIC_FIELD_KEY;
+
+      assertEquals(
+          "instrumenting a subclass reallocated the superclass's static field id",
+          (int) idAfterBase,
+          (int) idAfterDerived);
+    } finally {
+      Premain.jdk_instrumented = savedJdkInstrumented;
+      DCInstrument.static_field_id.clear();
+      DCInstrument.static_field_id.putAll(savedIds);
+      DCRuntime.static_tags.clear();
+      DCRuntime.static_tags.addAll(savedTags);
+    }
+  }
+
+  /**
+   * Instruments the named class with the BCEL instrumenter, for its side effect on {@code
+   * DCInstrument.static_field_id}.
+   *
+   * @param binaryName the class to instrument
+   * @throws IOException if the class file cannot be read
+   */
+  private void instrumentWithBcel(@BinaryName String binaryName) throws IOException {
+    JavaClass parsed =
+        new ClassParser(new ByteArrayInputStream(classBytes(binaryName)), binaryName).parse();
+    DCInstrument dci = new DCInstrument(parsed, false, classLoader());
+    withDiagnosticsDiscarded(dci::instrument);
   }
 }
