@@ -361,7 +361,10 @@ public class PptRelation implements Serializable {
   /**
    * Creates a USER or PARENT relation from child to parent. The variable relationships are
    * specified in the declaration record and stored in the VarInfo for each variable.
-   * RuntimeException will be thrown if any of the parent variables cannot be found.
+   * A derived child variable with no counterpart in the parent is omitted from the relation, because
+   * whether a variable is derived depends on per-ppt information such as comparability.
+   * RuntimeException will be thrown if the parent variable of any non-derived child variable cannot
+   * be found.
    */
   public static PptRelation newParentRelation(
       ParentRelation pr, PptTopLevel parent, PptTopLevel child) {
