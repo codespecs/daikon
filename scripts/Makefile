@@ -2,8 +2,8 @@ HIERDIR = ../tools/hierarchical
 KMDIR = ../tools/kmeans
 
 # These are executables and/or downloaded from the Internet.
-all: difftbl cluster clgroup kmeans trace-untruncate-fast checkargs.pm
-.PHONY: all clean tags
+all: difftbl cluster clgroup kmeans trace-untruncate-fast checkargs.pm dockerfiles
+.PHONY: all clean tags dockerfiles
 
 clean:
 	rm -f difftbl cluster clgroup kmeans trace-untruncate-fast
@@ -28,6 +28,20 @@ kmeans: ${KMDIR}/kmeans
 
 trace-untruncate-fast: trace-untruncate-fast.c
 	gcc -Wall -g $< -o $@
+
+## Dockerfiles
+
+DOCKERFILE_OSES := ubuntu rockylinux
+DOCKERFILE_JDKS := 11 17 21 25 26
+DOCKERFILES := $(foreach os,${DOCKERFILE_OSES},$(foreach jdk,${DOCKERFILE_JDKS},Dockerfile-${os}-jdk${jdk} Dockerfile-${os}-jdk${jdk}-plus))
+
+dockerfiles: ${DOCKERFILES}
+
+# The stem $* is, for example, "ubuntu-jdk21" or "ubuntu-jdk21-plus".
+${DOCKERFILES}: Dockerfile-%: Dockerfile-defs.m4 $(addsuffix .m4,$(addprefix Dockerfile-,${DOCKERFILE_OSES}))
+	m4 -P -DJDKVER=$(patsubst jdk%,%,$(word 2,$(subst -, ,$*))) \
+	  -DPLUS=$(if $(filter %-plus,$*),1,0) \
+	  Dockerfile-defs.m4 Dockerfile-$(word 1,$(subst -, ,$*)).m4 | cat -s > $@
 
 ## Delegation to other Makefiles (gross)
 
