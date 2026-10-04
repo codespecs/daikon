@@ -46,7 +46,7 @@ ifneq (,$(findstring start1.8,start${JAVA_VERSION_STRING}))
   JAVA21 := 0
   JAVA24 := 0
   JAVA25 := 0
-  JAVA26 := 0
+  JAVA27 := 0
   JAVA_RELEASE_NUMBER := 8
 else
   JAVA8 := 0
@@ -54,7 +54,7 @@ else
   JAVA21 := 0
   JAVA24 := 0
   JAVA25 := 0
-  JAVA26 := 0
+  JAVA27 := 0
   JAVA_RELEASE_NUMBER := $(shell echo ${JAVA_VERSION_STRING} | sed 's/\([0-9]*\)\..*/\1/')
 endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 17; echo $$?),0)
@@ -76,10 +76,10 @@ ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 25; echo $$?),0)
     JAVA25_HOME := ${JAVA_HOME}
   endif
 endif
-ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 26; echo $$?),0)
-  JAVA26 := 1
-  ifndef JAVA26_HOME
-    JAVA26_HOME := ${JAVA_HOME}
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 27; echo $$?),0)
+  JAVA27 := 1
+  ifndef JAVA27_HOME
+    JAVA27_HOME := ${JAVA_HOME}
   endif
 endif
 
@@ -97,11 +97,11 @@ ifeq (${JAVA25}, 1)
   ifdef JAVA25_HOME
     JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA25_HOME}
   else
-  ifdef JAVA26_HOME
-    JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA26_HOME}
+  ifdef JAVA27_HOME
+    JAVAC_TARGET_FLAGS ?= --source 25 --target 25 --system ${JAVA27_HOME}
   else
     # If this happens, $JAVA_HOME must also be empty.
-    $(error JAVA25_HOME and JAVA26_HOME are not set; JAVA_HOME=${JAVA_HOME})
+    $(error JAVA25_HOME and JAVA27_HOME are not set; JAVA_HOME=${JAVA_HOME})
   endif
   endif
 else
