@@ -391,6 +391,17 @@ public class PptRelation implements Serializable {
 
         // System.out.printf("---parent name %s%n", parent_name);
         VarInfo vp = parent.find_var_by_name(parent_name);
+        if (vp == null && vc.derived != null) {
+          // Whether a variable is derived depends on per-ppt information such as comparability,
+          // so a variable that is derived in the child need not be derived in the parent.
+          if (debug.isLoggable(Level.FINE)) {
+            debug.fine(
+                String.format(
+                    "No parent variable '%s' in ppt '%s' for derived var '%s' in ppt '%s'",
+                    parent_name, pi.parent_ppt, vc.name(), child.name()));
+          }
+          continue;
+        }
         if (vp == null) {
           throw new RuntimeException(
               String.format(
