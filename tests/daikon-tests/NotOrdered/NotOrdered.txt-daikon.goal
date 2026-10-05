@@ -1,0 +1,32 @@
+===========================================================================
+NotOrdered.flagged(int[],int[]):::ENTER
+a != null
+b != null
+b[] elements >= 0
+===========================================================================
+NotOrdered.flagged(int[],int[]):::EXIT
+a[] == orig(a[])
+b[] == orig(b[])
+b[] elements >= 0
+===========================================================================
+NotOrdered.ordered(int[],int[]):::ENTER
+a != null
+a[] sorted by <
+a[i] != i
+a[i] > i
+b != null
+b[] elements >= 0
+size(a[]) >= 1
+size(b[]) >= 1
+a[] > b[] (lexically)
+a[] >= b[] (lexically)
+===========================================================================
+NotOrdered.ordered(int[],int[]):::EXIT
+a[] == orig(a[])
+b[] == orig(b[])
+a[] sorted by <
+a[i] != i
+a[i] > i
+b[] elements >= 0
+a[] > b[] (lexically)
+a[] >= b[] (lexically)
