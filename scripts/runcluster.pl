@@ -17,8 +17,9 @@ use util_daikon;
 
 sub usage() {
   print STDERR
-    "Usage: runcluster.pl [OPTIONS] DTRACE_FILES DECLS_FILES",
+    "Usage: runcluster.pl [OPTIONS] DTRACE_FILES [DECLS_FILES]",
     "\n",
+    "If no DECLS_FILES are given, the declarations in DTRACE_FILES are used.\n",
     "Options:\n",
     " -a, --algorithm ALG\n",
     "       ALG specifies an implementation of a clustering algorithm.\n",
@@ -72,9 +73,6 @@ while (scalar(@ARGV) > 0) {
 if (scalar(@trace_files) == 0) {
   &dieusage("No trace files specified");
 }
-if (scalar(@decls_files) == 0) {
-  &dieusage("No decls files specified");
-}
 if ($algorithm eq "xm") {
   if (system("xmeans 2>&1 > /dev/null") != 0) {
     die "Could not run the 'xmeans' binary.\n"
@@ -83,15 +81,30 @@ if ($algorithm eq "xm") {
   }
 }
 
-my $dtrace_files = join(' ', @trace_files);
-my $decls_files = join(' ', @decls_files);
-
 ###########################################################################
 ### Processing
 ###
 
 #remove files from a previous run that might have aborted...
 &remove_temporary_files();
+
+# Make the invocation nonces consistent, and give every sample a nonce.
+# The input files are left unchanged; the fixed copies are temporary files
+# in the current directory, which are read by both extract_vars.pl and
+# dtrace-add-cluster.pl so that both see the same nonces.
+if ($verbose) { print "\n# Fixing invocation nonces ...\n"; }
+my @fixed_trace_files = ();
+foreach my $trace_file (@trace_files) {
+  my $gz = ($trace_file =~ /\.gz$/) ? ".gz" : "";
+  my $fixed = basename($trace_file);
+  $fixed =~ s/\.dtrace(\.gz)?$//;
+  $fixed .= "_runcluster_temp_nonces.dtrace$gz";
+  system_or_die("java -cp $SCRIPTDIR/../daikon.jar daikon.tools.DtraceNonceFixer $trace_file $fixed", $verbose);
+  push @fixed_trace_files, $fixed;
+}
+my $dtrace_files = join(' ', @fixed_trace_files);
+# If no decls files were given, the declarations are in the dtrace files.
+my $decls_files = (scalar(@decls_files) == 0) ? $dtrace_files : join(' ', @decls_files);
 
 #extract the variables from the dtrace file
 if ($verbose) { print "\n# Extracting variables from dtrace file ...\n"; }
@@ -189,11 +202,21 @@ my $spinfo_file = "runcluster_temp.spinfo";
 if ($verbose) { print "\n# Writing spinfo file $spinfo_file ...\n"; }
 open (SPINFO, ">$spinfo_file") || die "couldn't write cluster spinfo file runcluster_temp.spinfo\n";
 
-my $spinfostring = "PPT_NAME OBJECT\n";
+my $conditions = "";
 for (my $i = 1; $i <= $ncluster; $i++) {
-  $spinfostring  = $spinfostring."cluster == $i\n";
+  $conditions .= "cluster == $i\n";
 }
-print SPINFO $spinfostring;
+# Split each program point that was clustered.
+my @spinfo_ppts = ();
+open (PPTS, "runcluster_temp.clustered_ppts") || die "file with clustered ppts not found\n";
+while (my $ppt = <PPTS>) {
+  chomp($ppt);
+  push @spinfo_ppts, $ppt;
+}
+close PPTS;
+foreach my $ppt (@spinfo_ppts) {
+  print SPINFO "PPT_NAME $ppt\n$conditions\n";
+}
 close SPINFO;
 
 ###
@@ -203,13 +226,13 @@ close SPINFO;
 if ($verbose) { print "\n# Running daikon with cluster spinfo file ...\n"; }
 
 my @new_dtraces = ();
-foreach my $dtrace_file (@trace_files) {
+foreach my $dtrace_file (@fixed_trace_files) {
   $dtrace_file =~ /(.*)\.dtrace/;
   push @new_dtraces , "$1_runcluster_temp.dtrace";
 }
 
 my $invfile = "runcluster_temp_$algorithm-$ncluster.inv";
-$command = "java -cp $SCRIPTDIR/../daikon.jar -Xmx7g daikon.Daikon -o $invfile --config_option daikon.PptTopLevel.pairwise_implications=true --var_omit_pattern=\"class\" --no_text_output --no_show_progress $spinfo_file $decls_new " . join(' ', @new_dtraces) . " 2>&1 > runcluster_temp_Daikon_output.txt";
+$command = "java -cp $SCRIPTDIR/../daikon.jar -Xmx7g daikon.Daikon -o $invfile --config_option daikon.PptTopLevel.pairwise_implications=true --var-omit-pattern=\"class\" --no_text_output --no_show_progress $spinfo_file $decls_new " . join(' ', @new_dtraces) . " 2>&1 > runcluster_temp_Daikon_output.txt";
 system_or_die($command, $verbose);
 
 $invfile =~ /(.*)\.inv/;
@@ -233,7 +256,7 @@ if ($algorithm eq 'xm') {
 } else {
   $outfile = "cluster-$algorithm-$ncluster.spinfo";
 }
-$command = "java daikon.tools.ExtractConsequent $invfile > $outfile";
+$command = "java -cp $SCRIPTDIR/../daikon.jar daikon.tools.ExtractConsequent $invfile > $outfile";
 system_or_die($command, $verbose);
 
 #remove all temporary files

@@ -4704,6 +4704,24 @@ public class PptTopLevel extends Ppt {
     return (type != null && type == PptType.CLASS);
   }
 
+  /**
+   * Returns true if this is a leaf of the dataflow hierarchy, which receives samples directly
+   * rather than by merging invariants from its children. Rather than defining leaves as :::GLOBAL
+   * or :::EXIT54 (numbered exit), leaves are everything except ::EXIT (combined), :::ENTER,
+   * :::THROWS, :::OBJECT, and :::CLASS program points. This scheme ensures that arbitrarily named
+   * program points such as :::POINT (used by convertcsv.pl) are treated as leaves.
+   *
+   * @return true if this is a leaf of the dataflow hierarchy
+   */
+  @Pure
+  public boolean is_dataflow_leaf() {
+    return !(ppt_name.isCombinedExitPoint()
+        || ppt_name.isEnterPoint()
+        || ppt_name.isThrowsPoint()
+        || ppt_name.isObjectInstanceSynthetic()
+        || ppt_name.isClassStaticSynthetic());
+  }
+
   public String var_names() {
     return Arrays.toString(var_infos);
   }

@@ -170,6 +170,9 @@ public class SplitterFactory {
     if (splitterObjects.length == 0) {
       return;
     }
+    // The source files that were written successfully.  The others must not be passed to the
+    // compiler:  javac compiles nothing if one of its arguments does not exist.
+    List<String> fileNames = new ArrayList<>();
     for (int i = 0; i < splitterObjects.length; i++) {
       SplitterObject splitObj = splitterObjects[i];
       String fileName = getFileName(splitObj.getPptName());
@@ -198,15 +201,15 @@ public class SplitterFactory {
       } catch (IOException ioe) {
         System.out.println("Error while writing Splitter file: " + fileAddress);
         debug.fine(ioe.toString());
+        continue;
       }
-    }
-    List<String> fileNames = new ArrayList<>();
-    for (int i = 0; i < splitterObjects.length; i++) {
-      fileNames.add(splitterObjects[i].getFullSourcePath());
+      fileNames.add(splitObj.getFullSourcePath());
     }
     String errorOutput = null;
     try {
-      errorOutput = compileFiles(fileNames);
+      if (!fileNames.isEmpty()) {
+        errorOutput = compileFiles(fileNames);
+      }
     } catch (IOException ioe) {
       System.out.println("Error while compiling Splitter files (Daikon will continue):");
       debug.fine(ioe.toString());

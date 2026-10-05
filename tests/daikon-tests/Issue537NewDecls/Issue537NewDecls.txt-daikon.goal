@@ -1,0 +1,14 @@
+===========================================================================
+aprogram.point:::POINT
+(cluster == 1)  <==>  (cluster < x)
+(cluster == 2)  <==>  (cluster > x)
+cluster one of { 1, 2 }
+cluster != x
+===========================================================================
+aprogram.point:::POINT;condition="cluster == 1"
+cluster == 1
+cluster < x
+===========================================================================
+aprogram.point:::POINT;condition="not(cluster == 1)"
+cluster == 2
+cluster > x

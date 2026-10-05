@@ -1,0 +1,10 @@
+DECLARE
+aprogram.point:::POINT
+cluster
+int
+int
+1
+x
+int
+int
+1
