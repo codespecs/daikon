@@ -4,9 +4,10 @@ import daikon.Daikon;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UncheckedIOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -121,10 +122,18 @@ public final class MergeComparability {
       declFiles.add(readDeclFile(args[i]));
     }
 
-    try (PrintWriter pw = new PrintWriter(FilesPlume.newBufferedFileWriter(outputFilename))) {
+    // Merge fully before opening the output file, so that an inconsistency in the input files does
+    // not leave a truncated output file or destroy an existing one.
+    StringWriter merged = new StringWriter();
+    try (PrintWriter pw = new PrintWriter(merged)) {
       merge(declFiles, pw);
+    }
+
+    // Use a BufferedWriter rather than a PrintWriter, which would discard write errors.
+    try (BufferedWriter writer = FilesPlume.newBufferedFileWriter(outputFilename)) {
+      writer.write(merged.toString());
     } catch (IOException e) {
-      throw new UncheckedIOException("Problem writing " + outputFilename, e);
+      throw new Daikon.UserError(e, "Problem writing " + outputFilename);
     }
   }
 
