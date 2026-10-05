@@ -39,7 +39,7 @@ ${DAIKONDIR}/java/ChicoryPremain.jar:
 compile : ${CLASS_FILES}
 ${CLASS_FILES} :
 	tar cf - -C ${SRC_DIR} ${SRC_FILES} | tar xf - -C ${HERE}
-	javac -g `find . -name *.java`
+	javac -g ${SRC_FILES}
 
 online.inv.gz : ${CLASS_FILES} ${CHICORY}
 	java -cp .:${DAIKON_CLASSPATH} daikon.Chicory ${CHICORY_ARGS} \
