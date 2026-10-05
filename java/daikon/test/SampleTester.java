@@ -78,6 +78,7 @@ public class SampleTester {
           "      Specify a class, varinfos, and ppt to debug track.",
           "      Format is class<var1,var2,var3>@ppt");
 
+  @SuppressWarnings("JUnitMethodInvoked") // main() runs the tests without JUnit
   public static void main(String[] args) throws IOException {
 
     LongOpt[] longopts =
