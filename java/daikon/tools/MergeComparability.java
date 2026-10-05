@@ -524,7 +524,8 @@ public final class MergeComparability {
    * @param decls the declarations of one program point; must be non-empty
    * @return for each variable, its merged comparability, in the representation of {@link
    *     VarDecl#comparability}; an empty array if no declaration has a comparability for the
-   *     variable
+   *     variable; and {@code [-1]} (comparable to everything) if some but not all declarations have
+   *     a comparability for the variable
    */
   static int[][] mergePpt(List<PptDecl> decls) {
     PptDecl template = decls.get(0);
@@ -532,6 +533,8 @@ public final class MergeComparability {
 
     // Check consistency and determine the number of parts of each variable's comparability.
     int[] numParts = new int[numVars];
+    // missing[v] is true if some declaration has no comparability for variable v.
+    boolean[] missing = new boolean[numVars];
     for (PptDecl ppt : decls) {
       if (ppt.vars.size() != numVars) {
         throw new Daikon.UserError(
@@ -548,7 +551,9 @@ public final class MergeComparability {
                   "Program point %s: variable %d is %s in %s but %s in %s",
                   ppt.name, v + 1, expectedName, template.filename, var.name, ppt.filename));
         }
-        if (var.comparability != null) {
+        if (var.comparability == null) {
+          missing[v] = true;
+        } else {
           if (numParts[v] == 0) {
             numParts[v] = var.comparability.length;
           } else if (numParts[v] != var.comparability.length) {
@@ -614,6 +619,12 @@ public final class MergeComparability {
     int nextNumber = 1;
     int[][] result = new int[numVars][];
     for (int v = 0; v < numVars; v++) {
+      if (missing[v] && numParts[v] != 0) {
+        // A variable with no comparability is comparable to everything, including scalars.  A
+        // negative comparability such as "-1[-1]" would not be comparable to scalars.
+        result[v] = new int[] {-1};
+        continue;
+      }
       result[v] = new int[numParts[v]];
       for (int p = 0; p < numParts[v]; p++) {
         int slot = slotStart[v] + p;

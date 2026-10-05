@@ -169,6 +169,16 @@ public class MergeComparabilityTest {
     assertEquals(expected(ppt(null, "1")), merge(file(ppt(null, "2")), file(ppt("2", "2"))));
   }
 
+  /**
+   * An array variable with no comparability record in some file is comparable to everything,
+   * regardless of the order of the files.
+   */
+  @Test
+  public void testMissingArrayComparability() {
+    assertEquals(expected(ppt(null, "1")), merge(file(ppt(null, "2")), file(ppt("3[4]", "2"))));
+    assertEquals(expected(ppt("-1", "1")), merge(file(ppt("3[4]", "2")), file(ppt(null, "2"))));
+  }
+
   /** A program point that appears in only one file is included in the output. */
   @Test
   public void testDisjointPpts() {
