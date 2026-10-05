@@ -9,7 +9,7 @@ DAIKON_JAR := ${DAIKONDIR}/daikon.jar
 export PATH := ${SCRIPTDIR}:${PATH}
 
 .PHONY: test
-test: test-good test-malformed test-daikon-bad-option
+test: test-good test-duplicate-decls test-malformed test-daikon-bad-option
 	@echo "All runcluster tests passed."
 
 # runcluster.pl writes its temporary files to the current directory, so run
@@ -23,6 +23,16 @@ test-good:
 	cp good.decls good.dtrace work-good
 	cd work-good && ${SCRIPTDIR}/runcluster.pl -a km -k 2 good.dtrace good.decls
 	diff -u good-km-2.spinfo.goal work-good/cluster-km-2.spinfo
+
+# A program point may be declared in more than one decls file.
+.PHONY: test-duplicate-decls
+test-duplicate-decls:
+	rm -rf work-duplicate-decls
+	mkdir work-duplicate-decls
+	cp good.decls good.dtrace work-duplicate-decls
+	cp good.decls work-duplicate-decls/good2.decls
+	cd work-duplicate-decls && ${SCRIPTDIR}/runcluster.pl -a km -k 2 good.dtrace good.decls good2.decls
+	diff -u good-km-2.spinfo.goal work-duplicate-decls/cluster-km-2.spinfo
 
 # On a trace whose records omit a variable, runcluster.pl fails with a message
 # that names the problem.
@@ -43,4 +53,4 @@ test-daikon-bad-option:
 
 .PHONY: clean
 clean:
-	rm -rf work-good work-malformed
+	rm -rf work-good work-duplicate-decls work-malformed

@@ -526,6 +526,8 @@ sub read_decl_ppt () {
   my $nvars;			# number of variables at the program point
   my $pptname = <DECL>;		# the pptname.
   chomp ($pptname);
+  # A ppt may be declared more than once, such as in several decls files.
+  $pptname_to_tracevars{$pptname} = [];
 
   # now read the variable names and types
   my $varname;
