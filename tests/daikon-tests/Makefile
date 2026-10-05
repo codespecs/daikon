@@ -69,7 +69,7 @@ javautil-%: do-Vector-% do-ArrayList13-% do-ArrayList17-%
 	@echo ${HR}
 large-%: # do-Flex-% do-JML-%
 	@echo ${HR}
-new-%: do-Issue203-% do-Issue203Transitive-% do-KnownValues-% do-KnownValuesNewDecls-% do-NonZeroLargeRange-% do-baseline-% do-junit-% do-junit5-% do-ncalc-%
+new-%: do-Issue203-% do-Issue203Transitive-% do-Issue203OneChild-% do-KnownValues-% do-KnownValuesNewDecls-% do-NonZeroLargeRange-% do-baseline-% do-junit-% do-junit5-% do-ncalc-%
 	@echo ${HR}
 
 # Extra groupings

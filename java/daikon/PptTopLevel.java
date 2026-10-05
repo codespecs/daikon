@@ -3797,8 +3797,9 @@ public class PptTopLevel extends Ppt {
       startTime = System.nanoTime();
     }
 
-    // Merge the invariants
-    if (children.size() == 1) {
+    // Merge the invariants.  merge_invs_one_child copies the child's slices, which are built over
+    // the child's leaders, so it is correct only if the parent has the same equality sets.
+    if (children.size() == 1 && !children.get(0).splitsChildEqualitySet()) {
       merge_invs_one_child();
     } else {
       merge_invs_multiple_children();

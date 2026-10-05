@@ -319,6 +319,35 @@ public class PptRelation implements Serializable {
   }
 
   /**
+   * Returns true if some equality set of the child contains two variables that cannot be in the
+   * same equality set in the parent. If so, {@link #get_child_equalities_as_parent} omits some
+   * pairs, and the parent's equality sets are finer than the child's.
+   *
+   * @return true if some equality set of the child must be split in the parent
+   */
+  public boolean splitsChildEqualitySet() {
+    if (child.equality_view == null) {
+      return false;
+    }
+    for (Invariant inv : child.equality_view.invs) {
+      VarInfo first = null;
+      for (VarInfo cvi : ((Equality) inv).getVars()) {
+        VarInfo pvi = parentVar(cvi);
+        if (pvi == null) {
+          continue;
+        }
+        if (first == null) {
+          first = pvi;
+        } else if (!PptSliceEquality.canBeInSameEqualitySet(first, pvi)) {
+          // canBeInSameEqualitySet is transitive, so comparing to one member suffices.
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
    * Relates parent_var to a variable in child that matches name.
    *
    * @param parent_var the parent variable being matched
