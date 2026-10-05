@@ -41,6 +41,9 @@ import daikon.inv.*;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
 import java.io.Serializable;
+#if defined(TYPELONG)
+import java.math.BigInteger;
+#endif
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -450,7 +453,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
       // if line already broken, fit to plane equation
       if (line_flag == Flag.NO_LINE) {
         // If the new value doesn't fit the equation
-        if (!EQUAL(-d, a * x + b * y + c * z)) {
+        if (!fits_plane(x, y, z)) {
 
           // Try to find small changes that will fit better.
           if (!try_new_equation(x, y, z)) {
@@ -572,8 +575,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
                         c, def_point[i].z,
                         d);
 
-        if (!EQUAL(-d,
-                    a * def_point[i].x + b * def_point[i].y + c * def_point[i].z)) {
+        if (!fits_plane(def_point[i].x, def_point[i].y, def_point[i].z)) {
           if (Debug.logOn() || debug.isLoggable(Level.FINE)) {
             wrapper.log(debug, "Destroying at index " + i + ": 0 != "
                          + a + "*" + def_point[i].x
@@ -598,6 +600,54 @@ public final class CLASSNAME implements Serializable, Cloneable {
     // if it passes all the checks, then no change to the Invariant
     return InvariantStatus.NO_CHANGE;
   }
+
+  /**
+   * Returns true if the point (x, y, z) lies on the plane ax + by + cz + d = 0.
+   *
+   * @param x x component of the point
+   * @param y y component of the point
+   * @param z z component of the point
+   * @return true if the point lies on the plane
+   */
+  public boolean fits_plane(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z) {
+    #if defined(TYPELONG)
+      // A double cannot exactly represent every long, so floating-point arithmetic can report
+      // that a point is off the plane when it is on it (or vice versa).  When the coefficients
+      // are integers, which is the usual case, use exact integer arithmetic instead.
+      if (isLongValued(a) && isLongValued(b) && isLongValued(c) && isLongValued(d)) {
+        long la = (long) a;
+        long lb = (long) b;
+        long lc = (long) c;
+        long ld = (long) d;
+        try {
+          return Math.addExact(
+                  Math.addExact(Math.multiplyExact(la, x), Math.multiplyExact(lb, y)),
+                  Math.addExact(Math.multiplyExact(lc, z), ld))
+              == 0;
+        } catch (ArithmeticException e) {
+          // An intermediate result does not fit in a long.
+          return BigInteger.valueOf(la).multiply(BigInteger.valueOf(x))
+              .add(BigInteger.valueOf(lb).multiply(BigInteger.valueOf(y)))
+              .add(BigInteger.valueOf(lc).multiply(BigInteger.valueOf(z)))
+              .add(BigInteger.valueOf(ld))
+              .signum() == 0;
+        }
+      }
+    #endif
+    return EQUAL(-d, a * x + b * y + c * z);
+  }
+#if defined(TYPELONG)
+
+  /**
+   * Returns true if the given double is an integer that can be represented as a long.
+   *
+   * @param v a double
+   * @return true if v is an integer in the range of long
+   */
+  private static boolean isLongValued(double v) {
+    return v == Math.rint(v) && Math.abs(v) < 0x1p63;
+  }
+#endif
 
   /**
    * Attempts to fit the points in def_point to a line and calculates the corresponding line
@@ -886,7 +936,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
           && Global.fuzzy.eq(b, min_b) && Global.fuzzy.eq(b, max_b)
           && Global.fuzzy.eq(c, min_c) && Global.fuzzy.eq(c, max_c)
           && Global.fuzzy.eq(d, min_d) && Global.fuzzy.eq(d, max_d)
-          && EQUAL(-d, a * x + b * y + c * z)) {
+          && fits_plane(x, y, z)) {
         if (debug.isLoggable(Level.FINE)) {
           debug.fine(wrapper.ppt.name() + ": New a (" + a + ") and b ("
                       + b + ") and c (" + c + ")");
@@ -1038,6 +1088,56 @@ public final class CLASSNAME implements Serializable, Cloneable {
     // http://jblanco_60.tripod.com/plane.html (the math behind the
     // implementation is detailed above)
 
+#if defined(TYPELONG)
+    // Use BigInteger because the intermediate products can overflow a long, even when the
+    // final coefficients are small.
+    BigInteger px = BigInteger.valueOf(p0.x);
+    BigInteger py = BigInteger.valueOf(p0.y);
+    BigInteger pz = BigInteger.valueOf(p0.z);
+
+    // define the i, j, k components of the two line segments on the plane
+    BigInteger a1 = BigInteger.valueOf(p1.x).subtract(px);
+    BigInteger a2 = BigInteger.valueOf(p1.y).subtract(py);
+    BigInteger a3 = BigInteger.valueOf(p1.z).subtract(pz);
+
+    BigInteger b1 = BigInteger.valueOf(p2.x).subtract(px);
+    BigInteger b2 = BigInteger.valueOf(p2.y).subtract(py);
+    BigInteger b3 = BigInteger.valueOf(p2.z).subtract(pz);
+
+    // calculate the i, j, k components of the cross product
+    BigInteger i_var = a2.multiply(b3).subtract(b2.multiply(a3));
+    BigInteger j_var = b1.multiply(a3).subtract(a1.multiply(b3));
+    BigInteger k_var = a1.multiply(b2).subtract(b1.multiply(a2));
+
+    // Calculate the value of the constant.  Note that given the format
+    // of the point-normal form, we multiply by the negative of P(x,y,z)
+    BigInteger Stand_const = i_var.multiply(px).add(j_var.multiply(py)).add(k_var.multiply(pz))
+        .negate();
+
+    // Put the coefficients in lowest terms by dividing by the gcd.
+    BigInteger myGCD = i_var.gcd(j_var).gcd(k_var.gcd(Stand_const));
+    if (myGCD.signum() == 0) {
+      // The three points are collinear, so they do not determine a plane.  Return NaN, as
+      // floating-point division by a zero gcd would.
+      return new double[] {Double.NaN, Double.NaN, Double.NaN, Double.NaN};
+    }
+
+    if (wrapper != null) {
+      wrapper.log("Preliminary: %s %s %s %s GCD: %s", i_var, j_var, k_var, Stand_const, myGCD);
+    }
+
+    // Ensure positive x coefficient by negating if "x" term is negative.
+    if (i_var.signum() < 0) {
+      myGCD = myGCD.negate();
+    }
+
+    double[] coef = new double[] {i_var.divide(myGCD).doubleValue(),
+                                  j_var.divide(myGCD).doubleValue(),
+                                  k_var.divide(myGCD).doubleValue(),
+                                  Stand_const.divide(myGCD).doubleValue() };
+
+    return coef;
+#else
     PRIMITIVE px = p0.x;
     PRIMITIVE py = p0.y;
     PRIMITIVE pz = p0.z;
@@ -1095,6 +1195,7 @@ public final class CLASSNAME implements Serializable, Cloneable {
                                   standard_k_var, standard_Stand_const };
 
     return coef;
+#endif
 
   }
 
