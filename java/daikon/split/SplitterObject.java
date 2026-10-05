@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.NoSuchFileException;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -67,7 +68,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   static @Nullable Class<?> defineSplitterClass(@BinaryName String className, String fileName) {
     try {
       return ReflectionPlume.defineClassFromFile(className, fileName);
-    } catch (FileNotFoundException e) {
+    } catch (FileNotFoundException | NoSuchFileException e) {
       if (!PptSplitter.dkconfig_suppressSplitterErrors) {
         System.out.println(
             "File " + fileName.substring(0, fileName.length() - 6) + ".java did not compile");
