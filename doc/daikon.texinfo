@@ -7613,7 +7613,8 @@ program points does not indicate that the variables are comparable.
 A program point that appears in only some of the input files (for
 example, because it was executed in only some of the runs) is copied to
 the output.  A program point that appears in multiple input files must
-declare the same variables, in the same order, in each of them.
+declare the same variables, in the same order, with the same
+@code{var-kind}, @code{dec-type}, and @code{rep-type}, in each of them.
 
 The input files must use the version 2.0 declaration format
 (@pxref{Declarations,,,developer,Daikon Developer Manual}) with

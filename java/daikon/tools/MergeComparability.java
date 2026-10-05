@@ -229,6 +229,23 @@ public final class MergeComparability {
       this.comparabilityLine = comparabilityLine;
       this.comparability = comparability;
     }
+
+    /**
+     * Returns the record of this variable declaration that starts with the given keyword, trimmed,
+     * or null if there is none.
+     *
+     * @param keyword the first token of a record, such as "rep-type"
+     * @return the record that starts with the given keyword, or null
+     */
+    @Nullable String findRecord(String keyword) {
+      for (int j = 1; j < lines.size(); j++) {
+        String line = lines.get(j).trim();
+        if (line.startsWith(keyword + " ") || line.equals(keyword)) {
+          return line;
+        }
+      }
+      return null;
+    }
   }
 
   // Reading
@@ -415,6 +432,7 @@ public final class MergeComparability {
         result[i] = Integer.parseInt(parts.get(i));
       } catch (NumberFormatException e) {
         throw new Daikon.UserError(
+            e,
             String.format("%s line %d: malformed comparability \"%s\"", filename, lineNumber, rep));
       }
     }
@@ -550,6 +568,16 @@ public final class MergeComparability {
               String.format(
                   "Program point %s: variable %d is %s in %s but %s in %s",
                   ppt.name, v + 1, expectedName, template.filename, var.name, ppt.filename));
+        }
+        for (String keyword : new String[] {"var-kind", "dec-type", "rep-type"}) {
+          String expected = template.vars.get(v).findRecord(keyword);
+          String actual = var.findRecord(keyword);
+          if (!Objects.equals(expected, actual)) {
+            throw new Daikon.UserError(
+                String.format(
+                    "Program point %s: variable %s has \"%s\" in %s but \"%s\" in %s",
+                    ppt.name, var.name, expected, template.filename, actual, ppt.filename));
+          }
         }
         if (var.comparability == null) {
           missing[v] = true;

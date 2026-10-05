@@ -201,8 +201,18 @@ public class MergeComparabilityTest {
   /** Program points with different variables cannot be merged. */
   @Test
   public void testMismatchedVariables() {
-    assertThrows(
-        Daikon.UserError.class, () -> merge(file(ppt("1", "1")), file(ppt("1", "1", "1"))));
+    List<String> a = file(ppt("1", "1"));
+    List<String> b = file(ppt("1", "1", "1"));
+    assertThrows(Daikon.UserError.class, () -> merge(a, b));
+  }
+
+  /** Program points whose variables have different types cannot be merged. */
+  @Test
+  public void testMismatchedTypes() {
+    List<String> a = file(ppt("1", "1"));
+    List<String> b = new ArrayList<>(file(ppt("1", "1")));
+    b.set(b.lastIndexOf("  rep-type int"), "  rep-type double");
+    assertThrows(Daikon.UserError.class, () -> merge(a, b));
   }
 
   /** Sample records, such as those in a .dtrace file, are rejected. */
