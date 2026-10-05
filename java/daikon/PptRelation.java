@@ -234,9 +234,12 @@ public class PptRelation implements Serializable {
    * child variables themselves. The map is from the pair to itself, which allows the pair to be
    * looked up (which is not possible with a set).
    *
-   * <p>Pairs whose parent variables are not comparable in the parent are omitted. Comparability is
-   * computed separately for each program point, so variables that are comparable in the child may
-   * be incomparable in the parent, and an equality set must not contain incomparable variables.
+   * <p>Pairs whose parent variables cannot be in the same equality set in the parent are omitted.
+   * Comparability is computed separately for each program point, so variables that are comparable
+   * in the child may be incomparable in the parent. The filter uses {@link
+   * PptSliceEquality#canBeInSameEqualitySet}, which is transitive, so the remaining pairs still
+   * partition the variables into equality sets as {@link PptSliceEquality#instantiate_from_pairs}
+   * requires.
    */
   public Map<VarInfo.Pair, VarInfo.Pair> get_child_equalities_as_parent() {
 
@@ -288,9 +291,13 @@ public class PptRelation implements Serializable {
             debug.fine("-- -- " + varr[k].name() + " not in parent (skip)");
             continue;
           }
-          if (!VarComparability.comparable(v1, v2)) {
+          if (!PptSliceEquality.canBeInSameEqualitySet(v1, v2)) {
             debug.fine(
-                "-- -- " + v1.name() + ", " + v2.name() + " not comparable in parent (skip)");
+                "-- -- "
+                    + v1.name()
+                    + ", "
+                    + v2.name()
+                    + " cannot be in the same equality set in parent (skip)");
             continue;
           }
           VarInfo.Pair parent_pair = new VarInfo.Pair(v1, v2, e.numSamples());
