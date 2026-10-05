@@ -42,7 +42,8 @@ ${DOCKERFILES}: Dockerfile-%: Dockerfile-defs.m4 $(addsuffix .m4,$(addprefix Doc
 	m4 -P -DJDKVER=$(patsubst jdk%,%,$(word 2,$(subst -, ,$*))) \
 	  -DPLUS=$(if $(filter %-plus,$*),1,0) \
 	  Dockerfile-defs.m4 Dockerfile-$(word 1,$(subst -, ,$*)).m4 > $@.tmp
-	cat -s $@.tmp > $@
+	cat -s $@.tmp > $@.tmp2
+	mv -f $@.tmp2 $@
 	rm -f $@.tmp
 
 ## Delegation to other Makefiles (gross)
