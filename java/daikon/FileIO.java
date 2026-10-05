@@ -8,6 +8,7 @@ import static daikon.VarInfo.RefType;
 import static daikon.VarInfo.VarFlags;
 import static daikon.VarInfo.VarKind;
 import static daikon.tools.nullness.NullnessUtil.castNonNullDeep;
+import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Daikon.BugInDaikon;
@@ -1410,7 +1411,7 @@ public final class FileIO {
       // Open the reader stream
       if (raw_filename.equals("-")) {
         // "-" means read from the standard input stream
-        Reader file_reader = new InputStreamReader(System.in, "ISO-8859-1");
+        Reader file_reader = new InputStreamReader(System.in, ISO_8859_1);
         reader = new LineNumberReader(file_reader);
       } else if (raw_filename.equals("+")) { // socket comm with Chicory
         InputStream chicoryInput = connectToChicory();

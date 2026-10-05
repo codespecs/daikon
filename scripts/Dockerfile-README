@@ -65,8 +65,8 @@ create_upload_docker_image daikon ubuntu jdk21 && \
 create_upload_docker_image daikon ubuntu jdk21-plus && \
 create_upload_docker_image daikon ubuntu jdk25 && \
 create_upload_docker_image daikon ubuntu jdk25-plus && \
-create_upload_docker_image daikon ubuntu jdk26 && \
-create_upload_docker_image daikon ubuntu jdk26-plus && \
+create_upload_docker_image daikon ubuntu jdk27 && \
+create_upload_docker_image daikon ubuntu jdk27-plus && \
 create_upload_docker_image daikon rockylinux jdk11 && \
 create_upload_docker_image daikon rockylinux jdk11-plus && \
 create_upload_docker_image daikon rockylinux jdk17 && \
@@ -75,7 +75,7 @@ create_upload_docker_image daikon rockylinux jdk21 && \
 create_upload_docker_image daikon rockylinux jdk21-plus && \
 create_upload_docker_image daikon rockylinux jdk25 && \
 create_upload_docker_image daikon rockylinux jdk25-plus && \
-create_upload_docker_image daikon rockylinux jdk26 && \
-create_upload_docker_image daikon rockylinux jdk26-plus && \
+create_upload_docker_image daikon rockylinux jdk27 && \
+create_upload_docker_image daikon rockylinux jdk27-plus && \
 git push && \
 echo "success"

@@ -127,13 +127,13 @@ jobs:
       - name: test-quick
         run: scripts/test-quick-txt-diff.sh
 
-  quick_ubuntu_jdk26:
+  quick_ubuntu_jdk27:
     needs:
       - canary_jobs
       - quick_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-ubuntu-jdk26:latest
+      image: mdernst/daikon-ubuntu-jdk27:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -204,13 +204,13 @@ jobs:
       - name: test-nonquick
         run: scripts/test-nonquick-txt-diff.sh
 
-  nonquick_ubuntu_jdk26:
+  nonquick_ubuntu_jdk27:
     needs:
       - canary_jobs
       - nonquick_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-ubuntu-jdk26:latest
+      image: mdernst/daikon-ubuntu-jdk27:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -281,13 +281,13 @@ jobs:
       - name: test-nontxt
         run: scripts/test-non-txt-diff.sh
 
-  nontxt_ubuntu_jdk26:
+  nontxt_ubuntu_jdk27:
     needs:
       - canary_jobs
       - nontxt_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-ubuntu-jdk26:latest
+      image: mdernst/daikon-ubuntu-jdk27:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -358,13 +358,13 @@ jobs:
       - name: test-misc.sh
         run: make showvars && scripts/test-misc.sh
 
-  misc_ubuntu_jdk26:
+  misc_ubuntu_jdk27:
     needs:
       - canary_jobs
       - misc_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      image: mdernst/daikon-ubuntu-jdk27-plus:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -403,13 +403,13 @@ jobs:
       - name: test-kvasir.sh
         run: scripts/test-kvasir.sh
 
-  kvasir_ubuntu_jdk26:
+  kvasir_ubuntu_jdk27:
     needs:
       - canary_jobs
       - kvasir_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      image: mdernst/daikon-ubuntu-jdk27-plus:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -645,13 +645,13 @@ jobs:
       - name: typecheck latest part3
         run: scripts/test-typecheck-with-latest-cf.sh part3
 
-  typecheck_bundled_part1_ubuntu_jdk26:
+  typecheck_bundled_part1_ubuntu_jdk27:
     needs:
       - canary_jobs
       - typecheck_bundled_part1_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      image: mdernst/daikon-ubuntu-jdk27-plus:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -661,13 +661,13 @@ jobs:
       - name: typecheck bundled part1
         run: scripts/test-typecheck-with-bundled-cf.sh part1
 
-  typecheck_bundled_part2_ubuntu_jdk26:
+  typecheck_bundled_part2_ubuntu_jdk27:
     needs:
       - canary_jobs
       - typecheck_bundled_part2_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      image: mdernst/daikon-ubuntu-jdk27-plus:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -677,13 +677,13 @@ jobs:
       - name: typecheck bundled part2
         run: scripts/test-typecheck-with-bundled-cf.sh part2
 
-  typecheck_bundled_part3_ubuntu_jdk26:
+  typecheck_bundled_part3_ubuntu_jdk27:
     needs:
       - canary_jobs
       - typecheck_bundled_part3_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      image: mdernst/daikon-ubuntu-jdk27-plus:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -693,13 +693,13 @@ jobs:
       - name: typecheck bundled part3
         run: scripts/test-typecheck-with-bundled-cf.sh part3
 
-  typecheck_latest_part1_ubuntu_jdk26:
+  typecheck_latest_part1_ubuntu_jdk27:
     needs:
       - canary_jobs
       - typecheck_latest_part1_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      image: mdernst/daikon-ubuntu-jdk27-plus:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -709,13 +709,13 @@ jobs:
       - name: typecheck latest part1
         run: scripts/test-typecheck-with-latest-cf.sh part1
 
-  typecheck_latest_part2_ubuntu_jdk26:
+  typecheck_latest_part2_ubuntu_jdk27:
     needs:
       - canary_jobs
       - typecheck_latest_part2_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      image: mdernst/daikon-ubuntu-jdk27-plus:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -725,13 +725,13 @@ jobs:
       - name: typecheck latest part2
         run: scripts/test-typecheck-with-latest-cf.sh part2
 
-  typecheck_latest_part3_ubuntu_jdk26:
+  typecheck_latest_part3_ubuntu_jdk27:
     needs:
       - canary_jobs
       - typecheck_latest_part3_ubuntu_jdk25
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      image: mdernst/daikon-ubuntu-jdk27-plus:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -774,14 +774,14 @@ jobs:
       - name: test-quick
         run: scripts/test-quick-txt-diff.sh
 
-  quick_rockylinux_jdk26:
+  quick_rockylinux_jdk27:
     needs:
       - canary_jobs
       - quick_rockylinux_jdk25
-      - quick_ubuntu_jdk26
+      - quick_ubuntu_jdk27
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-rockylinux-jdk26:latest
+      image: mdernst/daikon-rockylinux-jdk27:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -824,14 +824,14 @@ jobs:
       - name: test-nonquick
         run: scripts/test-nonquick-txt-diff.sh
 
-  nonquick_rockylinux_jdk26:
+  nonquick_rockylinux_jdk27:
     needs:
       - canary_jobs
       - nonquick_rockylinux_jdk25
-      - nonquick_ubuntu_jdk26
+      - nonquick_ubuntu_jdk27
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-rockylinux-jdk26:latest
+      image: mdernst/daikon-rockylinux-jdk27:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -874,14 +874,14 @@ jobs:
       - name: test-nontxt
         run: scripts/test-non-txt-diff.sh
 
-  nontxt_rockylinux_jdk26:
+  nontxt_rockylinux_jdk27:
     needs:
       - canary_jobs
       - nontxt_rockylinux_jdk25
-      - nontxt_ubuntu_jdk26
+      - nontxt_ubuntu_jdk27
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-rockylinux-jdk26:latest
+      image: mdernst/daikon-rockylinux-jdk27:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -924,14 +924,14 @@ jobs:
       - name: test-misc.sh
         run: make showvars && scripts/test-misc.sh
 
-  misc_rockylinux_jdk26:
+  misc_rockylinux_jdk27:
     needs:
       - canary_jobs
       - misc_rockylinux_jdk25
-      - misc_ubuntu_jdk26
+      - misc_ubuntu_jdk27
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-rockylinux-jdk26-plus:latest
+      image: mdernst/daikon-rockylinux-jdk27-plus:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
@@ -974,14 +974,14 @@ jobs:
       - name: test-kvasir.sh
         run: scripts/test-kvasir.sh
 
-  kvasir_rockylinux_jdk26:
+  kvasir_rockylinux_jdk27:
     needs:
       - canary_jobs
       - kvasir_rockylinux_jdk25
-      - kvasir_ubuntu_jdk26
+      - kvasir_ubuntu_jdk27
     runs-on: ubuntu-latest
     container:
-      image: mdernst/daikon-rockylinux-jdk26-plus:latest
+      image: mdernst/daikon-rockylinux-jdk27-plus:latest
     timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
