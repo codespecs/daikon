@@ -215,6 +215,18 @@ public class MergeComparabilityTest {
     assertThrows(Daikon.UserError.class, () -> merge(a, b));
   }
 
+  /** Types separated from their keyword by a tab are compared, not ignored. */
+  @Test
+  public void testMismatchedTabSeparatedTypes() {
+    List<String> a = new ArrayList<>(file(ppt("1", "1")));
+    a.set(a.lastIndexOf("  rep-type int"), "  rep-type\tint");
+    List<String> b = new ArrayList<>(file(ppt("1", "1")));
+    b.set(b.lastIndexOf("  rep-type int"), "  rep-type\tdouble");
+    assertThrows(Daikon.UserError.class, () -> merge(a, b));
+    // Differences in whitespace alone do not prevent merging.
+    merge(a, file(ppt("1", "1")));
+  }
+
   /** Sample records, such as those in a .dtrace file, are rejected. */
   @Test
   public void testSampleRecord() {

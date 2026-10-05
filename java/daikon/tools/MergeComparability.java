@@ -231,17 +231,17 @@ public final class MergeComparability {
     }
 
     /**
-     * Returns the record of this variable declaration that starts with the given keyword, trimmed,
-     * or null if there is none.
+     * Returns the record of this variable declaration whose first token is the given keyword, with
+     * each run of whitespace replaced by a single space, or null if there is none.
      *
      * @param keyword the first token of a record, such as "rep-type"
      * @return the record that starts with the given keyword, or null
      */
     @Nullable String findRecord(String keyword) {
       for (int j = 1; j < lines.size(); j++) {
-        String line = lines.get(j).trim();
-        if (line.startsWith(keyword + " ") || line.equals(keyword)) {
-          return line;
+        String[] tokens = lines.get(j).trim().split("\\s+");
+        if (tokens[0].equals(keyword)) {
+          return String.join(" ", tokens);
         }
       }
       return null;
