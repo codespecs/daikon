@@ -78,6 +78,9 @@ ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -eq 25; echo $$?),0)
 endif
 ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 27; echo $$?),0)
   JAVA27 := 1
+endif
+# Use -ge 26, not -ge 27, so that JDK 26 has a value for the --system flag below.
+ifeq ($(shell test ${JAVA_RELEASE_NUMBER} -ge 26; echo $$?),0)
   ifndef JAVA27_HOME
     JAVA27_HOME := ${JAVA_HOME}
   endif
