@@ -933,38 +933,18 @@ public final class CalcStack24 {
    * @throws DynCompError if we don't recognize {@code lce}
    */
   static ClassDesc lceToCD(LoadableConstantEntry lce) {
-    switch (lce) {
-      case ClassEntry cle -> {
-        return CD_Class;
-      }
-      case ConstantDynamicEntry cde -> {
-        return cde.typeSymbol();
-      }
-      case DoubleEntry de -> {
-        return CD_double; // LDC2_W only, but we assume correct code
-      }
-      case FloatEntry fe -> {
-        return CD_float;
-      }
-      case IntegerEntry ie -> {
-        return CD_int;
-      }
-      case LongEntry le -> {
-        return CD_long; // LDC2_W only, but we assume correct code
-      }
-      case MethodHandleEntry mhe -> {
-        return ClassDesc.of("java.lang.invoke.MethodHandle");
-      }
-      case MethodTypeEntry mte -> {
-        return ClassDesc.of("java.lang.invoke.MethodType");
-      }
-      case StringEntry se -> {
-        return CD_String;
-      }
-      default -> {
-        throw new DynCompError("Illegal LoadableConstantEntry: " + lce);
-      }
-    }
+    return switch (lce) {
+      case ClassEntry cle -> CD_Class;
+      case ConstantDynamicEntry cde -> cde.typeSymbol();
+      case DoubleEntry de -> CD_double; // LDC2_W only, but we assume correct code
+      case FloatEntry fe -> CD_float;
+      case IntegerEntry ie -> CD_int;
+      case LongEntry le -> CD_long; // LDC2_W only, but we assume correct code
+      case MethodHandleEntry mhe -> ClassDesc.of("java.lang.invoke.MethodHandle");
+      case MethodTypeEntry mte -> ClassDesc.of("java.lang.invoke.MethodType");
+      case StringEntry se -> CD_String;
+      default -> throw new DynCompError("Illegal LoadableConstantEntry: " + lce);
+    };
   }
 
   /**

@@ -1113,7 +1113,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
   }
 
   /** A pair consisting of an Invariant and its corresponding Property. */
-  private static class InvProp {
+  static class InvProp {
     InvProp(Invariant inv, Property p) {
       this.invariant = inv;
       this.property = p;

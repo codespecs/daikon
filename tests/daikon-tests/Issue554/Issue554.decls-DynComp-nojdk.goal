@@ -1,0 +1,852 @@
+// Declarations for misc.Issue554
+// Declarations written 2026-10-04T10:09:25.120386405 by daikon.DynComp
+
+decl-version 2.0
+var-comparability implicit
+
+ppt misc.Issue554:::CLASS
+ppt-type class
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 6
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[8]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 4
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[9]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt misc.Issue554:::OBJECT
+ppt-type object
+variable this
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 6
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[12]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 4
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[13]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 10
+variable this.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 11[9]
+variable this.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 9
+
+ppt misc.Issue554.Issue554(int[]):::ENTER
+ppt-type enter
+variable mag
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[4]
+
+ppt misc.Issue554.Issue554(int[]):::EXIT25
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags is_param non_null
+  comparability 10
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 3
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 9[2]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 5
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[11]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 6
+variable this.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 3
+variable this.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[2]
+variable this.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 2
+variable mag
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[2]
+
+ppt misc.Issue554.bitLength():::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 7
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[6]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 4
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[10]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 9[6]
+variable this.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 6
+
+ppt misc.Issue554.bitLength():::EXIT31
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 7
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[6]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 4
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[10]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable this.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 9[6]
+variable this.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 6
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 6
+
+ppt misc.Issue554.calcBitLength(int, int[]):::ENTER
+ppt-type enter
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 3
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 9[2]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 5
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[10]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 6
+variable start
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable mag
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[2]
+
+ppt misc.Issue554.calcBitLength(int, int[]):::EXIT39
+ppt-type subexit
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 3
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 9[2]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 5
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[10]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 6
+variable start
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable mag
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[2]
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt misc.Issue554.main(java.lang.String[]):::ENTER
+ppt-type enter
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 9
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 10[11]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 5
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[12]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 6
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[13]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[14]
+
+ppt misc.Issue554.main(java.lang.String[]):::EXIT46
+ppt-type subexit
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 9
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 10[11]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 5
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[12]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 6
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[13]
+variable args[..].toString
+  var-kind function toString()
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[14]
+
+ppt misc.Issue554.equals(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags is_param non_null
+  comparability 9
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 6
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[13]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 4
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[14]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 11
+variable this.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 12[10]
+variable this.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 10
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 8
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt misc.Issue554.equals(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags is_param non_null
+  comparability 10
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 6
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[14]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 4
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[15]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 12
+variable this.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 13[11]
+variable this.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 11
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 8
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 9
+
+ppt misc.Issue554.equals_dcomp_instrumented(java.lang.Object):::ENTER
+ppt-type enter
+variable this
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags is_param non_null
+  comparability 9
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 6
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[13]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 4
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[14]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 11
+variable this.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 12[10]
+variable this.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 10
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 8
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+
+ppt misc.Issue554.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+ppt-type subexit
+variable this
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags is_param non_null
+  comparability 10
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 6
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[14]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 4
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[15]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 3
+variable this.mag
+  var-kind field mag
+  dec-type int[]
+  rep-type hashcode
+  comparability 12
+variable this.mag[..]
+  var-kind array
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 13[11]
+variable this.bitLength
+  var-kind field bitLength
+  dec-type int
+  rep-type int
+  comparability 11
+variable obj
+  var-kind variable
+  dec-type java.lang.Object
+  rep-type hashcode
+  flags is_param
+  comparability 8
+variable obj.getClass().getName()
+  var-kind function getClass().getName()
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args obj
+  flags synthetic classname non_null
+  comparability 1
+variable return
+  var-kind return
+  dec-type boolean
+  rep-type boolean
+  comparability 9
+
