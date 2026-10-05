@@ -233,6 +233,10 @@ public class PptRelation implements Serializable {
    * equality sets of the child. The variables are the corresponding parent variables and not the
    * child variables themselves. The map is from the pair to itself, which allows the pair to be
    * looked up (which is not possible with a set).
+   *
+   * <p>Pairs whose parent variables are not comparable in the parent are omitted. Comparability is
+   * computed separately for each program point, so variables that are comparable in the child may
+   * be incomparable in the parent, and an equality set must not contain incomparable variables.
    */
   public Map<VarInfo.Pair, VarInfo.Pair> get_child_equalities_as_parent() {
 
@@ -282,6 +286,11 @@ public class PptRelation implements Serializable {
           VarInfo v2 = parentVar(varr[k]);
           if (v2 == null) {
             debug.fine("-- -- " + varr[k].name() + " not in parent (skip)");
+            continue;
+          }
+          if (!VarComparability.comparable(v1, v2)) {
+            debug.fine(
+                "-- -- " + v1.name() + ", " + v2.name() + " not comparable in parent (skip)");
             continue;
           }
           VarInfo.Pair parent_pair = new VarInfo.Pair(v1, v2, e.numSamples());
