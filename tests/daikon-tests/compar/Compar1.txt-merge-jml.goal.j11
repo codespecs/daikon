@@ -37,8 +37,8 @@ public class Compar1 {
 
   static public void bar(int i, int j, int k, int l) {
     String s = "" + i + " " + j + " " + k + " " + l;
-    // Avoid extraneous output.
-    // System.out.println(s);
+    // A condition on a parameter, so the splitter test has a splitter that compiles.
+    if (i < 50) { s = s.trim(); }
   }
 
 }
