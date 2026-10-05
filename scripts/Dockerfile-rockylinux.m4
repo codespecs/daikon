@@ -35,19 +35,19 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   which
 
 # Install the JDK.
-RUN dnf -q -y upgrade && dnf -q -y install \
+m4_ifelse(jdk_packaged, 1, [[RUN dnf -q -y upgrade && dnf -q -y install \
   java-JDKVER-openjdk \
   java-JDKVER-openjdk-devel
 m4_ifelse(jdk_at_least(25), 1, [[ENV JAVA[[]]JDKVER[[]]_HOME=/usr/lib/jvm/java-JDKVER-openjdk
-
-## Use this when the java-JDKVER-openjdk* packages don't yet exist.
-# # RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz https://download.oracle.com/java/JDKVER/latest/jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
-# RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk[[]]JDKVER/bd75d5f9689641da8e1daabeccb5528b/36/GPL/openjdk-JDKVER[[]]_linux-x64_bin.tar.gz \
-# && tar xzf jdk-JDKVER[[]]_linux-x64_bin.tar.gz
-# ENV PATH="/jdk-JDKVER/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-# ENV JAVA[[]]JDKVER[[]]_HOME=/jdk-JDKVER
-# RUN chmod og+rx /root \
-# && chmod og+r /root/*
+]])]], [[# The java-JDKVER-openjdk* packages do not yet exist, so download the JDK.
+# RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz https://download.oracle.com/java/JDKVER/latest/jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
+RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \
+&& tar xzf jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
+&& rm jdk-JDKVER[[]]_linux-x64_bin.tar.gz
+ENV PATH="/jdk-JDKVER/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV JAVA[[]]JDKVER[[]]_HOME=/jdk-JDKVER
+RUN chmod og+rx /root \
+&& chmod og+r /root/*
 ]])m4_dnl
 if_plus([[
 RUN dnf -q -y upgrade && dnf -q -y install \
@@ -69,10 +69,10 @@ RUN dnf -q -y upgrade && dnf -q -y install \
 ##    However, SDKMAN requires bash, which would prevent the Docker container
 ##    from testing that Daikon runs under POSIX sh.
 # Install gradle (needed for building daikon-plumelib.jar).
-RUN wget -q https://services.gradle.org/distributions/gradle-9.6.1-bin.zip \
-&& unzip -q -d /opt/gradle gradle-9.6.1-bin.zip \
-&& rm gradle-9.6.1-bin.zip
-ENV PATH=$PATH:/opt/gradle/gradle-9.6.1/bin
+RUN wget -q https://services.gradle.org/distributions/gradle-9.8.0-bin.zip \
+&& unzip -q -d /opt/gradle gradle-9.8.0-bin.zip \
+&& rm gradle-9.8.0-bin.zip
+ENV PATH=$PATH:/opt/gradle/gradle-9.8.0/bin
 
 # Alternately, run: dnf --enablerepo=crb install PACKAGENAME
 RUN dnf config-manager --set-enabled crb \

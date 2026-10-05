@@ -32,7 +32,7 @@ trace-untruncate-fast: trace-untruncate-fast.c
 ## Dockerfiles
 
 DOCKERFILE_OSES := ubuntu rockylinux
-DOCKERFILE_JDKS := 11 17 21 25 26
+DOCKERFILE_JDKS := 11 17 21 25 27
 DOCKERFILES := $(foreach os,${DOCKERFILE_OSES},$(foreach jdk,${DOCKERFILE_JDKS},Dockerfile-${os}-jdk${jdk} Dockerfile-${os}-jdk${jdk}-plus))
 
 dockerfiles: ${DOCKERFILES}

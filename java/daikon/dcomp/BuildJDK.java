@@ -193,7 +193,8 @@ public final class BuildJDK {
       File jdk_classes_file = new File(dest_dir, "java/lang/jdk_classes.txt");
       System.out.printf("Writing a list of class names to %s%n", jdk_classes_file);
       // Class names are written in internal form.
-      try (PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name())) {
+      try (@SuppressWarnings("JdkObsolete") // Charset overload needs Java 10+; Daikon supports 8
+          PrintWriter pw = new PrintWriter(jdk_classes_file, UTF_8.name())) {
         for (String classFileName : class_stream_map.keySet()) {
           pw.println(removeSuffix(classFileName, ".class"));
         }

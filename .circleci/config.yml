@@ -96,9 +96,9 @@ jobs:
           name: test-quick
           command: scripts/test-quick-txt-diff.sh
 
-  quick_ubuntu_jdk26:
+  quick_ubuntu_jdk27:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26:latest
+      - image: mdernst/daikon-ubuntu-jdk27:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -201,9 +201,9 @@ jobs:
           name: test-nonquick
           command: scripts/test-nonquick-txt-diff.sh
 
-  nonquick_ubuntu_jdk26:
+  nonquick_ubuntu_jdk27:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26:latest
+      - image: mdernst/daikon-ubuntu-jdk27:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -306,9 +306,9 @@ jobs:
           name: test-nontxt
           command: scripts/test-non-txt-diff.sh
 
-  nontxt_ubuntu_jdk26:
+  nontxt_ubuntu_jdk27:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26:latest
+      - image: mdernst/daikon-ubuntu-jdk27:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -419,9 +419,9 @@ jobs:
           command: make showvars && scripts/test-misc.sh
           no_output_timeout: 20m
 
-  misc_ubuntu_jdk26:
+  misc_ubuntu_jdk27:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      - image: mdernst/daikon-ubuntu-jdk27-plus:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -486,9 +486,9 @@ jobs:
           command: scripts/test-kvasir.sh
           no_output_timeout: 20m
 
-  kvasir_ubuntu_jdk26:
+  kvasir_ubuntu_jdk27:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      - image: mdernst/daikon-ubuntu-jdk27-plus:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -842,9 +842,9 @@ jobs:
           command: scripts/test-typecheck-with-latest-cf.sh part3
           no_output_timeout: 30m
 
-  typecheck_bundled_part1_ubuntu_jdk26:
+  typecheck_bundled_part1_ubuntu_jdk27:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      - image: mdernst/daikon-ubuntu-jdk27-plus:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -864,9 +864,9 @@ jobs:
           command: scripts/test-typecheck-with-bundled-cf.sh part1
           no_output_timeout: 20m
 
-  typecheck_bundled_part2_ubuntu_jdk26:
+  typecheck_bundled_part2_ubuntu_jdk27:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      - image: mdernst/daikon-ubuntu-jdk27-plus:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -886,9 +886,9 @@ jobs:
           command: scripts/test-typecheck-with-bundled-cf.sh part2
           no_output_timeout: 20m
 
-  typecheck_bundled_part3_ubuntu_jdk26:
+  typecheck_bundled_part3_ubuntu_jdk27:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      - image: mdernst/daikon-ubuntu-jdk27-plus:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -908,9 +908,9 @@ jobs:
           command: scripts/test-typecheck-with-bundled-cf.sh part3
           no_output_timeout: 30m
 
-  typecheck_latest_part1_ubuntu_jdk26:
+  typecheck_latest_part1_ubuntu_jdk27:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      - image: mdernst/daikon-ubuntu-jdk27-plus:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -930,9 +930,9 @@ jobs:
           command: scripts/test-typecheck-with-latest-cf.sh part1
           no_output_timeout: 30m
 
-  typecheck_latest_part2_ubuntu_jdk26:
+  typecheck_latest_part2_ubuntu_jdk27:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      - image: mdernst/daikon-ubuntu-jdk27-plus:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -952,9 +952,9 @@ jobs:
           command: scripts/test-typecheck-with-latest-cf.sh part2
           no_output_timeout: 30m
 
-  typecheck_latest_part3_ubuntu_jdk26:
+  typecheck_latest_part3_ubuntu_jdk27:
     docker:
-      - image: mdernst/daikon-ubuntu-jdk26-plus:latest
+      - image: mdernst/daikon-ubuntu-jdk27-plus:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -972,72 +972,6 @@ jobs:
       - run:
           name: typecheck latest part3
           command: scripts/test-typecheck-with-latest-cf.sh part3
-          no_output_timeout: 30m
-
-  typecheck_bundled_part1_rockylinux_jdk25:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk25-plus:latest
-    resource_class: large
-    environment:
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          name: typecheck bundled part1
-          command: scripts/test-typecheck-with-bundled-cf.sh part1
-          no_output_timeout: 20m
-
-  typecheck_bundled_part2_rockylinux_jdk25:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk25-plus:latest
-    resource_class: large
-    environment:
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          name: typecheck bundled part2
-          command: scripts/test-typecheck-with-bundled-cf.sh part2
-          no_output_timeout: 20m
-
-  typecheck_bundled_part3_rockylinux_jdk25:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk25-plus:latest
-    resource_class: large
-    environment:
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          name: typecheck bundled part3
-          command: scripts/test-typecheck-with-bundled-cf.sh part3
           no_output_timeout: 30m
 
   quick_rockylinux_jdk11:
@@ -1082,9 +1016,9 @@ jobs:
           name: test-quick
           command: scripts/test-quick-txt-diff.sh
 
-  quick_rockylinux_jdk26:
+  quick_rockylinux_jdk27:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk26:latest
+      - image: mdernst/daikon-rockylinux-jdk27:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -1145,9 +1079,9 @@ jobs:
           name: test-nonquick
           command: scripts/test-nonquick-txt-diff.sh
 
-  nonquick_rockylinux_jdk26:
+  nonquick_rockylinux_jdk27:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk26:latest
+      - image: mdernst/daikon-rockylinux-jdk27:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -1208,9 +1142,9 @@ jobs:
           name: test-nontxt
           command: scripts/test-non-txt-diff.sh
 
-  nontxt_rockylinux_jdk26:
+  nontxt_rockylinux_jdk27:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk26:latest
+      - image: mdernst/daikon-rockylinux-jdk27:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -1275,9 +1209,9 @@ jobs:
           command: make showvars && scripts/test-misc.sh
           no_output_timeout: 20m
 
-  misc_rockylinux_jdk26:
+  misc_rockylinux_jdk27:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk26-plus:latest
+      - image: mdernst/daikon-rockylinux-jdk27-plus:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -1342,9 +1276,9 @@ jobs:
           command: scripts/test-kvasir.sh
           no_output_timeout: 20m
 
-  kvasir_rockylinux_jdk26:
+  kvasir_rockylinux_jdk27:
     docker:
-      - image: mdernst/daikon-rockylinux-jdk26-plus:latest
+      - image: mdernst/daikon-rockylinux-jdk27-plus:latest
     resource_class: large
     environment:
       TERM: dumb
@@ -1380,7 +1314,6 @@ workflows:
             - typecheck_latest_part2_ubuntu_jdk25
             - typecheck_latest_part3_ubuntu_jdk25
             - typecheck_bundled_part1_ubuntu_jdk25
-            - typecheck_bundled_part1_rockylinux_jdk25
             - typecheck_bundled_part2_ubuntu_jdk25
             - typecheck_bundled_part3_ubuntu_jdk25
       - quick_ubuntu_jdk11:
@@ -1399,7 +1332,7 @@ workflows:
             - quick_ubuntu_jdk25
 
       - quick_ubuntu_jdk25
-      - quick_ubuntu_jdk26:
+      - quick_ubuntu_jdk27:
           requires:
             - canary_jobs
             - quick_ubuntu_jdk25
@@ -1420,7 +1353,7 @@ workflows:
             - nonquick_ubuntu_jdk25
 
       - nonquick_ubuntu_jdk25
-      - nonquick_ubuntu_jdk26:
+      - nonquick_ubuntu_jdk27:
           requires:
             - canary_jobs
             - nonquick_ubuntu_jdk25
@@ -1441,7 +1374,7 @@ workflows:
             - nontxt_ubuntu_jdk25
 
       - nontxt_ubuntu_jdk25
-      - nontxt_ubuntu_jdk26:
+      - nontxt_ubuntu_jdk27:
           requires:
             - canary_jobs
             - nontxt_ubuntu_jdk25
@@ -1462,7 +1395,7 @@ workflows:
             - misc_ubuntu_jdk25
 
       - misc_ubuntu_jdk25
-      - misc_ubuntu_jdk26:
+      - misc_ubuntu_jdk27:
           requires:
             - canary_jobs
             - misc_ubuntu_jdk25
@@ -1473,7 +1406,7 @@ workflows:
             - kvasir_ubuntu_jdk25
 
       - kvasir_ubuntu_jdk25
-      - kvasir_ubuntu_jdk26:
+      - kvasir_ubuntu_jdk27:
           requires:
             - canary_jobs
             - kvasir_ubuntu_jdk25
@@ -1531,45 +1464,34 @@ workflows:
       - typecheck_latest_part2_ubuntu_jdk25
       - typecheck_latest_part3_ubuntu_jdk25
       - typecheck_bundled_part1_ubuntu_jdk25
-      - typecheck_bundled_part1_rockylinux_jdk25
       - typecheck_bundled_part2_ubuntu_jdk25
       - typecheck_bundled_part3_ubuntu_jdk25
-      - typecheck_latest_part1_ubuntu_jdk26:
+      - typecheck_latest_part1_ubuntu_jdk27:
           requires:
             - canary_jobs
             - typecheck_latest_part1_ubuntu_jdk25
 
-      - typecheck_latest_part2_ubuntu_jdk26:
+      - typecheck_latest_part2_ubuntu_jdk27:
           requires:
             - canary_jobs
             - typecheck_latest_part2_ubuntu_jdk25
 
-      - typecheck_latest_part3_ubuntu_jdk26:
+      - typecheck_latest_part3_ubuntu_jdk27:
           requires:
             - canary_jobs
             - typecheck_latest_part3_ubuntu_jdk25
 
-      - typecheck_bundled_part1_ubuntu_jdk26:
+      - typecheck_bundled_part1_ubuntu_jdk27:
           requires:
             - canary_jobs
             - typecheck_bundled_part1_ubuntu_jdk25
 
-      - typecheck_bundled_part2_ubuntu_jdk26:
+      - typecheck_bundled_part2_ubuntu_jdk27:
           requires:
             - canary_jobs
             - typecheck_bundled_part2_ubuntu_jdk25
 
-      - typecheck_bundled_part3_ubuntu_jdk26:
-          requires:
-            - canary_jobs
-            - typecheck_bundled_part3_ubuntu_jdk25
-
-      - typecheck_bundled_part2_rockylinux_jdk25:
-          requires:
-            - canary_jobs
-            - typecheck_bundled_part2_ubuntu_jdk25
-
-      - typecheck_bundled_part3_rockylinux_jdk25:
+      - typecheck_bundled_part3_ubuntu_jdk27:
           requires:
             - canary_jobs
             - typecheck_bundled_part3_ubuntu_jdk25
@@ -1585,11 +1507,11 @@ workflows:
             - canary_jobs
             - quick_ubuntu_jdk25
 
-      - quick_rockylinux_jdk26:
+      - quick_rockylinux_jdk27:
           requires:
             - canary_jobs
             - quick_rockylinux_jdk25
-            - quick_ubuntu_jdk26
+            - quick_ubuntu_jdk27
 
       - nonquick_rockylinux_jdk11:
           requires:
@@ -1602,11 +1524,11 @@ workflows:
             - canary_jobs
             - nonquick_ubuntu_jdk25
 
-      - nonquick_rockylinux_jdk26:
+      - nonquick_rockylinux_jdk27:
           requires:
             - canary_jobs
             - nonquick_rockylinux_jdk25
-            - nonquick_ubuntu_jdk26
+            - nonquick_ubuntu_jdk27
 
       - nontxt_rockylinux_jdk11:
           requires:
@@ -1619,11 +1541,11 @@ workflows:
             - canary_jobs
             - nontxt_ubuntu_jdk25
 
-      - nontxt_rockylinux_jdk26:
+      - nontxt_rockylinux_jdk27:
           requires:
             - canary_jobs
             - nontxt_rockylinux_jdk25
-            - nontxt_ubuntu_jdk26
+            - nontxt_ubuntu_jdk27
 
       - misc_rockylinux_jdk11:
           requires:
@@ -1636,11 +1558,11 @@ workflows:
             - canary_jobs
             - misc_ubuntu_jdk25
 
-      - misc_rockylinux_jdk26:
+      - misc_rockylinux_jdk27:
           requires:
             - canary_jobs
             - misc_rockylinux_jdk25
-            - misc_ubuntu_jdk26
+            - misc_ubuntu_jdk27
 
       - kvasir_rockylinux_jdk11:
           requires:
@@ -1653,8 +1575,8 @@ workflows:
             - canary_jobs
             - kvasir_ubuntu_jdk25
 
-      - kvasir_rockylinux_jdk26:
+      - kvasir_rockylinux_jdk27:
           requires:
             - canary_jobs
             - kvasir_rockylinux_jdk25
-            - kvasir_ubuntu_jdk26
+            - kvasir_ubuntu_jdk27

@@ -318,7 +318,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * Throws an exception if this object is malformed. Requires that the VarInfo has been installed
    * into a program point (the {@code ppt} field is set).
    *
-   * @exception RuntimeException if representation invariant on this is broken
+   * @throws RuntimeException if representation invariant on this is broken
    */
   public void checkRep() {
     checkRepNoPpt();
@@ -336,7 +336,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * <p>Does not require the {@code ppt} field to be set; can be called on VarInfos that have not
    * been installed into a program point.
    *
-   * @exception RuntimeException if representation invariant on this is broken
+   * @throws RuntimeException if representation invariant on this is broken
    */
   public void checkRepNoPpt() {
     try {
@@ -2616,7 +2616,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
         }
       }
 
-      /**
+      /*
        * Add the given variable to the result list. Does nothing if the variable is of primitive
        * type.
        */
@@ -4087,7 +4087,7 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     if (begin == null) {
       begin_name = null;
     } else {
-      begin_name = (begin != null) ? begin.var_info_name : null;
+      begin_name = begin.var_info_name;
       if (begin_shift == -1) {
         begin_name = begin_name.applyDecrement();
         parent_format = "%s-1..";

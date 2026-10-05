@@ -44,12 +44,18 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   wget
 
 # Install the JDK.
-RUN export DEBIAN_FRONTEND=noninteractive \
+m4_ifelse(jdk_packaged, 1, [[RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
   openjdk-JDKVER-jdk \
 && update-java-alternatives --set java-1.JDKVER.0-openjdk-amd64
 m4_ifelse(jdk_at_least(25), 1, [[ENV JAVA[[]]JDKVER[[]]_HOME=/usr/lib/jvm/java-JDKVER-openjdk-amd64
+]])]], [[# The openjdk-JDKVER-jdk package does not yet exist, so download the JDK.
+RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \
+&& tar xzf jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
+&& rm jdk-JDKVER[[]]_linux-x64_bin.tar.gz
+ENV PATH="/jdk-JDKVER/bin:$PATH"
+ENV JAVA[[]]JDKVER[[]]_HOME=/jdk-JDKVER
 ]])m4_dnl
 if_plus([[
 # These are needed to build the Checker Framework, used by the "typecheck" job in CI.
@@ -105,10 +111,10 @@ ENV PATH=/root/.local/bin:$PATH
 # However, SDKMAN requires bash, which would prevent the Docker container from
 # testing that Daikon runs under POSIX sh.
 RUN export DEBIAN_FRONTEND=noninteractive \
-&& wget -q https://services.gradle.org/distributions/gradle-9.6.1-bin.zip \
-&& unzip -q -d /opt/gradle gradle-9.6.1-bin.zip \
-&& rm gradle-9.6.1-bin.zip
-ENV PATH=$PATH:/opt/gradle/gradle-9.6.1/bin
+&& wget -q https://services.gradle.org/distributions/gradle-9.8.0-bin.zip \
+&& unzip -q -d /opt/gradle gradle-9.8.0-bin.zip \
+&& rm gradle-9.8.0-bin.zip
+ENV PATH=$PATH:/opt/gradle/gradle-9.8.0/bin
 ]])m4_dnl
 
 # Clean up.
