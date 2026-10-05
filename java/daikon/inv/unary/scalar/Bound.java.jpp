@@ -15,6 +15,7 @@ The correct way to build the system is to run 'make'.
   #define SUBSEQUENCE SubSequenceFloat
   #define INT(x) x ## Float
   #define PRIMITIVE double
+  #define GET_AUX_BOUND getDouble
   #define NUMWRAPPER Double
   #define LONGVALUE doubleValue()
   #define BASE_IS_INTEGRAL baseIsFloat()
@@ -27,6 +28,7 @@ The correct way to build the system is to run 'make'.
   #define SUBSEQUENCE SubSequence
   #define INT(x) x
   #define PRIMITIVE long
+  #define GET_AUX_BOUND getLong
   #define NUMWRAPPER Long
   #define LONGVALUE longValue()
   #define BASE_IS_INTEGRAL baseIsIntegral()
@@ -634,7 +636,7 @@ public class LOWERBOUND extends SINGLESCALAR {
 
     #if defined(LOWER) || defined(LOWERFLOAT) || defined(UPPER) || defined(UPPERFLOAT)
     if (var.aux.hasValue(VARINFOAUX_MINIMUM_VALUE)) {
-      int minVal = var.aux.getInt(VARINFOAUX_MINIMUM_VALUE);
+      PRIMITIVE minVal = var.aux.GET_AUX_BOUND(VARINFOAUX_MINIMUM_VALUE);
       if (minVal == MIN1) {
         return new DiscardInfo(this, DiscardCode.obvious,
           var.name() + " GTE " + MIN1 + " is already known");
