@@ -1,3 +1,7 @@
+PPT_NAME misc.Compar1.bar
+i < 50
+orig(i < 50)
+
 PPT_NAME misc.Compar1.main
 i<100
 orig(i<100)
