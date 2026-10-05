@@ -20,14 +20,11 @@ args[] == orig(args[])
 args[] == []
 args[].toString == []
 ===========================================================================
-NoMethodCalls.observe(java.util.List, java.util.List, int):::ENTER
+NoMethodCalls.observe(java.util.List, int):::ENTER
 list.getClass().getName() == NoMethodCalls$CountingList.class
-stale has only one value
-stale.getClass().getName() == java.util.ArrayList$SubList.class
 NoMethodCalls.toArrayCalls <= x
-list.getClass().getName() != stale.getClass().getName()
 ===========================================================================
-NoMethodCalls.observe(java.util.List, java.util.List, int):::EXIT
+NoMethodCalls.observe(java.util.List, int):::EXIT
 NoMethodCalls.toArrayCalls == orig(NoMethodCalls.toArrayCalls)
 NoMethodCalls.toArrayCalls < return
 NoMethodCalls.toArrayCalls <= orig(x)

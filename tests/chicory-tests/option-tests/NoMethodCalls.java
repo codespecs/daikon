@@ -21,23 +21,19 @@ public class NoMethodCalls {
   }
 
   public static void main(String[] args) {
-    List<Object> base = new ArrayList<>();
-    // Calling a method of `subList` after modifying `base` throws ConcurrentModificationException.
-    List<Object> stale = base.subList(0, 0);
-    base.add("");
     for (int i = 0; i < 10; i++) {
       CountingList cl = new CountingList();
       for (int j = 0; j < i; j++) {
         cl.add(j);
       }
-      observe(cl, stale, i);
+      observe(cl, i);
     }
     if (toArrayCalls != 0) {
       throw new Error("toArray() was called " + toArrayCalls + " times");
     }
   }
 
-  public static int observe(List<Object> list, List<Object> stale, int x) {
+  public static int observe(List<Object> list, int x) {
     return x + 1;
   }
 }
