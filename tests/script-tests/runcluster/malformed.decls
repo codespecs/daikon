@@ -1,0 +1,14 @@
+DECLARE
+Sensor.read():::POINT
+time
+double
+double
+1
+x
+int
+int
+1
+y
+int
+int
+1
