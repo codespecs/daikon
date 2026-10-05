@@ -1,32 +1,44 @@
 ===========================================================================
-NotOrdered.flagged(int[],int[]):::ENTER
+NotOrdered.flagged(int[],int[],int[],int[]):::ENTER
 a != null
 b != null
 b[] elements >= 0
+c != null
+d != null
 ===========================================================================
-NotOrdered.flagged(int[],int[]):::EXIT
+NotOrdered.flagged(int[],int[],int[],int[]):::EXIT
 a[] == orig(a[])
 b[] == orig(b[])
+c[] == orig(c[])
+d[] == orig(d[])
 b[] elements >= 0
 ===========================================================================
-NotOrdered.ordered(int[],int[]):::ENTER
+NotOrdered.ordered(int[],int[],int[],int[]):::ENTER
+size(c[]) == size(d[])
 a != null
 a[] sorted by <
 a[i] != i
 a[i] > i
 b != null
 b[] elements >= 0
+c != null
+d != null
 size(a[]) >= 1
 size(b[]) >= 1
+size(c[]) >= 1
 a[] > b[] (lexically)
 a[] >= b[] (lexically)
+3 * c[] - d[] == 0
 ===========================================================================
-NotOrdered.ordered(int[],int[]):::EXIT
+NotOrdered.ordered(int[],int[],int[],int[]):::EXIT
 a[] == orig(a[])
 b[] == orig(b[])
+c[] == orig(c[])
+d[] == orig(d[])
 a[] sorted by <
 a[i] != i
 a[i] > i
 b[] elements >= 0
 a[] > b[] (lexically)
 a[] >= b[] (lexically)
+3 * c[] - d[] == 0
