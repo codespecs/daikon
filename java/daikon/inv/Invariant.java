@@ -1143,7 +1143,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
    *
    * @param other the invariant to compare to this one
    * @return true iff the two invariants represent the same mathematical formula. Does not consider
-   * @exception RuntimeException if other.getClass() != this.getClass()
+   * @throws RuntimeException if other.getClass() != this.getClass()
    */
   public abstract boolean isSameFormula(@Prototype Invariant this, Invariant other);
 
@@ -2161,7 +2161,7 @@ public abstract class Invariant implements Serializable, Cloneable // but don't 
   /**
    * Throws an exception if this object is invalid.
    *
-   * @exception RuntimeException if representation invariant on this is broken
+   * @throws RuntimeException if representation invariant on this is broken
    */
   public void checkRep() {
     // very partial initial implementation

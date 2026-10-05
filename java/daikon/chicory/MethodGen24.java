@@ -295,7 +295,7 @@ public class MethodGen24 {
     }
 
     // Not necessarily sorted, so sort to make searching/insertion easier.
-    localsTable.sort(Comparator.comparing(LocalVariable::slot));
+    localsTable.sort(Comparator.comparingInt(LocalVariable::slot));
     origLocalVariables = localsTable.toArray(new LocalVariable[localsTable.size()]);
 
     poolBuilder = classBuilder.constantPool();
@@ -513,7 +513,7 @@ public class MethodGen24 {
 
     // If we added locals, then table is no longer sorted by slot.
     if (modified) {
-      localsTable.sort(Comparator.comparing(LocalVariable::slot));
+      localsTable.sort(Comparator.comparingInt(LocalVariable::slot));
     }
 
     // Now that we have updated and/or corrected the locals table, the paramNames
