@@ -830,6 +830,7 @@ error-prone: errorprone
 errorprone: compile errorprone-nocompile
 # Some of the -Xep are temporary
 #   -Xep:PatternMatchingInstanceof:OFF  requires Java 17 source code
+#   -Xep:StringConcatToTextBlock:OFF  requires Java 15 source code (text blocks)
 errorprone-nocompile:
 ifneq (${JAVA21}, 1)
 	@echo "Error Prone is only run under Java 21+"
