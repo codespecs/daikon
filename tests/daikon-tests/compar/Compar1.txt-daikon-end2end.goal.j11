@@ -5,6 +5,20 @@ k - l + 1 == 0
 ===========================================================================
 misc.Compar1.bar(int, int, int, int):::EXIT
 ===========================================================================
+misc.Compar1.bar(int, int, int, int):::EXIT;condition="i < 50"
+(orig(l) >> orig(k) == 0)
+===========================================================================
+misc.Compar1.bar(int, int, int, int):::EXIT;condition="not(i < 50)"
+===========================================================================
+misc.Compar1.bar(int, int, int, int):::EXIT;condition="orig(i < 50)"
+orig(i) - orig(j) + 1 == 0
+(orig(l) >> orig(k) == 0)
+orig(k) - orig(l) + 1 == 0
+===========================================================================
+misc.Compar1.bar(int, int, int, int):::EXIT;condition="not(orig(i < 50))"
+orig(i) - orig(j) + 1 == 0
+orig(k) - orig(l) + 1 == 0
+===========================================================================
 misc.Compar1.main(java.lang.String[]):::ENTER
 args has only one value
 args.getClass().getName() == java.lang.String[].class
