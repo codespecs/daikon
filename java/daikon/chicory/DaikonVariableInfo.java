@@ -128,6 +128,13 @@ public abstract class DaikonVariableInfo
   public static boolean std_visibility = false;
 
   /**
+   * If true, never create a variable whose value is obtained by calling a method of the target
+   * program's objects. For example, do not create a variable for the elements of a {@code
+   * java.util.List}, whose value is obtained by calling {@code toArray()}.
+   */
+  public static boolean no_method_calls = false;
+
+  /**
    * Set of fully qualified static variable names for this ppt. Used to ensure that each static is
    * only included once (regardless of how many other variables may include its declaring class).
    */
@@ -1034,6 +1041,11 @@ public abstract class DaikonVariableInfo
   /** Determines if type implements list and prints associated decls, if necessary. */
   protected void checkForListDecl(Class<?> type, String theName, String offset) {
     if (isArray || type.isPrimitive() || type.isArray()) {
+      return;
+    }
+
+    // Obtaining the elements of a list requires calling its toArray() method.
+    if (no_method_calls) {
       return;
     }
 

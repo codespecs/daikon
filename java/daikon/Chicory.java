@@ -157,6 +157,16 @@ public class Chicory implements AutoCloseable {
   @Option("File of pure methods to use as additional Daikon variables")
   public static @Nullable File purity_file;
 
+  /**
+   * If true, Chicory never calls a method of the target program's objects. For example, Chicory
+   * does not output the elements of a {@code java.util.List}, which requires calling its {@code
+   * toArray()} method. This degrades Daikon's output, but it prevents Chicory from changing the
+   * behavior of a program whose methods have side effects (or throw exceptions) when Chicory calls
+   * them. This option is incompatible with {@code --purity-file}.
+   */
+  @Option("Never call methods of the target program's objects")
+  public static boolean no_method_calls = false;
+
   // The next three command-line options are internal debugging
   // options that are primarily for the use of the Daikon developers.
 
@@ -254,6 +264,11 @@ public class Chicory implements AutoCloseable {
     }
     if (daikon && daikon_online) {
       System.out.printf("may not specify both daikon and daikon-onlne%n");
+      options.printUsage();
+      System.exit(1);
+    }
+    if (no_method_calls && purity_file != null) {
+      System.out.printf("may not specify both no-method-calls and purity-file%n");
       options.printUsage();
       System.exit(1);
     }

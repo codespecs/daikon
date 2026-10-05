@@ -1,0 +1,34 @@
+===========================================================================
+NoMethodCalls$CountingList:::OBJECT
+===========================================================================
+NoMethodCalls$CountingList.CountingList():::EXIT
+===========================================================================
+NoMethodCalls:::CLASS
+NoMethodCalls.toArrayCalls == 0
+===========================================================================
+NoMethodCalls.main(java.lang.String[]):::ENTER
+NoMethodCalls.toArrayCalls == size(args[])
+args has only one value
+args.getClass().getName() == java.lang.String[].class
+args[] == []
+args[].toString == []
+===========================================================================
+NoMethodCalls.main(java.lang.String[]):::EXIT
+NoMethodCalls.toArrayCalls == orig(NoMethodCalls.toArrayCalls)
+NoMethodCalls.toArrayCalls == orig(size(args[]))
+args[] == orig(args[])
+args[] == []
+args[].toString == []
+===========================================================================
+NoMethodCalls.observe(java.util.List, java.util.List, int):::ENTER
+list.getClass().getName() == NoMethodCalls$CountingList.class
+stale has only one value
+stale.getClass().getName() == java.util.ArrayList$SubList.class
+NoMethodCalls.toArrayCalls <= x
+list.getClass().getName() != stale.getClass().getName()
+===========================================================================
+NoMethodCalls.observe(java.util.List, java.util.List, int):::EXIT
+NoMethodCalls.toArrayCalls == orig(NoMethodCalls.toArrayCalls)
+NoMethodCalls.toArrayCalls < return
+NoMethodCalls.toArrayCalls <= orig(x)
+return - orig(x) - 1 == 0

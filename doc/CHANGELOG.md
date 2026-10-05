@@ -21,6 +21,13 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
+## Version 5.9.1 (???, 2026)
+
+Chicory:
+
+* New command-line option `--no-method-calls` makes Chicory never call
+  methods of the target program's objects, such as `toArray()` on lists.
+
 ## Version 5.9.0 (September 1, 2026)
 
 * All Daikon tools now work with Java 8-26.
