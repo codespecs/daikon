@@ -74,7 +74,7 @@ public class MergeComparabilityTest {
     result.add("ppt " + pptName);
     result.add("ppt-type enter");
     for (int i = 0; i < comparabilities.length; i++) {
-      result.addAll(var(String.valueOf((char) ('a' + i)), comparabilities[i]));
+      result.addAll(var(Character.toString('a' + i), comparabilities[i]));
     }
     result.add("");
     return result;
