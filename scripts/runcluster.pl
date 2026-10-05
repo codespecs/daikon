@@ -189,7 +189,9 @@ my $spinfo_file = "runcluster_temp.spinfo";
 if ($verbose) { print "\n# Writing spinfo file $spinfo_file ...\n"; }
 open (SPINFO, ">$spinfo_file") || die "couldn't write cluster spinfo file runcluster_temp.spinfo\n";
 
-my $spinfostring = "PPT_NAME OBJECT\n";
+# Daikon loads the splitters for the program point named here, and the
+# all_splitters configuration option applies them at every program point.
+my $spinfostring = "PPT_NAME " . &first_ppt_name(@decls_files) . "\n";
 for (my $i = 1; $i <= $ncluster; $i++) {
   $spinfostring  = $spinfostring."cluster == $i\n";
 }
@@ -209,7 +211,7 @@ foreach my $dtrace_file (@trace_files) {
 }
 
 my $invfile = "runcluster_temp_$algorithm-$ncluster.inv";
-$command = "java -cp $SCRIPTDIR/../daikon.jar -Xmx7g daikon.Daikon -o $invfile --config_option daikon.PptTopLevel.pairwise_implications=true --var_omit_pattern=\"class\" --no_text_output --no_show_progress $spinfo_file $decls_new " . join(' ', @new_dtraces) . " 2>&1 > runcluster_temp_Daikon_output.txt";
+$command = "java -cp $SCRIPTDIR/../daikon.jar -Xmx7g daikon.Daikon -o $invfile --config_option daikon.PptTopLevel.pairwise_implications=true --config_option daikon.split.SplitterList.all_splitters=true --var-omit-pattern=\"class\" --no_text_output --no_show_progress $spinfo_file $decls_new " . join(' ', @new_dtraces) . " 2>&1 > runcluster_temp_Daikon_output.txt";
 system_or_die($command, $verbose);
 
 $invfile =~ /(.*)\.inv/;
@@ -233,7 +235,7 @@ if ($algorithm eq 'xm') {
 } else {
   $outfile = "cluster-$algorithm-$ncluster.spinfo";
 }
-$command = "java daikon.tools.ExtractConsequent $invfile > $outfile";
+$command = "java -cp $SCRIPTDIR/../daikon.jar daikon.tools.ExtractConsequent $invfile > $outfile";
 system_or_die($command, $verbose);
 
 #remove all temporary files
@@ -253,6 +255,24 @@ sub unlink_glob ( $ ) {
     unlink $f;
   }
 } #unlink_glob
+
+# Returns the name of the first program point declared in the given decls files.
+sub first_ppt_name ( @ ) {
+  my @files = @_;
+  foreach my $file (@files) {
+    open (DECLS, $file) || die "couldn't open $file for input\n";
+    while (my $line = <DECLS>) {
+      if ($line =~ /^DECLARE$/) {
+        my $pptname = <DECLS>;
+        close DECLS;
+        chomp ($pptname);
+        return $pptname;
+      }
+    }
+    close DECLS;
+  }
+  die "No program point declarations found in: @files\n";
+} #first_ppt_name
 
 sub remove_temporary_files () {
   unlink_glob("*cluster_temp*");

@@ -1,0 +1,26 @@
+
+PPT_NAME Sensor.read
+x > y
+	DAIKON_FORMAT <dummy> x > y
+	ESC_FORMAT x > y
+	SIMPLIFY_FORMAT (> |x| |y|)
+x > y && y == 0
+	DAIKON_FORMAT x > y and y == 0
+	ESC_FORMAT x > y && y == 0
+	SIMPLIFY_FORMAT (AND (> |x| |y|) (EQ |y| 0))
+y != 0
+	DAIKON_FORMAT <dummy> y != 0
+	ESC_FORMAT y != 0
+	SIMPLIFY_FORMAT (NEQ |y| 0)
+y == 0
+	DAIKON_FORMAT <dummy> y == 0
+	ESC_FORMAT y == 0
+	SIMPLIFY_FORMAT (EQ |y| 0)
+y == 1
+	DAIKON_FORMAT <dummy> y == 1
+	ESC_FORMAT y == 1
+	SIMPLIFY_FORMAT (EQ |y| 1)
+y == 1 && y != 0
+	DAIKON_FORMAT y == 1 and y != 0
+	ESC_FORMAT y == 1 && y != 0
+	SIMPLIFY_FORMAT (AND (EQ |y| 1) (NEQ |y| 0))

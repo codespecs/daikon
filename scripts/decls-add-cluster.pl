@@ -12,9 +12,10 @@ use English;
 use strict;
 $WARNING = 1;			# "-w" flag
 
+use File::Basename;
+
 foreach my $decls_file (@ARGV) {
-    $decls_file =~ /.*\/(\S*)\.decls/;
-    my $decls_cluster = "$1_runcluster_temp.decls";
+    my $decls_cluster = basename($decls_file, ".decls") . "_runcluster_temp.decls";
     print " $decls_cluster ";
     open (IN, $decls_file) || die "couldn't open $decls_file for input\n";
     open (OUT, ">$decls_cluster") || die "couldn't open $decls_cluster for output\n";

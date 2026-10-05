@@ -75,6 +75,15 @@ my %pptname_to_nonces = ();
 # keep track of the variable names to be clustered.
 my %pptname_to_varnames = ();
 
+# PPTNAME -> ARRAY[VARNAME]
+# The names of the variables that appear in each record for the ppt in the
+# dtrace file, in order.  Used to detect a dtrace file that does not match
+# its declarations.
+my %pptname_to_tracevars = ();
+
+# The dtrace file being read, for error messages.
+my $current_dtrace_file;
+
 # This option is used to select the actual clustering algorithm
 # implementation we are planning to use. It determines the format with
 # which the extracted variables will be written to a file to be read
@@ -121,11 +130,15 @@ foreach my $dtrace_file (@dtrace_files) {
   } else {
     open (DTRACE, $dtrace_file) || die("couldn't open dtrace file $dtrace_file\n");
   }
+  $current_dtrace_file = $dtrace_file;
 
   # print "opened $dtrace_file\n";
   while (<DTRACE>) {
     my $line = $_;
-    if ($line =~ /:::/) {
+    if ($line =~ /^DECLARE$/) {
+      # A declaration in the dtrace file, not an execution.
+      &skip_till_next(*DTRACE);
+    } elsif ($line =~ /:::/) {
       my $pptname = $line;
       chomp ($pptname);
 
@@ -270,8 +283,17 @@ sub read_execution ( $ ) {
   }
 
   # get the values of the variables at this ppt that we want to cluster
-  while ($varname !~ /^$/) {
+  my @tracevars = @{$pptname_to_tracevars{$pptname}};
+  my $varindex = 0;
+  while (defined($varname) && $varname !~ /^$/) {
     chomp( $varname );
+    if ($varindex >= scalar(@tracevars)) {
+      &die_trace_mismatch($pptname, "end of record", $varname);
+    }
+    if ($varname ne $tracevars[$varindex]) {
+      &die_trace_mismatch($pptname, "variable $tracevars[$varindex]", $varname);
+    }
+    $varindex++;
     $value = <DTRACE>;
     chomp ($value);
 
@@ -312,7 +334,19 @@ sub read_execution ( $ ) {
 
     $varname = <DTRACE>;
   }
+  if ($varindex < scalar(@tracevars)) {
+    &die_trace_mismatch($pptname, "variable $tracevars[$varindex]",
+                        defined($varname) ? "end of record" : "end of file");
+  }
   return @vararray;
+}
+
+# Die with a message saying that the dtrace file does not match the
+# declarations.  Arguments are the program point name, a description of what
+# was expected, and what was found.
+sub die_trace_mismatch ( $$$ ) {
+  my ($pptname, $expected, $found) = @_;
+  die("$current_dtrace_file line $.: expected $expected, got $found for program point $pptname\n");
 }
 
 sub open_file_for_output_seq ( $$ ) {
@@ -499,6 +533,12 @@ sub read_decl_ppt () {
     chomp ($varname);
     my $declared_type = <DECL>;	# "$declared_type" is unused
     my $rep_type = <DECL>;
+
+    # A variable whose value is given in its declaration does not appear in
+    # the dtrace file.
+    if ($rep_type !~ /=/) {
+      push @{$pptname_to_tracevars{$pptname}}, $varname;
+    }
 
     # If the variable is an Object, keep note of that. Will be ignored (not
     # be clustered) later because its value is a hashcode.

@@ -208,7 +208,7 @@ public class ExtractConsequent {
           String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
           allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
           //           allConds.add(condIndex);
-          if (count > 0) {
+          if (count > 1) {
             conjunctionJava.append(" && ");
             conjunctionDaikon.append(" and ");
             conjunctionESC.append(" && ");
