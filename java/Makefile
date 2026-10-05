@@ -807,7 +807,7 @@ endif
 # See version numbers at https://github.com/google/error-prone/releases
 # and https://errorprone.info/docs/installation.
 # Only run under Java 21+.
-error-prone-version := 2.46.0
+error-prone-version := 2.50.0
 # "-XDaddTypeAnnotationsToSymbol=true" is only required under exactly Java 21,
 # but it's harmless (has no effect) on later versions of Java.
 extra-error-prone-args-1 := --should-stop=ifError=FLOW -XDaddTypeAnnotationsToSymbol=true

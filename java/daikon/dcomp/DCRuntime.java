@@ -2367,7 +2367,7 @@ public final class DCRuntime implements ComparabilityProvider {
   }
 
   /** Set of Daikon variables. Implements comparable on first DaikonVariable in each set. */
-  private static class DVSet extends ArrayList<DaikonVariableInfo> implements Comparable<DVSet> {
+  static class DVSet extends ArrayList<DaikonVariableInfo> implements Comparable<DVSet> {
     static final long serialVersionUID = 20050923L;
 
     /** Creates an empty DVSet. */
@@ -2459,6 +2459,7 @@ public final class DCRuntime implements ComparabilityProvider {
    * @param indent how many spaces to indent each line
    * @return a string representation of {@code dvsets}
    */
+  @SuppressWarnings("JdkObsolete") // Charset overload needs Java 10+; Daikon supports 8
   static String dvSetsToString(List<DVSet> dvsets, int indent) {
     // On Java 11, do
     //   ByteArrayOutputStream baos = new ByteArrayOutputStream();
