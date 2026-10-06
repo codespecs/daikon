@@ -734,8 +734,7 @@ public class LogicalCompare {
           System.out.println(usage);
           throw new Daikon.NormalTermination();
         case '?':
-          // getopt() already printed an error
-          throw new Daikon.UserError("Bad argument");
+          throw Daikon.badOptionError(g, args);
       }
     }
 

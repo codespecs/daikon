@@ -319,9 +319,7 @@ public final class Diff {
           logging = true;
           break;
         case '?':
-          // getopt() already printed an error
-          System.out.println(usage);
-          throw new Daikon.UserError("Bad argument");
+          throw Daikon.badOptionError(g, args);
         default:
           System.out.println("getopt() returned " + c);
           break;

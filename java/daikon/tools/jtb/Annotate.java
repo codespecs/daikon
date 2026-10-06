@@ -201,7 +201,7 @@ public class Annotate {
           slashslash = true;
           break;
         case '?':
-          break; // getopt() already printed an error
+          throw Daikon.badOptionError(g, args);
         default:
           System.out.println("getopt() returned " + c);
           break;
