@@ -160,13 +160,15 @@ public class DaikonGetopt extends Getopt {
    */
   private static String[] argsAfterOptions(
       String[] argv, String optstring, Supplier<String> usage) {
-    DaikonGetopt g = new DaikonGetopt(argv, optstring, new LongOpt[0], usage);
+    // Getopt permutes its argument array, so give it a copy to avoid modifying the caller's array.
+    String[] argvCopy = argv.clone();
+    DaikonGetopt g = new DaikonGetopt(argvCopy, optstring, new LongOpt[0], usage);
     // Every option other than -h and --help is bad, so getopt() returns only -1 or throws.
     int c = g.getopt();
     if (c != -1) {
       throw new Daikon.BugInDaikon("getopt() returned " + c);
     }
-    return Arrays.copyOfRange(argv, g.getOptind(), argv.length);
+    return Arrays.copyOfRange(argvCopy, g.getOptind(), argvCopy.length);
   }
 
   /**

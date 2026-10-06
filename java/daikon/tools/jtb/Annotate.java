@@ -87,7 +87,7 @@ public class Annotate {
   private static String usage =
       StringsPlume.joinLines(
           "Usage:  java daikon.tools.Annotate FILE.inv FILE.java ...",
-          "  -h   Display this usage message",
+          "  -h, --help  Display this usage message",
           "  -i   Insert invariants not supported by ESC with \"!\" instead of \"@\";",
           "       by default these \"inexpressible\" invariants are simply omitted",
           "  -s   Use // comments rather than /* comments",

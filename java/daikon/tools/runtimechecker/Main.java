@@ -2,7 +2,6 @@ package daikon.tools.runtimechecker;
 
 import daikon.Daikon;
 import daikon.DaikonGetopt;
-import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -13,18 +12,6 @@ import java.util.StringJoiner;
  * user-specified command.
  */
 public class Main extends CommandHandler {
-
-  /**
-   * Prints the usage message of each handler.
-   *
-   * @param handlers the handlers whose usage messages to print
-   * @param out where to print the usage messages
-   */
-  protected void usageMessage(List<CommandHandler> handlers, PrintStream out) {
-    for (CommandHandler h : handlers) {
-      h.usageMessage(out);
-    }
-  }
 
   /**
    * Returns the usage message of this and of each handler.
@@ -101,7 +88,12 @@ public class Main extends CommandHandler {
           System.err.println(
               "For more help, invoke the instrumenter with \"help\" as its sole argument.");
         } else {
-          h.usageMessage();
+          // Don't let a problem printing the usage message prevent the exit below.
+          try {
+            h.usageMessage();
+          } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+          }
         }
         System.exit(1);
       } else {
