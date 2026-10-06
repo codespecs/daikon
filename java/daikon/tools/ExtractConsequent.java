@@ -9,6 +9,7 @@ import daikon.FileIO;
 import daikon.Global;
 import daikon.Ppt;
 import daikon.PptMap;
+import daikon.PptName;
 import daikon.PptTopLevel;
 import daikon.VarInfo;
 import daikon.inv.Implication;
@@ -299,15 +300,18 @@ public class ExtractConsequent {
       }
     }
     if (!invs.isEmpty()) {
-      // A program point that is not a Java method, an :::OBJECT ppt, or a :::CLASS ppt (such as
-      // "aprogram.point:::POINT", as produced by convertcsv.pl) keeps its full name, so that the
-      // name matches the program point when used in a .spinfo file.
+      // In a .spinfo file, SplitterFactory.matchPpt matches a shortened name such as "Foo.bar"
+      // only against :::EXIT and :::OBJECT program points.  Any other program point (such as
+      // "aprogram.point:::POINT", as produced by convertcsv.pl) keeps its full name.
+      PptName ppt_name = ppt.ppt_name;
       String pptname =
-          (ppt.name().indexOf('(') == -1
-                  && !ppt.ppt_name.isObjectInstanceSynthetic()
-                  && !ppt.ppt_name.isClassStaticSynthetic())
-              ? ppt.name()
-              : cleanup_pptname(ppt.name());
+          (ppt_name.isEnterPoint()
+                  || ppt_name.isExitPoint()
+                  || ppt_name.isThrowsPoint()
+                  || ppt_name.isObjectInstanceSynthetic()
+                  || ppt_name.isClassStaticSynthetic())
+              ? cleanup_pptname(ppt.name())
+              : ppt.name();
       for (Invariant maybe_as_inv : invs) {
         Implication maybe = (Implication) maybe_as_inv;
 
