@@ -8,19 +8,27 @@ m4_dnl Disable comments, so that macros are expanded within "#" comments.
 m4_changecom()m4_dnl
 m4_dnl jdk_at_least(N) expands to 1 if JDKVER >= N, and to 0 otherwise.
 m4_define([[jdk_at_least]], [[m4_eval(JDKVER >= $1)]])m4_dnl
-m4_dnl jdk_lts expands to 1 if JDKVER is a long-term-support (LTS) release, and to 0 otherwise.
-m4_define([[jdk_lts]], [[m4_eval(JDKVER == 8 || JDKVER == 11 || JDKVER == 17 || (JDKVER >= 21 && (JDKVER - 21) % 4 == 0))]])m4_dnl
+m4_dnl ubuntu_newest_packaged_jdk is the newest JDK that Ubuntu provides as an OS package.
+m4_define([[ubuntu_newest_packaged_jdk]], [[26]])m4_dnl
 m4_dnl jdk_packaged_ubuntu expands to 1 if Ubuntu provides the openjdk-JDKVER-jdk package,
 m4_dnl and to 0 otherwise.  When it is 0, the JDK is downloaded from jdk_download_url.
-m4_define([[jdk_packaged_ubuntu]], [[m4_eval(JDKVER < 27)]])m4_dnl
-m4_dnl rockylinux_newest_packaged_jdk is the newest JDK that Rocky Linux provides as an OS package.
-m4_define([[rockylinux_newest_packaged_jdk]], [[25]])m4_dnl
-m4_dnl jdk_packaged_rockylinux expands to 1 if Rocky Linux provides the java-JDKVER-openjdk package,
-m4_dnl and to 0 otherwise.  When it is 0, the JDK is downloaded from jdk_download_url.
-m4_dnl Rocky Linux packages only LTS JDKs.  For a non-LTS JDK, dnf satisfies java-JDKVER-openjdk with
-m4_dnl EPEL's java-latest-openjdk, which moves to a newer JDK whenever the image is rebuilt.
-m4_define([[jdk_packaged_rockylinux]], [[m4_eval(jdk_lts && JDKVER <= rockylinux_newest_packaged_jdk)]])m4_dnl
-m4_define([[jdk_download_url]], [[https://download.java.net/java/GA/jdk27/55ce5470a6294008af0057ff4626d0e5/35/GPL/openjdk-27_linux-x64_bin.tar.gz]])m4_dnl
+m4_define([[jdk_packaged_ubuntu]], [[m4_eval(JDKVER <= ubuntu_newest_packaged_jdk)]])m4_dnl
+m4_dnl rockylinux_packaged_jdks lists the JDKs that Rocky Linux provides as OS packages.
+m4_dnl Do not list a JDK just because dnf can install java-NN-openjdk:  if Rocky Linux does not
+m4_dnl package JDK NN, then dnf satisfies java-NN-openjdk with EPEL's java-latest-openjdk, which
+m4_dnl moves to a newer JDK whenever the image is rebuilt.
+m4_define([[rockylinux_packaged_jdks]], [[8 11 17 21 25]])m4_dnl
+m4_dnl jdk_packaged_rockylinux expands to 1 if JDKVER is in rockylinux_packaged_jdks, and to 0
+m4_dnl otherwise.  When it is 0, the JDK is downloaded from jdk_download_url.
+m4_define([[jdk_packaged_rockylinux]],
+  [[m4_ifelse(m4_index([[ ]]rockylinux_packaged_jdks[[ ]], [[ ]]JDKVER[[ ]]), -1, 0, 1)]])m4_dnl
+m4_dnl jdk_download_url is the URL of the JDKVER tarball, which unpacks to directory jdk-JDKVER.
+m4_dnl It is used only when the OS does not package JDKVER.  If m4 reports that there is no URL,
+m4_dnl add one for JDKVER below.
+m4_define([[jdk_download_url]], [[m4_ifelse(JDKVER, 27,
+  [[https://download.java.net/java/GA/jdk27/55ce5470a6294008af0057ff4626d0e5/35/GPL/openjdk-27_linux-x64_bin.tar.gz]],
+  [[m4_errprint(m4___file__[[: no jdk_download_url for JDK ]]JDKVER
+)m4_m4exit(1)]])]])m4_dnl
 m4_dnl if_plus(TEXT) expands to TEXT for a "-plus" image, and to nothing otherwise.
 m4_define([[if_plus]], [[m4_ifelse(PLUS, 1, [[$1]])]])m4_dnl
 m4_dnl The comment at the top of each generated Dockerfile.
