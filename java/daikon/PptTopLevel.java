@@ -89,6 +89,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -411,7 +412,7 @@ public class PptTopLevel extends Ppt {
   @SuppressWarnings("fields.uninitialized") // todo: initialization and helper methods
   public PptTopLevel(
       String name,
-      PptType type,
+      @Nullable PptType type,
       List<ParentRelation> parents,
       EnumSet<PptFlags> flags,
       VarInfo[] var_infos) {
@@ -419,7 +420,7 @@ public class PptTopLevel extends Ppt {
 
     this.name = name;
     if (!name.contains(":::")) {
-      name += ":::" + type;
+      name += ":::" + (type == null ? PptType.POINT : type);
     }
     this.ppt_name = new PptName(name);
     this.flags = flags;
@@ -431,52 +432,87 @@ public class PptTopLevel extends Ppt {
   /** Restore/Create interns when reading serialized object. */
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
-    type = normalize_type(ppt_name, type);
   }
 
   /**
-   * Returns the type that a program point with the given name and declared type should have. A
-   * program point that has no declared type (as in a version 1 decls file), or that is declared
-   * with type {@link PptType#EXIT} or with the default type {@link PptType#POINT}, gets its type
-   * from its name:
+   * Returns the type that a program point with the given name and declared type should have.
+   *
+   * <p>A program point that has no declared type (as in a version 1 decls file, or a version 2
+   * decls file that omits the ppt-type record) gets its type from its name:
    *
    * <ul>
    *   <li>foo:::ENTER is an {@link PptType#ENTER},
-   *   <li>a combined exit point such as foo:::EXIT is an {@link PptType#EXIT},
+   *   <li>a combined exit point, foo:::EXIT, is an {@link PptType#EXIT},
    *   <li>a numbered exit point such as foo:::EXIT22 is a {@link PptType#SUBEXIT},
    *   <li>Foo:::OBJECT is an {@link PptType#OBJECT},
    *   <li>Foo:::CLASS is a {@link PptType#CLASS}, and
    *   <li>any other program point is a generic {@link PptType#POINT}.
    * </ul>
    *
-   * (Some front ends declare a numbered exit with type {@link PptType#EXIT}, and a version 2 decls
-   * file may omit the type.) As a result, the predicates is_subexit, is_combined_exit, etc. agree
-   * with one another and with the program point's name.
+   * <p>A program point that is declared with type {@link PptType#EXIT} or {@link PptType#SUBEXIT}
+   * is a combined exit or a numbered exit, according to its name. (Some front ends declare a
+   * numbered exit with type {@link PptType#EXIT}.)
+   *
+   * <p>A program point that is declared with any other type keeps that type. Its name must conform
+   * to the type, except for {@link PptType#POINT}, which permits any name.
+   *
+   * <p>As a result, the predicates is_enter, is_subexit, is_combined_exit, etc. agree with one
+   * another and with the program point's name.
    *
    * @param ppt_name the name of the program point
    * @param type the declared type of the program point, or null if none was declared
    * @return the type that the program point should have
+   * @throws IllegalArgumentException if the declared type does not conform to the name
    */
   private static PptType normalize_type(PptName ppt_name, @Nullable PptType type) {
-    if (type != null && type != PptType.EXIT && type != PptType.POINT) {
-      return type;
+    if (type == null) {
+      if (ppt_name.isEnterPoint()) {
+        return PptType.ENTER;
+      } else if (ppt_name.isCombinedExitPoint()) {
+        return PptType.EXIT;
+      } else if (ppt_name.isNumberedExitPoint()) {
+        return PptType.SUBEXIT;
+      } else if (ppt_name.isObjectInstanceSynthetic()) {
+        return PptType.OBJECT;
+      } else if (ppt_name.isClassStaticSynthetic()) {
+        return PptType.CLASS;
+      } else {
+        return PptType.POINT;
+      }
     }
-    if (ppt_name.isEnterPoint()) {
-      return PptType.ENTER;
+
+    boolean conforms;
+    switch (type) {
+      case POINT:
+        return type;
+      case ENTER:
+        conforms = ppt_name.isEnterPoint();
+        break;
+      case EXIT:
+      case SUBEXIT:
+        if (ppt_name.isCombinedExitPoint()) {
+          return PptType.EXIT;
+        } else if (ppt_name.isNumberedExitPoint()) {
+          return PptType.SUBEXIT;
+        }
+        conforms = false;
+        break;
+      case OBJECT:
+        conforms = ppt_name.isObjectInstanceSynthetic();
+        break;
+      case CLASS:
+        conforms = ppt_name.isClassStaticSynthetic();
+        break;
+      default:
+        throw new Error("Unexpected program point type " + type);
     }
-    if (ppt_name.isCombinedExitPoint()) {
-      return PptType.EXIT;
+    if (!conforms) {
+      throw new IllegalArgumentException(
+          String.format(
+              "Program point %s has type %s, but its name does not conform to that type",
+              ppt_name.getName(), type.toString().toLowerCase(Locale.ROOT)));
     }
-    if (ppt_name.isExitWithLineNumber()) {
-      return PptType.SUBEXIT;
-    }
-    if (ppt_name.isObjectInstanceSynthetic()) {
-      return PptType.OBJECT;
-    }
-    if (ppt_name.isClassStaticSynthetic()) {
-      return PptType.CLASS;
-    }
-    return PptType.POINT;
+    return type;
   }
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.

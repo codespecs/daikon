@@ -1876,10 +1876,6 @@ public final class Daikon {
 
       PptTopLevel exitnn_ppt = ppt;
       PptName exit_name = ppt.ppt_name.makeExit();
-      // Don't replace a combined exit point that the declarations already contain.
-      if (ppts.get(exit_name) != null) {
-        continue;
-      }
       PptTopLevel exit_ppt = exit_ppts.get(exit_name);
 
       if (debugInit.isLoggable(FINE)) {
