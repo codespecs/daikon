@@ -225,7 +225,8 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   /**
-   * Returns the representative of the comparable set that contains {@code base}.
+   * Returns the representative of the comparable set that contains {@code base}. Compresses the
+   * path from {@code base} to its representative.
    *
    * @param base a comparable set
    * @param groups a union-find structure over comparable sets: maps a comparable set to another
@@ -233,11 +234,17 @@ public final class VarComparabilityImplicit extends VarComparability implements 
    * @return the representative of the comparable set that contains {@code base}
    */
   private static int findGroup(int base, Map<Integer, Integer> groups) {
+    int root = base;
     Integer next;
-    while ((next = groups.get(base)) != null) {
+    while ((next = groups.get(root)) != null) {
+      root = next;
+    }
+    while (base != root) {
+      next = groups.put(base, root);
+      assert next != null : "@AssumeAssertion(nullness): base is not a representative";
       base = next;
     }
-    return base;
+    return root;
   }
 
   /**
@@ -249,16 +256,61 @@ public final class VarComparabilityImplicit extends VarComparability implements 
    */
   VarComparabilityImplicit remap(Map<Integer, Integer> groups) {
     int newBase = (base < 0) ? base : findGroup(base, groups);
-    boolean changed = (newBase != base);
-    VarComparabilityImplicit @Nullable [] newIndexTypes = indexTypes;
-    if (indexTypes != null) {
-      newIndexTypes = new VarComparabilityImplicit[indexTypes.length];
-      for (int i = 0; i < indexTypes.length; i++) {
-        newIndexTypes[i] = indexTypes[i].remap(groups);
-        changed |= (newIndexTypes[i] != indexTypes[i]);
+    VarComparabilityImplicit @Nullable [] oldIndexTypes = indexTypes;
+    VarComparabilityImplicit @Nullable [] newIndexTypes = oldIndexTypes;
+    if (oldIndexTypes != null) {
+      for (int i = 0; i < oldIndexTypes.length; i++) {
+        VarComparabilityImplicit newIndexType = oldIndexTypes[i].remap(groups);
+        if (newIndexType != oldIndexTypes[i]) {
+          if (newIndexTypes == oldIndexTypes) {
+            newIndexTypes = oldIndexTypes.clone();
+          }
+          assert newIndexTypes != null : "@AssumeAssertion(nullness): copy of oldIndexTypes";
+          newIndexTypes[i] = newIndexType;
+        }
       }
     }
-    return changed ? new VarComparabilityImplicit(newBase, newIndexTypes, dimensions) : this;
+    if (newBase == base && newIndexTypes == indexTypes) {
+      return this;
+    }
+    return new VarComparabilityImplicit(newBase, newIndexTypes, dimensions);
+  }
+
+  /**
+   * Returns the comparability of a variable that is always equal to two variables with the given
+   * comparabilities, which have been made comparable by {@link #unify} and {@link #remap}. Wherever
+   * either is comparable to everything, so is the result.
+   *
+   * @param type1 a comparability
+   * @param type2 a comparability that is comparable to {@code type1}
+   * @return a comparability that is comparable to everything that either argument is comparable to
+   */
+  static VarComparabilityImplicit join(
+      VarComparabilityImplicit type1, VarComparabilityImplicit type2) {
+    if (type1.dimensions != type2.dimensions) {
+      // Such variables are never equal.
+      return type1;
+    }
+    VarComparabilityImplicit @Nullable [] newIndexTypes = type1.indexTypes;
+    for (int i = 0; i < type1.dimensions; i++) {
+      VarComparabilityImplicit indexType1 = (VarComparabilityImplicit) type1.indexType(i);
+      VarComparabilityImplicit newIndexType =
+          join(indexType1, (VarComparabilityImplicit) type2.indexType(i));
+      if (newIndexType != indexType1) {
+        assert newIndexTypes != null : "@AssumeAssertion(nullness): dependent: dimensions > 0";
+        if (newIndexTypes == type1.indexTypes) {
+          newIndexTypes = newIndexTypes.clone();
+        }
+        newIndexTypes[i] = newIndexType;
+      }
+    }
+    // A negative base, which is comparable to everything, takes precedence.  If both are
+    // negative, the choice is arbitrary.  If both are non-negative, they are equal.
+    int newBase = Math.min(type1.base, type2.base);
+    if (newBase == type1.base && newIndexTypes == type1.indexTypes) {
+      return type1;
+    }
+    return new VarComparabilityImplicit(newBase, newIndexTypes, type1.dimensions);
   }
 
   /**
