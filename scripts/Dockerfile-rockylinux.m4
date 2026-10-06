@@ -35,11 +35,14 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   which
 
 # Install the JDK.
-m4_ifelse(jdk_packaged, 1, [[RUN dnf -q -y upgrade && dnf -q -y install \
+m4_ifelse(jdk_packaged_rockylinux, 1, [[RUN dnf -q -y upgrade && dnf -q -y install \
   java-JDKVER-openjdk \
   java-JDKVER-openjdk-devel
 m4_ifelse(jdk_at_least(25), 1, [[ENV JAVA[[]]JDKVER[[]]_HOME=/usr/lib/jvm/java-JDKVER-openjdk
-]])]], [[# The java-JDKVER-openjdk* packages do not yet exist, so download the JDK.
+]])]], [[# Download the JDK rather than installing java-JDKVER-openjdk with dnf.
+# Rocky Linux packages only LTS JDKs.  For any other JDK, dnf satisfies
+# java-NN-openjdk with EPEL's java-latest-openjdk, which moves to a newer JDK
+# (possibly an early-access release) whenever the image is rebuilt.
 # RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz https://download.oracle.com/java/JDKVER/latest/jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
 RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \
 && tar xzf jdk-JDKVER[[]]_linux-x64_bin.tar.gz \

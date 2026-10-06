@@ -44,7 +44,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   wget
 
 # Install the JDK.
-m4_ifelse(jdk_packaged, 1, [[RUN export DEBIAN_FRONTEND=noninteractive \
+m4_ifelse(jdk_packaged_ubuntu, 1, [[RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy update \
 && apt-get -qqy install \
   openjdk-JDKVER-jdk \

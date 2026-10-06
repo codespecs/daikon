@@ -37,7 +37,10 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   which
 
 # Install the JDK.
-# The java-27-openjdk* packages do not yet exist, so download the JDK.
+# Download the JDK rather than installing java-27-openjdk with dnf.
+# Rocky Linux packages only LTS JDKs.  For any other JDK, dnf satisfies
+# java-NN-openjdk with EPEL's java-latest-openjdk, which moves to a newer JDK
+# (possibly an early-access release) whenever the image is rebuilt.
 # RUN curl --silent -o jdk-27_linux-x64_bin.tar.gz https://download.oracle.com/java/27/latest/jdk-27_linux-x64_bin.tar.gz \
 RUN curl --silent -o jdk-27_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk27/55ce5470a6294008af0057ff4626d0e5/35/GPL/openjdk-27_linux-x64_bin.tar.gz \
 && tar xzf jdk-27_linux-x64_bin.tar.gz \

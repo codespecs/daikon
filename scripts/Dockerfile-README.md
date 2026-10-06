@@ -6,8 +6,11 @@ running tests reproducibly.
 The Dockerfiles are generated from `Dockerfile-*.m4`.
 To regenerate them, run `make dockerfiles`.
 The JDK versions are listed in variable `DOCKERFILE_JDKS` in `Makefile`.
-If a JDK version is not yet available as an OS package, edit `jdk_packaged`
-and `jdk_download_url` in `Dockerfile-defs.m4`.
+Whether a JDK is installed as an OS package or downloaded from
+`jdk_download_url` is controlled by `jdk_packaged_ubuntu` and
+`rockylinux_newest_packaged_jdk` in `Dockerfile-defs.m4`.
+Rocky Linux packages only LTS JDKs, so a non-LTS JDK is always downloaded
+for Rocky Linux.
 
 The rest of this file explains how to build new Docker images.
 
