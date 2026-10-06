@@ -1392,9 +1392,9 @@ public final class Daikon {
           break;
         //
         case '?':
-          // break; // getopt() already printed an error
+          // getopt() already printed an error
           System.out.println(usage);
-          throw new Daikon.NormalTermination();
+          throw new Daikon.UserError("Bad argument");
         //
         default:
           throw new Daikon.BugInDaikon("getopt() returned " + c);
