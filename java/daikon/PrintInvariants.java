@@ -1336,9 +1336,6 @@ public final class PrintInvariants {
   /** Print invariants for a single program point, once we know that this ppt is worth printing. */
   public static void print_invariants(PptTopLevel ppt, PrintWriter out, PptMap ppt_map) {
 
-    // make names easier to read before printing
-    ppt.simplify_variable_names();
-
     print_sample_data(ppt, out);
     print_modified_vars(ppt, out);
 

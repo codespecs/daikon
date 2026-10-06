@@ -14,7 +14,8 @@ my $indentation = 0;
 
 $/ = ""; # Read by paragraph
 while (<>) {
-    next if /^decl/ or /^ppt/ or /^var/ or /^input/ or /^\/\//; # Skip .decls-like paras
+    # Skip .decls-like paras
+    next if /^(ppt |decl-version|var-comparability|input-language|ListImplementors|\/\/)/;
     /^(.*):::([A-Z\d]+)$/m or die "Can't parse PPT name from <$_>";
     my $base = $1;
     my $suffix = $2;

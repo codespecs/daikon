@@ -1818,10 +1818,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /** Debug tracer. */
   private static final Logger debug = Logger.getLogger("daikon.VarInfo");
 
-  /** Debug tracer for simplifying expressions. */
-  private static final Logger debugSimplifyExpression =
-      Logger.getLogger("daikon.VarInfo.simplifyExpression");
-
   /** Enable assertions that would otherwise reduce run time performance. */
   private static final Logger debugEnableAssertions =
       Logger.getLogger("daikon.VarInfo.enableAssertions");
@@ -1833,56 +1829,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   // --dbg daikon.VarInfo
   public static boolean assertionsEnabled() {
     return debugEnableAssertions.isLoggable(Level.FINE);
-  }
-
-  /**
-   * Change the name of this VarInfo by side effect into a more simplified form, which is easier to
-   * read on display. Don't call this during processing, as I think the system assumes that names
-   * don't change over time (?).
-   */
-  public void simplify_expression() {
-    if (debugSimplifyExpression.isLoggable(Level.FINE)) {
-      debugSimplifyExpression.fine("** Simplify: " + name());
-    }
-
-    if (!isDerived()) {
-      if (debugSimplifyExpression.isLoggable(Level.FINE)) {
-        debugSimplifyExpression.fine("** Punt because not derived variable");
-      }
-      return;
-    }
-
-    // find a ...post(...)... expression to simplify
-    VarInfoName.Poststate postexpr = null;
-    for (VarInfoName node : new VarInfoName.InorderFlattener(var_info_name).nodes()) { // vin ok
-      if (node instanceof VarInfoName.Poststate) {
-        // Remove temporary var when bug is fixed.
-        VarInfoName.Poststate tempNode = (VarInfoName.Poststate) node;
-        postexpr = tempNode;
-        // old code; reinstate when bug is fixed
-        // postexpr = (VarInfoName.Poststate) node;
-        break;
-      }
-    }
-    if (postexpr == null) {
-      if (debugSimplifyExpression.isLoggable(Level.FINE)) {
-        debugSimplifyExpression.fine("** Punt because no post()");
-      }
-      return;
-    }
-
-    // if we have post(...+k) rewrite as post(...)+k
-    if (postexpr.term instanceof VarInfoName.Add) {
-      VarInfoName.Add add = (VarInfoName.Add) postexpr.term;
-      VarInfoName swapped = add.term.applyPoststate().applyAdd(add.amount);
-      var_info_name =
-          new VarInfoName.Replacer(postexpr, swapped)
-              .replace(var_info_name)
-              .intern(); // vin ok  // interning bugfix
-      // start over
-      simplify_expression();
-      return;
-    }
   }
 
   /**
