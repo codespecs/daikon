@@ -261,7 +261,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("          System.exit(1);");
     ps.println("          break;");
     ps.println("        case '?':");
-    ps.println("          break;");
+    ps.println("          throw Daikon.badOptionError(g, args);");
     ps.println("        default:");
     ps.println("          System.out.println(\"getopt() returned \" + c);");
     ps.println("          break;");

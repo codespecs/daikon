@@ -83,13 +83,14 @@ public class SampleTester {
 
     LongOpt[] longopts =
         new LongOpt[] {
+          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
 
-    Getopt g = new Getopt("daikon.test.SampleTester", args, "h:", longopts);
+    Getopt g = new Getopt("daikon.test.SampleTester", args, "h", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -128,8 +129,7 @@ public class SampleTester {
           throw new Daikon.NormalTermination();
 
         case '?':
-          break; // getopt() already printed an error
-
+          throw Daikon.badOptionError(g, args);
         default:
           System.out.println("getopt() returned " + c);
           break;

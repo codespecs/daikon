@@ -20,7 +20,7 @@ public class BadOptionTest {
   private static void assertBadOption(String badOption, ThrowingRunnable mainCall) {
     Daikon.UserError e = assertThrows(Daikon.UserError.class, mainCall);
     assertEquals(
-        "Bad command-line option " + badOption + "; run with --help for usage",
+        "Bad command-line option " + badOption + "; run with -h for usage",
         String.valueOf(e.getMessage()));
   }
 

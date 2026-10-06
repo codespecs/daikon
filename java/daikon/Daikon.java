@@ -1520,9 +1520,7 @@ public final class Daikon {
     return new UserError(
         "Bad command-line option"
             + (badOption == null ? "" : " " + badOption)
-            + "; run with --"
-            + help_SWITCH
-            + " for usage");
+            + "; run with -h for usage");
   }
 
   /**
