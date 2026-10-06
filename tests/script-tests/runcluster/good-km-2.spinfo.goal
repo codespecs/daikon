@@ -1,5 +1,5 @@
 
-PPT_NAME Sensor.read
+PPT_NAME Sensor.read():::POINT
 x > y
 	DAIKON_FORMAT <dummy> x > y
 	ESC_FORMAT x > y
