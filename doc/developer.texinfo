@@ -2080,7 +2080,7 @@ the Texinfo source files in the @file{doc/} directory against the previous
 versions:
 
 @smallexample
-if [ -z "$@{DAIKONDIR@}" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
+if [ -z "$@{DAIKONDIR@}" ] && [ -d "java/daikon/" ] ; then DAIKONDIR=$(pwd) ; fi
 cd $@{DAIKONDIR@}/doc && \
 diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
 @end smallexample
@@ -2090,7 +2090,7 @@ Another good source of information is the repository logs since the
 last release:
 
 @smallexample
-if [ -z "$@{DAIKONDIR@}" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
+if [ -z "$@{DAIKONDIR@}" ] && [ -d "java/daikon/" ] ; then DAIKONDIR=$(pwd) ; fi
 DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
     -O - | xargs echo -n` && \
 cd $@{DAIKONDIR@} && \
@@ -2109,7 +2109,7 @@ git log v$@{DAIKONVERSION@}..HEAD
 In addition, you should run the same command in your Fjalar clone:
 
 @smallexample
-if [ -z "$@{DAIKONDIR@}" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
+if [ -z "$@{DAIKONDIR@}" ] && [ -d "java/daikon/" ] ; then DAIKONDIR=$(pwd) ; fi
 DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
     -O - | xargs echo -n` && \
 @{ cd $@{DAIKONDIR@}/fjalar || cd $@{DAIKONDIR@}/../fjalar ; @} && \
@@ -2790,8 +2790,7 @@ Instead of placing both declarations and data trace records in a single
 file, it is permitted to place the declarations in one or more
 @file{.decls} @dfn{declaration files} while leaving the data trace records
 in the @file{.dtrace} file.  This can be convenient for tools that
-perform a separate instrumentation step, such as
-@command{dfepl} (@pxref{dfepl,,,daikon,Daikon User Manual}).
+perform a separate instrumentation step.
 Such a tool takes as
 input a target program to be analyzed, and produces two outputs:  a
 @file{.decls} file and an instrumented program.  Executing the
@@ -3532,8 +3531,8 @@ variables (@pxref{Variable names,,,daikon,Daikon User Manual}).
 Here are portions of two files @file{StackArTester.decls} and
 @file{StackArTester.dtrace}, for a Java class that implements a stack of
 integers using an array as the underlying data structure.  You can see
-many more examples by simply running an existing front end on some Java,
-C, or Perl programs and viewing the resulting files.
+many more examples by simply running an existing front end on some Java
+or C programs and viewing the resulting files.
 
 @menu
 * Example declaration file::
@@ -4297,7 +4296,7 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  INST Xiaoxia regex printf DiscardInfo instanceof UpperBound Xu
 @c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname rt toc
 @c  LocalWords:  VarComparability instrumenter struct Hatcliff Sinha Vibha xref
-@c  LocalWords:  dfepl uninstrumented classname subexit inline dec hashcode len
+@c  LocalWords:  uninstrumented classname subexit inline dec hashcode len
 @c  LocalWords:  hashCode param dups NonZero rel varname topOfStack MyInteger
 @c  LocalWords:  hasDuplicates hasOrder hasNull nullTerminated isParam DynComp
 @c  LocalWords:  Hashcodes birthyear topLevel bottomLevel pptInfo toplevel conf
