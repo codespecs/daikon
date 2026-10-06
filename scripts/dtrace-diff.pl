@@ -111,29 +111,6 @@ sub load_decls ( $ ) {
             $$lhashref{"variable order"} = [ @varorder ];
             $$declshash{$currppt} = $lhashref;
             $ppt_seen = 1;
-	} elsif ($l eq "DECLARE") {
-	    my $currppt = getline($decls);
-	    my $lhashref = {};
-            my @varorder = ();
-	    while (my $varname = getline($decls)) {
-		(defined (my $dtype = getline($decls)))
-		    or die "malformed decls file";
-		(defined (my $rtype = getline($decls)))
-		    or die "malformed decls file";
-		(defined (my $ltype = getline($decls)))
-		    or die "malformed decls file";
-                # print STDERR "decls defining $varname for $currppt\n";
-		$$lhashref{$varname} = [$dtype, $rtype, $ltype];
-                push @varorder, $varname;
-	    }
-            $$lhashref{"variable order"} = [ @varorder ];
-	    $$declshash{$currppt} = $lhashref;
-	    $ppt_seen = 1;
-        }elsif (($l eq "VarComparability") && !$ppt_seen) {
-	    # It's ok to have a VarComparability as the first thing
-	    # in the decls file.  Read the type of comparability,
-	    # then move on.
-	    $l = getline($decls);
 	} elsif (($l eq "ListImplementors") && !$ppt_seen) {
 	    # It's ok to have a ListImplementors in the decls file.
 	    # Read the type of comparability, then move on.
