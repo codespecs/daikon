@@ -360,6 +360,23 @@ public class PptName implements Serializable {
   }
 
   /**
+   * Returns true iff this name is that of a numbered exit point: it ends with ":::EXIT" followed by
+   * one or more digits, such as foo:::EXIT22. By contrast, {@link #isNumberedExitPoint} is also
+   * true for names such as foo:::EXIT_CONDITION.
+   *
+   * @return true iff this name is that of a numbered exit point
+   */
+  @EnsuresNonNullIf(result = true, expression = "point")
+  @Pure
+  public boolean isExitWithLineNumber() {
+    if (!isExitPoint()) {
+      return false;
+    }
+    String line = exitLine();
+    return !line.isEmpty() && point.length() == FileIO.exit_suffix.length() + line.length();
+  }
+
+  /**
    * Returns true iff this name refers to a procedure exit point.
    *
    * @return true iff this name refers to a procedure exit point
@@ -378,6 +395,7 @@ public class PptName implements Serializable {
    *     empty string
    * @see #getPointSubscript()
    */
+  @SideEffectFree
   public String exitLine() {
     if (!isExitPoint()) {
       return "";

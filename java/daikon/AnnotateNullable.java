@@ -1,9 +1,9 @@
 package daikon;
 
-import daikon.PptTopLevel.PptType;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +45,12 @@ public class AnnotateNullable {
 
   /** Map from a class name to the list of static functions for that class. */
   static Map<String, List<PptTopLevel>> class_map = new LinkedHashMap<>();
+
+  /**
+   * Map from the name of a combined exit ppt that the .inv file lacks, to the numbered exit ppts of
+   * that method. An older .inv file may lack a combined exit ppt.
+   */
+  static Map<PptName, List<PptTopLevel>> numbered_exits = new LinkedHashMap<>();
 
   // The package for the previous class.  Used to reduce duplication in
   // output file.
@@ -93,6 +99,15 @@ public class AnnotateNullable {
       System.out.println();
     }
 
+    for (PptTopLevel ppt : ppts.pptIterable()) {
+      if (ppt.is_subexit()) {
+        PptName exit_name = ppt.ppt_name.makeExit();
+        if (ppts.get(exit_name) == null) {
+          numbered_exits.computeIfAbsent(exit_name, k -> new ArrayList<>()).add(ppt);
+        }
+      }
+    }
+
     // Find all exit ppts that do not have a parent and determine what
     // class they are associated with.  These are static methods for classes
     // without any static variables (no class ppt is created if there are no
@@ -112,7 +127,7 @@ public class AnnotateNullable {
     // static method can be identified because it will not have the OBJECT
     // point as a parent.
     for (PptTopLevel ppt : ppts.pptIterable()) {
-      if (!ppt.is_combined_exit() || !is_static_method(ppt)) {
+      if (!is_method_exit(ppt) || !is_static_method(ppt)) {
         continue;
       }
 
@@ -149,8 +164,8 @@ public class AnnotateNullable {
         for (int i = 0; i < ppt.children.size(); i++) {
           PptRelation child_rel = ppt.children.get(i);
           PptTopLevel child = child_rel.child;
-          // Skip enter ppts, all of the info is at the exit.
-          if ((child.type == PptType.ENTER) || (child.type == PptType.OBJECT)) {
+          // Skip enter ppts and others; all the info is at the exit ppt that represents the method.
+          if (!is_method_exit(child)) {
             continue;
           }
           child_cnt++;
@@ -236,8 +251,8 @@ public class AnnotateNullable {
     if (class_ppt != null) {
       for (PptRelation child_rel : class_ppt.children) {
         PptTopLevel child = child_rel.child;
-        // Skip enter ppts, all of the info is at the exit.
-        if ((child.type == PptType.ENTER) || (child.type == PptType.OBJECT)) {
+        // Skip enter ppts and others; all the info is at the exit ppt that represents the method.
+        if (!is_method_exit(child)) {
           continue;
         }
         // debug.log("processing static method %s, type %s", child, child.type);
@@ -257,8 +272,8 @@ public class AnnotateNullable {
     // Process member (non-static) methods
     for (PptRelation child_rel : object_ppt.children) {
       PptTopLevel child = child_rel.child;
-      // Skip enter ppts, all of the info is at the exit.
-      if (child.type == PptType.ENTER) {
+      // Skip enter ppts and others; all the info is at the exit ppt that represents the method.
+      if (!is_method_exit(child)) {
         continue;
       }
       // debug.log("processing method %s, type %s", child, child.type);
@@ -278,14 +293,34 @@ public class AnnotateNullable {
    * string if no annotation is applicable. Otherwise, the return value contains a trailing space.
    */
   public static String get_annotation(PptTopLevel ppt, VarInfo vi) {
+    return get_annotation(Collections.singletonList(ppt), vi);
+  }
+
+  /**
+   * Returns the annotation for the specified variable, considering all the given exit ppts of a
+   * method. Returns @Nullable if, at any of the ppts, samples were found for the variable and at
+   * least one sample contained a null value. Otherwise behaves like {@link
+   * #get_annotation(PptTopLevel, VarInfo)}.
+   *
+   * @param exits the exit ppts of a method, which all declare a variable named like {@code vi}
+   * @param vi a variable of the first of the exit ppts
+   * @return the annotation for the variable
+   */
+  public static String get_annotation(List<PptTopLevel> exits, VarInfo vi) {
 
     if (vi.type.isPrimitive()) {
       return "";
     }
 
     String annotation = (nonnull_annotations ? "NonNull" : "");
-    if ((ppt.num_samples(vi) > 0) && !ppt.is_nonzero(vi)) {
-      annotation = "Nullable";
+    for (PptTopLevel ppt : exits) {
+      VarInfo ppt_vi = ppt.find_var_by_name(vi.name());
+      if (ppt_vi == null) {
+        continue;
+      }
+      if ((ppt.num_samples(ppt_vi) > 0) && !ppt.is_nonzero(ppt_vi)) {
+        annotation = "Nullable";
+      }
     }
     if (annotation != "") { // interned
       // if (! stub_format) {
@@ -299,7 +334,12 @@ public class AnnotateNullable {
   /** Print out the annotations for the specified method. */
   public static void process_method(PptTopLevel ppt) {
 
-    assert ppt.type == PptType.EXIT : ppt;
+    assert is_method_exit(ppt) : ppt;
+    List<PptTopLevel> exits = method_exits(ppt);
+    int num_samples = 0;
+    for (PptTopLevel exit : exits) {
+      num_samples += exit.num_samples();
+    }
 
     // Get all of the parameters to the method and the return value
     List<VarInfo> params = new ArrayList<>();
@@ -317,7 +357,7 @@ public class AnnotateNullable {
     }
 
     // The formatted annotation for the return value with a leading space, or empty string
-    String return_annotation = (retvar == null ? "" : " " + get_annotation(ppt, retvar));
+    String return_annotation = (retvar == null ? "" : " " + get_annotation(exits, retvar));
 
     // Look up the annotation for each parameter.
     List<String> names = new ArrayList<>();
@@ -326,7 +366,7 @@ public class AnnotateNullable {
       String annotation = "";
       names.add(param.name());
       if (param.file_rep_type.isHashcode()) {
-        annotation = get_annotation(ppt, param);
+        annotation = get_annotation(exits, param);
       }
       annos.add(annotation);
     }
@@ -339,9 +379,9 @@ public class AnnotateNullable {
         sj.add(String.format("%s %s %s", annos.get(i), "type-goes-here", names.get(i)));
       }
       System.out.printf("%s", sj);
-      System.out.printf("; // %d samples%n", ppt.num_samples());
+      System.out.printf("; // %d samples%n", num_samples);
     } else {
-      System.out.printf("  method %s : // %d samples%n", jvm_signature(ppt), ppt.num_samples());
+      System.out.printf("  method %s : // %d samples%n", jvm_signature(ppt), num_samples);
       System.out.printf("    return:%s%n", return_annotation);
       for (int i = 0; i < params.size(); i++) {
         // Print the annotation for this parameter
@@ -437,6 +477,47 @@ public class AnnotateNullable {
     } else {
       return field_name.substring(pt + 1);
     }
+  }
+
+  /**
+   * Returns true if the ppt is the exit ppt that represents its method. That is usually the
+   * combined exit ppt. However, an older .inv file may lack a combined exit ppt, in which case the
+   * numbered exit ppts are direct children of the OBJECT or CLASS ppt, and the first of them
+   * represents the method.
+   *
+   * @param ppt a program point
+   * @return true if the ppt is the exit ppt that represents its method
+   * @see #method_exits
+   */
+  @Pure
+  public static boolean is_method_exit(PptTopLevel ppt) {
+    if (ppt.is_combined_exit()) {
+      return true;
+    }
+    if (!ppt.is_subexit()) {
+      return false;
+    }
+    List<PptTopLevel> exits = numbered_exits.get(ppt.ppt_name.makeExit());
+    return exits != null && exits.get(0) == ppt;
+  }
+
+  /**
+   * Returns the exit ppts that together summarize all exits from the method that the given ppt
+   * represents: the combined exit ppt, or all the numbered exit ppts if there is no combined exit
+   * ppt.
+   *
+   * @param ppt the exit ppt that represents its method
+   * @return the exit ppts that together summarize all exits from the method
+   * @see #is_method_exit
+   */
+  private static List<PptTopLevel> method_exits(PptTopLevel ppt) {
+    assert is_method_exit(ppt) : ppt;
+    if (ppt.is_combined_exit()) {
+      return Collections.singletonList(ppt);
+    }
+    @SuppressWarnings("nullness:assignment") // is_method_exit(ppt) guarantees the map has the key
+    @NonNull List<PptTopLevel> exits = numbered_exits.get(ppt.ppt_name.makeExit());
+    return exits;
   }
 
   /**
