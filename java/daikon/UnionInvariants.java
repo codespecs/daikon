@@ -1,6 +1,5 @@
 package daikon;
 
-import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;
 import org.plumelib.util.FilesPlume;
@@ -50,9 +49,10 @@ public final class UnionInvariants {
 
     LongOpt[] longopts =
         new LongOpt[] {
+          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         };
-    Getopt g = new Getopt("daikon.UnionInvariants", args, "ho:", longopts);
+    DaikonGetopt g = new DaikonGetopt("daikon.UnionInvariants", args, "ho:", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -90,11 +90,8 @@ public final class UnionInvariants {
           }
           break;
         //
-        case '?':
-          break; // getopt() already printed an error
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
 

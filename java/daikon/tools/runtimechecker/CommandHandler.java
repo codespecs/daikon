@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.io.UncheckedIOException;
 
 /**
@@ -22,20 +23,30 @@ public class CommandHandler {
     throw new UnsupportedOperationException();
   }
 
+  /** Prints the usage message to standard error. */
   public void usageMessage() {
+    usageMessage(System.err);
+  }
+
+  /**
+   * Prints the usage message.
+   *
+   * @param out where to print the usage message
+   */
+  public void usageMessage(PrintStream out) {
     String[] classnameArray = getClass().getName().split("\\.");
     String simpleClassname = classnameArray[classnameArray.length - 1];
 
     String docFile = simpleClassname + ".doc";
     InputStream in = getClass().getResourceAsStream(docFile);
     if (in == null) {
-      System.err.println("Didn't find documentation for " + getClass());
+      out.println("Didn't find documentation for " + getClass());
       return;
     }
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(in, UTF_8))) {
       String line;
       while ((line = reader.readLine()) != null) {
-        System.err.println(line);
+        out.println(line);
       }
     } catch (IOException e) {
       throw new UncheckedIOException("problem reading " + docFile, e);

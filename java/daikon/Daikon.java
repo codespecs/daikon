@@ -1055,7 +1055,7 @@ public final class Daikon {
           new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         };
-    Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
+    DaikonGetopt g = new DaikonGetopt("daikon.Daikon", args, "ho:", longopts);
     int c;
 
     while ((c = g.getopt()) != -1) {
@@ -1390,11 +1390,6 @@ public final class Daikon {
             throw new Daikon.UserError("Cannot write to serialization output file " + inv_file);
           }
           break;
-        //
-        case '?':
-          // getopt() already printed an error
-          System.out.println(usage);
-          throw new Daikon.UserError("Bad argument");
         //
         default:
           throw new Daikon.BugInDaikon("getopt() returned " + c);
@@ -2586,7 +2581,17 @@ public final class Daikon {
         p = ((PptConditional) ppt).parent;
       }
 
-      if (!p.is_dataflow_leaf()) {
+      // Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered
+      // exit), we define them as everything except
+      // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT
+      //  and :::CLASS program points.  This scheme ensures that arbitrarily
+      //  named program points such as :::POINT (used by convertcsv.pl)
+      //  will be treated as leaves.
+      if (p.ppt_name.isCombinedExitPoint()
+          || p.ppt_name.isEnterPoint()
+          || p.ppt_name.isThrowsPoint()
+          || p.ppt_name.isObjectInstanceSynthetic()
+          || p.ppt_name.isClassStaticSynthetic()) {
         return;
       }
 

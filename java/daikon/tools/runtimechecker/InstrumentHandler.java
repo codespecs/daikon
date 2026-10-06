@@ -5,11 +5,11 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
 import daikon.PptMap;
 import daikon.tools.jtb.ParseResults;
-import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.IOException;
@@ -88,6 +88,9 @@ public class InstrumentHandler extends CommandHandler {
     Arguments arguments = readArguments(realArgs);
     if (arguments == errorWhileReadingArguments) {
       return false;
+    }
+    if (arguments == helpRequested) {
+      return true;
     }
 
     // Set up debug traces; note this comes after reading command line options.
@@ -201,10 +204,14 @@ public class InstrumentHandler extends CommandHandler {
   private static Arguments errorWhileReadingArguments =
       new Arguments("error while reading arguments", new ArrayList<String>());
 
+  /** Returned by {@link #readArguments} when the user requests the usage message. */
+  private static Arguments helpRequested = new Arguments("help requested", new ArrayList<String>());
+
   private Arguments readArguments(String[] args) {
 
     LongOpt[] longopts =
         new LongOpt[] {
+          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 'h'),
           new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(output_only_high_conf_invariants_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -213,9 +220,21 @@ public class InstrumentHandler extends CommandHandler {
           new LongOpt(directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(checkers_directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
         };
-    Getopt g = new Getopt("daikon.tools.runtimechecker.InstrumentHandler", args, "hs", longopts);
+    DaikonGetopt g =
+        new DaikonGetopt("daikon.tools.runtimechecker.InstrumentHandler", args, "h", longopts);
+    // The caller prints the usage message when this command fails.
+    g.setUsageHint(null);
     int c;
-    while ((c = g.getopt()) != -1) {
+    while (true) {
+      try {
+        c = g.getopt();
+      } catch (Daikon.UserError e) {
+        System.err.println(e.getMessage());
+        return errorWhileReadingArguments;
+      }
+      if (c == -1) {
+        break;
+      }
       switch (c) {
         case 0:
           // got a long option
@@ -237,10 +256,14 @@ public class InstrumentHandler extends CommandHandler {
             daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else {
             System.err.println("Unknown long option received: " + option_name);
+            return errorWhileReadingArguments;
           }
           break;
+        case 'h':
+          usageMessage(System.out);
+          return helpRequested;
         default:
-          System.out.println("unrecognized option" + c);
+          System.err.println("getopt() returned " + c);
           return errorWhileReadingArguments;
       }
     }

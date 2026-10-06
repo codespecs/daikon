@@ -5,6 +5,7 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
 import daikon.Ppt;
@@ -113,12 +114,13 @@ public class ExtractConsequent {
     daikon.LogHelper.setupLogs(INFO);
     LongOpt[] longopts =
         new LongOpt[] {
+          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
-    Getopt g = new Getopt("daikon.ExtractConsequent", args, "h", longopts);
+    DaikonGetopt g = new DaikonGetopt("daikon.ExtractConsequent", args, "h", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -145,11 +147,8 @@ public class ExtractConsequent {
         case 'h':
           System.out.println(usage);
           throw new Daikon.NormalTermination();
-        case '?':
-          break; // getopt() already printed an error
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
     // The index of the first non-option argument -- the name of the file
