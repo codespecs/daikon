@@ -34,7 +34,8 @@ trace-untruncate-fast: trace-untruncate-fast.c
 DOCKERFILE_OSES := ubuntu rockylinux
 DOCKERFILE_JDKS := 11 17 21 25 27
 DOCKERFILES := $(foreach os,${DOCKERFILE_OSES},$(foreach jdk,${DOCKERFILE_JDKS},Dockerfile-${os}-jdk${jdk} Dockerfile-${os}-jdk${jdk}-plus))
-# Remove this line when DOCKERFILE_JDKS no longer contains 11 or 17.
+# Rocky Linux 10 does not package JDK 11 or 17.  This special case is
+# temporary:  remove this line when DOCKERFILE_JDKS no longer contains 11 or 17.
 DOCKERFILES := $(filter-out Dockerfile-rockylinux-jdk11% Dockerfile-rockylinux-jdk17%,${DOCKERFILES})
 
 dockerfiles: ${DOCKERFILES}
@@ -55,9 +56,10 @@ ${DOCKERFILES}: Dockerfile-%: Dockerfile-defs.m4 $(addsuffix .m4,$(addprefix Doc
 #   make docker-image-ubuntu-jdk21-plus
 # The Docker Hub user and the "-testing" suffix come from file
 # ../.azure/defs-common.m4, which also determines the images that CI uses.
+# DOCKER_USERID and DOCKERTESTING run m4 only when first used, and at most once.
 DOCKER_M4_VALUE = $(shell printf '%s\n' '$(1)' | m4 ../.azure/defs-common.m4 - | tail -1)
-DOCKER_USERID := $(call DOCKER_M4_VALUE,docker_userid)
-DOCKERTESTING := $(call DOCKER_M4_VALUE,docker_testing)
+DOCKER_USERID = $(eval DOCKER_USERID := $(call DOCKER_M4_VALUE,docker_userid))${DOCKER_USERID}
+DOCKERTESTING = $(eval DOCKERTESTING := $(call DOCKER_M4_VALUE,docker_testing))${DOCKERTESTING}
 DOCKER_IMAGE = ${DOCKER_USERID}/daikon-$*${DOCKERTESTING}
 DOCKER_IMAGES := $(patsubst Dockerfile-%,docker-image-%,${DOCKERFILES})
 .PHONY: docker-images ${DOCKER_IMAGES}

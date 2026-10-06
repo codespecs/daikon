@@ -46,8 +46,9 @@ RUN dnf -q -y upgrade && dnf -q -y install \
 ENV JAVA25_HOME=/usr/lib/jvm/java-25-openjdk
 
 # The CRB repository contains certain packages, including dependencies of
-# EPEL packages such as yamllint.
-RUN crb enable
+# EPEL packages such as yamllint.  The `crb` script needs dnf-plugins-core.
+RUN dnf -q -y install dnf-plugins-core \
+&& crb enable
 
 RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \
