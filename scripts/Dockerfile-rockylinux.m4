@@ -38,7 +38,7 @@ RUN dnf -q -y upgrade && dnf -q -y install \
 m4_ifelse(jdk_packaged_by_every_os, 1, [[RUN dnf -q -y upgrade && dnf -q -y install \
   java-JDKVER-openjdk \
   java-JDKVER-openjdk-devel
-m4_ifelse(jdk_at_least(25), 1, [[ENV JAVA[[]]JDKVER[[]]_HOME=/usr/lib/jvm/java-JDKVER-openjdk
+m4_ifelse(m4_eval(JDKVER >= 25), 1, [[ENV JAVA[[]]JDKVER[[]]_HOME=/usr/lib/jvm/java-JDKVER-openjdk
 ]])]], [[# Not every OS packages a non-LTS JDK, so download the JDK.
 # RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz https://download.oracle.com/java/JDKVER/latest/jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
 RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \

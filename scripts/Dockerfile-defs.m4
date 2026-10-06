@@ -6,8 +6,6 @@ m4_dnl   PLUS: 1 for a "-plus" image (which contains more tools), 0 otherwise
 m4_changequote([[,]])m4_dnl
 m4_dnl Disable comments, so that macros are expanded within "#" comments.
 m4_changecom()m4_dnl
-m4_dnl jdk_at_least(N) expands to 1 if JDKVER >= N, and to 0 otherwise.
-m4_define([[jdk_at_least]], [[m4_eval(JDKVER >= $1)]])m4_dnl
 m4_dnl Increment this variable not when a new LTS JDK is released, but only once every OS packages it.
 m4_define([[latest_lts_release]], [[25]])m4_dnl
 m4_dnl jdk_packaged_by_every_os expands to 1 if *every* OS in DOCKERFILE_OSES provides JDKVER as an OS package,

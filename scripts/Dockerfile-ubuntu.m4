@@ -2,7 +2,7 @@ dockerfile_header(Dockerfile-ubuntu.m4)
 
 # "ubuntu" is the latest LTS release.  "ubuntu:rolling" is the latest release.
 # Either might lag behind; as of 2024-11-16, ubuntu:rolling was still 24.04 rather than 24.10.
-FROM ubuntu[[]]m4_ifelse(jdk_at_least(25), 1, [[:rolling]])
+FROM ubuntu[[]]m4_ifelse(m4_eval(JDKVER >= 25), 1, [[:rolling]])
 LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
 
 # According to
@@ -49,7 +49,7 @@ m4_ifelse(jdk_packaged_by_every_os, 1, [[RUN export DEBIAN_FRONTEND=noninteracti
 && apt-get -qqy install \
   openjdk-JDKVER-jdk \
 && update-java-alternatives --set java-1.JDKVER.0-openjdk-amd64
-m4_ifelse(jdk_at_least(25), 1, [[ENV JAVA[[]]JDKVER[[]]_HOME=/usr/lib/jvm/java-JDKVER-openjdk-amd64
+m4_ifelse(m4_eval(JDKVER >= 25), 1, [[ENV JAVA[[]]JDKVER[[]]_HOME=/usr/lib/jvm/java-JDKVER-openjdk-amd64
 ]])]], [[# Not every OS packages a non-LTS JDK, so download the JDK.
 RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \
 && tar xzf jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
