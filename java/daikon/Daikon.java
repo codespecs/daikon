@@ -1876,6 +1876,10 @@ public final class Daikon {
 
       PptTopLevel exitnn_ppt = ppt;
       PptName exit_name = ppt.ppt_name.makeExit();
+      // Don't replace a combined exit point that the declarations already contain.
+      if (ppts.get(exit_name) != null) {
+        continue;
+      }
       PptTopLevel exit_ppt = exit_ppts.get(exit_name);
 
       if (debugInit.isLoggable(FINE)) {
@@ -2589,9 +2593,7 @@ public final class Daikon {
       }
     }
 
-    // Create the initial equality sets
-    ppt.equality_view = new PptSliceEquality(ppt);
-    ppt.equality_view.instantiate_invariants();
+    ppt.create_equality_view();
   }
 
   private static List<SpinfoFile> spinfoFiles = new ArrayList<>();

@@ -435,26 +435,47 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns the type that a program point with the given name and declared type should have. Some
-   * front ends declare a numbered exit such as foo:::EXIT22 with type {@link PptType#EXIT} or with
-   * the default type {@link PptType#POINT}; such a program point is a {@link PptType#SUBEXIT}. Only
-   * Daikon creates combined exit points such as foo:::EXIT, so a program point with type {@link
-   * PptType#EXIT} and any other name is a generic {@link PptType#POINT}. As a result, the
-   * predicates is_subexit, is_combined_exit, is_dataflow_leaf, etc. agree with one another and with
-   * the program point's name.
+   * Returns the type that a program point with the given name and declared type should have. A
+   * program point declared with type {@link PptType#EXIT} or with the default type {@link
+   * PptType#POINT} gets its type from its name: a combined exit point such as foo:::EXIT is an
+   * {@link PptType#EXIT}, a numbered exit point such as foo:::EXIT22 is a {@link PptType#SUBEXIT},
+   * and any other program point is a generic {@link PptType#POINT}. (Some front ends declare a
+   * numbered exit with type {@link PptType#EXIT}, and a version 2 decls file may omit the type.)
+   * As a result, the predicates is_subexit, is_combined_exit, is_dataflow_leaf, etc. agree with one
+   * another and with the program point's name.
    *
    * @param ppt_name the name of the program point
    * @param type the declared type of the program point
    * @return the type that the program point should have
    */
   private static PptType normalize_type(PptName ppt_name, PptType type) {
-    if ((type == PptType.EXIT || type == PptType.POINT) && ppt_name.isNumberedExitPoint()) {
+    if (type != PptType.EXIT && type != PptType.POINT) {
+      return type;
+    }
+    if (ppt_name.isCombinedExitPoint()) {
+      return PptType.EXIT;
+    }
+    if (isExitWithLineNumber(ppt_name)) {
       return PptType.SUBEXIT;
     }
-    if (type == PptType.EXIT && !ppt_name.isCombinedExitPoint()) {
-      return PptType.POINT;
+    return PptType.POINT;
+  }
+
+  /**
+   * Returns true if the program point's name ends with ":::EXIT" followed by one or more digits,
+   * such as foo:::EXIT22. {@link PptName#isNumberedExitPoint} is not used because it is also true
+   * for names such as foo:::EXIT_CONDITION.
+   *
+   * @param ppt_name the name of a program point
+   * @return true if the name is that of a numbered exit point
+   */
+  private static boolean isExitWithLineNumber(PptName ppt_name) {
+    String point = ppt_name.getPoint();
+    if (point == null || !point.startsWith(FileIO.exit_suffix)) {
+      return false;
     }
-    return type;
+    String line = point.substring(FileIO.exit_suffix.length());
+    return !line.isEmpty() && line.chars().allMatch(Character::isDigit);
   }
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
@@ -4157,6 +4178,16 @@ public class PptTopLevel extends Ppt {
       ppt_cond.mergeInvs();
       debugConditional.fine("After merge, equality set = " + ppt_cond.equality_sets_txt());
     }
+  }
+
+  /**
+   * Creates the initial equality view for this ppt, in which all variables are in a single
+   * equality set.
+   */
+  public void create_equality_view() {
+    PptSliceEquality new_equality_view = new PptSliceEquality(this);
+    new_equality_view.instantiate_invariants();
+    equality_view = new_equality_view;
   }
 
   /**

@@ -112,7 +112,7 @@ public class AnnotateNullable {
     // static method can be identified because it will not have the OBJECT
     // point as a parent.
     for (PptTopLevel ppt : ppts.pptIterable()) {
-      if (!ppt.is_combined_exit() || !is_static_method(ppt)) {
+      if (!is_method_exit(ppt) || !is_static_method(ppt)) {
         continue;
       }
 
@@ -299,7 +299,7 @@ public class AnnotateNullable {
   /** Print out the annotations for the specified method. */
   public static void process_method(PptTopLevel ppt) {
 
-    assert ppt.type == PptType.EXIT : ppt;
+    assert is_method_exit(ppt) : ppt;
 
     // Get all of the parameters to the method and the return value
     List<VarInfo> params = new ArrayList<>();
@@ -437,6 +437,30 @@ public class AnnotateNullable {
     } else {
       return field_name.substring(pt + 1);
     }
+  }
+
+  /**
+   * Returns true if the ppt is the exit ppt that summarizes all exits from its method. That is
+   * usually the combined exit ppt. However, an older .inv file may lack a combined exit ppt, in
+   * which case a numbered exit ppt may be a direct child of the OBJECT or CLASS ppt.
+   *
+   * @param ppt a program point
+   * @return true if the ppt is the exit ppt that summarizes all exits from its method
+   */
+  @Pure
+  public static boolean is_method_exit(PptTopLevel ppt) {
+    if (ppt.is_combined_exit()) {
+      return true;
+    }
+    if (!ppt.is_subexit()) {
+      return false;
+    }
+    for (PptRelation rel : ppt.parents) {
+      if (rel.parent.is_combined_exit()) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**

@@ -363,6 +363,10 @@ public final class MergeInvariants {
       }
     }
 
+    // A non-leaf with no children (and thus no merge children) needs an equality view.  When
+    // the merge template was read from .inv files, clean_for_merge removed it.
+    PptRelation.setup_childless_nonleaves(merge_ppts);
+
     // Check the resulting PptMap for consistency
     merge_ppts.repCheck();
 
@@ -398,15 +402,15 @@ public final class MergeInvariants {
     long duration = System.nanoTime() - startTime;
     debugProgress.fine("Time spent in implications: " + TimeUnit.NANOSECONDS.toSeconds(duration));
 
-    // Remove the PptRelation links so that when the file is written
+    // Remove the merge PptRelation links so that when the file is written
     // out it only includes the new information
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
       if (!ppt.is_dataflow_leaf()) {
         continue;
       }
-      ppt.children.clear();
+      ppt.children.removeIf(MergeInvariants::isMergeChildRel);
       for (PptConditional cond : ppt.cond_iterable()) {
-        cond.children.clear();
+        cond.children.removeIf(MergeInvariants::isMergeChildRel);
       }
     }
 
@@ -423,6 +427,16 @@ public final class MergeInvariants {
       // Print the invariants
       PrintInvariants.print_invariants(merge_ppts);
     }
+  }
+
+  /**
+   * Returns true if the relation was created by {@link PptRelation#newMergeChildRel}.
+   *
+   * @param rel a relation
+   * @return true if the relation is from a merge ppt to the corresponding ppt of an input map
+   */
+  private static boolean isMergeChildRel(PptRelation rel) {
+    return rel.getRelationType() == PptRelation.PptRelationType.MERGE_CHILD;
   }
 
   /**
