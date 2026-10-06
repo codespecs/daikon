@@ -2954,7 +2954,8 @@ with efficient discovery of the number of clusters).  The kmeans and
 hierarchical clustering tools are provided in the Daikon
 distribution, in directories @file{$@{DAIKONDIR@}/tools/kmeans} and
 @file{$@{DAIKONDIR@}/tools/hierarchical}; run @command{make} in each
-directory, and put each directory on your path.  The xmeans code and executable are publicly available at
+directory, and put each directory on your path.
+The xmeans code and executable are publicly available at
 @uref{http://www.cs.cmu.edu/~dpelleg/kmeans.html} (fill in the license
 form and mail it in).
 
