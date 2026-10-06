@@ -8,6 +8,7 @@ public final class DataStructures_QueueAr_dequeue_27 extends Splitter {
     return "orig(++front == theArray.length)";
   }
 
+  VarInfo orig_this_theArray_array_varinfo; // orig(this.theArray[..])
   VarInfo orig_this_front_varinfo; // orig(this.front)
 
   static DummyInvariant dummyInvFactory;
@@ -15,6 +16,7 @@ public final class DataStructures_QueueAr_dequeue_27 extends Splitter {
 
   public DataStructures_QueueAr_dequeue_27() { }
   public DataStructures_QueueAr_dequeue_27(Ppt ppt) {
+    orig_this_theArray_array_varinfo = ppt.find_var_by_name("orig(this.theArray[..])");
     orig_this_front_varinfo = ppt.find_var_by_name("orig(this.front)");
   }
 
@@ -23,17 +25,19 @@ public final class DataStructures_QueueAr_dequeue_27 extends Splitter {
   }
 
   public boolean valid() {
-    return (orig_this_front_varinfo != null);
+    return (orig_this_theArray_array_varinfo != null) && (orig_this_front_varinfo != null);
   }
 
   public boolean test(ValueTuple vt) {
-    /* writeTestBody: 1 declarations */
+    /* writeTestBody: 2 declarations */
+    long[] orig_this_theArray_array = orig_this_theArray_array_varinfo.getIntArrayValue(vt);
     long orig_this_front = orig_this_front_varinfo.getIntValue(vt);
-    return(++orig_this_front==orig_this_theArray.length);
+    return(++orig_this_front==orig_this_theArray_array.length);
   }
 
   public String repr() {
     return "DataStructures_QueueAr_dequeue_27: "
+      + "orig_this_theArray_array_varinfo = " + orig_this_theArray_array_varinfo.repr() + " "
       + "orig_this_front_varinfo = " + orig_this_front_varinfo.repr() + " "
       ;
   }
@@ -44,9 +48,10 @@ public final class DataStructures_QueueAr_dequeue_27 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
+    VarInfo orig_this_theArray_array_vi = ppt.find_var_by_name("orig(this.theArray[..])");
     VarInfo orig_this_front_vi = ppt.find_var_by_name("orig(this.front)");
-    if (orig_this_front_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {orig_this_front_vi});
+    if (orig_this_theArray_array_vi != null && orig_this_front_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {orig_this_theArray_array_vi, orig_this_front_vi});
     }
   }
 

@@ -76,7 +76,6 @@
 TRACE_SOURCE?=generated
 INSTRUMENT?=infer
 SOURCE_LANGUAGE?=java
-DECL_FORMAT?=new
 
 NO_CSHARP=1
 
@@ -298,11 +297,6 @@ $(CHICORY_EXEC):
 # include the generic config.txt file unless there is one already specified
 ifeq (,$(findstring --config,$(DAIKON_OPTIONS)))
   DAIKON_OPTIONS := $(DAIKON_OPTIONS) --config ../config.txt
-endif
-
-# If specified, setup for the old declaration format
-ifeq (old,${DECL_FORMAT})
-  CHICORY := $(CHICORY) --new_decl_format=false
 endif
 
 # "make PROFILE_JAVA=1 <target>" to get profile information

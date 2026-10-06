@@ -85,7 +85,6 @@ public final class MergeInvariants {
    * @throws IOException if there is trouble with I/O
    * @throws ClassNotFoundException if a class cannot be found
    */
-  @SuppressWarnings("nullness:contracts.precondition") // private field
   public static void mainHelper(String[] args)
       throws FileNotFoundException,
           StreamCorruptedException,
