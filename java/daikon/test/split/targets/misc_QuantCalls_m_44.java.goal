@@ -1,0 +1,75 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class misc_QuantCalls_m_44 extends Splitter {
+
+  public String condition() {
+    return "daikon.Quant.getElement_int(this.a, daikon.Quant.getElement_int(this.b, i)) > 0";
+  }
+
+  VarInfo i_varinfo; // i
+  VarInfo this_a_array_varinfo; // this.a[]
+  VarInfo this_b_array_varinfo; // this.b[]
+
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public misc_QuantCalls_m_44() { }
+  public misc_QuantCalls_m_44(Ppt ppt) {
+    i_varinfo = ppt.find_var_by_name("i");
+    this_a_array_varinfo = ppt.find_var_by_name("this.a[]");
+    this_b_array_varinfo = ppt.find_var_by_name("this.b[]");
+  }
+
+  public Splitter instantiateSplitter(Ppt ppt) {
+    return new misc_QuantCalls_m_44(ppt);
+  }
+
+  public boolean valid() {
+    return (i_varinfo != null) && (this_a_array_varinfo != null) && (this_b_array_varinfo != null);
+  }
+
+  public boolean test(ValueTuple vt) {
+    /* writeTestBody: 3 declarations */
+    int i = i_varinfo.getIndexValue(vt);
+    long[] this_a_array = this_a_array_varinfo.getIntArrayValue(vt);
+    int[] this_b_array = getIntArray(this_b_array_varinfo.getIntArrayValue(vt));
+    return(this_a_array[this_b_array[i]]>0);
+  }
+
+  public String repr() {
+    return "misc_QuantCalls_m_44: "
+      + "i_varinfo = " + i_varinfo.repr() + " "
+      + "this_a_array_varinfo = " + this_a_array_varinfo.repr() + " "
+      + "this_b_array_varinfo = " + this_b_array_varinfo.repr() + " "
+      ;
+  }
+
+  public void makeDummyInvariantFactory(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+    VarInfo i_vi = ppt.find_var_by_name("i");
+    VarInfo this_a_array_vi = ppt.find_var_by_name("this.a[]");
+    VarInfo this_b_array_vi = ppt.find_var_by_name("this.b[]");
+    if (i_vi != null && this_a_array_vi != null && this_b_array_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {i_vi, this_a_array_vi, this_b_array_vi});
+    }
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+
+  public int[] getIntArray(long[] longArray) {
+    int[] intArray = new int[longArray.length];
+    for (int i = 0; i < intArray.length; i++) {
+      intArray[i] = (int) longArray[i];
+    }
+    return intArray;
+  }
+
+}

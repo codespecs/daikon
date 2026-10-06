@@ -1,8 +1,14 @@
 package daikon.split;
 
 import daikon.tools.jtb.Ast;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Set;
 import jtb.ParseException;
+import jtb.syntaxtree.Name;
 import jtb.syntaxtree.Node;
+import jtb.syntaxtree.NodeSequence;
 import jtb.syntaxtree.NodeToken;
 import jtb.visitor.DepthFirstVisitor;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
@@ -14,7 +20,9 @@ import org.checkerframework.dataflow.qual.Pure;
  * the variable name. For example "prefix.x" would go to "prefix_x", "y.prefix.x" would go to
  * "y_prefix_x", and "y.x.methodName()" would be go to y_x.methodName(). Prefixes that are java
  * reserved words are not affected. For example "this.x" yields "this.x". Finally, if the suffix is
- * "length", then it is not affected. For example "x.y.length" yields "x_y.length".
+ * "length", then it is not affected. For example "x.y.length" yields "x_y.length". Names that start
+ * with "daikon.Quant", such as "daikon.Quant.fuzzy.eq", are not affected; Daikon's Java output
+ * format uses them to call methods in daikon.Quant.
  */
 class PrefixFixer extends DepthFirstVisitor {
 
@@ -26,6 +34,9 @@ class PrefixFixer extends DepthFirstVisitor {
 
   /** The token visited before twoTokensAgo. */
   private @MonotonicNonNull NodeToken threeTokensAgo;
+
+  /** The tokens of names that start with "daikon.Quant". */
+  private final Set<NodeToken> quantNameTokens = Collections.newSetFromMap(new IdentityHashMap<>());
 
   /** Creates a new instance of PrefixFixer to fix "." prefixes. */
   private PrefixFixer() {
@@ -69,6 +80,21 @@ class PrefixFixer extends DepthFirstVisitor {
     super.visit(n);
   }
 
+  /**
+   * This method should not be directly used by users of this class; however, must be public to
+   * fulfill the visitor interface. Records the tokens of n if n starts with "daikon.Quant".
+   */
+  @Override
+  public void visit(Name n) {
+    if (n.f0.tokenImage.equals("daikon")
+        && n.f1.size() > 0
+        && ((NodeToken) ((NodeSequence) n.f1.elementAt(0)).elementAt(1))
+            .tokenImage.equals("Quant")) {
+      quantNameTokens.addAll(Arrays.asList(TokenExtractor.extractTokens(n)));
+    }
+    super.visit(n);
+  }
+
   /** Fixes the last token if needed. */
   private void fixLastToken() {
     if (threeTokensAgo != null
@@ -79,7 +105,8 @@ class PrefixFixer extends DepthFirstVisitor {
         Visitors.isIdentifier(lastToken)
         && Visitors.isDot(twoTokensAgo)
         && Visitors.isIdentifier(threeTokensAgo)
-        && !lastToken.tokenImage.equals("length")) {
+        && !lastToken.tokenImage.equals("length")
+        && !quantNameTokens.contains(lastToken)) {
       twoTokensAgo.tokenImage = "";
       lastToken.tokenImage = threeTokensAgo.tokenImage + "_" + lastToken.tokenImage;
       threeTokensAgo.tokenImage = "";
@@ -106,6 +133,7 @@ class PrefixFixer extends DepthFirstVisitor {
         && Visitors.isDot(twoTokensAgo)
         && threeTokensAgo != null
         && Visitors.isIdentifier(threeTokensAgo)
-        && !lastToken.tokenImage.equals("length"));
+        && !lastToken.tokenImage.equals("length")
+        && !quantNameTokens.contains(lastToken));
   }
 }

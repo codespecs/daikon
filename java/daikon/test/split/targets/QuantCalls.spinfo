@@ -1,0 +1,4 @@
+PPT_NAME misc.QuantCalls.m
+daikon.Quant.getElement_int(this.a, daikon.Quant.getElement_int(this.b, i)) > 0
+daikon.Quant.size(this.a) == i
+daikon.Quant.fuzzy.eq(this.x, 0.0)
