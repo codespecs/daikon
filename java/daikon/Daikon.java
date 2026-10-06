@@ -1055,7 +1055,7 @@ public final class Daikon {
           new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         };
-    Getopt g = new Getopt("daikon.Daikon", args, "ho:", longopts);
+    DaikonGetopt g = new DaikonGetopt("daikon.Daikon", args, "ho:", longopts);
     int c;
 
     while ((c = g.getopt()) != -1) {
@@ -1392,7 +1392,7 @@ public final class Daikon {
           break;
         //
         case '?':
-          throw badOptionError(g, args);
+          throw g.badOptionError();
         //
         default:
           throw new Daikon.BugInDaikon("getopt() returned " + c);
@@ -1493,34 +1493,6 @@ public final class Daikon {
       throw new Error("getOptarg returned null for " + g);
     }
     return result;
-  }
-
-  /**
-   * Returns an exception to throw when {@code g.getopt()} returns {@code '?'}, which indicates an
-   * unrecognized, ambiguous, or malformed command-line option. Getopt has already printed a message
-   * describing the problem.
-   *
-   * @param g a command-line argument processor whose {@code getopt()} just returned {@code '?'}
-   * @param args the command-line arguments that {@code g} is processing
-   * @return an exception that names the bad command-line argument
-   */
-  public static UserError badOptionError(Getopt g, String[] args) {
-    int optopt = g.getOptopt();
-    int optind = g.getOptind();
-    String badOption;
-    if (optopt != 0) {
-      // A short option.  It might be in the middle of an argument such as "-hx", so use optopt.
-      badOption = "-" + (char) optopt;
-    } else if (0 < optind && optind <= args.length) {
-      // A long option.  Getopt has already advanced optind past it.
-      badOption = args[optind - 1];
-    } else {
-      badOption = null;
-    }
-    return new UserError(
-        "Bad command-line option"
-            + (badOption == null ? "" : " " + badOption)
-            + "; run with -h for usage");
   }
 
   /**

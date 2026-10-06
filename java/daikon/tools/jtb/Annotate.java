@@ -140,7 +140,7 @@ public class Annotate {
           new LongOpt(max_invariants_pp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(no_reflection_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
         };
-    Getopt g = new Getopt("daikon.tools.jtb.Annotate", args, "hs", longopts);
+    DaikonGetopt g = new DaikonGetopt("daikon.tools.jtb.Annotate", args, "hs", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -201,7 +201,7 @@ public class Annotate {
           slashslash = true;
           break;
         case '?':
-          throw Daikon.badOptionError(g, args);
+          throw g.badOptionError();
         default:
           System.out.println("getopt() returned " + c);
           break;

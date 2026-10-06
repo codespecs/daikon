@@ -5,11 +5,11 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
 import daikon.PptMap;
 import daikon.tools.jtb.ParseResults;
-import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.IOException;
@@ -213,7 +213,8 @@ public class InstrumentHandler extends CommandHandler {
           new LongOpt(directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(checkers_directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
         };
-    Getopt g = new Getopt("daikon.tools.runtimechecker.InstrumentHandler", args, "hs", longopts);
+    DaikonGetopt g =
+        new DaikonGetopt("daikon.tools.runtimechecker.InstrumentHandler", args, "h", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -239,8 +240,15 @@ public class InstrumentHandler extends CommandHandler {
             System.err.println("Unknown long option received: " + option_name);
           }
           break;
+        case 'h':
+          usageMessage();
+          System.exit(0);
+          break;
+        case '?':
+          System.err.println(g.badOptionError().getMessage());
+          return errorWhileReadingArguments;
         default:
-          System.out.println("unrecognized option" + c);
+          System.err.println("getopt() returned " + c);
           return errorWhileReadingArguments;
       }
     }

@@ -5,6 +5,7 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
 import daikon.PptMap;
@@ -675,7 +676,7 @@ public class LogicalCompare {
 
     extra_assumptions = new LinkedHashMap<>();
 
-    Getopt g = new Getopt("daikon.tools.compare.LogicalCompare", args, "h", longopts);
+    DaikonGetopt g = new DaikonGetopt("daikon.tools.compare.LogicalCompare", args, "h", longopts);
     int c;
     boolean user_filters = false;
     while ((c = g.getopt()) != -1) {
@@ -734,7 +735,7 @@ public class LogicalCompare {
           System.out.println(usage);
           throw new Daikon.NormalTermination();
         case '?':
-          throw Daikon.badOptionError(g, args);
+          throw g.badOptionError();
       }
     }
 

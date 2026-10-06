@@ -4,6 +4,7 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.Debug;
 import daikon.FileIO;
 import daikon.Global;
@@ -127,6 +128,7 @@ public class InvariantChecker {
 
     LongOpt[] longopts =
         new LongOpt[] {
+          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(output_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(dir_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -138,7 +140,7 @@ public class InvariantChecker {
           new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
-    Getopt g = new Getopt("daikon.tools.InvariantChecker", args, "h", longopts);
+    DaikonGetopt g = new DaikonGetopt("daikon.tools.InvariantChecker", args, "h", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -186,7 +188,7 @@ public class InvariantChecker {
           System.out.println(usage);
           throw new Daikon.NormalTermination();
         case '?':
-          throw Daikon.badOptionError(g, args);
+          throw g.badOptionError();
         default:
           System.out.println("getopt() returned " + c);
           break;

@@ -24,7 +24,6 @@ import daikon.inv.filter.UnjustifiedFilter;
 import daikon.split.PptSplitter;
 import daikon.suppress.NIS;
 import daikon.suppress.NISuppressionSet;
-import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -344,7 +343,7 @@ public final class PrintInvariants {
           new LongOpt(
               PrintInvariants.print_csharp_metadata_SWITCH, LongOpt.OPTIONAL_ARGUMENT, null, 0),
         };
-    Getopt g = new Getopt("daikon.PrintInvariants", args, "h", longopts);
+    DaikonGetopt g = new DaikonGetopt("daikon.PrintInvariants", args, "h", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -437,7 +436,7 @@ public final class PrintInvariants {
           System.out.println(usage);
           throw new Daikon.NormalTermination();
         case '?':
-          throw Daikon.badOptionError(g, args);
+          throw g.badOptionError();
         default:
           System.out.println("getopt() returned " + c);
           break;

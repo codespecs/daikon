@@ -5,7 +5,6 @@ import static java.util.logging.Level.INFO;
 
 import daikon.split.PptSplitter;
 import daikon.suppress.NIS;
-import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -104,7 +103,7 @@ public final class MergeInvariants {
           new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
 
-    Getopt g = new Getopt("daikon.MergeInvariants", args, "ho:", longopts);
+    DaikonGetopt g = new DaikonGetopt("daikon.MergeInvariants", args, "ho:", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -161,7 +160,7 @@ public final class MergeInvariants {
           break;
 
         case '?':
-          throw Daikon.badOptionError(g, args);
+          throw g.badOptionError();
         default:
           System.out.println("getopt() returned " + c);
           break;

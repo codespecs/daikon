@@ -4,13 +4,13 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Ppt;
 import daikon.PptConditional;
 import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.inv.Invariant;
-import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -201,8 +201,8 @@ public final class Diff {
           new LongOpt(IGNORE_NUMBERED_EXITS_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         };
 
-    Getopt g =
-        new Getopt(
+    DaikonGetopt g =
+        new DaikonGetopt(
             "daikon.diff.Diff", args,
             "Hhyduastmxno:jzpevl", longOpts);
     int c;
@@ -319,7 +319,7 @@ public final class Diff {
           logging = true;
           break;
         case '?':
-          throw Daikon.badOptionError(g, args);
+          throw g.badOptionError();
         default:
           System.out.println("getopt() returned " + c);
           break;

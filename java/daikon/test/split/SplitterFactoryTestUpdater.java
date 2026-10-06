@@ -248,8 +248,16 @@ public class SplitterFactoryTestUpdater {
     ps.println("      \"  -h       Display this usage message\");");
     ps.println();
     ps.println("  public static void main(String[] args) {");
-    ps.println(
-        "    Getopt g = new Getopt(\"daikon.test.split.SplitterFactoryTest\", args, \"hs\");");
+    ps.println("    try {");
+    ps.println("      mainHelper(args);");
+    ps.println("    } catch (Daikon.DaikonTerminationException e) {");
+    ps.println("      Daikon.handleDaikonTerminationException(e);");
+    ps.println("    }");
+    ps.println("  }");
+    ps.println();
+    ps.println("  public static void mainHelper(String[] args) {");
+    ps.println("    DaikonGetopt g =");
+    ps.println("        new DaikonGetopt(\"daikon.test.split.SplitterFactoryTest\", args, \"hs\");");
     ps.println("    int c;");
     ps.println("    while ((c = g.getopt()) != -1) {");
     ps.println("      switch (c) {");
@@ -261,7 +269,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("          System.exit(1);");
     ps.println("          break;");
     ps.println("        case '?':");
-    ps.println("          throw Daikon.badOptionError(g, args);");
+    ps.println("          throw g.badOptionError();");
     ps.println("        default:");
     ps.println("          System.out.println(\"getopt() returned \" + c);");
     ps.println("          break;");

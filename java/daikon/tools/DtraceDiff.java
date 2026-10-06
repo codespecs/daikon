@@ -6,6 +6,7 @@ import static daikon.VarInfo.VarFlags;
 import static daikon.tools.nullness.NullnessUtil.*;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
 import daikon.PptMap;
@@ -114,6 +115,7 @@ public class DtraceDiff {
 
     LongOpt[] longopts =
         new LongOpt[] {
+          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           // Process only part of the trace file
           new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.ppt_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -124,7 +126,7 @@ public class DtraceDiff {
           new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
 
-    Getopt g = new Getopt("daikon.tools.DtraceDiff", args, "h", longopts);
+    DaikonGetopt g = new DaikonGetopt("daikon.tools.DtraceDiff", args, "h", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -233,7 +235,7 @@ public class DtraceDiff {
           throw new Daikon.NormalTermination();
 
         case '?':
-          throw Daikon.badOptionError(g, args);
+          throw g.badOptionError();
         default:
           System.out.println("getopt() returned " + c);
           break;

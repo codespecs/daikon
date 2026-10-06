@@ -88,7 +88,7 @@ public class CreateSpinfo {
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
 
-    Getopt g = new Getopt("daikon.tools.jtb.CreateSpinfo", args, "ho:", longopts);
+    DaikonGetopt g = new DaikonGetopt("daikon.tools.jtb.CreateSpinfo", args, "ho:", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -113,7 +113,7 @@ public class CreateSpinfo {
           System.out.println(usage);
           throw new Daikon.NormalTermination();
         case '?':
-          throw Daikon.badOptionError(g, args);
+          throw g.badOptionError();
         default:
           System.out.println("getopt() returned " + c);
           break;
