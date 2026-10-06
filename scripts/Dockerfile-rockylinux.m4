@@ -46,7 +46,8 @@ RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \
 && rm jdk-JDKVER[[]]_linux-x64_bin.tar.gz
 ENV PATH="/jdk-JDKVER/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 ENV JAVA[[]]JDKVER[[]]_HOME=/jdk-JDKVER
-RUN chmod og+rx /root
+# Azure runs jobs as a non-root user, who must be able to read files in /root.
+RUN chmod -R og+rX /root
 ]])m4_dnl
 if_plus([[
 # The CRB repository contains certain packages, including dependencies of

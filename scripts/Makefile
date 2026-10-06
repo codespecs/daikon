@@ -74,7 +74,7 @@ docker-images: ${DOCKER_IMAGES}
 # --pull and --no-cache ensure that the image contains the latest base image
 # and packages, rather than stale cached layers.
 ${DOCKER_IMAGES}: docker-image-%: Dockerfile-%
-	docker -l warn build --pull --no-cache --rm=false --progress=plain -t ${DOCKER_IMAGE} - < $<
+	docker -l warn build --pull --no-cache --progress=plain -t ${DOCKER_IMAGE} - < $<
 	docker -l warn push --quiet ${DOCKER_IMAGE}
 
 ## Delegation to other Makefiles (gross)
