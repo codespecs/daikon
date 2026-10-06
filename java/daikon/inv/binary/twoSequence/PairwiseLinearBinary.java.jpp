@@ -86,6 +86,12 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   @Override
+  public boolean instantiate_ok(VarInfo[] vis) {
+    // Don't instantiate if the variables can't have order
+    return vis[0].aux.hasOrder() && vis[1].aux.hasOrder();
+  }
+
+  @Override
   protected CLASSNAME instantiate_dyn(@Prototype CLASSNAME this, PptSlice slice) {
     return new CLASSNAME(slice);
   }
