@@ -3529,7 +3529,9 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       return var_info_name.includesSimpleName(varname); // vin ok
     }
 
-    if (isDerived()) {
+    if (postState != null) {
+      return postState.includes_simple_name(varname);
+    } else if (isDerived()) {
       for (VarInfo base : derived.getBases()) {
         if (base.includes_simple_name(varname)) {
           return true;

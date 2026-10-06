@@ -9,7 +9,6 @@ import daikon.FileIO;
 import daikon.Global;
 import daikon.Ppt;
 import daikon.PptMap;
-import daikon.PptName;
 import daikon.PptTopLevel;
 import daikon.VarInfo;
 import daikon.inv.Implication;
@@ -216,7 +215,7 @@ public class ExtractConsequent {
             conjunctionSimplify.append(" ");
           }
           conjunctionJava.append(parenthesizeDisjunction(javaStr));
-          conjunctionDaikon.append(daikonStr);
+          conjunctionDaikon.append(parenthesizeDisjunction(daikonStr));
           conjunctionESC.append(parenthesizeDisjunction(escStr));
           conjunctionSimplify.append(simplifyStr);
         }
@@ -264,14 +263,37 @@ public class ExtractConsequent {
   }
 
   /**
-   * Returns the given expression, parenthesized if it contains "||". Since "||" has lower
-   * precedence than "&&", such an expression must be parenthesized when it is a conjunct.
+   * Returns the given expression, parenthesized if it contains a disjunction ("||" or " or ").
+   * Since disjunction has lower precedence than conjunction, such an expression must be
+   * parenthesized when it is a conjunct.
    *
-   * @param expr a Java or ESC expression
+   * @param expr a Java, ESC, or Daikon expression
    * @return the expression, parenthesized if necessary to be used as a conjunct
    */
   static String parenthesizeDisjunction(String expr) {
-    return expr.contains("||") ? "(" + expr + ")" : expr;
+    return (expr.contains("||") || expr.contains(" or ")) ? "(" + expr + ")" : expr;
+  }
+
+  /**
+   * Returns true if the invariant is legal Java when its variables are booleans. Daikon represents
+   * a boolean as an int, so it may infer numeric invariants, such as "b != 0" or "b1 < b2", that
+   * are not legal Java over booleans.
+   *
+   * @param inv an invariant
+   * @return true if the invariant uses no boolean variable, or is legal Java over booleans
+   */
+  static boolean isLegalForBooleans(Invariant inv) {
+    if (inv instanceof daikon.inv.unary.scalar.OneOfScalar
+        || inv instanceof daikon.inv.binary.twoScalar.IntEqual
+        || inv instanceof daikon.inv.binary.twoScalar.IntNonEqual) {
+      return true;
+    }
+    for (VarInfo vi : inv.ppt.var_infos) {
+      if (vi.type.isScalar() && vi.type.baseIsBoolean()) {
+        return false;
+      }
+    }
+    return true;
   }
 
   static String combineDummy(String inv, String daikonStr, String esc, String simplify) {
@@ -300,18 +322,10 @@ public class ExtractConsequent {
       }
     }
     if (!invs.isEmpty()) {
-      // In a .spinfo file, SplitterFactory.matchPpt matches a shortened name such as "Foo.bar"
-      // only against :::EXIT and :::OBJECT program points.  Any other program point (such as
-      // "aprogram.point:::POINT", as produced by convertcsv.pl) keeps its full name.
-      PptName ppt_name = ppt.ppt_name;
-      String pptname =
-          (ppt_name.isEnterPoint()
-                  || ppt_name.isExitPoint()
-                  || ppt_name.isThrowsPoint()
-                  || ppt_name.isObjectInstanceSynthetic()
-                  || ppt_name.isClassStaticSynthetic())
-              ? cleanup_pptname(ppt.name())
-              : ppt.name();
+      // Use the full name, which SplitterFactory.matchPpt matches exactly.  A shortened name
+      // such as "Foo.bar" would be matched only against one EXIT program point, and the
+      // shortening would lose characters such as "$" that the full name needs.
+      String pptname = ppt.name();
       for (Invariant maybe_as_inv : invs) {
         Implication maybe = (Implication) maybe_as_inv;
 
@@ -390,19 +404,14 @@ public class ExtractConsequent {
           continue;
         }
 
-        // 2) "x != 0" for a boolean x, which is not legal Java
-        if (inv instanceof daikon.inv.unary.scalar.NonZero
-            && inv.ppt.var_infos[0].type.isScalar()
-            && inv.ppt.var_infos[0].type.baseIsBoolean()) {
+        // 2) Numeric invariants over booleans, such as "b != 0", which are not legal Java
+        if (!isLegalForBooleans(inv)) {
           continue;
         }
 
         String inv_string = javaFormat(inv);
         if (orig_pattern.matcher(inv_string).find()
-            || dot_class_pattern.matcher(inv_string).find()
-            // The "cluster" variable exists only while clustering; it may appear in a derived
-            // variable, such as an array index.
-            || cluster_pattern.matcher(inv.format_using(OutputFormat.DAIKON)).find()) {
+            || dot_class_pattern.matcher(inv_string).find()) {
           continue;
         }
         String fake_inv_string = simplify_inequalities(inv_string);
@@ -472,27 +481,6 @@ public class ExtractConsequent {
   }
 
   /**
-   * Remove non-word characters and everything after "(" (which includes everything after ":::")
-   * from the program point name, leaving "PackageName.ClassName.MethodName".
-   *
-   * @param pptname a program point name
-   * @return the argument, without non-word characters and without parens or ":::" suffix
-   */
-  private static String cleanup_pptname(String pptname) {
-    int index;
-    if ((index = pptname.indexOf('(')) > 0) {
-      pptname = pptname.substring(0, index);
-    }
-
-    if (pptname.endsWith(".")) {
-      pptname = pptname.substring(0, pptname.length() - 2);
-    }
-
-    Matcher m = non_word_pattern.matcher(pptname);
-    return m.replaceAll(".");
-  }
-
-  /**
    * Prevents the occurrence of "equivalent" inequalities, or inequalities which produce the same
    * pair of splits at a program point, for example "x &le; y" and "x &gt; y". Replaces "&ge;" with
    * "&lt;", "&le;" with "&gt;", and "!=" with "==" so that the occurrence of equivalent
@@ -529,11 +517,7 @@ public class ExtractConsequent {
   /** Matches the return value in Java format. */
   static Pattern result_pattern;
 
-  /** Matches the "cluster" variable. */
-  static Pattern cluster_pattern;
-
   static Pattern dot_class_pattern;
-  static Pattern non_word_pattern;
   static Pattern gteq_pattern;
   static Pattern lteq_pattern;
   static Pattern neq_pattern;
@@ -544,10 +528,8 @@ public class ExtractConsequent {
 
   static {
     try {
-      non_word_pattern = Pattern.compile("\\W+");
       orig_pattern = Pattern.compile("orig\\s*\\(|\\\\(old|new)\\s*\\(");
       result_pattern = Pattern.compile("\\\\result\\b");
-      cluster_pattern = Pattern.compile("\\bcluster\\b");
       dot_class_pattern = Pattern.compile("\\.class");
       inequality_pattern = Pattern.compile("[\\!<>]=");
       gteq_pattern = Pattern.compile(">=");
