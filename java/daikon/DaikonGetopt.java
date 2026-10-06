@@ -4,6 +4,7 @@ import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.util.Arrays;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.plumelib.util.ArraysPlume;
 
 /**
  * A command-line option processor that throws a {@link Daikon.UserError} that describes a bad
@@ -61,9 +62,8 @@ public class DaikonGetopt extends Getopt {
    * @return {@code longopts} plus {@code --help}
    */
   private static LongOpt[] withHelp(LongOpt[] longopts) {
-    LongOpt[] result = Arrays.copyOf(longopts, longopts.length + 1);
-    result[longopts.length] = new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 'h');
-    return result;
+    return ArraysPlume.append(
+        longopts, new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 'h'));
   }
 
   /**
