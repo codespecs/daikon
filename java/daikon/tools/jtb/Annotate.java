@@ -132,7 +132,6 @@ public class Annotate {
     Daikon.output_format = OutputFormat.ESCJAVA;
     LongOpt[] longopts =
         new LongOpt[] {
-          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.format_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -140,7 +139,7 @@ public class Annotate {
           new LongOpt(max_invariants_pp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(no_reflection_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
         };
-    DaikonGetopt g = new DaikonGetopt("daikon.tools.jtb.Annotate", args, "hs", longopts);
+    DaikonGetopt g = new DaikonGetopt("daikon.tools.jtb.Annotate", args, "s", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -148,10 +147,7 @@ public class Annotate {
           // got a long option
           String option_name = longopts[g.getLongind()].getName();
 
-          if (Daikon.help_SWITCH.equals(option_name)) {
-            System.out.println(usage);
-            throw new Daikon.NormalTermination();
-          } else if (no_reflection_SWITCH.equals(option_name)) {
+          if (no_reflection_SWITCH.equals(option_name)) {
             useReflection = false;
           } else if (max_invariants_pp_SWITCH.equals(option_name)) {
             try {
@@ -181,12 +177,9 @@ public class Annotate {
               setLightweight = true;
             }
           } else {
-            throw new Daikon.UserError("Unknown long option received: " + option_name);
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
-        case 'h':
-          System.out.println(usage);
-          throw new Daikon.NormalTermination();
         case 'i':
           insert_inexpressible = true;
           break;

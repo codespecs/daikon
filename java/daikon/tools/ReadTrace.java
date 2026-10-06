@@ -1,5 +1,7 @@
 package daikon.tools;
 
+import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.PptMap;
 import daikon.PptTopLevel;
@@ -32,9 +34,32 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
  */
 public class ReadTrace {
 
+  /** The usage message for this program. */
+  private static final String usage = "Usage: java daikon.tools.ReadTrace file1 file2 ...";
+
   /** Do not instantiate. */
   private ReadTrace() {
     throw new UnsupportedOperationException("Do not instantiate");
+  }
+
+  /**
+   * Returns the trace files named on the command line. Exits if the command line is bad or requests
+   * the usage message.
+   *
+   * @param args the command-line arguments
+   * @return the trace files named on the command line
+   */
+  private static String[] traceFiles(String[] args) {
+    try {
+      String[] files = DaikonGetopt.nonOptionArgs("daikon.tools.ReadTrace", args, usage);
+      if (files.length == 0) {
+        throw new Daikon.UserError("No trace files specified" + Daikon.lineSep + usage);
+      }
+      return files;
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
+      throw new Error("unreachable");
+    }
   }
 
   /**
@@ -43,11 +68,13 @@ public class ReadTrace {
    * @param args data trace file names, read from the command line
    */
   public static void main(String[] args) {
+    String[] traceFiles = traceFiles(args);
     CollectDataProcessor processor = new CollectDataProcessor();
     PptMap ppts = new PptMap();
     try {
       // `read_data_trace_files()` requires the list of files to be modifiable.
-      FileIO.read_data_trace_files(new ArrayList<>(Arrays.asList(args)), ppts, processor, false);
+      FileIO.read_data_trace_files(
+          new ArrayList<>(Arrays.asList(traceFiles)), ppts, processor, false);
     } catch (Exception e) {
       throw new Error(e);
     }

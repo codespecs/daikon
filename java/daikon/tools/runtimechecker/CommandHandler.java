@@ -40,7 +40,8 @@ public class CommandHandler {
     String docFile = simpleClassname + ".doc";
     InputStream in = getClass().getResourceAsStream(docFile);
     if (in == null) {
-      out.println("Didn't find documentation for " + getClass());
+      // This is an error message, so it goes to standard error even if `out` is standard output.
+      System.err.println("Didn't find documentation " + docFile + " for " + getClass());
       return;
     }
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(in, UTF_8))) {

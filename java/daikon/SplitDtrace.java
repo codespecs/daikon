@@ -29,6 +29,9 @@ import org.checkerframework.dataflow.qual.Pure;
  */
 public final class SplitDtrace {
 
+  /** The usage message for this program. */
+  private static final String usage = "Usage: java daikon.SplitDtrace file.dtrace[.gz]";
+
   /** Do not instantiate. */
   private SplitDtrace() {
     throw new UnsupportedOperationException("Do not instantiate");
@@ -40,14 +43,29 @@ public final class SplitDtrace {
    * @param args one argument, the name of the .dtrace or .dtrace.gz file
    */
   public static void main(String[] args) throws IOException {
-    if (args.length != 1) {
-      throw new RuntimeException(
-          "You must supply one argument which is the filename of the dtrace file");
+    try {
+      mainHelper(args);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
     }
-    String filename = args[0].trim();
+  }
+
+  /**
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called programmatically.
+   *
+   * @param args command-line arguments, like those of {@link #main}
+   * @throws IOException if there is a problem reading or writing a file
+   */
+  public static void mainHelper(String[] args) throws IOException {
+    String[] files = DaikonGetopt.nonOptionArgs("daikon.SplitDtrace", args, usage);
+    if (files.length != 1) {
+      throw new Daikon.UserError(usage);
+    }
+    String filename = files[0].trim();
     boolean isGz = filename.endsWith(".dtrace.gz");
     if (!filename.endsWith(".dtrace") && !isGz) {
-      throw new RuntimeException(
+      throw new Daikon.UserError(
           "Filename must end with .dtrace or .dtrace.gz: filename=" + filename);
     }
     int declNum = 1;

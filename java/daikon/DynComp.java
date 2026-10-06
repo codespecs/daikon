@@ -179,7 +179,7 @@ public class DynComp {
   public static void check_args(Options options, String[] targetArgs) {
     if (help) {
       options.printUsage();
-      System.exit(1);
+      System.exit(0);
     }
     if (nesting_depth < 0) {
       System.out.printf("nesting depth (%d) must not be negative%n", nesting_depth);

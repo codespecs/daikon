@@ -85,7 +85,13 @@ public class InstrumentHandler extends CommandHandler {
     for (int i = 0; i < realArgs.length; i++) {
       realArgs[i] = args[i + 1];
     }
-    Arguments arguments = readArguments(realArgs);
+    Arguments arguments;
+    try {
+      arguments = readArguments(realArgs);
+    } catch (Daikon.UserError e) {
+      System.err.println(e.getMessage());
+      return false;
+    }
     if (arguments == errorWhileReadingArguments) {
       return false;
     }
@@ -225,16 +231,7 @@ public class InstrumentHandler extends CommandHandler {
     // The caller prints the usage message when this command fails.
     g.setUsageHint(null);
     int c;
-    while (true) {
-      try {
-        c = g.getopt();
-      } catch (Daikon.UserError e) {
-        System.err.println(e.getMessage());
-        return errorWhileReadingArguments;
-      }
-      if (c == -1) {
-        break;
-      }
+    while ((c = g.getopt()) != -1) {
       switch (c) {
         case 0:
           // got a long option
@@ -255,16 +252,14 @@ public class InstrumentHandler extends CommandHandler {
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
             daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else {
-            System.err.println("Unknown long option received: " + option_name);
-            return errorWhileReadingArguments;
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
         case 'h':
           usageMessage(System.out);
           return helpRequested;
         default:
-          System.err.println("getopt() returned " + c);
-          return errorWhileReadingArguments;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
     // The index of the first non-option argument -- the name of the

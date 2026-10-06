@@ -2,6 +2,7 @@
 
 package daikon.tools;
 
+import daikon.DaikonGetopt;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -53,14 +54,15 @@ public class DtraceNonceFixer {
    * @param args command-line arguments, like those of {@link #main}
    */
   public static void mainHelper(final String[] args) {
-    if (args.length != 1) {
+    String[] files = DaikonGetopt.nonOptionArgs("daikon.tools.DtraceNonceFixer", args, usage);
+    if (files.length != 1) {
       throw new daikon.Daikon.UserError(usage);
     }
 
     String outputFilename =
-        args[0].endsWith(".gz") ? (args[0] + "_fixed.gz") : (args[0] + "_fixed");
+        files[0].endsWith(".gz") ? (files[0] + "_fixed.gz") : (files[0] + "_fixed");
 
-    try (BufferedReader br1 = FilesPlume.newBufferedFileReader(args[0]);
+    try (BufferedReader br1 = FilesPlume.newBufferedFileReader(files[0]);
         PrintWriter out1 = new PrintWriter(FilesPlume.newBufferedFileWriter(outputFilename))) {
 
       // maxNonce - the biggest nonce ever found in the file
@@ -93,7 +95,7 @@ public class DtraceNonceFixer {
 
       // now go back and add the OBJECT and CLASS invocations
       String allFixedFilename =
-          outputFilename.endsWith(".gz") ? (args[0] + "_all_fixed.gz") : (args[0] + "_all_fixed");
+          outputFilename.endsWith(".gz") ? (files[0] + "_all_fixed.gz") : (files[0] + "_all_fixed");
 
       try (BufferedReader br2 = FilesPlume.newBufferedFileReader(outputFilename);
           PrintWriter out2 = new PrintWriter(FilesPlume.newBufferedFileWriter(allFixedFilename))) {

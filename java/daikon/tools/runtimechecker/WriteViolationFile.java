@@ -2,6 +2,7 @@ package daikon.tools.runtimechecker;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import daikon.Daikon;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -40,6 +41,10 @@ class WriteViolationFile {
       System.out.println("Error: no class specified");
       usage();
       System.exit(1);
+    }
+    if (Daikon.isHelpArg(args[0])) {
+      usage();
+      System.exit(0);
     }
     @SuppressWarnings("signature") // will be checked immediately below, and exception is caught
     @BinaryName String class_name = args[0];

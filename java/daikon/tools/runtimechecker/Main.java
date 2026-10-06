@@ -1,5 +1,6 @@
 package daikon.tools.runtimechecker;
 
+import daikon.Daikon;
 import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +41,9 @@ public class Main extends CommandHandler {
           "For more help, invoke the instrumenter with \"help\" as its sole argument.");
       System.exit(1);
     }
-    if (args[0].toUpperCase(Locale.ENGLISH).equals("HELP") || args[0].equals("?")) {
+    if (args[0].toUpperCase(Locale.ENGLISH).equals("HELP")
+        || args[0].equals("?")
+        || Daikon.isHelpArg(args[0])) {
       usageMessage(System.out);
       usageMessage(handlers, System.out);
       System.exit(0);

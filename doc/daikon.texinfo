@@ -7034,6 +7034,9 @@ java -cp $@{DAIKONDIR@}/daikon.jar daikon.AnnotateNullable @i{[@var{flags}]} @va
 The flags are:
 @table @option
 
+@item -h --help
+Print usage message.
+
 @item -n --nonnull-annotations
 Adds @samp{NonNull} annotations as well as @samp{Nullable} annotations.  Unlike @samp{Nullable}
 annotations, @samp{NonNull} annotations are not guaranteed to be correct.

@@ -87,12 +87,21 @@ public class TraceSelect {
    */
   public static void mainHelper(final String[] args) {
     argles = args;
-    if (args.length == 0) {
-      throw new daikon.Daikon.UserError("No arguments found." + daikon.Daikon.lineSep + usage);
+    if (args.length > 0 && daikon.Daikon.isHelpArg(args[0])) {
+      System.out.println(usage);
+      throw new daikon.Daikon.NormalTermination();
+    }
+    if (args.length < 2) {
+      throw new daikon.Daikon.UserError("Too few arguments." + daikon.Daikon.lineSep + usage);
     }
 
-    num_reps = Integer.parseInt(args[0]);
-    numPerSample = Integer.parseInt(args[1]);
+    try {
+      num_reps = Integer.parseInt(args[0]);
+      numPerSample = Integer.parseInt(args[1]);
+    } catch (NumberFormatException e) {
+      throw new daikon.Daikon.UserError(
+          "num_reps and sample_size must be integers." + daikon.Daikon.lineSep + usage);
+    }
 
     // process optional switches
     // also deduce index of arg for Daikon

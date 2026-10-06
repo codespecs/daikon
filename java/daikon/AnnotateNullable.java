@@ -64,12 +64,24 @@ public class AnnotateNullable {
   @Option("-n Insert NonNull as well as Nullable annotations")
   public static boolean nonnull_annotations = false;
 
+  /** If true, print a usage message and exit. */
+  @Option("-h Display usage information")
+  public static boolean help = false;
+
   public static void main(String[] args) throws IOException {
 
     Options options =
-        new Options("plume.AnnotateNullable [options] <inv_file>", AnnotateNullable.class);
+        new Options("daikon.AnnotateNullable [options] <inv_file>", AnnotateNullable.class);
     String[] inv_files = options.parse(true, args);
-    assert inv_files.length == 1;
+    if (help) {
+      options.printUsage();
+      System.exit(0);
+    }
+    if (inv_files.length != 1) {
+      System.err.println("must specify exactly one invariant file");
+      options.printUsage();
+      System.exit(1);
+    }
 
     // Read the serialized invariant file
     File inv_file = new File(inv_files[0]);

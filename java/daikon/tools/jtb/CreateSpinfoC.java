@@ -2,6 +2,8 @@ package daikon.tools.jtb;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import daikon.Daikon;
+import daikon.DaikonGetopt;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,21 +23,38 @@ public class CreateSpinfoC {
     throw new UnsupportedOperationException("Do not instantiate");
   }
 
-  public static void main(String[] args) {
-    if (args.length == 1) {
-      System.out.println("Create spinfo file from file " + args[0] + " . . .");
-    } else {
-      System.out.println("C Parser Version 0.1Alpha:  Usage is one of:");
-      System.out.println("         java CreateSpinfoC < inputfile");
-      System.out.println("OR");
-      System.out.println("         java CreateSpinfoC inputfile");
-      return;
-    }
+  /** The usage message for this program. */
+  private static final String usage =
+      "C Parser Version 0.1Alpha:  Usage:  java daikon.tools.jtb.CreateSpinfoC inputfile";
+
+  /**
+   * Returns the input file named on the command line. Exits if the command line is bad or requests
+   * the usage message.
+   *
+   * @param args the command-line arguments
+   * @return the input file named on the command line
+   */
+  private static String inputFile(String[] args) {
     try {
-      String fileName = args[0].substring(0, args[0].lastIndexOf('.'));
+      String[] files = DaikonGetopt.nonOptionArgs("daikon.tools.jtb.CreateSpinfoC", args, usage);
+      if (files.length != 1) {
+        throw new Daikon.UserError(usage);
+      }
+      return files[0];
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
+      throw new Error("unreachable");
+    }
+  }
+
+  public static void main(String[] args) {
+    String inputFile = inputFile(args);
+    System.out.println("Create spinfo file from file " + inputFile + " . . .");
+    try {
+      String fileName = inputFile.substring(0, inputFile.lastIndexOf('.'));
       File temp = new File(fileName + ".temp");
       // filter out the '\f' characters in the file
-      try (Reader reader = Files.newBufferedReader(Paths.get(args[0]), UTF_8);
+      try (Reader reader = Files.newBufferedReader(Paths.get(inputFile), UTF_8);
           Writer writer = Files.newBufferedWriter(temp.toPath(), UTF_8)) {
         int c;
         while ((c = reader.read()) != -1) {

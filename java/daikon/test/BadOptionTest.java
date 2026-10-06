@@ -1,11 +1,13 @@
 package daikon.test;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import daikon.Daikon;
 import daikon.DaikonGetopt;
 import daikon.PrintInvariants;
+import daikon.SplitDtrace;
 import daikon.UnionInvariants;
 import daikon.tools.DtraceDiff;
 import gnu.getopt.LongOpt;
@@ -106,6 +108,20 @@ public class BadOptionTest {
     assertEquals(expected("Command-line option -o requires an argument"), parse("-ho"));
   }
 
+  /** Tests options that are missing their required argument, when the optstring starts with ':'. */
+  @Test
+  public void testMissingArgumentLeadingColon() {
+    DaikonGetopt g = new DaikonGetopt("BadOptionTest", new String[] {"-o"}, ":ho:", longopts);
+    Daikon.UserError e = assertThrows(Daikon.UserError.class, g::getopt);
+    assertEquals(
+        expected("Command-line option -o requires an argument"), String.valueOf(e.getMessage()));
+    g = new DaikonGetopt("BadOptionTest", new String[] {"--config"}, ":ho:", longopts);
+    e = assertThrows(Daikon.UserError.class, g::getopt);
+    assertEquals(
+        expected("Command-line option --config requires an argument"),
+        String.valueOf(e.getMessage()));
+  }
+
   /** Tests long options that are given an argument they do not take. */
   @Test
   public void testUnexpectedArgument() {
@@ -141,5 +157,27 @@ public class BadOptionTest {
         Daikon.NormalTermination.class, () -> DtraceDiff.mainHelper(new String[] {"--help"}));
     assertThrows(
         Daikon.NormalTermination.class, () -> UnionInvariants.mainHelper(new String[] {"--help"}));
+    assertThrows(
+        Daikon.NormalTermination.class, () -> SplitDtrace.mainHelper(new String[] {"-h", "x"}));
+  }
+
+  /** Tests {@link DaikonGetopt#nonOptionArgs}. */
+  @Test
+  public void testNonOptionArgs() {
+    assertArrayEquals(
+        new String[] {"a.dtrace", "b.dtrace"},
+        DaikonGetopt.nonOptionArgs("BadOptionTest", new String[] {"a.dtrace", "b.dtrace"}, "u"));
+    assertArrayEquals(
+        new String[] {"-a.dtrace"},
+        DaikonGetopt.nonOptionArgs("BadOptionTest", new String[] {"--", "-a.dtrace"}, "u"));
+    assertBadOption(
+        "Unrecognized command-line option --bogus",
+        () -> DaikonGetopt.nonOptionArgs("BadOptionTest", new String[] {"x", "--bogus"}, "u"));
+    assertBadOption(
+        "Unrecognized command-line option -x",
+        () -> DaikonGetopt.nonOptionArgs("BadOptionTest", new String[] {"-x"}, "u"));
+    assertThrows(
+        Daikon.NormalTermination.class,
+        () -> DaikonGetopt.nonOptionArgs("BadOptionTest", new String[] {"x", "--help"}, "u"));
   }
 }
