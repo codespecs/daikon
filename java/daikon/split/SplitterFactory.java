@@ -6,6 +6,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -170,8 +172,9 @@ public class SplitterFactory {
     if (splitterObjects.length == 0) {
       return;
     }
-    // The source files that were written successfully.  The others must not be passed to the
-    // compiler:  javac compiles nothing if one of its arguments does not exist.
+    // The splitters whose source files were written successfully, and the paths of those files.
+    // Splitters that were not written must not be compiled or loaded.
+    List<SplitterObject> writtenSplitters = new ArrayList<>();
     List<String> writtenSourcePaths = new ArrayList<>();
     for (int i = 0; i < splitterObjects.length; i++) {
       SplitterObject splitObj = splitterObjects[i];
@@ -183,33 +186,50 @@ public class SplitterFactory {
                 splitObj, splitObj.getPptName(), fileName, ppt.var_infos, statementReplacer);
         fileContents = splitterWriter.getFileText();
       } catch (ParseException e) {
-        System.out.println("Error in SplitterFactory while writing splitter java file for: ");
-        System.out.println(splitObj.condition() + " cannot be parsed.");
+        splitObj.setError(
+            "Splitter condition cannot be parsed: "
+                + splitObj.condition()
+                + " @ "
+                + splitObj.getPptName());
         continue;
       }
       String fileAddress = tempdir + fileName;
+      String sourcePath = fileAddress + ".java";
+      String classPath = fileAddress + ".class";
       @SuppressWarnings("signature") // safe, has been quoted
       @BinaryName String fileName_bn = fileName;
       splitObj.setClassName(fileName_bn);
-      try (BufferedWriter writer = FilesPlume.newBufferedFileWriter(fileAddress + ".java")) {
-        if (dkconfig_delete_splitters_on_exit) {
-          new File(fileAddress + ".java").deleteOnExit();
-          new File(fileAddress + ".class").deleteOnExit();
+      try {
+        // A class file left over from an earlier run must not be loaded if compilation fails.
+        Files.deleteIfExists(Path.of(classPath));
+        try (BufferedWriter writer = FilesPlume.newBufferedFileWriter(sourcePath)) {
+          if (dkconfig_delete_splitters_on_exit) {
+            new File(sourcePath).deleteOnExit();
+            new File(classPath).deleteOnExit();
+          }
+          writer.write(fileContents.toString());
+          writer.flush();
         }
-        writer.write(fileContents.toString());
-        writer.flush();
       } catch (IOException ioe) {
-        System.out.println("Error while writing Splitter file: " + fileAddress);
         debug.fine(ioe.toString());
+        splitObj.setError("Error while writing splitter file " + sourcePath + ": " + ioe);
+        try {
+          Files.deleteIfExists(Path.of(sourcePath));
+        } catch (IOException ioe2) {
+          debug.fine(ioe2.toString());
+        }
         continue;
       }
-      writtenSourcePaths.add(splitObj.getFullSourcePath());
+      writtenSplitters.add(splitObj);
+      writtenSourcePaths.add(sourcePath);
+    }
+    if (writtenSplitters.isEmpty()) {
+      Global.debugSplit.fine("<<exit>>  loadSplitters: no splitters were written");
+      return;
     }
     String errorOutput = null;
     try {
-      if (!writtenSourcePaths.isEmpty()) {
-        errorOutput = compileFiles(writtenSourcePaths);
-      }
+      errorOutput = compileFiles(writtenSourcePaths);
     } catch (IOException ioe) {
       System.out.println("Error while compiling Splitter files (Daikon will continue):");
       debug.fine(ioe.toString());
@@ -221,8 +241,8 @@ public class SplitterFactory {
           "Errors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);
     }
-    for (int i = 0; i < splitterObjects.length; i++) {
-      splitterObjects[i].load();
+    for (SplitterObject splitObj : writtenSplitters) {
+      splitObj.load();
     }
 
     Global.debugSplit.fine("<<exit>>  loadSplitters");

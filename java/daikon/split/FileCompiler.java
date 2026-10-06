@@ -107,7 +107,8 @@ public final class FileCompiler {
   }
 
   /**
-   * Compiles the files given by fileNames. Returns the error output.
+   * Compiles the files given by fileNames. Returns the error output. Nonexistent files are not
+   * passed to the compiler, but are reported in the error output.
    *
    * @param fileNames paths to the files to be compiled as Strings
    * @return the error output from compiling the files
@@ -117,24 +118,39 @@ public final class FileCompiler {
 
     // System.out.printf("compileFiles: %s%n", fileNames);
 
+    // javac compiles nothing if any of its arguments does not exist, so omit nonexistent files.
+    StringBuilder compile_errors = new StringBuilder();
+    List<String> existingFileNames = new ArrayList<>();
+    for (String fileName : fileNames) {
+      if (fileExists(fileName)) {
+        existingFileNames.add(fileName);
+      } else {
+        compile_errors.append("File not found: " + fileName + System.lineSeparator());
+      }
+    }
+    if (existingFileNames.isEmpty()) {
+      return compile_errors.toString();
+    }
+
     // Start a process to compile all of the files (in one command)
-    String compile_errors = compile_source(fileNames);
+    String first_compile_errors = compile_source(existingFileNames);
+    compile_errors.append(first_compile_errors);
 
     // javac tends to stop without completing the compilation if there
     // is an error in one of the files.  Remove all the erring files
     // and recompile only the good ones.
     if (compiler[0].indexOf("javac") != -1) {
-      recompile_without_errors(fileNames, compile_errors);
+      compile_errors.append(recompile_without_errors(existingFileNames, first_compile_errors));
     }
 
-    return compile_errors;
+    return compile_errors.toString();
   }
 
   /**
    * Returns the error output from compiling the files.
    *
    * @param filenames the paths of the Java source to be compiled as Strings
-   * @return the error output from compiling the files
+   * @return the error output and standard output from compiling the files
    * @throws Error if an empty list of filenames is provided
    */
   private String compile_source(List<String> filenames) throws IOException {
@@ -147,7 +163,6 @@ public final class FileCompiler {
     ByteArrayOutputStream errStream;
     PumpStreamHandler streamHandler;
     String compile_errors;
-    @SuppressWarnings("UnusedVariable") // for debugging
     String compile_output;
 
     if (filenames.isEmpty()) {
@@ -196,7 +211,7 @@ public final class FileCompiler {
 
     try {
       @SuppressWarnings("DefaultCharset") // toString(Charset) was introduced in Java 10
-      String compile_output_tmp = errStream.toString();
+      String compile_output_tmp = outStream.toString();
       compile_output = compile_output_tmp;
     } catch (RuntimeException e) {
       throw new Error("Exception getting process standard output", e);
@@ -213,7 +228,8 @@ public final class FileCompiler {
       }
       runtime.exit(1);
     }
-    return compile_errors;
+    // Some compilers write diagnostics to standard output rather than standard error.
+    return compile_errors + compile_output;
   }
 
   /**
@@ -224,8 +240,10 @@ public final class FileCompiler {
    *
    * @param fileNames all the files that were attempted to be compiled
    * @param errorString the error string that indicates which files could not be compiled
+   * @return the error output from the recompilation, or the empty string if no recompilation was
+   *     needed
    */
-  private void recompile_without_errors(List<String> fileNames, String errorString)
+  private String recompile_without_errors(List<String> fileNames, String errorString)
       throws IOException {
     // search the error string and extract the files with errors.
     if (errorString != null) {
@@ -250,9 +268,10 @@ public final class FileCompiler {
       }
 
       if (!retry.isEmpty()) {
-        compile_source(retry);
+        return compile_source(retry);
       }
     }
+    return "";
   }
 
   /**
