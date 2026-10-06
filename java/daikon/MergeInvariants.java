@@ -159,8 +159,6 @@ public final class MergeInvariants {
           }
           break;
 
-        case '?':
-          throw g.badOptionError();
         default:
           System.out.println("getopt() returned " + c);
           break;

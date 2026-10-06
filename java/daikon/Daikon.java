@@ -1391,9 +1391,6 @@ public final class Daikon {
           }
           break;
         //
-        case '?':
-          throw g.badOptionError();
-        //
         default:
           throw new Daikon.BugInDaikon("getopt() returned " + c);
       }

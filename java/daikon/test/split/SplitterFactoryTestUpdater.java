@@ -242,10 +242,11 @@ public class SplitterFactoryTestUpdater {
     ps.println();
     ps.println("  private static String usage =");
     ps.println("    StringsPlume.joinLines(");
-    ps.println("      \"Usage:  java daikon.tools.CreateSpinfo FILE.java ...\",");
+    ps.println("      \"Usage:  java daikon.test.split.SplitterFactoryTest [OPTION]...\",");
     ps.println(
-        "      \"  -s       Save (do not delete) the splitter java files in the temp directory\",");
-    ps.println("      \"  -h       Display this usage message\");");
+        "      \"  -s          Save (do not delete) the splitter java files in the temp"
+            + " directory\",");
+    ps.println("      \"  -h, --help  Display this usage message\");");
     ps.println();
     ps.println("  public static void main(String[] args) {");
     ps.println("    try {");
@@ -256,8 +257,12 @@ public class SplitterFactoryTestUpdater {
     ps.println("  }");
     ps.println();
     ps.println("  public static void mainHelper(String[] args) {");
+    ps.println("    LongOpt[] longopts =");
+    ps.println("        new LongOpt[] {new LongOpt(\"help\", LongOpt.NO_ARGUMENT, null, 'h')};");
     ps.println("    DaikonGetopt g =");
-    ps.println("        new DaikonGetopt(\"daikon.test.split.SplitterFactoryTest\", args, \"hs\");");
+    ps.println(
+        "        new DaikonGetopt(\"daikon.test.split.SplitterFactoryTest\", args, \"hs\","
+            + " longopts);");
     ps.println("    int c;");
     ps.println("    while ((c = g.getopt()) != -1) {");
     ps.println("      switch (c) {");
@@ -266,10 +271,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("          break;");
     ps.println("        case 'h':");
     ps.println("          System.out.println(usage);");
-    ps.println("          System.exit(1);");
-    ps.println("          break;");
-    ps.println("        case '?':");
-    ps.println("          throw g.badOptionError();");
+    ps.println("          throw new Daikon.NormalTermination();");
     ps.println("        default:");
     ps.println("          System.out.println(\"getopt() returned \" + c);");
     ps.println("          break;");

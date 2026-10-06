@@ -39,13 +39,13 @@ public class BadOptionTest {
    */
   private static String parse(String... args) {
     DaikonGetopt g = new DaikonGetopt("BadOptionTest", args, "ho:", longopts);
-    int c;
-    while ((c = g.getopt()) != -1) {
-      if (c == '?') {
-        return String.valueOf(g.badOptionError().getMessage());
-      }
-    }
-    throw new AssertionError("no bad option");
+    Daikon.UserError e =
+        assertThrows(
+            Daikon.UserError.class,
+            () -> {
+              while (g.getopt() != -1) {}
+            });
+    return String.valueOf(e.getMessage());
   }
 
   /**
@@ -80,6 +80,16 @@ public class BadOptionTest {
   @Test
   public void testAmbiguousLongOption() {
     assertEquals(expected("Ambiguous command-line option --conf"), parse("--conf=x"));
+    assertEquals(expected("Ambiguous command-line option --conf"), parse("--conf"));
+  }
+
+  /** Tests that a usage hint of null appends nothing to the description of a bad option. */
+  @Test
+  public void testNoUsageHint() {
+    DaikonGetopt g = new DaikonGetopt("BadOptionTest", new String[] {"--bogus"}, "h", longopts);
+    g.setUsageHint(null);
+    Daikon.UserError e = assertThrows(Daikon.UserError.class, g::getopt);
+    assertEquals("Unrecognized command-line option --bogus", String.valueOf(e.getMessage()));
   }
 
   /** Tests options that are missing their required argument. */

@@ -200,8 +200,6 @@ public class Annotate {
         case 's':
           slashslash = true;
           break;
-        case '?':
-          throw g.badOptionError();
         default:
           System.out.println("getopt() returned " + c);
           break;

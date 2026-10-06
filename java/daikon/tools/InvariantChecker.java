@@ -187,8 +187,6 @@ public class InvariantChecker {
         case 'h':
           System.out.println(usage);
           throw new Daikon.NormalTermination();
-        case '?':
-          throw g.badOptionError();
         default:
           System.out.println("getopt() returned " + c);
           break;

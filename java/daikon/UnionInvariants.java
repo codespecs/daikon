@@ -90,8 +90,6 @@ public final class UnionInvariants {
           }
           break;
         //
-        case '?':
-          throw g.badOptionError();
         default:
           System.out.println("getopt() returned " + c);
           break;

@@ -21,6 +21,14 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
+## Version 5.9.1 (???, 2026)
+
+* Daikon and its tools now reject an unrecognized, ambiguous, or malformed
+   command-line option:  they describe the problem and exit with a non-zero
+   status.  Previously, Daikon printed its usage message and exited with
+   status 0, and most other tools ignored the bad option and continued.
+* All tools accept `--help` as a synonym for `-h`.
+
 ## Version 5.9.0 (September 1, 2026)
 
 * All Daikon tools now work with Java 8-26.

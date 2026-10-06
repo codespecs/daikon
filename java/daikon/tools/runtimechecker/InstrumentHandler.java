@@ -89,6 +89,9 @@ public class InstrumentHandler extends CommandHandler {
     if (arguments == errorWhileReadingArguments) {
       return false;
     }
+    if (arguments == helpRequested) {
+      return true;
+    }
 
     // Set up debug traces; note this comes after reading command line options.
     daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
@@ -201,10 +204,14 @@ public class InstrumentHandler extends CommandHandler {
   private static Arguments errorWhileReadingArguments =
       new Arguments("error while reading arguments", new ArrayList<String>());
 
+  /** Returned by {@link #readArguments} when the user requests the usage message. */
+  private static Arguments helpRequested = new Arguments("help requested", new ArrayList<String>());
+
   private Arguments readArguments(String[] args) {
 
     LongOpt[] longopts =
         new LongOpt[] {
+          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 'h'),
           new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(output_only_high_conf_invariants_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -215,8 +222,19 @@ public class InstrumentHandler extends CommandHandler {
         };
     DaikonGetopt g =
         new DaikonGetopt("daikon.tools.runtimechecker.InstrumentHandler", args, "h", longopts);
+    // The caller prints the usage message when this command fails.
+    g.setUsageHint(null);
     int c;
-    while ((c = g.getopt()) != -1) {
+    while (true) {
+      try {
+        c = g.getopt();
+      } catch (Daikon.UserError e) {
+        System.err.println(e.getMessage());
+        return errorWhileReadingArguments;
+      }
+      if (c == -1) {
+        break;
+      }
       switch (c) {
         case 0:
           // got a long option
@@ -242,11 +260,7 @@ public class InstrumentHandler extends CommandHandler {
           break;
         case 'h':
           usageMessage();
-          System.exit(0);
-          break;
-        case '?':
-          System.err.println(g.badOptionError().getMessage());
-          return errorWhileReadingArguments;
+          return helpRequested;
         default:
           System.err.println("getopt() returned " + c);
           return errorWhileReadingArguments;

@@ -318,8 +318,6 @@ public final class Diff {
         case 'l':
           logging = true;
           break;
-        case '?':
-          throw g.badOptionError();
         default:
           System.out.println("getopt() returned " + c);
           break;

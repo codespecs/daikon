@@ -2,25 +2,16 @@ package daikon;
 
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * A command-line option processor that does not print a message about a bad command-line option.
- * Instead, when {@link #getopt()} returns {@code '?'}, a client should {@code throw
- * g.badOptionError()}, which describes the problem.
+ * A command-line option processor that throws a {@link Daikon.UserError} that describes a bad
+ * command-line option, instead of printing a message and returning {@code '?'}.
  */
 public class DaikonGetopt extends Getopt {
 
-  /**
-   * Creates a command-line option processor that recognizes only short options.
-   *
-   * @param progname the name of the program, for use in messages
-   * @param argv the command-line arguments
-   * @param optstring the short options, in the format of {@link Getopt}
-   */
-  public DaikonGetopt(String progname, String[] argv, String optstring) {
-    super(progname, argv, optstring);
-    opterr = false;
-  }
+  /** Text appended to the description of a bad command-line option, or null to append nothing. */
+  private @Nullable String usageHint = "run with -h for usage";
 
   /**
    * Creates a command-line option processor that recognizes short and long options.
@@ -36,17 +27,48 @@ public class DaikonGetopt extends Getopt {
   }
 
   /**
-   * Returns an exception to throw when {@link #getopt()} returns {@code '?'}, which indicates an
-   * unrecognized, ambiguous, or malformed command-line option.
+   * Sets the text that is appended to the description of a bad command-line option. The default
+   * tells the user to run the program with -h.
    *
-   * @return an exception that describes the bad command-line option
+   * @param usageHint text appended to the description of a bad command-line option, or null to
+   *     append nothing
    */
-  public Daikon.UserError badOptionError() {
-    return new Daikon.UserError(badOptionMessage() + "; run with -h for usage");
+  public void setUsageHint(@Nullable String usageHint) {
+    this.usageHint = usageHint;
   }
 
   /**
-   * Returns a description of the bad command-line option that {@link #getopt()} just rejected.
+   * Like {@link Getopt#getopt()}, but never returns {@code '?'}.
+   *
+   * @return the next option, as described in {@link Getopt#getopt()}
+   * @throws Daikon.UserError if the next option is unrecognized, ambiguous, or malformed
+   */
+  @Override
+  public int getopt() {
+    int c = super.getopt();
+    if (c == '?') {
+      throw badOptionError();
+    }
+    return c;
+  }
+
+  /**
+   * Returns an exception that describes the bad command-line option that {@link Getopt#getopt()}
+   * just rejected.
+   *
+   * @return an exception that describes the bad command-line option
+   */
+  private Daikon.UserError badOptionError() {
+    String message = badOptionMessage();
+    if (usageHint != null) {
+      message += "; " + usageHint;
+    }
+    return new Daikon.UserError(message);
+  }
+
+  /**
+   * Returns a description of the bad command-line option that {@link Getopt#getopt()} just
+   * rejected.
    *
    * @return a description of the bad command-line option
    */
@@ -54,12 +76,11 @@ public class DaikonGetopt extends Getopt {
     // For every bad long option, Getopt clears nextchar and advances optind past the option.  A
     // bad short option has no such guarantee, because it may be followed by other short options in
     // the same argument, as in "-xh".
-    if (long_options != null
-        && "".equals(nextchar)
+    if ("".equals(nextchar)
         && 0 < optind
         && optind <= argv.length
         && argv[optind - 1].startsWith("--")) {
-      return longOptionMessage(argv[optind - 1], long_options);
+      return longOptionMessage(argv[optind - 1]);
     }
     char c = (char) optopt;
     if (c == ':' || optstring.indexOf(c) == -1) {
@@ -70,40 +91,30 @@ public class DaikonGetopt extends Getopt {
   }
 
   /**
-   * Returns a description of a bad long command-line option.
+   * Returns a description of a bad long command-line option. Uses {@code longind}, which Getopt
+   * sets to the index of the long option that matched the argument, or to -1 if none matched.
    *
    * @param arg the bad command-line argument, which starts with "--"
-   * @param longopts the long options that this processor recognizes
    * @return a description of the bad command-line option
    */
-  private static String longOptionMessage(String arg, LongOpt[] longopts) {
+  private String longOptionMessage(String arg) {
     int equalsPos = arg.indexOf('=');
     String name = (equalsPos == -1) ? arg.substring(2) : arg.substring(2, equalsPos);
-
-    // This mimics how Getopt matches a long option:  an exact match takes precedence, and
-    // otherwise the name may be an unambiguous prefix of a long option.
-    LongOpt match = null;
-    boolean ambiguous = false;
-    for (LongOpt longopt : longopts) {
-      String longoptName = longopt.getName();
-      if (longoptName.equals(name)) {
-        match = longopt;
-        ambiguous = false;
-        break;
-      } else if (longoptName.startsWith(name)) {
-        if (match == null) {
-          match = longopt;
-        } else {
-          ambiguous = true;
+    LongOpt[] longopts = long_options;
+    if (longopts == null || longind == -1) {
+      return "Unrecognized command-line option --" + name;
+    }
+    LongOpt match = longopts[longind];
+    // For an inexact match, Getopt sets longind to the first long option that has the given
+    // prefix.  The match is ambiguous if a later long option also has the prefix.
+    if (!match.getName().equals(name)) {
+      for (int i = longind + 1; i < longopts.length; i++) {
+        if (longopts[i].getName().startsWith(name)) {
+          return "Ambiguous command-line option --" + name;
         }
       }
     }
-
-    if (ambiguous) {
-      return "Ambiguous command-line option --" + name;
-    } else if (match == null) {
-      return "Unrecognized command-line option --" + name;
-    } else if (equalsPos != -1 && match.getHasArg() == LongOpt.NO_ARGUMENT) {
+    if (equalsPos != -1 && match.getHasArg() == LongOpt.NO_ARGUMENT) {
       return "Command-line option --" + match.getName() + " does not take an argument";
     } else if (equalsPos == -1 && match.getHasArg() == LongOpt.REQUIRED_ARGUMENT) {
       return "Command-line option --" + match.getName() + " requires an argument";
