@@ -438,31 +438,42 @@ class Example @{
 @noindent
 The @file{.decls} file might look like the following.
 @example
-DECLARE
-Example.squar:::ENTER
-x
-int
-int
-1
-b
-boolean
-int
-2
+decl-version 2.0
 
-DECLARE
-Example.squar:::EXIT
-x
-int
-int
-1
-b
-boolean
-int
-2
-return
-int
-int
-1
+ppt Example.squar:::ENTER
+ppt-type enter
+variable x
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 1
+variable b
+  var-kind variable
+  dec-type boolean
+  rep-type int
+  flags is_param
+  comparability 2
+
+ppt Example.squar:::EXIT1
+ppt-type subexit
+variable x
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 1
+variable b
+  var-kind variable
+  dec-type boolean
+  rep-type int
+  flags is_param
+  comparability 2
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 1
 @end example
 
 @noindent
@@ -494,7 +505,7 @@ class Example @{
     int daikon_return_value = x*x;
     synchronized (daikon.chicory.Runtime.dtrace) @{
       daikon.chicory.Runtime.dtrace.println();
-      daikon.chicory.Runtime.dtrace.println("Example.squar:::EXIT");
+      daikon.chicory.Runtime.dtrace.println("Example.squar:::EXIT1");
       daikon.chicory.Runtime.dtrace.println("x");
       daikon.chicory.Runtime.dtrace.println(x);
       daikon.chicory.Runtime.dtrace.println(1);  // modified bit
@@ -2080,7 +2091,7 @@ the Texinfo source files in the @file{doc/} directory against the previous
 versions:
 
 @smallexample
-if [ -z "$@{DAIKONDIR@}" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
+if [ -z "$@{DAIKONDIR@}" ] && [ -d "java/daikon/" ] ; then DAIKONDIR=$(pwd) ; fi
 cd $@{DAIKONDIR@}/doc && \
 diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
 @end smallexample
@@ -2090,7 +2101,7 @@ Another good source of information is the repository logs since the
 last release:
 
 @smallexample
-if [ -z "$@{DAIKONDIR@}" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
+if [ -z "$@{DAIKONDIR@}" ] && [ -d "java/daikon/" ] ; then DAIKONDIR=$(pwd) ; fi
 DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
     -O - | xargs echo -n` && \
 cd $@{DAIKONDIR@} && \
@@ -2109,7 +2120,7 @@ git log v$@{DAIKONVERSION@}..HEAD
 In addition, you should run the same command in your Fjalar clone:
 
 @smallexample
-if [ -z "$@{DAIKONDIR@}" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
+if [ -z "$@{DAIKONDIR@}" ] && [ -d "java/daikon/" ] ; then DAIKONDIR=$(pwd) ; fi
 DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
     -O - | xargs echo -n` && \
 @{ cd $@{DAIKONDIR@}/fjalar || cd $@{DAIKONDIR@}/../fjalar ; @} && \
@@ -2876,8 +2887,8 @@ decl-version <version>
 
 @noindent
 The only supported version is 2.0.
-Daikon no longer reads files in the obsolete version 1 format, which did not
-include a version record.
+A file with no declaration version record is treated as version 2.0.
+Daikon no longer reads files in the obsolete version 1 format.
 
 
 @node          Input-language declaration

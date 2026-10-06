@@ -75,10 +75,10 @@ sub escapeDecl ( $ ) {
   return $name;
 }
 
-# The inverse of escapeDecl.
+# The inverse of escapeDecl.  Like FileIO.unescape_decl in Daikon.
 sub unescapeDecl ( $ ) {
   my ($name) = check_args(1, @_);
-  $name =~ s/\\(.)/$1 eq "_" ? " " : $1/ge;
+  $name =~ s/\\(.)/$1 eq "_" ? " " : $1 eq "n" ? "\n" : $1 eq "r" ? "\r" : $1/ge;
   return $name;
 }
 
