@@ -1039,11 +1039,11 @@ public class PptRelation implements Serializable {
 
     // Loop over each ppt and create an equality view and invariants for
     // any ppt without children that doesn't already have them.  This can
-    // happen when there are ppts such as OBJECT or CLASS that don't end up
+    // happen when there are non-leaf ppts such as OBJECT or CLASS that don't end up
     // with any children (due to the program source or because of ppt filtering).
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
       if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
-        assert ppt.is_object() || ppt.is_class() || ppt.is_enter() : ppt;
+        assert !ppt.is_dataflow_leaf() : ppt;
         ppt.equality_view = new PptSliceEquality(ppt);
         ppt.equality_view.instantiate_invariants();
       }

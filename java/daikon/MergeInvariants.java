@@ -279,20 +279,15 @@ public final class MergeInvariants {
       PptRelation.init_hierarchy(merge_ppts);
     }
 
-    // Create a hierarchy between the merge exitNN points and the
-    // corresponding points in each of the specified maps.  This
-    // should only be created at the exitNN points (i.e., the leaves)
-    // so that the normal processing will create the invariants at
-    // upper points.
+    // Create a hierarchy between the merge leaves (such as exitNN points)
+    // and the corresponding points in each of the specified maps.  This
+    // should only be created at the leaves so that the normal processing
+    // will create the invariants at upper points.
     debugProgress.fine("Building hierarchy between leaves of the maps");
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
 
-      // Skip everything that is not a final exit point
-      if (!ppt.ppt_name.isExitPoint()) {
-        assert !ppt.children.isEmpty() : ppt;
-        continue;
-      }
-      if (ppt.ppt_name.isCombinedExitPoint()) {
+      // Skip everything that is not a leaf
+      if (!ppt.is_dataflow_leaf()) {
         assert !ppt.children.isEmpty() : ppt;
         continue;
       }
@@ -406,10 +401,7 @@ public final class MergeInvariants {
     // Remove the PptRelation links so that when the file is written
     // out it only includes the new information
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
-      if (!ppt.ppt_name.isExitPoint()) {
-        continue;
-      }
-      if (ppt.ppt_name.isCombinedExitPoint()) {
+      if (!ppt.is_dataflow_leaf()) {
         continue;
       }
       ppt.children.clear();

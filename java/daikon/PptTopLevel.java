@@ -4691,20 +4691,30 @@ public class PptTopLevel extends Ppt {
    * Returns true if this is a leaf of the dataflow hierarchy, which obtains its invariants directly
    * from samples rather than by merging them from its children.
    *
-   * <p>Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered exit), this defines them as
-   * everything except ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT and :::CLASS program
-   * points. This scheme treats arbitrarily named program points such as :::POINT (used by
-   * convertcsv.pl) as leaves.
+   * <p>If the ppt's type was declared, the leaves are the numbered exit points ({@link
+   * PptType#SUBEXIT}) and the general program points ({@link PptType#POINT}). A ppt declared as
+   * {@link PptType#EXIT} but named like a numbered exit (such as :::EXIT22) is also a leaf, so that
+   * samples in hand-written decls files that use {@code ppt-type exit} for numbered exits are not
+   * rejected. If the ppt's type was not declared, the leaves are all program points except :::EXIT
+   * (combined), :::ENTER, :::THROWS, :::OBJECT, :::CLASS, and :::GLOBAL program points. Either way,
+   * arbitrarily named program points such as :::POINT (used by convertcsv.pl) are leaves.
    *
    * @return true if this is a leaf of the dataflow hierarchy
    */
   @Pure
   public boolean is_dataflow_leaf() {
-    return !(ppt_name.isCombinedExitPoint()
-        || ppt_name.isEnterPoint()
-        || ppt_name.isThrowsPoint()
-        || ppt_name.isObjectInstanceSynthetic()
-        || ppt_name.isClassStaticSynthetic());
+    if (type != null) {
+      return (type == PptType.SUBEXIT)
+          || (type == PptType.POINT)
+          || ((type == PptType.EXIT) && ppt_name.isNumberedExitPoint());
+    } else {
+      return !(ppt_name.isCombinedExitPoint()
+          || ppt_name.isEnterPoint()
+          || ppt_name.isThrowsPoint()
+          || ppt_name.isObjectInstanceSynthetic()
+          || ppt_name.isClassStaticSynthetic()
+          || ppt_name.isGlobalPoint());
+    }
   }
 
   /** Is this a ppt that represents an object? */

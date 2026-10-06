@@ -1883,33 +1883,13 @@ public final class FileIO {
     }
 
     // Only process the leaves of the ppt tree.
-    // This test assumes that all leaves are numbered exit program points
-    // -- that is, points of the form foo:::EXIT22 for which isExitPoint()
-    // is true and isCombinedExitPoint() is false.  "Combined" exit points
-    // of the form foo:::EXIT are not processed -- they are assumed to be
-    // non-leaves.
-    if (Daikon.use_dataflow_hierarchy) {
-
-      // Rather than defining leaves as :::EXIT54 (numbered exit)
-      // program points define them as everything except
-      // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT, ::GLOBAL
-      //  and :::CLASS program points.  This scheme treats arbitrarily
-      //  named program points such as :::POINT (used by convertcsv.pl)
-      //  as leaves.
-
-      if (ppt.ppt_name.isEnterPoint()
-          || ppt.ppt_name.isThrowsPoint()
-          || ppt.ppt_name.isObjectInstanceSynthetic()
-          || ppt.ppt_name.isClassStaticSynthetic()
-          || ppt.ppt_name.isGlobalPoint()) {
-        return;
-      }
-
-      if (ppt.ppt_name.isExitPoint() && ppt.ppt_name.isCombinedExitPoint()) {
+    if (Daikon.use_dataflow_hierarchy && !ppt.is_dataflow_leaf()) {
+      if (ppt.is_combined_exit()) {
         // not Daikon.UserError; caller has more info (e.g., filename)
         throw new RuntimeException(
             "Bad program point name " + ppt.name + " is a combined exit point name");
       }
+      return;
     }
 
     // Add derived variables
