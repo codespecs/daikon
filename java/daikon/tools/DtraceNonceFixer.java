@@ -6,7 +6,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.StringTokenizer;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
 
@@ -33,10 +36,12 @@ public class DtraceNonceFixer {
   /** The usage message for this program. */
   private static String usage =
       StringsPlume.joinLines(
-          "Usage: DtraceNonceFixer FILENAME",
+          "Usage: DtraceNonceFixer FILENAME [OUTFILE]",
           "Modifies dtrace file FILENAME so that the invocation nonces are consistent.",
           "The output file will be FILENAME_fixed and another output included",
-          "nonces for OBJECT and CLASS invocations called FILENAME_all_fixed");
+          "nonces for OBJECT and CLASS invocations called FILENAME_all_fixed.",
+          "If OUTFILE is supplied, the output that includes nonces for all invocations",
+          "is written to OUTFILE instead, and no other output file remains.");
 
   public static void main(String[] args) {
     try {
@@ -53,23 +58,28 @@ public class DtraceNonceFixer {
    * @param args command-line arguments, like those of {@link #main}
    */
   public static void mainHelper(final String[] args) {
-    if (args.length != 1) {
+    if (args.length != 1 && args.length != 2) {
       throw new daikon.Daikon.UserError(usage);
     }
 
+    // The base name of the output files, which determines whether they are compressed.
+    String outputBase = (args.length == 2) ? args[1] : args[0];
     String outputFilename =
-        args[0].endsWith(".gz") ? (args[0] + "_fixed.gz") : (args[0] + "_fixed");
+        outputBase.endsWith(".gz") ? (outputBase + "_fixed.gz") : (outputBase + "_fixed");
 
+    // maxNonce - the biggest nonce ever found in the file
+    int maxNonce = 0;
+
+    // The intermediate file must be closed before it is read, so that its contents (including, for
+    // a compressed file, the trailer) are complete.
     try (BufferedReader br1 = FilesPlume.newBufferedFileReader(args[0]);
         PrintWriter out1 = new PrintWriter(FilesPlume.newBufferedFileWriter(outputFilename))) {
 
-      // maxNonce - the biggest nonce ever found in the file
       // correctionFactor - the amount to add to each observed nonce
-      int maxNonce = 0;
       int correctionFactor = 0;
       boolean first = true;
-      while (br1.ready()) {
-        String nextInvo = grabNextInvocation(br1);
+      String nextInvo;
+      while ((nextInvo = grabNextInvocation(br1)) != null) {
         int non = peekNonce(nextInvo);
         // The first legit 0 nonce will have an ENTER and EXIT
         // seeing a 0 means we have reached the next file
@@ -89,31 +99,43 @@ public class DtraceNonceFixer {
           out1.println(nextInvo);
         }
       }
-      out1.flush();
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
 
-      // now go back and add the OBJECT and CLASS invocations
-      String allFixedFilename =
+    // now go back and add the OBJECT and CLASS invocations
+    String allFixedFilename;
+    if (args.length == 2) {
+      allFixedFilename = args[1];
+    } else {
+      allFixedFilename =
           outputFilename.endsWith(".gz") ? (args[0] + "_all_fixed.gz") : (args[0] + "_all_fixed");
+    }
 
-      try (BufferedReader br2 = FilesPlume.newBufferedFileReader(outputFilename);
-          PrintWriter out2 = new PrintWriter(FilesPlume.newBufferedFileWriter(allFixedFilename))) {
-
-        while (br2.ready()) {
-          String nextInvo = grabNextInvocation(br2);
-          int non = peekNonce(nextInvo);
-          // if there is no nonce at this point it must be an OBJECT
-          // or a CLASS invocation
-          if (non == -1) {
-            out2.println(spawnWithNewNonce(nextInvo, ++maxNonce));
-          } else {
-            out2.println(nextInvo);
-          }
+    try (BufferedReader br2 = FilesPlume.newBufferedFileReader(outputFilename);
+        PrintWriter out2 = new PrintWriter(FilesPlume.newBufferedFileWriter(allFixedFilename))) {
+      String nextInvo;
+      while ((nextInvo = grabNextInvocation(br2)) != null) {
+        int non = peekNonce(nextInvo);
+        // if there is no nonce at this point it must be an OBJECT
+        // or a CLASS invocation (or a sample without a nonce)
+        if (non == -1 && isSample(nextInvo)) {
+          out2.println(spawnWithNewNonce(nextInvo, ++maxNonce));
+        } else {
+          out2.println(nextInvo);
         }
-
-        out2.flush();
       }
     } catch (IOException e) {
       throw new UncheckedIOException(e);
+    }
+
+    // The intermediate file is not needed when OUTFILE is supplied.
+    if (args.length == 2) {
+      try {
+        Files.delete(Path.of(outputFilename));
+      } catch (IOException e) {
+        throw new UncheckedIOException(e);
+      }
     }
   }
 
@@ -145,14 +167,16 @@ public class DtraceNonceFixer {
 
     // See if the second line is the nonce
     String line = st.nextToken();
-    if (line.equals("this_invocation_nonce")) {
+    if (line.trim().equals("this_invocation_nonce")) {
       // modify the next line to include the new nonce
       sb.append(line).append(lineSep).append(newNonce).append(lineSep);
       // throw out the next token, because it will be the old nonce
       st.nextToken();
     } else {
-      // otherwise create the required this_invocation_nonce line
+      // otherwise create the required this_invocation_nonce line, then retain `line`, which is
+      // the name of the first variable
       sb.append("this_invocation_nonce" + lineSep).append(newNonce).append(lineSep);
+      sb.append(line).append(lineSep);
     }
 
     while (st.hasMoreTokens()) {
@@ -163,6 +187,19 @@ public class DtraceNonceFixer {
   }
 
   /**
+   * Returns true if the given paragraph of a dtrace file is a sample, as opposed to a declaration,
+   * a comment, or other information.
+   *
+   * @param invo a paragraph of a dtrace file
+   * @return true if {@code invo} is a sample
+   */
+  private static boolean isSample(String invo) {
+    int lineEnd = invo.indexOf(lineSep);
+    String firstLine = (lineEnd == -1) ? invo : invo.substring(0, lineEnd);
+    return firstLine.contains(":::") && !firstLine.startsWith("ppt ");
+  }
+
+  /**
    * Returns the nonce of the invocation 'invo', or -1 if the String 'this_invocation_nonce' is not
    * found in {@code invo}.
    */
@@ -170,8 +207,8 @@ public class DtraceNonceFixer {
     StringTokenizer st = new StringTokenizer(invo, lineSep);
     while (st.hasMoreTokens()) {
       String line = st.nextToken();
-      if (line.equals("this_invocation_nonce")) {
-        return Integer.parseInt(st.nextToken());
+      if (line.trim().equals("this_invocation_nonce")) {
+        return Integer.parseInt(st.nextToken().trim());
       }
     }
     return -1;
@@ -180,19 +217,23 @@ public class DtraceNonceFixer {
   /**
    * Grabs the next invocation out of the dtrace buffer and returns a String with endline characters
    * preserved. This method will return a single blank line if the original dtrace file contained
-   * consecutive blank lines.
+   * consecutive blank lines. Leading whitespace, which is significant in declarations, is
+   * preserved.
+   *
+   * @param br the reader for the dtrace file
+   * @return the next invocation, or null if the end of the file has been reached
    */
-  private static String grabNextInvocation(BufferedReader br) throws IOException {
+  private static @Nullable String grabNextInvocation(BufferedReader br) throws IOException {
     StringBuilder sb = new StringBuilder();
-    while (br.ready()) {
-      String line = br.readLine();
-      assert line != null; // because br.ready() = true
-      line = line.trim();
-      if (line.equals("")) {
-        break;
+    String line;
+    while ((line = br.readLine()) != null) {
+      line = line.stripTrailing();
+      if (line.isEmpty()) {
+        return sb.toString();
       }
       sb.append(line).append(lineSep);
     }
-    return sb.toString();
+    // End of file
+    return (sb.length() == 0) ? null : sb.toString();
   }
 }
