@@ -2,6 +2,8 @@
 
 package daikon.tools;
 
+import static daikon.tools.nullness.NullnessUtil.castNonNull;
+
 import daikon.FileIO;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -81,7 +83,7 @@ public class DtraceNonceFixer {
         Path outfile = Path.of(args[1]).toAbsolutePath();
         Path tmpFile =
             Files.createTempFile(
-                outfile.getParent(),
+                castNonNull(outfile.getParent()), // an absolute file path has a parent
                 outfile.getFileName() + "-",
                 args[1].endsWith(".gz") ? "-fixed.gz" : "-fixed");
         try {
@@ -224,8 +226,9 @@ public class DtraceNonceFixer {
   }
 
   /**
-   * Returns the index of the first line of {@code para} that is not a comment. Daikon treats leading
-   * comment lines as a separate record, so that line is the first line of a sample or declaration.
+   * Returns the index of the first line of {@code para} that is not a comment. Daikon treats
+   * leading comment lines as a separate record, so that line is the first line of a sample or
+   * declaration.
    *
    * @param para a paragraph of a dtrace file
    * @return the index of the first non-comment line, or {@code para.size()} if there is none
