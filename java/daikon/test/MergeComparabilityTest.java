@@ -1,5 +1,6 @@
 package daikon.test;
 
+import static daikon.tools.nullness.NullnessUtil.castNonNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
@@ -13,6 +14,7 @@ import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,14 +104,26 @@ public class MergeComparabilityTest {
   }
 
   /**
-   * Parses the contents of a declaration file.
+   * Parses the contents of a declaration file, for rewriting.
    *
    * @param filename the file name, used in error messages
    * @param lines the lines of the file
    * @return the contents of the file
    */
   private static DeclReader parse(String filename, List<String> lines) {
-    DeclReader result = new DeclReader();
+    return parse(filename, lines, true);
+  }
+
+  /**
+   * Parses the contents of a declaration file.
+   *
+   * @param filename the file name, used in error messages
+   * @param lines the lines of the file
+   * @param forRewriting if true, create a DeclReader for rewriting
+   * @return the contents of the file
+   */
+  private static DeclReader parse(String filename, List<String> lines, boolean forRewriting) {
+    DeclReader result = new DeclReader(forRewriting);
     try {
       result.read(new StringReader(String.join("\n", lines)), filename);
     } catch (IOException e) {
@@ -264,5 +278,87 @@ public class MergeComparabilityTest {
     List<String> none = new ArrayList<>(file(ppt("1")));
     none.set(none.indexOf("var-comparability implicit"), "var-comparability none");
     assertThrows(Daikon.UserError.class, () -> merge(none, file(ppt("1"))));
+  }
+
+  /** A variable line whose name is separated from its keyword by a tab is a variable. */
+  @Test
+  public void testTabSeparatedVariable() {
+    List<String> a = new ArrayList<>(file(ppt("2", "2", "3")));
+    a.set(a.indexOf("variable a"), "variable\ta");
+    List<String> expected = new ArrayList<>(expected(ppt("1", "1", "2")));
+    expected.set(expected.indexOf("variable a"), "variable\ta");
+    assertEquals(expected, merge(a, file(ppt("4", "4", "5"))));
+  }
+
+  /**
+   * Header and ppt records whose tokens are separated by tabs or multiple spaces are recognized.
+   */
+  @Test
+  public void testWhitespaceInHeaderAndPpt() {
+    List<String> a = new ArrayList<>(file(ppt("2", "3")));
+    a.set(a.indexOf("decl-version 2.0"), "decl-version\t2.0");
+    a.set(a.indexOf("var-comparability implicit"), "var-comparability  implicit");
+    a.set(a.indexOf("ppt C.m():::ENTER"), "ppt\tC.m():::ENTER");
+    List<String> expected = new ArrayList<>(expected(ppt("1", "1")));
+    expected.set(expected.indexOf("ppt C.m():::ENTER"), "ppt\tC.m():::ENTER");
+    assertEquals(expected, merge(a, file(ppt("4", "4"))));
+  }
+
+  /** A file without a var-comparability record uses implicit comparability. */
+  @Test
+  public void testMissingVarComparability() {
+    List<String> a = new ArrayList<>(file(ppt("2", "3")));
+    a.remove("var-comparability implicit");
+    merge(file(ppt("4", "4")), a);
+    merge(a, file(ppt("4", "4")));
+  }
+
+  /** Program points whose variables have different flags cannot be merged. */
+  @Test
+  public void testMismatchedFlags() {
+    List<String> a = new ArrayList<>(file(ppt("1", "1")));
+    a.add(a.indexOf("variable b"), "  flags nomod");
+    List<String> b = new ArrayList<>(file(ppt("1", "1")));
+    assertThrows(Daikon.UserError.class, () -> merge(a, b));
+    // Differences in whitespace alone do not prevent merging.
+    List<String> c = new ArrayList<>(file(ppt("1", "1")));
+    c.add(c.indexOf("variable b"), "  flags\tnomod");
+    merge(a, c);
+  }
+
+  /** Program points with different ppt-level records cannot be merged. */
+  @Test
+  public void testMismatchedPptRecords() {
+    List<String> a = new ArrayList<>(file(ppt("1", "1")));
+    a.add(a.indexOf("variable a"), "parent parent C:::OBJECT 1");
+    assertThrows(Daikon.UserError.class, () -> merge(a, file(ppt("1", "1"))));
+  }
+
+  /** A program point declared twice in one file cannot be rewritten. */
+  @Test
+  public void testDuplicatePpt() {
+    List<String> twice = file(ppt("1"), ppt("1"));
+    assertThrows(Daikon.UserError.class, () -> parse("a", twice));
+  }
+
+  /** A DeclReader that is not for rewriting skips sample records and allows duplicate ppts. */
+  @Test
+  public void testNotForRewriting() {
+    List<String> lines = new ArrayList<>(file(ppt("1", "2"), ppt("3", "3")));
+    lines.addAll(Arrays.asList("C.m():::ENTER", "this_invocation_nonce", "0", "a", "3", "1", ""));
+    DeclReader reader = parse("a", lines, false);
+    assertEquals(1, reader.ppts.size());
+    DeclReader.DeclPpt ppt = castNonNull(reader.find_ppt("C.m():::ENTER"));
+    DeclReader.DeclVarInfo var = castNonNull(ppt.find_var("a"));
+    assertEquals("3", castNonNull(var.get_comparability()));
+    assertEquals(Collections.emptyList(), ppt.declHeaderLines);
+    assertEquals(Collections.emptyList(), var.lines);
+  }
+
+  /** A malformed comparability is reported as a user error. */
+  @Test
+  public void testMalformedComparability() {
+    assertThrows(Daikon.UserError.class, () -> merge(file(ppt("1]", "1")), file(ppt("1", "1"))));
+    assertThrows(Daikon.UserError.class, () -> merge(file(ppt("x", "1")), file(ppt("1", "1"))));
   }
 }

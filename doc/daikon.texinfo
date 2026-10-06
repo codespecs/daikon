@@ -7609,12 +7609,14 @@ comparable in the output.
 A program point that appears in only some of the input files (for
 example, because it was executed in only some of the runs) appears in
 the output.  A program point that appears in multiple input files must
-declare the same variables, in the same order, with the same
-@code{var-kind}, @code{dec-type}, and @code{rep-type}, in each of them.
+declare the same variables, in the same order, in each of them.  Its
+declarations must also contain the same records (such as
+@code{dec-type}, @code{rep-type}, and @code{flags}), except for
+@code{comparability} records.
 
 The input files must use the version 2.0 declaration format
 (@pxref{Declarations,,,developer,Daikon Developer Manual}) with
-@samp{var-comparability implicit}, which is what DynComp produces.
+implicit comparability, which is what DynComp produces.
 Input and output files whose names end in @file{.gz} are compressed.
 
 @node    Reading dtrace files

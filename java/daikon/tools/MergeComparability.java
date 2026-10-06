@@ -1,17 +1,21 @@
 package daikon.tools;
 
 import daikon.Daikon;
+import daikon.VarComparabilityImplicit;
 import daikon.chicory.DeclReader;
 import daikon.chicory.DeclReader.DeclPpt;
 import daikon.chicory.DeclReader.DeclVarInfo;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,8 +39,9 @@ import org.plumelib.util.StringsPlume;
  * <p>A program point that appears in only some of the input files appears in the output. (For
  * example, DynComp produces no declaration for a program point that was never executed.) A program
  * point that appears in multiple input files must declare the same variables, in the same order, in
- * each of them. Each program point in the output is a copy of its first declaration in the input
- * files, except that the comparability records are changed.
+ * each of them, and its declarations must contain the same records, other than comparability
+ * records. Each program point in the output is a copy of its first declaration in the input files,
+ * except that the comparability records are changed.
  */
 public final class MergeComparability {
 
@@ -122,18 +127,36 @@ public final class MergeComparability {
       declFiles.put(args[i], readDeclFile(args[i]));
     }
 
-    // Merge fully before opening the output file, so that an inconsistency in the input files does
-    // not leave a truncated output file or destroy an existing one.
-    StringWriter merged = new StringWriter();
-    try (PrintWriter pw = new PrintWriter(merged)) {
-      merge(declFiles, pw);
-    }
-
-    // Use a BufferedWriter rather than a PrintWriter, which would discard write errors.
-    try (BufferedWriter writer = FilesPlume.newBufferedFileWriter(outputFilename)) {
-      writer.write(merged.toString());
+    // Write to a temporary file and then rename it, so that an inconsistency in the input files
+    // does not leave a truncated output file or destroy an existing one.  The temporary file is in
+    // the same directory as the output file, so that renaming it does not copy it.  Its name ends
+    // with the output file name, so that it is compressed if the output file name ends in ".gz".
+    Path outputPath = Paths.get(outputFilename);
+    Path tempPath = outputPath.resolveSibling(".tmp." + outputPath.getFileName());
+    boolean moved = false;
+    try {
+      PrintWriter pw = new PrintWriter(FilesPlume.newBufferedFileWriter(tempPath.toString()));
+      try {
+        merge(declFiles, pw);
+      } finally {
+        pw.close();
+      }
+      // A PrintWriter does not throw exceptions, but records whether any write failed.
+      if (pw.checkError()) {
+        throw new Daikon.UserError("Problem writing " + tempPath);
+      }
+      Files.move(tempPath, outputPath, StandardCopyOption.REPLACE_EXISTING);
+      moved = true;
     } catch (IOException e) {
       throw new Daikon.UserError(e, "Problem writing " + outputFilename);
+    } finally {
+      if (!moved) {
+        try {
+          Files.deleteIfExists(tempPath);
+        } catch (IOException e) {
+          System.err.println("Could not delete temporary file " + tempPath + ": " + e);
+        }
+      }
     }
   }
 
@@ -144,7 +167,7 @@ public final class MergeComparability {
    * @return the contents of the file
    */
   public static DeclReader readDeclFile(String filename) {
-    DeclReader result = new DeclReader();
+    DeclReader result = new DeclReader(true);
     try {
       result.read(new File(filename));
     } catch (IOException e) {
@@ -166,30 +189,15 @@ public final class MergeComparability {
     if (rep == null) {
       throw new IllegalArgumentException("Variable " + var.name + " has no comparability");
     }
-    List<String> parts = new ArrayList<>();
-    String rest = rep;
-    while (rest.endsWith("]")) {
-      int openpos = rest.lastIndexOf('[');
-      if (openpos == -1) {
-        break;
-      }
-      parts.add(0, rest.substring(openpos + 1, rest.length() - 1));
-      rest = rest.substring(0, openpos);
+    try {
+      return VarComparabilityImplicit.parseComponents(rep);
+    } catch (IllegalArgumentException e) {
+      throw new Daikon.UserError(
+          e,
+          String.format(
+              "%s: program point %s: variable %s: malformed comparability \"%s\"",
+              ppt.filename, ppt.name, var.name, rep));
     }
-    parts.add(0, rest);
-    int[] result = new int[parts.size()];
-    for (int i = 0; i < result.length; i++) {
-      try {
-        result[i] = Integer.parseInt(parts.get(i));
-      } catch (NumberFormatException e) {
-        throw new Daikon.UserError(
-            e,
-            String.format(
-                "%s: program point %s: variable %s: malformed comparability \"%s\"",
-                ppt.filename, ppt.name, var.name, rep));
-      }
-    }
-    return result;
   }
 
   /**
@@ -219,6 +227,8 @@ public final class MergeComparability {
     Map.Entry<String, DeclReader> first = declFiles.entrySet().iterator().next();
     List<String> header = first.getValue().header;
     for (Map.Entry<String, DeclReader> entry : declFiles.entrySet()) {
+      // A file without a var-comparability record uses implicit comparability.  Because every file
+      // uses implicit comparability, the var-comparability records need no consistency check.
       String varComparability = findRecord(entry.getValue().header, "var-comparability");
       if (varComparability != null && !varComparability.equals("var-comparability implicit")) {
         throw new Daikon.UserError(
@@ -226,9 +236,9 @@ public final class MergeComparability {
                 "%s: \"%s\": only implicit comparability can be merged",
                 entry.getKey(), varComparability));
       }
-      for (String prefix : new String[] {"decl-version", "var-comparability", "input-language"}) {
-        String expected = findRecord(header, prefix);
-        String actual = findRecord(entry.getValue().header, prefix);
+      for (String keyword : new String[] {"decl-version", "input-language"}) {
+        String expected = findRecord(header, keyword);
+        String actual = findRecord(entry.getValue().header, keyword);
         if (!Objects.equals(expected, actual)) {
           throw new Daikon.UserError(
               String.format(
@@ -282,19 +292,38 @@ public final class MergeComparability {
   }
 
   /**
-   * Returns the header record that starts with the given prefix, or null if there is none.
+   * Returns the header record with the given keyword, or null if there is none.
    *
-   * @param header the header records of a declaration file
-   * @param prefix the start of a record, such as "decl-version"
-   * @return the header record that starts with the given prefix, or null
+   * @param header the header records of a declaration file, as stored in {@link DeclReader#header}
+   * @param keyword the first token of a record, such as "decl-version"
+   * @return the header record with the given keyword, or null
    */
-  private static @Nullable String findRecord(List<String> header, String prefix) {
+  private static @Nullable String findRecord(List<String> header, String keyword) {
     for (String record : header) {
-      if (record.startsWith(prefix)) {
+      if (record.equals(keyword) || record.startsWith(keyword + " ")) {
         return record;
       }
     }
     return null;
+  }
+
+  /**
+   * Returns the records of a declaration other than its first line and its comparability record,
+   * with whitespace normalized, in sorted order.
+   *
+   * @param lines the lines of a declaration
+   * @param comparabilityLine the index in {@code lines} of the comparability record, or -1
+   * @return the records other than the first line and the comparability record
+   */
+  private static List<String> otherRecords(List<String> lines, int comparabilityLine) {
+    List<String> result = new ArrayList<>(lines.size());
+    for (int j = 1; j < lines.size(); j++) {
+      if (j != comparabilityLine) {
+        result.add(String.join(" ", DeclReader.tokenize(lines.get(j))));
+      }
+    }
+    Collections.sort(result);
+    return result;
   }
 
   /**
@@ -360,7 +389,15 @@ public final class MergeComparability {
     int[] numParts = new int[numVars];
     // missing[v] is true if some declaration has no comparability for variable v.
     boolean[] missing = new boolean[numVars];
+    List<String> templateHeaderRecords = otherRecords(template.declHeaderLines, -1);
     for (DeclPpt ppt : decls) {
+      List<String> headerRecords = otherRecords(ppt.declHeaderLines, -1);
+      if (!headerRecords.equals(templateHeaderRecords)) {
+        throw new Daikon.UserError(
+            String.format(
+                "Program point %s has records %s in %s but %s in %s",
+                ppt.name, templateHeaderRecords, template.filename, headerRecords, ppt.filename));
+      }
       List<DeclVarInfo> vars = new ArrayList<>(ppt.vars.values());
       if (vars.size() != numVars) {
         throw new Daikon.UserError(
@@ -381,6 +418,19 @@ public final class MergeComparability {
         checkSameRecord("var-kind", expected.var_kind, var.var_kind, var.name, template, ppt);
         checkSameRecord("dec-type", expected.type, var.type, var.name, template, ppt);
         checkSameRecord("rep-type", expected.rep_type, var.rep_type, var.name, template, ppt);
+        List<String> expectedRecords = otherRecords(expected.lines, expected.comparabilityLine);
+        List<String> actualRecords = otherRecords(var.lines, var.comparabilityLine);
+        if (!actualRecords.equals(expectedRecords)) {
+          throw new Daikon.UserError(
+              String.format(
+                  "Program point %s: variable %s has records %s in %s but %s in %s",
+                  ppt.name,
+                  var.name,
+                  expectedRecords,
+                  template.filename,
+                  actualRecords,
+                  ppt.filename));
+        }
         if (var.comparability == null) {
           missing[v] = true;
         } else {

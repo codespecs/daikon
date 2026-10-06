@@ -25,17 +25,29 @@ import org.checkerframework.dataflow.qual.TerminatesExecution;
  * points and the variables for each program point. Only version 2.0 declaration files are
  * supported.
  *
- * <p>DeclReader parses only the records that its clients need, but it retains the text of every
- * declaration, so a client can write a declaration with some of its records changed.
+ * <p>DeclReader parses only the records that its clients need. A DeclReader that is created for
+ * rewriting also retains the text of every declaration, so a client can write a declaration with
+ * some of its records changed.
  */
 public class DeclReader {
+
+  /**
+   * If true, this reader retains the text of every declaration, and it rejects input that cannot be
+   * faithfully rewritten: a file that is not a version 2.0 declaration file, records (such as
+   * sample records in a .dtrace file) that are neither header records nor declarations, and a
+   * program point that is declared more than once.
+   *
+   * <p>If false, this reader skips everything other than program point declarations, and a later
+   * declaration of a program point replaces an earlier one.
+   */
+  private final boolean forRewriting;
 
   /** Map from ppt name to corresponding DeclPpt, in the order the ppts appear in the input. */
   public HashMap<String, DeclPpt> ppts = new LinkedHashMap<>();
 
   /**
-   * The header records, such as "decl-version 2.0", in the order they appear in the input. Each
-   * record is trimmed; comments and blank lines are omitted.
+   * The header records, such as "decl-version 2.0", in the order they appear in the input. In each
+   * record, the tokens are separated by a single space; comments and blank lines are omitted.
    */
   public List<String> header = new ArrayList<>();
 
@@ -57,7 +69,10 @@ public class DeclReader {
 
     public int index;
 
-    /** The lines of the declaration, starting with the "variable" line. */
+    /**
+     * The lines of the declaration, starting with the "variable" line; empty if the DeclReader does
+     * not retain the text of declarations.
+     */
     public List<String> lines;
 
     /** The index in {@link #lines} of the comparability record, or -1 if there is none. */
@@ -131,9 +146,13 @@ public class DeclReader {
     public String filename;
 
     /**
-     * The lines of the declaration that precede the first variable, starting with the "ppt" line.
+     * The lines of the declaration that precede the first variable, starting with the "ppt" line;
+     * empty if the DeclReader does not retain the text of declarations.
      */
     public List<String> declHeaderLines = new ArrayList<>();
+
+    /** If true, retain the text of the declaration. */
+    private final boolean retainLines;
 
     /** Map from variable name to corresponding DeclVarInfo, in declaration order. */
     public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<>();
@@ -143,10 +162,12 @@ public class DeclReader {
      *
      * @param name program point name
      * @param filename the file in which this declaration appears
+     * @param retainLines if true, retain the text of the declaration
      */
-    public DeclPpt(String name, String filename) {
+    public DeclPpt(String name, String filename, boolean retainLines) {
       this.name = name;
       this.filename = filename;
+      this.retainLines = retainLines;
     }
 
     /**
@@ -173,7 +194,9 @@ public class DeclReader {
       }
 
       List<String> lines = new ArrayList<>();
-      lines.add(firstLine);
+      if (retainLines) {
+        lines.add(firstLine);
+      }
       String var_kind = null;
       String type = null;
       String rep_type = null;
@@ -183,12 +206,14 @@ public class DeclReader {
       // read variable data records until next variable or blank line
       String record = decl_file.readLine();
       while ((record != null) && !record.trim().isEmpty()) {
-        String[] tokens = record.trim().split("\\s+");
+        String[] tokens = tokenize(record);
         String keyword = tokens[0];
         if (keyword.equals("variable")) {
           break;
         }
-        lines.add(record);
+        if (retainLines) {
+          lines.add(record);
+        }
         // The record without its keyword, with each run of whitespace replaced by a single space.
         String value = String.join(" ", Arrays.asList(tokens).subList(1, tokens.length));
         if (keyword.equals("var-kind")) {
@@ -214,10 +239,12 @@ public class DeclReader {
             reportFileError(decl_file, "Malformed comparability record \"" + record.trim() + "\"");
           }
           comparability = tokens[1];
-          comparabilityLine = lines.size() - 1;
+          if (retainLines) {
+            comparabilityLine = lines.size() - 1;
+          }
         }
-        // All other record types (such as flags and enclosing-var) are retained in `lines` but not
-        // parsed, because no client needs them.
+        // All other record types (such as flags and enclosing-var) are not parsed, because no
+        // client needs them.
         record = decl_file.readLine();
       }
       // push back the variable or blank line record
@@ -283,9 +310,32 @@ public class DeclReader {
     }
   }
 
-  /** Create a new DeclReader. */
+  /**
+   * Create a new DeclReader that does not retain the text of declarations and that skips everything
+   * other than program point declarations.
+   */
   public DeclReader() {
-    // This constructor is intentionally empty.
+    this(false);
+  }
+
+  /**
+   * Create a new DeclReader.
+   *
+   * @param forRewriting if true, retain the text of every declaration and reject input that cannot
+   *     be faithfully rewritten; see {@link #forRewriting}
+   */
+  public DeclReader(boolean forRewriting) {
+    this.forRewriting = forRewriting;
+  }
+
+  /**
+   * Splits a record into whitespace-separated tokens.
+   *
+   * @param record a record, possibly with leading and trailing whitespace
+   * @return the tokens of the record; a single empty string if the record is blank
+   */
+  public static String[] tokenize(String record) {
+    return record.trim().split("\\s+");
   }
 
   /**
@@ -311,35 +361,41 @@ public class DeclReader {
             reader, filename, EntryFormat.DEFAULT, new CommentFormat("^(//|#).*"), null)) {
       boolean seenVersion2 = false;
       for (String line = decl_file.readLine(); line != null; line = decl_file.readLine()) {
-        String record = line.trim();
-        if (record.isEmpty()) {
+        String[] tokens = tokenize(line);
+        String keyword = tokens[0];
+        if (keyword.isEmpty()) {
           continue;
         }
-        if (record.startsWith("ppt ")) {
-          if (!seenVersion2) {
+        if (keyword.equals("ppt")) {
+          if (forRewriting && !seenVersion2) {
             reportFileError(decl_file, "Program point declaration precedes \"decl-version 2.0\"");
           }
           decl_file.putback(line);
           read_decl(decl_file);
           continue;
         }
-        if (record.equals("DECLARE")) {
-          reportFileError(decl_file, "Only version 2.0 declaration files are supported");
-        }
-        if (record.startsWith("decl-version")) {
-          if (!record.equals("decl-version 2.0")) {
-            reportFileError(decl_file, "Unsupported \"" + record + "\"");
+        String record = String.join(" ", tokens);
+        if (keyword.equals("decl-version")
+            || keyword.equals("var-comparability")
+            || keyword.equals("input-language")) {
+          if (keyword.equals("decl-version")) {
+            if (forRewriting && !record.equals("decl-version 2.0")) {
+              reportFileError(decl_file, "Unsupported \"" + record + "\"");
+            }
+            seenVersion2 = true;
           }
-          seenVersion2 = true;
-        } else if (!(record.startsWith("var-comparability")
-            || record.startsWith("input-language"))) {
+          header.add(record);
+        } else if (forRewriting) {
+          if (record.equals("DECLARE")) {
+            reportFileError(decl_file, "Only version 2.0 declaration files are supported");
+          }
           if (!seenVersion2) {
             reportFileError(decl_file, "Expected \"decl-version 2.0\", found \"" + record + "\"");
           }
           // For example, a sample record in a .dtrace file.
           reportFileError(decl_file, "Expected a declaration, found \"" + record + "\"");
         }
-        header.add(record);
+        // Otherwise, skip the record.  For example, it is a sample record in a .dtrace file.
       }
     }
   }
@@ -358,22 +414,31 @@ public class DeclReader {
     if (firstLine == null) {
       reportFileError(decl_file, "File ends prematurely, expected \"ppt ...\"");
     }
-    if (!firstLine.trim().startsWith("ppt ")) {
-      reportFileError(decl_file, "Expected \"ppt ...\", found \"" + firstLine + "\"");
+    String[] tokens = firstLine.trim().split("\\s+", 2);
+    if (tokens.length != 2 || !tokens[0].equals("ppt")) {
+      reportFileError(decl_file, "Expected \"ppt <PPTNAME>\", found \"" + firstLine + "\"");
     }
-    String pptname = firstLine.trim().substring(4); // skip "ppt "
+    String pptname = tokens[1];
     assert pptname.contains(":::");
-    if (ppts.containsKey(pptname)) {
+    if (forRewriting && ppts.containsKey(pptname)) {
       reportFileError(decl_file, "Program point " + pptname + " declared twice");
     }
-    DeclPpt ppt = new DeclPpt(pptname, decl_file.getFileName());
+    DeclPpt ppt = new DeclPpt(pptname, decl_file.getFileName(), forRewriting);
     ppts.put(pptname, ppt);
-    ppt.declHeaderLines.add(firstLine);
+    if (forRewriting) {
+      ppt.declHeaderLines.add(firstLine);
+    }
 
     // Read the records, such as ppt-type, that precede the first variable.
     String line = decl_file.readLine();
-    while ((line != null) && !line.trim().isEmpty() && !line.trim().startsWith("variable ")) {
-      ppt.declHeaderLines.add(line);
+    while (line != null) {
+      String keyword = tokenize(line)[0];
+      if (keyword.isEmpty() || keyword.equals("variable")) {
+        break;
+      }
+      if (forRewriting) {
+        ppt.declHeaderLines.add(line);
+      }
       line = decl_file.readLine();
     }
 
