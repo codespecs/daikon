@@ -142,8 +142,10 @@ public final class MergeComparability {
     // the same directory as the output file, so that renaming it does not copy it.  Its name ends
     // with the output file name, so that it is compressed if the output file name ends in ".gz".
     // Its name is unique, so that it does not clobber another file, such as that of a concurrent
-    // run.
-    Path outputPath = Paths.get(outputFilename).toAbsolutePath();
+    // run.  If the output file is a symbolic link, the file it refers to is replaced, so that the
+    // link is preserved.  The permissions of an existing output file are preserved, but its owner
+    // and group are not.
+    Path outputPath = resolveSymbolicLinks(Paths.get(outputFilename).toAbsolutePath());
     Path outputDir = outputPath.getParent();
     Path outputName = outputPath.getFileName();
     if (outputDir == null || outputName == null) {
@@ -179,6 +181,10 @@ public final class MergeComparability {
       if (pw.checkError()) {
         throw new Daikon.UserError("Problem writing " + tempPath);
       }
+      if (Files.exists(outputPath)
+          && FileSystems.getDefault().supportedFileAttributeViews().contains("posix")) {
+        Files.setPosixFilePermissions(tempPath, Files.getPosixFilePermissions(outputPath));
+      }
       Files.move(tempPath, outputPath, StandardCopyOption.REPLACE_EXISTING);
       moved = true;
     } catch (IOException e) {
@@ -192,6 +198,34 @@ public final class MergeComparability {
         }
       }
     }
+  }
+
+  /**
+   * Returns the file that a path refers to, following symbolic links. Unlike {@link
+   * Path#toRealPath}, this does not require the file to exist, and it does not follow symbolic
+   * links in the directories that contain the file.
+   *
+   * @param path an absolute path
+   * @return the file that {@code path} refers to, which is {@code path} itself if it is not a
+   *     symbolic link
+   */
+  private static Path resolveSymbolicLinks(Path path) {
+    // Limit the number of links that are followed, in case of a cycle.
+    for (int i = 0; i < 40 && Files.isSymbolicLink(path); i++) {
+      Path parent = path.getParent();
+      if (parent == null) {
+        break;
+      }
+      try {
+        path = parent.resolve(Files.readSymbolicLink(path));
+      } catch (IOException e) {
+        throw new Daikon.UserError(e, "Problem reading symbolic link " + path);
+      }
+    }
+    if (Files.isSymbolicLink(path)) {
+      throw new Daikon.UserError("Too many levels of symbolic links: " + path);
+    }
+    return path;
   }
 
   /**

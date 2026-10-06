@@ -3,6 +3,7 @@ package daikon.test;
 import static daikon.tools.nullness.NullnessUtil.castNonNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import daikon.Daikon;
 import daikon.chicory.DeclReader;
@@ -12,13 +13,23 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.junit.Assume;
 import org.junit.Test;
 
 /** Tests for {@link MergeComparability}. */
@@ -424,6 +435,77 @@ public class MergeComparabilityTest {
     lines.addAll(Arrays.asList("C.m():::ENTER", "this_invocation_nonce", "0", "ppt", "3", "1", ""));
     DeclReader reader = parse("a", lines, false);
     assertEquals(1, reader.ppts.size());
+  }
+
+  /** A program point declaration that is not ended by a blank line is rejected. */
+  @Test
+  public void testMissingBlankLineBetweenPpts() {
+    List<String> lines = new ArrayList<>(HEADER);
+    lines.addAll(namedPpt("C.m():::ENTER"));
+    lines.remove(lines.size() - 1);
+    lines.addAll(namedPpt("C.m():::EXIT1", "1"));
+    assertThrows(Daikon.UserError.class, () -> parse("a", lines));
+    assertThrows(Daikon.UserError.class, () -> parse("a", lines, false));
+  }
+
+  /** A "ppt" record within a variable declaration is rejected. */
+  @Test
+  public void testPptRecordInVariable() {
+    List<String> lines = new ArrayList<>(file(ppt("1")));
+    lines.remove(lines.size() - 1);
+    lines.addAll(namedPpt("C.m():::EXIT1", "1"));
+    assertThrows(Daikon.UserError.class, () -> parse("a", lines));
+    assertThrows(Daikon.UserError.class, () -> parse("a", lines, false));
+  }
+
+  /** A variable record before the first variable of a program point is rejected. */
+  @Test
+  public void testVariableRecordBeforeVariable() {
+    List<String> lines = new ArrayList<>(file(ppt("1")));
+    lines.add(lines.indexOf("variable a"), "  comparability 3");
+    assertThrows(Daikon.UserError.class, () -> parse("a", lines));
+  }
+
+  /** A file without a decl-version record, such as an empty file, cannot be rewritten. */
+  @Test
+  public void testNoDeclVersion() {
+    assertThrows(Daikon.UserError.class, () -> parse("a", Collections.emptyList()));
+    assertThrows(Daikon.UserError.class, () -> parse("a", Arrays.asList("// comment", "")));
+  }
+
+  /** A header record that appears more than once cannot be rewritten. */
+  @Test
+  public void testDuplicateHeaderRecord() {
+    List<String> lines = new ArrayList<>(file(ppt("1")));
+    lines.add("var-comparability none");
+    assertThrows(Daikon.UserError.class, () -> parse("a", lines));
+  }
+
+  /** Writing through a symbolic link preserves the link and the permissions of its target. */
+  @Test
+  public void testOutputSymbolicLink() throws IOException {
+    Assume.assumeTrue(FileSystems.getDefault().supportedFileAttributeViews().contains("posix"));
+    Path dir = Files.createTempDirectory("MergeComparabilityTest");
+    try {
+      Path input = dir.resolve("in.decls-DynComp");
+      Files.write(input, file(ppt("2", "2")));
+      Path target = dir.resolve("target.decls-DynComp");
+      Files.write(target, Collections.singletonList("old"));
+      Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rw-r-----");
+      Files.setPosixFilePermissions(target, permissions);
+      Path link = dir.resolve("link.decls-DynComp");
+      Files.createSymbolicLink(link, target.getFileName());
+      MergeComparability.mainHelper(new String[] {"-o", link.toString(), input.toString()});
+      assertTrue(Files.isSymbolicLink(link));
+      assertEquals(permissions, Files.getPosixFilePermissions(target));
+      assertTrue(Files.readAllLines(target).contains("  comparability 1"));
+    } finally {
+      try (Stream<Path> paths = Files.walk(dir)) {
+        for (Path p : paths.sorted(Comparator.reverseOrder()).collect(Collectors.toList())) {
+          Files.delete(p);
+        }
+      }
+    }
   }
 
   /** A malformed comparability is reported as a user error. */
