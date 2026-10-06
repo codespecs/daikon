@@ -1,6 +1,6 @@
 dockerfile_header(Dockerfile-rockylinux.m4)
 
-FROM rockylinux_image
+FROM rockylinux/rockylinux:10
 LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
 
 # According to
@@ -35,11 +35,17 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   which
 
 # Install the JDK.
-m4_ifelse(jdk_packaged_rockylinux, 1, [[RUN dnf -q -y upgrade && dnf -q -y install \
+m4_ifelse(jdk_packaged_by_every_os, 1, [[RUN dnf -q -y upgrade && dnf -q -y install \
   java-JDKVER-openjdk \
   java-JDKVER-openjdk-devel
 m4_ifelse(jdk_at_least(25), 1, [[ENV JAVA[[]]JDKVER[[]]_HOME=/usr/lib/jvm/java-JDKVER-openjdk
-]])]], [[jdk_download(rockylinux, [[/jdk-JDKVER/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin]])m4_dnl
+]])]], [[# Not every OS packages a non-LTS JDK, so download the JDK.
+# RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz https://download.oracle.com/java/JDKVER/latest/jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
+RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \
+&& tar xzf jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
+&& rm jdk-JDKVER[[]]_linux-x64_bin.tar.gz
+ENV PATH="/jdk-JDKVER/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV JAVA[[]]JDKVER[[]]_HOME=/jdk-JDKVER
 RUN chmod og+rx /root
 ]])m4_dnl
 if_plus([[
