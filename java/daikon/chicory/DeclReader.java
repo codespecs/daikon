@@ -1,13 +1,18 @@
 package daikon.chicory;
 
+import daikon.Daikon;
 import daikon.plumelib.util.EntryReader;
 import daikon.plumelib.util.EntryReader.CommentFormat;
 import daikon.plumelib.util.EntryReader.EntryFormat;
 import daikon.plumelib.util.FilesPlume;
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Scanner;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -16,27 +21,77 @@ import org.checkerframework.dataflow.qual.TerminatesExecution;
 
 /**
  * Reads declaration files and provides methods to access the information within them. A declaration
- * file consists of a number of program points and the variables for each program point.
+ * file consists of header records, such as "decl-version 2.0", followed by a number of program
+ * points and the variables for each program point. Only version 2.0 declaration files are
+ * supported.
+ *
+ * <p>DeclReader parses only the records that its clients need, but it retains the text of every
+ * declaration, so a client can write a declaration with some of its records changed.
  */
 public class DeclReader {
 
-  /** Map from ppt name to corresponding DeclPpt. */
+  /** Map from ppt name to corresponding DeclPpt, in the order the ppts appear in the input. */
   public HashMap<String, DeclPpt> ppts = new LinkedHashMap<>();
+
+  /**
+   * The header records, such as "decl-version 2.0", in the order they appear in the input. Each
+   * record is trimmed; comments and blank lines are omitted.
+   */
+  public List<String> header = new ArrayList<>();
 
   /** Information about variables within a program point. */
   public static class DeclVarInfo {
     public String name;
+
+    /** The variable kind, such as "variable" or "field f"; null if there is no var-kind record. */
+    public @Nullable String var_kind;
+
     public String type;
     public String rep_type;
-    public String comparability;
+
+    /**
+     * The comparability, such as "3" or "3[4]"; null if there is no comparability record, which
+     * means that the variable is comparable to every other variable.
+     */
+    public @Nullable String comparability;
+
     public int index;
 
-    public DeclVarInfo(String name, String type, String rep_type, String comparability, int index) {
+    /** The lines of the declaration, starting with the "variable" line. */
+    public List<String> lines;
+
+    /** The index in {@link #lines} of the comparability record, or -1 if there is none. */
+    public int comparabilityLine;
+
+    /**
+     * Creates a new DeclVarInfo.
+     *
+     * @param name the variable name
+     * @param var_kind the variable kind, or null
+     * @param type the declared type
+     * @param rep_type the representation type
+     * @param comparability the comparability, or null
+     * @param index the index of the variable within its program point
+     * @param lines the lines of the declaration
+     * @param comparabilityLine the index in {@code lines} of the comparability record, or -1
+     */
+    public DeclVarInfo(
+        String name,
+        @Nullable String var_kind,
+        String type,
+        String rep_type,
+        @Nullable String comparability,
+        int index,
+        List<String> lines,
+        int comparabilityLine) {
       this.name = name;
+      this.var_kind = var_kind;
       this.type = type;
       this.rep_type = rep_type;
       this.comparability = comparability;
       this.index = index;
+      this.lines = lines;
+      this.comparabilityLine = comparabilityLine;
     }
 
     /**
@@ -51,9 +106,9 @@ public class DeclReader {
     /**
      * Returns the comparability value from the decl file.
      *
-     * @return the comparability value
+     * @return the comparability value, or null if there is none
      */
-    public String get_comparability() {
+    public @Nullable String get_comparability() {
       return comparability;
     }
 
@@ -72,16 +127,26 @@ public class DeclReader {
     /** Program point name. */
     public String name;
 
-    /** Map from variable name to corresponding DeclVarInfo. */
+    /** The file in which this declaration appears. */
+    public String filename;
+
+    /**
+     * The lines of the declaration that precede the first variable, starting with the "ppt" line.
+     */
+    public List<String> declHeaderLines = new ArrayList<>();
+
+    /** Map from variable name to corresponding DeclVarInfo, in declaration order. */
     public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<>();
 
     /**
      * DeclPpt constructor.
      *
      * @param name program point name
+     * @param filename the file in which this declaration appears
      */
-    public DeclPpt(String name) {
+    public DeclPpt(String name, String filename) {
       this.name = name;
+      this.filename = filename;
     }
 
     /**
@@ -103,36 +168,56 @@ public class DeclReader {
         reportFileError(decl_file, "Expected \"variable <VARNAME>\", found \"" + firstLine + "\"");
       }
       String varName = scanner.next();
+      if (vars.containsKey(varName)) {
+        reportFileError(decl_file, "Variable " + varName + " declared twice in ppt " + name);
+      }
 
+      List<String> lines = new ArrayList<>();
+      lines.add(firstLine);
+      String var_kind = null;
       String type = null;
       String rep_type = null;
       String comparability = null;
+      int comparabilityLine = -1;
 
       // read variable data records until next variable or blank line
       String record = decl_file.readLine();
-      while ((record != null) && (record.length() != 0)) {
-        scanner = new Scanner(record);
-        String token = scanner.next();
-        if (token.equals("variable")) {
+      while ((record != null) && !record.trim().isEmpty()) {
+        String[] tokens = record.trim().split("\\s+");
+        String keyword = tokens[0];
+        if (keyword.equals("variable")) {
           break;
-        } else if (token.equals("dec-type")) {
-          if (!scanner.hasNext()) {
+        }
+        lines.add(record);
+        // The record without its keyword, with each run of whitespace replaced by a single space.
+        String value = String.join(" ", Arrays.asList(tokens).subList(1, tokens.length));
+        if (keyword.equals("var-kind")) {
+          if (value.isEmpty()) {
+            reportFileError(decl_file, "\"var-kind\" not followed by a kind");
+          }
+          var_kind = value;
+        } else if (keyword.equals("dec-type")) {
+          if (value.isEmpty()) {
             reportFileError(decl_file, "\"dec-type\" not followed by a type");
           }
-          type = scanner.next();
-        } else if (token.equals("rep-type")) {
-          if (!scanner.hasNext()) {
+          type = value;
+        } else if (keyword.equals("rep-type")) {
+          if (value.isEmpty()) {
             reportFileError(decl_file, "\"rep-type\" not followed by a type");
           }
-          rep_type = scanner.next();
-        } else if (token.equals("comparability")) {
-          if (!scanner.hasNext()) {
-            reportFileError(decl_file, "\"comparability\" not followed by a comparability-type");
+          rep_type = value;
+        } else if (keyword.equals("comparability")) {
+          if (comparabilityLine != -1) {
+            reportFileError(decl_file, "Multiple comparability records for variable " + varName);
           }
-          comparability = scanner.next();
+          if (tokens.length != 2) {
+            reportFileError(decl_file, "Malformed comparability record \"" + record.trim() + "\"");
+          }
+          comparability = tokens[1];
+          comparabilityLine = lines.size() - 1;
         }
-        // Chicory ignores all other record types (such as flags and enclosing-var) as they are not
-        // needed to calculate comparability values.
+        // All other record types (such as flags and enclosing-var) are retained in `lines` but not
+        // parsed, because no client needs them.
         record = decl_file.readLine();
       }
       // push back the variable or blank line record
@@ -146,19 +231,19 @@ public class DeclReader {
       if (rep_type == null) {
         reportFileError(decl_file, "No rep-type for variable " + varName);
       }
-      if (comparability == null) {
-        reportFileError(decl_file, "No comparability for variable " + varName);
-      }
 
       // I don't see the point of this interning.  No code seems to take
       // advantage of it.  Is it just for space?  -MDE
       DeclVarInfo var =
           new DeclVarInfo(
               varName.intern(),
+              var_kind,
               type.intern(),
               rep_type.intern(),
-              comparability.intern(),
-              vars.size());
+              (comparability == null) ? null : comparability.intern(),
+              vars.size(),
+              lines,
+              comparabilityLine);
       vars.put(varName, var);
       return var;
     }
@@ -210,28 +295,52 @@ public class DeclReader {
    * @throws IOException if there is trouble reading the file
    */
   public void read(File pathname) throws IOException {
+    read(FilesPlume.newFileReader(pathname), pathname.toString());
+  }
 
-    // have caller deal with FileNotFound
-
+  /**
+   * Read declarations from the specified reader, which is closed afterward.
+   *
+   * @param reader where to read data from
+   * @param filename the name of the file being read, used in error messages
+   * @throws IOException if there is trouble reading the file
+   */
+  public void read(Reader reader, String filename) throws IOException {
     try (EntryReader decl_file =
         new EntryReader(
-            FilesPlume.newFileReader(pathname),
-            pathname.toString(),
-            EntryFormat.DEFAULT,
-            new CommentFormat("^(//|#).*"),
-            null)) {
+            reader, filename, EntryFormat.DEFAULT, new CommentFormat("^(//|#).*"), null)) {
+      boolean seenVersion2 = false;
       for (String line = decl_file.readLine(); line != null; line = decl_file.readLine()) {
-        // Skip all input until we find a ppt.
-        if (!line.startsWith("ppt ")) {
+        String record = line.trim();
+        if (record.isEmpty()) {
           continue;
         }
-        decl_file.putback(line);
-
-        // Read the program point declaration.
-        read_decl(decl_file);
+        if (record.startsWith("ppt ")) {
+          if (!seenVersion2) {
+            reportFileError(decl_file, "Program point declaration precedes \"decl-version 2.0\"");
+          }
+          decl_file.putback(line);
+          read_decl(decl_file);
+          continue;
+        }
+        if (record.equals("DECLARE")) {
+          reportFileError(decl_file, "Only version 2.0 declaration files are supported");
+        }
+        if (record.startsWith("decl-version")) {
+          if (!record.equals("decl-version 2.0")) {
+            reportFileError(decl_file, "Unsupported \"" + record + "\"");
+          }
+          seenVersion2 = true;
+        } else if (!(record.startsWith("var-comparability")
+            || record.startsWith("input-language"))) {
+          if (!seenVersion2) {
+            reportFileError(decl_file, "Expected \"decl-version 2.0\", found \"" + record + "\"");
+          }
+          // For example, a sample record in a .dtrace file.
+          reportFileError(decl_file, "Expected a declaration, found \"" + record + "\"");
+        }
+        header.add(record);
       }
-    } catch (Exception e) {
-      throw new Error("Error reading comparability decl file " + pathname, e);
     }
   }
 
@@ -249,27 +358,28 @@ public class DeclReader {
     if (firstLine == null) {
       reportFileError(decl_file, "File ends prematurely, expected \"ppt ...\"");
     }
-    if (!firstLine.startsWith("ppt ")) {
+    if (!firstLine.trim().startsWith("ppt ")) {
       reportFileError(decl_file, "Expected \"ppt ...\", found \"" + firstLine + "\"");
     }
-    String pptname = firstLine.substring(4); // skip "ppt "
+    String pptname = firstLine.trim().substring(4); // skip "ppt "
     assert pptname.contains(":::");
-    DeclPpt ppt = new DeclPpt(pptname);
+    if (ppts.containsKey(pptname)) {
+      reportFileError(decl_file, "Program point " + pptname + " declared twice");
+    }
+    DeclPpt ppt = new DeclPpt(pptname, decl_file.getFileName());
     ppts.put(pptname, ppt);
+    ppt.declHeaderLines.add(firstLine);
 
-    // Chicory skips the ppt-type record as it is not needed to calculate comparability values.
-    String ppt_type = decl_file.readLine();
-    if (ppt_type == null) {
-      reportFileError(decl_file, "File terminated prematurely while reading decl for " + ppt);
+    // Read the records, such as ppt-type, that precede the first variable.
+    String line = decl_file.readLine();
+    while ((line != null) && !line.trim().isEmpty() && !line.trim().startsWith("variable ")) {
+      ppt.declHeaderLines.add(line);
+      line = decl_file.readLine();
     }
 
     // Read each of the variables in this program point.  The variables
     // are terminated by a blank line.
-    String line = decl_file.readLine();
-    while ((line != null) && (line.length() != 0)) {
-      if (!line.startsWith("variable ")) {
-        reportFileError(decl_file, "Expected \"variable ...\", found \"" + line + "\"");
-      }
+    while ((line != null) && !line.trim().isEmpty()) {
       decl_file.putback(line);
       ppt.read_var(decl_file);
       line = decl_file.readLine();
@@ -301,6 +411,6 @@ public class DeclReader {
    */
   @TerminatesExecution
   private static void reportFileError(EntryReader er, String message) {
-    throw new Error(message + " at " + er.getFileName() + " line " + er.getLineNumber());
+    throw new Daikon.UserError(message + " at " + er.getFileName() + " line " + er.getLineNumber());
   }
 }

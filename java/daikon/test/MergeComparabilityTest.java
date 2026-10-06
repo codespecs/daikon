@@ -4,12 +4,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
 import daikon.Daikon;
+import daikon.chicory.DeclReader;
 import daikon.tools.MergeComparability;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.Test;
 
@@ -96,6 +102,23 @@ public class MergeComparabilityTest {
   }
 
   /**
+   * Parses the contents of a declaration file.
+   *
+   * @param filename the file name, used in error messages
+   * @param lines the lines of the file
+   * @return the contents of the file
+   */
+  private static DeclReader parse(String filename, List<String> lines) {
+    DeclReader result = new DeclReader();
+    try {
+      result.read(new StringReader(String.join("\n", lines)), filename);
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+    return result;
+  }
+
+  /**
    * Merges two declaration files, named "a" and "b".
    *
    * @param a the lines of the first file
@@ -105,10 +128,10 @@ public class MergeComparabilityTest {
   private static List<String> merge(List<String> a, List<String> b) {
     StringWriter sw = new StringWriter();
     try (PrintWriter pw = new PrintWriter(sw)) {
-      MergeComparability.merge(
-          Arrays.asList(
-              MergeComparability.parseDeclFile("a", a), MergeComparability.parseDeclFile("b", b)),
-          pw);
+      Map<String, DeclReader> declFiles = new LinkedHashMap<>();
+      declFiles.put("a", parse("a", a));
+      declFiles.put("b", parse("b", b));
+      MergeComparability.merge(declFiles, pw);
     }
     return Arrays.asList(sw.toString().split("\\R", -1));
   }
@@ -232,7 +255,7 @@ public class MergeComparabilityTest {
   public void testSampleRecord() {
     List<String> dtrace = new ArrayList<>(file(ppt("1")));
     dtrace.addAll(Arrays.asList("C.m():::ENTER", "this_invocation_nonce", "0", "a", "3", "1", ""));
-    assertThrows(Daikon.UserError.class, () -> MergeComparability.parseDeclFile("a", dtrace));
+    assertThrows(Daikon.UserError.class, () -> parse("a", dtrace));
   }
 
   /** Comparability files without implicit comparability cannot be merged. */
@@ -240,6 +263,6 @@ public class MergeComparabilityTest {
   public void testNoneComparability() {
     List<String> none = new ArrayList<>(file(ppt("1")));
     none.set(none.indexOf("var-comparability implicit"), "var-comparability none");
-    assertThrows(Daikon.UserError.class, () -> MergeComparability.parseDeclFile("a", none));
+    assertThrows(Daikon.UserError.class, () -> merge(none, file(ppt("1"))));
   }
 }

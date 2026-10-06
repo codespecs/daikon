@@ -603,7 +603,10 @@ public class DeclWriter extends DaikonWriter implements ComparabilityProvider {
       comp_str = "-1";
       DeclReader.DeclVarInfo varinfo = compare_ppt.find_var(var.getName());
       if (varinfo != null) {
-        comp_str = varinfo.get_comparability();
+        String comparability = varinfo.get_comparability();
+        if (comparability != null) {
+          comp_str = comparability;
+        }
       }
     } else {
       // Check to see if DynComp data is present.

@@ -1,10 +1,13 @@
 package daikon.tools;
 
 import daikon.Daikon;
+import daikon.chicory.DeclReader;
+import daikon.chicory.DeclReader.DeclPpt;
+import daikon.chicory.DeclReader.DeclVarInfo;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -21,8 +24,7 @@ import org.plumelib.util.StringsPlume;
 /**
  * MergeComparability merges the comparability information in multiple declaration files, such as
  * the {@code .decls-DynComp} files produced by multiple runs of DynComp, into a single declaration
- * file. The result can be passed to Chicory's {@code --comparability-file} command-line option or
- * to Daikon.
+ * file.
  *
  * <p>Two variables at a program point are comparable in the output if they are comparable in any of
  * the input files, or if they are related by a chain of such comparabilities. That is, the
@@ -35,9 +37,6 @@ import org.plumelib.util.StringsPlume;
  * point that appears in multiple input files must declare the same variables, in the same order, in
  * each of them. Each program point in the output is a copy of its first declaration in the input
  * files, except that the comparability records are changed.
- *
- * <p>Comparability values are local to a program point: the same value at two different program
- * points does not indicate that the variables are comparable.
  */
 public final class MergeComparability {
 
@@ -75,8 +74,9 @@ public final class MergeComparability {
   }
 
   /**
-   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called programmatically.
+   * This does the work of {@link #main(String[])}, but it never calls System.exit (as
+   * Daikon.handleDaikonTerminationException does), so it is appropriate to be called
+   * programmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
    */
@@ -117,9 +117,9 @@ public final class MergeComparability {
       throw new Daikon.UserError("No input files specified" + lineSep + usage);
     }
 
-    List<DeclFile> declFiles = new ArrayList<>();
+    Map<String, DeclReader> declFiles = new LinkedHashMap<>();
     for (int i = fileIndex; i < args.length; i++) {
-      declFiles.add(readDeclFile(args[i]));
+      declFiles.put(args[i], readDeclFile(args[i]));
     }
 
     // Merge fully before opening the output file, so that an inconsistency in the input files does
@@ -137,284 +137,35 @@ public final class MergeComparability {
     }
   }
 
-  // Representation of a declaration file
-
-  /** The contents of a declaration file. */
-  public static class DeclFile {
-    /** The file name, used in error messages. */
-    final String filename;
-
-    /** The header records, such as "decl-version 2.0", without comments or blank lines. */
-    final List<String> header;
-
-    /** The program points declared in the file, in the order they appear. */
-    final List<PptDecl> ppts;
-
-    /**
-     * Creates a new DeclFile.
-     *
-     * @param filename the file name
-     * @param header the header records
-     * @param ppts the program points declared in the file
-     */
-    DeclFile(String filename, List<String> header, List<PptDecl> ppts) {
-      this.filename = filename;
-      this.header = header;
-      this.ppts = ppts;
-    }
-  }
-
-  /** The declaration of a program point. */
-  static class PptDecl {
-    /** The program point name. */
-    final String name;
-
-    /** The file in which this declaration appears, used in error messages. */
-    final String filename;
-
-    /**
-     * The lines of the declaration that precede the first variable, starting with the "ppt" line.
-     */
-    final List<String> pptLines;
-
-    /** The variables, in order. */
-    final List<VarDecl> vars;
-
-    /**
-     * Creates a new PptDecl.
-     *
-     * @param name the program point name
-     * @param filename the file in which this declaration appears
-     * @param pptLines the lines that precede the first variable
-     * @param vars the variables
-     */
-    PptDecl(String name, String filename, List<String> pptLines, List<VarDecl> vars) {
-      this.name = name;
-      this.filename = filename;
-      this.pptLines = pptLines;
-      this.vars = vars;
-    }
-  }
-
-  /** The declaration of a variable. */
-  static class VarDecl {
-    /** The variable name. */
-    final String name;
-
-    /** The lines of the declaration, starting with the "variable" line. */
-    final List<String> lines;
-
-    /** The index in {@link #lines} of the comparability record, or -1 if there is none. */
-    final int comparabilityLine;
-
-    /**
-     * The parsed comparability: element 0 is the base, and the remaining elements are the
-     * comparabilities of the indices. For example, "3[4]" is represented as [3, 4]. Null if the
-     * variable has no comparability record.
-     */
-    final int @Nullable [] comparability;
-
-    /**
-     * Creates a new VarDecl.
-     *
-     * @param name the variable name
-     * @param lines the lines of the declaration
-     * @param comparabilityLine the index in {@code lines} of the comparability record, or -1
-     * @param comparability the parsed comparability, or null
-     */
-    VarDecl(
-        String name, List<String> lines, int comparabilityLine, int @Nullable [] comparability) {
-      this.name = name;
-      this.lines = lines;
-      this.comparabilityLine = comparabilityLine;
-      this.comparability = comparability;
-    }
-
-    /**
-     * Returns the record of this variable declaration whose first token is the given keyword, with
-     * each run of whitespace replaced by a single space, or null if there is none.
-     *
-     * @param keyword the first token of a record, such as "rep-type"
-     * @return the record that starts with the given keyword, or null
-     */
-    @Nullable String findRecord(String keyword) {
-      for (int j = 1; j < lines.size(); j++) {
-        String[] tokens = lines.get(j).trim().split("\\s+");
-        if (tokens[0].equals(keyword)) {
-          return String.join(" ", tokens);
-        }
-      }
-      return null;
-    }
-  }
-
-  // Reading
-
-  /**
-   * Returns true if the line is a comment.
-   *
-   * @param line a line of a declaration file
-   * @return true if the line is a comment
-   */
-  private static boolean isComment(String line) {
-    return line.startsWith("//") || line.startsWith("#");
-  }
-
   /**
    * Reads a declaration file.
    *
    * @param filename the file to read
    * @return the contents of the file
    */
-  public static DeclFile readDeclFile(String filename) {
-    try (BufferedReader reader = FilesPlume.newBufferedFileReader(filename)) {
-      List<String> lines = new ArrayList<>();
-      for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-        lines.add(line);
-      }
-      return parseDeclFile(filename, lines);
+  public static DeclReader readDeclFile(String filename) {
+    DeclReader result = new DeclReader();
+    try {
+      result.read(new File(filename));
     } catch (IOException e) {
       throw new Daikon.UserError(e, "Problem reading " + filename);
     }
-  }
-
-  /**
-   * Parses the contents of a declaration file.
-   *
-   * @param filename the file name, used in error messages
-   * @param lines the lines of the file
-   * @return the contents of the file
-   */
-  public static DeclFile parseDeclFile(String filename, List<String> lines) {
-    List<String> header = new ArrayList<>();
-    List<PptDecl> ppts = new ArrayList<>();
-    boolean seenVersion2 = false;
-    int i = 0;
-    while (i < lines.size()) {
-      String line = lines.get(i).trim();
-      if (line.isEmpty() || isComment(line)) {
-        i++;
-        continue;
-      }
-      if (line.startsWith("ppt ")) {
-        if (!seenVersion2) {
-          throw new Daikon.UserError(
-              String.format(
-                  "%s line %d: program point declaration precedes \"decl-version 2.0\"",
-                  filename, i + 1));
-        }
-        int end = i;
-        while (end < lines.size() && !lines.get(end).trim().isEmpty()) {
-          end++;
-        }
-        ppts.add(parsePpt(filename, i, lines.subList(i, end)));
-        i = end;
-        continue;
-      }
-      if (line.equals("DECLARE")) {
-        throw new Daikon.UserError(
-            filename + ": MergeComparability supports only version 2.0 declaration files");
-      }
-      if (line.startsWith("decl-version")) {
-        if (!line.equals("decl-version 2.0")) {
-          throw new Daikon.UserError(
-              String.format("%s line %d: unsupported \"%s\"", filename, i + 1, line));
-        }
-        seenVersion2 = true;
-      } else if (line.startsWith("var-comparability")) {
-        if (!line.equals("var-comparability implicit")) {
-          throw new Daikon.UserError(
-              String.format(
-                  "%s line %d: \"%s\": only implicit comparability can be merged",
-                  filename, i + 1, line));
-        }
-      } else if (!seenVersion2) {
-        throw new Daikon.UserError(
-            String.format(
-                "%s line %d: expected \"decl-version 2.0\", found \"%s\"", filename, i + 1, line));
-      } else if (!line.startsWith("input-language")) {
-        // For example, a sample record in a .dtrace file.
-        throw new Daikon.UserError(
-            String.format(
-                "%s line %d: expected a declaration, found \"%s\"", filename, i + 1, line));
-      }
-      header.add(line);
-      i++;
-    }
-    return new DeclFile(filename, header, ppts);
-  }
-
-  /**
-   * Parses a single program point declaration.
-   *
-   * @param filename the file name, used in error messages
-   * @param startLine the index of the first line of the declaration within the file, used in error
-   *     messages
-   * @param lines the lines of the declaration, starting with the "ppt" line and not including the
-   *     terminating blank line
-   * @return the program point declaration
-   */
-  static PptDecl parsePpt(String filename, int startLine, List<String> lines) {
-    String pptName = lines.get(0).trim().substring("ppt ".length());
-    int firstVar = 1;
-    while (firstVar < lines.size() && !lines.get(firstVar).trim().startsWith("variable ")) {
-      firstVar++;
-    }
-    List<String> pptLines = new ArrayList<>(lines.subList(0, firstVar));
-
-    List<VarDecl> vars = new ArrayList<>();
-    int i = firstVar;
-    while (i < lines.size()) {
-      String varName = lines.get(i).trim().substring("variable ".length()).trim();
-      int end = i + 1;
-      while (end < lines.size() && !lines.get(end).trim().startsWith("variable ")) {
-        end++;
-      }
-      List<String> varLines = new ArrayList<>(lines.subList(i, end));
-      int comparabilityLine = -1;
-      int[] comparability = null;
-      for (int j = 1; j < varLines.size(); j++) {
-        String[] tokens = varLines.get(j).trim().split("\\s+");
-        if (tokens[0].equals("comparability")) {
-          if (comparabilityLine != -1) {
-            throw new Daikon.UserError(
-                String.format(
-                    "%s line %d: multiple comparability records for variable %s",
-                    filename, startLine + i + j + 1, varName));
-          }
-          if (tokens.length != 2) {
-            throw new Daikon.UserError(
-                String.format(
-                    "%s line %d: malformed comparability record \"%s\"",
-                    filename, startLine + i + j + 1, varLines.get(j).trim()));
-          }
-          comparabilityLine = j;
-          comparability = parseComparability(tokens[1], filename, startLine + i + j + 1);
-        }
-      }
-      for (VarDecl other : vars) {
-        if (other.name.equals(varName)) {
-          throw new Daikon.UserError(
-              String.format(
-                  "%s line %d: variable %s declared twice in program point %s",
-                  filename, startLine + i + 1, varName, pptName));
-        }
-      }
-      vars.add(new VarDecl(varName, varLines, comparabilityLine, comparability));
-      i = end;
-    }
-    return new PptDecl(pptName, filename, pptLines, vars);
+    return result;
   }
 
   /**
    * Parses an implicit comparability, such as "3" or "3[4]".
    *
-   * @param rep the comparability, as written in a declaration file
-   * @param filename the file name, used in error messages
-   * @param lineNumber the line number, used in error messages
+   * @param ppt the program point declaration in which the comparability appears, used in error
+   *     messages
+   * @param var the variable whose comparability to parse; must have a comparability
    * @return the base comparability followed by the comparabilities of the indices
    */
-  static int[] parseComparability(String rep, String filename, int lineNumber) {
+  static int[] parseComparability(DeclPpt ppt, DeclVarInfo var) {
+    String rep = var.comparability;
+    if (rep == null) {
+      throw new IllegalArgumentException("Variable " + var.name + " has no comparability");
+    }
     List<String> parts = new ArrayList<>();
     String rest = rep;
     while (rest.endsWith("]")) {
@@ -433,7 +184,9 @@ public final class MergeComparability {
       } catch (NumberFormatException e) {
         throw new Daikon.UserError(
             e,
-            String.format("%s line %d: malformed comparability \"%s\"", filename, lineNumber, rep));
+            String.format(
+                "%s: program point %s: variable %s: malformed comparability \"%s\"",
+                ppt.filename, ppt.name, var.name, rep));
       }
     }
     return result;
@@ -459,35 +212,43 @@ public final class MergeComparability {
   /**
    * Merges the declaration files and writes the result.
    *
-   * @param declFiles the declaration files to merge
+   * @param declFiles map from file name to the contents of that declaration file; must be non-empty
    * @param pw where to write the merged declarations
    */
-  public static void merge(List<DeclFile> declFiles, PrintWriter pw) {
-    List<String> header = declFiles.get(0).header;
-    for (DeclFile df : declFiles) {
+  public static void merge(Map<String, DeclReader> declFiles, PrintWriter pw) {
+    Map.Entry<String, DeclReader> first = declFiles.entrySet().iterator().next();
+    List<String> header = first.getValue().header;
+    for (Map.Entry<String, DeclReader> entry : declFiles.entrySet()) {
+      String varComparability = findRecord(entry.getValue().header, "var-comparability");
+      if (varComparability != null && !varComparability.equals("var-comparability implicit")) {
+        throw new Daikon.UserError(
+            String.format(
+                "%s: \"%s\": only implicit comparability can be merged",
+                entry.getKey(), varComparability));
+      }
       for (String prefix : new String[] {"decl-version", "var-comparability", "input-language"}) {
         String expected = findRecord(header, prefix);
-        String actual = findRecord(df.header, prefix);
+        String actual = findRecord(entry.getValue().header, prefix);
         if (!Objects.equals(expected, actual)) {
           throw new Daikon.UserError(
               String.format(
                   "Inconsistent headers: %s has \"%s\" but %s has \"%s\"",
-                  declFiles.get(0).filename, expected, df.filename, actual));
+                  first.getKey(), expected, entry.getKey(), actual));
         }
       }
     }
 
     // Map from program point name to all its declarations, in order.
-    Map<String, List<PptDecl>> pptDecls = new LinkedHashMap<>();
-    for (DeclFile df : declFiles) {
-      for (PptDecl ppt : df.ppts) {
+    Map<String, List<DeclPpt>> pptDecls = new LinkedHashMap<>();
+    for (DeclReader declFile : declFiles.values()) {
+      for (DeclPpt ppt : declFile.ppts.values()) {
         pptDecls.computeIfAbsent(ppt.name, k -> new ArrayList<>()).add(ppt);
       }
     }
 
     pw.println("// Declarations written by daikon.tools.MergeComparability, merging:");
-    for (DeclFile df : declFiles) {
-      pw.println("//   " + df.filename);
+    for (String filename : declFiles.keySet()) {
+      pw.println("//   " + filename);
     }
     pw.println();
     for (String record : header) {
@@ -495,15 +256,15 @@ public final class MergeComparability {
     }
     pw.println();
 
-    for (List<PptDecl> decls : pptDecls.values()) {
-      PptDecl template = decls.get(0);
+    for (List<DeclPpt> decls : pptDecls.values()) {
+      DeclPpt template = decls.get(0);
       int[][] merged = mergePpt(decls);
-      for (String line : template.pptLines) {
+      for (String line : template.declHeaderLines) {
         pw.println(line);
       }
-      for (int v = 0; v < template.vars.size(); v++) {
-        VarDecl var = template.vars.get(v);
-        int[] comparability = merged[v];
+      int v = 0;
+      for (DeclVarInfo var : template.vars.values()) {
+        int[] comparability = merged[v++];
         // A variable with no comparability record is comparable to everything, so its merged
         // comparability is negative and there is no need to add a record.
         for (int j = 0; j < var.lines.size(); j++) {
@@ -537,54 +298,97 @@ public final class MergeComparability {
   }
 
   /**
+   * Throws an exception if a record of a variable differs between two declarations of the same
+   * program point.
+   *
+   * @param keyword the record's keyword, such as "rep-type"
+   * @param expected the value of the record in {@code template}, or null if there is none
+   * @param actual the value of the record in {@code ppt}, or null if there is none
+   * @param varName the variable name
+   * @param template the first declaration of the program point
+   * @param ppt another declaration of the program point
+   */
+  private static void checkSameRecord(
+      String keyword,
+      @Nullable String expected,
+      @Nullable String actual,
+      String varName,
+      DeclPpt template,
+      DeclPpt ppt) {
+    if (!Objects.equals(expected, actual)) {
+      throw new Daikon.UserError(
+          String.format(
+              "Program point %s: variable %s has %s in %s but %s in %s",
+              ppt.name,
+              varName,
+              describeRecord(keyword, expected),
+              template.filename,
+              describeRecord(keyword, actual),
+              ppt.filename));
+    }
+  }
+
+  /**
+   * Returns a description of a record, for use in error messages.
+   *
+   * @param keyword the record's keyword, such as "rep-type"
+   * @param value the value of the record, or null if there is no such record
+   * @return a description of the record
+   */
+  private static String describeRecord(String keyword, @Nullable String value) {
+    return (value == null) ? ("no " + keyword + " record") : ("\"" + keyword + " " + value + "\"");
+  }
+
+  /**
    * Merges the comparabilities in multiple declarations of the same program point.
    *
    * @param decls the declarations of one program point; must be non-empty
-   * @return for each variable, its merged comparability, in the representation of {@link
-   *     VarDecl#comparability}; an empty array if no declaration has a comparability for the
+   * @return for each variable, its merged comparability, in the representation returned by {@link
+   *     #parseComparability}; an empty array if no declaration has a comparability for the
    *     variable; and {@code [-1]} (comparable to everything) if some but not all declarations have
    *     a comparability for the variable
    */
-  static int[][] mergePpt(List<PptDecl> decls) {
-    PptDecl template = decls.get(0);
-    int numVars = template.vars.size();
+  static int[][] mergePpt(List<DeclPpt> decls) {
+    DeclPpt template = decls.get(0);
+    List<DeclVarInfo> templateVars = new ArrayList<>(template.vars.values());
+    int numVars = templateVars.size();
 
+    // comparabilities.get(d)[v] is the parsed comparability of variable v in declaration d, or
+    // null if that variable has no comparability record.
+    List<int[] @Nullable []> comparabilities = new ArrayList<>(decls.size());
     // Check consistency and determine the number of parts of each variable's comparability.
     int[] numParts = new int[numVars];
     // missing[v] is true if some declaration has no comparability for variable v.
     boolean[] missing = new boolean[numVars];
-    for (PptDecl ppt : decls) {
-      if (ppt.vars.size() != numVars) {
+    for (DeclPpt ppt : decls) {
+      List<DeclVarInfo> vars = new ArrayList<>(ppt.vars.values());
+      if (vars.size() != numVars) {
         throw new Daikon.UserError(
             String.format(
                 "Program point %s has %d variables in %s but %d variables in %s",
-                ppt.name, numVars, template.filename, ppt.vars.size(), ppt.filename));
+                ppt.name, numVars, template.filename, vars.size(), ppt.filename));
       }
+      int[] @Nullable [] pptComparabilities = new int[numVars][];
       for (int v = 0; v < numVars; v++) {
-        VarDecl var = ppt.vars.get(v);
-        String expectedName = template.vars.get(v).name;
-        if (!var.name.equals(expectedName)) {
+        DeclVarInfo var = vars.get(v);
+        DeclVarInfo expected = templateVars.get(v);
+        if (!var.name.equals(expected.name)) {
           throw new Daikon.UserError(
               String.format(
                   "Program point %s: variable %d is %s in %s but %s in %s",
-                  ppt.name, v + 1, expectedName, template.filename, var.name, ppt.filename));
+                  ppt.name, v + 1, expected.name, template.filename, var.name, ppt.filename));
         }
-        for (String keyword : new String[] {"var-kind", "dec-type", "rep-type"}) {
-          String expected = template.vars.get(v).findRecord(keyword);
-          String actual = var.findRecord(keyword);
-          if (!Objects.equals(expected, actual)) {
-            throw new Daikon.UserError(
-                String.format(
-                    "Program point %s: variable %s has \"%s\" in %s but \"%s\" in %s",
-                    ppt.name, var.name, expected, template.filename, actual, ppt.filename));
-          }
-        }
+        checkSameRecord("var-kind", expected.var_kind, var.var_kind, var.name, template, ppt);
+        checkSameRecord("dec-type", expected.type, var.type, var.name, template, ppt);
+        checkSameRecord("rep-type", expected.rep_type, var.rep_type, var.name, template, ppt);
         if (var.comparability == null) {
           missing[v] = true;
         } else {
+          int[] comparability = parseComparability(ppt, var);
+          pptComparabilities[v] = comparability;
           if (numParts[v] == 0) {
-            numParts[v] = var.comparability.length;
-          } else if (numParts[v] != var.comparability.length) {
+            numParts[v] = comparability.length;
+          } else if (numParts[v] != comparability.length) {
             throw new Daikon.UserError(
                 String.format(
                     "Program point %s: variable %s has comparabilities with different numbers of"
@@ -593,6 +397,7 @@ public final class MergeComparability {
           }
         }
       }
+      comparabilities.add(pptComparabilities);
     }
 
     // Each part of each variable's comparability is a "slot".  slotStart[v] is the index of
@@ -606,9 +411,9 @@ public final class MergeComparability {
     // A slot is universal if it is comparable to everything (negative) in some declaration, or if
     // some declaration provides no comparability for it.
     boolean[] universal = new boolean[numSlots];
-    for (PptDecl ppt : decls) {
+    for (int[] @Nullable [] pptComparabilities : comparabilities) {
       for (int v = 0; v < numVars; v++) {
-        int[] comparability = ppt.vars.get(v).comparability;
+        int[] comparability = pptComparabilities[v];
         for (int p = 0; p < numParts[v]; p++) {
           if (comparability == null || comparability[p] < 0) {
             universal[slotStart[v] + p] = true;
@@ -619,11 +424,11 @@ public final class MergeComparability {
 
     // Union the non-universal slots that have the same comparability within some declaration.
     UnionFind uf = new UnionFind(numSlots);
-    for (PptDecl ppt : decls) {
+    for (int[] @Nullable [] pptComparabilities : comparabilities) {
       // Map from comparability value to the first slot with that value.
       Map<Integer, Integer> representative = new HashMap<>();
       for (int v = 0; v < numVars; v++) {
-        int[] comparability = ppt.vars.get(v).comparability;
+        int[] comparability = pptComparabilities[v];
         if (comparability == null) {
           continue;
         }
@@ -668,51 +473,5 @@ public final class MergeComparability {
       }
     }
     return result;
-  }
-
-  /** A union-find (disjoint-set) data structure over the integers 0..n-1. */
-  static class UnionFind {
-    /** The parent of each element; an element is a root if it is its own parent. */
-    private final int[] parent;
-
-    /**
-     * Creates a new UnionFind in which each element is in its own set.
-     *
-     * @param n the number of elements
-     */
-    UnionFind(int n) {
-      parent = new int[n];
-      for (int i = 0; i < n; i++) {
-        parent[i] = i;
-      }
-    }
-
-    /**
-     * Returns the representative of the set containing the element.
-     *
-     * @param x an element
-     * @return the representative of the set containing x
-     */
-    int find(int x) {
-      while (parent[x] != x) {
-        parent[x] = parent[parent[x]];
-        x = parent[x];
-      }
-      return x;
-    }
-
-    /**
-     * Merges the sets containing the two elements.
-     *
-     * @param x an element
-     * @param y an element
-     */
-    void union(int x, int y) {
-      int rx = find(x);
-      int ry = find(y);
-      if (rx != ry) {
-        parent[ry] = rx;
-      }
-    }
   }
 }

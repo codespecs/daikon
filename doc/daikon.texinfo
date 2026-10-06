@@ -7587,7 +7587,7 @@ reading, so they are compared with a ``fuzzy'' rather than exact equality test.
 
 @command{MergeComparability} merges the comparability information in
 multiple declaration files into a single declaration file.  It is
-typically used when you have run DynComp (@pxref{DynComp for Java} and
+typically used when you have run DynComp (@pxref{DynComp for Java} or
 @ref{DynComp for C/C++}) multiple times, such as on different test
 inputs, and you want a single comparability file that reflects all of
 the runs.  The output can be passed to Chicory's
@@ -7604,14 +7604,10 @@ are comparable in any of the input files, or if they are related by a
 chain of such comparabilities.  For example, if variables @code{x} and
 @code{y} are comparable in one run, and variables @code{y} and @code{z} are
 comparable in another run, then @code{x}, @code{y}, and @code{z} are all
-comparable in the output.  A variable that is comparable to every other
-variable (that is, its comparability is negative) in any input file is
-comparable to every other variable in the output.  Comparability
-values are local to a program point; the same value at two different
-program points does not indicate that the variables are comparable.
+comparable in the output.
 
 A program point that appears in only some of the input files (for
-example, because it was executed in only some of the runs) is copied to
+example, because it was executed in only some of the runs) appears in
 the output.  A program point that appears in multiple input files must
 declare the same variables, in the same order, with the same
 @code{var-kind}, @code{dec-type}, and @code{rep-type}, in each of them.
