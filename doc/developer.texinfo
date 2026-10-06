@@ -2989,9 +2989,10 @@ Since in most languages a method or function may have multiple exit points,
 the @code{ppt-name} for a @code{subexit} @code{ppt-type} must be appended
 with a unique id.  Typically, this is the corresponding source line number.
 
-@c Note:
-@c There is a little code in FileIO.java to support additional ppt-names ending
-@c in THROWS and GLOBAL.  Neither Daikon or Kvasir currently use them.
+The @code{ppt-name}s for the @code{throws} and @code{global}
+@code{ppt-type}s end with @code{:::THROWS} and @code{:::GLOBAL},
+respectively.  Neither Daikon's front ends nor Kvasir currently produce
+these program points.
 
 The following information about the program point (@code{ppt-info}) can be specified:
 @itemize
@@ -2999,8 +3000,12 @@ The following information about the program point (@code{ppt-info}) can be speci
 
 Specifies the @var{type} of the program point.  Possible program point
 types are @code{point}, @code{class}, @code{object}, @code{enter},
-@code{exit}, @code{subexit}.  Except for @code{point} all of these
+@code{exit}, @code{subexit}, @code{throws}, and @code{global}.  Except for
+@code{point} all of these
 types are related to the program point hierarchy (see @ref{Dataflow hierarchy}).
+The @code{ppt-name} of a program point whose type is @code{class},
+@code{object}, @code{enter}, @code{throws}, or @code{global} must have the
+form given above for that type.
 
 A @code{point} program point is one that is @emph{not} involved in a
 program point hierarchy.   This is normally used when the input is not

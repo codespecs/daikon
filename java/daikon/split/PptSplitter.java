@@ -97,7 +97,9 @@ public class PptSplitter implements Serializable {
 
   /**
    * Create a binary PptSplitter with the specified splitter for the specified PptTopLevel parent.
-   * The parent should be a leaf (i.e., a numbered exit point).
+   * If the parent is a leaf of the dataflow hierarchy (see {@link PptTopLevel#is_dataflow_leaf}),
+   * the conditional ppts obtain their invariants from samples; otherwise, they obtain them from
+   * the corresponding conditional ppts of the parent's children.
    */
   public PptSplitter(PptTopLevel parent, Splitter splitter) {
 

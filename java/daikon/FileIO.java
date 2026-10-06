@@ -403,7 +403,7 @@ public final class FileIO {
               varmap.put(vardef.name, vardef);
             }
           } else if (record == "ppt-type") { // interned
-            ppt_type = parse_ppt_type(state, scanner);
+            ppt_type = parse_ppt_type(state, scanner, ppt_name);
           } else {
             decl_error(state, "record '%s' found where %s expected", record, "'parent', 'flags'");
           }
@@ -531,11 +531,52 @@ public final class FileIO {
     }
   }
 
-  /** Parses a ppt-type record and returns the type. */
-  private static PptType parse_ppt_type(ParseState state, Scanner scanner) {
+  /**
+   * Parses a ppt-type record and returns the type.
+   *
+   * <p>The type of a non-leaf program point other than a combined exit point must agree with the
+   * program point's name, as the file format requires. Otherwise, Daikon would discard the
+   * program point's samples, which the front end presumably intended Daikon to use.
+   *
+   * @param state the current parse state
+   * @param scanner the scanner for the rest of the ppt-type record
+   * @param ppt_name the name of the program point whose type is being parsed
+   * @return the type of the program point
+   */
+  private static PptType parse_ppt_type(ParseState state, Scanner scanner, String ppt_name) {
 
     PptType ppt_type = parse_enum_val(state, scanner, PptType.class, "ppt type");
     need_eol(state, scanner);
+    PptName pname = new PptName(ppt_name);
+    boolean name_matches;
+    switch (ppt_type) {
+      case ENTER:
+        name_matches = pname.isEnterPoint();
+        break;
+      case OBJECT:
+        name_matches = pname.isObjectInstanceSynthetic();
+        break;
+      case CLASS:
+        name_matches = pname.isClassStaticSynthetic();
+        break;
+      case THROWS:
+        name_matches = pname.isThrowsPoint();
+        break;
+      case GLOBAL:
+        name_matches = pname.isGlobalPoint();
+        break;
+      default:
+        // A point or subexit is a leaf, and an exit gets its type from its name.
+        name_matches = true;
+        break;
+    }
+    if (!name_matches) {
+      decl_error(
+          state,
+          "ppt %s has type %s, but its name does not have the form that type requires",
+          ppt_name,
+          ppt_type.name().toLowerCase(Locale.ENGLISH));
+    }
     return ppt_type;
   }
 
@@ -1123,13 +1164,7 @@ public final class FileIO {
     // false if at least one of them is not a program point normally
     // found in traces from programming languages.
     for (PptTopLevel ppt_top_level : all_ppts.ppt_all_iterable()) {
-      boolean is_program_point =
-          (ppt_top_level.ppt_name.isExitPoint()
-              || ppt_top_level.ppt_name.isEnterPoint()
-              || ppt_top_level.ppt_name.isThrowsPoint()
-              || ppt_top_level.ppt_name.isObjectInstanceSynthetic()
-              || ppt_top_level.ppt_name.isClassStaticSynthetic()
-              || ppt_top_level.ppt_name.isGlobalPoint());
+      boolean is_program_point = ppt_top_level.type != PptType.POINT;
 
       all_program_points = all_program_points && is_program_point;
       some_program_points = some_program_points || is_program_point;

@@ -186,7 +186,11 @@ public class PptTopLevel extends Ppt {
     OBJECT,
     ENTER,
     EXIT,
-    SUBEXIT
+    SUBEXIT,
+    /** A :::THROWS program point. Daikon assigns this type based on the program point's name. */
+    THROWS,
+    /** A :::GLOBAL program point. Daikon assigns this type based on the program point's name. */
+    GLOBAL
   }
 
   /** Type of this program point. */
@@ -444,7 +448,9 @@ public class PptTopLevel extends Ppt {
    *   <li>a combined exit point such as foo:::EXIT is an {@link PptType#EXIT},
    *   <li>a numbered exit point such as foo:::EXIT22 is a {@link PptType#SUBEXIT},
    *   <li>Foo:::OBJECT is an {@link PptType#OBJECT},
-   *   <li>Foo:::CLASS is a {@link PptType#CLASS}, and
+   *   <li>Foo:::CLASS is a {@link PptType#CLASS},
+   *   <li>foo:::THROWS is a {@link PptType#THROWS},
+   *   <li>:::GLOBAL is a {@link PptType#GLOBAL}, and
    *   <li>any other program point is a generic {@link PptType#POINT}.
    * </ul>
    *
@@ -474,6 +480,12 @@ public class PptTopLevel extends Ppt {
     }
     if (ppt_name.isClassStaticSynthetic()) {
       return PptType.CLASS;
+    }
+    if (ppt_name.isThrowsPoint()) {
+      return PptType.THROWS;
+    }
+    if (ppt_name.isGlobalPoint()) {
+      return PptType.GLOBAL;
     }
     return PptType.POINT;
   }
@@ -4732,17 +4744,14 @@ public class PptTopLevel extends Ppt {
    * from samples rather than by merging them from its children.
    *
    * <p>The leaves are the numbered exit points ({@link PptType#SUBEXIT}) and the general program
-   * points ({@link PptType#POINT}), except for :::THROWS and :::GLOBAL program points, which have
-   * no type of their own. This ensures that arbitrarily named program points such as :::POINT (used
-   * by convertcsv.pl) are leaves.
+   * points ({@link PptType#POINT}). This ensures that arbitrarily named program points such as
+   * :::POINT (used by convertcsv.pl) are leaves.
    *
    * @return true if this is a leaf of the dataflow hierarchy
    */
   @Pure
   public boolean is_dataflow_leaf() {
-    return ((type == PptType.SUBEXIT) || (type == PptType.POINT))
-        && !ppt_name.isThrowsPoint()
-        && !ppt_name.isGlobalPoint();
+    return (type == PptType.SUBEXIT) || (type == PptType.POINT);
   }
 
   /** Is this a ppt that represents an object? */
