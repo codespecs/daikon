@@ -2430,13 +2430,7 @@ public final class Daikon {
     // Initialize the partial order hierarchy
     debugProgress.fine("Init Hierarchy ... ");
     startTime = System.nanoTime();
-    assert FileIO.new_decl_format != null
-        : "@AssumeAssertion(nullness): read data, so new_decl_format is set";
-    if (FileIO.new_decl_format) {
-      PptRelation.init_hierarchy_new(all_ppts);
-    } else {
-      PptRelation.init_hierarchy(all_ppts);
-    }
+    PptRelation.init_hierarchy_for_decl_format(all_ppts);
     duration = System.nanoTime() - startTime;
     debugProgress.fine(
         "Init Hierarchy ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");

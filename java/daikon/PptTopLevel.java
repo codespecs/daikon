@@ -423,7 +423,7 @@ public class PptTopLevel extends Ppt {
     }
     this.ppt_name = new PptName(name);
     this.flags = flags;
-    this.type = type;
+    this.type = normalize_type(ppt_name, type);
     this.parent_relations = parents;
     init_vars();
   }
@@ -431,6 +431,30 @@ public class PptTopLevel extends Ppt {
   /** Restore/Create interns when reading serialized object. */
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
+    type = normalize_type(ppt_name, type);
+  }
+
+  /**
+   * Returns the type that a program point with the given name and declared type should have. Some
+   * front ends declare a numbered exit such as foo:::EXIT22 with type {@link PptType#EXIT} or with
+   * the default type {@link PptType#POINT}; such a program point is a {@link PptType#SUBEXIT}. Only
+   * Daikon creates combined exit points such as foo:::EXIT, so a program point with type {@link
+   * PptType#EXIT} and any other name is a generic {@link PptType#POINT}. As a result, the
+   * predicates is_subexit, is_combined_exit, is_dataflow_leaf, etc. agree with one another and with
+   * the program point's name.
+   *
+   * @param ppt_name the name of the program point
+   * @param type the declared type of the program point
+   * @return the type that the program point should have
+   */
+  private static PptType normalize_type(PptName ppt_name, PptType type) {
+    if ((type == PptType.EXIT || type == PptType.POINT) && ppt_name.isNumberedExitPoint()) {
+      return PptType.SUBEXIT;
+    }
+    if (type == PptType.EXIT && !ppt_name.isCombinedExitPoint()) {
+      return PptType.POINT;
+    }
+    return type;
   }
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
@@ -4706,9 +4730,9 @@ public class PptTopLevel extends Ppt {
     if (type != null) {
       return (type == PptType.SUBEXIT) || (type == PptType.POINT);
     } else {
-      return !(is_combined_exit()
-          || is_enter()
-          || is_object()
+      return !(ppt_name.isCombinedExitPoint()
+          || ppt_name.isEnterPoint()
+          || ppt_name.isObjectInstanceSynthetic()
           || ppt_name.isClassStaticSynthetic()
           || ppt_name.isThrowsPoint()
           || ppt_name.isGlobalPoint());

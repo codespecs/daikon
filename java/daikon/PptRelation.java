@@ -652,16 +652,17 @@ public class PptRelation implements Serializable {
   /**
    * Creates an equality view and invariants for each ppt that has no children and does not already
    * have an equality view. This happens for non-leaf ppts such as OBJECT, CLASS, or GLOBAL that do
-   * not end up with any children (due to the program source or because of ppt filtering). Leaves
-   * got their equality views from {@link Daikon#setupEquality}, and a combined exit point always
-   * has children because Daikon creates it from its numbered exit points.
+   * not end up with any children (due to the program source or because of ppt filtering). It also
+   * happens for a combined exit point that a decls file declares when no corresponding numbered
+   * exit point is declared or included. Leaves got their equality views from {@link
+   * Daikon#setupEquality}.
    *
    * @param all_ppts the program points
    */
   private static void setup_childless_nonleaves(PptMap all_ppts) {
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
       if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
-        assert !ppt.is_dataflow_leaf() && !ppt.is_combined_exit() : ppt;
+        assert !ppt.is_dataflow_leaf() : ppt;
         ppt.equality_view = new PptSliceEquality(ppt);
         ppt.equality_view.instantiate_invariants();
       }
@@ -676,6 +677,22 @@ public class PptRelation implements Serializable {
     SplitChild(PptRelation rel, PptSplitter ppt_split) {
       this.rel = rel;
       this.ppt_split = ppt_split;
+    }
+  }
+
+  /**
+   * Initialize the hierarchical relationship between ppts, using {@link #init_hierarchy_new} or
+   * {@link #init_hierarchy} according to the format of the declaration records that were read.
+   *
+   * @param all_ppts the program points, which were read from declaration records
+   */
+  public static void init_hierarchy_for_decl_format(PptMap all_ppts) {
+    assert FileIO.new_decl_format != null
+        : "@AssumeAssertion(nullness): read declarations, so new_decl_format is set";
+    if (FileIO.new_decl_format) {
+      init_hierarchy_new(all_ppts);
+    } else {
+      init_hierarchy(all_ppts);
     }
   }
 
@@ -881,9 +898,10 @@ public class PptRelation implements Serializable {
           break;
         }
 
-        // If we didn't find a matching splitter at each child, can't merge
-        // this point.  Just remove it from the list of splitters
-        if (split_children.size() != ppt.children.size()) {
+        // If there are no children, or we didn't find a matching splitter
+        // at each child, can't merge this point.  Just remove it from the
+        // list of splitters.
+        if (ppt.children.isEmpty() || split_children.size() != ppt.children.size()) {
           ii.remove();
           continue;
         }
@@ -1042,9 +1060,10 @@ public class PptRelation implements Serializable {
           break;
         }
 
-        // If we didn't find a matching splitter at each child, can't merge
-        // this point.  Just remove it from the list of splitters
-        if (split_children.size() != ppt.children.size()) {
+        // If there are no children, or we didn't find a matching splitter
+        // at each child, can't merge this point.  Just remove it from the
+        // list of splitters.
+        if (ppt.children.isEmpty() || split_children.size() != ppt.children.size()) {
           ii.remove();
           continue;
         }
