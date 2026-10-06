@@ -17,7 +17,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -161,8 +160,7 @@ public final class MergeComparability {
                 outputDir,
                 ".tmp.",
                 "." + outputName,
-                PosixFilePermissions.asFileAttribute(
-                    PosixFilePermissions.fromString("rw-rw-rw-")));
+                PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-rw-rw-")));
       } else {
         tempPath = Files.createTempFile(outputDir, ".tmp.", "." + outputName);
       }
@@ -210,20 +208,20 @@ public final class MergeComparability {
    *     symbolic link
    */
   private static Path resolveSymbolicLinks(Path path) {
-    // Limit the number of links that are followed, in case of a cycle.
-    for (int i = 0; i < 40 && Files.isSymbolicLink(path); i++) {
+    for (int i = 0; Files.isSymbolicLink(path); i++) {
+      // Limit the number of links that are followed, in case of a cycle.
+      if (i == 40) {
+        throw new Daikon.UserError("Too many levels of symbolic links: " + path);
+      }
       Path parent = path.getParent();
       if (parent == null) {
-        break;
+        throw new Daikon.UserError("Cannot resolve symbolic link " + path);
       }
       try {
         path = parent.resolve(Files.readSymbolicLink(path));
       } catch (IOException e) {
         throw new Daikon.UserError(e, "Problem reading symbolic link " + path);
       }
-    }
-    if (Files.isSymbolicLink(path)) {
-      throw new Daikon.UserError("Too many levels of symbolic links: " + path);
     }
     return path;
   }
@@ -378,8 +376,8 @@ public final class MergeComparability {
 
   /**
    * Returns the records of a declaration other than its first line and its comparability record,
-   * with whitespace normalized, in sorted order. The flags in a "flags" record are also sorted,
-   * because their order is not significant.
+   * with whitespace normalized outside of string literals, in sorted order. The flags in a "flags"
+   * record are also sorted, because their order is not significant.
    *
    * @param lines the lines of a declaration
    * @param comparabilityLine the index in {@code lines} of the comparability record, or -1
@@ -389,14 +387,53 @@ public final class MergeComparability {
     List<String> result = new ArrayList<>(lines.size());
     for (int j = 1; j < lines.size(); j++) {
       if (j != comparabilityLine) {
-        String[] tokens = DeclReader.tokenize(lines.get(j));
-        if (tokens[0].equals("flags")) {
-          Arrays.sort(tokens, 1, tokens.length);
+        List<String> tokens = tokenizeRespectingQuotes(lines.get(j));
+        if (!tokens.isEmpty() && tokens.get(0).equals("flags")) {
+          Collections.sort(tokens.subList(1, tokens.size()));
         }
         result.add(String.join(" ", tokens));
       }
     }
     Collections.sort(result);
+    return result;
+  }
+
+  /**
+   * Splits a record into whitespace-separated tokens. A string literal, which starts and ends with
+   * a double quote, is part of a token even if it contains whitespace. Within a string literal, a
+   * backslash escapes the next character.
+   *
+   * @param record a record, possibly with leading and trailing whitespace
+   * @return the tokens of the record; empty if the record is blank
+   */
+  public static List<String> tokenizeRespectingQuotes(String record) {
+    List<String> result = new ArrayList<>();
+    StringBuilder token = new StringBuilder();
+    boolean inString = false;
+    for (int i = 0; i < record.length(); i++) {
+      char ch = record.charAt(i);
+      if (inString) {
+        token.append(ch);
+        if (ch == '\\' && i + 1 < record.length()) {
+          token.append(record.charAt(++i));
+        } else if (ch == '"') {
+          inString = false;
+        }
+      } else if (Character.isWhitespace(ch)) {
+        if (token.length() > 0) {
+          result.add(token.toString());
+          token.setLength(0);
+        }
+      } else {
+        token.append(ch);
+        if (ch == '"') {
+          inString = true;
+        }
+      }
+    }
+    if (token.length() > 0) {
+      result.add(token.toString());
+    }
     return result;
   }
 

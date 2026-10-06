@@ -373,6 +373,24 @@ public class MergeComparabilityTest {
     merge(a, b);
   }
 
+  /** Whitespace within a string literal is significant when comparing records. */
+  @Test
+  public void testWhitespaceInStringLiteral() {
+    List<String> a = new ArrayList<>(file(ppt("1", "1")));
+    a.add(a.indexOf("variable b"), "  constant \"x  y\"");
+    List<String> b = new ArrayList<>(file(ppt("1", "1")));
+    b.add(b.indexOf("variable b"), "  constant \"x y\"");
+    assertThrows(Daikon.UserError.class, () -> merge(a, b));
+    // Whitespace outside a string literal is not significant, and an escaped quote does not end a
+    // string literal.
+    List<String> c = new ArrayList<>(file(ppt("1", "1")));
+    c.add(c.indexOf("variable b"), "  constant\t\"x  y\"");
+    merge(a, c);
+    assertEquals(
+        Arrays.asList("constant", "\"a\\\" b\"", "c"),
+        MergeComparability.tokenizeRespectingQuotes(" constant \"a\\\" b\"  c "));
+  }
+
   /** Program points with different ppt-level records cannot be merged. */
   @Test
   public void testMismatchedPptRecords() {
@@ -426,6 +444,49 @@ public class MergeComparabilityTest {
     DeclReader.DeclPpt ppt = castNonNull(reader.find_ppt("C.m():::ENTER"));
     DeclReader.DeclVarInfo var = castNonNull(ppt.find_var("a"));
     assertEquals("3", castNonNull(var.get_comparability()));
+  }
+
+  /** A later declaration of a variable keeps the index of the earlier one. */
+  @Test
+  public void testDuplicateVariableIndexNotForRewriting() {
+    List<String> twice = new ArrayList<>(file(ppt("1", "2")));
+    twice.addAll(twice.size() - 1, var("a", "3"));
+    DeclReader reader = parse("a", twice, false);
+    DeclReader.DeclPpt ppt = castNonNull(reader.find_ppt("C.m():::ENTER"));
+    assertEquals(0, castNonNull(ppt.find_var("a")).index);
+    assertEquals(1, castNonNull(ppt.find_var("b")).index);
+  }
+
+  /**
+   * A DeclReader that is not for rewriting skips unrecognized records and ignores extra tokens, but
+   * a rewriting DeclReader rejects them.
+   */
+  @Test
+  public void testLenientNotForRewriting() {
+    List<String> unknownPptRecord = new ArrayList<>(file(ppt("1")));
+    unknownPptRecord.add(unknownPptRecord.indexOf("variable a"), "new-ppt-record x");
+    List<String> unknownVarRecord = new ArrayList<>(file(ppt("1")));
+    unknownVarRecord.add(unknownVarRecord.size() - 1, "  new-var-record x");
+    List<String> extraComparabilityToken = new ArrayList<>(file(ppt("1")));
+    extraComparabilityToken.set(
+        extraComparabilityToken.indexOf("  comparability 1"), "  comparability 1 x");
+    List<String> extraVariableToken = new ArrayList<>(file(ppt("1")));
+    extraVariableToken.set(extraVariableToken.indexOf("variable a"), "variable a x");
+    List<String> noColons = new ArrayList<>(file(ppt("1")));
+    noColons.set(noColons.indexOf("ppt C.m():::ENTER"), "ppt C.m()");
+    for (List<String> lines :
+        Arrays.asList(
+            unknownPptRecord,
+            unknownVarRecord,
+            extraComparabilityToken,
+            extraVariableToken,
+            noColons)) {
+      assertThrows(Daikon.UserError.class, () -> parse("a", lines));
+      DeclReader reader = parse("a", lines, false);
+      DeclReader.DeclPpt ppt = reader.ppts.values().iterator().next();
+      DeclReader.DeclVarInfo var = castNonNull(ppt.find_var("a"));
+      assertEquals("1", castNonNull(var.get_comparability()));
+    }
   }
 
   /** A DeclReader that is not for rewriting skips a sample record for a variable named "ppt". */
@@ -494,7 +555,7 @@ public class MergeComparabilityTest {
       Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rw-r-----");
       Files.setPosixFilePermissions(target, permissions);
       Path link = dir.resolve("link.decls-DynComp");
-      Files.createSymbolicLink(link, target.getFileName());
+      Files.createSymbolicLink(link, castNonNull(target.getFileName()));
       MergeComparability.mainHelper(new String[] {"-o", link.toString(), input.toString()});
       assertTrue(Files.isSymbolicLink(link));
       assertEquals(permissions, Files.getPosixFilePermissions(target));
