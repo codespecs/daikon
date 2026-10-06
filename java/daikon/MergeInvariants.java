@@ -276,7 +276,14 @@ public final class MergeInvariants {
       decl_files.add(decl_file);
       merge_ppts = FileIO.read_declaration_files(decl_files);
       merge_ppts.trimToSize();
-      PptRelation.init_hierarchy(merge_ppts);
+      Daikon.create_combined_exits(merge_ppts);
+      assert FileIO.new_decl_format != null
+          : "@AssumeAssertion(nullness): read a decls file, so new_decl_format is set";
+      if (FileIO.new_decl_format) {
+        PptRelation.init_hierarchy_new(merge_ppts);
+      } else {
+        PptRelation.init_hierarchy(merge_ppts);
+      }
     }
 
     // Create a hierarchy between the merge leaves (such as exitNN points)

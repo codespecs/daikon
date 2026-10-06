@@ -3,7 +3,7 @@ var-comparability none
 
 # A :::POINT program point (as produced by convertcsv.pl) is a leaf of the
 # dataflow hierarchy.  SplitPoint.spinfo splits it, which should yield
-# conditional invariants and implications.
+# conditional invariants and implications relating x and y.
 ppt SplitPoint:::POINT
 ppt-type point
 variable x

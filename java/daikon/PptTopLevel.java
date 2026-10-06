@@ -4691,28 +4691,26 @@ public class PptTopLevel extends Ppt {
    * Returns true if this is a leaf of the dataflow hierarchy, which obtains its invariants directly
    * from samples rather than by merging them from its children.
    *
-   * <p>If the ppt's type was declared, the leaves are the numbered exit points ({@link
-   * PptType#SUBEXIT}) and the general program points ({@link PptType#POINT}). A ppt declared as
-   * {@link PptType#EXIT} but named like a numbered exit (such as :::EXIT22) is also a leaf, so that
-   * samples in hand-written decls files that use {@code ppt-type exit} for numbered exits are not
-   * rejected. If the ppt's type was not declared, the leaves are all program points except :::EXIT
-   * (combined), :::ENTER, :::THROWS, :::OBJECT, :::CLASS, and :::GLOBAL program points. Either way,
-   * arbitrarily named program points such as :::POINT (used by convertcsv.pl) are leaves.
+   * <p>If the ppt has a type (as every ppt read from a version 2 decls file does), the type
+   * determines the result and the name is irrelevant: the leaves are the numbered exit points
+   * ({@link PptType#SUBEXIT}) and the general program points ({@link PptType#POINT}, which is the
+   * default type in a version 2 decls file). Otherwise, the name determines the result: the leaves
+   * are all program points except :::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT, :::CLASS, and
+   * :::GLOBAL program points. This ensures that arbitrarily named program points such as :::POINT
+   * (used by convertcsv.pl) are leaves.
    *
    * @return true if this is a leaf of the dataflow hierarchy
    */
   @Pure
   public boolean is_dataflow_leaf() {
     if (type != null) {
-      return (type == PptType.SUBEXIT)
-          || (type == PptType.POINT)
-          || ((type == PptType.EXIT) && ppt_name.isNumberedExitPoint());
+      return (type == PptType.SUBEXIT) || (type == PptType.POINT);
     } else {
-      return !(ppt_name.isCombinedExitPoint()
-          || ppt_name.isEnterPoint()
-          || ppt_name.isThrowsPoint()
-          || ppt_name.isObjectInstanceSynthetic()
+      return !(is_combined_exit()
+          || is_enter()
+          || is_object()
           || ppt_name.isClassStaticSynthetic()
+          || ppt_name.isThrowsPoint()
           || ppt_name.isGlobalPoint());
     }
   }

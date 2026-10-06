@@ -503,6 +503,13 @@ public final class FileIO {
       }
     }
 
+    // Some decls files declare numbered exits such as foo:::EXIT22 with "ppt-type exit".  Treat
+    // them as numbered exits, so that every PptTopLevel predicate (is_subexit,
+    // is_combined_exit, is_dataflow_leaf, ...) agrees about them.
+    if (ppt_type == PptType.EXIT && new PptName(ppt_name).isNumberedExitPoint()) {
+      ppt_type = PptType.SUBEXIT;
+    }
+
     // Build the program point
     PptTopLevel newppt = new PptTopLevel(ppt_name, ppt_type, ppt_parents, ppt_flags, vi_array);
 
@@ -1883,13 +1890,17 @@ public final class FileIO {
     }
 
     // Only process the leaves of the ppt tree.
-    if (Daikon.use_dataflow_hierarchy && !ppt.is_dataflow_leaf()) {
-      if (ppt.is_combined_exit()) {
+    if (Daikon.use_dataflow_hierarchy) {
+      // Daikon creates the combined exit points itself, so no sample may refer to one, whatever
+      // the program point's declared type.
+      if (ppt.is_combined_exit() || ppt.ppt_name.isCombinedExitPoint()) {
         // not Daikon.UserError; caller has more info (e.g., filename)
         throw new RuntimeException(
             "Bad program point name " + ppt.name + " is a combined exit point name");
       }
-      return;
+      if (!ppt.is_dataflow_leaf()) {
+        return;
+      }
     }
 
     // Add derived variables

@@ -649,6 +649,25 @@ public class PptRelation implements Serializable {
     return rel;
   }
 
+  /**
+   * Creates an equality view and invariants for each ppt that has no children and does not already
+   * have an equality view. This happens for non-leaf ppts such as OBJECT, CLASS, or GLOBAL that do
+   * not end up with any children (due to the program source or because of ppt filtering). Leaves
+   * got their equality views from {@link Daikon#setupEquality}, and a combined exit point always
+   * has children because Daikon creates it from its numbered exit points.
+   *
+   * @param all_ppts the program points
+   */
+  private static void setup_childless_nonleaves(PptMap all_ppts) {
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
+      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
+        assert !ppt.is_dataflow_leaf() && !ppt.is_combined_exit() : ppt;
+        ppt.equality_view = new PptSliceEquality(ppt);
+        ppt.equality_view.instantiate_invariants();
+      }
+    }
+  }
+
   // used by init_hierarchy below
   private static class SplitChild {
     PptRelation rel;
@@ -878,6 +897,8 @@ public class PptRelation implements Serializable {
       }
     }
 
+    setup_childless_nonleaves(all_ppts);
+
     // Debug print the hierarchy in a more readable manner
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("PPT Hierarchy");
@@ -1037,17 +1058,7 @@ public class PptRelation implements Serializable {
       }
     }
 
-    // Loop over each ppt and create an equality view and invariants for
-    // any ppt without children that doesn't already have them.  This can
-    // happen when there are non-leaf ppts such as OBJECT or CLASS that don't end up
-    // with any children (due to the program source or because of ppt filtering).
-    for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
-        assert !ppt.is_dataflow_leaf() : ppt;
-        ppt.equality_view = new PptSliceEquality(ppt);
-        ppt.equality_view.instantiate_invariants();
-      }
-    }
+    setup_childless_nonleaves(all_ppts);
 
     // Debug print the hierarchy in a more readable manner
     if (debug.isLoggable(Level.FINE)) {
