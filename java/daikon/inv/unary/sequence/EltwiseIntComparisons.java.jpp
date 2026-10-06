@@ -205,6 +205,13 @@ public class CLASSNAME extends SUPERCLASS {
       }
     #endif
 
+    #if !(defined(EQUAL) || defined(EQUALFLOAT))
+      // Sortedness is meaningless if the order of the elements is meaningless.
+      if (!vis[0].aux.hasOrder()) {
+        return false;
+      }
+    #endif
+
     return true;
   }
 
