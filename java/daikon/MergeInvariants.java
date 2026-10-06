@@ -261,12 +261,6 @@ public final class MergeInvariants {
       assert merge_ppts != null
           : "@AssumeAssertion(nullness): inv_files is non-empty, so for-loop body executed";
 
-      // Remove all of the slices, equality sets, to start
-      debugProgress.fine("Cleaning ppt map in preparation for merge");
-      for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
-        ppt.clean_for_merge();
-      }
-
     } else {
 
       // Build the result pptmap from the specific decls file
@@ -278,6 +272,13 @@ public final class MergeInvariants {
       merge_ppts.trimToSize();
       Daikon.create_combined_exits(merge_ppts);
       PptRelation.init_hierarchy_for_decl_format(merge_ppts);
+    }
+
+    // Remove all of the slices and equality sets, to start.  Each leaf gets merge children below,
+    // and a ppt with children must not have an equality view.
+    debugProgress.fine("Cleaning ppt map in preparation for merge");
+    for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
+      ppt.clean_for_merge();
     }
 
     // Create a hierarchy between the merge leaves (such as exitNN points)
@@ -363,8 +364,8 @@ public final class MergeInvariants {
       }
     }
 
-    // A non-leaf with no children (and thus no merge children) needs an equality view.  When
-    // the merge template was read from .inv files, clean_for_merge removed it.
+    // A non-leaf with no children (and thus no merge children) needs an equality view, which
+    // clean_for_merge removed.
     PptRelation.setup_childless_nonleaves(merge_ppts);
 
     // Check the resulting PptMap for consistency

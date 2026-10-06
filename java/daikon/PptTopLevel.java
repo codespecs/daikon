@@ -431,7 +431,6 @@ public class PptTopLevel extends Ppt {
   /** Restore/Create interns when reading serialized object. */
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
-    type = normalize_type(ppt_name, type);
   }
 
   /**

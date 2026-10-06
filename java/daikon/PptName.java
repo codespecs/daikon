@@ -368,6 +368,7 @@ public class PptName implements Serializable {
    */
   @EnsuresNonNullIf(result = true, expression = "point")
   @Pure
+  @SuppressWarnings("all:purity") // exitLine() allocates a string, but the result is deterministic
   public boolean isExitWithLineNumber() {
     if (!isExitPoint()) {
       return false;

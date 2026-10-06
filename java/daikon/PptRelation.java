@@ -651,11 +651,11 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Creates an equality view and invariants for each ppt that has no children and does not already
-   * have an equality view. This happens for non-leaf ppts such as OBJECT, CLASS, or GLOBAL that do
-   * not end up with any children (due to the program source or because of ppt filtering). It also
-   * happens for a combined exit point that a decls file declares when no corresponding numbered
-   * exit point is declared or included. Leaves got their equality views from {@link
+   * Creates an equality view and invariants for each non-leaf ppt that has no children and does not
+   * already have an equality view. This happens for non-leaf ppts such as OBJECT, CLASS, or GLOBAL
+   * that do not end up with any children (due to the program source or because of ppt filtering).
+   * It also happens for a combined exit point that a decls file declares when no corresponding
+   * numbered exit point is declared or included. Leaves get their equality views from {@link
    * Daikon#setupEquality} (or, in MergeInvariants, have children).
    *
    * <p>The equality view is created even if {@link Daikon#use_equality_optimization} is false,
@@ -665,8 +665,7 @@ public class PptRelation implements Serializable {
    */
   public static void setup_childless_nonleaves(PptMap all_ppts) {
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
-        assert !ppt.is_dataflow_leaf() : ppt;
+      if (ppt.children.isEmpty() && (ppt.equality_view == null) && !ppt.is_dataflow_leaf()) {
         ppt.create_equality_view();
       }
     }
