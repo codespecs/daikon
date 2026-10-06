@@ -25,8 +25,8 @@ Further documentation can be found in:
 
 Chicory:
 
-* New command-line option `--no-method-calls` makes Chicory never call
-  methods of the target program's objects, such as `toArray()` on lists.
+* New command-line option `--no-method-calls` makes Chicory never call methods
+  of the target program's objects, such as calling `toArray()` on a list.
 
 ## Version 5.9.0 (September 1, 2026)
 

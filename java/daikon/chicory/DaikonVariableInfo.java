@@ -1044,7 +1044,8 @@ public abstract class DaikonVariableInfo
       return;
     }
 
-    // Obtaining the elements of a list requires calling its toArray() method.
+    // Obtaining the elements of a list requires calling its toArray() method
+    // (or calling size() and get(int), which likewise may be overridden).
     if (no_method_calls) {
       return;
     }
