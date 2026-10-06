@@ -4693,8 +4693,8 @@ public class PptTopLevel extends Ppt {
    *
    * <p>Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered exit), this defines them as
    * everything except ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT and :::CLASS program
-   * points. This scheme ensures that arbitrarily named program points such as :::POINT (used by
-   * convertcsv.pl) are treated as leaves.
+   * points. This scheme treats arbitrarily named program points such as :::POINT (used by
+   * convertcsv.pl) as leaves.
    *
    * @return true if this is a leaf of the dataflow hierarchy
    */
