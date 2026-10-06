@@ -315,7 +315,7 @@ quick-test:
 	java -cp ${QT_PATH} daikon.Chicory --comparability-file=StackArTester.decls-DynComp DataStructures.StackArTester; \
 	java -cp ${QT_PATH} daikon.Daikon StackArTester.dtrace.gz
 
-# Sanity check, suitable for continuous integration such as Jenkins or Travis.
+# Sanity check, suitable for continuous integration.
 nightly-test:
 	${MAKE} showvars compile daikon.jar
 	${MAKE} javadoc doc-all
