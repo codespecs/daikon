@@ -271,24 +271,19 @@ public final class MergeInvariants {
       decl_files.add(decl_file);
       merge_ppts = FileIO.read_declaration_files(decl_files);
       merge_ppts.trimToSize();
-      PptRelation.init_hierarchy(merge_ppts);
+      Daikon.create_combined_exits(merge_ppts);
+      PptRelation.init_hierarchy_for_decl_format(merge_ppts);
     }
 
-    // Create a hierarchy between the merge exitNN points and the
-    // corresponding points in each of the specified maps.  This
-    // should only be created at the exitNN points (i.e., the leaves)
-    // so that the normal processing will create the invariants at
-    // upper points.
+    // Create a hierarchy between the merge leaves (such as exitNN points)
+    // and the corresponding points in each of the specified maps.  This
+    // should only be created at the leaves so that the normal processing
+    // will create the invariants at upper points.
     debugProgress.fine("Building hierarchy between leaves of the maps");
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
 
-      // Skip everything that is not a final exit point
-      if (!ppt.ppt_name.isExitPoint()) {
-        assert !ppt.children.isEmpty() : ppt;
-        continue;
-      }
-      if (ppt.ppt_name.isCombinedExitPoint()) {
-        assert !ppt.children.isEmpty() : ppt;
+      // Skip everything that is not a leaf
+      if (!ppt.is_dataflow_leaf()) {
         continue;
       }
 
@@ -363,6 +358,10 @@ public final class MergeInvariants {
       }
     }
 
+    // A non-leaf with no children (and thus no merge children) needs an equality view.  When
+    // the merge template was read from .inv files, clean_for_merge removed it.
+    PptRelation.setup_childless_nonleaves(merge_ppts);
+
     // Check the resulting PptMap for consistency
     merge_ppts.repCheck();
 
@@ -398,18 +397,15 @@ public final class MergeInvariants {
     long duration = System.nanoTime() - startTime;
     debugProgress.fine("Time spent in implications: " + TimeUnit.NANOSECONDS.toSeconds(duration));
 
-    // Remove the PptRelation links so that when the file is written
+    // Remove the merge PptRelation links so that when the file is written
     // out it only includes the new information
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
-      if (!ppt.ppt_name.isExitPoint()) {
+      if (!ppt.is_dataflow_leaf()) {
         continue;
       }
-      if (ppt.ppt_name.isCombinedExitPoint()) {
-        continue;
-      }
-      ppt.children.clear();
+      ppt.children.removeIf(MergeInvariants::isMergeChildRel);
       for (PptConditional cond : ppt.cond_iterable()) {
-        cond.children.clear();
+        cond.children.removeIf(MergeInvariants::isMergeChildRel);
       }
     }
 
@@ -426,6 +422,16 @@ public final class MergeInvariants {
       // Print the invariants
       PrintInvariants.print_invariants(merge_ppts);
     }
+  }
+
+  /**
+   * Returns true if the relation was created by {@link PptRelation#newMergeChildRel}.
+   *
+   * @param rel a relation
+   * @return true if the relation is from a merge ppt to the corresponding ppt of an input map
+   */
+  private static boolean isMergeChildRel(PptRelation rel) {
+    return rel.getRelationType() == PptRelation.PptRelationType.MERGE_CHILD;
   }
 
   /**

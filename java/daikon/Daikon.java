@@ -1871,6 +1871,10 @@ public final class Daikon {
 
       PptTopLevel exitnn_ppt = ppt;
       PptName exit_name = ppt.ppt_name.makeExit();
+      // Don't replace a combined exit point that the declarations already contain.
+      if (ppts.get(exit_name) != null) {
+        continue;
+      }
       PptTopLevel exit_ppt = exit_ppts.get(exit_name);
 
       if (debugInit.isLoggable(FINE)) {
@@ -2425,13 +2429,7 @@ public final class Daikon {
     // Initialize the partial order hierarchy
     debugProgress.fine("Init Hierarchy ... ");
     startTime = System.nanoTime();
-    assert FileIO.new_decl_format != null
-        : "@AssumeAssertion(nullness): read data, so new_decl_format is set";
-    if (FileIO.new_decl_format) {
-      PptRelation.init_hierarchy_new(all_ppts);
-    } else {
-      PptRelation.init_hierarchy(all_ppts);
-    }
+    PptRelation.init_hierarchy_for_decl_format(all_ppts);
     duration = System.nanoTime() - startTime;
     debugProgress.fine(
         "Init Hierarchy ... done [" + TimeUnit.NANOSECONDS.toSeconds(duration) + "]");
@@ -2581,17 +2579,7 @@ public final class Daikon {
         p = ((PptConditional) ppt).parent;
       }
 
-      // Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered
-      // exit), we define them as everything except
-      // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT
-      //  and :::CLASS program points.  This scheme ensures that arbitrarily
-      //  named program points such as :::POINT (used by convertcsv.pl)
-      //  will be treated as leaves.
-      if (p.ppt_name.isCombinedExitPoint()
-          || p.ppt_name.isEnterPoint()
-          || p.ppt_name.isThrowsPoint()
-          || p.ppt_name.isObjectInstanceSynthetic()
-          || p.ppt_name.isClassStaticSynthetic()) {
+      if (!p.is_dataflow_leaf()) {
         return;
       }
 
@@ -2600,9 +2588,7 @@ public final class Daikon {
       }
     }
 
-    // Create the initial equality sets
-    ppt.equality_view = new PptSliceEquality(ppt);
-    ppt.equality_view.instantiate_invariants();
+    ppt.create_equality_view();
   }
 
   private static List<SpinfoFile> spinfoFiles = new ArrayList<>();

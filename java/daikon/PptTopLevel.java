@@ -423,7 +423,7 @@ public class PptTopLevel extends Ppt {
     }
     this.ppt_name = new PptName(name);
     this.flags = flags;
-    this.type = type;
+    this.type = normalize_type(ppt_name, type);
     this.parent_relations = parents;
     init_vars();
   }
@@ -431,6 +431,52 @@ public class PptTopLevel extends Ppt {
   /** Restore/Create interns when reading serialized object. */
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     in.defaultReadObject();
+    type = normalize_type(ppt_name, type);
+  }
+
+  /**
+   * Returns the type that a program point with the given name and declared type should have. A
+   * program point that has no declared type (as in a version 1 decls file), or that is declared
+   * with type {@link PptType#EXIT} or with the default type {@link PptType#POINT}, gets its type
+   * from its name:
+   *
+   * <ul>
+   *   <li>foo:::ENTER is an {@link PptType#ENTER},
+   *   <li>a combined exit point such as foo:::EXIT is an {@link PptType#EXIT},
+   *   <li>a numbered exit point such as foo:::EXIT22 is a {@link PptType#SUBEXIT},
+   *   <li>Foo:::OBJECT is an {@link PptType#OBJECT},
+   *   <li>Foo:::CLASS is a {@link PptType#CLASS}, and
+   *   <li>any other program point is a generic {@link PptType#POINT}.
+   * </ul>
+   *
+   * (Some front ends declare a numbered exit with type {@link PptType#EXIT}, and a version 2 decls
+   * file may omit the type.) As a result, the predicates is_subexit, is_combined_exit,
+   * is_dataflow_leaf, etc. agree with one another and with the program point's name.
+   *
+   * @param ppt_name the name of the program point
+   * @param type the declared type of the program point, or null if none was declared
+   * @return the type that the program point should have
+   */
+  private static PptType normalize_type(PptName ppt_name, @Nullable PptType type) {
+    if (type != null && type != PptType.EXIT && type != PptType.POINT) {
+      return type;
+    }
+    if (ppt_name.isEnterPoint()) {
+      return PptType.ENTER;
+    }
+    if (ppt_name.isCombinedExitPoint()) {
+      return PptType.EXIT;
+    }
+    if (ppt_name.isExitWithLineNumber()) {
+      return PptType.SUBEXIT;
+    }
+    if (ppt_name.isObjectInstanceSynthetic()) {
+      return PptType.OBJECT;
+    }
+    if (ppt_name.isClassStaticSynthetic()) {
+      return PptType.CLASS;
+    }
+    return PptType.POINT;
   }
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
@@ -440,6 +486,7 @@ public class PptTopLevel extends Ppt {
     super(var_infos);
     this.name = name;
     ppt_name = new PptName(name);
+    type = normalize_type(ppt_name, null);
     init_vars();
   }
 
@@ -4136,6 +4183,16 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
+   * Creates the initial equality view for this ppt, in which all variables are in a single equality
+   * set.
+   */
+  public void create_equality_view() {
+    PptSliceEquality new_equality_view = new PptSliceEquality(this);
+    new_equality_view.instantiate_invariants();
+    equality_view = new_equality_view;
+  }
+
+  /**
    * Cleans up the ppt so that its invariants can be merged from other ppts. Not normally necessary
    * unless the merge is taking place over multiple ppts maps based on different data. This allows a
    * ppt to have its invariants recalculated.
@@ -4646,11 +4703,7 @@ public class PptTopLevel extends Ppt {
   /** Is this is an exit ppt (combined or specific)? */
   @Pure
   public boolean is_exit() {
-    if (type != null) {
-      return (type == PptType.EXIT) || (type == PptType.SUBEXIT);
-    } else {
-      return ppt_name.isExitPoint();
-    }
+    return (type == PptType.EXIT) || (type == PptType.SUBEXIT);
   }
 
   /**
@@ -4660,68 +4713,49 @@ public class PptTopLevel extends Ppt {
    */
   @Pure
   public boolean is_enter() {
-    if (type != null) {
-      return (type == PptType.ENTER);
-    } else {
-      return ppt_name.isEnterPoint();
-    }
+    return type == PptType.ENTER;
   }
 
   /** Is this a combined exit point? */
   @Pure
   public boolean is_combined_exit() {
-    if (type != null) {
-      return (type == PptType.EXIT);
-    } else {
-      return ppt_name.isCombinedExitPoint();
-    }
+    return type == PptType.EXIT;
   }
 
   /** Is this a numbered (specific) exit point? */
   @Pure
   public boolean is_subexit() {
-    if (type != null) {
-      return (type == PptType.SUBEXIT);
-    } else {
-      return ppt_name.isExitPoint() && !ppt_name.isCombinedExitPoint();
-    }
+    return type == PptType.SUBEXIT;
   }
 
   /**
    * Returns true if this is a leaf of the dataflow hierarchy, which obtains its invariants directly
    * from samples rather than by merging them from its children.
    *
-   * <p>Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered exit), this defines them as
-   * everything except ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT and :::CLASS program
-   * points. This scheme treats arbitrarily named program points such as :::POINT (used by
-   * convertcsv.pl) as leaves.
+   * <p>The leaves are the numbered exit points ({@link PptType#SUBEXIT}) and the general program
+   * points ({@link PptType#POINT}), except for :::THROWS and :::GLOBAL program points, which have
+   * no type of their own. This ensures that arbitrarily named program points such as :::POINT (used
+   * by convertcsv.pl) are leaves.
    *
    * @return true if this is a leaf of the dataflow hierarchy
    */
   @Pure
   public boolean is_dataflow_leaf() {
-    return !(ppt_name.isCombinedExitPoint()
-        || ppt_name.isEnterPoint()
-        || ppt_name.isThrowsPoint()
-        || ppt_name.isObjectInstanceSynthetic()
-        || ppt_name.isClassStaticSynthetic());
+    return ((type == PptType.SUBEXIT) || (type == PptType.POINT))
+        && !ppt_name.isThrowsPoint()
+        && !ppt_name.isGlobalPoint();
   }
 
   /** Is this a ppt that represents an object? */
   @Pure
   public boolean is_object() {
-    if (type != null) {
-      return (type == PptType.OBJECT);
-    } else {
-      return ppt_name.isObjectInstanceSynthetic();
-    }
+    return type == PptType.OBJECT;
   }
 
   /** Is this a ppt that represents a class? */
-  @EnsuresNonNullIf(result = true, expression = "type")
   @Pure
   public boolean is_class() {
-    return (type != null && type == PptType.CLASS);
+    return type == PptType.CLASS;
   }
 
   public String var_names() {
