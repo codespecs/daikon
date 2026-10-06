@@ -31,6 +31,12 @@ env:
     - OS=ubuntu JDKVER=jdk17-plus GROUP=misc
     - OS=ubuntu JDKVER=jdk11-plus GROUP=kvasir
     - OS=ubuntu JDKVER=jdk17-plus GROUP=kvasir
+    - OS=rockylinux JDKVER=jdk21 GROUP=nonquick-txt-diff
+    - OS=rockylinux JDKVER=jdk25 GROUP=nonquick-txt-diff
+    - OS=rockylinux JDKVER=jdk21-plus GROUP=misc
+    - OS=rockylinux JDKVER=jdk25-plus GROUP=misc
+    - OS=rockylinux JDKVER=jdk21-plus GROUP=kvasir
+    - OS=rockylinux JDKVER=jdk25-plus GROUP=kvasir
 
 # Currently-failing jobs
 # This section is temporary and should be commented out when no jobs are failing.

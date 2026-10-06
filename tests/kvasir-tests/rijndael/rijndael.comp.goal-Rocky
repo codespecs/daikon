@@ -738,8 +738,9 @@ rijndaeltest_ref.c.rijndaelTKAT():::ENTER
 ::iG[..]
 ::rcon
 blockLength keyLength
-fp in
+fp
 fp[..]
+in
 in[..]
 
 rijndaeltest_ref.c.rijndaelTKAT():::EXIT0
@@ -753,8 +754,9 @@ rijndaeltest_ref.c.rijndaelTKAT():::EXIT0
 ::iG[..]
 ::rcon
 blockLength keyLength
-fp in
+fp
 fp[..]
+in
 in[..]
 
 rijndaeltest_ref.c.rijndaelVKKAT():::ENTER

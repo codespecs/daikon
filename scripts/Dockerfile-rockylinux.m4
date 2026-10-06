@@ -63,6 +63,8 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   python3 \
   python3-distutils-extra \
   ShellCheck \
+  texinfo \
+  texinfo-tex \
   texlive \
   yamllint
 
@@ -76,10 +78,6 @@ RUN wget -q https://services.gradle.org/distributions/gradle-9.8.0-bin.zip \
 && unzip -q -d /opt/gradle gradle-9.8.0-bin.zip \
 && rm gradle-9.8.0-bin.zip
 ENV PATH=$PATH:/opt/gradle/gradle-9.8.0/bin
-
-RUN dnf -y install \
-  texinfo \
-  texinfo-tex
 
 # Install shfmt.
 RUN dnf -q -y upgrade && dnf -q -y install \
