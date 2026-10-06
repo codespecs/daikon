@@ -2,6 +2,7 @@ package daikon.tools.runtimechecker;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import daikon.Daikon;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class CommandHandler {
    * Prints the usage message.
    *
    * @param out where to print the usage message
+   * @throws Daikon.BugInDaikon if the documentation file is missing
    */
   public void usageMessage(PrintStream out) {
     String[] classnameArray = getClass().getName().split("\\.");
@@ -52,9 +54,7 @@ public class CommandHandler {
     String docFile = simpleClassname + ".doc";
     InputStream in = getClass().getResourceAsStream(docFile);
     if (in == null) {
-      // This is an error message, so it goes to standard error even if `out` is standard output.
-      System.err.println("Didn't find documentation " + docFile + " for " + getClass());
-      return;
+      throw new Daikon.BugInDaikon("Didn't find documentation " + docFile + " for " + getClass());
     }
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(in, UTF_8))) {
       String line;

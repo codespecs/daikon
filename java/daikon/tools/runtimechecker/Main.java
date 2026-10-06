@@ -1,14 +1,12 @@
 package daikon.tools.runtimechecker;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
 import daikon.Daikon;
 import daikon.DaikonGetopt;
-import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.StringJoiner;
 
 /**
  * Main entrypoint for the instrumenter. Passes control to whichever handler can handle the
@@ -35,11 +33,12 @@ public class Main extends CommandHandler {
    * @return the usage message of this and of each handler
    */
   private String usageMessage(List<CommandHandler> handlers) {
-    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    PrintStream out = new PrintStream(bytes, true, UTF_8);
-    usageMessage(out);
-    usageMessage(handlers, out);
-    return bytes.toString(UTF_8).stripTrailing();
+    StringJoiner result = new StringJoiner(Daikon.lineSep);
+    result.add(usageMessageString());
+    for (CommandHandler h : handlers) {
+      result.add(h.usageMessageString());
+    }
+    return result.toString();
   }
 
   /**

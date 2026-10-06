@@ -16,7 +16,6 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.StringTokenizer;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.MultiRandSelector;
@@ -41,10 +40,6 @@ public class TraceSelect {
 
   private static @MonotonicNonNull String fileName = null;
 
-  // Just a quick command line cache
-  // ... but I think it would it be better to pass args to invokeDaikon
-  // rather than introducing this variable.
-  private static String @MonotonicNonNull [] argles;
   // // stores the invocations in Strings
   // private static ArrayList invokeBuffer;
 
@@ -53,7 +48,8 @@ public class TraceSelect {
   // always set to non-null by mainHelper
   private static @MonotonicNonNull Random randObj;
 
-  private static int daikonArgStart = 0;
+  /** The arguments to pass to Daikon, other than the .dtrace file. */
+  private static List<String> daikonArgs = new ArrayList<>();
 
   // This allows us to simply call MultiDiff
   // with the same files we just created.
@@ -91,7 +87,7 @@ public class TraceSelect {
   public static void mainHelper(String[] args) {
     // Handles -h and --help before num_reps.
     args = DaikonGetopt.argsAfterLeadingOptions(args, usage);
-    argles = args;
+    daikonArgs = new ArrayList<>();
     if (args.length < 2) {
       throw new daikon.Daikon.UserError("Too few arguments." + daikon.Daikon.lineSep + usage);
     }
@@ -119,14 +115,12 @@ public class TraceSelect {
         } catch (NumberFormatException e) {
           throw new daikon.Daikon.UserError("-SEED requires an integer argument, not " + seed);
         }
-        daikonArgStart = i + 1;
       }
 
       // NOCLEAN argument will leave the trace samples even after
       // the invariants from these samples have been generated
       else if (args[i].toUpperCase(Locale.ENGLISH).equals("-NOCLEAN")) {
         CLEAN = false;
-        daikonArgStart = i + 1;
       }
 
       // INCLUDE_UNRETURNED option will allow selecting method invocations
@@ -134,7 +128,6 @@ public class TraceSelect {
       // either from a thrown Exception or abnormal termination.
       else if (args[i].toUpperCase(Locale.ENGLISH).equals("-INCLUDE_UNRETURNED")) {
         INCLUDE_UNRETURNED = true;
-        daikonArgStart = i + 1;
       }
 
       // DO_DIFFS will create a spinfo file for generating
@@ -144,7 +137,6 @@ public class TraceSelect {
       // samples.
       else if (args[i].toUpperCase(Locale.ENGLISH).equals("-DO_DIFFS")) {
         DO_DIFFS = true;
-        daikonArgStart = i + 1;
       }
 
       // The Daikon arguments start with the first .dtrace or .decls file, or with the first
@@ -165,21 +157,15 @@ public class TraceSelect {
           throw new daikon.Daikon.UserError("Only 1 dtrace file for input allowed");
         }
 
-        if (!knowArgStart) {
-          daikonArgStart = i;
-          knowArgStart = true;
-        }
-      } else if (args[i].endsWith(".decls")) {
-        if (!knowArgStart) {
-          daikonArgStart = i;
-          knowArgStart = true;
-        }
-      }
-
-      // Any other switch starts the Daikon arguments.
-      else if (!knowArgStart && args[i].startsWith("-")) {
-        daikonArgStart = i;
         knowArgStart = true;
+      } else {
+        // A .decls file or any other switch starts the Daikon arguments.
+        if (args[i].endsWith(".decls") || args[i].startsWith("-")) {
+          knowArgStart = true;
+        }
+        if (knowArgStart) {
+          daikonArgs.add(args[i]);
+        }
       }
     }
 
@@ -290,7 +276,6 @@ public class TraceSelect {
     }
   }
 
-  @RequiresNonNull("argles")
   private static void invokeDaikon(String dtraceName) throws IOException {
 
     System.out.println("Created file: " + dtraceName);
@@ -301,14 +286,8 @@ public class TraceSelect {
     daikonArgsList.add("-o");
     daikonArgsList.add(dtraceName + ".inv");
 
-    // find all the Daikon args except for the original
-    // single dtrace file.
-    for (int i = daikonArgStart; i < argles.length; i++) {
-      if (argles[i].endsWith(".dtrace")) {
-        continue;
-      }
-      daikonArgsList.add(argles[i]);
-    }
+    // all the Daikon args except for the original single dtrace file
+    daikonArgsList.addAll(daikonArgs);
 
     // create an array to store the Strings in daikonArgsList
     String[] daikonArgs = daikonArgsList.toArray(new String[0]);

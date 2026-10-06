@@ -67,18 +67,36 @@ public class DaikonGetopt extends Getopt {
    * @param usage computes the usage message to print for {@code -h} and {@code --help}
    */
   public DaikonGetopt(String[] argv, String optstring, LongOpt[] longopts, Supplier<String> usage) {
-    super(PROGNAME, argv, optstring + "h", withHelp(longopts));
+    super(PROGNAME, argv, withH(optstring), withHelp(longopts));
     this.usage = usage;
     opterr = false;
   }
 
   /**
+   * Returns the given short options plus {@code -h}.
+   *
+   * @param optstring short options, in the format of {@link Getopt}; must not contain {@code h}
+   * @return {@code optstring} plus {@code -h}
+   */
+  private static String withH(String optstring) {
+    if (optstring.indexOf('h') != -1) {
+      throw new IllegalArgumentException("optstring already contains h: " + optstring);
+    }
+    return optstring + "h";
+  }
+
+  /**
    * Returns the given long options plus {@code --help}.
    *
-   * @param longopts long options
+   * @param longopts long options; must not contain {@code help}
    * @return {@code longopts} plus {@code --help}
    */
   private static LongOpt[] withHelp(LongOpt[] longopts) {
+    for (LongOpt longopt : longopts) {
+      if (longopt.getName().equals(Daikon.help_SWITCH)) {
+        throw new IllegalArgumentException("longopts already contains " + Daikon.help_SWITCH);
+      }
+    }
     return ArraysPlume.append(
         longopts, new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 'h'));
   }

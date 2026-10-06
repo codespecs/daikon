@@ -53,7 +53,10 @@ public class CreateSpinfoC {
     }
     String inputFile = files[0];
     int dotPos = inputFile.lastIndexOf('.');
-    if (dotPos <= inputFile.lastIndexOf(File.separatorChar)) {
+    // On Windows, both '/' and '\\' are separators.
+    int separatorPos =
+        Math.max(inputFile.lastIndexOf('/'), inputFile.lastIndexOf(File.separatorChar));
+    if (dotPos <= separatorPos) {
       throw new Daikon.UserError(
           "File name has no extension: " + inputFile + Daikon.lineSep + usage);
     }
