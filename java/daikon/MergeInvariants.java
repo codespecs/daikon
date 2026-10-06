@@ -276,7 +276,7 @@ public final class MergeInvariants {
       decl_files.add(decl_file);
       merge_ppts = FileIO.read_declaration_files(decl_files);
       merge_ppts.trimToSize();
-      PptRelation.init_hierarchy(merge_ppts);
+      PptRelation.init_hierarchy_for_decl_format(merge_ppts);
     }
 
     // Create a hierarchy between the merge exitNN points and the

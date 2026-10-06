@@ -2574,29 +2574,13 @@ public final class Daikon {
     }
 
     // Skip points that are not leaves.
-    if (use_dataflow_hierarchy) {
-      PptTopLevel p = ppt;
-      if (ppt instanceof PptConditional) {
-        p = ((PptConditional) ppt).parent;
-      }
+    if (!ppt.is_dataflow_leaf()) {
+      return;
+    }
 
-      // Rather than defining leaves as :::GLOBAL or :::EXIT54 (numbered
-      // exit), we define them as everything except
-      // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT
-      //  and :::CLASS program points.  This scheme ensures that arbitrarily
-      //  named program points such as :::POINT (used by convertcsv.pl)
-      //  will be treated as leaves.
-      if (p.ppt_name.isCombinedExitPoint()
-          || p.ppt_name.isEnterPoint()
-          || p.ppt_name.isThrowsPoint()
-          || p.ppt_name.isObjectInstanceSynthetic()
-          || p.ppt_name.isClassStaticSynthetic()) {
-        return;
-      }
-
-      if (ppt.has_splitters()) {
-        return;
-      }
+    // Skip leaves with splitters; their samples are processed by their conditional ppts.
+    if (use_dataflow_hierarchy && ppt.has_splitters()) {
+      return;
     }
 
     ppt.create_equality_view();
