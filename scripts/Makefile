@@ -48,6 +48,26 @@ ${DOCKERFILES}: Dockerfile-%: Dockerfile-defs.m4 $(addsuffix .m4,$(addprefix Doc
 	mv -f $@.tmp2 $@
 	rm -f $@.tmp
 
+## Docker images
+
+# Build each Docker image and upload it to Docker Hub.
+# To build and upload just one image, run, for example:
+#   make docker-image-ubuntu-jdk21-plus
+# To build images named "...-testing", run:
+#   make docker-images DOCKERTESTING=-testing
+# and also update the value of `docker_testing` in file ../.azure/defs-common.m4 .
+DOCKERTESTING ?=
+DOCKER_IMAGES := $(patsubst Dockerfile-%,docker-image-%,${DOCKERFILES})
+.PHONY: docker-images ${DOCKER_IMAGES}
+docker-images: ${DOCKER_IMAGES}
+
+# The Dockerfiles copy no files into the image, so build with no context.
+${DOCKER_IMAGES}: docker-image-%: Dockerfile-%
+	@echo "***** Starting mdernst/daikon-$*${DOCKERTESTING} *****"
+	docker -l warn build --rm=false --progress=plain -t mdernst/daikon-$*${DOCKERTESTING} - < $<
+	docker -l warn push --quiet mdernst/daikon-$*${DOCKERTESTING}
+	@echo "***** Success for mdernst/daikon-$*${DOCKERTESTING} *****"
+
 ## Delegation to other Makefiles (gross)
 
 ${HIERDIR}/difftbl: ${HIERDIR}/difftbl.c
