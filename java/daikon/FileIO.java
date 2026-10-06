@@ -1893,7 +1893,7 @@ public final class FileIO {
       // Rather than defining leaves as :::EXIT54 (numbered exit)
       // program points define them as everything except
       // ::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT, ::GLOBAL
-      //  and :::CLASS program points.  This scheme treans arbitrarily
+      //  and :::CLASS program points.  This scheme treats arbitrarily
       //  named program points such as :::POINT (used by convertcsv.pl)
       //  as leaves.
 
