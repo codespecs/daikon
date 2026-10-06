@@ -209,3 +209,33 @@ variable b
   rep-type double
   min-value 1.75
   comparability 1
+
+# If minvalue == maxvalue == 0.25 and 'x == 0.25' is inferred,
+# 'x == 0.25' is suppressed.
+ppt floatConstantMinMaxMatch:::ENTER
+ppt-type enter
+
+ppt floatConstantMinMaxMatch:::EXIT1
+ppt-type exit
+variable return
+  var-kind return
+  dec-type double
+  rep-type double
+  min-value 0.25
+  max-value 0.25
+  comparability 1
+
+# If minvalue == maxvalue == 0.75 and 'x == 0.25' is inferred,
+# 'x == 0.25' is NOT suppressed.
+ppt floatConstantMinMaxDifferent:::ENTER
+ppt-type enter
+
+ppt floatConstantMinMaxDifferent:::EXIT1
+ppt-type exit
+variable return
+  var-kind return
+  dec-type double
+  rep-type double
+  min-value 0.75
+  max-value 0.75
+  comparability 1
