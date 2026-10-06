@@ -925,7 +925,7 @@ endif
 # override (not augment) any other use of -Alint in this Makefile.
 # "-proc:only" prevents generation of .class files (so generated classfiles are
 # version 8 rather than version 9, and so typecheck jobs can be run in parallel).
-# JAVACHECK_EXTRA_ARGS is set only by the user (and is currently used by Travis).
+# JAVACHECK_EXTRA_ARGS is set only by the user.
 CHECKER_ARGS_ALL_JDK_VERSIONS ?= -Xmaxerrs 10000 -Xmaxwarns 10000 -Aversion -ArequirePrefixInWarningSuppressions -AwarnUnneededSuppressions -AwarnRedundantAnnotations -XDignore.symbol.file -Xlint:deprecation -proc:only -processorpath ${CHECKERFRAMEWORK_JAR} ${JAVACHECK_EXTRA_ARGS}
 ifneq (,$(findstring 1.8.,$(shell java -version 2>&1)))
   CHECKER_ARGS ?= ${CHECKER_ARGS_ALL_JDK_VERSIONS} -J-Xbootclasspath/p:${CHECKERFRAMEWORK_JAVAC}
@@ -984,7 +984,7 @@ show_nullness_java_files:
 	@echo ${DAIKON_JAVA_FILES}
 
 ## TODO: Reinstate these dependencies later:  typecheck-prototype typecheck-vindex
-# Check is in multiple parts because Travis won't run jobs longer than 50 minutes
+# Check is in multiple parts to keep each CI job short
 # and because CI memory can get exhausted on multiple CI platforms (why?).
 # Index Checker takes much longer than any other checker.
 # Typechecking times (in minutes, as of 2025-11-03):
