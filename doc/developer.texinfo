@@ -179,9 +179,9 @@ with a Java 8 JDK. However, if you wish to compile Daikon you must use Java 11 (
 
 Before compiling Daikon, you need to install some dependencies (that is,
 software used to build Daikon).  For
-@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-rockylinux-jdk17-plus,
+@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-rockylinux-jdk21-plus,
 ,Rocky Linux} and
-@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-ubuntu-jdk17-plus,
+@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-ubuntu-jdk21-plus,
 , Ubuntu}, you can
 find the commands to install these dependencies in file
 @file{$@{DAIKONDIR@}/scripts/Dockerfile-@emph{OSNAME}-jdk@emph{N}-plus}.
@@ -2778,7 +2778,6 @@ There exist some other declaration-related records;
 * Declarations::
 * Data trace records::
 * Example files::
-* Version 1 Declarations::
 @end menu
 
 
@@ -2790,8 +2789,7 @@ Instead of placing both declarations and data trace records in a single
 file, it is permitted to place the declarations in one or more
 @file{.decls} @dfn{declaration files} while leaving the data trace records
 in the @file{.dtrace} file.  This can be convenient for tools that
-perform a separate instrumentation step, such as
-@command{dfepl} (@pxref{dfepl,,,daikon,Daikon User Manual}).
+perform a separate instrumentation step.
 Such a tool takes as
 input a target program to be analyzed, and produces two outputs:  a
 @file{.decls} file and an instrumented program.  Executing the
@@ -2877,10 +2875,9 @@ decl-version <version>
 @end example
 
 @noindent
-The current version is 2.0.
-
-Previous versions (see @ref{Version 1 Declarations}) did not include a
-version field and are identified by the lack of this field.
+The only supported version is 2.0.
+Daikon no longer reads files in the obsolete version 1 format, which did not
+include a version record.
 
 
 @node          Input-language declaration
@@ -2967,10 +2964,6 @@ file,
 @c on other lines.
 blanks must be replaced by @code{\_}, and backslashes must be escaped as @code{\\}.
 Program point names must be distinct.
-
-@c Note:
-@c The Version 1 declaration file format specification is described in
-@c "V1 pptname format", but it is not relevant for version 2.
 
 While Daikon does not infer program point relationships from @code{ppt-name}s,
 it does require these names to conform to a set syntax.
@@ -3912,356 +3905,6 @@ x.getClass().getName()
 @end smallexample
 
 
-@node    Version 1 Declarations
-@section Version 1 Declarations
-
-@cindex @file{.decls} file (version 1)
-
-This section describes the original version (1.0) of declaration
-records.  These are now obsolete and should not be used.
-
-A declarations file can contain program point declarations,
-@code{VarComparability} declarations, and @code{ListImplementors declarations}.
-
-@menu
-* V1 Program point declarations::
-* V1 pptname format::
-* V1 VarComparability declaration::
-* V1 ListImplementors declaration::
-@end menu
-
-@node       V1 Program point declarations
-@subsection V1 Program point declarations
-
-The format of a program point declaration is:
-@example
-DECLARE
-program-point-name
-varname1
-declared-type1 [# auxiliary-information1]
-representation-type1 [= constant-value1]
-comparable1
-varname2
-declared-type2 [# auxiliary-information2]
-representation-type2 [= constant-value2]
-comparable2
-...
-@end example
-
-@noindent
-Program point information includes:
-@itemize @bullet
-@item
-name (@dfn{tag}) of this program point, an arbitrary string containing no
-tab or newline characters.  This name contains information such as the
-class name or method name; what information is contained depends on
-which instrumenter is being used.  @xref{V1 pptname format}, for a full
-specification of the naming format.
-
-
-@item
-for each variable:
-@itemize @bullet
-@item
-name: a string containing no tabs or newlines.
-@xref{Variable names,,,daikon,Daikon User Manual}.
-
-@item
-declared type: this is what the programmer used in the declaration of
-the variable.  Array types must be suffixed by the proper number of
-@samp{[]} to indicate their dimensionality.  Names for standard types
-should use Java's names (e.g., @code{int}, @code{boolean}, etc.), but names for
-user-defined or language-specific types can be arbitrary strings.
-
-@item
-auxiliary information: optionally, Daikon can be given information
-about the meaning of the variable to help it better interpret the
-values it later sees.  Information is provided as a comma-separated
-list of items, with each item in the form of @samp{key = value}.  Unrecognized
-keys are silently ignored.  All values are
-either @samp{true} or @samp{false}.  Mainly, this information is used for
-collections, which are presented to Daikon as arrays.  Valid keys are:
-
-@table @code
-
-@item hasDuplicates
-Whether a collection can contain duplicates.  If it
-cannot, Daikon does not check for some invariants that only have
-meaning for collections that can contain duplicate elements.
-
-@item hasOrder
-Whether order has meaning for a collection.  If order does
-not have meaning in a collection, then Daikon does not check for
-element-wise comparisons between it and other collections.
-
-@item hasNull
-Whether zero has the special meaning null for the variable or
-collection.  If it does, then Daikon checks for whether a value or the
-elements in a collection are null.
-
-@item nullTerminated
-Whether a collection has a value (usually null) that
-ends its representation.  If it does, then Daikon looks at the
-collection's size and at the collection's size-1 as ``interesting''
-values.  If it does not, then Daikon only looks at the collection's
-size.
-
-@item isParam
-Whether a given variable is a parameter to a method.  If a
-variable is a parameter, Daikon avoids printing some information that
-would be considered uninteresting for parameters.  First, invariants
-that use the parameter variable @code{p} in its post-state form are not
-printed.  Second, invariants that use fields of @code{p} (such as @code{p.x})
-are printed only if @code{p} has not changed.  Lastly, some immutable
-characteristics, such as the size of arrays and data types are not
-printed (both can be changed if @code{p} is changed, but then, @code{p}
-would no longer be interesting).
-
-@end table
-
-@item
-representation type:  this describes what will appear in the data
-trace file.  For instance, the declared type might be @code{char[]} but
-the representation type might be @code{java.lang.String}.  Or, the declared
-type might be @code{Object} but the representation type might be
-@code{hashcode}, if the address of the object is written to the data trace
-file.
-
-The representation type should be one of @code{boolean}, @code{int},
-@code{hashcode}, @code{double}, or @code{java.lang.String}; or an
-array of one of those (indicated by a @code{[]} suffix, as in Java).
-Hashcodes are treated like integers, except that their actual values
-are considered uninteresting for the purposes of output; they are
-intended for unique object identifiers like memory addresses or the
-return value of Java's @code{Object.hashCode} method.
-
-The representation type may optionally be followed by an equals
-sign and a value; in that case, the variable is known to have a
-compile-time constant value and should be omitted from the data
-trace file.
-@end itemize
-@item
-@cindex comparability, for variables (@file{.decls} format version 1)
-@cindex variable comparability (@file{.decls} format version 1)
-comparable variables.  This information indicates
-which other variables are comparable to this one.
-
-The point of comparability is that Daikon should not compare unrelated
-quantities.  For example, each person's height in centimeters may always
-be less than their birth year, but it is not helpful for Daikon to
-output @samp{height < birthyear}, because the two variables are measuring
-incomparable quantities.  (In this case, the variables use different
-units of measurement.)
-
-Variable comparability information helps Daikon to avoid computing
-information over unrelated variables.  This saves time and (more
-importantly) improves the quality of Daikon's output.  For more details,
-see the paper
-@ifhtml
-@uref{http://homes.cs.washington.edu/~mernst/pubs/invariants-relevance-icse2000-abstract.html,
-, ``Quickly detecting relevant program invariants''}.
-@end ifhtml
-@ifnothtml
-@uref{http://homes.cs.washington.edu/~mernst/pubs/invariants-relevance-icse2000-abstract.html,
-  ``Quickly detecting relevant program invariants''}.
-@end ifnothtml
-
-Variable comparability information may be obtained dynamically
-(@pxref{Dynamic abstract type inference (DynComp),,,daikon,Daikon User Manual}), via
-type-inference based analysis, or in some other manner.  In any event,
-Daikon reads it from the variable declarations.
-
-A comparability for a non-array type is a signed integer.  Two variables
-at the same program point
-are considered comparable if both integers are the same, @emph{or} if either
-integer is negative.
-A comparability for an array type must contain an
-integer for each index and for the contents; for instance, @samp{5[22][17]}
-for a two-dimensional array.  Comparisons succeed if comparisons over
-each component succeed.
-
-Regardless of comparability, variables at different program points are
-never compared to one another.  Use of the same comparability integer at
-different program points does not indicate any
-relationship between the variables, and a given variable may have a
-different comparability integer at different program points.
-
-As an example, in the following code:
-@example
-int sum(int len, int[] a) @{
-  int sum=0;
-  for (int i=0; i++; i<len)
-    sum += a[i];
-  return sum;
-@}
-@end example
-variables @code{i} and @code{len} are comparable to one another (and
-to indices of array @code{a}).  Furthermore, the result is comparable
-to the elements of array @code{a}.  A declaration file for these
-variables might look like
-@example
-len
-int
-int
-5
-a
-int[]
-int[]
-8[5]
-return
-int
-int
-8
-@end example
-
-@end itemize
-
-@c Future enhancements may include:
-@c @itemize @bullet
-@c @item
-@c permit variables to be omitted if they haven't changed (but always
-@c outputting the bit permits us to write a sanity checker)
-@c @item
-@c permit variables to appear in any order (not sure this is so worthwhile)
-@c @item
-@c specify which @file{.decl} files should be used (including their pathnames
-@c and/or MD5 hashes)
-@c @end itemize
-
-@node       V1 pptname format
-@subsection Program point name format specification
-
-Instrumenting code creates a @file{.decls} file that contains program
-point names such as:
-
-@example
-DataStructures.StackAr.push(java.lang.Object):::ENTER
-DataStructures.StackAr.push(java.lang.Object):::EXIT99
-PolyCalc.RatNum.RatNum(int, int):::ENTER
-PolyCalc.RatNum.RatNum(int, int):::EXIT55
-PolyCalc.RatNum.RatNum(int, int):::EXIT67
-@end example
-
-This section describes the format of these program point names.  Someone
-writing an instrumenter for a new language must be sure to follow this
-format specification.
-
-A program point name is a string with no tabs or newlines in it.  The basic
-format is @samp{@var{topLevel}.@var{bottomLevel}:::@var{pptInfo}}.
-For the first example given above, the top level of the hierarchy would
-be @code{DataStructures.StackAr}, the bottom level would be
-@code{push(java.lang.Object)}, and the
-program point information would be @code{ENTER}.
-
-@var{topLevel} may contain any number of periods (@samp{.}). @var{bottomLevel}
-and @var{pptInfo} may not contain any periods.  The string @samp{:::} may only
-appear once.
-
-@var{topLevel} and @var{pptInfo} are required (i.e., they must be non-empty),
-as are the period to the right of @var{topLevel} and the colons to the
-left of @var{pptInfo}.  However, @var{bottomLevel} is optional.
-
-By convention, for Java @var{topLevel} consists of the class name, and
-@var{bottomLevel} consists of the method name and method signature.
-
-For C, @var{topLevel} consists of a filename (or a single period for
-global functions), and @var{bottomLevel}
-could consist of a function name and signature.
-More precisely, names of C program points follow these conventions:
-
-@itemize @bullet
-@item
-Names of program points for file-static functions are prefixed with the name
-of the source file, with @samp{.} characters mapped to @samp{_},
-followed by a @samp{.}.
-
-@item Names of program points for
-file-scope functions with external linkage are prefixed with @samp{..}.
-For example, a global function program point might be named
-@samp{..main():::ENTER}., the first period denoting that it is global in
-scope and the second denoting the separator between the @var{toplevel}
-and @var{bottomlevel} parts of the name.
-
-@item
-Names of C++ functions that are class or namespace members are prefixed
-with the name(s) of their classes or namespaces, with the C++ @samp{::}
-syntax mapped onto the Java @samp{.} syntax used by Daikon.
-@end itemize
-
-For an Input Output Automaton, @var{topLevel} consists of an Automaton name and
-@var{bottomLevel} consists of information for a transition state.
-
-By convention, the entry and exit points for a function have names of
-a special form so that they can be associated with one another.
-(Currently, those names end with @code{:::ENTER} and @code{:::EXIT}.)  This
-convention permits Daikon to generate @nospellcheck{pre-state} variables
-(@pxref{Variable names,,,daikon,Daikon User Manual}) automatically at
-procedure exit points, so
-front ends need not output them explicitly.  When there
-are multiple exit points, then each one should be suffixed by a number
-(such as a line number, for example, @code{foo::EXIT22}).  Daikon produces
-the main (non-numbered) @code{:::EXIT} point automatically.  All the
-numbered exits should contain the same set of variables; in general,
-this means that local variables are not included at exit points.
-Daikon requires that declarations for @code{:::ENTER} program
-points appear before any declarations for matching @code{:::EXIT} program
-points.
-
-Another convention is to have another program point whose
-@var{bottomLevel} is empty and whose @var{pptInfo} is  @code{OBJECT}:
-for example, @code{StackAr:::OBJECT}.  This contains the
-representation invariant (sometimes called the object invariant) of a
-class.  This program point is created automatically by Daikon; it need
-not appear in a trace file.
-
-@c This program point is not created automatically by Daikon, because
-@c there isn't a way to know whether a particular method is a private
-@c helper method or not --- that is, whether the representation
-@c invariants should hold on entry to and exit from it.
-
-
-
-@node       V1 VarComparability declaration
-@subsection V1 VarComparability declaration
-
-There is a special @code{VarComparability} declaration that controls how
-the comparability field in program point declarations is interpreted.
-The default @code{VarComparability} is @code{implicit}, which means
-ordinary comparability as described in @ref{Program point declarations}.
-(The name @code{implicit} is retained for historical reasons.)
-You can override it as
-follows:
-@example
-VarComparability
-none
-@end example
-
-@noindent
-As with all records in Daikon input files, a
-blank line is required between this record and the next one.
-
-@node       V1 ListImplementors declaration
-@subsection V1 ListImplementors declaration
-
-This declaration indicates classes that implement the
-@code{java.util.List} interface, and should be treated as sequences
-for the purposes of invariant detection.  The syntax is as follows:
-
-@example
-ListImplementors
-<classname1>
-<classname2>
-...
-@end example
-
-@noindent
-Each @code{classname} is in Java format (for example, @file{java.util.LinkedList}).
-
-The @option{--list_type} command-line option to Daikon can also be used to
-specify classes that implement lists; @pxref{Options to control invariant
-detection,,,daikon,Daikon User Manual}.
-
-
 @node       General Index
 @unnumbered General Index
 
@@ -4297,7 +3940,7 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  INST Xiaoxia regex printf DiscardInfo instanceof UpperBound Xu
 @c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname rt toc
 @c  LocalWords:  VarComparability instrumenter struct Hatcliff Sinha Vibha xref
-@c  LocalWords:  dfepl uninstrumented classname subexit inline dec hashcode len
+@c  LocalWords:  uninstrumented classname subexit inline dec hashcode len
 @c  LocalWords:  hashCode param dups NonZero rel varname topOfStack MyInteger
 @c  LocalWords:  hasDuplicates hasOrder hasNull nullTerminated isParam DynComp
 @c  LocalWords:  Hashcodes birthyear topLevel bottomLevel pptInfo toplevel conf

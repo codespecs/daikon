@@ -303,8 +303,8 @@ sub read_execution ( $ ) {
     my $mod = <DTRACE>;		# "$mod" is unused
 
     # extract variables to be clustered.
-    # Omit Object variables, .class, array[] or a string
-    if ( $varname !~ /\.class/ && $varname !~ /\[\]/ && $varname !~ /\.toString/) {
+    # Omit Object variables, class names, arrays, and strings.
+    if (!excluded_var($varname)) {
       if ( exists $pptname_to_varnames{$pptname}{$varname}) {
 	push @vararray, $value;
       }
@@ -463,8 +463,8 @@ sub read_decls_file ( $ ) {
   open(DECL, $decls_file) || &dieusage("cannot read decls file $decls_file");
   while (<DECL>) {
     my $line = $_;
-    if ($line =~ /^DECLARE$/) {
-      my $pptname = &read_decl_ppt();
+    if ($line =~ /^ppt (.*?)\s*$/) {
+      my $pptname = &read_decl_ppt($1);
 
       # extract the variables out of only the EXIT program
       # points. Corresponding ENTER and EXIT invocations must belong to a
@@ -486,36 +486,55 @@ sub read_decls_file ( $ ) {
   }
 }				# read_decls_file
 
-# read a program point declaration in the decls file.
-sub read_decl_ppt () {
+# Returns true if the variable should not be clustered: its value is a
+# class name, an array, or a string.
+sub excluded_var ( $ ) {
+  my ($varname) = @_;
+  return ($varname =~ /\.getClass\(\)/ || $varname =~ /\[\.\.\]/ || $varname =~ /\.toString/);
+}
 
+# read a program point declaration in the decls file.  The "ppt" line,
+# whose argument is the ppt name, has already been read.
+sub read_decl_ppt ( $ ) {
+
+  my ($pptname) = @_;
   my $nvars;			# number of variables at the program point
-  my $pptname = <DECL>;		# the pptname.
-  chomp ($pptname);
 
-  # now read the variable names and types
-  my $varname;
-  while ( defined($varname = <DECL>) && ($varname !~ /^$/) ) {
-    chomp ($varname);
-    my $declared_type = <DECL>;	# "$declared_type" is unused
-    my $rep_type = <DECL>;
+  # The variable being read, its rep type, and whether it is a constant.
+  my ($varname, $rep_type, $is_constant);
 
+  # Records the variable that was just read.
+  my $record_var = sub {
+    if (!defined($varname) || excluded_var($varname)) {
+      return;
+    }
     # If the variable is an Object, keep note of that. Will be ignored (not
     # be clustered) later because its value is a hashcode.
-    if ( $varname !~ /\.class/ && $varname !~ /\[\]/ && $varname !~ /\.toString/) {
-      if ($rep_type =~ /hashcode/) {
-	push @{$pptname_to_objectvars{$pptname}}, $varname;
-	$nvars++;		# added for object
-	$pptname_to_varnames{$pptname}{$varname} = 1;
-      } elsif ( $rep_type =~ /=/) {
-	# definition. do nothing
-      } else {
-	$nvars++;
-	$pptname_to_varnames{$pptname}{$varname} = 1;
-      }
+    if ($rep_type =~ /hashcode/) {
+      push @{$pptname_to_objectvars{$pptname}}, $varname;
+      $nvars++;		# added for object
+      $pptname_to_varnames{$pptname}{$varname} = 1;
+    } elsif ($is_constant) {
+      # definition. do nothing
+    } else {
+      $nvars++;
+      $pptname_to_varnames{$pptname}{$varname} = 1;
     }
-    my $var_comp = <DECL>;  # variable comparability; "$var_comp" is unused
+  };
+
+  # now read the variable names and types
+  my $line;
+  while ( defined($line = <DECL>) && ($line !~ /^\s*$/) ) {
+    if ($line =~ /^\s*variable\s+(.*?)\s*$/) {
+      &$record_var();
+      ($varname, $rep_type, $is_constant) = ($1, "", 0);
+    } elsif ($line =~ /^\s*rep-type\s+(.*?)\s*$/) {
+      $rep_type = $1;
+    } elsif ($line =~ /^\s*constant\s/) {
+      $is_constant = 1;
+    }
   }
+  &$record_var();
   # Store the number of variables at this program point. Remember that
   # @vararray[1] stores the program point name. The invocation nonce is
   # included in @vararray, but is not counted as a variable.

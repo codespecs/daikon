@@ -19,16 +19,33 @@ foreach my $decls_file (@ARGV) {
     open (IN, $decls_file) || die "couldn't open $decls_file for input\n";
     open (OUT, ">$decls_cluster") || die "couldn't open $decls_cluster for output\n";
 
+    # True if the current program point declaration still needs the
+    # cluster variable.  The cluster variable must precede the other
+    # variables, but must follow the ppt-level records such as ppt-type.
+    my $pending = 0;
     while (<IN>) {
 	my $line = $_;
-	print OUT $line;
-	if ($line =~ /:::/) {
-	    print OUT "cluster\n";
-	    print OUT "int\n";
-	    print OUT "int\n";
-	    print OUT "22\n";
+	if ($pending && ($line =~ /^\s*variable\s/ || $line =~ /^\s*$/)) {
+	    print_cluster_var();
+	    $pending = 0;
 	}
+	print OUT $line;
+	if ($line =~ /^ppt /) {
+	    $pending = 1;
+	}
+    }
+    if ($pending) {
+	print_cluster_var();
     }
     close IN;
     close OUT;
+}
+
+# Prints the declaration of the cluster variable.
+sub print_cluster_var {
+    print OUT "  variable cluster\n";
+    print OUT "    var-kind variable\n";
+    print OUT "    dec-type int\n";
+    print OUT "    rep-type int\n";
+    print OUT "    comparability 22\n";
 }
