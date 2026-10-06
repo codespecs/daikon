@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -145,12 +146,6 @@ public class DeclReader {
      */
     public List<String> declHeaderLines = new ArrayList<>();
 
-    /**
-     * If true, retain the text of the declaration and reject input that cannot be faithfully
-     * rewritten; see {@link DeclReader#forRewriting}.
-     */
-    private final boolean forRewriting;
-
     /** Map from variable name to corresponding DeclVarInfo, in declaration order. */
     public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<>();
 
@@ -159,13 +154,10 @@ public class DeclReader {
      *
      * @param name program point name
      * @param filename the file in which this declaration appears
-     * @param forRewriting if true, retain the text of the declaration and reject input that cannot
-     *     be faithfully rewritten
      */
-    public DeclPpt(String name, String filename, boolean forRewriting) {
+    public DeclPpt(String name, String filename) {
       this.name = name;
       this.filename = filename;
-      this.forRewriting = forRewriting;
     }
 
     /**
@@ -173,10 +165,12 @@ public class DeclReader {
      * before the variable name.
      *
      * @param decl_file where to read data from
+     * @param forRewriting if true, retain the text of the declaration and reject input that cannot
+     *     be faithfully rewritten; see {@link DeclReader#forRewriting}
      * @return DeclVarInfo for the program point variable
      * @throws IOException if there is trouble reading the file
      */
-    public DeclVarInfo read_var(EntryReader decl_file) throws IOException {
+    public DeclVarInfo read_var(EntryReader decl_file, boolean forRewriting) throws IOException {
 
       String firstLine = decl_file.readLine();
       if (firstLine == null) {
@@ -191,7 +185,8 @@ public class DeclReader {
         reportFileError(decl_file, "Variable " + varName + " declared twice in ppt " + name);
       }
 
-      List<String> lines = new ArrayList<>();
+      // Avoid allocating a list per variable when the lines are not retained.
+      List<String> lines = forRewriting ? new ArrayList<>() : Collections.emptyList();
       if (forRewriting) {
         lines.add(firstLine);
       }
@@ -412,11 +407,13 @@ public class DeclReader {
       reportFileError(decl_file, "Expected \"ppt <PPTNAME>\", found \"" + firstLine + "\"");
     }
     String pptname = tokens[1];
-    assert pptname.contains(":::");
+    if (!pptname.contains(":::")) {
+      reportFileError(decl_file, "Program point name \"" + pptname + "\" does not contain \":::\"");
+    }
     if (forRewriting && ppts.containsKey(pptname)) {
       reportFileError(decl_file, "Program point " + pptname + " declared twice");
     }
-    DeclPpt ppt = new DeclPpt(pptname, decl_file.getFileName(), forRewriting);
+    DeclPpt ppt = new DeclPpt(pptname, decl_file.getFileName());
     ppts.put(pptname, ppt);
     if (forRewriting) {
       ppt.declHeaderLines.add(firstLine);
@@ -439,7 +436,7 @@ public class DeclReader {
     // are terminated by a blank line.
     while ((line != null) && !line.trim().isEmpty()) {
       decl_file.putback(line);
-      ppt.read_var(decl_file);
+      ppt.read_var(decl_file, forRewriting);
       line = decl_file.readLine();
     }
 

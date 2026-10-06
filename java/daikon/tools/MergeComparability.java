@@ -10,10 +10,12 @@ import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -139,8 +141,32 @@ public final class MergeComparability {
     // does not leave a truncated output file or destroy an existing one.  The temporary file is in
     // the same directory as the output file, so that renaming it does not copy it.  Its name ends
     // with the output file name, so that it is compressed if the output file name ends in ".gz".
-    Path outputPath = Paths.get(outputFilename);
-    Path tempPath = outputPath.resolveSibling(".tmp." + outputPath.getFileName());
+    // Its name is unique, so that it does not clobber another file, such as that of a concurrent
+    // run.
+    Path outputPath = Paths.get(outputFilename).toAbsolutePath();
+    Path outputDir = outputPath.getParent();
+    Path outputName = outputPath.getFileName();
+    if (outputDir == null || outputName == null) {
+      throw new Daikon.UserError("Invalid output file " + outputFilename);
+    }
+    Path tempPath;
+    try {
+      if (FileSystems.getDefault().supportedFileAttributeViews().contains("posix")) {
+        // Files.createTempFile otherwise creates a file that only its owner can read.  These
+        // permissions are restricted by the umask, as for any newly-created file.
+        tempPath =
+            Files.createTempFile(
+                outputDir,
+                ".tmp.",
+                "." + outputName,
+                PosixFilePermissions.asFileAttribute(
+                    PosixFilePermissions.fromString("rw-rw-rw-")));
+      } else {
+        tempPath = Files.createTempFile(outputDir, ".tmp.", "." + outputName);
+      }
+    } catch (IOException e) {
+      throw new Daikon.UserError(e, "Problem creating a temporary file in " + outputDir);
+    }
     boolean moved = false;
     try {
       PrintWriter pw = new PrintWriter(FilesPlume.newBufferedFileWriter(tempPath.toString()));
