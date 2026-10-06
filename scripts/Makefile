@@ -34,6 +34,8 @@ trace-untruncate-fast: trace-untruncate-fast.c
 DOCKERFILE_OSES := ubuntu rockylinux
 DOCKERFILE_JDKS := 11 17 21 25 27
 DOCKERFILES := $(foreach os,${DOCKERFILE_OSES},$(foreach jdk,${DOCKERFILE_JDKS},Dockerfile-${os}-jdk${jdk} Dockerfile-${os}-jdk${jdk}-plus))
+# Remove this line when DOCKERFILE_JDKS no longer contains 11 or 17.
+DOCKERFILES := $(filter-out Dockerfile-rockylinux-jdk11% Dockerfile-rockylinux-jdk17%,${DOCKERFILES})
 
 dockerfiles: ${DOCKERFILES}
 

@@ -38,22 +38,17 @@ typecheck_job_parts(ubuntu, 25, latest)
 typecheck_job_parts(ubuntu, 27, bundled)
 typecheck_job_parts(ubuntu, 27, latest)
 
-quick_job(rockylinux, 11)
 quick_job(rockylinux, 25)
 quick_job(rockylinux, 27)
 
-nonquick_job(rockylinux, 11)
 nonquick_job(rockylinux, 25)
 nonquick_job(rockylinux, 27)
 
-nontxt_job(rockylinux, 11)
 nontxt_job(rockylinux, 25)
 nontxt_job(rockylinux, 27)
 
-misc_job(rockylinux, 11)
 misc_job(rockylinux, 25)
 misc_job(rockylinux, 27)
 
-kvasir_job(rockylinux, 11)
 kvasir_job(rockylinux, 25)
 kvasir_job(rockylinux, 27)

@@ -830,6 +830,7 @@ error-prone: errorprone
 errorprone: compile errorprone-nocompile
 # Some of the -Xep are temporary
 #   -Xep:PatternMatchingInstanceof:OFF  requires Java 17 source code
+#   -Xep:StringConcatToTextBlock:OFF  requires Java 15 source code (text blocks)
 errorprone-nocompile:
 ifneq (${JAVA21}, 1)
 	@echo "Error Prone is only run under Java 21+"
@@ -839,7 +840,7 @@ else
 	javac -cp ${DAIKON_CLASSPATH} \
 	  ${JAVAC_ANNOTATION_PROCESSOR_ARGS} \
 	  -XDcompilePolicy=simple -processorpath ${ERRORPRONE_PROCESSOR_PATH} \
-	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:ExtendsObject:OFF -Xep:PatternMatchingInstanceof:OFF -Xep:StatementSwitchToExpressionSwitch:OFF' \
+	  '-Xplugin:ErrorProne -Xep:ReferenceEquality:OFF -Xep:StringSplitter:OFF -Xep:AnnotateFormatMethod:OFF -Xep:MutablePublicArray:OFF -Xep:DoNotCallSuggester:OFF -Xep:InlineMeSuggester:OFF -Xep:CanIgnoreReturnValueSuggester:OFF -Xep:ExtendsObject:OFF -Xep:PatternMatchingInstanceof:OFF -Xep:StatementSwitchToExpressionSwitch:OFF -Xep:StringConcatToTextBlock:OFF' \
 	  -Xmaxwarns 100000 \
 	  -Werror \
 	  ${extra-error-prone-args-1} \
