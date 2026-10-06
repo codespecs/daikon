@@ -173,19 +173,15 @@ public final class SplitDtrace {
   }
 
   /**
-   * Returns true if the given record is a file header record, such as "decl-version" or
-   * "var-comparability", rather than a declaration or a sample.
+   * Returns true if the given record is a file header record, such as a comment or "decl-version",
+   * rather than a declaration or a sample.
    *
    * @param res the lines of a record from a .decls or .dtrace file
    * @return true if the given record is a file header record
    */
   @Pure
   static boolean isHeader(List<String> res) {
-    String first = res.get(0);
-    return first.startsWith("decl-version")
-        || first.startsWith("var-comparability")
-        || first.startsWith("input-language")
-        || first.equals("ListImplementors");
+    return FileIO.is_header_record(res.get(0));
   }
 
   /**

@@ -340,13 +340,12 @@ public final class FileIO {
 
     // process the ppt record
     String line = top_line;
-    Scanner scanner = new Scanner(line);
-    @Interned String record_name = need(state, scanner, "'ppt'");
-    if (record_name != "ppt") { // interned
-      decl_error(state, "found '%s' where 'ppt' expected", record_name);
+    String ppt_name = declared_ppt_name(line);
+    if (ppt_name == null) {
+      decl_error(state, "ppt name expected in '%s'", line);
+      throw new Error(); // this can't happen
     }
-    String ppt_name = need(state, scanner, "ppt name");
-    ppt_name = user_mod_ppt_name(ppt_name);
+    Scanner scanner;
 
     // Information that will populate the new program point.
     Map<String, VarDefinition> varmap = new LinkedHashMap<>();
@@ -2273,9 +2272,13 @@ public final class FileIO {
    * @return true if the ppt name is for a GLOBAL, OBJECT, or CLASS ppt
    */
   public static boolean is_parent_only_ppt_name(String ppt_name) {
-    return ppt_name.indexOf(global_suffix) != -1
-        || ppt_name.endsWith(object_tag)
-        || ppt_name.endsWith(class_static_tag);
+    if (!ppt_name.contains(ppt_tag_separator)) {
+      return false;
+    }
+    PptName pptName = new PptName(ppt_name);
+    return pptName.isGlobalPoint()
+        || pptName.isObjectInstanceSynthetic()
+        || pptName.isClassStaticSynthetic();
   }
 
   /**
@@ -2835,6 +2838,23 @@ public final class FileIO {
       msg = msg.substring(5);
     }
     throw new Daikon.UserError(cause, msg);
+  }
+
+  /**
+   * Returns true if the line starts a header record: a record that is neither a ppt declaration nor
+   * a sample, such as a comment or a "decl-version" record. Such records are handled by {@link
+   * #read_data_trace_record}.
+   *
+   * @param line the first line of a record in a .decls or .dtrace file
+   * @return true if the line starts a header record
+   */
+  @Pure
+  public static boolean is_header_record(String line) {
+    return isComment(line)
+        || line.startsWith("decl-version")
+        || line.startsWith("var-comparability")
+        || line.startsWith("input-language")
+        || line.equals("ListImplementors");
   }
 
   /** Returns true if the line is the start of a ppt declaration. */

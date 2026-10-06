@@ -3536,8 +3536,8 @@ variables (@pxref{Variable names,,,daikon,Daikon User Manual}).
 Here are portions of two files @file{StackArTester.decls} and
 @file{StackArTester.dtrace}, for a Java class that implements a stack of
 integers using an array as the underlying data structure.  You can see
-many more examples by simply running an existing front end on some Java,
-C, or Perl programs and viewing the resulting files.
+many more examples by simply running an existing front end on some Java
+or C programs and viewing the resulting files.
 
 @menu
 * Example declaration file::
