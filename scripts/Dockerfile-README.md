@@ -5,10 +5,7 @@ running tests reproducibly.
 
 The Dockerfiles are generated from `Dockerfile-*.m4`.
 To regenerate them, run `make dockerfiles`.
-The JDK versions for each OS are listed in variables `DOCKERFILE_JDKS_ubuntu`
-and `DOCKERFILE_JDKS_rockylinux` in `Makefile`.
-When you change them, also change the list of `create_upload_docker_image`
-commands below.
+The JDK versions are listed in variable `DOCKERFILE_JDKS` in `Makefile`.
 If a JDK version is not yet available as an OS package, edit `jdk_packaged`
 and `jdk_download_url` in `Dockerfile-defs.m4`.
 
@@ -89,6 +86,10 @@ create_upload_docker_image daikon ubuntu jdk25 && \
 create_upload_docker_image daikon ubuntu jdk25-plus && \
 create_upload_docker_image daikon ubuntu jdk27 && \
 create_upload_docker_image daikon ubuntu jdk27-plus && \
+create_upload_docker_image daikon rockylinux jdk11 && \
+create_upload_docker_image daikon rockylinux jdk11-plus && \
+create_upload_docker_image daikon rockylinux jdk17 && \
+create_upload_docker_image daikon rockylinux jdk17-plus && \
 create_upload_docker_image daikon rockylinux jdk21 && \
 create_upload_docker_image daikon rockylinux jdk21-plus && \
 create_upload_docker_image daikon rockylinux jdk25 && \
