@@ -8,6 +8,7 @@ import daikon.split.PptSplitter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -691,25 +692,23 @@ public class PptRelation implements Serializable {
    * remove it from the children list of non-leaves. This doesn't seem like the best solution.
    *
    * @param ppt the ppt whose conditional ppts to connect
+   * @return the relations that were created
    */
-  private static void connect_conditionals(PptTopLevel ppt) {
+  private static List<PptRelation> connect_conditionals(PptTopLevel ppt) {
     if (!ppt.has_splitters()) {
-      return;
+      return Collections.emptyList();
     }
     assert ppt.splitters != null; // guaranteed by call to has_splitters
+    List<PptRelation> result = new ArrayList<>();
     PptSplitter ppt_split = ppt.splitters.get(0);
     for (int ii = 0; ii < ppt_split.ppts.length; ii++) {
       PptRelation rel = newPptPptConditional(ppt, ppt_split.ppts[ii]);
-      debug.fine(
-          " -- Connected down to ppt conditional "
-              + ppt_split.ppts[ii].name()
-              + " with connections ["
-              + rel.parent_to_child_var_string()
-              + "]");
+      result.add(rel);
       if (!ppt.is_dataflow_leaf()) {
         ppt.children.remove(rel);
       }
     }
+    return result;
   }
 
   /**
@@ -945,7 +944,14 @@ public class PptRelation implements Serializable {
           }
         }
       }
-      connect_conditionals(ppt);
+      for (PptRelation cond_rel : connect_conditionals(ppt)) {
+        debug.fine(
+            " -- Connected down to ppt conditional "
+                + cond_rel.child.name()
+                + " with connections ["
+                + cond_rel.parent_to_child_var_string()
+                + "]");
+      }
     }
 
     finish_hierarchy(all_ppts);
@@ -1004,7 +1010,7 @@ public class PptRelation implements Serializable {
         }
       }
 
-      connect_conditionals(ppt);
+      rels.addAll(connect_conditionals(ppt));
       // Debug print the created relations
       for (PptRelation rel : rels) {
         debug.fine(

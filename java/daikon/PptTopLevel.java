@@ -436,46 +436,47 @@ public class PptTopLevel extends Ppt {
 
   /**
    * Returns the type that a program point with the given name and declared type should have. A
-   * program point declared with type {@link PptType#EXIT} or with the default type {@link
-   * PptType#POINT} gets its type from its name: a combined exit point such as foo:::EXIT is an
-   * {@link PptType#EXIT}, a numbered exit point such as foo:::EXIT22 is a {@link PptType#SUBEXIT},
-   * and any other program point is a generic {@link PptType#POINT}. (Some front ends declare a
-   * numbered exit with type {@link PptType#EXIT}, and a version 2 decls file may omit the type.)
-   * As a result, the predicates is_subexit, is_combined_exit, is_dataflow_leaf, etc. agree with one
-   * another and with the program point's name.
+   * program point that has no declared type (as in a version 1 decls file), or that is declared
+   * with type {@link PptType#EXIT} or with the default type {@link PptType#POINT}, gets its type
+   * from its name:
+   *
+   * <ul>
+   *   <li>foo:::ENTER is an {@link PptType#ENTER},
+   *   <li>a combined exit point such as foo:::EXIT is an {@link PptType#EXIT},
+   *   <li>a numbered exit point such as foo:::EXIT22 is a {@link PptType#SUBEXIT},
+   *   <li>Foo:::OBJECT is an {@link PptType#OBJECT},
+   *   <li>Foo:::CLASS is a {@link PptType#CLASS}, and
+   *   <li>any other program point is a generic {@link PptType#POINT}.
+   * </ul>
+   *
+   * (Some front ends declare a numbered exit with type {@link PptType#EXIT}, and a version 2 decls
+   * file may omit the type.) As a result, the predicates is_subexit, is_combined_exit,
+   * is_dataflow_leaf, etc. agree with one another and with the program point's name.
    *
    * @param ppt_name the name of the program point
-   * @param type the declared type of the program point
+   * @param type the declared type of the program point, or null if none was declared
    * @return the type that the program point should have
    */
-  private static PptType normalize_type(PptName ppt_name, PptType type) {
-    if (type != PptType.EXIT && type != PptType.POINT) {
+  private static PptType normalize_type(PptName ppt_name, @Nullable PptType type) {
+    if (type != null && type != PptType.EXIT && type != PptType.POINT) {
       return type;
+    }
+    if (ppt_name.isEnterPoint()) {
+      return PptType.ENTER;
     }
     if (ppt_name.isCombinedExitPoint()) {
       return PptType.EXIT;
     }
-    if (isExitWithLineNumber(ppt_name)) {
+    if (ppt_name.isExitWithLineNumber()) {
       return PptType.SUBEXIT;
     }
-    return PptType.POINT;
-  }
-
-  /**
-   * Returns true if the program point's name ends with ":::EXIT" followed by one or more digits,
-   * such as foo:::EXIT22. {@link PptName#isNumberedExitPoint} is not used because it is also true
-   * for names such as foo:::EXIT_CONDITION.
-   *
-   * @param ppt_name the name of a program point
-   * @return true if the name is that of a numbered exit point
-   */
-  private static boolean isExitWithLineNumber(PptName ppt_name) {
-    String point = ppt_name.getPoint();
-    if (point == null || !point.startsWith(FileIO.exit_suffix)) {
-      return false;
+    if (ppt_name.isObjectInstanceSynthetic()) {
+      return PptType.OBJECT;
     }
-    String line = point.substring(FileIO.exit_suffix.length());
-    return !line.isEmpty() && line.chars().allMatch(Character::isDigit);
+    if (ppt_name.isClassStaticSynthetic()) {
+      return PptType.CLASS;
+    }
+    return PptType.POINT;
   }
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
@@ -485,6 +486,7 @@ public class PptTopLevel extends Ppt {
     super(var_infos);
     this.name = name;
     ppt_name = new PptName(name);
+    type = normalize_type(ppt_name, null);
     init_vars();
   }
 
@@ -4181,8 +4183,8 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Creates the initial equality view for this ppt, in which all variables are in a single
-   * equality set.
+   * Creates the initial equality view for this ppt, in which all variables are in a single equality
+   * set.
    */
   public void create_equality_view() {
     PptSliceEquality new_equality_view = new PptSliceEquality(this);
@@ -4701,11 +4703,7 @@ public class PptTopLevel extends Ppt {
   /** Is this is an exit ppt (combined or specific)? */
   @Pure
   public boolean is_exit() {
-    if (type != null) {
-      return (type == PptType.EXIT) || (type == PptType.SUBEXIT);
-    } else {
-      return ppt_name.isExitPoint();
-    }
+    return (type == PptType.EXIT) || (type == PptType.SUBEXIT);
   }
 
   /**
@@ -4715,76 +4713,49 @@ public class PptTopLevel extends Ppt {
    */
   @Pure
   public boolean is_enter() {
-    if (type != null) {
-      return (type == PptType.ENTER);
-    } else {
-      return ppt_name.isEnterPoint();
-    }
+    return type == PptType.ENTER;
   }
 
   /** Is this a combined exit point? */
   @Pure
   public boolean is_combined_exit() {
-    if (type != null) {
-      return (type == PptType.EXIT);
-    } else {
-      return ppt_name.isCombinedExitPoint();
-    }
+    return type == PptType.EXIT;
   }
 
   /** Is this a numbered (specific) exit point? */
   @Pure
   public boolean is_subexit() {
-    if (type != null) {
-      return (type == PptType.SUBEXIT);
-    } else {
-      return ppt_name.isExitPoint() && !ppt_name.isCombinedExitPoint();
-    }
+    return type == PptType.SUBEXIT;
   }
 
   /**
    * Returns true if this is a leaf of the dataflow hierarchy, which obtains its invariants directly
    * from samples rather than by merging them from its children.
    *
-   * <p>If the ppt has a type (as every ppt read from a version 2 decls file does), the type
-   * determines the result and the name is irrelevant: the leaves are the numbered exit points
-   * ({@link PptType#SUBEXIT}) and the general program points ({@link PptType#POINT}, which is the
-   * default type in a version 2 decls file). Otherwise, the name determines the result: the leaves
-   * are all program points except :::EXIT (combined), :::ENTER, :::THROWS, :::OBJECT, :::CLASS, and
-   * :::GLOBAL program points. This ensures that arbitrarily named program points such as :::POINT
-   * (used by convertcsv.pl) are leaves.
+   * <p>The leaves are the numbered exit points ({@link PptType#SUBEXIT}) and the general program
+   * points ({@link PptType#POINT}), except for :::THROWS and :::GLOBAL program points, which have
+   * no type of their own. This ensures that arbitrarily named program points such as :::POINT (used
+   * by convertcsv.pl) are leaves.
    *
    * @return true if this is a leaf of the dataflow hierarchy
    */
   @Pure
   public boolean is_dataflow_leaf() {
-    if (type != null) {
-      return (type == PptType.SUBEXIT) || (type == PptType.POINT);
-    } else {
-      return !(ppt_name.isCombinedExitPoint()
-          || ppt_name.isEnterPoint()
-          || ppt_name.isObjectInstanceSynthetic()
-          || ppt_name.isClassStaticSynthetic()
-          || ppt_name.isThrowsPoint()
-          || ppt_name.isGlobalPoint());
-    }
+    return ((type == PptType.SUBEXIT) || (type == PptType.POINT))
+        && !ppt_name.isThrowsPoint()
+        && !ppt_name.isGlobalPoint();
   }
 
   /** Is this a ppt that represents an object? */
   @Pure
   public boolean is_object() {
-    if (type != null) {
-      return (type == PptType.OBJECT);
-    } else {
-      return ppt_name.isObjectInstanceSynthetic();
-    }
+    return type == PptType.OBJECT;
   }
 
   /** Is this a ppt that represents a class? */
-  @EnsuresNonNullIf(result = true, expression = "type")
   @Pure
   public boolean is_class() {
-    return (type != null && type == PptType.CLASS);
+    return type == PptType.CLASS;
   }
 
   public String var_names() {
