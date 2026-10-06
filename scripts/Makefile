@@ -33,7 +33,6 @@ trace-untruncate-fast: trace-untruncate-fast.c
 
 DOCKERFILE_OSES := ubuntu rockylinux
 DOCKERFILE_JDKS_ubuntu := 11 17 21 25 27
-# Rocky Linux 10 provides no JDK 11 or JDK 17 packages.
 DOCKERFILE_JDKS_rockylinux := 21 25 27
 DOCKERFILES := $(foreach os,${DOCKERFILE_OSES},$(foreach jdk,${DOCKERFILE_JDKS_${os}},Dockerfile-${os}-jdk${jdk} Dockerfile-${os}-jdk${jdk}-plus))
 
@@ -55,18 +54,24 @@ ${DOCKERFILES}: Dockerfile-%: Dockerfile-defs.m4 $(addsuffix .m4,$(addprefix Doc
 #   make docker-image-ubuntu-jdk21-plus
 # To build images named "...-testing", run:
 #   make docker-images DOCKERTESTING=-testing
-# and also update the value of `docker_testing` in file ../.azure/defs-common.m4 .
+# and also update the value of `docker_testing` in file ../.azure/defs-common.m4
+# and regenerate the CI configuration files (see Dockerfile-README.md).
 DOCKERTESTING ?=
+# Must match `docker_userid` in file ../.azure/defs-common.m4 .
+DOCKER_USERID := mdernst
+# The stem $* is, for example, "ubuntu-jdk21" or "ubuntu-jdk21-plus".
+DOCKER_IMAGE = ${DOCKER_USERID}/daikon-$*${DOCKERTESTING}
 DOCKER_IMAGES := $(patsubst Dockerfile-%,docker-image-%,${DOCKERFILES})
 .PHONY: docker-images ${DOCKER_IMAGES}
 docker-images: ${DOCKER_IMAGES}
 
 # The Dockerfiles copy no files into the image, so build with no context.
 ${DOCKER_IMAGES}: docker-image-%: Dockerfile-%
-	@echo "***** Starting mdernst/daikon-$*${DOCKERTESTING} *****"
-	docker -l warn build --rm=false --progress=plain -t mdernst/daikon-$*${DOCKERTESTING} - < $<
-	docker -l warn push --quiet mdernst/daikon-$*${DOCKERTESTING}
-	@echo "***** Success for mdernst/daikon-$*${DOCKERTESTING} *****"
+	@echo "***** Starting ${DOCKER_IMAGE} *****"
+	docker -l warn build --rm=false --progress=plain -t ${DOCKER_IMAGE} - < $< \
+	  && docker -l warn push --quiet ${DOCKER_IMAGE} \
+	  || { echo "***** FAILURE in ${DOCKER_IMAGE} *****"; exit 1; }
+	@echo "***** Success for ${DOCKER_IMAGE} *****"
 
 ## Delegation to other Makefiles (gross)
 

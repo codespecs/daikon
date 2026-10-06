@@ -181,7 +181,7 @@ Before compiling Daikon, you need to install some dependencies (that is,
 software used to build Daikon).  For
 @uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-rockylinux-jdk21-plus,
 ,Rocky Linux} and
-@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-ubuntu-jdk17-plus,
+@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-ubuntu-jdk21-plus,
 , Ubuntu}, you can
 find the commands to install these dependencies in file
 @file{$@{DAIKONDIR@}/scripts/Dockerfile-@emph{OSNAME}-jdk@emph{N}-plus}.

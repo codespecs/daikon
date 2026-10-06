@@ -63,5 +63,10 @@ make docker-image-ubuntu-jdk21-plus
 ```
 
 To create images named `mdernst/daikon-*-testing`, pass
-`DOCKERTESTING=-testing` to `make`, and also update the value of
-`docker_testing` in file `.azure/defs-common.m4`.
+`DOCKERTESTING=-testing` to `make`.  To make CI use those images, update the
+value of `docker_testing` in file `.azure/defs-common.m4`, then regenerate
+the CI configuration files by running, from the top-level directory:
+
+```sh
+make -C .azure && make -C .circleci && make -C .github/workflows
+```
