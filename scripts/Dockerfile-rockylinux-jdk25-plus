@@ -3,7 +3,7 @@
 # But it's used primarily for running miscellaneous tests such as the manual
 # and Javadoc.
 
-FROM rockylinux:9
+FROM rockylinux/rockylinux:10
 LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
 
 # According to
@@ -11,9 +11,10 @@ LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>
 #  * Put "apt-get update" and "apt-get install" in the same RUN command.
 #  * Do not run "apt-get upgrade"; instead get upstream to update.
 
-# The EPEL repository contains certain packages.
+# The EPEL and CRB repositories contain certain packages.
 RUN dnf -q -y upgrade && dnf -q -y install \
-  epel-release
+  epel-release \
+&& crb enable
 
 # curl is installed by default on Rocky Linux.
 RUN dnf -q -y upgrade && dnf -q -y install \
@@ -49,8 +50,7 @@ ENV JAVA25_HOME=/usr/lib/jvm/java-25-openjdk
 # && tar xzf jdk-25_linux-x64_bin.tar.gz
 # ENV PATH="/jdk-25/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 # ENV JAVA25_HOME=/jdk-25
-# RUN chmod og+rx /root \
-# && chmod og+r /root/*
+# RUN chmod og+rx /root
 
 RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \
@@ -76,10 +76,7 @@ RUN wget -q https://services.gradle.org/distributions/gradle-9.8.0-bin.zip \
 && rm gradle-9.8.0-bin.zip
 ENV PATH=$PATH:/opt/gradle/gradle-9.8.0/bin
 
-# Alternately, run: dnf --enablerepo=crb install PACKAGENAME
-RUN dnf config-manager --set-enabled crb \
-&& dnf -y install \
-  dnf-plugins-core \
+RUN dnf -y install \
   texinfo \
   texinfo-tex
 
