@@ -14,6 +14,7 @@ m4_dnl jdk_packaged_ubuntu expands to 1 if Ubuntu provides the openjdk-JDKVER-jd
 m4_dnl and to 0 otherwise.  When it is 0, the JDK is downloaded from jdk_download_url.
 m4_define([[jdk_packaged_ubuntu]], [[m4_eval(JDKVER <= ubuntu_newest_packaged_jdk)]])m4_dnl
 m4_dnl rockylinux_packaged_jdks lists the JDKs that Rocky Linux provides as OS packages.
+m4_dnl Dockerfile-README.md gives a command that lists them.
 m4_dnl Do not list a JDK just because dnf can install java-NN-openjdk:  if Rocky Linux does not
 m4_dnl package JDK NN, then dnf satisfies java-NN-openjdk with EPEL's java-latest-openjdk, which
 m4_dnl moves to a newer JDK whenever the image is rebuilt.
@@ -27,7 +28,7 @@ m4_dnl It is used only when the OS does not package JDKVER.  If m4 reports that 
 m4_dnl add one for JDKVER below.
 m4_define([[jdk_download_url]], [[m4_ifelse(JDKVER, 27,
   [[https://download.java.net/java/GA/jdk27/55ce5470a6294008af0057ff4626d0e5/35/GPL/openjdk-27_linux-x64_bin.tar.gz]],
-  [[m4_errprint(m4___file__[[: no jdk_download_url for JDK ]]JDKVER
+  [[m4_errprint([[Dockerfile-defs.m4: no jdk_download_url for JDK ]]JDKVER
 )m4_m4exit(1)]])]])m4_dnl
 m4_dnl if_plus(TEXT) expands to TEXT for a "-plus" image, and to nothing otherwise.
 m4_define([[if_plus]], [[m4_ifelse(PLUS, 1, [[$1]])]])m4_dnl

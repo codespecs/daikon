@@ -50,7 +50,8 @@ m4_ifelse(jdk_packaged_ubuntu, 1, [[RUN export DEBIAN_FRONTEND=noninteractive \
   openjdk-JDKVER-jdk \
 && update-java-alternatives --set java-1.JDKVER.0-openjdk-amd64
 m4_ifelse(jdk_at_least(25), 1, [[ENV JAVA[[]]JDKVER[[]]_HOME=/usr/lib/jvm/java-JDKVER-openjdk-amd64
-]])]], [[# The openjdk-JDKVER-jdk package does not yet exist, so download the JDK.
+]])]], [[# JDK JDKVER is newer than ubuntu[[]]_newest_packaged_jdk in Dockerfile-defs.m4, so
+# download the JDK rather than installing openjdk-JDKVER-jdk with apt-get.
 RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \
 && tar xzf jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
 && rm jdk-JDKVER[[]]_linux-x64_bin.tar.gz
