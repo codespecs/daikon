@@ -216,6 +216,32 @@ public class MergeComparabilityTest {
     assertEquals(expected(ppt("-1", "1")), merge(file(ppt("3[4]", "2")), file(ppt(null, "2"))));
   }
 
+  /**
+   * A scalar negative comparability on an array variable is comparable to everything, so the output
+   * of merging can itself be merged with DynComp output.
+   */
+  @Test
+  public void testScalarNegativeArrayComparability() {
+    assertEquals(expected(ppt("-1", "1")), merge(file(ppt("-1", "2")), file(ppt("3[4]", "2"))));
+    assertEquals(expected(ppt("-1", "1")), merge(file(ppt("3[4]", "2")), file(ppt("-1", "2"))));
+  }
+
+  /** A negative component of an array comparability is negative in the output. */
+  @Test
+  public void testNegativeArrayComponent() {
+    assertEquals(
+        expected(ppt("1[-1]", "2")), merge(file(ppt("5[-1]", "3")), file(ppt("5[6]", "3"))));
+  }
+
+  /**
+   * A chain of comparabilities does not pass through a variable that is comparable to everything.
+   */
+  @Test
+  public void testNoChainThroughUniversal() {
+    assertEquals(
+        expected(ppt("1", "-1", "2")), merge(file(ppt("1", "1", "2")), file(ppt("1", "-1", "2"))));
+  }
+
   /** A program point that appears in only one file is included in the output. */
   @Test
   public void testDisjointPpts() {
@@ -326,6 +352,16 @@ public class MergeComparabilityTest {
     merge(a, c);
   }
 
+  /** The order of flags in a flags record does not prevent merging. */
+  @Test
+  public void testFlagsOrder() {
+    List<String> a = new ArrayList<>(file(ppt("1", "1")));
+    a.add(a.indexOf("variable b"), "  flags is_param nomod");
+    List<String> b = new ArrayList<>(file(ppt("1", "1")));
+    b.add(b.indexOf("variable b"), "  flags nomod is_param");
+    merge(a, b);
+  }
+
   /** Program points with different ppt-level records cannot be merged. */
   @Test
   public void testMismatchedPptRecords() {
@@ -353,6 +389,41 @@ public class MergeComparabilityTest {
     assertEquals("3", castNonNull(var.get_comparability()));
     assertEquals(Collections.emptyList(), ppt.declHeaderLines);
     assertEquals(Collections.emptyList(), var.lines);
+  }
+
+  /** A rewriting DeclReader rejects a variable declared twice and multiple comparabilities. */
+  @Test
+  public void testDuplicateVariableAndComparability() {
+    List<String> twice = new ArrayList<>(file(ppt("1")));
+    twice.addAll(twice.size() - 1, var("a", "2"));
+    assertThrows(Daikon.UserError.class, () -> parse("a", twice));
+    List<String> twoComparabilities = new ArrayList<>(file(ppt("1")));
+    twoComparabilities.add(twoComparabilities.size() - 1, "  comparability 2");
+    assertThrows(Daikon.UserError.class, () -> parse("a", twoComparabilities));
+  }
+
+  /**
+   * A DeclReader that is not for rewriting allows a variable declared twice and multiple
+   * comparabilities; the last one wins.
+   */
+  @Test
+  public void testDuplicateVariableAndComparabilityNotForRewriting() {
+    List<String> twice = new ArrayList<>(file(ppt("1")));
+    twice.addAll(twice.size() - 1, var("a", "2"));
+    twice.add(twice.size() - 1, "  comparability 3");
+    DeclReader reader = parse("a", twice, false);
+    DeclReader.DeclPpt ppt = castNonNull(reader.find_ppt("C.m():::ENTER"));
+    DeclReader.DeclVarInfo var = castNonNull(ppt.find_var("a"));
+    assertEquals("3", castNonNull(var.get_comparability()));
+  }
+
+  /** A DeclReader that is not for rewriting skips a sample record for a variable named "ppt". */
+  @Test
+  public void testSampleVariableNamedPpt() {
+    List<String> lines = new ArrayList<>(file(ppt("1")));
+    lines.addAll(Arrays.asList("C.m():::ENTER", "this_invocation_nonce", "0", "ppt", "3", "1", ""));
+    DeclReader reader = parse("a", lines, false);
+    assertEquals(1, reader.ppts.size());
   }
 
   /** A malformed comparability is reported as a user error. */

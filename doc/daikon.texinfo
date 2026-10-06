@@ -7606,6 +7606,16 @@ chain of such comparabilities.  For example, if variables @code{x} and
 comparable in another run, then @code{x}, @code{y}, and @code{z} are all
 comparable in the output.
 
+A variable that is comparable to everything in any input file (because
+its comparability is a negative number such as @code{-1}, or because it
+has no @code{comparability} record) is comparable to everything in the
+output.  Likewise, the element or index part of an array comparability
+that is negative in any input file is negative in the output.  A chain
+of comparabilities does not pass through such a variable or part:  if
+@code{x} and @code{y} are comparable in one run, and @code{y} is
+comparable to everything in another run, then @code{x} is not thereby
+made comparable to other variables.
+
 A program point that appears in only some of the input files (for
 example, because it was executed in only some of the runs) appears in
 the output.  A program point that appears in multiple input files must

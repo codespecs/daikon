@@ -34,11 +34,12 @@ public class DeclReader {
   /**
    * If true, this reader retains the text of every declaration, and it rejects input that cannot be
    * faithfully rewritten: a file that is not a version 2.0 declaration file, records (such as
-   * sample records in a .dtrace file) that are neither header records nor declarations, and a
-   * program point that is declared more than once.
+   * sample records in a .dtrace file) that are neither header records nor declarations, a program
+   * point that is declared more than once, a variable that is declared more than once in a program
+   * point, and a variable with more than one comparability record.
    *
    * <p>If false, this reader skips everything other than program point declarations, and a later
-   * declaration of a program point replaces an earlier one.
+   * declaration of a program point, of a variable, or of a comparability replaces an earlier one.
    */
   private final boolean forRewriting;
 
@@ -54,10 +55,6 @@ public class DeclReader {
   /** Information about variables within a program point. */
   public static class DeclVarInfo {
     public String name;
-
-    /** The variable kind, such as "variable" or "field f"; null if there is no var-kind record. */
-    public @Nullable String var_kind;
-
     public String type;
     public String rep_type;
 
@@ -82,7 +79,6 @@ public class DeclReader {
      * Creates a new DeclVarInfo.
      *
      * @param name the variable name
-     * @param var_kind the variable kind, or null
      * @param type the declared type
      * @param rep_type the representation type
      * @param comparability the comparability, or null
@@ -92,7 +88,6 @@ public class DeclReader {
      */
     public DeclVarInfo(
         String name,
-        @Nullable String var_kind,
         String type,
         String rep_type,
         @Nullable String comparability,
@@ -100,7 +95,6 @@ public class DeclReader {
         List<String> lines,
         int comparabilityLine) {
       this.name = name;
-      this.var_kind = var_kind;
       this.type = type;
       this.rep_type = rep_type;
       this.comparability = comparability;
@@ -151,8 +145,11 @@ public class DeclReader {
      */
     public List<String> declHeaderLines = new ArrayList<>();
 
-    /** If true, retain the text of the declaration. */
-    private final boolean retainLines;
+    /**
+     * If true, retain the text of the declaration and reject input that cannot be faithfully
+     * rewritten; see {@link DeclReader#forRewriting}.
+     */
+    private final boolean forRewriting;
 
     /** Map from variable name to corresponding DeclVarInfo, in declaration order. */
     public HashMap<String, DeclVarInfo> vars = new LinkedHashMap<>();
@@ -162,12 +159,13 @@ public class DeclReader {
      *
      * @param name program point name
      * @param filename the file in which this declaration appears
-     * @param retainLines if true, retain the text of the declaration
+     * @param forRewriting if true, retain the text of the declaration and reject input that cannot
+     *     be faithfully rewritten
      */
-    public DeclPpt(String name, String filename, boolean retainLines) {
+    public DeclPpt(String name, String filename, boolean forRewriting) {
       this.name = name;
       this.filename = filename;
-      this.retainLines = retainLines;
+      this.forRewriting = forRewriting;
     }
 
     /**
@@ -189,15 +187,14 @@ public class DeclReader {
         reportFileError(decl_file, "Expected \"variable <VARNAME>\", found \"" + firstLine + "\"");
       }
       String varName = scanner.next();
-      if (vars.containsKey(varName)) {
+      if (forRewriting && vars.containsKey(varName)) {
         reportFileError(decl_file, "Variable " + varName + " declared twice in ppt " + name);
       }
 
       List<String> lines = new ArrayList<>();
-      if (retainLines) {
+      if (forRewriting) {
         lines.add(firstLine);
       }
-      String var_kind = null;
       String type = null;
       String rep_type = null;
       String comparability = null;
@@ -211,17 +208,12 @@ public class DeclReader {
         if (keyword.equals("variable")) {
           break;
         }
-        if (retainLines) {
+        if (forRewriting) {
           lines.add(record);
         }
         // The record without its keyword, with each run of whitespace replaced by a single space.
         String value = String.join(" ", Arrays.asList(tokens).subList(1, tokens.length));
-        if (keyword.equals("var-kind")) {
-          if (value.isEmpty()) {
-            reportFileError(decl_file, "\"var-kind\" not followed by a kind");
-          }
-          var_kind = value;
-        } else if (keyword.equals("dec-type")) {
+        if (keyword.equals("dec-type")) {
           if (value.isEmpty()) {
             reportFileError(decl_file, "\"dec-type\" not followed by a type");
           }
@@ -232,14 +224,14 @@ public class DeclReader {
           }
           rep_type = value;
         } else if (keyword.equals("comparability")) {
-          if (comparabilityLine != -1) {
+          if (forRewriting && comparability != null) {
             reportFileError(decl_file, "Multiple comparability records for variable " + varName);
           }
           if (tokens.length != 2) {
             reportFileError(decl_file, "Malformed comparability record \"" + record.trim() + "\"");
           }
           comparability = tokens[1];
-          if (retainLines) {
+          if (forRewriting) {
             comparabilityLine = lines.size() - 1;
           }
         }
@@ -264,7 +256,6 @@ public class DeclReader {
       DeclVarInfo var =
           new DeclVarInfo(
               varName.intern(),
-              var_kind,
               type.intern(),
               rep_type.intern(),
               (comparability == null) ? null : comparability.intern(),
@@ -366,7 +357,9 @@ public class DeclReader {
         if (keyword.isEmpty()) {
           continue;
         }
-        if (keyword.equals("ppt")) {
+        // In a .dtrace file, a line that is exactly "ppt" is the name of a variable in a sample
+        // record.  A rewriting reader rejects it in read_decl.
+        if (keyword.equals("ppt") && (tokens.length > 1 || forRewriting)) {
           if (forRewriting && !seenVersion2) {
             reportFileError(decl_file, "Program point declaration precedes \"decl-version 2.0\"");
           }

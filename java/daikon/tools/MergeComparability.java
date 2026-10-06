@@ -15,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -33,8 +34,15 @@ import org.plumelib.util.StringsPlume;
  * <p>Two variables at a program point are comparable in the output if they are comparable in any of
  * the input files, or if they are related by a chain of such comparabilities. That is, the
  * comparability sets of the output are the finest partition that is coarser than the partition in
- * every input file. A variable whose comparability is negative (meaning that it is comparable to
- * every other variable) in any input file has a negative comparability in the output.
+ * every input file.
+ *
+ * <p>A variable that is comparable to everything in any input file, because it has a scalar
+ * negative comparability such as "-1" or has no comparability record, is comparable to everything
+ * in the output. Likewise, a component of an array comparability (the element or an index) that is
+ * negative in any input file is negative in the output. A chain of comparabilities does not pass
+ * through a variable or component that is comparable to everything: if x and y are comparable in
+ * one input file and y is comparable to everything in another, then x does not thereby become
+ * comparable to other variables.
  *
  * <p>A program point that appears in only some of the input files appears in the output. (For
  * example, DynComp produces no declaration for a program point that was never executed.) A program
@@ -275,8 +283,9 @@ public final class MergeComparability {
       int v = 0;
       for (DeclVarInfo var : template.vars.values()) {
         int[] comparability = merged[v++];
-        // A variable with no comparability record is comparable to everything, so its merged
-        // comparability is negative and there is no need to add a record.
+        // If the template has no comparability record for the variable, then the variable is
+        // comparable to everything, so its merged comparability is negative and there is no need to
+        // add a record.
         for (int j = 0; j < var.lines.size(); j++) {
           if (j == var.comparabilityLine) {
             String line = var.lines.get(j);
@@ -309,7 +318,8 @@ public final class MergeComparability {
 
   /**
    * Returns the records of a declaration other than its first line and its comparability record,
-   * with whitespace normalized, in sorted order.
+   * with whitespace normalized, in sorted order. The flags in a "flags" record are also sorted,
+   * because their order is not significant.
    *
    * @param lines the lines of a declaration
    * @param comparabilityLine the index in {@code lines} of the comparability record, or -1
@@ -319,7 +329,11 @@ public final class MergeComparability {
     List<String> result = new ArrayList<>(lines.size());
     for (int j = 1; j < lines.size(); j++) {
       if (j != comparabilityLine) {
-        result.add(String.join(" ", DeclReader.tokenize(lines.get(j))));
+        String[] tokens = DeclReader.tokenize(lines.get(j));
+        if (tokens[0].equals("flags")) {
+          Arrays.sort(tokens, 1, tokens.length);
+        }
+        result.add(String.join(" ", tokens));
       }
     }
     Collections.sort(result);
@@ -327,45 +341,33 @@ public final class MergeComparability {
   }
 
   /**
-   * Throws an exception if a record of a variable differs between two declarations of the same
-   * program point.
+   * Throws an exception if two declarations of the same program point or variable have different
+   * records.
    *
-   * @param keyword the record's keyword, such as "rep-type"
-   * @param expected the value of the record in {@code template}, or null if there is none
-   * @param actual the value of the record in {@code ppt}, or null if there is none
-   * @param varName the variable name
+   * @param what the program point or variable, used in the error message, such as "Program point
+   *     C.m():::ENTER"
+   * @param expected the records in {@code template}, as returned by {@link #otherRecords}
+   * @param actual the records in {@code ppt}, as returned by {@link #otherRecords}
    * @param template the first declaration of the program point
    * @param ppt another declaration of the program point
    */
-  private static void checkSameRecord(
-      String keyword,
-      @Nullable String expected,
-      @Nullable String actual,
-      String varName,
-      DeclPpt template,
-      DeclPpt ppt) {
-    if (!Objects.equals(expected, actual)) {
-      throw new Daikon.UserError(
-          String.format(
-              "Program point %s: variable %s has %s in %s but %s in %s",
-              ppt.name,
-              varName,
-              describeRecord(keyword, expected),
-              template.filename,
-              describeRecord(keyword, actual),
-              ppt.filename));
+  private static void checkSameRecords(
+      String what, List<String> expected, List<String> actual, DeclPpt template, DeclPpt ppt) {
+    if (actual.equals(expected)) {
+      return;
     }
-  }
-
-  /**
-   * Returns a description of a record, for use in error messages.
-   *
-   * @param keyword the record's keyword, such as "rep-type"
-   * @param value the value of the record, or null if there is no such record
-   * @return a description of the record
-   */
-  private static String describeRecord(String keyword, @Nullable String value) {
-    return (value == null) ? ("no " + keyword + " record") : ("\"" + keyword + " " + value + "\"");
+    List<String> onlyExpected = new ArrayList<>(expected);
+    List<String> onlyActual = new ArrayList<>(actual);
+    for (String record : actual) {
+      onlyExpected.remove(record);
+    }
+    for (String record : expected) {
+      onlyActual.remove(record);
+    }
+    throw new Daikon.UserError(
+        String.format(
+            "%s has records %s in %s but %s in %s",
+            what, onlyExpected, template.filename, onlyActual, ppt.filename));
   }
 
   /**
@@ -373,9 +375,8 @@ public final class MergeComparability {
    *
    * @param decls the declarations of one program point; must be non-empty
    * @return for each variable, its merged comparability, in the representation returned by {@link
-   *     #parseComparability}; an empty array if no declaration has a comparability for the
-   *     variable; and {@code [-1]} (comparable to everything) if some but not all declarations have
-   *     a comparability for the variable
+   *     #parseComparability}; {@code [-1]} (comparable to everything) if some declaration has no
+   *     comparability or a scalar negative comparability for the variable
    */
   static int[][] mergePpt(List<DeclPpt> decls) {
     DeclPpt template = decls.get(0);
@@ -383,22 +384,28 @@ public final class MergeComparability {
     int numVars = templateVars.size();
 
     // comparabilities.get(d)[v] is the parsed comparability of variable v in declaration d, or
-    // null if that variable has no comparability record.
+    // null if that variable is comparable to everything in declaration d.
     List<int[] @Nullable []> comparabilities = new ArrayList<>(decls.size());
     // Check consistency and determine the number of parts of each variable's comparability.
     int[] numParts = new int[numVars];
-    // missing[v] is true if some declaration has no comparability for variable v.
-    boolean[] missing = new boolean[numVars];
+    // universalVar[v] is true if variable v is comparable to everything in some declaration.
+    boolean[] universalVar = new boolean[numVars];
     List<String> templateHeaderRecords = otherRecords(template.declHeaderLines, -1);
+    List<List<String>> templateVarRecords = new ArrayList<>(numVars);
+    for (DeclVarInfo var : templateVars) {
+      templateVarRecords.add(otherRecords(var.lines, var.comparabilityLine));
+    }
     for (DeclPpt ppt : decls) {
-      List<String> headerRecords = otherRecords(ppt.declHeaderLines, -1);
-      if (!headerRecords.equals(templateHeaderRecords)) {
-        throw new Daikon.UserError(
-            String.format(
-                "Program point %s has records %s in %s but %s in %s",
-                ppt.name, templateHeaderRecords, template.filename, headerRecords, ppt.filename));
+      boolean isTemplate = (ppt == template);
+      if (!isTemplate) {
+        checkSameRecords(
+            "Program point " + ppt.name,
+            templateHeaderRecords,
+            otherRecords(ppt.declHeaderLines, -1),
+            template,
+            ppt);
       }
-      List<DeclVarInfo> vars = new ArrayList<>(ppt.vars.values());
+      List<DeclVarInfo> vars = isTemplate ? templateVars : new ArrayList<>(ppt.vars.values());
       if (vars.size() != numVars) {
         throw new Daikon.UserError(
             String.format(
@@ -408,43 +415,38 @@ public final class MergeComparability {
       int[] @Nullable [] pptComparabilities = new int[numVars][];
       for (int v = 0; v < numVars; v++) {
         DeclVarInfo var = vars.get(v);
-        DeclVarInfo expected = templateVars.get(v);
-        if (!var.name.equals(expected.name)) {
-          throw new Daikon.UserError(
-              String.format(
-                  "Program point %s: variable %d is %s in %s but %s in %s",
-                  ppt.name, v + 1, expected.name, template.filename, var.name, ppt.filename));
-        }
-        checkSameRecord("var-kind", expected.var_kind, var.var_kind, var.name, template, ppt);
-        checkSameRecord("dec-type", expected.type, var.type, var.name, template, ppt);
-        checkSameRecord("rep-type", expected.rep_type, var.rep_type, var.name, template, ppt);
-        List<String> expectedRecords = otherRecords(expected.lines, expected.comparabilityLine);
-        List<String> actualRecords = otherRecords(var.lines, var.comparabilityLine);
-        if (!actualRecords.equals(expectedRecords)) {
-          throw new Daikon.UserError(
-              String.format(
-                  "Program point %s: variable %s has records %s in %s but %s in %s",
-                  ppt.name,
-                  var.name,
-                  expectedRecords,
-                  template.filename,
-                  actualRecords,
-                  ppt.filename));
-        }
-        if (var.comparability == null) {
-          missing[v] = true;
-        } else {
-          int[] comparability = parseComparability(ppt, var);
-          pptComparabilities[v] = comparability;
-          if (numParts[v] == 0) {
-            numParts[v] = comparability.length;
-          } else if (numParts[v] != comparability.length) {
+        if (!isTemplate) {
+          DeclVarInfo expected = templateVars.get(v);
+          if (!var.name.equals(expected.name)) {
             throw new Daikon.UserError(
                 String.format(
-                    "Program point %s: variable %s has comparabilities with different numbers of"
-                        + " array dimensions, such as in %s",
-                    ppt.name, var.name, ppt.filename));
+                    "Program point %s: variable %d is %s in %s but %s in %s",
+                    ppt.name, v + 1, expected.name, template.filename, var.name, ppt.filename));
           }
+          checkSameRecords(
+              "Program point " + ppt.name + ": variable " + var.name,
+              templateVarRecords.get(v),
+              otherRecords(var.lines, var.comparabilityLine),
+              template,
+              ppt);
+        }
+        int @Nullable [] comparability =
+            (var.comparability == null) ? null : parseComparability(ppt, var);
+        // A scalar negative comparability, like the absence of a comparability, makes the variable
+        // comparable to everything, including variables with any number of array dimensions.
+        if (comparability == null || (comparability.length == 1 && comparability[0] < 0)) {
+          universalVar[v] = true;
+          continue;
+        }
+        pptComparabilities[v] = comparability;
+        if (numParts[v] == 0) {
+          numParts[v] = comparability.length;
+        } else if (numParts[v] != comparability.length) {
+          throw new Daikon.UserError(
+              String.format(
+                  "Program point %s: variable %s has comparabilities with different numbers of"
+                      + " array dimensions, such as in %s",
+                  ppt.name, var.name, ppt.filename));
         }
       }
       comparabilities.add(pptComparabilities);
@@ -459,13 +461,14 @@ public final class MergeComparability {
     int numSlots = slotStart[numVars];
 
     // A slot is universal if it is comparable to everything (negative) in some declaration, or if
-    // some declaration provides no comparability for it.
+    // its variable is comparable to everything in some declaration.  A universal slot is not
+    // unioned with any other slot, so a chain of comparabilities does not pass through it.
     boolean[] universal = new boolean[numSlots];
     for (int[] @Nullable [] pptComparabilities : comparabilities) {
       for (int v = 0; v < numVars; v++) {
         int[] comparability = pptComparabilities[v];
         for (int p = 0; p < numParts[v]; p++) {
-          if (comparability == null || comparability[p] < 0) {
+          if (universalVar[v] || (comparability != null && comparability[p] < 0)) {
             universal[slotStart[v] + p] = true;
           }
         }
@@ -502,9 +505,8 @@ public final class MergeComparability {
     int nextNumber = 1;
     int[][] result = new int[numVars][];
     for (int v = 0; v < numVars; v++) {
-      if (missing[v] && numParts[v] != 0) {
-        // A variable with no comparability is comparable to everything, including scalars.  A
-        // negative comparability such as "-1[-1]" would not be comparable to scalars.
+      if (universalVar[v]) {
+        // A negative comparability such as "-1[-1]" would not be comparable to scalars.
         result[v] = new int[] {-1};
         continue;
       }
