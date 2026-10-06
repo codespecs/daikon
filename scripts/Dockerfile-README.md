@@ -70,9 +70,21 @@ make docker-image-ubuntu-jdk21-plus
 
 The Docker Hub user and the image name suffix come from `docker_userid` and
 `docker_testing` in file `.azure/defs-common.m4`.  To create and use images
-named `mdernst/daikon-*-testing`, set `docker_testing` to `-testing` in that
-file, then regenerate the CI configuration files by running, from the
-top-level directory:
+named `mdernst/daikon-*-testing`, uncomment the line that defines
+`docker_testing` as `-testing` in that file, by changing
+
+```m4
+ifelse([define([docker_testing], [-testing])])dnl
+```
+
+to
+
+```m4
+define([docker_testing], [-testing])dnl
+```
+
+Then regenerate the CI configuration files by running, from the top-level
+directory:
 
 ```sh
 make -C .azure && make -C .circleci && make -C .github/workflows
