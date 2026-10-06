@@ -6749,9 +6749,6 @@ invariants must be justified.  Does not print ``uninteresting'' invariants
 Display the tree of all invariants.  Includes invariants that are the
 same in @var{file1} and @var{file2}, and unjustified invariants.
 
-@item -u
-Has no effect; accepted for backward compatibility.
-
 @item -y
 @itemx --ignore_unjustified
 Include (statistically) unjustified invariants.
