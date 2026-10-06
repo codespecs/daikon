@@ -32,10 +32,11 @@ trace-untruncate-fast: trace-untruncate-fast.c
 ## Dockerfiles
 
 DOCKERFILE_OSES := ubuntu rockylinux
-# These lists will be unified later.
-DOCKERFILE_JDKS_ubuntu := 11 17 21 25 27
-DOCKERFILE_JDKS_rockylinux := 21 25 27
-DOCKERFILES := $(foreach os,${DOCKERFILE_OSES},$(foreach jdk,${DOCKERFILE_JDKS_${os}},Dockerfile-${os}-jdk${jdk} Dockerfile-${os}-jdk${jdk}-plus))
+DOCKERFILE_JDKS := 11 17 21 25 27
+DOCKERFILES := $(foreach os,${DOCKERFILE_OSES},$(foreach jdk,${DOCKERFILE_JDKS},Dockerfile-${os}-jdk${jdk} Dockerfile-${os}-jdk${jdk}-plus))
+# Rocky Linux 10 provides no JDK 11 or JDK 17 packages.
+# Remove this line when DOCKERFILE_JDKS no longer contains 11 or 17.
+DOCKERFILES := $(filter-out Dockerfile-rockylinux-jdk11% Dockerfile-rockylinux-jdk17%,${DOCKERFILES})
 
 dockerfiles: ${DOCKERFILES}
 
