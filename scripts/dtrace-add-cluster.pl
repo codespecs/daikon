@@ -7,7 +7,10 @@
 #    In particular, each file contains information relating invocations at a
 #    particular program point to their cluster number, as produced by a
 #    clustering tool.
-#  * data trace files (possibly compressed with gzip).
+#  * data trace files (possibly compressed with gzip).  Every sample must
+#    have a consistent invocation nonce; daikon.tools.DtraceNonceFixer
+#    produces such a file.  These must be the same data trace files that
+#    were given to extract_vars.pl.
 # New (uncompressed) data trace files are written with filenames
 # BASENAME_runcluster_temp.dtrace.
 
@@ -34,8 +37,6 @@ sub usage() {
     ;
 }				# usage
 
-my $SCRIPTDIR = dirname (__FILE__);
-
 # An invocation nonce is globally unique.
 # A per-ppt invocation order number runs from 1 (or is it 0?) to the total
 #   number of times that particular ppt was encountered.
@@ -44,12 +45,13 @@ my $SCRIPTDIR = dirname (__FILE__);
 # The invocation nonce is the index into the array.
 my %pptname_to_cluster = ();
 
-# Used to keep track of an invocation nonce for ppts that don't have them.
-my %pptname_to_nonces = ();
-
 # The highest cluster number.  This is needed when we are using xmeans so
 # that we can know how many clusters to split the dtrace file into.
 my $maxcluster = 0;
+
+# The names of the program points that have at least one clustered sample.
+# They are written to file runcluster_temp.clustered_ppts, one per line.
+my %clustered_ppts = ();
 
 my $algorithm = "xm";
 my $logging = 0;
@@ -102,16 +104,6 @@ if ($algorithm eq 'hierarchical' || $algorithm eq 'km') {
 
 foreach my $dtrace_file (@dtrace_files) {
 
-  # need to run the DtraceNonceDoctor in order in order for
-  # xmeans and possibly other clustering methods to work
-  system_or_die ("java -cp $SCRIPTDIR/../daikon.jar daikon.tools.DtraceNonceFixer $dtrace_file");
-  if (-e ("$dtrace_file" . "_all_fixed")) {
-    system_or_die ("mv $dtrace_file" . "_all_fixed $dtrace_file");
-  }
-  if (-e "dtrace_file" . "_all_fixed.gz") {
-    system_or_die ("mv $dtrace_file" . "_all_fixed.gz $dtrace_file");
-  }
-
 
  if ($dtrace_file =~ /\.gz$/) {
     open (DTRACE_IN, "zcat $dtrace_file |") || &dieusage("couldn't open dtrace file $dtrace_file with zcat");
@@ -129,7 +121,10 @@ foreach my $dtrace_file (@dtrace_files) {
   while (<DTRACE_IN>) {
     my $line = $_;
 #    print ("$line");
-    if ($line =~ /:::/) {
+    if ($line =~ /^(DECLARE|ppt\s)/) {
+      # A declaration, which decls-add-cluster.pl handles.
+      &skip_till_next(*DTRACE_IN);
+    } elsif ($line =~ /:::/) {
       my $pptname = $line;
       chomp ($pptname);
       &insert_cluster_info($pptname);
@@ -137,6 +132,12 @@ foreach my $dtrace_file (@dtrace_files) {
   }
 }
 
+
+open (PPTS, ">runcluster_temp.clustered_ppts") || die "couldn't open file to output clustered ppts";
+foreach my $ppt (sort keys %clustered_ppts) {
+  print PPTS "$ppt\n";
+}
+close(PPTS);
 
 if ($algorithm eq 'xm') {
   open (MAX, ">runcluster_temp.maxcluster") || die "couldn't open file to output max cluster";
@@ -162,15 +163,11 @@ sub insert_cluster_info ( $ ) {
   my $line = <DTRACE_IN>;
 #  print "$line\n";
   if ($line !~ /this.invocation.nonce/) {
-    die "No nonces present, and this program adds them incorrectly.";
-    $pptname_to_nonces{$pptname}++;
-    $invoc = $pptname_to_nonces{$pptname};
-  } else {
-    $invoc = <DTRACE_IN>;
-    chomp($invoc);
-    $line = <DTRACE_IN>;
-
+    die "No invocation nonce for a sample at $pptname; run daikon.tools.DtraceNonceFixer first";
   }
+  $invoc = <DTRACE_IN>;
+  chomp($invoc);
+  $line = <DTRACE_IN>;
 
   # Find out if this program point was clustered.  If it was, retrieve the
   # cluster information.  Otherwise skip it.
@@ -190,6 +187,7 @@ sub insert_cluster_info ( $ ) {
 	  &skip_till_next(*DTRACE_IN);
       }
   } else {
+    $clustered_ppts{$pptname} = 1;
     my $output = "$pptname\nthis_invocation_nonce\n$invoc\n";
     $output = $output."cluster\n$cluster_number\n1\n";
     print DTRACE_OUT $output;
@@ -207,10 +205,11 @@ sub insert_cluster_info ( $ ) {
 # read an opened file till you reach a blank line, then return
 sub skip_till_next(*) {
      local *FHANDLE = $_[0];
-    my $line;
-    do {
-	$line = <FHANDLE>;
-    } until ($line =~ /^\s*$/);
+    while (my $line = <FHANDLE>) {
+	if ($line =~ /^\s*$/) {
+	    return;
+	}
+    }
     return;
 }				# skip_till_next
 
@@ -268,8 +267,8 @@ sub read_cluster_info_seq ( @ ) {
     }
     $filename =~ s/\.ENTER.*//;
     $filename =~ s/\.EXIT.*//;
-    $filename =~ s/\.cluster//;
-    $filename =~ s/\.samp//;
+    $filename =~ s/\.cluster$//;
+    $filename =~ s/\.samp$//;
     $filename =~ s/\.runcluster_temp.*//;
 
     print "filename=$filename\n";
@@ -340,8 +339,8 @@ sub read_cluster_info_xm(@) {
     }
     $filename =~ s/\.ENTER.*//;
     $filename =~ s/\.EXIT.*//;
-    $filename =~ s/\.cluster//;
-    $filename =~ s/\.samp//;
+    $filename =~ s/\.cluster$//;
+    $filename =~ s/\.samp$//;
     $filename =~ s/\.runcluster_temp.*//;
 
     $pptname_to_cluster{$filename} = [@nonce_to_cluster];

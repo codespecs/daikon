@@ -27,7 +27,8 @@ use util_daikon;
 
 sub usage () {
     print STDERR
-	"Usage: extract_vars.pl [OPTIONS] DTRACE_FILES DECL_FILES\n",
+	"Usage: extract_vars.pl [OPTIONS] DTRACE_FILES [DECL_FILES]\n",
+	"If no DECL_FILES are given, the declarations in DTRACE_FILES are used.\n",
 	"Reads compressed (gzipped) or uncompressed dtrace files\n",
 	"Options:\n",
 	" -a, --algorithm ALG\n",
@@ -116,7 +117,8 @@ if (scalar(@dtrace_files) == 0) {
     &dieusage("No dtrace files specified");
 }
 if (scalar(@decls_files) == 0) {
-    &dieusage("No decls files specified");
+    # The declarations are in the dtrace files.
+    @decls_files = @dtrace_files;
 }
 
 
@@ -135,7 +137,7 @@ foreach my $dtrace_file (@dtrace_files) {
   # print "opened $dtrace_file\n";
   while (<DTRACE>) {
     my $line = $_;
-    if ($line =~ /^DECLARE$/) {
+    if ($line =~ /^(DECLARE|ppt\s)/) {
       # A declaration in the dtrace file, not an execution.
       &skip_till_next(*DTRACE);
     } elsif ($line =~ /:::/) {
@@ -309,7 +311,7 @@ sub read_execution ( $ ) {
 
     if ($object) {
       if ($value =~ /null/) {
-	$value =~ -5;
+	$value = -5;
       } elsif ($value =~ /missing/) {
 	$value = 0;
       } else {
@@ -325,11 +327,8 @@ sub read_execution ( $ ) {
     my $mod = <DTRACE>;		# "$mod" is unused
 
     # extract variables to be clustered.
-    # Omit Object variables, .class, array[] or a string
-    if ( $varname !~ /\.class/ && $varname !~ /\[\]/ && $varname !~ /\.toString/) {
-      if ( exists $pptname_to_varnames{$pptname}{$varname}) {
-	push @vararray, $value;
-      }
+    if ( exists $pptname_to_varnames{$pptname}{$varname}) {
+      push @vararray, $value;
     }
 
     $varname = <DTRACE>;
@@ -491,39 +490,72 @@ sub get_random_numbers ( $$ ) {
 }				# get_random_numbers
 
 # read a decls file, figure out the number of variables at each program
-# point, and open an output file for each decls file
+# point, and open an output file for each program point.
+# The file may be in the old or the new (version 2.0) declaration format;
+# it may also be a dtrace file that contains declarations, in which case
+# its samples are ignored.
 sub read_decls_file ( $ ) {
   my $decls_file = $_[0];
-  open(DECL, $decls_file) || &dieusage("cannot read decls file $decls_file");
+  if ($decls_file =~ /\.gz$/) {
+    open(DECL, "zcat $decls_file |") || &dieusage("cannot read decls file $decls_file with zcat");
+  } else {
+    open(DECL, $decls_file) || &dieusage("cannot read decls file $decls_file");
+  }
   while (<DECL>) {
     my $line = $_;
+    my $pptname;
     if ($line =~ /^DECLARE$/) {
-      my $pptname = &read_decl_ppt();
+      $pptname = &read_decl_ppt();
+    } elsif ($line =~ /^ppt\s+(.*?)\s*$/) {
+      $pptname = &read_decl_ppt_new($1);
+    } else {
+      next;
+    }
 
-      # extract the variables out of only the EXIT program
-      # points. Corresponding ENTER and EXIT invocations must belong to a
-      # single cluster, so we can perform clustering on either the ENTER or
-      # the EXIT, but not both. We choose the exit program point because it
-      # has more variables in scope there (eg. the return variable, etc).
-      if ($pptname !~ /ENTER/) {
-	my $pptfilename = &cleanup_pptname($pptname);
-	$pptfilename = $pptfilename.".runcluster_temp";
-	if ($algorithm eq 'km' || $algorithm eq 'hierarchical') {
-	  &open_file_for_output_seq($pptname, $pptfilename);
-	} elsif ($algorithm eq 'xm') {
-	  &open_file_for_output_xmeans($pptname, $pptfilename);
-	} else {
-	  croak("bad output format $algorithm");
-	}
+    # extract the variables out of only the EXIT program
+    # points. Corresponding ENTER and EXIT invocations must belong to a
+    # single cluster, so we can perform clustering on either the ENTER or
+    # the EXIT, but not both. We choose the exit program point because it
+    # has more variables in scope there (eg. the return variable, etc).
+    if ($pptname !~ /ENTER/) {
+      my $pptfilename = &cleanup_pptname($pptname);
+      $pptfilename = $pptfilename.".runcluster_temp";
+      if ($algorithm eq 'km' || $algorithm eq 'hierarchical') {
+        &open_file_for_output_seq($pptname, $pptfilename);
+      } elsif ($algorithm eq 'xm') {
+        &open_file_for_output_xmeans($pptname, $pptfilename);
+      } else {
+        croak("bad output format $algorithm");
       }
     }
   }
+  close DECL;
 }				# read_decls_file
 
-# read a program point declaration in the decls file.
+# Record a declared variable, if it is to be clustered.
+# Returns 1 if the variable is to be clustered, otherwise 0.
+sub add_decl_var ( $$$ ) {
+  my ($pptname, $varname, $rep_type) = @_;
+  # Omit .class, arrays, strings, and constants (whose rep-type in the old
+  # declaration format contains "=").
+  if ($varname =~ /\.class/ || $varname =~ /\[/ || $varname =~ /\.toString/
+      || $rep_type =~ /\[\]/ || $rep_type =~ /String/ || $rep_type =~ /=/) {
+    return 0;
+  }
+  # If the variable is an Object, keep note of that.  Its value is a
+  # hashcode, which read_execution converts to a number indicating whether
+  # it is null.
+  if ($rep_type =~ /hashcode/) {
+    push @{$pptname_to_objectvars{$pptname}}, $varname;
+  }
+  $pptname_to_varnames{$pptname}{$varname} = 1;
+  return 1;
+}				# add_decl_var
+
+# read a program point declaration in the old decls format.
 sub read_decl_ppt () {
 
-  my $nvars;			# number of variables at the program point
+  my $nvars = 0;		# number of variables at the program point
   my $pptname = <DECL>;		# the pptname.
   chomp ($pptname);
   # A ppt may be declared more than once, such as in several decls files.
@@ -535,27 +567,13 @@ sub read_decl_ppt () {
     chomp ($varname);
     my $declared_type = <DECL>;	# "$declared_type" is unused
     my $rep_type = <DECL>;
-
+    chomp ($rep_type);
     # A variable whose value is given in its declaration does not appear in
     # the dtrace file.
     if ($rep_type !~ /=/) {
       push @{$pptname_to_tracevars{$pptname}}, $varname;
     }
-
-    # If the variable is an Object, keep note of that. Will be ignored (not
-    # be clustered) later because its value is a hashcode.
-    if ( $varname !~ /\.class/ && $varname !~ /\[\]/ && $varname !~ /\.toString/) {
-      if ($rep_type =~ /hashcode/) {
-	push @{$pptname_to_objectvars{$pptname}}, $varname;
-	$nvars++;		# added for object
-	$pptname_to_varnames{$pptname}{$varname} = 1;
-      } elsif ( $rep_type =~ /=/) {
-	# definition. do nothing
-      } else {
-	$nvars++;
-	$pptname_to_varnames{$pptname}{$varname} = 1;
-      }
-    }
+    $nvars += &add_decl_var($pptname, $varname, $rep_type);
     my $var_comp = <DECL>;  # variable comparability; "$var_comp" is unused
   }
   # Store the number of variables at this program point. Remember that
@@ -564,3 +582,40 @@ sub read_decl_ppt () {
   $pptname_to_nvars{$pptname} = $nvars;
   return $pptname;
 }				# read_decl_ppt
+
+# read a program point declaration in the new (version 2.0) decls format.
+# The argument is the program point name, from the "ppt" line, which has
+# already been read.
+sub read_decl_ppt_new ( $ ) {
+  my ($pptname) = @_;
+  my $nvars = 0;		# number of variables at the program point
+  my $varname;			# the variable currently being read
+  my $rep_type = "";		# the rep-type of $varname
+  my $is_constant = 0;		# whether $varname has a constant value
+  # A ppt may be declared more than once, such as in several decls files.
+  $pptname_to_tracevars{$pptname} = [];
+  # Record $varname, which has been completely read.
+  my $finish_var = sub {
+    # A constant does not appear in the dtrace file.
+    if (defined($varname) && !$is_constant) {
+      push @{$pptname_to_tracevars{$pptname}}, $varname;
+      $nvars += &add_decl_var($pptname, $varname, $rep_type);
+    }
+  };
+  my $line;
+  while ( defined($line = <DECL>) && ($line !~ /^\s*$/) ) {
+    if ($line =~ /^\s*variable\s+(.*?)\s*$/) {
+      $finish_var->();
+      $varname = $1;
+      $rep_type = "";
+      $is_constant = 0;
+    } elsif ($line =~ /^\s*rep-type\s+(.*?)\s*$/) {
+      $rep_type = $1;
+    } elsif ($line =~ /^\s*constant\s/) {
+      $is_constant = 1;
+    }
+  }
+  $finish_var->();
+  $pptname_to_nvars{$pptname} = $nvars;
+  return $pptname;
+}				# read_decl_ppt_new
