@@ -1,6 +1,6 @@
 dockerfile_header(Dockerfile-rockylinux.m4)
 
-FROM rockylinux:9
+FROM rockylinux/rockylinux:10
 LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
 
 # According to
@@ -46,10 +46,13 @@ RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \
 && rm jdk-JDKVER[[]]_linux-x64_bin.tar.gz
 ENV PATH="/jdk-JDKVER/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 ENV JAVA[[]]JDKVER[[]]_HOME=/jdk-JDKVER
-RUN chmod og+rx /root \
-&& chmod og+r /root/*
+RUN chmod og+rx /root
 ]])m4_dnl
 if_plus([[
+# The CRB repository contains certain packages, including dependencies of
+# EPEL packages such as yamllint.
+RUN crb enable
+
 RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \
   devscripts-checkbashisms \
@@ -74,10 +77,7 @@ RUN wget -q https://services.gradle.org/distributions/gradle-9.8.0-bin.zip \
 && rm gradle-9.8.0-bin.zip
 ENV PATH=$PATH:/opt/gradle/gradle-9.8.0/bin
 
-# Alternately, run: dnf --enablerepo=crb install PACKAGENAME
-RUN dnf config-manager --set-enabled crb \
-&& dnf -y install \
-  dnf-plugins-core \
+RUN dnf -y install \
   texinfo \
   texinfo-tex
 

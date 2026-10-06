@@ -5,7 +5,7 @@
 # But it's used primarily for running miscellaneous tests such as the manual
 # and Javadoc.
 
-FROM rockylinux:9
+FROM rockylinux/rockylinux:10
 LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
 
 # According to
@@ -44,6 +44,10 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   java-21-openjdk \
   java-21-openjdk-devel
 
+# The CRB repository contains certain packages, including dependencies of
+# EPEL packages such as yamllint.
+RUN crb enable
+
 RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \
   devscripts-checkbashisms \
@@ -68,10 +72,7 @@ RUN wget -q https://services.gradle.org/distributions/gradle-9.8.0-bin.zip \
 && rm gradle-9.8.0-bin.zip
 ENV PATH=$PATH:/opt/gradle/gradle-9.8.0/bin
 
-# Alternately, run: dnf --enablerepo=crb install PACKAGENAME
-RUN dnf config-manager --set-enabled crb \
-&& dnf -y install \
-  dnf-plugins-core \
+RUN dnf -y install \
   texinfo \
   texinfo-tex
 
