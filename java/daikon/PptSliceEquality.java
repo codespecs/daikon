@@ -86,23 +86,6 @@ public class PptSliceEquality extends PptSlice {
   }
 
   /**
-   * Returns true if the two variables may be members of the same equality set. They must be
-   * comparableNWay; since we do not yet handle inheritance, we require that the comparability go
-   * both ways. Unlike {@link VarComparability#comparable}, this relation is transitive for implicit
-   * comparability, so it partitions variables into equality sets.
-   *
-   * @param v1 a variable
-   * @param v2 a variable
-   * @return true if the two variables may be members of the same equality set
-   */
-  @Pure
-  public static boolean canBeInSameEqualitySet(VarInfo v1, VarInfo v2) {
-    return v1.comparableNWay(v2)
-        && v1.comparability.equality_set_ok(v2.comparability)
-        && v1.aux.equals_for_instantiation(v2.aux);
-  }
-
-  /**
    * Encapsulates a VarInfo and its Comparability so that the two can be used to create sets of
    * VarInfos that are initially equal. Two VarInfoAndComparability's are true iff they are
    * VarComparability.comparable() to each other.
@@ -132,15 +115,17 @@ public class PptSliceEquality extends PptSlice {
     }
 
     /**
-     * True if two VarInfos can be set to be equal to each other.
-     *
-     * @see #canBeInSameEqualitySet
+     * True if two VarInfos can be set to be equal to each other is whether they are comparableNWay.
+     * Since we do not yet handle inheritance, we require that the comparability go both ways.
      */
     @EnsuresNonNullIf(result = true, expression = "#1")
     @Pure
     boolean equalsVarInfoAndComparability(
         @GuardSatisfied VarInfoAndComparability this, @GuardSatisfied VarInfoAndComparability o) {
-      return canBeInSameEqualitySet(vi, o.vi);
+
+      return (vi.comparableNWay(o.vi)
+          && vi.comparability.equality_set_ok(o.vi.comparability)
+          && vi.aux.equals_for_instantiation(o.vi.aux));
     }
 
     VarInfoAndComparability(VarInfo vi) {

@@ -3,9 +3,8 @@ var-comparability implicit
 
 # x, y, and z are comparable at the method ppts and always equal, so they
 # form one equality set there.  At the OBJECT ppt, x and y are incomparable,
-# but z (comparability -1) is comparable to both.  The merged equality sets
-# at the OBJECT ppt must still partition the variables:  z must not end up
-# in one set with x and in another set with y.
+# but z (comparability -1) is comparable to both.  x, y, and z are in the
+# same equality set at the OBJECT ppt.
 ppt C:::OBJECT
 ppt-type object
 variable this

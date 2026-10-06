@@ -3779,6 +3779,7 @@ public class PptTopLevel extends Ppt {
 
     // Build actual equality sets that match the pairs we found
     Set<VarInfo.Pair> equalityPairs_keySet = equalityPairs.keySet();
+    makeComparable(equalityPairs_keySet);
     equality_view.instantiate_from_pairs(equalityPairs_keySet);
     if (debugMerge.isLoggable(Level.FINE)) {
       debugMerge.fine("Built equality sets ");
@@ -3797,9 +3798,8 @@ public class PptTopLevel extends Ppt {
       startTime = System.nanoTime();
     }
 
-    // Merge the invariants.  merge_invs_one_child copies the child's slices, which are built over
-    // the child's leaders, so it is correct only if the parent has the same equality sets.
-    if (children.size() == 1 && !children.get(0).splitsChildEqualitySet()) {
+    // Merge the invariants
+    if (children.size() == 1) {
       merge_invs_one_child();
     } else {
       merge_invs_multiple_children();
@@ -3973,6 +3973,38 @@ public class PptTopLevel extends Ppt {
       PptTopLevel child = entry.getKey();
       List<Invariant> suppressed_list = entry.getValue();
       child.remove_invs(suppressed_list);
+    }
+  }
+
+  /**
+   * Loosens the comparability of this program point's variables so that the two variables in each
+   * pair are comparable. Comparability is computed separately for each program point, so variables
+   * that are comparable and equal in every child may be incomparable at this program point. Since
+   * they are always equal, they are in the same equality set here and so must be comparable.
+   *
+   * <p>The comparable sets of the two variables are merged. Therefore, every variable that is
+   * comparable to one of them becomes comparable to both, including derived variables.
+   *
+   * @param pairs pairs of variables at this program point that are equal in every child
+   */
+  private void makeComparable(Collection<VarInfo.Pair> pairs) {
+    Map<Integer, Integer> groups = new HashMap<>();
+    for (VarInfo.Pair pair : pairs) {
+      if (pair.v1.comparability instanceof VarComparabilityImplicit
+          && pair.v2.comparability instanceof VarComparabilityImplicit) {
+        VarComparabilityImplicit.unify(
+            (VarComparabilityImplicit) pair.v1.comparability,
+            (VarComparabilityImplicit) pair.v2.comparability,
+            groups);
+      }
+    }
+    if (groups.isEmpty()) {
+      return;
+    }
+    for (VarInfo vi : var_infos) {
+      if (vi.comparability instanceof VarComparabilityImplicit) {
+        vi.comparability = ((VarComparabilityImplicit) vi.comparability).remap(groups);
+      }
     }
   }
 

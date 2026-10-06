@@ -233,13 +233,6 @@ public class PptRelation implements Serializable {
    * equality sets of the child. The variables are the corresponding parent variables and not the
    * child variables themselves. The map is from the pair to itself, which allows the pair to be
    * looked up (which is not possible with a set).
-   *
-   * <p>Pairs whose parent variables cannot be in the same equality set in the parent are omitted.
-   * Comparability is computed separately for each program point, so variables that are comparable
-   * in the child may be incomparable in the parent. The filter uses {@link
-   * PptSliceEquality#canBeInSameEqualitySet}, which is transitive, so the remaining pairs still
-   * partition the variables into equality sets as {@link PptSliceEquality#instantiate_from_pairs}
-   * requires.
    */
   public Map<VarInfo.Pair, VarInfo.Pair> get_child_equalities_as_parent() {
 
@@ -291,15 +284,6 @@ public class PptRelation implements Serializable {
             debug.fine("-- -- " + varr[k].name() + " not in parent (skip)");
             continue;
           }
-          if (!PptSliceEquality.canBeInSameEqualitySet(v1, v2)) {
-            debug.fine(
-                "-- -- "
-                    + v1.name()
-                    + ", "
-                    + v2.name()
-                    + " cannot be in the same equality set in parent (skip)");
-            continue;
-          }
           VarInfo.Pair parent_pair = new VarInfo.Pair(v1, v2, e.numSamples());
           emap.put(parent_pair, parent_pair);
           if (debug.isLoggable(Level.FINE)) {
@@ -316,35 +300,6 @@ public class PptRelation implements Serializable {
       }
     }
     return emap;
-  }
-
-  /**
-   * Returns true if some equality set of the child contains two variables that cannot be in the
-   * same equality set in the parent. If so, {@link #get_child_equalities_as_parent} omits some
-   * pairs, and the parent's equality sets are finer than the child's.
-   *
-   * @return true if some equality set of the child must be split in the parent
-   */
-  public boolean splitsChildEqualitySet() {
-    if (child.equality_view == null) {
-      return false;
-    }
-    for (Invariant inv : child.equality_view.invs) {
-      VarInfo first = null;
-      for (VarInfo cvi : ((Equality) inv).getVars()) {
-        VarInfo pvi = parentVar(cvi);
-        if (pvi == null) {
-          continue;
-        }
-        if (first == null) {
-          first = pvi;
-        } else if (!PptSliceEquality.canBeInSameEqualitySet(first, pvi)) {
-          // canBeInSameEqualitySet is transitive, so comparing to one member suffices.
-          return true;
-        }
-      }
-    }
-    return false;
   }
 
   /**

@@ -2,13 +2,12 @@
 C:::OBJECT
 this.x == this.y
 this != null
-this.x one of { 1, 2, 3 }
+this.x >= 0
+this.x < this.w
 ===========================================================================
 C.m():::ENTER
-this.x == this.y
-this != null
-this.x one of { 1, 2, 3 }
 ===========================================================================
 C.m():::EXIT
 this.x == orig(this.x)
 this.x == orig(this.y)
+this.w == orig(this.w)

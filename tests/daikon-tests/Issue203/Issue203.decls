@@ -2,8 +2,8 @@ decl-version 2.0
 var-comparability implicit
 
 # x and y are comparable at the method ppts but not at the OBJECT ppt.
-# They are always equal, so the merged equality set at the OBJECT ppt
-# would contain incomparable variables.
+# They are always equal, so they are in the same equality set at the
+# OBJECT ppt even though they are incomparable there.
 ppt C:::OBJECT
 ppt-type object
 variable this

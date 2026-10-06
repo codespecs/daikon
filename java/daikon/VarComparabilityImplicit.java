@@ -3,6 +3,7 @@ package daikon;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -184,6 +185,80 @@ public final class VarComparabilityImplicit extends VarComparability implements 
       assert type1.dimensions == 0 || type2.dimensions == 0;
       return false;
     }
+  }
+
+  /**
+   * Records in {@code groups} that the two comparabilities must be comparable, by merging their
+   * comparable sets. Merging is needed only for sets that are not already comparable to everything.
+   *
+   * @param type1 a comparability
+   * @param type2 a comparability
+   * @param groups a union-find structure over comparable sets, as used by {@link #findGroup}
+   */
+  static void unify(
+      VarComparabilityImplicit type1,
+      VarComparabilityImplicit type2,
+      Map<Integer, Integer> groups) {
+    if ((type1.dimensions > 0) && (type2.dimensions > 0)) {
+      unify(
+          (VarComparabilityImplicit) type1.indexType(type1.dimensions - 1),
+          (VarComparabilityImplicit) type2.indexType(type2.dimensions - 1),
+          groups);
+      unify(
+          (VarComparabilityImplicit) type1.elementType(),
+          (VarComparabilityImplicit) type2.elementType(),
+          groups);
+    } else if ((type1.dimensions == 0) && (type2.dimensions == 0)) {
+      if (type1.base >= 0 && type2.base >= 0) {
+        int group1 = findGroup(type1.base, groups);
+        int group2 = findGroup(type2.base, groups);
+        // Use the smaller value as the representative, for deterministic results.
+        if (group1 < group2) {
+          groups.put(group2, group1);
+        } else if (group2 < group1) {
+          groups.put(group1, group2);
+        }
+      }
+    }
+    // Otherwise, one is an array and the other is not.  Such variables are never equal, so there
+    // is nothing to do.
+  }
+
+  /**
+   * Returns the representative of the comparable set that contains {@code base}.
+   *
+   * @param base a comparable set
+   * @param groups a union-find structure over comparable sets: maps a comparable set to another
+   *     comparable set in the same group; a representative has no entry
+   * @return the representative of the comparable set that contains {@code base}
+   */
+  private static int findGroup(int base, Map<Integer, Integer> groups) {
+    Integer next;
+    while ((next = groups.get(base)) != null) {
+      base = next;
+    }
+    return base;
+  }
+
+  /**
+   * Returns a comparability like this one, but with each comparable set replaced by its
+   * representative in {@code groups}.
+   *
+   * @param groups a union-find structure over comparable sets, as built by {@link #unify}
+   * @return a comparability like this one, with each comparable set replaced by its representative
+   */
+  VarComparabilityImplicit remap(Map<Integer, Integer> groups) {
+    int newBase = (base < 0) ? base : findGroup(base, groups);
+    boolean changed = (newBase != base);
+    VarComparabilityImplicit @Nullable [] newIndexTypes = indexTypes;
+    if (indexTypes != null) {
+      newIndexTypes = new VarComparabilityImplicit[indexTypes.length];
+      for (int i = 0; i < indexTypes.length; i++) {
+        newIndexTypes[i] = indexTypes[i].remap(groups);
+        changed |= (newIndexTypes[i] != indexTypes[i]);
+      }
+    }
+    return changed ? new VarComparabilityImplicit(newBase, newIndexTypes, dimensions) : this;
   }
 
   /**
