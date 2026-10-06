@@ -6,8 +6,6 @@ running tests reproducibly.
 The Dockerfiles are generated from `Dockerfile-*.m4`.
 To regenerate them, run `make dockerfiles`.
 The JDK versions are listed in variable `DOCKERFILE_JDKS` in `Makefile`.
-When you change them, also change the list of `create_upload_docker_image`
-commands below.
 If a JDK version is not yet available as an OS package, edit `jdk_packaged`
 and `jdk_download_url` in `Dockerfile-defs.m4`.
 
@@ -51,7 +49,8 @@ docker system prune -a -f
 
 ## Create the Docker images
 
-To create all the Docker images and upload them to Docker Hub, run:
+To create all the Docker images and upload them to Docker Hub, run, from
+this directory (`scripts/`):
 
 ```sh
 make docker-images && git push
@@ -63,10 +62,11 @@ To create and upload one image, run, for example:
 make docker-image-ubuntu-jdk21-plus
 ```
 
-To create images named `mdernst/daikon-*-testing`, pass
-`DOCKERTESTING=-testing` to `make`.  To make CI use those images, update the
-value of `docker_testing` in file `.azure/defs-common.m4`, then regenerate
-the CI configuration files by running, from the top-level directory:
+The Docker Hub user and the image name suffix come from `docker_userid` and
+`docker_testing` in file `.azure/defs-common.m4`.  To create and use images
+named `mdernst/daikon-*-testing`, set `docker_testing` to `-testing` in that
+file, then regenerate the CI configuration files by running, from the
+top-level directory:
 
 ```sh
 make -C .azure && make -C .circleci && make -C .github/workflows

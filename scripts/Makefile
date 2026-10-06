@@ -53,14 +53,11 @@ ${DOCKERFILES}: Dockerfile-%: Dockerfile-defs.m4 $(addsuffix .m4,$(addprefix Doc
 # Build each Docker image and upload it to Docker Hub.
 # To build and upload just one image, run, for example:
 #   make docker-image-ubuntu-jdk21-plus
-# To build images named "...-testing", run:
-#   make docker-images DOCKERTESTING=-testing
-# and also update the value of `docker_testing` in file ../.azure/defs-common.m4
-# and regenerate the CI configuration files (see Dockerfile-README.md).
-DOCKERTESTING ?=
-# Must match `docker_userid` in file ../.azure/defs-common.m4 .
-DOCKER_USERID := mdernst
-# The stem $* is, for example, "ubuntu-jdk21" or "ubuntu-jdk21-plus".
+# The Docker Hub user and the "-testing" suffix come from file
+# ../.azure/defs-common.m4, which also determines the images that CI uses.
+DOCKER_M4_VALUE = $(shell printf '%s\n' '$(1)' | m4 ../.azure/defs-common.m4 - | tail -1)
+DOCKER_USERID := $(call DOCKER_M4_VALUE,docker_userid)
+DOCKERTESTING := $(call DOCKER_M4_VALUE,docker_testing)
 DOCKER_IMAGE = ${DOCKER_USERID}/daikon-$*${DOCKERTESTING}
 DOCKER_IMAGES := $(patsubst Dockerfile-%,docker-image-%,${DOCKERFILES})
 .PHONY: docker-images ${DOCKER_IMAGES}
@@ -68,11 +65,8 @@ docker-images: ${DOCKER_IMAGES}
 
 # The Dockerfiles copy no files into the image, so build with no context.
 ${DOCKER_IMAGES}: docker-image-%: Dockerfile-%
-	@echo "***** Starting ${DOCKER_IMAGE} *****"
-	docker -l warn build --rm=false --progress=plain -t ${DOCKER_IMAGE} - < $< \
-	  && docker -l warn push --quiet ${DOCKER_IMAGE} \
-	  || { echo "***** FAILURE in ${DOCKER_IMAGE} *****"; exit 1; }
-	@echo "***** Success for ${DOCKER_IMAGE} *****"
+	docker -l warn build --rm=false --progress=plain -t ${DOCKER_IMAGE} - < $<
+	docker -l warn push --quiet ${DOCKER_IMAGE}
 
 ## Delegation to other Makefiles (gross)
 
