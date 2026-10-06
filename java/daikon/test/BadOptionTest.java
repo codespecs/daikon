@@ -39,13 +39,17 @@ public class BadOptionTest {
    */
   private static String parse(String... args) {
     DaikonGetopt g = new DaikonGetopt("BadOptionTest", args, "ho:", longopts);
-    Daikon.UserError e =
-        assertThrows(
-            Daikon.UserError.class,
-            () -> {
-              while (g.getopt() != -1) {}
-            });
+    Daikon.UserError e = assertThrows(Daikon.UserError.class, () -> consumeAll(g));
     return String.valueOf(e.getMessage());
+  }
+
+  /**
+   * Calls {@code getopt()} until all command-line arguments have been processed.
+   *
+   * @param g the command-line parser
+   */
+  private static void consumeAll(DaikonGetopt g) {
+    while (g.getopt() != -1) {}
   }
 
   /**

@@ -204,7 +204,7 @@ public final class Diff {
     DaikonGetopt g =
         new DaikonGetopt(
             "daikon.diff.Diff", args,
-            "Hhyduastmxno:jzpevl", longOpts);
+            "Hhyduastmxno:jpevl", longOpts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -268,6 +268,8 @@ public final class Diff {
         case 'd':
           optionSelected = true;
           printDiff = true;
+          break;
+        case 'u': // included for legacy code; has no effect
           break;
         case 'a':
           optionSelected = true;
