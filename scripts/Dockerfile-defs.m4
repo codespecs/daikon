@@ -24,14 +24,14 @@ m4_dnl jdk_packaged_ubuntu expands to 1 if Ubuntu provides the openjdk-JDKVER-jd
 m4_dnl and to 0 otherwise.  When it is 0, the JDK is downloaded from jdk_download_url.
 m4_define([[jdk_packaged_ubuntu]], [[m4_eval(JDKVER <= ubuntu_newest_packaged_jdk)]])m4_dnl
 m4_dnl rockylinux_image is the Rocky Linux base image.
-m4_define([[rockylinux_image]], [[rockylinux:9]])m4_dnl
+m4_define([[rockylinux_image]], [[rockylinux/rockylinux:10]])m4_dnl
 m4_dnl rockylinux_packaged_jdks lists the JDKs that rockylinux_image provides as OS packages,
 m4_dnl separated by whitespace.
 m4_dnl Dockerfile-README.md gives a command that lists them.
 m4_dnl Do not list a JDK just because dnf can install java-NN-openjdk:  if Rocky Linux does not
 m4_dnl package JDK NN, then dnf satisfies java-NN-openjdk with EPEL's java-latest-openjdk, which
 m4_dnl moves to a newer JDK whenever the image is rebuilt.
-m4_define([[rockylinux_packaged_jdks]], [[8 11 17 21 25]])m4_dnl
+m4_define([[rockylinux_packaged_jdks]], [[21 25]])m4_dnl
 m4_dnl jdk_packaged_rockylinux expands to 1 if JDKVER is in rockylinux_packaged_jdks, and to 0
 m4_dnl otherwise.  When it is 0, the JDK is downloaded from jdk_download_url.
 m4_define([[jdk_packaged_rockylinux]],
