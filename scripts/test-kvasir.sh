@@ -28,7 +28,7 @@ make showvars compile daikon.jar
 
 echo "test-kvasir.sh is running kvasir and DynComp tests"
 
-# Running Kvasir tests here may seem redundant with the fjalar project's Travis
+# Running Kvasir tests here may seem redundant with the fjalar project's CI
 # build; however, it means that they are run on each branch and pull request.
 
 # Get correct version of Kvasir/fjalar
