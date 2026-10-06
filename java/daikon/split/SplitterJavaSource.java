@@ -45,6 +45,12 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /** Java reserved words that are replaced by replaceReservedWords. */
   private static final @Regex String[] reservedWords = new @Regex String[] {"return"};
 
+  /**
+   * Matches "daikon.Quant." after {@link PrefixFixer} has converted it, as in "daikon_Quant_fuzzy."
+   * or "daikon_Quant.".
+   */
+  private static final Pattern daikonQuantPattern = Pattern.compile("\\bdaikon_Quant[._]");
+
   private static final String lineSep = System.lineSeparator();
 
   /**
@@ -72,7 +78,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     varInfos = filterNonVars(varInfos);
     String originalCondition = splitObj.condition();
     Global.debugSplit.fine("originalCondition =  " + originalCondition);
-    String condition = replaceReservedWords(originalCondition);
+    String condition = replaceReservedWords(replaceQuantArrayCalls(originalCondition));
     condition = this.statementReplacer.makeReplacements(condition);
     condition = convertVariableNames(condition, className, varInfos);
     Global.debugSplit.fine("modified condition = " + condition);
@@ -329,6 +335,80 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     return string.substring(1, string.length() - 1);
   }
 
+  /** The prefix of a call to a method of daikon.Quant that accesses an array element. */
+  private static final String getElementPrefix = "daikon.Quant.getElement_";
+
+  /** The prefix of a call to the daikon.Quant method that returns the size of an array. */
+  private static final String sizePrefix = "daikon.Quant.size(";
+
+  /**
+   * Replaces calls to daikon.Quant methods that access arrays, which appear in Daikon's Java output
+   * format, by the Java syntax that splitters use for arrays. "daikon.Quant.getElement_T(a, i)"
+   * becomes "(a[i])", and "daikon.Quant.size(a)" becomes "(a.length)".
+   *
+   * @param condition a splitting condition
+   * @return the condition, with calls to daikon.Quant array methods replaced
+   */
+  static String replaceQuantArrayCalls(String condition) {
+    StringBuilder result = new StringBuilder();
+    int pos = 0;
+    while (pos < condition.length()) {
+      int argsStart; // the index just after the open parenthesis of the call
+      boolean isGetElement;
+      if (condition.startsWith(getElementPrefix, pos)) {
+        int paren = condition.indexOf('(', pos);
+        if (paren == -1) {
+          break;
+        }
+        argsStart = paren + 1;
+        isGetElement = true;
+      } else if (condition.startsWith(sizePrefix, pos)) {
+        argsStart = pos + sizePrefix.length();
+        isGetElement = false;
+      } else {
+        result.append(condition.charAt(pos));
+        pos++;
+        continue;
+      }
+      // Find the top-level commas and the matching close parenthesis.
+      List<String> args = new ArrayList<>();
+      int depth = 0;
+      int argStart = argsStart;
+      int i = argsStart;
+      for (; i < condition.length(); i++) {
+        char c = condition.charAt(i);
+        if (c == '(') {
+          depth++;
+        } else if (c == ')') {
+          if (depth == 0) {
+            break;
+          }
+          depth--;
+        } else if (c == ',' && depth == 0) {
+          args.add(condition.substring(argStart, i).trim());
+          argStart = i + 1;
+        }
+      }
+      if (i == condition.length()) {
+        // Unbalanced parentheses; leave the rest of the condition alone.
+        break;
+      }
+      args.add(condition.substring(argStart, i).trim());
+      if (isGetElement && args.size() == 2) {
+        result.append("(" + replaceQuantArrayCalls(args.get(0)) + "[");
+        result.append(replaceQuantArrayCalls(args.get(1)) + "])");
+      } else if (!isGetElement && args.size() == 1) {
+        result.append("(" + replaceQuantArrayCalls(args.get(0)) + ".length)");
+      } else {
+        // Not a form that this method handles; leave it alone.
+        result.append(condition, pos, i + 1);
+      }
+      pos = i + 1;
+    }
+    result.append(condition.substring(pos));
+    return result.toString();
+  }
+
   /**
    * Returns a version of this condition in which the variable names are converted to the names that
    * will be used by the java class written to fileText. Instances of "this." are removed. Instances
@@ -351,6 +431,10 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     condition = ThisFixer.fixThisUsage(condition, varInfos);
     condition = OrigFixer.fixOrig(condition);
     condition = PrefixFixer.fixPrefix(condition);
+    // PrefixFixer treats the package and class names in calls to methods in daikon.Quant (which
+    // Daikon's Java output format uses, for example for floating-point comparisons) as prefixes of
+    // a variable name.  Restore them.
+    condition = daikonQuantPattern.matcher(condition).replaceAll("daikon.Quant.");
     // UNDONE: If the condition contains a naked reference to a class
     // variable, we should prepend the classname.  (markro)
     String[] baseNames = getBaseNames(varInfos);
