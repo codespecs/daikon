@@ -6,11 +6,14 @@ m4_dnl   PLUS: 1 for a "-plus" image (which contains more tools), 0 otherwise
 m4_changequote([[,]])m4_dnl
 m4_dnl Disable comments, so that macros are expanded within "#" comments.
 m4_changecom()m4_dnl
-m4_dnl jdk_at_least(N) expands to 1 if JDKVER >= N, and to 0 otherwise.
-m4_define([[jdk_at_least]], [[m4_eval(JDKVER >= $1)]])m4_dnl
-m4_dnl jdk_packaged expands to 1 if the OS package manager provides JDKVER, and to 0 otherwise.
-m4_dnl When it is 0, the JDK is downloaded from jdk_download_url.
-m4_define([[jdk_packaged]], [[m4_eval(JDKVER < 27)]])m4_dnl
+m4_dnl Increment this variable not when a new LTS JDK is released, but only once every OS packages it.
+m4_define([[latest_lts_release]], [[25]])m4_dnl
+m4_dnl jdk_packaged_by_every_os expands to 1 if *every* OS in DOCKERFILE_OSES provides JDKVER as an OS package,
+m4_dnl and to 0 otherwise.  When it is 0, the JDK is downloaded from jdk_download_url.
+m4_dnl Rocky Linux's own repositories package only LTS JDKs.  The EPEL
+m4_dnl repository provides java-NN-openjdk for the newest JDK NN.  That package may be an
+m4_dnl early-access build, and downloading ensures consistency across OSes in CI.
+m4_define([[jdk_packaged_by_every_os]], [[m4_eval(JDKVER <= latest_lts_release)]])m4_dnl
 m4_define([[jdk_download_url]], [[https://download.java.net/java/GA/jdk27/55ce5470a6294008af0057ff4626d0e5/35/GPL/openjdk-27_linux-x64_bin.tar.gz]])m4_dnl
 m4_dnl if_plus(TEXT) expands to TEXT for a "-plus" image, and to nothing otherwise.
 m4_define([[if_plus]], [[m4_ifelse(PLUS, 1, [[$1]])]])m4_dnl

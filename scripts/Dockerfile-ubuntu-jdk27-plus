@@ -49,7 +49,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   wget
 
 # Install the JDK.
-# The openjdk-27-jdk package does not yet exist, so download the JDK.
+# Not every OS packages a non-LTS JDK, so download the JDK.
 RUN curl --silent -o jdk-27_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk27/55ce5470a6294008af0057ff4626d0e5/35/GPL/openjdk-27_linux-x64_bin.tar.gz \
 && tar xzf jdk-27_linux-x64_bin.tar.gz \
 && rm jdk-27_linux-x64_bin.tar.gz
