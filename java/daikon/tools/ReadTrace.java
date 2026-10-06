@@ -43,32 +43,29 @@ public class ReadTrace {
   }
 
   /**
-   * Returns the trace files named on the command line. Exits if the command line is bad or requests
-   * the usage message.
-   *
-   * @param args the command-line arguments
-   * @return the trace files named on the command line
-   */
-  private static String[] traceFiles(String[] args) {
-    try {
-      String[] files = DaikonGetopt.nonOptionArgs("daikon.tools.ReadTrace", args, usage);
-      if (files.length == 0) {
-        throw new Daikon.UserError("No trace files specified" + Daikon.lineSep + usage);
-      }
-      return files;
-    } catch (Daikon.DaikonTerminationException e) {
-      Daikon.handleDaikonTerminationException(e);
-      throw new Error("unreachable");
-    }
-  }
-
-  /**
    * The entry point for ReadTrace.
    *
    * @param args data trace file names, read from the command line
    */
   public static void main(String[] args) {
-    String[] traceFiles = traceFiles(args);
+    try {
+      mainHelper(args);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
+    }
+  }
+
+  /**
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called programmatically.
+   *
+   * @param args command-line arguments, like those of {@link #main}
+   */
+  public static void mainHelper(String[] args) {
+    String[] traceFiles = DaikonGetopt.nonOptionArgs("daikon.tools.ReadTrace", args, usage);
+    if (traceFiles.length == 0) {
+      throw new Daikon.UserError("No trace files specified" + Daikon.lineSep + usage);
+    }
     CollectDataProcessor processor = new CollectDataProcessor();
     PptMap ppts = new PptMap();
     try {

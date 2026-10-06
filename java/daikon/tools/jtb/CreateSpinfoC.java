@@ -28,27 +28,30 @@ public class CreateSpinfoC {
       "C Parser Version 0.1Alpha:  Usage:  java daikon.tools.jtb.CreateSpinfoC inputfile";
 
   /**
-   * Returns the input file named on the command line. Exits if the command line is bad or requests
-   * the usage message.
+   * The entry point for CreateSpinfoC.
    *
-   * @param args the command-line arguments
-   * @return the input file named on the command line
+   * @param args one argument, the name of the C file
    */
-  private static String inputFile(String[] args) {
+  public static void main(String[] args) {
     try {
-      String[] files = DaikonGetopt.nonOptionArgs("daikon.tools.jtb.CreateSpinfoC", args, usage);
-      if (files.length != 1) {
-        throw new Daikon.UserError(usage);
-      }
-      return files[0];
+      mainHelper(args);
     } catch (Daikon.DaikonTerminationException e) {
       Daikon.handleDaikonTerminationException(e);
-      throw new Error("unreachable");
     }
   }
 
-  public static void main(String[] args) {
-    String inputFile = inputFile(args);
+  /**
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called programmatically.
+   *
+   * @param args command-line arguments, like those of {@link #main}
+   */
+  public static void mainHelper(String[] args) {
+    String[] files = DaikonGetopt.nonOptionArgs("daikon.tools.jtb.CreateSpinfoC", args, usage);
+    if (files.length != 1) {
+      throw new Daikon.UserError(usage);
+    }
+    String inputFile = files[0];
     System.out.println("Create spinfo file from file " + inputFile + " . . .");
     try {
       String fileName = inputFile.substring(0, inputFile.lastIndexOf('.'));
@@ -63,12 +66,8 @@ public class CreateSpinfoC {
           }
         }
       } catch (IOException e) {
-        System.out.println(e.getMessage());
-        if (temp != null) {
-          temp.delete();
-        }
-        System.exit(1);
-        throw new Error("unreachable");
+        temp.delete();
+        throw new Daikon.UserError(e, "Problem copying " + inputFile + " to " + temp);
       }
       try (FileInputStream fis = new FileInputStream(temp)) {
         @SuppressWarnings("UnusedVariable") // sets static variables for TranslationUnit()

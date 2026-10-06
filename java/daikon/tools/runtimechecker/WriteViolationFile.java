@@ -3,6 +3,7 @@ package daikon.tools.runtimechecker;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -12,8 +13,10 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import org.checkerframework.checker.signature.qual.BinaryName;
+import org.plumelib.util.StringsPlume;
 
 /**
  * This program runs a given program (which is assumed to contain some classes that have been
@@ -27,31 +30,37 @@ class WriteViolationFile {
     throw new UnsupportedOperationException("Do not instantiate");
   }
 
+  /** The usage message for this program. */
+  private static final String usageMessage =
+      StringsPlume.joinLines(
+          "Usage:  java WriteViolationFile CLASS ARGS",
+          "  CLASS and ARGS are just as they would be when being run directly,",
+          "  except that CLASS is written as a binary name, not a fully-qualified name",
+          "Output is written to file \"violations.txt\" in the current directory.");
+
   public static void usage() {
-    System.out.println("Usage:  java WriteViolationFile CLASS ARGS");
-    System.out.println("  CLASS and ARGS are just as they would be when being run directly,");
-    System.out.println(
-        "  except that CLASS is written as a binary name, not a fully-qualified name");
-    System.out.println("Output is written to file \"violations.txt\" in the current directory.");
+    System.out.println(usageMessage);
   }
 
   @SuppressWarnings("Finally")
   public static void main(String[] args) {
-    if (args.length == 0) {
+    String[] classAndArgs;
+    try {
+      classAndArgs =
+          DaikonGetopt.argsAfterLeadingOptions(
+              "daikon.tools.runtimechecker.WriteViolationFile", args, usageMessage);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
+      return;
+    }
+    if (classAndArgs.length == 0) {
       System.out.println("Error: no class specified");
       usage();
       System.exit(1);
     }
-    if (Daikon.isHelpArg(args[0])) {
-      usage();
-      System.exit(0);
-    }
     @SuppressWarnings("signature") // will be checked immediately below, and exception is caught
-    @BinaryName String class_name = args[0];
-    String[] main_args = new String[args.length - 1];
-    for (int i = 0; i < main_args.length; i++) {
-      main_args[i] = args[i + 1];
-    }
+    @BinaryName String class_name = classAndArgs[0];
+    String[] main_args = Arrays.copyOfRange(classAndArgs, 1, classAndArgs.length);
     Class<?> cls;
     try {
       cls = Class.forName(class_name);

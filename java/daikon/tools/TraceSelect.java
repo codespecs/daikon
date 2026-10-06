@@ -1,6 +1,7 @@
 // TraceSelect.java
 package daikon.tools;
 
+import daikon.DaikonGetopt;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -59,11 +60,16 @@ public class TraceSelect {
   // Always set to non-null by mainHelper
   private static String @MonotonicNonNull [] sampleNames;
 
+  /** The name of this program, for use in messages. */
+  private static final String progname = "daikon.tools.TraceSelect";
+
   /** The usage message for this program. */
   private static final String usage =
       StringsPlume.joinLines(
           "USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]...",
-          "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED-SEED 1000 foo.dtrace"
+          "The options are -SEED n, -NOCLEAN, -INCLUDE_UNRETURNED, and -DO_DIFFS.",
+          "The Daikon-args start with the first .dtrace or .decls file.",
+          "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED -SEED 1000 foo.dtrace"
               + " foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
 
   /**
@@ -85,12 +91,10 @@ public class TraceSelect {
    *
    * @param args command-line arguments, like those of {@link #main}
    */
-  public static void mainHelper(final String[] args) {
+  public static void mainHelper(String[] args) {
+    // Handles -h and --help before num_reps.
+    args = DaikonGetopt.argsAfterLeadingOptions(progname, args, usage);
     argles = args;
-    if (args.length > 0 && daikon.Daikon.isHelpArg(args[0])) {
-      System.out.println(usage);
-      throw new daikon.Daikon.NormalTermination();
-    }
     if (args.length < 2) {
       throw new daikon.Daikon.UserError("Too few arguments." + daikon.Daikon.lineSep + usage);
     }
@@ -110,9 +114,14 @@ public class TraceSelect {
       // allows seed setting
       if (args[i].toUpperCase(Locale.ENGLISH).equals("-SEED")) {
         if (i + 1 >= args.length) {
-          throw new daikon.Daikon.UserError("-SEED options requires argument");
+          throw new daikon.Daikon.UserError("-SEED requires an argument");
         }
-        randObj = new Random(Long.parseLong(args[++i]));
+        String seed = args[++i];
+        try {
+          randObj = new Random(Long.parseLong(seed));
+        } catch (NumberFormatException e) {
+          throw new daikon.Daikon.UserError("-SEED requires an integer argument, not " + seed);
+        }
         daikonArgStart = i + 1;
       }
 
@@ -166,6 +175,16 @@ public class TraceSelect {
           daikonArgStart = i;
           knowArgStart = true;
         }
+      }
+
+      // Any other switch before the Daikon arguments is a request for help or an error.
+      else if (!knowArgStart && args[i].startsWith("-")) {
+        if (args[i].startsWith("--") || args[i].length() == 2) {
+          // Prints the usage message for -h and --help, and describes any other such option.
+          DaikonGetopt.nonOptionArgs(progname, new String[] {args[i]}, usage);
+        }
+        throw new daikon.Daikon.UserError(
+            "Unrecognized command-line option " + args[i] + "; run with -h for usage");
       }
     }
 

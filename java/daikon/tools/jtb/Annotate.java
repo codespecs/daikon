@@ -91,7 +91,6 @@ public class Annotate {
           "  -h   Display this usage message",
           "  -i   Insert invariants not supported by ESC with \"!\" instead of \"@\";",
           "       by default these \"inexpressible\" invariants are simply omitted",
-          "  -r   Use all .java files under the current directory as arguments",
           "  -s   Use // comments rather than /* comments",
           "  --format name  Insert specifications in the given format: DBC, ESC, JML, Java",
           "  --wrap_xml     Wrap each annotation and auxiliary information in XML tags",
@@ -139,7 +138,7 @@ public class Annotate {
           new LongOpt(max_invariants_pp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(no_reflection_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
         };
-    DaikonGetopt g = new DaikonGetopt("daikon.tools.jtb.Annotate", args, "s", longopts, usage);
+    DaikonGetopt g = new DaikonGetopt("daikon.tools.jtb.Annotate", args, "is", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {

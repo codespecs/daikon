@@ -1486,16 +1486,6 @@ public final class Daikon {
   }
 
   /**
-   * Returns true if the command-line argument requests a usage message.
-   *
-   * @param arg a command-line argument
-   * @return true if {@code arg} is "-h" or "--help"
-   */
-  public static boolean isHelpArg(String arg) {
-    return arg.equals("-h") || arg.equals("--" + help_SWITCH);
-  }
-
-  /**
    * Invariants passed on the command line with the {@code --user_defined_invariant} option. A list
    * of class names in the format required by {@link Class#forName(String)}.
    */
