@@ -160,8 +160,7 @@ public final class MergeInvariants {
           break;
 
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
 

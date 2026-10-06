@@ -63,6 +63,7 @@ public class BadOptionTest {
   public void testUnrecognizedLongOption() {
     assertEquals(expected("Unrecognized command-line option --bogus"), parse("--bogus"));
     assertEquals(expected("Unrecognized command-line option --bogus"), parse("--bogus=3"));
+    assertEquals(expected("Unrecognized command-line option --=3"), parse("--=3"));
     assertEquals(
         expected("Unrecognized command-line option --bogus"), parse("-h", "--bogus", "file"));
   }

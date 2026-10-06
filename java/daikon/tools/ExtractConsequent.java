@@ -148,8 +148,7 @@ public class ExtractConsequent {
           System.out.println(usage);
           throw new Daikon.NormalTermination();
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
     // The index of the first non-option argument -- the name of the file

@@ -256,10 +256,11 @@ public class InstrumentHandler extends CommandHandler {
             daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else {
             System.err.println("Unknown long option received: " + option_name);
+            return errorWhileReadingArguments;
           }
           break;
         case 'h':
-          usageMessage();
+          usageMessage(System.out);
           return helpRequested;
         default:
           System.err.println("getopt() returned " + c);

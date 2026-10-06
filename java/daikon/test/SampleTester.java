@@ -150,8 +150,7 @@ public class SampleTester {
           throw new Daikon.NormalTermination();
 
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
 

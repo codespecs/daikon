@@ -1,5 +1,6 @@
 package daikon.tools.runtimechecker;
 
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -10,9 +11,15 @@ import java.util.Locale;
  */
 public class Main extends CommandHandler {
 
-  protected void usageMessage(List<CommandHandler> handlers) {
+  /**
+   * Prints the usage message of each handler.
+   *
+   * @param handlers the handlers whose usage messages to print
+   * @param out where to print the usage messages
+   */
+  protected void usageMessage(List<CommandHandler> handlers, PrintStream out) {
     for (CommandHandler h : handlers) {
-      h.usageMessage();
+      h.usageMessage(out);
     }
   }
 
@@ -34,8 +41,8 @@ public class Main extends CommandHandler {
       System.exit(1);
     }
     if (args[0].toUpperCase(Locale.ENGLISH).equals("HELP") || args[0].equals("?")) {
-      usageMessage();
-      usageMessage(handlers);
+      usageMessage(System.out);
+      usageMessage(handlers, System.out);
       System.exit(0);
     }
 

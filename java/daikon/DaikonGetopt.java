@@ -76,10 +76,7 @@ public class DaikonGetopt extends Getopt {
     // For every bad long option, Getopt clears nextchar and advances optind past the option.  A
     // bad short option has no such guarantee, because it may be followed by other short options in
     // the same argument, as in "-xh".
-    if ("".equals(nextchar)
-        && 0 < optind
-        && optind <= argv.length
-        && argv[optind - 1].startsWith("--")) {
+    if ("".equals(nextchar) && argv[optind - 1].startsWith("--")) {
       return longOptionMessage(argv[optind - 1]);
     }
     char c = (char) optopt;
@@ -101,6 +98,10 @@ public class DaikonGetopt extends Getopt {
     int equalsPos = arg.indexOf('=');
     String name = (equalsPos == -1) ? arg.substring(2) : arg.substring(2, equalsPos);
     LongOpt[] longopts = long_options;
+    // Getopt treats an empty name, as in "--=foo", as a prefix of every long option.
+    if (name.isEmpty()) {
+      return "Unrecognized command-line option " + arg;
+    }
     if (longopts == null || longind == -1) {
       return "Unrecognized command-line option --" + name;
     }
