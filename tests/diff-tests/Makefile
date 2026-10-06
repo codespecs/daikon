@@ -18,8 +18,7 @@
 
 # 6. Check the directory and remaining files into the repository.
 
-# XXX HACK:  must remove "grep -v StackAr"
-SUBDIRS = $(shell find * -maxdepth 0 -type d | grep -v StackAr)
+SUBDIRS = $(shell find * -maxdepth 0 -type d)
 
 default:
 
