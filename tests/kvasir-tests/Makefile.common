@@ -78,12 +78,8 @@ ifeq ($(OS_ID),Fedora)
 endif
 
 ifeq ($(OS_ID),Rocky)
-# Rocky 10 uses goal-Rocky10 if it exists.
-# Otherwise, all versions of Rocky use goal-Rocky if it exists,
-# otherwise the default goal file.
-ifeq ($(firstword $(subst ., ,$(OS_REL))),10)
-	GOAL := goal-Rocky10
-endif
+# All versions of Rocky will use goal-Rocky if it exists
+# otherwise the default goal file
 endif
 
 ifeq ($(OS_ID),Ubuntu)

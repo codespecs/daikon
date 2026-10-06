@@ -50,8 +50,9 @@ RUN chmod og+rx /root
 ]])m4_dnl
 if_plus([[
 # The CRB repository contains certain packages, including dependencies of
-# EPEL packages such as yamllint.
-RUN crb enable
+# EPEL packages such as yamllint.  `crb` uses `dnf config-manager`, which is
+# in dnf-plugins-core.
+RUN dnf -q -y install dnf-plugins-core && crb enable
 
 RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \

@@ -116,33 +116,14 @@ pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
 
 # Under Rocky Linux, trying to use `cronic` with `makeinfo` leads to errors
 # because of undefined variables:  COMSPEC, ComSpec, BIBINPUTS, BSTINPUTS, ...
+OS_ID := $(shell . /etc/os-release 2>/dev/null && echo "$$ID")
+MAKEINFO_PDF := $(if $(filter rocky,${OS_ID}),,${CRONIC}) makeinfo --pdf
+
 daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo ${CRONIC}
-	NO_CRONIC=; \
-	if [ -f /etc/os-release ]; then \
-	    . /etc/os-release; \
-	    if [ "$$ID" = "rocky" ]; then \
-	        NO_CRONIC="yes"; \
-	    fi; \
-	fi; \
-	if [ -n "$$NO_CRONIC" ] ; then \
-	  makeinfo --pdf $<; \
-	else \
-	  ${CRONIC} makeinfo --pdf $<; \
-	fi
+	${MAKEINFO_PDF} $<
 
 developer.pdf: developer.texinfo ${CRONIC}
-	NO_CRONIC=; \
-	if [ -f /etc/os-release ]; then \
-	    . /etc/os-release; \
-	    if [ "$$ID" = "rocky" ]; then \
-	        NO_CRONIC="yes"; \
-	    fi; \
-	fi; \
-	if [ -n "$$NO_CRONIC" ] ; then \
-	  makeinfo --pdf $<; \
-	else \
-	  ${CRONIC} makeinfo --pdf $<; \
-	fi
+	${MAKEINFO_PDF} $<
 
 # Note that the clean target does not remove invariants-doc.texinfo or
 # config-options.texinfo.
