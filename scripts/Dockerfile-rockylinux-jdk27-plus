@@ -40,10 +40,8 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   which
 
 # Install the JDK.
-# JDK 27 is not in rockylinux_packaged_jdks in Dockerfile-defs.m4, so
-# download the JDK rather than installing java-27-openjdk with dnf.
-# Dockerfile-defs.m4 explains why.
-# RUN curl --silent -o jdk-27_linux-x64_bin.tar.gz https://download.oracle.com/java/27/latest/jdk-27_linux-x64_bin.tar.gz \
+# rockylinux:9 does not package JDK 27 (see jdk_packaged_rockylinux in Dockerfile-defs.m4),
+# so download the JDK rather than installing it as an OS package.
 RUN curl --silent -o jdk-27_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk27/55ce5470a6294008af0057ff4626d0e5/35/GPL/openjdk-27_linux-x64_bin.tar.gz \
 && tar xzf jdk-27_linux-x64_bin.tar.gz \
 && rm jdk-27_linux-x64_bin.tar.gz

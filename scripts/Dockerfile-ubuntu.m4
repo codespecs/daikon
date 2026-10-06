@@ -1,8 +1,6 @@
 dockerfile_header(Dockerfile-ubuntu.m4)
 
-# "ubuntu" is the latest LTS release.  "ubuntu:rolling" is the latest release.
-# Either might lag behind; as of 2024-11-16, ubuntu:rolling was still 24.04 rather than 24.10.
-FROM ubuntu[[]]m4_ifelse(jdk_at_least(25), 1, [[:rolling]])
+FROM ubuntu_image
 LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
 
 # According to
@@ -50,14 +48,7 @@ m4_ifelse(jdk_packaged_ubuntu, 1, [[RUN export DEBIAN_FRONTEND=noninteractive \
   openjdk-JDKVER-jdk \
 && update-java-alternatives --set java-1.JDKVER.0-openjdk-amd64
 m4_ifelse(jdk_at_least(25), 1, [[ENV JAVA[[]]JDKVER[[]]_HOME=/usr/lib/jvm/java-JDKVER-openjdk-amd64
-]])]], [[# JDK JDKVER is newer than ubuntu[[]]_newest_packaged_jdk in Dockerfile-defs.m4, so
-# download the JDK rather than installing openjdk-JDKVER-jdk with apt-get.
-RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \
-&& tar xzf jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
-&& rm jdk-JDKVER[[]]_linux-x64_bin.tar.gz
-ENV PATH="/jdk-JDKVER/bin:$PATH"
-ENV JAVA[[]]JDKVER[[]]_HOME=/jdk-JDKVER
-]])m4_dnl
+]])]], [[jdk_download(ubuntu, [[/jdk-JDKVER/bin:$PATH]])]])m4_dnl
 if_plus([[
 # These are needed to build the Checker Framework, used by the "typecheck" job in CI.
 RUN export DEBIAN_FRONTEND=noninteractive \

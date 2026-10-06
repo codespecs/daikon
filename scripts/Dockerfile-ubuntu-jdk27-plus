@@ -5,8 +5,6 @@
 # But it's used primarily for running miscellaneous tests such as the manual
 # and Javadoc.
 
-# "ubuntu" is the latest LTS release.  "ubuntu:rolling" is the latest release.
-# Either might lag behind; as of 2024-11-16, ubuntu:rolling was still 24.04 rather than 24.10.
 FROM ubuntu:rolling
 LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
 
@@ -49,8 +47,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
   wget
 
 # Install the JDK.
-# JDK 27 is newer than ubuntu_newest_packaged_jdk in Dockerfile-defs.m4, so
-# download the JDK rather than installing openjdk-27-jdk with apt-get.
+# ubuntu:rolling does not package JDK 27 (see jdk_packaged_ubuntu in Dockerfile-defs.m4),
+# so download the JDK rather than installing it as an OS package.
 RUN curl --silent -o jdk-27_linux-x64_bin.tar.gz https://download.java.net/java/GA/jdk27/55ce5470a6294008af0057ff4626d0e5/35/GPL/openjdk-27_linux-x64_bin.tar.gz \
 && tar xzf jdk-27_linux-x64_bin.tar.gz \
 && rm jdk-27_linux-x64_bin.tar.gz

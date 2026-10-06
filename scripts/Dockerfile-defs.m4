@@ -8,12 +8,25 @@ m4_dnl Disable comments, so that macros are expanded within "#" comments.
 m4_changecom()m4_dnl
 m4_dnl jdk_at_least(N) expands to 1 if JDKVER >= N, and to 0 otherwise.
 m4_define([[jdk_at_least]], [[m4_eval(JDKVER >= $1)]])m4_dnl
-m4_dnl ubuntu_newest_packaged_jdk is the newest JDK that Ubuntu provides as an OS package.
-m4_define([[ubuntu_newest_packaged_jdk]], [[26]])m4_dnl
+m4_dnl ubuntu_image is the Ubuntu base image.  "ubuntu" is the latest LTS release.
+m4_dnl "ubuntu:rolling" is the latest release.  Either might lag behind; as of 2024-11-16,
+m4_dnl ubuntu:rolling was still 24.04 rather than 24.10.
+m4_define([[ubuntu_image]], [[m4_ifelse(jdk_at_least(25), 1, [[ubuntu:rolling]], [[ubuntu]])]])m4_dnl
+m4_dnl ubuntu_lts_newest_packaged_jdk and ubuntu_rolling_newest_packaged_jdk are the newest JDKs
+m4_dnl that the "ubuntu" and "ubuntu:rolling" images provide as OS packages.
+m4_dnl Dockerfile-README.md gives a command that lists them.
+m4_define([[ubuntu_lts_newest_packaged_jdk]], [[26]])m4_dnl
+m4_define([[ubuntu_rolling_newest_packaged_jdk]], [[26]])m4_dnl
+m4_dnl ubuntu_newest_packaged_jdk is the newest JDK that ubuntu_image provides as an OS package.
+m4_define([[ubuntu_newest_packaged_jdk]],
+  [[m4_ifelse(ubuntu_image, [[ubuntu]], ubuntu_lts_newest_packaged_jdk, ubuntu_rolling_newest_packaged_jdk)]])m4_dnl
 m4_dnl jdk_packaged_ubuntu expands to 1 if Ubuntu provides the openjdk-JDKVER-jdk package,
 m4_dnl and to 0 otherwise.  When it is 0, the JDK is downloaded from jdk_download_url.
 m4_define([[jdk_packaged_ubuntu]], [[m4_eval(JDKVER <= ubuntu_newest_packaged_jdk)]])m4_dnl
-m4_dnl rockylinux_packaged_jdks lists the JDKs that Rocky Linux provides as OS packages.
+m4_dnl rockylinux_image is the Rocky Linux base image.
+m4_define([[rockylinux_image]], [[rockylinux:9]])m4_dnl
+m4_dnl rockylinux_packaged_jdks lists the JDKs that rockylinux_image provides as OS packages,
+m4_dnl separated by whitespace.
 m4_dnl Dockerfile-README.md gives a command that lists them.
 m4_dnl Do not list a JDK just because dnf can install java-NN-openjdk:  if Rocky Linux does not
 m4_dnl package JDK NN, then dnf satisfies java-NN-openjdk with EPEL's java-latest-openjdk, which
@@ -22,7 +35,7 @@ m4_define([[rockylinux_packaged_jdks]], [[8 11 17 21 25]])m4_dnl
 m4_dnl jdk_packaged_rockylinux expands to 1 if JDKVER is in rockylinux_packaged_jdks, and to 0
 m4_dnl otherwise.  When it is 0, the JDK is downloaded from jdk_download_url.
 m4_define([[jdk_packaged_rockylinux]],
-  [[m4_ifelse(m4_index([[ ]]rockylinux_packaged_jdks[[ ]], [[ ]]JDKVER[[ ]]), -1, 0, 1)]])m4_dnl
+  [[m4_ifelse(m4_regexp(rockylinux_packaged_jdks, [[\<]]JDKVER[[\>]]), -1, 0, 1)]])m4_dnl
 m4_dnl jdk_download_url is the URL of the JDKVER tarball, which unpacks to directory jdk-JDKVER.
 m4_dnl It is used only when the OS does not package JDKVER.  If m4 reports that there is no URL,
 m4_dnl add one for JDKVER below.
@@ -30,6 +43,19 @@ m4_define([[jdk_download_url]], [[m4_ifelse(JDKVER, 27,
   [[https://download.java.net/java/GA/jdk27/55ce5470a6294008af0057ff4626d0e5/35/GPL/openjdk-27_linux-x64_bin.tar.gz]],
   [[m4_errprint([[Dockerfile-defs.m4: no jdk_download_url for JDK ]]JDKVER
 )m4_m4exit(1)]])]])m4_dnl
+m4_dnl jdk_download(OS, PATH) expands to Dockerfile commands that download the JDK from
+m4_dnl jdk_download_url and set PATH and JAVA<JDKVER>_HOME.  OS is "ubuntu" or "rockylinux".
+m4_dnl PATH is the new value of the PATH environment variable.
+m4_dnl An alternative download URL is
+m4_dnl https://download.oracle.com/java/JDKVER/latest/jdk-JDKVER_linux-x64_bin.tar.gz .
+m4_define([[jdk_download]], [[# $1_image does not package JDK JDKVER (see jdk_packaged_[[]]$1 in Dockerfile-defs.m4),
+# so download the JDK rather than installing it as an OS package.
+RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \
+&& tar xzf jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
+&& rm jdk-JDKVER[[]]_linux-x64_bin.tar.gz
+ENV PATH="$2"
+ENV JAVA[[]]JDKVER[[]]_HOME=/jdk-JDKVER
+]])m4_dnl
 m4_dnl if_plus(TEXT) expands to TEXT for a "-plus" image, and to nothing otherwise.
 m4_define([[if_plus]], [[m4_ifelse(PLUS, 1, [[$1]])]])m4_dnl
 m4_dnl The comment at the top of each generated Dockerfile.

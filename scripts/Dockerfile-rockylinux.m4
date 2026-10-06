@@ -1,6 +1,6 @@
 dockerfile_header(Dockerfile-rockylinux.m4)
 
-FROM rockylinux:9
+FROM rockylinux_image
 LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
 
 # According to
@@ -39,15 +39,7 @@ m4_ifelse(jdk_packaged_rockylinux, 1, [[RUN dnf -q -y upgrade && dnf -q -y insta
   java-JDKVER-openjdk \
   java-JDKVER-openjdk-devel
 m4_ifelse(jdk_at_least(25), 1, [[ENV JAVA[[]]JDKVER[[]]_HOME=/usr/lib/jvm/java-JDKVER-openjdk
-]])]], [[# JDK JDKVER is not in rockylinux[[]]_packaged_jdks in Dockerfile-defs.m4, so
-# download the JDK rather than installing java-JDKVER-openjdk with dnf.
-# Dockerfile-defs.m4 explains why.
-# RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz https://download.oracle.com/java/JDKVER/latest/jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
-RUN curl --silent -o jdk-JDKVER[[]]_linux-x64_bin.tar.gz jdk_download_url \
-&& tar xzf jdk-JDKVER[[]]_linux-x64_bin.tar.gz \
-&& rm jdk-JDKVER[[]]_linux-x64_bin.tar.gz
-ENV PATH="/jdk-JDKVER/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-ENV JAVA[[]]JDKVER[[]]_HOME=/jdk-JDKVER
+]])]], [[jdk_download(rockylinux, [[/jdk-JDKVER/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin]])m4_dnl
 RUN chmod og+rx /root \
 && chmod og+r /root/*
 ]])m4_dnl

@@ -7,18 +7,24 @@ The Dockerfiles are generated from `Dockerfile-*.m4`.
 To regenerate them, run `make dockerfiles`.
 The JDK versions are listed in variable `DOCKERFILE_JDKS` in `Makefile`.
 Whether a JDK is installed as an OS package or downloaded is controlled by
-`ubuntu_newest_packaged_jdk` and `rockylinux_packaged_jdks` in
-`Dockerfile-defs.m4`.
-Rocky Linux packages only some JDKs (currently, only LTS releases).
-When the Rocky Linux version in `Dockerfile-rockylinux.m4` changes, or when you
-add a JDK version, check `rockylinux_packaged_jdks` against the output of:
+`ubuntu_lts_newest_packaged_jdk`, `ubuntu_rolling_newest_packaged_jdk`, and
+`rockylinux_packaged_jdks` in `Dockerfile-defs.m4`.
+When a base image changes (including when Ubuntu makes a new release), or when
+you add a JDK version, check those values against the output of these commands:
 
 ```sh
-docker run --rm rockylinux:9 dnf -q list --available 'java-*-openjdk'
+for image in ubuntu ubuntu:rolling; do
+  docker pull -q "$image"
+  docker run --rm "$image" sh -c 'apt-get -qq update && apt-cache pkgnames openjdk- | grep -- "-jdk$" | sort -V'
+done
+image="$(echo rockylinux_image | m4 -P Dockerfile-defs.m4 -)"
+docker pull -q "$image"
+docker run --rm "$image" dnf -q list --available 'java-*-openjdk'
 ```
 
-That command does not enable EPEL, so it lists only the JDKs that Rocky Linux
-itself packages.
+Rocky Linux packages only some JDKs (currently, only LTS releases).
+The `dnf` command does not enable EPEL, so it lists only the JDKs that Rocky
+Linux itself packages.
 When you add a JDK version that some OS does not package, also add its
 download URL to `jdk_download_url` in `Dockerfile-defs.m4`; otherwise
 `make dockerfiles` fails.
