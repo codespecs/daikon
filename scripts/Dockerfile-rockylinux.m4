@@ -50,8 +50,9 @@ RUN chmod og+rx /root
 ]])m4_dnl
 if_plus([[
 # The CRB repository contains certain packages, including dependencies of
-# EPEL packages such as yamllint.
-RUN crb enable
+# EPEL packages such as yamllint.  `crb` uses `dnf config-manager`, which is
+# in dnf-plugins-core.
+RUN dnf -q -y install dnf-plugins-core && crb enable
 
 RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \
@@ -63,6 +64,8 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   python3 \
   python3-distutils-extra \
   ShellCheck \
+  texinfo \
+  texinfo-tex \
   texlive \
   yamllint
 
@@ -76,10 +79,6 @@ RUN wget -q https://services.gradle.org/distributions/gradle-9.8.0-bin.zip \
 && unzip -q -d /opt/gradle gradle-9.8.0-bin.zip \
 && rm gradle-9.8.0-bin.zip
 ENV PATH=$PATH:/opt/gradle/gradle-9.8.0/bin
-
-RUN dnf -y install \
-  texinfo \
-  texinfo-tex
 
 # Install shfmt.
 RUN dnf -q -y upgrade && dnf -q -y install \
