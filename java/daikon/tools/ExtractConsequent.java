@@ -201,21 +201,21 @@ public class ExtractConsequent {
             count--;
             continue;
           }
-          String javaStr = cond.inv.format_using(OutputFormat.JAVA);
+          String javaStr = javaFormat(cond.inv);
           String daikonStr = cond.inv.format_using(OutputFormat.DAIKON);
           String escStr = cond.inv.format_using(OutputFormat.ESCJAVA);
           String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
           allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
           //           allConds.add(condIndex);
-          if (count > 1) {
+          if (conjunctionJava.length() > 0) {
             conjunctionJava.append(" && ");
             conjunctionDaikon.append(" and ");
             conjunctionESC.append(" && ");
             conjunctionSimplify.append(" ");
           }
-          conjunctionJava.append(javaStr);
+          conjunctionJava.append(parenthesizeDisjunction(javaStr));
           conjunctionDaikon.append(daikonStr);
-          conjunctionESC.append(escStr);
+          conjunctionESC.append(parenthesizeDisjunction(escStr));
           conjunctionSimplify.append(simplifyStr);
         }
         conjunctionSimplify.append(")");
@@ -250,6 +250,28 @@ public class ExtractConsequent {
     pw.flush();
   }
 
+  /**
+   * Returns the invariant formatted as a splitting condition: in Java format, but with the return
+   * value written as "return", which is how a .spinfo file refers to it.
+   *
+   * @param inv an invariant
+   * @return the invariant formatted as a splitting condition
+   */
+  static String javaFormat(Invariant inv) {
+    return result_pattern.matcher(inv.format_using(OutputFormat.JAVA)).replaceAll("return");
+  }
+
+  /**
+   * Returns the given expression, parenthesized if it contains "||". Since "||" has lower
+   * precedence than "&&", such an expression must be parenthesized when it is a conjunct.
+   *
+   * @param expr a Java or ESC expression
+   * @return the expression, parenthesized if necessary to be used as a conjunct
+   */
+  static String parenthesizeDisjunction(String expr) {
+    return expr.contains("||") ? "(" + expr + ")" : expr;
+  }
+
   static String combineDummy(String inv, String daikonStr, String esc, String simplify) {
     StringBuilder combined = new StringBuilder(inv);
     combined.append(lineSep + "\tDAIKON_FORMAT ");
@@ -276,7 +298,15 @@ public class ExtractConsequent {
       }
     }
     if (!invs.isEmpty()) {
-      String pptname = cleanup_pptname(ppt.name());
+      // A program point that is not a Java method, an :::OBJECT ppt, or a :::CLASS ppt (such as
+      // "aprogram.point:::POINT", as produced by convertcsv.pl) keeps its full name, so that the
+      // name matches the program point when used in a .spinfo file.
+      String pptname =
+          (ppt.name().indexOf('(') == -1
+                  && !ppt.ppt_name.isObjectInstanceSynthetic()
+                  && !ppt.ppt_name.isClassStaticSynthetic())
+              ? ppt.name()
+              : cleanup_pptname(ppt.name());
       for (Invariant maybe_as_inv : invs) {
         Implication maybe = (Implication) maybe_as_inv;
 
@@ -355,9 +385,19 @@ public class ExtractConsequent {
           continue;
         }
 
-        String inv_string = inv.format_using(OutputFormat.JAVA);
+        // 2) "x != 0" for a boolean x, which is not legal Java
+        if (inv instanceof daikon.inv.unary.scalar.NonZero
+            && inv.ppt.var_infos[0].type.isScalar()
+            && inv.ppt.var_infos[0].type.baseIsBoolean()) {
+          continue;
+        }
+
+        String inv_string = javaFormat(inv);
         if (orig_pattern.matcher(inv_string).find()
-            || dot_class_pattern.matcher(inv_string).find()) {
+            || dot_class_pattern.matcher(inv_string).find()
+            // The "cluster" variable exists only while clustering; it may appear in a derived
+            // variable, such as an array index.
+            || cluster_pattern.matcher(inv.format_using(OutputFormat.DAIKON)).find()) {
           continue;
         }
         String fake_inv_string = simplify_inequalities(inv_string);
@@ -478,7 +518,15 @@ public class ExtractConsequent {
     return m.find() && !m.find();
   }
 
+  /** Matches a pre-state or post-state value, which a splitter cannot use. */
   static Pattern orig_pattern;
+
+  /** Matches the return value in Java format. */
+  static Pattern result_pattern;
+
+  /** Matches the "cluster" variable. */
+  static Pattern cluster_pattern;
+
   static Pattern dot_class_pattern;
   static Pattern non_word_pattern;
   static Pattern gteq_pattern;
@@ -492,7 +540,9 @@ public class ExtractConsequent {
   static {
     try {
       non_word_pattern = Pattern.compile("\\W+");
-      orig_pattern = Pattern.compile("orig\\s*\\(");
+      orig_pattern = Pattern.compile("orig\\s*\\(|\\\\(old|new)\\s*\\(");
+      result_pattern = Pattern.compile("\\\\result\\b");
+      cluster_pattern = Pattern.compile("\\bcluster\\b");
       dot_class_pattern = Pattern.compile("\\.class");
       inequality_pattern = Pattern.compile("[\\!<>]=");
       gteq_pattern = Pattern.compile(">=");
