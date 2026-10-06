@@ -795,8 +795,8 @@ public class PptRelation implements Serializable {
       // Connect any conditional ppt variables.  Only connect to the
       // first splitter, since each splitter should yield the same
       // results at the parent (since each splitter sees the same
-      // points)  This should only happen at the leaves (numbered
-      // exit points) since all other points should be built from
+      // points)  This should only happen at the leaves (such as
+      // numbered exit points) since all other points should be built from
       // their other children.  But since we need the relation
       // from the child's point of view when printing, we create
       // under all cases and then remove it from non-leaves children
@@ -812,7 +812,7 @@ public class PptRelation implements Serializable {
                   + " with connections ["
                   + rel.parent_to_child_var_string()
                   + "]");
-          if (!ppt.ppt_name.isNumberedExitPoint()) {
+          if (!ppt.is_dataflow_leaf()) {
             ppt.children.remove(rel);
           }
         }
@@ -828,7 +828,7 @@ public class PptRelation implements Serializable {
 
     // Loop over each ppt and process each non-leaf with splitters
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.ppt_name.isNumberedExitPoint()) {
+      if (ppt.is_dataflow_leaf()) {
         continue;
       }
       if (!ppt.has_splitters()) {
@@ -952,8 +952,8 @@ public class PptRelation implements Serializable {
       // Connect any conditional ppt variables.  Only connect to the
       // first splitter, since each splitter should yield the same
       // results at the parent (since each splitter sees the same
-      // points)  This should only happen at the leaves (numbered
-      // exit points) since all other points should be built from
+      // points)  This should only happen at the leaves (such as
+      // numbered exit points) since all other points should be built from
       // their other children.  But since we need the relation
       // from the child's point of view when printing, we create
       // under all cases and then remove it from non-leaves children
@@ -964,7 +964,7 @@ public class PptRelation implements Serializable {
         for (int ii = 0; ii < ppt_split.ppts.length; ii++) {
           PptRelation rel = newPptPptConditional(ppt, ppt_split.ppts[ii]);
           rels.add(rel);
-          if (!ppt.is_subexit()) {
+          if (!ppt.is_dataflow_leaf()) {
             ppt.children.remove(rel);
           }
         }
@@ -989,7 +989,7 @@ public class PptRelation implements Serializable {
 
     // Loop over each ppt and process each non-leaf with splitters
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.is_subexit()) {
+      if (ppt.is_dataflow_leaf()) {
         continue;
       }
       if (!ppt.has_splitters()) {
