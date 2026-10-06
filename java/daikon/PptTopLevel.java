@@ -4183,6 +4183,16 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
+   * Creates the initial equality view for this ppt, in which all variables are in a single equality
+   * set.
+   */
+  public void create_equality_view() {
+    PptSliceEquality new_equality_view = new PptSliceEquality(this);
+    new_equality_view.instantiate_invariants();
+    equality_view = new_equality_view;
+  }
+
+  /**
    * Cleans up the ppt so that its invariants can be merged from other ppts. Not normally necessary
    * unless the merge is taking place over multiple ppts maps based on different data. This allows a
    * ppt to have its invariants recalculated.
