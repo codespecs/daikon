@@ -3,6 +3,7 @@ package daikon;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -184,6 +185,132 @@ public final class VarComparabilityImplicit extends VarComparability implements 
       assert type1.dimensions == 0 || type2.dimensions == 0;
       return false;
     }
+  }
+
+  /**
+   * Records in {@code groups} that the two comparabilities must be comparable, by merging their
+   * comparable sets. Merging is needed only for sets that are not already comparable to everything.
+   *
+   * @param type1 a comparability
+   * @param type2 a comparability
+   * @param groups a union-find structure over comparable sets, as used by {@link #findGroup}
+   */
+  static void unify(
+      VarComparabilityImplicit type1,
+      VarComparabilityImplicit type2,
+      Map<Integer, Integer> groups) {
+    if ((type1.dimensions > 0) && (type2.dimensions > 0)) {
+      unify(
+          (VarComparabilityImplicit) type1.indexType(type1.dimensions - 1),
+          (VarComparabilityImplicit) type2.indexType(type2.dimensions - 1),
+          groups);
+      unify(
+          (VarComparabilityImplicit) type1.elementType(),
+          (VarComparabilityImplicit) type2.elementType(),
+          groups);
+    } else if ((type1.dimensions == 0) && (type2.dimensions == 0)) {
+      if (type1.base >= 0 && type2.base >= 0) {
+        int group1 = findGroup(type1.base, groups);
+        int group2 = findGroup(type2.base, groups);
+        // Use the smaller value as the representative, for deterministic results.
+        if (group1 < group2) {
+          groups.put(group2, group1);
+        } else if (group2 < group1) {
+          groups.put(group1, group2);
+        }
+      }
+    }
+    // Otherwise, one is an array and the other is not.  Such variables are never equal, so there
+    // is nothing to do.
+  }
+
+  /**
+   * Returns the representative of the comparable set that contains {@code base}. Compresses the
+   * path from {@code base} to its representative.
+   *
+   * @param base a comparable set
+   * @param groups a union-find structure over comparable sets: maps a comparable set to another
+   *     comparable set in the same group; a representative has no entry
+   * @return the representative of the comparable set that contains {@code base}
+   */
+  private static int findGroup(int base, Map<Integer, Integer> groups) {
+    int root = base;
+    Integer next;
+    while ((next = groups.get(root)) != null) {
+      root = next;
+    }
+    while (base != root) {
+      next = groups.put(base, root);
+      assert next != null : "@AssumeAssertion(nullness): base is not a representative";
+      base = next;
+    }
+    return root;
+  }
+
+  /**
+   * Returns a comparability like this one, but with each comparable set replaced by its
+   * representative in {@code groups}.
+   *
+   * @param groups a union-find structure over comparable sets, as built by {@link #unify}
+   * @return a comparability like this one, with each comparable set replaced by its representative
+   */
+  VarComparabilityImplicit remap(Map<Integer, Integer> groups) {
+    int newBase = (base < 0) ? base : findGroup(base, groups);
+    VarComparabilityImplicit @Nullable [] oldIndexTypes = indexTypes;
+    VarComparabilityImplicit @Nullable [] newIndexTypes = oldIndexTypes;
+    if (oldIndexTypes != null) {
+      for (int i = 0; i < oldIndexTypes.length; i++) {
+        VarComparabilityImplicit newIndexType = oldIndexTypes[i].remap(groups);
+        if (newIndexType != oldIndexTypes[i]) {
+          if (newIndexTypes == oldIndexTypes) {
+            newIndexTypes = oldIndexTypes.clone();
+          }
+          assert newIndexTypes != null : "@AssumeAssertion(nullness): copy of oldIndexTypes";
+          newIndexTypes[i] = newIndexType;
+        }
+      }
+    }
+    if (newBase == base && newIndexTypes == indexTypes) {
+      return this;
+    }
+    return new VarComparabilityImplicit(newBase, newIndexTypes, dimensions);
+  }
+
+  /**
+   * Returns the comparability of a variable that is always equal to two variables with the given
+   * comparabilities, which have been made comparable by {@link #unify} and {@link #remap}. Wherever
+   * either is comparable to everything, so is the result.
+   *
+   * @param type1 a comparability
+   * @param type2 a comparability that is comparable to {@code type1}
+   * @return a comparability that is comparable to everything that either argument is comparable to
+   */
+  static VarComparabilityImplicit join(
+      VarComparabilityImplicit type1, VarComparabilityImplicit type2) {
+    if (type1.dimensions != type2.dimensions) {
+      // Such variables are never equal.
+      return type1;
+    }
+    VarComparabilityImplicit @Nullable [] newIndexTypes = type1.indexTypes;
+    for (int i = 0; i < type1.dimensions; i++) {
+      VarComparabilityImplicit indexType1 = (VarComparabilityImplicit) type1.indexType(i);
+      VarComparabilityImplicit newIndexType =
+          join(indexType1, (VarComparabilityImplicit) type2.indexType(i));
+      if (newIndexType != indexType1) {
+        assert newIndexTypes != null : "@AssumeAssertion(nullness): dependent: dimensions > 0";
+        if (newIndexTypes == type1.indexTypes) {
+          newIndexTypes = newIndexTypes.clone();
+        }
+        newIndexTypes[i] = newIndexType;
+      }
+    }
+    // A negative base, which is comparable to everything, takes precedence.  If both are
+    // negative, the choice is arbitrary.  If both are non-negative, they are equal.
+    int newBase = Math.min(type1.base, type2.base);
+    if (newBase == type1.base && newIndexTypes == type1.indexTypes) {
+      return type1;
+    }
+    return new VarComparabilityImplicit(newBase, newIndexTypes, type1.dimensions);
   }
 
   /**
