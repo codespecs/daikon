@@ -56,8 +56,9 @@ this directory (`scripts/`):
 make -k docker-images && git push
 ```
 
-Do not pass `-j`; building the images in parallel can exhaust memory, disk
-space, or Docker Hub rate limits.  `-k` continues after a failure, so a
+The Makefile builds the images one at a time, even if you pass `-j`,
+because building them in parallel can exhaust memory, disk space, or Docker
+Hub rate limits.  `-k` continues after a failure, so a
 single run builds and uploads every image that can be built and reports
 every failure.  If any image fails, `git push` does not run; fix the problem
 and re-run the command, which rebuilds and re-uploads all the images.

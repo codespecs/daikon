@@ -524,9 +524,6 @@ tests/**/merged/
 # Coverity intermediate files
 java/cov-int/
 
-# Directory used for creating docker images
-scripts/dockerdir/
-
 # PMD
 java/pmd-output.txt
 java/pmd.cache
