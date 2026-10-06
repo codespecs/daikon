@@ -87,7 +87,7 @@ public class CreateSpinfo {
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
 
-    DaikonGetopt g = new DaikonGetopt("daikon.tools.jtb.CreateSpinfo", args, "o:", longopts, usage);
+    DaikonGetopt g = new DaikonGetopt(args, "o:", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {

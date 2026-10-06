@@ -54,7 +54,7 @@ public class DtraceNonceFixer {
    * @param args command-line arguments, like those of {@link #main}
    */
   public static void mainHelper(final String[] args) {
-    String[] files = DaikonGetopt.nonOptionArgs("daikon.tools.DtraceNonceFixer", args, usage);
+    String[] files = DaikonGetopt.nonOptionArgs(args, usage);
     if (files.length != 1) {
       throw new daikon.Daikon.UserError(usage);
     }

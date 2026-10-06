@@ -256,11 +256,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("  }");
     ps.println();
     ps.println("  public static void mainHelper(String[] args) {");
-    ps.println("    DaikonGetopt g =");
-    ps.println("        new DaikonGetopt(");
-    ps.println(
-        "            \"daikon.test.split.SplitterFactoryTest\", args, \"s\", new LongOpt[0],"
-            + " usage);");
+    ps.println("    DaikonGetopt g = new DaikonGetopt(args, \"s\", new LongOpt[0], usage);");
     ps.println("    int c;");
     ps.println("    while ((c = g.getopt()) != -1) {");
     ps.println("      switch (c) {");

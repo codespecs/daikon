@@ -24,8 +24,7 @@ import org.plumelib.util.StringsPlume;
  *
  * <p>The first argument is a Daikon {@code .inv} file -- a serialized file of Invariant objects.
  * All subsequent arguments are {@code Foo.java} files that are rewritten into {@code
- * Foo.java-jmlannotated} versions; alternately, use the {@code -r} flag to process every {@code
- * .java} file under the current directory.
+ * Foo.java-jmlannotated} versions.
  */
 public class Annotate {
 
@@ -138,7 +137,7 @@ public class Annotate {
           new LongOpt(max_invariants_pp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(no_reflection_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
         };
-    DaikonGetopt g = new DaikonGetopt("daikon.tools.jtb.Annotate", args, "is", longopts, usage);
+    DaikonGetopt g = new DaikonGetopt(args, "is", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {

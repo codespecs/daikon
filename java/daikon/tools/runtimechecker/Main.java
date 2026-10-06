@@ -55,9 +55,7 @@ public class Main extends CommandHandler {
 
     String[] commandAndArgs;
     try {
-      commandAndArgs =
-          DaikonGetopt.argsAfterLeadingOptions(
-              "daikon.tools.runtimechecker.Main", args, usageMessage(handlers));
+      commandAndArgs = DaikonGetopt.argsAfterLeadingOptions(args, () -> usageMessage(handlers));
     } catch (Daikon.DaikonTerminationException e) {
       Daikon.handleDaikonTerminationException(e);
       return;

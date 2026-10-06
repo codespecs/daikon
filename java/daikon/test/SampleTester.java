@@ -110,7 +110,7 @@ public class SampleTester {
           new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
 
-    DaikonGetopt g = new DaikonGetopt("daikon.test.SampleTester", args, "", longopts, usage);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {

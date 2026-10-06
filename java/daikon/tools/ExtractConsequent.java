@@ -119,7 +119,7 @@ public class ExtractConsequent {
           new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
-    DaikonGetopt g = new DaikonGetopt("daikon.ExtractConsequent", args, "", longopts, usage);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {

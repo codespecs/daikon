@@ -58,7 +58,7 @@ public final class SplitDtrace {
    * @throws IOException if there is a problem reading or writing a file
    */
   public static void mainHelper(String[] args) throws IOException {
-    String[] files = DaikonGetopt.nonOptionArgs("daikon.SplitDtrace", args, usage);
+    String[] files = DaikonGetopt.nonOptionArgs(args, usage);
     if (files.length != 1) {
       throw new Daikon.UserError(usage);
     }

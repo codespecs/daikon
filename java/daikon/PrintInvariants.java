@@ -342,7 +342,7 @@ public final class PrintInvariants {
           new LongOpt(
               PrintInvariants.print_csharp_metadata_SWITCH, LongOpt.OPTIONAL_ARGUMENT, null, 0),
         };
-    DaikonGetopt g = new DaikonGetopt("daikon.PrintInvariants", args, "", longopts, usage);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {

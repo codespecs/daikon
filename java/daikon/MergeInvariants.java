@@ -102,7 +102,7 @@ public final class MergeInvariants {
           new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
 
-    DaikonGetopt g = new DaikonGetopt("daikon.MergeInvariants", args, "o:", longopts, usage);
+    DaikonGetopt g = new DaikonGetopt(args, "o:", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {

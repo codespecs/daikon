@@ -1054,7 +1054,7 @@ public final class Daikon {
           new LongOpt(disc_reason_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(mem_stat_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         };
-    DaikonGetopt g = new DaikonGetopt("daikon.Daikon", args, "o:", longopts, usage);
+    DaikonGetopt g = new DaikonGetopt(args, "o:", longopts, usage);
     int c;
 
     while ((c = g.getopt()) != -1) {

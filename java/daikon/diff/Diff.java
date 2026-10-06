@@ -206,8 +206,7 @@ public final class Diff {
           new LongOpt(IGNORE_NUMBERED_EXITS_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         };
 
-    DaikonGetopt g =
-        new DaikonGetopt("daikon.diff.Diff", args, "Hydastmxno:jpevl", longOpts, usage);
+    DaikonGetopt g = new DaikonGetopt(args, "Hydastmxno:jpevl", longOpts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {

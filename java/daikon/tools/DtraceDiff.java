@@ -125,7 +125,7 @@ public class DtraceDiff {
           new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
 
-    DaikonGetopt g = new DaikonGetopt("daikon.tools.DtraceDiff", args, "", longopts, usage);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {

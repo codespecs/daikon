@@ -675,8 +675,7 @@ public class LogicalCompare {
 
     extra_assumptions = new LinkedHashMap<>();
 
-    DaikonGetopt g =
-        new DaikonGetopt("daikon.tools.compare.LogicalCompare", args, "", longopts, usage);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, usage);
     int c;
     boolean user_filters = false;
     while ((c = g.getopt()) != -1) {

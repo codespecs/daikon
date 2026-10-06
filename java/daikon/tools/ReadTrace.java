@@ -62,7 +62,7 @@ public class ReadTrace {
    * @param args command-line arguments, like those of {@link #main}
    */
   public static void mainHelper(String[] args) {
-    String[] traceFiles = DaikonGetopt.nonOptionArgs("daikon.tools.ReadTrace", args, usage);
+    String[] traceFiles = DaikonGetopt.nonOptionArgs(args, usage);
     if (traceFiles.length == 0) {
       throw new Daikon.UserError("No trace files specified" + Daikon.lineSep + usage);
     }

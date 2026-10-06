@@ -60,15 +60,12 @@ public class TraceSelect {
   // Always set to non-null by mainHelper
   private static String @MonotonicNonNull [] sampleNames;
 
-  /** The name of this program, for use in messages. */
-  private static final String progname = "daikon.tools.TraceSelect";
-
   /** The usage message for this program. */
   private static final String usage =
       StringsPlume.joinLines(
           "USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]...",
           "The options are -SEED n, -NOCLEAN, -INCLUDE_UNRETURNED, and -DO_DIFFS.",
-          "The Daikon-args start with the first .dtrace or .decls file.",
+          "The Daikon-args start with the first .dtrace or .decls file or other switch.",
           "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED -SEED 1000 foo.dtrace"
               + " foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
 
@@ -93,7 +90,7 @@ public class TraceSelect {
    */
   public static void mainHelper(String[] args) {
     // Handles -h and --help before num_reps.
-    args = DaikonGetopt.argsAfterLeadingOptions(progname, args, usage);
+    args = DaikonGetopt.argsAfterLeadingOptions(args, usage);
     argles = args;
     if (args.length < 2) {
       throw new daikon.Daikon.UserError("Too few arguments." + daikon.Daikon.lineSep + usage);
@@ -150,13 +147,15 @@ public class TraceSelect {
         daikonArgStart = i + 1;
       }
 
-      // TODO: The current implementation assumes that a decls
-      // or dtrace file will be the first of the Daikon arguments,
-      // marking the end of the TraceSelect arguments.  That is
-      // not necessarily true, especially in cases when someone
-      // uses a Daikon argument such as "--nohierarchy" or "--format java"
-      // and the manual examples place the arguments before any dtrace
-      // or decls arguments.
+      // The Daikon arguments start with the first .dtrace or .decls file, or with the first
+      // switch that is not a TraceSelect switch, such as "--nohierarchy" or "--format java".
+
+      // -h and --help before the Daikon arguments print the usage message.
+      else if (!knowArgStart
+          && (args[i].equals("-h") || args[i].equals("--" + daikon.Daikon.help_SWITCH))) {
+        System.out.println(usage);
+        throw new daikon.Daikon.NormalTermination();
+      }
 
       // For now, only the first dtrace file will be sampled
       else if (args[i].endsWith(".dtrace")) {
@@ -177,14 +176,10 @@ public class TraceSelect {
         }
       }
 
-      // Any other switch before the Daikon arguments is a request for help or an error.
+      // Any other switch starts the Daikon arguments.
       else if (!knowArgStart && args[i].startsWith("-")) {
-        if (args[i].startsWith("--") || args[i].length() == 2) {
-          // Prints the usage message for -h and --help, and describes any other such option.
-          DaikonGetopt.nonOptionArgs(progname, new String[] {args[i]}, usage);
-        }
-        throw new daikon.Daikon.UserError(
-            "Unrecognized command-line option " + args[i] + "; run with -h for usage");
+        daikonArgStart = i;
+        knowArgStart = true;
       }
     }
 

@@ -46,9 +46,7 @@ class WriteViolationFile {
   public static void main(String[] args) {
     String[] classAndArgs;
     try {
-      classAndArgs =
-          DaikonGetopt.argsAfterLeadingOptions(
-              "daikon.tools.runtimechecker.WriteViolationFile", args, usageMessage);
+      classAndArgs = DaikonGetopt.argsAfterLeadingOptions(args, usageMessage);
     } catch (Daikon.DaikonTerminationException e) {
       Daikon.handleDaikonTerminationException(e);
       return;

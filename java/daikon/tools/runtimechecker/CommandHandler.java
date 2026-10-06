@@ -3,6 +3,7 @@ package daikon.tools.runtimechecker;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,6 +27,17 @@ public class CommandHandler {
   /** Prints the usage message to standard error. */
   public void usageMessage() {
     usageMessage(System.err);
+  }
+
+  /**
+   * Returns the usage message.
+   *
+   * @return the usage message
+   */
+  public String usageMessageString() {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    usageMessage(new PrintStream(bytes, true, UTF_8));
+    return bytes.toString(UTF_8).stripTrailing();
   }
 
   /**

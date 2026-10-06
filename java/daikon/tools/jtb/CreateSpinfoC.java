@@ -47,15 +47,20 @@ public class CreateSpinfoC {
    * @param args command-line arguments, like those of {@link #main}
    */
   public static void mainHelper(String[] args) {
-    String[] files = DaikonGetopt.nonOptionArgs("daikon.tools.jtb.CreateSpinfoC", args, usage);
+    String[] files = DaikonGetopt.nonOptionArgs(args, usage);
     if (files.length != 1) {
       throw new Daikon.UserError(usage);
     }
     String inputFile = files[0];
+    int dotPos = inputFile.lastIndexOf('.');
+    if (dotPos <= inputFile.lastIndexOf(File.separatorChar)) {
+      throw new Daikon.UserError(
+          "File name has no extension: " + inputFile + Daikon.lineSep + usage);
+    }
+    String fileName = inputFile.substring(0, dotPos);
     System.out.println("Create spinfo file from file " + inputFile + " . . .");
+    File temp = new File(fileName + ".temp");
     try {
-      String fileName = inputFile.substring(0, inputFile.lastIndexOf('.'));
-      File temp = new File(fileName + ".temp");
       // filter out the '\f' characters in the file
       try (Reader reader = Files.newBufferedReader(Paths.get(inputFile), UTF_8);
           Writer writer = Files.newBufferedWriter(temp.toPath(), UTF_8)) {
@@ -66,35 +71,35 @@ public class CreateSpinfoC {
           }
         }
       } catch (IOException e) {
-        temp.delete();
         throw new Daikon.UserError(e, "Problem copying " + inputFile + " to " + temp);
       }
+      TranslationUnit root;
       try (FileInputStream fis = new FileInputStream(temp)) {
         @SuppressWarnings("UnusedVariable") // sets static variables for TranslationUnit()
         CParser parser = new CParser(fis);
+        // The parser reads lazily, so the stream must be open while it parses.
+        root = CParser.TranslationUnit();
       } catch (IOException e) {
         throw new UncheckedIOException("problem reading " + temp, e);
+      } catch (ParseException e) {
+        throw new Daikon.UserError(e, "CreateSpinfoC encountered errors during parse");
       }
-      TranslationUnit root = CParser.TranslationUnit();
       StringFinder finder = new StringFinder();
-      temp.delete();
       root.accept(finder);
 
-      ConditionPrinter printer;
+      String spinfoFile = fileName + ".spinfo";
       try {
-        printer = new ConditionPrinter(fileName + ".spinfo");
+        ConditionPrinter printer = new ConditionPrinter(spinfoFile);
         printer.setActualStrings(finder.functionStringMapping);
         printer.setStringArrays(finder.stringMatrices);
         root.accept(printer);
         printer.close();
       } catch (IOException e) {
-        System.out.println("File IO Error");
-        System.out.println(e.getMessage());
+        throw new Daikon.UserError(e, "Problem writing " + spinfoFile);
       }
       System.out.println("CreateSpinfoC:  C program parsed successfully.");
-    } catch (ParseException e) {
-      System.out.println("CreateSpinfoC encountered errors during parse.");
-      System.out.println(e.getMessage());
+    } finally {
+      temp.delete();
     }
   }
 }
