@@ -444,8 +444,9 @@ public class DeclReader {
         // Otherwise, skip the record.  For example, it is a sample record in a .dtrace file.
       }
       if (forRewriting && !seenVersion2) {
-        // For example, the file is empty.
-        reportFileError(decl_file, "No \"decl-version 2.0\" record");
+        // For example, the file is empty.  The EntryReader cannot report a file name or line
+        // number after the end of the input.
+        throw new Daikon.UserError("No \"decl-version 2.0\" record in " + filename);
       }
     }
   }
