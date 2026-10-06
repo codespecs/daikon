@@ -34,7 +34,8 @@ trace-untruncate-fast: trace-untruncate-fast.c
 DOCKERFILE_OSES := ubuntu rockylinux
 DOCKERFILE_JDKS := 11 17 21 25 27
 DOCKERFILES := $(foreach os,${DOCKERFILE_OSES},$(foreach jdk,${DOCKERFILE_JDKS},Dockerfile-${os}-jdk${jdk} Dockerfile-${os}-jdk${jdk}-plus))
-# Remove this line when DOCKERFILE_JDKS no longer contains 11 or 17.
+# Rocky Linux 10 does not package JDK 11 or 17.  This special case is
+# temporary:  remove this line when DOCKERFILE_JDKS no longer contains 11 or 17.
 DOCKERFILES := $(filter-out Dockerfile-rockylinux-jdk11% Dockerfile-rockylinux-jdk17%,${DOCKERFILES})
 
 dockerfiles: ${DOCKERFILES}
@@ -47,6 +48,34 @@ ${DOCKERFILES}: Dockerfile-%: Dockerfile-defs.m4 $(addsuffix .m4,$(addprefix Doc
 	cat -s $@.tmp > $@.tmp2
 	mv -f $@.tmp2 $@
 	rm -f $@.tmp
+
+## Docker images
+
+# Build each Docker image and upload it to Docker Hub.
+# To build and upload just one image, run, for example:
+#   make docker-image-ubuntu-jdk21-plus
+# The Docker Hub user and the "-testing" suffix come from file
+# ../.azure/defs-common.m4, which also determines the images that CI uses.
+# DOCKER_USERID and DOCKERTESTING run m4 only when first used, and at most once.
+# DOCKER_M4_VALUE fails if m4 fails, rather than silently yielding a wrong
+# image name such as one that lacks the "-testing" suffix.
+DOCKER_M4_VALUE = $(shell out=$$(printf '%s\n' '$(1)' | m4 ../.azure/defs-common.m4 -) && printf '%s\n' "$$out" | tail -1)$(if $(filter 0,${.SHELLSTATUS}),,$(error m4 failed to compute $(1)))
+DOCKER_USERID = $(eval DOCKER_USERID := $(call DOCKER_M4_VALUE,docker_userid))${DOCKER_USERID}
+DOCKERTESTING = $(eval DOCKERTESTING := $(call DOCKER_M4_VALUE,docker_testing))${DOCKERTESTING}
+DOCKER_IMAGE = ${DOCKER_USERID}/daikon-$*${DOCKERTESTING}
+DOCKER_IMAGES := $(patsubst Dockerfile-%,docker-image-%,${DOCKERFILES})
+.PHONY: docker-images ${DOCKER_IMAGES}
+docker-images: ${DOCKER_IMAGES}
+# Building the images in parallel can exhaust memory, disk space, or Docker
+# Hub rate limits, so build them one at a time even if make is run with -j.
+.NOTPARALLEL: docker-images
+
+# The Dockerfiles copy no files into the image, so build with no context.
+# --pull and --no-cache ensure that the image contains the latest base image
+# and packages, rather than stale cached layers.
+${DOCKER_IMAGES}: docker-image-%: Dockerfile-%
+	docker -l warn build --pull --no-cache --progress=plain -t ${DOCKER_IMAGE} - < $<
+	docker -l warn push --quiet ${DOCKER_IMAGE}
 
 ## Delegation to other Makefiles (gross)
 
