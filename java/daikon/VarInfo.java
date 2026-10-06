@@ -457,6 +457,15 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     if (var_flags.contains(VarFlags.NON_NULL)) {
       auxstrs.add(VarInfoAux.IS_NON_NULL + "=true");
     }
+    if (var_flags.contains(VarFlags.NO_DUPS)) {
+      auxstrs.add(VarInfoAux.HAS_DUPLICATES + "=false");
+    }
+    if (var_flags.contains(VarFlags.NOT_ORDERED)) {
+      auxstrs.add(VarInfoAux.HAS_ORDER + "=false");
+    }
+    if (var_flags.contains(VarFlags.NO_SIZE)) {
+      auxstrs.add(VarInfoAux.HAS_SIZE + "=false");
+    }
     if (vardef.min_value != null) {
       auxstrs.add(VarInfoAux.MINIMUM_VALUE + "=" + vardef.min_value);
     }

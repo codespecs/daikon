@@ -211,6 +211,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return false;
     }
 
+    #if defined(SEQ)
+      // Don't instantiate if the variables can't have order
+      if (!vis[0].aux.hasOrder() || !vis[1].aux.hasOrder()) {
+        return false;
+      }
+    #endif
+
     return true;
   }
 
