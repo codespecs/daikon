@@ -1,0 +1,1306 @@
+// Declarations for misc.Issue554
+// Declarations written by Chicory 2026-10-04T10:09:26.506863351
+
+decl-version 2.0
+var-comparability implicit
+
+ppt misc.Issue554.Issue554(int[]):::ENTER
+ppt-type enter
+variable mag
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable mag[..]
+  var-kind array
+  enclosing-var mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 3[4]
+
+ppt misc.Issue554.Issue554(int[]):::EXIT25
+ppt-type subexit
+parent parent misc.Issue554:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags is_param non_null
+  comparability 10
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 3
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO_MAG
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 9[2]
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 5
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  enclosing-var misc.Issue554.ZERO
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO.mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[11]
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  enclosing-var misc.Issue554.ZERO
+  dec-type int
+  rep-type int
+  comparability 6
+  parent misc.Issue554:::OBJECT 1
+variable this.mag
+  var-kind field mag
+  enclosing-var this
+  dec-type int[]
+  rep-type hashcode
+  comparability 3
+  parent misc.Issue554:::OBJECT 1
+variable this.mag[..]
+  var-kind array
+  enclosing-var this.mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[2]
+  parent misc.Issue554:::OBJECT 1
+variable this.bitLength
+  var-kind field bitLength
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 2
+  parent misc.Issue554:::OBJECT 1
+variable mag
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable mag[..]
+  var-kind array
+  enclosing-var mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[2]
+
+ppt misc.Issue554.bitLength():::ENTER
+ppt-type enter
+parent parent misc.Issue554:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 7
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO_MAG
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[6]
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 2
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  enclosing-var misc.Issue554.ZERO
+  dec-type int[]
+  rep-type hashcode
+  comparability 4
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO.mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[10]
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  enclosing-var misc.Issue554.ZERO
+  dec-type int
+  rep-type int
+  comparability 3
+  parent misc.Issue554:::OBJECT 1
+variable this.mag
+  var-kind field mag
+  enclosing-var this
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+  parent misc.Issue554:::OBJECT 1
+variable this.mag[..]
+  var-kind array
+  enclosing-var this.mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 9[6]
+  parent misc.Issue554:::OBJECT 1
+variable this.bitLength
+  var-kind field bitLength
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 6
+  parent misc.Issue554:::OBJECT 1
+
+ppt misc.Issue554.bitLength():::EXIT31
+ppt-type subexit
+parent parent misc.Issue554:::OBJECT 1
+variable this
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags is_param non_null
+  comparability 2
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 7
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO_MAG
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[6]
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 2
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  enclosing-var misc.Issue554.ZERO
+  dec-type int[]
+  rep-type hashcode
+  comparability 4
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO.mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[10]
+  parent misc.Issue554:::OBJECT 1
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  enclosing-var misc.Issue554.ZERO
+  dec-type int
+  rep-type int
+  comparability 3
+  parent misc.Issue554:::OBJECT 1
+variable this.mag
+  var-kind field mag
+  enclosing-var this
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+  parent misc.Issue554:::OBJECT 1
+variable this.mag[..]
+  var-kind array
+  enclosing-var this.mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 9[6]
+  parent misc.Issue554:::OBJECT 1
+variable this.bitLength
+  var-kind field bitLength
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 6
+  parent misc.Issue554:::OBJECT 1
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 6
+
+ppt misc.Issue554.calcBitLength(int,\_int[]):::ENTER
+ppt-type enter
+parent parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 3
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO_MAG
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 9[2]
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 5
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  enclosing-var misc.Issue554.ZERO
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO.mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[10]
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  enclosing-var misc.Issue554.ZERO
+  dec-type int
+  rep-type int
+  comparability 6
+  parent misc.Issue554:::CLASS 1
+variable start
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable mag
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable mag[..]
+  var-kind array
+  enclosing-var mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[2]
+
+ppt misc.Issue554.calcBitLength(int,\_int[]):::EXIT39
+ppt-type subexit
+parent parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 3
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO_MAG
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 9[2]
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 5
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  enclosing-var misc.Issue554.ZERO
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO.mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[10]
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  enclosing-var misc.Issue554.ZERO
+  dec-type int
+  rep-type int
+  comparability 6
+  parent misc.Issue554:::CLASS 1
+variable start
+  var-kind variable
+  dec-type int
+  rep-type int
+  flags is_param
+  comparability 2
+variable mag
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags is_param
+  comparability 3
+variable mag[..]
+  var-kind array
+  enclosing-var mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 4[2]
+variable return
+  var-kind return
+  dec-type int
+  rep-type int
+  comparability 2
+
+ppt misc.Issue554.main(java.lang.String[]):::ENTER
+ppt-type enter
+parent parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 9
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO_MAG
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 10[11]
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 5
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  enclosing-var misc.Issue554.ZERO
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO.mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[12]
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  enclosing-var misc.Issue554.ZERO
+  dec-type int
+  rep-type int
+  comparability 6
+  parent misc.Issue554:::CLASS 1
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[13]
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[14]
+
+ppt misc.Issue554.main(java.lang.String[]):::EXIT46
+ppt-type subexit
+parent parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 9
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO_MAG
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 10[11]
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 5
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  enclosing-var misc.Issue554.ZERO
+  dec-type int[]
+  rep-type hashcode
+  comparability 7
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO.mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 8[12]
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  enclosing-var misc.Issue554.ZERO
+  dec-type int
+  rep-type int
+  comparability 6
+  parent misc.Issue554:::CLASS 1
+variable args
+  var-kind variable
+  dec-type java.lang.String[]
+  rep-type hashcode
+  flags is_param
+  comparability 2
+variable args.getClass().getName()
+  var-kind function getClass().getName()
+  enclosing-var args
+  dec-type java.lang.Class
+  rep-type java.lang.String
+  function-args args
+  flags synthetic classname non_null
+  comparability 1
+variable args[..]
+  var-kind array
+  enclosing-var args
+  array 1
+  dec-type java.lang.String[]
+  rep-type hashcode[]
+  comparability 3[13]
+variable args[..].toString
+  var-kind function toString()
+  enclosing-var args[..]
+  array 1
+  dec-type java.lang.String[]
+  rep-type java.lang.String[]
+  function-args args[]
+  flags synthetic to_string
+  comparability 4[14]
+
+ppt misc.Issue554:::CLASS
+ppt-type class
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 6
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO_MAG
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[8]
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 2
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  enclosing-var misc.Issue554.ZERO
+  dec-type int[]
+  rep-type hashcode
+  comparability 4
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO.mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[9]
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  enclosing-var misc.Issue554.ZERO
+  dec-type int
+  rep-type int
+  comparability 3
+
+ppt misc.Issue554:::OBJECT
+ppt-type object
+parent parent misc.Issue554:::CLASS 1
+variable this
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags is_param non_null
+  comparability 8
+variable misc.Issue554.ZERO_MAG
+  var-kind variable
+  dec-type int[]
+  rep-type hashcode
+  flags nomod
+  comparability 6
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO_MAG[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO_MAG
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 7[12]
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO
+  var-kind variable
+  dec-type misc.Issue554
+  rep-type hashcode
+  flags nomod
+  comparability 2
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.mag
+  var-kind field mag
+  enclosing-var misc.Issue554.ZERO
+  dec-type int[]
+  rep-type hashcode
+  comparability 4
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.mag[..]
+  var-kind array
+  enclosing-var misc.Issue554.ZERO.mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 5[13]
+  parent misc.Issue554:::CLASS 1
+variable misc.Issue554.ZERO.bitLength
+  var-kind field bitLength
+  enclosing-var misc.Issue554.ZERO
+  dec-type int
+  rep-type int
+  comparability 3
+  parent misc.Issue554:::CLASS 1
+variable this.mag
+  var-kind field mag
+  enclosing-var this
+  dec-type int[]
+  rep-type hashcode
+  comparability 10
+variable this.mag[..]
+  var-kind array
+  enclosing-var this.mag
+  array 1
+  dec-type int[]
+  rep-type int[]
+  comparability 11[9]
+variable this.bitLength
+  var-kind field bitLength
+  enclosing-var this
+  dec-type int
+  rep-type int
+  comparability 9
+
+misc.Issue554.Issue554(int[]):::ENTER
+this_invocation_nonce
+0
+mag
+282828951
+1
+mag[..]
+[]
+1
+
+misc.Issue554.Issue554(int[]):::EXIT25
+this_invocation_nonce
+0
+this
+394721749
+1
+misc.Issue554.ZERO_MAG
+nonsensical
+2
+misc.Issue554.ZERO_MAG[..]
+nonsensical
+2
+misc.Issue554.ZERO
+nonsensical
+2
+misc.Issue554.ZERO.mag
+nonsensical
+2
+misc.Issue554.ZERO.mag[..]
+nonsensical
+2
+misc.Issue554.ZERO.bitLength
+nonsensical
+2
+this.mag
+282828951
+1
+this.mag[..]
+[]
+1
+this.bitLength
+-1
+1
+mag
+282828951
+1
+mag[..]
+[]
+1
+
+misc.Issue554.main(java.lang.String[]):::ENTER
+this_invocation_nonce
+1
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+args
+345281752
+1
+args.getClass().getName()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+
+misc.Issue554.Issue554(int[]):::ENTER
+this_invocation_nonce
+2
+mag
+1896294051
+1
+mag[..]
+[1 2]
+1
+
+misc.Issue554.Issue554(int[]):::EXIT25
+this_invocation_nonce
+2
+this
+1684015092
+1
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+this.mag
+1896294051
+1
+this.mag[..]
+[1 2]
+1
+this.bitLength
+-1
+1
+mag
+1896294051
+1
+mag[..]
+[1 2]
+1
+
+misc.Issue554.bitLength():::ENTER
+this_invocation_nonce
+3
+this
+1684015092
+1
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+this.mag
+1896294051
+1
+this.mag[..]
+[1 2]
+1
+this.bitLength
+-1
+1
+
+misc.Issue554.calcBitLength(int, int[]):::ENTER
+this_invocation_nonce
+4
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+start
+0
+1
+mag
+1896294051
+1
+mag[..]
+[1 2]
+1
+
+misc.Issue554.calcBitLength(int, int[]):::EXIT39
+this_invocation_nonce
+4
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+start
+0
+1
+mag
+1896294051
+1
+mag[..]
+[1 2]
+1
+return
+0
+1
+
+misc.Issue554.bitLength():::EXIT31
+this_invocation_nonce
+3
+this
+1684015092
+1
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+this.mag
+1896294051
+1
+this.mag[..]
+[1 2]
+1
+this.bitLength
+0
+1
+return
+0
+1
+
+misc.Issue554.Issue554(int[]):::ENTER
+this_invocation_nonce
+5
+mag
+1209669119
+1
+mag[..]
+[3]
+1
+
+misc.Issue554.Issue554(int[]):::EXIT25
+this_invocation_nonce
+5
+this
+2014866032
+1
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+this.mag
+1209669119
+1
+this.mag[..]
+[3]
+1
+this.bitLength
+-1
+1
+mag
+1209669119
+1
+mag[..]
+[3]
+1
+
+misc.Issue554.bitLength():::ENTER
+this_invocation_nonce
+6
+this
+2014866032
+1
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+this.mag
+1209669119
+1
+this.mag[..]
+[3]
+1
+this.bitLength
+-1
+1
+
+misc.Issue554.calcBitLength(int, int[]):::ENTER
+this_invocation_nonce
+7
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+start
+0
+1
+mag
+1209669119
+1
+mag[..]
+[3]
+1
+
+misc.Issue554.calcBitLength(int, int[]):::EXIT39
+this_invocation_nonce
+7
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+start
+0
+1
+mag
+1209669119
+1
+mag[..]
+[3]
+1
+return
+0
+1
+
+misc.Issue554.bitLength():::EXIT31
+this_invocation_nonce
+6
+this
+2014866032
+1
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+this.mag
+1209669119
+1
+this.mag[..]
+[3]
+1
+this.bitLength
+0
+1
+return
+0
+1
+
+misc.Issue554.bitLength():::ENTER
+this_invocation_nonce
+8
+this
+394721749
+1
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+this.mag
+282828951
+1
+this.mag[..]
+[]
+1
+this.bitLength
+-1
+1
+
+misc.Issue554.calcBitLength(int, int[]):::ENTER
+this_invocation_nonce
+9
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+start
+0
+1
+mag
+282828951
+1
+mag[..]
+[]
+1
+
+misc.Issue554.calcBitLength(int, int[]):::EXIT39
+this_invocation_nonce
+9
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+-1
+1
+start
+0
+1
+mag
+282828951
+1
+mag[..]
+[]
+1
+return
+0
+1
+
+misc.Issue554.bitLength():::EXIT31
+this_invocation_nonce
+8
+this
+394721749
+1
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+0
+1
+this.mag
+282828951
+1
+this.mag[..]
+[]
+1
+this.bitLength
+0
+1
+return
+0
+1
+
+misc.Issue554.main(java.lang.String[]):::EXIT46
+this_invocation_nonce
+1
+misc.Issue554.ZERO_MAG
+282828951
+1
+misc.Issue554.ZERO_MAG[..]
+[]
+1
+misc.Issue554.ZERO
+394721749
+1
+misc.Issue554.ZERO.mag
+282828951
+1
+misc.Issue554.ZERO.mag[..]
+[]
+1
+misc.Issue554.ZERO.bitLength
+0
+1
+args
+345281752
+1
+args.getClass().getName()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+
