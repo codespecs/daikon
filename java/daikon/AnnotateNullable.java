@@ -79,7 +79,7 @@ public class AnnotateNullable {
     }
     if (inv_files.length != 1) {
       System.err.println("must specify exactly one invariant file");
-      options.printUsage();
+      options.printUsage(System.err);
       System.exit(1);
     }
 
