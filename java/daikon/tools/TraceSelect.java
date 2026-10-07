@@ -207,7 +207,7 @@ public class TraceSelect {
 
         List<String> al = new ArrayList<>();
         try (DtracePartitioner dec = new DtracePartitioner(fileName)) {
-          MultiRandSelector<String> mrs = new MultiRandSelector<>(numPerSample, dec);
+          MultiRandSelector<String> mrs = new MultiRandSelector<>(numPerSample, randObj, dec);
 
           while (dec.hasNext()) {
             mrs.accept(dec.next());
