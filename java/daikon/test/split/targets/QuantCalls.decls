@@ -96,6 +96,50 @@ ppt misc.QuantCalls.m(int):::ENTER
     dec-type char[]
     rep-type java.lang.String
     comparability 22
+  variable this.sh
+    var-kind field sh
+    enclosing-var this
+    dec-type short[]
+    rep-type hashcode
+    comparability 22
+  variable this.sh[..]
+    var-kind array
+    enclosing-var this.sh
+    array 1
+    dec-type short[]
+    rep-type int[]
+    comparability 22
+  variable this.h
+    var-kind field h
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+  variable this.sign
+    var-kind field sign
+    enclosing-var this
+    dec-type java.lang.String
+    rep-type java.lang.String
+    comparability 22
+  variable this.obj
+    var-kind field obj
+    enclosing-var this
+    dec-type java.lang.Object
+    rep-type hashcode
+    comparability 22
+  variable this.objs
+    var-kind field objs
+    enclosing-var this
+    dec-type java.lang.Object[]
+    rep-type hashcode
+    comparability 22
+  variable this.objs[..]
+    var-kind array
+    enclosing-var this.objs
+    array 1
+    dec-type java.lang.Object[]
+    rep-type hashcode[]
+    comparability 22
 
 ppt misc.QuantCalls.m(int):::EXIT10
   ppt-type subexit
@@ -187,4 +231,48 @@ ppt misc.QuantCalls.m(int):::EXIT10
     enclosing-var this
     dec-type char[]
     rep-type java.lang.String
+    comparability 22
+  variable this.sh
+    var-kind field sh
+    enclosing-var this
+    dec-type short[]
+    rep-type hashcode
+    comparability 22
+  variable this.sh[..]
+    var-kind array
+    enclosing-var this.sh
+    array 1
+    dec-type short[]
+    rep-type int[]
+    comparability 22
+  variable this.h
+    var-kind field h
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+  variable this.sign
+    var-kind field sign
+    enclosing-var this
+    dec-type java.lang.String
+    rep-type java.lang.String
+    comparability 22
+  variable this.obj
+    var-kind field obj
+    enclosing-var this
+    dec-type java.lang.Object
+    rep-type hashcode
+    comparability 22
+  variable this.objs
+    var-kind field objs
+    enclosing-var this
+    dec-type java.lang.Object[]
+    rep-type hashcode
+    comparability 22
+  variable this.objs[..]
+    var-kind array
+    enclosing-var this.objs
+    array 1
+    dec-type java.lang.Object[]
+    rep-type hashcode[]
     comparability 22

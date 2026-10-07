@@ -7,11 +7,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -341,7 +338,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * two parts. Instances of "orig(variableName)" are replaced by instances of "orig_variableName".
    * For example "orig(varName.publicField)" would yield "orig_varName_publicField". Calls to
    * daikon.Quant methods that access arrays are replaced (see {@link QuantFixer}), and instances of
-   * "null" are replaced by "0" (see {@link NullReplacer}).
+   * "null" that the splitter represents as a hashcode are replaced by "0" (see {@link
+   * NullReplacer}).
    *
    * @param condition a string representation of a conditional statement
    * @return a version of the conditional with the variable names converted
@@ -359,12 +357,11 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     condition = PrefixFixer.fixPrefix(condition, baseNames);
     // UNDONE: If the condition contains a naked reference to a class
     // variable, we should prepend the classname.  (markro)
-    // NullReplacer must run before QuantFixer, because NullReplacer recognizes the calls to
-    // daikon.Quant methods that return a reference, which are compared with null rather than 0.
-    condition = NullReplacer.replaceNull(condition);
     // QuantFixer must run before ArrayFixer, which would add "_identity" to the array arguments.
-    condition = QuantFixer.fixQuant(condition, getArrays(varInfos), getArrayBaseNames(varInfos));
+    condition = QuantFixer.fixQuant(condition, baseNames, varInfos);
     condition = ArrayFixer.fixArrays(condition, baseNames, varInfos);
+    // NullReplacer must run last, because it recognizes the compilable names of variables.
+    condition = NullReplacer.replaceNull(condition, varInfos);
     return condition;
   }
 
@@ -514,39 +511,6 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       baseNames[i] = getBaseName(varInfos[i]);
     }
     return baseNames;
-  }
-
-  /**
-   * Returns a map from the base name of each array variable in varInfos whose elements the splitter
-   * represents to its VarInfo.
-   *
-   * @param varInfos the varInfos for the variables that may appear in the condition
-   * @return a map from base names of array variables to their VarInfos
-   */
-  private static Map<String, VarInfo> getArrays(VarInfo[] varInfos) {
-    Map<String, VarInfo> arrays = new HashMap<>();
-    for (VarInfo varInfo : varInfos) {
-      if (varInfo.type.isArray() && varInfo.file_rep_type != ProglangType.HASHCODE) {
-        arrays.put(getBaseName(varInfo), varInfo);
-      }
-    }
-    return arrays;
-  }
-
-  /**
-   * Returns the base names of the array variables in varInfos.
-   *
-   * @param varInfos the varInfos for the variables that may appear in the condition
-   * @return the base names of the array variables
-   */
-  private static Set<String> getArrayBaseNames(VarInfo[] varInfos) {
-    Set<String> arrayBaseNames = new HashSet<>();
-    for (VarInfo varInfo : varInfos) {
-      if (varInfo.type.isArray()) {
-        arrayBaseNames.add(getBaseName(varInfo));
-      }
-    }
-    return arrayBaseNames;
   }
 
   /**

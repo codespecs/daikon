@@ -13,3 +13,12 @@ daikon.Quant.getElement_double(this.d, Math.max(i, 0)) > java.lang.Math.abs(this
 daikon.Quant.getElement_char(this.str, 0) == 'a' && daikon.Quant.size(this.str) > 1
 daikon.Quant.getElement_String(this.s, 0) == null
 daikon.Quant.getElement_Object(this.s, i) != null
+this.a[this.sh[0]] > 0 && daikon.Quant.getElement_short(this.sh, 1) > 0
+this.sign == null
+this.sign != null && (daikon.Quant.getElement_String(this.s, 0)) == null
+daikon.Quant.getElement_String(this.s, 0).trim() != null
+this.obj == null
+daikon.Quant.getElement_Object(this.objs, i) != null && this.objs[0] == null
+daikon.Quant.getElement_boolean(this.a, 0)
+java.util.Arrays.equals(this.a, this.b)
+daikon.Quant.size(this.h) > daikon.Quant.getElement_int(this.d, 0)

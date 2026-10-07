@@ -1,9 +1,12 @@
 package daikon.split;
 
+import daikon.ProglangType;
 import daikon.VarInfo;
 import daikon.tools.jtb.Ast;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import jtb.ParseException;
 import jtb.syntaxtree.ArgumentList;
 import jtb.syntaxtree.Arguments;
@@ -26,56 +29,58 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  *
  * <p>QuantFixer runs after the fixers that convert variable names to base names, such as {@link
  * PrefixFixer}, and before {@link ArrayFixer}, which would convert the array arguments to their
- * identities. A call to a daikon.Quant method whose arguments include an array cannot be evaluated
- * correctly on an array's identity, so QuantFixer reports an error for such a call that it does not
- * replace, such as one whose array argument is not the base name of an array whose elements the
- * splitter represents.
+ * identities. QuantFixer reports an error for a call to a daikon.Quant method that accesses an
+ * array but that it cannot replace: one whose first argument is not the base name of an array whose
+ * elements the splitter represents, or one whose element type differs from the array's. The
+ * splitter's representation of an array does not distinguish some element types (for example, int
+ * and boolean arrays are both represented as long[]), so without the check a mismatched call would
+ * compile and quietly evaluate to a meaningless value.
  */
 class QuantFixer extends DepthFirstVisitor {
 
   /** Maps the base name of each array variable whose elements the splitter represents to it. */
-  private final Map<String, VarInfo> arrays;
+  private final Map<String, VarInfo> arrays = new HashMap<>();
 
-  /** The base names of all the array variables, including those represented only by identity. */
-  private final Set<String> allArrays;
-
-  /** A description of a call that QuantFixer cannot replace, or null if there is none. */
-  private @Nullable String error = null;
+  /** Descriptions of the calls that QuantFixer cannot replace. */
+  private final List<String> errors = new ArrayList<>();
 
   /**
    * Creates a new QuantFixer.
    *
-   * @param arrays maps the base name of each array variable whose elements the splitter represents
-   *     to its VarInfo
-   * @param allArrays the base names of all the array variables
+   * @param baseNames the base names of the variables that may appear in the expression
+   * @param varInfos the VarInfos of the variables; the ith element is the VarInfo for the ith
+   *     element of baseNames
    */
-  private QuantFixer(Map<String, VarInfo> arrays, Set<String> allArrays) {
+  private QuantFixer(String[] baseNames, VarInfo[] varInfos) {
     super();
-    this.arrays = arrays;
-    this.allArrays = allArrays;
+    for (int i = 0; i < varInfos.length; i++) {
+      if (varInfos[i].type.isArray() && varInfos[i].file_rep_type != ProglangType.HASHCODE) {
+        arrays.put(baseNames[i], varInfos[i]);
+      }
+    }
   }
 
   /**
    * Replaces calls to daikon.Quant methods that access arrays (see class description).
    *
    * @param expression a valid segment of Java code
-   * @param arrays maps the base name of each array variable whose elements the splitter represents
-   *     to its VarInfo
-   * @param allArrays the base names of all the array variables
+   * @param baseNames the base names of the variables that may appear in the expression
+   * @param varInfos the VarInfos of the variables; the ith element is the VarInfo for the ith
+   *     element of baseNames
    * @return expression, with calls to daikon.Quant array methods replaced
    * @throws ParseException if expression is not valid Java code, or if it contains a call to a
-   *     daikon.Quant method on an array that cannot be replaced
+   *     daikon.Quant method that accesses an array but cannot be replaced
    */
-  public static String fixQuant(
-      String expression, Map<String, VarInfo> arrays, Set<String> allArrays) throws ParseException {
+  public static String fixQuant(String expression, String[] baseNames, VarInfo[] varInfos)
+      throws ParseException {
     if (!expression.contains("daikon.Quant")) {
       return expression;
     }
     Node root = Visitors.getJtbTree(expression);
-    QuantFixer fixer = new QuantFixer(arrays, allArrays);
+    QuantFixer fixer = new QuantFixer(baseNames, varInfos);
     root.accept(fixer);
-    if (fixer.error != null) {
-      throw new ParseException(fixer.error);
+    if (!fixer.errors.isEmpty()) {
+      throw new ParseException(String.join(System.lineSeparator(), fixer.errors));
     }
     return Ast.format(root);
   }
@@ -86,24 +91,17 @@ class QuantFixer extends DepthFirstVisitor {
    */
   @Override
   public void visit(PrimaryExpression n) {
-    // Visit the arguments first, so that the check of n's arguments below does not see the array
-    // arguments of nested calls that are replaced.
+    // Visit the arguments first, so that nested calls are replaced.
     super.visit(n);
     String methodName = quantMethodName(n);
-    if (methodName == null) {
+    if (methodName == null
+        || !(methodName.equals("size") || methodName.startsWith("getElement_"))) {
       return;
     }
     Arguments args = (Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice;
-    boolean accessesArray = methodName.equals("size") || methodName.startsWith("getElement_");
-    if (accessesArray && fixQuantCall(n, args)) {
-      return;
-    }
-    if (accessesArray || mentionsArray(args)) {
-      error =
-          "Cannot translate a call to daikon.Quant."
-              + methodName
-              + " whose arguments are "
-              + Ast.format(args);
+    String error = fixQuantCall(n, methodName, args);
+    if (error != null) {
+      errors.add("Cannot translate daikon.Quant." + methodName + Ast.format(args) + ": " + error);
     }
   }
 
@@ -119,23 +117,26 @@ class QuantFixer extends DepthFirstVisitor {
 
   /**
    * Replaces n, a call to a daikon.Quant method that accesses an array, if the array argument is
-   * the base name of an array whose elements the splitter represents.
+   * the base name of an array whose elements the splitter represents and whose element type is the
+   * one that the method expects.
    *
    * @param n a call to a daikon.Quant method that accesses an array
+   * @param methodName the name of the method that n calls
    * @param args the arguments of n
-   * @return true if n was replaced
+   * @return null if n was replaced, or else the reason that n cannot be replaced
    */
-  private boolean fixQuantCall(PrimaryExpression n, Arguments args) {
-    if (!args.f1.present()) {
-      return false;
-    }
-    NodeToken[] arrayTokens = TokenExtractor.extractTokens(((ArgumentList) args.f1.node).f0);
-    if (arrayTokens.length != 1) {
-      return false;
-    }
-    VarInfo array = arrays.get(arrayTokens[0].tokenImage);
+  private @Nullable String fixQuantCall(PrimaryExpression n, String methodName, Arguments args) {
+    NodeToken[] arrayTokens =
+        args.f1.present()
+            ? TokenExtractor.extractTokens(((ArgumentList) args.f1.node).f0)
+            : new NodeToken[0];
+    VarInfo array = (arrayTokens.length == 1) ? arrays.get(arrayTokens[0].tokenImage) : null;
     if (array == null) {
-      return false;
+      return "the first argument is not an array whose elements are available to the splitter";
+    }
+    if (methodName.startsWith("getElement_")
+        && !hasElementType(array, methodName.substring("getElement_".length()))) {
+      return "the element type of " + array.name() + " is not the one that the method expects";
     }
     // Remove "daikon.Quant.", leaving the method name.
     NodeToken[] methodTokens = TokenExtractor.extractTokens(n.f0);
@@ -143,41 +144,32 @@ class QuantFixer extends DepthFirstVisitor {
       methodTokens[i].tokenImage = "";
     }
     arrayTokens[0].tokenImage = SplitterJavaSource.compilableName(array);
-    return true;
+    return null;
   }
 
   /**
-   * Returns true if some argument in args is the base name of an array. {@link ArrayFixer} converts
-   * such an argument to the array's identity.
+   * Returns true if the elements of array have the given type, as the name of a daikon.Quant
+   * getElement_ method expresses it. Daikon's Java output format uses getElement_Object for every
+   * array whose elements are not primitives, including a String array.
    *
-   * @param args the arguments of a method call
-   * @return true if some argument in args is an array
+   * @param array a one-dimensional array variable
+   * @param elementType the suffix of the name of a daikon.Quant getElement_ method, such as "int",
+   *     "String", or "Object"
+   * @return true if the elements of array have type elementType
    */
-  private boolean mentionsArray(Arguments args) {
-    if (!args.f1.present()) {
+  private static boolean hasElementType(VarInfo array, String elementType) {
+    if (array.type.dimensions() != 1) {
       return false;
     }
-    ArgumentList argList = (ArgumentList) args.f1.node;
-    if (isArray(argList.f0)) {
-      return true;
+    String base = array.type.base();
+    switch (elementType) {
+      case "Object":
+        return !array.type.baseIsPrimitive();
+      case "String":
+        return base.equals("java.lang.String") || base.equals("String");
+      default:
+        return base.equals(elementType);
     }
-    for (Node commaAndArg : argList.f1.nodes) {
-      if (isArray(((NodeSequence) commaAndArg).elementAt(1))) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Returns true if arg is the base name of an array.
-   *
-   * @param arg an argument of a method call
-   * @return true if arg is the base name of an array
-   */
-  private boolean isArray(Node arg) {
-    NodeToken[] tokens = TokenExtractor.extractTokens(arg);
-    return tokens.length == 1 && allArrays.contains(tokens[0].tokenImage);
   }
 
   /**

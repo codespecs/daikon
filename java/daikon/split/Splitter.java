@@ -91,15 +91,16 @@ public abstract class Splitter implements Serializable {
   // called in a splitting condition (see QuantFixer).  The daikon.Quant methods cannot be called
   // directly because a splitter represents an array differently than the program does: an
   // integral or boolean array as a long[] (or an index array as an int[]), a float or double array
-  // as a double[], and a char array as a String.  Each method has the same semantics as the
-  // daikon.Quant method of the same name, including its default value for a null array.  There is
-  // a method only for each element type that the representation can hold, so a splitting
-  // condition that applies a method to an array of a different type does not compile.
+  // as a double[], a char array as a String, a String array as a String[], and an array of other
+  // references as a long[] of hashcodes.  Each method has the same semantics as the daikon.Quant
+  // method of the same name, including its default value for a null array.  Because the
+  // representation does not distinguish, for example, an int array from a boolean array,
+  // QuantFixer checks that a method's element type matches the element type of its array argument.
 
   /**
    * Like {@link daikon.Quant#size(Object)}.
    *
-   * @param a an array, or null
+   * @param a an integral, boolean, or (non-String) reference array, or null
    * @return the length of a, or Integer.MAX_VALUE if a is null
    */
   public static int size(long @Nullable [] a) {
@@ -109,7 +110,7 @@ public abstract class Splitter implements Serializable {
   /**
    * Like {@link daikon.Quant#size(Object)}.
    *
-   * @param a an array, or null
+   * @param a an index array, or null
    * @return the length of a, or Integer.MAX_VALUE if a is null
    */
   public static int size(int @Nullable [] a) {
@@ -119,7 +120,7 @@ public abstract class Splitter implements Serializable {
   /**
    * Like {@link daikon.Quant#size(Object)}.
    *
-   * @param a an array, or null
+   * @param a a float or double array, or null
    * @return the length of a, or Integer.MAX_VALUE if a is null
    */
   public static int size(double @Nullable [] a) {
@@ -129,7 +130,7 @@ public abstract class Splitter implements Serializable {
   /**
    * Like {@link daikon.Quant#size(Object)}.
    *
-   * @param a an array, or null
+   * @param a a String array, or null
    * @return the length of a, or Integer.MAX_VALUE if a is null
    */
   public static int size(@Nullable String @Nullable [] a) {
@@ -158,6 +159,17 @@ public abstract class Splitter implements Serializable {
   }
 
   /**
+   * Like {@link daikon.Quant#getElement_boolean(boolean[], long)}.
+   *
+   * @param a a boolean array whose elements are used as indices, represented as an int[], or null
+   * @param i an index into a
+   * @return the ith element of a, or false if a is null
+   */
+  public static boolean getElement_boolean(int @Nullable [] a, long i) {
+    return (a == null) ? false : a[(int) i] > 0;
+  }
+
+  /**
    * Like {@link daikon.Quant#getElement_byte(byte[], long)}.
    *
    * @param a a byte array represented as a long[], or null
@@ -165,6 +177,17 @@ public abstract class Splitter implements Serializable {
    * @return the ith element of a, or Byte.MAX_VALUE if a is null
    */
   public static byte getElement_byte(long @Nullable [] a, long i) {
+    return (a == null) ? Byte.MAX_VALUE : (byte) a[(int) i];
+  }
+
+  /**
+   * Like {@link daikon.Quant#getElement_byte(byte[], long)}.
+   *
+   * @param a a byte array whose elements are used as indices, represented as an int[], or null
+   * @param i an index into a
+   * @return the ith element of a, or Byte.MAX_VALUE if a is null
+   */
+  public static byte getElement_byte(int @Nullable [] a, long i) {
     return (a == null) ? Byte.MAX_VALUE : (byte) a[(int) i];
   }
 
@@ -180,9 +203,20 @@ public abstract class Splitter implements Serializable {
   }
 
   /**
+   * Like {@link daikon.Quant#getElement_short(short[], long)}.
+   *
+   * @param a a short array whose elements are used as indices, represented as an int[], or null
+   * @param i an index into a
+   * @return the ith element of a, or Short.MAX_VALUE if a is null
+   */
+  public static short getElement_short(int @Nullable [] a, long i) {
+    return (a == null) ? Short.MAX_VALUE : (short) a[(int) i];
+  }
+
+  /**
    * Like {@link daikon.Quant#getElement_int(int[], long)}.
    *
-   * @param a an int array represented as a long[], or null
+   * @param a a int array represented as a long[], or null
    * @param i an index into a
    * @return the ith element of a, or Integer.MAX_VALUE if a is null
    */
@@ -193,7 +227,7 @@ public abstract class Splitter implements Serializable {
   /**
    * Like {@link daikon.Quant#getElement_int(int[], long)}.
    *
-   * @param a an index array, or null
+   * @param a a int array whose elements are used as indices, represented as an int[], or null
    * @param i an index into a
    * @return the ith element of a, or Integer.MAX_VALUE if a is null
    */
@@ -209,6 +243,17 @@ public abstract class Splitter implements Serializable {
    * @return the ith element of a, or Long.MAX_VALUE if a is null
    */
   public static long getElement_long(long @Nullable [] a, long i) {
+    return (a == null) ? Long.MAX_VALUE : a[(int) i];
+  }
+
+  /**
+   * Like {@link daikon.Quant#getElement_long(long[], long)}.
+   *
+   * @param a a long array whose elements are used as indices, represented as an int[], or null
+   * @param i an index into a
+   * @return the ith element of a, or Long.MAX_VALUE if a is null
+   */
+  public static long getElement_long(int @Nullable [] a, long i) {
     return (a == null) ? Long.MAX_VALUE : a[(int) i];
   }
 
@@ -266,5 +311,18 @@ public abstract class Splitter implements Serializable {
    */
   public static @Nullable Object getElement_Object(@Nullable String @Nullable [] a, long i) {
     return getElement_String(a, i);
+  }
+
+  /**
+   * Like {@link daikon.Quant#getElement_Object(Object, long)}, for an array of references other
+   * than Strings, which is represented as an array of hashcodes. Daikon's Java output format uses
+   * getElement_Object for an array whose elements are not primitives.
+   *
+   * @param a an array of references represented as an array of hashcodes, or null
+   * @param i an index into a
+   * @return the hashcode of the ith element of a, or 0 (the hashcode of null) if a is null
+   */
+  public static long getElement_Object(long @Nullable [] a, long i) {
+    return (a == null) ? 0 : a[(int) i];
   }
 }
