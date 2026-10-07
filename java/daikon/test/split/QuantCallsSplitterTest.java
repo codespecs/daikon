@@ -88,7 +88,6 @@ public final class QuantCallsSplitterTest {
   public void testQuantCalls() throws IOException {
     SpinfoFile spinfo = SplitterFactory.parse_spinfofile(new File(targetDir + "QuantCalls.spinfo"));
     PptMap ppts = new PptMap();
-    FileIO.resetNewDeclFormat();
     // Other tests may have set the patterns that filter the program points and variables.
     Pattern oldPptRegexp = Daikon.ppt_regexp;
     Pattern oldPptOmitRegexp = Daikon.ppt_omit_regexp;
