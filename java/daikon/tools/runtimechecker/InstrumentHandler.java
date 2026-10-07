@@ -89,9 +89,6 @@ public class InstrumentHandler extends CommandHandler {
     if (arguments == errorWhileReadingArguments) {
       return false;
     }
-    if (arguments == helpRequested) {
-      return true;
-    }
 
     // Set up debug traces; note this comes after reading command line options.
     daikon.LogHelper.setupLogs(Global.debugAll ? FINE : INFO);
@@ -204,10 +201,6 @@ public class InstrumentHandler extends CommandHandler {
   private static final Arguments errorWhileReadingArguments =
       new Arguments("error while reading arguments", new ArrayList<String>());
 
-  /** Indicates that the user requested the usage message, which has already been printed. */
-  private static final Arguments helpRequested =
-      new Arguments("help requested", new ArrayList<String>());
-
   private Arguments readArguments(String[] args) {
 
     LongOpt[] longopts =
@@ -218,11 +211,9 @@ public class InstrumentHandler extends CommandHandler {
           new LongOpt(make_all_fields_public_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(create_checker_classes_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-          new LongOpt(checkers_directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
-          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 'h')
+          new LongOpt(checkers_directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
         };
-    // This class handles -h itself, because its usage message is printed by usageMessage().
-    DaikonGetopt g = new DaikonGetopt(args, "h", longopts);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -248,9 +239,6 @@ public class InstrumentHandler extends CommandHandler {
             throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
-        case 'h':
-          usageMessage();
-          return helpRequested;
         default:
           throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
