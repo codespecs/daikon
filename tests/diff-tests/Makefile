@@ -18,7 +18,7 @@
 
 # 6. Check the directory and remaining files into the repository.
 
-SUBDIRS = $(shell find * -maxdepth 0 -type d)
+SUBDIRS = $(patsubst %/Makefile,%,$(wildcard */Makefile))
 
 default:
 

@@ -83,6 +83,7 @@ public class SplitterFactoryTestUpdater {
    */
   private static void generateSplitters(List<String> spinfos, List<String> decls) {
     HashSet<File> declsFileSet = new HashSet<>();
+    List<String> declsPaths = new ArrayList<>();
     HashSet<File> spinfoFiles = new HashSet<>();
     PptMap allPpts = new PptMap();
     for (String spinfoFile : spinfos) {
@@ -93,19 +94,13 @@ public class SplitterFactoryTestUpdater {
     for (String declsFile : decls) {
       declsFile = targetDir + declsFile;
       declsFileSet.add(new File(declsFile));
+      declsPaths.add(declsFile);
     }
     declsFileLists.add(new ArrayList<File>(declsFileSet));
     try {
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       Daikon.create_splitters(spinfoFiles);
-      // calling read_data_trace_file in a loop instead of calling
-      // read_data_trace_files allows us to mix version 1 and
-      // version 2 decls file formats.
-      for (String declsFile : decls) {
-        // This reset allows current format to differ from previous.
-        FileIO.resetNewDeclFormat();
-        FileIO.read_data_trace_file(targetDir + declsFile, allPpts);
-      }
+      FileIO.read_data_trace_files(declsPaths, allPpts);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -295,11 +290,8 @@ public class SplitterFactoryTestUpdater {
     ps.println("      }");
     ps.println("      PptSplitter.dkconfig_suppressSplitterErrors = true;");
     ps.println("      Daikon.create_splitters(spFiles);");
-    ps.println("      for (String declsFile : decls) {");
-    ps.println("        FileIO.resetNewDeclFormat();");
     ps.println(
-        "        FileIO.read_data_trace_file(declsFile, allPpts);"); // invoked for side effects
-    ps.println("      }");
+        "      FileIO.read_data_trace_files(decls, allPpts);"); // invoked for side effects
     ps.println("      tempDir = SplitterFactory.getTempDir();");
     ps.println("    } catch (IOException e) {");
     ps.println("      throw new RuntimeException(e);");
