@@ -205,7 +205,7 @@ public class InstrumentHandler extends CommandHandler {
     }
   }
 
-  private static Arguments errorWhileReadingArguments =
+  private static final Arguments errorWhileReadingArguments =
       new Arguments("error while reading arguments", new ArrayList<String>());
 
   private Arguments readArguments(String[] args) {
@@ -256,24 +256,24 @@ public class InstrumentHandler extends CommandHandler {
     // invariant file.
     int argindex = g.getOptind();
     if (argindex >= args.length) {
-      System.out.println("Error: No .inv file or .java file arguments supplied.");
+      System.err.println("Error: No .inv file or .java file arguments supplied.");
       return errorWhileReadingArguments;
     }
     String invfile = args[argindex];
     argindex++;
     if (!(invfile.endsWith(".inv") || invfile.endsWith(".inv.gz"))) {
-      System.out.println("Error: first argument must be a file ending in .inv or .inv.gz.");
+      System.err.println("Error: first argument must be a file ending in .inv or .inv.gz.");
       return errorWhileReadingArguments;
     }
     if (argindex >= args.length) {
-      System.out.println("Error: No .java file arguments supplied.");
+      System.err.println("Error: No .java file arguments supplied.");
       return errorWhileReadingArguments;
     }
     List<String> javaFileNames = new ArrayList<>();
     for (; argindex < args.length; argindex++) {
       String javafile = args[argindex];
       if (!javafile.endsWith(".java")) {
-        System.out.println("File does not end in .java: " + javafile);
+        System.err.println("File does not end in .java: " + javafile);
         return errorWhileReadingArguments;
       }
       javaFileNames.add(javafile);
