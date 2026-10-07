@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import daikon.FileIO;
 import daikon.inv.OutputFormat;
 import daikon.inv.ternary.threeScalar.LinearTernaryCore;
 import org.junit.BeforeClass;
@@ -18,7 +17,6 @@ public class LinearTernaryCoreTest {
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);
-    FileIO.new_decl_format = true;
   }
 
   void set_cache(LinearTernaryCore ltc, int index, long x, long y, long z) {

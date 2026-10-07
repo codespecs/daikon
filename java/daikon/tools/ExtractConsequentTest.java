@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import daikon.FileIO;
 import daikon.FileIO.VarDefinition;
 import daikon.PptSlice;
 import daikon.PptSlice1;
@@ -22,8 +21,6 @@ import daikon.inv.binary.twoScalar.IntGreaterThan;
 import daikon.inv.binary.twoScalar.IntNonEqual;
 import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.test.Common;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,25 +30,10 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class ExtractConsequentTest {
 
-  /** The value of {@code FileIO.new_decl_format} before these tests ran. */
-  private static @Nullable Boolean savedNewDeclFormat;
-
   /** Prepares for tests. */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);
-    savedNewDeclFormat = FileIO.new_decl_format;
-    FileIO.new_decl_format = true;
-  }
-
-  /** Restores global state, so that these tests do not affect other tests. */
-  @AfterClass
-  public static void tearDownClass() {
-    if (savedNewDeclFormat == null) {
-      FileIO.resetNewDeclFormat();
-    } else {
-      FileIO.new_decl_format = savedNewDeclFormat;
-    }
   }
 
   /**

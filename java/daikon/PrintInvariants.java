@@ -151,18 +151,7 @@ public final class PrintInvariants {
    */
   public static boolean dkconfig_true_inv_cnt = false;
 
-  /**
-   * If true, remove as many variables as possible that need to be indicated as 'post'. Post
-   * variables occur when the subscript for a derived variable with an orig sequence is not orig.
-   * For example: orig(a[post(i)]) An equivalent expression involving only orig variables is
-   * substituted for the post variable when one exists.
-   */
-  public static boolean dkconfig_remove_post_vars = false;
-
-  /**
-   * In the new decl format, print array names as 'a[]' as opposed to 'a[..]' This creates names
-   * that are more compatible with the old output. This option has no effect in the old decl format.
-   */
+  /** If true, print array names as 'a[]' as opposed to 'a[..]'. */
   public static boolean dkconfig_old_array_names = true;
 
   /**
@@ -732,7 +721,6 @@ public final class PrintInvariants {
   //
   // All of this can (and should be) improved when V2 is dropped.
 
-  @RequiresNonNull("FileIO.new_decl_format")
   public static void print_invariants(PptMap all_ppts) {
 
     if (out_stream == null) {
@@ -830,7 +818,6 @@ public final class PrintInvariants {
    * Print invariants for a single program point and its conditionals. Does no output if no samples
    * or no views.
    */
-  @RequiresNonNull("FileIO.new_decl_format")
   public static void print_invariants_maybe(PptTopLevel ppt, PrintWriter out, PptMap all_ppts) {
 
     debugPrint.fine("Considering printing ppt " + ppt.name() + ", samples = " + ppt.num_samples());
@@ -917,7 +904,6 @@ public final class PrintInvariants {
    * samples for the specified ppt. Also prints all of the variables for the ppt if
    * Daikon.output_num_samples is enabled or the format is ESCJAVA, JML, or DBCJAVA.
    */
-  @RequiresNonNull("FileIO.new_decl_format")
   public static void print_sample_data(PptTopLevel ppt, PrintWriter out) {
 
     if (!wrap_xml) {
@@ -946,7 +932,7 @@ public final class PrintInvariants {
         || (Daikon.output_format == OutputFormat.DBCJAVA)) {
       out.print("    Variables:");
       for (int i = 0; i < ppt.var_infos.length; i++) {
-        if (dkconfig_old_array_names && FileIO.new_decl_format) {
+        if (dkconfig_old_array_names) {
           out.print(" " + ppt.var_infos[i].name().replace("[..]", "[]"));
         } else {
           out.print(" " + ppt.var_infos[i].name());
@@ -1074,7 +1060,6 @@ public final class PrintInvariants {
   }
 
   /** Prints the specified invariant to out. */
-  @RequiresNonNull("FileIO.new_decl_format")
   public static void print_invariant(
       Invariant inv, PrintWriter out, int invCounter, PptTopLevel ppt) {
 
@@ -1144,7 +1129,7 @@ public final class PrintInvariants {
       debugPrint.fine("Printing: [" + inv.repr_prob() + "]");
     }
 
-    if (dkconfig_old_array_names && FileIO.new_decl_format) {
+    if (dkconfig_old_array_names) {
       inv_rep = inv_rep.replace("[..]", "[]");
     }
 
@@ -1338,7 +1323,6 @@ public final class PrintInvariants {
   }
 
   /** Print invariants for a single program point, once we know that this ppt is worth printing. */
-  @RequiresNonNull("FileIO.new_decl_format")
   public static void print_invariants(PptTopLevel ppt, PrintWriter out, PptMap ppt_map) {
 
     // make names easier to read before printing
@@ -1462,7 +1446,6 @@ public final class PrintInvariants {
   }
 
   /** Does the actual printing of the invariants. */
-  @RequiresNonNull("FileIO.new_decl_format")
   private static void finally_print_the_invariants(
       List<Invariant> invariants, PrintWriter out, PptTopLevel ppt) {
     // System.out.printf("Ppt %s%n", ppt.name());

@@ -84,7 +84,6 @@ public final class MergeInvariants {
    * @throws IOException if there is trouble with I/O
    * @throws ClassNotFoundException if a class cannot be found
    */
-  @SuppressWarnings("nullness:contracts.precondition") // private field
   public static void mainHelper(String[] args)
       throws FileNotFoundException,
           StreamCorruptedException,
@@ -264,7 +263,7 @@ public final class MergeInvariants {
       merge_ppts = FileIO.read_declaration_files(decl_files);
       merge_ppts.trimToSize();
       Daikon.create_combined_exits(merge_ppts);
-      PptRelation.init_hierarchy_for_decl_format(merge_ppts);
+      PptRelation.init_hierarchy(merge_ppts);
     }
 
     // Create a hierarchy between the merge leaves (such as exitNN points)

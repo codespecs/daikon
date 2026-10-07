@@ -121,8 +121,8 @@ foreach my $dtrace_file (@dtrace_files) {
   while (<DTRACE_IN>) {
     my $line = $_;
 #    print ("$line");
-    if ($line =~ /^(DECLARE|ppt\s)/) {
-      # A declaration, which decls-add-cluster.pl handles.
+    if ($line =~ /^ppt /) {
+      # A program point declaration; the decls file provides the declarations.
       &skip_till_next(*DTRACE_IN);
     } elsif ($line =~ /:::/) {
       my $pptname = $line;

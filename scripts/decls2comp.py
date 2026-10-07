@@ -51,31 +51,12 @@ ppt ..returnIntSum():::ENTER
   dec-type int
   comparability -1
 
-DECLARE
-..add():::ENTER
-a
-int # isParam=true
-int
-1
-b
-int # isParam=true
-int
-1
-c
-int # isParam=true
-int
-2
-d
-int # isParam=true
-int
--1
-
 Output:
 
-..add():::ENTER
+..returnIntSum():::ENTER
 a b
 c
--1: d
+d
 """
 
 import re
@@ -107,7 +88,7 @@ hashcode_re = re.compile(r"hashcode.*")
 
 
 # Break each program point declaration up into separate lists.
-# Program points are separated by "DECLARE" statements
+# Each program point declaration starts with a "ppt" record
 # Key: program point name
 # Value: list of all strings following program point
 all_ppts = {}

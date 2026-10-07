@@ -1,14 +1,20 @@
-DECLARE
-Sensor.read():::POINT
-time
-double
-double
-1
-x
-int
-int
-1
-y
-int
-int
-1
+decl-version 2.0
+var-comparability none
+
+ppt Sensor.read():::POINT
+ppt-type point
+variable time
+  var-kind variable
+  dec-type double
+  rep-type double
+  comparability 1
+variable x
+  var-kind variable
+  dec-type int
+  rep-type int
+  comparability 1
+variable y
+  var-kind variable
+  dec-type int
+  rep-type int
+  comparability 1

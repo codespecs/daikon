@@ -1,3345 +1,4718 @@
-VarComparability
-implicit
+decl-version 2.0
 
-DECLARE
-std.enqueue(int;process *;)int:::ENTER
-prio
-int
-int
-1
-new_process
-process[]
-hashcode
-2
-new_process.priority
-int
-int
-3
-new_process.next
-process[]
-hashcode
-4
-new_process.next.priority
-int
-int
-5
-new_process.next.next
-process[]
-hashcode
-6
-new_process.next.next.priority
-int
-int
-7
-new_process.next.next.next
-process[]
-hashcode
-8
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+var-comparability implicit
 
-DECLARE
-std.enqueue(int;process *;)int:::EXIT1
-prio
-int
-int
-1
-new_process
-process[]
-hashcode
-2
-new_process.priority
-int
-int
-3
-new_process.next
-process[]
-hashcode
-4
-new_process.next.priority
-int
-int
-5
-new_process.next.next
-process[]
-hashcode
-6
-new_process.next.next.priority
-int
-int
-7
-new_process.next.next.next
-process[]
-hashcode
-8
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.enqueue(int;process\_*;)int:::ENTER
+  ppt-type enter
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable new_process
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 2
+  variable new_process.priority
+    var-kind field priority
+    enclosing-var new_process
+    dec-type int
+    rep-type int
+    comparability 3
+  variable new_process.next
+    var-kind field next
+    enclosing-var new_process
+    dec-type process[]
+    rep-type hashcode
+    comparability 4
+  variable new_process.next.priority
+    var-kind field priority
+    enclosing-var new_process.next
+    dec-type int
+    rep-type int
+    comparability 5
+  variable new_process.next.next
+    var-kind field next
+    enclosing-var new_process.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 6
+  variable new_process.next.next.priority
+    var-kind field priority
+    enclosing-var new_process.next.next
+    dec-type int
+    rep-type int
+    comparability 7
+  variable new_process.next.next.next
+    var-kind field next
+    enclosing-var new_process.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 8
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.enqueue(int;process *;)int:::EXIT2
-prio
-int
-int
-1
-new_process
-process[]
-hashcode
-2
-new_process.priority
-int
-int
-3
-new_process.next
-process[]
-hashcode
-4
-new_process.next.priority
-int
-int
-5
-new_process.next.next
-process[]
-hashcode
-6
-new_process.next.next.priority
-int
-int
-7
-new_process.next.next.next
-process[]
-hashcode
-8
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.enqueue(int;process\_*;)int:::EXIT1
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable new_process
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 2
+  variable new_process.priority
+    var-kind field priority
+    enclosing-var new_process
+    dec-type int
+    rep-type int
+    comparability 3
+  variable new_process.next
+    var-kind field next
+    enclosing-var new_process
+    dec-type process[]
+    rep-type hashcode
+    comparability 4
+  variable new_process.next.priority
+    var-kind field priority
+    enclosing-var new_process.next
+    dec-type int
+    rep-type int
+    comparability 5
+  variable new_process.next.next
+    var-kind field next
+    enclosing-var new_process.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 6
+  variable new_process.next.next.priority
+    var-kind field priority
+    enclosing-var new_process.next.next
+    dec-type int
+    rep-type int
+    comparability 7
+  variable new_process.next.next.next
+    var-kind field next
+    enclosing-var new_process.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 8
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.main(int;char **;)int:::ENTER
-argc
-int
-int
-25
-argv
-char *[]
-hashcode
-26
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.enqueue(int;process\_*;)int:::EXIT2
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable new_process
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 2
+  variable new_process.priority
+    var-kind field priority
+    enclosing-var new_process
+    dec-type int
+    rep-type int
+    comparability 3
+  variable new_process.next
+    var-kind field next
+    enclosing-var new_process
+    dec-type process[]
+    rep-type hashcode
+    comparability 4
+  variable new_process.next.priority
+    var-kind field priority
+    enclosing-var new_process.next
+    dec-type int
+    rep-type int
+    comparability 5
+  variable new_process.next.next
+    var-kind field next
+    enclosing-var new_process.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 6
+  variable new_process.next.next.priority
+    var-kind field priority
+    enclosing-var new_process.next.next
+    dec-type int
+    rep-type int
+    comparability 7
+  variable new_process.next.next.next
+    var-kind field next
+    enclosing-var new_process.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 8
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.main(int;char **;)int:::EXIT3
-argc
-int
-int
-25
-argv
-char *[]
-hashcode
-26
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.main(int;char\_**;)int:::ENTER
+  ppt-type enter
+  variable argc
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 25
+  variable argv
+    var-kind variable
+    dec-type char\_*[]
+    rep-type hashcode
+    comparability 26
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.get_command(int *;int *;float *;)int:::ENTER
-command
-int[]
-hashcode
-27
-*command
-int
-int
-28
-prio
-int[]
-hashcode
-1
-*prio
-int
-int
-28
-ratio
-float[]
-hashcode
-29
-*ratio
-float
-double
-30
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.main(int;char\_**;)int:::EXIT3
+  ppt-type subexit
+  variable argc
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 25
+  variable argv
+    var-kind variable
+    dec-type char\_*[]
+    rep-type hashcode
+    comparability 26
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.get_command(int *;int *;float *;)int:::EXIT4
-command
-int[]
-hashcode
-27
-*command
-int
-int
-28
-prio
-int[]
-hashcode
-1
-*prio
-int
-int
-28
-ratio
-float[]
-hashcode
-29
-*ratio
-float
-double
-30
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.get_command(int\_*;int\_*;float\_*;)int:::ENTER
+  ppt-type enter
+  variable command
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 27
+  variable *command
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 28
+  variable prio
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 1
+  variable *prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 28
+  variable ratio
+    var-kind variable
+    dec-type float[]
+    rep-type hashcode
+    comparability 29
+  variable *ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 30
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.get_command(int *;int *;float *;)int:::EXIT5
-command
-int[]
-hashcode
-27
-*command
-int
-int
-28
-prio
-int[]
-hashcode
-1
-*prio
-int
-int
-28
-ratio
-float[]
-hashcode
-29
-*ratio
-float
-double
-30
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.get_command(int\_*;int\_*;float\_*;)int:::EXIT4
+  ppt-type subexit
+  variable command
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 27
+  variable *command
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 28
+  variable prio
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 1
+  variable *prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 28
+  variable ratio
+    var-kind variable
+    dec-type float[]
+    rep-type hashcode
+    comparability 29
+  variable *ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 30
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.exit_here(int;)int:::ENTER
-status
-int
-int
-31
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.get_command(int\_*;int\_*;float\_*;)int:::EXIT5
+  ppt-type subexit
+  variable command
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 27
+  variable *command
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 28
+  variable prio
+    var-kind variable
+    dec-type int[]
+    rep-type hashcode
+    comparability 1
+  variable *prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 28
+  variable ratio
+    var-kind variable
+    dec-type float[]
+    rep-type hashcode
+    comparability 29
+  variable *ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 30
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.exit_here(int;)int:::EXIT6
-status
-int
-int
-31
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.exit_here(int;)int:::ENTER
+  ppt-type enter
+  variable status
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 31
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.new_job(int;)int:::ENTER
-prio
-int
-int
-1
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.exit_here(int;)int:::EXIT6
+  ppt-type subexit
+  variable status
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 31
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.new_job(int;)int:::EXIT7
-prio
-int
-int
-1
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.new_job(int;)int:::ENTER
+  ppt-type enter
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.upgrade_prio(int;float;)int:::ENTER
-prio
-int
-int
-1
-ratio
-float
-double
-29
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.new_job(int;)int:::EXIT7
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.upgrade_prio(int;float;)int:::EXIT8
-prio
-int
-int
-1
-ratio
-float
-double
-29
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.upgrade_prio(int;float;)int:::ENTER
+  ppt-type enter
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.upgrade_prio(int;float;)int:::EXIT9
-prio
-int
-int
-1
-ratio
-float
-double
-29
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.upgrade_prio(int;float;)int:::EXIT8
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.upgrade_prio(int;float;)int:::EXIT10
-prio
-int
-int
-1
-ratio
-float
-double
-29
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.upgrade_prio(int;float;)int:::EXIT9
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.block()int:::ENTER
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.upgrade_prio(int;float;)int:::EXIT10
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.block()int:::EXIT11
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.block()int:::ENTER
+  ppt-type enter
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.block()int:::EXIT12
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.block()int:::EXIT11
+  ppt-type subexit
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.unblock(float;)int:::ENTER
-ratio
-float
-double
-29
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.block()int:::EXIT12
+  ppt-type subexit
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.unblock(float;)int:::EXIT13
-ratio
-float
-double
-29
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.unblock(float;)int:::ENTER
+  ppt-type enter
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.unblock(float;)int:::EXIT14
-ratio
-float
-double
-29
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.unblock(float;)int:::EXIT13
+  ppt-type subexit
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.quantum_expire()int:::ENTER
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.unblock(float;)int:::EXIT14
+  ppt-type subexit
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.quantum_expire()int:::EXIT15
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.quantum_expire()int:::ENTER
+  ppt-type enter
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.quantum_expire()int:::EXIT16
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.quantum_expire()int:::EXIT15
+  ppt-type subexit
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.finish()int:::ENTER
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.quantum_expire()int:::EXIT16
+  ppt-type subexit
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.finish()int:::EXIT17
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.finish()int:::ENTER
+  ppt-type enter
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.finish()int:::EXIT18
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.finish()int:::EXIT17
+  ppt-type subexit
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.flush()int:::ENTER
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.finish()int:::EXIT18
+  ppt-type subexit
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.flush()int:::EXIT19
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.flush()int:::ENTER
+  ppt-type enter
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.get_current()process *:::ENTER
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.flush()int:::EXIT19
+  ppt-type subexit
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.get_current()process *:::EXIT20
-::current_job
-process[]
-hashcode
-32
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-process[]
-hashcode
-32
-return.priority
-int
-int
-33
-return.next
-process[]
-hashcode
-34
-return.next.priority
-int
-int
-35
-return.next.next
-process[]
-hashcode
-36
-return.next.next.priority
-int
-int
-37
-return.next.next.next
-process[]
-hashcode
-38
+ppt std.get_current()process\_*:::ENTER
+  ppt-type enter
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.reschedule(int;)int:::ENTER
-prio
-int
-int
-1
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.get_current()process\_*:::EXIT20
+  ppt-type subexit
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 32
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type process[]
+    rep-type hashcode
+    comparability 32
+  variable return.priority
+    var-kind field priority
+    enclosing-var return
+    dec-type int
+    rep-type int
+    comparability 33
+  variable return.next
+    var-kind field next
+    enclosing-var return
+    dec-type process[]
+    rep-type hashcode
+    comparability 34
+  variable return.next.priority
+    var-kind field priority
+    enclosing-var return.next
+    dec-type int
+    rep-type int
+    comparability 35
+  variable return.next.next
+    var-kind field next
+    enclosing-var return.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 36
+  variable return.next.next.priority
+    var-kind field priority
+    enclosing-var return.next.next
+    dec-type int
+    rep-type int
+    comparability 37
+  variable return.next.next.next
+    var-kind field next
+    enclosing-var return.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 38
 
-DECLARE
-std.reschedule(int;)int:::EXIT21
-prio
-int
-int
-1
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.reschedule(int;)int:::ENTER
+  ppt-type enter
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.schedule(int;int;float;)int:::ENTER
-command
-int
-int
-39
-prio
-int
-int
-39
-ratio
-float
-double
-29
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.reschedule(int;)int:::EXIT21
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.schedule(int;int;float;)int:::EXIT22
-command
-int
-int
-39
-prio
-int
-int
-39
-ratio
-float
-double
-29
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.schedule(int;int;float;)int:::ENTER
+  ppt-type enter
+  variable command
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 39
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 39
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.put_end(int;process *;)int:::ENTER
-prio
-int
-int
-1
-process_ptr
-process[]
-hashcode
-40
-process_ptr.priority
-int
-int
-41
-process_ptr.next
-process[]
-hashcode
-42
-process_ptr.next.priority
-int
-int
-43
-process_ptr.next.next
-process[]
-hashcode
-44
-process_ptr.next.next.priority
-int
-int
-45
-process_ptr.next.next.next
-process[]
-hashcode
-46
-::current_job
-process[]
-hashcode
-40
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.schedule(int;int;float;)int:::EXIT22
+  ppt-type subexit
+  variable command
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 39
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 39
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.put_end(int;process *;)int:::EXIT23
-prio
-int
-int
-1
-process_ptr
-process[]
-hashcode
-40
-process_ptr.priority
-int
-int
-41
-process_ptr.next
-process[]
-hashcode
-42
-process_ptr.next.priority
-int
-int
-43
-process_ptr.next.next
-process[]
-hashcode
-44
-process_ptr.next.next.priority
-int
-int
-45
-process_ptr.next.next.next
-process[]
-hashcode
-46
-::current_job
-process[]
-hashcode
-40
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.put_end(int;process\_*;)int:::ENTER
+  ppt-type enter
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable process_ptr
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 40
+  variable process_ptr.priority
+    var-kind field priority
+    enclosing-var process_ptr
+    dec-type int
+    rep-type int
+    comparability 41
+  variable process_ptr.next
+    var-kind field next
+    enclosing-var process_ptr
+    dec-type process[]
+    rep-type hashcode
+    comparability 42
+  variable process_ptr.next.priority
+    var-kind field priority
+    enclosing-var process_ptr.next
+    dec-type int
+    rep-type int
+    comparability 43
+  variable process_ptr.next.next
+    var-kind field next
+    enclosing-var process_ptr.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 44
+  variable process_ptr.next.next.priority
+    var-kind field priority
+    enclosing-var process_ptr.next.next
+    dec-type int
+    rep-type int
+    comparability 45
+  variable process_ptr.next.next.next
+    var-kind field next
+    enclosing-var process_ptr.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 46
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 40
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.put_end(int;process *;)int:::EXIT24
-prio
-int
-int
-1
-process_ptr
-process[]
-hashcode
-40
-process_ptr.priority
-int
-int
-41
-process_ptr.next
-process[]
-hashcode
-42
-process_ptr.next.priority
-int
-int
-43
-process_ptr.next.next
-process[]
-hashcode
-44
-process_ptr.next.next.priority
-int
-int
-45
-process_ptr.next.next.next
-process[]
-hashcode
-46
-::current_job
-process[]
-hashcode
-40
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.put_end(int;process\_*;)int:::EXIT23
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable process_ptr
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 40
+  variable process_ptr.priority
+    var-kind field priority
+    enclosing-var process_ptr
+    dec-type int
+    rep-type int
+    comparability 41
+  variable process_ptr.next
+    var-kind field next
+    enclosing-var process_ptr
+    dec-type process[]
+    rep-type hashcode
+    comparability 42
+  variable process_ptr.next.priority
+    var-kind field priority
+    enclosing-var process_ptr.next
+    dec-type int
+    rep-type int
+    comparability 43
+  variable process_ptr.next.next
+    var-kind field next
+    enclosing-var process_ptr.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 44
+  variable process_ptr.next.next.priority
+    var-kind field priority
+    enclosing-var process_ptr.next.next
+    dec-type int
+    rep-type int
+    comparability 45
+  variable process_ptr.next.next.next
+    var-kind field next
+    enclosing-var process_ptr.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 46
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 40
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.get_process(int;float;process **;)int:::ENTER
-prio
-int
-int
-1
-ratio
-float
-double
-29
-job
-process *[]
-hashcode
-47
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
+ppt std.put_end(int;process\_*;)int:::EXIT24
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable process_ptr
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 40
+  variable process_ptr.priority
+    var-kind field priority
+    enclosing-var process_ptr
+    dec-type int
+    rep-type int
+    comparability 41
+  variable process_ptr.next
+    var-kind field next
+    enclosing-var process_ptr
+    dec-type process[]
+    rep-type hashcode
+    comparability 42
+  variable process_ptr.next.priority
+    var-kind field priority
+    enclosing-var process_ptr.next
+    dec-type int
+    rep-type int
+    comparability 43
+  variable process_ptr.next.next
+    var-kind field next
+    enclosing-var process_ptr.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 44
+  variable process_ptr.next.next.priority
+    var-kind field priority
+    enclosing-var process_ptr.next.next
+    dec-type int
+    rep-type int
+    comparability 45
+  variable process_ptr.next.next.next
+    var-kind field next
+    enclosing-var process_ptr.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 46
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 40
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.get_process(int;float;process **;)int:::EXIT25
-prio
-int
-int
-1
-ratio
-float
-double
-29
-job
-process *[]
-hashcode
-47
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.get_process(int;float;process\_**;)int:::ENTER
+  ppt-type enter
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable job
+    var-kind variable
+    dec-type process\_*[]
+    rep-type hashcode
+    comparability 47
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
 
-DECLARE
-std.get_process(int;float;process **;)int:::EXIT26
-prio
-int
-int
-1
-ratio
-float
-double
-29
-job
-process *[]
-hashcode
-47
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.get_process(int;float;process\_**;)int:::EXIT25
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable job
+    var-kind variable
+    dec-type process\_*[]
+    rep-type hashcode
+    comparability 47
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.get_process(int;float;process **;)int:::EXIT27
-prio
-int
-int
-1
-ratio
-float
-double
-29
-job
-process *[]
-hashcode
-47
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.get_process(int;float;process\_**;)int:::EXIT26
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable job
+    var-kind variable
+    dec-type process\_*[]
+    rep-type hashcode
+    comparability 47
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
-DECLARE
-std.get_process(int;float;process **;)int:::EXIT28
-prio
-int
-int
-1
-ratio
-float
-double
-29
-job
-process *[]
-hashcode
-47
-::current_job
-process[]
-hashcode
-9
-::current_job.priority
-int
-int
-10
-::current_job.next
-process[]
-hashcode
-11
-::current_job.next.priority
-int
-int
-12
-::current_job.next.next
-process[]
-hashcode
-13
-::current_job.next.next.priority
-int
-int
-14
-::current_job.next.next.next
-process[]
-hashcode
-15
-::next_pid
-int
-int
-16
-::prio_queue
-queue[]
-hashcode
-17
-::prio_queue.length
-int
-int
-18
-::prio_queue.head
-process[]
-hashcode
-19
-::prio_queue.head.priority
-int
-int
-20
-::prio_queue.head.next
-process[]
-hashcode
-21
-::prio_queue.head.next.priority
-int
-int
-22
-::prio_queue.head.next.next
-process[]
-hashcode
-23
-return
-int
-int
-24
+ppt std.get_process(int;float;process\_**;)int:::EXIT27
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable job
+    var-kind variable
+    dec-type process\_*[]
+    rep-type hashcode
+    comparability 47
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
+
+ppt std.get_process(int;float;process\_**;)int:::EXIT28
+  ppt-type subexit
+  variable prio
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 1
+  variable ratio
+    var-kind variable
+    dec-type float
+    rep-type double
+    comparability 29
+  variable job
+    var-kind variable
+    dec-type process\_*[]
+    rep-type hashcode
+    comparability 47
+  variable ::current_job
+    var-kind variable
+    dec-type process[]
+    rep-type hashcode
+    comparability 9
+  variable ::current_job.priority
+    var-kind field priority
+    enclosing-var ::current_job
+    dec-type int
+    rep-type int
+    comparability 10
+  variable ::current_job.next
+    var-kind field next
+    enclosing-var ::current_job
+    dec-type process[]
+    rep-type hashcode
+    comparability 11
+  variable ::current_job.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next
+    dec-type int
+    rep-type int
+    comparability 12
+  variable ::current_job.next.next
+    var-kind field next
+    enclosing-var ::current_job.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 13
+  variable ::current_job.next.next.priority
+    var-kind field priority
+    enclosing-var ::current_job.next.next
+    dec-type int
+    rep-type int
+    comparability 14
+  variable ::current_job.next.next.next
+    var-kind field next
+    enclosing-var ::current_job.next.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 15
+  variable ::next_pid
+    var-kind variable
+    dec-type int
+    rep-type int
+    comparability 16
+  variable ::prio_queue
+    var-kind variable
+    dec-type queue[]
+    rep-type hashcode
+    comparability 17
+  variable ::prio_queue.length
+    var-kind field length
+    enclosing-var ::prio_queue
+    dec-type int
+    rep-type int
+    comparability 18
+  variable ::prio_queue.head
+    var-kind field head
+    enclosing-var ::prio_queue
+    dec-type process[]
+    rep-type hashcode
+    comparability 19
+  variable ::prio_queue.head.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head
+    dec-type int
+    rep-type int
+    comparability 20
+  variable ::prio_queue.head.next
+    var-kind field next
+    enclosing-var ::prio_queue.head
+    dec-type process[]
+    rep-type hashcode
+    comparability 21
+  variable ::prio_queue.head.next.priority
+    var-kind field priority
+    enclosing-var ::prio_queue.head.next
+    dec-type int
+    rep-type int
+    comparability 22
+  variable ::prio_queue.head.next.next
+    var-kind field next
+    enclosing-var ::prio_queue.head.next
+    dec-type process[]
+    rep-type hashcode
+    comparability 23
+  variable return
+    var-kind return
+    dec-type int
+    rep-type int
+    comparability 24
 
 # Implicit Type to Explicit Type
 #   1 : prio

@@ -2,7 +2,7 @@
 
 # Canonicalize a .decls, .dtrace, or combined .dtrace file by sorting
 # PPT declarations, and the variables within each program point, into
-# alphabetical order. Each contiguous series of DECLARE paragraphs is
+# alphabetical order. Each contiguous series of ppt declaration paragraphs is
 # reordered, while trace paragraphs remain in the same order as in the
 # original file.
 # This change is semantics-preserving: Daikon produces the same
@@ -13,7 +13,6 @@ use 5.006;
 use warnings;
 
 my @decls;
-my $decls_2 = 0;
 
 sub flush_decls {
     if (@decls) {
@@ -26,11 +25,7 @@ sub flush_decls {
 $/ = ""; # Read by paragraph
 
 while (<>) {
-    if ((/^VarComparability/)) {
-	print;
-	next;
-    } elsif ((/^decl\-version.+/) || (/^decl\-input.+/) || (/^input\-language.+/) || (/^var\-comparability.+/)) {
-        $decls_2 = 1;
+    if ((/^decl\-version.+/) || (/^decl\-input.+/) || (/^input\-language.+/) || (/^var\-comparability.+/)) {
         print;
         next;
     } elsif((/^ppt\s.+/)) {
@@ -67,18 +62,6 @@ while (<>) {
 
         push @decls, join("", @ppt);
 
-    }elsif (/^DECLARE/) {
-	chomp;
-	my @lines = split(/\n/, $_);
-	die "Bad .decls paragraph format" if shift @lines ne "DECLARE";
-	my $ppt_name = shift @lines;
-	die "Bad number of lines" unless @lines % 4 == 0;
-	my @vars;
-	while (@lines) {
-	    push @vars, join("\n", splice(@lines, 0, 4));
-	}
-	@vars = sort @vars;
-	push @decls, join("\n", "DECLARE", $ppt_name, @vars);
     } else {
 	flush_decls();
 	chomp;

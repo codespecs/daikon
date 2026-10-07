@@ -92,7 +92,7 @@ public final class SplitDtrace {
     }
 
     System.out.println(
-        "Number of DECLARE statements: " + declNum + " and number of records is: " + recNum);
+        "Number of declarations: " + declNum + " and number of records is: " + recNum);
 
     // DecimalFormat formatter = new DecimalFormat("000");
     // for (int i = 1; i<=100; i++) writeDtrace(filename, formatter.format(i), 0, 2+recNum*i/200);
@@ -199,7 +199,7 @@ public final class SplitDtrace {
    */
   @Pure
   static boolean isDeclare(List<String> res) {
-    return res.get(0).equals("DECLARE");
+    return res.get(0).startsWith("ppt ");
   }
 
   /**

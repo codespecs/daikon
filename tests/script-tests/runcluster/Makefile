@@ -27,7 +27,7 @@ test-good:
 	cd work-good && java -cp ${DAIKON_JAR} daikon.Daikon --no_show_progress cluster-km-2.spinfo good.decls good.dtrace > daikon-output.txt
 	grep -F 'Sensor.read():::POINT: 6 of 6 splitters successful' work-good/daikon-output.txt
 
-# A dtrace file may contain declarations, in the new (version 2.0) format.
+# A dtrace file may contain the declarations.
 .PHONY: test-newdecls
 test-newdecls:
 	rm -rf work-newdecls
@@ -58,7 +58,7 @@ test-malformed:
 	grep -F 'malformed_runcluster_temp_nonces.dtrace line 4: expected variable time, got 0.100 for program point Sensor.read():::POINT' work-malformed/stderr.txt
 	grep -F 'malformed_runcluster_temp_nonces.dtrace is a copy of malformed.dtrace' work-malformed/stderr.txt
 
-# The same, with declarations in the new format, in the dtrace file.
+# The same, with the declarations in the dtrace file.
 .PHONY: test-malformed-newdecls
 test-malformed-newdecls:
 	rm -rf work-malformed-newdecls

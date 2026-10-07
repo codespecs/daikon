@@ -137,7 +137,7 @@ foreach my $dtrace_file (@dtrace_files) {
   # print "opened $dtrace_file\n";
   while (<DTRACE>) {
     my $line = $_;
-    if ($line =~ /^(DECLARE|ppt\s)/) {
+    if ($line =~ /^ppt\s/) {
       # A declaration in the dtrace file, not an execution.
       &skip_till_next(*DTRACE);
     } elsif ($line =~ /:::/) {
@@ -491,9 +491,8 @@ sub get_random_numbers ( $$ ) {
 
 # read a decls file, figure out the number of variables at each program
 # point, and open an output file for each program point.
-# The file may be in the old or the new (version 2.0) declaration format;
-# it may also be a dtrace file that contains declarations, in which case
-# its samples are ignored.
+# The file must be in the version 2 declaration format.  It may be a dtrace
+# file that contains declarations, in which case its samples are ignored.
 sub read_decls_file ( $ ) {
   my $decls_file = $_[0];
   if ($decls_file =~ /\.gz$/) {
@@ -503,14 +502,10 @@ sub read_decls_file ( $ ) {
   }
   while (<DECL>) {
     my $line = $_;
-    my $pptname;
-    if ($line =~ /^DECLARE$/) {
-      $pptname = &read_decl_ppt();
-    } elsif ($line =~ /^ppt\s+(.*?)\s*$/) {
-      $pptname = &read_decl_ppt_new($1);
-    } else {
+    if ($line !~ /^ppt\s+(.*?)\s*$/) {
       next;
     }
+    my $pptname = &read_decl_ppt($1);
 
     # extract the variables out of only the EXIT program
     # points. Corresponding ENTER and EXIT invocations must belong to a
@@ -536,10 +531,9 @@ sub read_decls_file ( $ ) {
 # Returns 1 if the variable is to be clustered, otherwise 0.
 sub add_decl_var ( $$$ ) {
   my ($pptname, $varname, $rep_type) = @_;
-  # Omit .class, arrays, strings, and constants (whose rep-type in the old
-  # declaration format contains "=").
+  # Omit .class, arrays, and strings.
   if ($varname =~ /\.class/ || $varname =~ /\[/ || $varname =~ /\.toString/
-      || $rep_type =~ /\[\]/ || $rep_type =~ /String/ || $rep_type =~ /=/) {
+      || $rep_type =~ /\[\]/ || $rep_type =~ /String/) {
     return 0;
   }
   # If the variable is an Object, keep note of that.  Its value is a
@@ -552,41 +546,10 @@ sub add_decl_var ( $$$ ) {
   return 1;
 }				# add_decl_var
 
-# read a program point declaration in the old decls format.
-sub read_decl_ppt () {
-
-  my $nvars = 0;		# number of variables at the program point
-  my $pptname = <DECL>;		# the pptname.
-  chomp ($pptname);
-  # A ppt may be declared more than once, such as in several decls files.
-  $pptname_to_tracevars{$pptname} = [];
-
-  # now read the variable names and types
-  my $varname;
-  while ( defined($varname = <DECL>) && ($varname !~ /^$/) ) {
-    chomp ($varname);
-    my $declared_type = <DECL>;	# "$declared_type" is unused
-    my $rep_type = <DECL>;
-    chomp ($rep_type);
-    # A variable whose value is given in its declaration does not appear in
-    # the dtrace file.
-    if ($rep_type !~ /=/) {
-      push @{$pptname_to_tracevars{$pptname}}, $varname;
-    }
-    $nvars += &add_decl_var($pptname, $varname, $rep_type);
-    my $var_comp = <DECL>;  # variable comparability; "$var_comp" is unused
-  }
-  # Store the number of variables at this program point. Remember that
-  # @vararray[1] stores the program point name. The invocation nonce is
-  # included in @vararray, but is not counted as a variable.
-  $pptname_to_nvars{$pptname} = $nvars;
-  return $pptname;
-}				# read_decl_ppt
-
-# read a program point declaration in the new (version 2.0) decls format.
+# read a program point declaration.
 # The argument is the program point name, from the "ppt" line, which has
 # already been read.
-sub read_decl_ppt_new ( $ ) {
+sub read_decl_ppt ( $ ) {
   my ($pptname) = @_;
   my $nvars = 0;		# number of variables at the program point
   my $varname;			# the variable currently being read
@@ -618,4 +581,4 @@ sub read_decl_ppt_new ( $ ) {
   $finish_var->();
   $pptname_to_nvars{$pptname} = $nvars;
   return $pptname;
-}				# read_decl_ppt_new
+}				# read_decl_ppt

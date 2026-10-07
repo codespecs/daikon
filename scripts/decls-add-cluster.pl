@@ -8,11 +8,11 @@
 ## current directory.  Furthermore, the list of output files is written
 ## to standard out.
 ##
-## Each input file may be in the old or the new (version 2.0) declaration
-## format, and may be compressed with gzip.  An input file may also be a
-## dtrace file that contains declarations; its samples are not copied to the
-## output.  In the new format, the variable is not added to :::OBJECT and
-## :::CLASS program points, which have no samples.
+## Each input file must be in the version 2 declaration format, and may be
+## compressed with gzip.  An input file may also be a dtrace file that
+## contains declarations; its samples are not copied to the output.  The
+## variable is not added to :::OBJECT and :::CLASS program points, which have
+## no samples.
 
 use English;
 use strict;
@@ -54,16 +54,8 @@ sub output_paragraph ( @ ) {
     if (scalar(@lines) == 0) {
 	return;
     }
-    if ($lines[0] =~ /^DECLARE$/) {
-	# Old format: the program point name, then 4 lines per variable.
-	print OUT $lines[0], $lines[1];
-	print OUT "cluster\n";
-	print OUT "int\n";
-	print OUT "int\n";
-	print OUT "22\n";
-	print OUT @lines[2..$#lines];
-    } elsif ($lines[0] =~ /^ppt\s/) {
-	# New format: insert the variable before the first variable declaration.
+    if ($lines[0] =~ /^ppt\s/) {
+	# Insert the variable before the first variable declaration.
 	my $add = ($lines[0] !~ /:::(OBJECT|CLASS)\s*$/);
 	foreach my $line (@lines) {
 	    if ($add && $line =~ /^\s*variable\s/) {
