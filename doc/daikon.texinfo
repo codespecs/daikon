@@ -8650,7 +8650,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  bBoOmjpi de iconv undefine DHAVE Xie Ast rt MyPackage jre
 @c  LocalWords:  superdirectory SOURCEPATH InvalidClassDataError strace lstat
 @c  LocalWords:  RuntimeException IFLNK interconvert interconvertible strdup ld
-@c  LocalWords:  lwpp ine runtime's malloced MaxPermSize JVM's MyVector perc vv
+@c  LocalWords:  ine runtime's malloced MaxPermSize JVM's MyVector perc vv
 @c  LocalWords:  falsetime trueinvs testsuite MergeInvariants fns untruncate mx
 @c  LocalWords:  subsubheading bzip fontspecific sublicense NONINFRINGEMENT Cok
 @c  LocalWords:  getopt Renn Nethercote MemCheck readelf Binutils Yuriy Brun ps
