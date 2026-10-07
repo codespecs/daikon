@@ -64,8 +64,18 @@ sub sort_variables {
 		map { $_->[0] . $_->[1] } sort { $a->[1] cmp $b->[1] } @vars);
 }
 
+# Like Perl's -i command-line option, which has no effect on files that a
+# script opens itself:  if $^I is defined, each file is rewritten in place,
+# and if $^I is non-empty, the original is saved under a backup name.
+my $in_place = defined($^I);
+
 foreach my $file (@ARGV ? @ARGV : ("-")) {
   open(my $fh, $file) or die "Cannot open $file: $!";
+  my $output = "";
+  if ($in_place && $file ne "-") {
+    open(my $out, ">", \$output) or die "Cannot open in-memory output: $!";
+    select($out);
+  }
   while (defined(my $record = read_record($fh, $file))) {
     my $kind = $record->{kind};
     if ($kind eq "ppt") {
@@ -97,4 +107,19 @@ foreach my $file (@ARGV ? @ARGV : ("-")) {
   }
   close($fh);
   flush_decls();
+  if ($in_place && $file ne "-") {
+    close(select(STDOUT));
+    if ($^I ne "") {
+      my $backup;
+      if ($^I =~ /\*/) {
+        ($backup = $^I) =~ s/\*/$file/g;
+      } else {
+        $backup = $file . $^I;
+      }
+      rename($file, $backup) or die "Cannot rename $file to $backup: $!";
+    }
+    open(my $out, ">", $file) or die "Cannot write $file: $!";
+    print $out $output;
+    close($out) or die "Cannot write $file: $!";
+  }
 }
