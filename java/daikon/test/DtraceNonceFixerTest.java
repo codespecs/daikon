@@ -5,9 +5,13 @@ import static org.junit.Assert.assertEquals;
 
 import daikon.tools.DtraceNonceFixer;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -140,5 +144,232 @@ public class DtraceNonceFixerTest {
             "",
             "");
     assertEquals(expected, Files.readString(out, UTF_8).replace(System.lineSeparator(), "\n"));
+  }
+
+  /**
+   * Runs DtraceNonceFixer with a new input file and a separate output file, and returns the output.
+   *
+   * @param input the contents of the input file
+   * @return the contents of the output file
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  private String fix(String input) throws IOException {
+    Path dir = tmpFolder.newFolder().toPath();
+    Path in = dir.resolve("in.dtrace");
+    Path out = dir.resolve("out.dtrace");
+    Files.writeString(in, input, UTF_8);
+    DtraceNonceFixer.mainHelper(new String[] {in.toString(), out.toString()});
+    return Files.readString(out, UTF_8).replace(System.lineSeparator(), "\n");
+  }
+
+  /**
+   * Tests that a THROWS sample with nonce 0 is not treated as the start of a concatenated file.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testThrowsWithNonceZero() throws IOException {
+    String samples =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::THROWS",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "1",
+            "",
+            // A second, concatenated file.
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "");
+    String expected =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::THROWS",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "2",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "2",
+            "",
+            "");
+    assertEquals(expected, fix(samples));
+  }
+
+  /**
+   * Tests that an EXIT sample without a nonce gets the nonce of its ENTER sample, when the ENTER
+   * sample has a nonce. Also tests that an EXIT sample with a nonce matches its ENTER sample.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testEnterWithNonceExitWithout() throws IOException {
+    String samples =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "5",
+            "",
+            "C.g():::ENTER",
+            "this_invocation_nonce",
+            "6",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "7",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "7",
+            "",
+            "C.g():::EXIT9",
+            "",
+            "C.f():::EXIT3",
+            "",
+            "");
+    String expected =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "5",
+            "",
+            "C.g():::ENTER",
+            "this_invocation_nonce",
+            "6",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "7",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "7",
+            "",
+            "C.g():::EXIT9",
+            "this_invocation_nonce",
+            "6",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "5",
+            "",
+            "");
+    assertEquals(expected, fix(samples));
+  }
+
+  /**
+   * Tests that a line that contains only whitespace does not end a sample, and that whitespace is
+   * preserved.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testWhitespaceLine() throws IOException {
+    String samples = String.join("\n", "aprogram.point:::POINT ", "x", "   ", "1", "", "");
+    String expected =
+        String.join(
+            "\n", "aprogram.point:::POINT ", "this_invocation_nonce", "1", "x", "   ", "1", "", "");
+    assertEquals(expected, fix(samples));
+  }
+
+  /**
+   * Tests that a compressed file can be both the input and the output.
+   *
+   * @throws IOException if there is trouble reading or writing a file
+   */
+  @Test
+  public void testInPlaceCompressed() throws IOException {
+    Path dir = tmpFolder.getRoot().toPath();
+    Path file = dir.resolve("in.dtrace.gz");
+    String samples =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "");
+    try (OutputStream os = new GZIPOutputStream(Files.newOutputStream(file))) {
+      os.write(samples.getBytes(UTF_8));
+    }
+
+    DtraceNonceFixer.mainHelper(new String[] {file.toString(), file.toString()});
+
+    String expected =
+        String.join(
+            "\n",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "0",
+            "",
+            "C.f():::ENTER",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "C.f():::EXIT3",
+            "this_invocation_nonce",
+            "1",
+            "",
+            "");
+    String actual;
+    try (InputStream is = new GZIPInputStream(Files.newInputStream(file))) {
+      actual = new String(is.readAllBytes(), UTF_8).replace(System.lineSeparator(), "\n");
+    }
+    assertEquals(expected, actual);
+    // No temporary file remains.
+    try (Stream<Path> files = Files.list(dir)) {
+      assertEquals(1, files.count());
+    }
   }
 }

@@ -5,16 +5,21 @@ package daikon.tools;
 import static daikon.tools.nullness.NullnessUtil.castNonNull;
 
 import daikon.FileIO;
+import daikon.PptName;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.StringsPlume;
@@ -25,9 +30,9 @@ import org.plumelib.util.StringsPlume;
  * invocation nonces increased by the "correct" amount, determined in the following way:
  *
  * <p>Keep track of all the nonces you see and maintain a record of the highest nonce observed. The
- * next time you see a '0' valued nonce that is not part of an EXIT program point, then you know you
- * have reached the beginning of the next dtrace file. Use that as the number to add to the
- * remaining nonces and repeat. This should only require one pass through the file.
+ * next time you see a '0' valued nonce that is not part of an EXIT or THROWS program point, then
+ * you know you have reached the beginning of the next dtrace file. Use that as the number to add to
+ * the remaining nonces and repeat. This should only require one pass through the file.
  *
  * <p>A second pass gives a nonce to each sample that lacks one. An EXIT sample gets the same nonce
  * as its ENTER sample, which is found the same way that Daikon pairs samples without nonces.
@@ -50,7 +55,11 @@ public class DtraceNonceFixer {
           "The output file will be FILENAME_fixed and another output included",
           "nonces for OBJECT and CLASS invocations called FILENAME_all_fixed.",
           "If OUTFILE is supplied, the output that includes nonces for all invocations",
-          "is written to OUTFILE instead, and no other output file remains.");
+          "is written to OUTFILE instead, and no other output file remains.",
+          "OUTFILE may be the same as FILENAME.");
+
+  /** Parsed program point names, indexed by their full names. */
+  private static final Map<String, PptName> pptNames = new HashMap<>();
 
   public static void main(String[] args) {
     try {
@@ -78,23 +87,50 @@ public class DtraceNonceFixer {
         int maxNonce = correctNonces(args[0], fixedFilename);
         addMissingNonces(fixedFilename, args[0] + "_all_fixed" + suffix, maxNonce);
       } else {
-        // The intermediate file is in OUTFILE's directory, and has a fresh name so that it
-        // overwrites no existing file.
+        // The temporary files are in OUTFILE's directory, so that the final move can be atomic,
+        // and have fresh names so that they overwrite no existing file.  OUTFILE is not opened
+        // for writing, so if this program fails, OUTFILE (which may be the input) is unchanged.
         Path outfile = Path.of(args[1]).toAbsolutePath();
-        Path tmpFile =
-            Files.createTempFile(
-                castNonNull(outfile.getParent()), // an absolute file path has a parent
-                outfile.getFileName() + "-",
-                args[1].endsWith(".gz") ? "-fixed.gz" : "-fixed");
+        Path dir = castNonNull(outfile.getParent()); // an absolute file path has a parent
+        String prefix = outfile.getFileName() + "-";
+        String suffix = args[1].endsWith(".gz") ? ".gz" : "";
+        Path tmpFile = Files.createTempFile(dir, prefix, "-fixed" + suffix);
+        Path tmpOutFile = Files.createTempFile(dir, prefix, "-all-fixed" + suffix);
         try {
           int maxNonce = correctNonces(args[0], tmpFile.toString());
-          addMissingNonces(tmpFile.toString(), args[1], maxNonce);
+          addMissingNonces(tmpFile.toString(), tmpOutFile.toString(), maxNonce);
+          replaceFile(tmpOutFile, outfile);
         } finally {
           Files.deleteIfExists(tmpFile);
+          Files.deleteIfExists(tmpOutFile);
         }
       }
     } catch (IOException e) {
       throw new UncheckedIOException(e);
+    }
+  }
+
+  /**
+   * Moves {@code source} to {@code target}, replacing {@code target} if it exists. If possible, the
+   * move is atomic, and the result has the permissions of the original {@code target}.
+   *
+   * @param source the file to move
+   * @param target the file to replace
+   * @throws IOException if there is trouble moving the file
+   */
+  private static void replaceFile(Path source, Path target) throws IOException {
+    if (Files.exists(target)) {
+      try {
+        Files.setPosixFilePermissions(source, Files.getPosixFilePermissions(target));
+      } catch (UnsupportedOperationException e) {
+        // The file system does not support POSIX permissions.
+      }
+    }
+    try {
+      Files.move(
+          source, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+    } catch (AtomicMoveNotSupportedException e) {
+      Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
     }
   }
 
@@ -118,16 +154,16 @@ public class DtraceNonceFixer {
       // correctionFactor - the amount to add to each observed nonce
       int correctionFactor = 0;
       boolean first = true;
-      List<String> para;
-      while ((para = grabNextParagraph(br)) != null) {
-        int non = peekNonce(para);
+      Paragraph para;
+      while ((para = Paragraph.read(br)) != null) {
+        int non = para.nonce;
         if (non == -1) {
-          printParagraph(out, para);
+          para.print(out);
           continue;
         }
         // The first legit 0 nonce will have an ENTER and EXIT
         // seeing a 0 means we have reached the next file
-        if (non == 0 && !para.get(pptNameIndex(para)).contains(FileIO.exit_tag)) {
+        if (non == 0 && !isExitOrThrows(para.pptName())) {
           if (first) {
             // on the first file, keep the first nonce as 0
             first = false;
@@ -137,7 +173,7 @@ public class DtraceNonceFixer {
         }
         int newNonce = non + correctionFactor;
         maxNonce = Math.max(maxNonce, newNonce);
-        printParagraph(out, withNonce(para, newNonce));
+        para.printWithNonce(out, newNonce);
       }
     }
     return maxNonce;
@@ -147,7 +183,8 @@ public class DtraceNonceFixer {
    * Copies {@code inFilename} to {@code outFilename}, giving a nonce to each sample that lacks one,
    * such as an OBJECT or CLASS sample. Each new nonce is larger than {@code maxNonce}. An EXIT or
    * THROWS sample gets the nonce of the most recent unmatched ENTER sample for the same method,
-   * like the call stack that Daikon uses for samples without nonces.
+   * like the call stack that Daikon uses for samples without nonces. The ENTER sample may have had
+   * a nonce in the input.
    *
    * @param inFilename the dtrace file to read
    * @param outFilename the dtrace file to write
@@ -156,33 +193,74 @@ public class DtraceNonceFixer {
    */
   private static void addMissingNonces(String inFilename, String outFilename, int maxNonce)
       throws IOException {
-    // The ENTER samples that have not yet been matched by an EXIT sample, most recent first.
-    Deque<Call> callStack = new ArrayDeque<>();
+    CallStack callStack = new CallStack();
     try (BufferedReader br = FilesPlume.newBufferedFileReader(inFilename);
         PrintWriter out = new PrintWriter(FilesPlume.newBufferedFileWriter(outFilename))) {
-      List<String> para;
-      while ((para = grabNextParagraph(br)) != null) {
-        if (!isSample(para) || peekNonce(para) != -1) {
-          printParagraph(out, para);
+      Paragraph para;
+      while ((para = Paragraph.read(br)) != null) {
+        if (!para.isSample()) {
+          para.print(out);
           continue;
         }
-        String pptName = para.get(pptNameIndex(para));
-        int sepIndex = pptName.indexOf(FileIO.ppt_tag_separator);
-        String method = pptName.substring(0, sepIndex);
-        String point = pptName.substring(sepIndex + FileIO.ppt_tag_separator.length());
+        String pptName = para.pptName();
+        // This is the same test that Daikon uses in FileIO.compute_orig_variables.
+        boolean isEnter = pptName.endsWith(FileIO.enter_tag);
+        boolean isExit = !isEnter && isExitOrThrows(pptName);
+        if (para.nonce != -1) {
+          if (isEnter) {
+            callStack.push(methodName(pptName), para.nonce);
+          } else if (isExit) {
+            callStack.matchNonce(para.nonce);
+          }
+          para.print(out);
+          continue;
+        }
         int nonce;
-        if (point.startsWith(FileIO.enter_suffix)) {
+        if (isEnter) {
           nonce = ++maxNonce;
-          callStack.push(new Call(method, nonce));
-        } else if (point.startsWith(FileIO.exit_suffix) || point.startsWith(FileIO.throws_suffix)) {
-          Integer enterNonce = popCall(callStack, method);
+          callStack.push(methodName(pptName), nonce);
+        } else if (isExit) {
+          Integer enterNonce = callStack.matchMethod(methodName(pptName));
           nonce = (enterNonce != null) ? enterNonce : ++maxNonce;
         } else {
           nonce = ++maxNonce;
         }
-        printParagraph(out, withNonce(para, nonce));
+        para.printWithNonce(out, nonce);
       }
     }
+  }
+
+  /**
+   * Returns the parsed form of the given program point name.
+   *
+   * @param pptName a program point name
+   * @return the parsed form of {@code pptName}
+   */
+  private static PptName parsePptName(String pptName) {
+    return pptNames.computeIfAbsent(pptName, PptName::new);
+  }
+
+  /**
+   * Returns true if the given program point is an EXIT or THROWS point, which Daikon pairs with an
+   * ENTER point.
+   *
+   * @param pptName a program point name
+   * @return true if {@code pptName} is an EXIT or THROWS point
+   */
+  private static boolean isExitOrThrows(String pptName) {
+    PptName parsed = parsePptName(pptName);
+    return parsed.isExitPoint() || parsed.isThrowsPoint();
+  }
+
+  /**
+   * Returns the given program point name, without the part starting at ":::".
+   *
+   * @param pptName a program point name
+   * @return the method part of {@code pptName}
+   */
+  private static String methodName(String pptName) {
+    // non-null because the PptName was created from a name that contains ":::"
+    return castNonNull(parsePptName(pptName).getNameWithoutPoint());
   }
 
   /** A method call whose ENTER sample has been seen, but whose EXIT sample has not. */
@@ -192,6 +270,9 @@ public class DtraceNonceFixer {
 
     /** The nonce of the ENTER sample. */
     final int nonce;
+
+    /** True if an EXIT sample has been matched with this call. */
+    boolean matched = false;
 
     /**
      * Creates a new Call.
@@ -206,139 +287,218 @@ public class DtraceNonceFixer {
   }
 
   /**
-   * Removes the most recent call to {@code method} from {@code callStack}, along with all more
-   * recent calls (which exited exceptionally), and returns its nonce. If {@code callStack} has no
-   * call to {@code method}, returns null and leaves {@code callStack} unchanged.
-   *
-   * @param callStack the unmatched ENTER samples, most recent first
-   * @param method the method of an EXIT sample
-   * @return the nonce of the matching ENTER sample, or null if there is none
+   * The ENTER samples that have not yet been matched by an EXIT sample. Each operation takes
+   * amortized constant time.
    */
-  private static @Nullable Integer popCall(Deque<Call> callStack, String method) {
-    if (callStack.stream().noneMatch(call -> call.method.equals(method))) {
-      return null;
-    }
-    Call call;
-    do {
-      call = callStack.pop();
-    } while (!call.method.equals(method));
-    return call.nonce;
-  }
+  private static final class CallStack {
+    /**
+     * The calls, most recent first. May contain matched calls (those that were matched by nonce
+     * while a more recent call was unmatched); they are skipped.
+     */
+    private final Deque<Call> stack = new ArrayDeque<>();
 
-  /**
-   * Returns the index of the first line of {@code para} that is not a comment. Daikon treats
-   * leading comment lines as a separate record, so that line is the first line of a sample or
-   * declaration.
-   *
-   * @param para a paragraph of a dtrace file
-   * @return the index of the first non-comment line, or {@code para.size()} if there is none
-   */
-  private static int pptNameIndex(List<String> para) {
-    int i = 0;
-    while (i < para.size() && FileIO.isComment(para.get(i))) {
-      i++;
-    }
-    return i;
-  }
+    /** The number of unmatched calls in {@link #stack}, for each method. */
+    private final Map<String, Integer> unmatchedCounts = new HashMap<>();
 
-  /**
-   * Returns true if the given paragraph of a dtrace file is a sample, as opposed to a declaration,
-   * a comment, or other information.
-   *
-   * @param para a paragraph of a dtrace file
-   * @return true if {@code para} is a sample
-   */
-  private static boolean isSample(List<String> para) {
-    int i = pptNameIndex(para);
-    if (i == para.size()) {
-      return false;
-    }
-    String firstLine = para.get(i);
-    return firstLine.contains(FileIO.ppt_tag_separator) && !firstLine.startsWith("ppt ");
-  }
+    /** The unmatched calls in {@link #stack}, indexed by nonce. */
+    private final Map<Integer, Call> unmatchedByNonce = new HashMap<>();
 
-  /**
-   * Returns the nonce of the sample {@code para}, or -1 if {@code para} is not a sample or has no
-   * nonce. The nonce header, if any, directly follows the program point name.
-   *
-   * @param para a paragraph of a dtrace file
-   * @return the nonce of {@code para}, or -1
-   */
-  private static int peekNonce(List<String> para) {
-    if (!isSample(para)) {
-      return -1;
+    /**
+     * Adds a call.
+     *
+     * @param method the program point name of the ENTER sample, without the part starting at ":::"
+     * @param nonce the nonce of the ENTER sample
+     */
+    void push(String method, int nonce) {
+      Call call = new Call(method, nonce);
+      stack.push(call);
+      unmatchedCounts.merge(method, 1, Integer::sum);
+      unmatchedByNonce.put(nonce, call);
     }
-    int i = pptNameIndex(para);
-    if (i + 1 >= para.size() || !para.get(i + 1).trim().equals(NONCE_HEADER)) {
-      return -1;
-    }
-    if (i + 2 >= para.size()) {
-      throw new daikon.Daikon.UserError("No nonce after " + NONCE_HEADER + " in: " + para);
-    }
-    String nonceString = para.get(i + 2).trim();
-    try {
-      return Integer.parseInt(nonceString);
-    } catch (NumberFormatException e) {
-      throw new daikon.Daikon.UserError("Bad nonce \"" + nonceString + "\" in: " + para);
-    }
-  }
 
-  /**
-   * Returns a copy of the sample {@code para} whose nonce is {@code newNonce}. If {@code para} has
-   * a nonce, it is replaced; otherwise the nonce header and nonce are inserted directly below the
-   * program point name.
-   *
-   * @param para a sample from a dtrace file
-   * @param newNonce the nonce for the result
-   * @return a copy of {@code para} with nonce {@code newNonce}
-   */
-  private static List<String> withNonce(List<String> para, int newNonce) {
-    boolean hasNonce = peekNonce(para) != -1;
-    List<String> result = new ArrayList<>(para);
-    int i = pptNameIndex(para);
-    if (hasNonce) {
-      // Daikon requires the header to be exactly NONCE_HEADER, without surrounding whitespace.
-      result.set(i + 1, NONCE_HEADER);
-      result.set(i + 2, Integer.toString(newNonce));
-    } else {
-      result.add(i + 1, NONCE_HEADER);
-      result.add(i + 2, Integer.toString(newNonce));
-    }
-    return result;
-  }
-
-  /**
-   * Prints a paragraph followed by a blank line.
-   *
-   * @param out where to print
-   * @param para the lines of the paragraph
-   */
-  private static void printParagraph(PrintWriter out, List<String> para) {
-    for (String line : para) {
-      out.println(line);
-    }
-    out.println();
-  }
-
-  /**
-   * Returns the lines of the next paragraph of the dtrace file. This method will return an empty
-   * list if the original dtrace file contained consecutive blank lines. Leading whitespace is
-   * preserved, so that the output differs from the input only in nonces.
-   *
-   * @param br the reader for the dtrace file
-   * @return the lines of the next paragraph, or null if the end of the file has been reached
-   */
-  private static @Nullable List<String> grabNextParagraph(BufferedReader br) throws IOException {
-    List<String> result = new ArrayList<>();
-    String line;
-    while ((line = br.readLine()) != null) {
-      line = line.stripTrailing();
-      if (line.isEmpty()) {
-        return result;
+    /**
+     * Marks the call with the given nonce, if any, as matched.
+     *
+     * @param nonce the nonce of an EXIT sample
+     */
+    void matchNonce(int nonce) {
+      Call call = unmatchedByNonce.get(nonce);
+      if (call != null) {
+        markMatched(call);
       }
-      result.add(line);
+      Call top;
+      while ((top = stack.peek()) != null && top.matched) {
+        stack.pop();
+      }
     }
-    // End of file
-    return result.isEmpty() ? null : result;
+
+    /**
+     * Removes the most recent unmatched call to {@code method}, along with all more recent calls
+     * (which exited exceptionally), and returns its nonce. If there is no unmatched call to {@code
+     * method}, returns null and leaves this unchanged.
+     *
+     * @param method the method of an EXIT sample
+     * @return the nonce of the matching ENTER sample, or null if there is none
+     */
+    @Nullable Integer matchMethod(String method) {
+      if (!unmatchedCounts.containsKey(method)) {
+        return null;
+      }
+      while (true) {
+        Call call = stack.pop();
+        if (call.matched) {
+          continue;
+        }
+        markMatched(call);
+        if (call.method.equals(method)) {
+          return call.nonce;
+        }
+      }
+    }
+
+    /**
+     * Marks the given unmatched call as matched, but does not remove it from {@link #stack}.
+     *
+     * @param call an unmatched call
+     */
+    private void markMatched(Call call) {
+      call.matched = true;
+      unmatchedCounts.computeIfPresent(call.method, (m, count) -> (count == 1) ? null : count - 1);
+      unmatchedByNonce.remove(call.nonce, call);
+    }
+  }
+
+  /** A paragraph of a dtrace file: its lines, up to but not including a blank line. */
+  private static final class Paragraph {
+    /** The lines of the paragraph. */
+    final List<String> lines;
+
+    /**
+     * The index of the program point name, if this paragraph is a sample; otherwise -1. Leading
+     * lines are comments, which Daikon treats as a separate record.
+     */
+    final int pptNameIndex;
+
+    /** The nonce, or -1 if this paragraph is not a sample or has no nonce. */
+    final int nonce;
+
+    /**
+     * Creates a new Paragraph.
+     *
+     * @param lines the lines of the paragraph
+     */
+    Paragraph(List<String> lines) {
+      this.lines = lines;
+      int i = 0;
+      while (i < lines.size() && FileIO.isComment(lines.get(i))) {
+        i++;
+      }
+      boolean isSample =
+          i < lines.size()
+              && lines.get(i).contains(FileIO.ppt_tag_separator)
+              && !lines.get(i).startsWith("ppt ");
+      this.pptNameIndex = isSample ? i : -1;
+      this.nonce = isSample ? parseNonce(lines, i) : -1;
+    }
+
+    /**
+     * Returns the nonce of the sample whose program point name is at index {@code i}, or -1 if the
+     * sample has no nonce. The nonce header, if any, directly follows the program point name.
+     *
+     * @param lines the lines of a sample
+     * @param i the index of the program point name in {@code lines}
+     * @return the nonce of the sample, or -1
+     */
+    private static int parseNonce(List<String> lines, int i) {
+      if (i + 1 >= lines.size() || !lines.get(i + 1).trim().equals(NONCE_HEADER)) {
+        return -1;
+      }
+      if (i + 2 >= lines.size()) {
+        throw new daikon.Daikon.UserError("No nonce after " + NONCE_HEADER + " in: " + lines);
+      }
+      String nonceString = lines.get(i + 2).trim();
+      try {
+        return Integer.parseInt(nonceString);
+      } catch (NumberFormatException e) {
+        throw new daikon.Daikon.UserError("Bad nonce \"" + nonceString + "\" in: " + lines);
+      }
+    }
+
+    /**
+     * Returns true if this paragraph is a sample, as opposed to a declaration, a comment, or other
+     * information.
+     *
+     * @return true if this paragraph is a sample
+     */
+    boolean isSample() {
+      return pptNameIndex != -1;
+    }
+
+    /**
+     * Returns the program point name of this sample.
+     *
+     * @return the program point name of this sample
+     */
+    String pptName() {
+      return lines.get(pptNameIndex);
+    }
+
+    /**
+     * Prints this paragraph followed by a blank line.
+     *
+     * @param out where to print
+     */
+    void print(PrintWriter out) {
+      for (String line : lines) {
+        out.println(line);
+      }
+      out.println();
+    }
+
+    /**
+     * Prints this sample, with nonce {@code newNonce}, followed by a blank line. If this sample has
+     * a nonce, it is replaced; otherwise the nonce header and nonce are inserted directly below the
+     * program point name.
+     *
+     * @param out where to print
+     * @param newNonce the nonce to print
+     */
+    void printWithNonce(PrintWriter out, int newNonce) {
+      // Daikon requires the header to be exactly NONCE_HEADER, without surrounding whitespace.
+      int rest = (nonce == -1) ? pptNameIndex + 1 : pptNameIndex + 3;
+      for (int i = 0; i <= pptNameIndex; i++) {
+        out.println(lines.get(i));
+      }
+      out.println(NONCE_HEADER);
+      out.println(newNonce);
+      for (int i = rest; i < lines.size(); i++) {
+        out.println(lines.get(i));
+      }
+      out.println();
+    }
+
+    /**
+     * Returns the next paragraph of the dtrace file. Like Daikon, this method treats only an empty
+     * line as a paragraph separator; a line that contains only whitespace is part of a paragraph.
+     * This method returns an empty paragraph if the dtrace file contains consecutive empty lines.
+     * Lines are not modified, so the output differs from the input only in the nonce header line,
+     * in the nonces, and in a final empty line (which the output always has).
+     *
+     * @param br the reader for the dtrace file
+     * @return the next paragraph, or null if the end of the file has been reached
+     * @throws IOException if there is trouble reading the file
+     */
+    static @Nullable Paragraph read(BufferedReader br) throws IOException {
+      List<String> result = new ArrayList<>();
+      String line;
+      while ((line = br.readLine()) != null) {
+        if (line.isEmpty()) {
+          return new Paragraph(result);
+        }
+        result.add(line);
+      }
+      // End of file
+      return result.isEmpty() ? null : new Paragraph(result);
+    }
   }
 }
