@@ -169,7 +169,7 @@ public final class SplitDtrace {
    */
   @Pure
   static boolean isDeclare(List<String> res) {
-    return res.get(0).startsWith("ppt ");
+    return FileIO.is_declaration_header(res.get(0));
   }
 
   /**

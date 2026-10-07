@@ -25,7 +25,9 @@ sub flush_decls {
 $/ = ""; # Read by paragraph
 
 while (<>) {
-    if ((/^decl\-version.+/) || (/^decl\-input.+/) || (/^input\-language.+/) || (/^var\-comparability.+/)) {
+    if (/^(decl-version|decl-input|input-language|var-comparability|ListImplementors|\/\/)/) {
+        # A header paragraph, such as a comment.  Print it in its original position.
+        flush_decls();
         print;
         next;
     } elsif((/^ppt\s.+/)) {

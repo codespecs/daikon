@@ -345,7 +345,6 @@ public final class FileIO {
       decl_error(state, "ppt name expected in '%s'", line);
       throw new Error(); // this can't happen
     }
-    Scanner scanner;
 
     // Information that will populate the new program point.
     Map<String, VarDefinition> varmap = new LinkedHashMap<>();
@@ -364,7 +363,7 @@ public final class FileIO {
           break;
         }
 
-        scanner = new Scanner(line);
+        Scanner scanner = new Scanner(line);
         @Interned String record = scanner.next().intern();
         if (vardef == null) {
           if (record == "parent") { // interned
@@ -2272,13 +2271,15 @@ public final class FileIO {
    * @return true if the ppt name is for a GLOBAL, OBJECT, or CLASS ppt
    */
   public static boolean is_parent_only_ppt_name(String ppt_name) {
-    if (!ppt_name.contains(ppt_tag_separator)) {
+    // This is called for every sample, so it avoids constructing a PptName.
+    int separatorPosition = ppt_name.indexOf(ppt_tag_separator);
+    if (separatorPosition == -1) {
       return false;
     }
-    PptName pptName = new PptName(ppt_name);
-    return pptName.isGlobalPoint()
-        || pptName.isObjectInstanceSynthetic()
-        || pptName.isClassStaticSynthetic();
+    String point = ppt_name.substring(separatorPosition + ppt_tag_separator.length());
+    return point.equals(global_suffix)
+        || point.equals(object_suffix)
+        || point.equals(class_static_suffix);
   }
 
   /**
@@ -2857,9 +2858,14 @@ public final class FileIO {
         || line.equals("ListImplementors");
   }
 
-  /** Returns true if the line is the start of a ppt declaration. */
+  /**
+   * Returns true if the line is the start of a ppt declaration.
+   *
+   * @param line the first line of a record in a .decls or .dtrace file
+   * @return true if the line starts a ppt declaration
+   */
   @Pure
-  private static boolean is_declaration_header(String line) {
+  public static boolean is_declaration_header(String line) {
     return line.startsWith("ppt ");
   }
 
