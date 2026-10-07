@@ -104,9 +104,13 @@ foreach my $dtrace_file (@dtrace_files) {
 
   # need to run the DtraceNonceDoctor in order in order for
   # xmeans and possibly other clustering methods to work
-  # A list, not a string, so that the shell does not interpret the file name.
-  system ("java", "-cp", "$SCRIPTDIR/../daikon.jar", "daikon.tools.DtraceNonceFixer", $dtrace_file, $dtrace_file) == 0
-    || die "DtraceNonceFixer failed on $dtrace_file";
+  system_or_die ("java -cp $SCRIPTDIR/../daikon.jar daikon.tools.DtraceNonceFixer $dtrace_file");
+  if (-e ("$dtrace_file" . "_all_fixed")) {
+    system_or_die ("mv $dtrace_file" . "_all_fixed $dtrace_file");
+  }
+  if (-e "dtrace_file" . "_all_fixed.gz") {
+    system_or_die ("mv $dtrace_file" . "_all_fixed.gz $dtrace_file");
+  }
 
 
  if ($dtrace_file =~ /\.gz$/) {
