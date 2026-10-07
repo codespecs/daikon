@@ -180,6 +180,7 @@ public class ExtractConsequentTest {
     return ExtractConsequent.clusterKey(inv);
   }
 
+  @SuppressWarnings("interning") // newly-created VarInfo
   @Test
   public void testClusterKey() {
     VarInfo cluster = new VarInfo(new VarDefinition("cluster", VarKind.VARIABLE, ProglangType.INT));

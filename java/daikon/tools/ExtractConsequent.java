@@ -7,7 +7,6 @@ import static java.util.logging.Level.INFO;
 import daikon.Daikon;
 import daikon.FileIO;
 import daikon.Global;
-import daikon.Ppt;
 import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.ProglangType;
@@ -26,7 +25,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -173,88 +171,104 @@ public class ExtractConsequent {
   }
 
   public static void extract_consequent(PptMap ppts) {
-    // Retrieve Ppt objects in sorted order.
-    // Use a custom comparator for a specific ordering
-    Comparator<PptTopLevel> comparator = new Ppt.NameComparator();
-    TreeSet<PptTopLevel> ppts_sorted = new TreeSet<>(comparator);
-    ppts_sorted.addAll(ppts.asCollection());
-
-    for (PptTopLevel ppt : ppts_sorted) {
+    pptname_to_conditions.clear();
+    for (PptTopLevel ppt : ppts.asCollection()) {
       extract_consequent_maybe(ppt, ppts);
+    }
+
+    // Maps a program point name to the conditions to write for it.  Sorted, for deterministic
+    // output.
+    Map<String, TreeSet<String>> pptname_to_output = new TreeMap<>();
+    for (Map.Entry<String, Map<String, Map<String, HashedConsequent>>> entry :
+        pptname_to_conditions.entrySet()) {
+      String pptname = entry.getKey();
+      TreeSet<String> allConds = conditions(entry.getValue());
+      if (allConds.isEmpty()) {
+        continue;
+      }
+      pptname_to_output.computeIfAbsent(pptname, k -> new TreeSet<>()).addAll(allConds);
+      // A condition at an entry point also splits the method's exit points.  The name of the
+      // combined exit point matches the numbered exit points as well.
+      if (pptname.endsWith(FileIO.enter_tag)) {
+        String exitname =
+            pptname.substring(0, pptname.length() - FileIO.enter_tag.length()) + FileIO.exit_tag;
+        if (ppts.containsName(exitname)) {
+          pptname_to_output.computeIfAbsent(exitname, k -> new TreeSet<>()).addAll(allConds);
+        }
+      }
     }
 
     PrintWriter pw =
         new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out, UTF_8)), true);
-
-    // All conditions at a program point.  A TreeSet to enable
-    // deterministic output.
-    TreeSet<String> allConds = new TreeSet<>();
-    for (String pptname : pptname_to_conditions.keySet()) {
-      Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
-          pptname_to_conditions.get(pptname);
-      for (Map.Entry<@KeyFor("cluster_to_conditions") String, Map<String, HashedConsequent>> entry :
-          cluster_to_conditions.entrySet()) {
-        Map<String, HashedConsequent> conditions = entry.getValue();
-        StringBuilder conjunctionJava = new StringBuilder();
-        StringBuilder conjunctionDaikon = new StringBuilder();
-        StringBuilder conjunctionESC = new StringBuilder();
-        StringBuilder conjunctionSimplify = new StringBuilder("(AND ");
-        int count = 0;
-        for (Map.Entry<@KeyFor("conditions") String, HashedConsequent> entry2 :
-            conditions.entrySet()) {
-          String condIndex = entry2.getKey();
-          HashedConsequent cond = entry2.getValue();
-          if (cond.fakeFor != null) {
-            continue;
-          }
-          String javaStr = javaFormat(cond.inv);
-          String daikonStr = cond.inv.format_using(OutputFormat.DAIKON);
-          String escStr = cond.inv.format_using(OutputFormat.ESCJAVA);
-          String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
-          allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
-          //           allConds.add(condIndex);
-          if (count > 0) {
-            conjunctionJava.append(" && ");
-            conjunctionDaikon.append(" and ");
-            conjunctionESC.append(" && ");
-            conjunctionSimplify.append(" ");
-          }
-          count++;
-          conjunctionJava.append(parenthesizeIfNeeded(javaStr));
-          conjunctionDaikon.append(parenthesizeIfNeeded(daikonStr));
-          conjunctionESC.append(parenthesizeIfNeeded(escStr));
-          conjunctionSimplify.append(simplifyStr);
-        }
-        conjunctionSimplify.append(")");
-        String conj = conjunctionJava.toString();
-        // Avoid inserting self-contradictory conditions such as "x == 1 &&
-        // x == 2", or conjunctions of only a single condition.
-        if (count < 2
-            || contradict_inv_pattern.matcher(conj).find()
-            || useless_inv_pattern_1.matcher(conj).find()
-            || useless_inv_pattern_2.matcher(conj).find()) {
-          // System.out.println("Suppressing: " + conj);
-        } else {
-          allConds.add(
-              combineDummy(
-                  conjunctionJava.toString(),
-                  conjunctionDaikon.toString(),
-                  conjunctionESC.toString(),
-                  conjunctionSimplify.toString()));
-        }
+    for (Map.Entry<String, TreeSet<String>> entry : pptname_to_output.entrySet()) {
+      pw.println();
+      pw.println("PPT_NAME " + entry.getKey());
+      for (String s : entry.getValue()) {
+        pw.println(s);
       }
-
-      if (!allConds.isEmpty()) {
-        pw.println();
-        pw.println("PPT_NAME " + pptname);
-        for (String s : allConds) {
-          pw.println(s);
-        }
-      }
-      allConds.clear();
     }
-
     pw.flush();
+  }
+
+  /**
+   * Returns the splitting conditions for one program point: each condition, and the conjunction of
+   * the conditions for each cluster.
+   *
+   * @param cluster_to_conditions maps a cluster key to the conditions for that cluster, as in a
+   *     value of {@link #pptname_to_conditions}
+   * @return the splitting conditions, each formatted by {@link #combineDummy}
+   */
+  private static TreeSet<String> conditions(
+      Map<String, Map<String, HashedConsequent>> cluster_to_conditions) {
+    // A TreeSet, for deterministic output.
+    TreeSet<String> allConds = new TreeSet<>();
+    for (Map<String, HashedConsequent> conditions : cluster_to_conditions.values()) {
+      StringBuilder conjunctionJava = new StringBuilder();
+      StringBuilder conjunctionDaikon = new StringBuilder();
+      StringBuilder conjunctionESC = new StringBuilder();
+      StringBuilder conjunctionSimplify = new StringBuilder("(AND ");
+      int count = 0;
+      for (Map.Entry<@KeyFor("conditions") String, HashedConsequent> entry2 :
+          conditions.entrySet()) {
+        String condIndex = entry2.getKey();
+        HashedConsequent cond = entry2.getValue();
+        if (cond.fakeFor != null) {
+          continue;
+        }
+        String javaStr = javaFormat(cond.inv);
+        String daikonStr = cond.inv.format_using(OutputFormat.DAIKON);
+        String escStr = cond.inv.format_using(OutputFormat.ESCJAVA);
+        String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
+        allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
+        if (count > 0) {
+          conjunctionJava.append(" && ");
+          conjunctionDaikon.append(" and ");
+          conjunctionESC.append(" && ");
+          conjunctionSimplify.append(" ");
+        }
+        count++;
+        conjunctionJava.append(parenthesizeIfNeeded(javaStr));
+        conjunctionDaikon.append(parenthesizeIfNeeded(daikonStr));
+        conjunctionESC.append(parenthesizeIfNeeded(escStr));
+        conjunctionSimplify.append(simplifyStr);
+      }
+      conjunctionSimplify.append(")");
+      String conj = conjunctionJava.toString();
+      // Avoid inserting self-contradictory conditions such as "x == 1 &&
+      // x == 2", or conjunctions of only a single condition.
+      if (count >= 2
+          && !contradict_inv_pattern.matcher(conj).find()
+          && !useless_inv_pattern_1.matcher(conj).find()
+          && !useless_inv_pattern_2.matcher(conj).find()) {
+        allConds.add(
+            combineDummy(
+                conj,
+                conjunctionDaikon.toString(),
+                conjunctionESC.toString(),
+                conjunctionSimplify.toString()));
+      }
+    }
+    return allConds;
   }
 
   /**
@@ -427,7 +441,9 @@ public class ExtractConsequent {
 
         // 2) Numeric invariants over booleans, such as "b != 0", which are not legal Java
         if (!isLegalForBooleans(inv)) {
-          debug.fine("Not legal Java over booleans: " + inv.format_using(OutputFormat.JAVA));
+          if (debug.isLoggable(FINE)) {
+            debug.fine("Not legal Java over booleans: " + inv.format_using(OutputFormat.JAVA));
+          }
           continue;
         }
 
@@ -436,19 +452,20 @@ public class ExtractConsequent {
             || dot_class_pattern.matcher(inv_string).find()) {
           continue;
         }
+        String cluster_key = clusterKey(cluster_inv);
         String fake_inv_string = simplify_inequalities(inv_string);
         HashedConsequent real = new HashedConsequent(inv, null);
         if (!fake_inv_string.equals(inv_string)) {
           // For instance, inv_string is "x != y", fake_inv_string is "x == y"
           HashedConsequent fake = new HashedConsequent(inv, inv_string);
-          boolean added = store_invariant(clusterKey(cluster_inv), fake_inv_string, fake, pptname);
+          boolean added = store_invariant(cluster_key, fake_inv_string, fake, pptname);
           if (!added) {
             // We couldn't add "x == y", (when we're "x != y") because
             // it already exists; so don't add "x == y" either.
             continue;
           }
         }
-        store_invariant(clusterKey(cluster_inv), inv_string, real, pptname);
+        store_invariant(cluster_key, inv_string, real, pptname);
       }
     }
   }
@@ -556,7 +573,8 @@ public class ExtractConsequent {
 
   /**
    * Matches an operator whose precedence is lower than that of conjunction. "&lt;==" is needed for
-   * reverse implication, and "&lt;=!=&gt;" contains neither "==&gt;" nor "&lt;==".
+   * reverse implication, and "&lt;=!=&gt;" contains neither "==&gt;" nor "&lt;==". A "?" matches
+   * only if a ":" follows it, as in a conditional expression.
    */
   static Pattern low_precedence_pattern;
 
@@ -577,7 +595,7 @@ public class ExtractConsequent {
       orig_pattern = Pattern.compile("\\borig\\s*\\(|\\\\(old|new)\\s*\\(");
       result_pattern = Pattern.compile("\\\\result\\b");
       orig_cluster_pattern = Pattern.compile("\\borig\\(cluster\\)");
-      low_precedence_pattern = Pattern.compile("\\|\\|| or |==>|<==|<=!=>|\\?");
+      low_precedence_pattern = Pattern.compile("\\|\\|| or |==>|<==|<=!=>|\\?.*:");
       literal_pattern = Pattern.compile("\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'");
       dot_class_pattern = Pattern.compile("\\.class");
       inequality_pattern = Pattern.compile("[\\!<>]=");
