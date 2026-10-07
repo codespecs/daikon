@@ -10,6 +10,7 @@ import daikon.Global;
 import daikon.Ppt;
 import daikon.PptMap;
 import daikon.PptTopLevel;
+import daikon.ProglangType;
 import daikon.VarInfo;
 import daikon.inv.Implication;
 import daikon.inv.Invariant;
@@ -195,11 +196,9 @@ public class ExtractConsequent {
         int count = 0;
         for (Map.Entry<@KeyFor("conditions") String, HashedConsequent> entry2 :
             conditions.entrySet()) {
-          count++;
           String condIndex = entry2.getKey();
           HashedConsequent cond = entry2.getValue();
           if (cond.fakeFor != null) {
-            count--;
             continue;
           }
           String javaStr = javaFormat(cond.inv);
@@ -208,15 +207,16 @@ public class ExtractConsequent {
           String simplifyStr = cond.inv.format_using(OutputFormat.SIMPLIFY);
           allConds.add(combineDummy(condIndex, "<dummy> " + daikonStr, escStr, simplifyStr));
           //           allConds.add(condIndex);
-          if (conjunctionJava.length() > 0) {
+          if (count > 0) {
             conjunctionJava.append(" && ");
             conjunctionDaikon.append(" and ");
             conjunctionESC.append(" && ");
             conjunctionSimplify.append(" ");
           }
-          conjunctionJava.append(parenthesizeDisjunction(javaStr));
-          conjunctionDaikon.append(parenthesizeDisjunction(daikonStr));
-          conjunctionESC.append(parenthesizeDisjunction(escStr));
+          count++;
+          conjunctionJava.append(parenthesizeIfNeeded(javaStr));
+          conjunctionDaikon.append(parenthesizeIfNeeded(daikonStr));
+          conjunctionESC.append(parenthesizeIfNeeded(escStr));
           conjunctionSimplify.append(simplifyStr);
         }
         conjunctionSimplify.append(")");
@@ -263,15 +263,15 @@ public class ExtractConsequent {
   }
 
   /**
-   * Returns the given expression, parenthesized if it contains a disjunction ("||" or " or ").
-   * Since disjunction has lower precedence than conjunction, such an expression must be
-   * parenthesized when it is a conjunct.
+   * Returns the given expression, parenthesized if it may contain an operator whose precedence is
+   * lower than that of conjunction, such as "||", " or ", "?:", or the ESC/JML "==&gt;". Such an
+   * expression must be parenthesized when it is a conjunct.
    *
    * @param expr a Java, ESC, or Daikon expression
    * @return the expression, parenthesized if necessary to be used as a conjunct
    */
-  static String parenthesizeDisjunction(String expr) {
-    return (expr.contains("||") || expr.contains(" or ")) ? "(" + expr + ")" : expr;
+  static String parenthesizeIfNeeded(String expr) {
+    return low_precedence_pattern.matcher(expr).find() ? "(" + expr + ")" : expr;
   }
 
   /**
@@ -283,17 +283,32 @@ public class ExtractConsequent {
    * @return true if the invariant uses no boolean variable, or is legal Java over booleans
    */
   static boolean isLegalForBooleans(Invariant inv) {
-    if (inv instanceof daikon.inv.unary.scalar.OneOfScalar
-        || inv instanceof daikon.inv.binary.twoScalar.IntEqual
-        || inv instanceof daikon.inv.binary.twoScalar.IntNonEqual) {
+    VarInfo[] vis = inv.ppt.var_infos;
+    if (inv instanceof daikon.inv.unary.scalar.OneOfScalar) {
       return true;
     }
-    for (VarInfo vi : inv.ppt.var_infos) {
-      if (vi.type.isScalar() && vi.type.baseIsBoolean()) {
+    if (inv instanceof daikon.inv.binary.twoScalar.IntEqual
+        || inv instanceof daikon.inv.binary.twoScalar.IntNonEqual) {
+      // "b == i" is not legal Java if exactly one of the operands is a boolean.
+      return isBoolean(vis[0]) == isBoolean(vis[1]);
+    }
+    for (VarInfo vi : vis) {
+      if (isBoolean(vi)) {
         return false;
       }
     }
     return true;
+  }
+
+  /**
+   * Returns true if the variable is a boolean. A splitter declares such a variable as a Java
+   * boolean; see {@code SplitterJavaSource.getVarType}.
+   *
+   * @param vi a variable
+   * @return true if the variable is a boolean
+   */
+  private static boolean isBoolean(VarInfo vi) {
+    return vi.type == ProglangType.BOOLEAN;
   }
 
   static String combineDummy(String inv, String daikonStr, String esc, String simplify) {
@@ -322,10 +337,7 @@ public class ExtractConsequent {
       }
     }
     if (!invs.isEmpty()) {
-      // Use the full name, which SplitterFactory.matchPpt matches exactly.  A shortened name
-      // such as "Foo.bar" would be matched only against one EXIT program point, and the
-      // shortening would lose characters such as "$" that the full name needs.
-      String pptname = ppt.name();
+      String pptname = spinfoPptName(ppt);
       for (Invariant maybe_as_inv : invs) {
         Implication maybe = (Implication) maybe_as_inv;
 
@@ -419,18 +431,59 @@ public class ExtractConsequent {
         if (!fake_inv_string.equals(inv_string)) {
           // For instance, inv_string is "x != y", fake_inv_string is "x == y"
           HashedConsequent fake = new HashedConsequent(inv, inv_string);
-          boolean added =
-              store_invariant(
-                  cluster_inv.format_using(OutputFormat.JAVA), fake_inv_string, fake, pptname);
+          boolean added = store_invariant(clusterKey(cluster_inv), fake_inv_string, fake, pptname);
           if (!added) {
             // We couldn't add "x == y", (when we're "x != y") because
             // it already exists; so don't add "x == y" either.
             continue;
           }
         }
-        store_invariant(cluster_inv.format_using(OutputFormat.JAVA), inv_string, real, pptname);
+        store_invariant(clusterKey(cluster_inv), inv_string, real, pptname);
       }
     }
+  }
+
+  /**
+   * Returns the name to write after "PPT_NAME" in the .spinfo file, for conditions found at the
+   * given program point.
+   *
+   * <p>For an entry or exit program point, the result is the method's name followed by ":::", such
+   * as "pkg.Foo.bar(int):::". SplitterFactory.matchPpt matches that name against the first of the
+   * method's exit program points that Daikon processes. SplitterList.get, which matches by
+   * substring, applies the resulting splitters to every program point of the method and to no other
+   * method. Conditions found at different program points of one method are therefore merged and
+   * output once. The full name of a numbered exit point would not work: SplitterList.get would
+   * apply "Foo.bar():::EXIT1" to "Foo.bar():::EXIT12" as well.
+   *
+   * <p>For any other program point, the result is the full name, which SplitterFactory.matchPpt
+   * matches exactly.
+   *
+   * @param ppt a program point
+   * @return the name of the program point in the .spinfo file
+   */
+  static String spinfoPptName(PptTopLevel ppt) {
+    String name = ppt.name();
+    if (ppt.ppt_name.isEnterPoint() || ppt.ppt_name.isExitPoint()) {
+      int index = name.indexOf(FileIO.ppt_tag_separator);
+      if (index != -1) {
+        return name.substring(0, index + FileIO.ppt_tag_separator.length());
+      }
+    }
+    return name;
+  }
+
+  /**
+   * Returns a key that identifies the cluster that the given invariant describes. The pre-state
+   * value "orig(cluster)" and the post-state value "cluster" are equal, so the key for an invariant
+   * over one is the same as the key for the same invariant over the other.
+   *
+   * @param cluster_inv an invariant over the "cluster" variable, such as "cluster == 1"
+   * @return a key that identifies the cluster
+   */
+  static String clusterKey(Invariant cluster_inv) {
+    return orig_cluster_pattern
+        .matcher(cluster_inv.format_using(OutputFormat.DAIKON))
+        .replaceAll("cluster");
   }
 
   // Store the invariant for later printing. Ignore duplicate
@@ -517,6 +570,12 @@ public class ExtractConsequent {
   /** Matches the return value in Java format. */
   static Pattern result_pattern;
 
+  /** Matches the pre-state value of the "cluster" variable, in Daikon format. */
+  static Pattern orig_cluster_pattern;
+
+  /** Matches an operator whose precedence is lower than that of conjunction. */
+  static Pattern low_precedence_pattern;
+
   static Pattern dot_class_pattern;
   static Pattern gteq_pattern;
   static Pattern lteq_pattern;
@@ -528,8 +587,10 @@ public class ExtractConsequent {
 
   static {
     try {
-      orig_pattern = Pattern.compile("orig\\s*\\(|\\\\(old|new)\\s*\\(");
+      orig_pattern = Pattern.compile("\\borig\\s*\\(|\\\\(old|new)\\s*\\(");
       result_pattern = Pattern.compile("\\\\result\\b");
+      orig_cluster_pattern = Pattern.compile("\\borig\\(cluster\\)");
+      low_precedence_pattern = Pattern.compile("\\|\\|| or |==>|<==|<=!=>|\\?");
       dot_class_pattern = Pattern.compile("\\.class");
       inequality_pattern = Pattern.compile("[\\!<>]=");
       gteq_pattern = Pattern.compile(">=");
