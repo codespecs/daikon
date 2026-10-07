@@ -1,5 +1,6 @@
 package daikon.split;
 
+import daikon.FileIO;
 import daikon.Global;
 import daikon.PptTopLevel;
 import java.io.BufferedWriter;
@@ -246,16 +247,20 @@ public class SplitterFactory {
     return fileCompiler.compileFiles(fileNames);
   }
 
-  /** Returns true if a Ppt's name matches the given pattern. */
+  /**
+   * Returns true if a Ppt's name matches the given name from a {@code .spinfo} file.
+   *
+   * @param ppt_name a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param ppt a program point
+   * @return true if the program point's name matches {@code ppt_name}
+   */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
+    if (ppt_name.contains(FileIO.ppt_tag_separator)) {
+      // A complete program point name.
+      return SplitterList.matches(ppt_name, ppt.name);
+    }
     if (ppt.name.equals(ppt_name)) {
       return true;
-    }
-    if (ppt_name.endsWith(":::EXIT")) {
-      String regex = Pattern.quote(ppt_name) + "[0-9]+";
-      if (matchPptRegex(regex, ppt)) {
-        return true;
-      }
     }
 
     // Look for corresponding EXIT ppt. This is because the exit ppt usually has
@@ -286,16 +291,27 @@ public class SplitterFactory {
   }
 
   /**
+   * The maximum length of the part of a splitter file name that comes from the program point name.
+   * Many file systems limit a file name to 255 bytes, which must also accommodate the guid and the
+   * ".class" suffix.
+   */
+  private static final int MAX_FILE_NAME_PREFIX_LENGTH = 200;
+
+  /**
    * Returns a file name for a splitter file to be used with a Ppt with the name, ppt_name. The file
    * name is ppt_name with all characters which are invalid for use in a java file name (such as
    * ".") replaced with "_". Then "_guid" is append to the end. For example if ppt_name is
    * "myPackage.myClass.someMethod" and guid = 12, then the following would be returned:
-   * "myPackage_myClass_someMethod_12".
+   * "myPackage_myClass_someMethod_12". If ppt_name is long, only a prefix of it is used, so that
+   * the file name does not exceed the file system's limit; the guid makes the file name unique.
    *
    * @param ppt_name the name of the Ppt that the splitter Java file will be used with
    */
   private static String getFileName(String ppt_name) {
     String splitterName = clean(ppt_name);
+    if (splitterName.length() > MAX_FILE_NAME_PREFIX_LENGTH) {
+      splitterName = splitterName.substring(0, MAX_FILE_NAME_PREFIX_LENGTH);
+    }
     splitterName = splitterName + "_" + guid;
     guid++;
     return splitterName;
