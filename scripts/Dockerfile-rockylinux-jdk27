@@ -2,7 +2,7 @@
 
 # Create a Docker image that is ready to run the Daikon tests.
 
-FROM rockylinux:9
+FROM rockylinux/rockylinux:10
 LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
 
 # According to
@@ -44,8 +44,7 @@ RUN curl --silent -o jdk-27_linux-x64_bin.tar.gz https://download.java.net/java/
 && rm jdk-27_linux-x64_bin.tar.gz
 ENV PATH="/jdk-27/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 ENV JAVA27_HOME=/jdk-27
-RUN chmod og+rx /root \
-&& chmod og+r /root/*
+RUN chmod og+rx /root
 
 # Clean up.
 RUN dnf -q clean all
