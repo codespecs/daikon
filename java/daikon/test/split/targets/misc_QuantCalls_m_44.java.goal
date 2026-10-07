@@ -35,7 +35,7 @@ public final class misc_QuantCalls_m_44 extends Splitter {
     long i = i_varinfo.getIntValue(vt);
     long[] this_a_array = this_a_array_varinfo.getIntArrayValue(vt);
     long[] this_b_array = this_b_array_varinfo.getIntArrayValue(vt);
-    return((this_a_array==null?Integer.MAX_VALUE:(int)this_a_array[(int)((this_b_array==null?Integer.MAX_VALUE:(int)this_b_array[(int)(i)]))])>0);
+    return(getElement_int(this_a_array,getElement_int(this_b_array,i))>0);
   }
 
   public String repr() {

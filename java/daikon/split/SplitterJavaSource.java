@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -358,10 +359,11 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     condition = PrefixFixer.fixPrefix(condition, baseNames);
     // UNDONE: If the condition contains a naked reference to a class
     // variable, we should prepend the classname.  (markro)
+    // NullReplacer must run before QuantFixer, because NullReplacer recognizes the calls to
+    // daikon.Quant methods that return a reference, which are compared with null rather than 0.
     condition = NullReplacer.replaceNull(condition);
-    // QuantFixer must run after NullReplacer, which would replace the null literals that QuantFixer
-    // introduces, and before ArrayFixer, which would add "_identity" to the array arguments.
-    condition = QuantFixer.fixQuant(condition, getArrays(varInfos));
+    // QuantFixer must run before ArrayFixer, which would add "_identity" to the array arguments.
+    condition = QuantFixer.fixQuant(condition, getArrays(varInfos), getArrayBaseNames(varInfos));
     condition = ArrayFixer.fixArrays(condition, baseNames, varInfos);
     return condition;
   }
@@ -532,6 +534,22 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
+   * Returns the base names of the array variables in varInfos.
+   *
+   * @param varInfos the varInfos for the variables that may appear in the condition
+   * @return the base names of the array variables
+   */
+  private static Set<String> getArrayBaseNames(VarInfo[] varInfos) {
+    Set<String> arrayBaseNames = new HashSet<>();
+    for (VarInfo varInfo : varInfos) {
+      if (varInfo.type.isArray()) {
+        arrayBaseNames.add(getBaseName(varInfo));
+      }
+    }
+    return arrayBaseNames;
+  }
+
+  /**
    * Returns the name of the variable represented by varInfo as it would appear in the field
    * declaration of a java splitter file.
    *
@@ -559,7 +577,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo for the variable whose type is desired
    * @return the type of the variable represented by varInfo
    */
-  static String getVarType(VarInfo varInfo) {
+  private static String getVarType(VarInfo varInfo) {
     if (varInfo.file_rep_type == ProglangType.HASHCODE) {
       return "int";
     } else if ((varInfo.type == ProglangType.CHAR_ARRAY)

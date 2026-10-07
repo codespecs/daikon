@@ -29,7 +29,7 @@ public final class misc_QuantCalls_m_51 extends Splitter {
   public boolean test(ValueTuple vt) {
     /* writeTestBody: 1 declarations */
     String this_str_array = this_str_array_varinfo.getStringValue(vt);
-    return((this_str_array==null?Character.MAX_VALUE:this_str_array.charAt((int)(0)))=='a'&&(this_str_array==null?Integer.MAX_VALUE:this_str_array.length())>1);
+    return(getElement_char(this_str_array,0)=='a'&&size(this_str_array)>1);
   }
 
   public String repr() {

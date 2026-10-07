@@ -3,6 +3,7 @@ package daikon.split;
 import daikon.tools.jtb.Ast;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Set;
 import jtb.ParseException;
@@ -34,8 +35,11 @@ class PrefixFixer extends DepthFirstVisitor {
   /** The token visited before twoTokensAgo. */
   private @MonotonicNonNull NodeToken threeTokensAgo;
 
-  /** The base names of the variables that may appear in the expression. */
-  private final String[] baseNames;
+  /**
+   * The identifiers that may start a variable name: each base name of a variable that may appear in
+   * the expression, and each prefix of such a base name that is followed by "_".
+   */
+  private final Set<String> variableNamePrefixes = new HashSet<>();
 
   /** The tokens of names that do not start with a variable name, such as "java.lang.Math.abs". */
   private final Set<NodeToken> nonVariableNameTokens =
@@ -48,7 +52,12 @@ class PrefixFixer extends DepthFirstVisitor {
    */
   private PrefixFixer(String[] baseNames) {
     super();
-    this.baseNames = baseNames;
+    for (String baseName : baseNames) {
+      variableNamePrefixes.add(baseName);
+      for (int i = baseName.indexOf('_'); i != -1; i = baseName.indexOf('_', i + 1)) {
+        variableNamePrefixes.add(baseName.substring(0, i));
+      }
+    }
   }
 
   /**
@@ -96,26 +105,10 @@ class PrefixFixer extends DepthFirstVisitor {
    */
   @Override
   public void visit(Name n) {
-    if (!isVariableNamePrefix(n.f0.tokenImage)) {
+    if (!variableNamePrefixes.contains(n.f0.tokenImage)) {
       nonVariableNameTokens.addAll(Arrays.asList(TokenExtractor.extractTokens(n)));
     }
     super.visit(n);
-  }
-
-  /**
-   * Returns true if some base name in baseNames is identifier or starts with identifier and "_".
-   *
-   * @param identifier the first identifier of a name
-   * @return true if identifier may be the start of a variable name
-   */
-  @Pure
-  private boolean isVariableNamePrefix(String identifier) {
-    for (String baseName : baseNames) {
-      if (baseName.equals(identifier) || baseName.startsWith(identifier + "_")) {
-        return true;
-      }
-    }
-    return false;
   }
 
   /** Fixes the last token if needed. */

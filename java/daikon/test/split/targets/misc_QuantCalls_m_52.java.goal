@@ -2,10 +2,10 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.split.*;
 
-public final class misc_QuantCalls_m_50 extends Splitter {
+public final class misc_QuantCalls_m_52 extends Splitter {
 
   public String condition() {
-    return "\"x\".equals(daikon.Quant.getElement_String(this.s, 0))";
+    return "daikon.Quant.getElement_String(this.s, 0) == null";
   }
 
   VarInfo this_s_array_varinfo; // this.s[]
@@ -13,13 +13,13 @@ public final class misc_QuantCalls_m_50 extends Splitter {
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
-  public misc_QuantCalls_m_50() { }
-  public misc_QuantCalls_m_50(Ppt ppt) {
+  public misc_QuantCalls_m_52() { }
+  public misc_QuantCalls_m_52(Ppt ppt) {
     this_s_array_varinfo = ppt.find_var_by_name("this.s[]");
   }
 
   public Splitter instantiateSplitter(Ppt ppt) {
-    return new misc_QuantCalls_m_50(ppt);
+    return new misc_QuantCalls_m_52(ppt);
   }
 
   public boolean valid() {
@@ -29,11 +29,11 @@ public final class misc_QuantCalls_m_50 extends Splitter {
   public boolean test(ValueTuple vt) {
     /* writeTestBody: 1 declarations */
     java.lang.String[] this_s_array = this_s_array_varinfo.getStringArrayValue(vt);
-    return("x".equals(getElement_String(this_s_array,0)));
+    return(getElement_String(this_s_array,0)==null);
   }
 
   public String repr() {
-    return "misc_QuantCalls_m_50: "
+    return "misc_QuantCalls_m_52: "
       + "this_s_array_varinfo = " + this_s_array_varinfo.repr() + " "
       ;
   }

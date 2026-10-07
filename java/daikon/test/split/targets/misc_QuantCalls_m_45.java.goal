@@ -32,7 +32,7 @@ public final class misc_QuantCalls_m_45 extends Splitter {
     /* writeTestBody: 2 declarations */
     long i = i_varinfo.getIntValue(vt);
     long[] this_a_array = this_a_array_varinfo.getIntArrayValue(vt);
-    return((this_a_array==null?Integer.MAX_VALUE:this_a_array.length)==i);
+    return(size(this_a_array)==i);
   }
 
   public String repr() {
