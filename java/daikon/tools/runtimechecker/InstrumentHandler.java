@@ -5,11 +5,11 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
 import daikon.PptMap;
 import daikon.tools.jtb.ParseResults;
-import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.IOException;
@@ -213,59 +213,64 @@ public class InstrumentHandler extends CommandHandler {
           new LongOpt(directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(checkers_directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
         };
-    Getopt g = new Getopt("daikon.tools.runtimechecker.InstrumentHandler", args, "hs", longopts);
-    int c;
-    while ((c = g.getopt()) != -1) {
-      switch (c) {
-        case 0:
-          // got a long option
-          String option_name = longopts[g.getLongind()].getName();
+    // Main prints the usage message when this tool fails, so DaikonGetopt need not handle -h.
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts);
+    try {
+      int c;
+      while ((c = g.getopt()) != -1) {
+        switch (c) {
+          case 0:
+            // got a long option
+            String option_name = longopts[g.getLongind()].getName();
 
-          if (create_checker_classes_SWITCH.equals(option_name)) {
-            createCheckerClasses = true;
-          } else if (output_only_high_conf_invariants_SWITCH.equals(option_name)) {
-            InstrumentVisitor.outputOnlyHighConfInvariants = true;
-          } else if (make_all_fields_public_SWITCH.equals(option_name)) {
-            InstrumentVisitor.makeAllFieldsPublic = true;
-          } else if (directory_SWITCH.equals(option_name)) {
-            instrumented_directory = Daikon.getOptarg(g);
-          } else if (checkers_directory_SWITCH.equals(option_name)) {
-            checkersOutputDirName = Daikon.getOptarg(g);
-          } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
-            Global.debugAll = true;
-          } else if (Daikon.debug_SWITCH.equals(option_name)) {
-            daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
-          } else {
-            System.err.println("Unknown long option received: " + option_name);
-          }
-          break;
-        default:
-          System.out.println("unrecognized option" + c);
-          return errorWhileReadingArguments;
+            if (create_checker_classes_SWITCH.equals(option_name)) {
+              createCheckerClasses = true;
+            } else if (output_only_high_conf_invariants_SWITCH.equals(option_name)) {
+              InstrumentVisitor.outputOnlyHighConfInvariants = true;
+            } else if (make_all_fields_public_SWITCH.equals(option_name)) {
+              InstrumentVisitor.makeAllFieldsPublic = true;
+            } else if (directory_SWITCH.equals(option_name)) {
+              instrumented_directory = Daikon.getOptarg(g);
+            } else if (checkers_directory_SWITCH.equals(option_name)) {
+              checkersOutputDirName = Daikon.getOptarg(g);
+            } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
+              Global.debugAll = true;
+            } else if (Daikon.debug_SWITCH.equals(option_name)) {
+              daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
+            } else {
+              throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
+            }
+            break;
+          default:
+            throw new Daikon.BugInDaikon("getopt() returned " + c);
+        }
       }
+    } catch (Daikon.UserError e) {
+      System.err.println("Error: " + e.getMessage());
+      return errorWhileReadingArguments;
     }
     // The index of the first non-option argument -- the name of the
     // invariant file.
     int argindex = g.getOptind();
     if (argindex >= args.length) {
-      System.out.println("Error: No .inv file or .java file arguments supplied.");
+      System.err.println("Error: No .inv file or .java file arguments supplied.");
       return errorWhileReadingArguments;
     }
     String invfile = args[argindex];
     argindex++;
     if (!(invfile.endsWith(".inv") || invfile.endsWith(".inv.gz"))) {
-      System.out.println("Error: first argument must be a file ending in .inv or .inv.gz.");
+      System.err.println("Error: first argument must be a file ending in .inv or .inv.gz.");
       return errorWhileReadingArguments;
     }
     if (argindex >= args.length) {
-      System.out.println("Error: No .java file arguments supplied.");
+      System.err.println("Error: No .java file arguments supplied.");
       return errorWhileReadingArguments;
     }
     List<String> javaFileNames = new ArrayList<>();
     for (; argindex < args.length; argindex++) {
       String javafile = args[argindex];
       if (!javafile.endsWith(".java")) {
-        System.out.println("File does not end in .java: " + javafile);
+        System.err.println("File does not end in .java: " + javafile);
         return errorWhileReadingArguments;
       }
       javaFileNames.add(javafile);
