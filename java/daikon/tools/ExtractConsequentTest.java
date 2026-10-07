@@ -190,6 +190,7 @@ public class ExtractConsequentTest {
     assertTrue(origCluster.includes_simple_name("cluster"));
 
     assertEquals(clusterKey(cluster, 1), clusterKey(origCluster, 1));
-    assertFalse(clusterKey(cluster, 1).equals(clusterKey(origCluster, 2)));
+    // Normalization does not conflate different clusters.
+    assertFalse(clusterKey(origCluster, 1).equals(clusterKey(origCluster, 2)));
   }
 }

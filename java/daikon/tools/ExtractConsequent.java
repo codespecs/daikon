@@ -17,6 +17,7 @@ import daikon.inv.OutputFormat;
 import daikon.inv.binary.twoScalar.IntEqual;
 import daikon.inv.binary.twoScalar.IntNonEqual;
 import daikon.inv.unary.scalar.OneOfScalar;
+import daikon.split.SplitterList;
 import gnu.getopt.*;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,10 +26,12 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +46,10 @@ import org.plumelib.util.StringsPlume;
  * <em>NUM</em>) &rArr; consequent". The consequent is only true in certain clusters, but is not
  * generally true for all executions of the program point to which the Implication belongs. These
  * resulting implications are written to standard output in the format of a splitter info file.
+ *
+ * <p>Each PPT_NAME in the output is a complete program point name. To make Daikon use each
+ * condition only at the program points that its PPT_NAME designates, disable indiscriminate
+ * splitting via {@code --config_option daikon.split.SplitterList.all_splitters=false}.
  */
 public class ExtractConsequent {
 
@@ -182,18 +189,23 @@ public class ExtractConsequent {
     for (Map.Entry<String, Map<String, Map<String, HashedConsequent>>> entry :
         pptname_to_conditions.entrySet()) {
       String pptname = entry.getKey();
-      TreeSet<String> allConds = conditions(entry.getValue());
+      TreeSet<String> allConds = conditions(entry.getValue(), inv -> true);
       if (allConds.isEmpty()) {
         continue;
       }
       pptname_to_output.computeIfAbsent(pptname, k -> new TreeSet<>()).addAll(allConds);
-      // A condition at an entry point also splits the method's exit points.  The name of the
-      // combined exit point matches the numbered exit points as well.
+      // A condition at an entry point also splits the method's exit points, if the method does not
+      // modify the condition's variables.  At an exit point, a variable's name denotes its
+      // post-state value, and a splitter cannot use a pre-state value such as "orig(x)".
       if (pptname.endsWith(FileIO.enter_tag)) {
-        String exitname =
-            pptname.substring(0, pptname.length() - FileIO.enter_tag.length()) + FileIO.exit_tag;
-        if (ppts.containsName(exitname)) {
-          pptname_to_output.computeIfAbsent(exitname, k -> new TreeSet<>()).addAll(allConds);
+        for (PptTopLevel exitPpt : exitPoints(pptname, ppts)) {
+          TreeSet<String> exitConds =
+              conditions(entry.getValue(), inv -> isUnmodified(inv, exitPpt));
+          if (!exitConds.isEmpty()) {
+            pptname_to_output
+                .computeIfAbsent(exitPpt.name(), k -> new TreeSet<>())
+                .addAll(exitConds);
+          }
         }
       }
     }
@@ -211,15 +223,71 @@ public class ExtractConsequent {
   }
 
   /**
+   * Returns the exit points to which the conditions at the given entry point should be copied. If
+   * the combined exit point exists, the result is just it, because its name also designates the
+   * numbered exit points (see {@link SplitterList#matches}). Otherwise, the result is the numbered
+   * exit points.
+   *
+   * @param enterName the name of an entry point
+   * @param ppts all the program points
+   * @return the exit points of the method whose entry point is {@code enterName}
+   */
+  private static List<PptTopLevel> exitPoints(String enterName, PptMap ppts) {
+    String exitName =
+        enterName.substring(0, enterName.length() - FileIO.enter_tag.length()) + FileIO.exit_tag;
+    PptTopLevel combinedExit = ppts.get(exitName);
+    if (combinedExit != null) {
+      return Collections.singletonList(combinedExit);
+    }
+    List<PptTopLevel> result = new ArrayList<>();
+    for (PptTopLevel ppt : ppts.asCollection()) {
+      if (SplitterList.matches(exitName, ppt.name())) {
+        result.add(ppt);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Returns true if the invariant, which is at an entry point, means the same thing at the given
+   * exit point: that is, if every variable of the invariant is unmodified at the exit point.
+   *
+   * @param inv an invariant at an entry point
+   * @param exitPpt an exit point of the same method
+   * @return true if no variable of the invariant is modified at {@code exitPpt}
+   */
+  static boolean isUnmodified(Invariant inv, PptTopLevel exitPpt) {
+    for (VarInfo vi : inv.ppt.var_infos) {
+      VarInfo post = exitPpt.find_var_by_name(vi.name());
+      VarInfo orig = exitPpt.find_var_by_name(vi.prestate_name());
+      if (post == null || orig == null) {
+        return false;
+      }
+      // A variable's equalitySet is null if Daikon did not compute equality sets at the ppt.
+      if (post.equalitySet == null || orig.equalitySet == null) {
+        return false;
+      }
+      // Equal variables are usually in the same equality set, but undoOpts replaces equality sets
+      // by equality invariants.
+      if (!(post.isEqualTo(orig) || exitPpt.is_equal(post, orig))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
    * Returns the splitting conditions for one program point: each condition, and the conjunction of
    * the conditions for each cluster.
    *
    * @param cluster_to_conditions maps a cluster key to the conditions for that cluster, as in a
    *     value of {@link #pptname_to_conditions}
+   * @param filter which invariants to use as conditions
    * @return the splitting conditions, each formatted by {@link #combineDummy}
    */
   private static TreeSet<String> conditions(
-      Map<String, Map<String, HashedConsequent>> cluster_to_conditions) {
+      Map<String, Map<String, HashedConsequent>> cluster_to_conditions,
+      Predicate<Invariant> filter) {
     // A TreeSet, for deterministic output.
     TreeSet<String> allConds = new TreeSet<>();
     for (Map<String, HashedConsequent> conditions : cluster_to_conditions.values()) {
@@ -232,7 +300,7 @@ public class ExtractConsequent {
           conditions.entrySet()) {
         String condIndex = entry2.getKey();
         HashedConsequent cond = entry2.getValue();
-        if (cond.fakeFor != null) {
+        if (cond.fakeFor != null || !filter.test(cond.inv)) {
           continue;
         }
         String javaStr = javaFormat(cond.inv);

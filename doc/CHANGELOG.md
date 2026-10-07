@@ -26,6 +26,8 @@ Further documentation can be found in:
 * In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
   complete program point name, and it matches only the program point of that
   name.  A name ending with `:::EXIT` also matches the numbered exit points.
+  This affects where Daikon uses a condition only if indiscriminate splitting
+  is disabled via `--config_option daikon.split.SplitterList.all_splitters=false`.
 * ExtractConsequent writes splitting conditions that Daikon can use.
 
 ## Version 5.9.0 (September 1, 2026)
