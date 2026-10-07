@@ -269,12 +269,13 @@ public class SplitterFactoryTestUpdater {
     ps.println("    }");
     ps.println("    Result result = JUnitCore.runClasses(SplitterFactoryTest.class);");
     ps.println("    for (Failure failure : result.getFailures()) {");
-    ps.println("      System.out.println(failure.getTrace());");
+    ps.println("      System.err.println(failure.getTrace());");
     ps.println("    }");
     ps.println("    if (!result.wasSuccessful()) {");
     ps.println(
-        "      throw new Daikon.UserError(StringsPlume.nPlural(result.getFailureCount(), \"test\")"
+        "      System.err.println(StringsPlume.nPlural(result.getFailureCount(), \"test\")"
             + " + \" failed\");");
+    ps.println("      System.exit(1);");
     ps.println("    }");
     ps.println("  }");
     ps.println();
