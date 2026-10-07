@@ -1,28 +1,29 @@
-package daikon.test.split;
+package daikon.split;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 import daikon.Daikon;
 import daikon.FileIO;
 import daikon.PptMap;
 import daikon.PptTopLevel;
-import daikon.split.PptSplitter;
-import daikon.split.SpinfoFile;
-import daikon.split.SplitterFactory;
-import daikon.split.SplitterList;
-import daikon.split.SplitterObject;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /** Tests loading of splitters when some of the splitters for a program point are erroneous. */
@@ -40,6 +41,68 @@ public class SplitterLoadTest {
 
   /** A splitter condition that is valid for {@link #pptName}. */
   private static final String goodCondition = "currentSize == 0";
+
+  /**
+   * Skips the tests if splitters cannot be compiled, because the compiler is not available or
+   * because Daikon's classes are not on the classpath that the compiler uses.
+   */
+  @BeforeClass
+  public static void assumeSplittersCanBeCompiled() {
+    assumeTrue("Cannot run the splitter compiler", compilerIsRunnable());
+    assumeTrue("Daikon's classes are not on java.class.path", splitterIsOnClassPath());
+  }
+
+  /**
+   * Returns true if the compiler of {@link SplitterFactory#dkconfig_compiler} can be run.
+   *
+   * @return true if the compiler can be run
+   */
+  private static boolean compilerIsRunnable() {
+    String compiler = SplitterFactory.dkconfig_compiler.trim().split(" +")[0];
+    try {
+      Process p = new ProcessBuilder(compiler, "-version").redirectErrorStream(true).start();
+      try (InputStream in = p.getInputStream()) {
+        while (in.read() != -1) {
+          // Discard the output, so that the process does not block.
+        }
+      }
+      return p.waitFor() == 0;
+    } catch (IOException e) {
+      return false;
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+      return false;
+    }
+  }
+
+  /**
+   * Returns true if the location of the {@link Splitter} class is on {@code java.class.path}, which
+   * {@link SplitterFactory#dkconfig_compiler} passes to the compiler.
+   *
+   * @return true if the {@link Splitter} class is on {@code java.class.path}
+   */
+  private static boolean splitterIsOnClassPath() {
+    Path splitterLocation;
+    try {
+      splitterLocation =
+          Paths.get(Splitter.class.getProtectionDomain().getCodeSource().getLocation().toURI())
+              .toAbsolutePath()
+              .normalize();
+    } catch (URISyntaxException | RuntimeException e) {
+      return false;
+    }
+    for (String entry : System.getProperty("java.class.path").split(File.pathSeparator)) {
+      try {
+        if (!entry.isEmpty()
+            && Paths.get(entry).toAbsolutePath().normalize().equals(splitterLocation)) {
+          return true;
+        }
+      } catch (InvalidPathException e) {
+        // Ignore a malformed classpath entry.
+      }
+    }
+    return false;
+  }
 
   /**
    * Erroneous splitters (a parse error and a lexical error) must not prevent the other splitters
@@ -70,13 +133,17 @@ public class SplitterLoadTest {
    */
   @Test
   public void testUnwritableSplitter() throws IOException {
-    // A regular file cannot be the parent directory of the splitter source file.
-    Path notADirectory = Files.createTempFile("SplitterLoadTest", ".notadir");
+    // No file can be created in a read-only directory.  Deleting the nonexistent class file from
+    // that directory succeeds, so writing the source file is the step that fails.
+    Path readOnlyDirectory = Files.createTempDirectory("SplitterLoadTest");
     try {
+      assumeTrue(readOnlyDirectory.toFile().setWritable(false, false));
+      // A privileged user can write to a read-only directory.
+      assumeTrue(!Files.isWritable(readOnlyDirectory));
       SplitterObject[] splitters =
           loadSplitters(
               List.of(goodCondition, "currentSize != 0"),
-              s -> s[1].setDirectory(notADirectory + File.separator));
+              s -> s[1].setDirectory(readOnlyDirectory + File.separator));
       SplitterObject good = splitters[0];
       SplitterObject unwritable = splitters[1];
 
@@ -86,7 +153,8 @@ public class SplitterLoadTest {
           unwritable.getError(),
           unwritable.getError().contains("Error while writing splitter file"));
     } finally {
-      Files.delete(notADirectory);
+      readOnlyDirectory.toFile().setWritable(true);
+      Files.delete(readOnlyDirectory);
     }
   }
 
@@ -117,12 +185,16 @@ public class SplitterLoadTest {
       }
       modifier.accept(result);
 
-      PptTopLevel ppt = readPpt();
+      // Reading the decls file sets FileIO.new_decl_format, which writing the splitters uses.
+      // Restore it afterward, so that it does not affect other tests.
+      Boolean oldNewDeclFormat = FileIO.new_decl_format;
       boolean oldSuppress = PptSplitter.dkconfig_suppressSplitterErrors;
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       try {
+        PptTopLevel ppt = readPpt();
         SplitterFactory.load_splitters(ppt, Collections.singletonList(spfile));
       } finally {
+        FileIO.new_decl_format = oldNewDeclFormat;
         PptSplitter.dkconfig_suppressSplitterErrors = oldSuppress;
         SplitterList.remove(pptName);
       }

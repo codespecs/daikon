@@ -176,6 +176,8 @@ public class SplitterFactory {
     // The splitters whose source files were written successfully.
     // Splitters that were not written must not be compiled or loaded.
     List<SplitterObject> writtenSplitters = new ArrayList<>();
+    // The source files of writtenSplitters, in the same order.
+    List<String> writtenSourcePaths = new ArrayList<>();
     for (int i = 0; i < splitterObjects.length; i++) {
       SplitterObject splitObj = splitterObjects[i];
       String fileName = getFileName(splitObj.getPptName());
@@ -202,14 +204,20 @@ public class SplitterFactory {
       try {
         // A class file left over from an earlier run must not be loaded if compilation fails.
         Files.deleteIfExists(Path.of(classPath));
-        try (BufferedWriter writer = FilesPlume.newBufferedFileWriter(sourcePath)) {
-          if (dkconfig_delete_splitters_on_exit) {
-            new File(sourcePath).deleteOnExit();
-            new File(classPath).deleteOnExit();
-          }
-          writer.write(fileContents.toString());
-          writer.flush();
-        }
+      } catch (IOException ioe) {
+        debug.fine(ioe.toString());
+        splitObj.setError("Cannot delete old splitter class file " + classPath + ": " + ioe);
+        continue;
+      }
+      if (dkconfig_delete_splitters_on_exit) {
+        // Registered before the source file is opened, so that a partially-written file is deleted
+        // even if deleting it below fails.
+        new File(sourcePath).deleteOnExit();
+        new File(classPath).deleteOnExit();
+      }
+      try (BufferedWriter writer = FilesPlume.newBufferedFileWriter(sourcePath)) {
+        writer.write(fileContents.toString());
+        writer.flush();
       } catch (IOException ioe) {
         debug.fine(ioe.toString());
         splitObj.setError("Error while writing splitter file " + sourcePath + ": " + ioe);
@@ -221,14 +229,11 @@ public class SplitterFactory {
         continue;
       }
       writtenSplitters.add(splitObj);
+      writtenSourcePaths.add(sourcePath);
     }
     if (writtenSplitters.isEmpty()) {
       Global.debugSplit.fine("<<exit>>  loadSplitters: no splitters were written");
       return;
-    }
-    List<String> writtenSourcePaths = new ArrayList<>(writtenSplitters.size());
-    for (SplitterObject splitObj : writtenSplitters) {
-      writtenSourcePaths.add(splitObj.getFullSourcePath());
     }
     String errorOutput = null;
     try {

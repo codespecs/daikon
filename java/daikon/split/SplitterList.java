@@ -65,7 +65,7 @@ public abstract class SplitterList {
    *
    * @param pptname the name of a program point
    */
-  public static void remove(String pptname) {
+  static void remove(String pptname) {
     ppt_splitters.remove(pptname);
   }
 

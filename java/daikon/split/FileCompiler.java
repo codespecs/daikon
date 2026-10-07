@@ -22,6 +22,7 @@ import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.checkerframework.checker.index.qual.Positive;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.checkerframework.common.value.qual.MinLen;
 
@@ -50,14 +51,12 @@ public final class FileCompiler {
     try {
       @Regex(1) String java_filename_re
           // A javac error message may consist of several lines of output.
-          // The filename will be found at the beginning of the first line,
-          // the additional lines of information will all be indented.
-          // (?m) turns on MULTILINE mode so the first "^" matches the
-          // start of each error line output by javac. The blank space after
-          // the second "^" is intentional; together with the first "^", this
-          // says a filename can only be found at the start of a non-indented
-          // line as noted above.
-          = "(?m)^([^ ]+?\\.java)";
+          // The first line has the form "FILENAME.java:LINENUMBER: MESSAGE";
+          // the additional lines of information do not.
+          // (?m) turns on MULTILINE mode so "^" matches the start of each
+          // line output by javac.  The filename may contain spaces, but it
+          // does not start with whitespace.
+          = "(?m)^(\\S.*?\\.java):[0-9]+:";
       java_filename_pattern = Pattern.compile(java_filename_re);
     } catch (PatternSyntaxException me) {
       me.printStackTrace();
@@ -120,27 +119,112 @@ public final class FileCompiler {
     // System.out.printf("compileFiles: %s%n", fileNames);
 
     // Start a process to compile all of the files (in one command)
-    String compile_errors = compile_source(fileNames);
+    CompileResult result = compile_source(fileNames);
+    String compile_errors = result.errorOutput();
 
     // javac tends to stop without completing the compilation if there
     // is an error in one of the files.  Remove all the erring files
     // and recompile only the good ones.
-    if (compiler[0].indexOf("javac") != -1) {
-      compile_errors += recompile_without_errors(fileNames, compile_errors);
+    if (result.failed && compiler[0].indexOf("javac") != -1) {
+      // javac writes its diagnostics to standard error, so only standard error is searched for the
+      // names of files with errors.
+      CompileResult recompileResult = recompile_without_errors(fileNames, result.stderr);
+      // If the recompilation succeeded, its output contains no errors, only warnings that were
+      // already reported by the first compilation.
+      if (recompileResult != null && recompileResult.failed) {
+        compile_errors =
+            appendWithLineSeparator(
+                compile_errors, withoutCommonPrefix(compile_errors, recompileResult));
+      }
     }
 
     return compile_errors;
   }
 
   /**
-   * Returns the error output from compiling the files.
+   * Returns the lines of the error output of {@code result}, without any leading lines that also
+   * start {@code previousOutput}. Such lines are typically warnings about command-line options,
+   * which the compiler issues every time it runs.
+   *
+   * @param previousOutput the error output of an earlier compilation
+   * @param result the result of a later compilation
+   * @return the error output of {@code result}, without the leading lines it shares with {@code
+   *     previousOutput}
+   */
+  private static String withoutCommonPrefix(String previousOutput, CompileResult result) {
+    String[] previousLines = previousOutput.split("\\R", -1);
+    String[] lines = result.errorOutput().split("\\R", -1);
+    int common = 0;
+    while (common < previousLines.length
+        && common < lines.length
+        && lines[common].equals(previousLines[common])) {
+      common++;
+    }
+    return String.join(System.lineSeparator(), Arrays.asList(lines).subList(common, lines.length));
+  }
+
+  /**
+   * Returns the concatenation of {@code text} and {@code addition}, separated by a line separator
+   * if {@code text} is non-empty and does not end with one.
+   *
+   * @param text some text
+   * @param addition text to append
+   * @return the concatenation of {@code text} and {@code addition}
+   */
+  private static String appendWithLineSeparator(String text, String addition) {
+    if (addition.isEmpty()) {
+      return text;
+    }
+    if (!text.isEmpty() && !text.endsWith("\n")) {
+      text += System.lineSeparator();
+    }
+    return text + addition;
+  }
+
+  /** The result of running the compiler once. */
+  private static final class CompileResult {
+    /** True if the compiler exited with a failure status. */
+    final boolean failed;
+
+    /** The standard error of the compiler. */
+    final String stderr;
+
+    /** The standard output of the compiler. */
+    final String stdout;
+
+    /**
+     * Creates a new CompileResult.
+     *
+     * @param failed true if the compiler exited with a failure status
+     * @param stderr the standard error of the compiler
+     * @param stdout the standard output of the compiler
+     */
+    CompileResult(boolean failed, String stderr, String stdout) {
+      this.failed = failed;
+      this.stderr = stderr;
+      this.stdout = stdout;
+    }
+
+    /**
+     * Returns the error output of the compiler. Some compilers write diagnostics to standard output
+     * rather than standard error, so this includes standard output if compilation failed. Standard
+     * output is not an error if compilation succeeded; for example, it might be verbose output.
+     *
+     * @return the error output of the compiler
+     */
+    String errorOutput() {
+      return failed ? appendWithLineSeparator(stderr, stdout) : stderr;
+    }
+  }
+
+  /**
+   * Compiles the given files.
    *
    * @param filenames the paths of the Java source to be compiled as Strings
-   * @return the error output from compiling the files; if compilation fails, also the standard
-   *     output
+   * @return the result of compiling the files
    * @throws Error if an empty list of filenames is provided
    */
-  private String compile_source(List<String> filenames) throws IOException {
+  private CompileResult compile_source(List<String> filenames) throws IOException {
     /* Apache Commons Exec objects */
     CommandLine cmdLine;
     DefaultExecuteResultHandler resultHandler;
@@ -215,15 +299,7 @@ public final class FileCompiler {
       }
       runtime.exit(1);
     }
-    // Some compilers write diagnostics to standard output rather than standard error.  Standard
-    // output is not an error if compilation succeeded; for example, it might be verbose output.
-    if (executor.isFailure(exitValue) && !compile_output.isEmpty()) {
-      if (!compile_errors.isEmpty() && !compile_errors.endsWith("\n")) {
-        compile_errors += System.lineSeparator();
-      }
-      compile_errors += compile_output;
-    }
-    return compile_errors;
+    return new CompileResult(executor.isFailure(exitValue), compile_errors, compile_output);
   }
 
   /**
@@ -234,11 +310,10 @@ public final class FileCompiler {
    *
    * @param fileNames all the files that were attempted to be compiled
    * @param errorString the error string that indicates which files could not be compiled
-   * @return the error output from the recompilation, or the empty string if no recompilation was
-   *     needed
+   * @return the result of the recompilation, or null if no recompilation was performed
    */
-  private String recompile_without_errors(List<String> fileNames, String errorString)
-      throws IOException {
+  private @Nullable CompileResult recompile_without_errors(
+      List<String> fileNames, String errorString) throws IOException {
     // search the error string and extract the files with errors.
     if (errorString != null) {
       HashSet<String> errorClasses = new HashSet<>();
@@ -261,11 +336,13 @@ public final class FileCompiler {
         }
       }
 
-      if (!retry.isEmpty()) {
+      // If no file was excluded, recompiling would only repeat the previous compilation.  That
+      // happens, for example, if the failure is not attributable to any particular file.
+      if (!retry.isEmpty() && retry.size() < fileNames.size()) {
         return compile_source(retry);
       }
     }
-    return "";
+    return null;
   }
 
   /**
