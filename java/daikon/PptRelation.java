@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -651,22 +652,21 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Creates an equality view and invariants for each ppt that has no children and does not already
-   * have an equality view. This happens for non-leaf ppts such as OBJECT, CLASS, or GLOBAL that do
-   * not end up with any children (due to the program source or because of ppt filtering). It also
-   * happens for a combined exit point that a decls file declares when no corresponding numbered
-   * exit point is declared or included. Leaves got their equality views from {@link
-   * Daikon#setupEquality} (or, in MergeInvariants, have children).
+   * Creates an equality view and invariants for each non-leaf ppt that has no children and does not
+   * already have an equality view. This happens for non-leaf ppts such as OBJECT, CLASS, or GLOBAL
+   * that do not end up with any children (due to the program source or because of ppt filtering).
+   * It also happens for a combined exit point that a decls file declares when no corresponding
+   * numbered exit point is declared or included. Leaves get their equality views from {@link
+   * Daikon#setupEquality}.
    *
    * <p>The equality view is created even if {@link Daikon#use_equality_optimization} is false,
    * because {@link PptTopLevel#mergeInvs} requires every childless ppt to have one.
    *
    * @param all_ppts the program points
    */
-  public static void setup_childless_nonleaves(PptMap all_ppts) {
+  private static void setup_childless_nonleaves(PptMap all_ppts) {
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
-        assert !ppt.is_dataflow_leaf() : ppt;
+      if (ppt.children.isEmpty() && (ppt.equality_view == null) && !ppt.is_dataflow_leaf()) {
         ppt.create_equality_view();
       }
     }
@@ -986,6 +986,17 @@ public class PptRelation implements Serializable {
         if (parent == null) {
           throw new RuntimeException(
               "parent ppt " + pr.parent_ppt_name + " not found for ppt " + ppt.name());
+        }
+        // A leaf obtains its invariants from its samples (and its conditional ppts), never from
+        // its children.
+        if (parent.is_dataflow_leaf()) {
+          throw new Daikon.UserError(
+              String.format(
+                  "ppt %s is declared as a parent of ppt %s, but its type (%s) makes it a leaf of"
+                      + " the dataflow hierarchy",
+                  parent.name(),
+                  ppt.name(),
+                  parent.type.name().toLowerCase(Locale.ENGLISH)));
         }
         if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
           continue;

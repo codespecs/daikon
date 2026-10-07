@@ -1127,13 +1127,7 @@ public final class FileIO {
     // false if at least one of them is not a program point normally
     // found in traces from programming languages.
     for (PptTopLevel ppt_top_level : all_ppts.ppt_all_iterable()) {
-      boolean is_program_point =
-          (ppt_top_level.ppt_name.isExitPoint()
-              || ppt_top_level.ppt_name.isEnterPoint()
-              || ppt_top_level.ppt_name.isThrowsPoint()
-              || ppt_top_level.ppt_name.isObjectInstanceSynthetic()
-              || ppt_top_level.ppt_name.isClassStaticSynthetic()
-              || ppt_top_level.ppt_name.isGlobalPoint());
+      boolean is_program_point = ppt_top_level.type != PptType.POINT;
 
       all_program_points = all_program_points && is_program_point;
       some_program_points = some_program_points || is_program_point;

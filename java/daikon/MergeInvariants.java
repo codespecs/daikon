@@ -248,7 +248,7 @@ public final class MergeInvariants {
       assert merge_ppts != null
           : "@AssumeAssertion(nullness): inv_files is non-empty, so for-loop body executed";
 
-      // Remove all of the slices, equality sets, to start
+      // Remove all of the slices and equality sets, to start
       debugProgress.fine("Cleaning ppt map in preparation for merge");
       for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
         ppt.clean_for_merge();
@@ -293,6 +293,7 @@ public final class MergeInvariants {
       }
 
       // Loop over each of the input ppt maps, looking for the same ppt
+      List<PptTopLevel> merge_children = new ArrayList<>();
       for (int j = 0; j < pptmaps.size(); j++) {
         PptMap pmap = pptmaps.get(j);
         PptTopLevel child = pmap.get(ppt.name());
@@ -300,6 +301,7 @@ public final class MergeInvariants {
         if (child == null) {
           continue;
         }
+        merge_children.add(child);
         if (child.equality_view == null) {
           System.out.println(
               "equality_view == null in child ppt: "
@@ -326,7 +328,22 @@ public final class MergeInvariants {
 
         // Remove implications, they don't merge correctly
         child.remove_implications();
+      }
 
+      // If no input map contains this leaf (for example, because ppt filtering removed it), it
+      // keeps the equality views that reading the decls file gave it, and it gets no invariants.
+      if (merge_children.isEmpty()) {
+        continue;
+      }
+
+      // A ppt with children must not have an equality view.  (The equality views were created
+      // when reading the decls file, or have already been removed from the .inv template.)
+      ppt.clean_for_merge();
+      for (PptConditional cond : ppt.cond_iterable()) {
+        cond.clean_for_merge();
+      }
+
+      for (PptTopLevel child : merge_children) {
         // If the ppt has splitters, attach the child's splitters to the
         // splitters.  Don't attach the ppt itself, as its invariants can
         // be built from the invariants in the splitters.
@@ -338,8 +355,6 @@ public final class MergeInvariants {
         }
       }
 
-      // Make sure at least one child was found
-      assert !ppt.children.isEmpty() : ppt;
       if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters) {
@@ -350,9 +365,14 @@ public final class MergeInvariants {
       }
     }
 
-    // A non-leaf with no children (and thus no merge children) needs an equality view.  When
-    // the merge template was read from .inv files, clean_for_merge removed it.
-    PptRelation.setup_childless_nonleaves(merge_ppts);
+    // Every ppt with no children needs an equality view.  This includes a non-leaf whose equality
+    // view clean_for_merge removed, and a leaf that no input map contains when
+    // Daikon.use_equality_optimization is false.
+    for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
+      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
+        ppt.create_equality_view();
+      }
+    }
 
     // Check the resulting PptMap for consistency
     merge_ppts.repCheck();
