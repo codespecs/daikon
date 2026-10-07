@@ -24,8 +24,7 @@ import org.plumelib.util.StringsPlume;
  *
  * <p>The first argument is a Daikon {@code .inv} file -- a serialized file of Invariant objects.
  * All subsequent arguments are {@code Foo.java} files that are rewritten into {@code
- * Foo.java-jmlannotated} versions; alternately, use the {@code -r} flag to process every {@code
- * .java} file under the current directory.
+ * Foo.java-jmlannotated} versions.
  */
 public class Annotate {
 
@@ -88,10 +87,9 @@ public class Annotate {
   private static String usage =
       StringsPlume.joinLines(
           "Usage:  java daikon.tools.Annotate FILE.inv FILE.java ...",
-          "  -h   Display this usage message",
+          "  -h, --help  Display this usage message",
           "  -i   Insert invariants not supported by ESC with \"!\" instead of \"@\";",
           "       by default these \"inexpressible\" invariants are simply omitted",
-          "  -r   Use all .java files under the current directory as arguments",
           "  -s   Use // comments rather than /* comments",
           "  --format name  Insert specifications in the given format: DBC, ESC, JML, Java",
           "  --wrap_xml     Wrap each annotation and auxiliary information in XML tags",
@@ -132,7 +130,6 @@ public class Annotate {
     Daikon.output_format = OutputFormat.ESCJAVA;
     LongOpt[] longopts =
         new LongOpt[] {
-          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.format_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -140,7 +137,7 @@ public class Annotate {
           new LongOpt(max_invariants_pp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(no_reflection_SWITCH, LongOpt.NO_ARGUMENT, null, 0)
         };
-    Getopt g = new Getopt("daikon.tools.jtb.Annotate", args, "hs", longopts);
+    DaikonGetopt g = new DaikonGetopt(args, "is", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -148,10 +145,7 @@ public class Annotate {
           // got a long option
           String option_name = longopts[g.getLongind()].getName();
 
-          if (Daikon.help_SWITCH.equals(option_name)) {
-            System.out.println(usage);
-            throw new Daikon.NormalTermination();
-          } else if (no_reflection_SWITCH.equals(option_name)) {
+          if (no_reflection_SWITCH.equals(option_name)) {
             useReflection = false;
           } else if (max_invariants_pp_SWITCH.equals(option_name)) {
             try {
@@ -181,12 +175,9 @@ public class Annotate {
               setLightweight = true;
             }
           } else {
-            throw new Daikon.UserError("Unknown long option received: " + option_name);
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
-        case 'h':
-          System.out.println(usage);
-          throw new Daikon.NormalTermination();
         case 'i':
           insert_inexpressible = true;
           break;
@@ -200,11 +191,8 @@ public class Annotate {
         case 's':
           slashslash = true;
           break;
-        case '?':
-          break; // getopt() already printed an error
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
 
