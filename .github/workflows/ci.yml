@@ -741,23 +741,6 @@ jobs:
       - name: typecheck latest part3
         run: scripts/test-typecheck-with-latest-cf.sh part3
 
-  quick_rockylinux_jdk11:
-    needs:
-      - canary_jobs
-      - quick_rockylinux_jdk25
-      - quick_ubuntu_jdk11
-    runs-on: ubuntu-latest
-    container:
-      image: mdernst/daikon-rockylinux-jdk11:latest
-    timeout-minutes: 70
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          set-safe-directory: true
-          fetch-depth: 25
-      - name: test-quick
-        run: scripts/test-quick-txt-diff.sh
-
   quick_rockylinux_jdk25:
     needs:
       - canary_jobs
@@ -790,23 +773,6 @@ jobs:
           fetch-depth: 25
       - name: test-quick
         run: scripts/test-quick-txt-diff.sh
-
-  nonquick_rockylinux_jdk11:
-    needs:
-      - canary_jobs
-      - nonquick_rockylinux_jdk25
-      - nonquick_ubuntu_jdk11
-    runs-on: ubuntu-latest
-    container:
-      image: mdernst/daikon-rockylinux-jdk11:latest
-    timeout-minutes: 70
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          set-safe-directory: true
-          fetch-depth: 25
-      - name: test-nonquick
-        run: scripts/test-nonquick-txt-diff.sh
 
   nonquick_rockylinux_jdk25:
     needs:
@@ -841,23 +807,6 @@ jobs:
       - name: test-nonquick
         run: scripts/test-nonquick-txt-diff.sh
 
-  nontxt_rockylinux_jdk11:
-    needs:
-      - canary_jobs
-      - nontxt_rockylinux_jdk25
-      - nontxt_ubuntu_jdk11
-    runs-on: ubuntu-latest
-    container:
-      image: mdernst/daikon-rockylinux-jdk11:latest
-    timeout-minutes: 70
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          set-safe-directory: true
-          fetch-depth: 25
-      - name: test-nontxt
-        run: scripts/test-non-txt-diff.sh
-
   nontxt_rockylinux_jdk25:
     needs:
       - canary_jobs
@@ -891,23 +840,6 @@ jobs:
       - name: test-nontxt
         run: scripts/test-non-txt-diff.sh
 
-  misc_rockylinux_jdk11:
-    needs:
-      - canary_jobs
-      - misc_rockylinux_jdk25
-      - misc_ubuntu_jdk11
-    runs-on: ubuntu-latest
-    container:
-      image: mdernst/daikon-rockylinux-jdk11-plus:latest
-    timeout-minutes: 70
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          set-safe-directory: true
-          fetch-depth: 0
-      - name: test-misc.sh
-        run: make showvars && scripts/test-misc.sh
-
   misc_rockylinux_jdk25:
     needs:
       - canary_jobs
@@ -940,23 +872,6 @@ jobs:
           fetch-depth: 0
       - name: test-misc.sh
         run: make showvars && scripts/test-misc.sh
-
-  kvasir_rockylinux_jdk11:
-    needs:
-      - canary_jobs
-      - kvasir_rockylinux_jdk25
-      - kvasir_ubuntu_jdk11
-    runs-on: ubuntu-latest
-    container:
-      image: mdernst/daikon-rockylinux-jdk11-plus:latest
-    timeout-minutes: 70
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          set-safe-directory: true
-          fetch-depth: 25
-      - name: test-kvasir.sh
-        run: scripts/test-kvasir.sh
 
   kvasir_rockylinux_jdk25:
     needs:
