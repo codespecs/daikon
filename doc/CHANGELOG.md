@@ -21,7 +21,7 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
-## Version ??
+## Version 5.9.1 (???, 2026)
 
 * Removed the Perl front end, dfepl.
 
