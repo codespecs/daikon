@@ -10,7 +10,7 @@ public final class misc_QuantCalls_m_49 extends Splitter {
 
   VarInfo i_varinfo; // i
   VarInfo this_x_varinfo; // this.x
-  VarInfo this_d_array_varinfo; // this.d[]
+  VarInfo this_d_array_varinfo; // this.d[..]
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
@@ -19,7 +19,7 @@ public final class misc_QuantCalls_m_49 extends Splitter {
   public misc_QuantCalls_m_49(Ppt ppt) {
     i_varinfo = ppt.find_var_by_name("i");
     this_x_varinfo = ppt.find_var_by_name("this.x");
-    this_d_array_varinfo = ppt.find_var_by_name("this.d[]");
+    this_d_array_varinfo = ppt.find_var_by_name("this.d[..]");
   }
 
   public Splitter instantiateSplitter(Ppt ppt) {
@@ -54,7 +54,7 @@ public final class misc_QuantCalls_m_49 extends Splitter {
     dummyInv = null;
     VarInfo i_vi = ppt.find_var_by_name("i");
     VarInfo this_x_vi = ppt.find_var_by_name("this.x");
-    VarInfo this_d_array_vi = ppt.find_var_by_name("this.d[]");
+    VarInfo this_d_array_vi = ppt.find_var_by_name("this.d[..]");
     if (i_vi != null && this_x_vi != null && this_d_array_vi != null) {
       dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {i_vi, this_x_vi, this_d_array_vi});
     }

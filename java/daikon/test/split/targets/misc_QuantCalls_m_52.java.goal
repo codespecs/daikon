@@ -8,14 +8,14 @@ public final class misc_QuantCalls_m_52 extends Splitter {
     return "daikon.Quant.getElement_String(this.s, 0) == null";
   }
 
-  VarInfo this_s_array_varinfo; // this.s[]
+  VarInfo this_s_array_varinfo; // this.s[..]
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
   public misc_QuantCalls_m_52() { }
   public misc_QuantCalls_m_52(Ppt ppt) {
-    this_s_array_varinfo = ppt.find_var_by_name("this.s[]");
+    this_s_array_varinfo = ppt.find_var_by_name("this.s[..]");
   }
 
   public Splitter instantiateSplitter(Ppt ppt) {
@@ -44,7 +44,7 @@ public final class misc_QuantCalls_m_52 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
-    VarInfo this_s_array_vi = ppt.find_var_by_name("this.s[]");
+    VarInfo this_s_array_vi = ppt.find_var_by_name("this.s[..]");
     if (this_s_array_vi != null) {
       dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_s_array_vi});
     }

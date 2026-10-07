@@ -1,179 +1,278 @@
+decl-version 2.0
+
 // Declarations for a class with array fields, used to test splitting conditions that contain
 // calls to daikon.Quant methods.
 
-VarComparability
-none
+var-comparability none
 
-DECLARE
-misc.QuantCalls.m(int):::ENTER
-i
-int # isParam=true
-int
-22
-this
-misc.QuantCalls # isParam=true
-hashcode
-22
-this.a
-int[]
-hashcode
-22
-this.a[]
-int[]
-int[]
-22[22]
-this.b
-int[]
-hashcode
-22
-this.b[]
-int[]
-int[]
-22[22]
-this.x
-double
-double
-22
-this.flags
-boolean[]
-hashcode
-22
-this.flags[]
-boolean[]
-boolean[]
-22[22]
-this.d
-double[]
-hashcode
-22
-this.d[]
-double[]
-double[]
-22[22]
-this.s
-java.lang.String[]
-hashcode
-22
-this.s[]
-java.lang.String[]
-java.lang.String[]
-22[22]
-this.str
-char[]
-java.lang.String
-22
-this.sh
-short[]
-hashcode
-22
-this.sh[]
-short[]
-int[]
-22[22]
-this.h
-int[]
-hashcode
-22
-this.sign
-java.lang.String
-java.lang.String
-22
-this.obj
-java.lang.Object
-hashcode
-22
-this.objs
-java.lang.Object[]
-hashcode
-22
-this.objs[]
-java.lang.Object[]
-hashcode[]
-22[22]
+ppt misc.QuantCalls.m(int):::ENTER
+  ppt-type enter
+  variable i
+    var-kind variable
+    dec-type int
+    rep-type int
+    flags is_param
+    comparability 22
+  variable this
+    var-kind variable
+    dec-type misc.QuantCalls
+    rep-type hashcode
+    flags is_param
+    comparability 22
+  variable this.a
+    var-kind field a
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+  variable this.a[..]
+    var-kind array
+    enclosing-var this.a
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 22
+  variable this.b
+    var-kind field b
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+  variable this.b[..]
+    var-kind array
+    enclosing-var this.b
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 22
+  variable this.x
+    var-kind field x
+    enclosing-var this
+    dec-type double
+    rep-type double
+    comparability 22
+  variable this.flags
+    var-kind field flags
+    enclosing-var this
+    dec-type boolean[]
+    rep-type hashcode
+    comparability 22
+  variable this.flags[..]
+    var-kind array
+    enclosing-var this.flags
+    array 1
+    dec-type boolean[]
+    rep-type boolean[]
+    comparability 22
+  variable this.d
+    var-kind field d
+    enclosing-var this
+    dec-type double[]
+    rep-type hashcode
+    comparability 22
+  variable this.d[..]
+    var-kind array
+    enclosing-var this.d
+    array 1
+    dec-type double[]
+    rep-type double[]
+    comparability 22
+  variable this.s
+    var-kind field s
+    enclosing-var this
+    dec-type java.lang.String[]
+    rep-type hashcode
+    comparability 22
+  variable this.s[..]
+    var-kind array
+    enclosing-var this.s
+    array 1
+    dec-type java.lang.String[]
+    rep-type java.lang.String[]
+    comparability 22
+  variable this.str
+    var-kind field str
+    enclosing-var this
+    dec-type char[]
+    rep-type java.lang.String
+    comparability 22
+  variable this.sh
+    var-kind field sh
+    enclosing-var this
+    dec-type short[]
+    rep-type hashcode
+    comparability 22
+  variable this.sh[..]
+    var-kind array
+    enclosing-var this.sh
+    array 1
+    dec-type short[]
+    rep-type int[]
+    comparability 22
+  variable this.h
+    var-kind field h
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+  variable this.sign
+    var-kind field sign
+    enclosing-var this
+    dec-type java.lang.String
+    rep-type java.lang.String
+    comparability 22
+  variable this.obj
+    var-kind field obj
+    enclosing-var this
+    dec-type java.lang.Object
+    rep-type hashcode
+    comparability 22
+  variable this.objs
+    var-kind field objs
+    enclosing-var this
+    dec-type java.lang.Object[]
+    rep-type hashcode
+    comparability 22
+  variable this.objs[..]
+    var-kind array
+    enclosing-var this.objs
+    array 1
+    dec-type java.lang.Object[]
+    rep-type hashcode[]
+    comparability 22
 
-DECLARE
-misc.QuantCalls.m(int):::EXIT10
-i
-int # isParam=true
-int
-22
-this
-misc.QuantCalls # isParam=true
-hashcode
-22
-this.a
-int[]
-hashcode
-22
-this.a[]
-int[]
-int[]
-22[22]
-this.b
-int[]
-hashcode
-22
-this.b[]
-int[]
-int[]
-22[22]
-this.x
-double
-double
-22
-this.flags
-boolean[]
-hashcode
-22
-this.flags[]
-boolean[]
-boolean[]
-22[22]
-this.d
-double[]
-hashcode
-22
-this.d[]
-double[]
-double[]
-22[22]
-this.s
-java.lang.String[]
-hashcode
-22
-this.s[]
-java.lang.String[]
-java.lang.String[]
-22[22]
-this.str
-char[]
-java.lang.String
-22
-this.sh
-short[]
-hashcode
-22
-this.sh[]
-short[]
-int[]
-22[22]
-this.h
-int[]
-hashcode
-22
-this.sign
-java.lang.String
-java.lang.String
-22
-this.obj
-java.lang.Object
-hashcode
-22
-this.objs
-java.lang.Object[]
-hashcode
-22
-this.objs[]
-java.lang.Object[]
-hashcode[]
-22[22]
+ppt misc.QuantCalls.m(int):::EXIT10
+  ppt-type subexit
+  variable i
+    var-kind variable
+    dec-type int
+    rep-type int
+    flags is_param
+    comparability 22
+  variable this
+    var-kind variable
+    dec-type misc.QuantCalls
+    rep-type hashcode
+    flags is_param
+    comparability 22
+  variable this.a
+    var-kind field a
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+  variable this.a[..]
+    var-kind array
+    enclosing-var this.a
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 22
+  variable this.b
+    var-kind field b
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+  variable this.b[..]
+    var-kind array
+    enclosing-var this.b
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 22
+  variable this.x
+    var-kind field x
+    enclosing-var this
+    dec-type double
+    rep-type double
+    comparability 22
+  variable this.flags
+    var-kind field flags
+    enclosing-var this
+    dec-type boolean[]
+    rep-type hashcode
+    comparability 22
+  variable this.flags[..]
+    var-kind array
+    enclosing-var this.flags
+    array 1
+    dec-type boolean[]
+    rep-type boolean[]
+    comparability 22
+  variable this.d
+    var-kind field d
+    enclosing-var this
+    dec-type double[]
+    rep-type hashcode
+    comparability 22
+  variable this.d[..]
+    var-kind array
+    enclosing-var this.d
+    array 1
+    dec-type double[]
+    rep-type double[]
+    comparability 22
+  variable this.s
+    var-kind field s
+    enclosing-var this
+    dec-type java.lang.String[]
+    rep-type hashcode
+    comparability 22
+  variable this.s[..]
+    var-kind array
+    enclosing-var this.s
+    array 1
+    dec-type java.lang.String[]
+    rep-type java.lang.String[]
+    comparability 22
+  variable this.str
+    var-kind field str
+    enclosing-var this
+    dec-type char[]
+    rep-type java.lang.String
+    comparability 22
+  variable this.sh
+    var-kind field sh
+    enclosing-var this
+    dec-type short[]
+    rep-type hashcode
+    comparability 22
+  variable this.sh[..]
+    var-kind array
+    enclosing-var this.sh
+    array 1
+    dec-type short[]
+    rep-type int[]
+    comparability 22
+  variable this.h
+    var-kind field h
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+  variable this.sign
+    var-kind field sign
+    enclosing-var this
+    dec-type java.lang.String
+    rep-type java.lang.String
+    comparability 22
+  variable this.obj
+    var-kind field obj
+    enclosing-var this
+    dec-type java.lang.Object
+    rep-type hashcode
+    comparability 22
+  variable this.objs
+    var-kind field objs
+    enclosing-var this
+    dec-type java.lang.Object[]
+    rep-type hashcode
+    comparability 22
+  variable this.objs[..]
+    var-kind array
+    enclosing-var this.objs
+    array 1
+    dec-type java.lang.Object[]
+    rep-type hashcode[]
+    comparability 22

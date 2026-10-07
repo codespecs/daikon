@@ -133,7 +133,7 @@ public final class QuantCallsSplitterTest {
     assertTrue(
         output,
         output.contains(
-            "Cannot translate daikon.Quant.getElement_int(this_d,0): the element type of this.d[]"
+            "Cannot translate daikon.Quant.getElement_int(this_d,0): the element type of this.d[..]"
                 + " is not the one that the method expects"));
 
     Splitter[] factories = SplitterList.get_raw(pptName);
@@ -161,16 +161,16 @@ public final class QuantCallsSplitterTest {
   private static ValueTuple makeVt(PptTopLevel ppt) {
     Map<String, Object> values = new HashMap<>();
     values.put("i", 1L);
-    values.put("this.a[]", new long[] {5, -3, 7});
-    values.put("this.b[]", new long[] {2, 0});
+    values.put("this.a[..]", new long[] {5, -3, 7});
+    values.put("this.b[..]", new long[] {2, 0});
     values.put("this.x", 0.5);
-    values.put("this.flags[]", new long[] {0, 1});
-    values.put("this.d[]", new double[] {1.0, 0.25});
-    values.put("this.s[]", new String[] {"x", " y "});
+    values.put("this.flags[..]", new long[] {0, 1});
+    values.put("this.d[..]", new double[] {1.0, 0.25});
+    values.put("this.s[..]", new String[] {"x", " y "});
     values.put("this.str", "ab");
-    values.put("this.sh[]", new long[] {2, 4});
+    values.put("this.sh[..]", new long[] {2, 4});
     values.put("this.obj", 0L);
-    values.put("this.objs[]", new long[] {0, 7});
+    values.put("this.objs[..]", new long[] {0, 7});
     values.put("this.sign", "+");
 
     int size = 0;

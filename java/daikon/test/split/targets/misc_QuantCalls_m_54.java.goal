@@ -8,16 +8,16 @@ public final class misc_QuantCalls_m_54 extends Splitter {
     return "this.a[this.sh[0]] > 0 && daikon.Quant.getElement_short(this.sh, 1) > 0";
   }
 
-  VarInfo this_a_array_varinfo; // this.a[]
-  VarInfo this_sh_array_varinfo; // this.sh[]
+  VarInfo this_a_array_varinfo; // this.a[..]
+  VarInfo this_sh_array_varinfo; // this.sh[..]
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
   public misc_QuantCalls_m_54() { }
   public misc_QuantCalls_m_54(Ppt ppt) {
-    this_a_array_varinfo = ppt.find_var_by_name("this.a[]");
-    this_sh_array_varinfo = ppt.find_var_by_name("this.sh[]");
+    this_a_array_varinfo = ppt.find_var_by_name("this.a[..]");
+    this_sh_array_varinfo = ppt.find_var_by_name("this.sh[..]");
   }
 
   public Splitter instantiateSplitter(Ppt ppt) {
@@ -48,8 +48,8 @@ public final class misc_QuantCalls_m_54 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
-    VarInfo this_a_array_vi = ppt.find_var_by_name("this.a[]");
-    VarInfo this_sh_array_vi = ppt.find_var_by_name("this.sh[]");
+    VarInfo this_a_array_vi = ppt.find_var_by_name("this.a[..]");
+    VarInfo this_sh_array_vi = ppt.find_var_by_name("this.sh[..]");
     if (this_a_array_vi != null && this_sh_array_vi != null) {
       dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_a_array_vi, this_sh_array_vi});
     }
