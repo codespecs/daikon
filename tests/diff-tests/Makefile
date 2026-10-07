@@ -18,7 +18,7 @@
 
 # 6. Check the directory and remaining files into the repository.
 
-SUBDIRS = $(patsubst %/Makefile,%,$(wildcard */Makefile))
+SUBDIRS = $(patsubst %/,%,$(wildcard */))
 
 default:
 
@@ -26,7 +26,7 @@ default:
 %:
 	@for dir in ${SUBDIRS}; \
 	  do echo "Entering diff-tests subdirectory: $$dir"; \
-	     ${MAKE} -C $$dir $*; \
+	     ${MAKE} -C $$dir $* || exit 1; \
 	done
 
 showvars:
