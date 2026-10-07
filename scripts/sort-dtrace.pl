@@ -18,70 +18,68 @@ use lib dirname (__FILE__);
 # The file `util_daikon.pm` appears in the same directory as this script.
 use util_daikon;
 
+# The program point declarations that have not yet been output.  Each is a
+# [comments, text] pair, where comments are the comment lines that precede
+# the declaration.
 my @decls;
 
 sub flush_decls {
-    if (@decls) {
-	@decls = sort @decls;
-	print join("\n\n", @decls), "\n\n";
-	@decls = ();
+    foreach my $decl (sort { $a->[1] cmp $b->[1] } @decls) {
+	print $decl->[0], $decl->[1], "\n";
     }
+    @decls = ();
 }
 
-$/ = ""; # Read by paragraph
-
-while (<>) {
-    # Daikon does not require a blank line after a comment.
-    my $comments;
-    ($comments, $_) = split_leading_comments($_);
-    if ($comments ne "") {
-	flush_decls();
-	print $comments;
-	next if $_ eq "";
+# Returns the program point declaration that is the argument, with its
+# variables sorted.  A comment line stays with the line that follows it.
+sub sort_variables {
+    my ($text) = @_;
+    my @lines = split(/^/m, $text);
+    # The ppt line and the ppt-level records.
+    my $head = shift @lines;
+    # Each element is a [comments, text] pair for one variable.
+    my @vars;
+    # Comment lines that are not yet attached to a line.
+    my $pending = "";
+    foreach my $line (@lines) {
+	if (is_comment_line($line)) {
+	    $pending .= $line;
+	} elsif ($line =~ /^\s*variable\s/) {
+	    push @vars, [$pending, $line];
+	    $pending = "";
+	} elsif (@vars) {
+	    $vars[-1][1] .= $pending . $line;
+	    $pending = "";
+	} else {
+	    $head .= $pending . $line;
+	    $pending = "";
+	}
     }
-    my $kind = record_kind($_);
-    if ($kind eq "ppt") {
-	my @lines = split(/\n/, $_);
-	my @vars;
-        my $var = "";
-        my @ppt;
-
-
-        push @ppt, shift(@lines);
-
-        while((@lines) && (not ($lines[0] =~ /\s*variable/))) {
-            push @ppt,  "\n" . shift(@lines);
-        }
-
-        while(my $line = shift @lines) {
-            if($line =~ /^\s+variable.+/){
-                if($var) {
-                    push @vars, $var;
-                    $var = "";
-                }
-                $var = join("\n", $var, $line);
-            } else {
-                $var = join("\n", $var, $line);
-            }
-        }
-
-        if($var) {
-            push @vars, $var;
-        }
-
-        @vars = sort @vars;
-        @ppt = (@ppt, @vars );
-
-        push @decls, join("", @ppt);
-
-    } elsif ($kind ne "data") {
-	# A header
-	flush_decls();
-	print;
+    if (@vars) {
+	$vars[-1][1] .= $pending;
     } else {
-	flush_decls();
-	chomp;
-	my @lines = split(/\n/, $_);
+	$head .= $pending;
+    }
+    return join("", $head,
+		map { $_->[0] . $_->[1] } sort { $a->[1] cmp $b->[1] } @vars);
+}
+
+foreach my $file (@ARGV ? @ARGV : ("-")) {
+  open(my $fh, $file) or die "Cannot open $file: $!";
+  while (defined(my $record = read_record($fh, $file))) {
+    my $kind = $record->{kind};
+    if ($kind eq "ppt") {
+	my $text = $record->{text};
+	$text .= "\n" if $text !~ /\n\z/;
+	push @decls, [$record->{comments}, sort_variables($text)];
+	next;
+    }
+    flush_decls();
+    print $record->{comments};
+    if ($kind eq "header") {
+	print $record->{text}, "\n";
+    } elsif ($kind eq "data") {
+	my @lines = split(/\n/, $record->{text});
 	my @header;
 	push @header, shift @lines;
 	if (@lines and $lines[0] eq "this_invocation_nonce") {
@@ -96,5 +94,7 @@ while (<>) {
 	@vars = sort @vars;
 	print join("\n", @header, @vars), "\n\n";
     }
-    flush_decls() if eof;
+  }
+  close($fh);
+  flush_decls();
 }

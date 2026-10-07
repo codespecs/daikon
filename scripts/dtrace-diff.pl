@@ -35,17 +35,6 @@ my $errors_found = 0;
 ### Subroutines
 ###
 
-sub getline ( $ ) {
-# gets a (non-comment) line from the filehandle $1
-    my ($fh) = @_;
-    my $l;
-    do {
-	$l = <$fh>;
-	if ($l) { chomp $l; }
-    } while ($l && is_comment_line($l));
-    return $l;
-}
-
 sub gzopen ( $$ ) {
 # takes a fh and a filename, opens it (using zcat if necessary), and returns
 # a filehandle.
@@ -67,7 +56,7 @@ sub gzopen ( $$ ) {
 
 sub load_decls ( $ ) {
 # Loads the decls file given by $1 into a hash, returns a ref.
-# The hash maps from ppt name to the hash returned by read_ppt_decl,
+# The hash maps from ppt name to the hash returned by parse_ppt_decl,
 # augmented with two keys:
 #   "var by name":  map from varname to the variable's hash
 #   "variable order":  the names of the non-constant variables, in order.
@@ -97,39 +86,30 @@ sub load_ppt ( $$ ) {
 # Returns a "ppt_trace_info": a 3-element array of pptname, line number in
 # file, and hash mapping varname to array of value and modbit.
     my ($dtfh, $dtfhname) = @_;
-    my $pptname = getline($dtfh);
-    # Skip blank lines and records other than data records, such as headers
-    # and program point declarations in a combined .dtrace file.  (getline
-    # skips comments.)
-    while ((defined $pptname)
-           && (($pptname eq "") || (record_kind($pptname, $dtfhname) ne "data"))) {
-	if ($pptname ne "") {
-	    # Skip the rest of the paragraph.
-	    do {
-		$pptname = getline($dtfh);
-	    } while ((defined $pptname) && ($pptname ne ""));
-	}
-	$pptname = getline($dtfh);
-    }
-
-    (defined $pptname)
-	or return undef;
-    $pptname = unescape_decl($pptname);
-
-    my $pptline = $INPUT_LINE_NUMBER;
+    # Skip records other than data records, such as headers and program
+    # point declarations in a combined .dtrace file.
+    my $record;
+    do {
+	$record = read_record($dtfh, $dtfhname);
+	(defined $record)
+	    or return undef;
+    } while ($record->{kind} ne "data");
+    my @lines = grep { !is_comment_line($_) } split(/\n/, $record->{text});
+    my $pptname = unescape_decl(shift @lines);
+    my $pptline = $record->{line};
 
     my $ppthash = {};
 
     my @varorder = ();
 
-    while (my $varname = getline($dtfh)) {
+    while (defined(my $varname = shift @lines)) {
         $varname = unescape_decl($varname);
         my ($modbit, $varval);
-	(defined ($varval = getline($dtfh)))
+	(defined ($varval = shift @lines))
 	    # or die "malformed dtrace file (ppt $pptname, var $varname, no varval) $dtfhname";
 	    or die "malformed dtrace file (ppt $pptname) $dtfhname";
 	unless ($varname eq 'this_invocation_nonce') {
-	(defined ($modbit = getline($dtfh)))
+	(defined ($modbit = shift @lines))
 	    # or die "malformed dtrace file (ppt $pptname, var $varname, val $varval, no modbit) $dtfhname";
   	    or die "malformed dtrace file (ppt $pptname, no modbit) $dtfhname";
         }
@@ -156,6 +136,16 @@ sub print_ppt ( $ ) {
 	print "  variable \"${var}\" = (\"" . $$val[0] . "\", "
 	    . $$val[1] . ")\n";
     }
+}
+
+sub lists_equal ( $$ ) {
+# Returns true if the two lists of strings, given by reference, are equal.
+    my ($x, $y) = @_;
+    return 0 if scalar(@$x) != scalar(@$y);
+    for (my $i = 0; $i < scalar(@$x); $i++) {
+	return 0 if $$x[$i] ne $$y[$i];
+    }
+    return 1;
 }
 
 sub cmp_ppts ( $$$ ) {
@@ -186,9 +176,8 @@ sub cmp_ppts ( $$$ ) {
     if ((scalar(@ppt2_varnames) > 0) && ($ppt2_varnames[0] eq "this_invocation_nonce")) {
       shift @ppt2_varnames;
     }
-    # Variable names are unescaped, so they may contain spaces but not newlines.
-    if ((join("\n", @decls_varnames) ne join("\n", @ppt1_varnames))
-        || (join("\n", @decls_varnames) ne join("\n", @ppt2_varnames))) {
+    if (!lists_equal(\@decls_varnames, \@ppt1_varnames)
+        || !lists_equal(\@decls_varnames, \@ppt2_varnames)) {
       print "Mismatched variables for ppt $pptname.\n";
       print "  decls:   " . join(" ", map { escape_decl($_) } @decls_varnames) . "\n";
       print "  trace1:  " . join(" ", map { escape_decl($_) } @ppt1_varnames) . "\n";

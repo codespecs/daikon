@@ -22,13 +22,19 @@ my %ppt_count;
 
 my %long_names;
 
-$/ = ""; # Read by paragraph
-while (<>) {
-    # Daikon does not require a blank line after a comment.
-    (undef, $_) = split_leading_comments($_);
-    # Skip .decls-like paras
-    next if $_ eq "" or record_kind($_) ne "data";
-    next if /^Begin/ or /^Done/; # Skip processing program point comments
+foreach my $file (@ARGV ? @ARGV : ("-")) {
+  open(my $fh, $file) or die "Cannot open $file: $!";
+  while (defined(my $record = read_record($fh, $file))) {
+    # Skip headers and declarations
+    next if $record->{kind} ne "data";
+    count_record($record->{text});
+  }
+  close($fh);
+}
+
+sub count_record {
+    local $_ = shift;
+    return if /^Begin/ or /^Done/; # Skip processing program point comments
     # This script assumes that each program point name contains ":::".
     /^(.*):::(.+)$/m or die "Can't parse PPT name from <$_>";
     my $name = "$1:::$2";

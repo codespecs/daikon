@@ -7,9 +7,9 @@ require 5.003;			# uses prototypes
 require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw( cleanup_pptname system_or_die backticks_or_die
-                  escape_decl unescape_decl is_comment_line split_leading_comments
-                  record_kind read_ppt_decl read_ppt_decls
-                  skip_till_next );
+                  escape_decl unescape_decl is_comment_line
+                  record_kind read_record parse_ppt_decl read_ppt_decls
+                  check_no_cluster_var );
 
 use English;
 use strict;
@@ -99,30 +99,11 @@ sub unescape_decl ( $ ) {
   return $name;
 }
 
-# Returns true if the argument, which is a line (or the start of a
-# paragraph), is a comment.  Like FileIO.isComment in Daikon.
+# Returns true if the argument, which is a line, is a comment.  Like
+# FileIO.isComment in Daikon.
 sub is_comment_line ( $ ) {
   my ($line) = @_;
   return $line =~ /\A(?:\/\/|#)/;
-}
-
-# Splits a paragraph into its leading comment lines and the remainder.
-# Daikon does not require a blank line after a comment, so a paragraph may
-# consist of comments followed by a record.  Returns a two-element list;
-# either element may be the empty string.  If the paragraph consists only of
-# comments, the first element is the entire paragraph, including any
-# trailing blank lines.
-sub split_leading_comments ( $ ) {
-  my ($para) = @_;
-  if ($para =~ /\A((?:(?:\/\/|#)[^\n]*(?:\n|\z))+)/) {
-    my $comments = $1;
-    my $rest = substr($para, length($comments));
-    if ($rest !~ /\S/) {
-      return ($para, "");
-    }
-    return ($comments, $rest);
-  }
-  return ("", $para);
 }
 
 # Dies, saying that version 1 declarations are not supported.  The optional
@@ -134,33 +115,71 @@ sub die_version_1 ( ;$ ) {
 }
 
 # Returns the kind of a record in a version 2 .decls or .dtrace file.  The
-# argument is a paragraph, or the first line of a paragraph.  The result is
-# one of:
+# argument is the first line of the record, which is not a comment.  The
+# result is one of:
 #   "ppt"      a program point declaration
 #   "header"   decl-version, var-comparability, input-language, or
 #              ListImplementors
-#   "comment"  a comment line
 #   "data"     anything else, which is a data trace record
-# Dies if the record is a version 1 declaration.  Only the first line is
-# examined, because a later line of a data record may be a variable name
-# such as "DECLARE".  The optional second argument is the name of the file,
-# for use in the error message.
+# The tests are the same as in FileIO.read_data_trace_record in Daikon.
+# Dies if the record is a version 1 declaration.  The optional second
+# argument is the name of the file, for use in the error message.
 # This is called on every record of a potentially huge trace file, so it
 # uses a single regular expression.
 sub record_kind ( $;$ ) {
-  my ($para, $filename) = @_;
-  if ($para !~ /\A(?:(ppt\s)|(decl-version|var-comparability|input-language|ListImplementors)|(\/\/|#)|((?:DECLARE|VarComparability)[ \t\r]*$))/m) {
+  my ($line, $filename) = @_;
+  if ($line !~ /\A(?:(ppt )|(decl-version|var-comparability|input-language|ListImplementors\r?\n?\z)|((?:DECLARE|VarComparability)\r?\n?\z))/) {
     return "data";
   }
   return "ppt" if defined($1);
   return "header" if defined($2);
-  return "comment" if defined($3);
   die_version_1($filename);
 }
 
-# Reads the remainder of a version 2 program point declaration from the
-# filehandle, up to a blank line or end of file.  The first argument is the
-# "ppt" line, which has already been read.  Comment lines are skipped.
+# Reads the next record from the filehandle, which is a version 2 .decls or
+# .dtrace file.  Like FileIO.read_data_trace_record in Daikon, the
+# decl-version, var-comparability, and input-language headers are a single
+# line, and every other record extends to a blank line or end of file.
+# Returns undef at end of file.  Otherwise, returns a reference to a hash
+# with these keys:
+#   comments  the comment lines that precede the record, or ""
+#   kind      the kind of the record, as returned by record_kind; or "" if
+#             the file ends after the comments
+#   text      the lines of the record, without the blank line that
+#             terminates it; or "" if kind is ""
+#   line      the line number of the first line of the record
+# The optional second argument is the name of the file, for use in error
+# messages.
+sub read_record ( $;$ ) {
+  my ($fh, $filename) = @_;
+  my $comments = "";
+  my $line;
+  while (defined($line = <$fh>)) {
+    next if $line =~ /\A\s*\z/;
+    if (is_comment_line($line)) {
+      $comments .= $line;
+      next;
+    }
+    last;
+  }
+  if (!defined($line)) {
+    return undef if $comments eq "";
+    return { comments => $comments, kind => "", text => "", line => $INPUT_LINE_NUMBER };
+  }
+  my $record = { comments => $comments, kind => record_kind($line, $filename),
+                 text => $line, line => $INPUT_LINE_NUMBER };
+  if ($record->{kind} eq "header" && $line !~ /\AListImplementors/) {
+    return $record;
+  }
+  while (defined($line = <$fh>)) {
+    last if $line =~ /\A\s*\z/;
+    $record->{text} .= $line;
+  }
+  return $record;
+}
+
+# Parses a version 2 program point declaration.  The argument is the text
+# of the record, as returned by read_record.  Comment lines are skipped.
 # Returns a reference to a hash with these keys:
 #   name     the (unescaped) program point name
 #   parents  a reference to an array of the ppt-level parent records, each
@@ -172,17 +191,17 @@ sub record_kind ( $;$ ) {
 #            variable, or undef if the variable is not a constant).  The
 #            value of a constant variable does not appear in data trace
 #            records.
-sub read_ppt_decl ( $$ ) {
-  my ($pptline, $fh) = @_;
+sub parse_ppt_decl ( $ ) {
+  my ($text) = @_;
+  my ($pptline, @lines) = split(/\n/, $text);
   $pptline =~ /\Appt\s+(.*?)\s*\z/s
     or croak "Not a program point declaration: $pptline";
   my $ppt = { name => unescape_decl($1), parents => [], vars => [] };
   my $var;                      # the variable currently being read
-  while (defined(my $line = <$fh>)) {
+  foreach my $line (@lines) {
     $line =~ s/\A\s+//;
     $line =~ s/\s+\z//;
-    last if $line eq "";
-    next if is_comment_line($line);
+    next if $line eq "" || is_comment_line($line);
     my ($key, $value) = split(/\s+/, $line, 2);
     if ($key eq "variable") {
       $var = { name => unescape_decl($value), dec_type => "", rep_type => "",
@@ -206,23 +225,19 @@ sub read_ppt_decl ( $$ ) {
 }
 
 # Reads all the program point declarations from the filehandle, which is a
-# version 2 .decls or combined .dtrace file.  Headers, comments, and data
-# trace records are skipped.  Returns a list of references to hashes, as
-# returned by read_ppt_decl.  Dies if the file is in version 1 format or
-# contains no program point declarations.  The second argument is the name
-# of the file, for use in error messages.
+# version 2 .decls file.  Headers and comments are skipped.  Returns a list
+# of references to hashes, as returned by parse_ppt_decl.  Dies if the file
+# is in version 1 format, contains a data trace record, or contains no
+# program point declarations.  The second argument is the name of the
+# file, for use in error messages.
 sub read_ppt_decls ( $$ ) {
   my ($fh, $filename) = @_;
   my @ppts = ();
-  # Each line read here is a blank line or the first line of a record,
-  # because each record is read in its entirety.
-  while (defined(my $line = <$fh>)) {
-    next if $line =~ /\A\s*\z/;
-    my $kind = record_kind($line, $filename);
-    if ($kind eq "ppt") {
-      push @ppts, read_ppt_decl($line, $fh);
-    } elsif ($kind ne "comment") {
-      skip_till_next($fh);
+  while (defined(my $record = read_record($fh, $filename))) {
+    if ($record->{kind} eq "ppt") {
+      push @ppts, parse_ppt_decl($record->{text});
+    } elsif ($record->{kind} eq "data") {
+      croak "Declaration files should not contain data trace records, but $filename does at line $record->{line}";
     }
   }
   if (!@ppts) {
@@ -231,12 +246,17 @@ sub read_ppt_decls ( $$ ) {
   return @ppts;
 }
 
-# Reads lines from the filehandle until reaching a blank line or end of
-# file.  This skips the remainder of the current paragraph.
-sub skip_till_next ( * ) {
-  my ($fh) = @_;
-  while (defined(my $line = <$fh>)) {
-    last if $line =~ /^\s*$/;
+# Dies if the program point declaration, as returned by parse_ppt_decl,
+# already has a variable named "cluster", which would conflict with the
+# variable that the cluster analysis scripts add.  The second argument is
+# the name of the file, for use in the error message.
+sub check_no_cluster_var ( $$ ) {
+  my ($ppt, $filename) = @_;
+  foreach my $var (@{$ppt->{vars}}) {
+    if ($var->{name} eq "cluster") {
+      croak "Program point $ppt->{name} in $filename already has a variable named \"cluster\", "
+        . "which conflicts with the variable that runcluster.pl adds";
+    }
   }
 }
 

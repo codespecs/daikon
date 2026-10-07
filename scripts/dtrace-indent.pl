@@ -18,25 +18,27 @@ use util_daikon;
 
 my $indentation = 0;
 
-$/ = ""; # Read by paragraph
-while (<>) {
-    # Daikon does not require a blank line after a comment.
-    (undef, $_) = split_leading_comments($_);
-    # Skip .decls-like paras
-    next if $_ eq "" or record_kind($_) ne "data";
-    /^(.*):::([A-Z\d]+)$/m or die "Can't parse PPT name from <$_>";
+foreach my $file (@ARGV ? @ARGV : ("-")) {
+  open(my $fh, $file) or die "Cannot open $file: $!";
+  while (defined(my $record = read_record($fh, $file))) {
+    # Skip headers and declarations
+    next if $record->{kind} ne "data";
+    my $text = $record->{text};
+    $text =~ /^(.*):::([A-Z\d]+)$/m or die "Can't parse PPT name from <$text>";
     my $base = $1;
     my $suffix = $2;
     my $name = $base . ":::" . $suffix;
     if ($suffix !~ /^EXIT|^ENTER$/) {
-	die "What is this line? <suffix> <$_>";
+      die "What is this line? <suffix> <$text>";
     }
     if ($suffix =~ /^EXIT/) {
-	$indentation--;
+      $indentation--;
     }
     my $line = (' ' x $indentation) . $name . "\n";
     print $line;
     if ($suffix eq "ENTER") {
-	$indentation++;
+      $indentation++;
     }
+  }
+  close($fh);
 }

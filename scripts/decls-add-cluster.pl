@@ -4,8 +4,8 @@
 
 ## Adds the variable "cluster" to one or more decls files as the first
 ## variable at each program point.  The original decls files are left
-## unchanged, and the result is output to file *_runcluster_temp.decls in the
-## current directory.  Furthermore, the list of output files is written
+## unchanged, and the result for BASENAME.decls is output to file
+## BASENAME_runcluster_temp.decls in the current directory.  Furthermore, the list of output files is written
 ## to standard out.
 
 use English;
@@ -19,24 +19,32 @@ use lib dirname (__FILE__);
 # The file `util_daikon.pm` appears in the same directory as this script.
 use util_daikon;
 
+# Maps each output file name to the input file that it was created from.
+my %output_to_input = ();
+
 foreach my $decls_file (@ARGV) {
-    $decls_file =~ /.*\/(\S*)\.decls/;
-    my $decls_cluster = "$1_runcluster_temp.decls";
+    my $decls_cluster = basename($decls_file);
+    $decls_cluster =~ s/\.decls$//;
+    $decls_cluster .= "_runcluster_temp.decls";
+    if (exists($output_to_input{$decls_cluster})) {
+	die "$decls_file and $output_to_input{$decls_cluster} would both be output to $decls_cluster\n";
+    }
+    $output_to_input{$decls_cluster} = $decls_file;
     open (IN, $decls_file) || die "couldn't open $decls_file for input\n";
     open (OUT, ">$decls_cluster") || die "couldn't open $decls_cluster for output\n";
 
     my $ppt_seen = 0;
-    local $INPUT_RECORD_SEPARATOR = ""; # Read by paragraph
-    while (my $para = <IN>) {
-	# Daikon does not require a blank line after a comment.
-	my ($comments, $record) = split_leading_comments($para);
-	print OUT $comments;
-	if ($record eq "" || record_kind($record, $decls_file) ne "ppt") {
-	    print OUT $record;
-	    next;
+    while (defined(my $record = read_record(\*IN, $decls_file))) {
+	print OUT $record->{comments};
+	my $text = $record->{text};
+	next if $text eq "";
+	$text .= "\n" if $text !~ /\n\z/;
+	if ($record->{kind} eq "ppt") {
+	    $ppt_seen = 1;
+	    check_no_cluster_var(parse_ppt_decl($text), $decls_file);
+	    $text = add_cluster_var($text);
 	}
-	$ppt_seen = 1;
-	print OUT add_cluster_var($record, $decls_file);
+	print OUT $text, "\n";
     }
     if (!$ppt_seen) {
 	die "No program point declarations in $decls_file\n";
@@ -49,13 +57,10 @@ foreach my $decls_file (@ARGV) {
 # Returns the program point declaration paragraph that is the first
 # argument, with the cluster variable added.  The cluster variable must
 # precede the other variables, but must follow the ppt-level records such
-# as ppt-type.  The second argument is the file name, for error messages.
+# as ppt-type.
 sub add_cluster_var {
-    my ($record, $decls_file) = @_;
+    my ($record) = @_;
     my @lines = split(/^/m, $record);
-    my $pptname = $lines[0];
-    $pptname =~ s/^ppt\s+//;
-    $pptname =~ s/\s+$//;
     my $result = "";
     my $pending = 1;
     # The "parent"-type parent records of the program point, as
@@ -67,10 +72,7 @@ sub add_cluster_var {
     # parameter's class.
     my @parents = ();
     foreach my $line (@lines) {
-	if ($line =~ /^\s*variable\s+(.*?)\s*$/ && unescape_decl($1) eq "cluster") {
-	    die "Program point " . unescape_decl($pptname) . " in $decls_file already has a variable named \"cluster\"\n";
-	}
-	if ($pending && ($line =~ /^\s*variable\s/ || $line =~ /^\s*$/)) {
+	if ($pending && $line =~ /^\s*variable\s/) {
 	    $result .= cluster_var_decl(@parents);
 	    $pending = 0;
 	}
@@ -80,9 +82,6 @@ sub add_cluster_var {
 	}
     }
     if ($pending) {
-	if ($result !~ /\n\z/) {
-	    $result .= "\n";
-	}
 	$result .= cluster_var_decl(@parents);
     }
     return $result;
