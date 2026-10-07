@@ -269,7 +269,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("    }");
     ps.println("    Result result = JUnitCore.runClasses(SplitterFactoryTest.class);");
     ps.println("    for (Failure failure : result.getFailures()) {");
-    ps.println("      System.out.println(failure.getTrace());");
+    ps.println("      System.err.println(failure.getTrace());");
     ps.println("    }");
     ps.println("    if (!result.wasSuccessful()) {");
     ps.println(

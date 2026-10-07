@@ -87,10 +87,10 @@ public class Annotate {
   private static String usage =
       StringsPlume.joinLines(
           "Usage:  java daikon.tools.Annotate FILE.inv FILE.java ...",
-          "  -h, --help  Display this usage message",
-          "  -i   Insert invariants not supported by ESC with \"!\" instead of \"@\";",
-          "       by default these \"inexpressible\" invariants are simply omitted",
-          "  -s   Use // comments rather than /* comments",
+          "  -h, --help     Display this usage message",
+          "  -i             Insert invariants not supported by ESC with \"!\" instead of \"@\";",
+          "                 by default these \"inexpressible\" invariants are simply omitted",
+          "  -s             Use // comments rather than /* comments",
           "  --format name  Insert specifications in the given format: DBC, ESC, JML, Java",
           "  --wrap_xml     Wrap each annotation and auxiliary information in XML tags",
           "  --max_invariants_pp N",
