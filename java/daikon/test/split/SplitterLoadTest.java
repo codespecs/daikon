@@ -12,11 +12,16 @@ import daikon.PptTopLevel;
 import daikon.split.PptSplitter;
 import daikon.split.SpinfoFile;
 import daikon.split.SplitterFactory;
+import daikon.split.SplitterList;
 import daikon.split.SplitterObject;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import org.junit.Test;
 
@@ -30,65 +35,127 @@ public class SplitterLoadTest {
   /** The directory containing the decls file. */
   private static final String targetDir = "daikon/test/split/targets/";
 
+  /** The name of the program point whose splitters are tested. */
+  private static final String pptName = "DataStructures.QueueAr.isEmpty";
+
+  /** A splitter condition that is valid for {@link #pptName}. */
+  private static final String goodCondition = "currentSize == 0";
+
   /**
-   * An unparseable splitter must not prevent the other splitters from being compiled and loaded.
+   * Erroneous splitters (a parse error and a lexical error) must not prevent the other splitters
+   * from being compiled and loaded.
    */
   @Test
   public void testUnparseableSplitter() throws IOException {
-    String goodCondition = "currentSize == 0";
-    String badCondition = "currentSize == == 0";
+    String parseErrorCondition = "currentSize == == 0";
+    // An unterminated comment is a lexical error, which the parser reports as a TokenMgrError.
+    String lexicalErrorCondition = "currentSize == 0 /* unterminated";
 
+    SplitterObject[] splitters =
+        loadSplitters(List.of(goodCondition, parseErrorCondition, lexicalErrorCondition), s -> {});
+    SplitterObject good = splitters[0];
+    SplitterObject parseError = splitters[1];
+    SplitterObject lexicalError = splitters[2];
+
+    assertTrue(good.getError(), good.splitterExists());
+    assertFalse(parseError.splitterExists());
+    assertTrue(parseError.getError(), parseError.getError().contains("cannot be parsed"));
+    assertFalse(lexicalError.splitterExists());
+    assertTrue(lexicalError.getError(), lexicalError.getError().contains("cannot be parsed"));
+  }
+
+  /**
+   * A splitter whose source file cannot be written must not prevent the other splitters from being
+   * compiled and loaded.
+   */
+  @Test
+  public void testUnwritableSplitter() throws IOException {
+    // A regular file cannot be the parent directory of the splitter source file.
+    Path notADirectory = Files.createTempFile("SplitterLoadTest", ".notadir");
+    try {
+      SplitterObject[] splitters =
+          loadSplitters(
+              List.of(goodCondition, "currentSize != 0"),
+              s -> s[1].setDirectory(notADirectory + File.separator));
+      SplitterObject good = splitters[0];
+      SplitterObject unwritable = splitters[1];
+
+      assertTrue(good.getError(), good.splitterExists());
+      assertFalse(unwritable.splitterExists());
+      assertTrue(
+          unwritable.getError(),
+          unwritable.getError().contains("Error while writing splitter file"));
+    } finally {
+      Files.delete(notADirectory);
+    }
+  }
+
+  /**
+   * Creates splitters with the given conditions for {@link #pptName}, then writes, compiles, and
+   * loads them. Leaves no splitters registered in {@link SplitterList}.
+   *
+   * @param conditions the splitter conditions
+   * @param modifier a function that modifies the splitters before they are loaded
+   * @return the splitters, in the same order as {@code conditions}
+   */
+  private static SplitterObject[] loadSplitters(
+      List<String> conditions, Consumer<SplitterObject[]> modifier) throws IOException {
     Path spinfo = Files.createTempFile("SplitterLoadTest", ".spinfo");
     try {
-      Files.writeString(
-          spinfo,
-          String.join(
-              System.lineSeparator(),
-              "PPT_NAME DataStructures.QueueAr.isEmpty",
-              goodCondition,
-              badCondition,
-              ""));
+      List<String> lines = new ArrayList<>();
+      lines.add("PPT_NAME " + pptName);
+      lines.addAll(conditions);
+      lines.add("");
+      Files.writeString(spinfo, String.join(System.lineSeparator(), lines));
       SpinfoFile spfile = SplitterFactory.parse_spinfofile(spinfo.toFile());
       SplitterObject[][] splitterObjects = spfile.getSplitterObjects();
       assertEquals(1, splitterObjects.length);
-      assertEquals(2, splitterObjects[0].length);
-      SplitterObject good = splitterObjects[0][0];
-      SplitterObject bad = splitterObjects[0][1];
-      assertEquals(goodCondition, good.condition());
-      assertEquals(badCondition, bad.condition());
-
-      PptMap allPpts = new PptMap();
-      // Other tests may have set program point filters, which would prevent reading the decls.
-      Pattern oldPptRegexp = Daikon.ppt_regexp;
-      Pattern oldPptOmitRegexp = Daikon.ppt_omit_regexp;
-      String oldPptMaxName = Daikon.ppt_max_name;
-      Daikon.ppt_regexp = null;
-      Daikon.ppt_omit_regexp = null;
-      Daikon.ppt_max_name = null;
-      try {
-        FileIO.resetNewDeclFormat();
-        FileIO.read_data_trace_file(targetDir + "QueueAr.decls", allPpts);
-      } finally {
-        Daikon.ppt_regexp = oldPptRegexp;
-        Daikon.ppt_omit_regexp = oldPptOmitRegexp;
-        Daikon.ppt_max_name = oldPptMaxName;
+      SplitterObject[] result = splitterObjects[0];
+      assertEquals(conditions.size(), result.length);
+      for (int i = 0; i < conditions.size(); i++) {
+        assertEquals(conditions.get(i), result[i].condition());
       }
-      PptTopLevel ppt = allPpts.get("DataStructures.QueueAr.isEmpty():::EXIT47");
-      assertNotNull(ppt);
+      modifier.accept(result);
 
+      PptTopLevel ppt = readPpt();
       boolean oldSuppress = PptSplitter.dkconfig_suppressSplitterErrors;
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       try {
         SplitterFactory.load_splitters(ppt, Collections.singletonList(spfile));
       } finally {
         PptSplitter.dkconfig_suppressSplitterErrors = oldSuppress;
+        SplitterList.remove(pptName);
       }
-
-      assertTrue(good.getError(), good.splitterExists());
-      assertFalse(bad.splitterExists());
-      assertTrue(bad.getError(), bad.getError().contains("cannot be parsed"));
+      return result;
     } finally {
       Files.delete(spinfo);
     }
+  }
+
+  /**
+   * Reads the program point to which the splitters apply.
+   *
+   * @return the program point to which the splitters apply
+   */
+  private static PptTopLevel readPpt() throws IOException {
+    PptMap allPpts = new PptMap();
+    // Other tests may have set program point filters, which would prevent reading the decls.
+    Pattern oldPptRegexp = Daikon.ppt_regexp;
+    Pattern oldPptOmitRegexp = Daikon.ppt_omit_regexp;
+    String oldPptMaxName = Daikon.ppt_max_name;
+    Daikon.ppt_regexp = null;
+    Daikon.ppt_omit_regexp = null;
+    Daikon.ppt_max_name = null;
+    try {
+      FileIO.resetNewDeclFormat();
+      FileIO.read_data_trace_file(targetDir + "QueueAr.decls", allPpts);
+    } finally {
+      Daikon.ppt_regexp = oldPptRegexp;
+      Daikon.ppt_omit_regexp = oldPptOmitRegexp;
+      Daikon.ppt_max_name = oldPptMaxName;
+    }
+    PptTopLevel ppt = allPpts.get(pptName + "():::EXIT47");
+    assertNotNull(ppt);
+    return ppt;
   }
 }

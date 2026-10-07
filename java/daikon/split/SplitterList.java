@@ -60,6 +60,15 @@ public abstract class SplitterList {
     }
   }
 
+  /**
+   * Removes the splitters associated with the program point pptname. Intended for use by tests.
+   *
+   * @param pptname the name of a program point
+   */
+  public static void remove(String pptname) {
+    ppt_splitters.remove(pptname);
+  }
+
   // This is only used by the debugging output in SplitterList.put().
   public static String formatSplitters(Splitter[] splits) {
     if (splits == null) {

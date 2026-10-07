@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jtb.ParseException;
+import jtb.TokenMgrError;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.RequiresNonNull;
@@ -172,10 +173,9 @@ public class SplitterFactory {
     if (splitterObjects.length == 0) {
       return;
     }
-    // The splitters whose source files were written successfully, and the paths of those files.
+    // The splitters whose source files were written successfully.
     // Splitters that were not written must not be compiled or loaded.
     List<SplitterObject> writtenSplitters = new ArrayList<>();
-    List<String> writtenSourcePaths = new ArrayList<>();
     for (int i = 0; i < splitterObjects.length; i++) {
       SplitterObject splitObj = splitterObjects[i];
       String fileName = getFileName(splitObj.getPptName());
@@ -185,7 +185,8 @@ public class SplitterFactory {
             new SplitterJavaSource(
                 splitObj, splitObj.getPptName(), fileName, ppt.var_infos, statementReplacer);
         fileContents = splitterWriter.getFileText();
-      } catch (ParseException e) {
+      } catch (ParseException | TokenMgrError e) {
+        // TokenMgrError indicates a lexical error in the condition.
         splitObj.setError(
             "Splitter condition cannot be parsed: "
                 + splitObj.condition()
@@ -193,12 +194,11 @@ public class SplitterFactory {
                 + splitObj.getPptName());
         continue;
       }
-      String fileAddress = tempdir + fileName;
-      String sourcePath = fileAddress + ".java";
-      String classPath = fileAddress + ".class";
       @SuppressWarnings("signature") // safe, has been quoted
       @BinaryName String fileName_bn = fileName;
       splitObj.setClassName(fileName_bn);
+      String sourcePath = splitObj.getFullSourcePath();
+      String classPath = splitObj.getFullClassPath();
       try {
         // A class file left over from an earlier run must not be loaded if compilation fails.
         Files.deleteIfExists(Path.of(classPath));
@@ -221,11 +221,14 @@ public class SplitterFactory {
         continue;
       }
       writtenSplitters.add(splitObj);
-      writtenSourcePaths.add(sourcePath);
     }
     if (writtenSplitters.isEmpty()) {
       Global.debugSplit.fine("<<exit>>  loadSplitters: no splitters were written");
       return;
+    }
+    List<String> writtenSourcePaths = new ArrayList<>(writtenSplitters.size());
+    for (SplitterObject splitObj : writtenSplitters) {
+      writtenSourcePaths.add(splitObj.getFullSourcePath());
     }
     String errorOutput = null;
     try {

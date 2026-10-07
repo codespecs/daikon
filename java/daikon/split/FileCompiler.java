@@ -4,6 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -107,8 +109,7 @@ public final class FileCompiler {
   }
 
   /**
-   * Compiles the files given by fileNames. Returns the error output. Nonexistent files are not
-   * passed to the compiler, but are reported in the error output.
+   * Compiles the files given by fileNames. Returns the error output.
    *
    * @param fileNames paths to the files to be compiled as Strings
    * @return the error output from compiling the files
@@ -118,39 +119,25 @@ public final class FileCompiler {
 
     // System.out.printf("compileFiles: %s%n", fileNames);
 
-    // javac compiles nothing if any of its arguments does not exist, so omit nonexistent files.
-    StringBuilder compile_errors = new StringBuilder();
-    List<String> existingFileNames = new ArrayList<>();
-    for (String fileName : fileNames) {
-      if (fileExists(fileName)) {
-        existingFileNames.add(fileName);
-      } else {
-        compile_errors.append("File not found: " + fileName + System.lineSeparator());
-      }
-    }
-    if (existingFileNames.isEmpty()) {
-      return compile_errors.toString();
-    }
-
     // Start a process to compile all of the files (in one command)
-    String first_compile_errors = compile_source(existingFileNames);
-    compile_errors.append(first_compile_errors);
+    String compile_errors = compile_source(fileNames);
 
     // javac tends to stop without completing the compilation if there
     // is an error in one of the files.  Remove all the erring files
     // and recompile only the good ones.
     if (compiler[0].indexOf("javac") != -1) {
-      compile_errors.append(recompile_without_errors(existingFileNames, first_compile_errors));
+      compile_errors += recompile_without_errors(fileNames, compile_errors);
     }
 
-    return compile_errors.toString();
+    return compile_errors;
   }
 
   /**
    * Returns the error output from compiling the files.
    *
    * @param filenames the paths of the Java source to be compiled as Strings
-   * @return the error output and standard output from compiling the files
+   * @return the error output from compiling the files; if compilation fails, also the standard
+   *     output
    * @throws Error if an empty list of filenames is provided
    */
   private String compile_source(List<String> filenames) throws IOException {
@@ -228,8 +215,15 @@ public final class FileCompiler {
       }
       runtime.exit(1);
     }
-    // Some compilers write diagnostics to standard output rather than standard error.
-    return compile_errors + compile_output;
+    // Some compilers write diagnostics to standard output rather than standard error.  Standard
+    // output is not an error if compilation succeeded; for example, it might be verbose output.
+    if (executor.isFailure(exitValue) && !compile_output.isEmpty()) {
+      if (!compile_errors.isEmpty() && !compile_errors.endsWith("\n")) {
+        compile_errors += System.lineSeparator();
+      }
+      compile_errors += compile_output;
+    }
+    return compile_errors;
   }
 
   /**
@@ -252,8 +246,8 @@ public final class FileCompiler {
       while (m.find()) {
         @SuppressWarnings(
             "nullness") // Regex Checker imprecision: find() guarantees that group 1 exists
-        @NonNull String sansExtension = m.group(1);
-        errorClasses.add(sansExtension);
+        @NonNull String errorFileName = m.group(1);
+        errorClasses.add(normalizePath(errorFileName));
       }
       // Collect all the files that were not compiled into retry
       List<String> retry = new ArrayList<>();
@@ -261,7 +255,7 @@ public final class FileCompiler {
         sourceFileName = sourceFileName.trim();
         String classFilePath = getClassFilePath(sourceFileName);
         if (!fileExists(classFilePath)) {
-          if (!errorClasses.contains(sourceFileName)) {
+          if (!errorClasses.contains(normalizePath(sourceFileName))) {
             retry.add(sourceFileName);
           }
         }
@@ -272,6 +266,21 @@ public final class FileCompiler {
       }
     }
     return "";
+  }
+
+  /**
+   * Returns a canonical form of the given path, so that different spellings of the same file
+   * compare equal.
+   *
+   * @param path a file path
+   * @return a normalized absolute form of the path, or the path itself if it is malformed
+   */
+  private static String normalizePath(String path) {
+    try {
+      return Path.of(path).toAbsolutePath().normalize().toString();
+    } catch (InvalidPathException e) {
+      return path;
+    }
   }
 
   /**
