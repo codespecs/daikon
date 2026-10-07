@@ -170,6 +170,8 @@ public class SplitterFactory {
     if (splitterObjects.length == 0) {
       return;
     }
+    // The splitters whose Java files were written.
+    List<SplitterObject> written = new ArrayList<>();
     for (int i = 0; i < splitterObjects.length; i++) {
       SplitterObject splitObj = splitterObjects[i];
       String fileName = getFileName(splitObj.getPptName());
@@ -180,8 +182,13 @@ public class SplitterFactory {
                 splitObj, splitObj.getPptName(), fileName, ppt.var_infos, statementReplacer);
         fileContents = splitterWriter.getFileText();
       } catch (ParseException e) {
-        System.out.println("Error in SplitterFactory while writing splitter java file for: ");
-        System.out.println(splitObj.condition() + " cannot be parsed.");
+        // load_splitters prints the error.
+        splitObj.setError(
+            String.join(
+                System.lineSeparator(),
+                "Error in SplitterFactory while writing splitter java file for:",
+                splitObj.condition() + " cannot be parsed or translated:",
+                e.getMessage()));
         continue;
       }
       String fileAddress = tempdir + fileName;
@@ -195,14 +202,19 @@ public class SplitterFactory {
         }
         writer.write(fileContents.toString());
         writer.flush();
+        written.add(splitObj);
       } catch (IOException ioe) {
-        System.out.println("Error while writing Splitter file: " + fileAddress);
         debug.fine(ioe.toString());
+        // load_splitters prints the error.
+        splitObj.setError("Error while writing Splitter file: " + fileAddress);
       }
     }
+    if (written.isEmpty()) {
+      return;
+    }
     List<String> fileNames = new ArrayList<>();
-    for (int i = 0; i < splitterObjects.length; i++) {
-      fileNames.add(splitterObjects[i].getFullSourcePath());
+    for (SplitterObject splitObj : written) {
+      fileNames.add(splitObj.getFullSourcePath());
     }
     String errorOutput = null;
     try {
@@ -218,8 +230,8 @@ public class SplitterFactory {
           "Errors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);
     }
-    for (int i = 0; i < splitterObjects.length; i++) {
-      splitterObjects[i].load();
+    for (SplitterObject splitObj : written) {
+      splitObj.load();
     }
 
     Global.debugSplit.fine("<<exit>>  loadSplitters");
