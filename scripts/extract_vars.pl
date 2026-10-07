@@ -302,12 +302,10 @@ sub read_execution ( $ ) {
     $value =~ s/NaN/1e10/;
     my $mod = <DTRACE>;		# "$mod" is unused
 
-    # extract variables to be clustered.
-    # Omit Object variables, class names, arrays, and strings.
-    if (!excluded_var($varname)) {
-      if ( exists $pptname_to_varnames{$pptname}{$varname}) {
-	push @vararray, $value;
-      }
+    # extract variables to be clustered.  read_decl_ppt omits class names,
+    # arrays, and strings from %pptname_to_varnames.
+    if (exists $pptname_to_varnames{$pptname}{$varname}) {
+      push @vararray, $value;
     }
 
     $varname = <DTRACE>;
@@ -486,11 +484,11 @@ sub read_decls_file ( $ ) {
   }
 }				# read_decls_file
 
-# Returns true if the variable should not be clustered: its value is a
-# class name, an array, or a string.
-sub excluded_var ( $ ) {
-  my ($varname) = @_;
-  return ($varname =~ /\.getClass\(\)/ || $varname =~ /\[\.\.\]/ || $varname =~ /\.toString/);
+# Returns true if a variable with the given rep type should not be
+# clustered: its value is a string (including a class name) or an array.
+sub excluded_rep_type ( $ ) {
+  my ($rep_type) = @_;
+  return ($rep_type eq "java.lang.String" || $rep_type =~ /\[\]$/);
 }
 
 # read a program point declaration in the decls file.  The "ppt" line,
@@ -505,7 +503,7 @@ sub read_decl_ppt ( $ ) {
 
   # Records the variable that was just read.
   my $record_var = sub {
-    if (!defined($varname) || excluded_var($varname)) {
+    if (!defined($varname) || excluded_rep_type($rep_type)) {
       return;
     }
     # If the variable is an Object, keep note of that. Will be ignored (not

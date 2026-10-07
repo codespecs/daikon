@@ -25,6 +25,7 @@ sub flush_decls {
 $/ = ""; # Read by paragraph
 
 while (<>) {
+    die "Version 1 declarations are not supported; convert to version 2 format" if /^(DECLARE|VarComparability)$/m;
     if ((/^decl\-version.+/) || (/^decl\-input.+/) || (/^input\-language.+/) || (/^var\-comparability.+/)) {
         print;
         next;

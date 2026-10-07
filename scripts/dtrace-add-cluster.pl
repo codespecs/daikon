@@ -210,10 +210,11 @@ sub insert_cluster_info ( $ ) {
 # read an opened file till you reach a blank line, then return
 sub skip_till_next(*) {
      local *FHANDLE = $_[0];
-    my $line;
-    do {
-	$line = <FHANDLE>;
-    } until ($line =~ /^\s*$/);
+    while (my $line = <FHANDLE>) {
+	if ($line =~ /^\s*$/) {
+	    return;
+	}
+    }
     return;
 }				# skip_till_next
 

@@ -67,10 +67,13 @@ my $USAGE =
 ###
 
 # Converts a name to the form used in declaration and data trace files:
-# backslashes are escaped and blanks are replaced by "\_".
+# backslashes, newlines, and carriage returns are escaped, and blanks are
+# replaced by "\_".  Like FileIO.escape_decl in Daikon.
 sub escapeDecl ( $ ) {
   my ($name) = check_args(1, @_);
   $name =~ s/\\/\\\\/g;
+  $name =~ s/\n/\\n/g;
+  $name =~ s/\r/\\r/g;
   $name =~ s/ /\\_/g;
   return $name;
 }
@@ -85,24 +88,37 @@ sub unescapeDecl ( $ ) {
 # Parses the provided declaration file, which must contain only one
 # program point.
 # Returns an array containing the program point name and the names of
-# variables.
+# non-constant variables (the ones whose values appear in data trace records).
 sub parseDecl ( $ ) {
   my ($inputfile) = check_args(1, @_);
   open(DECLHANDLE, $inputfile) ||
     die("Cannot open declarations file $inputfile");
   my $ppt;
   my @varnames;
+  # The variable currently being read, and whether it is a constant.
+  my ($varname, $is_constant);
+  my $record_var = sub {
+    if (defined($varname) && !$is_constant) {
+      push @varnames, $varname;
+    }
+  };
 
   while (<DECLHANDLE>) {
-    if (/^ppt\s+(\S+)\s*$/) {
+    if (/^(DECLARE|VarComparability)$/) {
+      die "Version 1 declaration file $inputfile is not supported; convert it to version 2 format";
+    } elsif (/^ppt\s+(\S+)\s*$/) {
       if (defined($ppt)) {
         die "Declaration file $inputfile contains more than one program point";
       }
       $ppt = unescapeDecl($1);
     } elsif (/^\s*variable\s+(\S+)\s*$/) {
-      push @varnames, unescapeDecl($1);
+      &$record_var();
+      ($varname, $is_constant) = (unescapeDecl($1), 0);
+    } elsif (/^\s*constant\s/) {
+      $is_constant = 1;
     }
   }
+  &$record_var();
   close(DECLHANDLE);
   if (!defined($ppt)) {
     die "Didn't see a \"ppt\" record in declaration file $inputfile";

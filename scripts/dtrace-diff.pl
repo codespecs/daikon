@@ -111,6 +111,8 @@ sub load_decls ( $ ) {
             $$lhashref{"variable order"} = [ @varorder ];
             $$declshash{$currppt} = $lhashref;
             $ppt_seen = 1;
+	} elsif (($l eq "DECLARE") || ($l eq "VarComparability")) {
+	    die "Version 1 declarations are not supported; convert $mydeclsname to version 2 format";
 	} elsif (($l eq "ListImplementors") && !$ppt_seen) {
 	    # It's ok to have a ListImplementors in the decls file.
 	    # Read the type of comparability, then move on.
