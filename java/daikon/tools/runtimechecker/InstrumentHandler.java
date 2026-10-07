@@ -5,17 +5,18 @@ import static java.util.logging.Level.FINE;
 import static java.util.logging.Level.INFO;
 
 import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.Global;
 import daikon.PptMap;
 import daikon.tools.jtb.ParseResults;
-import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import jtb.syntaxtree.*;
@@ -81,11 +82,17 @@ public class InstrumentHandler extends CommandHandler {
       return false;
     }
 
-    String[] realArgs = new String[args.length - 1];
-    for (int i = 0; i < realArgs.length; i++) {
-      realArgs[i] = args[i + 1];
+    String[] realArgs = Arrays.copyOfRange(args, 1, args.length);
+    Arguments arguments;
+    try {
+      arguments = readArguments(realArgs);
+    } catch (Daikon.NormalTermination e) {
+      // The user requested the usage message, which has been printed.
+      return true;
+    } catch (Daikon.UserError e) {
+      System.err.println(e.getMessage());
+      return false;
     }
-    Arguments arguments = readArguments(realArgs);
     if (arguments == errorWhileReadingArguments) {
       return false;
     }
@@ -213,7 +220,9 @@ public class InstrumentHandler extends CommandHandler {
           new LongOpt(directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(checkers_directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
         };
-    Getopt g = new Getopt("daikon.tools.runtimechecker.InstrumentHandler", args, "hs", longopts);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, this::usageMessageString);
+    // The caller prints the usage message when this command fails.
+    g.setUsageHint(null);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -236,12 +245,11 @@ public class InstrumentHandler extends CommandHandler {
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
             daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else {
-            System.err.println("Unknown long option received: " + option_name);
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
         default:
-          System.out.println("unrecognized option" + c);
-          return errorWhileReadingArguments;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
     // The index of the first non-option argument -- the name of the
