@@ -1,0 +1,75 @@
+import daikon.*;
+import daikon.inv.*;
+import daikon.split.*;
+
+public final class misc_QuantCalls_m_49 extends Splitter {
+
+  public String condition() {
+    return "daikon.Quant.getElement_double(this.d, Math.max(i, 0)) > java.lang.Math.abs(this.x)";
+  }
+
+  VarInfo i_varinfo; // i
+  VarInfo this_x_varinfo; // this.x
+  VarInfo this_d_array_varinfo; // this.d[]
+
+  static DummyInvariant dummyInvFactory;
+  DummyInvariant dummyInv;
+
+  public misc_QuantCalls_m_49() { }
+  public misc_QuantCalls_m_49(Ppt ppt) {
+    i_varinfo = ppt.find_var_by_name("i");
+    this_x_varinfo = ppt.find_var_by_name("this.x");
+    this_d_array_varinfo = ppt.find_var_by_name("this.d[]");
+  }
+
+  public Splitter instantiateSplitter(Ppt ppt) {
+    return new misc_QuantCalls_m_49(ppt);
+  }
+
+  public boolean valid() {
+    return (i_varinfo != null) && (this_x_varinfo != null) && (this_d_array_varinfo != null);
+  }
+
+  public boolean test(ValueTuple vt) {
+    /* writeTestBody: 3 declarations */
+    long i = i_varinfo.getIntValue(vt);
+    double this_x = this_x_varinfo.getDoubleValue(vt);
+    double[] this_d_array = this_d_array_varinfo.getDoubleArrayValue(vt);
+    return((this_d_array==null?Double.NaN:this_d_array[(int)(Math.max(i,0))])>java.lang.Math.abs(this_x));
+  }
+
+  public String repr() {
+    return "misc_QuantCalls_m_49: "
+      + "i_varinfo = " + i_varinfo.repr() + " "
+      + "this_x_varinfo = " + this_x_varinfo.repr() + " "
+      + "this_d_array_varinfo = " + this_d_array_varinfo.repr() + " "
+      ;
+  }
+
+  public void makeDummyInvariantFactory(DummyInvariant inv) {
+    dummyInvFactory = inv;
+  }
+
+  public void instantiateDummy(PptTopLevel ppt) {
+    dummyInv = null;
+    VarInfo i_vi = ppt.find_var_by_name("i");
+    VarInfo this_x_vi = ppt.find_var_by_name("this.x");
+    VarInfo this_d_array_vi = ppt.find_var_by_name("this.d[]");
+    if (i_vi != null && this_x_vi != null && this_d_array_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {i_vi, this_x_vi, this_d_array_vi});
+    }
+  }
+
+  public DummyInvariant getDummyInvariant() {
+    return dummyInv;
+  }
+
+  public int[] getIntArray(long[] longArray) {
+    int[] intArray = new int[longArray.length];
+    for (int i = 0; i < intArray.length; i++) {
+      intArray[i] = (int) longArray[i];
+    }
+    return intArray;
+  }
+
+}

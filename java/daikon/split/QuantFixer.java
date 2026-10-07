@@ -1,12 +1,14 @@
 package daikon.split;
 
+import daikon.VarInfo;
 import daikon.tools.jtb.Ast;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import jtb.ParseException;
 import jtb.syntaxtree.ArgumentList;
 import jtb.syntaxtree.Arguments;
-import jtb.syntaxtree.Expression;
 import jtb.syntaxtree.Name;
 import jtb.syntaxtree.Node;
 import jtb.syntaxtree.NodeSequence;
@@ -18,27 +20,69 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * QuantFixer is a visitor for a jtb syntax tree that replaces calls to the daikon.Quant methods
- * that access arrays, which appear in Daikon's Java output format, by the Java syntax that
- * splitters use for arrays. For example, {@code daikon.Quant.getElement_int(a, i)} yields {@code
- * a[i]}, and {@code daikon.Quant.size(a)} yields {@code a.length}.
+ * that access arrays, which appear in Daikon's Java output format, by Java code that uses the
+ * variables of a splitter. For example, if {@code this_a} is the base name of an int array, then
+ * {@code daikon.Quant.getElement_int(this_a, i)} yields
+ *
+ * <pre>{@code (this_a_array==null?Integer.MAX_VALUE:(int)this_a_array[(int)(i)])}</pre>
+ *
+ * and {@code daikon.Quant.size(this_a)} yields
+ *
+ * <pre>{@code (this_a_array==null?Integer.MAX_VALUE:this_a_array.length)}</pre>
+ *
+ * Like the daikon.Quant methods, the replacements yield a default value if the array is null, and
+ * they accept a long index.
+ *
+ * <p>QuantFixer runs after the fixers that convert variable names to base names, such as {@link
+ * PrefixFixer}. A call is left alone if its array argument is not the base name of an array
+ * variable, or if the splitter does not represent the array's elements, as for {@code
+ * getElement_Object}.
  */
 class QuantFixer extends DepthFirstVisitor {
 
-  /** Creates a new QuantFixer. */
-  private QuantFixer() {
+  /** The default value that each daikon.Quant getElement_* method returns for a null array. */
+  private static final Map<String, String> defaultValues = new HashMap<>();
+
+  static {
+    defaultValues.put("boolean", "false");
+    defaultValues.put("byte", "Byte.MAX_VALUE");
+    defaultValues.put("char", "Character.MAX_VALUE");
+    defaultValues.put("double", "Double.NaN");
+    defaultValues.put("float", "Float.NaN");
+    defaultValues.put("int", "Integer.MAX_VALUE");
+    defaultValues.put("long", "Long.MAX_VALUE");
+    defaultValues.put("short", "Short.MAX_VALUE");
+    defaultValues.put("String", "null");
+  }
+
+  /** Maps the base name of each array variable to its VarInfo. */
+  private final Map<String, VarInfo> arrays;
+
+  /**
+   * Creates a new QuantFixer.
+   *
+   * @param arrays maps the base name of each array variable to its VarInfo
+   */
+  private QuantFixer(Map<String, VarInfo> arrays) {
     super();
+    this.arrays = arrays;
   }
 
   /**
    * Replaces calls to daikon.Quant methods that access arrays (see class description).
    *
    * @param expression a valid segment of Java code
+   * @param arrays maps the base name of each array variable to its VarInfo
    * @return expression, with calls to daikon.Quant array methods replaced
    * @throws ParseException if expression is not valid Java code
    */
-  public static String fixQuant(String expression) throws ParseException {
+  public static String fixQuant(String expression, Map<String, VarInfo> arrays)
+      throws ParseException {
+    if (!expression.contains("daikon.Quant")) {
+      return expression;
+    }
     Node root = Visitors.getJtbTree(expression);
-    root.accept(new QuantFixer());
+    root.accept(new QuantFixer(arrays));
     return Ast.format(root);
   }
 
@@ -50,38 +94,7 @@ class QuantFixer extends DepthFirstVisitor {
   public void visit(PrimaryExpression n) {
     String methodName = quantMethodName(n);
     if (methodName != null) {
-      Arguments args = (Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice;
-      List<Expression> argExprs = new ArrayList<>();
-      List<NodeToken> commas = new ArrayList<>();
-      if (args.f1.present()) {
-        ArgumentList argList = (ArgumentList) args.f1.node;
-        argExprs.add(argList.f0);
-        for (Node commaAndArg : argList.f1.nodes) {
-          NodeSequence seq = (NodeSequence) commaAndArg;
-          commas.add((NodeToken) seq.elementAt(0));
-          argExprs.add((Expression) seq.elementAt(1));
-        }
-      }
-      boolean isGetElement = methodName.startsWith("getElement_") && argExprs.size() == 2;
-      boolean isSize = methodName.equals("size") && argExprs.size() == 1;
-      if (isGetElement || isSize) {
-        for (NodeToken token : TokenExtractor.extractTokens(n.f0)) {
-          token.tokenImage = "";
-        }
-        // Retain the parentheses around the array argument unless it is a primary expression,
-        // which binds as tightly as the array access or field access that follows it.
-        boolean parenthesize = !isPrimaryExpression(argExprs.get(0));
-        String closeArray = parenthesize ? ")" : "";
-        if (!parenthesize) {
-          args.f0.tokenImage = "";
-        }
-        if (isGetElement) {
-          commas.get(0).tokenImage = closeArray + "[";
-          args.f2.tokenImage = "]";
-        } else {
-          args.f2.tokenImage = closeArray + ".length";
-        }
-      }
+      fixQuantCall(n, methodName);
     }
     super.visit(n);
   }
@@ -94,6 +107,80 @@ class QuantFixer extends DepthFirstVisitor {
   public void visit(NodeToken n) {
     n.beginColumn = -1;
     n.endColumn = -1;
+  }
+
+  /**
+   * Replaces n, a call to a daikon.Quant method, if the method accesses an array that the splitter
+   * represents.
+   *
+   * @param n a call to a daikon.Quant method
+   * @param methodName the name of the daikon.Quant method that n calls
+   */
+  private void fixQuantCall(PrimaryExpression n, String methodName) {
+    Arguments args = (Arguments) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice;
+    if (!args.f1.present()) {
+      return;
+    }
+    ArgumentList argList = (ArgumentList) args.f1.node;
+    List<NodeToken> commas = new ArrayList<>();
+    for (Node commaAndArg : argList.f1.nodes) {
+      commas.add((NodeToken) ((NodeSequence) commaAndArg).elementAt(0));
+    }
+    NodeToken[] arrayTokens = TokenExtractor.extractTokens(argList.f0);
+    if (arrayTokens.length != 1) {
+      return;
+    }
+    VarInfo array = arrays.get(arrayTokens[0].tokenImage);
+    if (array == null) {
+      return;
+    }
+    String arrayName = SplitterJavaSource.compilableName(array);
+    // A splitter represents a char array as a String.
+    boolean isString = SplitterJavaSource.getVarType(array).equals("char[]");
+
+    // The replacement is prefix, then the index argument if any, then suffix.
+    String prefix;
+    String suffix;
+    if (methodName.equals("size") && commas.isEmpty()) {
+      prefix = "Integer.MAX_VALUE:" + arrayName + (isString ? ".length()" : ".length");
+      suffix = ")";
+    } else if (methodName.startsWith("getElement_") && commas.size() == 1) {
+      String elementType = methodName.substring("getElement_".length());
+      String defaultValue = defaultValues.get(elementType);
+      if (defaultValue == null) {
+        return;
+      }
+      if (isString) {
+        prefix = defaultValue + ":" + arrayName + ".charAt((int)(";
+        suffix = ")))";
+      } else {
+        // A splitter represents the elements of an integral or boolean array as longs, and those
+        // of a float array as doubles.
+        String cast =
+            (elementType.equals("byte")
+                    || elementType.equals("short")
+                    || elementType.equals("int")
+                    || elementType.equals("float"))
+                ? "(" + elementType + ")"
+                : "";
+        prefix = defaultValue + ":" + cast + arrayName + "[(int)(";
+        suffix = ")]" + (elementType.equals("boolean") ? ">0" : "") + ")";
+      }
+    } else {
+      return;
+    }
+
+    NodeToken[] methodTokens = TokenExtractor.extractTokens(n.f0);
+    for (NodeToken token : methodTokens) {
+      token.tokenImage = "";
+    }
+    methodTokens[0].tokenImage = "(" + arrayName + "==null?" + prefix;
+    args.f0.tokenImage = "";
+    arrayTokens[0].tokenImage = "";
+    for (NodeToken comma : commas) {
+      comma.tokenImage = "";
+    }
+    args.f2.tokenImage = suffix;
   }
 
   /**
@@ -117,28 +204,5 @@ class QuantFixer extends DepthFirstVisitor {
       return null;
     }
     return ((NodeToken) ((NodeSequence) name.f1.elementAt(1)).elementAt(1)).tokenImage;
-  }
-
-  /**
-   * Returns true if the given expression is a primary expression, such as a variable name, a field
-   * access, or an array access.
-   *
-   * @param e an expression
-   * @return true iff e is a primary expression
-   */
-  private static boolean isPrimaryExpression(Expression e) {
-    // The first primary expression in e is all of e, if e is a primary expression.
-    @Nullable PrimaryExpression[] first = new @Nullable PrimaryExpression[1];
-    e.accept(
-        new DepthFirstVisitor() {
-          @Override
-          public void visit(PrimaryExpression n) {
-            if (first[0] == null) {
-              first[0] = n;
-            }
-          }
-        });
-    return first[0] != null
-        && TokenExtractor.extractTokens(first[0]).length == TokenExtractor.extractTokens(e).length;
   }
 }

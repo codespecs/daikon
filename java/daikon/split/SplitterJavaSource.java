@@ -7,8 +7,10 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -72,7 +74,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     varInfos = filterNonVars(varInfos);
     String originalCondition = splitObj.condition();
     Global.debugSplit.fine("originalCondition =  " + originalCondition);
-    String condition = QuantFixer.fixQuant(replaceReservedWords(originalCondition));
+    String condition = replaceReservedWords(originalCondition);
     condition = this.statementReplacer.makeReplacements(condition);
     condition = convertVariableNames(condition, className, varInfos);
     Global.debugSplit.fine("modified condition = " + condition);
@@ -109,7 +111,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     skipLine();
     add("  public boolean test(ValueTuple vt) {");
     writeTestBody();
-    add("    return(" + NullReplacer.replaceNull(condition) + ");");
+    add("    return(" + condition + ");");
     add("  }");
     skipLine();
     add("  public String repr() {");
@@ -336,7 +338,9 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * variable name with a "_" separating the two parts. Instances of a public field name suffixing a
    * variable name are removed and appended to the end of variable name with a "_" separating the
    * two parts. Instances of "orig(variableName)" are replaced by instances of "orig_variableName".
-   * For example "orig(varName.publicField)" would yield "orig_varName_publicField".
+   * For example "orig(varName.publicField)" would yield "orig_varName_publicField". Calls to
+   * daikon.Quant methods that access arrays are replaced (see {@link QuantFixer}), and instances of
+   * "null" are replaced by "0" (see {@link NullReplacer}).
    *
    * @param condition a string representation of a conditional statement
    * @return a version of the conditional with the variable names converted
@@ -350,10 +354,14 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     condition = NameFixer.fixUnqualifiedMemberNames(condition, className, varInfos);
     condition = ThisFixer.fixThisUsage(condition, varInfos);
     condition = OrigFixer.fixOrig(condition);
-    condition = PrefixFixer.fixPrefix(condition);
+    String[] baseNames = getBaseNames(varInfos);
+    condition = PrefixFixer.fixPrefix(condition, baseNames);
     // UNDONE: If the condition contains a naked reference to a class
     // variable, we should prepend the classname.  (markro)
-    String[] baseNames = getBaseNames(varInfos);
+    condition = NullReplacer.replaceNull(condition);
+    // QuantFixer must run after NullReplacer, which would replace the null literals that QuantFixer
+    // introduces, and before ArrayFixer, which would add "_identity" to the array arguments.
+    condition = QuantFixer.fixQuant(condition, getArrays(varInfos));
     condition = ArrayFixer.fixArrays(condition, baseNames, varInfos);
     return condition;
   }
@@ -445,7 +453,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo of the variable whose compilable name is desired
    * @return the name of the variable represented by varInfo in a compilable form
    */
-  private static String compilableName(VarInfo varInfo) {
+  static String compilableName(VarInfo varInfo) {
     String name = getBaseName(varInfo);
     if (varInfo.type.isArray()) {
       if (varInfo.file_rep_type == ProglangType.HASHCODE) {
@@ -483,8 +491,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
     name = name.replace('.', '_');
     // Remove the suffix of an array's name, which is "[]" or "[..]" (which the replace above
-    // changes
-    // to "[__]").
+    // changes to "[__]").
     if (varInfo.type.isArray()) {
       if (name.endsWith("[__]")) {
         name = name.substring(0, name.length() - 4);
@@ -505,6 +512,23 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       baseNames[i] = getBaseName(varInfos[i]);
     }
     return baseNames;
+  }
+
+  /**
+   * Returns a map from the base name of each array variable in varInfos whose elements the splitter
+   * represents to its VarInfo.
+   *
+   * @param varInfos the varInfos for the variables that may appear in the condition
+   * @return a map from base names of array variables to their VarInfos
+   */
+  private static Map<String, VarInfo> getArrays(VarInfo[] varInfos) {
+    Map<String, VarInfo> arrays = new HashMap<>();
+    for (VarInfo varInfo : varInfos) {
+      if (varInfo.type.isArray() && varInfo.file_rep_type != ProglangType.HASHCODE) {
+        arrays.put(getBaseName(varInfo), varInfo);
+      }
+    }
+    return arrays;
   }
 
   /**
@@ -535,7 +559,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo for the variable whose type is desired
    * @return the type of the variable represented by varInfo
    */
-  private static String getVarType(VarInfo varInfo) {
+  static String getVarType(VarInfo varInfo) {
     if (varInfo.file_rep_type == ProglangType.HASHCODE) {
       return "int";
     } else if ((varInfo.type == ProglangType.CHAR_ARRAY)

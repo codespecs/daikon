@@ -2,42 +2,38 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.split.*;
 
-public final class misc_QuantCalls_m_45 extends Splitter {
+public final class misc_QuantCalls_m_47 extends Splitter {
 
   public String condition() {
-    return "daikon.Quant.size(this.a) == i";
+    return "isEmpty()";
   }
 
-  VarInfo i_varinfo; // i
   VarInfo this_a_array_varinfo; // this.a[]
 
   static DummyInvariant dummyInvFactory;
   DummyInvariant dummyInv;
 
-  public misc_QuantCalls_m_45() { }
-  public misc_QuantCalls_m_45(Ppt ppt) {
-    i_varinfo = ppt.find_var_by_name("i");
+  public misc_QuantCalls_m_47() { }
+  public misc_QuantCalls_m_47(Ppt ppt) {
     this_a_array_varinfo = ppt.find_var_by_name("this.a[]");
   }
 
   public Splitter instantiateSplitter(Ppt ppt) {
-    return new misc_QuantCalls_m_45(ppt);
+    return new misc_QuantCalls_m_47(ppt);
   }
 
   public boolean valid() {
-    return (i_varinfo != null) && (this_a_array_varinfo != null);
+    return (this_a_array_varinfo != null);
   }
 
   public boolean test(ValueTuple vt) {
-    /* writeTestBody: 2 declarations */
-    long i = i_varinfo.getIntValue(vt);
+    /* writeTestBody: 1 declarations */
     long[] this_a_array = this_a_array_varinfo.getIntArrayValue(vt);
-    return((this_a_array==null?Integer.MAX_VALUE:this_a_array.length)==i);
+    return((this_a_array==null?Integer.MAX_VALUE:this_a_array.length)==0);
   }
 
   public String repr() {
-    return "misc_QuantCalls_m_45: "
-      + "i_varinfo = " + i_varinfo.repr() + " "
+    return "misc_QuantCalls_m_47: "
       + "this_a_array_varinfo = " + this_a_array_varinfo.repr() + " "
       ;
   }
@@ -48,10 +44,9 @@ public final class misc_QuantCalls_m_45 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
-    VarInfo i_vi = ppt.find_var_by_name("i");
     VarInfo this_a_array_vi = ppt.find_var_by_name("this.a[]");
-    if (i_vi != null && this_a_array_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {i_vi, this_a_array_vi});
+    if (this_a_array_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {this_a_array_vi});
     }
   }
 
