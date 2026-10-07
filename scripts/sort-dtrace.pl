@@ -12,6 +12,12 @@ use strict;
 use 5.006;
 use warnings;
 
+# Put the script directory on the @INC path.
+use File::Basename;
+use lib dirname (__FILE__);
+# The file `util_daikon.pm` appears in the same directory as this script.
+use util_daikon;
+
 my @decls;
 
 sub flush_decls {
@@ -25,11 +31,8 @@ sub flush_decls {
 $/ = ""; # Read by paragraph
 
 while (<>) {
-    die "Version 1 declarations are not supported; convert to version 2 format" if /^(DECLARE|VarComparability)$/m;
-    if ((/^decl\-version.+/) || (/^decl\-input.+/) || (/^input\-language.+/) || (/^var\-comparability.+/)) {
-        print;
-        next;
-    } elsif((/^ppt\s.+/)) {
+    die_if_version_1_decl($_);
+    if (/^ppt\s.+/) {
 	my @lines = split(/\n/, $_);
 	my @vars;
         my $var = "";
@@ -63,6 +66,10 @@ while (<>) {
 
         push @decls, join("", @ppt);
 
+    } elsif (is_declaration_paragraph($_)) {
+	# A header or comment
+	flush_decls();
+	print;
     } else {
 	flush_decls();
 	chomp;

@@ -270,7 +270,7 @@ sub read_execution ( $ ) {
   }
 
   # get the values of the variables at this ppt that we want to cluster
-  while ($varname !~ /^$/) {
+  while (defined($varname) && $varname !~ /^$/) {
     chomp( $varname );
     $value = <DTRACE>;
     chomp ($value);
@@ -287,7 +287,7 @@ sub read_execution ( $ ) {
 
     if ($object) {
       if ($value =~ /null/) {
-	$value =~ -5;
+	$value = -5;
       } elsif ($value =~ /missing/) {
 	$value = 0;
       } else {
@@ -418,17 +418,6 @@ sub output_seq ( @ ) {
   }
 }
 
-# read an opened file till you reach a blank line, then return
-# (used to skip a paragraph of lines).
-sub skip_till_next ( * ) {
-  local *FHANDLE = $_[0];
-  while (my $line = <FHANDLE>) {
-    if ($line =~ /^\s*$/) {
-      return;
-    }
-  }
-}				# skip_till_next
-
 # return an array of $target random numbers between 0 (inclusive) and
 # $max(exclusive). These are used to sample the invocations at a
 # program point.
@@ -496,43 +485,38 @@ sub excluded_rep_type ( $ ) {
 sub read_decl_ppt ( $ ) {
 
   my ($pptname) = @_;
-  my $nvars;			# number of variables at the program point
+  my $nvars = 0;		# number of variables at the program point
 
-  # The variable being read, its rep type, and whether it is a constant.
-  my ($varname, $rep_type, $is_constant);
-
-  # Records the variable that was just read.
-  my $record_var = sub {
-    if (!defined($varname) || excluded_rep_type($rep_type)) {
-      return;
-    }
-    # If the variable is an Object, keep note of that. Will be ignored (not
-    # be clustered) later because its value is a hashcode.
-    if ($rep_type =~ /hashcode/) {
-      push @{$pptname_to_objectvars{$pptname}}, $varname;
-      $nvars++;		# added for object
-      $pptname_to_varnames{$pptname}{$varname} = 1;
-    } elsif ($is_constant) {
-      # definition. do nothing
-    } else {
-      $nvars++;
-      $pptname_to_varnames{$pptname}{$varname} = 1;
-    }
-  };
+  # The variables at the program point, in order.  Each element is a
+  # reference to a [name, rep-type, is-constant] array.
+  my @vars = ();
 
   # now read the variable names and types
   my $line;
   while ( defined($line = <DECL>) && ($line !~ /^\s*$/) ) {
     if ($line =~ /^\s*variable\s+(.*?)\s*$/) {
-      &$record_var();
-      ($varname, $rep_type, $is_constant) = ($1, "", 0);
-    } elsif ($line =~ /^\s*rep-type\s+(.*?)\s*$/) {
-      $rep_type = $1;
-    } elsif ($line =~ /^\s*constant\s/) {
-      $is_constant = 1;
+      push @vars, [$1, "", 0];
+    } elsif (@vars && $line =~ /^\s*rep-type\s+(.*?)\s*$/) {
+      $vars[-1][1] = $1;
+    } elsif (@vars && $line =~ /^\s*constant\s/) {
+      $vars[-1][2] = 1;
     }
   }
-  &$record_var();
+
+  foreach my $var (@vars) {
+    my ($varname, $rep_type, $is_constant) = @$var;
+    # A constant's value does not appear in data trace records.
+    if ($is_constant || excluded_rep_type($rep_type)) {
+      next;
+    }
+    # If the variable is an Object, keep note of that. Will be ignored (not
+    # be clustered) later because its value is a hashcode.
+    if ($rep_type =~ /hashcode/) {
+      push @{$pptname_to_objectvars{$pptname}}, $varname;
+    }
+    $nvars++;
+    $pptname_to_varnames{$pptname}{$varname} = 1;
+  }
   # Store the number of variables at this program point. Remember that
   # @vararray[1] stores the program point name. The invocation nonce is
   # included in @vararray, but is not counted as a variable.

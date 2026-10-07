@@ -68,10 +68,6 @@ PPT_START = "ppt "
 REP_START = "rep-type "
 COMP_START = "comparability "
 
-# Note: Lackwit produces comparability numbers for arrays in the
-# following format: '9[10]' - we are going to ignore what is between
-# the brackets so we will treat it as '9'
-
 ignore_hashcodes = False
 
 if len(sys.argv) < 2:
@@ -140,6 +136,7 @@ for ppt_name in sorted_ppt_keys:
     # prefixed by comparability
 
     cur_var = None
+    hashcode_vars = set()  # Variables whose rep. type is a hashcode
     for line in v:
         stripped_line = line.strip()
 
@@ -148,12 +145,18 @@ for ppt_name in sorted_ppt_keys:
         elif stripped_line[0 : len(REP_START)] == REP_START:
             assert cur_var  # There should have been a variable entry before rep-type
             cur_rep = stripped_line[len(REP_START) :]
+            if hashcode_re.match(cur_rep):
+                hashcode_vars.add(cur_var)
         elif stripped_line[0 : len(COMP_START)] == COMP_START:
             assert (
                 cur_var  # There should have been a variable entry before comparability
             )
             cur_comp = stripped_line[len(COMP_START) :]
             var2comp[cur_var] = cur_comp
+
+    if ignore_hashcodes:
+        for var in hashcode_vars:
+            var2comp.pop(var, None)
 
     # Now we can do the real work of grouping variables together
     # in comparability sets based on their numbers

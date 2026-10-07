@@ -207,18 +207,6 @@ sub insert_cluster_info ( $ ) {
 }				# insert_cluster_info
 
 
-# read an opened file till you reach a blank line, then return
-sub skip_till_next(*) {
-     local *FHANDLE = $_[0];
-    while (my $line = <FHANDLE>) {
-	if ($line =~ /^\s*$/) {
-	    return;
-	}
-    }
-    return;
-}				# skip_till_next
-
-
 # copy one file into another, until a blank line is reached.
 sub copy_till_next(**) {
   my $line;

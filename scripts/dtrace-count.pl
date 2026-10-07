@@ -9,6 +9,12 @@ use strict;
 use 5.006;
 use warnings;
 
+# Put the script directory on the @INC path.
+use File::Basename;
+use lib dirname (__FILE__);
+# The file `util_daikon.pm` appears in the same directory as this script.
+use util_daikon;
+
 # $ppt_count{ppt_name} = [count, num_lines];
 # num_lines is the number of lines in each dtrace record.
 # It is measured to detect discrepancies, which indicate errors in the trace file.
@@ -18,9 +24,9 @@ my %long_names;
 
 $/ = ""; # Read by paragraph
 while (<>) {
-    die "Version 1 declarations are not supported; convert to version 2 format" if /^(DECLARE|VarComparability)$/m;
+    die_if_version_1_decl($_);
     # Skip .decls-like paras
-    next if /^(ppt |decl-version|var-comparability|input-language|ListImplementors|\/\/)/;
+    next if is_declaration_paragraph($_);
     next if /^Begin/ or /^Done/; # Skip processing program point comments
     # This script assumes that each program point name contains ":::".
     /^(.*):::(.+)$/m or die "Can't parse PPT name from <$_>";

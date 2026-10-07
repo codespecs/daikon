@@ -23,10 +23,13 @@ foreach my $decls_file (@ARGV) {
     # cluster variable.  The cluster variable must precede the other
     # variables, but must follow the ppt-level records such as ppt-type.
     my $pending = 0;
-    # The parent records of the current program point, as
+    # The "parent"-type parent records of the current program point, as
     # "<parent-ppt-name> <relation-id>" strings.  The cluster variable is
     # linked to the cluster variable of each such parent, so that, for
     # example, an OBJECT program point gets cluster values from its methods.
+    # "user"-type relations are not followed:  they link a program point
+    # to an unrelated program point, such as the OBJECT program point of a
+    # parameter's class.
     my @parents = ();
     while (<IN>) {
 	my $line = $_;
@@ -38,7 +41,7 @@ foreach my $decls_file (@ARGV) {
 	if ($line =~ /^ppt /) {
 	    $pending = 1;
 	    @parents = ();
-	} elsif ($pending && $line =~ /^\s*parent\s+\S+\s+(\S+)\s+(\S+)\s*$/) {
+	} elsif ($pending && $line =~ /^\s*parent\s+parent\s+(\S+)\s+(\S+)\s*$/) {
 	    push @parents, "$1 $2";
 	}
     }

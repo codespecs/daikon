@@ -6,7 +6,8 @@ package util_daikon;
 require 5.003;			# uses prototypes
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw( cleanup_pptname system_or_die backticks_or_die );
+our @EXPORT = qw( cleanup_pptname system_or_die backticks_or_die
+                  die_if_version_1_decl is_declaration_paragraph skip_till_next );
 
 use English;
 use strict;
@@ -71,6 +72,36 @@ sub cleanup_pptname ( $ ) {
   $result =~ s/\.\.+/\./g;
   $pptname_cache{$ppt} = $result;
   return $result;
+}
+
+# Dies if the argument, which is a paragraph or the first line of a
+# paragraph from a .decls or .dtrace file, is a version 1 declaration.
+# Only the first line is examined, because a later line of a data record
+# may be a variable name such as "DECLARE".  The optional second argument
+# is the name of the file, for use in the error message.
+sub die_if_version_1_decl ( $;$ ) {
+  my ($para, $filename) = check_args_range(1, 2, @_);
+  if ($para =~ /\A(DECLARE|VarComparability)$/m) {
+    my $file = defined($filename) ? " $filename" : "";
+    croak "Version 1 declarations are not supported; convert$file to version 2 format";
+  }
+}
+
+# Returns true if the argument, which is a paragraph or the first line of a
+# paragraph from a version 2 .decls or .dtrace file, is not a data record:
+# that is, it is a program point declaration, a header, or a comment.
+sub is_declaration_paragraph ( $ ) {
+  my ($para) = @_;
+  return $para =~ /\A(ppt |decl-version|decl-input|var-comparability|input-language|ListImplementors|\/\/)/;
+}
+
+# Reads lines from the filehandle until reaching a blank line or end of
+# file.  This skips the remainder of the current paragraph.
+sub skip_till_next ( * ) {
+  my ($fh) = @_;
+  while (defined(my $line = <$fh>)) {
+    last if $line =~ /^\s*$/;
+  }
 }
 
 

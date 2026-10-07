@@ -21,6 +21,8 @@ use lib dirname (__FILE__);
 
 # The file `checkargs.pm` appears in the same directory as this script.
 use checkargs;
+# The file `util_daikon.pm` appears in the same directory as this script.
+use util_daikon;
 
 # TODO:
 #   If using "-m interpolate", then what about missing values before the
@@ -95,30 +97,22 @@ sub parseDecl ( $ ) {
     die("Cannot open declarations file $inputfile");
   my $ppt;
   my @varnames;
-  # The variable currently being read, and whether it is a constant.
-  my ($varname, $is_constant);
-  my $record_var = sub {
-    if (defined($varname) && !$is_constant) {
-      push @varnames, $varname;
-    }
-  };
 
   while (<DECLHANDLE>) {
-    if (/^(DECLARE|VarComparability)$/) {
-      die "Version 1 declaration file $inputfile is not supported; convert it to version 2 format";
-    } elsif (/^ppt\s+(\S+)\s*$/) {
+    die_if_version_1_decl($_, $inputfile);
+    if (/^ppt\s+(\S+)\s*$/) {
       if (defined($ppt)) {
         die "Declaration file $inputfile contains more than one program point";
       }
       $ppt = unescapeDecl($1);
     } elsif (/^\s*variable\s+(\S+)\s*$/) {
-      &$record_var();
-      ($varname, $is_constant) = (unescapeDecl($1), 0);
+      push @varnames, unescapeDecl($1);
     } elsif (/^\s*constant\s/) {
-      $is_constant = 1;
+      # The most recently read variable is a constant, so its value does
+      # not appear in data trace records.
+      pop @varnames;
     }
   }
-  &$record_var();
   close(DECLHANDLE);
   if (!defined($ppt)) {
     die "Didn't see a \"ppt\" record in declaration file $inputfile";

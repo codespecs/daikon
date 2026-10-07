@@ -9,6 +9,12 @@ use English;
 use strict;
 $WARNING = 1;
 
+# Put the script directory on the @INC path.
+use File::Basename;
+use lib dirname (__FILE__);
+# The file `util_daikon.pm` appears in the same directory as this script.
+use util_daikon;
+
 my $ignore_exitno = 0;
 
 if ($ARGV[0] eq "--ignore_exitno") {
@@ -70,56 +76,53 @@ sub load_decls ( $ ) {
     while (defined (my $l = getline($decls))) {
 
         $l =~ s://.*::; # strip any comments on this line
+	die_if_version_1_decl($l, $mydeclsname);
 
 	if (($l =~ /(^ppt\s+)(.+)/)) {
 	    my $currppt = $2;
 	    my $lhashref = {};
             my @varorder = ();
 
+            # The variable currently being read, and its
+            # [dec-type, rep-type, comparability] triple.
             my $curvar = "";
-            my $currep = "";
-            my $curdec = "";
-            my $curcomp = "";
+            my $curinfo;
 
             while(my $subline = getline($decls)) {
                 $subline =~ s/^\s+//;
                 $subline  =~ s/\s+$//;
 
                 if($subline =~ /(^variable\s+)(.+)/) {
-                    unless($curvar eq "") { # Push stuff to the stack
-                        $$lhashref{$curvar} = [$curdec, $currep, $curcomp];
-                        push @varorder, $curvar;
-                    }
                     $curvar = $2;
+                    $curinfo = ["", "", ""];
+                    $$lhashref{$curvar} = $curinfo;
+                    push @varorder, $curvar;
                 }elsif (($subline =~ /^parent.+/) ||
                         ($subline =~ /^ppt\-type.+/) ||
                         ($subline =~ /^flags.+/)) {
                 }elsif ($curvar eq "") {
                     die "Malformed decls file: \"$subline\" at line $INPUT_LINE_NUMBER instead of variable declaration";
+                }elsif ($subline =~ /^constant\s/) {
+                    # A constant's value does not appear in data trace records.
+                    delete $$lhashref{$curvar};
+                    pop @varorder;
                 }elsif ($subline =~ /(^rep\-type\s*)(.+)/) {
-                    $currep = $2;
+                    $$curinfo[1] = $2;
                 }elsif ($subline =~ /(^dec-type\s*)(.+)/) {
-                    $curdec = $2;
+                    $$curinfo[0] = $2;
                 }elsif ($subline =~ /(^comparability\s*)(.+)/) {
-                    $curcomp = $2;
+                    $$curinfo[2] = $2;
                 }
-            }
-            unless($curvar eq "") { # Push stuff to the stack
-                $$lhashref{$curvar} = [$curdec, $currep, $curcomp];
-                push @varorder, $curvar;
             }
             $$lhashref{"variable order"} = [ @varorder ];
             $$declshash{$currppt} = $lhashref;
             $ppt_seen = 1;
-	} elsif (($l eq "DECLARE") || ($l eq "VarComparability")) {
-	    die "Version 1 declarations are not supported; convert $mydeclsname to version 2 format";
 	} elsif (($l eq "ListImplementors") && !$ppt_seen) {
 	    # It's ok to have a ListImplementors in the decls file.
 	    # Read the type of comparability, then move on.
 	    $l = getline($decls);
-	} elsif (($l =~ /^input\-language.+/) ||
-                 ($l =~ /^decl\-version.+/) ||
-                 ($l =~ /^var\-comparability.+/)){
+	} elsif (is_declaration_paragraph($l)) {
+	    # A header line
         } elsif ($l) {
 	    die "malformed decls file: \"$l\" at line $INPUT_LINE_NUMBER of $mydeclsname";
 	}
@@ -134,12 +137,19 @@ sub load_ppt ( $$ ) {
 # file, and hash mapping varname to array of value and modbit.
     my ($dtfh, $dtfhname) = @_;
     my $pptname = getline($dtfh);
-    while ((defined $pptname) && (($pptname eq "") ||
-                                  ($pptname =~ /^input\-language.+/) ||
-                                  ($pptname =~ /^decl\-version.+/) ||
-                                  ($pptname =~ /^var\-comparability.+/))) {
+    # Skip blank lines and declaration paragraphs, such as headers and
+    # program point declarations in a combined .dtrace file.
+    while ((defined $pptname)
+           && (($pptname eq "") || is_declaration_paragraph($pptname))) {
+	if ($pptname ne "") {
+	    # Skip the rest of the paragraph.
+	    do {
+		$pptname = getline($dtfh);
+	    } while ((defined $pptname) && ($pptname ne ""));
+	}
 	$pptname = getline($dtfh);
     }
+    (defined $pptname) and die_if_version_1_decl($pptname, $dtfhname);
 
 
     (defined $pptname)
