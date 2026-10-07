@@ -225,7 +225,6 @@ public class DtraceDiff {
             throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
 
-        // short options
         default:
           throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
