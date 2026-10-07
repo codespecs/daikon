@@ -2655,10 +2655,12 @@ public final class Daikon {
 
           // Read each ppt name from the file
           for (String line = fp.readLine(); line != null; line = fp.readLine()) {
-            if (!line.startsWith("ppt ")) {
+            String ppt_name = FileIO.declared_ppt_name(line);
+            // GLOBAL, OBJECT, and CLASS ppts are always included; see FileIO.ppt_included.
+            if (ppt_name == null || FileIO.is_parent_only_ppt_name(ppt_name)) {
               continue;
             }
-            ppts.add(FileIO.unescape_decl(line.substring("ppt ".length()).trim()));
+            ppts.add(ppt_name);
           }
         }
       }

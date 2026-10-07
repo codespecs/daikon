@@ -340,13 +340,11 @@ public final class FileIO {
 
     // process the ppt record
     String line = top_line;
-    Scanner scanner = new Scanner(line);
-    @Interned String record_name = need(state, scanner, "'ppt'");
-    if (record_name != "ppt") { // interned
-      decl_error(state, "found '%s' where 'ppt' expected", record_name);
+    String ppt_name = declared_ppt_name(line);
+    if (ppt_name == null) {
+      decl_error(state, "ppt name expected in '%s'", line);
+      throw new Error(); // this can't happen
     }
-    String ppt_name = need(state, scanner, "ppt name");
-    ppt_name = user_mod_ppt_name(ppt_name);
 
     // Information that will populate the new program point.
     Map<String, VarDefinition> varmap = new LinkedHashMap<>();
@@ -365,7 +363,7 @@ public final class FileIO {
           break;
         }
 
-        scanner = new Scanner(line);
+        Scanner scanner = new Scanner(line);
         @Interned String record = scanner.next().intern();
         if (vardef == null) {
           if (record == "parent") { // interned
@@ -548,9 +546,8 @@ public final class FileIO {
    *
    * @param state the parse state
    * @param line the "decl-version" record
-   * @return the version, which is always "2.0"
    */
-  private static @Interned String read_decl_version(ParseState state, String line) {
+  private static void read_decl_version(ParseState state, String line) {
     Scanner scanner = new Scanner(line);
     scanner.next();
     @Interned String version = need(state, scanner, "declaration version number");
@@ -560,7 +557,6 @@ public final class FileIO {
     } else if (version != "2.0") { // interned
       decl_error(state, "'%s' found where 2.0 expected", version);
     }
-    return version;
   }
 
   /** The error message for a file in the obsolete version 1 format. */
@@ -1371,7 +1367,7 @@ public final class FileIO {
 
       // Check for the file format
       if (line.startsWith("decl-version")) {
-        state.payload = read_decl_version(state, line);
+        read_decl_version(state, line);
         state.rtype = RecordType.DECL_VERSION;
         return;
       }
@@ -2249,6 +2245,8 @@ public final class FileIO {
   /**
    * Returns true if the specified ppt name should be included in processing. Ppts can be excluded
    * because they match the omit_regexp, don't match ppt_regexp, or are greater than ppt_max_name.
+   * The ppt_max_name cutoff never excludes GLOBAL, OBJECT, or CLASS ppts, because they may be
+   * parents of included ppts.
    */
   public static boolean ppt_included(String ppt_name) {
 
@@ -2258,11 +2256,30 @@ public final class FileIO {
         || ((Daikon.ppt_regexp != null) && !Daikon.ppt_regexp.matcher(ppt_name).find())
         || ((Daikon.ppt_max_name != null)
             && ((Daikon.ppt_max_name.compareTo(ppt_name) < 0)
-                && (ppt_name.indexOf(global_suffix) == -1)))) {
+                && !is_parent_only_ppt_name(ppt_name)))) {
       return false;
     } else {
       return true;
     }
+  }
+
+  /**
+   * Returns true if the ppt name is for a GLOBAL, OBJECT, or CLASS ppt. Such ppts have no samples
+   * of their own; they get their values from their children.
+   *
+   * @param ppt_name a ppt name
+   * @return true if the ppt name is for a GLOBAL, OBJECT, or CLASS ppt
+   */
+  public static boolean is_parent_only_ppt_name(String ppt_name) {
+    // This is called for every sample, so it avoids constructing a PptName.
+    int separatorPosition = ppt_name.indexOf(ppt_tag_separator);
+    if (separatorPosition == -1) {
+      return false;
+    }
+    String point = ppt_name.substring(separatorPosition + ppt_tag_separator.length());
+    return point.equals(global_suffix)
+        || point.equals(object_suffix)
+        || point.equals(class_static_suffix);
   }
 
   /**
@@ -2824,10 +2841,51 @@ public final class FileIO {
     throw new Daikon.UserError(cause, msg);
   }
 
-  /** Returns true if the line is the start of a ppt declaration. */
+  /**
+   * Returns true if the line starts a header record: a record that is neither a ppt declaration nor
+   * a sample, such as a comment or a "decl-version" record. Such records are handled by {@link
+   * #read_data_trace_record}.
+   *
+   * @param line the first line of a record in a .decls or .dtrace file
+   * @return true if the line starts a header record
+   */
   @Pure
-  private static boolean is_declaration_header(String line) {
+  public static boolean is_header_record(String line) {
+    return isComment(line)
+        || line.startsWith("decl-version")
+        || line.startsWith("var-comparability")
+        || line.startsWith("input-language")
+        || line.equals("ListImplementors");
+  }
+
+  /**
+   * Returns true if the line is the start of a ppt declaration.
+   *
+   * @param line the first line of a record in a .decls or .dtrace file
+   * @return true if the line starts a ppt declaration
+   */
+  @Pure
+  public static boolean is_declaration_header(String line) {
     return line.startsWith("ppt ");
+  }
+
+  /**
+   * If the line is the start of a ppt declaration, returns the declared ppt name, after applying
+   * {@link #user_mod_ppt_name}. Otherwise returns null.
+   *
+   * @param line a line of a declaration file
+   * @return the ppt name declared by the line, or null if the line is not a ppt record
+   */
+  public static @Nullable String declared_ppt_name(String line) {
+    if (!is_declaration_header(line)) {
+      return null;
+    }
+    Scanner scanner = new Scanner(line);
+    scanner.next(); // "ppt"
+    if (!scanner.hasNext()) {
+      return null;
+    }
+    return user_mod_ppt_name(unescape_decl(scanner.next()));
   }
 
   /**

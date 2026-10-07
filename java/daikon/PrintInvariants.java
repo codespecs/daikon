@@ -719,18 +719,13 @@ public final class PrintInvariants {
     discPpt = temp.substring(1);
   }
 
-  // The following code is a little odd because it is trying to match the
-  // output format of V2.  In V2, combined exit points are printed after
-  // the original exit points (rather than before as they are following
-  // the PptMap sort order).
+  // The combined exit point is printed after the EXITnn points, even though
+  // it precedes them in the PptMap sort order.
   //
-  // Also, V2 only prints out a single ppt when there is only one
-  // exit point.  This seems correct.  Probably a better solution to
-  // this would be to not create the combined exit point at all when there
-  // is only a single exit.  Its done here instead so as not to futz with
-  // the partial order stuff.
-  //
-  // All of this can (and should be) improved when V2 is dropped.
+  // When there is only one EXITnn point, only the combined exit point is
+  // printed.  Probably a better solution would be to not create the combined
+  // exit point at all when there is only a single exit.  It is done here
+  // instead so as not to disturb the program point hierarchy.
 
   public static void print_invariants(PptMap all_ppts) {
 
@@ -1335,9 +1330,6 @@ public final class PrintInvariants {
 
   /** Print invariants for a single program point, once we know that this ppt is worth printing. */
   public static void print_invariants(PptTopLevel ppt, PrintWriter out, PptMap ppt_map) {
-
-    // make names easier to read before printing
-    ppt.simplify_variable_names();
 
     print_sample_data(ppt, out);
     print_modified_vars(ppt, out);
