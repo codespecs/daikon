@@ -341,8 +341,6 @@ public class ExtractConsequent {
    * top-level program points because Implications are produced only at those points.
    */
   public static void extract_consequent_maybe(PptTopLevel ppt, PptMap all_ppts) {
-    ppt.simplify_variable_names();
-
     List<Invariant> invs = new ArrayList<>();
     // Collect Implication invariants at this program point.
     for (Invariant inv : ppt.invariants_vector()) {

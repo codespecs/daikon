@@ -18,7 +18,8 @@ my %long_names;
 
 $/ = ""; # Read by paragraph
 while (<>) {
-    next if /^decl/ or /^ppt/ or /^var/ or /^input/ or /^\/\//; # Skip .decls-like paras
+    # Skip .decls-like paras
+    next if /^(ppt |decl-version|var-comparability|input-language|ListImplementors|\/\/)/;
     next if /^Begin/ or /^Done/; # Skip processing program point comments
     # This script assumes that each program point name contains ":::".
     /^(.*):::(.+)$/m or die "Can't parse PPT name from <$_>";

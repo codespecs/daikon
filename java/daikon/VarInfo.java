@@ -432,9 +432,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
 
     // Create the VarInfoAux information
     final List<String> auxstrs = new ArrayList<>();
-    if (var_flags.contains(VarFlags.IS_PARAM)) {
-      auxstrs.add(VarInfoAux.IS_PARAM + "=true");
-    }
     if (var_flags.contains(VarFlags.NON_NULL)) {
       auxstrs.add(VarInfoAux.IS_NON_NULL + "=true");
     }
@@ -810,9 +807,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   public static VarInfo origVarInfo(VarInfo vi) {
     // At an exit point, parameters are uninteresting, but orig(param) is not.
     // So don't call orig(param) a parameter.
-    // VIN (below should be removed)
-    // VarInfoAux aux_nonparam =
-    //   vi.aux.setValue(VarInfoAux.IS_PARAM, VarInfoAux.FALSE);
 
     // Build a Variable Definition from the poststate vardef
     VarDefinition result_vardef = vi.vardef.copy();
@@ -1818,10 +1812,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   /** Debug tracer. */
   private static final Logger debug = Logger.getLogger("daikon.VarInfo");
 
-  /** Debug tracer for simplifying expressions. */
-  private static final Logger debugSimplifyExpression =
-      Logger.getLogger("daikon.VarInfo.simplifyExpression");
-
   /** Enable assertions that would otherwise reduce run time performance. */
   private static final Logger debugEnableAssertions =
       Logger.getLogger("daikon.VarInfo.enableAssertions");
@@ -1833,56 +1823,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   // --dbg daikon.VarInfo
   public static boolean assertionsEnabled() {
     return debugEnableAssertions.isLoggable(Level.FINE);
-  }
-
-  /**
-   * Change the name of this VarInfo by side effect into a more simplified form, which is easier to
-   * read on display. Don't call this during processing, as I think the system assumes that names
-   * don't change over time (?).
-   */
-  public void simplify_expression() {
-    if (debugSimplifyExpression.isLoggable(Level.FINE)) {
-      debugSimplifyExpression.fine("** Simplify: " + name());
-    }
-
-    if (!isDerived()) {
-      if (debugSimplifyExpression.isLoggable(Level.FINE)) {
-        debugSimplifyExpression.fine("** Punt because not derived variable");
-      }
-      return;
-    }
-
-    // find a ...post(...)... expression to simplify
-    VarInfoName.Poststate postexpr = null;
-    for (VarInfoName node : new VarInfoName.InorderFlattener(var_info_name).nodes()) { // vin ok
-      if (node instanceof VarInfoName.Poststate) {
-        // Remove temporary var when bug is fixed.
-        VarInfoName.Poststate tempNode = (VarInfoName.Poststate) node;
-        postexpr = tempNode;
-        // old code; reinstate when bug is fixed
-        // postexpr = (VarInfoName.Poststate) node;
-        break;
-      }
-    }
-    if (postexpr == null) {
-      if (debugSimplifyExpression.isLoggable(Level.FINE)) {
-        debugSimplifyExpression.fine("** Punt because no post()");
-      }
-      return;
-    }
-
-    // if we have post(...+k) rewrite as post(...)+k
-    if (postexpr.term instanceof VarInfoName.Add) {
-      VarInfoName.Add add = (VarInfoName.Add) postexpr.term;
-      VarInfoName swapped = add.term.applyPoststate().applyAdd(add.amount);
-      var_info_name =
-          new VarInfoName.Replacer(postexpr, swapped)
-              .replace(var_info_name)
-              .intern(); // vin ok  // interning bugfix
-      // start over
-      simplify_expression();
-      return;
-    }
   }
 
   /**
@@ -2332,7 +2272,16 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
     }
   }
 
-  /** Returns true if this variable is a parameter. */
+  /**
+   * Returns true if this variable is a parameter to a method, or derived from a parameter to a
+   * method. By default, if p is a parameter, then some EXIT invariants related to p aren't printed.
+   * However, this does not affect the computation of invariants.
+   *
+   * <p>Front ends are responsible for setting whether p is a parameter and whether p.a is a
+   * parameter. In Java, p.a is not a parameter, whereas in IOA, it is.
+   *
+   * @return true if this variable is a parameter
+   */
   @Pure
   public boolean isParam() {
     return var_flags.contains(VarFlags.IS_PARAM);
@@ -2342,7 +2291,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
   public void set_is_param() {
     // System.out.printf("setting is_param for %s %n", name());
     var_flags.add(VarFlags.IS_PARAM);
-    aux = aux.setValue(VarInfoAux.IS_PARAM, VarInfoAux.TRUE); // VIN
   }
 
   /** Set whether or not this variable is a parameter. */
@@ -2351,7 +2299,6 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
       set_is_param();
     } else {
       var_flags.remove(VarFlags.IS_PARAM);
-      aux = aux.setValue(VarInfoAux.IS_PARAM, VarInfoAux.FALSE); // VIN
     }
   }
 
@@ -2896,31 +2843,10 @@ public final @Interned class VarInfo implements Cloneable, Serializable {
    * don't check isArray().
    */
   public @Nullable String get_simplify_size_name() {
-    // Implement the method in two ways, to double-check results.
-
-    @Interned String result;
     if (!file_rep_type.isArray() || isDerived()) {
-      result = null;
-    } else {
-      // System.out.printf("Getting size name for %s [%s]%n", name(),
-      //                    get_length());
-      result = get_length().simplify_name().intern();
+      return null;
     }
-
-    @Interned String old_result;
-    if (!var_info_name.isApplySizeSafe()) { // vin ok
-      old_result = null;
-    } else {
-      old_result = var_info_name.applySize().simplify_name().intern(); // vin ok
-    }
-    if (old_result != result) {
-      throw new Error(
-          String.format(
-              "%s: '%s' '%s'%n basehashcode = %s%n",
-              this, result, old_result, get_base_array_hashcode()));
-    }
-
-    return old_result;
+    return get_length().simplify_name().intern();
   }
 
   /**

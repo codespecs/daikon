@@ -68,16 +68,10 @@ public final class SplitDtrace {
       throw new Daikon.UserError(
           "Filename must end with .dtrace or .dtrace.gz: filename=" + filename);
     }
-    int declNum = 1;
+    int declNum = 0;
     int recNum = 0;
     try (BufferedReader reader = getStream(filename)) {
       ArrayList<String> rec = new ArrayList<>();
-      while (true) {
-        readRec(reader, rec);
-        if (isDeclare(rec)) {
-          break;
-        }
-      }
       while (true) {
         readRec(reader, rec);
         if (rec.isEmpty()) {
@@ -85,7 +79,7 @@ public final class SplitDtrace {
         }
         if (isDeclare(rec)) {
           declNum++;
-        } else {
+        } else if (!isHeader(rec)) {
           recNum++;
         }
       }
@@ -113,18 +107,12 @@ public final class SplitDtrace {
       ArrayList<String> rec = new ArrayList<>();
       while (true) {
         readRec(reader, rec);
-        if (isDeclare(rec)) {
-          writer.newLine();
-        }
-        writeRec(writer, rec);
-        if (isDeclare(rec)) {
-          break;
-        }
-      }
-      while (true) {
-        readRec(reader, rec);
         if (rec.isEmpty()) {
           break;
+        }
+        if (isHeader(rec)) {
+          writeRec(writer, rec);
+          continue;
         }
         boolean isDecl = isDeclare(rec);
         if ((currRecCount >= fromRec || isDecl) && currRecCount <= toRec) {
@@ -199,7 +187,19 @@ public final class SplitDtrace {
    */
   @Pure
   static boolean isDeclare(List<String> res) {
-    return res.get(0).startsWith("ppt ");
+    return FileIO.is_declaration_header(res.get(0));
+  }
+
+  /**
+   * Returns true if the given record is a file header record, such as a comment or "decl-version",
+   * rather than a declaration or a sample.
+   *
+   * @param res the lines of a record from a .decls or .dtrace file
+   * @return true if the given record is a file header record
+   */
+  @Pure
+  static boolean isHeader(List<String> res) {
+    return FileIO.is_header_record(res.get(0));
   }
 
   /**
