@@ -1,4 +1,4 @@
-package daikon.split;
+package daikon.test.split;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -10,6 +10,12 @@ import daikon.Daikon;
 import daikon.FileIO;
 import daikon.PptMap;
 import daikon.PptTopLevel;
+import daikon.split.PptSplitter;
+import daikon.split.SpinfoFile;
+import daikon.split.Splitter;
+import daikon.split.SplitterFactory;
+import daikon.split.SplitterList;
+import daikon.split.SplitterObject;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

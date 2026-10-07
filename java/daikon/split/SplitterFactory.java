@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -176,8 +177,6 @@ public class SplitterFactory {
     // The splitters whose source files were written successfully.
     // Splitters that were not written must not be compiled or loaded.
     List<SplitterObject> writtenSplitters = new ArrayList<>();
-    // The source files of writtenSplitters, in the same order.
-    List<String> writtenSourcePaths = new ArrayList<>();
     for (int i = 0; i < splitterObjects.length; i++) {
       SplitterObject splitObj = splitterObjects[i];
       String fileName = getFileName(splitObj.getPptName());
@@ -204,7 +203,7 @@ public class SplitterFactory {
       try {
         // A class file left over from an earlier run must not be loaded if compilation fails.
         Files.deleteIfExists(Path.of(classPath));
-      } catch (IOException ioe) {
+      } catch (IOException | InvalidPathException ioe) {
         debug.fine(ioe.toString());
         splitObj.setError("Cannot delete old splitter class file " + classPath + ": " + ioe);
         continue;
@@ -223,17 +222,20 @@ public class SplitterFactory {
         splitObj.setError("Error while writing splitter file " + sourcePath + ": " + ioe);
         try {
           Files.deleteIfExists(Path.of(sourcePath));
-        } catch (IOException ioe2) {
+        } catch (IOException | InvalidPathException ioe2) {
           debug.fine(ioe2.toString());
         }
         continue;
       }
       writtenSplitters.add(splitObj);
-      writtenSourcePaths.add(sourcePath);
     }
     if (writtenSplitters.isEmpty()) {
       Global.debugSplit.fine("<<exit>>  loadSplitters: no splitters were written");
       return;
+    }
+    List<String> writtenSourcePaths = new ArrayList<>(writtenSplitters.size());
+    for (SplitterObject splitObj : writtenSplitters) {
+      writtenSourcePaths.add(splitObj.getFullSourcePath());
     }
     String errorOutput = null;
     try {

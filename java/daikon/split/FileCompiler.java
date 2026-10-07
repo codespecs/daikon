@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -22,7 +23,6 @@ import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.checkerframework.checker.index.qual.Positive;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.regex.qual.Regex;
 import org.checkerframework.common.value.qual.MinLen;
 
@@ -35,7 +35,10 @@ public final class FileCompiler {
   /** The Runtime of the JVM. */
   public static Runtime runtime = java.lang.Runtime.getRuntime();
 
-  /** Matches the names of Java source files. Match group 1 is the complete filename. */
+  /**
+   * Matches javac error messages, but not warnings. Match group 1 is the complete filename of the
+   * Java source file that contains the error.
+   */
   static @Regex(1) Pattern java_filename_pattern;
 
   /**
@@ -51,12 +54,14 @@ public final class FileCompiler {
     try {
       @Regex(1) String java_filename_re
           // A javac error message may consist of several lines of output.
-          // The first line has the form "FILENAME.java:LINENUMBER: MESSAGE";
-          // the additional lines of information do not.
+          // The first line has the form "FILENAME.java:LINENUMBER: error: MESSAGE";
+          // the additional lines of information do not.  A warning has the form
+          // "FILENAME.java:LINENUMBER: warning: MESSAGE" and is not matched, because
+          // a file with only warnings can be compiled.
           // (?m) turns on MULTILINE mode so "^" matches the start of each
           // line output by javac.  The filename may contain spaces, but it
           // does not start with whitespace.
-          = "(?m)^(\\S.*?\\.java):[0-9]+:";
+          = "(?m)^(\\S.*?\\.java):[0-9]+: error:";
       java_filename_pattern = Pattern.compile(java_filename_re);
     } catch (PatternSyntaxException me) {
       me.printStackTrace();
@@ -124,17 +129,32 @@ public final class FileCompiler {
 
     // javac tends to stop without completing the compilation if there
     // is an error in one of the files.  Remove all the erring files
-    // and recompile only the good ones.
+    // and recompile only the good ones.  javac reports errors in phases:  for
+    // example, after a syntax error it does not report type errors.  So, a
+    // recompilation may reveal errors in other files, and recompilation is
+    // repeated until it succeeds or no more files can be excluded.
     if (result.failed && compiler[0].indexOf("javac") != -1) {
-      // javac writes its diagnostics to standard error, so only standard error is searched for the
-      // names of files with errors.
-      CompileResult recompileResult = recompile_without_errors(fileNames, result.stderr);
-      // If the recompilation succeeded, its output contains no errors, only warnings that were
-      // already reported by the first compilation.
-      if (recompileResult != null && recompileResult.failed) {
-        compile_errors =
-            appendWithLineSeparator(
-                compile_errors, withoutCommonPrefix(compile_errors, recompileResult));
+      // The files in which javac has reported an error, in normalized form.
+      Set<String> errorFiles = new HashSet<>();
+      List<String> attempted = fileNames;
+      while (result.failed) {
+        // javac writes its diagnostics to standard error, so only standard error is searched for
+        // the names of files with errors.
+        addFilesWithErrors(result.stderr, errorFiles);
+        List<String> retry = filesToRetry(attempted, errorFiles);
+        // If no file was excluded, recompiling would only repeat the previous compilation.  That
+        // happens, for example, if the failure is not attributable to any particular file.
+        if (retry.isEmpty() || retry.size() == attempted.size()) {
+          break;
+        }
+        result = compile_source(retry);
+        attempted = retry;
+        // If the recompilation succeeded, its output contains no errors, only warnings that were
+        // already reported by an earlier compilation.
+        if (result.failed) {
+          compile_errors =
+              appendWithLineSeparator(compile_errors, withoutCommonPrefix(compile_errors, result));
+        }
       }
     }
 
@@ -303,46 +323,40 @@ public final class FileCompiler {
   }
 
   /**
-   * Examine the errorString to identify the files that cannot compile, then recompile all the other
-   * files. This function is necessary when compiling with javac because javac does not compile all
-   * the files supplied to it if some of them contain errors. So some "good" files end up not being
-   * compiled.
+   * Adds to {@code errorFiles} the files in which {@code errorString} reports an error. This is
+   * necessary when compiling with javac because javac does not compile any of the files supplied to
+   * it if some of them contain errors. So some "good" files end up not being compiled.
+   *
+   * @param errorString the error output of javac
+   * @param errorFiles the set of normalized paths of files with errors; is side-effected
+   */
+  private static void addFilesWithErrors(String errorString, Set<String> errorFiles) {
+    Matcher m = java_filename_pattern.matcher(errorString);
+    while (m.find()) {
+      @SuppressWarnings(
+          "nullness") // Regex Checker imprecision: find() guarantees that group 1 exists
+      @NonNull String errorFileName = m.group(1);
+      errorFiles.add(normalizePath(errorFileName));
+    }
+  }
+
+  /**
+   * Returns the files that were not compiled and that contain no known error.
    *
    * @param fileNames all the files that were attempted to be compiled
-   * @param errorString the error string that indicates which files could not be compiled
-   * @return the result of the recompilation, or null if no recompilation was performed
+   * @param errorFiles the normalized paths of files with errors
+   * @return the elements of {@code fileNames} that should be recompiled
    */
-  private @Nullable CompileResult recompile_without_errors(
-      List<String> fileNames, String errorString) throws IOException {
-    // search the error string and extract the files with errors.
-    if (errorString != null) {
-      HashSet<String> errorClasses = new HashSet<>();
-      Matcher m = java_filename_pattern.matcher(errorString);
-      while (m.find()) {
-        @SuppressWarnings(
-            "nullness") // Regex Checker imprecision: find() guarantees that group 1 exists
-        @NonNull String errorFileName = m.group(1);
-        errorClasses.add(normalizePath(errorFileName));
-      }
-      // Collect all the files that were not compiled into retry
-      List<String> retry = new ArrayList<>();
-      for (String sourceFileName : fileNames) {
-        sourceFileName = sourceFileName.trim();
-        String classFilePath = getClassFilePath(sourceFileName);
-        if (!fileExists(classFilePath)) {
-          if (!errorClasses.contains(normalizePath(sourceFileName))) {
-            retry.add(sourceFileName);
-          }
-        }
-      }
-
-      // If no file was excluded, recompiling would only repeat the previous compilation.  That
-      // happens, for example, if the failure is not attributable to any particular file.
-      if (!retry.isEmpty() && retry.size() < fileNames.size()) {
-        return compile_source(retry);
+  private static List<String> filesToRetry(List<String> fileNames, Set<String> errorFiles) {
+    List<String> retry = new ArrayList<>();
+    for (String sourceFileName : fileNames) {
+      sourceFileName = sourceFileName.trim();
+      String classFilePath = getClassFilePath(sourceFileName);
+      if (!fileExists(classFilePath) && !errorFiles.contains(normalizePath(sourceFileName))) {
+        retry.add(sourceFileName);
       }
     }
-    return null;
+    return retry;
   }
 
   /**
