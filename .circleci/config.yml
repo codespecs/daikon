@@ -974,27 +974,6 @@ jobs:
           command: scripts/test-typecheck-with-latest-cf.sh part3
           no_output_timeout: 30m
 
-  quick_rockylinux_jdk11:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk11:latest
-    resource_class: large
-    environment:
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          name: test-quick
-          command: scripts/test-quick-txt-diff.sh
-
   quick_rockylinux_jdk25:
     docker:
       - image: mdernst/daikon-rockylinux-jdk25:latest
@@ -1036,27 +1015,6 @@ jobs:
       - run:
           name: test-quick
           command: scripts/test-quick-txt-diff.sh
-
-  nonquick_rockylinux_jdk11:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk11:latest
-    resource_class: large
-    environment:
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          name: test-nonquick
-          command: scripts/test-nonquick-txt-diff.sh
 
   nonquick_rockylinux_jdk25:
     docker:
@@ -1100,27 +1058,6 @@ jobs:
           name: test-nonquick
           command: scripts/test-nonquick-txt-diff.sh
 
-  nontxt_rockylinux_jdk11:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk11:latest
-    resource_class: large
-    environment:
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          name: test-nontxt
-          command: scripts/test-non-txt-diff.sh
-
   nontxt_rockylinux_jdk25:
     docker:
       - image: mdernst/daikon-rockylinux-jdk25:latest
@@ -1162,29 +1099,6 @@ jobs:
       - run:
           name: test-nontxt
           command: scripts/test-non-txt-diff.sh
-
-  misc_rockylinux_jdk11:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk11-plus:latest
-    resource_class: large
-    environment:
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout:
-          method: full
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          name: test-misc.sh
-          command: make showvars && scripts/test-misc.sh
-          no_output_timeout: 20m
 
   misc_rockylinux_jdk25:
     docker:
@@ -1230,28 +1144,6 @@ jobs:
       - run:
           name: test-misc.sh
           command: make showvars && scripts/test-misc.sh
-          no_output_timeout: 20m
-
-  kvasir_rockylinux_jdk11:
-    docker:
-      - image: mdernst/daikon-rockylinux-jdk11-plus:latest
-    resource_class: large
-    environment:
-      TERM: dumb
-    steps:
-      - restore_cache:
-          keys:
-            - &source-cache source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
-      - checkout
-      - save_cache:
-          key: *source-cache
-          paths:
-            - ".git"
-      - run:
-          name: test-kvasir.sh
-          command: scripts/test-kvasir.sh
           no_output_timeout: 20m
 
   kvasir_rockylinux_jdk25:
@@ -1496,12 +1388,6 @@ workflows:
             - canary_jobs
             - typecheck_bundled_part3_ubuntu_jdk25
 
-      - quick_rockylinux_jdk11:
-          requires:
-            - canary_jobs
-            - quick_rockylinux_jdk25
-            - quick_ubuntu_jdk11
-
       - quick_rockylinux_jdk25:
           requires:
             - canary_jobs
@@ -1512,12 +1398,6 @@ workflows:
             - canary_jobs
             - quick_rockylinux_jdk25
             - quick_ubuntu_jdk27
-
-      - nonquick_rockylinux_jdk11:
-          requires:
-            - canary_jobs
-            - nonquick_rockylinux_jdk25
-            - nonquick_ubuntu_jdk11
 
       - nonquick_rockylinux_jdk25:
           requires:
@@ -1530,12 +1410,6 @@ workflows:
             - nonquick_rockylinux_jdk25
             - nonquick_ubuntu_jdk27
 
-      - nontxt_rockylinux_jdk11:
-          requires:
-            - canary_jobs
-            - nontxt_rockylinux_jdk25
-            - nontxt_ubuntu_jdk11
-
       - nontxt_rockylinux_jdk25:
           requires:
             - canary_jobs
@@ -1547,12 +1421,6 @@ workflows:
             - nontxt_rockylinux_jdk25
             - nontxt_ubuntu_jdk27
 
-      - misc_rockylinux_jdk11:
-          requires:
-            - canary_jobs
-            - misc_rockylinux_jdk25
-            - misc_ubuntu_jdk11
-
       - misc_rockylinux_jdk25:
           requires:
             - canary_jobs
@@ -1563,12 +1431,6 @@ workflows:
             - canary_jobs
             - misc_rockylinux_jdk25
             - misc_ubuntu_jdk27
-
-      - kvasir_rockylinux_jdk11:
-          requires:
-            - canary_jobs
-            - kvasir_rockylinux_jdk25
-            - kvasir_ubuntu_jdk11
 
       - kvasir_rockylinux_jdk25:
           requires:
