@@ -201,11 +201,12 @@ public class InstrumentHandler extends CommandHandler {
     }
   }
 
-  private static Arguments errorWhileReadingArguments =
+  private static final Arguments errorWhileReadingArguments =
       new Arguments("error while reading arguments", new ArrayList<String>());
 
   /** Indicates that the user requested the usage message, which has already been printed. */
-  private static Arguments helpRequested = new Arguments("help requested", new ArrayList<String>());
+  private static final Arguments helpRequested =
+      new Arguments("help requested", new ArrayList<String>());
 
   private Arguments readArguments(String[] args) {
 
@@ -222,42 +223,37 @@ public class InstrumentHandler extends CommandHandler {
         };
     // This class handles -h itself, because its usage message is printed by usageMessage().
     DaikonGetopt g = new DaikonGetopt(args, "h", longopts);
-    try {
-      int c;
-      while ((c = g.getopt()) != -1) {
-        switch (c) {
-          case 0:
-            // got a long option
-            String option_name = longopts[g.getLongind()].getName();
+    int c;
+    while ((c = g.getopt()) != -1) {
+      switch (c) {
+        case 0:
+          // got a long option
+          String option_name = longopts[g.getLongind()].getName();
 
-            if (create_checker_classes_SWITCH.equals(option_name)) {
-              createCheckerClasses = true;
-            } else if (output_only_high_conf_invariants_SWITCH.equals(option_name)) {
-              InstrumentVisitor.outputOnlyHighConfInvariants = true;
-            } else if (make_all_fields_public_SWITCH.equals(option_name)) {
-              InstrumentVisitor.makeAllFieldsPublic = true;
-            } else if (directory_SWITCH.equals(option_name)) {
-              instrumented_directory = Daikon.getOptarg(g);
-            } else if (checkers_directory_SWITCH.equals(option_name)) {
-              checkersOutputDirName = Daikon.getOptarg(g);
-            } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
-              Global.debugAll = true;
-            } else if (Daikon.debug_SWITCH.equals(option_name)) {
-              daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
-            } else {
-              throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
-            }
-            break;
-          case 'h':
-            usageMessage();
-            return helpRequested;
-          default:
-            throw new Daikon.BugInDaikon("getopt() returned " + c);
-        }
+          if (create_checker_classes_SWITCH.equals(option_name)) {
+            createCheckerClasses = true;
+          } else if (output_only_high_conf_invariants_SWITCH.equals(option_name)) {
+            InstrumentVisitor.outputOnlyHighConfInvariants = true;
+          } else if (make_all_fields_public_SWITCH.equals(option_name)) {
+            InstrumentVisitor.makeAllFieldsPublic = true;
+          } else if (directory_SWITCH.equals(option_name)) {
+            instrumented_directory = Daikon.getOptarg(g);
+          } else if (checkers_directory_SWITCH.equals(option_name)) {
+            checkersOutputDirName = Daikon.getOptarg(g);
+          } else if (Daikon.debugAll_SWITCH.equals(option_name)) {
+            Global.debugAll = true;
+          } else if (Daikon.debug_SWITCH.equals(option_name)) {
+            daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
+          } else {
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
+          }
+          break;
+        case 'h':
+          usageMessage();
+          return helpRequested;
+        default:
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
-    } catch (Daikon.UserError e) {
-      System.err.println("Error: " + e.getMessage());
-      return errorWhileReadingArguments;
     }
     // The index of the first non-option argument -- the name of the
     // invariant file.
