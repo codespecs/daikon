@@ -35,8 +35,7 @@ had an effect only for version 1 files.
 
 Scripts:
 
-* `convertcsv.pl` and the cluster analysis scripts (`runcluster.pl` and the
-  scripts it calls) now read and write version 2 files.
+* `convertcsv.pl` now reads and writes version 2 files.
 * Removed scripts that processed only version 1 files:  `auxinfo.pl`,
   `clean-decls.php`, `copy_comparable.pl`, `decls2comp-1.0.py`,
   `decls-lackwit-disjoint.pl`, `dfec-to-kvasir.py`, `dfec-to-kvasir-dtrace.py`,

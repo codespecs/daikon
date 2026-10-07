@@ -102,18 +102,21 @@ if ($algorithm eq 'hierarchical' || $algorithm eq 'km') {
 
 foreach my $dtrace_file (@dtrace_files) {
 
-  # Run DtraceNonceFixer in order for xmeans and possibly other
-  # clustering methods to work.  Read its output, which is a temporary
-  # file, rather than modifying the user's dtrace file.
+  # need to run the DtraceNonceDoctor in order in order for
+  # xmeans and possibly other clustering methods to work
   system_or_die ("java -cp $SCRIPTDIR/../daikon.jar daikon.tools.DtraceNonceFixer $dtrace_file");
-  my $gz_suffix = ($dtrace_file =~ /\.gz$/) ? ".gz" : "";
-  my $fixed_file = "${dtrace_file}_fixed$gz_suffix";
-  my $all_fixed_file = "${dtrace_file}_all_fixed$gz_suffix";
+  if (-e ("$dtrace_file" . "_all_fixed")) {
+    system_or_die ("mv $dtrace_file" . "_all_fixed $dtrace_file");
+  }
+  if (-e "dtrace_file" . "_all_fixed.gz") {
+    system_or_die ("mv $dtrace_file" . "_all_fixed.gz $dtrace_file");
+  }
 
-  if ($gz_suffix) {
-    open (DTRACE_IN, "zcat $all_fixed_file |") || &dieusage("couldn't open dtrace file $all_fixed_file with zcat");
+
+ if ($dtrace_file =~ /\.gz$/) {
+    open (DTRACE_IN, "zcat $dtrace_file |") || &dieusage("couldn't open dtrace file $dtrace_file with zcat");
   } else {
-    open (DTRACE_IN, $all_fixed_file) || &dieusage("couldn't open dtrace file $all_fixed_file");
+    open (DTRACE_IN, $dtrace_file) || &dieusage("couldn't open dtrace file $dtrace_file");
   }
 
   $dtrace_file =~ /(.*)\.dtrace/;
@@ -126,18 +129,12 @@ foreach my $dtrace_file (@dtrace_files) {
   while (<DTRACE_IN>) {
     my $line = $_;
 #    print ("$line");
-    if ($line =~ /^ppt /) {
-      # A program point declaration; the decls file provides the declarations.
-      &skip_till_next(*DTRACE_IN);
-    } elsif ($line =~ /:::/) {
+    if ($line =~ /:::/) {
       my $pptname = $line;
       chomp ($pptname);
       &insert_cluster_info($pptname);
     }
   }
-  close (DTRACE_IN);
-  close (DTRACE_OUT);
-  unlink ($fixed_file, $all_fixed_file);
 }
 
 
