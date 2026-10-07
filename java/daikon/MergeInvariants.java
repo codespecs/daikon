@@ -247,7 +247,7 @@ public final class MergeInvariants {
       assert merge_ppts != null
           : "@AssumeAssertion(nullness): inv_files is non-empty, so for-loop body executed";
 
-      // Remove all of the slices, equality sets, to start
+      // Remove all of the slices and equality sets, to start
       debugProgress.fine("Cleaning ppt map in preparation for merge");
       for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
         ppt.clean_for_merge();
@@ -266,21 +266,15 @@ public final class MergeInvariants {
       PptRelation.init_hierarchy(merge_ppts);
     }
 
-    // Create a hierarchy between the merge exitNN points and the
-    // corresponding points in each of the specified maps.  This
-    // should only be created at the exitNN points (i.e., the leaves)
-    // so that the normal processing will create the invariants at
-    // upper points.
+    // Create a hierarchy between the merge leaves (such as exitNN points)
+    // and the corresponding points in each of the specified maps.  This
+    // should only be created at the leaves so that the normal processing
+    // will create the invariants at upper points.
     debugProgress.fine("Building hierarchy between leaves of the maps");
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
 
-      // Skip everything that is not a final exit point
-      if (!ppt.ppt_name.isExitPoint()) {
-        assert !ppt.children.isEmpty() : ppt;
-        continue;
-      }
-      if (ppt.ppt_name.isCombinedExitPoint()) {
-        assert !ppt.children.isEmpty() : ppt;
+      // Skip everything that is not a leaf
+      if (!ppt.is_dataflow_leaf()) {
         continue;
       }
 
@@ -298,6 +292,7 @@ public final class MergeInvariants {
       }
 
       // Loop over each of the input ppt maps, looking for the same ppt
+      List<PptTopLevel> merge_children = new ArrayList<>();
       for (int j = 0; j < pptmaps.size(); j++) {
         PptMap pmap = pptmaps.get(j);
         PptTopLevel child = pmap.get(ppt.name());
@@ -305,6 +300,7 @@ public final class MergeInvariants {
         if (child == null) {
           continue;
         }
+        merge_children.add(child);
         if (child.equality_view == null) {
           System.out.println(
               "equality_view == null in child ppt: "
@@ -331,7 +327,22 @@ public final class MergeInvariants {
 
         // Remove implications, they don't merge correctly
         child.remove_implications();
+      }
 
+      // If no input map contains this leaf (for example, because ppt filtering removed it), it
+      // keeps the equality views that reading the decls file gave it, and it gets no invariants.
+      if (merge_children.isEmpty()) {
+        continue;
+      }
+
+      // A ppt with children must not have an equality view.  (The equality views were created
+      // when reading the decls file, or have already been removed from the .inv template.)
+      ppt.clean_for_merge();
+      for (PptConditional cond : ppt.cond_iterable()) {
+        cond.clean_for_merge();
+      }
+
+      for (PptTopLevel child : merge_children) {
         // If the ppt has splitters, attach the child's splitters to the
         // splitters.  Don't attach the ppt itself, as its invariants can
         // be built from the invariants in the splitters.
@@ -343,8 +354,6 @@ public final class MergeInvariants {
         }
       }
 
-      // Make sure at least one child was found
-      assert !ppt.children.isEmpty() : ppt;
       if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters) {
@@ -352,6 +361,15 @@ public final class MergeInvariants {
             assert !p.children.isEmpty() : p;
           }
         }
+      }
+    }
+
+    // Every ppt with no children needs an equality view.  This includes a non-leaf whose equality
+    // view clean_for_merge removed, and a leaf that no input map contains when
+    // Daikon.use_equality_optimization is false.
+    for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
+      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
+        ppt.create_equality_view();
       }
     }
 
@@ -390,18 +408,15 @@ public final class MergeInvariants {
     long duration = System.nanoTime() - startTime;
     debugProgress.fine("Time spent in implications: " + TimeUnit.NANOSECONDS.toSeconds(duration));
 
-    // Remove the PptRelation links so that when the file is written
+    // Remove the merge PptRelation links so that when the file is written
     // out it only includes the new information
     for (PptTopLevel ppt : merge_ppts.pptIterable()) {
-      if (!ppt.ppt_name.isExitPoint()) {
+      if (!ppt.is_dataflow_leaf()) {
         continue;
       }
-      if (ppt.ppt_name.isCombinedExitPoint()) {
-        continue;
-      }
-      ppt.children.clear();
+      ppt.children.removeIf(MergeInvariants::isMergeChildRel);
       for (PptConditional cond : ppt.cond_iterable()) {
-        cond.children.clear();
+        cond.children.removeIf(MergeInvariants::isMergeChildRel);
       }
     }
 
@@ -418,6 +433,16 @@ public final class MergeInvariants {
       // Print the invariants
       PrintInvariants.print_invariants(merge_ppts);
     }
+  }
+
+  /**
+   * Returns true if the relation was created by {@link PptRelation#newMergeChildRel}.
+   *
+   * @param rel a relation
+   * @return true if the relation is from a merge ppt to the corresponding ppt of an input map
+   */
+  private static boolean isMergeChildRel(PptRelation rel) {
+    return rel.getRelationType() == PptRelation.PptRelationType.MERGE_CHILD;
   }
 
   /**
