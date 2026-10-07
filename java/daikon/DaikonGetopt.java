@@ -1,5 +1,7 @@
 package daikon;
 
+import static daikon.tools.nullness.NullnessUtil.castNonNull;
+
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.util.Arrays;
@@ -31,16 +33,32 @@ public class DaikonGetopt extends Getopt {
   private @Nullable String usageHint = "run with -h for usage";
 
   /**
-   * Creates a command-line option processor that recognizes short and long options.
+   * Creates a command-line option processor that recognizes short and long options. Its description
+   * of a bad option does not suggest running with {@code -h}, because it does not handle {@code
+   * -h}.
    *
    * @param argv the command-line arguments
    * @param optstring the short options, in the format of {@link Getopt}
    * @param longopts the long options
    */
   public DaikonGetopt(String[] argv, String optstring, LongOpt[] longopts) {
-    super(PROGNAME, argv, optstring, longopts);
+    super(PROGNAME, argv, nonEmpty(optstring), longopts);
     this.usage = null;
+    usageHint = null;
     opterr = false;
+  }
+
+  /**
+   * Returns short options that are equivalent to the given ones but are not empty. Getopt replaces
+   * an empty optstring by " ", which makes "- " a valid option.
+   *
+   * @param optstring short options, in the format of {@link Getopt}
+   * @return {@code optstring}, or ":" if {@code optstring} is empty
+   */
+  private static String nonEmpty(String optstring) {
+    // A leading ':' only makes Getopt return ':' rather than '?' for a missing argument, which
+    // getopt() treats identically.
+    return optstring.isEmpty() ? ":" : optstring;
   }
 
   /**
@@ -250,14 +268,15 @@ public class DaikonGetopt extends Getopt {
   private String longOptionMessage(String arg) {
     int equalsPos = arg.indexOf('=');
     String name = (equalsPos == -1) ? arg.substring(2) : arg.substring(2, equalsPos);
-    LongOpt[] longopts = long_options;
     // Getopt treats an empty name, as in "--=foo", as a prefix of every long option.
     if (name.isEmpty()) {
       return "Unrecognized command-line option " + arg;
     }
-    if (longopts == null || longind == -1) {
+    if (longind == -1) {
       return "Unrecognized command-line option --" + name;
     }
+    // Every constructor passes long options to Getopt.
+    LongOpt[] longopts = castNonNull(long_options);
     LongOpt match = longopts[longind];
     // For an inexact match, Getopt sets longind to the first long option that has the given
     // prefix.  The match is ambiguous if a later long option also has the prefix.
@@ -273,7 +292,7 @@ public class DaikonGetopt extends Getopt {
     } else if (equalsPos == -1 && match.getHasArg() == LongOpt.REQUIRED_ARGUMENT) {
       return "Command-line option --" + match.getName() + " requires an argument";
     } else {
-      return "Bad command-line option " + arg;
+      throw new Daikon.BugInDaikon("Getopt rejected " + arg + " for no known reason");
     }
   }
 }
