@@ -27,6 +27,8 @@ Further documentation can be found in:
    command-line option:  they describe the problem and exit with a non-zero
    status.  Previously, Daikon printed its usage message and exited with
    status 0, and most other tools ignored the bad option and continued.
+* All tools accept `-h` and `--help`, which print a usage message and exit
+   with status 0.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
    no effect.
 
