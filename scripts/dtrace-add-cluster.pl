@@ -126,11 +126,13 @@ foreach my $dtrace_file (@dtrace_files) {
     || die "couldn't open $newfile for output";
 
   print "Reading from $dtrace_file\n";
-  # Headers and program point declarations are omitted; the decls file
-  # provides the declarations.
-  while (defined(my $record = read_record(\*DTRACE_IN, $dtrace_file))) {
-    if ($record->{kind} eq "data") {
-      &insert_cluster_info($record->{text});
+  while (<DTRACE_IN>) {
+    my $line = $_;
+#    print ("$line");
+    if ($line =~ /:::/) {
+      my $pptname = $line;
+      chomp ($pptname);
+      &insert_cluster_info($pptname);
     }
   }
 }
@@ -146,13 +148,10 @@ exit();
 
 ########################### subroutines ######################
 
-# Takes a data trace record, and outputs it with a cluster number inserted.
-# Discards the record if that ppt was not clustered.
+# Read a record from a dtrace file and insert a cluster number if
+# appropriate.  Discard the record if that ppt was not clustered.
 sub insert_cluster_info ( $ ) {
-  my ($record) = @_;
-  my @lines = split(/^/m, $record);
-  my $pptname = shift @lines;
-  chomp ($pptname);
+  my $pptname = $_[0];
 
   # If the first 'variable' at this ppt execution is not an
   # invocation nonce, then this program point does not have an
@@ -160,14 +159,17 @@ sub insert_cluster_info ( $ ) {
   # is used to match the entry and exit program points to cluster
   # information
   my $invoc;			# the invocation nonce for this execution.
-  my $line = shift @lines;
-  if (!defined($line) || $line !~ /this.invocation.nonce/) {
+  my $line = <DTRACE_IN>;
+#  print "$line\n";
+  if ($line !~ /this.invocation.nonce/) {
     die "No nonces present, and this program adds them incorrectly.";
     $pptname_to_nonces{$pptname}++;
     $invoc = $pptname_to_nonces{$pptname};
   } else {
-    $invoc = shift @lines;
+    $invoc = <DTRACE_IN>;
     chomp($invoc);
+    $line = <DTRACE_IN>;
+
   }
 
   # Find out if this program point was clustered.  If it was, retrieve the
@@ -177,21 +179,54 @@ sub insert_cluster_info ( $ ) {
   # information, because the entry and exit with the same invocation number
   # must have the same cluster number.
 
-  # extract_vars.pl names the cluster files by the unescaped name.
-  my $pptstem = unescape_decl($pptname);
+  my $pptstem = $pptname;
   $pptstem =~ s/:::(ENTER|EXIT).*//;
   $pptstem = &cleanup_pptname($pptstem);
 
   my $cluster_number = $pptname_to_cluster{$pptstem}[$invoc];
-  if ((defined($cluster_number)) && ($cluster_number != 0)) {
+  if ((! defined($cluster_number)) || ($cluster_number == 0)) {
+      chomp ($line);
+      if (! ($line eq "")) {
+	  &skip_till_next(*DTRACE_IN);
+      }
+  } else {
     my $output = "$pptname\nthis_invocation_nonce\n$invoc\n";
     $output = $output."cluster\n$cluster_number\n1\n";
-    $output = $output . join("", @lines);
-    $output .= "\n" if $output !~ /\n\z/;
-    print DTRACE_OUT $output, "\n";
+    print DTRACE_OUT $output;
+    print DTRACE_OUT $line;
+    if ($line =~ /^\s*$/) {
+      # this ppt has no variables.
+      return;
+    }
+    &copy_till_next(*DTRACE_IN, *DTRACE_OUT);
   }
   return;
 }				# insert_cluster_info
+
+
+# read an opened file till you reach a blank line, then return
+sub skip_till_next(*) {
+     local *FHANDLE = $_[0];
+    my $line;
+    do {
+	$line = <FHANDLE>;
+    } until ($line =~ /^\s*$/);
+    return;
+}				# skip_till_next
+
+
+# copy one file into another, until a blank line is reached.
+sub copy_till_next(**) {
+  my $line;
+  local (*INHANDLE, *OUTHANDLE) = @_;
+
+  while ($line = <INHANDLE>) {
+    print OUTHANDLE $line;
+    if ($line =~ /^\s*$/) {
+      return;
+    }
+  }
+}				# copy_till_next
 
 ########################## read_cluster_info_xxx ##########
 # the return is an associative array. The keys are the program point stems

@@ -123,20 +123,24 @@ foreach my $dtrace_file (@dtrace_files) {
   }
 
   # print "opened $dtrace_file\n";
-  while (defined(my $record = read_record(\*DTRACE, $dtrace_file))) {
-    next if $record->{kind} ne "data";
-    my @lines = split(/\n/, $record->{text});
-    my $pptname = unescape_decl(shift @lines);
+  while (<DTRACE>) {
+    my $line = $_;
+    if ($line =~ /:::/) {
+      my $pptname = $line;
+      chomp ($pptname);
 
-    if ($pptname !~ /:::ENTER/ && exists $pptname_to_fhandles{$pptname}) {
-      my @ppt_execution = &read_execution($pptname, @lines); # [pptname, invocation_nonce, @variable_values]
-      push @{$pptname_to_vararrays{$pptname}}, @ppt_execution;
-      if ($algorithm eq 'km' || $algorithm eq 'hierarchical') {
-	&output_seq(@ppt_execution);
-      } elsif ($algorithm eq 'xm') {
-	&output_xmeans(@ppt_execution);
+      if ($pptname =~ /:::ENTER/ || !(exists $pptname_to_fhandles{$pptname})) {
+	&skip_till_next(*DTRACE);
       } else {
-	croak("bad output format $algorithm");
+	my @ppt_execution = &read_execution($pptname); # [pptname, invocation_nonce, @variable_values]
+	push @{$pptname_to_vararrays{$pptname}}, @ppt_execution;
+	if ($algorithm eq 'km' || $algorithm eq 'hierarchical') {
+	  &output_seq(@ppt_execution);
+	} elsif ($algorithm eq 'xm') {
+	  &output_xmeans(@ppt_execution);
+	} else {
+	  croak("bad output format $algorithm");
+	}
       }
     }
   }
@@ -237,14 +241,13 @@ sub sample_large_ppts () {
   }
 }
 
-# Takes the program point name and the remaining lines of a data trace
-# record (an execution), and returns an array in the format
-# [pptname, invocation_nonce, @variable_values]
-sub read_execution ( $@ ) {
-  my ($pptname, @lines) = @_;
+# reads a paragraph of a dtrace file (an execution) and returns an
+# array in the format [pptname, invocation_nonce, @variable_values]
+sub read_execution ( $ ) {
   my @vararray = ();
   my @objarray;
 
+  my $pptname = $_[0];
   # the pptname is the first element in the array. The variables follow it
   push @vararray, $pptname;
 
@@ -255,20 +258,22 @@ sub read_execution ( $@ ) {
 
   my ($varname, $value);
 
-  $varname = shift @lines;
-  if (!defined($varname) || $varname !~ /this.invocation.nonce/) {
+  $varname = <DTRACE>;
+  if ($varname !~ /this.invocation.nonce/) {
     $pptname_to_nonces{$pptname}++;
     push @vararray, $pptname_to_nonces{$pptname};
   } else {
-    $value = shift @lines;
+    $value = <DTRACE>;
+    chomp($value);
     push @vararray, $value;
-    $varname = shift @lines;
+    $varname = <DTRACE>;
   }
 
   # get the values of the variables at this ppt that we want to cluster
-  while (defined($varname)) {
-    $varname = unescape_decl($varname);
-    $value = shift @lines;
+  while ($varname !~ /^$/) {
+    chomp( $varname );
+    $value = <DTRACE>;
+    chomp ($value);
 
     # see if the variable is an Object variable
     my $object = 0;
@@ -282,7 +287,7 @@ sub read_execution ( $@ ) {
 
     if ($object) {
       if ($value =~ /null/) {
-	$value = -5;
+	$value =~ -5;
       } elsif ($value =~ /missing/) {
 	$value = 0;
       } else {
@@ -295,15 +300,17 @@ sub read_execution ( $@ ) {
     $value =~ s/null/0/;
     $value =~ s/missing/-11111/;
     $value =~ s/NaN/1e10/;
-    shift @lines;		# the modified bit is unused
+    my $mod = <DTRACE>;		# "$mod" is unused
 
-    # extract variables to be clustered.  read_decl_ppt omits class names,
-    # arrays, and strings from %pptname_to_varnames.
-    if (exists $pptname_to_varnames{$pptname}{$varname}) {
-      push @vararray, $value;
+    # extract variables to be clustered.
+    # Omit Object variables, .class, array[] or a string
+    if ( $varname !~ /\.class/ && $varname !~ /\[\]/ && $varname !~ /\.toString/) {
+      if ( exists $pptname_to_varnames{$pptname}{$varname}) {
+	push @vararray, $value;
+      }
     }
 
-    $varname = shift @lines;
+    $varname = <DTRACE>;
   }
   return @vararray;
 }
@@ -413,6 +420,17 @@ sub output_seq ( @ ) {
   }
 }
 
+# read an opened file till you reach a blank line, then return
+# (used to skip a paragraph of lines).
+sub skip_till_next ( * ) {
+  local *FHANDLE = $_[0];
+  while (my $line = <FHANDLE>) {
+    if ($line =~ /^\s*$/) {
+      return;
+    }
+  }
+}				# skip_till_next
+
 # return an array of $target random numbers between 0 (inclusive) and
 # $max(exclusive). These are used to sample the invocations at a
 # program point.
@@ -439,66 +457,64 @@ sub get_random_numbers ( $$ ) {
 }				# get_random_numbers
 
 # read a decls file, figure out the number of variables at each program
-# point, and open an output file for each program point
+# point, and open an output file for each decls file
 sub read_decls_file ( $ ) {
   my $decls_file = $_[0];
   open(DECL, $decls_file) || &dieusage("cannot read decls file $decls_file");
-  foreach my $ppt (read_ppt_decls(\*DECL, $decls_file)) {
-    my $pptname = &read_decl_ppt($ppt, $decls_file);
+  while (<DECL>) {
+    my $line = $_;
+    if ($line =~ /^DECLARE$/) {
+      my $pptname = &read_decl_ppt();
 
-    # extract the variables out of only the EXIT program
-    # points. Corresponding ENTER and EXIT invocations must belong to a
-    # single cluster, so we can perform clustering on either the ENTER or
-    # the EXIT, but not both. We choose the exit program point because it
-    # has more variables in scope there (eg. the return variable, etc).
-    if ($pptname !~ /ENTER/) {
-      my $pptfilename = &cleanup_pptname($pptname);
-      $pptfilename = $pptfilename.".runcluster_temp";
-      if ($algorithm eq 'km' || $algorithm eq 'hierarchical') {
-	&open_file_for_output_seq($pptname, $pptfilename);
-      } elsif ($algorithm eq 'xm') {
-	&open_file_for_output_xmeans($pptname, $pptfilename);
-      } else {
-	croak("bad output format $algorithm");
+      # extract the variables out of only the EXIT program
+      # points. Corresponding ENTER and EXIT invocations must belong to a
+      # single cluster, so we can perform clustering on either the ENTER or
+      # the EXIT, but not both. We choose the exit program point because it
+      # has more variables in scope there (eg. the return variable, etc).
+      if ($pptname !~ /ENTER/) {
+	my $pptfilename = &cleanup_pptname($pptname);
+	$pptfilename = $pptfilename.".runcluster_temp";
+	if ($algorithm eq 'km' || $algorithm eq 'hierarchical') {
+	  &open_file_for_output_seq($pptname, $pptfilename);
+	} elsif ($algorithm eq 'xm') {
+	  &open_file_for_output_xmeans($pptname, $pptfilename);
+	} else {
+	  croak("bad output format $algorithm");
+	}
       }
     }
   }
-  close(DECL);
 }				# read_decls_file
 
-# Returns true if a variable with the given name and rep type should not be
-# clustered: its value is a string (including a class name) or an array, or
-# it is derived from a class name, an array, or a toString() call.
-sub excluded_var ( $$ ) {
-  my ($varname, $rep_type) = @_;
-  return ($rep_type eq "java.lang.String" || $rep_type =~ /\[\]$/
-          || $varname =~ /\.class|\[\]|\.toString/);
-}
+# read a program point declaration in the decls file.
+sub read_decl_ppt () {
 
-# Records the variables to be clustered at a program point.  The arguments
-# are a program point declaration, as returned by parse_ppt_decl, and the
-# name of the decls file.  Returns the program point name.
-sub read_decl_ppt ( $$ ) {
+  my $nvars;			# number of variables at the program point
+  my $pptname = <DECL>;		# the pptname.
+  chomp ($pptname);
 
-  my ($ppt, $decls_file) = @_;
-  check_no_cluster_var($ppt, $decls_file);
-  my $pptname = $$ppt{name};
-  my $nvars = 0;		# number of variables at the program point
+  # now read the variable names and types
+  my $varname;
+  while ( defined($varname = <DECL>) && ($varname !~ /^$/) ) {
+    chomp ($varname);
+    my $declared_type = <DECL>;	# "$declared_type" is unused
+    my $rep_type = <DECL>;
 
-  foreach my $var (@{$$ppt{vars}}) {
-    my $varname = $$var{name};
-    my $rep_type = $$var{rep_type};
-    # A constant's value does not appear in data trace records.
-    if (defined($$var{constant}) || excluded_var($varname, $rep_type)) {
-      next;
-    }
     # If the variable is an Object, keep note of that. Will be ignored (not
     # be clustered) later because its value is a hashcode.
-    if ($rep_type =~ /hashcode/) {
-      push @{$pptname_to_objectvars{$pptname}}, $varname;
+    if ( $varname !~ /\.class/ && $varname !~ /\[\]/ && $varname !~ /\.toString/) {
+      if ($rep_type =~ /hashcode/) {
+	push @{$pptname_to_objectvars{$pptname}}, $varname;
+	$nvars++;		# added for object
+	$pptname_to_varnames{$pptname}{$varname} = 1;
+      } elsif ( $rep_type =~ /=/) {
+	# definition. do nothing
+      } else {
+	$nvars++;
+	$pptname_to_varnames{$pptname}{$varname} = 1;
+      }
     }
-    $nvars++;
-    $pptname_to_varnames{$pptname}{$varname} = 1;
+    my $var_comp = <DECL>;  # variable comparability; "$var_comp" is unused
   }
   # Store the number of variables at this program point. Remember that
   # @vararray[1] stores the program point name. The invocation nonce is
