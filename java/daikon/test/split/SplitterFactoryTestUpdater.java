@@ -269,9 +269,8 @@ public class SplitterFactoryTestUpdater {
     ps.println("    }");
     ps.println("    if (!result.wasSuccessful()) {");
     ps.println(
-        "      System.err.println(StringsPlume.nPlural(result.getFailureCount(), \"test\")"
+        "      throw new Daikon.UserError(StringsPlume.nPlural(result.getFailureCount(), \"test\")"
             + " + \" failed\");");
-    ps.println("      System.exit(1);");
     ps.println("    }");
     ps.println("  }");
     ps.println();
