@@ -681,8 +681,6 @@ daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
 	# Don't do  ${MAKE} clean  which deletes .class files
 	(cd ${TMPDIR}/daikon/java; ${RM_TEMP_FILES})
 
-	## Front ends
-
 	# Kvasir C front end
 # We use the --filter option twice with rsync to exclude unneeded files.
 # The first attempts to ignore all files indicated by the contents

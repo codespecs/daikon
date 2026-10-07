@@ -8616,7 +8616,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  CompletionChar PathCompletionChar subsubsection MYDOCU ENV arg
 @c  LocalWords:  DataStructures dotfiles ActiveState mypackage MyClass emph Xmx
 @c  LocalWords:  StackArTester PrintInvariants theArray topOfStack Ljava gdwarf
-@c  LocalWords:  kvasir decls Valgrind config Rijndael rijndaeltest perl bday
+@c  LocalWords:  kvasir decls Valgrind config Rijndael rijndaeltest perl
 @c  LocalWords:  dtype standalone decl asis noversion num conf nohierarchy ppt
 @c  LocalWords:  dbg mem stat postprocessed itemx mux pre val classname regexp
 @c  LocalWords:  ListImplementors dataflow getLogger JML jml hashcode DBC Jtest

@@ -498,7 +498,7 @@ File format
     - Input language record.  Specifies the language of the target
       program.
 
-        input-language |C|C++|Perl|Java
+        input-language |C|C++|Java
 
     - The type of comparability used in the file
 
@@ -879,7 +879,7 @@ Resolved Issues:
       other languages. For instance, as mentioned above it would be
       nice to use "*" for dereferences in C (though we don't at the
       moment). In Perl, there's a class of variables whose names start
-      with "*" (though dfepl doesn't support them at the moment) and
+      with "*" and
       there's also a global variable for just about every punctuation
       character, including $*. Perhaps a multi-character marker would
       be more robust?  (smcc)
