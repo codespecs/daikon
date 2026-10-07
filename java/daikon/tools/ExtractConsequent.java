@@ -15,6 +15,9 @@ import daikon.VarInfo;
 import daikon.inv.Implication;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
+import daikon.inv.binary.twoScalar.IntEqual;
+import daikon.inv.binary.twoScalar.IntNonEqual;
+import daikon.inv.unary.scalar.OneOfScalar;
 import gnu.getopt.*;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,9 +27,9 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -74,12 +77,15 @@ public class ExtractConsequent {
     }
   }
 
-  /* A HashMap whose keys are PPT names (Strings) and whose values are
-  HashMaps whose keys are predicate names (Strings) and whose values are
-   HashMaps whose keys are Strings (normalized java-format invariants)
-     and whose values are HashedConsequent objects. */
+  /**
+   * Maps a program point name to a map whose keys are cluster keys (see {@link #clusterKey}) and
+   * whose values are maps whose keys are Strings (normalized Java-format invariants) and whose
+   * values are HashedConsequent objects. Each program point has its own clustering, so conditions
+   * from different program points are never combined. The maps are sorted, for deterministic
+   * output.
+   */
   private static Map<String, Map<String, Map<String, HashedConsequent>>> pptname_to_conditions =
-      new HashMap<>();
+      new TreeMap<>();
 
   /** The usage message for this program. */
   private static String usage =
@@ -264,14 +270,16 @@ public class ExtractConsequent {
 
   /**
    * Returns the given expression, parenthesized if it may contain an operator whose precedence is
-   * lower than that of conjunction, such as "||", " or ", "?:", or the ESC/JML "==&gt;". Such an
-   * expression must be parenthesized when it is a conjunct.
+   * lower than that of conjunction, such as "||", " or ", "?:", or the ESC/JML "==&gt;", "&lt;==",
+   * "&lt;==&gt;", and "&lt;=!=&gt;". Such an expression must be parenthesized when it is a
+   * conjunct. Operators within string and character literals are ignored.
    *
    * @param expr a Java, ESC, or Daikon expression
    * @return the expression, parenthesized if necessary to be used as a conjunct
    */
   static String parenthesizeIfNeeded(String expr) {
-    return low_precedence_pattern.matcher(expr).find() ? "(" + expr + ")" : expr;
+    String withoutLiterals = literal_pattern.matcher(expr).replaceAll("\"\"");
+    return low_precedence_pattern.matcher(withoutLiterals).find() ? "(" + expr + ")" : expr;
   }
 
   /**
@@ -283,12 +291,12 @@ public class ExtractConsequent {
    * @return true if the invariant uses no boolean variable, or is legal Java over booleans
    */
   static boolean isLegalForBooleans(Invariant inv) {
-    VarInfo[] vis = inv.ppt.var_infos;
-    if (inv instanceof daikon.inv.unary.scalar.OneOfScalar) {
+    // OneOfScalar is the only scalar invariant that formats a boolean specially, as "b == true".
+    if (inv instanceof OneOfScalar) {
       return true;
     }
-    if (inv instanceof daikon.inv.binary.twoScalar.IntEqual
-        || inv instanceof daikon.inv.binary.twoScalar.IntNonEqual) {
+    VarInfo[] vis = inv.ppt.var_infos;
+    if (inv instanceof IntEqual || inv instanceof IntNonEqual) {
       // "b == i" is not legal Java if exactly one of the operands is a boolean.
       return isBoolean(vis[0]) == isBoolean(vis[1]);
     }
@@ -337,7 +345,8 @@ public class ExtractConsequent {
       }
     }
     if (!invs.isEmpty()) {
-      String pptname = spinfoPptName(ppt);
+      // The full name, which SplitterList.matches matches only to this program point.
+      String pptname = ppt.name();
       for (Invariant maybe_as_inv : invs) {
         Implication maybe = (Implication) maybe_as_inv;
 
@@ -418,6 +427,7 @@ public class ExtractConsequent {
 
         // 2) Numeric invariants over booleans, such as "b != 0", which are not legal Java
         if (!isLegalForBooleans(inv)) {
+          debug.fine("Not legal Java over booleans: " + inv.format_using(OutputFormat.JAVA));
           continue;
         }
 
@@ -444,35 +454,6 @@ public class ExtractConsequent {
   }
 
   /**
-   * Returns the name to write after "PPT_NAME" in the .spinfo file, for conditions found at the
-   * given program point.
-   *
-   * <p>For an entry or exit program point, the result is the method's name followed by ":::", such
-   * as "pkg.Foo.bar(int):::". SplitterFactory.matchPpt matches that name against the first of the
-   * method's exit program points that Daikon processes. SplitterList.get, which matches by
-   * substring, applies the resulting splitters to every program point of the method and to no other
-   * method. Conditions found at different program points of one method are therefore merged and
-   * output once. The full name of a numbered exit point would not work: SplitterList.get would
-   * apply "Foo.bar():::EXIT1" to "Foo.bar():::EXIT12" as well.
-   *
-   * <p>For any other program point, the result is the full name, which SplitterFactory.matchPpt
-   * matches exactly.
-   *
-   * @param ppt a program point
-   * @return the name of the program point in the .spinfo file
-   */
-  static String spinfoPptName(PptTopLevel ppt) {
-    String name = ppt.name();
-    if (ppt.ppt_name.isEnterPoint() || ppt.ppt_name.isExitPoint()) {
-      int index = name.indexOf(FileIO.ppt_tag_separator);
-      if (index != -1) {
-        return name.substring(0, index + FileIO.ppt_tag_separator.length());
-      }
-    }
-    return name;
-  }
-
-  /**
    * Returns a key that identifies the cluster that the given invariant describes. The pre-state
    * value "orig(cluster)" and the post-state value "cluster" are equal, so the key for an invariant
    * over one is the same as the key for the same invariant over the other.
@@ -491,13 +472,13 @@ public class ExtractConsequent {
   private static boolean store_invariant(
       String predicate, String index, HashedConsequent consequent, String pptname) {
     if (!pptname_to_conditions.containsKey(pptname)) {
-      pptname_to_conditions.put(pptname, new HashMap<>());
+      pptname_to_conditions.put(pptname, new TreeMap<>());
     }
 
     Map<String, Map<String, HashedConsequent>> cluster_to_conditions =
         pptname_to_conditions.get(pptname);
     if (!cluster_to_conditions.containsKey(predicate)) {
-      cluster_to_conditions.put(predicate, new HashMap<>());
+      cluster_to_conditions.put(predicate, new TreeMap<>());
     }
 
     Map<String, HashedConsequent> conditions = cluster_to_conditions.get(predicate);
@@ -518,8 +499,8 @@ public class ExtractConsequent {
   }
 
   private static boolean contains_constant_non_012(Invariant inv) {
-    if (inv instanceof daikon.inv.unary.scalar.OneOfScalar) {
-      daikon.inv.unary.scalar.OneOfScalar oneof = (daikon.inv.unary.scalar.OneOfScalar) inv;
+    if (inv instanceof OneOfScalar) {
+      OneOfScalar oneof = (OneOfScalar) inv;
       // TODO: isInteresting has been removed.  Do we need to deal with it specially here?
       // OneOf invariants that indicate a small set ( > 1 element) of
       // possible values are not interesting, and have already been
@@ -573,8 +554,14 @@ public class ExtractConsequent {
   /** Matches the pre-state value of the "cluster" variable, in Daikon format. */
   static Pattern orig_cluster_pattern;
 
-  /** Matches an operator whose precedence is lower than that of conjunction. */
+  /**
+   * Matches an operator whose precedence is lower than that of conjunction. "&lt;==" is needed for
+   * reverse implication, and "&lt;=!=&gt;" contains neither "==&gt;" nor "&lt;==".
+   */
   static Pattern low_precedence_pattern;
+
+  /** Matches a string or character literal. */
+  static Pattern literal_pattern;
 
   static Pattern dot_class_pattern;
   static Pattern gteq_pattern;
@@ -591,6 +578,7 @@ public class ExtractConsequent {
       result_pattern = Pattern.compile("\\\\result\\b");
       orig_cluster_pattern = Pattern.compile("\\borig\\(cluster\\)");
       low_precedence_pattern = Pattern.compile("\\|\\|| or |==>|<==|<=!=>|\\?");
+      literal_pattern = Pattern.compile("\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'");
       dot_class_pattern = Pattern.compile("\\.class");
       inequality_pattern = Pattern.compile("[\\!<>]=");
       gteq_pattern = Pattern.compile(">=");

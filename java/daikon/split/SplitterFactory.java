@@ -1,5 +1,6 @@
 package daikon.split;
 
+import daikon.FileIO;
 import daikon.Global;
 import daikon.PptTopLevel;
 import java.io.BufferedWriter;
@@ -243,16 +244,20 @@ public class SplitterFactory {
     return fileCompiler.compileFiles(fileNames);
   }
 
-  /** Returns true if a Ppt's name matches the given pattern. */
+  /**
+   * Returns true if a Ppt's name matches the given name from a {@code .spinfo} file.
+   *
+   * @param ppt_name a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param ppt a program point
+   * @return true if the program point's name matches {@code ppt_name}
+   */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
+    if (ppt_name.contains(FileIO.ppt_tag_separator)) {
+      // A complete program point name.
+      return SplitterList.matches(ppt_name, ppt.name);
+    }
     if (ppt.name.equals(ppt_name)) {
       return true;
-    }
-    if (ppt_name.endsWith(":::EXIT")) {
-      String regex = Pattern.quote(ppt_name) + "[0-9]+";
-      if (matchPptRegex(regex, ppt)) {
-        return true;
-      }
     }
 
     // Look for corresponding EXIT ppt. This is because the exit ppt usually has

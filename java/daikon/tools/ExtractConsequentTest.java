@@ -22,6 +22,8 @@ import daikon.inv.binary.twoScalar.IntGreaterThan;
 import daikon.inv.binary.twoScalar.IntNonEqual;
 import daikon.inv.unary.scalar.OneOfScalar;
 import daikon.test.Common;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,11 +33,25 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class ExtractConsequentTest {
 
+  /** The value of {@code FileIO.new_decl_format} before these tests ran. */
+  private static @Nullable Boolean savedNewDeclFormat;
+
   /** Prepares for tests. */
   @BeforeClass
   public static void setUpClass() {
     daikon.LogHelper.setupLogs(INFO);
+    savedNewDeclFormat = FileIO.new_decl_format;
     FileIO.new_decl_format = true;
+  }
+
+  /** Restores global state, so that these tests do not affect other tests. */
+  @AfterClass
+  public static void tearDownClass() {
+    if (savedNewDeclFormat == null) {
+      FileIO.resetNewDeclFormat();
+    } else {
+      FileIO.new_decl_format = savedNewDeclFormat;
+    }
   }
 
   /**
@@ -55,35 +71,6 @@ public class ExtractConsequentTest {
         VarInfoAux.getDefault());
   }
 
-  /**
-   * Returns the name that ExtractConsequent writes for a program point with the given name.
-   *
-   * @param pptname the name of a program point
-   * @return the name of the program point in the .spinfo file
-   */
-  private static String spinfoPptName(String pptname) {
-    return ExtractConsequent.spinfoPptName(
-        Common.makePptTopLevel(pptname, new VarInfo[] {Common.newIntVarInfo("x")}));
-  }
-
-  @Test
-  public void testSpinfoPptName() {
-    String methodName = "pkg.Outer$Foo.bar(int):::";
-    assertEquals(methodName, spinfoPptName("pkg.Outer$Foo.bar(int):::ENTER"));
-    assertEquals(methodName, spinfoPptName("pkg.Outer$Foo.bar(int):::EXIT"));
-    assertEquals(methodName, spinfoPptName("pkg.Outer$Foo.bar(int):::EXIT1"));
-    assertEquals(methodName, spinfoPptName("pkg.Outer$Foo.bar(int):::EXIT12"));
-
-    assertEquals("pkg.Foo:::OBJECT", spinfoPptName("pkg.Foo:::OBJECT"));
-    assertEquals("pkg.Foo:::CLASS", spinfoPptName("pkg.Foo:::CLASS"));
-    assertEquals("aprogram.point:::POINT", spinfoPptName("aprogram.point:::POINT"));
-
-    // SplitterList.get applies a splitter to every ppt whose name contains the splitter's ppt
-    // name.  The method's name must not be contained in the name of a different method.
-    assertFalse("pkg.Foo.barBaz(int):::ENTER".contains(spinfoPptName("pkg.Foo.bar(int):::ENTER")));
-    assertFalse("pkg.Foo.bar(long):::ENTER".contains(spinfoPptName("pkg.Foo.bar(int):::ENTER")));
-  }
-
   @Test
   public void testParenthesizeIfNeeded() {
     assertEquals("x > 0", ExtractConsequent.parenthesizeIfNeeded("x > 0"));
@@ -95,6 +82,19 @@ public class ExtractConsequentTest {
     assertEquals("(x > 0 ==> y > 0)", ExtractConsequent.parenthesizeIfNeeded("x > 0 ==> y > 0"));
     assertEquals("(x > 0 <==> y > 0)", ExtractConsequent.parenthesizeIfNeeded("x > 0 <==> y > 0"));
     assertEquals("(b ? x : y)", ExtractConsequent.parenthesizeIfNeeded("b ? x : y"));
+    assertEquals("(x > 0 <== y > 0)", ExtractConsequent.parenthesizeIfNeeded("x > 0 <== y > 0"));
+    assertEquals(
+        "(x > 0 <=!=> y > 0)", ExtractConsequent.parenthesizeIfNeeded("x > 0 <=!=> y > 0"));
+
+    // Operators within literals are not operators.
+    assertEquals("s.equals(\"a?b\")", ExtractConsequent.parenthesizeIfNeeded("s.equals(\"a?b\")"));
+    assertEquals(
+        "s == \"this or \\\" that\"",
+        ExtractConsequent.parenthesizeIfNeeded("s == \"this or \\\" that\""));
+    assertEquals("c == '?'", ExtractConsequent.parenthesizeIfNeeded("c == '?'"));
+    assertEquals(
+        "(c == '?' || s == \"||\")",
+        ExtractConsequent.parenthesizeIfNeeded("c == '?' || s == \"||\""));
   }
 
   @Test

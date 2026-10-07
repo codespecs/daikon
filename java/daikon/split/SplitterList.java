@@ -1,5 +1,6 @@
 package daikon.split;
 
+import daikon.FileIO;
 import daikon.Global;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -155,6 +156,35 @@ public abstract class SplitterList {
   // //////////////////////
 
   /**
+   * Returns true if the name on a PPT_NAME line of a {@code .spinfo} file designates the given
+   * program point.
+   *
+   * <p>A name that contains ":::", such as "pkg.Foo.bar(int):::EXIT1", is a complete program point
+   * name. It designates only the program point of that name, except that a name ending with
+   * ":::EXIT" also designates the method's numbered exit points, such as
+   * "pkg.Foo.bar(int):::EXIT12".
+   *
+   * <p>Any other name, such as "Foo.bar", designates every program point whose name contains it.
+   *
+   * @param spinfoPptName a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param pptName the name of a program point
+   * @return true if {@code spinfoPptName} designates the program point named {@code pptName}
+   */
+  public static boolean matches(String spinfoPptName, String pptName) {
+    if (!spinfoPptName.contains(FileIO.ppt_tag_separator)) {
+      return pptName.contains(spinfoPptName);
+    }
+    if (pptName.equals(spinfoPptName)) {
+      return true;
+    }
+    if (spinfoPptName.endsWith(FileIO.exit_tag) && pptName.startsWith(spinfoPptName)) {
+      String exitNumber = pptName.substring(spinfoPptName.length());
+      return !exitNumber.isEmpty() && exitNumber.chars().allMatch(c -> c >= '0' && c <= '9');
+    }
+    return false;
+  }
+
+  /**
    * Returns the splitters associated with this program point name (or null). The resulting
    * splitters are factories, not instantiated splitters.
    *
@@ -164,8 +194,7 @@ public abstract class SplitterList {
     List<Splitter[]> splitterArrays = new ArrayList<>();
 
     for (String name : ppt_splitters.keySet()) {
-      // name is a ppt name, assumed to begin with "ClassName.functionName"
-      if (pptName.indexOf(name) != -1) {
+      if (matches(name, pptName)) {
         Splitter[] result = get_raw(name);
         if (result != null) {
           splitterArrays.add(result);
