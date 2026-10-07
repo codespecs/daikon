@@ -29,6 +29,16 @@ public abstract class SplitterList {
 
   private static final HashMap<String, Splitter[]> ppt_splitters = new LinkedHashMap<>();
 
+  /**
+   * Removes the splitters associated with the given name, which is a name on a PPT_NAME line of a
+   * {@code .spinfo} file.
+   *
+   * @param pptname a name on a PPT_NAME line of a {@code .spinfo} file
+   */
+  public static void remove(String pptname) {
+    ppt_splitters.remove(pptname);
+  }
+
   /** Associate an array of splitters with the program point pptname. */
   public static void put(String pptname, Splitter[] splits) {
     // for (int i = 0; i<splits.length; i++) {
@@ -58,15 +68,6 @@ public abstract class SplitterList {
       //               + lineSep + " which is " + formatSplitters(get_raw(pptname));
       ppt_splitters.put(pptname, splits);
     }
-  }
-
-  /**
-   * Removes the splitters associated with the program point pptname. Intended for use by tests.
-   *
-   * @param pptname the name of a program point
-   */
-  public static void remove(String pptname) {
-    ppt_splitters.remove(pptname);
   }
 
   // This is only used by the debugging output in SplitterList.put().
