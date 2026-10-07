@@ -1,0 +1,15 @@
+REPLACE
+isEmpty()
+daikon.Quant.size(this.a) == 0
+
+PPT_NAME misc.QuantCalls.m
+daikon.Quant.getElement_int(this.a, daikon.Quant.getElement_int(this.b, i)) > 0
+daikon.Quant.size(this.a) == i
+daikon.Quant.fuzzy.eq(this.x, 0.0)
+isEmpty()
+daikon.Quant.getElement_boolean(this.flags, i)
+daikon.Quant.getElement_double(this.d, Math.max(i, 0)) > java.lang.Math.abs(this.x)
+"x".equals(daikon.Quant.getElement_String(this.s, 0))
+daikon.Quant.getElement_char(this.str, 0) == 'a' && daikon.Quant.size(this.str) > 1
+daikon.Quant.getElement_String(this.s, 0) == null
+daikon.Quant.getElement_Object(this.s, i) != null

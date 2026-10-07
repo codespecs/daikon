@@ -7,8 +7,11 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,12 +48,6 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /** Java reserved words that are replaced by replaceReservedWords. */
   private static final @Regex String[] reservedWords = new @Regex String[] {"return"};
 
-  /**
-   * Matches "daikon.Quant." after {@link PrefixFixer} has converted it, as in "daikon_Quant_fuzzy."
-   * or "daikon_Quant.".
-   */
-  private static final Pattern daikonQuantPattern = Pattern.compile("\\bdaikon_Quant[._]");
-
   private static final String lineSep = System.lineSeparator();
 
   /**
@@ -78,7 +75,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     varInfos = filterNonVars(varInfos);
     String originalCondition = splitObj.condition();
     Global.debugSplit.fine("originalCondition =  " + originalCondition);
-    String condition = replaceReservedWords(replaceQuantArrayCalls(originalCondition));
+    String condition = replaceReservedWords(originalCondition);
     condition = this.statementReplacer.makeReplacements(condition);
     condition = convertVariableNames(condition, className, varInfos);
     Global.debugSplit.fine("modified condition = " + condition);
@@ -115,7 +112,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     skipLine();
     add("  public boolean test(ValueTuple vt) {");
     writeTestBody();
-    add("    return(" + NullReplacer.replaceNull(condition) + ");");
+    add("    return(" + condition + ");");
     add("  }");
     skipLine();
     add("  public String repr() {");
@@ -335,80 +332,6 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     return string.substring(1, string.length() - 1);
   }
 
-  /** The prefix of a call to a method of daikon.Quant that accesses an array element. */
-  private static final String getElementPrefix = "daikon.Quant.getElement_";
-
-  /** The prefix of a call to the daikon.Quant method that returns the size of an array. */
-  private static final String sizePrefix = "daikon.Quant.size(";
-
-  /**
-   * Replaces calls to daikon.Quant methods that access arrays, which appear in Daikon's Java output
-   * format, by the Java syntax that splitters use for arrays. "daikon.Quant.getElement_T(a, i)"
-   * becomes "(a[i])", and "daikon.Quant.size(a)" becomes "(a.length)".
-   *
-   * @param condition a splitting condition
-   * @return the condition, with calls to daikon.Quant array methods replaced
-   */
-  static String replaceQuantArrayCalls(String condition) {
-    StringBuilder result = new StringBuilder();
-    int pos = 0;
-    while (pos < condition.length()) {
-      int argsStart; // the index just after the open parenthesis of the call
-      boolean isGetElement;
-      if (condition.startsWith(getElementPrefix, pos)) {
-        int paren = condition.indexOf('(', pos);
-        if (paren == -1) {
-          break;
-        }
-        argsStart = paren + 1;
-        isGetElement = true;
-      } else if (condition.startsWith(sizePrefix, pos)) {
-        argsStart = pos + sizePrefix.length();
-        isGetElement = false;
-      } else {
-        result.append(condition.charAt(pos));
-        pos++;
-        continue;
-      }
-      // Find the top-level commas and the matching close parenthesis.
-      List<String> args = new ArrayList<>();
-      int depth = 0;
-      int argStart = argsStart;
-      int i = argsStart;
-      for (; i < condition.length(); i++) {
-        char c = condition.charAt(i);
-        if (c == '(') {
-          depth++;
-        } else if (c == ')') {
-          if (depth == 0) {
-            break;
-          }
-          depth--;
-        } else if (c == ',' && depth == 0) {
-          args.add(condition.substring(argStart, i).trim());
-          argStart = i + 1;
-        }
-      }
-      if (i == condition.length()) {
-        // Unbalanced parentheses; leave the rest of the condition alone.
-        break;
-      }
-      args.add(condition.substring(argStart, i).trim());
-      if (isGetElement && args.size() == 2) {
-        result.append("(" + replaceQuantArrayCalls(args.get(0)) + "[");
-        result.append(replaceQuantArrayCalls(args.get(1)) + "])");
-      } else if (!isGetElement && args.size() == 1) {
-        result.append("(" + replaceQuantArrayCalls(args.get(0)) + ".length)");
-      } else {
-        // Not a form that this method handles; leave it alone.
-        result.append(condition, pos, i + 1);
-      }
-      pos = i + 1;
-    }
-    result.append(condition.substring(pos));
-    return result.toString();
-  }
-
   /**
    * Returns a version of this condition in which the variable names are converted to the names that
    * will be used by the java class written to fileText. Instances of "this." are removed. Instances
@@ -416,7 +339,9 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * variable name with a "_" separating the two parts. Instances of a public field name suffixing a
    * variable name are removed and appended to the end of variable name with a "_" separating the
    * two parts. Instances of "orig(variableName)" are replaced by instances of "orig_variableName".
-   * For example "orig(varName.publicField)" would yield "orig_varName_publicField".
+   * For example "orig(varName.publicField)" would yield "orig_varName_publicField". Calls to
+   * daikon.Quant methods that access arrays are replaced (see {@link QuantFixer}), and instances of
+   * "null" are replaced by "0" (see {@link NullReplacer}).
    *
    * @param condition a string representation of a conditional statement
    * @return a version of the conditional with the variable names converted
@@ -430,14 +355,15 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     condition = NameFixer.fixUnqualifiedMemberNames(condition, className, varInfos);
     condition = ThisFixer.fixThisUsage(condition, varInfos);
     condition = OrigFixer.fixOrig(condition);
-    condition = PrefixFixer.fixPrefix(condition);
-    // PrefixFixer treats the package and class names in calls to methods in daikon.Quant (which
-    // Daikon's Java output format uses, for example for floating-point comparisons) as prefixes of
-    // a variable name.  Restore them.
-    condition = daikonQuantPattern.matcher(condition).replaceAll("daikon.Quant.");
+    String[] baseNames = getBaseNames(varInfos);
+    condition = PrefixFixer.fixPrefix(condition, baseNames);
     // UNDONE: If the condition contains a naked reference to a class
     // variable, we should prepend the classname.  (markro)
-    String[] baseNames = getBaseNames(varInfos);
+    // NullReplacer must run before QuantFixer, because NullReplacer recognizes the calls to
+    // daikon.Quant methods that return a reference, which are compared with null rather than 0.
+    condition = NullReplacer.replaceNull(condition);
+    // QuantFixer must run before ArrayFixer, which would add "_identity" to the array arguments.
+    condition = QuantFixer.fixQuant(condition, getArrays(varInfos), getArrayBaseNames(varInfos));
     condition = ArrayFixer.fixArrays(condition, baseNames, varInfos);
     return condition;
   }
@@ -529,7 +455,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo of the variable whose compilable name is desired
    * @return the name of the variable represented by varInfo in a compilable form
    */
-  private static String compilableName(VarInfo varInfo) {
+  static String compilableName(VarInfo varInfo) {
     String name = getBaseName(varInfo);
     if (varInfo.type.isArray()) {
       if (varInfo.file_rep_type == ProglangType.HASHCODE) {
@@ -566,11 +492,13 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     }
 
     name = name.replace('.', '_');
-    // originally array names in type infos end in "[..]"
-    // but the replace above will change it to "[__]".   (markro)
+    // Remove the suffix of an array's name, which is "[]" or "[..]" (which the replace above
+    // changes to "[__]").
     if (varInfo.type.isArray()) {
       if (name.endsWith("[__]")) {
         name = name.substring(0, name.length() - 4);
+      } else if (name.endsWith("[]")) {
+        name = name.substring(0, name.length() - 2);
       }
     }
     return name;
@@ -586,6 +514,39 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       baseNames[i] = getBaseName(varInfos[i]);
     }
     return baseNames;
+  }
+
+  /**
+   * Returns a map from the base name of each array variable in varInfos whose elements the splitter
+   * represents to its VarInfo.
+   *
+   * @param varInfos the varInfos for the variables that may appear in the condition
+   * @return a map from base names of array variables to their VarInfos
+   */
+  private static Map<String, VarInfo> getArrays(VarInfo[] varInfos) {
+    Map<String, VarInfo> arrays = new HashMap<>();
+    for (VarInfo varInfo : varInfos) {
+      if (varInfo.type.isArray() && varInfo.file_rep_type != ProglangType.HASHCODE) {
+        arrays.put(getBaseName(varInfo), varInfo);
+      }
+    }
+    return arrays;
+  }
+
+  /**
+   * Returns the base names of the array variables in varInfos.
+   *
+   * @param varInfos the varInfos for the variables that may appear in the condition
+   * @return the base names of the array variables
+   */
+  private static Set<String> getArrayBaseNames(VarInfo[] varInfos) {
+    Set<String> arrayBaseNames = new HashSet<>();
+    for (VarInfo varInfo : varInfos) {
+      if (varInfo.type.isArray()) {
+        arrayBaseNames.add(getBaseName(varInfo));
+      }
+    }
+    return arrayBaseNames;
   }
 
   /**
