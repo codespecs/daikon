@@ -1,14 +1,20 @@
 package daikon.test;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
 
 import daikon.Daikon;
 import daikon.DaikonGetopt;
 import daikon.PrintInvariants;
+import daikon.SplitDtrace;
 import daikon.UnionInvariants;
 import daikon.tools.DtraceDiff;
+import daikon.tools.TraceSelect;
 import gnu.getopt.LongOpt;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import org.junit.Test;
 import org.junit.function.ThrowingRunnable;
 
@@ -38,77 +44,91 @@ public class BadOptionTest {
    * @return the message of the UserError for the bad option
    */
   private static String parse(String... args) {
-    DaikonGetopt g = new DaikonGetopt("BadOptionTest", args, "ho:", longopts);
-    Daikon.UserError e =
-        assertThrows(
-            Daikon.UserError.class,
-            () -> {
-              while (g.getopt() != -1) {}
-            });
+    DaikonGetopt g = new DaikonGetopt(args, "ho:", longopts);
+    Daikon.UserError e = assertThrows(Daikon.UserError.class, () -> consumeAll(g));
     return String.valueOf(e.getMessage());
   }
 
   /**
-   * Returns the expected message for a bad option.
+   * Calls {@code getopt()} until all command-line arguments have been processed.
    *
-   * @param description a description of the bad option
-   * @return the expected message for a bad option
+   * @param g the command-line parser
    */
-  private static String expected(String description) {
-    return description + "; run with -h for usage";
+  private static void consumeAll(DaikonGetopt g) {
+    while (g.getopt() != -1) {}
   }
 
   /** Tests an unrecognized long option. */
   @Test
   public void testUnrecognizedLongOption() {
-    assertEquals(expected("Unrecognized command-line option --bogus"), parse("--bogus"));
-    assertEquals(expected("Unrecognized command-line option --bogus"), parse("--bogus=3"));
-    assertEquals(expected("Unrecognized command-line option --=3"), parse("--=3"));
-    assertEquals(
-        expected("Unrecognized command-line option --bogus"), parse("-h", "--bogus", "file"));
+    assertEquals("Unrecognized command-line option --bogus", parse("--bogus"));
+    assertEquals("Unrecognized command-line option --bogus", parse("--bogus=3"));
+    assertEquals("Unrecognized command-line option --=3", parse("--=3"));
+    assertEquals("Unrecognized command-line option --bogus", parse("-h", "--bogus", "file"));
   }
 
   /** Tests an unrecognized short option, alone and combined with a valid one. */
   @Test
   public void testUnrecognizedShortOption() {
-    assertEquals(expected("Unrecognized command-line option -x"), parse("-x"));
-    assertEquals(expected("Unrecognized command-line option -x"), parse("-xh"));
-    assertEquals(expected("Unrecognized command-line option -x"), parse("-hx"));
-    assertEquals(expected("Unrecognized command-line option -:"), parse("-:"));
+    assertEquals("Unrecognized command-line option -x", parse("-x"));
+    assertEquals("Unrecognized command-line option -x", parse("-xh"));
+    assertEquals("Unrecognized command-line option -x", parse("-hx"));
+    assertEquals("Unrecognized command-line option -:", parse("-:"));
+  }
+
+  /** Tests an unrecognized short option when there are no short options. */
+  @Test
+  public void testNoShortOptions() {
+    for (String arg : new String[] {"- ", "-x", "-:"}) {
+      DaikonGetopt g = new DaikonGetopt(new String[] {arg}, "", longopts);
+      Daikon.UserError e = assertThrows(Daikon.UserError.class, g::getopt);
+      assertEquals("Unrecognized command-line option " + arg, String.valueOf(e.getMessage()));
+    }
   }
 
   /** Tests an ambiguous abbreviation of a long option. */
   @Test
   public void testAmbiguousLongOption() {
-    assertEquals(expected("Ambiguous command-line option --conf"), parse("--conf=x"));
-    assertEquals(expected("Ambiguous command-line option --conf"), parse("--conf"));
+    assertEquals("Ambiguous command-line option --conf", parse("--conf=x"));
+    assertEquals("Ambiguous command-line option --conf", parse("--conf"));
   }
 
-  /** Tests that a usage hint of null appends nothing to the description of a bad option. */
+  /** Tests that the description of a bad option suggests -h if DaikonGetopt handles -h. */
   @Test
-  public void testNoUsageHint() {
-    DaikonGetopt g = new DaikonGetopt("BadOptionTest", new String[] {"--bogus"}, "h", longopts);
-    g.setUsageHint(null);
+  public void testUsageHint() {
+    DaikonGetopt g = new DaikonGetopt(new String[] {"--bogus"}, "o:", new LongOpt[0], "usage");
     Daikon.UserError e = assertThrows(Daikon.UserError.class, g::getopt);
-    assertEquals("Unrecognized command-line option --bogus", String.valueOf(e.getMessage()));
+    assertEquals(
+        "Unrecognized command-line option --bogus; run with -h for usage",
+        String.valueOf(e.getMessage()));
   }
 
   /** Tests options that are missing their required argument. */
   @Test
   public void testMissingArgument() {
-    assertEquals(expected("Command-line option --config requires an argument"), parse("--config"));
-    assertEquals(expected("Command-line option --debug requires an argument"), parse("--deb"));
-    assertEquals(expected("Command-line option -o requires an argument"), parse("-o"));
-    assertEquals(expected("Command-line option -o requires an argument"), parse("-ho"));
+    assertEquals("Command-line option --config requires an argument", parse("--config"));
+    assertEquals("Command-line option --debug requires an argument", parse("--deb"));
+    assertEquals("Command-line option -o requires an argument", parse("-o"));
+    assertEquals("Command-line option -o requires an argument", parse("-ho"));
+  }
+
+  /** Tests options that are missing their required argument, when the optstring starts with ':'. */
+  @Test
+  public void testMissingArgumentLeadingColon() {
+    DaikonGetopt g = new DaikonGetopt(new String[] {"-o"}, ":ho:", longopts);
+    Daikon.UserError e = assertThrows(Daikon.UserError.class, g::getopt);
+    assertEquals("Command-line option -o requires an argument", String.valueOf(e.getMessage()));
+    g = new DaikonGetopt(new String[] {"--config"}, ":ho:", longopts);
+    e = assertThrows(Daikon.UserError.class, g::getopt);
+    assertEquals(
+        "Command-line option --config requires an argument", String.valueOf(e.getMessage()));
   }
 
   /** Tests long options that are given an argument they do not take. */
   @Test
   public void testUnexpectedArgument() {
-    assertEquals(
-        expected("Command-line option --help does not take an argument"), parse("--help=x"));
-    assertEquals(
-        expected("Command-line option --verbose does not take an argument"), parse("--verb=x"));
+    assertEquals("Command-line option --help does not take an argument", parse("--help=x"));
+    assertEquals("Command-line option --verbose does not take an argument", parse("--verb=x"));
   }
 
   /**
@@ -119,7 +139,7 @@ public class BadOptionTest {
    */
   private static void assertBadOption(String description, ThrowingRunnable mainCall) {
     Daikon.UserError e = assertThrows(Daikon.UserError.class, mainCall);
-    assertEquals(expected(description), String.valueOf(e.getMessage()));
+    assertEquals(description + "; run with -h for usage", String.valueOf(e.getMessage()));
   }
 
   /** Tests an unrecognized long option in a tool. */
@@ -133,9 +153,29 @@ public class BadOptionTest {
   /** Tests that tools accept the {@code --help} option that their usage messages document. */
   @Test
   public void testHelpOption() {
-    assertThrows(
-        Daikon.NormalTermination.class, () -> DtraceDiff.mainHelper(new String[] {"--help"}));
-    assertThrows(
-        Daikon.NormalTermination.class, () -> UnionInvariants.mainHelper(new String[] {"--help"}));
+    assertPrintsUsage(() -> DtraceDiff.mainHelper(new String[] {"--help"}));
+    assertPrintsUsage(() -> UnionInvariants.mainHelper(new String[] {"--help"}));
+    assertPrintsUsage(() -> SplitDtrace.mainHelper(new String[] {"-h", "x"}));
+    assertPrintsUsage(() -> TraceSelect.mainHelper(new String[] {"--help"}));
+    assertPrintsUsage(() -> TraceSelect.mainHelper(new String[] {"20", "10", "-h", "x.dtrace"}));
+  }
+
+  /**
+   * Asserts that the given code prints a usage message to standard output and throws {@link
+   * Daikon.NormalTermination}. Captures the usage message so that it does not clutter the test
+   * output.
+   *
+   * @param code the code to run
+   */
+  private static void assertPrintsUsage(ThrowingRunnable code) {
+    PrintStream oldOut = System.out;
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    System.setOut(new PrintStream(bytes, true, UTF_8));
+    try {
+      assertThrows(Daikon.NormalTermination.class, code);
+    } finally {
+      System.setOut(oldOut);
+    }
+    assertNotEquals("", bytes.toString(UTF_8).trim());
   }
 }

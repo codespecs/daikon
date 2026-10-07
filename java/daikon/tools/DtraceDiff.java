@@ -115,7 +115,6 @@ public class DtraceDiff {
 
     LongOpt[] longopts =
         new LongOpt[] {
-          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           // Process only part of the trace file
           new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(Daikon.ppt_omit_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -126,7 +125,7 @@ public class DtraceDiff {
           new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
         };
 
-    DaikonGetopt g = new DaikonGetopt("daikon.tools.DtraceDiff", args, "h", longopts);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
@@ -134,10 +133,7 @@ public class DtraceDiff {
         // long option
         case 0:
           String option_name = longopts[g.getLongind()].getName();
-          if (Daikon.help_SWITCH.equals(option_name)) {
-            System.out.println(usage);
-            throw new Daikon.NormalTermination();
-          } else if (Daikon.ppt_regexp_SWITCH.equals(option_name)) {
+          if (Daikon.ppt_regexp_SWITCH.equals(option_name)) {
             if (Daikon.ppt_regexp != null) {
               throw new Error(
                   "multiple --"
@@ -226,13 +222,8 @@ public class DtraceDiff {
             Configuration.getInstance().apply(item);
             break;
           } else {
-            throw new RuntimeException("Unknown long option received: " + option_name);
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
-
-        // short options
-        case 'h':
-          System.out.println(usage);
-          throw new Daikon.NormalTermination();
 
         default:
           throw new Daikon.BugInDaikon("getopt() returned " + c);

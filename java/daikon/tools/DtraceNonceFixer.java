@@ -2,6 +2,7 @@
 
 package daikon.tools;
 
+import daikon.DaikonGetopt;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -58,12 +59,13 @@ public class DtraceNonceFixer {
    * @param args command-line arguments, like those of {@link #main}
    */
   public static void mainHelper(final String[] args) {
-    if (args.length != 1 && args.length != 2) {
+    String[] files = DaikonGetopt.nonOptionArgs(args, usage);
+    if (files.length != 1 && files.length != 2) {
       throw new daikon.Daikon.UserError(usage);
     }
 
     // The base name of the output files, which determines whether they are compressed.
-    String outputBase = (args.length == 2) ? args[1] : args[0];
+    String outputBase = (files.length == 2) ? files[1] : files[0];
     String outputFilename =
         outputBase.endsWith(".gz") ? (outputBase + "_fixed.gz") : (outputBase + "_fixed");
 
@@ -72,7 +74,7 @@ public class DtraceNonceFixer {
 
     // The intermediate file must be closed before it is read, so that its contents (including, for
     // a compressed file, the trailer) are complete.
-    try (BufferedReader br1 = FilesPlume.newBufferedFileReader(args[0]);
+    try (BufferedReader br1 = FilesPlume.newBufferedFileReader(files[0]);
         PrintWriter out1 = new PrintWriter(FilesPlume.newBufferedFileWriter(outputFilename))) {
 
       // correctionFactor - the amount to add to each observed nonce
@@ -105,11 +107,11 @@ public class DtraceNonceFixer {
 
     // now go back and add the OBJECT and CLASS invocations
     String allFixedFilename;
-    if (args.length == 2) {
-      allFixedFilename = args[1];
+    if (files.length == 2) {
+      allFixedFilename = files[1];
     } else {
       allFixedFilename =
-          outputFilename.endsWith(".gz") ? (args[0] + "_all_fixed.gz") : (args[0] + "_all_fixed");
+          outputFilename.endsWith(".gz") ? (files[0] + "_all_fixed.gz") : (files[0] + "_all_fixed");
     }
 
     try (BufferedReader br2 = FilesPlume.newBufferedFileReader(outputFilename);
@@ -130,7 +132,7 @@ public class DtraceNonceFixer {
     }
 
     // The intermediate file is not needed when OUTFILE is supplied.
-    if (args.length == 2) {
+    if (files.length == 2) {
       try {
         Files.delete(Path.of(outputFilename));
       } catch (IOException e) {

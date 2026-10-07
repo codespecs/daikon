@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import jtb.syntaxtree.*;
@@ -81,16 +82,19 @@ public class InstrumentHandler extends CommandHandler {
       return false;
     }
 
-    String[] realArgs = new String[args.length - 1];
-    for (int i = 0; i < realArgs.length; i++) {
-      realArgs[i] = args[i + 1];
-    }
-    Arguments arguments = readArguments(realArgs);
-    if (arguments == errorWhileReadingArguments) {
+    String[] realArgs = Arrays.copyOfRange(args, 1, args.length);
+    Arguments arguments;
+    try {
+      arguments = readArguments(realArgs);
+    } catch (Daikon.NormalTermination e) {
+      // The user requested the usage message, which has been printed.
+      return true;
+    } catch (Daikon.UserError e) {
+      System.err.println(e.getMessage());
       return false;
     }
-    if (arguments == helpRequested) {
-      return true;
+    if (arguments == errorWhileReadingArguments) {
+      return false;
     }
 
     // Set up debug traces; note this comes after reading command line options.
@@ -204,14 +208,10 @@ public class InstrumentHandler extends CommandHandler {
   private static Arguments errorWhileReadingArguments =
       new Arguments("error while reading arguments", new ArrayList<String>());
 
-  /** Returned by {@link #readArguments} when the user requests the usage message. */
-  private static Arguments helpRequested = new Arguments("help requested", new ArrayList<String>());
-
   private Arguments readArguments(String[] args) {
 
     LongOpt[] longopts =
         new LongOpt[] {
-          new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 'h'),
           new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
           new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(output_only_high_conf_invariants_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
@@ -220,21 +220,11 @@ public class InstrumentHandler extends CommandHandler {
           new LongOpt(directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
           new LongOpt(checkers_directory_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0)
         };
-    DaikonGetopt g =
-        new DaikonGetopt("daikon.tools.runtimechecker.InstrumentHandler", args, "h", longopts);
+    DaikonGetopt g = new DaikonGetopt(args, "", longopts, this::usageMessageString);
     // The caller prints the usage message when this command fails.
     g.setUsageHint(null);
     int c;
-    while (true) {
-      try {
-        c = g.getopt();
-      } catch (Daikon.UserError e) {
-        System.err.println(e.getMessage());
-        return errorWhileReadingArguments;
-      }
-      if (c == -1) {
-        break;
-      }
+    while ((c = g.getopt()) != -1) {
       switch (c) {
         case 0:
           // got a long option
@@ -255,40 +245,35 @@ public class InstrumentHandler extends CommandHandler {
           } else if (Daikon.debug_SWITCH.equals(option_name)) {
             daikon.LogHelper.setLevel(Daikon.getOptarg(g), FINE);
           } else {
-            System.err.println("Unknown long option received: " + option_name);
-            return errorWhileReadingArguments;
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
-        case 'h':
-          usageMessage(System.out);
-          return helpRequested;
         default:
-          System.err.println("getopt() returned " + c);
-          return errorWhileReadingArguments;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
     // The index of the first non-option argument -- the name of the
     // invariant file.
     int argindex = g.getOptind();
     if (argindex >= args.length) {
-      System.out.println("Error: No .inv file or .java file arguments supplied.");
+      System.err.println("Error: No .inv file or .java file arguments supplied.");
       return errorWhileReadingArguments;
     }
     String invfile = args[argindex];
     argindex++;
     if (!(invfile.endsWith(".inv") || invfile.endsWith(".inv.gz"))) {
-      System.out.println("Error: first argument must be a file ending in .inv or .inv.gz.");
+      System.err.println("Error: first argument must be a file ending in .inv or .inv.gz.");
       return errorWhileReadingArguments;
     }
     if (argindex >= args.length) {
-      System.out.println("Error: No .java file arguments supplied.");
+      System.err.println("Error: No .java file arguments supplied.");
       return errorWhileReadingArguments;
     }
     List<String> javaFileNames = new ArrayList<>();
     for (; argindex < args.length; argindex++) {
       String javafile = args[argindex];
       if (!javafile.endsWith(".java")) {
-        System.out.println("File does not end in .java: " + javafile);
+        System.err.println("File does not end in .java: " + javafile);
         return errorWhileReadingArguments;
       }
       javaFileNames.add(javafile);

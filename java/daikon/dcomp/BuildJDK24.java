@@ -132,6 +132,10 @@ public final class BuildJDK24 {
             DynComp.class,
             DCInstrument24.class);
     String[] cl_args = options.parse(true, args);
+    if (DynComp.help) {
+      options.printUsage();
+      System.exit(0);
+    }
     if (cl_args.length < 1) {
       System.err.println("must specify destination dir");
       options.printUsage();

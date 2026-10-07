@@ -1,6 +1,7 @@
 // TraceSelect.java
 package daikon.tools;
 
+import daikon.DaikonGetopt;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,7 +16,6 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.StringTokenizer;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.util.FilesPlume;
 import org.plumelib.util.MultiRandSelector;
@@ -40,10 +40,6 @@ public class TraceSelect {
 
   private static @MonotonicNonNull String fileName = null;
 
-  // Just a quick command line cache
-  // ... but I think it would it be better to pass args to invokeDaikon
-  // rather than introducing this variable.
-  private static String @MonotonicNonNull [] argles;
   // // stores the invocations in Strings
   // private static ArrayList invokeBuffer;
 
@@ -52,7 +48,8 @@ public class TraceSelect {
   // always set to non-null by mainHelper
   private static @MonotonicNonNull Random randObj;
 
-  private static int daikonArgStart = 0;
+  /** The arguments to pass to Daikon, other than the .dtrace file. */
+  private static List<String> daikonArgs = new ArrayList<>();
 
   // This allows us to simply call MultiDiff
   // with the same files we just created.
@@ -63,7 +60,9 @@ public class TraceSelect {
   private static final String usage =
       StringsPlume.joinLines(
           "USAGE: TraceSelect num_reps sample_size [options] [Daikon-args]...",
-          "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED-SEED 1000 foo.dtrace"
+          "The options are -SEED n, -NOCLEAN, -INCLUDE_UNRETURNED, and -DO_DIFFS.",
+          "The Daikon-args start with the first argument that is not one of those options.",
+          "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED -SEED 1000 foo.dtrace"
               + " foo2.dtrace foo.decls RatPoly.decls foo3.dtrace");
 
   /**
@@ -85,14 +84,28 @@ public class TraceSelect {
    *
    * @param args command-line arguments, like those of {@link #main}
    */
-  public static void mainHelper(final String[] args) {
-    argles = args;
-    if (args.length == 0) {
-      throw new daikon.Daikon.UserError("No arguments found." + daikon.Daikon.lineSep + usage);
+  public static void mainHelper(String[] args) {
+    // Handles -h and --help before num_reps.
+    args = DaikonGetopt.argsAfterLeadingOptions(args, usage);
+    // Reset the state from any previous call.
+    CLEAN = true;
+    INCLUDE_UNRETURNED = false;
+    DO_DIFFS = false;
+    daikonArgs = new ArrayList<>();
+    String inputFile = null;
+    Random rand = null;
+
+    if (args.length < 2) {
+      throw new daikon.Daikon.UserError("Too few arguments." + daikon.Daikon.lineSep + usage);
     }
 
-    num_reps = Integer.parseInt(args[0]);
-    numPerSample = Integer.parseInt(args[1]);
+    try {
+      num_reps = Integer.parseInt(args[0]);
+      numPerSample = Integer.parseInt(args[1]);
+    } catch (NumberFormatException e) {
+      throw new daikon.Daikon.UserError(
+          "num_reps and sample_size must be integers." + daikon.Daikon.lineSep + usage);
+    }
 
     // process optional switches
     // also deduce index of arg for Daikon
@@ -101,17 +114,20 @@ public class TraceSelect {
       // allows seed setting
       if (args[i].toUpperCase(Locale.ENGLISH).equals("-SEED")) {
         if (i + 1 >= args.length) {
-          throw new daikon.Daikon.UserError("-SEED options requires argument");
+          throw new daikon.Daikon.UserError("-SEED requires an argument");
         }
-        randObj = new Random(Long.parseLong(args[++i]));
-        daikonArgStart = i + 1;
+        String seed = args[++i];
+        try {
+          rand = new Random(Long.parseLong(seed));
+        } catch (NumberFormatException e) {
+          throw new daikon.Daikon.UserError("-SEED requires an integer argument, not " + seed);
+        }
       }
 
       // NOCLEAN argument will leave the trace samples even after
       // the invariants from these samples have been generated
       else if (args[i].toUpperCase(Locale.ENGLISH).equals("-NOCLEAN")) {
         CLEAN = false;
-        daikonArgStart = i + 1;
       }
 
       // INCLUDE_UNRETURNED option will allow selecting method invocations
@@ -119,7 +135,6 @@ public class TraceSelect {
       // either from a thrown Exception or abnormal termination.
       else if (args[i].toUpperCase(Locale.ENGLISH).equals("-INCLUDE_UNRETURNED")) {
         INCLUDE_UNRETURNED = true;
-        daikonArgStart = i + 1;
       }
 
       // DO_DIFFS will create a spinfo file for generating
@@ -129,48 +144,45 @@ public class TraceSelect {
       // samples.
       else if (args[i].toUpperCase(Locale.ENGLISH).equals("-DO_DIFFS")) {
         DO_DIFFS = true;
-        daikonArgStart = i + 1;
       }
 
-      // TODO: The current implementation assumes that a decls
-      // or dtrace file will be the first of the Daikon arguments,
-      // marking the end of the TraceSelect arguments.  That is
-      // not necessarily true, especially in cases when someone
-      // uses a Daikon argument such as "--nohierarchy" or "--format java"
-      // and the manual examples place the arguments before any dtrace
-      // or decls arguments.
+      // The Daikon arguments start with the first argument that is not a TraceSelect switch,
+      // such as a .dtrace or .decls file, or "--nohierarchy" or "--format java".
+
+      // -h and --help before the Daikon arguments print the usage message.
+      else if (!knowArgStart
+          && (args[i].equals("-h") || args[i].equals("--" + daikon.Daikon.help_SWITCH))) {
+        System.out.println(usage);
+        throw new daikon.Daikon.NormalTermination();
+      }
 
       // For now, only the first dtrace file will be sampled
       else if (args[i].endsWith(".dtrace")) {
-        if (fileName == null) {
-          fileName = args[i];
+        if (inputFile == null) {
+          inputFile = args[i];
         } else {
           throw new daikon.Daikon.UserError("Only 1 dtrace file for input allowed");
         }
 
-        if (!knowArgStart) {
-          daikonArgStart = i;
-          knowArgStart = true;
-        }
-      } else if (args[i].endsWith(".decls")) {
-        if (!knowArgStart) {
-          daikonArgStart = i;
-          knowArgStart = true;
-        }
+        knowArgStart = true;
+      } else {
+        knowArgStart = true;
+        daikonArgs.add(args[i]);
       }
     }
 
     // if no seed provided, use default Random() constructor
-    if (randObj == null) {
-      randObj = new Random();
-    }
+    randObj = (rand != null) ? rand : new Random();
 
     sampleNames = new String[num_reps + 1];
     sampleNames[0] = "-p";
 
-    if (fileName == null) {
-      throw new daikon.Daikon.UserError("No .dtrace file name specified");
+    if (inputFile == null) {
+      throw new daikon.Daikon.UserError(
+          "No .dtrace file name specified (the trace file must be uncompressed and its name must"
+              + " end with \".dtrace\")");
     }
+    fileName = inputFile;
 
     try {
 
@@ -267,7 +279,6 @@ public class TraceSelect {
     }
   }
 
-  @RequiresNonNull("argles")
   private static void invokeDaikon(String dtraceName) throws IOException {
 
     System.out.println("Created file: " + dtraceName);
@@ -278,14 +289,8 @@ public class TraceSelect {
     daikonArgsList.add("-o");
     daikonArgsList.add(dtraceName + ".inv");
 
-    // find all the Daikon args except for the original
-    // single dtrace file.
-    for (int i = daikonArgStart; i < argles.length; i++) {
-      if (argles[i].endsWith(".dtrace")) {
-        continue;
-      }
-      daikonArgsList.add(argles[i]);
-    }
+    // all the Daikon args except for the original single dtrace file
+    daikonArgsList.addAll(daikonArgs);
 
     // create an array to store the Strings in daikonArgsList
     String[] daikonArgs = daikonArgsList.toArray(new String[0]);

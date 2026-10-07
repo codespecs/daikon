@@ -1,9 +1,11 @@
 package daikon.tools.runtimechecker;
 
-import java.io.PrintStream;
+import daikon.Daikon;
+import daikon.DaikonGetopt;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.StringJoiner;
 
 /**
  * Main entrypoint for the instrumenter. Passes control to whichever handler can handle the
@@ -12,15 +14,18 @@ import java.util.Locale;
 public class Main extends CommandHandler {
 
   /**
-   * Prints the usage message of each handler.
+   * Returns the usage message of this and of each handler.
    *
-   * @param handlers the handlers whose usage messages to print
-   * @param out where to print the usage messages
+   * @param handlers the handlers whose usage messages to include
+   * @return the usage message of this and of each handler
    */
-  protected void usageMessage(List<CommandHandler> handlers, PrintStream out) {
+  private String usageMessage(List<CommandHandler> handlers) {
+    StringJoiner result = new StringJoiner(Daikon.lineSep);
+    result.add(usageMessageString());
     for (CommandHandler h : handlers) {
-      h.usageMessage(out);
+      result.add(h.usageMessageString());
     }
+    return result.toString();
   }
 
   /**
@@ -34,19 +39,26 @@ public class Main extends CommandHandler {
     List<CommandHandler> handlers =
         Collections.singletonList((CommandHandler) new InstrumentHandler());
 
-    if (args.length < 1) {
+    String[] commandAndArgs;
+    try {
+      commandAndArgs = DaikonGetopt.argsAfterLeadingOptions(args, () -> usageMessage(handlers));
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
+      return;
+    }
+    if (commandAndArgs.length < 1) {
       System.err.println("ERROR:  No command given.");
       System.err.println(
           "For more help, invoke the instrumenter with \"help\" as its sole argument.");
       System.exit(1);
     }
-    if (args[0].toUpperCase(Locale.ENGLISH).equals("HELP") || args[0].equals("?")) {
-      usageMessage(System.out);
-      usageMessage(handlers, System.out);
+    if (commandAndArgs[0].toUpperCase(Locale.ENGLISH).equals("HELP")
+        || commandAndArgs[0].equals("?")) {
+      System.out.println(usageMessage(handlers));
       System.exit(0);
     }
 
-    String command = args[0];
+    String command = commandAndArgs[0];
 
     boolean success = false;
 
@@ -56,7 +68,7 @@ public class Main extends CommandHandler {
       for (CommandHandler handler : handlers) {
         if (handler.handles(command)) {
           h = handler;
-          success = h.handle(args);
+          success = h.handle(commandAndArgs);
           if (!success) {
             System.err.println("The command you issued returned a failing status flag.");
           }
@@ -76,7 +88,12 @@ public class Main extends CommandHandler {
           System.err.println(
               "For more help, invoke the instrumenter with \"help\" as its sole argument.");
         } else {
-          h.usageMessage();
+          // Don't let a problem printing the usage message prevent the exit below.
+          try {
+            h.usageMessage();
+          } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+          }
         }
         System.exit(1);
       } else {

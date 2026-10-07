@@ -6765,9 +6765,6 @@ invariants must be justified.  Does not print ``uninteresting'' invariants
 Display the tree of all invariants.  Includes invariants that are the
 same in @var{file1} and @var{file2}, and unjustified invariants.
 
-@item -u
-Include ``uninteresting'' invariants in the tree of differing invariants.
-
 @item -y
 @itemx --ignore_unjustified
 Include (statistically) unjustified invariants.
@@ -7052,6 +7049,9 @@ java -cp $@{DAIKONDIR@}/daikon.jar daikon.AnnotateNullable @i{[@var{flags}]} @va
 @noindent
 The flags are:
 @table @option
+
+@item -h --help
+Print usage message.
 
 @item -n --nonnull-annotations
 Adds @samp{NonNull} annotations as well as @samp{Nullable} annotations.  Unlike @samp{Nullable}

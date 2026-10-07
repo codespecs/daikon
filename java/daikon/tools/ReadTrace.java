@@ -1,5 +1,7 @@
 package daikon.tools;
 
+import daikon.Daikon;
+import daikon.DaikonGetopt;
 import daikon.FileIO;
 import daikon.PptMap;
 import daikon.PptTopLevel;
@@ -32,6 +34,9 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
  */
 public class ReadTrace {
 
+  /** The usage message for this program. */
+  private static final String usage = "Usage: java daikon.tools.ReadTrace file1 file2 ...";
+
   /** Do not instantiate. */
   private ReadTrace() {
     throw new UnsupportedOperationException("Do not instantiate");
@@ -43,11 +48,30 @@ public class ReadTrace {
    * @param args data trace file names, read from the command line
    */
   public static void main(String[] args) {
+    try {
+      mainHelper(args);
+    } catch (Daikon.DaikonTerminationException e) {
+      Daikon.handleDaikonTerminationException(e);
+    }
+  }
+
+  /**
+   * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
+   * appropriate to be called programmatically.
+   *
+   * @param args command-line arguments, like those of {@link #main}
+   */
+  public static void mainHelper(String[] args) {
+    String[] traceFiles = DaikonGetopt.nonOptionArgs(args, usage);
+    if (traceFiles.length == 0) {
+      throw new Daikon.UserError("No trace files specified" + Daikon.lineSep + usage);
+    }
     CollectDataProcessor processor = new CollectDataProcessor();
     PptMap ppts = new PptMap();
     try {
       // `read_data_trace_files()` requires the list of files to be modifiable.
-      FileIO.read_data_trace_files(new ArrayList<>(Arrays.asList(args)), ppts, processor, false);
+      FileIO.read_data_trace_files(
+          new ArrayList<>(Arrays.asList(traceFiles)), ppts, processor, false);
     } catch (Exception e) {
       throw new Error(e);
     }

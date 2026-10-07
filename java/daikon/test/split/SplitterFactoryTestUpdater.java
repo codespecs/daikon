@@ -256,31 +256,25 @@ public class SplitterFactoryTestUpdater {
     ps.println("  }");
     ps.println();
     ps.println("  public static void mainHelper(String[] args) {");
-    ps.println("    LongOpt[] longopts =");
-    ps.println("        new LongOpt[] {new LongOpt(\"help\", LongOpt.NO_ARGUMENT, null, 'h')};");
-    ps.println("    DaikonGetopt g =");
-    ps.println(
-        "        new DaikonGetopt(\"daikon.test.split.SplitterFactoryTest\", args, \"hs\","
-            + " longopts);");
+    ps.println("    DaikonGetopt g = new DaikonGetopt(args, \"s\", new LongOpt[0], usage);");
     ps.println("    int c;");
     ps.println("    while ((c = g.getopt()) != -1) {");
     ps.println("      switch (c) {");
     ps.println("        case 's':");
     ps.println("          saveFiles = true;");
     ps.println("          break;");
-    ps.println("        case 'h':");
-    ps.println("          System.out.println(usage);");
-    ps.println("          throw new Daikon.NormalTermination();");
     ps.println("        default:");
     ps.println("          throw new Daikon.BugInDaikon(\"getopt() returned \" + c);");
     ps.println("      }");
     ps.println("    }");
     ps.println("    Result result = JUnitCore.runClasses(SplitterFactoryTest.class);");
     ps.println("    for (Failure failure : result.getFailures()) {");
-    ps.println("      System.out.println(failure);");
+    ps.println("      System.out.println(failure.getTrace());");
     ps.println("    }");
     ps.println("    if (!result.wasSuccessful()) {");
-    ps.println("      throw new Daikon.UserError(result.getFailureCount() + \" tests failed\");");
+    ps.println(
+        "      throw new Daikon.UserError(StringsPlume.nPlural(result.getFailureCount(), \"test\")"
+            + " + \" failed\");");
     ps.println("    }");
     ps.println("  }");
     ps.println();

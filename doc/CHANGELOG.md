@@ -27,7 +27,10 @@ Further documentation can be found in:
    command-line option:  they describe the problem and exit with a non-zero
    status.  Previously, Daikon printed its usage message and exited with
    status 0, and most other tools ignored the bad option and continued.
-* All tools accept `--help` as a synonym for `-h`.
+* All tools accept `-h` and `--help`, which print a usage message and exit
+   with status 0.
+* `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
+   no effect.
 * In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
   complete program point name, and it matches only the program point of that
   name.  A name ending with `:::EXIT` also matches the numbered exit points.
