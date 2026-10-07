@@ -4308,7 +4308,7 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  paragraphindent firstparagraphindent codequotebacktick v1
 @c  LocalWords:  ifclear evenheading thispage thischaptername oddheading
 @c  LocalWords:  thischapternum thissectionnum thissectionname sudo jdk v2
-@c  LocalWords:  everyfooting exampleindent openjdk ctags graphviz netpbm
+@c  LocalWords:  everyfooting exampleindent openjdk ctags
 @c  LocalWords:  texlive Makefile automake autoconf binutils dev dfn AMD64
 @c  LocalWords:  UnaryInvariant BinaryInvariant TernaryInvariant EM64T www
 @c  LocalWords:  runtime var1 PptSlice1 over1 config EXIT99 var2 var3 val1

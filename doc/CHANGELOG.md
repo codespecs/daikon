@@ -23,7 +23,7 @@ Further documentation can be found in:
 
 ## Version ??
 
-Removed the Perl front end, dfepl.
+* Removed the Perl front end, dfepl.
 
 ## Version 5.9.0 (September 1, 2026)
 
