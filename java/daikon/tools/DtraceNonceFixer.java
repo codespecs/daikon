@@ -2,6 +2,7 @@
 
 package daikon.tools;
 
+import daikon.FileIO;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,6 +20,9 @@ import org.plumelib.util.StringsPlume;
  * next time you see a '0' valued nonce that is not part of an EXIT program point, then you know you
  * have reached the beginning of the next dtrace file. Use that as the number to add to the
  * remaining nonces and repeat. This should only require one pass through the file.
+ *
+ * <p>A second pass gives a new nonce to each sample record that has none, such as OBJECT and CLASS
+ * samples. Header records and program point declarations are copied unchanged.
  */
 public class DtraceNonceFixer {
 
@@ -60,12 +64,14 @@ public class DtraceNonceFixer {
     String outputFilename =
         args[0].endsWith(".gz") ? (args[0] + "_fixed.gz") : (args[0] + "_fixed");
 
+    // The biggest nonce ever found in the file.
+    int maxNonce = 0;
+
+    // Close the first output file before reading it, so that a gzipped file is complete.
     try (BufferedReader br1 = FilesPlume.newBufferedFileReader(args[0]);
         PrintWriter out1 = new PrintWriter(FilesPlume.newBufferedFileWriter(outputFilename))) {
 
-      // maxNonce - the biggest nonce ever found in the file
-      // correctionFactor - the amount to add to each observed nonce
-      int maxNonce = 0;
+      // The amount to add to each observed nonce.
       int correctionFactor = 0;
       boolean first = true;
       while (br1.ready()) {
@@ -89,28 +95,27 @@ public class DtraceNonceFixer {
           out1.println(nextInvo);
         }
       }
-      out1.flush();
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
 
-      // now go back and add the OBJECT and CLASS invocations
-      String allFixedFilename =
-          outputFilename.endsWith(".gz") ? (args[0] + "_all_fixed.gz") : (args[0] + "_all_fixed");
+    // now go back and add the OBJECT and CLASS invocations
+    String allFixedFilename =
+        outputFilename.endsWith(".gz") ? (args[0] + "_all_fixed.gz") : (args[0] + "_all_fixed");
 
-      try (BufferedReader br2 = FilesPlume.newBufferedFileReader(outputFilename);
-          PrintWriter out2 = new PrintWriter(FilesPlume.newBufferedFileWriter(allFixedFilename))) {
+    try (BufferedReader br2 = FilesPlume.newBufferedFileReader(outputFilename);
+        PrintWriter out2 = new PrintWriter(FilesPlume.newBufferedFileWriter(allFixedFilename))) {
 
-        while (br2.ready()) {
-          String nextInvo = grabNextInvocation(br2);
-          int non = peekNonce(nextInvo);
-          // if there is no nonce at this point it must be an OBJECT
-          // or a CLASS invocation
-          if (non == -1) {
-            out2.println(spawnWithNewNonce(nextInvo, ++maxNonce));
-          } else {
-            out2.println(nextInvo);
-          }
+      while (br2.ready()) {
+        String nextInvo = grabNextInvocation(br2);
+        int non = peekNonce(nextInvo);
+        // A sample with no nonce at this point must be an OBJECT
+        // or a CLASS invocation.
+        if (non == -1 && isSample(nextInvo)) {
+          out2.println(spawnWithNewNonce(nextInvo, ++maxNonce));
+        } else {
+          out2.println(nextInvo);
         }
-
-        out2.flush();
       }
     } catch (IOException e) {
       throw new UncheckedIOException(e);
@@ -151,8 +156,9 @@ public class DtraceNonceFixer {
       // throw out the next token, because it will be the old nonce
       st.nextToken();
     } else {
-      // otherwise create the required this_invocation_nonce line
+      // otherwise create the required this_invocation_nonce line, followed by the line just read
       sb.append("this_invocation_nonce" + lineSep).append(newNonce).append(lineSep);
+      sb.append(line).append(lineSep);
     }
 
     while (st.hasMoreTokens()) {
@@ -160,6 +166,22 @@ public class DtraceNonceFixer {
     }
 
     return sb.toString();
+  }
+
+  /**
+   * Returns true if the record is a sample, as opposed to a header record or a program point
+   * declaration.
+   *
+   * @param invo a record from a dtrace file, with its lines separated by line separators
+   * @return true if the record is a sample
+   */
+  private static boolean isSample(String invo) {
+    StringTokenizer st = new StringTokenizer(invo, lineSep);
+    if (!st.hasMoreTokens()) {
+      return false;
+    }
+    String firstLine = st.nextToken();
+    return !FileIO.is_header_record(firstLine) && !FileIO.is_declaration_header(firstLine);
   }
 
   /**
