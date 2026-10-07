@@ -11,6 +11,7 @@ import daikon.DaikonGetopt;
 import daikon.PrintInvariants;
 import daikon.UnionInvariants;
 import daikon.tools.DtraceDiff;
+import daikon.tools.TraceSelect;
 import gnu.getopt.LongOpt;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -158,6 +159,8 @@ public class BadOptionTest {
   public void testHelpOption() {
     assertPrintsUsage(() -> DtraceDiff.mainHelper(new String[] {"--help"}));
     assertPrintsUsage(() -> UnionInvariants.mainHelper(new String[] {"--help"}));
+    assertPrintsUsage(() -> TraceSelect.mainHelper(new String[] {"--help"}));
+    assertPrintsUsage(() -> TraceSelect.mainHelper(new String[] {"20", "10", "-h", "x.dtrace"}));
   }
 
   /**
