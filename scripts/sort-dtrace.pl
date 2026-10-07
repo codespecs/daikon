@@ -31,8 +31,16 @@ sub flush_decls {
 $/ = ""; # Read by paragraph
 
 while (<>) {
-    die_if_version_1_decl($_);
-    if (/^ppt\s.+/) {
+    # Daikon does not require a blank line after a comment.
+    my $comments;
+    ($comments, $_) = split_leading_comments($_);
+    if ($comments ne "") {
+	flush_decls();
+	print $comments;
+	next if $_ eq "";
+    }
+    my $kind = record_kind($_);
+    if ($kind eq "ppt") {
 	my @lines = split(/\n/, $_);
 	my @vars;
         my $var = "";
@@ -66,8 +74,8 @@ while (<>) {
 
         push @decls, join("", @ppt);
 
-    } elsif (is_declaration_paragraph($_)) {
-	# A header or comment
+    } elsif ($kind ne "data") {
+	# A header
 	flush_decls();
 	print;
     } else {

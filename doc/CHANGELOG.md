@@ -28,7 +28,8 @@ Scripts:
 * `convertcsv.pl` and the cluster analysis scripts (`runcluster.pl` and the
   scripts it calls) now write version 2 files.
 * `convertcsv.pl -decl`, `dtrace-count.pl`, `dtrace-diff.pl`,
-  `dtrace-indent.pl`, and `sort-dtrace.pl` no longer accept version 1 files.
+  `dtrace-indent.pl`, `sort-dtrace.pl`, and the cluster analysis scripts no
+  longer accept version 1 files.
 * Removed scripts that processed only version 1 files:  `auxinfo.pl`,
   `clean-decls.php`, `copy_comparable.pl`, `decls2comp-1.0.py`,
   `decls-lackwit-disjoint.pl`, `dfec-to-kvasir.py`, `dfec-to-kvasir-dtrace.py`,

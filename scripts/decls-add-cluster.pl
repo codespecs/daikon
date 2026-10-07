@@ -12,18 +12,53 @@ use English;
 use strict;
 $WARNING = 1;			# "-w" flag
 
+# Put the script directory on the @INC path.
+use File::Basename;
+use lib dirname (__FILE__);
+
+# The file `util_daikon.pm` appears in the same directory as this script.
+use util_daikon;
+
 foreach my $decls_file (@ARGV) {
     $decls_file =~ /.*\/(\S*)\.decls/;
     my $decls_cluster = "$1_runcluster_temp.decls";
-    print " $decls_cluster ";
     open (IN, $decls_file) || die "couldn't open $decls_file for input\n";
     open (OUT, ">$decls_cluster") || die "couldn't open $decls_cluster for output\n";
 
-    # True if the current program point declaration still needs the
-    # cluster variable.  The cluster variable must precede the other
-    # variables, but must follow the ppt-level records such as ppt-type.
-    my $pending = 0;
-    # The "parent"-type parent records of the current program point, as
+    my $ppt_seen = 0;
+    local $INPUT_RECORD_SEPARATOR = ""; # Read by paragraph
+    while (my $para = <IN>) {
+	# Daikon does not require a blank line after a comment.
+	my ($comments, $record) = split_leading_comments($para);
+	print OUT $comments;
+	if ($record eq "" || record_kind($record, $decls_file) ne "ppt") {
+	    print OUT $record;
+	    next;
+	}
+	$ppt_seen = 1;
+	print OUT add_cluster_var($record, $decls_file);
+    }
+    if (!$ppt_seen) {
+	die "No program point declarations in $decls_file\n";
+    }
+    close IN;
+    close OUT;
+    print " $decls_cluster ";
+}
+
+# Returns the program point declaration paragraph that is the first
+# argument, with the cluster variable added.  The cluster variable must
+# precede the other variables, but must follow the ppt-level records such
+# as ppt-type.  The second argument is the file name, for error messages.
+sub add_cluster_var {
+    my ($record, $decls_file) = @_;
+    my @lines = split(/^/m, $record);
+    my $pptname = $lines[0];
+    $pptname =~ s/^ppt\s+//;
+    $pptname =~ s/\s+$//;
+    my $result = "";
+    my $pending = 1;
+    # The "parent"-type parent records of the program point, as
     # "<parent-ppt-name> <relation-id>" strings.  The cluster variable is
     # linked to the cluster variable of each such parent, so that, for
     # example, an OBJECT program point gets cluster values from its methods.
@@ -31,37 +66,39 @@ foreach my $decls_file (@ARGV) {
     # to an unrelated program point, such as the OBJECT program point of a
     # parameter's class.
     my @parents = ();
-    while (<IN>) {
-	my $line = $_;
+    foreach my $line (@lines) {
+	if ($line =~ /^\s*variable\s+(.*?)\s*$/ && unescape_decl($1) eq "cluster") {
+	    die "Program point " . unescape_decl($pptname) . " in $decls_file already has a variable named \"cluster\"\n";
+	}
 	if ($pending && ($line =~ /^\s*variable\s/ || $line =~ /^\s*$/)) {
-	    print_cluster_var(@parents);
+	    $result .= cluster_var_decl(@parents);
 	    $pending = 0;
 	}
-	print OUT $line;
-	if ($line =~ /^ppt /) {
-	    $pending = 1;
-	    @parents = ();
-	} elsif ($pending && $line =~ /^\s*parent\s+parent\s+(\S+)\s+(\S+)\s*$/) {
+	$result .= $line;
+	if ($pending && $line =~ /^\s*parent\s+parent\s+(\S+)\s+(\S+)\s*$/) {
 	    push @parents, "$1 $2";
 	}
     }
     if ($pending) {
-	print_cluster_var(@parents);
+	if ($result !~ /\n\z/) {
+	    $result .= "\n";
+	}
+	$result .= cluster_var_decl(@parents);
     }
-    close IN;
-    close OUT;
+    return $result;
 }
 
-# Prints the declaration of the cluster variable.  The arguments are the
+# Returns the declaration of the cluster variable.  The arguments are the
 # "<parent-ppt-name> <relation-id>" strings for the program point's parents.
-sub print_cluster_var {
+sub cluster_var_decl {
     my (@parents) = @_;
-    print OUT "  variable cluster\n";
-    print OUT "    var-kind variable\n";
-    print OUT "    dec-type int\n";
-    print OUT "    rep-type int\n";
-    print OUT "    comparability 22\n";
+    my $result = "  variable cluster\n"
+      . "    var-kind variable\n"
+      . "    dec-type int\n"
+      . "    rep-type int\n"
+      . "    comparability 22\n";
     foreach my $parent (@parents) {
-	print OUT "    parent $parent\n";
+	$result .= "    parent $parent\n";
     }
+    return $result;
 }

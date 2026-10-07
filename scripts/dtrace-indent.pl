@@ -20,9 +20,10 @@ my $indentation = 0;
 
 $/ = ""; # Read by paragraph
 while (<>) {
-    die_if_version_1_decl($_);
+    # Daikon does not require a blank line after a comment.
+    (undef, $_) = split_leading_comments($_);
     # Skip .decls-like paras
-    next if is_declaration_paragraph($_);
+    next if $_ eq "" or record_kind($_) ne "data";
     /^(.*):::([A-Z\d]+)$/m or die "Can't parse PPT name from <$_>";
     my $base = $1;
     my $suffix = $2;

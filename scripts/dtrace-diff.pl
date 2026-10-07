@@ -36,13 +36,13 @@ my $errors_found = 0;
 ###
 
 sub getline ( $ ) {
-# gets a (non-comment, non-blank) line from the filehandle $1
+# gets a (non-comment) line from the filehandle $1
     my ($fh) = @_;
     my $l;
     do {
 	$l = <$fh>;
 	if ($l) { chomp $l; }
-    } while ($l && ($l =~ m|^\#|));
+    } while ($l && is_comment_line($l));
     return $l;
 }
 
@@ -67,65 +67,26 @@ sub gzopen ( $$ ) {
 
 sub load_decls ( $ ) {
 # Loads the decls file given by $1 into a hash, returns a ref.
-# The hash maps from ppt name to (map from varname to triple).
+# The hash maps from ppt name to the hash returned by read_ppt_decl,
+# augmented with two keys:
+#   "var by name":  map from varname to the variable's hash
+#   "variable order":  the names of the non-constant variables, in order.
+#     These are the variables whose values appear in data trace records.
     my ($mydeclsname) = @_;
-#    open DECLS, $mydeclsname or die "couldn't open decls \"$decls\"\n";
     my $decls = gzopen(\*DECLS, $mydeclsname);
     my $declshash = {};
-    my $ppt_seen = 0;
-    while (defined (my $l = getline($decls))) {
-
-        $l =~ s://.*::; # strip any comments on this line
-	die_if_version_1_decl($l, $mydeclsname);
-
-	if (($l =~ /(^ppt\s+)(.+)/)) {
-	    my $currppt = $2;
-	    my $lhashref = {};
-            my @varorder = ();
-
-            # The variable currently being read, and its
-            # [dec-type, rep-type, comparability] triple.
-            my $curvar = "";
-            my $curinfo;
-
-            while(my $subline = getline($decls)) {
-                $subline =~ s/^\s+//;
-                $subline  =~ s/\s+$//;
-
-                if($subline =~ /(^variable\s+)(.+)/) {
-                    $curvar = $2;
-                    $curinfo = ["", "", ""];
-                    $$lhashref{$curvar} = $curinfo;
-                    push @varorder, $curvar;
-                }elsif (($subline =~ /^parent.+/) ||
-                        ($subline =~ /^ppt\-type.+/) ||
-                        ($subline =~ /^flags.+/)) {
-                }elsif ($curvar eq "") {
-                    die "Malformed decls file: \"$subline\" at line $INPUT_LINE_NUMBER instead of variable declaration";
-                }elsif ($subline =~ /^constant\s/) {
-                    # A constant's value does not appear in data trace records.
-                    delete $$lhashref{$curvar};
-                    pop @varorder;
-                }elsif ($subline =~ /(^rep\-type\s*)(.+)/) {
-                    $$curinfo[1] = $2;
-                }elsif ($subline =~ /(^dec-type\s*)(.+)/) {
-                    $$curinfo[0] = $2;
-                }elsif ($subline =~ /(^comparability\s*)(.+)/) {
-                    $$curinfo[2] = $2;
-                }
-            }
-            $$lhashref{"variable order"} = [ @varorder ];
-            $$declshash{$currppt} = $lhashref;
-            $ppt_seen = 1;
-	} elsif (($l eq "ListImplementors") && !$ppt_seen) {
-	    # It's ok to have a ListImplementors in the decls file.
-	    # Read the type of comparability, then move on.
-	    $l = getline($decls);
-	} elsif (is_declaration_paragraph($l)) {
-	    # A header line
-        } elsif ($l) {
-	    die "malformed decls file: \"$l\" at line $INPUT_LINE_NUMBER of $mydeclsname";
+    foreach my $ppt (read_ppt_decls($decls, $mydeclsname)) {
+	my $by_name = {};
+	my @varorder = ();
+	foreach my $var (@{$$ppt{vars}}) {
+	    $$by_name{$$var{name}} = $var;
+	    if (!defined($$var{constant})) {
+		push @varorder, $$var{name};
+	    }
 	}
+	$$ppt{"var by name"} = $by_name;
+	$$ppt{"variable order"} = [ @varorder ];
+	$$declshash{$$ppt{name}} = $ppt;
     }
     close \*DECLS;
     return $declshash;
@@ -137,10 +98,11 @@ sub load_ppt ( $$ ) {
 # file, and hash mapping varname to array of value and modbit.
     my ($dtfh, $dtfhname) = @_;
     my $pptname = getline($dtfh);
-    # Skip blank lines and declaration paragraphs, such as headers and
-    # program point declarations in a combined .dtrace file.
+    # Skip blank lines and records other than data records, such as headers
+    # and program point declarations in a combined .dtrace file.  (getline
+    # skips comments.)
     while ((defined $pptname)
-           && (($pptname eq "") || is_declaration_paragraph($pptname))) {
+           && (($pptname eq "") || (record_kind($pptname, $dtfhname) ne "data"))) {
 	if ($pptname ne "") {
 	    # Skip the rest of the paragraph.
 	    do {
@@ -149,11 +111,10 @@ sub load_ppt ( $$ ) {
 	}
 	$pptname = getline($dtfh);
     }
-    (defined $pptname) and die_if_version_1_decl($pptname, $dtfhname);
-
 
     (defined $pptname)
 	or return undef;
+    $pptname = unescape_decl($pptname);
 
     my $pptline = $INPUT_LINE_NUMBER;
 
@@ -162,6 +123,7 @@ sub load_ppt ( $$ ) {
     my @varorder = ();
 
     while (my $varname = getline($dtfh)) {
+        $varname = unescape_decl($varname);
         my ($modbit, $varval);
 	(defined ($varval = getline($dtfh)))
 	    # or die "malformed dtrace file (ppt $pptname, var $varname, no varval) $dtfhname";
@@ -224,17 +186,29 @@ sub cmp_ppts ( $$$ ) {
     if ((scalar(@ppt2_varnames) > 0) && ($ppt2_varnames[0] eq "this_invocation_nonce")) {
       shift @ppt2_varnames;
     }
-    if (("@decls_varnames" ne "@ppt1_varnames")
-        || ("@decls_varnames" ne "@ppt2_varnames")) {
+    # Variable names are unescaped, so they may contain spaces but not newlines.
+    if ((join("\n", @decls_varnames) ne join("\n", @ppt1_varnames))
+        || (join("\n", @decls_varnames) ne join("\n", @ppt2_varnames))) {
       print "Mismatched variables for ppt $pptname.\n";
-      print "  decls:   @decls_varnames\n";
-      print "  trace1:  @ppt1_varnames\n";
-      print "  trace2:  @ppt2_varnames\n";
+      print "  decls:   " . join(" ", map { escape_decl($_) } @decls_varnames) . "\n";
+      print "  trace1:  " . join(" ", map { escape_decl($_) } @ppt1_varnames) . "\n";
+      print "  trace2:  " . join(" ", map { escape_decl($_) } @ppt2_varnames) . "\n";
       $errors_found++;
+      foreach my $trace ([$dtaname, \@ppt1_varnames], [$dtbname, \@ppt2_varnames]) {
+	my ($tracename, $trace_varnames) = @$trace;
+	foreach my $varname (@$trace_varnames) {
+	  my $var = $$ppt{"var by name"}{$varname};
+	  if (not defined $var) {
+	    print "  ${varname} appears in ${tracename} but is not declared\n";
+	  } elsif (defined $$var{constant}) {
+	    print "  ${varname} appears in ${tracename} but is declared as constant $$var{constant}\n";
+	  }
+	}
+      }
     }
 
     foreach my $varname (@decls_varnames) {
-	my $varl = $$ppt{$varname};
+	my $rep_type = $$ppt{"var by name"}{$varname}{rep_type};
 	my $la = $$ha{$varname};
 	my $lb = $$hb{$varname};
 	#la == lb == [varval, modbit]
@@ -247,7 +221,7 @@ sub cmp_ppts ( $$$ ) {
 	} elsif (not defined $lb) {
 	    print "${varname} \@ ${pptname} undefined in ${dtbname}\n";
 	    $errors_found++;
-	} elsif ($$varl[1] eq "double") {
+	} elsif ($rep_type eq "double") {
   	    my $difference;
 	    if (($$la[0] eq "uninit")||($$lb[0] eq "uninit")) {
 		$difference = !($$la[0] eq $$lb[0]);
@@ -275,7 +249,7 @@ sub cmp_ppts ( $$$ ) {
 		$differences_found++;
 	    }
 	} else {
-	    if ($$varl[1] =~ /^hashcode/) {
+	    if ($rep_type =~ /^hashcode/) {
 	        # It's a hashcode, or array of hashcodes; we only care
 	        # about which ones are null or not.
 	        $$la[0] =~ s/\d*[1-9]\d*/non-null/g; # match numbers except 0
@@ -336,15 +310,16 @@ sub cmp_dtracen ( $$$ ) {
 sub dump_decls ( $ ) {
 # dump the decls struct given by $1
     my ($declshash) = @_;
-    foreach my $ppt (keys %$declshash) {
-	my $lhashref = $$declshash{$ppt};
-	print "\@${ppt}:\n";
-	foreach my $var (keys %$lhashref) {
-	    print "  ${var}:\n";
-	    my ($d, $r, $l) = @{$$lhashref{$var}};
-	    print "    declare ${d}\n";
-	    print "    reptype ${r}\n";
-	    print "    lackwit ${l}\n";
+    foreach my $pptname (keys %$declshash) {
+	print "\@${pptname}:\n";
+	foreach my $var (@{$$declshash{$pptname}{vars}}) {
+	    print "  $$var{name}:\n";
+	    print "    dec-type $$var{dec_type}\n";
+	    print "    rep-type $$var{rep_type}\n";
+	    print "    comparability $$var{comparability}\n";
+	    if (defined $$var{constant}) {
+		print "    constant $$var{constant}\n";
+	    }
 	}
     }
 }

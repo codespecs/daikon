@@ -24,9 +24,10 @@ my %long_names;
 
 $/ = ""; # Read by paragraph
 while (<>) {
-    die_if_version_1_decl($_);
+    # Daikon does not require a blank line after a comment.
+    (undef, $_) = split_leading_comments($_);
     # Skip .decls-like paras
-    next if is_declaration_paragraph($_);
+    next if $_ eq "" or record_kind($_) ne "data";
     next if /^Begin/ or /^Done/; # Skip processing program point comments
     # This script assumes that each program point name contains ":::".
     /^(.*):::(.+)$/m or die "Can't parse PPT name from <$_>";

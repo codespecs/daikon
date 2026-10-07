@@ -68,25 +68,6 @@ my $USAGE =
 ### Subroutines that don't use global variables
 ###
 
-# Converts a name to the form used in declaration and data trace files:
-# backslashes, newlines, and carriage returns are escaped, and blanks are
-# replaced by "\_".  Like FileIO.escape_decl in Daikon.
-sub escapeDecl ( $ ) {
-  my ($name) = check_args(1, @_);
-  $name =~ s/\\/\\\\/g;
-  $name =~ s/\n/\\n/g;
-  $name =~ s/\r/\\r/g;
-  $name =~ s/ /\\_/g;
-  return $name;
-}
-
-# The inverse of escapeDecl.  Like FileIO.unescape_decl in Daikon.
-sub unescapeDecl ( $ ) {
-  my ($name) = check_args(1, @_);
-  $name =~ s/\\(.)/$1 eq "_" ? " " : $1 eq "n" ? "\n" : $1 eq "r" ? "\r" : $1/ge;
-  return $name;
-}
-
 # Parses the provided declaration file, which must contain only one
 # program point.
 # Returns an array containing the program point name and the names of
@@ -95,30 +76,14 @@ sub parseDecl ( $ ) {
   my ($inputfile) = check_args(1, @_);
   open(DECLHANDLE, $inputfile) ||
     die("Cannot open declarations file $inputfile");
-  my $ppt;
-  my @varnames;
-
-  while (<DECLHANDLE>) {
-    die_if_version_1_decl($_, $inputfile);
-    if (/^ppt\s+(\S+)\s*$/) {
-      if (defined($ppt)) {
-        die "Declaration file $inputfile contains more than one program point";
-      }
-      $ppt = unescapeDecl($1);
-    } elsif (/^\s*variable\s+(\S+)\s*$/) {
-      push @varnames, unescapeDecl($1);
-    } elsif (/^\s*constant\s/) {
-      # The most recently read variable is a constant, so its value does
-      # not appear in data trace records.
-      pop @varnames;
-    }
-  }
+  my @ppts = read_ppt_decls(\*DECLHANDLE, $inputfile);
   close(DECLHANDLE);
-  if (!defined($ppt)) {
-    die "Didn't see a \"ppt\" record in declaration file $inputfile";
+  if (scalar(@ppts) > 1) {
+    die "Declaration file $inputfile contains more than one program point";
   }
-  return ($ppt, @varnames);
-
+  my $ppt = $ppts[0];
+  my @varnames = map { $$_{name} } grep { !defined($$_{constant}) } @{$$ppt{vars}};
+  return ($$ppt{name}, @varnames);
 }
 
 
@@ -284,7 +249,7 @@ sub interpolate () {
     die("Could not open $dtrace_file for output.");
 
   for (my $k = 0; $k < $num_samples; $k++) {
-    print DTRACEHANDLE "\n" . escapeDecl($programpointname) . "\n";
+    print DTRACEHANDLE "\n" . escape_decl($programpointname) . "\n";
     for (my $j = 0; $j < $num_decl_vars; $j++) {
       my $csvindex = $varNameCsvIndex{$decl_varnames[$j]};
       if ($variableArray{$csvindex}[$k] eq "") {
@@ -321,7 +286,7 @@ sub interpolate () {
           $variableArray{$csvindex}[$k] = $prevvalues[$csvindex];
         }
       }
-      print DTRACEHANDLE escapeDecl($csv_varnames[$csvindex]) . "\n";
+      print DTRACEHANDLE escape_decl($csv_varnames[$csvindex]) . "\n";
       print DTRACEHANDLE "$variableArray{$csvindex}[$k]\n";
       print DTRACEHANDLE "1\n";
     }
@@ -403,7 +368,7 @@ while (<CSVHANDLE>) {
     }
   }
 
-  print DTRACEHANDLE escapeDecl($programpointname) . "\n";
+  print DTRACEHANDLE escape_decl($programpointname) . "\n";
   for (my $j = 0; $j<$num_decl_vars; $j++) {
     my $csvindex = $varNameCsvIndex{$decl_varnames[$j]};
     my $value = $sample[$csvindex];
@@ -437,7 +402,7 @@ while (<CSVHANDLE>) {
         $variableArray{$csvindex}[$num_samples] = $value;
       }
     }
-    print DTRACEHANDLE escapeDecl($csv_varnames[$csvindex]) . "\n";
+    print DTRACEHANDLE escape_decl($csv_varnames[$csvindex]) . "\n";
     print DTRACEHANDLE "$value\n";
     print DTRACEHANDLE "$modbit\n";
   }
@@ -449,12 +414,12 @@ while (<CSVHANDLE>) {
 if (defined($decls_file)) {
   print DECLSHANDLE "decl-version 2.0\n";
   print DECLSHANDLE "var-comparability none\n\n";
-  print DECLSHANDLE "ppt " . escapeDecl($programpointname) . "\n";
+  print DECLSHANDLE "ppt " . escape_decl($programpointname) . "\n";
   print DECLSHANDLE "  ppt-type point\n";
   for (my $j = 0; $j<$num_decl_vars; $j++) {
     my $csvindex = $varNameCsvIndex{$decl_varnames[$j]};
     my $type = ($isNumber[$csvindex] ? "double" : "java.lang.String");
-    print DECLSHANDLE "  variable " . escapeDecl($csv_varnames[$csvindex]) . "\n";
+    print DECLSHANDLE "  variable " . escape_decl($csv_varnames[$csvindex]) . "\n";
     print DECLSHANDLE "    var-kind variable\n";
     print DECLSHANDLE "    dec-type $type\n";
     print DECLSHANDLE "    rep-type $type\n";

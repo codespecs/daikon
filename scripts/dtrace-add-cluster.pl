@@ -126,16 +126,19 @@ foreach my $dtrace_file (@dtrace_files) {
     || die "couldn't open $newfile for output";
 
   print "Reading from $dtrace_file\n";
-  while (<DTRACE_IN>) {
-    my $line = $_;
-#    print ("$line");
-    if ($line =~ /^ppt /) {
-      # A program point declaration; the decls file provides the declarations.
-      &skip_till_next(*DTRACE_IN);
-    } elsif ($line =~ /:::/) {
+  # Each line read here is a blank line or the first line of a record,
+  # because each record is read in its entirety.
+  while (my $line = <DTRACE_IN>) {
+    next if $line =~ /^\s*$/;
+    my $kind = record_kind($line, $dtrace_file);
+    if ($kind eq "data") {
       my $pptname = $line;
       chomp ($pptname);
       &insert_cluster_info($pptname);
+    } elsif ($kind ne "comment") {
+      # A header or program point declaration; the decls file provides the
+      # declarations.
+      &skip_till_next(*DTRACE_IN);
     }
   }
 }
@@ -182,7 +185,8 @@ sub insert_cluster_info ( $ ) {
   # information, because the entry and exit with the same invocation number
   # must have the same cluster number.
 
-  my $pptstem = $pptname;
+  # extract_vars.pl names the cluster files by the unescaped name.
+  my $pptstem = unescape_decl($pptname);
   $pptstem =~ s/:::(ENTER|EXIT).*//;
   $pptstem = &cleanup_pptname($pptstem);
 
