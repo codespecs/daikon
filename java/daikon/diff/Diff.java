@@ -413,7 +413,7 @@ public final class Diff {
       v1.printAll();
       return;
     } else {
-      throw new Daikon.UserError("No invariant files specified" + Daikon.lineSep + usage);
+      throw new Daikon.UserError("No invariant files specified; run with -h for usage");
     }
 
     if (logging) {
