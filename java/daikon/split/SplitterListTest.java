@@ -1,5 +1,6 @@
-package daikon.test.split;
+package daikon.split;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -7,8 +8,9 @@ import static org.junit.Assert.assertTrue;
 import daikon.Ppt;
 import daikon.ValueTuple;
 import daikon.inv.DummyInvariant;
-import daikon.split.Splitter;
-import daikon.split.SplitterList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -45,6 +47,40 @@ public class SplitterListTest {
   private void put(String pptname, Splitter[] splits) {
     putNames.add(pptname);
     SplitterList.put(pptname, splits);
+  }
+
+  /**
+   * Calls {@link SplitterList#put(String, Splitter[], StatementReplacer)}, and records the name so
+   * that {@link #tearDown} removes the splitters.
+   *
+   * @param pptname a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param splits the splitters for the name
+   * @param replacer the REPLACE statements of the {@code .spinfo} file
+   */
+  private void put(String pptname, Splitter[] splits, StatementReplacer replacer) {
+    putNames.add(pptname);
+    SplitterList.put(pptname, splits, replacer);
+  }
+
+  /**
+   * Returns the REPLACE statements of a {@code .spinfo} file that contains the given REPLACE
+   * section and no splitters.
+   *
+   * @param replaceLines the lines of the REPLACE section, after the "REPLACE" line
+   * @return the REPLACE statements
+   * @throws IOException if there is trouble writing or reading the file
+   */
+  private static StatementReplacer replacer(String... replaceLines) throws IOException {
+    Path spinfo = Files.createTempFile("SplitterListTest", ".spinfo");
+    try {
+      List<String> lines = new ArrayList<>();
+      lines.add("REPLACE");
+      lines.addAll(Arrays.asList(replaceLines));
+      Files.write(spinfo, lines, UTF_8);
+      return SplitterFactory.parse_spinfofile(spinfo.toFile()).getReplacer();
+    } finally {
+      Files.delete(spinfo);
+    }
   }
 
   @Test
@@ -157,5 +193,48 @@ public class SplitterListTest {
     put(objectB, new Splitter[] {new ConditionSplitter("b > 0")});
     assertEquals(Arrays.asList("a > 0"), conditions(objectA));
     assertEquals(Arrays.asList("b > 0"), conditions(objectB));
+  }
+
+  /**
+   * Returns the conditions of the splitters that {@link SplitterList#get_all} returns, among those
+   * whose condition is in {@code relevant}. Other tests may leave splitters in SplitterList.
+   *
+   * @param relevant the conditions of interest
+   * @return the conditions of the splitters, among those in {@code relevant}
+   */
+  private static List<String> allConditions(List<String> relevant) {
+    List<String> result = new ArrayList<>();
+    for (Splitter splitter : SplitterList.get_all()) {
+      if (relevant.contains(splitter.condition())) {
+        result.add(splitter.condition());
+      }
+    }
+    return result;
+  }
+
+  @Test
+  public void testGetAllNoDuplicates() {
+    put(
+        "splitterlisttest.C.f():::EXIT",
+        new Splitter[] {new ConditionSplitter("c > 0"), new ConditionSplitter("d > 0")});
+    put(
+        "splitterlisttest.D.g():::EXIT",
+        new Splitter[] {new ConditionSplitter(" d > 0"), new ConditionSplitter("e > 0")});
+    List<String> relevant = Arrays.asList("c > 0", "d > 0", " d > 0", "e > 0");
+    assertEquals(Arrays.asList("c > 0", "d > 0", "e > 0"), allConditions(relevant));
+  }
+
+  @Test
+  public void testGetDifferentReplacements() throws IOException {
+    String exit = "splitterlisttest.E.h():::EXIT";
+    StatementReplacer replacer1 = replacer("isEmpty()", "size == 0");
+    StatementReplacer replacer2 = replacer("isEmpty()", "top == -1");
+    // The same condition means different things in different .spinfo files.
+    put(exit, new Splitter[] {new ConditionSplitter("isEmpty()")}, replacer1);
+    put(exit, new Splitter[] {new ConditionSplitter("isEmpty()")}, replacer2);
+    assertEquals(Arrays.asList("isEmpty()", "isEmpty()"), conditions(exit));
+    // The same condition means the same thing in the same .spinfo file.
+    put(exit, new Splitter[] {new ConditionSplitter("isEmpty()")}, replacer1);
+    assertEquals(Arrays.asList("isEmpty()", "isEmpty()"), conditions(exit));
   }
 }

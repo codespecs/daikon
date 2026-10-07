@@ -1,6 +1,5 @@
 package daikon.split;
 
-import daikon.FileIO;
 import daikon.Global;
 import daikon.PptTopLevel;
 import java.io.BufferedWriter;
@@ -136,7 +135,7 @@ public class SplitterFactory {
             System.out.printf(
                 "%s: %d of %d splitters successful%n", ppt_name, numGood, numsplitters);
             if (!sp.isEmpty()) {
-              SplitterList.put(ppt_name, sp.toArray(new Splitter[0]));
+              SplitterList.put(ppt_name, sp.toArray(new Splitter[0]), statementReplacer);
             }
             // delete this entry in the splitter array to prevent it from
             // matching any other Ppts, since the documented behavior is that
@@ -285,8 +284,7 @@ public class SplitterFactory {
    * @return true if the program point's name matches {@code ppt_name}
    */
   private static boolean matchPpt(String ppt_name, PptTopLevel ppt) {
-    if (ppt_name.contains(FileIO.ppt_tag_separator)) {
-      // A complete program point name.
+    if (SplitterList.isComplete(ppt_name)) {
       return SplitterList.matches(ppt_name, ppt.name);
     }
     if (ppt.name.equals(ppt_name)) {
@@ -321,11 +319,11 @@ public class SplitterFactory {
   }
 
   /**
-   * The maximum length of the part of a splitter file name that comes from the program point name.
-   * Many file systems limit a file name to 255 bytes, which must also accommodate the guid and the
-   * ".class" suffix.
+   * The maximum length, in UTF-8 bytes, of the part of a splitter file name that comes from the
+   * program point name. Many file systems limit a file name to 255 bytes, which must also
+   * accommodate the guid and the ".class" suffix.
    */
-  private static final int MAX_FILE_NAME_PREFIX_LENGTH = 200;
+  private static final int MAX_FILE_NAME_PREFIX_BYTES = 200;
 
   /**
    * Returns a file name for a splitter file to be used with a Ppt with the name, ppt_name. The file
@@ -338,13 +336,35 @@ public class SplitterFactory {
    * @param ppt_name the name of the Ppt that the splitter Java file will be used with
    */
   private static String getFileName(String ppt_name) {
-    String splitterName = clean(ppt_name);
-    if (splitterName.length() > MAX_FILE_NAME_PREFIX_LENGTH) {
-      splitterName = splitterName.substring(0, MAX_FILE_NAME_PREFIX_LENGTH);
-    }
+    String splitterName = truncateToUtf8Bytes(clean(ppt_name), MAX_FILE_NAME_PREFIX_BYTES);
     splitterName = splitterName + "_" + guid;
     guid++;
     return splitterName;
+  }
+
+  /**
+   * Returns the longest prefix of the given string whose UTF-8 encoding is at most the given number
+   * of bytes. The prefix does not end in the middle of a surrogate pair.
+   *
+   * @param str a string
+   * @param maxBytes the maximum length of the result's UTF-8 encoding
+   * @return the longest prefix of {@code str} whose UTF-8 encoding is at most {@code maxBytes}
+   *     bytes
+   */
+  static String truncateToUtf8Bytes(String str, int maxBytes) {
+    int bytes = 0;
+    int end = 0;
+    while (end < str.length()) {
+      int codePoint = str.codePointAt(end);
+      int codePointBytes =
+          codePoint < 0x80 ? 1 : codePoint < 0x800 ? 2 : codePoint < 0x10000 ? 3 : 4;
+      if (bytes + codePointBytes > maxBytes) {
+        break;
+      }
+      bytes += codePointBytes;
+      end += Character.charCount(codePoint);
+    }
+    return str.substring(0, end);
   }
 
   /**

@@ -2,14 +2,14 @@ package daikon.split;
 
 import daikon.FileIO;
 import daikon.Global;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.logging.Level;
+import jtb.ParseException;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 // SplitterList maps from a program point name to an array of Splitter
@@ -32,13 +32,45 @@ public abstract class SplitterList {
   private static final HashMap<String, Splitter[]> ppt_splitters = new LinkedHashMap<>();
 
   /**
+   * Maps a splitter to its condition, with the REPLACE statements of its {@code .spinfo} file
+   * applied. {@link #get} and {@link #get_all} use this to determine whether two splitters are
+   * duplicates. A splitter that is not a key is identified by its condition.
+   */
+  private static final Map<Splitter, String> expanded_conditions = new IdentityHashMap<>();
+
+  /**
    * Removes the splitters associated with the given name, which is a name on a PPT_NAME line of a
    * {@code .spinfo} file.
    *
    * @param pptname a name on a PPT_NAME line of a {@code .spinfo} file
    */
   public static void remove(String pptname) {
-    ppt_splitters.remove(pptname);
+    Splitter[] splits = ppt_splitters.remove(pptname);
+    if (splits != null) {
+      for (Splitter splitter : splits) {
+        expanded_conditions.remove(splitter);
+      }
+    }
+  }
+
+  /**
+   * Associate an array of splitters with the program point pptname.
+   *
+   * @param pptname a name on a PPT_NAME line of a {@code .spinfo} file
+   * @param splits the splitters
+   * @param replacer the REPLACE statements of the {@code .spinfo} file that contains the splitters
+   */
+  static void put(String pptname, Splitter[] splits, StatementReplacer replacer) {
+    for (Splitter splitter : splits) {
+      String condition = splitter.condition().trim();
+      try {
+        expanded_conditions.put(splitter, replacer.makeReplacements(condition).trim());
+      } catch (ParseException e) {
+        // The splitter's Java source was created from the same expansion, so this does not happen.
+        // If it does, identify the splitter by its unexpanded condition.
+      }
+    }
+    put(pptname, splits);
   }
 
   /** Associate an array of splitters with the program point pptname. */
@@ -202,14 +234,15 @@ public abstract class SplitterList {
    * @param spinfoPptName a name on a PPT_NAME line of a {@code .spinfo} file
    * @return true if {@code spinfoPptName} is a complete program point name
    */
-  private static boolean isComplete(String spinfoPptName) {
+  static boolean isComplete(String spinfoPptName) {
     return spinfoPptName.contains(FileIO.ppt_tag_separator);
   }
 
   /**
    * Returns the splitters associated with this program point name (or null). The resulting
    * splitters are factories, not instantiated splitters. The result contains no two splitters with
-   * the same condition, even if several PPT_NAME lines match the program point.
+   * the same condition (after REPLACE statements are applied), even if several PPT_NAME lines match
+   * the program point.
    *
    * <p>An OBJECT program point also uses every splitter whose PPT_NAME is not a complete program
    * point name, if any such PPT_NAME contains "OBJECT".
@@ -228,14 +261,12 @@ public abstract class SplitterList {
       }
     }
 
-    // Maps a condition to its splitter.  A LinkedHashMap, for deterministic output.
+    // Maps an expanded condition to its splitter.  A LinkedHashMap, for deterministic output.
     Map<String, Splitter> splitters = new LinkedHashMap<>();
     for (Map.Entry<String, Splitter[]> entry : ppt_splitters.entrySet()) {
       String name = entry.getKey();
       if (matches(name, pptName) || (useAllIncomplete && !isComplete(name))) {
-        for (Splitter splitter : entry.getValue()) {
-          splitters.putIfAbsent(splitter.condition().trim(), splitter);
-        }
+        addUnlessDuplicate(splitters, entry.getValue());
       }
     }
 
@@ -250,32 +281,35 @@ public abstract class SplitterList {
   }
 
   /**
-   * Returns all the splitters in this program, The resulting splitters are factories, not
-   * instantiated splitters.
+   * Adds each splitter to the map, unless the map already contains a splitter with the same
+   * expanded condition.
+   *
+   * @param splitters maps an expanded condition to its splitter; side-effected by this method
+   * @param toAdd the splitters to add
+   */
+  private static void addUnlessDuplicate(Map<String, Splitter> splitters, Splitter[] toAdd) {
+    for (Splitter splitter : toAdd) {
+      String condition = expanded_conditions.get(splitter);
+      if (condition == null) {
+        condition = splitter.condition().trim();
+      }
+      splitters.putIfAbsent(condition, splitter);
+    }
+  }
+
+  /**
+   * Returns all the splitters in this program. The resulting splitters are factories, not
+   * instantiated splitters. The result contains no two splitters with the same condition (after
+   * REPLACE statements are applied).
    *
    * @return an array of splitters
    */
   public static Splitter[] get_all() {
-    List<Splitter> splitters = new ArrayList<>();
+    // Maps an expanded condition to its splitter.  A LinkedHashMap, for deterministic output.
+    Map<String, Splitter> splitters = new LinkedHashMap<>();
     for (Splitter[] splitter_array : ppt_splitters.values()) {
-      for (int i = 0; i < splitter_array.length; i++) {
-        Splitter tempsplitter = splitter_array[i];
-        boolean duplicate = false;
-        // Weed out splitters with the same condition.
-        if (!splitters.isEmpty()) {
-          for (Splitter splitter : splitters) {
-            if (tempsplitter.condition().trim().equals(splitter.condition().trim())) {
-              // System.err.println(" duplicate " + tempsplitter.condition()); System.err.println();
-              duplicate = true;
-              break;
-            }
-          }
-        }
-        if (!duplicate) {
-          splitters.add(tempsplitter);
-        }
-      }
+      addUnlessDuplicate(splitters, splitter_array);
     }
-    return splitters.toArray(new Splitter[0]);
+    return splitters.values().toArray(new Splitter[0]);
   }
 }
