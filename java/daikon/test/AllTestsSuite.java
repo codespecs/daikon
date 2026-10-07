@@ -35,6 +35,7 @@ import org.junit.runners.Suite;
   daikon.test.TestAnnotate.class,
   daikon.test.DtraceDiffTester.class,
   daikon.test.split.QuantCallsSplitterTest.class,
+  daikon.test.split.SplitterLoadTest.class,
   //       ,
   //       // I'm having trouble with this; need to fix, reinstate, and not call
   //       // specially from Makefile.  -MDE 7/8/2005

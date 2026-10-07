@@ -228,6 +228,11 @@ public class CLASSNAME extends SUPERCLASS {
       return false;
     }
 
+    // Indices are meaningless if the order of the elements is meaningless.
+    if (!seqvar.aux.hasOrder()) {
+      return false;
+    }
+
     return true;
   }
 
