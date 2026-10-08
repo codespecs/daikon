@@ -30,7 +30,12 @@ Further documentation can be found in:
 * All tools accept `-h` and `--help`, which print a usage message and exit
    with status 0.
 * `daikon.diff.Diff` no longer accepts the `-u` and `-z` options, which had
-   no effect.
+   no effect.  When run with no invariant files, it reports an error and exits
+   with a non-zero status, rather than printing its usage message and exiting
+   with status 0.
+* `daikon.tools.TraceSelect` checks all its arguments before sampling.  Its
+   `-SEED` option now takes effect.  Its options must precede the arguments
+   that it passes to Daikon.
 * In a splitter info (`.spinfo`) file, a `PPT_NAME` that contains `:::` is a
   complete program point name, and it matches only the program point of that
   name.  A name ending with `:::EXIT` also matches the numbered exit points.

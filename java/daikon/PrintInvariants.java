@@ -477,6 +477,7 @@ public final class PrintInvariants {
       assert out_stream != null
           : "@AssumeAssertion(nullness): flush() does not affect any global variables";
       out_stream.close();
+      out_stream = null;
     }
   }
 
