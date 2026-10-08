@@ -1,25 +1,27 @@
 #!/usr/bin/env perl
 
 # dtrace-diff.pl
-# How to invoke:  declsfile dtrace1 dtrace2
+# How to invoke:  [declsfile] dtrace1 dtrace2
 # Outputs differences that aren't hashcodes.
-# Optionally also ignores differences in exit ppt numbers.
+# The program point declarations are those in declsfile, if it is given,
+# plus those in the dtrace files.  declsfile may be a .decls file or a
+# .dtrace file that contains declarations.
 
 use English;
 use strict;
 $WARNING = 1;
 
-my $ignore_exitno = 0;
+# Put the script directory on the @INC path.
+use File::Basename;
+use lib dirname (__FILE__);
+# The file `util_daikon.pm` appears in the same directory as this script.
+use util_daikon;
 
-if ($ARGV[0] eq "--ignore_exitno") {
-  $ignore_exitno = 1;
-  shift @ARGV;
+if (scalar(@ARGV) != 2 && scalar(@ARGV) != 3) {
+  die "Usage: $0 [<declsname>] <dtrace1> <dtrace2>\n";
 }
-
-if (scalar(@ARGV) != 3) {
-  die "Usage: $0 [--ignore-exitno] <declsname> <dtrace1> <dtrace2>\n";
-}
-my ($declsname, $dtaname, $dtbname) = @ARGV;
+my $declsname = (scalar(@ARGV) == 3) ? shift @ARGV : undef;
+my ($dtaname, $dtbname) = @ARGV;
 
 my $differences_found = 0;
 my $errors_found = 0;
@@ -28,17 +30,6 @@ my $errors_found = 0;
 ###########################################################################
 ### Subroutines
 ###
-
-sub getline ( $ ) {
-# gets a (non-comment, non-blank) line from the filehandle $1
-    my ($fh) = @_;
-    my $l;
-    do {
-	$l = <$fh>;
-	if ($l) { chomp $l; }
-    } while ($l && ($l =~ m|^\#|));
-    return $l;
-}
 
 sub gzopen ( $$ ) {
 # takes a fh and a filename, opens it (using zcat if necessary), and returns
@@ -59,107 +50,88 @@ sub gzopen ( $$ ) {
 }
 
 
-sub load_decls ( $ ) {
-# Loads the decls file given by $1 into a hash, returns a ref.
-# The hash maps from ppt name to (map from varname to triple).
-    my ($mydeclsname) = @_;
-#    open DECLS, $mydeclsname or die "couldn't open decls \"$decls\"\n";
-    my $decls = gzopen(\*DECLS, $mydeclsname);
-    my $declshash = {};
-    my $ppt_seen = 0;
-    while (defined (my $l = getline($decls))) {
+sub add_ppt_decl ( $$$$ ) {
+# Adds the program point declaration whose text is $2, which appears at
+# line $4 of the file named $3, to the decls hash $1, unless the hash
+# already contains a declaration of the program point.
+# The decls hash maps from ppt name to the hash returned by parse_ppt_decl,
+# augmented with two keys:
+#   "var by name":  map from varname to the variable's hash
+#   "variable order":  the names of the non-constant variables, in order.
+#     These are the variables whose values appear in data trace records.
+    my ($declshash, $text, $filename, $line) = @_;
+    my $ppt = parse_ppt_decl($text, $filename, $line);
+    return if exists $$declshash{$$ppt{name}};
+    my $by_name = {};
+    my @varorder = ();
+    foreach my $var (@{$$ppt{vars}}) {
+	$$by_name{$$var{name}} = $var;
+	if (!defined($$var{constant})) {
+	    push @varorder, $$var{name};
+	}
+    }
+    $$ppt{"var by name"} = $by_name;
+    $$ppt{"variable order"} = [ @varorder ];
+    $$declshash{$$ppt{name}} = $ppt;
+}
 
-        $l =~ s://.*::; # strip any comments on this line
-
-	if (($l =~ /(^ppt\s+)(.+)/)) {
-	    my $currppt = $2;
-	    my $lhashref = {};
-            my @varorder = ();
-
-            my $curvar = "";
-            my $currep = "";
-            my $curdec = "";
-            my $curcomp = "";
-
-            while(my $subline = getline($decls)) {
-                $subline =~ s/^\s+//;
-                $subline  =~ s/\s+$//;
-
-                if($subline =~ /(^variable\s+)(.+)/) {
-                    unless($curvar eq "") { # Push stuff to the stack
-                        $$lhashref{$curvar} = [$curdec, $currep, $curcomp];
-                        push @varorder, $curvar;
-                    }
-                    $curvar = $2;
-                }elsif (($subline =~ /^parent.+/) ||
-                        ($subline =~ /^ppt\-type.+/) ||
-                        ($subline =~ /^flags.+/)) {
-                }elsif ($curvar eq "") {
-                    die "Malformed decls file: \"$subline\" at line $INPUT_LINE_NUMBER instead of variable declaration";
-                }elsif ($subline =~ /(^rep\-type\s*)(.+)/) {
-                    $currep = $2;
-                }elsif ($subline =~ /(^dec-type\s*)(.+)/) {
-                    $curdec = $2;
-                }elsif ($subline =~ /(^comparability\s*)(.+)/) {
-                    $curcomp = $2;
-                }
-            }
-            unless($curvar eq "") { # Push stuff to the stack
-                $$lhashref{$curvar} = [$curdec, $currep, $curcomp];
-                push @varorder, $curvar;
-            }
-            $$lhashref{"variable order"} = [ @varorder ];
-            $$declshash{$currppt} = $lhashref;
-            $ppt_seen = 1;
-	} elsif (($l eq "ListImplementors") && !$ppt_seen) {
-	    # It's ok to have a ListImplementors in the decls file.
-	    # Read the type of comparability, then move on.
-	    $l = getline($decls);
-	} elsif (($l =~ /^input\-language.+/) ||
-                 ($l =~ /^decl\-version.+/) ||
-                 ($l =~ /^var\-comparability.+/)){
-        } elsif ($l) {
-	    die "malformed decls file: \"$l\" at line $INPUT_LINE_NUMBER of $mydeclsname";
+sub load_decls ( $$ ) {
+# Adds the program point declarations in the file named $2 to the decls
+# hash $1 (see add_ppt_decl).  Data trace records in the file are ignored.
+    my ($declshash, $mydeclsname) = @_;
+    my $reader = record_reader(gzopen(\*DECLS, $mydeclsname), $mydeclsname);
+    my $found = 0;
+    while (defined(my $record = $reader->())) {
+	if ($record->{kind} eq "ppt") {
+	    add_ppt_decl($declshash, $record->{text}, $mydeclsname, $record->{line});
+	    $found = 1;
 	}
     }
     close \*DECLS;
-    return $declshash;
+    $found or die "No program point declarations in $mydeclsname\n";
 }
 
-sub load_ppt ( $$ ) {
-# Loads a single ppt from a dtrace fh given by $1.
+sub load_ppt ( $$$ ) {
+# Loads a single ppt using the record reader given by $2 (see
+# record_reader in util_daikon.pm), which reads the dtrace file named $3.
+# Program point declarations that precede the ppt are added to the decls
+# hash $1.
 # Returns a "ppt_trace_info": a 3-element array of pptname, line number in
 # file, and hash mapping varname to array of value and modbit.
-    my ($dtfh, $dtfhname) = @_;
-    my $pptname = getline($dtfh);
-    while ((defined $pptname) && (($pptname eq "") ||
-                                  ($pptname =~ /^input\-language.+/) ||
-                                  ($pptname =~ /^decl\-version.+/) ||
-                                  ($pptname =~ /^var\-comparability.+/))) {
-	$pptname = getline($dtfh);
+    my ($declshash, $dtreader, $dtfhname) = @_;
+    # Skip records other than data records, such as headers.
+    my $record;
+    while (1) {
+	$record = $dtreader->();
+	(defined $record)
+	    or return undef;
+	last if $record->{kind} eq "data";
+	if ($record->{kind} eq "ppt") {
+	    add_ppt_decl($declshash, $record->{text}, $dtfhname, $record->{line});
+	}
     }
-
-
-    (defined $pptname)
-	or return undef;
-
-    my $pptline = $INPUT_LINE_NUMBER;
+    my $text = $record->{text};
+    # Remove comment lines (see is_comment_line in util_daikon.pm).  This
+    # is faster than testing each line.
+    $text =~ s/^(?:\/\/|#).*\n?//mg;
+    my @lines = split(/\n/, $text);
+    my $pptname = unescape_decl(shift @lines);
+    my $pptline = $record->{line};
 
     my $ppthash = {};
 
     my @varorder = ();
 
-    while (my $varname = getline($dtfh)) {
+    while (defined(my $varname = shift @lines)) {
+        $varname = unescape_decl($varname);
         my ($modbit, $varval);
-	(defined ($varval = getline($dtfh)))
-	    # or die "malformed dtrace file (ppt $pptname, var $varname, no varval) $dtfhname";
-	    or die "malformed dtrace file (ppt $pptname) $dtfhname";
+	(defined ($varval = shift @lines))
+	    or die "malformed dtrace file (ppt " . escape_decl($pptname) . ") $dtfhname";
 	unless ($varname eq 'this_invocation_nonce') {
-	(defined ($modbit = getline($dtfh)))
-	    # or die "malformed dtrace file (ppt $pptname, var $varname, val $varval, no modbit) $dtfhname";
-  	    or die "malformed dtrace file (ppt $pptname, no modbit) $dtfhname";
+	(defined ($modbit = shift @lines))
+  	    or die "malformed dtrace file (ppt " . escape_decl($pptname) . ", no modbit) $dtfhname";
         }
-	die "duplicate entry in dtracefile for var $varname at $pptname in $dtfhname\n"
+	die "duplicate entry in dtracefile for var " . escape_decl($varname) . " at " . escape_decl($pptname) . " in $dtfhname\n"
 	    if (defined $$ppthash{$varname});
 	$$ppthash{$varname} = [$varval, $modbit];
         push @varorder, $varname;
@@ -184,18 +156,29 @@ sub print_ppt ( $ ) {
     }
 }
 
+sub lists_equal ( $$ ) {
+# Returns true if the two lists of strings, given by reference, are equal.
+    my ($x, $y) = @_;
+    return 0 if scalar(@$x) != scalar(@$y);
+    for (my $i = 0; $i < scalar(@$x); $i++) {
+	return 0 if $$x[$i] ne $$y[$i];
+    }
+    return 1;
+}
+
 sub cmp_ppts ( $$$ ) {
 # Compares, according to the decls $1, the two ppts given by $2 and $3.
 # Arguments 2 and 3 are "ppt_trace_info" objects (see load_ppt for definition).
     my ($declshash, $ppta, $pptb) = @_;
     if ($$ppta[0] ne $$pptb[0]) {
-	print "ppt name difference: ${dtaname}=\"" . $$ppta[0] . " [line " . $$ppta[1]
-        . "] ". "\", ${dtbname}=\"" . $$pptb[0] . "\" [line ". $$pptb[1] ."]\n";
+	print "ppt name difference: ${dtaname}=\"" . escape_decl($$ppta[0]) . " [line " . $$ppta[1]
+        . "] ". "\", ${dtbname}=\"" . escape_decl($$pptb[0]) . "\" [line ". $$pptb[1] ."]\n";
         $differences_found++;
 	return;
     }
-    my $pptname = $$ppta[0];
-    my $ppt = $$declshash{$pptname};
+    my $ppt = $$declshash{$$ppta[0]};
+    # Names in the output are escaped, as in a dtrace file.
+    my $pptname = escape_decl($$ppta[0]);
     if (not defined $ppt) {
 	print "ppt name not in decls: \"${pptname}\"\n";
 	$errors_found++;
@@ -212,19 +195,32 @@ sub cmp_ppts ( $$$ ) {
     if ((scalar(@ppt2_varnames) > 0) && ($ppt2_varnames[0] eq "this_invocation_nonce")) {
       shift @ppt2_varnames;
     }
-    if (("@decls_varnames" ne "@ppt1_varnames")
-        || ("@decls_varnames" ne "@ppt2_varnames")) {
+    if (!lists_equal(\@decls_varnames, \@ppt1_varnames)
+        || !lists_equal(\@decls_varnames, \@ppt2_varnames)) {
       print "Mismatched variables for ppt $pptname.\n";
-      print "  decls:   @decls_varnames\n";
-      print "  trace1:  @ppt1_varnames\n";
-      print "  trace2:  @ppt2_varnames\n";
+      print "  decls:   " . join(" ", map { escape_decl($_) } @decls_varnames) . "\n";
+      print "  trace1:  " . join(" ", map { escape_decl($_) } @ppt1_varnames) . "\n";
+      print "  trace2:  " . join(" ", map { escape_decl($_) } @ppt2_varnames) . "\n";
       $errors_found++;
+      foreach my $trace ([$dtaname, \@ppt1_varnames], [$dtbname, \@ppt2_varnames]) {
+	my ($tracename, $trace_varnames) = @$trace;
+	foreach my $name (@$trace_varnames) {
+	  my $var = $$ppt{"var by name"}{$name};
+	  my $varname = escape_decl($name);
+	  if (not defined $var) {
+	    print "  ${varname} appears in ${tracename} but is not declared\n";
+	  } elsif (defined $$var{constant}) {
+	    print "  ${varname} appears in ${tracename} but is declared as constant $$var{constant}\n";
+	  }
+	}
+      }
     }
 
-    foreach my $varname (@decls_varnames) {
-	my $varl = $$ppt{$varname};
-	my $la = $$ha{$varname};
-	my $lb = $$hb{$varname};
+    foreach my $name (@decls_varnames) {
+	my $rep_type = $$ppt{"var by name"}{$name}{rep_type};
+	my $la = $$ha{$name};
+	my $lb = $$hb{$name};
+	my $varname = escape_decl($name);
 	#la == lb == [varval, modbit]
 	if ((not defined $la) && (not defined $lb)) {
 	    print "${varname} \@ ${pptname} undefined in both dtrace files\n";
@@ -235,7 +231,7 @@ sub cmp_ppts ( $$$ ) {
 	} elsif (not defined $lb) {
 	    print "${varname} \@ ${pptname} undefined in ${dtbname}\n";
 	    $errors_found++;
-	} elsif ($$varl[1] eq "double") {
+	} elsif ($rep_type eq "double") {
   	    my $difference;
 	    if (($$la[0] eq "uninit")||($$lb[0] eq "uninit")) {
 		$difference = !($$la[0] eq $$lb[0]);
@@ -263,7 +259,7 @@ sub cmp_ppts ( $$$ ) {
 		$differences_found++;
 	    }
 	} else {
-	    if ($$varl[1] =~ /^hashcode/) {
+	    if ($rep_type =~ /^hashcode/) {
 	        # It's a hashcode, or array of hashcodes; we only care
 	        # about which ones are null or not.
 	        $$la[0] =~ s/\d*[1-9]\d*/non-null/g; # match numbers except 0
@@ -290,16 +286,12 @@ sub cmp_dtracen ( $$$ ) {
     my ($declshash, $mydtaname, $mydtbname) = @_;
 #    open DTA, $mydtaname or die "couldn't open dtrace \"$mydtaname\"\n";
 #    open DTB, $mydtbname or die "couldn't open dtrace \"$mydtbname\"\n";
-    my $dta = gzopen(\*DTA, $mydtaname);
-    my $dtb = gzopen(\*DTB, $mydtbname);
+    my $dta = record_reader(gzopen(\*DTA, $mydtaname), $mydtaname);
+    my $dtb = record_reader(gzopen(\*DTB, $mydtbname), $mydtbname);
 
   PPT: while (1) {
-
-      #Skip headers
-
-
-      my $ppta = load_ppt($dta, $mydtaname);
-      my $pptb = load_ppt($dtb, $mydtbname);
+      my $ppta = load_ppt($declshash, $dta, $mydtaname);
+      my $pptb = load_ppt($declshash, $dtb, $mydtbname);
       if ((not defined $ppta) && (not defined $pptb)) {
 	  last PPT;
       } elsif (not defined $ppta) {
@@ -324,15 +316,16 @@ sub cmp_dtracen ( $$$ ) {
 sub dump_decls ( $ ) {
 # dump the decls struct given by $1
     my ($declshash) = @_;
-    foreach my $ppt (keys %$declshash) {
-	my $lhashref = $$declshash{$ppt};
-	print "\@${ppt}:\n";
-	foreach my $var (keys %$lhashref) {
-	    print "  ${var}:\n";
-	    my ($d, $r, $l) = @{$$lhashref{$var}};
-	    print "    declare ${d}\n";
-	    print "    reptype ${r}\n";
-	    print "    lackwit ${l}\n";
+    foreach my $pptname (keys %$declshash) {
+	print "\@${pptname}:\n";
+	foreach my $var (@{$$declshash{$pptname}{vars}}) {
+	    print "  $$var{name}:\n";
+	    print "    dec-type $$var{dec_type}\n";
+	    print "    rep-type $$var{rep_type}\n";
+	    print "    comparability $$var{comparability}\n";
+	    if (defined $$var{constant}) {
+		print "    constant $$var{constant}\n";
+	    }
 	}
     }
 }
@@ -342,7 +335,10 @@ sub dump_decls ( $ ) {
 ###
 
 # load decls file
-my $gdeclshash = load_decls($declsname);
+my $gdeclshash = {};
+if (defined $declsname) {
+    load_decls($gdeclshash, $declsname);
+}
 
 # dump it
 # dump_decls($gdeclshash);
