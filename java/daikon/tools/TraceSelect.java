@@ -2,7 +2,6 @@
 package daikon.tools;
 
 import daikon.DaikonGetopt;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UncheckedIOException;
@@ -10,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -40,6 +40,7 @@ public class TraceSelect {
           "The options are -SEED n, -NOCLEAN, -INCLUDE_UNRETURNED, and -DO_DIFFS.",
           "The Daikon-args start with the first argument that is not one of those options.",
           "Exactly one of the Daikon-args must be a .dtrace file; it is the file to sample.",
+          "The Daikon-args must not include -o, which TraceSelect supplies for each sample.",
           "Example: java TraceSelect 20 10 -NOCLEAN -INCLUDE_UNRETURNED -SEED 1000 foo.dtrace"
               + " foo.decls RatPoly.decls",
           "",
@@ -70,7 +71,7 @@ public class TraceSelect {
     args = DaikonGetopt.argsAfterLeadingOptions(args, usage);
 
     if (args.length < 2) {
-      throw new daikon.Daikon.UserError("Too few arguments." + daikon.Daikon.lineSep + usage);
+      throw new daikon.Daikon.UserError("Too few arguments; " + DaikonGetopt.USAGE_HINT);
     }
 
     int numReps = parsePositiveInt("num_reps", args[0]);
@@ -134,13 +135,14 @@ public class TraceSelect {
 
     // Check the Daikon arguments before doing any sampling, so that a bad argument (including a
     // misspelled TraceSelect option) is reported immediately.  This also handles -h and --help.
-    List<String> argsToCheck = new ArrayList<>(daikonArgs);
-    argsToCheck.add(inputFile);
-    daikon.Daikon.read_options(argsToCheck.toArray(new String[0]), usage);
+    // The arguments are the same as those of a sample's Daikon run, except for the .dtrace file,
+    // which does not exist yet.  Daikon.mainHelper calls Daikon.cleanup() before each run, which
+    // undoes the effects of this check.
+    daikon.Daikon.cleanup();
+    daikon.Daikon.read_options(daikonCommandLine(inputFile, daikonArgs), usage);
 
-    // The arguments to daikon.diff.MultiDiff: "-p" followed by the .inv file for each sample.
-    String[] sampleNames = new String[numReps + 1];
-    sampleNames[0] = "-p";
+    // The .inv file for each sample, from the last sample to the first.
+    List<String> sampleNames = new ArrayList<>();
 
     System.out.println("*******Processing********");
 
@@ -164,13 +166,16 @@ public class TraceSelect {
 
         String filePrefix = calcOut(inputFile, rep);
 
-        sampleNames[rep] = filePrefix + ".inv";
+        sampleNames.add(filePrefix + ".inv");
 
         try {
           try (PrintWriter pwOut = new PrintWriter(FilesPlume.newBufferedFileWriter(filePrefix))) {
             for (String toPrint : al) {
               pwOut.println(toPrint);
             }
+          } catch (IOException e) {
+            throw new daikon.Daikon.UserError(
+                "Cannot write sample file " + filePrefix + ": " + e.getMessage());
           }
 
           invokeDaikon(filePrefix, daikonArgs);
@@ -183,8 +188,11 @@ public class TraceSelect {
       }
 
       if (doDiffs) {
-        // spinfo format
-        daikon.diff.MultiDiff.mainHelper(sampleNames);
+        // spinfo format.  The arguments are "-p" followed by the samples, first sample first.
+        List<String> multiDiffArgs = new ArrayList<>(sampleNames);
+        multiDiffArgs.add("-p");
+        Collections.reverse(multiDiffArgs);
+        daikon.diff.MultiDiff.mainHelper(multiDiffArgs.toArray(new String[0]));
       }
 
     } catch (IOException e) {
@@ -193,12 +201,9 @@ public class TraceSelect {
       throw new daikon.Daikon.BugInDaikon(e);
     } finally {
       // Clean up the mess!  A failed cleanup is not fatal.
-      // Start at index 1: sampleNames[0] is the "-p" sentinel, not a file.
       if (clean) {
-        for (int j = 1; j < sampleNames.length; j++) {
-          if (sampleNames[j] != null) {
-            deleteQuietly(sampleNames[j]);
-          }
+        for (String sampleName : sampleNames) {
+          deleteQuietly(sampleName);
         }
       }
     }
@@ -221,7 +226,7 @@ public class TraceSelect {
     }
     if (result <= 0) {
       throw new daikon.Daikon.UserError(
-          name + " must be a positive integer, not " + arg + daikon.Daikon.lineSep + usage);
+          name + " must be a positive integer, not " + arg + "; " + DaikonGetopt.USAGE_HINT);
     }
     return result;
   }
@@ -241,59 +246,50 @@ public class TraceSelect {
   }
 
   /**
+   * Returns the command line for running Daikon on a sample.
+   *
+   * @param dtraceName the sample .dtrace file
+   * @param daikonArgs the arguments to pass to Daikon, other than the .dtrace file
+   * @return the command line for running Daikon on the sample
+   */
+  private static String[] daikonCommandLine(String dtraceName, List<String> daikonArgs) {
+    List<String> result = new ArrayList<>();
+    result.add(dtraceName);
+    result.add("-o");
+    result.add(dtraceName + ".inv");
+    result.addAll(daikonArgs);
+    return result.toArray(new String[0]);
+  }
+
+  /**
    * Runs Daikon on a sample, then runs PrintInvariants on the result.
    *
    * @param dtraceName the sample .dtrace file
    * @param daikonArgs the arguments to pass to Daikon, other than the .dtrace file
-   * @throws IOException if PrintInvariants cannot be run
+   * @throws IOException if PrintInvariants cannot read or write a file
+   * @throws ClassNotFoundException if PrintInvariants cannot deserialize the invariants
    */
-  private static void invokeDaikon(String dtraceName, List<String> daikonArgs) throws IOException {
+  private static void invokeDaikon(String dtraceName, List<String> daikonArgs)
+      throws IOException, ClassNotFoundException {
 
     System.out.println("Created file: " + dtraceName);
 
-    List<String> daikonArgsList = new ArrayList<>();
-    daikonArgsList.add(dtraceName);
-    daikonArgsList.add("-o");
-    daikonArgsList.add(dtraceName + ".inv");
-    daikonArgsList.addAll(daikonArgs);
-
-    daikon.Daikon.mainHelper(daikonArgsList.toArray(new String[0]));
-    // Run: java daikon.PrintInvariants dtraceName.inv > dtraceName.txt
-    ProcessBuilder pb = new ProcessBuilder("java", "daikon.PrintInvariants", dtraceName + ".inv");
-    pb.redirectOutput(new File(dtraceName + ".txt"));
-    // In Java 26, `Process` implements `AutoCloseable`, so use try-with-resources.
-    @SuppressWarnings({
-      "resourceleak:required.method.not.called",
-      "resourceleak:unneeded.suppression"
-    })
-    Process p = pb.start();
-    try {
-      p.waitFor();
-    } catch (InterruptedException e) {
-      // do nothing
-    }
+    daikon.Daikon.mainHelper(daikonCommandLine(dtraceName, daikonArgs));
+    daikon.PrintInvariants.mainHelper(
+        new String[] {"--output", dtraceName + ".txt", dtraceName + ".inv"});
   }
 
   /**
    * Returns the name of the file that holds the given sample of the given trace file.
    *
-   * @param strFileName the name of the trace file
+   * @param strFileName the name of the trace file; ends with ".dtrace"
    * @param rep the number of the sample
    * @return the name of the file that holds the sample
    */
   private static String calcOut(String strFileName, int rep) {
-    StringBuilder product = new StringBuilder();
-    int index = strFileName.indexOf('.');
-    if (index >= 0) {
-      product.append(strFileName.substring(0, index));
-      product.append(rep);
-      if (index != strFileName.length()) {
-        product.append(strFileName.substring(index));
-      }
-    } else {
-      product.append(strFileName).append("2");
-    }
-    return product.toString();
+    // Insert the sample number into the file's name, not into the name of a directory.
+    String base = strFileName.substring(0, strFileName.length() - ".dtrace".length());
+    return base + rep + ".dtrace";
   }
 }
 
