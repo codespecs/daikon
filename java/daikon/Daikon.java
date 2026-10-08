@@ -518,7 +518,7 @@ public final class Daikon {
   public static final Logger debugStats = Logger.getLogger("daikon.stats");
 
   /** The usage message for this program. */
-  static String usage =
+  public static final String usage =
       StringsPlume.joinLines(
           release_string,
           // "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
@@ -1003,8 +1003,18 @@ public final class Daikon {
 
   // ///////////////////////////////////////////////////////////////////////////
   // Read in the command line options
-  // Return {decls, dtrace, spinfo, map} files.
-  static FileOptions read_options(String[] args, String usage) {
+
+  /**
+   * Reads the command-line options, setting the corresponding static fields of Daikon and other
+   * classes.
+   *
+   * @param args the command-line arguments
+   * @param usage the usage message to print for {@code -h} and {@code --help}
+   * @return the {decls, dtrace, spinfo, map} files
+   * @throws Daikon.NormalTermination after printing the usage message, if an argument requests it
+   * @throws Daikon.UserError if an argument is malformed or names a nonexistent file
+   */
+  public static FileOptions read_options(String[] args, String usage) {
     if (args.length == 0) {
       System.out.println("Error: no files supplied on command line.");
       System.out.println(usage);

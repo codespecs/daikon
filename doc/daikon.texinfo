@@ -2981,6 +2981,10 @@ The @var{daikon_options} are the same options that can be provided to the
 The @var{options} for @command{TraceSelect} are:
 @table @option
 
+@item -SEED @var{n}
+Use the integer @var{n} as the seed for random selection, so that repeated
+runs select the same samples.
+
 @item -NOCLEAN
 Don't delete the temporary trace samples created by the random
 selection process.  This can help for debugging or for using the tool
@@ -9229,7 +9233,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  fd Linux's GNUC mkdir tmp gunzip xf li dkconfig CreateSpinfo
 @c  LocalWords:  ParameterDoclet CreateSpinfoC un biconditional addAll isFull
 @c  LocalWords:  smallexample simpleStack currentSize jtb ParseException kmeans
-@c  LocalWords:  runcluster xm ALG xmeans TraceSelect NOCLEAN DIFFS MergeESC pp
+@c  LocalWords:  runcluster xm ALG xmeans TraceSelect NOCLEAN DIFFS SEED MergeESC pp
 @c  LocalWords:  escannotated jmlannotated dbcannotated Annnotate xml INVINFO
 @c  LocalWords:  ubs Throwable throwable rethrown WriteViolationFile MyProg
 @c  LocalWords:  callMethod isInstrumented getInvariants INVS ijmp exin wp

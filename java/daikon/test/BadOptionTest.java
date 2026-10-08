@@ -149,6 +149,23 @@ public class BadOptionTest {
         () -> PrintInvariants.mainHelper(new String[] {"--bogus", "foo.inv.gz"}));
   }
 
+  /** Tests that TraceSelect rejects bad arguments before doing any sampling. */
+  @Test
+  public void testTraceSelectBadArguments() {
+    assertThrows(
+        Daikon.UserError.class, () -> TraceSelect.mainHelper(new String[] {"0", "10", "x.dtrace"}));
+    assertThrows(
+        Daikon.UserError.class,
+        () -> TraceSelect.mainHelper(new String[] {"20", "-5", "x.dtrace"}));
+    assertThrows(
+        Daikon.UserError.class,
+        () -> TraceSelect.mainHelper(new String[] {"20", "ten", "x.dtrace"}));
+    // A misspelled TraceSelect option is a bad Daikon argument.
+    assertThrows(
+        Daikon.UserError.class,
+        () -> TraceSelect.mainHelper(new String[] {"20", "10", "-NOCLAEN", "x.dtrace"}));
+  }
+
   /** Tests that tools accept the {@code --help} option that their usage messages document. */
   @Test
   public void testHelpOption() {
@@ -156,6 +173,8 @@ public class BadOptionTest {
     assertPrintsUsage(() -> UnionInvariants.mainHelper(new String[] {"--help"}));
     assertPrintsUsage(() -> TraceSelect.mainHelper(new String[] {"--help"}));
     assertPrintsUsage(() -> TraceSelect.mainHelper(new String[] {"20", "10", "-h", "x.dtrace"}));
+    assertPrintsUsage(
+        () -> TraceSelect.mainHelper(new String[] {"20", "10", "-NOCLEAN", "x.dtrace", "--he"}));
   }
 
   /**
