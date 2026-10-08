@@ -3363,22 +3363,6 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /**
-   * Simplify the names of variables before printing them. For example, "orig(a[post(i)])" might
-   * change into "orig(a[i+1])". We might want to switch off this behavior, depending on various
-   * heuristics. We'll have to try it and see which output we like best. In any case, we have to do
-   * this for ESC output, since ESC doesn't have anything like post().
-   */
-  public void simplify_variable_names() {
-    for (VarInfo vi : var_infos) {
-      // String original = vi.name();
-      vi.simplify_expression();
-      // if (!original.equals (vi.name()))
-      //   System.out.printf("modified var from %s to %s%n", original,
-      //                      vi.name());
-    }
-  }
-
   public static final Comparator<Invariant> icfp = new Invariant.InvariantComparatorForPrinting();
 
   static Comparator<PptSlice> arityVarnameComparator = new PptSlice.ArityVarnameComparator();
@@ -4136,6 +4120,16 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
+   * Creates the initial equality view for this ppt, in which all variables are in a single equality
+   * set.
+   */
+  public void create_equality_view() {
+    PptSliceEquality new_equality_view = new PptSliceEquality(this);
+    new_equality_view.instantiate_invariants();
+    equality_view = new_equality_view;
+  }
+
+  /**
    * Cleans up the ppt so that its invariants can be merged from other ppts. Not normally necessary
    * unless the merge is taking place over multiple ppts maps based on different data. This allows a
    * ppt to have its invariants recalculated.
@@ -4685,6 +4679,33 @@ public class PptTopLevel extends Ppt {
     } else {
       return ppt_name.isExitPoint() && !ppt_name.isCombinedExitPoint();
     }
+  }
+
+  /**
+   * Returns true if this ppt is a leaf of the dataflow hierarchy: that is, its invariants are
+   * computed from samples (possibly by way of its conditional ppts) rather than by merging the
+   * invariants of other ppts. Every ppt is a leaf if {@link Daikon#use_dataflow_hierarchy} is
+   * false. Otherwise, the non-leaves are combined exit, enter, throws, OBJECT, and CLASS ppts (and
+   * the conditional ppts of such ppts). Defining the leaves this way ensures that arbitrarily named
+   * ppts, such as {@code :::POINT} (used by convertcsv.pl), are leaves.
+   *
+   * <p>A leaf need not be childless: for example, a numbered exit point is the parent of its
+   * conditional ppts.
+   *
+   * @return true if this ppt is a leaf of the dataflow hierarchy
+   */
+  @Pure
+  public boolean is_dataflow_leaf() {
+    if (!Daikon.use_dataflow_hierarchy) {
+      return true;
+    }
+    PptName pname =
+        (this instanceof PptConditional) ? ((PptConditional) this).parent.ppt_name : ppt_name;
+    return !(pname.isCombinedExitPoint()
+        || pname.isEnterPoint()
+        || pname.isThrowsPoint()
+        || pname.isObjectInstanceSynthetic()
+        || pname.isClassStaticSynthetic());
   }
 
   /** Is this a ppt that represents an object? */

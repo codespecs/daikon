@@ -9,6 +9,12 @@ use strict;
 use 5.006;
 use warnings;
 
+# Put the script directory on the @INC path.
+use File::Basename;
+use lib dirname (__FILE__);
+# The file `util_daikon.pm` appears in the same directory as this script.
+use util_daikon;
+
 # $ppt_count{ppt_name} = [count, num_lines];
 # num_lines is the number of lines in each dtrace record.
 # It is measured to detect discrepancies, which indicate errors in the trace file.
@@ -16,13 +22,17 @@ my %ppt_count;
 
 my %long_names;
 
-$/ = ""; # Read by paragraph
-while (<>) {
-    next if /^VarComparability/ or /^DECLARE/ or /^decl/ or /^ppt/ or /^var/ or /^input/ or /^\/\//; # Skip .decls-like paras
-    next if /^Begin/ or /^Done/; # Skip processing program point comments
-    # This script currently assumes the V1 declaration record format, which
-    # requires ::: in the program point name.
-    /^(.*):::(.+)$/m or die "Can't parse PPT name (in Version 1 format) from <$_>";
+for_each_record(sub {
+  my ($record) = @_;
+  # Skip headers and declarations
+  count_record($record->{text}) if $record->{kind} eq "data";
+});
+
+sub count_record {
+    local $_ = shift;
+    return if /^Begin/ or /^Done/; # Skip processing program point comments
+    # This script assumes that each program point name contains ":::".
+    /^(.*):::(.+)$/m or die "Can't parse PPT name from <$_>";
     my $name = "$1:::$2";
     $long_names{$1}{$2} = 1;
     s/\n+$//;

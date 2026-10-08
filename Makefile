@@ -32,7 +32,7 @@ JAVA_RELEASE_NUMBER := $(shell java -version 2>&1 | head -1 | cut -d'"' -f2 | se
 
 # note that for right now, we are only copying the html and texinfo
 # versions of the developer manual (though the PDF version is also built)
-IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps dfepl-flow.dot
+IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps
 IMAGE_PARTIAL_PATHS := $(addprefix images/,${IMAGE_FILES})
 DOC_FILES_NO_IMAGES := Makefile index.html daikon.texinfo \
                        config-options.texinfo invariants-doc.texinfo \
@@ -52,7 +52,7 @@ README_PATHS := README doc/README fjalar/README
 DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
                       doc/index.html doc/www/download/index.html
 
-# Scripts, such as Perl programs, that are included in the Daikon distribution.
+# Scripts that are included in the Daikon distribution.
 # Why not just include all of them?  (Maybe to avoid problems with
 # accidentally including things in the user's checkout that are not needed
 # by most users, but why not include everything that's in repository?)
@@ -61,7 +61,6 @@ DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
 # from the 'Installation' section of the Daikon manual.
 SCRIPT_FILES := Makefile \
 	daikon.bashrc \
-	dfepl dtrace-perl dtype-perl \
 	java-cpp \
 	kvasir-dtrace \
 	convertcsv.pl \
@@ -85,7 +84,6 @@ DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/test/InvariantFormatTest.commands \
 	daikon/test/SampleTester.commands \
 	daikon/test/SampleTester.decls \
-	daikon/test/SampleTesterGlobal.decls \
 	daikon/test/SampleTester.commands_linear_ternary \
 	daikon/test/varInfoNameTest.testEscForall \
 	daikon/test/varInfoNameTest.testEscForall.goal \
@@ -141,16 +139,6 @@ endif
 
 # For deterministic sorting
 export LC_ALL=C
-
-## Examples of better ways to get the lists:
-# PERL_MODULES := $(wildcard *.pm)
-# PERL_SCRIPTS := $(wildcard *.pl)
-# PERL_SCRIPTS += em_analyze em_reports cppp
-# PERL_MODULE_TEXI := $(patsubst %.pm,%.texi,${PERL_MODULES})
-# PERL_MODULE_INFO := $(patsubst %.pm,%.info,${PERL_MODULES})
-# PERL_MODULE_MAN := $(patsubst %.pm,%.man,${PERL_MODULES})
-# PERL_MODULE_HTML := $(patsubst %.pm,%.html,${PERL_MODULES})
-
 
 ###########################################################################
 ### Rules
@@ -660,10 +648,6 @@ daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
 	# Keep .java files, delete everything else
 	(cd ${TMPDIR}/daikon && find examples/java-examples -name '*.java' -prune -o \( -type f -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print0 | xargs -0 rm -rf)
 
-	# Perl example files
-	mkdir ${TMPDIR}/daikon/examples/perl-examples
-	(cd examples/perl-examples && cp -p Birthday.accessors Birthday.pm standalone.pl test_bday.pl ${TMPDIR}/daikon/examples/perl-examples)
-
 	# C example files for Kvasir
 	mkdir ${TMPDIR}/daikon/examples/c-examples
 	mkdir ${TMPDIR}/daikon/examples/c-examples/bzip2
@@ -685,14 +669,6 @@ daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
 	# Maybe I should do  ${MAKE} javadoc
 	# Don't do  ${MAKE} clean  which deletes .class files
 	(cd ${TMPDIR}/daikon/java; ${RM_TEMP_FILES})
-
-	## Front ends
-	mkdir ${TMPDIR}/daikon/front-end
-
-	# Perl front end
-	# mkdir ${TMPDIR}/daikon/front-end/perl
-	cp -pR front-end/perl ${TMPDIR}/daikon/front-end
-	(cd ${TMPDIR}/daikon/front-end/perl; ${RM_TEMP_FILES} )
 
 	# Kvasir C front end
 # We use the --filter option twice with rsync to exclude unneeded files.
