@@ -11,6 +11,13 @@ variables at each program point, alphabetically sorted and separated
 by spaces.  All program points are also sorted by alphabetical
 order. Output is written to stdout by default
 
+Variables are in the same comparability set if their comparabilities
+are identical.  For arrays, this is stricter than Daikon, which
+compares the element and index comparabilities (as in "9[10]")
+separately.  A variable whose comparability is negative and is not an
+array is comparable to every variable; all such variables are listed on
+the last line for the program point, which starts with "-1:".
+
 Usage: ./decls2comp.py input.decls 'no-hashcodes' [optional]
 Running this with the 'no-hashcodes' string as the 2nd arg results
 in the tool ignoring all variables of rep. type 'hashcode' or
@@ -51,28 +58,9 @@ ppt ..returnIntSum():::ENTER
   dec-type int
   comparability -1
 
-DECLARE
-..add():::ENTER
-a
-int # isParam=true
-int
-1
-b
-int # isParam=true
-int
-1
-c
-int # isParam=true
-int
-2
-d
-int # isParam=true
-int
--1
-
 Output:
 
-..add():::ENTER
+..returnIntSum():::ENTER
 a b
 c
 -1: d
@@ -86,10 +74,6 @@ VAR_START = "variable "
 PPT_START = "ppt "
 REP_START = "rep-type "
 COMP_START = "comparability "
-
-# Note: Lackwit produces comparability numbers for arrays in the
-# following format: '9[10]' - we are going to ignore what is between
-# the brackets so we will treat it as '9'
 
 ignore_hashcodes = False
 
@@ -107,7 +91,7 @@ hashcode_re = re.compile(r"hashcode.*")
 
 
 # Break each program point declaration up into separate lists.
-# Program points are separated by "DECLARE" statements
+# Each program point declaration starts with a "ppt" record
 # Key: program point name
 # Value: list of all strings following program point
 all_ppts = {}
@@ -153,12 +137,13 @@ sorted_ppt_keys = sorted(all_ppts.keys())
 for ppt_name in sorted_ppt_keys:
     v = all_ppts[ppt_name]
     i = 0
-    var2comp = {}  # Key: variable name, Value: comparability number
+    var2comp: dict[str, str] = {}  # Key: variable name, Value: comparability number
 
     # The comparability info for a variable at a program point is
     # prefixed by comparability
 
     cur_var = None
+    hashcode_vars = set()  # Variables whose rep. type is a hashcode
     for line in v:
         stripped_line = line.strip()
 
@@ -167,6 +152,8 @@ for ppt_name in sorted_ppt_keys:
         elif stripped_line[0 : len(REP_START)] == REP_START:
             assert cur_var  # There should have been a variable entry before rep-type
             cur_rep = stripped_line[len(REP_START) :]
+            if hashcode_re.match(cur_rep):
+                hashcode_vars.add(cur_var)
         elif stripped_line[0 : len(COMP_START)] == COMP_START:
             assert (
                 cur_var  # There should have been a variable entry before comparability
@@ -174,40 +161,25 @@ for ppt_name in sorted_ppt_keys:
             cur_comp = stripped_line[len(COMP_START) :]
             var2comp[cur_var] = cur_comp
 
+    if ignore_hashcodes:
+        for var in hashcode_vars:
+            var2comp.pop(var, None)
+
     # Now we can do the real work of grouping variables together
     # in comparability sets based on their numbers
-    sorted_vars = sorted(var2comp.keys())
+    groups = {}  # Key: comparability, Value: sorted list of variable names
+    always_comparable = []  # Variables that are comparable to every variable
+    for var_name in sorted(var2comp.keys()):
+        comp = var2comp[var_name]
+        if comp.startswith("-") and "[" not in comp:
+            always_comparable.append(var_name)
+        else:
+            groups.setdefault(comp, []).append(var_name)
 
     print(ppt_name)
-
-    start_of_line = 1
-    while len(sorted_vars) > 0:
-        var_name = sorted_vars[0]
-
-        #        if var2comp[var_name] == '-1': # Remember that everything is a string
-        #            print '-1:', var_name,
-        #        else:
-        if start_of_line == 1:
-            print(var_name, end="")
-            StartOfLine = 0
-        else:
-            print("", var_name, end="")
-
-        comp_num = var2comp[var_name]
-
-        if comp_num:
-            del var2comp[var_name]
-
-            sorted_vars = sorted(var2comp.keys())
-
-            for other_var in sorted_vars:
-                if var2comp[other_var] == comp_num:
-                    print("", other_var, end="")
-                    del var2comp[other_var]
-        print()
-
-        # Update sorted_vars after deleting the appropriate entries
-        # from var2comp
-        sorted_vars = sorted(var2comp.keys())
-
+    # Each group is sorted, so this orders the groups by their first variable.
+    for group in sorted(groups.values()):
+        print(" ".join(group))
+    if always_comparable:
+        print("-1:", " ".join(always_comparable))
     print()

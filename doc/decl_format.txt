@@ -496,9 +496,11 @@ File format
   are:
 
     - Input language record.  Specifies the language of the target
-      program.
+      program.  The language is an arbitrary single token that contains
+      no whitespace (for example, C, C++, C#, or Java) and is not used
+      by Daikon.
 
-        input-language |C|C++|Perl|Java
+        input-language <language>
 
     - The type of comparability used in the file
 
@@ -879,9 +881,8 @@ Resolved Issues:
       other languages. For instance, as mentioned above it would be
       nice to use "*" for dereferences in C (though we don't at the
       moment). In Perl, there's a class of variables whose names start
-      with "*" (though dfepl doesn't support them at the moment) and
-      there's also a global variable for just about every punctuation
-      character, including $*. Perhaps a multi-character marker would
+      with "*" and there's also a global variable for just about every
+      punctuation character, including $*. Perhaps a multi-character marker would
       be more robust?  (smcc)
 
       I'd forgotten about '*' in C.  I've changed the proposal to use

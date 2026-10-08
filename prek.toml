@@ -223,7 +223,6 @@ hooks = [
     "SCRIPTDIR",
   ], exclude = { glob = [
     "cronic-orig",
-    "scripts/eps2png-mono-alpha.zsh",
     "share/csail-athena-tickets.bash",
     "tests/kvasir-tests/**/*",
   ] } },

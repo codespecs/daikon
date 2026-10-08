@@ -3363,22 +3363,6 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /**
-   * Simplify the names of variables before printing them. For example, "orig(a[post(i)])" might
-   * change into "orig(a[i+1])". We might want to switch off this behavior, depending on various
-   * heuristics. We'll have to try it and see which output we like best. In any case, we have to do
-   * this for ESC output, since ESC doesn't have anything like post().
-   */
-  public void simplify_variable_names() {
-    for (VarInfo vi : var_infos) {
-      // String original = vi.name();
-      vi.simplify_expression();
-      // if (!original.equals (vi.name()))
-      //   System.out.printf("modified var from %s to %s%n", original,
-      //                      vi.name());
-    }
-  }
-
   public static final Comparator<Invariant> icfp = new Invariant.InvariantComparatorForPrinting();
 
   static Comparator<PptSlice> arityVarnameComparator = new PptSlice.ArityVarnameComparator();
