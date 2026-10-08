@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import org.checkerframework.checker.interning.qual.UsesObjectEquals;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.dataflow.qual.SideEffectFree;
@@ -179,6 +180,7 @@ public class DeclReader {
    * Information about the program point that is contained in the decl file. This consists of the
    * ppt name and a list of the declared variables.
    */
+  @UsesObjectEquals
   public static class DeclPpt {
     /** Program point name. */
     public String name;
@@ -425,7 +427,9 @@ public class DeclReader {
    * @throws IOException if there is trouble reading the file
    */
   public void read(File pathname) throws IOException {
-    read(FilesPlume.newFileReader(pathname), pathname.toString());
+    try (Reader reader = FilesPlume.newFileReader(pathname)) {
+      read(reader, pathname.toString());
+    }
   }
 
   /**

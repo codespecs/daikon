@@ -314,7 +314,8 @@ public class MergeComparabilityTest {
   public void testNoneComparability() {
     List<String> none = new ArrayList<>(file(ppt("1")));
     none.set(none.indexOf("var-comparability implicit"), "var-comparability none");
-    assertThrows(Daikon.UserError.class, () -> merge(none, file(ppt("1"))));
+    List<String> b = file(ppt("1"));
+    assertThrows(Daikon.UserError.class, () -> merge(none, b));
   }
 
   /** A variable line whose name is separated from its keyword by a tab is a variable. */
@@ -396,7 +397,8 @@ public class MergeComparabilityTest {
   public void testMismatchedPptRecords() {
     List<String> a = new ArrayList<>(file(ppt("1", "1")));
     a.add(a.indexOf("variable a"), "parent parent C:::OBJECT 1");
-    assertThrows(Daikon.UserError.class, () -> merge(a, file(ppt("1", "1"))));
+    List<String> b = file(ppt("1", "1"));
+    assertThrows(Daikon.UserError.class, () -> merge(a, b));
   }
 
   /** A program point declared twice in one file cannot be rewritten. */
@@ -572,7 +574,10 @@ public class MergeComparabilityTest {
   /** A malformed comparability is reported as a user error. */
   @Test
   public void testMalformedComparability() {
-    assertThrows(Daikon.UserError.class, () -> merge(file(ppt("1]", "1")), file(ppt("1", "1"))));
-    assertThrows(Daikon.UserError.class, () -> merge(file(ppt("x", "1")), file(ppt("1", "1"))));
+    List<String> b = file(ppt("1", "1"));
+    List<String> bracket = file(ppt("1]", "1"));
+    assertThrows(Daikon.UserError.class, () -> merge(bracket, b));
+    List<String> nonNumeric = file(ppt("x", "1"));
+    assertThrows(Daikon.UserError.class, () -> merge(nonNumeric, b));
   }
 }
