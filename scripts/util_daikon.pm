@@ -154,30 +154,69 @@ sub record_kind ( $;$ ) {
 #   line      the line number of the first line of the record
 #
 # For speed, the input is read a paragraph at a time rather than a line at
-# a time.  A paragraph ends with an empty line, so it contains at most one
-# record that is not a single-line header, and that record is last.
+# a time.  A paragraph ends with an empty line.  Line endings may be "\n"
+# or "\r\n", as determined by the first line of the file; "\r\n" line
+# endings are converted to "\n".
 
 # Returns a new reader state for the file with the given name.
 sub new_reader_state ( $ ) {
   my ($filename) = @_;
-  return { filename => $filename, line => 1, comments => "" };
+  return { filename => $filename, line => 1, comments => "",
+           separator => undef };
 }
+
+# Returns the next paragraph of the filehandle, which is the file whose
+# reader state is the second argument, or undef at end of file.
+sub read_paragraph ( $$ ) {
+  my ($fh, $state) = @_;
+  if (defined($state->{separator})) {
+    local $INPUT_RECORD_SEPARATOR = $state->{separator};
+    return scalar(<$fh>);
+  }
+  # This is the first line of the file.  Use it to determine the line
+  # ending, then read the rest of the paragraph.
+  my $first_line;
+  {
+    local $INPUT_RECORD_SEPARATOR = "\n";
+    $first_line = <$fh>;
+  }
+  return undef if !defined($first_line);
+  $state->{separator} = ($first_line =~ /\r\n\z/) ? "\r\n\r\n" : "\n\n";
+  return $first_line if $first_line !~ /\n\z/ || $first_line =~ /\A\r?\n\z/;
+  local $INPUT_RECORD_SEPARATOR = $state->{separator};
+  my $rest = <$fh>;
+  return defined($rest) ? $first_line . $rest : $first_line;
+}
+
+# Each of these matches the line that terminates a record:  for a program
+# point declaration, a line that contains only whitespace; for any other
+# record, an empty line.
+my $ppt_terminator = qr/^[^\S\n]*(?:\n|\z)/m;
+my $other_terminator = qr/^\n/m;
 
 # Returns the records in the paragraph, which is the next one read from the
 # file whose reader state is the first argument.  Updates the state.
 sub paragraph_records ( $$ ) {
   my ($state, $paragraph) = @_;
+  $paragraph =~ s/\r\n/\n/g if $state->{separator} eq "\r\n\r\n";
   my @records = ();
   my $line = $state->{line};
   $state->{line} += ($paragraph =~ tr/\n//);
+  my $length = length($paragraph);
+  # The paragraph is processed by moving $pos forward rather than by
+  # removing text from the front of $paragraph, which would make
+  # processing a long paragraph take quadratic time.
+  my $pos = 0;
   while (1) {
     # Skip empty lines.
-    if ($paragraph =~ s/\A(\n+)//) {
-      $line += length($1);
+    while ($pos < $length && substr($paragraph, $pos, 1) eq "\n") {
+      $pos++;
+      $line++;
     }
-    last if $paragraph eq "";
-    my $end = index($paragraph, "\n");
-    my $first = ($end < 0) ? $paragraph : substr($paragraph, 0, $end + 1);
+    last if $pos == $length;
+    my $end = index($paragraph, "\n", $pos);
+    my $next = ($end < 0) ? $length : $end + 1;
+    my $first = substr($paragraph, $pos, $next - $pos);
     my $kind;
     if (!is_comment_line($first)) {
       $kind = record_kind($first, $state->{filename});
@@ -190,22 +229,26 @@ sub paragraph_records ( $$ ) {
       } else {
         $state->{comments} .= $first;
       }
-      $paragraph = ($end < 0) ? "" : substr($paragraph, $end + 1);
+      $pos = $next;
       $line++;
       next;
     }
-    my $text = $paragraph;
-    $paragraph = "";
-    if ($kind eq "ppt" && $text =~ /^[^\S\n]+(?:\n|\z)/m) {
-      $paragraph = substr($text, $LAST_MATCH_END[0]);
-      $text = substr($text, 0, $LAST_MATCH_START[0]);
+    # The record extends to its terminating line or to the end of the
+    # paragraph.  The first line of the record does not terminate it.
+    pos($paragraph) = $next;
+    my ($text_end, $after);
+    my $terminator = ($kind eq "ppt") ? $ppt_terminator : $other_terminator;
+    if ($paragraph =~ /$terminator/g) {
+      ($text_end, $after) = ($LAST_MATCH_START[0], $LAST_MATCH_END[0]);
     } else {
-      chop($text) if substr($text, -2) eq "\n\n";
+      ($text_end, $after) = ($length, $length);
     }
+    my $text = substr($paragraph, $pos, $text_end - $pos);
     push @records, { comments => $state->{comments}, kind => $kind,
                      text => $text, line => $line };
     $state->{comments} = "";
     $line += ($text =~ tr/\n//) + 1;
+    $pos = $after;
   }
   return @records;
 }
@@ -232,8 +275,7 @@ sub record_reader ( $;$ ) {
   my $at_eof = 0;
   return sub {
     while (!@pending && !$at_eof) {
-      local $INPUT_RECORD_SEPARATOR = "\n\n";
-      my $paragraph = <$fh>;
+      my $paragraph = read_paragraph($fh, $state);
       if (defined($paragraph)) {
         @pending = paragraph_records($state, $paragraph);
       } else {
@@ -254,10 +296,9 @@ sub record_reader ( $;$ ) {
 # is the name of the current file.
 sub for_each_record ( $;$ ) {
   my ($process_record, $end_of_file) = @_;
-  my $state;
-  local $INPUT_RECORD_SEPARATOR = "\n\n";
-  while (defined(my $paragraph = <ARGV>)) {
-    $state = new_reader_state($ARGV) if !defined($state);
+  my $state = new_reader_state(undef);
+  while (defined(my $paragraph = read_paragraph(\*ARGV, $state))) {
+    $state->{filename} = $ARGV;
     foreach my $record (paragraph_records($state, $paragraph)) {
       $process_record->($record);
     }
@@ -266,7 +307,7 @@ sub for_each_record ( $;$ ) {
         $process_record->($record);
       }
       $end_of_file->() if defined($end_of_file);
-      undef $state;
+      $state = new_reader_state(undef);
     }
   }
 }
@@ -284,7 +325,8 @@ my %var_keys = map { $_ => 1 }
 # text of the record, as returned by a record reader.  Comment lines are
 # skipped.  The optional second and third arguments are the name of the
 # file and the line number of the record, for use in error messages.
-# Dies if the declaration is malformed.
+# Dies if the declaration is malformed, including if a variable is declared
+# twice or lacks var-kind, dec-type, or rep-type.
 # Returns a reference to a hash with these keys:
 #   name     the (unescaped) program point name
 #   parents  a reference to an array of the ppt-level parent records, each
@@ -310,39 +352,65 @@ sub parse_ppt_decl ( $;$$ ) {
   $pptline =~ /\Appt\s+(.*?)\s*\z/s
     or croak "Not a program point declaration in " . $where->(0) . ": $pptline";
   my $ppt = { name => unescape_decl($1), parents => [], vars => [] };
+  # Dies with a message about the line at the given index of @lines.
+  my $malformed = sub {
+    my ($i, $message) = @_;
+    croak "Malformed declaration of " . escape_decl($ppt->{name}) . " in "
+      . $where->($i + 1) . ": $message";
+  };
   my $var;                      # the variable currently being read
+  my $var_index;                # the index in @lines of the declaration of $var
+  my %var_items;                # the keys that have appeared for $var
+  my %var_names;                # the names of the variables declared so far
+  # Dies if $var lacks a key that Daikon requires (see
+  # VarDefinition.checkRep in Daikon).
+  my $check_var = sub {
+    return if !defined($var);
+    foreach my $key (qw( var-kind dec-type rep-type )) {
+      $var_items{$key}
+        or $malformed->($var_index, "variable " . escape_decl($var->{name}) . " has no $key");
+    }
+  };
   for (my $i = 0; $i < @lines; $i++) {
     my $line = $lines[$i];
     $line =~ s/\A\s+//;
     $line =~ s/\s+\z//;
     next if $line eq "" || is_comment_line($line);
     my ($key, $value) = split(/\s+/, $line, 2);
-    my $error_prefix = "Malformed declaration of $ppt->{name} in " . $where->($i + 1);
     if ($key eq "variable") {
-      defined($value) or croak "$error_prefix: variable has no name";
+      defined($value) or $malformed->($i, "variable has no name");
+      $check_var->();
       $var = { name => unescape_decl($value), dec_type => "", rep_type => "",
                comparability => "", constant => undef };
+      $var_index = $i;
+      %var_items = ();
+      $var_names{$var->{name}}++
+        and $malformed->($i, "variable $value declared twice");
       push @{$ppt->{vars}}, $var;
     } elsif (!defined($var)) {
       $ppt_keys{$key}
-        or croak "$error_prefix: \"$key\" found where \"variable\", \"parent\", \"flags\", or \"ppt-type\" expected";
+        or $malformed->($i, "\"$key\" found where \"variable\", \"parent\", \"flags\", or \"ppt-type\" expected");
       if ($key eq "parent") {
         push @{$ppt->{parents}}, [split(/\s+/, defined($value) ? $value : "")];
       }
     } elsif (!$var_keys{$key}) {
-      croak "$error_prefix: unexpected variable item \"$key\"";
-    } elsif (!defined($value) && $key =~ /\A(?:dec-type|rep-type|comparability|constant)\z/) {
-      croak "$error_prefix: \"$key\" has no value";
-    } elsif ($key eq "dec-type") {
-      $var->{dec_type} = $value;
-    } elsif ($key eq "rep-type") {
-      $var->{rep_type} = $value;
-    } elsif ($key eq "comparability") {
-      $var->{comparability} = $value;
-    } elsif ($key eq "constant") {
-      $var->{constant} = $value;
+      $malformed->($i, "unexpected variable item \"$key\"");
+    } elsif (!defined($value) && $key =~ /\A(?:var-kind|dec-type|rep-type|comparability|constant)\z/) {
+      $malformed->($i, "\"$key\" has no value");
+    } else {
+      $var_items{$key} = 1;
+      if ($key eq "dec-type") {
+        $var->{dec_type} = $value;
+      } elsif ($key eq "rep-type") {
+        $var->{rep_type} = $value;
+      } elsif ($key eq "comparability") {
+        $var->{comparability} = $value;
+      } elsif ($key eq "constant") {
+        $var->{constant} = $value;
+      }
     }
   }
+  $check_var->();
   return $ppt;
 }
 
