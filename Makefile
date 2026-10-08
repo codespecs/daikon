@@ -52,7 +52,7 @@ README_PATHS := README doc/README fjalar/README
 DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
                       doc/index.html doc/www/download/index.html
 
-# Scripts, such as Perl programs, that are included in the Daikon distribution.
+# Scripts that are included in the Daikon distribution.
 # Why not just include all of them?  (Maybe to avoid problems with
 # accidentally including things in the user's checkout that are not needed
 # by most users, but why not include everything that's in repository?)
@@ -139,16 +139,6 @@ endif
 
 # For deterministic sorting
 export LC_ALL=C
-
-## Examples of better ways to get the lists:
-# PERL_MODULES := $(wildcard *.pm)
-# PERL_SCRIPTS := $(wildcard *.pl)
-# PERL_SCRIPTS += em_analyze em_reports cppp
-# PERL_MODULE_TEXI := $(patsubst %.pm,%.texi,${PERL_MODULES})
-# PERL_MODULE_INFO := $(patsubst %.pm,%.info,${PERL_MODULES})
-# PERL_MODULE_MAN := $(patsubst %.pm,%.man,${PERL_MODULES})
-# PERL_MODULE_HTML := $(patsubst %.pm,%.html,${PERL_MODULES})
-
 
 ###########################################################################
 ### Rules
@@ -679,8 +669,6 @@ daikon.tar daikon.zip: kvasir ${README_PATHS} ${DAIKON_JAVA_FILES} java/Makefile
 	# Maybe I should do  ${MAKE} javadoc
 	# Don't do  ${MAKE} clean  which deletes .class files
 	(cd ${TMPDIR}/daikon/java; ${RM_TEMP_FILES})
-
-	## Front ends
 
 	# Kvasir C front end
 # We use the --filter option twice with rsync to exclude unneeded files.
