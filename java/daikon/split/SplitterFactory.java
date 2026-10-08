@@ -193,7 +193,7 @@ public class SplitterFactory {
                 System.lineSeparator(),
                 "Error in SplitterFactory while writing splitter java file for:",
                 splitObj.condition() + " cannot be parsed or translated:",
-                e.getMessage()));
+                e.toString()));
         continue;
       }
       @SuppressWarnings("signature") // safe, has been quoted
