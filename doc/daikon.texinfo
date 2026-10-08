@@ -338,7 +338,7 @@ the Simplify theorem prover (@pxref{Installing Simplify}).
 @c export DAIKONDIR=$(cd daikon-5.9.1 && pwd)
 @c source $@{DAIKONDIR@}/scripts/daikon.bashrc
 @c
-@c apt -qqy install openjdk-11-jdk gcc ctags git graphviz make netpbm \
+@c apt -qqy install openjdk-11-jdk gcc ctags git make \
 @c   texlive texlive-generic-recommended texinfo \
 @c   autoconf automake binutils-dev m4 zlib1g-dev
 @c
@@ -8629,8 +8629,8 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  CompletionChar PathCompletionChar subsubsection MYDOCU ENV arg
 @c  LocalWords:  DataStructures dotfiles ActiveState mypackage MyClass emph Xmx
 @c  LocalWords:  StackArTester PrintInvariants theArray topOfStack Ljava gdwarf
-@c  LocalWords:  kvasir decls Valgrind config Rijndael rijndaeltest perl bday
-@c  LocalWords:  dtype standalone decl asis noversion num conf nohierarchy ppt
+@c  LocalWords:  kvasir decls Valgrind config Rijndael rijndaeltest perl
+@c  LocalWords:  decl asis noversion num conf nohierarchy ppt
 @c  LocalWords:  dbg mem stat postprocessed itemx mux pre val classname regexp
 @c  LocalWords:  ListImplementors dataflow getLogger JML jml hashcode DBC Jtest
 @c  LocalWords:  Parasoft's Quant ESC pre-state int seq elt Javadoc JVML param
@@ -8642,8 +8642,8 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  autoload myA myList hashcodes MyA HashSetLinear HslIterator IA
 @c  LocalWords:  topAndPop init util DTRACEFILE DTRACEAPPEND Valgrind's AMD gz
 @c  LocalWords:  Athlon fomit Kvasir's programname vars gzip fifo AFS csv rec
-@c  LocalWords:  stdout stderr disambig myprog Debian libfoo inst pragma prog
-@c  LocalWords:  workflow accessor instr instrsourcedir TYPESAPPEND basedir cp
+@c  LocalWords:  stdout stderr disambig myprog Debian libfoo inst prog
+@c  LocalWords:  workflow instr cp
 @c  LocalWords:  myfile dfej's classfiles jikes QueueAr QueueArTester ln nn gdb
 @c  LocalWords:  classhier decldir instrdir uninst csal apdir cpdir Mangel's va
 @c  LocalWords:  ComparablePairsDescFileReader runnables dumpdir rm isprint cmd
@@ -8711,14 +8711,14 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  oddheading thissectionnum thissectionname everyfooting d1
 @c  LocalWords:  QuickTime QTSystem QTJava arg1 arg2 arg3 MyMain Makefile
 @c  LocalWords:  originalclasspath grep EXIT79 EXIT32 prepend Xmx7g var1
-@c  LocalWords:  prepended computeConfidence numsamples getName var2 var3
+@c  LocalWords:  computeConfidence numsamples getName var2 var3
 @c  LocalWords:  jcc Java2 seq1 CSharpContract myString otherString EXIT48
 @c  LocalWords:  unsplit if'' condition1 condition2 condition3 procedure1
 @c  LocalWords:  replacement1 procedure2 replacement2 arg0 EXIT33 pack1 d2
 @c  LocalWords:  pack2 online'' EXIT11 o1 o2 SIGSEGV O0 fjalar gcc3 EXIT0
 @c  LocalWords:  I' C' S' A' P' superclasses vv1 bzip2 Xmx7g bfd dev ABI
 @c  LocalWords:  binutils AMD64 EM64T amd64 CeleriacLauncher celeriacArg1
-@c  LocalWords:  celeriacArg2 EXIT22 checkargs Takuan WS BPEL file1 file2
+@c  LocalWords:  celeriacArg2 checkargs Takuan WS BPEL file1 file2
 @c  LocalWords:  readlink Hynger HYbrid iNvariant GEneratoR SLSF Bak Udon
 @c  LocalWords:  Drager I1 I2 invSortComparator1 invSortComparator2 prover
 @c  LocalWords:  Myprog2 isDaikonInstrumented getDaikonInvariants GeoPoint
@@ -8728,14 +8728,14 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  SecurityManager setSecurityManager omitpattern Software''
 @c  LocalWords:  MyProblemMethod Liu Galeotti Mangala Gowri ABB LVTT LVT
 @c  LocalWords:  ClassFormatError javautil ArrayList17 Simulink Stateflow
-@c  LocalWords:  untyped splitter filename substring boolean splitters CVC
+@c  LocalWords:  splitter filename substring boolean splitters CVC
 @c  LocalWords:  dimensionality consequents UNRETURNED getter globals pwd
 @c  LocalWords:  typedefs celeriacArg Inserter comparator roundoff bitwise
 @c  LocalWords:  Kellen Florian Laure Raytheon pathname customizable ctags
-@c  LocalWords:  myclasspath runtime Year2 typedef ubuntu openjdk graphviz
-@c  LocalWords:  netpbm texlive autoconf automake m4 zlib1g fno ClassFile
+@c  LocalWords:  myclasspath runtime Year2 typedef ubuntu openjdk
+@c  LocalWords:  texlive autoconf automake m4 zlib1g fno ClassFile
 @c  LocalWords:  example1c Ldaikon sayHello FunctionalInterface valgrind
-@c  LocalWords:  Bourne accessors subparts MERCHANTABILITY merchantability
+@c  LocalWords:  Bourne subparts MERCHANTABILITY merchantability
 @c  LocalWords:  uniq Cemal Akcaba Marinov McArthur Rayside Pickard Thaine
 @c  LocalWords:  Massimiliano Menarini Tatyana Nikolova Hellendoorn Xing
 @c  LocalWords:  Weitian Yoav Zibin daikonparentpath OpenAPI AGORA qqy

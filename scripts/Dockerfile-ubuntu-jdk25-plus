@@ -69,9 +69,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
 && apt-get -qqy install \
   devscripts \
   g++ \
-  graphviz \
   libc6-dbg \
-  netpbm \
   python3-setuptools \
   shellcheck \
   shfmt \

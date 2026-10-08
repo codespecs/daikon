@@ -40,9 +40,6 @@ invariants-doc.texinfo:
 .PHONY : invariants-doc.texinfo
 endif
 
-images/%.eps: images/%.dot
-	dot -Tps $< >$@
-
 images/%.pdf: images/%.eps
 	epstopdf $< --outfile=$@
 

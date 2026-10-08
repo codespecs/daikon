@@ -10,25 +10,32 @@ use strict;
 use 5.006;
 use warnings;
 
+# Put the script directory on the @INC path.
+use File::Basename;
+use lib dirname (__FILE__);
+# The file `util_daikon.pm` appears in the same directory as this script.
+use util_daikon;
+
 my $indentation = 0;
 
-$/ = ""; # Read by paragraph
-while (<>) {
-    # Skip .decls-like paras
-    next if /^(ppt |decl-version|var-comparability|input-language|ListImplementors|\/\/)/;
-    /^(.*):::([A-Z\d]+)$/m or die "Can't parse PPT name from <$_>";
-    my $base = $1;
-    my $suffix = $2;
-    my $name = $base . ":::" . $suffix;
-    if ($suffix !~ /^EXIT|^ENTER$/) {
-	die "What is this line? <suffix> <$_>";
-    }
-    if ($suffix =~ /^EXIT/) {
-	$indentation--;
-    }
-    my $line = (' ' x $indentation) . $name . "\n";
-    print $line;
-    if ($suffix eq "ENTER") {
-	$indentation++;
-    }
-}
+for_each_record(sub {
+  my ($record) = @_;
+  # Skip headers and declarations
+  return if $record->{kind} ne "data";
+  my $text = $record->{text};
+  $text =~ /^(.*):::([A-Z\d]+)$/m or die "Can't parse PPT name from <$text>";
+  my $base = $1;
+  my $suffix = $2;
+  my $name = $base . ":::" . $suffix;
+  if ($suffix !~ /^EXIT|^ENTER$/) {
+    die "What is this line? <suffix> <$text>";
+  }
+  if ($suffix =~ /^EXIT/) {
+    $indentation--;
+  }
+  my $line = (' ' x $indentation) . $name . "\n";
+  print $line;
+  if ($suffix eq "ENTER") {
+    $indentation++;
+  }
+});
