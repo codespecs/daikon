@@ -5,6 +5,7 @@ import static daikon.tools.nullness.NullnessUtil.castNonNull;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.util.Arrays;
+import java.util.function.Supplier;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.plumelib.util.ArraysPlume;
 
@@ -23,16 +24,19 @@ public class DaikonGetopt extends Getopt {
   private static final String PROGNAME = "DaikonGetopt";
 
   /**
+   * Computes the usage message printed for {@code -h} and {@code --help}, or null if the caller
+   * handles them.
+   */
+  private final @Nullable Supplier<String> usage;
+
+  /**
    * Text that is appended to the description of a bad command-line option, for programs that handle
    * {@code -h}.
    */
   public static final String USAGE_HINT = "run with -h for usage";
 
-  /**
-   * The usage message printed for {@code -h} and {@code --help}, or null if the caller handles
-   * them.
-   */
-  private final @Nullable String usage;
+  /** Text appended to the description of a bad command-line option, or null to append nothing. */
+  private @Nullable String usageHint = USAGE_HINT;
 
   /**
    * Creates a command-line option processor that recognizes short and long options. Its description
@@ -46,6 +50,7 @@ public class DaikonGetopt extends Getopt {
   public DaikonGetopt(String[] argv, String optstring, LongOpt[] longopts) {
     super(PROGNAME, argv, nonEmpty(optstring), longopts);
     this.usage = null;
+    usageHint = null;
     opterr = false;
   }
 
@@ -72,6 +77,20 @@ public class DaikonGetopt extends Getopt {
    * @param usage the usage message to print for {@code -h} and {@code --help}
    */
   public DaikonGetopt(String[] argv, String optstring, LongOpt[] longopts, String usage) {
+    this(argv, optstring, longopts, () -> usage);
+  }
+
+  /**
+   * Creates a command-line option processor that recognizes short and long options, plus {@code -h}
+   * and {@code --help}, which print the usage message and throw {@link Daikon.NormalTermination}.
+   * The usage message is computed only if it is needed.
+   *
+   * @param argv the command-line arguments
+   * @param optstring the short options, in the format of {@link Getopt}; must not contain {@code h}
+   * @param longopts the long options; must not contain {@code help}
+   * @param usage computes the usage message to print for {@code -h} and {@code --help}
+   */
+  public DaikonGetopt(String[] argv, String optstring, LongOpt[] longopts, Supplier<String> usage) {
     super(PROGNAME, argv, withH(optstring), withHelp(longopts));
     this.usage = usage;
     opterr = false;
@@ -107,6 +126,20 @@ public class DaikonGetopt extends Getopt {
   }
 
   /**
+   * Processes the command-line arguments of a program that takes no options other than {@code -h}
+   * and {@code --help}.
+   *
+   * @param argv the command-line arguments
+   * @param usage the usage message to print for {@code -h} and {@code --help}
+   * @return the arguments that are not options
+   * @throws Daikon.NormalTermination after printing the usage message, if an argument requests it
+   * @throws Daikon.UserError if an argument is any other option
+   */
+  public static String[] nonOptionArgs(String[] argv, String usage) {
+    return argsAfterOptions(argv, "", () -> usage);
+  }
+
+  /**
    * Processes the leading command-line arguments of a program that takes no options other than
    * {@code -h} and {@code --help}. Processing stops at the first argument that is not an option, so
    * later arguments may be options for some other program.
@@ -119,16 +152,58 @@ public class DaikonGetopt extends Getopt {
    * @throws Daikon.UserError if a leading argument is any other option
    */
   public static String[] argsAfterLeadingOptions(String[] argv, String usage) {
+    return argsAfterLeadingOptions(argv, () -> usage);
+  }
+
+  /**
+   * Like {@link #argsAfterLeadingOptions(String[], String)}, but computes the usage message only if
+   * it is needed.
+   *
+   * @param argv the command-line arguments
+   * @param usage computes the usage message to print for {@code -h} and {@code --help}
+   * @return the arguments from the first one that is not an option onward
+   * @throws Daikon.NormalTermination after printing the usage message, if a leading argument
+   *     requests it
+   * @throws Daikon.UserError if a leading argument is any other option
+   */
+  public static String[] argsAfterLeadingOptions(String[] argv, Supplier<String> usage) {
+    // A leading "+" tells Getopt to stop at the first argument that is not an option.
+    return argsAfterOptions(argv, "+", usage);
+  }
+
+  /**
+   * Processes command-line arguments, permitting no options other than {@code -h} and {@code
+   * --help}.
+   *
+   * @param argv the command-line arguments
+   * @param optstring "" to process all the arguments, or "+" to stop at the first non-option
+   * @param usage computes the usage message to print for {@code -h} and {@code --help}
+   * @return the arguments that Getopt did not process as options
+   * @throws Daikon.NormalTermination after printing the usage message, if an argument requests it
+   * @throws Daikon.UserError if an argument is any other option
+   */
+  private static String[] argsAfterOptions(
+      String[] argv, String optstring, Supplier<String> usage) {
     // Getopt permutes its argument array, so give it a copy to avoid modifying the caller's array.
     String[] argvCopy = argv.clone();
-    // A leading "+" tells Getopt to stop at the first argument that is not an option.
-    DaikonGetopt g = new DaikonGetopt(argvCopy, "+", new LongOpt[0], usage);
+    DaikonGetopt g = new DaikonGetopt(argvCopy, optstring, new LongOpt[0], usage);
     // Every option other than -h and --help is bad, so getopt() returns only -1 or throws.
     int c = g.getopt();
     if (c != -1) {
       throw new Daikon.BugInDaikon("getopt() returned " + c);
     }
     return Arrays.copyOfRange(argvCopy, g.getOptind(), argvCopy.length);
+  }
+
+  /**
+   * Sets the text that is appended to the description of a bad command-line option. The default
+   * tells the user to run the program with -h.
+   *
+   * @param usageHint text appended to the description of a bad command-line option, or null to
+   *     append nothing
+   */
+  public void setUsageHint(@Nullable String usageHint) {
+    this.usageHint = usageHint;
   }
 
   /**
@@ -148,7 +223,7 @@ public class DaikonGetopt extends Getopt {
       throw badOptionError();
     }
     if (c == 'h' && usage != null) {
-      System.out.println(usage);
+      System.out.println(usage.get());
       throw new Daikon.NormalTermination();
     }
     return c;
@@ -162,8 +237,8 @@ public class DaikonGetopt extends Getopt {
    */
   private Daikon.UserError badOptionError() {
     String message = badOptionMessage();
-    if (usage != null) {
-      message += "; " + USAGE_HINT;
+    if (usageHint != null) {
+      message += "; " + usageHint;
     }
     return new Daikon.UserError(message);
   }
