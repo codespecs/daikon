@@ -339,7 +339,8 @@ public class DtraceNonceFixerTest {
             "0",
             "",
             "");
-    try (OutputStream os = new GZIPOutputStream(Files.newOutputStream(file))) {
+    try (OutputStream fileOs = Files.newOutputStream(file);
+        OutputStream os = new GZIPOutputStream(fileOs)) {
       os.write(samples.getBytes(UTF_8));
     }
 
@@ -366,7 +367,8 @@ public class DtraceNonceFixerTest {
             "",
             "");
     String actual;
-    try (InputStream is = new GZIPInputStream(Files.newInputStream(file))) {
+    try (InputStream fileIs = Files.newInputStream(file);
+        InputStream is = new GZIPInputStream(fileIs)) {
       actual = new String(is.readAllBytes(), UTF_8).replace(System.lineSeparator(), "\n");
     }
     assertEquals(expected, actual);
