@@ -82,15 +82,16 @@ sub load_decls ( $ ) {
 }
 
 sub load_ppt ( $$ ) {
-# Loads a single ppt from a dtrace fh given by $1.
+# Loads a single ppt using the record reader given by $1 (see
+# record_reader in util_daikon.pm), which reads the dtrace file named $2.
 # Returns a "ppt_trace_info": a 3-element array of pptname, line number in
 # file, and hash mapping varname to array of value and modbit.
-    my ($dtfh, $dtfhname) = @_;
+    my ($dtreader, $dtfhname) = @_;
     # Skip records other than data records, such as headers and program
     # point declarations in a combined .dtrace file.
     my $record;
     do {
-	$record = read_record($dtfh, $dtfhname);
+	$record = $dtreader->();
 	(defined $record)
 	    or return undef;
     } while ($record->{kind} ne "data");
@@ -265,8 +266,8 @@ sub cmp_dtracen ( $$$ ) {
     my ($declshash, $mydtaname, $mydtbname) = @_;
 #    open DTA, $mydtaname or die "couldn't open dtrace \"$mydtaname\"\n";
 #    open DTB, $mydtbname or die "couldn't open dtrace \"$mydtbname\"\n";
-    my $dta = gzopen(\*DTA, $mydtaname);
-    my $dtb = gzopen(\*DTB, $mydtbname);
+    my $dta = record_reader(gzopen(\*DTA, $mydtaname), $mydtaname);
+    my $dtb = record_reader(gzopen(\*DTB, $mydtbname), $mydtbname);
 
   PPT: while (1) {
 

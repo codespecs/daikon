@@ -22,15 +22,11 @@ my %ppt_count;
 
 my %long_names;
 
-foreach my $file (@ARGV ? @ARGV : ("-")) {
-  open(my $fh, $file) or die "Cannot open $file: $!";
-  while (defined(my $record = read_record($fh, $file))) {
-    # Skip headers and declarations
-    next if $record->{kind} ne "data";
-    count_record($record->{text});
-  }
-  close($fh);
-}
+for_each_record(sub {
+  my ($record) = @_;
+  # Skip headers and declarations
+  count_record($record->{text}) if $record->{kind} eq "data";
+});
 
 sub count_record {
     local $_ = shift;

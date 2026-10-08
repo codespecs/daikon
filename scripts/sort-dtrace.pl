@@ -54,7 +54,8 @@ sub sort_variables {
     # Comment lines that are not yet attached to a line.
     my $pending = "";
     foreach my $line (@lines) {
-	if (is_comment_line($line)) {
+	my ($stripped) = $line =~ /\A\s*(.*)/s;
+	if (is_comment_line($stripped)) {
 	    $pending .= $line;
 	} elsif ($line =~ /^\s*variable\s/) {
 	    push @vars, [$pending, $line];
@@ -76,36 +77,29 @@ sub sort_variables {
 		map { $_->[0] . $_->[1] } sort { $a->[1] cmp $b->[1] } @vars);
 }
 
-# Like Perl's -i command-line option, which has no effect on files that a
-# script opens itself:  if $^I is defined, each file is rewritten in place,
-# and if $^I is non-empty, the original is saved under a backup name.
-my $in_place = defined($^I);
+# The files are read through the ARGV filehandle, so Perl's -i command-line
+# option rewrites each file in place.
+for_each_record(\&process_record, sub { end_headers(); flush_decls(); });
 
-foreach my $file (@ARGV ? @ARGV : ("-")) {
-  open(my $fh, $file) or die "Cannot open $file: $!";
-  my $output = "";
-  if ($in_place && $file ne "-") {
-    open(my $out, ">", \$output) or die "Cannot open in-memory output: $!";
-    select($out);
-  }
-  while (defined(my $record = read_record($fh, $file))) {
+sub process_record {
+    my ($record) = @_;
     my $kind = $record->{kind};
-    if ($kind eq "header" && $record->{text} !~ /\AListImplementors/) {
+    if ($kind eq "header") {
 	flush_decls();
 	print $record->{comments}, $record->{text};
 	$after_header = 1;
-	next;
+	return;
     }
     end_headers();
     if ($kind eq "ppt") {
 	my $text = $record->{text};
 	$text .= "\n" if $text !~ /\n\z/;
 	push @decls, [$record->{comments}, sort_variables($text)];
-	next;
+	return;
     }
     flush_decls();
     print $record->{comments};
-    if ($kind eq "header") {
+    if ($kind eq "list-implementors") {
 	print $record->{text}, "\n";
     } elsif ($kind eq "data") {
 	my @lines = split(/\n/, $record->{text});
@@ -115,7 +109,7 @@ foreach my $file (@ARGV ? @ARGV : ("-")) {
 	    push @header, shift @lines;
 	    push @header, shift @lines;
 	}
-	die "Bad number of lines" unless @lines % 3 == 0;
+	die "Bad number of lines in $ARGV at line $record->{line}" unless @lines % 3 == 0;
 	my @vars;
 	while (@lines) {
 	    push @vars, join("\n", splice(@lines, 0, 3));
@@ -123,23 +117,4 @@ foreach my $file (@ARGV ? @ARGV : ("-")) {
 	@vars = sort @vars;
 	print join("\n", @header, @vars), "\n\n";
     }
-  }
-  close($fh);
-  end_headers();
-  flush_decls();
-  if ($in_place && $file ne "-") {
-    close(select(STDOUT));
-    if ($^I ne "") {
-      my $backup;
-      if ($^I =~ /\*/) {
-        ($backup = $^I) =~ s/\*/$file/g;
-      } else {
-        $backup = $file . $^I;
-      }
-      rename($file, $backup) or die "Cannot rename $file to $backup: $!";
-    }
-    open(my $out, ">", $file) or die "Cannot write $file: $!";
-    print $out $output;
-    close($out) or die "Cannot write $file: $!";
-  }
 }
