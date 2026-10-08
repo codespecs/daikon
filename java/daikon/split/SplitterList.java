@@ -3,10 +3,12 @@ package daikon.split;
 import daikon.FileIO;
 import daikon.Global;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.logging.Level;
 import jtb.ParseException;
@@ -36,7 +38,15 @@ public abstract class SplitterList {
    * applied. {@link #get} and {@link #get_all} use this to determine whether two splitters are
    * duplicates. A splitter that is not a key is identified by its condition.
    */
-  private static final Map<Splitter, String> expanded_conditions = new IdentityHashMap<>();
+  private static final IdentityHashMap<Splitter, String> expanded_conditions =
+      new IdentityHashMap<>();
+
+  /**
+   * The splitters whose conditions, as written, use a REPLACE statement of their {@code .spinfo}
+   * file. Of two duplicate splitters, {@link #get} and {@link #get_all} prefer one in this set.
+   */
+  private static final Set<Splitter> uses_replacement =
+      Collections.newSetFromMap(new IdentityHashMap<>());
 
   /**
    * Removes the splitters associated with the given name, which is a name on a PPT_NAME line of a
@@ -49,6 +59,7 @@ public abstract class SplitterList {
     if (splits != null) {
       for (Splitter splitter : splits) {
         expanded_conditions.remove(splitter);
+        uses_replacement.remove(splitter);
       }
     }
   }
@@ -61,10 +72,16 @@ public abstract class SplitterList {
    * @param replacer the REPLACE statements of the {@code .spinfo} file that contains the splitters
    */
   static void put(String pptname, Splitter[] splits, StatementReplacer replacer) {
+    // Makes no replacements, but formats a condition the same way that replacer does.
+    StatementReplacer noReplacer = new StatementReplacer(Collections.emptyList());
     for (Splitter splitter : splits) {
       String condition = splitter.condition().trim();
       try {
-        expanded_conditions.put(splitter, replacer.makeReplacements(condition).trim());
+        String expanded = replacer.makeReplacements(condition).trim();
+        expanded_conditions.put(splitter, expanded);
+        if (!expanded.equals(noReplacer.makeReplacements(condition).trim())) {
+          uses_replacement.add(splitter);
+        }
       } catch (ParseException e) {
         // The splitter's Java source was created from the same expansion, so this does not happen.
         // If it does, identify the splitter by its unexpanded condition.
@@ -242,7 +259,8 @@ public abstract class SplitterList {
    * Returns the splitters associated with this program point name (or null). The resulting
    * splitters are factories, not instantiated splitters. The result contains no two splitters with
    * the same condition (after REPLACE statements are applied), even if several PPT_NAME lines match
-   * the program point.
+   * the program point. Of several such splitters, the result contains one whose condition uses a
+   * REPLACE statement, if any does.
    *
    * <p>An OBJECT program point also uses every splitter whose PPT_NAME is not a complete program
    * point name, if any such PPT_NAME contains "OBJECT".
@@ -282,25 +300,43 @@ public abstract class SplitterList {
 
   /**
    * Adds each splitter to the map, unless the map already contains a splitter with the same
-   * expanded condition.
+   * expanded condition. Of two splitters with the same expanded condition, the map retains one
+   * whose condition, as written, uses a REPLACE statement (such as "isEmpty()" rather than "size ==
+   * 0"), because that condition is more readable in the names of conditional program points.
+   * Otherwise, the map retains the first one.
    *
    * @param splitters maps an expanded condition to its splitter; side-effected by this method
    * @param toAdd the splitters to add
    */
   private static void addUnlessDuplicate(Map<String, Splitter> splitters, Splitter[] toAdd) {
     for (Splitter splitter : toAdd) {
-      String condition = expanded_conditions.get(splitter);
-      if (condition == null) {
-        condition = splitter.condition().trim();
+      String condition = expandedCondition(splitter);
+      Splitter existing = splitters.get(condition);
+      if (existing == null
+          || (uses_replacement.contains(splitter) && !uses_replacement.contains(existing))) {
+        // Replacing the value of an existing key does not change the LinkedHashMap's order.
+        splitters.put(condition, splitter);
       }
-      splitters.putIfAbsent(condition, splitter);
     }
+  }
+
+  /**
+   * Returns the splitter's condition, with the REPLACE statements of its {@code .spinfo} file
+   * applied.
+   *
+   * @param splitter a splitter
+   * @return the splitter's expanded condition
+   */
+  private static String expandedCondition(Splitter splitter) {
+    String condition = expanded_conditions.get(splitter);
+    return (condition != null) ? condition : splitter.condition().trim();
   }
 
   /**
    * Returns all the splitters in this program. The resulting splitters are factories, not
    * instantiated splitters. The result contains no two splitters with the same condition (after
-   * REPLACE statements are applied).
+   * REPLACE statements are applied). Of several such splitters, the result contains one whose
+   * condition uses a REPLACE statement, if any does.
    *
    * @return an array of splitters
    */

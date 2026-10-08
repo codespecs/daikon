@@ -26,9 +26,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.function.Predicate;
@@ -189,7 +189,7 @@ public class ExtractConsequent {
     for (Map.Entry<String, Map<String, Map<String, HashedConsequent>>> entry :
         pptname_to_conditions.entrySet()) {
       String pptname = entry.getKey();
-      TreeSet<String> allConds = conditions(entry.getValue(), inv -> true);
+      Set<String> allConds = conditions(entry.getValue(), inv -> true);
       if (allConds.isEmpty()) {
         continue;
       }
@@ -199,8 +199,7 @@ public class ExtractConsequent {
       // post-state value, and a splitter cannot use a pre-state value such as "orig(x)".
       if (pptname.endsWith(FileIO.enter_tag)) {
         for (PptTopLevel exitPpt : exitPoints(pptname, ppts)) {
-          TreeSet<String> exitConds =
-              conditions(entry.getValue(), inv -> isUnmodified(inv, exitPpt));
+          Set<String> exitConds = conditions(entry.getValue(), inv -> isUnmodified(inv, exitPpt));
           if (!exitConds.isEmpty()) {
             pptname_to_output
                 .computeIfAbsent(exitPpt.name(), k -> new TreeSet<>())
@@ -235,11 +234,12 @@ public class ExtractConsequent {
   private static List<PptTopLevel> exitPoints(String enterName, PptMap ppts) {
     String exitName =
         enterName.substring(0, enterName.length() - FileIO.enter_tag.length()) + FileIO.exit_tag;
+    List<PptTopLevel> result = new ArrayList<>();
     PptTopLevel combinedExit = ppts.get(exitName);
     if (combinedExit != null) {
-      return Collections.singletonList(combinedExit);
+      result.add(combinedExit);
+      return result;
     }
-    List<PptTopLevel> result = new ArrayList<>();
     for (PptTopLevel ppt : ppts.asCollection()) {
       if (SplitterList.matches(exitName, ppt.name())) {
         result.add(ppt);
@@ -285,7 +285,7 @@ public class ExtractConsequent {
    * @param filter which invariants to use as conditions
    * @return the splitting conditions, each formatted by {@link #combineDummy}
    */
-  private static TreeSet<String> conditions(
+  private static Set<String> conditions(
       Map<String, Map<String, HashedConsequent>> cluster_to_conditions,
       Predicate<Invariant> filter) {
     // A TreeSet, for deterministic output.

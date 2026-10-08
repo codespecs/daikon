@@ -237,4 +237,18 @@ public class SplitterListTest {
     put(exit, new Splitter[] {new ConditionSplitter("isEmpty()")}, replacer1);
     assertEquals(Arrays.asList("isEmpty()", "isEmpty()"), conditions(exit));
   }
+
+  @Test
+  public void testGetPrefersReplacement() throws IOException {
+    StatementReplacer replacer = replacer("isEmpty()", "top == -1");
+    // The condition that uses a REPLACE statement is retained, regardless of order.
+    String exitF = "splitterlisttest.F.f():::EXIT";
+    put(exitF, new Splitter[] {new ConditionSplitter("top == -1")}, replacer);
+    put(exitF, new Splitter[] {new ConditionSplitter("isEmpty()")}, replacer);
+    assertEquals(Arrays.asList("isEmpty()"), conditions(exitF));
+    String exitG = "splitterlisttest.G.g():::EXIT";
+    put(exitG, new Splitter[] {new ConditionSplitter("isEmpty()")}, replacer);
+    put(exitG, new Splitter[] {new ConditionSplitter("top == -1")}, replacer);
+    assertEquals(Arrays.asList("isEmpty()"), conditions(exitG));
+  }
 }
