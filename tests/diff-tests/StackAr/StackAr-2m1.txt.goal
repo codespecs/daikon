@@ -1,0 +1,32 @@
+<DataStructures.StackAr.<init>(I)V:::EXIT, null>
+  <this.theArray[..] elements == this.theArray[capacity-1] {1+}, null> (Bin,JM)
+<DataStructures.StackAr.isEmpty()Z:::EXIT, null>
+  <(return == true)  ==>  (this.topOfStack < size(this.theArray[..])-1) {0.999+}, null> (Nul,JM)
+  <(return == false)  ==>  (this.theArray[..].getClass().getName() elements one of { null, "DataStructures.MyInteger", "java.lang.Object" }) {1+}, null> (Nul,JM)
+<DataStructures.StackAr.isFull()Z:::ENTER, null>
+  <this.topOfStack < size(this.theArray[..])-1 {0.9999+}, null> (Bin,JM)
+<DataStructures.StackAr.isFull()Z:::EXIT, null>
+  <this.topOfStack < size(this.theArray[..])-1 {0.9999+}, null> (Bin,JM)
+  <return == false {1+}, null> (Una,JM)
+<DataStructures.StackAr.push(Ljava/lang/Object;)V:::ENTER, null>
+  <x.getClass().getName() one of { "DataStructures.MyInteger", "java.lang.Object" } {1+}, null> (Una,JM)
+<DataStructures.StackAr.push(Ljava/lang/Object;)V:::EXIT, null>
+  <x.getClass().getName() one of { "DataStructures.MyInteger", "java.lang.Object" } {1+}, null> (Una,JM)
+<DataStructures.StackAr.top()Ljava/lang/Object;:::ENTER, null>
+  <this.topOfStack >= 0 {1+}, null> (Una,JM)
+  <this.theArray[0..this.topOfStack-1] elements != null {0.9999+}, null> (Una,JM)
+<DataStructures.StackAr.top()Ljava/lang/Object;:::EXIT, null>
+  <return == orig(this.theArray[post(this.topOfStack)]) {1+}, null> (Bin,JM)
+  <return == orig(this.theArray[this.topOfStack]) {1+}, null> (Bin,JM)
+  <return == this.theArray[orig(this.topOfStack)] {1+}, null> (Bin,JM)
+  <return == this.theArray[this.topOfStack] {1+}, null> (Bin,JM)
+  <this.topOfStack >= 0 {1+}, null> (Una,JM)
+  <this.theArray[0..this.topOfStack-1] elements != null {0.9999+}, null> (Una,JM)
+  <return.getClass().getName() one of { "DataStructures.MyInteger", "java.lang.Object" } {1+}, null> (Una,JM)
+<DataStructures.StackAr.topAndPop()Ljava/lang/Object;:::EXIT, null>
+  <(return == null)  ==>  (return in this.theArray[..]) {1+}, null> (Nul,JM)
+  <(return == null)  ==>  (return in this.theArray[orig(this.topOfStack)+1..]) {1+}, null> (Nul,JM)
+  <(return == null)  ==>  (return in this.theArray[this.topOfStack+1..]) {1+}, null> (Nul,JM)
+  <return in orig(this.theArray[..]) {1+}, null> (Bin,JM)
+  <return in orig(this.theArray[post(this.topOfStack)+1..]) {1+}, null> (Bin,JM)
+  <this.topOfStack < size(this.theArray[..])-1 {0.9999+}, null> (Bin,JM)

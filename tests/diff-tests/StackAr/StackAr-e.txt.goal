@@ -1,0 +1,81 @@
+<DataStructures.StackAr.<init>(I)V:::ENTER>
+  <capacity >= 0 {1+}, capacity >= 2 {0-}> (Una,DJU)
+<DataStructures.StackAr.<init>(I)V:::EXIT>
+  <null, this.theArray[..] elements == this.theArray[capacity-1] {1+}> (Bin,MJ)
+<DataStructures.StackAr.isEmpty()Z:::ENTER>
+<DataStructures.StackAr.isEmpty()Z:::EXIT>
+  <null, (return == true)  ==>  (this.topOfStack < size(this.theArray[..])-1) {0.999+}> (Nul,MJ)
+  <(return == false)  ==>  ((size(this.theArray[..])-1 == 0) ==> (this.topOfStack == 0)) {1+}, null> (Nul,JM)
+  <(return == true)  ==>  (this.theArray[..].getClass().getName() elements == null) {1+}, (return == false)  ==>  (this.theArray[..].getClass().getName() elements one of { null, "DataStructures.MyInteger", "java.lang.Object" }) {1+}> (Nul,DJJ)
+  <null, (return == true)  ==>  (this.theArray[..].getClass().getName() elements == null) {1+}> (Nul,MJ)
+<DataStructures.StackAr.isFull()Z:::ENTER>
+  <null, this.topOfStack < size(this.theArray[..])-1 {0.9999+}> (Bin,MJ)
+<DataStructures.StackAr.isFull()Z:::EXIT>
+  <(return == true)  <==>  (this.topOfStack == size(this.theArray[..])-1) {1+}, null> (Nul,JM)
+  <(return == false)  <==>  (this.topOfStack < size(this.theArray[..])-1) {1+}, null> (Nul,JM)
+  <(return == true)  ==>  (this.theArray[..] elements != null) {0.9923+}, null> (Nul,JM)
+  <(return == false)  <==>  (this.theArray[this.topOfStack+1..] elements == null) {1+}, null> (Nul,JM)
+  <(return == true)  ==>  (this.theArray[this.topOfStack+1..] == []) {1+}, null> (Nul,JM)
+  <(return == true)  ==>  (this.theArray[..].getClass().getName() elements one of { "DataStructures.MyInteger", "DataStructures.StackAr", "java.lang.Object" }) {1+}, null> (Nul,JM)
+  <null, this.topOfStack < size(this.theArray[..])-1 {0.9999+}> (Bin,MJ)
+  <null, return == false {1+}> (Una,MJ)
+<DataStructures.StackAr.makeEmpty()V:::ENTER>
+  <(this.topOfStack == 0) ==> (size(this.theArray[..])-1 == 0) {1+}, null> (Bin,JM)
+  <this.theArray[0..this.topOfStack] elements are equal {1+}, null> (Una,JM)
+  <this.theArray[..].getClass().getName() elements one of { null, "DataStructures.StackAr" } {1+}, null> (Una,JM)
+<DataStructures.StackAr.makeEmpty()V:::EXIT>
+  <size(this.theArray[..]) == orig(size(this.theArray[..])) {1+}, null> (Bin,JM)
+  <this.theArray == orig(this.theArray) {1+}, null> (Bin,JM)
+  <orig(this.topOfStack) <= size(this.theArray[..])-1 {0.9961+}, null> (Bin,JM)
+  <this.topOfStack <= orig(this.topOfStack) {0.9961+}, null> (Bin,JM)
+  <this.topOfStack < size(this.theArray[..])-1 {0.9961+}, null> (Bin,JM)
+  <(orig(this.topOfStack) == 0) ==> (size(this.theArray[..])-1 == 0) {1+}, null> (Bin,JM)
+  <this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..]) {1+}, null> (Bin,JM)
+  <this.theArray.getClass().getName() == orig(this.theArray.getClass().getName()) {1+}, null> (Bin,JM)
+  <this.topOfStack == -1 {1+}, null> (Una,JM)
+  <this.theArray[..] elements == null {1+}, null> (Una,JM)
+  <this.theArray[0..this.topOfStack] == [] {1+}, null> (Una,JM)
+  <this.theArray[..].getClass().getName() elements == null {1+}, null> (Una,JM)
+<DataStructures.StackAr.pop()V:::ENTER>
+<DataStructures.StackAr.pop()V:::EXIT>
+<DataStructures.StackAr.push(Ljava/lang/Object;)V:::ENTER>
+  <x.getClass().getName() one of { "DataStructures.MyInteger", "DataStructures.StackAr", "java.lang.Object" } {1+}, x.getClass().getName() one of { "DataStructures.MyInteger", "java.lang.Object" } {1+}> (Una,DJJ)
+<DataStructures.StackAr.push(Ljava/lang/Object;)V:::EXIT>
+  <(size(this.theArray[..])-1 == 0) ==> (this.topOfStack == 0) {1+}, null> (Bin,JM)
+  <x.getClass().getName() one of { "DataStructures.MyInteger", "DataStructures.StackAr", "java.lang.Object" } {1+}, x.getClass().getName() one of { "DataStructures.MyInteger", "java.lang.Object" } {1+}> (Una,DJJ)
+<DataStructures.StackAr.top()Ljava/lang/Object;:::ENTER>
+  <this.topOfStack >= -1 {1-}, this.topOfStack >= 0 {1+}> (Una,DJJ)
+  <null, this.theArray[0..this.topOfStack-1] elements != null {0.9999+}> (Una,MJ)
+<DataStructures.StackAr.top()Ljava/lang/Object;:::EXIT>
+  <(this.topOfStack >= 0)  ==>  (return.getClass().getName() in this.theArray[..].getClass().getName()) {1+}, null> (Nul,JM)
+  <(this.topOfStack >= 0)  ==>  (return == orig(this.theArray[post(this.topOfStack)])) {1+}, null> (Nul,JM)
+  <(this.topOfStack >= 0)  ==>  (return == orig(this.theArray[this.topOfStack])) {1+}, null> (Nul,JM)
+  <(this.topOfStack >= 0)  ==>  (return == this.theArray[orig(this.topOfStack)]) {1+}, null> (Nul,JM)
+  <(this.topOfStack >= 0)  ==>  (return == this.theArray[this.topOfStack]) {1+}, null> (Nul,JM)
+  <(this.topOfStack >= 0)  ==>  ((size(this.theArray[..])-1 == 0) ==> (this.topOfStack == 0)) {1+}, null> (Nul,JM)
+  <(this.topOfStack >= 0)  ==>  (return.getClass().getName() != this.theArray.getClass().getName()) {1+}, null> (Nul,JM)
+  <(this.topOfStack >= 0)  ==>  (return.getClass().getName() one of { "DataStructures.MyInteger", "DataStructures.StackAr", "java.lang.Object" }) {1+}, null> (Nul,JM)
+  <(this.topOfStack >= 0)  ==>  (return.getClass().getName() is printable) {1+}, null> (Nul,JM)
+  <(return == null)  ==>  (this.theArray[..] elements == return) {1+}, null> (Nul,JM)
+  <(return == null)  ==>  (this.theArray[this.topOfStack+1..] elements == return) {1+}, null> (Nul,JM)
+  <(return == null)  <==>  (this.topOfStack == -1) {1+}, null> (Nul,JM)
+  <(return == null)  ==>  (this.theArray[..] elements == null) {1+}, null> (Nul,JM)
+  <(return == null)  ==>  (this.theArray[0..this.topOfStack] == []) {1+}, null> (Nul,JM)
+  <(return == null)  ==>  (this.theArray[..].getClass().getName() elements == null) {1+}, null> (Nul,JM)
+  <null, return == orig(this.theArray[post(this.topOfStack)]) {1+}> (Bin,MJ)
+  <null, return == orig(this.theArray[this.topOfStack]) {1+}> (Bin,MJ)
+  <null, return == this.theArray[orig(this.topOfStack)] {1+}> (Bin,MJ)
+  <null, return == this.theArray[this.topOfStack] {1+}> (Bin,MJ)
+  <this.topOfStack >= -1 {1-}, this.topOfStack >= 0 {1+}> (Una,DJJ)
+  <null, this.theArray[0..this.topOfStack-1] elements != null {0.9999+}> (Una,MJ)
+  <return.getClass().getName() one of { "DataStructures.MyInteger", "DataStructures.StackAr", "java.lang.Object" } {1+}, return.getClass().getName() one of { "DataStructures.MyInteger", "java.lang.Object" } {1+}> (Una,DJJ)
+<DataStructures.StackAr.topAndPop()Ljava/lang/Object;:::ENTER>
+<DataStructures.StackAr.topAndPop()Ljava/lang/Object;:::EXIT>
+  <(orig(this.topOfStack) >= 0)  ==>  (this.topOfStack < size(this.theArray[..])-1) {0.9999+}, null> (Nul,JM)
+  <(orig(this.topOfStack) >= 0)  ==>  ((size(this.theArray[..])-1 == 0) ==> (orig(this.topOfStack) == 0)) {1+}, null> (Nul,JM)
+  <null, (return == null)  ==>  (return in this.theArray[..]) {1+}> (Nul,MJ)
+  <null, (return == null)  ==>  (return in this.theArray[orig(this.topOfStack)+1..]) {1+}> (Nul,MJ)
+  <null, (return == null)  ==>  (return in this.theArray[this.topOfStack+1..]) {1+}> (Nul,MJ)
+  <null, return in orig(this.theArray[..]) {1+}> (Bin,MJ)
+  <null, return in orig(this.theArray[post(this.topOfStack)+1..]) {1+}> (Bin,MJ)
+  <null, this.topOfStack < size(this.theArray[..])-1 {0.9999+}> (Bin,MJ)
