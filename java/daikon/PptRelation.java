@@ -614,6 +614,7 @@ public class PptRelation implements Serializable {
    * @param ppt the ppt whose conditional ppts to connect
    * @return the relations that were created
    */
+  @SuppressWarnings("MixedMutabilityReturnType")
   private static List<PptRelation> connect_conditionals(PptTopLevel ppt) {
     if (!ppt.has_splitters()) {
       return Collections.emptyList();
