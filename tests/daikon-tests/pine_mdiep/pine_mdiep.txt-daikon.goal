@@ -174,7 +174,7 @@ pine_state->vars->is_obsolete == pine_state->vars->is_global
 pine_state->vars->is_obsolete == pine_state->vars->is_list
 pine_state->vars->is_obsolete == pine_state->vars->is_fixed
 pine_state has only one value
-pine_state[] has only one value
+pine_state[0] has only one value
 pine_state->next_screen == null
 pine_state->prev_screen has only one value
 pine_state->redrawer has only one value
@@ -197,7 +197,7 @@ pine_state->feat_list_back_compat == null
 pine_state->init_context == -1
 pine_state->initial_cmds == null
 pine_state->ttyo has only one value
-pine_state->ttyo[] has only one value
+pine_state->ttyo[0] has only one value
 pine_state->ttyo->screen_rows == 24
 pine_state->ttyo->screen_cols == 80
 pine_state->ttyo->header_rows == 2
@@ -212,7 +212,7 @@ pine_state->last_expire_year == 999
 pine_state->last_expire_month == 98
 pine_state->composer_fillcol == 74
 pine_state->vars has only one value
-pine_state->vars[] has only one value
+pine_state->vars[0] has only one value
 pine_state->vars->name == "personal-name"
 pine_state->vars->is_obsolete == 26
 pine_state->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -230,7 +230,7 @@ pine_state->localdomain is a substring of pine_state->userdomain
 pine_state->pine_name is a substring of pine_state->pinerc
 ===========================================================================
 global.addr_book_config():::EXIT
-pine_state[] == orig(pine_state[])
+pine_state[0] == orig(pine_state[0])
 pine_state->next_screen == orig(pine_state->prev_screen)
 pine_state->context_list == pine_state->context_current
 pine_state->context_list == pine_state->context_last
@@ -379,7 +379,7 @@ pine_state->initial_cmds == pine_state->free_initial_cmds
 pine_state->initial_cmds == orig(pine_state->initial_cmds)
 pine_state->initial_cmds == orig(pine_state->free_initial_cmds)
 pine_state->ttyo == orig(pine_state->ttyo)
-pine_state->ttyo[] == orig(pine_state->ttyo[])
+pine_state->ttyo[0] == orig(pine_state->ttyo[0])
 pine_state->ttyo->screen_rows == orig(pine_state->ttyo->screen_rows)
 pine_state->ttyo->screen_cols == orig(pine_state->ttyo->screen_cols)
 pine_state->ttyo->header_rows == orig(pine_state->ttyo->header_rows)
@@ -388,7 +388,7 @@ pine_state->last_expire_year == orig(pine_state->last_expire_year)
 pine_state->last_expire_month == orig(pine_state->last_expire_month)
 pine_state->composer_fillcol == orig(pine_state->composer_fillcol)
 pine_state->vars == orig(pine_state->vars)
-pine_state->vars[] == orig(pine_state->vars[])
+pine_state->vars[0] == orig(pine_state->vars[0])
 pine_state->vars->is_obsolete == pine_state->vars->is_used
 pine_state->vars->is_obsolete == pine_state->vars->been_written
 pine_state->vars->is_obsolete == pine_state->vars->is_user
@@ -408,7 +408,7 @@ pine_state->vars->user_val == orig(pine_state->vars->user_val)
 pine_state->vars->global_val == orig(pine_state->vars->global_val)
 pine_state->vars->fixed_val == orig(pine_state->vars->fixed_val)
 pine_state->vars->cmdline_val == orig(pine_state->vars->cmdline_val)
-pine_state[] has only one value
+pine_state[0] has only one value
 pine_state->next_screen has only one value
 pine_state->prev_screen has only one value
 pine_state->redrawer has only one value
@@ -430,7 +430,7 @@ pine_state->feat_list_back_compat == null
 pine_state->init_context == -1
 pine_state->initial_cmds == null
 pine_state->ttyo has only one value
-pine_state->ttyo[] has only one value
+pine_state->ttyo[0] has only one value
 pine_state->ttyo->screen_rows == 24
 pine_state->ttyo->screen_cols == 80
 pine_state->ttyo->header_rows == 2
@@ -445,7 +445,7 @@ pine_state->last_expire_year == 999
 pine_state->last_expire_month == 98
 pine_state->composer_fillcol == 74
 pine_state->vars has only one value
-pine_state->vars[] has only one value
+pine_state->vars[0] has only one value
 pine_state->vars->name == "personal-name"
 pine_state->vars->is_obsolete == 26
 pine_state->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -560,14 +560,15 @@ return == "23"
 ===========================================================================
 global.config_screen():::ENTER
 tt has only one value
-tt[] == null
+tt[0] == null
 ===========================================================================
 global.config_screen():::EXIT
-tt[] has only one value
-tt[]->screen_rows == 24
-tt[]->screen_cols == 80
-tt[]->header_rows == 2
-tt[]->footer_rows == 3
+tt[0] has only one value
+tt[0][0] has only one value
+tt[0]->screen_rows == 24
+tt[0]->screen_cols == 80
+tt[0]->header_rows == 2
+tt[0]->footer_rows == 3
 return == 0
 ===========================================================================
 global.context_apply():::ENTER
@@ -711,7 +712,7 @@ ps->vars->is_obsolete == ps->vars->is_global
 ps->vars->is_obsolete == ps->vars->is_list
 ps->vars->is_obsolete == ps->vars->is_fixed
 ps has only one value
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->inbox_new_mail_count == 0
@@ -735,7 +736,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -749,7 +750,7 @@ ps->home_dir is a substring of ps->pinerc
 ps->pine_name is a substring of ps->pinerc
 ===========================================================================
 global.decode_sort():::EXIT
-ps[] == orig(ps[])
+ps[0] == orig(ps[0])
 ps->next_screen == ps->prev_screen
 ps->next_screen == ps->redrawer
 ps->next_screen == orig(ps->next_screen)
@@ -925,7 +926,7 @@ ps->status_msg_delay == return
 ps->composer_fillcol == orig(ps->composer_fillcol)
 ps->hours_to_timeout == return
 ps->vars == orig(ps->vars)
-ps->vars[] == orig(ps->vars[])
+ps->vars[0] == orig(ps->vars[0])
 ps->vars->is_obsolete == ps->vars->is_used
 ps->vars->is_obsolete == ps->vars->been_written
 ps->vars->is_obsolete == ps->vars->is_user
@@ -952,7 +953,7 @@ return == orig(ps->expunge_count)
 return == orig(ps->first_unseen)
 return == orig(ps->status_msg_delay)
 return == orig(ps->hours_to_timeout)
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->msgmap has only one value
@@ -975,7 +976,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -1054,10 +1055,10 @@ km->how_many == km->which
 km->how_many == km->width
 quick_draw == 0
 km has only one value
-km[] has only one value
+km[0] has only one value
 km->how_many one of { 2, 20482 }
 km->keys has only one value
-km->keys[] has only one value
+km->keys[0] has only one value
 km->keys->name == "?"
 km->keys->label == "Help"
 km->keys->bind has only one value
@@ -1068,14 +1069,14 @@ km->formatted_hm one of { 0, 4294967042L }
 km->formatted_hm is a pointer
 ===========================================================================
 global.do_menu():::EXIT
-km[] == orig(km[])
+km[0] == orig(km[0])
 km->how_many == km->which
 km->how_many == km->width
 km->how_many == orig(km->how_many)
 km->how_many == orig(km->which)
 km->how_many == orig(km->width)
 km->keys == orig(km->keys)
-km->keys[] == orig(km->keys[])
+km->keys[0] == orig(km->keys[0])
 km->keys->name == orig(km->keys->name)
 km->keys->label == orig(km->keys->label)
 km->keys->bind == orig(km->keys->bind)
@@ -1084,10 +1085,10 @@ km->keys->bind.nch == orig(km->keys->bind.nch)
 km->keys->bind.ch == orig(km->keys->bind.ch)
 km->keys->column == orig(quick_draw)
 km->formatted_hm == orig(km->formatted_hm)
-km[] has only one value
+km[0] has only one value
 km->how_many one of { 2, 20482 }
 km->keys has only one value
-km->keys[] has only one value
+km->keys[0] has only one value
 km->keys->name == "?"
 km->keys->label == "Help"
 km->keys->bind has only one value
@@ -1115,24 +1116,24 @@ km->keys->bind.cmd one of { 0, 500 }
 km->keys->bind.nch one of { 0, 2 }
 km->formatted_hm one of { 0, 4294967042L }
 km->formatted_hm is a pointer
-bitmap[] one of { 3, 253, 255 }
+bitmap[0] one of { 3, 253, 255 }
 width == 80
 row == -2
 column == 0
 ===========================================================================
 global.draw_keymenu():::EXIT
-km[] == orig(km[])
+km[0] == orig(km[0])
 km->how_many == km->which
 km->how_many == km->width
 km->keys == orig(km->keys)
-km->keys[] == orig(km->keys[])
+km->keys[0] == orig(km->keys[0])
 km->keys->name == orig(km->keys->name)
 km->keys->label == orig(km->keys->label)
 km->keys->bind == orig(km->keys->bind)
 km->keys->bind.cmd == orig(km->keys->bind.cmd)
 km->keys->bind.nch == orig(km->keys->bind.nch)
 km->keys->bind.ch == orig(km->keys->bind.ch)
-bitmap[] == orig(bitmap[])
+bitmap[0] == orig(bitmap[0])
 km->how_many one of { 20481, 20482 }
 km->keys->name one of { "?", "Y" }
 km->keys->name is printable
@@ -1141,7 +1142,7 @@ km->keys->label is printable
 km->keys->bind.cmd one of { 0, 500 }
 km->keys->bind.nch one of { 0, 2 }
 km->keys->column one of { 0, 1 }
-bitmap[] one of { 3, 253, 255 }
+bitmap[0] one of { 3, 253, 255 }
 km->how_many % orig(km->how_many) == 0
 orig(km->how_many) is a bitwise subset of km->how_many
 orig(km->how_many) is a bitwise subset of km->formatted_hm
@@ -1247,7 +1248,7 @@ ps->vars->is_obsolete == ps->vars->is_global
 ps->vars->is_obsolete == ps->vars->is_list
 ps->vars->is_obsolete == ps->vars->is_fixed
 ps has only one value
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->msgmap has only one value
@@ -1270,7 +1271,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -1284,7 +1285,7 @@ ps->home_dir is a substring of ps->pinerc
 ps->pine_name is a substring of ps->pinerc
 ===========================================================================
 global.dump_config():::EXIT
-ps[] == orig(ps[])
+ps[0] == orig(ps[0])
 ps->next_screen == ps->prev_screen
 ps->next_screen == ps->redrawer
 ps->next_screen == orig(ps->next_screen)
@@ -1468,7 +1469,7 @@ ps->last_expire_year == orig(ps->last_expire_year)
 ps->last_expire_month == orig(ps->last_expire_month)
 ps->composer_fillcol == orig(ps->composer_fillcol)
 ps->vars == orig(ps->vars)
-ps->vars[] == orig(ps->vars[])
+ps->vars[0] == orig(ps->vars[0])
 ps->vars->is_obsolete == ps->vars->is_used
 ps->vars->is_obsolete == ps->vars->been_written
 ps->vars->is_obsolete == ps->vars->is_user
@@ -1487,7 +1488,7 @@ ps->vars->user_val == orig(ps->vars->user_val)
 ps->vars->global_val == orig(ps->vars->global_val)
 ps->vars->fixed_val == orig(ps->vars->fixed_val)
 ps->vars->cmdline_val == orig(ps->vars->cmdline_val)
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->inbox_new_mail_count == 0
@@ -1511,7 +1512,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -1589,8 +1590,8 @@ folder == "INBOX"
 final_msg has only one value
 ===========================================================================
 global.expunge_and_close():::EXIT
-final_msg[] == "Closed folder \"INBOX\". Kept all 23 messages."
-orig(folder) is a substring of final_msg[]
+final_msg[0] == "Closed folder \"INBOX\". Kept all 23 messages."
+orig(folder) is a substring of final_msg[0]
 ===========================================================================
 global.fcc_rules():::ENTER
 index == 0
@@ -1703,22 +1704,22 @@ km->keys->bind.nch one of { 0, 2 }
 km->keys->column == 0
 km->formatted_hm one of { 0, 4294967042L }
 km->formatted_hm is a pointer
-bm[] one of { 3, 253, 255 }
+bm[0] one of { 3, 253, 255 }
 width == 80
 ===========================================================================
 global.format_keymenu():::EXIT
-km[] == orig(km[])
+km[0] == orig(km[0])
 km->how_many == km->which
 km->how_many == km->width
 km->keys == orig(km->keys)
-km->keys[] == orig(km->keys[])
+km->keys[0] == orig(km->keys[0])
 km->keys->name == orig(km->keys->name)
 km->keys->label == orig(km->keys->label)
 km->keys->bind == orig(km->keys->bind)
 km->keys->bind.cmd == orig(km->keys->bind.cmd)
 km->keys->bind.nch == orig(km->keys->bind.nch)
 km->keys->bind.ch == orig(km->keys->bind.ch)
-bm[] == orig(bm[])
+bm[0] == orig(bm[0])
 km->how_many one of { 20481, 20482 }
 km->keys->name one of { "?", "Y" }
 km->keys->name is printable
@@ -1727,7 +1728,7 @@ km->keys->label is printable
 km->keys->bind.cmd one of { 0, 500 }
 km->keys->bind.nch one of { 0, 2 }
 km->keys->column one of { 0, 1 }
-bm[] one of { 3, 253, 255 }
+bm[0] one of { 3, 253, 255 }
 km->how_many % orig(km->how_many) == 0
 orig(km->how_many) is a bitwise subset of km->how_many
 orig(km->how_many) is a bitwise subset of km->formatted_hm
@@ -1737,47 +1738,47 @@ orig(km->formatted_hm) is a bitwise subset of km->formatted_hm
 global.format_titlebar():::ENTER
 ===========================================================================
 global.format_titlebar():::EXIT
-start_col[] one of { 0, 11 }
+start_col[0] one of { 0, 11 }
 return one of { "  PINE 4.03   MAIN MENU                            Folder: INBOX  23 Messages   ", "  PINE 4.03   MAIN MENU                          Folder: (CLOSED)  No Messages  ", "  PINE 4.03   SETUP ADDRESS BOOKS                  Folder: INBOX  23 Messages   " }
 return is printable
 ===========================================================================
 global.free_cache_array():::ENTER
 c_array has only one value
-c_array[] has only one value
+c_array[0] has only one value
 size == 57
 ===========================================================================
 global.free_cache_array():::EXIT
-c_array[] == null
+c_array[0] == null
 ===========================================================================
 global.free_context():::ENTER
 cntxt has only one value
-cntxt[] has only one value
+cntxt[0] has only one value
 ===========================================================================
 global.free_context():::EXIT
-cntxt[] == null
+cntxt[0] == null
 ===========================================================================
 global.free_fdir():::ENTER
 f has only one value
-f[] has only one value
+f[0] has only one value
 recur == 1
 ===========================================================================
 global.free_fdir():::EXIT
-f[] == null
+f[0] == null
 ===========================================================================
 global.free_folder_entries():::ENTER
 flist has only one value
-flist[] has only one value
+flist[0] has only one value
 ===========================================================================
 global.free_folder_entries():::EXIT
-flist[] == null
+flist[0] == null
 ===========================================================================
 global.free_list_array():::ENTER
 list != null
-list[] == null
+list[0] == null
 ===========================================================================
 global.free_list_array():::EXIT
-list[] == orig(list[])
-list[] == null
+list[0] == orig(list[0])
+list[0] == null
 ===========================================================================
 global.get_display_line():::ENTER
 continuation one of { 0, 1 }
@@ -1785,14 +1786,14 @@ retcol has only one value
 (global_row & continuation) == 0
 ===========================================================================
 global.get_display_line():::EXIT
-s_hilite[] == retcol[]
-s_hilite[] == orig(global_row)
-s_hilite[] == 0
-e_hilite[] == 80
-retcol[] one of { 0, 40 }
+s_hilite[0] == retcol[0]
+s_hilite[0] == orig(global_row)
+s_hilite[0] == 0
+e_hilite[0] == 80
+retcol[0] one of { 0, 40 }
 return is printable
-(orig(global_row) == 0) ==> (retcol[] == 0)
-(retcol[] & orig(global_row)) == 0
+(orig(global_row) == 0) ==> (retcol[0] == 0)
+(retcol[0] & orig(global_row)) == 0
 ===========================================================================
 global.get_dlc():::ENTER
 row >= 0
@@ -1825,17 +1826,17 @@ string is printable
 firstws == 0
 ===========================================================================
 global.get_pair():::EXIT
-value[] == orig(string)
-value[] one of { ".addressbook", "mail/[]" }
-value[] is printable
+value[0] == orig(string)
+value[0] one of { ".addressbook", "mail/[]" }
+value[0] is printable
 ===========================================================================
 global.get_user_info():::ENTER
 ui has only one value
-ui[] has only one value
+ui[0] has only one value
 ===========================================================================
 global.get_user_info():::EXIT
-ui[] == orig(ui[])
-ui[] has only one value
+ui[0] == orig(ui[0])
+ui[0] has only one value
 ui->homedir == "/home/mhardojo"
 ui->login == "mhardojo"
 ui->fullname == "Madeline Hardojo"
@@ -1845,7 +1846,7 @@ global.get_windsize():::ENTER
 ttyo has only one value
 ===========================================================================
 global.get_windsize():::EXIT
-ttyo[] has only one value
+ttyo[0] has only one value
 ttyo->screen_rows == 24
 ttyo->screen_cols == 80
 return == 0
@@ -2003,7 +2004,7 @@ ps->vars->is_obsolete == ps->vars->is_global
 ps->vars->is_obsolete == ps->vars->is_list
 ps->vars->is_obsolete == ps->vars->is_fixed
 ps has only one value
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->inbox_new_mail_count == 0
@@ -2020,7 +2021,7 @@ ps->feat_list_back_compat == null
 ps->init_context == -1
 ps->initial_cmds == null
 ps->ttyo has only one value
-ps->ttyo[] has only one value
+ps->ttyo[0] has only one value
 ps->ttyo->screen_rows == 24
 ps->ttyo->screen_cols == 80
 ps->ttyo->header_rows == 2
@@ -2035,7 +2036,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -2053,7 +2054,7 @@ ps->localdomain is a substring of ps->userdomain
 ps->pine_name is a substring of ps->pinerc
 ===========================================================================
 global.init_folders():::EXIT
-ps[] == orig(ps[])
+ps[0] == orig(ps[0])
 ps->next_screen == ps->prev_screen
 ps->next_screen == ps->redrawer
 ps->next_screen == orig(ps->next_screen)
@@ -2230,7 +2231,7 @@ ps->initial_cmds == ps->free_initial_cmds
 ps->initial_cmds == orig(ps->initial_cmds)
 ps->initial_cmds == orig(ps->free_initial_cmds)
 ps->ttyo == orig(ps->ttyo)
-ps->ttyo[] == orig(ps->ttyo[])
+ps->ttyo[0] == orig(ps->ttyo[0])
 ps->ttyo->screen_rows == orig(ps->ttyo->screen_rows)
 ps->ttyo->screen_cols == orig(ps->ttyo->screen_cols)
 ps->ttyo->header_rows == orig(ps->ttyo->header_rows)
@@ -2239,7 +2240,7 @@ ps->last_expire_year == orig(ps->last_expire_year)
 ps->last_expire_month == orig(ps->last_expire_month)
 ps->composer_fillcol == orig(ps->composer_fillcol)
 ps->vars == orig(ps->vars)
-ps->vars[] == orig(ps->vars[])
+ps->vars[0] == orig(ps->vars[0])
 ps->vars->is_obsolete == ps->vars->is_used
 ps->vars->is_obsolete == ps->vars->been_written
 ps->vars->is_obsolete == ps->vars->is_user
@@ -2259,7 +2260,7 @@ ps->vars->user_val == orig(ps->vars->user_val)
 ps->vars->global_val == orig(ps->vars->global_val)
 ps->vars->fixed_val == orig(ps->vars->fixed_val)
 ps->vars->cmdline_val == orig(ps->vars->cmdline_val)
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list has only one value
 ps->context_last == null
@@ -2277,7 +2278,7 @@ ps->feat_list_back_compat == null
 ps->init_context == -1
 ps->initial_cmds == null
 ps->ttyo has only one value
-ps->ttyo[] has only one value
+ps->ttyo[0] has only one value
 ps->ttyo->screen_rows == 24
 ps->ttyo->screen_cols == 80
 ps->ttyo->header_rows == 2
@@ -2292,7 +2293,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -2397,7 +2398,7 @@ ps->vars->is_obsolete == ps->vars->is_global
 ps->vars->is_obsolete == ps->vars->is_list
 ps->vars->is_obsolete == ps->vars->is_fixed
 ps has only one value
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->inbox_new_mail_count == 0
@@ -2422,7 +2423,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -2438,7 +2439,7 @@ ps->home_dir is a substring of ps->pinerc
 ps->pine_name is a substring of ps->pinerc
 ===========================================================================
 global.init_hostname():::EXIT
-ps[] == orig(ps[])
+ps[0] == orig(ps[0])
 ps->next_screen == ps->prev_screen
 ps->next_screen == ps->redrawer
 ps->next_screen == orig(ps->next_screen)
@@ -2612,7 +2613,7 @@ ps->status_msg_delay == return
 ps->composer_fillcol == orig(ps->composer_fillcol)
 ps->hours_to_timeout == return
 ps->vars == orig(ps->vars)
-ps->vars[] == orig(ps->vars[])
+ps->vars[0] == orig(ps->vars[0])
 ps->vars->is_obsolete == ps->vars->is_used
 ps->vars->is_obsolete == ps->vars->been_written
 ps->vars->is_obsolete == ps->vars->is_user
@@ -2640,7 +2641,7 @@ return == orig(ps->expunge_count)
 return == orig(ps->first_unseen)
 return == orig(ps->status_msg_delay)
 return == orig(ps->hours_to_timeout)
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->msgmap has only one value
@@ -2667,7 +2668,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -2693,10 +2694,10 @@ global.init_inbox_mapping():::EXIT
 ===========================================================================
 global.init_index_format():::ENTER
 answer has only one value
-answer[] == null
+answer[0] == null
 ===========================================================================
 global.init_index_format():::EXIT
-answer[] has only one value
+answer[0] has only one value
 ===========================================================================
 global.init_init_vars():::ENTER
 ps->next_screen == ps->prev_screen
@@ -2782,7 +2783,7 @@ ps->goto_default_rule == ps->open_readonly_on_startup
 ps->feat_list_back_compat == ps->init_errs
 ps->initial_cmds == ps->free_initial_cmds
 ps has only one value
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->inbox_new_mail_count == 0
@@ -2799,7 +2800,7 @@ ps->ttyo == null
 ps->vars == null
 ===========================================================================
 global.init_init_vars():::EXIT
-ps[] == orig(ps[])
+ps[0] == orig(ps[0])
 ps->next_screen == ps->prev_screen
 ps->next_screen == ps->redrawer
 ps->next_screen == orig(ps->next_screen)
@@ -2988,7 +2989,7 @@ ps->vars->is_obsolete == ps->vars->is_user
 ps->vars->is_obsolete == ps->vars->is_global
 ps->vars->is_obsolete == ps->vars->is_list
 ps->vars->is_obsolete == ps->vars->is_fixed
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->inbox_new_mail_count == 0
@@ -3003,7 +3004,7 @@ ps->init_context == -1
 ps->initial_cmds == null
 ps->ttyo == null
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -3107,7 +3108,7 @@ ps->vars->is_obsolete == ps->vars->is_global
 ps->vars->is_obsolete == ps->vars->is_list
 ps->vars->is_obsolete == ps->vars->is_fixed
 ps has only one value
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->inbox_new_mail_count == 0
@@ -3135,7 +3136,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -3153,7 +3154,7 @@ ps->localdomain is a substring of ps->userdomain
 ps->pine_name is a substring of ps->pinerc
 ===========================================================================
 global.init_mail_dir():::EXIT
-ps[] == orig(ps[])
+ps[0] == orig(ps[0])
 ps->next_screen == ps->prev_screen
 ps->next_screen == ps->redrawer
 ps->next_screen == orig(ps->next_screen)
@@ -3327,7 +3328,7 @@ ps->status_msg_delay == return
 ps->composer_fillcol == orig(ps->composer_fillcol)
 ps->hours_to_timeout == return
 ps->vars == orig(ps->vars)
-ps->vars[] == orig(ps->vars[])
+ps->vars[0] == orig(ps->vars[0])
 ps->vars->is_obsolete == ps->vars->is_used
 ps->vars->is_obsolete == ps->vars->been_written
 ps->vars->is_obsolete == ps->vars->is_user
@@ -3355,7 +3356,7 @@ return == orig(ps->expunge_count)
 return == orig(ps->first_unseen)
 return == orig(ps->status_msg_delay)
 return == orig(ps->hours_to_timeout)
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->msgmap has only one value
@@ -3382,7 +3383,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -3494,7 +3495,7 @@ ps->vars->is_obsolete == ps->vars->is_global
 ps->vars->is_obsolete == ps->vars->is_list
 ps->vars->is_obsolete == ps->vars->is_fixed
 ps has only one value
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->inbox_new_mail_count == 0
@@ -3522,7 +3523,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -3540,7 +3541,7 @@ ps->localdomain is a substring of ps->userdomain
 ps->pine_name is a substring of ps->pinerc
 ===========================================================================
 global.init_tty_driver():::EXIT
-ps[] == orig(ps[])
+ps[0] == orig(ps[0])
 ps->next_screen == ps->prev_screen
 ps->next_screen == ps->redrawer
 ps->next_screen == orig(ps->next_screen)
@@ -3688,7 +3689,7 @@ ps->status_msg_delay == return
 ps->composer_fillcol == orig(ps->composer_fillcol)
 ps->hours_to_timeout == return
 ps->vars == orig(ps->vars)
-ps->vars[] == orig(ps->vars[])
+ps->vars[0] == orig(ps->vars[0])
 ps->vars->is_obsolete == ps->vars->is_used
 ps->vars->is_obsolete == ps->vars->been_written
 ps->vars->is_obsolete == ps->vars->is_user
@@ -3716,7 +3717,7 @@ return == orig(ps->expunge_count)
 return == orig(ps->first_unseen)
 return == orig(ps->status_msg_delay)
 return == orig(ps->hours_to_timeout)
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->msgmap has only one value
@@ -3742,7 +3743,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -3849,7 +3850,7 @@ ps->vars->is_obsolete == ps->vars->is_global
 ps->vars->is_obsolete == ps->vars->is_list
 ps->vars->is_obsolete == ps->vars->is_fixed
 ps has only one value
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->inbox_new_mail_count == 0
@@ -3873,7 +3874,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -3886,7 +3887,7 @@ ps->home_dir is a substring of ps->pinerc
 ps->pine_name is a substring of ps->pinerc
 ===========================================================================
 global.init_username():::EXIT
-ps[] == orig(ps[])
+ps[0] == orig(ps[0])
 ps->next_screen == ps->prev_screen
 ps->next_screen == ps->redrawer
 ps->next_screen == orig(ps->next_screen)
@@ -4061,7 +4062,7 @@ ps->status_msg_delay == return
 ps->composer_fillcol == orig(ps->composer_fillcol)
 ps->hours_to_timeout == return
 ps->vars == orig(ps->vars)
-ps->vars[] == orig(ps->vars[])
+ps->vars[0] == orig(ps->vars[0])
 ps->vars->is_obsolete == ps->vars->is_used
 ps->vars->is_obsolete == ps->vars->been_written
 ps->vars->is_obsolete == ps->vars->is_user
@@ -4088,7 +4089,7 @@ return == orig(ps->expunge_count)
 return == orig(ps->first_unseen)
 return == orig(ps->status_msg_delay)
 return == orig(ps->hours_to_timeout)
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->msgmap has only one value
@@ -4112,7 +4113,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -4222,7 +4223,7 @@ ps->vars->is_obsolete == ps->vars->is_global
 ps->vars->is_obsolete == ps->vars->is_list
 ps->vars->is_obsolete == ps->vars->is_fixed
 ps has only one value
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->inbox_new_mail_count == 0
@@ -4240,7 +4241,7 @@ ps->ttyo == null
 ps->home_dir == "/home/mhardojo"
 ps->pine_name == "pine"
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -4251,7 +4252,7 @@ ps->vars->fixed_val has only one value
 ps->vars->cmdline_val has only one value
 ===========================================================================
 global.init_vars():::EXIT
-ps[] == orig(ps[])
+ps[0] == orig(ps[0])
 ps->next_screen == ps->prev_screen
 ps->next_screen == ps->redrawer
 ps->next_screen == orig(ps->next_screen)
@@ -4434,7 +4435,7 @@ ps->initial_cmds == orig(ps->initial_cmds)
 ps->initial_cmds == orig(ps->free_initial_cmds)
 ps->ttyo == orig(ps->ttyo)
 ps->vars == orig(ps->vars)
-ps->vars[] == orig(ps->vars[])
+ps->vars[0] == orig(ps->vars[0])
 ps->vars->is_obsolete == ps->vars->is_used
 ps->vars->is_obsolete == ps->vars->been_written
 ps->vars->is_obsolete == ps->vars->is_user
@@ -4453,7 +4454,7 @@ ps->vars->user_val == orig(ps->vars->user_val)
 ps->vars->global_val == orig(ps->vars->global_val)
 ps->vars->fixed_val == orig(ps->vars->fixed_val)
 ps->vars->cmdline_val == orig(ps->vars->cmdline_val)
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->inbox_new_mail_count == 0
@@ -4477,7 +4478,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -4525,7 +4526,7 @@ global.kbseq():::ENTER
 getcfunc has only one value
 recorder has only one value
 bail_handler has only one value
-c[] == 2115
+c[0] == 2115
 ===========================================================================
 global.kbseq():::EXIT
 return == 0
@@ -4646,7 +4647,7 @@ pine_state->vars->is_obsolete == pine_state->vars->is_global
 pine_state->vars->is_obsolete == pine_state->vars->is_list
 pine_state->vars->is_obsolete == pine_state->vars->is_fixed
 pine_state has only one value
-pine_state[] has only one value
+pine_state[0] has only one value
 pine_state->next_screen has only one value
 pine_state->prev_screen == null
 pine_state->context_list has only one value
@@ -4668,7 +4669,7 @@ pine_state->feat_list_back_compat == null
 pine_state->init_context == -1
 pine_state->initial_cmds == null
 pine_state->ttyo has only one value
-pine_state->ttyo[] has only one value
+pine_state->ttyo[0] has only one value
 pine_state->ttyo->screen_rows == 24
 pine_state->ttyo->screen_cols == 80
 pine_state->ttyo->header_rows == 2
@@ -4683,7 +4684,7 @@ pine_state->last_expire_year == 999
 pine_state->last_expire_month == 98
 pine_state->composer_fillcol == 74
 pine_state->vars has only one value
-pine_state->vars[] has only one value
+pine_state->vars[0] has only one value
 pine_state->vars->name == "personal-name"
 pine_state->vars->is_obsolete == 26
 pine_state->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -4701,7 +4702,7 @@ pine_state->localdomain is a substring of pine_state->userdomain
 pine_state->pine_name is a substring of pine_state->pinerc
 ===========================================================================
 global.main_menu_screen():::EXIT
-pine_state[] == orig(pine_state[])
+pine_state[0] == orig(pine_state[0])
 pine_state->context_list == pine_state->context_current
 pine_state->context_list == pine_state->context_last
 pine_state->context_list == orig(pine_state->context_list)
@@ -4844,7 +4845,7 @@ pine_state->initial_cmds == pine_state->free_initial_cmds
 pine_state->initial_cmds == orig(pine_state->initial_cmds)
 pine_state->initial_cmds == orig(pine_state->free_initial_cmds)
 pine_state->ttyo == orig(pine_state->ttyo)
-pine_state->ttyo[] == orig(pine_state->ttyo[])
+pine_state->ttyo[0] == orig(pine_state->ttyo[0])
 pine_state->ttyo->screen_rows == orig(pine_state->ttyo->screen_rows)
 pine_state->ttyo->screen_cols == orig(pine_state->ttyo->screen_cols)
 pine_state->ttyo->header_rows == orig(pine_state->ttyo->header_rows)
@@ -4853,7 +4854,7 @@ pine_state->last_expire_year == orig(pine_state->last_expire_year)
 pine_state->last_expire_month == orig(pine_state->last_expire_month)
 pine_state->composer_fillcol == orig(pine_state->composer_fillcol)
 pine_state->vars == orig(pine_state->vars)
-pine_state->vars[] == orig(pine_state->vars[])
+pine_state->vars[0] == orig(pine_state->vars[0])
 pine_state->vars->is_obsolete == pine_state->vars->is_used
 pine_state->vars->is_obsolete == pine_state->vars->been_written
 pine_state->vars->is_obsolete == pine_state->vars->is_user
@@ -4873,7 +4874,7 @@ pine_state->vars->user_val == orig(pine_state->vars->user_val)
 pine_state->vars->global_val == orig(pine_state->vars->global_val)
 pine_state->vars->fixed_val == orig(pine_state->vars->fixed_val)
 pine_state->vars->cmdline_val == orig(pine_state->vars->cmdline_val)
-pine_state[] has only one value
+pine_state[0] has only one value
 pine_state->next_screen has only one value
 pine_state->prev_screen has only one value
 pine_state->redrawer has only one value
@@ -4895,7 +4896,7 @@ pine_state->feat_list_back_compat == null
 pine_state->init_context == -1
 pine_state->initial_cmds == null
 pine_state->ttyo has only one value
-pine_state->ttyo[] has only one value
+pine_state->ttyo[0] has only one value
 pine_state->ttyo->screen_rows == 24
 pine_state->ttyo->screen_cols == 80
 pine_state->ttyo->header_rows == 2
@@ -4910,7 +4911,7 @@ pine_state->last_expire_year == 999
 pine_state->last_expire_month == 98
 pine_state->composer_fillcol == 74
 pine_state->vars has only one value
-pine_state->vars[] has only one value
+pine_state->vars[0] has only one value
 pine_state->vars->name == "personal-name"
 pine_state->vars->is_obsolete == 26
 pine_state->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -4929,11 +4930,11 @@ pine_state->pine_name is a substring of pine_state->pinerc
 ===========================================================================
 global.mc_free_entry():::ENTER
 mc has only one value
-mc[] == null
+mc[0] == null
 ===========================================================================
 global.mc_free_entry():::EXIT
-mc[] == orig(mc[])
-mc[] == null
+mc[0] == orig(mc[0])
+mc[0] == null
 ===========================================================================
 global.menu_add_binding():::ENTER
 menu->how_many == menu->which
@@ -4960,14 +4961,14 @@ menu->keys->column < cmd
 key < cmd
 ===========================================================================
 global.menu_add_binding():::EXIT
-menu[] == orig(menu[])
+menu[0] == orig(menu[0])
 menu->how_many == menu->which
 menu->how_many == menu->width
 menu->how_many == orig(menu->how_many)
 menu->how_many == orig(menu->which)
 menu->how_many == orig(menu->width)
 menu->keys == orig(menu->keys)
-menu->keys[] == orig(menu->keys[])
+menu->keys[0] == orig(menu->keys[0])
 menu->keys->name == orig(menu->keys->name)
 menu->keys->label == orig(menu->keys->label)
 menu->keys->bind == orig(menu->keys->bind)
@@ -4998,10 +4999,10 @@ global.menu_clear_binding():::ENTER
 menu->how_many == menu->which
 menu->how_many == menu->width
 menu != null
-menu[] != null
+menu[0] != null
 menu->how_many one of { 2, 3, 20482 }
 menu->keys != null
-menu->keys[] != null
+menu->keys[0] != null
 menu->keys->name == "?"
 menu->keys->label == "Help"
 menu->keys->bind != null
@@ -5019,14 +5020,14 @@ menu->keys->bind.nch < key
 menu->keys->column < key
 ===========================================================================
 global.menu_clear_binding():::EXIT
-menu[] == orig(menu[])
+menu[0] == orig(menu[0])
 menu->how_many == menu->which
 menu->how_many == menu->width
 menu->how_many == orig(menu->how_many)
 menu->how_many == orig(menu->which)
 menu->how_many == orig(menu->width)
 menu->keys == orig(menu->keys)
-menu->keys[] == orig(menu->keys[])
+menu->keys[0] == orig(menu->keys[0])
 menu->keys->name == orig(menu->keys->name)
 menu->keys->label == orig(menu->keys->label)
 menu->keys->bind == orig(menu->keys->bind)
@@ -5035,10 +5036,10 @@ menu->keys->bind.nch == orig(menu->keys->bind.nch)
 menu->keys->bind.ch == orig(menu->keys->bind.ch)
 menu->keys->column == orig(menu->keys->column)
 menu->formatted_hm == orig(menu->formatted_hm)
-menu[] != null
+menu[0] != null
 menu->how_many one of { 2, 3, 20482 }
 menu->keys != null
-menu->keys[] != null
+menu->keys[0] != null
 menu->keys->name == "?"
 menu->keys->label == "Help"
 menu->keys->bind != null
@@ -5065,10 +5066,10 @@ global.menu_clear_cmd_binding():::ENTER
 menu->how_many == menu->which
 menu->how_many == menu->width
 menu has only one value
-menu[] has only one value
+menu[0] has only one value
 menu->how_many == 1
 menu->keys has only one value
-menu->keys[] has only one value
+menu->keys[0] has only one value
 menu->keys->name == "?"
 menu->keys->label == "Help"
 menu->keys->bind has only one value
@@ -5081,14 +5082,14 @@ menu->keys->column == (java.lang.Math.pow(menu->keys->bind.cmd, cmd))
 menu->keys->column == (java.lang.Math.pow(menu->keys->bind.nch, cmd))
 ===========================================================================
 global.menu_clear_cmd_binding():::EXIT
-menu[] == orig(menu[])
+menu[0] == orig(menu[0])
 menu->how_many == menu->which
 menu->how_many == menu->width
 menu->how_many == orig(menu->how_many)
 menu->how_many == orig(menu->which)
 menu->how_many == orig(menu->width)
 menu->keys == orig(menu->keys)
-menu->keys[] == orig(menu->keys[])
+menu->keys[0] == orig(menu->keys[0])
 menu->keys->name == orig(menu->keys->name)
 menu->keys->label == orig(menu->keys->label)
 menu->keys->bind == orig(menu->keys->bind)
@@ -5097,10 +5098,10 @@ menu->keys->bind.nch == orig(menu->keys->bind.nch)
 menu->keys->bind.ch == orig(menu->keys->bind.ch)
 menu->keys->column == orig(menu->keys->column)
 menu->formatted_hm == orig(menu->formatted_hm)
-menu[] has only one value
+menu[0] has only one value
 menu->how_many == 1
 menu->keys has only one value
-menu->keys[] has only one value
+menu->keys[0] has only one value
 menu->keys->name == "?"
 menu->keys->label == "Help"
 menu->keys->bind has only one value
@@ -5127,14 +5128,14 @@ menu->formatted_hm one of { 4294966529L, 4294967042L }
 menu->formatted_hm is a pointer
 ===========================================================================
 global.menu_command():::EXIT
-menu[] == orig(menu[])
+menu[0] == orig(menu[0])
 menu->how_many == menu->which
 menu->how_many == menu->width
 menu->how_many == orig(menu->how_many)
 menu->how_many == orig(menu->which)
 menu->how_many == orig(menu->width)
 menu->keys == orig(menu->keys)
-menu->keys[] == orig(menu->keys[])
+menu->keys[0] == orig(menu->keys[0])
 menu->keys->name == orig(menu->keys->name)
 menu->keys->label == orig(menu->keys->label)
 menu->keys->bind == orig(menu->keys->bind)
@@ -5158,10 +5159,10 @@ global.menu_init_binding():::ENTER
 menu->how_many == menu->which
 menu->how_many == menu->width
 menu has only one value
-menu[] has only one value
+menu[0] has only one value
 menu->how_many == 1
 menu->keys has only one value
-menu->keys[] has only one value
+menu->keys[0] has only one value
 menu->keys->name == "?"
 menu->keys->label == "Help"
 menu->keys->bind has only one value
@@ -5178,14 +5179,14 @@ menu->keys->column == (java.lang.Math.pow(menu->keys->bind.cmd, cmd))
 menu->keys->column == (java.lang.Math.pow(menu->keys->bind.nch, cmd))
 ===========================================================================
 global.menu_init_binding():::EXIT
-menu[] == orig(menu[])
+menu[0] == orig(menu[0])
 menu->how_many == menu->which
 menu->how_many == menu->width
 menu->how_many == orig(menu->how_many)
 menu->how_many == orig(menu->which)
 menu->how_many == orig(menu->width)
 menu->keys == orig(menu->keys)
-menu->keys[] == orig(menu->keys[])
+menu->keys[0] == orig(menu->keys[0])
 menu->keys->name == orig(menu->keys->name)
 menu->keys->label == orig(menu->keys->label)
 menu->keys->bind == orig(menu->keys->bind)
@@ -5194,10 +5195,10 @@ menu->keys->bind.nch == orig(menu->keys->bind.nch)
 menu->keys->bind.ch == orig(menu->keys->bind.ch)
 menu->keys->column == orig(menu->keys->column)
 menu->formatted_hm == orig(menu->formatted_hm)
-menu[] has only one value
+menu[0] has only one value
 menu->how_many == 1
 menu->keys has only one value
-menu->keys[] has only one value
+menu->keys[0] has only one value
 menu->keys->name == "?"
 menu->keys->label == "Help"
 menu->keys->bind has only one value
@@ -5217,8 +5218,8 @@ return one of { 0, 3 }
 global.messages_queued():::ENTER
 ===========================================================================
 global.messages_queued():::EXIT
-dtime[] == return
-dtime[] == 3
+dtime[0] == return
+dtime[0] == 3
 return one of { 0, 3 }
 ===========================================================================
 global.mm_critical():::ENTER
@@ -5271,10 +5272,10 @@ return == 0
 ===========================================================================
 global.msgno_give():::ENTER
 msgs has only one value
-msgs[] has only one value
+msgs[0] has only one value
 ===========================================================================
 global.msgno_give():::EXIT
-msgs[] == null
+msgs[0] == null
 ===========================================================================
 global.msgno_in_sort():::ENTER
 msgs has only one value
@@ -5289,7 +5290,7 @@ msgs has only one value
 tot one of { 0, 23 }
 ===========================================================================
 global.msgno_init():::EXIT
-msgs[] has only one value
+msgs[0] has only one value
 ===========================================================================
 global.name_file_mtime():::ENTER
 file == "/home/mhardojo/.pinerc"
@@ -5298,10 +5299,10 @@ global.name_file_mtime():::EXIT
 ===========================================================================
 global.new_context():::ENTER
 cntxt_string == "mail/[]"
-prime[] == 0
+prime[0] == 0
 ===========================================================================
 global.new_context():::EXIT
-prime[] == 1
+prime[0] == 1
 ===========================================================================
 global.new_fdir():::ENTER
 view == ""
@@ -5345,19 +5346,19 @@ km->keys->label is printable
 km->keys->bind.cmd one of { 0, 500 }
 km->keys->bind.nch one of { 0, 2 }
 km->keys->column one of { 0, 1 }
-bm[] one of { 3, 253, 255 }
+bm[0] one of { 3, 253, 255 }
 row == -2
 column == 0
 ===========================================================================
 global.output_keymenu():::EXIT
-km[] == orig(km[])
+km[0] == orig(km[0])
 km->how_many == km->which
 km->how_many == km->width
 km->how_many == orig(km->how_many)
 km->how_many == orig(km->which)
 km->how_many == orig(km->width)
 km->keys == orig(km->keys)
-km->keys[] == orig(km->keys[])
+km->keys[0] == orig(km->keys[0])
 km->keys->name == orig(km->keys->name)
 km->keys->label == orig(km->keys->label)
 km->keys->bind == orig(km->keys->bind)
@@ -5366,7 +5367,7 @@ km->keys->bind.nch == orig(km->keys->bind.nch)
 km->keys->bind.ch == orig(km->keys->bind.ch)
 km->keys->column == orig(km->keys->column)
 km->formatted_hm == orig(km->formatted_hm)
-bm[] == orig(bm[])
+bm[0] == orig(bm[0])
 km->how_many one of { 20481, 20482 }
 km->keys->name one of { "?", "Y" }
 km->keys->name is printable
@@ -5375,7 +5376,7 @@ km->keys->label is printable
 km->keys->bind.cmd one of { 0, 500 }
 km->keys->bind.nch one of { 0, 2 }
 km->keys->column one of { 0, 1 }
-bm[] one of { 3, 253, 255 }
+bm[0] one of { 3, 253, 255 }
 ===========================================================================
 global.output_message():::ENTER
 ===========================================================================
@@ -5400,9 +5401,9 @@ list is printable
 count == 1
 ===========================================================================
 global.parse_list():::EXIT
-return[] == orig(list)
-return[] one of { ".addressbook", "lpr", "mail/[]" }
-return[] is printable
+return[0] == orig(list)
+return[0] one of { ".addressbook", "lpr", "mail/[]" }
+return[0] is printable
 ===========================================================================
 global.pine_args():::ENTER
 pine_state->next_screen == pine_state->prev_screen
@@ -5499,9 +5500,9 @@ pine_state->vars->is_obsolete == pine_state->vars->is_user
 pine_state->vars->is_obsolete == pine_state->vars->is_global
 pine_state->vars->is_obsolete == pine_state->vars->is_list
 pine_state->vars->is_obsolete == pine_state->vars->is_fixed
-argv == addrs[]
+argv == addrs[0]
 pine_state has only one value
-pine_state[] has only one value
+pine_state[0] has only one value
 pine_state->next_screen == null
 pine_state->context_list == null
 pine_state->inbox_new_mail_count == 0
@@ -5516,7 +5517,7 @@ pine_state->initial_cmds == null
 pine_state->ttyo == null
 pine_state->home_dir == "/home/mhardojo"
 pine_state->vars has only one value
-pine_state->vars[] has only one value
+pine_state->vars[0] has only one value
 pine_state->vars->name == "personal-name"
 pine_state->vars->is_obsolete == 26
 pine_state->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -5527,11 +5528,11 @@ pine_state->vars->fixed_val has only one value
 pine_state->vars->cmdline_val has only one value
 argc == 1
 argv has only one value
-argv[] == "/home2/mhardojo/preparation/subjects/pine/source/v4.03/bin/pine"
+argv[0] == "/home2/mhardojo/preparation/subjects/pine/source/v4.03/bin/pine"
 addrs has only one value
 ===========================================================================
 global.pine_args():::EXIT
-pine_state[] == orig(pine_state[])
+pine_state[0] == orig(pine_state[0])
 pine_state->next_screen == pine_state->prev_screen
 pine_state->next_screen == pine_state->redrawer
 pine_state->next_screen == orig(pine_state->next_screen)
@@ -5720,7 +5721,7 @@ pine_state->initial_cmds == orig(pine_state->initial_cmds)
 pine_state->initial_cmds == orig(pine_state->free_initial_cmds)
 pine_state->ttyo == orig(pine_state->ttyo)
 pine_state->vars == orig(pine_state->vars)
-pine_state->vars[] == orig(pine_state->vars[])
+pine_state->vars[0] == orig(pine_state->vars[0])
 pine_state->vars->is_obsolete == pine_state->vars->is_used
 pine_state->vars->is_obsolete == pine_state->vars->been_written
 pine_state->vars->is_obsolete == pine_state->vars->is_user
@@ -5739,9 +5740,9 @@ pine_state->vars->user_val == orig(pine_state->vars->user_val)
 pine_state->vars->global_val == orig(pine_state->vars->global_val)
 pine_state->vars->fixed_val == orig(pine_state->vars->fixed_val)
 pine_state->vars->cmdline_val == orig(pine_state->vars->cmdline_val)
-addrs[] == orig(argv)
-addrs[] == orig(addrs[])
-pine_state[] has only one value
+addrs[0] == orig(argv)
+addrs[0] == orig(addrs[0])
+pine_state[0] has only one value
 pine_state->next_screen == null
 pine_state->context_list == null
 pine_state->inbox_new_mail_count == 0
@@ -5759,7 +5760,7 @@ pine_state->ttyo == null
 pine_state->home_dir == "/home/mhardojo"
 pine_state->pine_name == "pine"
 pine_state->vars has only one value
-pine_state->vars[] has only one value
+pine_state->vars[0] has only one value
 pine_state->vars->name == "personal-name"
 pine_state->vars->is_obsolete == 26
 pine_state->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -5768,8 +5769,8 @@ pine_state->vars->user_val has only one value
 pine_state->vars->global_val has only one value
 pine_state->vars->fixed_val has only one value
 pine_state->vars->cmdline_val has only one value
-addrs[] has only one value
-pine_state->pine_name is a substring of orig(argv[])
+addrs[0] has only one value
+pine_state->pine_name is a substring of orig(argv[0])
 ===========================================================================
 global.pine_close_stream():::ENTER
 stream has only one value
@@ -5895,7 +5896,7 @@ ps->vars->is_obsolete == ps->vars->is_fixed
 old_growth == hir
 old_growth == osr
 ps has only one value
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->msgmap has only one value
@@ -5918,7 +5919,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -5933,7 +5934,7 @@ ps->home_dir is a substring of ps->pinerc
 ps->pine_name is a substring of ps->pinerc
 ===========================================================================
 global.process_feature_list():::EXIT
-ps[] == orig(ps[])
+ps[0] == orig(ps[0])
 ps->next_screen == ps->prev_screen
 ps->next_screen == ps->redrawer
 ps->next_screen == orig(ps->next_screen)
@@ -6119,7 +6120,7 @@ ps->last_expire_year == orig(ps->last_expire_year)
 ps->last_expire_month == orig(ps->last_expire_month)
 ps->composer_fillcol == orig(ps->composer_fillcol)
 ps->vars == orig(ps->vars)
-ps->vars[] == orig(ps->vars[])
+ps->vars[0] == orig(ps->vars[0])
 ps->vars->is_obsolete == ps->vars->is_used
 ps->vars->is_obsolete == ps->vars->been_written
 ps->vars->is_obsolete == ps->vars->is_user
@@ -6138,7 +6139,7 @@ ps->vars->user_val == orig(ps->vars->user_val)
 ps->vars->global_val == orig(ps->vars->global_val)
 ps->vars->fixed_val == orig(ps->vars->fixed_val)
 ps->vars->cmdline_val == orig(ps->vars->cmdline_val)
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list == null
 ps->inbox_new_mail_count == 0
@@ -6162,7 +6163,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -6296,7 +6297,7 @@ ps->vars->is_obsolete == ps->vars->is_global
 ps->vars->is_obsolete == ps->vars->is_list
 ps->vars->is_obsolete == ps->vars->is_fixed
 ps has only one value
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list has only one value
 ps->context_last == null
@@ -6315,7 +6316,7 @@ ps->feat_list_back_compat == null
 ps->init_context == -1
 ps->initial_cmds == null
 ps->ttyo has only one value
-ps->ttyo[] has only one value
+ps->ttyo[0] has only one value
 ps->ttyo->screen_rows == 24
 ps->ttyo->screen_cols == 80
 ps->ttyo->header_rows == 2
@@ -6330,7 +6331,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -6348,7 +6349,7 @@ ps->localdomain is a substring of ps->userdomain
 ps->pine_name is a substring of ps->pinerc
 ===========================================================================
 global.queue_init_errors():::EXIT
-ps[] == orig(ps[])
+ps[0] == orig(ps[0])
 ps->next_screen == ps->prev_screen
 ps->next_screen == ps->redrawer
 ps->next_screen == orig(ps->next_screen)
@@ -6524,7 +6525,7 @@ ps->initial_cmds == ps->free_initial_cmds
 ps->initial_cmds == orig(ps->initial_cmds)
 ps->initial_cmds == orig(ps->free_initial_cmds)
 ps->ttyo == orig(ps->ttyo)
-ps->ttyo[] == orig(ps->ttyo[])
+ps->ttyo[0] == orig(ps->ttyo[0])
 ps->ttyo->screen_rows == orig(ps->ttyo->screen_rows)
 ps->ttyo->screen_cols == orig(ps->ttyo->screen_cols)
 ps->ttyo->header_rows == orig(ps->ttyo->header_rows)
@@ -6533,7 +6534,7 @@ ps->last_expire_year == orig(ps->last_expire_year)
 ps->last_expire_month == orig(ps->last_expire_month)
 ps->composer_fillcol == orig(ps->composer_fillcol)
 ps->vars == orig(ps->vars)
-ps->vars[] == orig(ps->vars[])
+ps->vars[0] == orig(ps->vars[0])
 ps->vars->is_obsolete == ps->vars->is_used
 ps->vars->is_obsolete == ps->vars->been_written
 ps->vars->is_obsolete == ps->vars->is_user
@@ -6553,7 +6554,7 @@ ps->vars->user_val == orig(ps->vars->user_val)
 ps->vars->global_val == orig(ps->vars->global_val)
 ps->vars->fixed_val == orig(ps->vars->fixed_val)
 ps->vars->cmdline_val == orig(ps->vars->cmdline_val)
-ps[] has only one value
+ps[0] has only one value
 ps->next_screen == null
 ps->context_list has only one value
 ps->context_last == null
@@ -6572,7 +6573,7 @@ ps->feat_list_back_compat == null
 ps->init_context == -1
 ps->initial_cmds == null
 ps->ttyo has only one value
-ps->ttyo[] has only one value
+ps->ttyo[0] has only one value
 ps->ttyo->screen_rows == 24
 ps->ttyo->screen_cols == 80
 ps->ttyo->header_rows == 2
@@ -6587,7 +6588,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -6610,12 +6611,12 @@ prompt is printable
 line == -3
 dflt one of { 112, 121 }
 on_ctrl_C one of { 0, 120 }
-help_text[] == "Select one of the setup tasks by typing the capitalized letter."
+help_text[0] == "Select one of the setup tasks by typing the capitalized letter."
 flags == 0
 ===========================================================================
 global.radio_buttons():::EXIT
-help_text[] == orig(help_text[])
-help_text[] == "Select one of the setup tasks by typing the capitalized letter."
+help_text[0] == orig(help_text[0])
+help_text[0] == "Select one of the setup tasks by typing the capitalized letter."
 return one of { 97, 121 }
 ===========================================================================
 global.read_char():::ENTER
@@ -6647,7 +6648,7 @@ vars->current_val.l == vars->cmdline_val.l
 filename one of { "/home/mhardojo/.pinerc", "/usr/local/lib/pine.conf", "/usr/local/lib/pine.conf.fixed" }
 filename is printable
 vars has only one value
-vars[] has only one value
+vars[0] has only one value
 vars->name == "personal-name"
 vars->is_obsolete == 26
 vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -6659,7 +6660,7 @@ vars->fixed_val has only one value
 vars->cmdline_val has only one value
 ===========================================================================
 global.read_pinerc():::EXIT
-vars[] == orig(vars[])
+vars[0] == orig(vars[0])
 vars->name == orig(vars->name)
 vars->is_obsolete == vars->is_used
 vars->is_obsolete == vars->been_written
@@ -6689,7 +6690,7 @@ vars->user_val == orig(vars->user_val)
 vars->global_val == orig(vars->global_val)
 vars->fixed_val == orig(vars->fixed_val)
 vars->cmdline_val == orig(vars->cmdline_val)
-vars[] has only one value
+vars[0] has only one value
 vars->name == "personal-name"
 vars->is_obsolete == 26
 vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -6785,30 +6786,30 @@ var->is_obsolete == var->is_list
 var->is_obsolete == var->is_fixed
 var->current_val.l == var->fixed_val.l
 var->current_val.l == var->cmdline_val.l
-var->user_val.l[] == var->global_val.l[]
+var->user_val.l[0] == var->global_val.l[0]
 var != null
-var[] != null
+var[0] != null
 var->name is printable
 var->current_val != null
 var->current_val.l == null
 var->user_val != null
-var->user_val.l[] one of { ".addressbook", "mail/[]" }
-var->user_val.l[] is printable
+var->user_val.l[0] one of { ".addressbook", "mail/[]" }
+var->user_val.l[0] is printable
 var->global_val != null
-var->global_val.l[] one of { ".addressbook", "lpr", "mail/[]" }
-var->global_val.l[] is printable
+var->global_val.l[0] one of { ".addressbook", "lpr", "mail/[]" }
+var->global_val.l[0] is printable
 var->fixed_val != null
 var->cmdline_val != null
 expand one of { 0, 1 }
 cmdline == 1
 var->name > var->descrip
 var->name != var->global_val.p
-var->user_val.l[] is a substring of var->descrip
+var->user_val.l[0] is a substring of var->descrip
 var->descrip != var->global_val.p
 expand <= cmdline
 ===========================================================================
 global.set_current_val():::EXIT
-var[] == orig(var[])
+var[0] == orig(var[0])
 var->name == orig(var->name)
 var->is_obsolete == var->is_used
 var->is_obsolete == var->been_written
@@ -6825,13 +6826,13 @@ var->is_obsolete == orig(var->is_list)
 var->is_obsolete == orig(var->is_fixed)
 var->descrip == orig(var->descrip)
 var->current_val == orig(var->current_val)
-var->current_val.l[] == var->user_val.l[]
-var->current_val.l[] == var->global_val.l[]
-var->current_val.l[] == orig(var->global_val.l[])
+var->current_val.l[0] == var->user_val.l[0]
+var->current_val.l[0] == var->global_val.l[0]
+var->current_val.l[0] == orig(var->global_val.l[0])
 var->user_val == orig(var->user_val)
 var->user_val.p == orig(var->user_val.p)
 var->user_val.l == orig(var->user_val.l)
-var->user_val.l[] == orig(var->user_val.l[])
+var->user_val.l[0] == orig(var->user_val.l[0])
 var->global_val == orig(var->global_val)
 var->global_val.p == orig(var->global_val.p)
 var->global_val.l == orig(var->global_val.l)
@@ -6841,14 +6842,14 @@ var->fixed_val.l == orig(var->current_val.l)
 var->fixed_val.l == orig(var->fixed_val.l)
 var->fixed_val.l == orig(var->cmdline_val.l)
 var->cmdline_val == orig(var->cmdline_val)
-var[] != null
+var[0] != null
 var->name is printable
 var->current_val != null
-var->current_val.l[] one of { ".addressbook", "lpr", "mail/[]" }
-var->current_val.l[] is printable
+var->current_val.l[0] one of { ".addressbook", "lpr", "mail/[]" }
+var->current_val.l[0] is printable
 var->user_val != null
-var->user_val.l[] one of { ".addressbook", "mail/[]" }
-var->user_val.l[] is printable
+var->user_val.l[0] one of { ".addressbook", "mail/[]" }
+var->user_val.l[0] is printable
 var->global_val != null
 var->fixed_val != null
 var->fixed_val.l == null
@@ -6857,7 +6858,7 @@ var->name > var->descrip
 var->name != var->current_val.p
 var->name != var->global_val.p
 var->descrip != var->current_val.p
-var->user_val.l[] is a substring of var->descrip
+var->user_val.l[0] is a substring of var->descrip
 var->descrip != var->global_val.p
 ===========================================================================
 global.set_feature_list_current_val():::ENTER
@@ -6872,7 +6873,7 @@ var->current_val.l == var->global_val.l
 var->current_val.l == var->fixed_val.l
 var->current_val.l == var->cmdline_val.l
 var has only one value
-var[] has only one value
+var[0] has only one value
 var->name == "feature-list"
 var->is_obsolete == 58
 var->descrip == "List of features; see Pine's Setup/options menu for the current set.\n# e.g. feature-list= select-without-confirm, signature-at-bottom\n# Default condition for all of the features is no-."
@@ -6885,7 +6886,7 @@ var->cmdline_val has only one value
 var->name is a substring of var->descrip
 ===========================================================================
 global.set_feature_list_current_val():::EXIT
-var[] == orig(var[])
+var[0] == orig(var[0])
 var->name == orig(var->name)
 var->is_obsolete == var->is_used
 var->is_obsolete == var->been_written
@@ -6914,7 +6915,7 @@ var->user_val.l == orig(var->cmdline_val.l)
 var->global_val == orig(var->global_val)
 var->fixed_val == orig(var->fixed_val)
 var->cmdline_val == orig(var->cmdline_val)
-var[] has only one value
+var[0] has only one value
 var->name == "feature-list"
 var->is_obsolete == 58
 var->descrip == "List of features; see Pine's Setup/options menu for the current set.\n# e.g. feature-list= select-without-confirm, signature-at-bottom\n# Default condition for all of the features is no-."
@@ -7041,7 +7042,7 @@ quick_draw == km_popped
 km->how_many == km->which
 km->how_many == km->width
 ps has only one value
-ps[] has only one value
+ps[0] has only one value
 ps->context_list has only one value
 ps->inbox_msgmap == null
 ps->msgmap has only one value
@@ -7062,7 +7063,7 @@ ps->feat_list_back_compat == null
 ps->init_context == -1
 ps->initial_cmds == null
 ps->ttyo has only one value
-ps->ttyo[] has only one value
+ps->ttyo[0] has only one value
 ps->ttyo->screen_rows == 24
 ps->ttyo->screen_cols == 80
 ps->ttyo->header_rows == 2
@@ -7077,7 +7078,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -7090,10 +7091,10 @@ ps->vars->fixed_val has only one value
 ps->vars->cmdline_val has only one value
 quick_draw == 0
 km has only one value
-km[] has only one value
+km[0] has only one value
 km->how_many one of { 2, 20482 }
 km->keys has only one value
-km->keys[] has only one value
+km->keys[0] has only one value
 km->keys->name == "?"
 km->keys->label == "Help"
 km->keys->bind has only one value
@@ -7108,7 +7109,7 @@ ps->localdomain is a substring of ps->userdomain
 ps->pine_name is a substring of ps->pinerc
 ===========================================================================
 global.show_main_screen():::EXIT
-ps[] == orig(ps[])
+ps[0] == orig(ps[0])
 ps->next_screen == orig(ps->next_screen)
 ps->prev_screen == orig(ps->prev_screen)
 ps->redrawer == orig(ps->redrawer)
@@ -7235,7 +7236,7 @@ ps->initial_cmds == ps->free_initial_cmds
 ps->initial_cmds == orig(ps->initial_cmds)
 ps->initial_cmds == orig(ps->free_initial_cmds)
 ps->ttyo == orig(ps->ttyo)
-ps->ttyo[] == orig(ps->ttyo[])
+ps->ttyo[0] == orig(ps->ttyo[0])
 ps->ttyo->screen_rows == orig(ps->ttyo->screen_rows)
 ps->ttyo->screen_cols == orig(ps->ttyo->screen_cols)
 ps->ttyo->header_rows == km->keys->bind.nch
@@ -7254,7 +7255,7 @@ ps->last_expire_year == orig(ps->last_expire_year)
 ps->last_expire_month == orig(ps->last_expire_month)
 ps->composer_fillcol == orig(ps->composer_fillcol)
 ps->vars == orig(ps->vars)
-ps->vars[] == orig(ps->vars[])
+ps->vars[0] == orig(ps->vars[0])
 ps->vars->name == orig(ps->vars->name)
 ps->vars->is_obsolete == ps->vars->is_used
 ps->vars->is_obsolete == ps->vars->been_written
@@ -7277,17 +7278,17 @@ ps->vars->user_val == orig(ps->vars->user_val)
 ps->vars->global_val == orig(ps->vars->global_val)
 ps->vars->fixed_val == orig(ps->vars->fixed_val)
 ps->vars->cmdline_val == orig(ps->vars->cmdline_val)
-km[] == orig(km[])
+km[0] == orig(km[0])
 km->how_many == km->which
 km->how_many == km->width
 km->keys == orig(km->keys)
-km->keys[] == orig(km->keys[])
+km->keys[0] == orig(km->keys[0])
 km->keys->name == orig(km->keys->name)
 km->keys->label == orig(km->keys->label)
 km->keys->bind == orig(km->keys->bind)
 km->keys->bind.cmd == orig(km->keys->bind.cmd)
 km->keys->bind.ch == orig(km->keys->bind.ch)
-ps[] has only one value
+ps[0] has only one value
 ps->context_list has only one value
 ps->inbox_new_mail_count == 0
 ps->inbox_msgmap == null
@@ -7307,7 +7308,7 @@ ps->feat_list_back_compat == null
 ps->init_context == -1
 ps->initial_cmds == null
 ps->ttyo has only one value
-ps->ttyo[] has only one value
+ps->ttyo[0] has only one value
 ps->ttyo->screen_rows == 24
 ps->ttyo->screen_cols == 80
 ps->ttyo->header_rows == 2
@@ -7322,7 +7323,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -7333,10 +7334,10 @@ ps->vars->user_val has only one value
 ps->vars->global_val has only one value
 ps->vars->fixed_val has only one value
 ps->vars->cmdline_val has only one value
-km[] has only one value
+km[0] has only one value
 km->how_many == 20482
 km->keys has only one value
-km->keys[] has only one value
+km->keys[0] has only one value
 km->keys->name == "?"
 km->keys->label == "Help"
 km->keys->bind has only one value
@@ -7409,28 +7410,28 @@ global.strtoval():::ENTER
 s == errbuf
 s == "150"
 val has only one value
-val[] >= 0
+val[0] >= 0
 minmum one of { 0, 14 }
 errbuf is printable
 varname is printable
-(val[] == 0) ==> (minmum == 0)
-minmum is a bitwise subset of val[]
-val[] >= minmum
-val[] != maxmum
+(val[0] == 0) ==> (minmum == 0)
+minmum is a bitwise subset of val[0]
+val[0] >= minmum
+val[0] != maxmum
 (minmum & maxmum) == 0
 minmum != maxmum
 minmum % maxmum == 0
 errbuf < varname
 ===========================================================================
 global.strtoval():::EXIT
-val[] >= 0
-(orig(val[]) == 0) ==> (val[] == 0)
-(val[] == 0) ==> (orig(val[]) == 0)
-val[] >= orig(val[])
-(val[] == 0) ==> (orig(minmum) == 0)
-val[] >= orig(minmum)
-val[] != orig(maxmum)
-14 * val[] - 14 * orig(val[]) - 135 * orig(minmum) == 0
+val[0] >= 0
+(orig(val[0]) == 0) ==> (val[0] == 0)
+(val[0] == 0) ==> (orig(val[0]) == 0)
+val[0] >= orig(val[0])
+(val[0] == 0) ==> (orig(minmum) == 0)
+val[0] >= orig(minmum)
+val[0] != orig(maxmum)
+14 * val[0] - 14 * orig(val[0]) - 135 * orig(minmum) == 0
 ===========================================================================
 global.strucmp():::ENTER
 o is printable
@@ -7535,7 +7536,7 @@ ps->vars->is_obsolete == ps->vars->is_global
 ps->vars->is_obsolete == ps->vars->is_list
 ps->vars->is_obsolete == ps->vars->is_fixed
 ps has only one value
-ps[] has only one value
+ps[0] has only one value
 ps->redrawer == null
 ps->inbox_new_mail_count == 0
 ps->inbox_msgmap == null
@@ -7554,7 +7555,7 @@ ps->start_entry == 0
 ps->feat_list_back_compat == null
 ps->init_context == -1
 ps->initial_cmds == null
-ps->ttyo[] has only one value
+ps->ttyo[0] has only one value
 ps->ttyo->screen_rows == 24
 ps->ttyo->screen_cols == 80
 ps->ttyo->header_rows == 2
@@ -7569,7 +7570,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
@@ -7589,7 +7590,7 @@ ps->localdomain is a substring of ps->userdomain
 ps->pine_name is a substring of ps->pinerc
 ===========================================================================
 global.tty_chmod():::EXIT
-ps[] == orig(ps[])
+ps[0] == orig(ps[0])
 ps->next_screen == orig(ps->next_screen)
 ps->prev_screen == orig(ps->prev_screen)
 ps->redrawer == orig(ps->redrawer)
@@ -7761,7 +7762,7 @@ ps->initial_cmds == ps->free_initial_cmds
 ps->initial_cmds == orig(ps->initial_cmds)
 ps->initial_cmds == orig(ps->free_initial_cmds)
 ps->ttyo == orig(ps->ttyo)
-ps->ttyo[] == orig(ps->ttyo[])
+ps->ttyo[0] == orig(ps->ttyo[0])
 ps->ttyo->header_rows == orig(func)
 ps->home_dir == orig(ps->home_dir)
 ps->hostname == orig(ps->hostname)
@@ -7775,7 +7776,7 @@ ps->last_expire_year == orig(ps->last_expire_year)
 ps->last_expire_month == orig(ps->last_expire_month)
 ps->composer_fillcol == orig(ps->composer_fillcol)
 ps->vars == orig(ps->vars)
-ps->vars[] == orig(ps->vars[])
+ps->vars[0] == orig(ps->vars[0])
 ps->vars->name == orig(ps->vars->name)
 ps->vars->is_obsolete == ps->vars->is_used
 ps->vars->is_obsolete == ps->vars->been_written
@@ -7798,7 +7799,7 @@ ps->vars->user_val == orig(ps->vars->user_val)
 ps->vars->global_val == orig(ps->vars->global_val)
 ps->vars->fixed_val == orig(ps->vars->fixed_val)
 ps->vars->cmdline_val == orig(ps->vars->cmdline_val)
-ps[] has only one value
+ps[0] has only one value
 ps->redrawer == null
 ps->inbox_new_mail_count == 0
 ps->inbox_msgmap == null
@@ -7817,7 +7818,7 @@ ps->start_entry == 0
 ps->feat_list_back_compat == null
 ps->init_context == -1
 ps->initial_cmds == null
-ps->ttyo[] has only one value
+ps->ttyo[0] has only one value
 ps->ttyo->screen_rows == 24
 ps->ttyo->screen_cols == 80
 ps->ttyo->header_rows == 2
@@ -7832,7 +7833,7 @@ ps->last_expire_year == 999
 ps->last_expire_month == 98
 ps->composer_fillcol == 74
 ps->vars has only one value
-ps->vars[] has only one value
+ps->vars[0] has only one value
 ps->vars->name == "personal-name"
 ps->vars->is_obsolete == 26
 ps->vars->descrip == "Over-rides your full name from Unix password file. Required for PC-Pine."
