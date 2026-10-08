@@ -23,6 +23,18 @@ use util_daikon;
 # the declaration.
 my @decls;
 
+# True if the most recent output was a single-line header, such as
+# "decl-version 2.0".  Consecutive single-line headers are output without
+# blank lines between them, and a blank line follows the last of them.
+my $after_header = 0;
+
+sub end_headers {
+    if ($after_header) {
+	print "\n";
+	$after_header = 0;
+    }
+}
+
 sub flush_decls {
     foreach my $decl (sort { $a->[1] cmp $b->[1] } @decls) {
 	print $decl->[0], $decl->[1], "\n";
@@ -78,6 +90,13 @@ foreach my $file (@ARGV ? @ARGV : ("-")) {
   }
   while (defined(my $record = read_record($fh, $file))) {
     my $kind = $record->{kind};
+    if ($kind eq "header" && $record->{text} !~ /\AListImplementors/) {
+	flush_decls();
+	print $record->{comments}, $record->{text};
+	$after_header = 1;
+	next;
+    }
+    end_headers();
     if ($kind eq "ppt") {
 	my $text = $record->{text};
 	$text .= "\n" if $text !~ /\n\z/;
@@ -106,6 +125,7 @@ foreach my $file (@ARGV ? @ARGV : ("-")) {
     }
   }
   close($fh);
+  end_headers();
   flush_decls();
   if ($in_place && $file ne "-") {
     close(select(STDOUT));
