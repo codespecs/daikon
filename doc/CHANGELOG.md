@@ -21,6 +21,23 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
+## Version ??
+
+Scripts:
+
+* `convertcsv.pl` now writes version 2 files.
+* `convertcsv.pl -decl`, `dtrace-count.pl`, `dtrace-diff.pl`,
+  `dtrace-indent.pl`, and `sort-dtrace.pl` no longer accept version 1
+  declarations.
+* `dtrace-diff.pl` reads program point declarations from the .dtrace files,
+  so its .decls file argument is now optional.  It no longer accepts the
+  `--ignore_exitno` option, which had no effect.
+* Removed scripts that processed only version 1 files:  `auxinfo.pl`,
+  `clean-decls.php`, `copy_comparable.pl`, `decls2comp-1.0.py`,
+  `decls-lackwit-disjoint.pl`, `dfec-to-kvasir.py`, `dfec-to-kvasir-dtrace.py`,
+  `dtrace-rm-decls.php`, `find_comparable.pl`, `find_globals.pl`,
+  `generate-dec-types.py`, `lwpp.pl`, `lwpp-init.pl`, and `set_decl_type.pl`.
+
 ## Version 5.9.0 (September 1, 2026)
 
 * All Daikon tools now work with Java 8-26.
