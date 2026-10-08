@@ -44,7 +44,10 @@ if [ -n "${SKIP_JAVADOC+x}" ]; then
   exit
 else
 
-  make javadoc doc-all
+  # cronic runs `set -u`, which an exported SHELLOPTS would propagate to
+  # texi2dvi (run by `makeinfo --pdf`).  texi2dvi fails under `set -u` when
+  # /bin/sh is bash, as on Rocky Linux.
+  (export -n SHELLOPTS && make javadoc doc-all)
 
   # For refactorings that touch a lot of code that you don't understand, create
   # top-level file SKIP-REQUIRE-JAVADOC.  Delete it after the pull request is merged.
