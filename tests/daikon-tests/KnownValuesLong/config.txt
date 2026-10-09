@@ -1,0 +1,14 @@
+# Configuration for the KnownValuesLong test.
+
+# Report bounds that do not fit in a Java int.
+daikon.inv.unary.scalar.LowerBound.minimal_interesting = -9223372036854775808
+daikon.inv.unary.scalar.LowerBound.maximal_interesting = 9223372036854775807
+daikon.inv.unary.scalar.UpperBound.minimal_interesting = -9223372036854775808
+daikon.inv.unary.scalar.UpperBound.maximal_interesting = 9223372036854775807
+
+# Reduce clutter in the output.
+daikon.inv.unary.scalar.IsPointer.enabled = 0
+daikon.inv.unary.scalar.Modulus.enabled = 0
+daikon.inv.unary.scalar.NonModulus.enabled = 0
+daikon.inv.binary.twoScalar.LinearBinary.enabled = 0
+daikon.inv.binary.twoScalar.LinearBinaryFloat.enabled = 0
