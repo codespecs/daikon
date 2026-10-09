@@ -268,7 +268,6 @@ public class DtraceDiff {
       Set<File> declsfile1, String dtracefile1, Set<File> declsfile2, String dtracefile2) {
 
     // System.out.printf("dtrace files = %s, %s%n", dtracefile1, dtracefile2);
-    FileIO.resetNewDeclFormat();
 
     try {
       Map<PptTopLevel, PptTopLevel> pptmap = new HashMap<>(); // map ppts1 -> ppts2

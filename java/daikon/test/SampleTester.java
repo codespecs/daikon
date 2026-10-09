@@ -183,8 +183,6 @@ public class SampleTester {
    */
   public void test_samples(String commandFile) throws IOException {
 
-    FileIO.new_decl_format = null;
-
     try (InputStream commands = getClass().getResourceAsStream(commandFile)) {
       if (commands == null) {
         fail(

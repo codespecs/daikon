@@ -8,9 +8,11 @@ import daikon.split.PptSplitter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -139,26 +141,6 @@ public class PptRelation implements Serializable {
     }
 
     return var_str.toString();
-  }
-
-  /**
-   * Relates all of the variables with the same name in parent and child. Returns true if each
-   * non-static parent variable was related to a child variable.
-   */
-  public boolean relate_same_name() {
-
-    boolean relate_all = true;
-    for (VarInfo vp : parent.var_infos) {
-      boolean relate_var = relate(vp, vp.name());
-      if (!relate_var && !vp.isStaticConstant()) {
-        // System.out.printf("no relation for '%s' from %s-%s with vars %s%n",
-        //                   vp.name(), parent.name(), child.name(),
-        //                   child.varNames());
-        relate_all = false;
-      }
-    }
-
-    return relate_all;
   }
 
   /** Prints a ppt hierarchy of all of the ppts of this child and below. */
@@ -322,43 +304,6 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Returns a relation in the ppt hierarchy from an object (parent) to a method (child) on that
-   * object.
-   */
-  public static PptRelation newObjectMethodRel(PptTopLevel parent, PptTopLevel child) {
-
-    assert (parent != null) && (child != null);
-
-    PptRelation rel = new PptRelation(parent, child, PptRelationType.PARENT);
-
-    debug.fine(parent.name() + " parent vars = " + Arrays.toString(parent.var_infos));
-    debug.fine(child.name() + " child vars = " + Arrays.toString(child.var_infos));
-
-    // Connect each 'this' variable between parent and child.
-    // Note that these should be the only variables whose names match and
-    // that each parent variable should match one in the child.
-    boolean relate_all = rel.relate_same_name();
-    assert relate_all;
-    return rel;
-  }
-
-  /**
-   * Returns a relation in the ppt hierarchy from a class (parent) to an object (child) containing
-   * static members of that class.
-   */
-  public static PptRelation newClassObjectRel(PptTopLevel parent, PptTopLevel child) {
-
-    assert (parent != null) && (child != null);
-
-    PptRelation rel = new PptRelation(parent, child, PptRelationType.PARENT);
-
-    // Connect each static variable between parent and child
-    // Note that these should be the only variables whose names match
-    rel.relate_same_name();
-    return rel;
-  }
-
-  /**
    * Creates a USER or PARENT relation from child to parent. The variable relationships are
    * specified in the declaration record and stored in the VarInfo for each variable. A derived
    * child variable with no counterpart in the parent is omitted from the relation, because whether
@@ -414,29 +359,6 @@ public class PptRelation implements Serializable {
         rel.child_to_parent_map.put(vc, vp);
         rel.parent_to_child_map.put(vp, vc);
       }
-    }
-    return rel;
-  }
-
-  /**
-   * Returns a relation in the ppt hierarchy from an object (parent) to a user (child) of that
-   * objects (eg, from the object B to the method A.foo (B arg)).
-   *
-   * @param parent ppt of the object definition
-   * @param child ppt of a user of parent's object
-   * @param arg variable of type object found in child
-   */
-  public static PptRelation newObjectUserRel(PptTopLevel parent, PptTopLevel child, VarInfo arg) {
-
-    assert (parent != null) && (child != null);
-
-    PptRelation rel = new PptRelation(parent, child, PptRelationType.USER);
-
-    // Connect each field in arg between parent and child.  Do this
-    // by substituting args name for this in the parent and then looking
-    // for a name match in the child
-    for (VarInfo vp : parent.var_infos) {
-      rel.relate(vp, vp.replace_this(arg));
     }
     return rel;
   }
@@ -649,6 +571,27 @@ public class PptRelation implements Serializable {
     return rel;
   }
 
+  /**
+   * Creates an equality view and invariants for each non-leaf ppt that has no children and does not
+   * already have an equality view. This happens for non-leaf ppts such as OBJECT, CLASS, or GLOBAL
+   * that do not end up with any children (due to the program source or because of ppt filtering).
+   * It also happens for a combined exit point that a decls file declares when no corresponding
+   * numbered exit point is declared or included. Leaves get their equality views from {@link
+   * Daikon#setupEquality}.
+   *
+   * <p>The equality view is created even if {@link Daikon#use_equality_optimization} is false,
+   * because {@link PptTopLevel#mergeInvs} requires every childless ppt to have one.
+   *
+   * @param all_ppts the program points
+   */
+  private static void setup_childless_nonleaves(PptMap all_ppts) {
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
+      if (ppt.children.isEmpty() && (ppt.equality_view == null) && !ppt.is_dataflow_leaf()) {
+        ppt.create_equality_view();
+      }
+    }
+  }
+
   // used by init_hierarchy below
   private static class SplitChild {
     PptRelation rel;
@@ -661,325 +604,41 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Initialize the hierarchical relationship between ppts. Specifically process each ppt, find its
-   * parent(s) in the partial order, and fill this point into the children field in the parent. Note
-   * that children contains only the immediate descendants of the ppt.
+   * Connects a ppt to the conditional ppts of its first splitter. Only connect to the first
+   * splitter, since each splitter should yield the same results at the parent (since each splitter
+   * sees the same points). This should only happen at the leaves (such as numbered exit points)
+   * since all other points should be built from their other children. But since we need the
+   * relation from the child's point of view when printing, we create it in all cases and then
+   * remove it from the children list of non-leaves. This doesn't seem like the best solution.
    *
-   * <p>This version should be used with the old version of declaration records. Use
-   * init_hierarchy_new() with new declaration records.
+   * @param ppt the ppt whose conditional ppts to connect
+   * @return the relations that were created
    */
-  public static void init_hierarchy(PptMap all_ppts) {
-
-    for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      PptName pname = ppt.ppt_name;
-      PptRelation rel = null;
-      Daikon.debugProgress.fine("Processing ppt " + pname);
-      debug.fine("Processing ppt " + pname);
-
-      // If this is an object ppt, parent is the class point
-      if (pname.isObjectInstanceSynthetic()) {
-        PptTopLevel parent = all_ppts.get(pname.makeClassStatic());
-        if (parent != null) {
-          rel = newClassObjectRel(parent, ppt);
-        }
-
-        // Else if it's a method and not a constructor, parent is
-        // object or class static methods will relate to the class,
-        // while non-static methods will relate to the object.
-        // Whether or not a method is static is not in the decls file.
-        // We infer this by looking to see if the variables match with
-        // the object ppt or the class ppt.
-      } else if ((pname.isEnterPoint() && !pname.isConstructor()) || pname.isCombinedExitPoint()) {
-
-        PptTopLevel parent = all_ppts.get(pname.makeObject());
-
-        if (parent != null) {
-          if (ppt.find_var_by_name(parent.var_infos[0].name()) != null) {
-            rel = newObjectMethodRel(parent, ppt);
-          } else {
-            parent = all_ppts.get(parent.ppt_name.makeClassStatic());
-            if (parent != null) {
-              rel = newObjectMethodRel(parent, ppt);
-            }
-          }
-        }
-
-        // Else if an exitNN point, parent is combined exit point
-      } else if (pname.isExitPoint()) {
-        PptTopLevel parent = all_ppts.get(pname.makeExit());
-        // System.out.printf("Parent of %s is %s%n", pname.name(),
-        //                   parent.name());
-        if (parent != null) {
-          rel = newCombinedExitExitNNRel(parent, ppt);
-        }
-      }
-
-      // If a relation was created, connect it into its ppts
-      if (rel != null) {
-        debug.fine(
-            "-- ppt parent is "
-                + rel.parent.name()
-                + " with connections ["
-                + rel.parent_to_child_var_string()
-                + "]");
-      } else {
-        debug.fine(" -- no ppt parent");
-      }
-
-      // Connect combined exit points to enter points over orig variables
-      if (pname.isCombinedExitPoint()) {
-        PptTopLevel enter = all_ppts.get(pname.makeEnter());
-        if (enter != null) {
-          rel = PptRelation.newEnterExitRel(enter, ppt);
-          debug.fine(
-              " -- exit to enter "
-                  + enter.name
-                  + " with connections ["
-                  + rel.parent_to_child_var_string()
-                  + "]");
-        } else {
-          debug.fine("-- No matching enter for exit");
-        }
-      }
-
-      // For all points, look for vars of a declared type for which we have
-      // a corresponding OBJECT ppt.  Essentially these are all of the
-      // users of the object.  Don't match if the variable already has
-      // a parent (since the parent will provide the link back to the
-      // object) For each variable of this type that we find, setup a
-      // parent-child relationship with its corresponding OBJECT
-      // variables.
-      //
-      // For example, consider class A with fields x and y and method
-      // B.foo (A arg1, A arg2).  We will set up two relations to this
-      // ppt -- one from A to b.foo.arg1 and one from A to b.foo.arg2.
-      // in each we will equate A.x with arg.x and A.y with arg.y.
-      //
-      // We skip variables named exactly 'this' so that we don't setup a
-      // recursive relationship from the object to itself.
-
-      // DaikonSimple can not see these relations, so don't create them
-      // if we'll be comparing to DaikonSimple.
-      if (dkconfig_enable_object_user) {
-
-        debug.fine("-- Looking for variables with an OBJECT ppt");
-        for (VarInfo vc : ppt.var_infos) {
-          String dstr = "-- -- var '" + vc.name() + "' - ";
-          if (ppt.has_parent(vc)) {
-            debug.fine(dstr + " Skipping, already has a parent");
-            continue;
-          }
-          if (vc.isThis()) {
-            debug.fine(dstr + " skipping, name is 'this'");
-            continue;
-          }
-          PptTopLevel object_ppt = vc.find_object_ppt(all_ppts);
-          if (object_ppt != null) {
-            if (object_ppt == ppt) {
-              debug.fine(dstr + " skipping, OBJECT (" + object_ppt + ") is the same as this");
-              continue;
-            }
-            rel = PptRelation.newObjectUserRel(object_ppt, ppt, vc);
-            debug.fine(
-                dstr
-                    + " Connected to Object ppt "
-                    + object_ppt.name()
-                    + " with connections ["
-                    + rel.parent_to_child_var_string()
-                    + "]");
-          } else {
-            debug.fine(dstr + " No object ppt");
-          }
-        }
-      }
-      // Connect any conditional ppt variables.  Only connect to the
-      // first splitter, since each splitter should yield the same
-      // results at the parent (since each splitter sees the same
-      // points)  This should only happen at the leaves (numbered
-      // exit points) since all other points should be built from
-      // their other children.  But since we need the relation
-      // from the child's point of view when printing, we create
-      // under all cases and then remove it from non-leaves children
-      // list.  This doesn't seem like the best solution.
-      if (ppt.has_splitters()) {
-        assert ppt.splitters != null; // guaranteed by call to has_splitters
-        PptSplitter ppt_split = ppt.splitters.get(0);
-        for (int ii = 0; ii < ppt_split.ppts.length; ii++) {
-          rel = newPptPptConditional(ppt, ppt_split.ppts[ii]);
-          debug.fine(
-              " -- Connected down to ppt conditional "
-                  + ppt_split.ppts[ii].name()
-                  + " with connections ["
-                  + rel.parent_to_child_var_string()
-                  + "]");
-          if (!ppt.ppt_name.isNumberedExitPoint()) {
-            ppt.children.remove(rel);
-          }
-        }
+  @SuppressWarnings("MixedMutabilityReturnType")
+  private static List<PptRelation> connect_conditionals(PptTopLevel ppt) {
+    if (!ppt.has_splitters()) {
+      return Collections.emptyList();
+    }
+    assert ppt.splitters != null; // guaranteed by call to has_splitters
+    List<PptRelation> result = new ArrayList<>();
+    PptSplitter ppt_split = ppt.splitters.get(0);
+    for (int ii = 0; ii < ppt_split.ppts.length; ii++) {
+      PptRelation rel = newPptPptConditional(ppt, ppt_split.ppts[ii]);
+      result.add(rel);
+      if (!ppt.is_dataflow_leaf()) {
+        ppt.children.remove(rel);
       }
     }
-
-    // Create relations between conditional ppts and their children.
-    // The relationship between conditional ppts matches exactly
-    // the relationship between each their parents.  For example,
-    // presume ppt A has a child ppt B.  A has two conditional
-    // ppts (AC1, AC2) and B has two conditional ppts (BC1, BC2)
-    // Then AC1 is the parent of BC1 and AC2 is the parent of BC2
-
-    // Loop over each ppt and process each non-leaf with splitters
-    for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.ppt_name.isNumberedExitPoint()) {
-        continue;
-      }
-      if (!ppt.has_splitters()) {
-        continue;
-      }
-
-      // System.out.printf("processing splitter '%s' [%s] %b%n", ppt.name(),
-      //                    ppt.ppt_name.getPoint(),
-      //                    ppt.ppt_name.isNumberedExitPoint());
-
-      // Loop over each splitter
-      // splitter_loop:
-      for (Iterator<PptSplitter> ii = ppt.splitters.iterator(); ii.hasNext(); ) {
-        PptSplitter ppt_split = ii.next();
-
-        // list of children that match this splitter
-        List<SplitChild> split_children = new ArrayList<>();
-
-        // Create a list of children for this splitter
-        child_loop:
-        for (PptRelation rel : ppt.children) {
-          if (!rel.child.has_splitters()) {
-            break;
-          }
-          for (PptSplitter csplit : rel.child.splitters) {
-            if (ppt_split.splitter == csplit.splitter) {
-              split_children.add(new SplitChild(rel, csplit));
-              continue child_loop;
-            }
-          }
-          break;
-        }
-
-        // If we didn't find a matching splitter at each child, can't merge
-        // this point.  Just remove it from the list of splitters
-        if (split_children.size() != ppt.children.size()) {
-          ii.remove();
-          continue;
-        }
-
-        // Build the PptRelations for each child.  The PptRelation from
-        // the conditional point is of the same type as the original
-        // relation from parent to child
-        for (SplitChild sc : split_children) {
-          ppt_split.add_relation(sc.rel, sc.ppt_split);
-        }
-      }
-    }
-
-    // Debug print the hierarchy in a more readable manner
-    if (debug.isLoggable(Level.FINE)) {
-      debug.fine("PPT Hierarchy");
-      for (PptTopLevel ppt : all_ppts.pptIterable()) {
-        if (ppt.parents.isEmpty()) {
-          ppt.debug_print_tree(debug, 0, null);
-        }
-      }
-    }
-
-    // Debug print the equality sets for each ppt
-    if (debug.isLoggable(Level.FINE)) {
-      for (PptTopLevel ppt : all_ppts.pptIterable()) {
-        debug.fine(ppt.name() + " equality sets: " + ppt.equality_sets_txt());
-      }
-    }
+    return result;
   }
 
   /**
-   * Initialize the hierarchical relationship between ppts. Specifically process each ppt, find its
-   * parent(s) in the partial order, and fill this point into the children field in the parent. Note
-   * that children contains only the immediate descendants of the ppt.
+   * Completes the hierarchy, after the relations between the (unconditional) ppts have been
+   * created: creates the relations between conditional ppts, and sets up childless non-leaves.
+   *
+   * @param all_ppts the program points
    */
-  public static void init_hierarchy_new(PptMap all_ppts) {
-
-    for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      PptName pname = ppt.ppt_name;
-      // rels is solely for debugging; each relation is stored in the
-      // parent and child ppts
-      List<PptRelation> rels = new ArrayList<>();
-      Daikon.debugProgress.finer("Processing ppt " + pname);
-      debug.fine("Processing ppt " + pname);
-
-      assert ppt.parent_relations != null : "missing parent_relations in ppt " + ppt.name();
-
-      // Process the front-end specified relations
-      for (ParentRelation pr : ppt.parent_relations) {
-        // Skip all relations in subexits.  These relations will be handled
-        // in the combined exit point.
-        if (ppt.is_subexit()) {
-          continue;
-        }
-
-        PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
-        if (parent == null) {
-          throw new RuntimeException(
-              "parent ppt " + pr.parent_ppt_name + " not found for ppt " + ppt.name());
-        }
-        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
-          continue;
-        }
-        // System.out.printf("processing hierarchy rel from '%s' to '%s'%n",
-        //                    ppt.name(), pr.parent_ppt_name);
-        rels.add(newParentRelation(pr, parent, ppt));
-      }
-
-      // if an exitNN point, parent is combined exit point
-      if (ppt.is_subexit()) {
-        PptTopLevel parent = all_ppts.get(pname.makeExit());
-        if (parent != null) {
-          rels.add(newCombinedExitExitNNRel(parent, ppt));
-        }
-
-        // Connect combined exit points to enter points over orig variables
-      } else if (ppt.is_combined_exit()) {
-        PptTopLevel enter = all_ppts.get(pname.makeEnter());
-        if (enter != null) {
-          rels.add(PptRelation.newEnterExitRel(enter, ppt));
-        }
-      }
-
-      // Connect any conditional ppt variables.  Only connect to the
-      // first splitter, since each splitter should yield the same
-      // results at the parent (since each splitter sees the same
-      // points)  This should only happen at the leaves (numbered
-      // exit points) since all other points should be built from
-      // their other children.  But since we need the relation
-      // from the child's point of view when printing, we create
-      // under all cases and then remove it from non-leaves children
-      // list.  This doesn't seem like the best solution.
-      if (ppt.has_splitters()) {
-        assert ppt.splitters != null; // guaranteed by call to has_splitters
-        PptSplitter ppt_split = ppt.splitters.get(0);
-        for (int ii = 0; ii < ppt_split.ppts.length; ii++) {
-          PptRelation rel = newPptPptConditional(ppt, ppt_split.ppts[ii]);
-          rels.add(rel);
-          if (!ppt.is_subexit()) {
-            ppt.children.remove(rel);
-          }
-        }
-      }
-      // Debug print the created relations
-      for (PptRelation rel : rels) {
-        debug.fine(
-            "-- ppt parent is "
-                + rel.parent.name()
-                + " with connections ["
-                + rel.parent_to_child_var_string()
-                + "]");
-      }
-    }
-
+  private static void finish_hierarchy(PptMap all_ppts) {
     // Create relations between conditional ppts and their children.
     // The relationship between conditional ppts matches exactly
     // the relationship between each their parents.  For example,
@@ -989,7 +648,7 @@ public class PptRelation implements Serializable {
 
     // Loop over each ppt and process each non-leaf with splitters
     for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.is_subexit()) {
+      if (ppt.is_dataflow_leaf()) {
         continue;
       }
       if (!ppt.has_splitters()) {
@@ -1021,9 +680,10 @@ public class PptRelation implements Serializable {
           break;
         }
 
-        // If we didn't find a matching splitter at each child, can't merge
-        // this point.  Just remove it from the list of splitters
-        if (split_children.size() != ppt.children.size()) {
+        // If there are no children, or we didn't find a matching splitter
+        // at each child, can't merge this point.  Just remove it from the
+        // list of splitters.
+        if (ppt.children.isEmpty() || split_children.size() != ppt.children.size()) {
           ii.remove();
           continue;
         }
@@ -1037,17 +697,7 @@ public class PptRelation implements Serializable {
       }
     }
 
-    // Loop over each ppt and create an equality view and invariants for
-    // any ppt without children that doesn't already have them.  This can
-    // happen when there are ppts such as OBJECT or CLASS that don't end up
-    // with any children (due to the program source or because of ppt filtering).
-    for (PptTopLevel ppt : all_ppts.pptIterable()) {
-      if (ppt.children.isEmpty() && (ppt.equality_view == null)) {
-        assert ppt.is_object() || ppt.is_class() || ppt.is_enter() : ppt;
-        ppt.equality_view = new PptSliceEquality(ppt);
-        ppt.equality_view.instantiate_invariants();
-      }
-    }
+    setup_childless_nonleaves(all_ppts);
 
     // Debug print the hierarchy in a more readable manner
     if (debug.isLoggable(Level.FINE)) {
@@ -1065,5 +715,82 @@ public class PptRelation implements Serializable {
         debug.fine(ppt.name() + " equality sets: " + ppt.equality_sets_txt());
       }
     }
+  }
+
+  /**
+   * Initialize the hierarchical relationship between ppts. Specifically process each ppt, find its
+   * parent(s) in the partial order, and fill this point into the children field in the parent. Note
+   * that children contains only the immediate descendants of the ppt.
+   */
+  public static void init_hierarchy(PptMap all_ppts) {
+
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
+      PptName pname = ppt.ppt_name;
+      // rels is solely for debugging; each relation is stored in the
+      // parent and child ppts
+      List<PptRelation> rels = new ArrayList<>();
+      Daikon.debugProgress.finer("Processing ppt " + pname);
+      debug.fine("Processing ppt " + pname);
+
+      assert ppt.parent_relations != null : "missing parent_relations in ppt " + ppt.name();
+
+      // Process the front-end specified relations
+      for (ParentRelation pr : ppt.parent_relations) {
+        // Skip all relations in subexits.  These relations will be handled
+        // in the combined exit point.
+        if (ppt.is_subexit()) {
+          continue;
+        }
+
+        PptTopLevel parent = all_ppts.get(pr.parent_ppt_name);
+        if (parent == null) {
+          throw new RuntimeException(
+              "parent ppt " + pr.parent_ppt_name + " not found for ppt " + ppt.name());
+        }
+        // A leaf obtains its invariants from its samples (and its conditional ppts), never from
+        // its children.
+        if (parent.is_dataflow_leaf()) {
+          throw new Daikon.UserError(
+              String.format(
+                  "ppt %s is declared as a parent of ppt %s, but its type (%s) makes it a leaf of"
+                      + " the dataflow hierarchy",
+                  parent.name(), ppt.name(), parent.type.name().toLowerCase(Locale.ENGLISH)));
+        }
+        if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
+          continue;
+        }
+        // System.out.printf("processing hierarchy rel from '%s' to '%s'%n",
+        //                    ppt.name(), pr.parent_ppt_name);
+        rels.add(newParentRelation(pr, parent, ppt));
+      }
+
+      // if an exitNN point, parent is combined exit point
+      if (ppt.is_subexit()) {
+        PptTopLevel parent = all_ppts.get(pname.makeExit());
+        if (parent != null) {
+          rels.add(newCombinedExitExitNNRel(parent, ppt));
+        }
+
+        // Connect combined exit points to enter points over orig variables
+      } else if (ppt.is_combined_exit()) {
+        PptTopLevel enter = all_ppts.get(pname.makeEnter());
+        if (enter != null) {
+          rels.add(PptRelation.newEnterExitRel(enter, ppt));
+        }
+      }
+
+      rels.addAll(connect_conditionals(ppt));
+      // Debug print the created relations
+      for (PptRelation rel : rels) {
+        debug.fine(
+            "-- ppt parent is "
+                + rel.parent.name()
+                + " with connections ["
+                + rel.parent_to_child_var_string()
+                + "]");
+      }
+    }
+
+    finish_hierarchy(all_ppts);
   }
 }
