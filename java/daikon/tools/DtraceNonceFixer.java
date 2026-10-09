@@ -369,7 +369,14 @@ public class DtraceNonceFixer {
       }
       while (true) {
         Call call = stack.pop();
-        counts.computeIfPresent(call.method, (m, count) -> (count == 1) ? null : count - 1);
+        counts.computeIfPresent(
+            call.method,
+            (m, count) -> {
+              if (count == 1) {
+                return null;
+              }
+              return count - 1;
+            });
         if (call.method.equals(method)) {
           return call.nonce;
         }
