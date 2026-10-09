@@ -22,7 +22,7 @@ CHICORY_ARGS = --dtrace-file=$(basename $(basename $@)).dtrace
 PREMAIN		= ${CHICORY}
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
-TESTS		= online pptsel pptomit nesting stdvis varomit samples misc
+TESTS		= online pptsel pptomit nesting stdvis varomit samples misc nomethodcalls
 
 # This is the working directory, but not necessarily the directory in
 # which this Makefile is found.
@@ -39,7 +39,7 @@ ${DAIKONDIR}/java/ChicoryPremain.jar:
 compile : ${CLASS_FILES}
 ${CLASS_FILES} :
 	tar cf - -C ${SRC_DIR} ${SRC_FILES} | tar xf - -C ${HERE}
-	javac -g `find . -name *.java`
+	javac -g ${SRC_FILES}
 
 online.inv.gz : ${CLASS_FILES} ${CHICORY}
 	java -cp .:${DAIKON_CLASSPATH} daikon.Chicory ${CHICORY_ARGS} \
@@ -74,6 +74,15 @@ misc.inv.gz : ${CLASS_FILES} ${CHICORY}
 	--premain=${PREMAIN} --heap_size=100m \
 	  --daikon --daikon-args '${DAIKON_ARGS}' ${TARGET_ARGS}
 
+NoMethodCalls.class : NoMethodCalls.java
+	javac -g NoMethodCalls.java
+
+# Chicory is run without --daikon so that a failure of the target program
+# (which detects calls to its methods) makes Chicory exit with a non-zero status.
+nomethodcalls.inv.gz : NoMethodCalls.class ${CHICORY}
+	java -cp .:${DAIKON_CLASSPATH} daikon.Chicory ${CHICORY_ARGS} --no-method-calls NoMethodCalls
+	java -cp .:${DAIKON_CLASSPATH} daikon.Daikon ${DAIKON_ARGS} nomethodcalls.dtrace
+
 %.daikon.diff : %.inv.gz %.inv.txt.goal
 	java -cp .:${DAIKON_CLASSPATH} daikon.PrintInvariants $< > $*.inv.txt
 	-diff -w -u $*.inv.txt.goal $*.inv.txt > $@
@@ -86,7 +95,7 @@ update-goals:
 
 clean:
 	/bin/rm -rf *.inv.txt *.inv.gz *.diff *.dtrace *.dtrace.gz \
-	${CLASS_FILES} ${SRC_FILES}
+	${CLASS_FILES} ${SRC_FILES} NoMethodCalls*.class
 
 show-vars:
 	@echo CLASS_FILES = ${CLASS_FILES}

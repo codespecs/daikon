@@ -3503,6 +3503,20 @@ One way to create a @file{.pure} file is to run the Purity Analysis Kit
 the @option{--daikon-purity-file} when running the Purity Analysis Kit,
 it writes a file that can be supplied to Chicory.
 
+@item --no-method-calls
+@cindex side effects, of Chicory
+When this switch is on, Chicory never calls a method of the target
+program's objects.  By default, Chicory calls the @code{toArray()} method
+of each object that implements @code{java.util.List}, in order to output
+the elements of the list.  Chicory assumes that @code{toArray()} has no
+side effects and throws no exceptions.  If that assumption is false for
+some list, then running the program under Chicory changes the
+program's behavior.  Supplying @option{--no-method-calls} prevents such
+changes, but it degrades Daikon's output, because Daikon has fewer
+variables to generalize over:  Chicory outputs the identity (hash
+code) of each list but not its elements.  This option may not be
+combined with @option{--purity-file}.
+
 @end table
 
 
