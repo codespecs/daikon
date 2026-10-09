@@ -754,9 +754,7 @@ public class PptRelation implements Serializable {
               String.format(
                   "ppt %s is declared as a parent of ppt %s, but its type (%s) makes it a leaf of"
                       + " the dataflow hierarchy",
-                  parent.name(),
-                  ppt.name(),
-                  parent.type.name().toLowerCase(Locale.ENGLISH)));
+                  parent.name(), ppt.name(), parent.type.name().toLowerCase(Locale.ENGLISH)));
         }
         if ((pr.rel_type == PptRelationType.USER) && !dkconfig_enable_object_user) {
           continue;
