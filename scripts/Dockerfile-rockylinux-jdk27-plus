@@ -5,7 +5,7 @@
 # But it's used primarily for running miscellaneous tests such as the manual
 # and Javadoc.
 
-FROM rockylinux:9
+FROM rockylinux/rockylinux:10
 LABEL org.opencontainers.image.authors="Michael Ernst <mernst@cs.washington.edu>"
 
 # According to
@@ -47,8 +47,12 @@ RUN curl --silent -o jdk-27_linux-x64_bin.tar.gz https://download.java.net/java/
 && rm jdk-27_linux-x64_bin.tar.gz
 ENV PATH="/jdk-27/bin:/root/.local/bin:/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 ENV JAVA27_HOME=/jdk-27
-RUN chmod og+rx /root \
-&& chmod og+r /root/*
+RUN chmod og+rx /root
+
+# The CRB repository contains certain packages, including dependencies of
+# EPEL packages such as yamllint.  `crb` uses `dnf config-manager`, which is
+# in dnf-plugins-core.
+RUN dnf -q -y install dnf-plugins-core && crb enable
 
 RUN dnf -q -y upgrade && dnf -q -y install \
   ctags \
@@ -60,6 +64,8 @@ RUN dnf -q -y upgrade && dnf -q -y install \
   python3 \
   python3-distutils-extra \
   ShellCheck \
+  texinfo \
+  texinfo-tex \
   texlive \
   yamllint
 
@@ -73,13 +79,6 @@ RUN wget -q https://services.gradle.org/distributions/gradle-9.8.0-bin.zip \
 && unzip -q -d /opt/gradle gradle-9.8.0-bin.zip \
 && rm gradle-9.8.0-bin.zip
 ENV PATH=$PATH:/opt/gradle/gradle-9.8.0/bin
-
-# Alternately, run: dnf --enablerepo=crb install PACKAGENAME
-RUN dnf config-manager --set-enabled crb \
-&& dnf -y install \
-  dnf-plugins-core \
-  texinfo \
-  texinfo-tex
 
 # Install shfmt.
 RUN dnf -q -y upgrade && dnf -q -y install \
