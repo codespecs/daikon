@@ -237,4 +237,14 @@ public class SplitterListTest {
     put(exit, new Splitter[] {new ConditionSplitter("isEmpty()")}, replacer1);
     assertEquals(Arrays.asList("isEmpty()", "isEmpty()"), conditions(exit));
   }
+
+  @Test
+  public void testGetSameExpansion() throws IOException {
+    String exit = "splitterlisttest.F.f():::EXIT";
+    StatementReplacer replacer = replacer("isEmpty()", "top == -1");
+    // Conditions that differ as written are not duplicates, even if their expansions are the same.
+    put(exit, new Splitter[] {new ConditionSplitter("top == -1")}, replacer);
+    put(exit, new Splitter[] {new ConditionSplitter("isEmpty()")}, replacer);
+    assertEquals(Arrays.asList("top == -1", "isEmpty()"), conditions(exit));
+  }
 }

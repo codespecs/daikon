@@ -34,9 +34,10 @@ public abstract class SplitterList {
   /**
    * Maps a splitter to its condition, with the REPLACE statements of its {@code .spinfo} file
    * applied. {@link #get} and {@link #get_all} use this to determine whether two splitters are
-   * duplicates. A splitter that is not a key is identified by its condition.
+   * duplicates. For a splitter that is not a key, the expanded condition is its condition.
    */
-  private static final Map<Splitter, String> expanded_conditions = new IdentityHashMap<>();
+  private static final IdentityHashMap<Splitter, String> expanded_conditions =
+      new IdentityHashMap<>();
 
   /**
    * Removes the splitters associated with the given name, which is a name on a PPT_NAME line of a
@@ -240,9 +241,9 @@ public abstract class SplitterList {
 
   /**
    * Returns the splitters associated with this program point name (or null). The resulting
-   * splitters are factories, not instantiated splitters. The result contains no two splitters with
-   * the same condition (after REPLACE statements are applied), even if several PPT_NAME lines match
-   * the program point.
+   * splitters are factories, not instantiated splitters. The result contains no two duplicate
+   * splitters (see {@link #addUnlessDuplicate}), even if several PPT_NAME lines match the program
+   * point.
    *
    * <p>An OBJECT program point also uses every splitter whose PPT_NAME is not a complete program
    * point name, if any such PPT_NAME contains "OBJECT".
@@ -261,7 +262,7 @@ public abstract class SplitterList {
       }
     }
 
-    // Maps an expanded condition to its splitter.  A LinkedHashMap, for deterministic output.
+    // Maps a duplicate key to its splitter.  A LinkedHashMap, for deterministic output.
     Map<String, Splitter> splitters = new LinkedHashMap<>();
     for (Map.Entry<String, Splitter[]> entry : ppt_splitters.entrySet()) {
       String name = entry.getKey();
@@ -281,31 +282,51 @@ public abstract class SplitterList {
   }
 
   /**
-   * Adds each splitter to the map, unless the map already contains a splitter with the same
-   * expanded condition.
+   * Adds each splitter to the map, unless the map already contains a duplicate of it. Two splitters
+   * are duplicates if their conditions are the same, both as written and with the REPLACE
+   * statements of their {@code .spinfo} files applied.
    *
-   * @param splitters maps an expanded condition to its splitter; side-effected by this method
+   * <p>Two splitters whose conditions differ as written are not duplicates, even if the conditions
+   * are the same after REPLACE statements are applied, such as "isEmpty()" and "size == 0". A
+   * splitter's variables are those of the program point for which it was created, so two such
+   * splitters may test different values.
+   *
+   * @param splitters maps a key returned by {@link #duplicateKey} to its splitter; side-effected by
+   *     this method
    * @param toAdd the splitters to add
    */
   private static void addUnlessDuplicate(Map<String, Splitter> splitters, Splitter[] toAdd) {
     for (Splitter splitter : toAdd) {
-      String condition = expanded_conditions.get(splitter);
-      if (condition == null) {
-        condition = splitter.condition().trim();
-      }
-      splitters.putIfAbsent(condition, splitter);
+      splitters.putIfAbsent(duplicateKey(splitter), splitter);
     }
   }
 
   /**
+   * Returns a string that is equal for two splitters if and only if they are duplicates; see {@link
+   * #addUnlessDuplicate}.
+   *
+   * @param splitter a splitter
+   * @return a key that identifies the splitter's duplicates
+   */
+  private static String duplicateKey(Splitter splitter) {
+    String condition = splitter.condition().trim();
+    String expanded = expanded_conditions.get(splitter);
+    if (expanded == null) {
+      expanded = condition;
+    }
+    // A newline cannot appear in a condition, which is one line of a .spinfo file.
+    return condition + "\n" + expanded;
+  }
+
+  /**
    * Returns all the splitters in this program. The resulting splitters are factories, not
-   * instantiated splitters. The result contains no two splitters with the same condition (after
-   * REPLACE statements are applied).
+   * instantiated splitters. The result contains no two duplicate splitters (see {@link
+   * #addUnlessDuplicate}).
    *
    * @return an array of splitters
    */
   public static Splitter[] get_all() {
-    // Maps an expanded condition to its splitter.  A LinkedHashMap, for deterministic output.
+    // Maps a duplicate key to its splitter.  A LinkedHashMap, for deterministic output.
     Map<String, Splitter> splitters = new LinkedHashMap<>();
     for (Splitter[] splitter_array : ppt_splitters.values()) {
       addUnlessDuplicate(splitters, splitter_array);
