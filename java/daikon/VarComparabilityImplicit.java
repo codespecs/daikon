@@ -94,26 +94,41 @@ public final class VarComparabilityImplicit extends VarComparability implements 
   }
 
   static VarComparabilityImplicit parse(String rep, @Nullable ProglangType vartype) {
-    // String rep_ = rep;          // for debugging
+    int[] components = parseComponents(rep);
+    int dims = components.length - 1;
+    VarComparabilityImplicit[] index_types = new VarComparabilityImplicit[dims];
+    for (int i = 0; i < dims; i++) {
+      index_types[i] =
+          new VarComparabilityImplicit(components[i + 1], new VarComparabilityImplicit[0], 0);
+    }
+    return new VarComparabilityImplicit(components[0], index_types, dims);
+  }
 
+  /**
+   * Parses the textual representation of an implicit comparability, such as "3" or "3[4][5]".
+   *
+   * @param rep the textual representation of an implicit comparability
+   * @return the base comparability followed by the comparability of each index, from first to last
+   * @throws IllegalArgumentException if {@code rep} is malformed
+   */
+  public static int[] parseComponents(String rep) {
     List<String> dim_reps = new ArrayList<>();
     // handle array types
     while (rep.endsWith("]")) {
       int openpos = rep.lastIndexOf('[');
+      if (openpos == -1) {
+        throw new IllegalArgumentException("Unmatched \"]\" in comparability \"" + rep + "\"");
+      }
       dim_reps.add(0, rep.substring(openpos + 1, rep.length() - 1));
       rep = rep.substring(0, openpos);
     }
-    int dims = dim_reps.size();
-    VarComparabilityImplicit[] index_types = new VarComparabilityImplicit[dims];
-    for (int i = 0; i < dims; i++) {
-      index_types[i] = parse(dim_reps.get(i), null);
+    dim_reps.add(0, rep);
+    int[] result = new int[dim_reps.size()];
+    for (int i = 0; i < result.length; i++) {
+      // Integer.parseInt throws NumberFormatException, a subclass of IllegalArgumentException.
+      result[i] = Integer.parseInt(dim_reps.get(i));
     }
-    try {
-      int base = Integer.parseInt(rep);
-      return new VarComparabilityImplicit(base, index_types, dims);
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException(e);
-    }
+    return result;
   }
 
   @Override

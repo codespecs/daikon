@@ -26,6 +26,7 @@ import org.junit.runners.Suite;
   daikon.test.inv.unary.scalar.OneOfScalarTester.class,
   daikon.test.inv.unary.sequence.OneOfSequenceTester.class,
   daikon.test.LinearTernaryCoreTest.class,
+  daikon.test.MergeComparabilityTest.class,
   daikon.test.ModBitTrackerTest.class,
   daikon.test.ProglangTypeTest.class,
   daikon.test.VarComparabilityTest.class,
