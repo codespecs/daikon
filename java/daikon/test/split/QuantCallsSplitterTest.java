@@ -113,7 +113,7 @@ public final class QuantCallsSplitterTest {
 
     PrintStream oldOut = System.out;
     ByteArrayOutputStream out = new ByteArrayOutputStream();
-    System.setOut(new PrintStream(out, true, "UTF-8"));
+    System.setOut(new PrintStream(out, true, StandardCharsets.UTF_8));
     try {
       SplitterFactory.load_splitters(ppt, Collections.singletonList(spinfo));
     } finally {

@@ -187,7 +187,8 @@ public class SplitterFactory {
                 splitObj, splitObj.getPptName(), fileName, ppt.var_infos, statementReplacer);
         fileContents = splitterWriter.getFileText();
       } catch (ParseException | TokenMgrError e) {
-        // TokenMgrError indicates a lexical error in the condition.  load_splitters prints the error.
+        // TokenMgrError indicates a lexical error in the condition.
+        // load_splitters prints the error.
         splitObj.setError(
             String.join(
                 System.lineSeparator(),
