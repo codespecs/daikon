@@ -112,7 +112,7 @@ else
 endif
 
 # TODO: -Werror is temporary.
-JAVAC_ARGS ?= -g -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${LINT_THIS_ESCAPE} ${JAVAC_TARGET_ARGS} ${JAVAC_TARGET_FLAGS}
+JAVAC_ARGS ?= -g -encoding UTF-8 -XDignore.symbol.file -Xmaxerrs 100000 -Xmaxwarns 100000 -Werror -Xlint:-path -Xlint:-options -Xlint:-classfile ${LINT_THIS_ESCAPE} ${JAVAC_TARGET_ARGS} ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
