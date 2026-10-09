@@ -177,8 +177,10 @@ ifneq "$(wildcard ${JAVA_HOME}/jre/lib/rt.jar)" ""
   DAIKON_CLASSPATH := ${DAIKON_CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar
 endif
 
-JAVADOC_COMMAND := ${JAVADOC} -cp ${DAIKON_CLASSPATH}
-JAVAC_COMMAND := ${JAVAC} -cp ${DAIKON_CLASSPATH} -Xlint -J-Xmx7g ${JAVAC_ARGS}
+# "-encoding UTF-8" is needed because the top-level Makefile sets LC_ALL=C,
+# which makes JDK 17 and earlier read source files as US-ASCII.
+JAVADOC_COMMAND := ${JAVADOC} -cp ${DAIKON_CLASSPATH} -encoding UTF-8
+JAVAC_COMMAND := ${JAVAC} -cp ${DAIKON_CLASSPATH} -encoding UTF-8 -Xlint -J-Xmx7g ${JAVAC_ARGS}
 JAVA_COMMAND := ${JAVA} -cp ${DAIKON_CLASSPATH}
 
 DOCLETPATH := ${DAIKONDIR}/java:$(wildcard ${DAIKONDIR}/java/lib/bcel-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/plume-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/reflection-util-*.jar):$(wildcard ${DAIKONDIR}/java/lib/hashmap-util-*.jar):${DAIKONDIR}/java/lib/daikon-plumelib.jar

@@ -2606,6 +2606,16 @@ that are prefixes of other method names.  For instance, if the class
 which was encountered first.  Instead writing @samp{PPT_NAME
 List.add(} will match only the @code{add} method.
 
+If @var{pptname} contains @samp{:::}, then it is a complete program
+point name, such as @samp{pkg.List.add(Object):::EXIT12}, and it
+matches only the program point of that name.  As a special case, a
+name that ends with @samp{:::EXIT} also matches the method's numbered
+exit points, such as @samp{:::EXIT12}.  By default, Daikon uses every
+condition at every program point, regardless of @var{pptname}; to use
+each condition only at the program points that its @var{pptname}
+matches, disable indiscriminate splitting (@pxref{Indiscriminate
+splitting}).
+
 Each condition is a Java expression of boolean type.  All variables
 that appear in the condition must also appear in the declaration of
 the program point in the @file{.decls} file.  (In other words, all the
