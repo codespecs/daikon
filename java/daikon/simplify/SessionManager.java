@@ -132,18 +132,18 @@ public class SessionManager implements Closeable {
           throw new RuntimeException(
               "Could not find resource daikon/simplify/" + fileName + " on the classpath");
         }
-        BufferedReader lines = new BufferedReader(new InputStreamReader(bg_stream, UTF_8));
-        String line;
-        while ((line = lines.readLine()) != null) {
-          line = line.trim();
-          if ((line.length() == 0) || line.startsWith(";")) {
-            continue;
+        try (BufferedReader lines = new BufferedReader(new InputStreamReader(bg_stream, UTF_8))) {
+          String line;
+          while ((line = lines.readLine()) != null) {
+            line = line.trim();
+            if ((line.length() == 0) || line.startsWith(";")) {
+              continue;
+            }
+            result.append(" ");
+            result.append(line);
+            result.append(daikon.Global.lineSep);
           }
-          result.append(" ");
-          result.append(line);
-          result.append(daikon.Global.lineSep);
         }
-        lines.close();
         prover_background = result.toString();
       } catch (IOException e) {
         throw new RuntimeException("Could not load prover background");
@@ -154,7 +154,7 @@ public class SessionManager implements Closeable {
 
   public static int prover_instantiate_count = 0;
 
-  // Start up simplify, and send the universal backgound.
+  // Start up simplify, and send the universal background.
   // Is successful exactly when return != null.
   public static @Nullable SessionManager attemptProverStartup() {
     SessionManager prover;
@@ -183,7 +183,7 @@ public class SessionManager implements Closeable {
 
   /** Helper thread which interacts with a Session, according to the enclosing manager. */
   @MustCall("close") private class Worker extends Thread implements Closeable {
-    /** The session mananger. */
+    /** The session manager. */
     private final SessionManager mgr = SessionManager.this; // just sugar
 
     /** The associated session, or null if the thread should shutdown. */

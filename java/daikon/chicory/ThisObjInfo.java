@@ -28,9 +28,7 @@ public class ThisObjInfo extends DaikonVariableInfo {
     this.type = type;
   }
 
-  /* (non-Javadoc)
-   * @see daikon.chicory.DaikonVariableInfo#getChildValue(java.lang.Object)
-   */
+  // See daikon.chicory.DaikonVariableInfo#getChildValue(java.lang.Object)
   @Override
   public @Nullable Object getMyValFromParentVal(Object val) {
     throw new Error("shouldn't be called");

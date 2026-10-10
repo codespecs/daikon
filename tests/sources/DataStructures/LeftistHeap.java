@@ -37,7 +37,7 @@
         {
             if( this == rhs )    // Avoid aliasing problems
                 return;
-    
+
             root = merge( root, rhs.root );
             rhs.root = null;
         }

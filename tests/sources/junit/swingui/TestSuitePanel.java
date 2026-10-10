@@ -8,7 +8,7 @@ import javax.swing.tree.*;
 import junit.framework.*;
 
 /**
- * A Panel showing a test suite as a tree. 
+ * A Panel showing a test suite as a tree.
  */
 class TestSuitePanel extends JPanel implements TestListener {
 	private JTree fTree;
@@ -19,18 +19,18 @@ class TestSuitePanel extends JPanel implements TestListener {
 		private Icon fErrorIcon;
 		private Icon fOkIcon;
 		private Icon fFailureIcon;
-		
+
 		TestTreeCellRenderer() {
 	    		super();
 	    		loadIcons();
 		}
-		
+
 		void loadIcons() {
 			fErrorIcon= TestRunner.getIconResource(getClass(), "icons/error.gif");
 	    		fOkIcon= TestRunner.getIconResource(getClass(), "icons/ok.gif");
 	    		fFailureIcon= TestRunner.getIconResource(getClass(), "icons/failure.gif");
 		}
-		
+
 		String stripParenthesis(Object o) {
 			String text= o.toString ();
     			int pos= text.indexOf('(');
@@ -41,10 +41,10 @@ class TestSuitePanel extends JPanel implements TestListener {
 
 		public Component getTreeCellRendererComponent(JTree tree, Object value,
 				boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
-			
+
 			Component c= super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 	  		TreeModel model= tree.getModel();
-	  		if (model instanceof TestTreeModel) {	
+	  		if (model instanceof TestTreeModel) {
 				TestTreeModel testModel= (TestTreeModel)model;
 				Test t= (Test)value;
 				String s= "";
@@ -70,29 +70,29 @@ class TestSuitePanel extends JPanel implements TestListener {
 			return c;
 		}
 	}
-	
+
 	public TestSuitePanel() {
 		super(new BorderLayout());
 		setPreferredSize(new Dimension(300, 100));
 		fTree= new JTree();
 		fTree.setModel(null);
 		fTree.setRowHeight(20);
-		ToolTipManager.sharedInstance().registerComponent(fTree);	
+		ToolTipManager.sharedInstance().registerComponent(fTree);
 		fTree.putClientProperty("JTree.lineStyle", "Angled");
 		fScrollTree= new JScrollPane(fTree);
 		add(fScrollTree, BorderLayout.CENTER);
 	}
-		
+
 	public void addError(final Test test, final Throwable t) {
  		fModel.addError(test);
 		fireTestChanged(test, true);
 	}
-	
+
 	public void addFailure(final Test test, final AssertionFailedError t) {
  		fModel.addFailure(test);
 		fireTestChanged(test, true);
 	}
-	
+
 	/**
  	 * A test ended.
  	 */
@@ -105,8 +105,8 @@ class TestSuitePanel extends JPanel implements TestListener {
  	 * A test started.
  	 */
  	public void startTest(Test test) {
- 	} 	  
- 			
+ 	}
+
 	/**
 	 * Returns the selected test or null if multiple or none is selected
 	 */
@@ -132,7 +132,7 @@ class TestSuitePanel extends JPanel implements TestListener {
 		fTree.setModel(fModel);
 		fTree.setCellRenderer(new TestTreeCellRenderer());
 	}
-	
+
 	private void fireTestChanged(final Test test, final boolean expand) {
 		SwingUtilities.invokeLater(
 			new Runnable() {

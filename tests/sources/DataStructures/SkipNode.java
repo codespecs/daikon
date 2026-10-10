@@ -11,16 +11,16 @@ class SkipNode
   {
     this( theElement, null, null );
   }
-  
+
   SkipNode( Comparable theElement, SkipNode rt, SkipNode dt )
   {
     element  = theElement;
     right    = rt;
     down     = dt;
   }
-  
+
   // Friendly data; accessible by other package routines
   Comparable element;      // The data in the node
-  SkipNode   right;        // Right link 
+  SkipNode   right;        // Right link
   SkipNode   down;         // Down link
 }

@@ -157,7 +157,7 @@ public class RatPolyStack {
     }
 
     /** Adds the top two elements of this, placing the result on top
-	of the stack. 
+	of the stack.
         @requires: size-of(this) >= 2
 	@modifies: this
 	@effects:  If this = [p1, p2]:S
@@ -171,7 +171,7 @@ public class RatPolyStack {
         RatPoly r3 = r2.add(r1);
         push(r3);
     }
-    
+
     /** Subtracts the top poly from the next from top poly, placing
 	the result on top of the stack.
         @requires: size-of(this) >= 2
@@ -189,7 +189,7 @@ public class RatPolyStack {
     }
 
     /** Multiplies top two elements of this, placing the result on
-	top of the stack. 
+	top of the stack.
 	@requires: size-of(this) >= 2
 	@modifies: this
 	@effects:  If this = [p1, p2]:S

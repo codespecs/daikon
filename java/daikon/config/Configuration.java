@@ -118,7 +118,7 @@ public final class Configuration implements Serializable {
   /**
    * Apply the settings in the given InputStream.
    *
-   * @param input the commands to set confiuration
+   * @param input the commands to set configuration
    */
   public void apply(InputStream input) {
     assert input != null;
@@ -138,7 +138,7 @@ public final class Configuration implements Serializable {
   /**
    * Apply the setting in the given InputStream.
    *
-   * @param line the command to set confiuration
+   * @param line the command to set configuration
    */
   public void apply(String line) {
     assert line != null;
@@ -232,9 +232,9 @@ public final class Configuration implements Serializable {
 
     if (type.equals(Boolean.TYPE)) {
       if (unparsed.equals("1") || unparsed.equalsIgnoreCase("true")) {
-        value = Boolean.TRUE;
+        value = true;
       } else if (unparsed.equals("0") || unparsed.equalsIgnoreCase("false")) {
-        value = Boolean.FALSE;
+        value = false;
       } else {
         throw new ConfigException(
             "Badly formatted boolean argument "

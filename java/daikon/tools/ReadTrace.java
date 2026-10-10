@@ -32,16 +32,22 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
  */
 public class ReadTrace {
 
+  /** Do not instantiate. */
+  private ReadTrace() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
   /**
    * The entry point for ReadTrace.
    *
-   * @param args data trace file names
+   * @param args data trace file names, read from the command line
    */
   public static void main(String[] args) {
     CollectDataProcessor processor = new CollectDataProcessor();
     PptMap ppts = new PptMap();
     try {
-      FileIO.read_data_trace_files(Arrays.asList(args), ppts, processor, false);
+      // `read_data_trace_files()` requires the list of files to be modifiable.
+      FileIO.read_data_trace_files(new ArrayList<>(Arrays.asList(args)), ppts, processor, false);
     } catch (Exception e) {
       throw new Error(e);
     }

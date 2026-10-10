@@ -10,7 +10,7 @@ public class CompositeRoutePath implements Path {
   private double length;
   private Cons geoList;
   private int size;
-  
+
 
   public CompositeRoutePath(GeoSegment gs) {
     compRoute = new CompositeRoute(gs);
@@ -27,12 +27,12 @@ public class CompositeRoutePath implements Path {
     size = crp.size + 1;
     length = compRoute.length();
   }
-  
+
 
   // Inherited from the Path interface.
-  
+
   // Producers
-  
+
   /**
    * Creates an extended path by adding a new node to its end.
    * @requires n != null && n is a valid node type for this particular
@@ -48,9 +48,9 @@ public class CompositeRoutePath implements Path {
                                  "with a GeoSegment.");
     return new CompositeRoutePath(this, (GeoSegment)n);
   }
-  
+
   // Observers
-  
+
   /**
    * @return an Iterator that produces the contents of this.elements,
    *            in order
@@ -67,7 +67,7 @@ public class CompositeRoutePath implements Path {
     }
     return new UnmodifyableArrayIterator(gsArray);
   }
-  
+
   /** @return this.cost */
   public double cost() {
     return length;
@@ -76,13 +76,13 @@ public class CompositeRoutePath implements Path {
   public String directions() {
     return compRoute.directions(0.0);
   }
-  
-  
-  
+
+
+
   private class UnmodifyableArrayIterator implements Iterator {
     private Object[] ar;
     private int index;
-    
+
     public UnmodifyableArrayIterator(Object[] a) {
       ar = a;
       index = 0;
@@ -110,5 +110,5 @@ public class CompositeRoutePath implements Path {
       this.tail = tail;
     }
   }
-  
+
 }

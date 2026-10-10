@@ -160,5 +160,4 @@ print_tokens2.c.unget_error():::EXIT0
 fp
 fp[..]
 fp[..][0]
-return
 

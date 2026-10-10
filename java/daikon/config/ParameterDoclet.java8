@@ -1,3 +1,5 @@
+// -*- java -*-
+
 package daikon.config;
 
 import com.sun.javadoc.*;
@@ -17,6 +19,7 @@ import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.reflection.ReflectionPlume;
 import org.plumelib.util.CollectionsPlume;
 import org.plumelib.util.FilesPlume;
+import org.plumelib.util.MapsP;
 
 /**
  * ParameterDoclet is a JavaDoc doclet that collects information about the run-time configuration
@@ -166,7 +169,7 @@ public class ParameterDoclet {
     }
 
     /**
-     * Return true if the given variable (that represents a configuration option) should be included
+     * Returns true if the given variable (that represents a configuration option) should be included
      * in this section.
      *
      * @param fullConfigName the fully-qualified name of a Daikon configuration variable (no
@@ -293,7 +296,7 @@ public class ParameterDoclet {
               new String[] {
                 "@cindex Output, quantity of",
                 "The configuration options in this section make Daikon print more or less output.",
-                "They do not affect which invariants Daikon computes, only how it ouputs them.",
+                "They do not affect which invariants Daikon computes, only how it outputs them.",
                 "Also see the following section."
               }),
           new DocCategory(
@@ -405,7 +408,7 @@ public class ParameterDoclet {
       out.println();
 
       for (
-      @KeyFor("categories[c].fields") String field : CollectionsPlume.sortedKeySet(categories[c].fields)) {
+      @KeyFor("categories[c].fields") String field : MapsP.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defaultString = getDefaultString(field);
 
@@ -441,7 +444,7 @@ public class ParameterDoclet {
       out.println();
 
       for (
-      @KeyFor("categories[c].fields") String field : CollectionsPlume.sortedKeySet(categories[c].fields)) {
+      @KeyFor("categories[c].fields") String field : MapsP.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defaultString = getDefaultString(field);
 
@@ -459,7 +462,7 @@ public class ParameterDoclet {
 
   public void writeList(PrintWriter out) {
     for (int c = 0; c < categories.length; c++) {
-      for (String field : CollectionsPlume.sortedKeySet(categories[c].fields)) {
+      for (String field : MapsP.sortedKeySet(categories[c].fields)) {
         out.println(field);
       }
     }

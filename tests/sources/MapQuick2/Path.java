@@ -24,7 +24,7 @@ public interface Path {
     /**
      * Creates an extended path by adding a new node to its end.
      * @requires n != null &&
-                 n is a valid node type for this particular path 
+                 n is a valid node type for this particular path
 		 implementation
      * @return a new Path p such that
      *       p.elements = this.elements + [ n ]
@@ -44,5 +44,3 @@ public interface Path {
     double cost();
 
 } // Path
-
-

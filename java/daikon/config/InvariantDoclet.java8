@@ -93,7 +93,7 @@ public class InvariantDoclet {
     @SuppressWarnings("keyfor") // the loop below makes all these keys to cmap
     @KeyFor("this.cmap") ClassDoc[] clazzes = root.classes();
 
-    // go through all of the classes and intialize the map
+    // go through all of the classes and initialize the map
     for (ClassDoc cd : clazzes) {
       cmap.put(cd, new TreeSet<@KeyFor("cmap") ClassDoc>());
     }

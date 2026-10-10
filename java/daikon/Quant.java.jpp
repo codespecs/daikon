@@ -61,11 +61,11 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
  * <p>First, each predicate (boolean method) returns false when invoked on an illegal argument such
  * as a null collection (array or Collection).
  *
- * <p>Second, each accessor method returns a default "bad" value if inovked on an illegal argument.
+ * <p>Second, each accessor method returns a default "bad" value if invoked on an illegal argument.
  * For example, the default value for the double type is Double.NaN.
  *
  * <p>The rationale for the decision to never throw exceptions is that we wish to be able to invoke
- * the Quant methods at run time without distrubing execution of a program, and without forcing
+ * the Quant methods at run time without disturbing execution of a program, and without forcing
  * clients to write a try .. catch block around each invocation.
  *
  * <p>A downside of the decision is that if the default value is returned, it may be impossible for

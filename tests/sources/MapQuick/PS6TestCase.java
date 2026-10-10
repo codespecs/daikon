@@ -155,14 +155,14 @@ public class PS6TestCase
       Iterator result_dirs = result.getDirections();
       assertEquals("getDirections(Address x 2) " + useful_name,
 		   query_dirs, result_dirs);
-      
+
     } catch (InvalidAddressException e) {
       fail("Unexpected exception on " + useful_name + ": " + e.toString());
     } catch (NoPathException e) {
       fail("Unexpected exception on " + useful_name + ": " + e.toString());
     }
   }
-  
+
   // (destructively) checks that two iterators return equal elements
   protected static void assertEquals(String message, Iterator expected, Iterator actual)
   {
@@ -179,7 +179,7 @@ public class PS6TestCase
       Object expected_next = expected.next();
       fail(message + ": expected had '" + expected_next + "' but actual had no more elements");
     }
-    
+
     // if just one is exhausted, we fail
     if (!expected_hasnext && actual_hasnext) {
       Object actual_next = actual.next();

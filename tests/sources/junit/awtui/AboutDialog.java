@@ -8,12 +8,12 @@ import junit.runner.Version;
 class AboutDialog extends Dialog {
 	public AboutDialog(Frame parent) {
 		super(parent);
-		
+
 		setResizable(false);
 		setLayout(new GridBagLayout());
 		setSize(330, 138);
 		setTitle("About");
-		
+
 		Button button= new Button("Close");
 		button.addActionListener(
 			new ActionListener() {
@@ -22,13 +22,13 @@ class AboutDialog extends Dialog {
 				}
 			}
 		);
-		
+
 		Label label1= new Label("JUnit");
 		label1.setFont(new Font("dialog", Font.PLAIN, 36));
-		
+
 		Label label2= new Label("JUnit "+Version.id()+ " by Kent Beck and Erich Gamma");
 		label2.setFont(new Font("dialog", Font.PLAIN, 14));
-		
+
 		Logo logo= new Logo();
 
 		GridBagConstraints constraintsLabel1= new GridBagConstraints();

@@ -9,13 +9,14 @@ import org.checkerframework.dataflow.qual.Pure;
 // language; for instance, C uses "*array" in place of "array[]-element".
 
 /**
- * Represents the comparability of variables, including methods to determine if two
- * VarComparabilities are comparable. VarComparability types have two formats: implicit and none.
+ * Represents the comparability of variables, including methods to determine if two {@code
+ * VarComparability}s are comparable. {@code VarComparability} types have two formats: implicit and
+ * none.
  *
- * <p>A VarComparabilityImplicit is an arbitrary string, and comparisons succeed exactly if the two
- * VarComparabilitys are identical.
+ * <p>A {@link VarComparabilityImplicit} is an arbitrary string, and comparisons succeed exactly if
+ * the two {@code VarComparability}s are identical.
  *
- * <p>VarComparabilityNone means no comparability information was provided.
+ * <p>{@link VarComparabilityNone} means no comparability information was provided.
  */
 public abstract class VarComparability {
 
@@ -52,7 +53,7 @@ public abstract class VarComparability {
    * @return a new comparability that is an array with the same dimensionality and indices as given,
    *     but with a different element type
    * @param elemTypeName the new type of the elements of return value
-   * @param old the varcomparability that this is derived from; has the same indices as this
+   * @param old the VarComparability that this is derived from; has the same indices as this
    */
   public static VarComparability makeComparabilitySameIndices(
       String elemTypeName, VarComparability old) {
@@ -73,19 +74,19 @@ public abstract class VarComparability {
 
   public abstract VarComparability indexType(@GuardSatisfied VarComparability this, int dim);
 
-  /** Return the comparability for the length of this string* */
+  /** Returns the comparability for the length of this string. */
   public abstract VarComparability string_length_type();
 
   /** Returns true if this is comparable to everything else. */
   public abstract boolean alwaysComparable(@GuardSatisfied VarComparability this);
 
-  /** Returns whether two variables are comparable. */
+  /** Returns true if two variables are comparable. */
   @Pure
   public static boolean comparable(VarInfo v1, VarInfo v2) {
     return comparable(v1.comparability, v2.comparability);
   }
 
-  /** Returns whether two comparabilities are comparable. */
+  /** Returns true if two comparabilities are comparable. */
   @SuppressWarnings("all:purity") // Override the purity checker
   @Pure
   public static boolean comparable(
@@ -94,7 +95,7 @@ public abstract class VarComparability {
     if (type1 != null && type2 != null && type1.getClass() != type2.getClass()) {
       throw new Error(
           String.format(
-              "Trying to compare VarComparabilities of different types: %s (%s) and %s (%s)",
+              "Trying to compare VarComparability of different types: %s (%s) and %s (%s)",
               type1.toString(), type1.getClass(), type2.toString(), type2.getClass()));
     }
 

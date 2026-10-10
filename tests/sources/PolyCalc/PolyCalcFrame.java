@@ -533,7 +533,7 @@ public class PolyCalcFrame extends JFrame {
     frame.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
     frame.setVisible(true);
   }
-    
+
   boolean startNewEq = false;
   void appendToCurrentText(String textToAdd)
   {
@@ -592,35 +592,35 @@ public class PolyCalcFrame extends JFrame {
 
   void jButton_exp_actionPerformed(ActionEvent e)
   {
-      if (startNewEq == true) 
+      if (startNewEq == true)
 	  startNewEq = false;
     appendToCurrentText("^");
   }
 
   void jButton_mul_actionPerformed(ActionEvent e)
   {
-      if (startNewEq == true) 
+      if (startNewEq == true)
 	  startNewEq = false;
     appendToCurrentText("*");
   }
 
   void jButton_div_actionPerformed(ActionEvent e)
   {
-      if (startNewEq == true) 
+      if (startNewEq == true)
 	  startNewEq = false;
     appendToCurrentText("/");
   }
 
   void jButton_plus_actionPerformed(ActionEvent e)
   {
-      if (startNewEq == true) 
+      if (startNewEq == true)
 	  startNewEq = false;
     appendToCurrentText("+");
   }
 
   void jButton_minus_actionPerformed(ActionEvent e)
   {
-      if (startNewEq == true) 
+      if (startNewEq == true)
 	  startNewEq = false;
     appendToCurrentText("-");
   }

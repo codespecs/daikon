@@ -2,10 +2,10 @@
  * @(#)ListIterator.java	1.16 00/02/02
  *
  * Copyright 1997-2000 Sun Microsystems, Inc. All Rights Reserved.
- * 
- * This software is the proprietary information of Sun Microsystems, Inc.  
+ *
+ * This software is the proprietary information of Sun Microsystems, Inc.
  * Use is subject to license terms.
- * 
+ *
  */
 
 package javautil;
@@ -67,7 +67,7 @@ public interface ListIterator13 extends Iterator13 {
      * element repeatedly.)
      *
      * @return the previous element in the list.
-     * 
+     *
      * @exception NoSuchElementException if the iteration has no previous
      *            element.
      */
@@ -80,7 +80,7 @@ public interface ListIterator13 extends Iterator13 {
      *
      * @return the index of the element that would be returned by a subsequent
      * 	       call to <tt>next</tt>, or list size if list iterator is at end
-     *	       of list. 
+     *	       of list.
      */
     int nextIndex();
 
@@ -92,12 +92,12 @@ public interface ListIterator13 extends Iterator13 {
      * @return the index of the element that would be returned by a subsequent
      * 	       call to <tt>previous</tt>, or -1 if list iterator is at
      *	       beginning of list.
-     */ 
+     */
     int previousIndex();
 
 
     // Modification Operations
-    
+
     /**
      * Removes from the list the last element that was returned by
      * <tt>next</tt> or <tt>previous</tt> (optional operation).  This call can
@@ -151,10 +151,10 @@ public interface ListIterator13 extends Iterator13 {
      * @param o the element to insert.
      * @exception UnsupportedOperationException if the <tt>add</tt> method is
      * 		  not supported by this list iterator.
-     * 
+     *
      * @exception ClassCastException if the class of the specified element
      * 		  prevents it from being added to this Set.
-     * 
+     *
      * @exception IllegalArgumentException if some aspect of this element
      *            prevents it from being added to this Collection.
      */

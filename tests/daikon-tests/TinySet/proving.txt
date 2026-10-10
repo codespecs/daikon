@@ -6,4 +6,3 @@ integers, but this may require some bitwise semantics to say anything
 at all (or perhaps we can get around that by saying everything is very
 labored, specific statements, like these integer ranges imply this bit
 is set, etc.).
-

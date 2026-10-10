@@ -7,13 +7,13 @@ import java.lang.Comparable;
  * often called an <i>enumeration</i> type.  There are a handful of
  * values the type may hold, and the set of options is fixed at
  * compile time.
- * 
+ *
  * <p> Example uses: <pre>
  * StreetClassification myType = StreetClassification.LOCAL_ROAD;
  * if (myType == StreetClassification.UNKNOWN) {
  *   // ...
  * } </pre>
- * 
+ *
  * <p> Notice that you may reference the constant values as you would
  * with any other static variable, e.g. ClassName.STATIC_FIELD_NAME.
  * Also, you may use the <code>==</code> operator to check for

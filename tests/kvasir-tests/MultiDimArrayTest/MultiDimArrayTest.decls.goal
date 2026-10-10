@@ -4,14 +4,6 @@ var-comparability none
 
 ppt ..fchar():::ENTER
   ppt-type enter
-  variable ::DIM1
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::DIM2
-    var-kind variable
-    rep-type int
-    dec-type int
   variable ::globalBoo
     var-kind variable
     rep-type hashcode
@@ -66,14 +58,6 @@ ppt ..fchar():::ENTER
 
 ppt ..fchar():::EXIT0
   ppt-type subexit
-  variable ::DIM1
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::DIM2
-    var-kind variable
-    rep-type int
-    dec-type int
   variable ::globalBoo
     var-kind variable
     rep-type hashcode
@@ -128,14 +112,6 @@ ppt ..fchar():::EXIT0
 
 ppt ..fcrashint():::ENTER
   ppt-type enter
-  variable ::DIM1
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::DIM2
-    var-kind variable
-    rep-type int
-    dec-type int
   variable ::globalBoo
     var-kind variable
     rep-type hashcode
@@ -237,14 +213,6 @@ ppt ..fcrashint():::ENTER
 
 ppt ..fcrashint():::EXIT0
   ppt-type subexit
-  variable ::DIM1
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::DIM2
-    var-kind variable
-    rep-type int
-    dec-type int
   variable ::globalBoo
     var-kind variable
     rep-type hashcode
@@ -346,14 +314,6 @@ ppt ..fcrashint():::EXIT0
 
 ppt ..ffixedint():::ENTER
   ppt-type enter
-  variable ::DIM1
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::DIM2
-    var-kind variable
-    rep-type int
-    dec-type int
   variable ::globalBoo
     var-kind variable
     rep-type hashcode
@@ -414,14 +374,6 @@ ppt ..ffixedint():::ENTER
 
 ppt ..ffixedint():::EXIT0
   ppt-type subexit
-  variable ::DIM1
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::DIM2
-    var-kind variable
-    rep-type int
-    dec-type int
   variable ::globalBoo
     var-kind variable
     rep-type hashcode
@@ -482,14 +434,6 @@ ppt ..ffixedint():::EXIT0
 
 ppt ..fint():::ENTER
   ppt-type enter
-  variable ::DIM1
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::DIM2
-    var-kind variable
-    rep-type int
-    dec-type int
   variable ::globalBoo
     var-kind variable
     rep-type hashcode
@@ -550,14 +494,6 @@ ppt ..fint():::ENTER
 
 ppt ..fint():::EXIT0
   ppt-type subexit
-  variable ::DIM1
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::DIM2
-    var-kind variable
-    rep-type int
-    dec-type int
   variable ::globalBoo
     var-kind variable
     rep-type hashcode
@@ -618,14 +554,6 @@ ppt ..fint():::EXIT0
 
 ppt ..main():::ENTER
   ppt-type enter
-  variable ::DIM1
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::DIM2
-    var-kind variable
-    rep-type int
-    dec-type int
   variable ::globalBoo
     var-kind variable
     rep-type hashcode
@@ -669,14 +597,6 @@ ppt ..main():::ENTER
 
 ppt ..main():::EXIT0
   ppt-type subexit
-  variable ::DIM1
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::DIM2
-    var-kind variable
-    rep-type int
-    dec-type int
   variable ::globalBoo
     var-kind variable
     rep-type hashcode

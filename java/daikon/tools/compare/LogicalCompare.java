@@ -68,7 +68,7 @@ import org.plumelib.util.StringsPlume;
  */
 public class LogicalCompare {
   private LogicalCompare() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   public static final Logger debug = Logger.getLogger("daikon.tools.compare.LogicalCompare");
@@ -431,7 +431,7 @@ public class LogicalCompare {
     for (int i = 0; i < unsafeAssumptions.size(); i++) {
       List<Lemma> unsafe = unsafeAssumptions.subList(i, j);
       boolean safe = false;
-      while (!safe && unsafe.size() > 0) {
+      while (!safe && !unsafe.isEmpty()) {
         int innerMark = lemmas.markLevel();
         lemmas.pushLemmas(new ArrayList<Lemma>(unsafe));
         if (lemmas.checkForContradiction() == 'T') {
@@ -445,7 +445,7 @@ public class LogicalCompare {
         }
       }
       if (!safe) {
-        assert unsafe.size() == 0;
+        assert unsafe.isEmpty();
         j = unsafeAssumptions.size();
       }
     }
@@ -463,7 +463,7 @@ public class LogicalCompare {
     lemmas = new LemmaStack();
   }
 
-  // Comparare the invariants for enter and exit points between two
+  // Compare the invariants for enter and exit points between two
   // methods (usually two sets of invariants for methods of the same
   // name).
   // For historical reasons, one set of invariants is called the app
@@ -587,7 +587,7 @@ public class LogicalCompare {
       while ((line = reader.readLine()) != null) {
         line = line.trim();
         if (line.equals("") || line.startsWith("#")) {
-          continue;
+          // continue;
         } else if (line.startsWith("PPT_NAME")) {
           ppt_name = line.substring("PPT_NAME".length()).trim();
           if (!extra_assumptions.containsKey(ppt_name)) {
@@ -598,14 +598,16 @@ public class LogicalCompare {
             System.err.println("Must specify PPT_NAME before giving a formula");
             throw new Error();
           }
-          String formula, comment;
+          String formula;
+          String comment;
           // XXX This should really read a balanced Simplify
           // expression, then look for a comment after that. But that
           // would involve counting parens and vertical bars and
           // backslashes, which I'm too lazy to do right now.
-          if (line.indexOf("#") != -1) {
-            formula = line.substring(0, line.indexOf("#"));
-            comment = line.substring(line.indexOf("#") + 1);
+          int hash = line.indexOf('#');
+          if (hash != -1) {
+            formula = line.substring(0, hash);
+            comment = line.substring(hash + 1);
           } else {
             formula = line;
             comment = "User-supplied assumption";
@@ -642,7 +644,7 @@ public class LogicalCompare {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
    */

@@ -27,6 +27,8 @@ java/dcomp_premain.jar
 java/*.class
 java/**/*.class
 java/lib/tmp
+# Directory generated when building daikon-plumelib.jar
+java/lib/.gradle
 # Temporary file used during compilation
 java/java_files.txt
 java/javadoc-files.txt
@@ -48,6 +50,8 @@ java/dcomp-rt
 java/dcomp_rt.jar
 dcomp-rt.jar
 # DynComp testing
+java/daikon/dcomp/DcompTest.decls-DynComp
+java/daikon/dcomp/debug/
 java/daikon/dcomp/jdk_dcomp_out.diff
 java/daikon/dcomp/jdk_dcomp_out.txt
 java/daikon/dcomp/std_dcomp_out.diff
@@ -60,9 +64,10 @@ java/daikon/chicory/ChicoryTest.inv.gz
 java/daikon/chicory/ChicoryTest.inv.out
 java/daikon/chicory/ChicoryTest.inv.out.diff
 java/daikon/chicory/ChicoryTest.log
+java/daikon/chicory/debug/
 
 # Obtained via Git
-utils
+.utils
 
 # Documentation (including WWW pages and the manual)
 doc/.fix-dev-menu
@@ -342,6 +347,8 @@ make-typecheck-nullness-output.txt*
 tests/chicory-tests/option-tests/DataStructures
 tests/chicory-tests/option-tests/StackArTester.dtrace.gz
 tests/chicory-tests/option-tests/StackArTesterException.dtrace.gz
+tests/daikon-tests/ncalc/libcalculator.so
+tests/daikon-tests/ncalc/ncalc.h
 tests/dyncomp-tests/Apples/Apples
 tests/dyncomp-tests/DerivedComparability/DerivedComparability
 tests/dyncomp-tests/FloatTest/FloatTest
@@ -519,3 +526,7 @@ java/cov-int/
 
 # Directory used for creating docker images
 scripts/dockerdir/
+
+# PMD
+java/pmd-output.txt
+java/pmd.cache

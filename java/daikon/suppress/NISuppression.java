@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -133,7 +134,7 @@ public class NISuppression {
   }
 
   /**
-   * Determines whether or not the falsified invariant previously passed to {@link
+   * Returns true if the falsified invariant previously passed to {@link
    * #check(PptTopLevel,VarInfo[],Invariant)} was the first suppressor to be falsified in this
    * suppression. If the falsified invariant is not involved in this suppression, then it can't have
    * been invalidated.
@@ -499,7 +500,7 @@ public class NISuppression {
   }
 
   /**
-   * Determines whether the order of the variables in vis a valid permutations (i.e., their
+   * Returns true if the order of the variables in vis a valid permutations (i.e., their
    * varinfo_index's are ordered). Null elements are ignored (and an all-null list is OK).
    */
   private boolean vis_order_ok(VarInfo[] vis) {
@@ -526,7 +527,7 @@ public class NISuppression {
    */
   public static boolean vis_compatible(VarInfo[] vis) {
 
-    // Unary vis are always compatble
+    // Unary vis are always compatible
     if (vis.length == 1) {
       return true;
     }
@@ -624,15 +625,14 @@ public class NISuppression {
   /** Returns a string describing each of the antecedents for each suppressor. */
   public String antecedents_for_suppression(List<Invariant> antecedents[]) {
 
-    String sep = Global.lineSep;
-
-    String out = "suppression " + this + sep;
+    StringJoiner out = new StringJoiner(Global.lineSep);
+    out.add("suppression " + this);
     for (int i = 0; i < antecedents.length; i++) {
-      out += "antecedents for suppressor " + i + sep;
+      out.add("antecedents for suppressor " + i);
       for (Invariant inv : antecedents[i]) {
-        out += "    " + inv.format() + (inv.is_false() ? " [false]" : " t") + sep;
+        out.add("    " + inv.format() + (inv.is_false() ? " [false]" : " t"));
       }
     }
-    return out;
+    return out.toString();
   }
 }

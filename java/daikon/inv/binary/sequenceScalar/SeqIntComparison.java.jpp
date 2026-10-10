@@ -425,7 +425,7 @@ public final class SEQINTEQUAL extends SUPERCLASS {
     //           + " and " + sclvar.name());
 
     // Look for the same property over a supersequence of this one.  This
-    // doesn't need to explicitly ignore oher members of the equality set
+    // doesn't need to explicitly ignore other members of the equality set
     // because those members won't have any invariants over them.
     PptTopLevel pptt = ppt.parent;
     for (Iterator<Invariant> inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {

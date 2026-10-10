@@ -1,17 +1,22 @@
-JAVA = java -Xmx3600m -XX:MaxPermSize=768M
-# DAIKON = $(JAVA) daikon.Daikon --no_text_output --show_progress --suppress_redundant
-DAIKON = $(JAVA) daikon.Daikon --no_text_output --show_progress
+JAVA = java -Xmx7g -XX:MaxPermSize=768M
+# DAIKON = ${JAVA} daikon.Daikon --no_text_output --show_progress --suppress_redundant
+DAIKON = ${JAVA} daikon.Daikon --no_text_output --show_progress
 
+.PHONY: all
 all: birthday.inv standalone.inv
 
+.PHONY: clean
 clean:
 	rm -rf birthday.inv standalone.inv daikon-untyped daikon-instrumented daikon-output
 
+.PHONY: test
+test: all
+
 birthday.inv: daikon-output/Birthday.decls daikon-output/test_bday-combined.dtrace
-	$(DAIKON) $^ -o $@
+	${DAIKON} $^ -o $@
 
 standalone.inv: daikon-output/standalone-main.decls daikon-output/standalone-combined.dtrace
-	$(DAIKON) $^ -o $@
+	${DAIKON} $^ -o $@
 
 
 daikon-output/test_bday-combined.dtrace: daikon-instrumented/Birthday.pm test_bday.pl

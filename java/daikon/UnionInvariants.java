@@ -20,7 +20,7 @@ import org.plumelib.util.StringsPlume;
  */
 public final class UnionInvariants {
   private UnionInvariants() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   /** The usage message for this program. */
@@ -43,7 +43,7 @@ public final class UnionInvariants {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    */
   public static void mainHelper(String[] args) throws Exception {
     File inv_file = null;
@@ -89,7 +89,7 @@ public final class UnionInvariants {
             throw new Daikon.UserError("Cannot write to serialization output file " + inv_file);
           }
           break;
-          //
+        //
         case '?':
           break; // getopt() already printed an error
         default:
@@ -150,7 +150,7 @@ public final class UnionInvariants {
   public static void union(PptMap collector, PptMap source) {
     for (PptTopLevel ppt : source.pptIterable()) {
 
-      if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0)) {
+      if ((ppt.numViews() == 0) && ppt.joiner_view.invs.isEmpty()) {
         continue;
       }
 

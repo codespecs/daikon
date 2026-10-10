@@ -3,7 +3,7 @@ package MapQuick.tigerdb;
 import MapQuick2.GeoPoint;
 
 /**
- * TigerRT1 represents a Complete-Chain Basic Data Record. 
+ * TigerRT1 represents a Complete-Chain Basic Data Record.
  *
  *
  * Created: Tue Aug 15 19:06:15 2000
@@ -19,12 +19,12 @@ public class TigerRT1 extends TigerRwTLID {
 
   public  String cfc;
 
-  public String lftZip;        
-  public String rgtZip;        
+  public String lftZip;
+  public String rgtZip;
 
   public String toString() {
-    if (true) 
-      return 
+    if (true)
+      return
 	"TigerRT1< "+from+", "+to+
 	", "+feature+
 	", "+lftRange+", "+rgtRange+
@@ -67,9 +67,9 @@ public class TigerRT1 extends TigerRwTLID {
     // Do not call Feature.intern(), since Feature is short-lived,
     // and doesn't intern well
     feature = new Feature(s.substring(17, 55));
-	
+
     cfc = s.substring(55,58);
-	
+
     lftRange = parseAddrRange(s.substring(58, 69), s.substring(69, 80));
     rgtRange = parseAddrRange(s.substring(80, 91), s.substring(91, 102));
 
@@ -81,7 +81,7 @@ public class TigerRT1 extends TigerRwTLID {
 
   /** Returns the primary name of this, or "" if this does not have
    * a primary name.  Right now the name contains the Primary
-   * Feature PrefixDirection, Name, Type, and SuffixDirection. 
+   * Feature PrefixDirection, Name, Type, and SuffixDirection.
    */
   public String primaryName() { return feature.fullName(); }
 

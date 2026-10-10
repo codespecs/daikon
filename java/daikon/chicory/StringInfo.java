@@ -1,5 +1,6 @@
 package daikon.chicory;
 
+import daikon.plumelib.util.StringsPlume;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
@@ -67,7 +68,7 @@ public class StringInfo extends DaikonVariableInfo {
       if (str == null) {
         buf.add("null");
       } else if (str instanceof String) {
-        buf.add("\"" + encodeString((String) str) + "\"");
+        buf.add("\"" + StringsPlume.escapeJava((String) str) + "\"");
       } else if (str instanceof NonsensicalObject || str instanceof NonsensicalList) {
         buf.add("nonsensical");
       } else {
@@ -104,14 +105,14 @@ public class StringInfo extends DaikonVariableInfo {
     return retString;
   }
 
-  // encodes a string: surrounds in quotes and removes line breaks
+  /**
+   * Encodes a string: surrounds it in quotes and removes line breaks.
+   *
+   * @param stringRef the string to be quoted
+   * @return the quoted string
+   */
   private String getString(String stringRef) {
-    return ("\"" + encodeString(stringRef) + "\"");
-  }
-
-  // removes endlines in string
-  private static String encodeString(String input) {
-    return Runtime.quote(input);
+    return "\"" + StringsPlume.escapeJava(stringRef) + "\"";
   }
 
   /** toString is a function. */

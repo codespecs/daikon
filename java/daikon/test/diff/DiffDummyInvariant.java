@@ -22,7 +22,7 @@ public class DiffDummyInvariant extends Invariant {
   /** A string representation of the formula that this dummy invariant represents. */
   public String formula;
 
-  /** The confidence fro this dummy invariant. */
+  /** The confidence for this dummy invariant. */
   public double confidence;
 
   /** Whether the invariant is worth printing. */
@@ -106,22 +106,22 @@ public class DiffDummyInvariant extends Invariant {
 
   @Override
   public boolean enabled() {
-    throw new Error("do not invoke " + getClass() + ".enabled()");
+    throw new UnsupportedOperationException("do not invoke " + getClass() + ".enabled()");
   }
 
   @Override
   public boolean valid_types(VarInfo[] vis) {
-    throw new Error("do not invoke " + getClass() + ".valid_types()");
+    throw new UnsupportedOperationException("do not invoke " + getClass() + ".valid_types()");
   }
 
   @Override
   protected DiffDummyInvariant instantiate_dyn(PptSlice slice) {
-    throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
+    throw new UnsupportedOperationException("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 
   @Override
   public @Nullable @NonPrototype DiffDummyInvariant merge(
       @Prototype DiffDummyInvariant this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
-    throw new Error("do not merge DiffDummyInvariant");
+    throw new UnsupportedOperationException("do not merge DiffDummyInvariant");
   }
 }

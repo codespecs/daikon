@@ -1,7 +1,10 @@
 package daikon.test.split;
 
-import daikon.*;
-import daikon.split.*;
+import daikon.Daikon;
+import daikon.FileIO;
+import daikon.PptMap;
+import daikon.split.PptSplitter;
+import daikon.split.SplitterFactory;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -225,6 +228,11 @@ public class SplitterFactoryTestUpdater {
     ps.println("  // Because the SplitterFactory sequentially numbers the");
     ps.println("  // java files it produces, changing the order that the setUpTests");
     ps.println("  // commands are run will cause the tests to fail.");
+    ps.println();
+    ps.println("  /** Do not instantiate. */");
+    ps.println("  private SplitterFactoryTest() {");
+    ps.println("    throw new Error(\"Do not instantiate\");");
+    ps.println("  }");
     ps.println();
     ps.println("  private static String targetDir = \"" + targetDir + "\";");
     ps.println();

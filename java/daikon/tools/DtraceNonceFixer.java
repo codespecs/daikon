@@ -22,6 +22,11 @@ import org.plumelib.util.StringsPlume;
  */
 public class DtraceNonceFixer {
 
+  /** Do not instantiate. */
+  private DtraceNonceFixer() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
   /** The system-specific line separator. */
   private static final String lineSep = System.lineSeparator();
 
@@ -43,7 +48,7 @@ public class DtraceNonceFixer {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
    */

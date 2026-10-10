@@ -182,11 +182,11 @@ public class Implication extends Joiner {
   }
 
   /**
-   * Return true if the right side of the implication and some equality combinations of its member
+   * Returns true if the right side of the implication and some equality combinations of its member
    * variables are statically obvious. For example, if a == b, and f(a) is obvious, then so is f(b).
    * We use the someInEquality (or least interesting) method during printing so we only print an
    * invariant if all its variables are interesting, since a single, static, non interesting
-   * occurance means all the equality combinations aren't interesting.
+   * occurrence means all the equality combinations aren't interesting.
    *
    * <p>This must be overridden for Implication because the right side is the invariant of interest.
    * The standard version passes the vis from the slice containing the implication itself (slice 0).
@@ -207,10 +207,10 @@ public class Implication extends Joiner {
   }
 
   /**
-   * Return true if the rightr side of the implication some equality combinations of its member
+   * Returns true if the right side of the implication and some equality combinations of its member
    * variables are dynamically obvious. For example, a == b, and f(a) is obvious, so is f(b). We use
    * the someInEquality (or least interesting) method during printing so we only print an invariant
-   * if all its variables are interesting, since a single, dynamic, non interesting occurance means
+   * if all its variables are interesting, since a single, dynamic, non interesting occurrence means
    * all the equality combinations aren't interesting.
    *
    * <p>This must be overridden for Implication because the right side is the invariant of interest.
@@ -304,7 +304,7 @@ public class Implication extends Joiner {
    * Logs a description of the invariant and the specified msg via the logger as described in {@code
    * daikon.Debug#log(Logger, Class, Ppt, VarInfo[], String)}. Uses the consequent as the logger.
    *
-   * @return whether or not it logged anything
+   * @return true if it logged anything
    */
   @Override
   @FormatMethod
@@ -325,22 +325,22 @@ public class Implication extends Joiner {
 
   @Override
   public boolean enabled(@Prototype Implication this) {
-    throw new Error("do not invoke " + getClass() + ".enabled()");
+    throw new UnsupportedOperationException("do not invoke " + getClass() + ".enabled()");
   }
 
   @Override
   public boolean valid_types(@Prototype Implication this, VarInfo[] vis) {
-    throw new Error("do not invoke " + getClass() + ".valid_types()");
+    throw new UnsupportedOperationException("do not invoke " + getClass() + ".valid_types()");
   }
 
   @Override
   protected @NonPrototype Invariant instantiate_dyn(@Prototype Implication this, PptSlice slice) {
-    throw new Error("do not invoke " + getClass() + ".instantiate_dyn()");
+    throw new UnsupportedOperationException("do not invoke " + getClass() + ".instantiate_dyn()");
   }
 
   @Override
   public @Nullable @NonPrototype Implication merge(
       @Prototype Implication this, List<@NonPrototype Invariant> invs, PptSlice parent_ppt) {
-    throw new Error("do not merge implications");
+    throw new UnsupportedOperationException("do not merge implications");
   }
 }

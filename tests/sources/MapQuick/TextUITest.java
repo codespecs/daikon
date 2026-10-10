@@ -8,8 +8,8 @@ import java6170.test.FilterTest;
 import junit.framework.*;
 
 public class TextUITest extends TestSuite
-{    
-    public TextUITest() 
+{
+    public TextUITest()
     {
         this("Problem Set 6 TextUI Test");
     }
@@ -21,7 +21,7 @@ public class TextUITest extends TestSuite
         addBadComponentTests();
         addCorrectTest();
     }
-    
+
     private static String expectedStart =
         "starting number? starting street? starting zipcode? " +
         "destination number? destination street? destination zipcode? ";
@@ -120,7 +120,7 @@ public class TextUITest extends TestSuite
 
                 private boolean sawExpectedEnd = false;
                 private boolean sawNewline = false;
-                
+
                 protected void assertLineMatch(int lineNum,
                                                String expected,
                                                String actual)
@@ -148,5 +148,3 @@ public class TextUITest extends TestSuite
             };
     }
 }
-
-  

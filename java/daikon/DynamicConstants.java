@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.checkerframework.checker.interning.qual.Interned;
@@ -36,7 +37,7 @@ import org.checkerframework.dataflow.qual.SideEffectFree;
 
 /**
  * Class that implements dynamic constants optimization. This optimization doesn't instantiate
- * invariants over constant variables (i.e., that that have only seen one value). When the variable
+ * invariants over constant variables (i.e., those that have only seen one value). When the variable
  * receives a second value, invariants are instantiated and are given the sample representing the
  * previous constant value. Each DynamicConstants object is associated with a single program point,
  * ppt.
@@ -54,8 +55,8 @@ public class DynamicConstants implements Serializable {
   // daikon.config.Configuration interface.
 
   /**
-   * Whether to use the dynamic constants optimization. This optimization doesn't instantiate
-   * invariants over constant variables (i.e., that that have only seen one value). When the
+   * If true, use the dynamic constants optimization. This optimization doesn't instantiate
+   * invariants over constant variables (i.e., those that have only seen one value). When the
    * variable receives a second value, invariants are instantiated and are given the sample
    * representing the previous constant value.
    */
@@ -137,26 +138,26 @@ public class DynamicConstants implements Serializable {
     public int count = 0;
 
     /** The variable that has this value. */
-    public VarInfo vi;
+    public final VarInfo vi;
 
-    /** Whether or not this has been missing for every sample to date. */
+    /** True if this has been missing for every sample to date. */
     boolean always_missing = true;
 
-    /** Whether or not this is constant. */
+    /** True if this is constant. */
     boolean constant = false;
 
     /**
-     * Whether or not this was constant at the beginning of this sample. At the beginning of the
-     * add() method, all newly non-constant variables are marked (constant=false). It is sometimes
-     * useful within the remainder of processing that sample to know that a variable was constant at
-     * the beginning. The field previously_constant is set to true when constant is set to false,
-     * and then is itself set to false at the end of the add() method.
+     * True if this was constant at the beginning of this sample. At the beginning of the add()
+     * method, all newly non-constant variables are marked (constant=false). It is sometimes useful
+     * within the remainder of processing that sample to know that a variable was constant at the
+     * beginning. The field previously_constant is set to true when constant is set to false, and
+     * then is itself set to false at the end of the add() method.
      */
     boolean previously_constant = false;
 
     /**
-     * Whether or not this was always missing at the beginning of this sample. At the beginning of
-     * the add() method, all newly non missing variables are marked (always_missing=false). It is
+     * True if this was always missing at the beginning of this sample. At the beginning of the
+     * add() method, all newly non missing variables are marked (always_missing=false). It is
      * sometimes useful within the remainder of processing that sample to know that a variable was
      * missing at the beginning. The field previous_missing set to true when missing is set to
      * false, and then is itself set to false at the end of the add() method.
@@ -190,7 +191,7 @@ public class DynamicConstants implements Serializable {
     }
 
     /**
-     * Returns whether the specified variable is currently a constant OR was a constant at the
+     * Returns true if the specified variable is currently a constant OR was a constant at the
      * beginning of constants processing.
      */
     @Pure
@@ -406,7 +407,7 @@ public class DynamicConstants implements Serializable {
     }
   }
 
-  /** Returns whether the specified variable is missing in this ValueTuple. */
+  /** Returns true if the specified variable is missing in this ValueTuple. */
   private boolean missing(VarInfo vi, ValueTuple vt) {
 
     int mod = vt.getModified(vi);
@@ -422,7 +423,7 @@ public class DynamicConstants implements Serializable {
     return result;
   }
 
-  /** Returns whether the specified variable is currently a constant. */
+  /** Returns true if the specified variable is currently a constant. */
   @Pure
   public boolean is_constant(VarInfo vi) {
 
@@ -430,7 +431,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * Returns whether the specified variable is currently a constant OR was a constant at the
+   * Returns true if the specified variable is currently a constant OR was a constant at the
    * beginning of constants processing.
    */
   @Pure
@@ -450,7 +451,7 @@ public class DynamicConstants implements Serializable {
     return result;
   }
 
-  /** Returns whether the specified variable missing for all values so far. */
+  /** Returns true if the specified variable missing for all values so far. */
   @Pure
   public boolean is_missing(VarInfo vi) {
 
@@ -458,7 +459,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /**
-   * Returns whether the specified variable is currently missing OR was missing at the beginning of
+   * Returns true if the specified variable is currently missing OR was missing at the beginning of
    * constants processing.
    */
   @Pure
@@ -517,7 +518,7 @@ public class DynamicConstants implements Serializable {
     // the remaining constants and the newly-non constants.  Any slices
     // between the non-constants and other variables will have already
     // been created when those other variables became non-constants.
-    if (noncons.size() > 0) {
+    if (!noncons.isEmpty()) {
       List<Constant> cons = new ArrayList<>();
       cons.addAll(con_list);
       cons.addAll(noncons);
@@ -528,7 +529,7 @@ public class DynamicConstants implements Serializable {
     // Create all views over the newly non-missing.  Since missing
     // vars were not included in any previous views, we must match them
     // against all variables.
-    if (non_missing.size() > 0) {
+    if (!non_missing.isEmpty()) {
       debug.fine("Instantiating non missing in ppt: " + ppt.name());
       instantiate_views(non_missing, all_list);
     }
@@ -692,14 +693,14 @@ public class DynamicConstants implements Serializable {
           if (!inv.is_false()) {
             true_inv_cnt[slice.arity()]++;
           } else {
-            String vals = "";
+            StringJoiner vals = new StringJoiner(" ");
             for (VarInfo vi : slice.var_infos) {
-              vals += vi.name() + "=" + Debug.toString(constant_value(vi)) + " ";
+              vals.add(vi.name() + "=" + Debug.toString(constant_value(vi)));
             }
             inv.log("Invariant %s destroyed by constant values %s", inv.format(), vals);
           }
         }
-        if (slice.invs.size() > 0) {
+        if (!slice.invs.isEmpty()) {
           slice_cnt[slice.arity()]++;
         }
         inv_cnt[slice.arity()] += slice.invs.size();
@@ -754,7 +755,8 @@ public class DynamicConstants implements Serializable {
               + "): "
               + leader2_cnt
               + " leader2 ints ("
-              + leader2_str);
+              + leader2_str
+              + ")");
     }
 
     // Remove any falsified invariants from the new views.  Don't
@@ -1096,7 +1098,7 @@ public class DynamicConstants implements Serializable {
         assert con.val != null : "@AssumeAssertion(nullness): dependent: val when count>0";
         slice1.add_val_bu(con.val, mod, con.count);
       }
-      if (slice1.invs.size() > 0) {
+      if (!slice1.invs.isEmpty()) {
         new_views.add(slice1);
       }
     }
@@ -1124,7 +1126,7 @@ public class DynamicConstants implements Serializable {
               : "@AssumeAssertion(nullness): dependent: val != null when count>0";
           slice2.add_val_bu(con1.val, con2.val, mod, mod, con1.count);
         }
-        if (slice2.invs.size() > 0) {
+        if (!slice2.invs.isEmpty()) {
           new_views.add(slice2);
         }
       }

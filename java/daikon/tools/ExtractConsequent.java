@@ -44,6 +44,11 @@ import org.plumelib.util.StringsPlume;
  */
 public class ExtractConsequent {
 
+  /** Do not instantiate. */
+  private ExtractConsequent() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
   public static final Logger debug = Logger.getLogger("daikon.ExtractConsequent");
   private static final String lineSep = Global.lineSep;
 
@@ -99,7 +104,7 @@ public class ExtractConsequent {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    *
    * @param args command-line arguments, like those of {@link #main}
    * @throws IOException if there is trouble reading the file
@@ -233,7 +238,7 @@ public class ExtractConsequent {
         }
       }
 
-      if (allConds.size() > 0) {
+      if (!allConds.isEmpty()) {
         pw.println();
         pw.println("PPT_NAME " + pptname);
         for (String s : allConds) {
@@ -258,14 +263,20 @@ public class ExtractConsequent {
   }
 
   /**
-   * Extract consequents from a implications at a single program point. It only searches for
+   * Extract consequents from all implications at a single program point. It only searches for
    * top-level program points because Implications are produced only at those points.
    */
   public static void extract_consequent_maybe(PptTopLevel ppt, PptMap all_ppts) {
     ppt.simplify_variable_names();
 
     List<Invariant> invs = new ArrayList<>();
-    if (invs.size() > 0) {
+    // Collect Implication invariants at this program point.
+    for (Invariant inv : ppt.invariants_vector()) {
+      if (inv instanceof Implication) {
+        invs.add(inv);
+      }
+    }
+    if (!invs.isEmpty()) {
       String pptname = cleanup_pptname(ppt.name());
       for (Invariant maybe_as_inv : invs) {
         Implication maybe = (Implication) maybe_as_inv;
@@ -290,15 +301,17 @@ public class ExtractConsequent {
           for (int i = 0; i < maybe.ppt.var_infos.length; i++) {
             VarInfo vi = maybe.ppt.var_infos[i];
             if (vi.isDerivedParam()) {
-              continue;
+              // continue;
             }
           }
         }
 
         Invariant consequent = maybe.consequent();
         Invariant predicate = maybe.predicate();
-        Invariant inv, cluster_inv;
-        boolean cons_uses_cluster = false, pred_uses_cluster = false;
+        Invariant inv;
+        Invariant cluster_inv;
+        boolean cons_uses_cluster = false;
+        boolean pred_uses_cluster = false;
         // extract the consequent (predicate) if the predicate
         // (consequent) uses the variable "cluster".  Ignore if they
         // both depend on "cluster"
@@ -414,11 +427,16 @@ public class ExtractConsequent {
     return false;
   }
 
-  // remove non-word characters and everything after ":::" from the
-  // program point name, leaving PackageName.ClassName.MethodName
+  /**
+   * Remove non-word characters and everything after "(" (which includes everything after ":::")
+   * from the program point name, leaving "PackageName.ClassName.MethodName".
+   *
+   * @param pptname a program point name
+   * @return the argument, without non-word characters and without parens or ":::" suffix
+   */
   private static String cleanup_pptname(String pptname) {
     int index;
-    if ((index = pptname.indexOf("(")) > 0) {
+    if ((index = pptname.indexOf('(')) > 0) {
       pptname = pptname.substring(0, index);
     }
 
@@ -431,11 +449,11 @@ public class ExtractConsequent {
   }
 
   /**
-   * Prevents the occurence of "equivalent" inequalities, or inequalities which produce the same
+   * Prevents the occurrence of "equivalent" inequalities, or inequalities which produce the same
    * pair of splits at a program point, for example "x &le; y" and "x &gt; y". Replaces "&ge;" with
-   * "&lt;", "&le;" with "&gt;", and "!=" with "==" so that the occurence of equivalent inequalities
-   * can be detected. However it tries not to be smart ... If there is more than one inequality in
-   * the expression, it doesn't perform a substitution.
+   * "&lt;", "&le;" with "&gt;", and "!=" with "==" so that the occurrence of equivalent
+   * inequalities can be detected. However it tries not to be smart ... If there is more than one
+   * inequality in the expression, it doesn't perform a substitution.
    *
    * @param condition a boolean equation
    * @return the condition, with some equalities canonicalized
@@ -461,9 +479,16 @@ public class ExtractConsequent {
     return m.find() && !m.find();
   }
 
-  static Pattern orig_pattern, dot_class_pattern, non_word_pattern;
-  static Pattern gteq_pattern, lteq_pattern, neq_pattern, inequality_pattern;
-  static Pattern contradict_inv_pattern, useless_inv_pattern_1, useless_inv_pattern_2;
+  static Pattern orig_pattern;
+  static Pattern dot_class_pattern;
+  static Pattern non_word_pattern;
+  static Pattern gteq_pattern;
+  static Pattern lteq_pattern;
+  static Pattern neq_pattern;
+  static Pattern inequality_pattern;
+  static Pattern contradict_inv_pattern;
+  static Pattern useless_inv_pattern_1;
+  static Pattern useless_inv_pattern_2;
 
   static {
     try {

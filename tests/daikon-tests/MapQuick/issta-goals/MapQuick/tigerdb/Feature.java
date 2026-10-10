@@ -19,19 +19,19 @@ public class Feature implements Serializable {
   public final String name;
   public final String type;
   public final String suffixDir;
-    
-  public Feature(String prefixDir, String name, 
+
+  public Feature(String prefixDir, String name,
 		 String type, String suffixDir) {
     this.prefixDir = prefixDir.trim().intern();
     this.name = name.trim().intern();
     this.type = type.trim().intern();
     this.suffixDir = suffixDir.trim().intern();
-	
+
     // fullNames.add( fullName().intern() );
   }
 
   public Feature(String s) {
-    if (s.length() != 38) 
+    if (s.length() != 38)
       throw new RuntimeException
 	("feature must have length of 38, not "+s.length());
     prefixDir = s.substring( 0,  2).trim().intern();
@@ -49,7 +49,7 @@ public class Feature implements Serializable {
   public int hashCode() {
     return fullName().hashCode();
   }
-  public String fullName() { 
+  public String fullName() {
     StringBuffer sb = new StringBuffer();
     boolean pre = false;
     if (prefixDir.length() > 0) {
@@ -62,7 +62,7 @@ public class Feature implements Serializable {
     }
     if (type.length() > 0) {
       sb.append((pre)?" ":"");
-      sb.append(type); 
+      sb.append(type);
       pre = true;
     }
     if (suffixDir.length() > 0) {
@@ -75,7 +75,7 @@ public class Feature implements Serializable {
     }
     return sb.toString();
   }
-    
+
   private static HashMap internMap = new HashMap();
   public Feature intern() {
     if (internMap.keySet().contains(this)) {
@@ -85,7 +85,7 @@ public class Feature implements Serializable {
       return this;
     }
   }
-    
+
   /** Returns an Iterator[String] of names for this feature. */
   Iterator names() {
     ArrayList l = new ArrayList();
@@ -101,5 +101,5 @@ public class Feature implements Serializable {
   public String toString() {
     return "Feature:"+fullName();
   }
-    
+
 } // Feature

@@ -42,13 +42,13 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.8.21
+@center Daikon version 5.9.1
 
 @sp 1
 
 @c The following comment is needed to help perl edit the release date.
-@c Print out the Daikon version 5.8.21 release date
-@center May 14, 2024
+@c Print out the Daikon version 5.9.1 release date
+@center September 1, 2026
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -85,7 +85,7 @@ Copyright @copyright{} 1998-2025
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.8.21, released May 14, 2024.
+It describes Daikon version 5.9.1, released September 1, 2026.
 
 @menu
 * Introduction::
@@ -157,9 +157,9 @@ This chapter describes how to customize or modify Daikon.
 
 @cindex compiling Daikon
 
-To compile Daikon, type @command{make} in @file{$DAIKONDIR/java/} or any of its
-subdirectories.  Alternately, type @command{make -C $DAIKONDIR compile}.
-To create the @file{daikon.jar} file, type @command{make -C $DAIKONDIR daikon.jar}.
+To compile Daikon, type @command{make} in @file{$@{DAIKONDIR@}/java/} or any of its
+subdirectories.  Alternately, type @command{make -C $@{DAIKONDIR@} compile}.
+To create the @file{daikon.jar} file, type @command{make -C $@{DAIKONDIR@} daikon.jar}.
 
 The distribution includes @file{daikon.jar} and compiled @file{.class} files,
 so you do not need to compile them yourself unless you make changes.
@@ -174,14 +174,17 @@ For more information about compiling Daikon, see the comments in the Makefiles.
 @node    Requirements for compiling Daikon
 @subsection Requirements for compiling Daikon
 
+Note that Daikon can both execute on and process programs built on systems
+with a Java 8 JDK. However, if you wish to compile Daikon you must use Java 11 (or later).
+
 Before compiling Daikon, you need to install some dependencies (that is,
 software used to build Daikon).  For
-@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-rockylinux-jdk17-plus,
+@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-rockylinux-jdk21-plus,
 ,Rocky Linux} and
-@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-ubuntu-jdk17-plus,
+@uref{https://github.com/codespecs/daikon/blob/master/scripts/Dockerfile-ubuntu-jdk21-plus,
 , Ubuntu}, you can
 find the commands to install these dependencies in file
-@file{$DAIKONDIR/scripts/Dockerfile-@emph{OSNAME}-jdk@emph{N}-plus}.
+@file{$@{DAIKONDIR@}/scripts/Dockerfile-@emph{OSNAME}-jdk@emph{N}-plus}.
 For other operating systems, use similar commands.
 
 Note that Kvasir, the Daikon front end for the C language
@@ -345,9 +348,9 @@ of invariant detection.  For instance, if there exists an array
 variable @samp{a[i]}.  This permits detection of invariants over this
 quantity.
 
-(Describing how to create new variety of derived variable is still to
+(Describing how to create a new variety of derived variable is still to
 be written.  For now, see the derived variables that appear in the Java
-files in directory @file{$DAIKONDIR/java/daikon/derive/}.)
+files in directory @file{$@{DAIKONDIR@}/java/daikon/derive/}.)
 
 
 @node    New formatting for invariants
@@ -513,7 +516,7 @@ class Example @{
 instrumentation into the Java source code of your program.  Rather, it
 instruments the bytecode as it is loaded into the JVM.  This is more
 efficient, and it avoids making any changes to your @file{.java} or
-@file{.class} files.  We have shown an example of  Java source code
+@file{.class} files.  We have shown an example of Java source code
 instrumentation because that is  simpler to explain and understand than
 the bytecode instrumentation.)
 
@@ -527,7 +530,7 @@ the bytecode instrumentation.)
 Daikon comes with a front end for the C language:  Kvasir
 (@pxref{Kvasir,,,daikon,Daikon User Manual}).
 Kvasir only works under the Linux operating system, and it works only on
-``x86'' (Intel 386, 486, 586, 686 compatible) and ``x86-64'' (AMD64, EM64T
+``x86-64'' (AMD64, EM64T
 compatible) processors.
 
 You may wish to infer invariants over C programs running on other
@@ -1041,7 +1044,7 @@ non-printing.
 the invariant's truth value is statically obvious (from the semantics
 of the programming language), no matter what values may be seen at run
 time.  Two examples are @samp{A[i] is an element of A[]} and @samp{size(A[])
->= 0}.  Non-instantiation is implemented by the by the
+>= 0}.  Non-instantiation is implemented by the
 @code{isObviousStatically} method.
 With the equality sets optimization (@pxref{Equality optimization}),
 non-instantiation can only happen if all equality permutations are
@@ -1061,7 +1064,7 @@ Suppression also cannot use relationships between variables.  For
 example, it cannot suppress @samp{x[i] = y[j]} by @samp{(x[] = y[]) ^ (i =
 j)}.  Suppressor invariants can only use variables that are also in the
 invariant that is being suppressed.  In this example, only invariants
-using the variables @samp{x[i]} and @samp{y[i]} can be used as a suppressors.
+using the variables @samp{x[i]} and @samp{y[i]} can be used as suppressors.
 See @ref{New suppressors} for more information.
 
 @dfn{Non-printing} is a post-pass that throws out any invariants that
@@ -1230,7 +1233,7 @@ repository)}), within the @file{tests} subdirectory.
 The unit tests are found in @file{daikon/java/daikon/test/}; they use
 the @samp{JUnit} unit testing framework.  They take a few seconds to run.  They
 are automatically run each time you compile Daikon (by running
-@command{make} in @file{$DAIKONDIR/java} or any of its subdirectories).  You can
+@command{make} in @file{$@{DAIKONDIR@}/java} or any of its subdirectories).  You can
 also run them explicitly via @command{make unit}.  When you write new code
 or modify old code, please try to add unit tests.
 
@@ -1279,7 +1282,7 @@ A type string must consist of one or more of the following literals:
 @samp{int}, @samp{double}, @samp{string}, @samp{int_array},
 @samp{double_array}, or @samp{string_array}, separated by spaces.
 This string represents the
-types that an invariant is supposed to compare For instance, a binary
+types that an invariant is supposed to compare.  For instance, a binary
 integer comparison would have type string @samp{int int}.  A pairwise
 sequence comparison would have type string @samp{int_array int_array}.
 
@@ -1379,7 +1382,7 @@ except to generate goal files.
 
 Furthermore, this framework cannot parse complex types from files
 unless they contain a @code{public Object valueOf(String s)}
-function. Otherwise the program has no was of knowing how to create
+function. Otherwise the program has no way of knowing how to create
 such an object from a string. All primitives and the String type are
 already recognized.
 
@@ -1459,7 +1462,7 @@ More assertions can easily be added to @file{SampleTester.java} as required.
 @node          Example file
 @subsubsection Example file
 
-The following is an simple example of sample testing.
+The following is a simple example of sample testing.
 @example
 decl: daikon/test/SampleTesters.decls
 
@@ -1480,7 +1483,7 @@ ppt: foo.f():::EXIT35
 The regression tests run Daikon on many different inputs and compare
 Daikon's output to expected output.  They take about an hour to run.
 
-The regression tests appear in the @file{$DAIKONDIR/tests/} directory.  Type
+The regression tests appear in the @file{$@{DAIKONDIR@}/tests/} directory.  Type
 @command{make} in that directory to see a list of Makefile targets.  The
 most common target is @command{make diffs}; if any output file has
 non-zero size, the tests fail.  You do not generally need to do
@@ -1491,21 +1494,21 @@ As when you install or compile Daikon, when you run the tests
 environment variable @env{DAIKONDIR}
 should be set.
 
-You should generally run the regression tests before checking it a
+You should generally run the regression tests before checking in a
 change (especially any non-trivial change).  If any of the regression
 test diffs has a non-zero size, then your edits have changed Daikon's
 output and you should not check in without carefully determining that
 the changes are intentional and desirable (in which case you should update the
 goal output files, so that the diffs are again zero).
 
-There are several subdirectories under @file{$DAIKONDIR/tests/}, testing
+There are several subdirectories under @file{$@{DAIKONDIR@}/tests/}, testing
 different components of the Daikon distribution (such as Kvasir,
 @pxref{Kvasir,,,daikon,Daikon User Manual}).  Tests of the
 invariant detection engine itself appear in
-@file{$DAIKONDIR/tests/daikon-tests/}.
+@file{$@{DAIKONDIR@}/tests/daikon-tests/}.
 
-Each Makefile under @file{$DAIKONDIR/tests} includes
-@file{$DAIKONDIR/tests/Makefile.common}, which contains the logic for all of
+Each Makefile under @file{$@{DAIKONDIR@}/tests} includes
+@file{$@{DAIKONDIR@}/tests/Makefile.common}, which contains the logic for all of
 the tests.  @file{Makefile.common} is somewhat complicated, if only
 because it controls so many types of tests.
 
@@ -1521,9 +1524,9 @@ because it controls so many types of tests.
 
 
 The Kvasir (Daikon C front-end) tests appear in the
-@file{$DAIKONDIR/tests/kvasir-tests} directory. These tests run Daikon to ensure
+@file{$@{DAIKONDIR@}/tests/kvasir-tests} directory. These tests run Daikon to ensure
 that the Kvasir output is valid Daikon input. To run them, go to
-@file{$DAIKONDIR/tests/kvasir-tests} or of its sub-directories and run
+@file{$@{DAIKONDIR@}/tests/kvasir-tests} or one of its sub-directories and run
 @command{make summary-w-daikon}. If any tests return @samp{FAILED}, then
 you should look at the appropriate @file{.diff} file. If you feel that the
 failure was actually a result of your Daikon changes and should be in fact
@@ -1539,10 +1542,10 @@ correct output, then run @command{make update-inv-goals} to update the Daikon
 @cindex new regression tests
 
 Most Daikon regression tests are in subdirectories of
-@file{$DAIKONDIR/tests/daikon-tests/}.
-(There is also a @file{$DAIKONDIR/tests/chicory-tests/} directory,
+@file{$@{DAIKONDIR@}/tests/daikon-tests/}.
+(There is also a @file{$@{DAIKONDIR@}/tests/chicory-tests/} directory,
 but it is usually better to put tests in
-@file{$DAIKONDIR/tests/daikon-tests/}, even if they are exercising
+@file{$@{DAIKONDIR@}/tests/daikon-tests/}, even if they are exercising
 Chicory-specific behavior.)
 
 To create a new test, perform the following steps.
@@ -1550,16 +1553,16 @@ To create a new test, perform the following steps.
 @enumerate
 @item
 Create a new subdirectory of
-@file{$DAIKONDIR/tests/daikon-tests/}.
+@file{$@{DAIKONDIR@}/tests/daikon-tests/}.
 
 @item
-Put the source files for the test under @file{$DAIKONDIR/tests/sources/},
+Put the source files for the test under @file{$@{DAIKONDIR@}/tests/sources/},
 not in the test directory itself.  Your test may be able to re-use existing
 Java source code that appears in that directory.
 
 @item
 It is expedient to copy a Makefile from another subdirectory, such as
-@file{$DAIKONDIR/tests/@/daikon-tests/@/StackAr/}, then modify it.
+@file{$@{DAIKONDIR@}/tests/@/daikon-tests/@/StackAr/}, then modify it.
 
 The @file{Makefile} must contain at least the following entries.
 
@@ -1593,7 +1596,7 @@ instrument-files-revise:
 
 If you run @command{make} (without a target), you will see a description of
 all of the Makefile's functionality.  Most of that is inherited from
-@file{$DAIKONDIR/tests/Makefile.common}.
+@file{$@{DAIKONDIR@}/tests/Makefile.common}.
 
 @item
 The @file{.goal} files are the expected results of running Daikon and its
@@ -1627,12 +1630,12 @@ to the repository.
 @item
 Make the new test be run by adding to the appropriate list (usually
 @samp{everything} or @samp{quick}) in
-@file{$DAIKONDIR/tests/daikon-tests/Makefile}.
+@file{$@{DAIKONDIR@}/tests/daikon-tests/Makefile}.
 
 @end enumerate
 
 For more information, see the comments in file
-@file{$DAIKONDIR/tests/Makefile.common}.
+@file{$@{DAIKONDIR@}/tests/Makefile.common}.
 
 @node    Editing
 @chapter Editing Daikon source code
@@ -1664,9 +1667,9 @@ and also
 
 Just run the command @command{eclipse} at the command shell.
 
-There is one big catch:  take note of where you launch Eclipse and
+There is one big catch: take note of where you launch Eclipse and
 @b{always} launch Eclipse from the same location. For example, you might
-want to alias run-eclipse with @command{cd $HOME; eclipse}.
+want to alias @command{run-eclipse} to @command{cd; eclipse}.
 For convenience, this is already done for you if you source the
 @file{daikon-dev.bashrc} startup script.
 There are ways around the launch location inconvenience, such as
@@ -1697,16 +1700,16 @@ Window >> Preferences >> Java >> Compiler >> Style >> Non-static access >> >> Ig
 @node          Import existing project
 @subsubsection Import an existing project
 
-@c First, do @command{cp $DAIKONDIR/java/.classpath-pag $DAIKONDIR/java/.classpath}
+@c First, do @command{cp $@{DAIKONDIR@}/java/.classpath-pag $@{DAIKONDIR@}/java/.classpath}
 
 Second, import Daikon into Eclipse.  To import:  start Eclipse, then choose
 menu item @samp{File->Import->ExistingProjectIntoWorkspace}, then enter (the full
-name of) directory @file{$DAIKONDIR/java} for Project Contents.
+name of) directory @file{$@{DAIKONDIR@}/java} for Project Contents.
 
 Those two steps are all there is to it!
 
 (This simple procedure works because there are already
-@file{.project} and @file{.classpath} files in @file{$DAIKONDIR/java}.
+@file{.project} and @file{.classpath} files in @file{$@{DAIKONDIR@}/java}.
 To import a project that doesn't have these files, you would need to create
 them (for instance, copy them from Daikon's), or else follow a different
 procedure to work on your project in Eclipse.)
@@ -1751,7 +1754,7 @@ Select the menu item File->Import
 @item
 On the next popup window, select @samp{File System} and click
 Next. Browse to the folder containing your source code.  Using the
-standard @samp{PAG} setup, the folder should be @file{$DAIKONDIR/java}. The import
+standard @samp{PAG} setup, the folder should be @file{$@{DAIKONDIR@}/java}. The import
 destination should be @file{Daikon/src}.  Check the boxes for including
 Daikon, @samp{jtb}, and plume.
 
@@ -1767,7 +1770,7 @@ Note that if you follow these directions, then
 which you imported in the previous step}.
 Instead, the compiled classes appear in the Eclipse workspace
 directory. If you followed the setup instructions above, then the
-compiled code will be in "$HOME/.eclipse/Daikon/bin", which you
+compiled code will be in "$@{HOME@}/.eclipse/Daikon/bin", which you
 should add to your classpath in order to use the updates you make from
 Eclipse.
 
@@ -1961,12 +1964,12 @@ Environment variable @env{DAIKONDIR} must be set to a clone of
 @item
 A clone of
 @uref{https://github.com/codespecs/fjalar} must be a sibling of
-@file{$DAIKONDIR}.
+@file{$@{DAIKONDIR@}}.
 
 @c If it's created automatically, there is no need to mention it as a requirement.
 @c @item
 @c There must be a symbolic link from
-@c @file{$DAIKONDIR/fjalar} to @file{$DAIKONDIR/../fjalar}.
+@c @file{$@{DAIKONDIR@}/fjalar} to @file{$@{DAIKONDIR@}/../fjalar}.
 @c If it does not already exist, the @command{rebuild-everything} step below
 @c will create it for you.
 
@@ -1981,13 +1984,9 @@ A clone of
 
 @item
 Environment variable @env{JAVA_HOME} must be set to the appropriate JDK installation.
-For now, this should be a current version of JDK 8. If the default JDK on your
-system is not JDK 8, you will also need to add @file{$JAVA_HOME/bin} to your @env{PATH}.
+For now, this should be a current version of JDK 11. If the default JDK on your
+system is not JDK 11, you will also need to add @file{$@{JAVA_HOME@}/bin} to your @env{PATH}.
 See the example in the next section.
-@c This is necessary as daikon/java/Makefile will set JAVA_HOME to the machine's default
-@c JDK if it is not currently set. Currently, the machine default is often JDK 11 and we
-@c want to build with JDK 8.
-@c Example:  export JAVA_HOME=/usr/lib/jvm/java-1.8.0
 
 @item
 Optionally, set environment variable @env{BIBDIR} to a clone of
@@ -2004,15 +2003,15 @@ Optionally, set environment variable @env{BIBDIR} to a clone of
 @need 1000
 Get a fresh copy of your Bash shell (e.g., log out and log back in), then
 run the following bash commands.  Note that your system may no longer have
-JDK 8 installed at @file{/usr/lib/jvm-1.8.0}. If you do not have a local
-copy, one can be found at @file{/homes/gws/markro/jdk1.8.0_401}.
+JDK 11 installed. If you do not have a local
+copy, one can be found at @file{/homes/gws/markro/jdk-11.0.22}.
 In any case, adjust environment variables below as necessary.
 @c DAIKONDIR is necessary only for the instructions in this file.
 @c Maybe use a different environment variable?
 @example
 export DAIKONDIR=$inv/daikon
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0
-export PATH=$JAVA_HOME/bin:$PATH
+export JAVA_HOME=/usr/lib/jvm/java-11
+export PATH=$@{JAVA_HOME@}/bin:$@{PATH@}
 unset CHECKERFRAMEWORK
 @end example
 
@@ -2025,8 +2024,8 @@ Update the Daikon source files to their most recent version.
 
 @smallexample
 set -o pipefail
-(cd $DAIKONDIR && git pull && git log --branches --not --remotes && git status)
-(cd $DAIKONDIR/../fjalar && git pull && git log --branches --not --remotes && git status)
+(cd $@{DAIKONDIR@} && git pull && git log --branches --not --remotes && git status)
+(cd $@{DAIKONDIR@}/../fjalar && git pull && git log --branches --not --remotes && git status)
 @end smallexample
 
 @noindent
@@ -2052,7 +2051,7 @@ The home page for the GNU Binutils
 
 File
 @uref{https://raw.githubusercontent.com/codespecs/fjalar/master/valgrind/REVISION,
-, @file{$DAIKONDIR/fjalar/valgrind/REVISION}} indicates the version of
+, @file{$@{DAIKONDIR@}/fjalar/valgrind/REVISION}} indicates the version of
 these tools that Kvasir uses.
 You can determine whether a newer version of these tools is available
 by comparing the @file{REVISION} file to
@@ -2081,19 +2080,21 @@ the Texinfo source files in the @file{doc/} directory against the previous
 versions:
 
 @smallexample
-cd $DAIKONDIR/doc
+if [ -z "$@{DAIKONDIR@}" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
+cd $@{DAIKONDIR@}/doc && \
 diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
 @end smallexample
 
 @need 1000
-Another good source of information are the repository logs since the
+Another good source of information is the repository logs since the
 last release:
 
 @smallexample
-cd $DAIKONDIR
+if [ -z "$@{DAIKONDIR@}" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
 DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
-git log v$DAIKONVERSION..HEAD
+    -O - | xargs echo -n` && \
+cd $@{DAIKONDIR@} && \
+git log v$@{DAIKONVERSION@}..HEAD
 @end smallexample
 
 @c TODO: How can this be done for Git?
@@ -2108,13 +2109,14 @@ git log v$DAIKONVERSION..HEAD
 In addition, you should run the same command in your Fjalar clone:
 
 @smallexample
-cd $DAIKONDIR/fjalar
+if [ -z "$@{DAIKONDIR@}" ] && [ -d "front-end/" ] ; then DAIKONDIR=$(pwd) ; fi
 DAIKONVERSION=`wget -q http://plse.cs.washington.edu/daikon/download/doc/VERSION \
-    -O - | xargs echo -n`
-git log v$DAIKONVERSION..HEAD
+    -O - | xargs echo -n` && \
+@{ cd $@{DAIKONDIR@}/fjalar || cd $@{DAIKONDIR@}/../fjalar ; @} && \
+git log v$@{DAIKONVERSION@}..HEAD
 @end smallexample
 
-When you have competed your updates, commit and push the changes.
+When you have completed your updates, commit and push the changes.
 
 [Time: a few minutes]
 
@@ -2124,7 +2126,7 @@ When you have competed your updates, commit and push the changes.
 Check the release documents for spelling errors.
 
 @example
-cd $DAIKONDIR/doc
+cd $@{DAIKONDIR@}/doc
 make spell-check
 @end example
 
@@ -2208,7 +2210,7 @@ overnight.
 Do a very clean rebuild of everything.
 
 @example
-cd $DAIKONDIR && make very-clean clean-kvasir && make rebuild-everything
+cd $@{DAIKONDIR@} && make very-clean clean-kvasir && make rebuild-everything
 @end example
 
 @c Time on buffalo as of 12/16/2015
@@ -2253,7 +2255,7 @@ Set the version number to an even number.
 You may:
 @itemize
 @item
-Manually edit file @file{$DAIKONDIR/doc/VERSION}, or
+Manually edit file @file{$@{DAIKONDIR@}/doc/VERSION}, or
 @item
 If the revision number just needs to be incremented
 by 1 (to go from odd to even) you may use:
@@ -2263,7 +2265,7 @@ make update-dist-version-file
 @end itemize
 
 Note that if a new feature has been added, or if some change has made
-the current version incompatible from the previous release (such as a
+the current version incompatible with the previous release (such as a
 change in the dtrace file format or revised names for tool options),
 then you should manually edit the VERSION file to increment the minor
 version number and reset the revision number to zero.
@@ -2277,7 +2279,10 @@ export TODAY='November 1, 2013'
 
 @need 1000
 Now, update the appropriate files with the date and version number
-of the release and commit these changes back to the repository:
+of the release and commit these changes back to the repository: @*
+(WARNING: This step uses a tool that is no longer supported on JDK 11.
+You must switch to a different bash shell running at least JDK 17 for
+this step only. Switch back to your original bash shell afterwards.)
 
 @example
 make update-run-google-java-format && make update-and-commit-version
@@ -2307,14 +2312,14 @@ build everything to be distributed and copy it to the temporary staging area
 @example
 # First, start a separate, new Bash command shell.  Don't kill your old one.
 
-rm -rf /tmp/$USER/stage-daikon
-mkdir -p /tmp/$USER/stage-daikon
-cd /tmp/$USER/stage-daikon
+rm -rf /tmp/$@{USER@}/stage-daikon
+mkdir -p /tmp/$@{USER@}/stage-daikon
+cd /tmp/$@{USER@}/stage-daikon
 git clone --depth=1 https://github.com/codespecs/daikon
 cd daikon
 export DAIKONDIR=`pwd`
-export JAVA_HOME=/usr/lib/jvm/java-1.8.0
-export PATH=$JAVA_HOME/bin:$PATH
+export JAVA_HOME=/usr/lib/jvm/java-11
+export PATH=$@{JAVA_HOME@}/bin:$@{PATH@}
 unset CHECKERFRAMEWORK
 make compile && make staging
 @end example
@@ -2377,8 +2382,8 @@ not in the drop directories. This means:
 Switch back to your original Bash shell.
 @item
 Correct the file. (Most likely located beneath either
-@file{$DAIKONDIR/doc} or
-@file{$BIBDIR} (@file{~/bib/} if @file{$BIBDIR} is not set).)
+@file{$@{DAIKONDIR@}/doc} or
+@file{$@{BIBDIR@}} (@file{~/bib/} if @file{$@{BIBDIR@}} is not set).)
 @item
 Commit the changes.
 @item
@@ -2462,7 +2467,7 @@ Update the website by deleting the current release
 and then making the staged version the (new) current release.
 
 @example
-cd $DAIKONDIR
+cd $@{DAIKONDIR@}
 make staging-to-www
 @end example
 
@@ -2474,12 +2479,12 @@ make staging-to-www
 Add a version label to the repository:
 
 @example
-cd $DAIKONDIR
-DAIKONVERSION=`cat $DAIKONDIR/doc/VERSION | xargs echo -n`
-git tag -a v$DAIKONVERSION -m $DAIKONVERSION
+cd $@{DAIKONDIR@}
+DAIKONVERSION=`cat $@{DAIKONDIR@}/doc/VERSION | xargs echo -n`
+git tag -a v$@{DAIKONVERSION@} -m $@{DAIKONVERSION@}
 git push --tags
 cd fjalar
-git tag -a v$DAIKONVERSION -m $DAIKONVERSION
+git tag -a v$@{DAIKONVERSION@} -m $@{DAIKONVERSION@}
 git push --tags
 @end example
 
@@ -2492,7 +2497,7 @@ At this point the distribution has been completed.
 Bump the version number to an odd value for continuing development.
 
 @example
-cd $DAIKONDIR
+cd $@{DAIKONDIR@}
 export -n TODAY
 make update-dist-version-file
 make update-doc-dist-date-and-version
@@ -2507,7 +2512,7 @@ Verify these changes by doing product builds (no need to clean first) and
 running a short verification test.
 
 @example
-cd $DAIKONDIR
+cd $@{DAIKONDIR@}
 make rebuild-everything quick-test
 @end example
 
@@ -2518,10 +2523,13 @@ Success is indicated by invariant output being written to the screen.
 
 @need 1000
 @item
-Commit changes back to the repository:
+Commit changes back to the repository: @*
+(WARNING: This step uses a tool that is no longer supported on JDK 11.
+You must switch to a different bash shell running at least JDK 17 for
+this step only. Switch back to your original bash shell afterwards.)
 
 @example
-cd $DAIKONDIR
+cd $@{DAIKONDIR@}
 git commit -a -m "Bump version number for ongoing development."
 git push
 cd fjalar
@@ -2679,9 +2687,9 @@ In early January 2002 (or perhaps in late 2001), we created the
 the Daikon CVS repository.  Primary development continued along the CVS
 branch @samp{ENGINE_V2_PATCHES}, which we called
 ``Daikon version @c trick version updater
-2''  We
+2''.  We
 called the CVS trunk ``Daikon version @c trick version updater
-3'' it was experimental, and very
+3''.  It was experimental, and very
 few people ran its code or performed development on it.  Periodically,
 all changes made to the branch would be merged into the trunk, as one
 large checkin on the trunk.  Later, development on version 3 became more
@@ -2726,7 +2734,7 @@ trunk (respectively, the branch).
 @cindex file formats
 
 This chapter contains information about the file format of Daikon's
-input files.  It is of most information to those who wish to write a
+input files.  It is of most interest to those who wish to write a
 front end, also known as an instrumenter
 (@pxref{Front ends and instrumentation,,,daikon,Daikon User Manual}).
 A new front end enables Daikon to detect
@@ -3021,7 +3029,7 @@ by Daikon, but the only one output to the data files is @code{parent}.
 @c types are: parent, user, enter-exit, exit-exitnn, merge-child and ppt-pptcond
 A @code{parent} relationship is one where the program points themselves
 are explicitly related, such as an enter and an exit point.  All of the
-variables at one of the points exists at the other.  A @code{user}
+variables at one of the points exist at the other.  A @code{user}
 relation is one where a class is used at another point, such as at an
 enter point.  For example, if a reference to class A were passed to
 routine @samp{r1}, the values found at enter and exit of @samp{r1} could
@@ -4309,4 +4317,9 @@ detection,,,daikon,Daikon User Manual}.
 @c  LocalWords:  chmod og rwx BIBDIR CHECKERFRAMEWORK pipefail wget OSNAME
 @c  LocalWords:  readelf DAIKONVERSION xargs codespecs kvasir repo rf pwd
 @c  LocalWords:  untracked Makefile's mernstdaikon mkdir checklink Wayback
-@c  LocalWords:  URI md cvsaa cvsai cvsa merging'' substrings splitter
+@c  LocalWords:  URI md cvsaa cvsai cvsa merging'' substrings splitter fi
+@c  LocalWords:  perl classname1 classname2 exitnn pptcond r1 Galar func
+@c  LocalWords:  ClearView bb nomod readonly variable'' f1 vN varname2 MD5
+@c  LocalWords:  getName EXIT103 varname1 type1 information1 value1 type2
+@c  LocalWords:  comparable1 information2 value2 comparable2 invariants''
+@c  LocalWords:  pathnames EXIT55 EXIT67

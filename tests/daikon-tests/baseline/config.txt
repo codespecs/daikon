@@ -8,4 +8,3 @@ daikon.inv.unary.scalar.LowerBound.minimal_interesting = -5000
 daikon.inv.unary.scalar.LowerBound.maximal_interesting = 5000
 
 daikon.inv.unary.sequence.OneOfSequence.size = 1
-

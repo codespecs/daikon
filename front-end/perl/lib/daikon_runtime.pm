@@ -15,7 +15,7 @@ package daikon_runtime;
 # of the Daikon distribution under the same terms.
 
 # Among the 5.6 features we use is three-argument open. Note that for
-# backwards compatilibity it would be silly to say "use 5.6.0", since
+# backwards compatibility it would be silly to say "use 5.6.0", since
 # that version syntax wasn't introduced until 5.6.
 use 5.006;
 
@@ -59,7 +59,7 @@ my %output_style;
 # True, if we have types and are ready to make a .dtrace file.
 # Defined but false, if we're tracing untyped programs just to get
 # their types.
-# Intially undefined.
+# Initially undefined.
 my $tracing = undef;
 
 sub set_output_style {
@@ -104,7 +104,7 @@ sub program_name {
     return $name;
 }
 
-# Open (if it isn't alreay open) the file we'll use to output KIND
+# Open (if it isn't already open) the file we'll use to output KIND
 # data (where KIND is types, decls or dtrace) generated for the
 # package PACKAGE. Returns a file handle to use, and a boolean value
 # that tells if the caller should close the file when done writing, or

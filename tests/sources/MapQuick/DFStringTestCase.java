@@ -6,7 +6,7 @@ class DFStringTestCase extends DFAnyTestCase
   {
     super(name, test);
   }
-  
+
   /**
    * Runs all of the tests in this.
    */
@@ -14,7 +14,7 @@ class DFStringTestCase extends DFAnyTestCase
   {
     testProgString();
   }
-  
+
   /**
    * Runs the test against getDirections(String x 6)
    */
@@ -83,4 +83,3 @@ class DFStringTestCase extends DFAnyTestCase
 		 actual);
   }
 }
-

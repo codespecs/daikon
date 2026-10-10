@@ -78,7 +78,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   public boolean lightweight;
 
   /**
-   * Whether to use reflection when trying to figure out if a method overrides/implements another
+   * If true, use reflection when trying to figure out if a method overrides/implements another
    * method. If this variable is set to false, then Annotate will not try to determine if a method
    * overrides/implements another method, which means that it will not try to add "also" tags to its
    * output.
@@ -352,7 +352,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       Node n;
       boolean behaviorInserted;
 
-      public InsertBehaviorVisitor(Node n) {
+      InsertBehaviorVisitor(Node n) {
         super();
         this.n = n;
         behaviorInserted = false;
@@ -365,7 +365,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       @Override
       public void visit(NodeChoice nc) {
         // Since we know we are in a Modifiers() parse tree, the only
-        // thing a NodeChoice can hold is a NodeToken for the modifer.
+        // thing a NodeChoice can hold is a NodeToken for the modifier.
         Annotate.debug.fine("InsertBehavior visitor visiting a NodeChoice");
         String modifier = (nc != null && nc.choice != null ? nc.choice.toString() : "");
         Annotate.debug.fine("A node choice here: " + modifier);
@@ -614,7 +614,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
 
     if (!(modifiesString.startsWith("modifies") || modifiesString.startsWith("assignable"))) {
-      // Doesn't look ilke a modifies clause.
+      // Doesn't look like a modifies clause.
       return false;
     }
 
@@ -679,7 +679,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         if (insert_inexpressible) {
           addComment(n, javaLineComment("! " + inv + ";"), true);
         }
-        continue;
+        // continue;
       } else {
         String commentContents =
             (Daikon.output_format == OutputFormat.DBCJAVA ? "  " : "@ ")
@@ -1004,11 +1004,12 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return retval;
   }
 
-  private static class InvariantsAndModifiedVars {
-    public List<Invariant> invariants;
-    public String modifiedVars;
+  static class InvariantsAndModifiedVars {
+    final List<Invariant> invariants;
+    // `modifiedVars` cannot be final.
+    String modifiedVars;
 
-    public InvariantsAndModifiedVars(List<Invariant> invariants, String modifiedVars) {
+    InvariantsAndModifiedVars(List<Invariant> invariants, String modifiedVars) {
       this.invariants = invariants;
       this.modifiedVars = modifiedVars;
     }
@@ -1062,7 +1063,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return index;
   }
 
-  /** Return the whitespace at the front of the string. */
+  /** Returns the whitespace at the front of the string. */
   public static String precedingWhitespace(String s) {
     for (int i = 0; i < s.length(); i++) {
       if (!Character.isWhitespace(s.charAt(i))) {

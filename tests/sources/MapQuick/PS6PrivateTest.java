@@ -5,9 +5,9 @@ import junit.framework.*;
 public class PS6PrivateTest extends TestSuite
 {
     public static Test suite()
-    { return new PS6PrivateTest(); }    
+    { return new PS6PrivateTest(); }
     public PS6PrivateTest()
-    { this("Problem Set 6 Private Test"); }  
+    { this("Problem Set 6 Private Test"); }
     public PS6PrivateTest(String s)
     {
 	super(s);

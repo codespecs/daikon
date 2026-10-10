@@ -2,27 +2,27 @@
 # Read Makefile in parent directory to see what this all means
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
-SCRIPTS=$(DAIKONDIR)/scripts
+DAIKONDIR ?= $(realpath $(dir $(lastword ${MAKEFILE_LIST}))..)
+SCRIPTS=${DAIKONDIR}/scripts
 
 # Help system
 default help: help-recurse
 
 .PHONY: regression-tests
 regression-tests:
-	$(MAKE) txt-diff
-	$(MAKE) summary
+	${MAKE} txt-diff
+	${MAKE} summary
 
 # Targets that ascend to parent directories
 results summary summary2 summary3 help-recurse:
-	@$(MAKE) --no-print-directory BASE?=`pwd` -C .. $@
+	@${MAKE} --no-print-directory BASE?=`pwd` -C .. $@
 
 # Targets that descend to child directories
 clean clean-output txt-diff txt-daikon-suppress-diffed txt-suppress txt-daikon txt-chicory update-goals txt-all merge stats instrument compile diffs inv-checker-diff list-targets chicory chicory-diff esc jml inv txt-daikon-diff txt-chicory-diff spinfo-static dyncomp dyncomp-diff txt-simplify txt-simplify-diff txt-csharpcontract txt-csharpcontract-diff txt-repair-diff txt-esc txt-esc-diff txt-jml-diff txt-merge-diff txt-jaif-diff txt-jaif rtc rtc-diff txt-logicalcompare txt-logicalcompare-diff:
-	$(MAKE) everything-$@
+	${MAKE} everything-$@
 
 cross-checker:
-	$(MAKE) everything-cross-checker
+	${MAKE} everything-cross-checker
 
 ###########################################################################
 # Useful groupings of projects (everything, default, by source, etc.)
@@ -55,7 +55,7 @@ SQD-%: do-StackAr-% do-QueueAr-% do-DisjSets-%
 	@echo ${HR}
 polycalc-%: do-RatNum-% do-RatPoly-% do-RatPolyStack-% do-RatTermVec-%
 	@echo ${HR}
-special-cases-%: do-encapsulate_downcast-% do-compar-% do-precedence-% do-fib-% do-hanoi-% do-param-% do-suppress01-% do-suppress02-% do-StaticInteresting-% do-pine_mdiep-% do-purity-% do-Smithnosky-%
+special-cases-%: do-encapsulate_downcast-% do-compar-% do-precedence-% do-fib-% do-hanoi-% do-param-% do-suppress01-% do-suppress02-% do-StaticInteresting-% do-pine_mdiep-% do-purity-% do-Smithnosky-% do-Issue554-%
 	@echo ${HR}
 siemens-%: do-print_tokens-% do-print_tokens2-% do-replace-% do-schedule-% do-schedule2-% do-tcas-% do-tot_info-% do-space-%
 	@echo ${HR}
@@ -69,7 +69,7 @@ javautil-%: do-Vector-% do-ArrayList13-% do-ArrayList17-%
 	@echo ${HR}
 large-%: # do-Flex-% do-JML-%
 	@echo ${HR}
-new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-baseline-% do-junit-% do-junit5-% do-agora-%
+new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-NonZeroLargeRange-% do-NotOrdered-% do-baseline-% do-junit-% do-junit5-% do-ncalc-% do-agora-%
 	@echo ${HR}
 
 # Extra groupings
@@ -85,10 +85,10 @@ cross-checker-good-%: do-BinaryTree-% do-compar-% do-DisjSets-% do-encapsulate_d
 DIR = $(word 1,$(subst -, ,$*))
 ifdef PARALLEL
 do-%:
-	@echo exec $(MAKE) -C daikon-tests/$(DIR) $(subst $(DIR)-,,$*)
+	@echo exec ${MAKE} -C daikon-tests/${DIR} $(subst ${DIR}-,,$*)
 else
 do-%:
-	@$(MAKE) -C $(DIR) --jobs=1 $(subst $(DIR)-,,$*)
+	@${MAKE} -C ${DIR} --jobs=1 $(subst ${DIR}-,,$*)
 endif
 
 HR:="=========================================================================="

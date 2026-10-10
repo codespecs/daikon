@@ -30,9 +30,9 @@ public class IsTimeOfDay extends SingleString {
   /** Matches a time of day in HH:MM 24-hour format, with optional leading 0. */
   public static final Pattern PATTERN = Pattern.compile("^" + H + ":" + MINUTES + "$");
 
-  ///
-  /// Required methods
-  ///
+  //
+  // Required methods
+  //
 
   /**
    * Creates a new IsTimeOfDay.

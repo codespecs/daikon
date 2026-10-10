@@ -74,8 +74,8 @@ public abstract class Derivation implements Serializable, Cloneable {
   public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);
 
   /**
-   * Get the VarInfo that this would represent. However, the VarInfo can't be used to obtain values
-   * without further modification -- use computeValueAndModified() for this.
+   * Returns the VarInfo that this would represent. However, the VarInfo can't be used to obtain
+   * values without further modification -- use computeValueAndModified() for this.
    *
    * @return the VarInfo hat this would represent
    * @see Derivation#computeValueAndModified
@@ -144,8 +144,8 @@ public abstract class Derivation implements Serializable, Cloneable {
 
   /**
    * Returns true iff other and this represent the same derivation (modulo the variable they are
-   * applied to). Default implentation will just checks run-time type, but subclasses with state
-   * (e.g. SequenceInitial index) should match that, too.
+   * applied to). Default implementation just checks run-time type, but subclasses with state (e.g.
+   * SequenceInitial index) should match that, too.
    *
    * @param other the Derivation to compare to
    * @return true iff other and this represent the same derivation
@@ -243,9 +243,9 @@ public abstract class Derivation implements Serializable, Cloneable {
   }
 
   /**
-   * Return the complexity of this derivation. This is only for the derivation itself and not for
+   * Returns the complexity of this derivation. This is only for the derivation itself and not for
    * the variables included in the derivation. The default implementation returns 1 (which is the
-   * added complexity of an derivation). Subclasses that add additional complexity (such as an
+   * added complexity of a derivation). Subclasses that add additional complexity (such as an
    * offset) should override.
    */
   public int complexity() {

@@ -1478,10 +1478,6 @@ ppt ..unget_char():::EXIT0
     rep-type int
     dec-type char
     flags is_param 
-  variable return
-    var-kind variable
-    rep-type int
-    dec-type int
   variable stream_ptr
     var-kind variable
     rep-type hashcode
@@ -2191,10 +2187,6 @@ ppt print_tokens.c.get_actual_token():::EXIT0
     array 1
     rep-type int[]
     dec-type int[]
-  variable return
-    var-kind variable
-    rep-type int
-    dec-type int
   variable token_ind
     var-kind variable
     rep-type int
@@ -2884,10 +2876,6 @@ ppt print_tokens.c.skip():::EXIT0
     array 1
     rep-type int[]
     dec-type int[]
-  variable return
-    var-kind variable
-    rep-type int
-    dec-type int
   variable stream_ptr
     var-kind variable
     rep-type hashcode

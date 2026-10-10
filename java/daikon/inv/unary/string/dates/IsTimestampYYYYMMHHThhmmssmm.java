@@ -46,9 +46,9 @@ public class IsTimestampYYYYMMHHThhmmssmm extends SingleString {
               + "Z"
               + "$");
 
-  ///
-  /// Required methods
-  ///
+  //
+  // Required methods
+  //
 
   /**
    * Creates a new IsTimestampYYYYMMHHThhmmssmm.

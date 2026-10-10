@@ -1,7 +1,11 @@
 #!/bin/bash
 
 # Get some system info for debugging.
-for file in /etc/*release; do echo "$file"; cat "$file"; echo; done
+for file in /etc/*release; do
+  echo "$file"
+  cat "$file"
+  echo
+done
 gcc --version
 make --version
 ldd --version
@@ -12,20 +16,24 @@ echo ""
 
 set -e
 set -o pipefail
-set -o verbose
-set -o xtrace
 export SHELLOPTS
+
+## Useful for debugging and sometimes for interpreting the script.
+# # Output lines of this script as they are read.
+# set -o verbose
+# # Output expanded lines of this script as they are executed.
+# set -o xtrace
 
 make showvars compile daikon.jar
 
 echo "test-kvasir.sh is running kvasir and DynComp tests"
 
-# Running Kvasir tests here may seem redundant with the fjalar project's Travis
+# Running Kvasir tests here may seem redundant with the fjalar project's CI
 # build; however, it means that they are run on each branch and pull request.
 
 # Get correct version of Kvasir/fjalar
-if [ ! -d ../fjalar ] ; then
-  if [ -d "/tmp/$USER/git-scripts" ] ; then
+if [ ! -d ../fjalar ]; then
+  if [ -d "/tmp/$USER/git-scripts" ]; then
     (cd "/tmp/$USER/git-scripts" && git pull -q) > /dev/null 2>&1
   else
     mkdir -p "/tmp/$USER"

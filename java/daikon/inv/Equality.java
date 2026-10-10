@@ -108,8 +108,8 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     vars.addAll(variables);
     VarInfo leader = leader();
 
-    // ensure well-formedness and set equality slots
-    assert variables.size() > 0;
+    // Ensure well-formedness and set equality slots.
+    assert !variables.isEmpty();
     assert vars.size() == variables.size();
 
     for (VarInfo vi : variables) {
@@ -131,7 +131,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   private @Nullable VarInfo leaderCache = null;
 
   /**
-   * Return the canonical VarInfo of this. Note that the leader never changes.
+   * Returns the canonical VarInfo of this. Note that the leader never changes.
    *
    * @return the canonical VarInfo of this
    */
@@ -254,10 +254,10 @@ public final /*(at)Interned*/ class Equality extends Invariant {
     }
     // Choose a leader, preferring the valid variables.
     VarInfo leader;
-    if (valid_equiv.size() > 0) {
+    if (!valid_equiv.isEmpty()) {
       leader = valid_equiv.get(0);
     } else {
-      assert invalid_equiv.size() > 0;
+      assert !invalid_equiv.isEmpty();
       leader = invalid_equiv.get(0);
     }
     // Print the equality statements, stating expressible ones first.
@@ -318,7 +318,14 @@ public final /*(at)Interned*/ class Equality extends Invariant {
         String[] form = VarInfo.simplify_quantify(QuantFlags.element_wise(), leader, var);
         String a = format_elt(form[1]);
         String b = format_elt(form[2]);
-        result.append(" " + form[0] + "(EQ " + a + " " + b + ")" + form[3]);
+        result.append(" ");
+        result.append(form[0]);
+        result.append("(EQ ");
+        result.append(a);
+        result.append(" ");
+        result.append(b);
+        result.append(")");
+        result.append(form[3]);
       }
     } else {
       for (VarInfo var : vars) {
@@ -382,7 +389,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
   // Processing of data
 
   /**
-   * Return a List of VarInfos that do not fit into this set anymore.
+   * Returns a List of VarInfos that do not fit into this set anymore.
    *
    * <p>Originally (8/14/2003), this did not check for the modified bits. It seems however, quite
    * wrong to leave variables in the same equality set when one is missing and the other is not.
@@ -561,7 +568,7 @@ public final /*(at)Interned*/ class Equality extends Invariant {
       }
       // if we got here, this is the "all other things being equal" case
       else if (var.complexity() < newLeader.complexity()) {
-        // System.out.printf("%s greater comlexity, %s is leader%n",
+        // System.out.printf("%s greater complexity, %s is leader%n",
         //                   newLeader, var);
         newLeader = var;
       }

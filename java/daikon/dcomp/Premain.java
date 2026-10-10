@@ -6,6 +6,7 @@ import daikon.DynComp;
 import daikon.chicory.DaikonVariableInfo;
 import daikon.chicory.DeclWriter;
 import daikon.plumelib.bcelutil.BcelUtil;
+import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
 import java.io.BufferedReader;
@@ -23,13 +24,24 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+import org.checkerframework.checker.signature.qual.ClassGetName;
+import org.checkerframework.checker.signature.qual.Identifier;
+import org.checkerframework.checker.signature.qual.InternalForm;
+import org.checkerframework.dataflow.qual.Pure;
 
 /**
  * This class is the entry point for the DynComp instrumentation agent. It is the only code in
  * dcomp_premain.jar.
  */
 public class Premain {
+
+  /** Do not instantiate. */
+  private Premain() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
 
   // These command-line options cannot be accessed from DynComp.  These are internal debugging
   // options that may be used when Premain is invoked directly from the command line.
@@ -47,7 +59,14 @@ public class Premain {
   public static boolean debug_dcruntime_all = false;
 
   /** If true, print information about the classes being transformed. */
-  public static boolean verbose = false;
+  protected static boolean verbose;
+
+  /**
+   * Specifies if we are to use an instrumented version of the JDK. Calls into the JDK must be
+   * modified to remove the arguments from the tag stack if the JDK is not instrumented. The default
+   * value is set to true for BuildJDK. Other tools will set this flag based on their options.
+   */
+  protected static boolean jdk_instrumented = true; // default to true for BuildJDK
 
   /** Set of pre-instrumented JDK classes. */
   protected static Set<String> pre_instrumented = new HashSet<>();
@@ -146,9 +165,11 @@ public class Premain {
     daikon.chicory.Runtime.ppt_omit_pattern = DynComp.ppt_omit_pattern;
     daikon.chicory.Runtime.ppt_select_pattern = DynComp.ppt_select_pattern;
 
-    DCInstrument.jdk_instrumented = !DynComp.no_jdk;
-    @SuppressWarnings("UnusedVariable") // loads the BcelUtil class; otherwise, Premain gives errors
-    int junk = BcelUtil.javaVersion;
+    // We need to load the BcelUtil class prior to turning on instrumentation.
+    @SuppressWarnings("UnusedVariable")
+    int toLoadBcelUtil = BcelUtil.javaVersion;
+
+    jdk_instrumented = !DynComp.no_jdk;
 
     // Another 'trick' to force needed classes to be loaded prior to retransformation.
     String buffer =
@@ -160,7 +181,7 @@ public class Premain {
     }
 
     // Read the list of pre-instrumented classes.
-    if (DCInstrument.jdk_instrumented) {
+    if (jdk_instrumented) {
       // location is: daikon/java/dcomp-rt/java/lang/jdk_classes.txt .
       try (InputStream strm = Object.class.getResourceAsStream("jdk_classes.txt")) {
         if (strm == null) {
@@ -169,15 +190,15 @@ public class Premain {
                   + " see Daikon manual, section \"Instrumenting the JDK with DynComp\"");
           System.exit(1);
         }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(strm, UTF_8));
-
-        while (true) {
-          String line = reader.readLine();
-          if (line == null) {
-            break;
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(strm, UTF_8))) {
+          while (true) {
+            String line = reader.readLine();
+            if (line == null) {
+              break;
+            }
+            // System.out.printf("adding '%s'%n", line);
+            pre_instrumented.add(line);
           }
-          // System.out.printf("adding '%s'%n", line);
-          pre_instrumented.add(line);
         }
       }
     }
@@ -186,6 +207,13 @@ public class Premain {
     Thread shutdown_thread = new ShutdownThread();
     java.lang.Runtime.getRuntime().addShutdownHook(shutdown_thread);
 
+    String instrumenter;
+    if (daikon.chicory.Runtime.isJava24orLater()) {
+      instrumenter = "daikon.dcomp.Instrument24";
+    } else {
+      instrumenter = "daikon.dcomp.Instrument";
+    }
+
     // Setup the transformer
     ClassFileTransformer transformer;
     // use a special classloader to ensure correct version of BCEL is used
@@ -193,12 +221,12 @@ public class Premain {
     try {
       transformer =
           (ClassFileTransformer)
-              loader.loadClass("daikon.dcomp.Instrument").getDeclaredConstructor().newInstance();
+              loader.loadClass(instrumenter).getDeclaredConstructor().newInstance();
     } catch (Exception e) {
-      throw new RuntimeException("Unexpected error loading Instrument", e);
+      throw new RuntimeException("Error loading Instrumenter " + instrumenter, e);
     }
     if (verbose) {
-      // If DCInstrument.jdk_instrumented is true then the printf below will output
+      // If jdk_instrumented is true then the printf below will output
       // 'null' to indicate we are using the bootstrap loader.
       System.out.printf(
           "Classloader of transformer = %s%n", transformer.getClass().getClassLoader());
@@ -222,13 +250,13 @@ public class Premain {
     inst.addTransformer(transformer, true);
 
     // See the "General Java Runtime instrumentation strategy" comments in DCInstrument.java
-    // for an explaination of how we deal with instrumenting the JDK 11 runtime.
+    // for an explanation of how we deal with instrumenting the JDK 11 runtime.
     //
     // At this point in DynComp start up, we use java.lang.instrument.redefineClasses to replace the
     // dummy java.lang.DCRuntime with a version where each method calls the corresponding method in
     // daikon.dcomp.DCRuntime. The Java runtime does not enforce the security check in this case.
     //
-    if (BcelUtil.javaVersion > 8 && DCInstrument.jdk_instrumented) {
+    if (daikon.chicory.Runtime.isJava9orLater() && jdk_instrumented) {
 
       // Buffer for input of our replacement java.lang.DCRuntime.
       // The size of the current version is 6326 bytes and we do not
@@ -249,7 +277,7 @@ public class Premain {
             throw new Error("openStream failed for " + class_url);
           }
         } catch (Throwable t) {
-          throw new Error("Unexpected error reading " + class_url, t);
+          throw new Error("Error reading " + class_url, t);
         }
       } else {
         throw new Error("Could not locate " + classname);
@@ -273,7 +301,7 @@ public class Premain {
     @Override
     public void run() {
 
-      if (Premain.verbose) {
+      if (verbose) {
         System.out.println("in shutdown");
       }
       in_shutdown = true;
@@ -286,14 +314,14 @@ public class Premain {
 
       // If requested, write the comparability data to a file
       if (DynComp.comparability_file != null) {
-        if (Premain.verbose) {
+        if (verbose) {
           System.out.println("Writing comparability sets to " + DynComp.comparability_file);
         }
         PrintWriter compare_out = open(DynComp.comparability_file);
         long startTime = System.nanoTime();
         DCRuntime.printAllComparable(compare_out);
         compare_out.close();
-        if (Premain.verbose) {
+        if (verbose) {
           long duration = System.nanoTime() - startTime;
           System.out.printf(
               "Comparability sets written in %ds%n", TimeUnit.NANOSECONDS.toSeconds(duration));
@@ -301,14 +329,14 @@ public class Premain {
       }
 
       if (DynComp.trace_file != null) {
-        if (Premain.verbose) {
+        if (verbose) {
           System.out.println("Writing traced comparability sets to " + DynComp.trace_file);
         }
         PrintWriter trace_out = open(DynComp.trace_file);
         long startTime = System.nanoTime();
         DCRuntime.traceAllComparable(trace_out);
         trace_out.close();
-        if (Premain.verbose) {
+        if (verbose) {
           long duration = System.nanoTime() - startTime;
           System.out.printf(
               "Traced comparability sets written in %ds%n",
@@ -318,14 +346,14 @@ public class Premain {
         // Writing comparability sets to standard output?
       }
 
-      if (Premain.verbose) {
+      if (verbose) {
         DCRuntime.decl_stats();
       }
 
       // Write the decl file out
       @SuppressWarnings("nullness:argument") // DynComp guarantees decl_file is non null
       File decl_file = new File(DynComp.output_dir, DynComp.decl_file);
-      if (Premain.verbose) {
+      if (verbose) {
         System.out.println("Writing decl file to " + decl_file);
       }
       PrintWriter decl_fp = open(decl_file);
@@ -338,7 +366,7 @@ public class Premain {
       long startTime = System.nanoTime();
       DCRuntime.printDeclFile(decl_fp);
       decl_fp.close();
-      if (Premain.verbose) {
+      if (verbose) {
         long duration = System.nanoTime() - startTime;
         System.out.printf("Decl file written in %ds%n", TimeUnit.NANOSECONDS.toSeconds(duration));
         System.out.printf("comp_list = %,d%n", DCRuntime.comp_list_ms);
@@ -346,7 +374,7 @@ public class Premain {
         System.out.printf("decl vars = %,d%n", DCRuntime.decl_vars_ms);
         System.out.printf("total     = %,d%n", DCRuntime.total_ms);
       }
-      if (Premain.verbose) {
+      if (verbose) {
         System.out.println("DynComp complete");
       }
     }
@@ -379,5 +407,166 @@ public class Premain {
     } catch (Exception e) {
       throw new Error("Can't open " + filename + " = " + canonicalFile, e);
     }
+  }
+
+  /** Name prefix for tag setter methods. */
+  protected static final String SET_TAG = "set_tag";
+
+  /** Name prefix for tag getter methods. */
+  protected static final String GET_TAG = "get_tag";
+
+  /**
+   * Returns a field tag accessor method name.
+   *
+   * @param type "get_tag" or "set_tag"
+   * @param classname name of class
+   * @param fname name of field
+   * @return name of tag accessor method
+   */
+  static String tag_method_name(String type, String classname, String fname) {
+    return fname + "_" + classname.replace('.', '_') + "__$" + type;
+  }
+
+  /**
+   * Set of JUnit test classes, as discovered by whichever instrumenter is running. Shared rather
+   * than held per instrumenter: it describes the target program, not the instrumentation strategy,
+   * and only one instrumenter is active in a JVM. Thread-safe because a multithreaded target
+   * program instruments classes concurrently.
+   */
+  protected static Set<String> junitTestClasses = ConcurrentHashMap.newKeySet();
+
+  /**
+   * Returns true if the given class is one that transforms other classes, and so must not itself be
+   * instrumented.
+   *
+   * @param className the class to check, in internal form
+   * @return true if the class transforms other classes
+   */
+  @Pure
+  protected static boolean is_transformer(@InternalForm String className) {
+
+    if (className.startsWith("org/codehaus/groovy")) {
+      return true;
+    }
+    if (className.startsWith("groovy/lang")) {
+      return true;
+    }
+    if (className.startsWith("org/mockito")) {
+      return true;
+    }
+    if (className.startsWith("org/objenesis")) {
+      return true;
+    }
+    if (className.contains("ByMockito")) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Returns true if the given method's class is instrumented, so that a caller should invoke the
+   * instrumented version of the method.
+   *
+   * <p>Shared by {@code DCInstrument} and {@code DCInstrument24}, which must agree: an exclusion
+   * added to only one of them would silently change comparability depending on which instrumenter
+   * ran. It lives here because most of what it consults -- {@link #problem_packages}, {@link
+   * #problem_classes}, {@link #jdk_instrumented}, {@link #junitTestClasses} -- lives here, and
+   * because this class is compiled on every supported JDK, whereas {@code DCInstrument24} is not.
+   *
+   * <p>The {@code classname} parameter is a {@code @ClassGetName}, which accepts a
+   * {@code @BinaryName} as well, since the latter is a subtype. The two instrumenters hold the name
+   * in those two different forms, and every test below behaves identically for both on the
+   * non-array class names this sees.
+   *
+   * @param classname the class to check
+   * @param methodName the method being invoked; used only by the {@code set_class_initialized} rule
+   *     and for debugging output
+   * @param debug the caller's {@code debugHandleInvoke} flag
+   * @param log the caller's {@code debugInstrument} log
+   * @return true if the class is instrumented
+   */
+  protected static boolean isClassnameInstrumented(
+      @ClassGetName String classname, @Identifier String methodName, boolean debug, SimpleLog log) {
+
+    if (debug) {
+      System.out.printf("Checking callee instrumented on %s.%s%n", classname, methodName);
+    }
+
+    // Our copy of daikon.plumelib is not instrumented.  It would be odd, though,
+    // to see calls to this.
+    if (classname.startsWith("daikon.plumelib")) {
+      return false;
+    }
+
+    // When a class contains an existing <clinit>, it will be instrumented. Thus, we need to mark
+    // our added call to 'DCRuntime.set_class_initialized' as not instrumented.  This can only
+    // arise under DCInstrument24, which adds that call before it walks the method body;
+    // DCInstrument adds it to the already-instrumented <clinit>, so its handleInvoke never sees
+    // the call.  The rule is inert, not wrong, for DCInstrument.
+    if (classname.endsWith("DCRuntime") && methodName.equals("set_class_initialized")) {
+      return false;
+    }
+
+    // Special-case JUnit test classes.
+    if (junitTestClasses.contains(classname)) {
+      return false;
+    }
+
+    @SuppressWarnings("signature:assignment") // string conversion
+    @InternalForm String internalName = classname.replace('.', '/');
+    if (is_transformer(internalName)) {
+      return false;
+    }
+
+    // Special-case the execution trace tool.
+    if (classname.startsWith("minst.Minst")) {
+      return false;
+    }
+
+    // We should probably change the interface to include method name
+    // and use "classname.methodname" as arg to pattern matcher.
+    // If any of the omit patterns match, use the uninstrumented version of the method
+    for (Pattern p : DynComp.ppt_omit_pattern) {
+      if (p.matcher(classname).find()) {
+        if (debug) {
+          System.out.printf("callee instrumented = false: %s.%s%n", classname, methodName);
+        }
+        return false;
+      }
+    }
+
+    // If it's not a JDK class, presume it's instrumented.
+    if (!BcelUtil.inJdk(classname)) {
+      return true;
+    }
+
+    int i = classname.lastIndexOf('.');
+    if (i > 0 && problem_packages.contains(classname.substring(0, i))) {
+      log.log("Don't call instrumented member of problem package %s%n", classname.substring(0, i));
+      return false;
+    }
+
+    if (problem_classes.contains(classname)) {
+      log.log("Don't call instrumented member of problem class %s%n", classname);
+      return false;
+    }
+
+    // We have decided not to use the instrumented version of Random as
+    // the method generates values based on an initial seed value.
+    // (Typical of random() algorithms.) Instrumentation would have the undesirable side
+    // effect of putting all the generated values in the same comparison
+    // set when they should be distinct.
+    // Note: If we find other classes that should not use the instrumented
+    // versions, we should consider making this a searchable list.
+    if (classname.equals("java.util.Random")) {
+      return false;
+    }
+
+    // If using the instrumented JDK, then everything but object is instrumented.
+    if (jdk_instrumented && !classname.equals("java.lang.Object")) {
+      return true;
+    }
+
+    return false;
   }
 }

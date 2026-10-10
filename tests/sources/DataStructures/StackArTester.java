@@ -26,11 +26,11 @@ public class StackArTester
       return new Object();
     case 4:
       return new Object();
-    default:  
+    default:
     // should never get here
       return new MyInteger(0);
     }
-  }  
+  }
 
   public static void push() {
     try {

@@ -61,9 +61,9 @@ public class IsUrl extends SingleString {
               + "(?:/[^\\s]*)?"
               + "$");
 
-  ///
-  /// Required methods
-  ///
+  //
+  // Required methods
+  //
 
   /**
    * Creates a new IsUrl.

@@ -155,7 +155,7 @@ min-length 1
 max-length 1
 
 # If a.minvalue == 1, 'a >= 1' is suppressed. Note that the
-# trace repeats 'a = 1' at least five more times than the 
+# trace repeats 'a = 1' at least five more times than the
 # next values, ensuring the invariant gets produced (and
 # then suppressed).
 ppt lowerBoundSuppressed:::ENTER

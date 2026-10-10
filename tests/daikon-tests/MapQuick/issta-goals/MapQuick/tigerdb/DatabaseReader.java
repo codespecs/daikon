@@ -16,7 +16,7 @@ public class DatabaseReader {
   // tracks tlids that we've thrown out as useless for our purposes
   // (b/c their TigerRT1's weren't Roads, they were Rails or
   // something...)
-  private Set trashTLIDS = new HashSet(); 
+  private Set trashTLIDS = new HashSet();
 
   public class GeoChain {
     public final TigerRT1 rt1;
@@ -49,10 +49,10 @@ public class DatabaseReader {
       };
   }
 
-  public Iterator geoChains(File zf) throws IOException { 
+  public Iterator geoChains(File zf) throws IOException {
     return geoChains(new ZipFile(zf));
   }
-  public Iterator geoChains(String zf) throws IOException { 
+  public Iterator geoChains(String zf) throws IOException {
     return geoChains(new ZipFile(zf));
   }
   private Iterator geoChains(ZipFile zf) {
@@ -66,7 +66,7 @@ public class DatabaseReader {
 	  break;
 	}
       }
-	    
+
       entries = zf.entries();
       ZipEntry mainEntry = null;
       while(entries.hasMoreElements()) {
@@ -79,16 +79,16 @@ public class DatabaseReader {
       if (mainEntry == null) {
 	return new ImmIterator() {
 	    public boolean hasNext() { return false; }
-	    public Object next() { 
+	    public Object next() {
 	      throw new NoSuchElementException();
 	    }
 	  };
       }
-      final LineNumberReader lnr = 
+      final LineNumberReader lnr =
 	new LineNumberReader
-	  (new InputStreamReader(zf.getInputStream(mainEntry))); 
-	    
-      // now return the nifty read-and-throw-away GeoChain iterator 
+	  (new InputStreamReader(zf.getInputStream(mainEntry)));
+
+      // now return the nifty read-and-throw-away GeoChain iterator
       return new ImmIterator() {
 	  TigerRT1 rt1 = null;
 	  private void advance() {
@@ -118,11 +118,11 @@ public class DatabaseReader {
 	    }
 	  }
 	  public boolean hasNext() {
-	    advance(); 
+	    advance();
 	    return (rt1 != null);
 	  }
 	  public Object next() {
-	    GeoChain gc = 
+	    GeoChain gc =
 	      new GeoChain(rt1,type6.getBag(new Integer(rt1.tlid)));
 	    rt1 = null;
 	    advance();
@@ -139,7 +139,7 @@ public class DatabaseReader {
   }
 
   // checks internal state of this to increase confidence that the
-  // data set isn't screwy 
+  // data set isn't screwy
   public void checkMappingInv() {
     checkOneMappingInv(type6);
   }
@@ -148,7 +148,7 @@ public class DatabaseReader {
   private void checkOneMappingInv(Map typeT) {
     for(Iterator tki = typeT.keySet().iterator();tki.hasNext();) {
       Integer tlid = (Integer) tki.next();
-      if (false && !type1.containsKey(tlid)) 
+      if (false && !type1.containsKey(tlid))
 	System.out.println("!!! No record found for tlid:"+tlid+
 			   " with records:"+ typeT.get(tlid));
     }
@@ -164,25 +164,25 @@ public class DatabaseReader {
 	db.readZipFile(zfstr);
       } catch (IOException e) {
 	System.out.println("IOEXCEPTION?");
-		
+
       } catch (OutOfMemoryError e) {
-		
+
 	System.out.println("OUT OF MEMORY");
 
 	System.out.println("1 "+db.type1.size());
 	System.out.println("6 "+db.type6.size());
-		
+
 	e.printStackTrace();
 	System.exit(-1);
       }
     }
 
-	
+
     db.checkMappingInv();
-	
-    if (false) {  
-      // Prints Feature.fullNames to STDOUT 
-      // (when fullNames is supported) 
+
+    if (false) {
+      // Prints Feature.fullNames to STDOUT
+      // (when fullNames is supported)
 
       Iterator names = null;
       // names = Feature.fullNames.iterator();
@@ -199,13 +199,13 @@ public class DatabaseReader {
 
   public void readZipFile(String zstr) throws IOException {
     readZipFile(new ZipFile(zstr));
-    if (INFO) 
+    if (INFO)
       System.out.println("finished with "+zstr);
   }
-    
+
   private void readZipFile(ZipFile zf) throws IOException {
     Enumeration entries = zf.entries();
-    // build the type6 map for 
+    // build the type6 map for
     while(entries.hasMoreElements()) {
       ZipEntry entry = (ZipEntry) entries.nextElement();
       this.readRecords(zf.getInputStream(entry));
@@ -219,22 +219,22 @@ public class DatabaseReader {
       // System.out.print("*");
       try {
 	switch(line.charAt(0)) {
-	case '1': 
+	case '1':
 	  TigerRT1 rt1 = new TigerRT1(line);
-		    
-	  if (rt1.cfc.charAt(0) != 'a' && 
+
+	  if (rt1.cfc.charAt(0) != 'a' &&
 	      rt1.cfc.charAt(0) != 'A') {
 	    trashTLIDS.add(new Integer(rt1.tlid));
 	    type6.remove(new Integer(rt1.tlid));
 	    // System.out.println("1: ("+type1.size()+") Skipping "+rt1);
 	  } else {
-	    if (type1.containsKey(new Integer(rt1.tlid))) 
+	    if (type1.containsKey(new Integer(rt1.tlid)))
 	      throw new RuntimeException("1: SOMETHING'S WRONG");
 	    // System.out.println("1: ("+type1.size()+") Adding "+rt1);
 	    type1.put(new Integer(rt1.tlid), rt1);
 	  }
 	  break;
-	case '6': 
+	case '6':
 	  TigerRT6 rt6 = new TigerRT6(line);
 	  if (!trashTLIDS.contains(new Integer(rt6.tlid))) {
 	    type6.getBag(new Integer(rt6.tlid)).add(rt6);
@@ -242,7 +242,7 @@ public class DatabaseReader {
 	  } else {
 	    // System.out.println("6: Skipping "+rt6);
 	  }
-	  break; 
+	  break;
 	default:
 	  // System.out.println("skipping record, type: "+line.charAt(0));
 	}
@@ -266,7 +266,7 @@ public class DatabaseReader {
 	  System.out.println();
 	}
 
-		
+
       }
       // System.gc();
     }

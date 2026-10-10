@@ -53,7 +53,7 @@ public enum OutputFormat {
   // can be case-sensitive, can permit alternative names, etc.  An enum
   // cannot override valueOf().
   /**
-   * Return the appropriate OutputFormat for the given name, or throw an error if no such
+   * Returns the appropriate OutputFormat for the given name, or throw an error if no such
    * OutputFormat exists.
    */
   public static OutputFormat get(String name) {

@@ -618,7 +618,7 @@ this_invocation_nonce
 "and"
 1
 return
-15
+1
 1
 tok
 "and"
@@ -1677,7 +1677,7 @@ this_invocation_nonce
 "`"
 1
 return
-8
+2
 1
 tok
 "`"
@@ -2061,7 +2061,7 @@ this_invocation_nonce
 ")"
 1
 return
-8
+2
 1
 tok
 ")"
@@ -2656,7 +2656,7 @@ this_invocation_nonce
 "=>"
 1
 return
-14
+1
 1
 tok
 "=>"
@@ -2895,7 +2895,7 @@ this_invocation_nonce
 ")"
 1
 return
-8
+2
 1
 tok
 ")"
@@ -4099,7 +4099,7 @@ this_invocation_nonce
 ")"
 1
 return
-8
+2
 1
 tok
 ")"
@@ -4367,7 +4367,7 @@ this_invocation_nonce
 ")"
 1
 return
-8
+2
 1
 tok
 ")"
@@ -7484,7 +7484,7 @@ this_invocation_nonce
 "xor"
 1
 return
-15
+1
 1
 tok
 "xor"
@@ -7723,7 +7723,7 @@ this_invocation_nonce
 "'"
 1
 return
-7
+2
 1
 tok
 "'"
@@ -9008,7 +9008,7 @@ this_invocation_nonce
 "9"
 1
 return
-11
+41
 1
 tok
 "9"
@@ -13156,7 +13156,7 @@ this_invocation_nonce
 "P"
 1
 return
-16
+3
 1
 tok
 "P"
@@ -17227,7 +17227,7 @@ this_invocation_nonce
 "On"
 1
 return
-17
+3
 1
 tok
 "On"
@@ -19302,7 +19302,7 @@ this_invocation_nonce
 "\"rX\""
 1
 return
-13
+42
 1
 tok
 "\"rX\""
@@ -21830,7 +21830,7 @@ this_invocation_nonce
 "=>"
 1
 return
-14
+1
 1
 tok
 "=>"
@@ -22926,7 +22926,7 @@ this_invocation_nonce
 "ÿ"
 1
 return
-5
+6
 1
 tok
 "ÿ"

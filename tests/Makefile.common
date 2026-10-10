@@ -159,12 +159,13 @@ endif
 # SOURCES is where all of the source code to be examined is located
 SOURCES?=$(COMMON_HERE)/sources
 
-# PROJECT is the relative directory for the project resides
-# (e.g. esc-experiments/StackAr or daikon-tests/QueueAr)
+# CWD is the absolute directory in which the project resides.
 CWD:=$(shell pwd)
-# Why is this command echoed in the Travis job output?
-PROJECT_VIA_COMMAND:=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[678]-)?daikon[^/]*/(workspace/)?tests(\.ver[23])?/||;')
-PROJECT?=${PROJECT_VIA_COMMAND}
+# PROJECT is the directory in which the project resides, relative to
+# ${COMMON_HERE} (e.g. esc-experiments/StackAr or daikon-tests/QueueAr).
+# Both operands are canonicalized, so that the prefix matches even if the
+# clone is reached through a symbolic link.
+PROJECT?=$(patsubst $(realpath ${COMMON_HERE})/%,%,$(realpath ${CWD}))
 
 # This is the name for the output files ($.inv.gz $.txt-daikon ...)
 # Default is the last name on the path to the project; most projects
@@ -188,14 +189,20 @@ CP_PARENTS := rsync -aR
 ifeq ($(shell uname), Darwin)
   JAVA_HOME ?= $(/usr/libexec/java_home)
 else
-  JAVA_HOME ?= $(shell readlink -f /usr/bin/javac | sed "s:bin/javac::")
+ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
+  JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
+else
+  $(info Failure: Here is the output of: which javac)
+  $(info $(shell which javac))
+  $(error 'which javac' had exit status 1)
 endif
-JAVA  := $(JAVA_HOME)/bin/java
-JAVAC ?= $(JAVA_HOME)/bin/javac
+endif
+JAVA  := ${JAVA_HOME}/bin/java
+JAVAC ?= ${JAVA_HOME}/bin/javac
 
 JUNIT_CLASSPATH ?=
 
-JAVALIB_CLASSPATH := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
+JAVALIB_CLASSPATH := ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 
@@ -207,7 +214,7 @@ CHICORY_EXEC := ${DAIKONDIR}/java/daikon/Chicory.class
 
 # As of JDK 1.3 (and 1.4, I think), don't use "-server" here.
 # It causes incorrect optimizations that are evidenced by ">>" right shifts.
-RUN_JAVA?=$(JAVA) -ea -Xmx3600m -cp "$(DAIKON_TESTS_CLASSPATH)"
+RUN_JAVA?=$(JAVA) -ea -Xmx7g -cp "$(DAIKON_TESTS_CLASSPATH)"
 DAIKON_CLASS?=${DAIKONDIR}/java/daikon/Daikon.class
 DAIKON = $(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.Daikon
 PRINT_INVARIANTS_CLASS?=${DAIKONDIR}/java/daikon/PrintInvariants.class
@@ -259,7 +266,7 @@ endif
 # Reasons for different behavior between Java versions include:
 # - javac versions 8 & 9 sometimes generate dummy field accessor methods
 #   that javac 11 does not
-# - string concatenation of variables sometimes caused the varaibles to be
+# - string concatenation of variables sometimes caused the variables to be
 #   associated in Java 8 but not in Java 11. (This is an improvement.)
 #
 # This goal_name does not apply to kvasir-tests which
@@ -279,10 +286,10 @@ goal_name = \
 
 
 $(PRINT_INVARIANTS_CLASS):
-	make -C ${DAIKONDIR}/java
+	${MAKE} -C ${DAIKONDIR}/java
 
 $(CHICORY_EXEC):
-	make -C ${DAIKONDIR}/java
+	${MAKE} -C ${DAIKONDIR}/java
 
 # USER_DAIKON_OPTIONS is sometimes set in a Makefile.
 # PERSONAL_DAIKON_OPTIONS is never set by a checked-in Makefile; a user can
@@ -377,7 +384,7 @@ ifeq (generated,${TRACE_SOURCE})
 endif
 
 # Perhaps, if "PRESERVE_DECLS" is set, this should not blow away the old
-# .decls file.  Or maybe that .decls file shoudl be stored elsewhere, to
+# .decls file.  Or maybe that .decls file should be stored elsewhere, to
 # protect it from such action.  Then there would have to be some target
 # that would really remove the .decls file, however.
 clean-scratch:
@@ -493,10 +500,15 @@ endif
 
 chicory: $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz
 $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-timestamp \
-									$(INST_LIST_FILE) $(CHICORY_EXEC)
+						$(INST_LIST_FILE) $(CHICORY_EXEC)
 	@echo
 	@echo "### Run Chicory (${PROJECT_FILE})"
 	@echo
+	if [ ! -s "$(CWD)/$(PROJECT_FILE).decls-DynComp" ]; then \
+	  echo "File is empty or does not exist: $(CWD)/$(PROJECT_FILE).decls-DynComp"; \
+	  false; \
+	fi
+	export LD_LIBRARY_PATH="${CWD}" && \
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 	  --dtrace-file=$(PROJECT_FILE).dtrace.gz \
 	  --comparability-file=$(CWD)/$(PROJECT_FILE).decls-DynComp \
@@ -551,8 +563,12 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
 	@echo
 #	@echo inst_Files: '$(INST_FILES)'
 	rm -f $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset
+	# Calls the sub-make only if the variable EXTRA_TARGET is not empty
+	if [ -n "${EXTRA_TARGET}" ]; then ${MAKE} -C "${CWD}" extra-target; fi
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
+	export LD_LIBRARY_PATH="${CWD}" && \
 	$(RUN_JAVA) daikon.DynComp $(DCOMP_ARGS) ${JUNIT} $(MAIN_CLASS) $(MAIN_ARGS)
+	export LD_LIBRARY_PATH="${CWD}" && \
 	$(RUN_JAVA) daikon.DynComp '--ppt-select-pattern=$(INST_FILES)' \
 		--comparability-file=$(PROJECT_FILE).txt-cset-nojdk \
 		--decl_file $(PROJECT_FILE).decls-DynComp-nojdk \
@@ -648,6 +664,7 @@ ${SPINFO_INV_FILE}: ${PROJECT_FILE}.decls-DynComp ${PROJECT_FILE}.spinfo-static 
 	@echo
 	@echo "### run Chicory with DynComp input (${PROJECT_FILE})"
 	@echo
+	export LD_LIBRARY_PATH="${CWD}" && \
 	cd $(SCRATCH_FOR_DAIKON) && ${CHICORY} $(CHICORY_USER_FLAGS) \
 		--dtrace-file=$(PROJECT_FILE)-dyncomp.dtrace.gz \
 		--comparability-file=${CWD}/$(PROJECT_FILE).decls-DynComp \
@@ -717,12 +734,12 @@ txt-jaif: $(PROJECT_FILE).txt-jaif
 	@echo
 	@echo "### run AnnotateNullable (${PROJECT_FILE})"
 	@echo
-	$(JAVA) -cp "$(DAIKON_TESTS_CLASSPATH)" -ea -Xmx3600M daikon.Daikon --no_text_output --no_show_progress \
+	$(JAVA) -cp "$(DAIKON_TESTS_CLASSPATH)" -ea -Xmx7g daikon.Daikon --no_text_output --no_show_progress \
 	  $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz \
 	  --config ${DAIKONDIR}/java/daikon/annotate_nullable.config \
 	  --config_option daikon.Debug.show_stack_trace=true \
 	  -o $(PROJECT_FILE)-jaif.inv.gz
-	$(JAVA) -cp "$(DAIKON_TESTS_CLASSPATH)" -ea -Xmx3600M daikon.AnnotateNullable $(PROJECT_FILE)-jaif.inv.gz \
+	$(JAVA) -cp "$(DAIKON_TESTS_CLASSPATH)" -ea -Xmx7g daikon.AnnotateNullable $(PROJECT_FILE)-jaif.inv.gz \
 	  > $@-failed 2>&1
 	mv $@-failed $@
 else
@@ -859,12 +876,24 @@ txt-all: ${PROJECT_FILE}.txt-daikon ${PROJECT_FILE}.txt-simplify merge;
 endif
 endif
 
+ifdef SKIP_TEST
+diffs:
+	@echo "SKIP_TEST is set for: ${PROJECT_FILE}"
+else
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make diffs          : run all regression tests and display results"
 diffs: txt-diff results
+endif
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-diff       : makes .diff files (from diff -u $$.goal)"
+
+ifdef SKIP_TEST
+txt-diff:
+	@echo "SKIP_TEST is set for: ${PROJECT_FILE}"
+else
+
+# !SKIP_TEST
 
 ifdef ESC_ON
 ifndef NO_MERGE
@@ -938,6 +967,7 @@ endif
 endif # ifndef NO_MERGE
 endif # ifdef NO_JML
 endif # ifdef ESC_ON
+endif # ifdef SKIP_TEST
 
 txt-daikon-diff: ${PROJECT_FILE}.txt-daikon.diff;
 txt-daikon-end2end-diff: ${PROJECT_FILE}.txt-daikon-end2end.diff;
@@ -1122,7 +1152,7 @@ ifdef ESC_ON
 ${PROJECT_FILE}.txt-merge-esc: merged/.merged-esc
 	(cd merged && cat `cat ${INST_LIST_FILE}`) > ${PROJECT_FILE}.txt-merge-esc
 merged/.merged-esc: ${INV_FILE} ${DAIKON_CLASS} ${MERGE_ESC_CLASS} ${MERGE_ESC_VISITOR_CLASS}
-	@[ ! -e merged/.nomerge ] || (echo "Merging diasabled; rm merged/.nomerge if you want to enable it." && false)
+	@[ ! -e merged/.nomerge ] || (echo "Merging disabled; rm merged/.nomerge if you want to enable it." && false)
 	@echo
 	@echo "### create merge-esc (${PROJECT_FILE})"
 	@echo
@@ -1149,7 +1179,7 @@ ${PROJECT_FILE}.txt-merge-jml: merged/.merged-jml
 	rm -f ${PROJECT_FILE}.txt-merge-jml
 	(cd merged && cat `cat ${INST_LIST_FILE}`) > ${PROJECT_FILE}.txt-merge-jml
 merged/.merged-jml: ${INV_FILE} ${DAIKON_CLASS} ${MERGE_ESC_CLASS} ${MERGE_ESC_VISITOR_CLASS}
-	@[ ! -e merged/.nomerge ] || (echo "Merging diasabled; rm merged/.nomerge if you want to enable it." && false)
+	@[ ! -e merged/.nomerge ] || (echo "Merging disabled; rm merged/.nomerge if you want to enable it." && false)
 	@echo
 	@echo "### create merge-jml (${PROJECT_FILE})"
 	@echo

@@ -143,7 +143,7 @@ int alt_sep_test(void)
     return alt_sep;
 }
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     if(argc < 13)
     {

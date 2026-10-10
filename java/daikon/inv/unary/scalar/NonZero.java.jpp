@@ -188,7 +188,7 @@ public class NONZERO extends SINGLESCALAR {
     return status;
   }
 
-  /** Returns whether or not the variable is a pointer. */
+  /** Returns true if the variable is a pointer. */
   @Pure
   private boolean is_pointer(@GuardSatisfied NONZERO this) {
     return ppt.var_infos[0].file_rep_type == ProglangType.HASHCODE;
@@ -237,7 +237,18 @@ public class NONZERO extends SINGLESCALAR {
         // Perhaps I ought to check that it's possible (given the modulus
         // constraints) for the value to be zero; otherwise, the modulus
         // constraint implies non-zero.
-        range = (vs.max() - vs.min() + 1) / modulus;
+        #if defined(SCALAR)
+          // max - min + 1 overflows if the true range exceeds Long.MAX_VALUE; any such range
+          // is clamped to range_max below.
+          long diff = vs.max() - vs.min();
+          if (diff < 0 || diff == Long.MAX_VALUE) {
+            range = Long.MAX_VALUE;
+          } else {
+            range = (diff + 1) / modulus;
+          }
+        #else
+          range = (vs.max() - vs.min() + 1) / modulus;
+        #endif
       }
       if ((range_max != 0) && (range > range_max)) {
         range = range_max;
@@ -270,7 +281,7 @@ public class NONZERO extends SINGLESCALAR {
 
     if (!var.aux.hasNull()) {
       return new DiscardInfo(this, DiscardCode.obvious,
-                     "'null' has no special meaning for " + var.name());
+                             "'null' has no special meaning for " + var.name());
     }
 
     return super.isObviousStatically(vis);

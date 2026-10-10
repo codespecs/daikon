@@ -72,7 +72,7 @@ public class Param
     ps1.a ++;
     ps2.a ++;
 
-    
+
   }
 
   /*@ ensures this.gs1.a == 10; */

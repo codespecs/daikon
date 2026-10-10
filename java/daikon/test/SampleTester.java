@@ -51,7 +51,7 @@ import org.plumelib.util.StringsPlume;
  *
  * <p>The input file format is documented in the developer manual.
  */
-@SuppressWarnings({"nullness", "builder"}) // test code
+@SuppressWarnings("nullness") // test code
 public class SampleTester {
 
   public static final Logger debug = Logger.getLogger("daikon.test.SampleTester");
@@ -78,6 +78,7 @@ public class SampleTester {
           "      Specify a class, varinfos, and ppt to debug track.",
           "      Format is class<var1,var2,var3>@ppt");
 
+  @SuppressWarnings("JUnitMethodInvoked") // main() runs the tests without JUnit
   public static void main(String[] args) throws IOException {
 
     LongOpt[] longopts =
@@ -93,7 +94,7 @@ public class SampleTester {
     while ((c = g.getopt()) != -1) {
       switch (c) {
 
-          // long option
+        // long option
         case 0:
           String option_name = longopts[g.getLongind()].getName();
           if (Daikon.help_SWITCH.equals(option_name)) {
@@ -582,21 +583,25 @@ public class SampleTester {
   }
 
   /**
-   * Prints out all of the invariants in the slice identified by the argumens (each of which should
-   * be a valid variable name for this ppt). always returns true.
+   * Prints all of the invariants in the given slice identified by the arguments (each of which
+   * should be a valid variable name for this ppt).
+   *
+   * @param varNames a list of variable names
+   * @return true
    */
-  private boolean proc_show_invs_assert(List<String> args) {
+  private boolean proc_show_invs_assert(List<String> varNames) {
 
-    if ((args.size() < 1) || (args.size() > 3)) {
-      parse_error("bad argument count (" + args.size() + ") for show_invs");
+    if (varNames.isEmpty() || (varNames.size() > 3)) {
+      parse_error("bad argument count (" + varNames.size() + ") for show_invs");
     }
 
     // Build a vis to match the specified variables
-    VarInfo[] vis = new VarInfo[args.size()];
+    VarInfo[] vis = new VarInfo[varNames.size()];
     for (int i = 0; i < vis.length; i++) {
-      vis[i] = ppt.find_var_by_name(args.get(i));
+      vis[i] = ppt.find_var_by_name(varNames.get(i));
       if (vis[i] == null) {
-        parse_error(String.format("Variable '%s' not found at ppt %s", args.get(i), ppt.name()));
+        parse_error(
+            String.format("Variable '%s' not found at ppt %s", varNames.get(i), ppt.name()));
       }
     }
     PptSlice slice = ppt.findSlice(vis);
@@ -605,27 +610,31 @@ public class SampleTester {
       return true;
     }
 
-    // Look for a matching invariant in the slices invariant list
-    System.out.printf("SampleTester show_invs: %d invariants%n", slice.invs.size());
-    for (Invariant inv : slice.invs) {
-      System.out.printf("  %s: %s%n", inv.getClass(), inv.format());
+    // Diagnostics.
+    if (false) {
+      System.out.printf(
+          "SampleTester %s show_invs: %d invariants%n", Arrays.toString(vis), slice.invs.size());
+      for (Invariant inv : slice.invs) {
+        System.out.printf("  %s: %s%n", inv.getClass(), inv.format());
+      }
     }
+
     return true;
   }
 
   /**
    * The constant assertion returns true if all of its arguments are constants.
    *
-   * @param args variables; must be non-empty
+   * @param varNames variables; must be non-empty
    * @return true if all of the given variables are constants
    */
-  private boolean proc_constant_assert(List<String> args) {
+  private boolean proc_constant_assert(List<String> varNames) {
 
-    if (args.size() < 1) {
+    if (varNames.isEmpty()) {
       parse_error("Must be at least one argument for constant assertion");
     }
 
-    for (String arg : args) {
+    for (String arg : varNames) {
       VarInfo v = ppt.find_var_by_name(arg);
       if (v == null) {
         parse_error(String.format("Variable '%s' not found at ppt %s", arg, ppt.name()));

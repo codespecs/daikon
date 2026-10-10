@@ -48,6 +48,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.logging.Logger;
@@ -71,7 +72,7 @@ import org.plumelib.util.StringsPlume;
 public final class PrintInvariants {
 
   private PrintInvariants() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   /**
@@ -155,7 +156,7 @@ public final class PrintInvariants {
    * If true, remove as many variables as possible that need to be indicated as 'post'. Post
    * variables occur when the subscript for a derived variable with an orig sequence is not orig.
    * For example: orig(a[post(i)]) An equivalent expression involving only orig variables is
-   * substitued for the post variable when one exists.
+   * substituted for the post variable when one exists.
    */
   public static boolean dkconfig_remove_post_vars = false;
 
@@ -168,7 +169,7 @@ public final class PrintInvariants {
   /**
    * This enables a different way of treating static constant variables. They are not created into
    * invariants into slices. Instead, they are examined during print time. If a unary invariant
-   * contains a value which matches the value of a static constant varible, the value will be
+   * contains a value which matches the value of a static constant variable, the value will be
    * replaced by the name of the variable, "if it makes sense". For example, if there is a static
    * constant variable a = 1. And if there exists an invariant x &le; 1, x &le; a would be the
    * result printed.
@@ -269,7 +270,7 @@ public final class PrintInvariants {
   private static @MonotonicNonNull String discVars = null;
 
   /**
-   * Output discard reasons for this program point. If null, output discard reasons fro all program
+   * Output discard reasons for this program point. If null, output discard reasons for all program
    * points.
    */
   private static @MonotonicNonNull String discPpt = null;
@@ -317,7 +318,7 @@ public final class PrintInvariants {
 
   /**
    * This does the work of {@link #main(String[])}, but it never calls System.exit, so it is
-   * appropriate to be called progrmmatically.
+   * appropriate to be called programmatically.
    */
   public static void mainHelper(String[] args)
       throws FileNotFoundException,
@@ -484,7 +485,7 @@ public final class PrintInvariants {
     if (debug.isLoggable(FINE)) {
       debug.fine("Printing PPT Hierarchy");
       for (PptTopLevel my_ppt : ppts.pptIterable()) {
-        if (my_ppt.parents.size() == 0) {
+        if (my_ppt.parents.isEmpty()) {
           my_ppt.debug_print_tree(debug, 0, null);
         }
       }
@@ -705,10 +706,12 @@ public final class PrintInvariants {
         throw new IllegalArgumentException("Too many brackets" + lineSep + usage);
       StringTokenizer vars = new StringTokenizer(parenTokens.nextToken(), ",");
       if (vars.hasMoreTokens()) {
-        discVars = vars.nextToken();
-        while (vars.hasMoreTokens()) discVars += "," + vars.nextToken();
+        StringJoiner discVarsJoiner = new StringJoiner(",");
+        while (vars.hasMoreTokens()) {
+          discVarsJoiner.add(vars.nextToken());
+        }
         // Get rid of *all* spaces since we know varnames can't have them
-        discVars = discVars.replaceAll(" ", "");
+        discVars = discVarsJoiner.toString().replaceAll(" ", "");
       }
       if (temp.endsWith(">")) {
         return;
@@ -880,7 +883,7 @@ public final class PrintInvariants {
       }
       return;
     }
-    if ((ppt.numViews() == 0) && (ppt.joiner_view.invs.size() == 0)) {
+    if ((ppt.numViews() == 0) && ppt.joiner_view.invs.isEmpty()) {
       if (debugPrint.isLoggable(FINE)) {
         debugPrint.fine("[No views for " + ppt.name() + "]");
       }
@@ -937,7 +940,7 @@ public final class PrintInvariants {
     if (Daikon.output_num_samples) {
       out.print("  ");
       if (!wrap_xml) {
-        out.print(StringsPlume.nplural(ppt.num_samples(), "sample"));
+        out.print(StringsPlume.nPlural(ppt.num_samples(), "sample"));
       } else {
         printXmlTagged(out, "SAMPLES", ppt.num_samples());
       }
@@ -1012,14 +1015,14 @@ public final class PrintInvariants {
     if (Daikon.output_num_samples
         || (Daikon.output_format == OutputFormat.ESCJAVA)
         || (Daikon.output_format == OutputFormat.DBCJAVA)) {
-      if (modified_vars.size() > 0) {
+      if (!modified_vars.isEmpty()) {
         out.print("      Modified variables:");
         for (VarInfo vi : modified_vars) {
           out.print(" " + vi.old_var_name());
         }
         out.println();
       }
-      if (reassigned_parameters.size() > 0) {
+      if (!reassigned_parameters.isEmpty()) {
         // out.print("      Reassigned parameters:");
         out.print("      Modified primitive arguments:");
         for (VarInfo vi : reassigned_parameters) {
@@ -1027,7 +1030,7 @@ public final class PrintInvariants {
         }
         out.println();
       }
-      if (unmodified_vars.size() > 0) {
+      if (!unmodified_vars.isEmpty()) {
         out.print("      Unmodified variables:");
         for (VarInfo vi : unmodified_vars) {
           out.print(" " + vi.old_var_name());
@@ -1047,7 +1050,7 @@ public final class PrintInvariants {
       }
 
       // Print out the modifies/assignable list
-      if (mods.size() > 0) {
+      if (!mods.isEmpty()) {
         if (Daikon.output_format == OutputFormat.ESCJAVA) {
           out.print("modifies ");
         } else {
@@ -1107,7 +1110,7 @@ public final class PrintInvariants {
       }
     }
 
-    // Addditional information about C# (C Sharp) contracts.
+    // Additional information about C# (C Sharp) contracts.
     if (Daikon.output_format == OutputFormat.CSHARPCONTRACT) {
 
       String csharp = inv.format_using(OutputFormat.CSHARPCONTRACT);
@@ -1119,19 +1122,9 @@ public final class PrintInvariants {
 
       if (!postAndOrig) {
         Set<String> sortedVariables = new HashSet<>();
-        String sortedVars = "";
-        Set<String> variables = new HashSet<>();
-        String vars = "";
-
         get_csharp_invariant_variables(inv, sortedVariables, true);
+        Set<String> variables = new HashSet<>();
         get_csharp_invariant_variables(inv, variables, false);
-
-        for (String s : sortedVariables) {
-          sortedVars += s + " ";
-        }
-        for (String s : variables) {
-          vars += s + " ";
-        }
 
         out.println(csharp);
 
@@ -1139,8 +1132,8 @@ public final class PrintInvariants {
         if (PrintInvariants.print_csharp_metadata) {
           out.println(daikon);
           out.println(invType);
-          out.println(sortedVars);
-          out.println(vars);
+          out.println(String.join(" ", sortedVariables));
+          out.println(String.join(" ", variables));
           out.println("*");
         }
       }
@@ -1152,7 +1145,7 @@ public final class PrintInvariants {
 
     if (Daikon.output_num_samples) {
       int inv_num_samps = inv.ppt.num_samples();
-      String num_values_samples = "\t\t(" + StringsPlume.nplural(inv_num_samps, "sample") + ")";
+      String num_values_samples = "\t\t(" + StringsPlume.nPlural(inv_num_samps, "sample") + ")";
       inv_rep += num_values_samples;
     }
 
@@ -1249,9 +1242,9 @@ public final class PrintInvariants {
 
     if (!sort) {
       String r = varInfo.name_using(OutputFormat.CSHARPCONTRACT);
-      int a = r.indexOf("[");
-      int b = r.indexOf("]");
-      if (a != 1 && b != 1 && a < b) {
+      int a = r.indexOf('[');
+      int b = r.indexOf(']');
+      if (a != -1 && b != -1 && a < b) {
         String middle = r.substring(a + 1, b);
         if (middle.equals("..")) {
           r = r.substring(0, a + 1) + ".." + r.substring(b, r.length());
@@ -1556,12 +1549,13 @@ public final class PrintInvariants {
         }
         VarInfo[] vis = slice.var_infos;
 
-        String var_str = "";
-        for (int i = 0; i < vis.length; i++) {
-          var_str += vis[i].name() + " ";
-          if (ppt.is_constant(vis[i])) {
-            var_str += "[" + Debug.toString(ppt.constants.constant_value(vis[i])) + "] ";
+        StringJoiner var_str = new StringJoiner(" ");
+        for (VarInfo vi : vis) {
+          String name = vi.name();
+          if (ppt.is_constant(vi)) {
+            name += " [" + Debug.toString(ppt.constants.constant_value(vi)) + "]";
           }
+          var_str.add(name);
         }
         System.out.printf("  Slice %s - %d invariants%n", var_str, slice.invs.size());
 

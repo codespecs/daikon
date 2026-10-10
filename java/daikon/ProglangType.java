@@ -13,6 +13,7 @@ import java.util.List;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.lock.qual.GuardSatisfied;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.signedness.qual.Signed;
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.dataflow.qual.SideEffectFree;
 import org.plumelib.util.Intern;
@@ -26,7 +27,7 @@ import org.plumelib.util.StringsPlume;
 // I could also consider using Class; however:
 //  * that ties this to a Java front end, as Class can't represent types of
 //    (say) C variables.  (not a compelling problem)
-//  * that loads the class, which requies that all classes available at
+//  * that loads the class, which requires that all classes available at
 //    run time be available at inference time.  (not a compelling problem)
 //  * Class does not represent inheritance (but I can do that myself);
 //    and see isAssignableFrom, which might do all I need.
@@ -86,7 +87,7 @@ public final @Interned class ProglangType implements Serializable {
   private int dimensions;
 
   /**
-   * Return the number of dimensions (zero for a non-array).
+   * Returns the number of dimensions (zero for a non-array).
    *
    * @return the number of dimensions
    */
@@ -342,7 +343,9 @@ public final @Interned class ProglangType implements Serializable {
     } else {
       long val;
       if ((value.length() > 2) && (value.charAt(0) == '0') && (value.charAt(1) == 'x')) {
-        val = Long.parseLong(value.substring(2), 16);
+        @SuppressWarnings("signedness:assignment")
+        @Signed long temp = Long.parseUnsignedLong(value.substring(2), 16);
+        val = temp;
       } else {
         val = Long.parseLong(value);
       }
@@ -690,7 +693,7 @@ public final @Interned class ProglangType implements Serializable {
   }
 
   /**
-   * Return true if this is java.lang.Object.
+   * Returns true if this is java.lang.Object.
    *
    * @return true if this is java.lang.Object
    */
@@ -700,7 +703,7 @@ public final @Interned class ProglangType implements Serializable {
   }
 
   /**
-   * Return true if the base (the final element type) is a reference type rather than integer,
+   * Returns true if the base (the final element type) is a reference type rather than integer,
    * float, or boolean.
    *
    * @return true if the base is Object
@@ -734,7 +737,7 @@ public final @Interned class ProglangType implements Serializable {
   }
 
   /**
-   * Return true if these two types can be sensibly compared to one another, or if one can be cast
+   * Returns true if these two types can be sensibly compared to one another, or if one can be cast
    * to the other. For instance, int is castable to long, but boolean is not castable to float, and
    * int is not castable to int[]. This is a reflexive relationship, but not a transitive one
    * because it might not be true for two children of a superclass, even though it's true for the
@@ -762,9 +765,9 @@ public final @Interned class ProglangType implements Serializable {
   }
 
   /**
-   * Return true if these two types can be sensibly compared to one another, and if non-integral,
-   * whether this could be a superclass of other. A List is comparableOrSuperclassOf to a ArrayList,
-   * but not the other way around. This is a transitive method, but not reflexive.
+   * Returns true if these two types can be sensibly compared to one another, and if non-integral,
+   * whether this could be a superclass of other. A List is comparableOrSuperclassOf to an
+   * ArrayList, but not the other way around. This is a transitive method, but not reflexive.
    */
   public boolean comparableOrSuperclassOf(ProglangType other) {
     if (this == other) { // ProglangType objects are interned
@@ -809,8 +812,8 @@ public final @Interned class ProglangType implements Serializable {
   }
 
   /**
-   * Returns whether or not this declared type is a function pointer Only valid if the front end
-   * marks the function pointer with the name '*func'.
+   * Returns true if this declared type is a function pointer Only valid if the front end marks the
+   * function pointer with the name '*func'.
    */
   @Pure
   public boolean is_function_pointer() {

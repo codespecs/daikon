@@ -19,7 +19,7 @@ import org.plumelib.util.FilesPlume;
  * SpinfoFile stores information parsed from a {@code .spinfo} file. The constructor parses the
  * file; then clients can make calls to retrieve the parsed information.
  *
- * <p>This file uses the term "ppt section" and "replace section" to describe what is refered to as
+ * <p>This file uses the term "ppt section" and "replace section" to describe what is referred to as
  * a "Program Point Section" and "replacement sections" in the Daikon User Manual, respectively. A
  * "ppt statement" is a single line from a "ppt section".
  */
@@ -84,7 +84,7 @@ public class SpinfoFile {
     return splitterObjects;
   }
 
-  /** Return the number of splitters (SplitterObject objects) represented by this file. */
+  /** Returns the number of splitters (SplitterObject objects) represented by this file. */
   public int numSplittterObjects() {
     int result = 0;
     for (SplitterObject[] spa : splitterObjects) {
@@ -94,7 +94,7 @@ public class SpinfoFile {
   }
 
   /**
-   * Return the number of splitters (SplitterObject objects) represented by all the files in the
+   * Returns the number of splitters (SplitterObject objects) represented by all the files in the
    * list.
    */
   public static int numSplittterObjects(List<SpinfoFile> spinfoFiles) {
@@ -232,7 +232,7 @@ public class SpinfoFile {
     List<SplitterObject[]> splittersForAllPpts = new ArrayList<>();
     for (List<String> pptSection : pptSections) {
       List<SplitterObject> splittersForThisPpt = new ArrayList<>();
-      if (pptSection.size() > 0) {
+      if (!pptSection.isEmpty()) {
         String pptName = pptSection.get(0).trim();
         SplitterObject splitObj = null;
         for (int j = 1; j < pptSection.size(); j++) {
@@ -293,7 +293,7 @@ public class SpinfoFile {
     }
   }
 
-  /** Returns whether the line is blank (or null). */
+  /** Returns true if the line is blank (or null). */
   @EnsuresNonNullIf(result = false, expression = "#1")
   @Pure
   private static boolean isBlank(@Nullable String line) {
@@ -301,7 +301,7 @@ public class SpinfoFile {
   }
 
   /**
-   * Returns whether the line is a spinfo file comment line. A line is a comment if it starts with a
+   * Returns true if the line is a spinfo file comment line. A line is a comment if it starts with a
    * (possibly indented) "#".
    */
   @Pure
@@ -310,7 +310,7 @@ public class SpinfoFile {
   }
 
   /**
-   * Returns whether the line is a spinfo file formatting command. A line is a formatting command if
+   * Returns true if the line is a spinfo file formatting command. A line is a formatting command if
    * line is indented with a tab ("\t") or spaces (" ").
    */
   @Pure

@@ -113,7 +113,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
       // Added to get rid of constants other than -1, 0, 1 in the
       // invariant's format_java() string... this change was made to
-      // filter out targets that could never really be achived
+      // filter out targets that could never really be achieved
       // example:   num >= 10378
 
       if (filterOut(inv1) || filterOut(inv2)) {
@@ -143,7 +143,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
         // remember identifiers can not begin with [0-9\-]
         if (Character.isDigit(firstChar) || firstChar == '-') {
           if (acceptableNumber(oneToken)) {
-            continue;
+            // continue;
           } else {
             return true;
           }
@@ -152,15 +152,20 @@ public class MatchCountVisitor extends PrintAllVisitor {
       } catch (NumberFormatException e) {
         System.out.println(
             "Should never get here... NumberFormatException in filterOut: " + oneToken);
-        continue;
+        // continue;
       }
     }
     return false;
   }
 
+  /**
+   * Returns the recall.
+   *
+   * @return the recall
+   */
   public double calcRecall() {
     System.out.println("Recall: " + recall.size() + " / " + targSet.size());
-    if (targSet.size() == 0) {
+    if (targSet.isEmpty()) {
       // avoids divide by zero
       return -1;
     }
@@ -178,7 +183,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
     // point number
 
     // could be float, look for "."
-    if (numLiteral.indexOf(".") > -1) {
+    if (numLiteral.indexOf('.') > -1) {
       // float fnum = Float.parseFloat(numLiteral);
       // for now, accept all floats (ignore return value of parseFloat)
       return true;
@@ -195,7 +200,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
   public double calcPrecision() {
 
     System.out.println("Prec: " + recall.size() + " / " + cnt.size());
-    if (cnt.size() == 0) {
+    if (cnt.isEmpty()) {
       // to avoid a divide by zero
       return -1;
     }

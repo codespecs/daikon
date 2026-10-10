@@ -1,7 +1,7 @@
 package daikon.chicory;
 
 import daikon.Chicory;
-import daikon.SignaturesUtil;
+import daikon.plumelib.reflection.Signatures;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -18,7 +18,10 @@ public abstract class DaikonWriter {
   /** Platform-dependent line separator. Should be "\n" on Unix. */
   public static final String lineSep = System.lineSeparator();
 
-  protected DaikonWriter() {}
+  /** Create a new DaikonWriter. */
+  protected DaikonWriter() {
+    // This constructor is intentionally empty.
+  }
 
   /**
    * Determines if this field warrants an [ = val ] entry in decls file.
@@ -44,7 +47,7 @@ public abstract class DaikonWriter {
    * @return the decorated method entry name for Daikon
    */
   public static String methodEntryName(Member method) {
-    return methodName(method, daikon.FileIO.enter_suffix);
+    return methodPptName(method, daikon.FileIO.enter_suffix);
   }
 
   /**
@@ -60,7 +63,7 @@ public abstract class DaikonWriter {
    */
   public static String methodEntryName(
       String fullClassName, String[] types, String name, String short_name) {
-    return methodName(fullClassName, types, name, short_name, daikon.FileIO.enter_suffix);
+    return methodPptName(fullClassName, types, name, short_name, daikon.FileIO.enter_suffix);
   }
 
   /**
@@ -71,7 +74,7 @@ public abstract class DaikonWriter {
    * @return the decorated method exit name for Daikon
    */
   public static String methodExitName(Member method, int lineNum) {
-    return methodName(method, daikon.FileIO.exit_suffix + lineNum);
+    return methodPptName(method, daikon.FileIO.exit_suffix + lineNum);
   }
 
   /**
@@ -87,7 +90,8 @@ public abstract class DaikonWriter {
    */
   public static String methodExitName(
       String fullClassName, String[] types, String name, String short_name, int lineNum) {
-    return methodName(fullClassName, types, name, short_name, daikon.FileIO.exit_suffix + lineNum);
+    return methodPptName(
+        fullClassName, types, name, short_name, daikon.FileIO.exit_suffix + lineNum);
   }
 
   /**
@@ -100,15 +104,17 @@ public abstract class DaikonWriter {
    *     DataStructures.StackArTester.doNew(int size)"
    * @param short_name just the method's name ("{@code <init>}" for constructors)
    * @param point program point type/suffix such as "EXIT" or "ENTER"
-   * @return same thing as {@link #methodName(Member, String)}
+   * @return same thing as {@link #methodPptName(Member, String)}
    */
-  private static String methodName(
+  private static String methodPptName(
       String fullClassName, String[] types, String name, String short_name, String point) {
+
+    // UNDONE: name is no longer used
 
     // System.out.printf("fullclass: %s !!! name: %s !!! short_name: %s %n",
     //                  fullClassName, name, short_name);
 
-    boolean isConstructor = name.equals("<init>") || name.equals("");
+    boolean isConstructor = short_name.equals("<init>") || short_name.equals("");
 
     if (isConstructor) {
       // replace <init>'s with the actual class name
@@ -119,13 +125,13 @@ public abstract class DaikonWriter {
 
     // build up the string to go inside the parens
     StringJoiner paramTypes = new StringJoiner(",", "(", ")");
-    for (int i = 0; i < types.length; i++) {
-      paramTypes.add(types[i]);
+    for (String type : types) {
+      paramTypes.add(type);
     }
     String pptname = fullClassName + "." + short_name + paramTypes + ":::" + point;
 
     if (Chicory.debug_ppt_names) {
-      System.out.printf("methodName1 final ppt name = '%s'%n", pptname);
+      System.out.printf("methodPptName final ppt name = '%s'%n", pptname);
     }
 
     // Throwable t = new Throwable("debug");
@@ -143,32 +149,28 @@ public abstract class DaikonWriter {
    * @param point usually "ENTER" or "EXIT"
    * @return the program point name
    */
-  private static String methodName(Member member, String point) {
+  private static String methodPptName(Member member, String point) {
     String fullname;
-    Class<?>[] args;
+    Class<?>[] params;
     Class<?> declaring_class = member.getDeclaringClass();
     if (member instanceof Method) {
       Method method = (Method) member;
       fullname = declaring_class.getName() + "." + method.getName();
-      args = method.getParameterTypes();
+      params = method.getParameterTypes();
     } else {
       Constructor<?> constructor = (Constructor<?>) member;
       fullname = declaring_class.getName() + "." + declaring_class.getSimpleName();
-      args = constructor.getParameterTypes();
+      params = constructor.getParameterTypes();
     }
-    String arg_str = "";
-    for (Class<?> arg : args) {
-      if (arg_str.length() > 0) {
-        arg_str += ", ";
-      }
-      if (arg.isArray()) {
-        arg_str += SignaturesUtil.classGetNameToBinaryName(arg.getName());
+    StringJoiner param_str = new StringJoiner(", ");
+    for (Class<?> param : params) {
+      if (param.isArray()) {
+        param_str.add(Signatures.classGetNameToBinaryName(param.getName()));
       } else {
-        arg_str += arg.getName();
+        param_str.add(param.getName());
       }
     }
-    String ppt_name = String.format("%s(%s):::%s", fullname, arg_str, point);
-    return ppt_name;
+    return String.format("%s(%s):::%s", fullname, param_str, point);
   }
 
   /** Determines if the given method should be instrumented. */
@@ -177,10 +179,7 @@ public abstract class DaikonWriter {
       return Chicory.instrument_clinit;
     }
     int modifiers = method.getModifiers();
-    if (Modifier.isAbstract(modifiers) || Modifier.isNative(modifiers)) {
-      return false;
-    }
-    return true;
+    return !(Modifier.isAbstract(modifiers) || Modifier.isNative(modifiers));
   }
 
   /**
@@ -189,7 +188,7 @@ public abstract class DaikonWriter {
    * classes).
    */
   public static @BinaryName String stdClassName(Class<?> type) {
-    return Runtime.classGetNameToBinaryName(type.getName());
+    return Signatures.classGetNameToBinaryName(type.getName());
   }
 
   /** Escapes blanks and backslashes in names written to the decl/dtrace files. */

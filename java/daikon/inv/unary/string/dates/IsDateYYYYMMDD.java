@@ -42,9 +42,9 @@ public class IsDateYYYYMMDD extends SingleString {
               // The ISO 8610 standard permits "-" separator or no separator.
               + ("^" + YYYY2050 + MONTH_NUMBER + DAY_OF_MONTH + "$"));
 
-  ///
-  /// Required methods
-  ///
+  //
+  // Required methods
+  //
 
   /**
    * Creates a new IsDateYYYYMMDD.

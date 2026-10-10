@@ -558,6 +558,8 @@ main(int argc, char *argv[])
 
 	grwrite(group_ptr, fn);
 
+	return 0;
+
 }
 
 

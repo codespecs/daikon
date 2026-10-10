@@ -10,7 +10,7 @@ import jtb.visitor.DepthFirstVisitor;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 /**
- * NameFixer is a visitor for a JTB syntax tree that checks for unqualifed class member variables
+ * NameFixer is a visitor for a JTB syntax tree that checks for unqualified class member variables
  * and adds the className as a qualifier. For example, the condition:
  *
  * <pre>D[a]</pre>
@@ -61,12 +61,12 @@ class NameFixer extends DepthFirstVisitor {
   }
 
   /**
-   * Fixes unqualifed class member variables.
+   * Fixes unqualified class member variables.
    *
    * @param expression a valid segment of java code
    * @param className is name of the containing class
    * @param varInfos is a List of VarInfos for all the variables available
-   * @return condition with all unqualifed variable references now qualified with className
+   * @return condition with all unqualified variable references now qualified with className
    * @throws ParseException when condition is not a valid segment of java code
    */
   public static String fixUnqualifiedMemberNames(

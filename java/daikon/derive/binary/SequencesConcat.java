@@ -39,7 +39,7 @@ public final class SequencesConcat extends BinaryDerivation {
   }
 
   /**
-   * Create a new SequenceScarlarConcat that represents the concatenation of two base variables.
+   * Create a new SequencesConcat that represents the concatenation of two base variables.
    *
    * @param vi1 base variable 1
    * @param vi2 base variable 2

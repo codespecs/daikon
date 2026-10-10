@@ -2,7 +2,7 @@
 
 # Canonicalize a .decls, .dtrace, or combined .dtrace file by sorting
 # PPT declarations, and the variables within each program point, into
-# alphabetical order. Each continguous series of DECLARE paragraphs is
+# alphabetical order. Each contiguous series of DECLARE paragraphs is
 # reordered, while trace paragraphs remain in the same order as in the
 # original file.
 # This change is semantics-preserving: Daikon produces the same

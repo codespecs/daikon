@@ -1,7 +1,7 @@
 package daikon;
 
+import daikon.chicory.Runtime;
 import daikon.chicory.StreamRedirectThread;
-import daikon.plumelib.bcelutil.BcelUtil;
 import daikon.plumelib.bcelutil.SimpleLog;
 import daikon.plumelib.options.Option;
 import daikon.plumelib.options.Options;
@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Pattern;
@@ -285,6 +286,7 @@ public class DynComp {
     List<String> cmdlist = new ArrayList<>();
     cmdlist.add("java");
     // cmdlist.add ("-verbose:class");
+
     cmdlist.add("-cp");
     cmdlist.add(cp);
     cmdlist.add("-ea");
@@ -293,7 +295,7 @@ public class DynComp {
     cmdlist.add(
         "-Xmx" + (int) Math.ceil(java.lang.Runtime.getRuntime().maxMemory() / 1073741824.0) + "G");
 
-    if (BcelUtil.javaVersion <= 8) {
+    if (!Runtime.isJava9orLater()) {
       if (!no_jdk) {
         // prepend to rather than replace boot classpath
         // If daikonPath is nonempty, it starts with a pathSeparator.
@@ -303,6 +305,10 @@ public class DynComp {
       // allow DCRuntime to make reflective access to java.land.Object.clone() without a warning
       cmdlist.add("--add-opens");
       cmdlist.add("java.base/java.lang=ALL-UNNAMED");
+      if (Runtime.isJava24orLater()) {
+        // needed to eliminate warning for JNI access to native code
+        cmdlist.add("--enable-native-access=ALL-UNNAMED");
+      }
       if (!no_jdk) {
         // If we are processing JDK classes, then we need our code on the boot classpath as well.
         // Otherwise, references to DCRuntime from the JDK would fail.
@@ -314,6 +320,10 @@ public class DynComp {
         // allow DCRuntime to make reflective access to sun.util.locale (equals_dcomp_instrumented)
         cmdlist.add("--add-exports");
         cmdlist.add("java.base/sun.util.locale=ALL-UNNAMED");
+        if (Runtime.isJava24orLater()) {
+          cmdlist.add("--add-opens");
+          cmdlist.add("java.base/sun.util.resources=ALL-UNNAMED");
+        }
         // replace default java.base with our instrumented version
         cmdlist.add("--patch-module");
         cmdlist.add("java.base=" + rt_file);
@@ -410,15 +420,21 @@ public class DynComp {
    * @param args the list of arguments
    * @return argument string
    */
-  public String argsToString(List<String> args) {
-    String str = "";
+  public static String argsToString(List<String> args) {
+    StringJoiner result = new StringJoiner(" ");
     for (String arg : args) {
-      if (arg.indexOf(" ") != -1) {
-        arg = "'" + arg + "'";
+      if (arg.indexOf(' ') != -1) {
+        if (arg.indexOf('\'') == -1) {
+          arg = "'" + arg + "'";
+        } else if (arg.indexOf('\"') == -1) {
+          arg = "\"" + arg + "\"";
+        } else {
+          throw new Error("Cannot quote: " + arg);
+        }
       }
-      str += arg + " ";
+      result.add(arg);
     }
-    return str.trim();
+    return result.toString();
   }
 
   /**

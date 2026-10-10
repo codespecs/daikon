@@ -37,9 +37,9 @@ public class FixedLengthString extends SingleString {
   @Unused(when = Prototype.class)
   private @Nullable Integer length = null;
 
-  ///
-  /// Required methods
-  ///
+  //
+  // Required methods
+  //
 
   /**
    * Creates a new FixedLengthString.

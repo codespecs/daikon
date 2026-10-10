@@ -4,7 +4,7 @@
 
 ## Adds the variable "cluster" to one or more decls files as the first
 ## variable at each program point.  The original decls files are left
-## unchanged, and the result is ouput to file *_runcluster_temp.decls in the
+## unchanged, and the result is output to file *_runcluster_temp.decls in the
 ## current directory.  Furthermore, the list of output files is written
 ## to standard out.
 

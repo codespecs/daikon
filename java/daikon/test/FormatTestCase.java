@@ -185,7 +185,7 @@ class FormatTestCase {
 
   // End of SingleOutputTestCase
 
-  /** Prefix to each goal line in the file for identitication. */
+  /** Prefix to each goal line in the file for identification. */
   private static final String GOAL_PREFIX = "Goal";
 
   /**
@@ -253,7 +253,7 @@ class FormatTestCase {
   }
 
   /**
-   * Checks to see whether all tests on this invariant are passed.
+   * Returns true if all tests on this invariant are passed.
    *
    * @return true if all the tests on this invariant passed, false otherwise
    */
@@ -904,7 +904,7 @@ class FormatTestCase {
    *     variables involved
    */
   private static void populateWithSamples(Invariant inv, List<Object[]> samples) {
-    if (samples == null || samples.size() == 0) {
+    if (samples == null || samples.isEmpty()) {
       return;
     }
 

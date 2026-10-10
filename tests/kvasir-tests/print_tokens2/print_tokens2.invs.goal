@@ -41,6 +41,7 @@ return has only one value
 ..print_token():::EXIT
 ::buffer == orig(::buffer)
 ::buffer == orig(tok)
+return >= 1
 ===========================================================================
 print_tokens2.c.is_char_constant():::ENTER
 ::buffer == str

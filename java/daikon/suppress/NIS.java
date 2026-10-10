@@ -43,11 +43,13 @@ import typequals.prototype.qual.Prototype;
 //
 
 /** Main class for non-instantiating suppression. Handles setup and other overall functions. */
+@SuppressWarnings("PMD.UseUtilityClass") // Bug in PMD: this class has a no-arg constructor.
 public class NIS {
 
+  /** Do not instantiate. */
   @SuppressWarnings("initialization.fields.uninitialized") // never instantiated
-  public NIS() {
-    throw new Error("Do not instantiate");
+  private NIS() {
+    throw new UnsupportedOperationException("Do not instantiate");
   }
 
   /** Debug tracer. */
@@ -113,15 +115,15 @@ public class NIS {
    * these states on each suppressor.
    */
   public enum SuppressState {
-    /** initial state -- suppressor has not been checked yet */
+    /** Initial state -- suppressor has not been checked yet. */
     NONE,
-    /** suppressor matches the falsified invariant */
+    /** Suppressor matches the falsified invariant. */
     MATCH,
-    /** suppressor is true */
+    /** Suppressor is true. */
     VALID,
-    /** suppressor is not true */
+    /** Suppressor is not true. */
     INVALID,
-    /** suppressor contains a variable that has always been nonsensical */
+    /** Suppressor contains a variable that has always been nonsensical. */
     NONSENSICAL
   }
 
@@ -162,7 +164,7 @@ public class NIS {
   // Statistics that are kept during processing.  Some of these are kept
   // and/or make sense for some approaches and not for others
 
-  /** Whether or not to keep statistics. */
+  /** If true, keep statistics. */
   public static boolean keep_stats = false;
 
   /** Number of falsified invariants in the program point. */
@@ -215,7 +217,7 @@ public class NIS {
     suppressor_proto_invs = new ArrayList<@Prototype Invariant>();
 
     // This should be the first statement in the method, but put it after the
-    // field initalizations so that the Initialization Checker doesn't complain.
+    // field initializations so that the Initialization Checker doesn't complain.
     if (!dkconfig_enabled) {
       return;
     }
@@ -726,7 +728,7 @@ public class NIS {
    * Also removes the always-comparable set of antecedents as a separate set (since it is now merged
    * into each of the other sets). Updates comp_ants accordingly.
    *
-   * <p>In general, in implicit comparability, the variables at a program point are partioned into
+   * <p>In general, in implicit comparability, the variables at a program point are partitioned into
    * disjoint sets of comparable variables. However, implicit comparability also allows some
    * variables to be comparable to all others (always-comparable). An invariant is always-comparable
    * if all of its variables are always-comparable. Since always-comparable invariants can form
@@ -925,7 +927,7 @@ public class NIS {
 
   /**
    * Class used to describe invariants without instantiating the invariant. The invariant is defined
-   * by its NISuppressee and variables (Its ppt is also stored, but not used in comparisions, its
+   * by its NISuppressee and variables (Its ppt is also stored, but not used in comparisons, its
    * presumed that only SupInvs from the same ppt will every be compared.)
    */
   static class SupInv {
@@ -1017,10 +1019,10 @@ public class NIS {
     }
 
     /**
-     * Returns the invariant if it already exists, or null otherwise. Unary and and ternary
-     * invariant must match by class (there are no permutations for unary invariants and ternary
-     * invariants handle permutations as different classes). Binary invariants must match the class
-     * and if there is an internal swap variable for variable order, that must match as well.
+     * Returns the invariant if it already exists, or null otherwise. Unary and ternary invariant
+     * must match by class (there are no permutations for unary invariants and ternary invariants
+     * handle permutations as different classes). Binary invariants must match the class and if
+     * there is an internal swap variable for variable order, that must match as well.
      */
     public @Nullable Invariant already_exists() {
       Invariant cinv = ppt.find_inv_by_class(vis, suppressee.sup_class);
@@ -1040,7 +1042,7 @@ public class NIS {
       return cinv;
     }
 
-    /** Return string representation of the suppressed invariant. */
+    /** Returns string representation of the suppressed invariant. */
     @SideEffectFree
     @Override
     public String toString(@GuardSatisfied SupInv this) {
@@ -1149,22 +1151,23 @@ public class NIS {
     @Override
     public String toString(@GuardSatisfied Antecedents this) {
 
-      String out = "Comparability " + comparability + " : ";
+      StringBuilder out = new StringBuilder();
+      out.append("Comparability " + comparability + " : ");
 
       for (Class<? extends Invariant> iclass : antecedent_map.keySet()) {
-        out += iclass.getSimpleName() + " : ";
+        out.append(iclass.getSimpleName() + " : ");
         List<Invariant> ilist = antecedent_map.get(iclass);
         for (Invariant inv : ilist) {
           if (inv.is_false()) {
-            out += inv.format() + "[FALSE] ";
+            out.append(inv.format() + "[FALSE] ");
           } else {
-            out += inv.format() + " ";
+            out.append(inv.format() + " ");
           }
         }
-        out += " : ";
+        out.append(" : ");
       }
 
-      return out;
+      return out.toString();
     }
   }
 

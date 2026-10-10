@@ -3,9 +3,15 @@ package daikon.simplify;
 /** Utility functions for the simplify package. */
 public class SimpUtil {
   private SimpUtil() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
+  /**
+   * Throws an exception if the string is not a Simplify expression.
+   *
+   * @param s a Simplify expression
+   */
+  @SuppressWarnings("AssignmentExpression") // for "assert (assert_enabled = true);"
   public static void assert_well_formed(String s) {
     boolean assert_enabled = false;
     assert (assert_enabled = true);

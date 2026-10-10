@@ -1,7 +1,3 @@
-/*
- * Created on May 3, 2005
- */
-
 package daikon.chicory;
 
 import java.util.EnumSet;
@@ -56,7 +52,7 @@ public class DaikonClassInfo extends DaikonVariableInfo {
   }
 
   /**
-   * Get a String representation of the given Object's run-time type and the corresponding
+   * Returns a String representation of the given Object's run-time type and the corresponding
    * "modified" value.
    *
    * @param val the Object whose run-time class we wish to get a String representation of

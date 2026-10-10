@@ -161,7 +161,7 @@ public abstract class DaikonVariableInfo
     debug_vars.log(
         "Construct DaikonVariableInfo: %s : %s : %s", this.getClass().getName(), name, typeName);
 
-    children = new ArrayList<DaikonVariableInfo>();
+    children = new ArrayList<>();
     isArray = arr;
 
     if ((theName != null) && (theName.contains("[..]") || theName.contains("[]")) && !isArray) {
@@ -195,7 +195,11 @@ public abstract class DaikonVariableInfo
     children.add(info);
   }
 
-  /** Returns a string representation of this node. */
+  /**
+   * Returns a string representation of this node.
+   *
+   * <p>This implementation returns its run-time class and its name.
+   */
   @SideEffectFree
   @Override
   public String toString(@GuardSatisfied DaikonVariableInfo this) {
@@ -203,29 +207,37 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Returns a string representation of this node and its descandants.
+   * Returns a string representation of this node, with its identity hash code.
    *
-   * @return a string representation of this node and its descandants
+   * <p>This implementation returns its run-time class and its name.
    */
-  public String treeString() {
-    return getStringBuilder(new StringBuilder("--")).toString();
+  @SideEffectFree
+  public String toStringWithIdentityHashCode(@GuardSatisfied DaikonVariableInfo this) {
+    return name + " [" + System.identityHashCode(this) + " " + getClass().getSimpleName() + "]";
   }
 
   /**
-   * Return a StringBuilder that contains the name of this node and all ancestors of this node.
+   * Returns a string representation of this node and its descendants.
+   *
+   * @return a string representation of this node and its descendants
+   */
+  public String treeString() {
+    return getStringBuilder("--").toString();
+  }
+
+  /**
+   * Returns a StringBuilder that contains the name of this node and all ancestors of this node.
    * Longer indentations correspond to deeper levels in the tree.
    *
    * @param offset the offset to begin each line with
    * @return StringBuilder that contains all children of this node
    */
-  private StringBuilder getStringBuilder(StringBuilder offset) {
+  private StringBuilder getStringBuilder(CharSequence offset) {
     StringBuilder theBuf = new StringBuilder();
 
-    theBuf.append(
-        offset + name + " [" + System.identityHashCode(this) + "]" + DaikonWriter.lineSep);
+    theBuf.append("" + offset + this.toStringWithIdentityHashCode() + DaikonWriter.lineSep);
 
-    StringBuilder childOffset = new StringBuilder(offset);
-    childOffset.append("--");
+    CharSequence childOffset = offset + "--";
     for (DaikonVariableInfo info : children) {
       theBuf.append(info.getStringBuilder(childOffset));
     }
@@ -395,7 +407,7 @@ public abstract class DaikonVariableInfo
   }
 
   //
-  // Building the tre
+  // Building the tree
   //
 
   /**
@@ -403,26 +415,26 @@ public abstract class DaikonVariableInfo
    *
    * @param cinfo the method's class
    * @param method the method
-   * @param argnames the method's arguments
+   * @param paramNames the method's parameters
    * @param depth the remaining depth to print variables to
    */
-  protected void addParameters(ClassInfo cinfo, Member method, List<String> argnames, int depth) {
+  protected void addParameters(ClassInfo cinfo, Member method, List<String> paramNames, int depth) {
     debug_vars.log("enter addParameters%n");
 
     Class<?>[] parameterTypes =
         (method instanceof Constructor<?>)
             ? ((Constructor<?>) method).getParameterTypes()
             : ((Method) method).getParameterTypes();
-    assert argnames.size() == parameterTypes.length;
+    assert paramNames.size() == parameterTypes.length;
 
     int param_offset = 0;
     for (int i = 0; i < parameterTypes.length; i++) {
       Class<?> type = parameterTypes[i];
-      String name = argnames.get(i);
       if (type.getName().equals("daikon.dcomp.DCompMarker")
           || type.getName().equals("java.lang.DCompMarker")) {
         continue;
       }
+      String name = paramNames.get(i);
       debug_vars.log("processing parameter '%s'%n", name);
       debug_vars.indent();
       DaikonVariableInfo theChild =
@@ -457,7 +469,7 @@ public abstract class DaikonVariableInfo
 
     DaikonVariableInfo thisInfo; // DaikonVariableInfo corresponding to the "this" object
     if (!dontPrintInstanceVars && topLevelCall) {
-      // "this" variable; must must be at the first level of recursion (not lower) to print it
+      // "this" variable; must be at the first level of recursion (not lower) to print it
       thisInfo = new ThisObjInfo(type);
       addChild(thisInfo);
 
@@ -659,11 +671,11 @@ public abstract class DaikonVariableInfo
       String name,
       String offset,
       int depth,
-      int argNum,
+      int paramNum,
       int param_offset) {
     debug_vars.log("enter addParamDeclVar%n");
     // add this variable to the tree as a child of curNode
-    DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum, type, param_offset);
+    DaikonVariableInfo newChild = new ParameterInfo(offset + name, paramNum, type, param_offset);
 
     addChild(newChild);
 
@@ -705,16 +717,10 @@ public abstract class DaikonVariableInfo
     Class<?> type = meth.getReturnType();
     assert type != null;
 
-    String theName = meth.getName() + "(";
-    if (args.length > 0) {
-      theName += args[0].getName();
+    StringJoiner theName = new StringJoiner(", ", meth.getName() + "(", ")");
+    for (DaikonVariableInfo arg : args) {
+      theName.add(arg.getName());
     }
-    if (args.length > 1) {
-      for (int i = 1; i < args.length - 1; i++) {
-        theName += ", " + args[i].getName();
-      }
-    }
-    theName += ")";
 
     if (offset.length() > 0) {
       // offset already starts with "this"
@@ -736,7 +742,7 @@ public abstract class DaikonVariableInfo
 
     addChild(newPure);
 
-    newPure.checkForDerivedVariables(type, theName, offset);
+    newPure.checkForDerivedVariables(type, theName.toString(), offset);
 
     buf.append(offset);
 
@@ -806,7 +812,7 @@ public abstract class DaikonVariableInfo
       if (cinfo != null) {
         value = cinfo.staticMap.get(theName);
 
-        if (DaikonVariableInfo.dkconfig_constant_infer) {
+        if (dkconfig_constant_infer) {
           if (value == null) {
             isPrimitive = false;
             String className = field.getDeclaringClass().getName();
@@ -832,7 +838,7 @@ public abstract class DaikonVariableInfo
         newField.repTypeName += " = " + value;
         newField.const_val = value;
         newField.dtraceShouldPrint = false;
-        if (DaikonVariableInfo.dkconfig_constant_infer && isPrimitive) {
+        if (dkconfig_constant_infer && isPrimitive) {
           newField.dtraceShouldPrintChildren = false;
         }
       }
@@ -866,7 +872,7 @@ public abstract class DaikonVariableInfo
    * classes).
    */
   public static @BinaryName String stdClassName(Class<?> type) {
-    return Runtime.classGetNameToBinaryName(type.getName());
+    return Signatures.classGetNameToBinaryName(type.getName());
   }
 
   /**
@@ -874,7 +880,7 @@ public abstract class DaikonVariableInfo
    * representation type of a class object is "hashcode."
    *
    * @param type the type of the variable
-   * @param asArray whether the variable is being output as an array (true) or as a pointer (false)
+   * @param asArray true if the variable is being output as an array (true) or as a pointer (false)
    * @return the representation type as a string
    */
   public static String getRepName(Class<?> type, boolean asArray) {
@@ -946,7 +952,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Returns whether or not the specified field is visible from the Class current. All fields within
+   * Returns true if the specified field is visible from the Class current. All fields within
    * instrumented classes are considered visible from everywhere (to match dfej behavior).
    */
   public static boolean isFieldVisible(Class<?> current, Field field) {
@@ -1003,14 +1009,12 @@ public abstract class DaikonVariableInfo
 
     // System.out.printf("Package name for type  %s is %s%n", type, pkgName);
 
-    StringBuilder ret = new StringBuilder();
-
     // In Java 9+ package name is empty string for the unnamed package.
     if (pkgName != null && !pkgName.isEmpty()) {
-      ret.append(" # declaringClassPackageName=" + pkgName);
+      return " # declaringClassPackageName=" + pkgName;
+    } else {
+      return "";
     }
-
-    return ret.toString();
   }
 
   /**
@@ -1118,7 +1122,7 @@ public abstract class DaikonVariableInfo
    * @return true iff type implements the List interface
    */
   public static boolean implementsList(Class<?> type) {
-    if (type.equals(java.util.List.class)) {
+    if (type.equals(List.class)) {
       return true;
     }
 
@@ -1126,7 +1130,7 @@ public abstract class DaikonVariableInfo
     Class<?>[] interfaces = type.getInterfaces();
     for (Class<?> inter : interfaces) {
       // System.out.println("  implements: " + inter.getName());
-      if (inter.equals(java.util.List.class)) {
+      if (inter.equals(List.class)) {
         return true;
       }
     }
@@ -1230,9 +1234,9 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Returns whether or not the fields of the specified class should be included, based on whether
-   * the Class type is a system class or not. Right now, any system classes are excluded, but a
-   * better way of determining this is probably necessary.
+   * Returns true if the fields of the specified class should be included, based on whether the
+   * Class type is a system class or not. Right now, any system classes are excluded, but a better
+   * way of determining this is probably necessary.
    */
   public static boolean systemClass(Class<?> type) {
     String class_name = type.getName();
@@ -1253,7 +1257,7 @@ public abstract class DaikonVariableInfo
   }
 
   /**
-   * Return the type name without aux information.
+   * Returns the type name without aux information.
    *
    * @see #getTypeName()
    */
@@ -1269,7 +1273,7 @@ public abstract class DaikonVariableInfo
     return repTypeName;
   }
 
-  /** Return the rep type name without the constant value. */
+  /** Returns the rep type name without the constant value. */
   public String getRepTypeNameOnly() {
     return repTypeName.replaceFirst(" = .*", "");
   }
@@ -1297,12 +1301,12 @@ public abstract class DaikonVariableInfo
     return compareInfoString;
   }
 
-  /** Return true iff the DeclWriter should print this node. */
+  /** Returns true iff the DeclWriter should print this node. */
   public boolean declShouldPrint() {
     return declShouldPrint;
   }
 
-  /** Return true iff the DTraceWriter should print this node. */
+  /** Returns true iff the DTraceWriter should print this node. */
   public boolean dTraceShouldPrint() {
     return dtraceShouldPrint;
   }
@@ -1318,7 +1322,7 @@ public abstract class DaikonVariableInfo
     return name.compareTo(dv.name);
   }
 
-  /** Returns whether or not this variable is an array. */
+  /** Returns true if this variable is an array. */
   public boolean isArray() {
     return isArray;
   }
@@ -1333,7 +1337,7 @@ public abstract class DaikonVariableInfo
     return null;
   }
 
-  /** Returns whether or not this variable has a rep type of hashcode. */
+  /** Returns true if this variable has a rep type of hashcode. */
   public boolean isHashcode() {
     return getRepTypeName().equals("hashcode");
   }
@@ -1342,7 +1346,7 @@ public abstract class DaikonVariableInfo
     return getRepTypeName().equals("hashcode[]");
   }
 
-  /** Returns whether or not the declared type of this variable is int. */
+  /** Returns true if the declared type of this variable is int. */
   public boolean isInt() {
     String[] sarr = getTypeName().split("  *");
     return sarr[0].equals("int");
@@ -1384,6 +1388,9 @@ public abstract class DaikonVariableInfo
    * @return true if this DaikonVariableInfo should be ignored (should not be printed)
    */
   private boolean check_for_dup_names() {
+
+    // TODO: It seems wrong to choose the first occurrence of the variable, which could be a nested
+    // occurrence rather than the canonical top-level occurrence.
 
     if (ppt_statics.contains(name)) {
       debug_vars.log("ignoring already included variable %s [%s]", name, getClass());

@@ -19,7 +19,7 @@ import java.util.logging.SimpleFormatter;
  */
 public final class LogHelper {
   private LogHelper() {
-    throw new Error("do not instantiate");
+    throw new UnsupportedOperationException("do not instantiate");
   }
 
   /**

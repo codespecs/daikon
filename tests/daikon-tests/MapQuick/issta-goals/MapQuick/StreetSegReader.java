@@ -2,13 +2,13 @@ package MapQuick;
 
 import java.io.*;
 import java.util.*;
-  
-/** 
+
+/**
  * A StreetSegReader reads StreetSegments from a set of Tiger Databases.
  *
  * <p>
  * @specfield sourceDirectory : String     // name of directory where Tiger files are located
- * @specfield streetSegs      : Collection // contents of the database; each element is a StreetSegment 
+ * @specfield streetSegs      : Collection // contents of the database; each element is a StreetSegment
  * @endspec
  *
  * <p> Tiger Databases are produced and maintained by the <a
@@ -40,7 +40,7 @@ public class StreetSegReader
   /**
    * @effects Constructs a StreetSegReader where sourceDirectory
    *   contains the Tiger Database files.
-   *   
+   *
    * @throws InvalidSourceException if sourceDirectory is not a
    *   directory.
    */
@@ -62,7 +62,7 @@ public class StreetSegReader
   // where to load the database from
   // .isDirectory() == true
   private final File sourceDirectory;
-  
+
   /**
    * Returns an Iterator over this.streetSegs.
    *

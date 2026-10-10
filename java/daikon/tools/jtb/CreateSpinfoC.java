@@ -16,6 +16,11 @@ import jtb.cparser.syntaxtree.*;
 
 public class CreateSpinfoC {
 
+  /** Do not instantiate. */
+  private CreateSpinfoC() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
+
   public static void main(String[] args) {
     if (args.length == 1) {
       System.out.println("Create spinfo file from file " + args[0] + " . . .");
@@ -27,7 +32,7 @@ public class CreateSpinfoC {
       return;
     }
     try {
-      String fileName = args[0].substring(0, args[0].lastIndexOf("."));
+      String fileName = args[0].substring(0, args[0].lastIndexOf('.'));
       File temp = new File(fileName + ".temp");
       // filter out the '\f' characters in the file
       try (Reader reader = Files.newBufferedReader(Paths.get(args[0]), UTF_8);

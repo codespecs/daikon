@@ -42,13 +42,13 @@ public final class VarInfoAux implements Cloneable, Serializable {
   // See https://tinyurl.com/cfissue/877
 
   /**
-   * Whether the elements in this collection are all the meaningful elements, or whether there is a
+   * True if the elements in this collection are all the meaningful elements, or whether there is a
    * null at the end of this collection that ends the collection.
    */
   public static final String NULL_TERMINATING = "nullTerminating";
 
   /**
-   * Whether this variable is a parameter to a method, or derived from a parameter to a method. By
+   * True if this variable is a parameter to a method, or derived from a parameter to a method. By
    * default, if p is a parameter, then some EXIT invariants related to p aren't printed. However,
    * this does not affect the computation of invariants.
    *
@@ -57,16 +57,16 @@ public final class VarInfoAux implements Cloneable, Serializable {
    */
   public static final String IS_PARAM = "isParam";
 
-  /** Whether repeated elements can exist in this collection. */
+  /** True if repeated elements can exist in this collection. */
   public static final String HAS_DUPLICATES = "hasDuplicates";
 
-  /** Whether order matters. */
+  /** True if order matters. */
   public static final String HAS_ORDER = "hasOrder";
 
-  /** Whether taking the size of this matters. */
+  /** True if taking the size of this matters. */
   public static final String HAS_SIZE = "hasSize";
 
-  /** Whether null has a special meaning for this variable or its members. */
+  /** True if null has a special meaning for this variable or its members. */
   public static final String HAS_NULL = "hasNull";
 
   /** Indicates the minimum size of the vector, if there's any. */
@@ -91,14 +91,14 @@ public final class VarInfoAux implements Cloneable, Serializable {
   public static final String VALID_VALUES = "validvalues";
 
   /**
-   * Whether this variable is an inline structure. By default, a variable is a reference to a
+   * True if this variable is an inline structure. By default, a variable is a reference to a
    * structure (class). If it is an inlined structure (or array), it doesn't make sense to look for
    * invariants over its hashcode. Front ends include references to inlined structures as variables
    * because some tools that follow daikon need other information about the variable.
    */
   public static final String IS_STRUCT = "isStruct";
 
-  /** Whether this variable is known to be non-null, such as "this" in a Java program. */
+  /** True if this variable is known to be non-null, such as "this" in a Java program. */
   public static final String IS_NON_NULL = "isNonNull";
 
   /**
@@ -117,7 +117,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
   @SuppressWarnings("serial")
   private Map<@Interned String, @Interned String> map;
 
-  /** Whether this is interned. */
+  /** True if this is interned. */
   private boolean isInterned = false;
 
   /** Make the default map here. */
@@ -148,13 +148,13 @@ public final class VarInfoAux implements Cloneable, Serializable {
   }
 
   /**
-   * Return an interned VarInfoAux that represents a given string. Elements are separated by commas,
-   * in the form:
+   * Returns an interned VarInfoAux that represents a given string. Elements are separated by
+   * commas, in the form:
    *
    * <p>x = a, "a key" = "a value"
    *
    * <p>Parse allow for quoted elements. White space to the left and right of keys and values do not
-   * matter, but inbetween does.
+   * matter, but in between does.
    */
   public static @Interned VarInfoAux parse(String inString) throws IOException {
     Reader inStringReader = new StringReader(inString);
@@ -441,7 +441,9 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return map.get(key);
   }
 
-  /** Return {@code true} if the value for the given key is defined, and {@code false} otherwise. */
+  /**
+   * Returns {@code true} if the value for the given key is defined, and {@code false} otherwise.
+   */
   @Pure
   @EnsuresKeyForIf(result = true, expression = "#1", map = "map")
   public boolean hasValue(String key) {
@@ -455,7 +457,7 @@ public final class VarInfoAux implements Cloneable, Serializable {
     return value.equals(TRUE);
   }
 
-  /** Return a new VarInfoAux with the desired value set. Does not modify this. */
+  /** Returns a new VarInfoAux with the desired value set. Does not modify this. */
   public @Interned VarInfoAux setValue(String key, String value) {
     HashMap<@Interned String, @Interned String> newMap = new HashMap<>(this.map);
     newMap.put(key.intern(), value.intern());

@@ -2,19 +2,16 @@
 
 # Download the distribution and run "make distribution-check".
 
-
 # Fail the whole script if any command fails
 set -e
-# Fail if any command in a pipeline fails
+# Fail if any command in a pipeline fails; requires bash, not sh.
 #set -o pipefail
 # Echo commands before executing them
 set -x
 
-
 # Use default URL if environment variable is not set by caller.
 # Caller might do: DAIKONBASEURL=http://plse.cs.washington.edu/staging-daikon
 DAIKONBASEURL=${DAIKONBASEURL:-http://plse.cs.washington.edu/daikon}
-
 
 # Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE

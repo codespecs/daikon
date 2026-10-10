@@ -7,5 +7,3 @@ invariants don't parse for ESC.
 Even if I pare the output down to the five or so invariants which are
 easily expressible, missing annotations having to do with the ghost
 fields of Vector do me in.
-
-

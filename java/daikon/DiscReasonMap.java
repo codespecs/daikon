@@ -7,6 +7,7 @@ import daikon.inv.InvariantInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringJoiner;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -59,11 +60,11 @@ public final class DiscReasonMap {
       System.out.println("no var infos");
       return;
     }
-    String vars_result = inv.ppt.var_infos[0].name();
-    for (int i = 1; i < inv.ppt.var_infos.length; i++) {
-      vars_result += "," + inv.ppt.var_infos[i].name();
+    StringJoiner vars_result = new StringJoiner(",");
+    for (VarInfo vi : inv.ppt.var_infos) {
+      vars_result.add(vi.name());
     }
-    put(vars_result, inv.ppt.parent.name, disc_info);
+    put(vars_result.toString(), inv.ppt.parent.name, disc_info);
   }
 
   public static void put(Invariant inv, DiscardCode discardCode, String discardString) {

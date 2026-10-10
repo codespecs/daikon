@@ -77,7 +77,7 @@ public abstract class Ppt implements Serializable {
     return sj.toString();
   }
 
-  /** Return a string representation of the variable names. */
+  /** Returns a string representation of the variable names. */
   @SideEffectFree
   public String varNames(@GuardSatisfied @UnknownInitialization(Ppt.class) Ppt this) {
     return varNames(var_infos);
@@ -116,7 +116,7 @@ public abstract class Ppt implements Serializable {
   }
 
   public boolean containsVar(VarInfo vi) {
-    // There's gotta be a faster way of doing this.  I don't want to
+    // There must be a faster way of doing this.  I don't want to
     // use a HashSet for var_infos because various things clobber
     // this.var_infos.
     for (VarInfo elt : var_infos) {

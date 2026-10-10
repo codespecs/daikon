@@ -50,11 +50,11 @@ ppt: foo.f():::EXIT35
   assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, x, z);
   data: 6 4 12
 # should still be a line
-#  assert: show_invs(x,x,z)
+  assert: show_invs(x,x,z)
   assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, x, z);
   data: 1 5 9
 # should break the line and form a plane
-#  assert: show_invs(x,y,z)
+  assert: show_invs(x,y,z)
 ###################
 # the following does not work as planned because of zero coefficients
 ###################
@@ -84,11 +84,11 @@ ppt: foo.f():::EXIT35
   assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, x, z);
   data: 6 6 12
 # should still be a line
-#  assert: show_invs(x,x,z)
+  assert: show_invs(x,x,z)
   assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, x, z);
   data: 1 5 100
 # should break the line and form a plane
-#  assert: show_invs(x,y,z)
+  assert: show_invs(x,y,z)
 ###################
 # the following does not work as planned because of zero coefficients
 ###################
@@ -130,11 +130,11 @@ ppt: foo.f():::EXIT35
    assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, x, z);
   data: 6 5 6
 # should break the line and form a plane
-#  assert: show_invs(x,y,z)
+  assert: show_invs(x,y,z)
   assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, y, z);
   data: 8 8 20
 # should still be a plane
-#  assert: show_invs(x,y,z)
+  assert: show_invs(x,y,z)
   assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, y, z);
 # should break the plane
 #  data: 0 0 0
@@ -162,11 +162,11 @@ ppt: foo.f():::EXIT35
   assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, x, z);
   data: 3 8 10
 # should break the line and form a plane
-#  assert: show_invs(x,y,z)
+  assert: show_invs(x,y,z)
   assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, y, z);
   data: 8 16 20
 # should still be a plane
-#  assert: show_invs(x,y,z)
+  assert: show_invs(x,y,z)
   assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, y, z);
 # should break the plane
   data: 0 0 0
@@ -195,11 +195,11 @@ ppt: foo.f():::EXIT35
   assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, x, z);
   data: 2 3 1
 # should break the line and form a plane
-#  assert: show_invs(x,y,z)
+  assert: show_invs(x,y,z)
   assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, y, z);
   data: 15 15 15
 # should still be a plane
-#  assert: show_invs(x,y,z)
+  assert: show_invs(x,y,z)
   assert: inv(daikon.inv.ternary.threeScalar.LinearTernary, x, y, z);
 # should break the plane
   data: 2 3 2

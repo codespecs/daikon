@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 import org.checkerframework.checker.interning.qual.Interned;
 import org.checkerframework.checker.nullness.qual.KeyFor;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -30,6 +31,11 @@ import org.plumelib.reflection.Signatures;
  * the distribution does this.
  */
 public class AnnotateNullable {
+
+  /** Do not instantiate. */
+  private AnnotateNullable() {
+    throw new UnsupportedOperationException("Do not instantiate");
+  }
 
   // Why is this variable static?
   static PptMap ppts = new PptMap(); // dummy value, to satisfy Nullness Checker
@@ -169,9 +175,15 @@ public class AnnotateNullable {
     }
   }
 
-  // Returns null if no corresponding class ppt exists
+  /**
+   * Returns the class program point corresponding to an object program point. Returns null if no
+   * corresponding class ppt exists.
+   *
+   * @param object_ppt an object program point
+   * @return the class program point corresponding to an object program point
+   */
   private static @Nullable PptTopLevel class_for_object(PptTopLevel object_ppt) {
-    if (object_ppt.parents.size() == 0) {
+    if (object_ppt.parents.isEmpty()) {
       return null;
     }
     assert object_ppt.parents.size() == 1 : object_ppt;
@@ -261,9 +273,9 @@ public class AnnotateNullable {
   }
 
   /**
-   * Get the annotation for the specified variable. Returns @Nullable if samples were found for this
-   * variable and at least one sample contained a null value. Returns an (interned) empty string if
-   * no annotation is applicable. Otherwise, the return value contains a trailing space.
+   * Returns the annotation for the specified variable. Returns @Nullable if samples were found for
+   * this variable and at least one sample contained a null value. Returns an (interned) empty
+   * string if no annotation is applicable. Otherwise, the return value contains a trailing space.
    */
   public static String get_annotation(PptTopLevel ppt, VarInfo vi) {
 
@@ -321,14 +333,13 @@ public class AnnotateNullable {
 
     // Print out the method declaration
     if (stub_format) {
-      System.out.printf(" %s %s(", return_annotation, ppt.ppt_name.getMethodName());
+      System.out.printf(" %s %s", return_annotation, ppt.ppt_name.getMethodName());
+      StringJoiner sj = new StringJoiner(", ", "(", ")");
       for (int i = 0; i < params.size(); i++) {
-        if (i != 0) {
-          System.out.printf(" ,");
-        }
-        System.out.printf("%s %s %s", annos.get(i), "type-goes-here", names.get(i));
+        sj.add(String.format("%s %s %s", annos.get(i), "type-goes-here", names.get(i)));
       }
-      System.out.printf("); // %d samples%n", ppt.num_samples());
+      System.out.printf("%s", sj);
+      System.out.printf("; // %d samples%n", ppt.num_samples());
     } else {
       System.out.printf("  method %s : // %d samples%n", jvm_signature(ppt), ppt.num_samples());
       System.out.printf("    return:%s%n", return_annotation);
@@ -429,9 +440,9 @@ public class AnnotateNullable {
   }
 
   /**
-   * Returns whether or not the method of the specified ppt is static or not. The ppt must be an
-   * exit ppt. Exit ppts that do not have an object as a parent are inferred to be static. This does
-   * not work for enter ppts, because constructors do not have the object as a parent on entry.
+   * Returns true if the method of the specified ppt is static or not. The ppt must be an exit ppt.
+   * Exit ppts that do not have an object as a parent are inferred to be static. This does not work
+   * for enter ppts, because constructors do not have the object as a parent on entry.
    */
   @Pure
   public static boolean is_static_method(PptTopLevel ppt) {
