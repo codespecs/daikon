@@ -1,7 +1,8 @@
 # DAIKONDIR is the clone of the 'daikon' project.
-ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../..)
-endif
+# PARSER_TESTS_DIR is simply expanded (":=") so that it is not affected by later
+# includes, which change MAKEFILE_LIST.
+PARSER_TESTS_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+DAIKONDIR ?= $(realpath ${PARSER_TESTS_DIR}../..)
 
 DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daikon.jar
 

@@ -3,9 +3,10 @@
 # Forked from $DAIKONDIR/tests/kvasir-tests/Makefile.common
 
 # DAIKONDIR is the clone of the 'daikon' project.
-ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
-endif
+# DYNCOMP_TESTS_DIR is simply expanded (":=") so that it is not affected by later
+# includes, which change MAKEFILE_LIST.
+DYNCOMP_TESTS_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+DAIKONDIR ?= $(realpath ${DYNCOMP_TESTS_DIR}../..)
 
 ifeq ($(shell uname -m),x86_64)
 VALGRIND_ARCH := amd64

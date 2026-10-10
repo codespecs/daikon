@@ -3,7 +3,10 @@
 #
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR := $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
+# OPTION_TESTS_DIR is simply expanded (":=") so that it is not affected by later
+# includes, which change MAKEFILE_LIST.
+OPTION_TESTS_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+DAIKONDIR ?= $(realpath ${OPTION_TESTS_DIR}../../..)
 
 # StackAr sources are used for option testing
 SRC_DIR = ${DAIKONDIR}/tests/sources
