@@ -7,6 +7,7 @@ instrument [OPTIONS] INV_FILE JAVA_FILES
     INV_FILE is an invariant file (suffix .inv or .inv.gz) created by Daikon.
     JAVA_FILES is one or more Java files that will be instrumented.
     OPTIONS:
+      -h, --help                Display this usage message.
       --make_all_fields_public  Make all declared fields public.
       --directory=DIRNAME       Output directory; default: instrumented-classes
       --output_only_high_conf_invariants

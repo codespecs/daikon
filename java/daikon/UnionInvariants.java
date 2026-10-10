@@ -1,6 +1,5 @@
 package daikon;
 
-import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 import java.io.File;
 import org.plumelib.util.FilesPlume;
@@ -52,25 +51,19 @@ public final class UnionInvariants {
         new LongOpt[] {
           new LongOpt(Daikon.suppress_redundant_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
         };
-    Getopt g = new Getopt("daikon.UnionInvariants", args, "ho:", longopts);
+    DaikonGetopt g = new DaikonGetopt(args, "o:", longopts, usage);
     int c;
     while ((c = g.getopt()) != -1) {
       switch (c) {
         case 0:
           // got a long option
           String option_name = longopts[g.getLongind()].getName();
-          if (Daikon.help_SWITCH.equals(option_name)) {
-            System.out.println(usage);
-            throw new Daikon.NormalTermination();
-          } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
+          if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
             Daikon.suppress_redundant_invariants_with_simplify = true;
           } else {
-            throw new Daikon.UserError("Unknown option received: " + option_name);
+            throw new Daikon.BugInDaikon("Unhandled long option " + option_name);
           }
           break;
-        case 'h':
-          System.out.println(usage);
-          throw new Daikon.NormalTermination();
         case 'o':
           String inv_filename = Daikon.getOptarg(g);
 
@@ -90,11 +83,8 @@ public final class UnionInvariants {
           }
           break;
         //
-        case '?':
-          break; // getopt() already printed an error
         default:
-          System.out.println("getopt() returned " + c);
-          break;
+          throw new Daikon.BugInDaikon("getopt() returned " + c);
       }
     }
 
