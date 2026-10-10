@@ -326,6 +326,34 @@ public final class PrintInvariants {
           OptionalDataException,
           IOException,
           ClassNotFoundException {
+    try {
+      printInvariantsFromArgs(args);
+    } finally {
+      // Close the output stream if --output was specified, even if printing failed.
+      // print_invariants sets out_stream to System.out if --output was not specified.
+      if (out_stream != null) {
+        OutputStream os = out_stream;
+        out_stream = null;
+        if (os == System.out) {
+          os.flush();
+        } else {
+          os.close();
+        }
+      }
+    }
+  }
+
+  /**
+   * Does the work of {@link #mainHelper}, except closing the output stream.
+   *
+   * @param args command-line arguments, like those of {@link #main}
+   */
+  private static void printInvariantsFromArgs(String[] args)
+      throws FileNotFoundException,
+          StreamCorruptedException,
+          OptionalDataException,
+          IOException,
+          ClassNotFoundException {
 
     LongOpt[] longopts =
         new LongOpt[] {
@@ -492,14 +520,6 @@ public final class PrintInvariants {
     }
 
     print_invariants(ppts);
-
-    // Close the output stream if --output was specified.
-    if (out_stream != null) {
-      out_stream.flush();
-      assert out_stream != null
-          : "@AssumeAssertion(nullness): flush() does not affect any global variables";
-      out_stream.close();
-    }
   }
 
   /**
