@@ -149,6 +149,20 @@ ifndef COMMON_HERE
   $(error Test directory ${DAIKONDIR}/tests does not exist)
 endif
 
+# JAVA_HOME is set before Makefile.user is included, so that Makefile.user can use or override it.
+# Use ":=" so that the shell commands run only once.
+ifeq ($(origin JAVA_HOME), undefined)
+  ifeq ($(shell uname), Darwin)
+    JAVA_HOME := $(shell /usr/libexec/java_home)
+  else
+    JAVA_HOME := $(shell javac=$$(command -v javac) && readlink -f "$$javac" | sed 's:/bin/javac$$::')
+  endif
+endif
+# CHECKED_JAVA_HOME is JAVA_HOME, but expanding it fails if no JDK was found.
+# The check happens only when a variable that uses it is expanded, so targets
+# that do not run Java (such as "clean") work without a JDK.
+CHECKED_JAVA_HOME = $(or ${JAVA_HOME},$(error No JDK found; set JAVA_HOME))
+
 # Put user-specific changes in your own Makefile.user
 #  (such as changes to PLUME_DIR or JAVAC or PATH).
 # Make will silently continue if the file does not exist.
@@ -186,25 +200,8 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
-# Use ":=" so that the shell commands run only once.
-ifeq ($(origin JAVA_HOME), undefined)
-ifeq ($(shell uname), Darwin)
-  JAVA_HOME := $(shell /usr/libexec/java_home)
-  ifeq (${JAVA_HOME},)
-    $(error /usr/libexec/java_home did not find a JDK; set JAVA_HOME)
-  endif
-else
-ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
-  JAVA_HOME := $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
-else
-  $(info Failure: Here is the output of: which javac)
-  $(info $(shell which javac))
-  $(error 'which javac' had exit status 1)
-endif
-endif
-endif
-JAVA  := ${JAVA_HOME}/bin/java
-JAVAC ?= ${JAVA_HOME}/bin/javac
+JAVA  = ${CHECKED_JAVA_HOME}/bin/java
+JAVAC ?= ${CHECKED_JAVA_HOME}/bin/javac
 
 JUNIT_CLASSPATH ?=
 
@@ -215,7 +212,7 @@ DAIKON_CLASSPATH := ${DAIKONDIR}/java:${DAIKONDIR}/java/lib/*:${DAIKONDIR}/daiko
 export DAIKON_TESTS_CLASSPATH := .:$(JAVALIB_CLASSPATH):$(SCRATCH_FOR_DAIKON):$(JUNIT_CLASSPATH):$(DAIKON_CLASSPATH)
 
 # Dynamic instrumentation based java front end command.
-CHICORY := $(JAVA) -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.Chicory
+CHICORY = $(JAVA) -ea -cp "$(DAIKON_TESTS_CLASSPATH)" daikon.Chicory
 CHICORY_EXEC := ${DAIKONDIR}/java/daikon/Chicory.class
 
 # As of JDK 1.3 (and 1.4, I think), don't use "-server" here.
@@ -308,12 +305,12 @@ endif
 
 # If specified, setup for the old declaration format
 ifeq (old,${DECL_FORMAT})
-  CHICORY := $(CHICORY) --new_decl_format=false
+  CHICORY += --new_decl_format=false
 endif
 
 # "make PROFILE_JAVA=1 <target>" to get profile information
 ifdef PROFILE_JAVA
-RUN_JAVA:=$(RUN_JAVA) -Xrunhprof:cpu=samples,file=${PROJECT_FILE}.profile.txt,depth=3
+RUN_JAVA += -Xrunhprof:cpu=samples,file=${PROJECT_FILE}.profile.txt,depth=3
 endif
 
 # To turn off Simplify, put this in the project's own Makefile, after

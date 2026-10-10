@@ -13,20 +13,7 @@
 #    category to contain it.
 #
 
-ifeq (4.0,$(firstword $(sort ${MAKE_VERSION} 4.0)))
-  # Version 4.0 or higher
-  MPARG ?= -Orecurse
-else
-  MPARG ?=
-endif
-
-ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
-endif
-PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
-# Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
-# If is-ci.sh is absent, assume the run is not under CI.
-TEST_JOBS := $(if $(shell "${PLUME_SCRIPTS}/is-ci.sh" 2>/dev/null),1,4)
+include $(dir $(lastword $(MAKEFILE_LIST)))../Makefile.jobs
 
 default: summary-w-daikon
 

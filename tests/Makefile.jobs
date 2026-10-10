@@ -1,0 +1,32 @@
+# This is a -*- makefile -*-, Emacs
+#
+# Settings shared by the Makefiles that drive a whole test suite:
+# tests/Makefile, tests/kvasir-tests/Makefile, and tests/dyncomp-tests/Makefile.
+# Include it before any other include, so that MAKEFILE_LIST ends with this file.
+
+# To produce incremental output, invoke make as: make MPARG=-Otarget ...
+# To not run in parallel, invoke make as: make MPARG=-j1 ...
+ifeq (4.0,$(firstword $(sort ${MAKE_VERSION} 4.0)))
+  # Version 4.0 or higher
+  MPARG ?= -Orecurse
+else
+  MPARG ?=
+endif
+
+# DAIKONDIR is the clone of the 'daikon' project.
+ifeq ($(origin DAIKONDIR), undefined)
+  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
+endif
+PLUME_SCRIPTS ?= ${DAIKONDIR}/.utils/plume-scripts
+
+# TEST_JOBS is the number of tests to run in parallel.
+# Under CI, there are two CPUs, but limit to 1 to avoid out-of-memory error.
+# The value is exported, so recursive invocations of make do not recompute it.
+# To override it, set TEST_JOBS on the command line or in the environment.
+ifeq ($(origin TEST_JOBS), undefined)
+  ifeq ($(wildcard ${PLUME_SCRIPTS}/is-ci.sh),)
+    $(error ${PLUME_SCRIPTS}/is-ci.sh not found; run "make" in ${DAIKONDIR} to clone plume-scripts, or set TEST_JOBS)
+  endif
+  TEST_JOBS := $(if $(shell sh "${PLUME_SCRIPTS}/is-ci.sh"),1,4)
+endif
+export TEST_JOBS
