@@ -1,6 +1,5 @@
 package daikon.tools.runtimechecker;
 
-import daikon.Daikon;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -58,11 +57,6 @@ public class Main extends CommandHandler {
         }
       }
 
-    } catch (Daikon.UserError e) {
-      // A user error, such as a bad command-line option, is reported in one line.  System.exit
-      // prevents the finally block from printing generic failure text and the usage message.
-      System.err.println("Error: " + e.getMessage());
-      System.exit(1);
     } catch (Throwable e) {
       System.out.println("Throwable thrown while handling command:" + e);
       e.printStackTrace();
