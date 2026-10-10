@@ -1,7 +1,6 @@
 ###########################################################################
 
-include ${DAIKONDIR}/scripts/java-home.mak
-
 # need junit.jar on classpath to compile all junit references
 JUNIT_CLASSPATH := ${DAIKONDIR}/java/lib/*
-JAVAC := $(JAVA_HOME)/bin/javac -cp .:$(JUNIT_CLASSPATH)
+# "=" because Makefile.common sets JAVA_HOME after including this file.
+JAVAC = $(JAVA_HOME)/bin/javac -cp .:$(JUNIT_CLASSPATH)

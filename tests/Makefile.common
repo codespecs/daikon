@@ -133,12 +133,15 @@ ifdef ESC_ON
 endif
 
 
+# MAKEFILE_COMMON_DIR is the directory containing this file, even if the user set DAIKONDIR.
+MAKEFILE_COMMON_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+
 # DAIKONDIR is the clone of the 'daikon' project.
 # Would like to use simple '?=' but this is recursively expanded while ':=' is simply expanded.
 # The include of Makefile.user (if it exists) will change the value of MAKEFILE_LIST and thus
 # '?=' will not evaluate as we desire.
 ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
+  DAIKONDIR := $(realpath ${MAKEFILE_COMMON_DIR}/..)
 endif
 
 # COMMON_HERE is where the Makefile.common is located.
@@ -186,7 +189,8 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
-include ${DAIKONDIR}/scripts/java-home.mak
+# This follows the Makefile.user includes, so that a JAVA_HOME set there takes precedence.
+include ${MAKEFILE_COMMON_DIR}/../scripts/java-home.mak
 JAVA  := ${JAVA_HOME}/bin/java
 JAVAC ?= ${JAVA_HOME}/bin/javac
 
