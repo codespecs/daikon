@@ -53,6 +53,11 @@ DIFF_NAME ?= $(shell basename `pwd`)
 BEFORE_RUN ?= @:
 AFTER_RUN ?= @:
 
+# Append this to a command that writes its output to file $(1).  If the
+# command fails, this prints the contents of $(1) and exits with the
+# command's status.
+show_output_on_failure = || { status=$$?; echo "Command failed with exit status $$status; contents of $(1) follow:"; cat $(1); exit $$status; }
+
 # gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
 DAIKON := java -ea -Xmx7g -cp ${DAIKON_JAR} daikon.Daikon --no_text_output --no_show_progress --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true --config_option daikon.Debug.show_stack_trace=true ${DAIKON_OPTIONS}
 PRINT_INV := java -Xmx7g -cp ${DAIKON_JAR} daikon.PrintInvariants
@@ -231,7 +236,7 @@ ifdef TESTS_SCRIPT
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(TESTS_SCRIPT) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	rm -f daikon-output/$(NAME)$(DTRACE_EXT)
 	$(BEFORE_RUN)
-	DTRACEAPPEND=1 perl $(RUN_MANY) $(KVASIR_SCRIPT) <$(TESTS_SCRIPT) >$(NAME).out
+	DTRACEAPPEND=1 perl $(RUN_MANY) $(KVASIR_SCRIPT) <$(TESTS_SCRIPT) >$(NAME).out $(call show_output_on_failure,$(NAME).out)
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -249,12 +254,11 @@ else
 ifdef DTRACE_APPEND
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).out 2>&1
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).out 2>&1 $(call show_output_on_failure,$(NAME).out)
 	$(BEFORE_RUN)
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls --dtrace-file=daikon-output/$(NAME).dtrace --dtrace-append ./$(NAME) $(PROGRAM_ARGS) >>$(NAME).out 2>&1 $(call show_output_on_failure,$(NAME).out)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls --dtrace-file=daikon-output/$(NAME).dtrace --dtrace-append ./$(NAME) $(PROGRAM_ARGS) >$(NAME).out 2>&1
-	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).dyncomp.out 2>&1 $(call show_output_on_failure,$(NAME).dyncomp.out)
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -272,9 +276,9 @@ else
 ifeq ($(COUNTS_ONLY),)
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).out 2>&1
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).out 2>&1 $(call show_output_on_failure,$(NAME).out)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-only --dyncomp --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).dyncomp.out 2>&1 $(call show_output_on_failure,$(NAME).dyncomp.out)
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
@@ -289,15 +293,17 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dyncomp.decls
 	touch $@
 else
+# pipefail makes the pipeline below fail if Kvasir fails, not just if dtrace-count.pl fails.
+ran-kvasir: SHELL := /bin/bash
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --program-stdout='&2' --program-stderr='&2' --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS) 2>$(NAME).out | ${DAIKONDIR}/scripts/dtrace-count.pl >$(NAME).counts
+	set -o pipefail; $(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --program-stdout='&2' --program-stderr='&2' --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS) 2>$(NAME).out | ${DAIKONDIR}/scripts/dtrace-count.pl >$(NAME).counts $(call show_output_on_failure,$(NAME).out)
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
 	perl -i $(CLEAN_DECLS) $(NAME).counts
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --dyncomp --decls-only --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --dyncomp --decls-only --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).dyncomp.out 2>&1 $(call show_output_on_failure,$(NAME).dyncomp.out)
 	perl -i $(CLEAN_DECLS) daikon-output/$(NAME).dyncomp.decls
 	$(DECLS_2_COMP) daikon-output/$(NAME).dyncomp.decls > $(NAME).comp
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dyncomp.decls
@@ -420,7 +426,7 @@ diffs-w-daikon-if-working:   diffs-w-daikon
 summary-w-daikon-if-working: summary-w-daikon
 
 clean:
-	rm -rf $(NAME) $(DIFF_NAME).*.diff $(NAME).out daikon-output ran-kvasir $(EXTRA_JUNK) $(EXTRA_OUTPUTS) $(NAME).inv.gz $(NAME).comp $(NAME).counts $(NAME).dtrace.gz $(NAME).decls $(NAME).[12].dtrace.gz
+	rm -rf $(NAME) $(DIFF_NAME).*.diff $(NAME).out $(NAME).dyncomp.out daikon-output ran-kvasir $(EXTRA_JUNK) $(EXTRA_OUTPUTS) $(NAME).inv.gz $(NAME).comp $(NAME).counts $(NAME).dtrace.gz $(NAME).decls $(NAME).[12].dtrace.gz
 	$(CLEAN_SCRIPT)
 
 update-out-goals: $(NAME).out
