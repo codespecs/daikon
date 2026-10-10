@@ -557,6 +557,7 @@ number == 23
 ===========================================================================
 global.comatose():::EXIT
 return == "23"
+return is Numeric
 ===========================================================================
 global.config_screen():::ENTER
 tt has only one value
@@ -5171,6 +5172,7 @@ menu.keys.bind.nch == 2
 menu.keys.bind.ch has only one value
 menu.keys.column == 0
 menu.formatted_hm == 0
+LENGTH(name)==1
 name is printable
 label is printable
 (menu.keys.bind.cmd & keynum) == 0
@@ -7412,6 +7414,7 @@ s == "150"
 val has only one value
 val[] >= 0
 minmum one of { 0, 14 }
+errbuf is Numeric
 errbuf is printable
 varname is printable
 (val[] == 0) ==> (minmum == 0)

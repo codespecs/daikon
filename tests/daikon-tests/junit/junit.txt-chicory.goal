@@ -1,9 +1,8 @@
 // Declarations for MyEvenOddTest
-// Declarations written 2020-08-06T14:44:24.024
+// Declarations written by Chicory 2023-09-29T09:27:05.137138132
 
 decl-version 2.0
-
-var-comparability none
+var-comparability implicit
 
 ppt MyEvenOddTest.MyEvenOddTest():::ENTER
 ppt-type enter
@@ -16,7 +15,7 @@ variable this
   dec-type MyEvenOddTest
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent MyEvenOddTest:::OBJECT 1
 
 ppt MyEvenOddTest.testEvenOddNumber():::ENTER
@@ -27,7 +26,7 @@ variable this
   dec-type MyEvenOddTest
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent MyEvenOddTest:::OBJECT 1
 
 ppt MyEvenOddTest.testEvenOddNumber():::EXIT11
@@ -38,7 +37,7 @@ variable this
   dec-type MyEvenOddTest
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent MyEvenOddTest:::OBJECT 1
 
 ppt MyEvenOddTest:::OBJECT
@@ -48,7 +47,7 @@ variable this
   dec-type MyEvenOddTest
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
 
 MyEvenOddTest.MyEvenOddTest():::ENTER
 this_invocation_nonce
@@ -58,14 +57,14 @@ MyEvenOddTest.MyEvenOddTest():::EXIT5
 this_invocation_nonce
 0
 this
-1835073088
+962287291
 1
 
 MyEvenOddTest.testEvenOddNumber():::ENTER
 this_invocation_nonce
 1
 this
-1835073088
+962287291
 1
 
 ppt MyEvenOdd.MyEvenOdd():::ENTER
@@ -79,7 +78,7 @@ variable this
   dec-type MyEvenOdd
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
   parent MyEvenOdd:::OBJECT 1
 
 ppt MyEvenOdd.isEvenNumber(int):::ENTER
@@ -90,14 +89,14 @@ variable this
   dec-type MyEvenOdd
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 3
   parent MyEvenOdd:::OBJECT 1
 variable number
   var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 
 ppt MyEvenOdd.isEvenNumber(int):::EXIT9
 ppt-type subexit
@@ -107,19 +106,19 @@ variable this
   dec-type MyEvenOdd
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 4
   parent MyEvenOdd:::OBJECT 1
 variable number
   var-kind variable
   dec-type int
   rep-type int
   flags is_param
-  comparability 22
+  comparability 2
 variable return
   var-kind return
   dec-type boolean
   rep-type boolean
-  comparability 22
+  comparability 3
 
 ppt MyEvenOdd:::OBJECT
 ppt-type object
@@ -128,7 +127,7 @@ variable this
   dec-type MyEvenOdd
   rep-type hashcode
   flags is_param non_null
-  comparability 22
+  comparability 2
 
 MyEvenOdd.MyEvenOdd():::ENTER
 this_invocation_nonce
@@ -138,14 +137,14 @@ MyEvenOdd.MyEvenOdd():::EXIT1
 this_invocation_nonce
 2
 this
-79782883
+350069300
 1
 
 MyEvenOdd.isEvenNumber(int):::ENTER
 this_invocation_nonce
 3
 this
-79782883
+350069300
 1
 number
 10
@@ -155,7 +154,7 @@ MyEvenOdd.isEvenNumber(int):::EXIT9
 this_invocation_nonce
 3
 this
-79782883
+350069300
 1
 number
 10
@@ -168,6 +167,6 @@ MyEvenOddTest.testEvenOddNumber():::EXIT11
 this_invocation_nonce
 1
 this
-1835073088
+962287291
 1
 

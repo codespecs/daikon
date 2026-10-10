@@ -287,6 +287,7 @@ ratStr.toString().equals("NaN")
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT267
     Variables: ratStr ratStr.toString return return.numer return.denom orig(ratStr) orig(ratStr.toString)
+daikon.inv.unary.string.IsNumeric.PATTERN.matcher(ratStr.toString).matches()
 \result.denom == 1
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT273
@@ -344,6 +345,7 @@ this.numer != this.denom
 PolyCalc.RatNum.unparse():::EXIT137
     Variables: this this.numer this.denom return return.toString orig(this) orig(this.numer) orig(this.denom)
 this.denom == 1
+daikon.inv.unary.string.IsNumeric.PATTERN.matcher(return.toString).matches()
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT
     Variables: this this.numer this.denom return return.toString orig(this) orig(this.numer) orig(this.denom)
@@ -1078,6 +1080,7 @@ PolyCalc.RatPoly.unparse():::EXIT165
 daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.terms.wrapped), new String[] {  })
 \result != null
 \result.toString().equals("0")
+daikon.inv.unary.string.IsNumeric.PATTERN.matcher(return.toString).matches()
 ===========================================================================
 PolyCalc.RatPoly.unparse():::EXIT196
     Variables: this this.terms this.terms.wrapped this.terms.wrapped[] this.terms.wrapped[].getClass().getName() return return.toString orig(this) orig(this.terms) orig(this.terms.wrapped) orig(this.terms.wrapped[]) orig(this.terms.wrapped[].getClass().getName()) size(this.terms.wrapped[]) size(this.terms.wrapped[])-1 orig(size(this.terms.wrapped[])) orig(size(this.terms.wrapped[]))-1
@@ -1090,6 +1093,7 @@ this.terms.wrapped == \old(this.terms.wrapped)
 daikon.Quant.pairwiseEqual(this.terms.wrapped, \old(this.terms.wrapped))
 (daikon.Quant.size(this.terms.wrapped) == 0)  ==>  (\result != null)
 (daikon.Quant.size(this.terms.wrapped) == 0)  ==>  (\result.toString().equals("0"))
+(daikon.Quant.size(this.terms.wrapped) == 0)  ==>  (daikon.inv.unary.string.IsNumeric.PATTERN.matcher(return.toString).matches())
 (daikon.Quant.size(this.terms.wrapped) == 0)  ==>  (daikon.Quant.size(this.terms.wrapped) is a pointer)
 (daikon.Quant.size(this.terms.wrapped) == 0)  ==>  (("oneOf.java.jpp: SEQUENCE unimplemented" != null))
 (daikon.Quant.size(this.terms.wrapped) == 0)  ==>  (daikon.Quant.pairwiseEqual(daikon.Quant.typeArray(this.terms.wrapped), new String[] {  }))

@@ -702,6 +702,7 @@ lab >= 1
 ..def_label():::EXIT
 ===========================================================================
 ..find_id():::ENTER
+LENGTH(id)==1
 tree->a_name == 0
 tree->balance one of { 0, 1 }
 tree->f_name one of { 1, 2, 4 }
@@ -865,6 +866,7 @@ new_id->v_name == root[0]->v_name
 new_id != null
 new_id->a_name == 0
 new_id->f_name == 0
+LENGTH(new_id->id)==1
 new_id->v_name == 0
 new_id[0] != null
 root != null
@@ -936,6 +938,7 @@ root[0][0] == orig(root[0][0])
 new_id->a_name == 0
 new_id->balance == 0
 new_id->f_name == 0
+LENGTH(new_id->id)==1
 new_id->left == null
 new_id->v_name == 0
 new_id[0] != null
@@ -943,6 +946,7 @@ return one of { 0, 1 }
 root[0] != null
 root[0]->balance one of { 0, 1 }
 root[0]->f_name >= 0
+LENGTH(root[0]->id)==1
 root[0]->left[].a_name == [0]
 root[0]->left[].a_name elements == 0
 root[0]->left[i].a_name == i
@@ -1028,6 +1032,7 @@ return >= 0
 str[0] != orig(str[0])
 ===========================================================================
 ..lookup():::ENTER
+LENGTH(name)==1
 namekind == 2
 ===========================================================================
 ..lookup():::EXIT
@@ -1345,9 +1350,11 @@ var_name one of { 2, 4, 11 }
 ..store_var():::EXIT
 ===========================================================================
 ..strcopyof():::ENTER
+LENGTH(str)==1
 ===========================================================================
 ..strcopyof():::EXIT
 return == orig(str)
+LENGTH(return)==1
 ===========================================================================
 ..yy_create_buffer():::ENTER
 file has only one value

@@ -21,6 +21,34 @@ Further documentation can be found in:
      `make -C $DAIKONDIR/java javadoc`
    It is also available at <http://plse.cs.washington.edu/daikon/download/api/> .
 
+## Version 5.9.1 (??)
+
+Daikon supports the following new invariants, over strings and sequences of
+strings; all of them are enabled by default:
+
+* IsUrl
+* FixedLengthString
+* IsNumeric
+* IsEmail
+* IsDateYYYYMMDD
+* IsDateDDMMYYYY
+* IsDateMMDDYYYY
+* IsTimeOfDay
+* IsTimeOfDayWithSeconds
+* IsTimeOfDayAMPM
+* IsTimestampYYYYMMHHThhmmssmm
+* SequenceFixedLengthString
+* SequenceStringElementsAreUrl
+* SequenceStringElementsAreNumeric
+* SequenceStringElementsAreEmail
+* SequenceStringElementsAreDateYYYYMMDD
+* SequenceStringElementsAreDateDDMMYYYY
+* SequenceStringElementsAreDateMMDDYYYY
+* SequenceStringElementsAreTimeOfDay
+* SequenceStringElementsAreTimeOfDayWithSeconds
+* SequenceStringElementsAreTimeOfDayAMPM
+* SequenceStringElementsAreTimestampYYYYMMHHThhmmssmm
+
 ## Version 5.9.0 (September 1, 2026)
 
 * All Daikon tools now work with Java 8-26.

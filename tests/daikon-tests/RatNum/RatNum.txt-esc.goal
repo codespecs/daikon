@@ -286,6 +286,7 @@ warning: method daikon.inv.unary.string.OneOfString.format(OutputFormat:ESC/Java
 PolyCalc.RatNum.parse(java.lang.String):::EXIT267
     Variables: ratStr ratStr.toString return return.numer return.denom orig(ratStr) orig(ratStr.toString)
       Unmodified variables: ratStr ratStr.toString
+daikon.inv.unary.string.IsNumeric.PATTERN.matcher(ratStr.toString).matches()
 \result.denom == 1
 ===========================================================================
 PolyCalc.RatNum.parse(java.lang.String):::EXIT273
@@ -343,6 +344,7 @@ PolyCalc.RatNum.unparse():::EXIT137
     Variables: this this.numer this.denom return return.toString orig(this) orig(this.numer) orig(this.denom)
       Unmodified variables: this this.numer this.denom
 this.denom == 1
+daikon.inv.unary.string.IsNumeric.PATTERN.matcher(return.toString).matches()
 ===========================================================================
 PolyCalc.RatNum.unparse():::EXIT
     Variables: this this.numer this.denom return return.toString orig(this) orig(this.numer) orig(this.denom)

@@ -7,6 +7,7 @@ this.currentSize >= 0
 this.array has only one value
 this.array != null
 this.array.getClass().getName() == DataStructures.Comparable[].class
+All the elements of this.array[].getClass().getName() have LENGTH=24
 size(this.array[]) == 101
 this.array[0..this.currentSize] contains no duplicates
 this.currentSize <= size(this.array[])-1
