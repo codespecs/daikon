@@ -8,10 +8,18 @@
 ##        files to .class files but have not re-made the daikon.jar file.
 ## You should not need to edit this file.
 
-if [ "$(uname)" = "Darwin" ] ; then
-  export JAVA_HOME=${JAVA_HOME:-$(/usr/libexec/java_home)}
-else
-  export JAVA_HOME=${JAVA_HOME:-$(dirname $(dirname $(readlink -f $(which javac))))}
+# This logic is the same as in java-home.mak:  use the JDK that contains the
+# javac on the PATH.  On macOS, /usr/bin/javac is a stub; then use the JDK that
+# /usr/libexec/java_home reports.
+if [ -z "$JAVA_HOME" ] ; then
+  DAIKON_JAVAC_REALPATH=$(type -P javac > /dev/null && readlink -f "$(type -P javac)")
+  if [ "$(uname)" = "Darwin" ] && [ "$DAIKON_JAVAC_REALPATH" = "/usr/bin/javac" ] ; then
+    JAVA_HOME=$(/usr/libexec/java_home)
+  elif [ -n "$DAIKON_JAVAC_REALPATH" ] ; then
+    JAVA_HOME=$(dirname "$(dirname "$DAIKON_JAVAC_REALPATH")")
+  fi
+  unset DAIKON_JAVAC_REALPATH
+  export JAVA_HOME
 fi
 if [ ! -d "$JAVA_HOME" ]; then
   echo "Cannot infer JAVA_HOME; please set it.  Aborting daikon.bashrc ."

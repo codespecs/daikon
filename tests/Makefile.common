@@ -133,13 +133,11 @@ ifdef ESC_ON
 endif
 
 
+# MAKEFILE_COMMON_DIR is the directory containing this file, even if the user set DAIKONDIR.
+MAKEFILE_COMMON_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+
 # DAIKONDIR is the clone of the 'daikon' project.
-# Would like to use simple '?=' but this is recursively expanded while ':=' is simply expanded.
-# The include of Makefile.user (if it exists) will change the value of MAKEFILE_LIST and thus
-# '?=' will not evaluate as we desire.
-ifeq ($(origin DAIKONDIR), undefined)
-  DAIKONDIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
-endif
+DAIKONDIR ?= $(realpath ${MAKEFILE_COMMON_DIR}/..)
 
 # COMMON_HERE is where the Makefile.common is located.
 COMMON_HERE?=${DAIKONDIR}/tests
@@ -186,21 +184,16 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
-ifeq ($(shell uname), Darwin)
-  JAVA_HOME ?= $(/usr/libexec/java_home)
-else
-ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
-  JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
-else
-  $(info Failure: Here is the output of: which javac)
-  $(info $(shell which javac))
-  $(error 'which javac' had exit status 1)
-endif
-endif
+# This follows the Makefile.user includes, so that a JAVA_HOME set there takes precedence.
+include ${DAIKONDIR}/scripts/java-home.mak
 JAVA  := ${JAVA_HOME}/bin/java
-JAVAC ?= ${JAVA_HOME}/bin/javac
-
 JUNIT_CLASSPATH ?=
+ifneq (,${JUNIT_CLASSPATH})
+  # The JUnit tests require JUNIT_CLASSPATH, even if the environment sets JAVAC.
+  JAVAC := ${JAVA_HOME}/bin/javac -cp .:${JUNIT_CLASSPATH}
+else
+  JAVAC ?= ${JAVA_HOME}/bin/javac
+endif
 
 JAVALIB_CLASSPATH := ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
 
