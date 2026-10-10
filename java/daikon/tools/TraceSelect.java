@@ -149,20 +149,7 @@ public class TraceSelect {
     try {
       for (int rep = numReps; rep > 0; rep--) {
 
-        List<String> al = new ArrayList<>();
-        try (DtracePartitioner dec = new DtracePartitioner(inputFile)) {
-          MultiRandSelector<String> mrs = new MultiRandSelector<>(numPerSample, rand, dec);
-
-          while (dec.hasNext()) {
-            mrs.accept(dec.next());
-          }
-
-          for (Iterator<String> iter = mrs.valuesIter(); iter.hasNext(); ) {
-            al.add(iter.next());
-          }
-
-          al = dec.patchValues(al, includeUnreturned);
-        }
+        List<String> al = selectSample(inputFile, numPerSample, rand, includeUnreturned);
 
         String filePrefix = calcOut(inputFile, rep);
 
@@ -206,6 +193,40 @@ public class TraceSelect {
           deleteQuietly(sampleName);
         }
       }
+    }
+  }
+
+  /**
+   * Randomly selects invocations from a trace file.
+   *
+   * @param inputFile the trace file to sample
+   * @param numPerSample the number of invocations to select for each program point
+   * @param rand the source of randomness
+   * @param includeUnreturned if true, also select invocations that entered a method but did not
+   *     exit it normally
+   * @return the selected invocations, each followed by its matching exit, in no particular order
+   * @throws IOException if the trace file cannot be read
+   */
+  public static List<String> selectSample(
+      String inputFile, int numPerSample, Random rand, boolean includeUnreturned)
+      throws IOException {
+    try (DtracePartitioner dec = new DtracePartitioner(inputFile)) {
+      MultiRandSelector<String> mrs = new MultiRandSelector<>(numPerSample, rand, dec);
+
+      while (dec.hasNext()) {
+        // DtracePartitioner returns an empty string for a blank line or for a trailing EXIT.
+        String invocation = dec.next();
+        if (!invocation.isEmpty()) {
+          mrs.accept(invocation);
+        }
+      }
+
+      List<String> al = new ArrayList<>();
+      for (Iterator<String> iter = mrs.valuesIter(); iter.hasNext(); ) {
+        al.add(iter.next());
+      }
+
+      return dec.patchValues(al, includeUnreturned);
     }
   }
 
