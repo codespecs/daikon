@@ -9,7 +9,10 @@
 # files are in drawlet_src.zip in this directory
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR ?= $(realpath $(dir $(lastword ${MAKEFILE_LIST}))../../..)
+# DRAWLET_TEST_DIR is simply expanded (":=") so that it is not affected by later
+# includes, which change MAKEFILE_LIST.
+DRAWLET_TEST_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+DAIKONDIR ?= $(realpath ${DRAWLET_TEST_DIR}../../..)
 
 DAIKON_ARGS = '--ppt-omit-pattern=^org\.' --no_text_output --no_show_progress --config_option daikon.Debug.show_stack_trace=true
 DAIKON = ${DAIKONDIR}/java/daikon/Daikon.class

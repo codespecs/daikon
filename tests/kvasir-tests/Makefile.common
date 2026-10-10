@@ -1,7 +1,10 @@
 # This is a -*- makefile -*-, Emacs
 
 # DAIKONDIR is the clone of the 'daikon' project.
-DAIKONDIR ?= $(realpath $(dir $(lastword $(MAKEFILE_LIST)))../..)
+# KVASIR_TESTS_DIR is simply expanded (":=") so that it is not affected by later
+# includes, which change MAKEFILE_LIST.
+KVASIR_TESTS_DIR := $(dir $(lastword $(MAKEFILE_LIST)))
+DAIKONDIR ?= $(realpath ${KVASIR_TESTS_DIR}../..)
 DAIKON_JAR := ${DAIKONDIR}/daikon.jar
 # Fails when running "clean".
 # $(if $(wildcard ${DAIKON_JAR}),,$(error daikon.jar not found at ${DAIKON_JAR}))
