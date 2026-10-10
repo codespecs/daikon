@@ -25,17 +25,7 @@ JAR ?= jar
 
 BuildJDKTool = BuildJDK
 
-ifeq ($(shell uname), Darwin)
-  JAVA_HOME ?= $(shell /usr/libexec/java_home)
-else
-ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
-  JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
-else
-  $(info Failure: Here is the output of: which javac)
-  $(info $(shell which javac))
-  $(error 'which javac' had exit status 1)
-endif
-endif
+include ${DAIKONDIR}/scripts/java-home.mak
 
 # The "JAVANN" variables mean "at least version NN", except JAVA8.
 JAVA_VERSION_STRING_WITH_EA := $(shell javac -version 2>&1 | head -1 | cut "-d " -f2)

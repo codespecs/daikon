@@ -186,17 +186,7 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
-ifeq ($(shell uname), Darwin)
-  JAVA_HOME ?= $(/usr/libexec/java_home)
-else
-ifeq ($(shell which javac > /dev/null 2>&1 && echo found || echo nonexistent), found)
-  JAVA_HOME ?= $(shell readlink -f $(shell which javac) | sed "s:/bin/javac::")
-else
-  $(info Failure: Here is the output of: which javac)
-  $(info $(shell which javac))
-  $(error 'which javac' had exit status 1)
-endif
-endif
+include ${DAIKONDIR}/scripts/java-home.mak
 JAVA  := ${JAVA_HOME}/bin/java
 JAVAC ?= ${JAVA_HOME}/bin/javac
 

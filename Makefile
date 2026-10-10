@@ -59,7 +59,7 @@ DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
 # Need to include the Dockerfiles as they are referenced from 'Requirements for
 # compiling Daikon' in the Daikon Developer manual; which is in turn referenced
 # from the 'Installation' section of the Daikon manual.
-SCRIPT_FILES := Makefile \
+SCRIPT_FILES := Makefile java-home.mak \
 	daikon.bashrc \
 	dfepl dtrace-perl dtype-perl \
 	java-cpp \
