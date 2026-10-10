@@ -4691,6 +4691,20 @@ y} or @code{x != y}). (@option{=comparisons})
 Finally, you may specify that no binary operations qualify as
 interactions between values.  Thus, DynComp only tracks dataflow. (@option{=none})
 
+@item --dyncomp-unhandled-ops=panic
+@item --dyncomp-unhandled-ops=warn
+
+By default, if DynComp encounters a Valgrind VEX IR operation that it
+does not handle, it prints the name of the operation and stops.
+(@option{=panic})  Please report such a failure (@pxref{Reporting problems}).
+
+Alternatively, DynComp can print a warning the first time it encounters
+each such operation and continue, approximating the operation:  the result
+of an operation with one operand is comparable to its operand, and the
+operands of an operation with more than one operand are made comparable to
+one another.  The resulting comparability sets may be larger than
+necessary, but are not smaller. (@option{=warn})
+
 @item --dyncomp-approximate-literals
 
 This option applies an approximation for handling literal values which
